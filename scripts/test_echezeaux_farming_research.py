@@ -28,7 +28,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 127)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 125)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -105,6 +105,9 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertIn('wh-d0510', rows['D 0510']['externalResearchIds'])
         # Winehog's retired D0792 reaches today's parcels only through recorded lineage.
         self.assertIn('wh-grivot', rows['D 0826']['externalResearchIds'])
+        # Conflicting sources stay side by side; neither becomes the farmer.
+        self.assertEqual({c['name'] for c in rows['D 0677']['candidateLeads']},
+                         {'Domaine David Duband', 'Domaine Arnoux-Lachaux'})
         self.assertIsNone(rows['D 0510']['currentFarmer'])
         curation = copy.deepcopy(self.curation)
         curation['externalResearch'][0]['currentFarmer'] = 'Hospices de Beaune'

@@ -60,6 +60,8 @@ The Côte-d'Or DDT publishes receipts, authorisations and refusals under the far
 
 A Premium article supplied by the repository owner (facts only) names Domaine Jean Grivot's seven plots: Les Cruots **D0172, D0176, D0599** and former **D0792, D0794** (divided in 2022 into D0826–D0829), and Champs Traversins **D0590, D0593**. The published areas equal the cadastral sums exactly, and none of the plots has a company owner, consistent with private family ownership farmed by Grivot. It also dates the division of the Lamadon holdings in 2006 between Liger-Belair (métayage), the Lamarche family and Grivot.
 
+A second supplied article names Domaine Arnoux-Lachaux's four Les Rouges du Bas plots, **D0818–D0820** (formerly 206) and **D0677**, with exact area matches. D0677 is recorded to François Feuillet, so this implies Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019, which conflicts with the Feuillet → Duband lead for that parcel; the conflict is recorded, not resolved.
+
 Winehog's 2014 Échezeaux du Dessus areas also equal exact sums of current parcels: Perdrix = D0620 + D0621, Millot = D0798–D0800, Tremblay = D0189 + D0190, Mongeard = D0668–D0670. These parcel sets are this register's reconstruction, recorded as weak leads. The Michel Noëllat area matches D0191, D0192 and D0671–D0673, which conflicts with Mongeard and Bouchon Pourpre rights and is left unresolved. Winehog's 2020 report that Liger-Belair added an Échezeaux du Dessus plot is compatible with, but does not identify, D0673's 2024 transfer to Bouchon Pourpre.
 
 ### Nicole Lamarche: three exact candidate parcels

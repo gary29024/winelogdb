@@ -27,10 +27,10 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 112,
+    "holderLead": 114,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
-    "unresolved": 146,
+    "unresolved": 144,
     "currentFarmerConfirmed": 0,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 36
@@ -7046,7 +7046,8 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
@@ -7090,7 +7091,8 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
@@ -7134,7 +7136,8 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
@@ -7178,18 +7181,28 @@
           "basis": "reported-operator-relationship",
           "sourceIds": [
             "feuillet",
-            "duband-wine"
+            "duband-wine",
+            "winehog-arnoux-lachaux"
+          ]
+        },
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
           ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9163,15 +9176,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9185,15 +9208,25 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9227,16 +9260,25 @@
           "sourceIds": [
             "arnoux"
           ]
+        },
+        {
+          "name": "Domaine Arnoux-Lachaux",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-arnoux-lachaux"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-arnoux-lachaux"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

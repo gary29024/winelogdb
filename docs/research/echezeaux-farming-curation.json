@@ -698,6 +698,16 @@
       "reviewedAt": "2026-09-28",
       "access": "read",
       "finding": "Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image."
+    },
+    {
+      "id": "winehog-arnoux-lachaux",
+      "title": "Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux",
+      "url": "https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/",
+      "type": "critic-research",
+      "documentDate": "2019-05-04",
+      "reviewedAt": "2026-09-28",
+      "access": "premium-supplied-by-repository-owner",
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Four plots in Les Rouges du Bas, 0.6204 ha: former cadastre 206, now 818, 819 and 820 (0.4535 ha), and 677 (0.1669 ha). Échezeaux produced since the late 1970s."
     }
   ],
   "holders": [
@@ -840,10 +850,11 @@
         "Domaine David Duband"
       ],
       "basis": "reported-operator-relationship",
-      "finding": "A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references.",
+      "finding": "A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references. Winehog (2019) lists D0677 among Arnoux-Lachaux's Échezeaux plots, which conflicts with a Duband lead for that parcel.",
       "sourceIds": [
         "feuillet",
-        "duband-wine"
+        "duband-wine",
+        "winehog-arnoux-lachaux"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1662,6 +1673,22 @@
       "finding": "Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number.",
       "sourceIds": [
         "winehog-grivot"
+      ]
+    },
+    {
+      "id": "wh-arnoux-lachaux",
+      "title": "Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas",
+      "producer": "Domaine Arnoux-Lachaux",
+      "parcelIds": [
+        "212670000D0818",
+        "212670000D0819",
+        "212670000D0820",
+        "212670000D0677"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article.",
+      "sourceIds": [
+        "winehog-arnoux-lachaux"
       ]
     }
   ]

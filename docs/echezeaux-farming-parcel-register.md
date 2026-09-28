@@ -6,9 +6,9 @@ Reviewed 2026-09-28; target season 2026.
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 112 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 146 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 114 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 144 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-127 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+125 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.
 
@@ -158,9 +158,9 @@ Parcels (4): D 0674, D 0675, D 0676, D 0677.
 
 **Candidate to investigate:** Domaine David Duband. **Basis:** reported-operator-relationship. **Current farming:** unconfirmed.
 
-A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references.
+A report hosted by Duband describes Feuillet entrusting vineyards to him; Duband also lists Échezeaux. The relationship is a useful operator lead but neither source names the four cadastral references. Winehog (2019) lists D0677 among Arnoux-Lachaux's Échezeaux plots, which conflicts with a Duband lead for that parcel.
 
-Sources: [Duband-hosted report on François Feuillet vines](https://www.domaine-duband.com/f/news/received-our-3rd-star-5.pdf), [David Duband: Échezeaux](https://www.domaine-duband.com/fr/vins/18/echezeaux-grand-cru).
+Sources: [Duband-hosted report on François Feuillet vines](https://www.domaine-duband.com/f/news/received-our-3rd-star-5.pdf), [David Duband: Échezeaux](https://www.domaine-duband.com/fr/vins/18/echezeaux-grand-cru), [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/).
 
 <a id="holder-328972344"></a>
 
@@ -635,7 +635,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0674 | 1703.58 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
 | D 0675 | 1443.35 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
 | D 0676 | 271.01 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
-| D 0677 | 1617.53 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
+| D 0677 | 1617.53 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
 | D 0678 | 845.12 | None | Unresolved | Unconfirmed |
 | D 0679 | 800.99 | None | Unresolved | Unconfirmed |
 | D 0680 | 737.41 | None | Unresolved | Unconfirmed |
@@ -694,9 +694,9 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0813 | 2104.69 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
 | D 0814 | 1310.55 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
 | D 0815 | 855.99 | [798977476](#holder-798977476) | Unresolved | Unconfirmed |
-| D 0818 | 591.93 | None | Unresolved | Unconfirmed |
-| D 0819 | 1027.71 | None | Unresolved | Unconfirmed |
-| D 0820 | 3009.27 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context) | Unconfirmed |
+| D 0818 | 591.93 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0819 | 1027.71 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0820 | 3009.27 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
 | D 0821 | 386.56 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead) | Unconfirmed |
 | D 0822 | 457.83 | None | Unresolved | Unconfirmed |
 | D 0824 | 521.48 | None | Unresolved | Unconfirmed |
@@ -761,6 +761,7 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Berthaut-Gerbet enlarged its Échezeaux from 2018** (D 0360, D 0508, D 0821; critic-holding-description). Winehog says Amélie Berthaut took over the old Gerbet holdings and enlarged the Échezeaux from the 2018 vintage. These are the Gerbet Sirugue GFA references; the article preview does not say which parcels are farmed. Sources: [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/).
 - **Domaine Jean Grivot: seven named Échezeaux plots** (D 0172, D 0176, D 0599, D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their successors D0826/D0827 and D0828/D0829 are listed here through recorded lineage. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
 - **Lamadon holdings divided in 2006** (D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-holding-description). Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas** (D 0818, D 0819, D 0820, D 0677; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article. Sources: [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/).
 
 ## Rights history and parcel lineage
 
@@ -909,6 +910,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **winehog-berthaut-gerbet** — [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/). critic-research; preview-only; document date 2019-03-13. Public preview: Amélie Berthaut took over the old Gerbet holdings; Échezeaux holdings enlarged from the 2018 vintage. Remainder is Premium content, not read.
 - **winehog-grivot** — [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/). critic-research; premium-supplied-by-repository-owner; document date 2019-05-11. Premium article supplied by the repository owner; only facts are recorded. Grivot Échezeaux from seven plots, 0.8460 ha: Les Cruots ou Vignes Blanches 172, 176, 792, 794, 599 (0.7970 ha) and Champs Traversins 590, 593 (0.0490 ha). 172/176 presumably via the Jayer family; 792/794 and presumably 590/593 from the Lamadon holdings divided in 2006 between Liger-Belair (métayage), the Lamarche family and the Grivot family.
 - **raa-2026-067** — [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28). government-decision; read; document date 2026-04-07. Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image.
+- **winehog-arnoux-lachaux** — [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/). critic-research; premium-supplied-by-repository-owner; document date 2019-05-04. Premium article supplied by the repository owner; only facts are recorded. Four plots in Les Rouges du Bas, 0.6204 ha: former cadastre 206, now 818, 819 and 820 (0.4535 ha), and 677 (0.1669 ha). Échezeaux produced since the late 1970s.
 
 ## Remaining evidence and access gaps
 
