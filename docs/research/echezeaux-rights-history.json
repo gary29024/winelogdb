@@ -95,13 +95,13 @@
   "A recorded right is legal-entity ownership or another real right on 1 January, never farming.",
   "Private individuals are not in the legal-entity files: no record does not mean no owner.",
   "Holder continuity is proved only by the same SIREN; names alone are hints for review.",
-  "Lineage is a spatial overlap between cadastre vintages, not a documented division act."
+  "Lineage is accepted only when a successor first appears in the next vintage and lies at least 95% inside the retired reference; other overlaps are rejected candidates. It is rule-based, not a documented division act."
  ],
  "counts": {
   "parcels": 276,
   "withAnyRightsChange": 76,
   "createdSinceFirstVintage": 35,
-  "withPredecessor": 36,
+  "withPredecessor": 35,
   "retiredReferences": 13,
   "changeKinds": {
    "holder-changed": 10,
@@ -117,26 +117,47 @@
    "reference": "D 0143",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 4772.1,
+   "areaM2": 4772.2,
    "successors": [
     {
      "parcelId": "212670000D0898",
-     "sharedAreaM2": 823.9
+     "sharedAreaM2": 823.9,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1727,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0899",
-     "sharedAreaM2": 782.5
+     "sharedAreaM2": 782.5,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.164,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0900",
-     "sharedAreaM2": 779.3
+     "sharedAreaM2": 779.3,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1633,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0901",
-     "sharedAreaM2": 2251.5
+     "sharedAreaM2": 2251.5,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.4718,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0902",
-     "sharedAreaM2": 134.8
+     "sharedAreaM2": 134.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0282,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": [
@@ -213,14 +234,23 @@
    "reference": "D 0160",
    "lastSeenCadastre": "2022-01-01",
    "cruOverlapM2": 3663.8,
+   "areaM2": 3664.0,
    "successors": [
     {
      "parcelId": "212670000D0841",
-     "sharedAreaM2": 1846.7
+     "sharedAreaM2": 1846.7,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.504,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0842",
-     "sharedAreaM2": 1817.3
+     "sharedAreaM2": 1817.3,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.496,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -230,14 +260,23 @@
    "reference": "D 0300",
    "lastSeenCadastre": "2019-01-01",
    "cruOverlapM2": 844.8,
+   "areaM2": 844.8,
    "successors": [
     {
      "parcelId": "212670000D0821",
-     "sharedAreaM2": 386.2
+     "sharedAreaM2": 386.2,
+     "shareOfSuccessor": 0.9991,
+     "shareOfRetired": 0.4572,
+     "successorFirstSeen": "2020-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0822",
-     "sharedAreaM2": 457.8
+     "sharedAreaM2": 457.8,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.5419,
+     "successorFirstSeen": "2020-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -247,42 +286,79 @@
    "reference": "D 0708",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 6562.8,
+   "areaM2": 6562.8,
    "successors": [
     {
      "parcelId": "212670000D0871",
-     "sharedAreaM2": 523.8
+     "sharedAreaM2": 523.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0798,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0872",
-     "sharedAreaM2": 43.3
+     "sharedAreaM2": 43.3,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.0066,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0905",
-     "sharedAreaM2": 991.8
+     "sharedAreaM2": 991.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1511,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0906",
-     "sharedAreaM2": 1116.1
+     "sharedAreaM2": 1116.1,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1701,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0907",
-     "sharedAreaM2": 1113.9
+     "sharedAreaM2": 1113.9,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1697,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0908",
-     "sharedAreaM2": 1114.8
+     "sharedAreaM2": 1114.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1699,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0909",
-     "sharedAreaM2": 557.3
+     "sharedAreaM2": 557.3,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0849,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0910",
-     "sharedAreaM2": 557.1
+     "sharedAreaM2": 557.1,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0849,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0911",
-     "sharedAreaM2": 544.7
+     "sharedAreaM2": 544.7,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.083,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": false
     }
    ],
    "rightsHistory": []
@@ -292,14 +368,23 @@
    "reference": "D 0759",
    "lastSeenCadastre": "2022-01-01",
    "cruOverlapM2": 739.7,
+   "areaM2": 739.7,
    "successors": [
     {
      "parcelId": "212670000D0824",
-     "sharedAreaM2": 521.5
+     "sharedAreaM2": 521.5,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.705,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0825",
-     "sharedAreaM2": 218.3
+     "sharedAreaM2": 218.3,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.295,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -309,14 +394,23 @@
    "reference": "D 0772",
    "lastSeenCadastre": "2023-01-01",
    "cruOverlapM2": 1806.4,
+   "areaM2": 1806.4,
    "successors": [
     {
      "parcelId": "212670000D0843",
-     "sharedAreaM2": 902.6
+     "sharedAreaM2": 902.6,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.4997,
+     "successorFirstSeen": "2024-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0844",
-     "sharedAreaM2": 903.7
+     "sharedAreaM2": 903.7,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.5003,
+     "successorFirstSeen": "2024-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -326,14 +420,23 @@
    "reference": "D 0774",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 2762.2,
+   "areaM2": 2762.2,
    "successors": [
     {
      "parcelId": "212670000D0830",
-     "sharedAreaM2": 159.2
+     "sharedAreaM2": 159.2,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0577,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0831",
-     "sharedAreaM2": 2602.2
+     "sharedAreaM2": 2602.2,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.9421,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -343,18 +446,31 @@
    "reference": "D 0775",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 5179.3,
+   "areaM2": 5179.4,
    "successors": [
     {
      "parcelId": "212670000D0832",
-     "sharedAreaM2": 177.4
+     "sharedAreaM2": 177.4,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0343,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0833",
-     "sharedAreaM2": 157.7
+     "sharedAreaM2": 157.7,
+     "shareOfSuccessor": 0.998,
+     "shareOfRetired": 0.0304,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0834",
-     "sharedAreaM2": 4844.2
+     "sharedAreaM2": 4844.2,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.9353,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -364,14 +480,23 @@
    "reference": "D 0776",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 1480.0,
+   "areaM2": 1480.4,
    "successors": [
     {
      "parcelId": "212670000D0835",
-     "sharedAreaM2": 178.3
+     "sharedAreaM2": 178.3,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.1205,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0836",
-     "sharedAreaM2": 1302.0
+     "sharedAreaM2": 1302.0,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.8795,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -381,14 +506,23 @@
    "reference": "D 0787",
    "lastSeenCadastre": "2024-01-01",
    "cruOverlapM2": 1036.9,
+   "areaM2": 1036.9,
    "successors": [
     {
      "parcelId": "212670000D0903",
-     "sharedAreaM2": 135.9
+     "sharedAreaM2": 135.9,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1311,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0904",
-     "sharedAreaM2": 901.0
+     "sharedAreaM2": 901.0,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.8689,
+     "successorFirstSeen": "2025-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -398,18 +532,31 @@
    "reference": "D 0792",
    "lastSeenCadastre": "2022-01-01",
    "cruOverlapM2": 2120.8,
+   "areaM2": 2120.9,
    "successors": [
     {
      "parcelId": "212670000D0793",
-     "sharedAreaM2": 1.9
+     "sharedAreaM2": 1.9,
+     "shareOfSuccessor": 0.0006,
+     "shareOfRetired": 0.0009,
+     "successorFirstSeen": "2019-01-01",
+     "accepted": false
     },
     {
      "parcelId": "212670000D0826",
-     "sharedAreaM2": 1053.7
+     "sharedAreaM2": 1053.7,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.4968,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0827",
-     "sharedAreaM2": 1067.1
+     "sharedAreaM2": 1067.1,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.5031,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -419,14 +566,23 @@
    "reference": "D 0794",
    "lastSeenCadastre": "2022-01-01",
    "cruOverlapM2": 193.5,
+   "areaM2": 193.5,
    "successors": [
     {
      "parcelId": "212670000D0828",
-     "sharedAreaM2": 102.9
+     "sharedAreaM2": 102.9,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.5317,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0829",
-     "sharedAreaM2": 90.6
+     "sharedAreaM2": 90.6,
+     "shareOfSuccessor": 0.9999,
+     "shareOfRetired": 0.4683,
+     "successorFirstSeen": "2023-01-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -436,34 +592,63 @@
    "reference": "D 0873",
    "lastSeenCadastre": "2025-01-01",
    "cruOverlapM2": 5995.6,
+   "areaM2": 5995.6,
    "successors": [
     {
      "parcelId": "212670000D0905",
-     "sharedAreaM2": 991.8
+     "sharedAreaM2": 991.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1654,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0906",
-     "sharedAreaM2": 1116.1
+     "sharedAreaM2": 1116.1,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1862,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0907",
-     "sharedAreaM2": 1113.9
+     "sharedAreaM2": 1113.9,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1858,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0908",
-     "sharedAreaM2": 1114.8
+     "sharedAreaM2": 1114.8,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.1859,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0909",
-     "sharedAreaM2": 557.2
+     "sharedAreaM2": 557.2,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0929,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0910",
-     "sharedAreaM2": 557.1
+     "sharedAreaM2": 557.1,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0929,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     },
     {
      "parcelId": "212670000D0911",
-     "sharedAreaM2": 544.7
+     "sharedAreaM2": 544.7,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 0.0908,
+     "successorFirstSeen": "2026-06-01",
+     "accepted": true
     }
    ],
    "rightsHistory": []
@@ -21816,9 +22001,7 @@
    "parcelId": "212670000D0793",
    "reference": "D 0793",
    "firstSeenCadastre": "2019-01-01",
-   "predecessorIds": [
-    "212670000D0792"
-   ],
+   "predecessorIds": [],
    "cadastre": [
     {
      "date": "2019-01-01",
@@ -26247,7 +26430,6 @@
    "reference": "D 0905",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26324,7 +26506,6 @@
    "reference": "D 0906",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26401,7 +26582,6 @@
    "reference": "D 0907",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26478,7 +26658,6 @@
    "reference": "D 0908",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26555,7 +26734,6 @@
    "reference": "D 0909",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26632,7 +26810,6 @@
    "reference": "D 0910",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [
@@ -26709,7 +26886,6 @@
    "reference": "D 0911",
    "firstSeenCadastre": "2026-06-01",
    "predecessorIds": [
-    "212670000D0708",
     "212670000D0873"
    ],
    "cadastre": [

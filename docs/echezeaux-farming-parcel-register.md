@@ -6,7 +6,7 @@ Reviewed 2026-09-28; target season 2026.
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 115 parcels have holder-derived research leads, 16 have an exact-reference historical application, and 143 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 115 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, and 143 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
 124 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
@@ -701,10 +701,10 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0822 | 457.83 | None | Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
 | D 0824 | 521.48 | None | Unresolved | Unconfirmed |
 | D 0825 | 218.26 | None | Unresolved | Unconfirmed |
-| D 0826 | 1053.72 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0827 | 1067.09 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0828 | 102.88 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0829 | 90.63 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0826 | 1053.72 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
+| D 0827 | 1067.09 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
+| D 0828 | 102.88 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
+| D 0829 | 90.63 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
 | D 0830 | 159.25 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
 | D 0831 | 2602.23 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
 | D 0832 | 177.40 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
@@ -759,8 +759,8 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Liger-Belair Échezeaux holdings before 2020** (no cadastral reference; critic-holding-description). Six plots totalling 0.6157 ha: two in Les Cruots ou Vignes Blanches (0.3299 ha), Champs Traversins and Clos Saint-Denis. No cadastral references; a research target for those climats. Sources: [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/).
 - **Les Loächausses: former Gros Frère et Sœur monopole** (no cadastral reference; critic-holding-description). Winehog (2011) describes Les Loächausses as formerly a Gros Frère et Sœur monopole and lists Gros Frère et Sœur and Anne Gros there. The 2022 applications by Michel Gros and AF Gros cover D0181, D0184, D0558, D0774 and D0775 in Les Loächausses, and ANNE GROS holds D0183/D0709 there from 2021, consistent with a division of that holding. Sources: [Winehog: Echezeaux – Grand cru standard?](https://winehog.org/echezeaux-grand-cru-standard-584/), [BFC bulletin 2022-101: receipt BFC-2022-04-04-00033, SARL Domaine Michel Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97791/623936/file/recueil-bfc-2022-101-recueil-des-actes-administratifs-special.pdf#page=351), [BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88).
 - **Berthaut-Gerbet: four named plots, one only in part** (D 0360, D 0508, D 0821, D 0822; critic-named-cadastral-reference). Winehog (March 2019) names 360 in Les Quartiers de Nuits (0.0975 ha), part of 508 in Les Treux (0.0276 ha) and, from the 2018 vintage, 821 and 822 in Champs Traversins (0.0875 ha), 0.2126 ha in total. D0360 and D0821 + D0822 equal their cadastral areas exactly. D0508 is 901 m², so about 625 m² of a parcel held by the Gerbet Sirugue GFA is presumably farmed by another, unnamed domaine. D0360, D0508 and D0821 are held by GFA Domaine Gerbet Sirugue; D0822, divided with D0821 from former D0300 in 2019, has no company record. Amélie Berthaut took over two thirds of the Gerbet vineyards. Sources: [Winehog: Terroir View – Berthaut-Gerbet Echezeaux](https://winehog.org/terroir-view-berthaut-gerbet-echezeaux-2-2-37319/).
-- **Domaine Jean Grivot: seven named Échezeaux plots** (D 0172, D 0176, D 0599, D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their successors D0826/D0827 and D0828/D0829 are listed here through recorded lineage. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
-- **Lamadon holdings divided in 2006** (D 0826, D 0827, D 0828, D 0829, D 0590, D 0593; critic-holding-description). Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Domaine Jean Grivot: seven named Échezeaux plots** (D 0172, D 0176, D 0599, D 0590, D 0593; via lineage: D 0792 (retired) → D 0826, D 0827; D 0794 (retired) → D 0828, D 0829; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their evidence reaches D0826/D0827 and D0828/D0829 only through accepted lineage, and those rows are labelled as inherited. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Lamadon holdings divided in 2006** (D 0590, D 0593; via lineage: D 0792 (retired) → D 0826, D 0827; D 0794 (retired) → D 0828, D 0829; critic-holding-description). Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
 - **Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas** (D 0818, D 0819, D 0820, D 0677; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article. Sources: [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/).
 
 ## Rights history and parcel lineage
@@ -820,23 +820,23 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 
 **Retired references and their current successors**
 
-Successors are current parcels sharing more than 1 m² with the retired geometry. This is a spatial comparison, not a division act; verify before carrying any evidence across.
+A successor is accepted when it first appears in the vintage right after the retired reference and lies almost entirely inside it. Other overlaps, such as boundary slivers or parcels that already existed, are rejected candidates and never carry evidence. The rule is spatial, not a documented division act.
 
-| Retired reference | Last vintage | Current successors | Company records before retirement |
-| --- | --- | --- | --- |
-| D 0143 | 2024-01-01 | D 0898, D 0899, D 0900, D 0901, D 0902 | PROPRIETAIRES DU BND 267 D0143 |
-| D 0160 | 2022-01-01 | D 0841, D 0842 | None |
-| D 0300 | 2019-01-01 | D 0821, D 0822 | None |
-| D 0708 | 2024-01-01 | D 0871, D 0872, D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | None |
-| D 0759 | 2022-01-01 | D 0824, D 0825 | None |
-| D 0772 | 2023-01-01 | D 0843, D 0844 | None |
-| D 0774 | 2024-01-01 | D 0830, D 0831 | None |
-| D 0775 | 2024-01-01 | D 0832, D 0833, D 0834 | None |
-| D 0776 | 2024-01-01 | D 0835, D 0836 | None |
-| D 0787 | 2024-01-01 | D 0903, D 0904 | None |
-| D 0792 | 2022-01-01 | D 0793, D 0826, D 0827 | None |
-| D 0794 | 2022-01-01 | D 0828, D 0829 | None |
-| D 0873 | 2025-01-01 | D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | None |
+| Retired reference | Last vintage | Accepted successors | Rejected spatial candidates | Company records before retirement |
+| --- | --- | --- | --- | --- |
+| D 0143 | 2024-01-01 | D 0898, D 0899, D 0900, D 0901, D 0902 | — | PROPRIETAIRES DU BND 267 D0143 |
+| D 0160 | 2022-01-01 | D 0841, D 0842 | — | None |
+| D 0300 | 2019-01-01 | D 0821, D 0822 | — | None |
+| D 0708 | 2024-01-01 | D 0871, D 0872 | D 0905 (991.8 m²), D 0906 (1116.1 m²), D 0907 (1113.9 m²), D 0908 (1114.8 m²), D 0909 (557.3 m²), D 0910 (557.1 m²), D 0911 (544.7 m²) | None |
+| D 0759 | 2022-01-01 | D 0824, D 0825 | — | None |
+| D 0772 | 2023-01-01 | D 0843, D 0844 | — | None |
+| D 0774 | 2024-01-01 | D 0830, D 0831 | — | None |
+| D 0775 | 2024-01-01 | D 0832, D 0833, D 0834 | — | None |
+| D 0776 | 2024-01-01 | D 0835, D 0836 | — | None |
+| D 0787 | 2024-01-01 | D 0903, D 0904 | — | None |
+| D 0792 | 2022-01-01 | D 0826, D 0827 | D 0793 (1.9 m²) | None |
+| D 0794 | 2022-01-01 | D 0828, D 0829 | — | None |
+| D 0873 | 2025-01-01 | D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | — | None |
 
 ## Source log
 
@@ -917,8 +917,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - CVI records require cooperation from authorised holders; no private records accessed.
 - Public CartoBio polygons omit operator identity.
 - HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.
-- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.
+- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
-- Winehog Premium articles were not read beyond their public previews.
+- Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

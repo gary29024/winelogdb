@@ -33,7 +33,7 @@
     "unresolved": 143,
     "currentFarmerConfirmed": 0,
     "withRightsChangeSince2019": 76,
-    "withCadastralPredecessor": 36
+    "withCadastralPredecessor": 35
   },
   "parcels": [
     {
@@ -8562,9 +8562,7 @@
       "externalResearchIds": [],
       "rightsChanges": [],
       "cadastreFirstSeen": "2019-01-01",
-      "predecessorIds": [
-        "212670000D0792"
-      ],
+      "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
       "researchDepth": "inventory-only",
@@ -9467,7 +9465,7 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean Grivot",
-          "basis": "critic-named-cadastral-reference",
+          "basis": "critic-named-cadastral-reference on predecessor D0792",
           "sourceIds": [
             "winehog-grivot"
           ]
@@ -9504,7 +9502,7 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean Grivot",
-          "basis": "critic-named-cadastral-reference",
+          "basis": "critic-named-cadastral-reference on predecessor D0792",
           "sourceIds": [
             "winehog-grivot"
           ]
@@ -9541,7 +9539,7 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean Grivot",
-          "basis": "critic-named-cadastral-reference",
+          "basis": "critic-named-cadastral-reference on predecessor D0794",
           "sourceIds": [
             "winehog-grivot"
           ]
@@ -9578,7 +9576,7 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean Grivot",
-          "basis": "critic-named-cadastral-reference",
+          "basis": "critic-named-cadastral-reference on predecessor D0794",
           "sourceIds": [
             "winehog-grivot"
           ]
@@ -10398,7 +10396,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10425,7 +10422,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10452,7 +10448,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10479,7 +10474,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10506,7 +10500,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10533,7 +10526,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [
@@ -10560,7 +10552,6 @@
       "rightsChanges": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
-        "212670000D0708",
         "212670000D0873"
       ],
       "historyFindingIds": [

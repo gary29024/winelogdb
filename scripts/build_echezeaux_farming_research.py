@@ -57,21 +57,26 @@ def build_register(manifest, asset, curation, history):
         require(finding['parcelIds'] and set(finding['parcelIds']) <= ids, 'History finding outside research cru')
         require(finding['sourceIds'] and set(finding['sourceIds']) <= sources.keys(), 'Unknown history finding source')
         require(finding.get('currentFarmer') is None, 'Rights history cannot establish current farming')
-    successors = {r['parcelId']: {s['parcelId'] for s in r['successors']} for r in history['retiredParcels']}
+    # Only rule-accepted splits may carry evidence to today's parcels; rejected spatial candidates never do.
+    successors = {r['parcelId']: {s['parcelId'] for s in r['successors'] if s['accepted']} for r in history['retiredParcels']}
+
+    def check_lineage(item, kind):
+        for retired, current in item.get('predecessorReferences', {}).items():
+            require(retired in successors and set(current) <= successors[retired] & ids,
+                    f'{kind} predecessor reference without matching cadastral lineage')
     for event in curation['exactParcelEvents']:
         require(set(event['parcelIds']) <= ids, 'Event reference outside research cru')
         require(event['sourceId'] in sources, 'Unknown event source')
         require(event['kind'] in EVENT_KINDS, f"Unknown event kind: {event['kind']}")
         require(event['currentFarmer'] is None, 'Historical event cannot establish current farming')
         # A retired reference named in a notice reaches today's parcels only through recorded lineage.
-        for retired, current in event.get('predecessorReferences', {}).items():
-            require(retired in successors and set(current) <= successors[retired] & ids,
-                    'Predecessor reference without matching cadastral lineage')
+        check_lineage(event, 'Event')
     for item in curation['externalResearch']:
         require(set(item['parcelIds']) <= ids, 'External research outside research cru')
         require(item['sourceIds'] and set(item['sourceIds']) <= sources.keys(), 'Unknown external research source')
         require(item['basis'] in EXTERNAL_BASES, f"Unknown external research basis: {item['basis']}")
         require(item.get('currentFarmer') is None, 'External research cannot establish current farming')
+        check_lineage(item, 'External research')
     rows = []
     for p in parcels:
         holder_ids = sorted({r['holderId'] for r in p['recordedRights']})
@@ -79,6 +84,8 @@ def build_register(manifest, asset, curation, history):
         inherited = [(e, retired) for e in curation['exactParcelEvents']
                      for retired, current in e.get('predecessorReferences', {}).items() if p['id'] in current]
         external = [x for x in curation['externalResearch'] if p['id'] in x['parcelIds']]
+        external_inherited = [(x, retired) for x in curation['externalResearch']
+                              for retired, current in x.get('predecessorReferences', {}).items() if p['id'] in current]
         leads = [{'name': name, 'holderId': hid, 'basis': holders[hid]['basis'],
                   'sourceIds': holders[hid]['sourceIds']}
                  for hid in holder_ids for name in holders[hid]['candidateNames']]
@@ -87,13 +94,15 @@ def build_register(manifest, asset, curation, history):
                          'sourceIds': [e['sourceId']]} for e, r in inherited]
         external_leads = [{'name': x['producer'], 'basis': x['basis'], 'sourceIds': x['sourceIds']}
                           for x in external if x.get('producer')]
+        external_leads += [{'name': x['producer'], 'basis': f"{x['basis']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
+                            'sourceIds': x['sourceIds']} for x, r in external_inherited if x.get('producer')]
         rows.append({
             'parcelId': p['id'], 'reference': p['reference'], 'commune': p['commune'],
             'cruOverlapM2': next(o['areaM2'] for o in p['overlaps'] if o['parentFeatureId'] == parent),
             'recordedRights': p['recordedRights'], 'recordMatch': p['recordMatch'],
             'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads + external_leads,
             'historicalEvents': events + [{**e, 'viaPredecessor': r} for e, r in inherited],
-            'externalResearchIds': [x['id'] for x in external],
+            'externalResearchIds': [x['id'] for x in external] + [x['id'] for x, _ in external_inherited],
             # Dated legal-entity rights since 2019 and cadastral splits: context for who to ask, not farming.
             'rightsChanges': [{k: c[k] for k in ('from', 'to', 'kind', 'before', 'after')}
                               for c in lineage[p['id']]['rightsChanges']],
@@ -104,7 +113,7 @@ def build_register(manifest, asset, curation, history):
                                'historical-application' if events or inherited else
                                'holder-lead' if leads or external_leads else 'unresolved'),
             'researchDepth': ('exact-reference-event-reviewed' if events or inherited else
-                              'external-research-reviewed' if external else
+                              'external-research-reviewed' if external or external_inherited else
                               'holder-group-triage' if holder_ids else 'inventory-only'),
             'currentFarmer': None, 'verifiedAsOf': None, 'operationScope': 'unconfirmed',
             'nextEvidenceNeeded': ('Confirm actual operation, scope and continuation since the decision.'
@@ -150,8 +159,9 @@ def render_report(register, curation, history):
         register['scope'], '',
         f"Of {counts['parcels']} mapped parcels, {counts['withRecordedRights']} have recorded rights and "
         f"{counts['withoutMatchedRights']} have no matched right holder. All {counts['recordedHolders']} holder groups were triaged. "
-        f"{counts['holderLead']} parcels have holder-derived research leads, {counts['historicalApplication']} have an exact-reference "
-        f"historical application, and {counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
+        f"{counts['holderLead']} parcels have holder-derived or independent-research leads, {counts['historicalApplication']} have an "
+        f"exact-reference application or suspended application, {counts['historicalAuthorisation']} have an authorisation decision, and "
+        f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
         'Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. '
@@ -204,7 +214,9 @@ def render_report(register, curation, history):
               'current farming. "Area-reconstructed" rows are this register\'s inference: the published area equals an exact '
               'sum of parcel areas, which the source itself does not state.', '']
     for x in curation['externalResearch']:
-        refs = ', '.join(ref(i) for i in x['parcelIds']) or 'no cadastral reference'
+        via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}" for r, cs in x.get('predecessorReferences', {}).items())
+        refs = ', '.join(ref(i) for i in x['parcelIds']) + (('; via lineage: ' if x['parcelIds'] else 'via lineage: ') + via if via else '')
+        refs = refs or 'no cadastral reference'
         cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in x['sourceIds'])
         lines.append(f"- **{cell(x['title'])}** ({refs}; {x['basis']}). {x['finding']} Sources: {cited}.")
     lines.append('')
@@ -266,14 +278,17 @@ def render_history(register, curation, history, sources):
     for (start, end, kind, before, after), refs in sorted(grouped.items()):
         lines.append(f"| {', '.join(refs)} | {start[:4]} → {end[:4]} | {CHANGE_LABELS[kind]} | {cell(before)} | {cell(after)} |")
     lines += ['', '**Retired references and their current successors**', '',
-              'Successors are current parcels sharing more than 1 m² with the retired geometry. '
-              'This is a spatial comparison, not a division act; verify before carrying any evidence across.', '',
-              '| Retired reference | Last vintage | Current successors | Company records before retirement |',
-              '| --- | --- | --- | --- |']
+              'A successor is accepted when it first appears in the vintage right after the retired reference and lies '
+              'almost entirely inside it. Other overlaps, such as boundary slivers or parcels that already existed, are '
+              'rejected candidates and never carry evidence. The rule is spatial, not a documented division act.', '',
+              '| Retired reference | Last vintage | Accepted successors | Rejected spatial candidates | Company records before retirement |',
+              '| --- | --- | --- | --- | --- |']
     for p in history['retiredParcels']:
-        successors = ', '.join(rows[s['parcelId']]['reference'] if s['parcelId'] in rows else s['parcelId'] for s in p['successors'])
+        name = lambda s: rows[s['parcelId']]['reference'] if s['parcelId'] in rows else s['parcelId']
+        accepted = ', '.join(name(s) for s in p['successors'] if s['accepted']) or 'None'
+        rejected = ', '.join(f"{name(s)} ({s['sharedAreaM2']} m²)" for s in p['successors'] if not s['accepted']) or '—'
         names = sorted({r['name'] for h in p['rightsHistory'] for r in h['records']})
-        lines.append(f"| {p['reference']} | {p['lastSeenCadastre']} | {successors} | {cell(' / '.join(names)) or 'None'} |")
+        lines.append(f"| {p['reference']} | {p['lastSeenCadastre']} | {accepted} | {rejected} | {cell(' / '.join(names)) or 'None'} |")
     return lines + ['']
 
 

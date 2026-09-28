@@ -182,6 +182,11 @@ def build(config, manifest, source_dir):
         vintages.append((c['date'], {f['properties']['id']: transform(project, shape(f['geometry'])) for f in features}))
     vintages.append((parcels_config['cadastreDate'], metric))
 
+    # Spatial overlaps are only candidates. A split is accepted when the successor first appears in the vintage
+    # right after the retired reference disappears and lies almost entirely inside it; boundary slivers and
+    # neighbours that already existed are kept as rejected candidates and never carry evidence.
+    dates = [d for d, _ in vintages]
+    first_seen = {cid: next(d for d, g in vintages if cid in g) for cid in metric}
     predecessors, retired = {}, {}
     for date, geometries in vintages[:-1]:
         for pid, geometry in geometries.items():
@@ -191,16 +196,25 @@ def build(config, manifest, source_dir):
             if geometry.intersection(cru).area <= config['minimumOverlapM2']:
                 continue
             entry = retired.setdefault(pid, {'parcelId': pid, 'reference': f'{pid[8:10].lstrip("0")} {pid[10:]}',
-                                             'lastSeenCadastre': date, 'cruOverlapM2': 0, 'successors': {}})
+                                             'lastSeenCadastre': date, 'cruOverlapM2': 0, 'areaM2': 0, 'successors': {}})
             entry['lastSeenCadastre'] = date
             entry['cruOverlapM2'] = round(geometry.intersection(cru).area, 1)
+            entry['areaM2'] = round(geometry.area, 1)
             for cid, cg in metric.items():
                 shared = geometry.intersection(cg).area
                 if shared > config['minimumOverlapM2']:
-                    entry['successors'][cid] = round(shared, 1)
-                    predecessors.setdefault(cid, set()).add(pid)
+                    entry['successors'][cid] = (shared, shared / cg.area, shared / geometry.area)
     for entry in retired.values():
-        entry['successors'] = [{'parcelId': k, 'sharedAreaM2': v} for k, v in sorted(entry['successors'].items())]
+        next_vintage = dates[dates.index(entry['lastSeenCadastre']) + 1]
+        rows = []
+        for cid, (shared, of_successor, of_retired) in sorted(entry['successors'].items()):
+            accepted = first_seen[cid] == next_vintage and of_successor >= config['successorInsideShare']
+            rows.append({'parcelId': cid, 'sharedAreaM2': round(shared, 1), 'shareOfSuccessor': round(of_successor, 4),
+                         'shareOfRetired': round(of_retired, 4), 'successorFirstSeen': first_seen[cid],
+                         'accepted': accepted})
+            if accepted:
+                predecessors.setdefault(cid, set()).add(entry['parcelId'])
+        entry['successors'] = rows
         entry['rightsHistory'] = [{'asOf': d, 'records': s.get(entry['parcelId'], [])} for d, s in snapshots
                                   if s.get(entry['parcelId'])]
 
@@ -246,7 +260,9 @@ def build(config, manifest, source_dir):
         'rules': ['A recorded right is legal-entity ownership or another real right on 1 January, never farming.',
                   'Private individuals are not in the legal-entity files: no record does not mean no owner.',
                   'Holder continuity is proved only by the same SIREN; names alone are hints for review.',
-                  'Lineage is a spatial overlap between cadastre vintages, not a documented division act.'],
+                  'Lineage is accepted only when a successor first appears in the next vintage and lies at least '
+                  f"{config['successorInsideShare']:.0%} inside the retired reference; other overlaps are rejected candidates. "
+                  'It is rule-based, not a documented division act.'],
         'counts': {'parcels': len(rows), 'withAnyRightsChange': sum(bool(r['rightsChanges']) for r in rows),
                    'createdSinceFirstVintage': sum(r['firstSeenCadastre'] != vintages[0][0] for r in rows),
                    'withPredecessor': sum(bool(r['predecessorIds']) for r in rows),

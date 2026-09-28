@@ -1242,9 +1242,9 @@
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
     "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
-    "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched. The DDT notice page and cote-dor.gouv.fr refused automated access.",
+    "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
-    "Winehog Premium articles were not read beyond their public previews."
+    "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews."
   ],
   "historyFindings": [
     {
@@ -1484,7 +1484,10 @@
         "winehog-dessus",
         "winehog-hospices"
       ],
-      "producer": "Hospices de Beaune (owner)"
+      "producer": "Hospices de Beaune (owner)",
+      "printedReferences": [
+        "510"
+      ]
     },
     {
       "id": "wh-d0631",
@@ -1498,7 +1501,10 @@
         "winehog-jayer-gilles",
         "winehog-dessus"
       ],
-      "producer": "Domaine Jayer-Gilles / Hoffmann-Jayer"
+      "producer": "Domaine Jayer-Gilles / Hoffmann-Jayer",
+      "printedReferences": [
+        "631"
+      ]
     },
     {
       "id": "wh-d0632",
@@ -1512,7 +1518,10 @@
         "winehog-jayer-gilles",
         "winehog-dessus"
       ],
-      "producer": "Niquet-Jayer family (owner)"
+      "producer": "Niquet-Jayer family (owner)",
+      "printedReferences": [
+        "632"
+      ]
     },
     {
       "id": "wh-dessus-perdrix",
@@ -1542,7 +1551,12 @@
         "winehog-millot",
         "winehog-dessus"
       ],
-      "producer": "Domaine Jean-Marc Millot"
+      "producer": "Domaine Jean-Marc Millot",
+      "printedReferences": [
+        "798",
+        "799",
+        "800"
+      ]
     },
     {
       "id": "wh-dessus-tremblay",
@@ -1638,7 +1652,13 @@
       "sourceIds": [
         "winehog-berthaut-gerbet"
       ],
-      "producer": "Domaine Berthaut-Gerbet"
+      "producer": "Domaine Berthaut-Gerbet",
+      "printedReferences": [
+        "360",
+        "508",
+        "821",
+        "822"
+      ]
     },
     {
       "id": "wh-grivot",
@@ -1648,27 +1668,38 @@
         "212670000D0172",
         "212670000D0176",
         "212670000D0599",
-        "212670000D0826",
-        "212670000D0827",
-        "212670000D0828",
-        "212670000D0829",
         "212670000D0590",
         "212670000D0593"
       ],
       "basis": "critic-named-cadastral-reference",
-      "finding": "Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their successors D0826/D0827 and D0828/D0829 are listed here through recorded lineage. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease.",
+      "finding": "Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their evidence reaches D0826/D0827 and D0828/D0829 only through accepted lineage, and those rows are labelled as inherited. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease.",
       "sourceIds": [
         "winehog-grivot"
-      ]
+      ],
+      "printedReferences": [
+        "172",
+        "176",
+        "792",
+        "794",
+        "599",
+        "590",
+        "593"
+      ],
+      "predecessorReferences": {
+        "212670000D0792": [
+          "212670000D0826",
+          "212670000D0827"
+        ],
+        "212670000D0794": [
+          "212670000D0828",
+          "212670000D0829"
+        ]
+      }
     },
     {
       "id": "wh-lamadon-2006",
       "title": "Lamadon holdings divided in 2006",
       "parcelIds": [
-        "212670000D0826",
-        "212670000D0827",
-        "212670000D0828",
-        "212670000D0829",
         "212670000D0590",
         "212670000D0593"
       ],
@@ -1676,7 +1707,23 @@
       "finding": "Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number.",
       "sourceIds": [
         "winehog-grivot"
-      ]
+      ],
+      "printedReferences": [
+        "792",
+        "794",
+        "590",
+        "593"
+      ],
+      "predecessorReferences": {
+        "212670000D0792": [
+          "212670000D0826",
+          "212670000D0827"
+        ],
+        "212670000D0794": [
+          "212670000D0828",
+          "212670000D0829"
+        ]
+      }
     },
     {
       "id": "wh-arnoux-lachaux",
@@ -1692,6 +1739,13 @@
       "finding": "Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article.",
       "sourceIds": [
         "winehog-arnoux-lachaux"
+      ],
+      "printedReferences": [
+        "818",
+        "819",
+        "820",
+        "677",
+        "206"
       ]
     }
   ]

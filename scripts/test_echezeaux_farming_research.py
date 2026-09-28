@@ -97,7 +97,7 @@ class FarmingResearchTests(unittest.TestCase):
         curation = copy.deepcopy(self.curation)
         event = next(e for e in curation['exactParcelEvents'] if 'predecessorReferences' in e)
         event['predecessorReferences'] = {'212670000D0774': ['212670000D0832']}  # a successor of D0775 instead
-        with self.assertRaisesRegex(ValueError, 'without matching cadastral lineage'):
+        with self.assertRaisesRegex(ValueError, 'Event predecessor reference without matching cadastral lineage'):
             self.build(curation)
 
     def test_external_research_is_cited_and_never_a_farmer(self):
@@ -112,6 +112,15 @@ class FarmingResearchTests(unittest.TestCase):
         curation = copy.deepcopy(self.curation)
         curation['externalResearch'][0]['currentFarmer'] = 'Hospices de Beaune'
         with self.assertRaisesRegex(ValueError, 'cannot establish current farming'):
+            self.build(curation)
+        # Inherited references are labelled and must follow accepted lineage, not a spatial sliver.
+        self.assertEqual(rows['D 0826']['candidateLeads'][0]['basis'],
+                         'critic-named-cadastral-reference on predecessor D0792')
+        self.assertEqual(rows['D 0793']['candidateLeads'], [])
+        curation = copy.deepcopy(self.curation)
+        grivot = next(x for x in curation['externalResearch'] if x['id'] == 'wh-grivot')
+        grivot['predecessorReferences']['212670000D0792'].append('212670000D0793')
+        with self.assertRaisesRegex(ValueError, 'External research predecessor reference without matching cadastral lineage'):
             self.build(curation)
         curation = copy.deepcopy(self.curation)
         curation['externalResearch'][0]['sourceIds'] = []

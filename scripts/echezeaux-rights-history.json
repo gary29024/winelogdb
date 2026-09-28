@@ -106,5 +106,6 @@
       "file": "parcelles-21267-2025-01-01.json.gz",
       "sha256": "ec859de99fd6df80604617c41e8383450835f012222d6a38694a4185cd5c7b53"
     }
-  ]
+  ],
+  "successorInsideShare": 0.95
 }
