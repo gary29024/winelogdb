@@ -666,8 +666,8 @@
       "type": "critic-research",
       "documentDate": "2019-01-04",
       "reviewedAt": "2026-09-28",
-      "finding": "Public preview: the cuvée comes from very old vines in Échezeaux du Dessus. Remainder is Premium content, not read.",
-      "access": "preview-only"
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. Millot owns 0.5981 ha of Échezeaux du Dessus, plots 798, 799 and 800, from the Gouroux family of his wife; a 1986 court case against Mongeard-Mugneret gave Millot the right to vinify them. Cuvée 1949 (from 2017) comes from part of 798/799.",
+      "access": "premium-supplied-by-repository-owner"
     },
     {
       "id": "winehog-berthaut-gerbet",
@@ -676,8 +676,8 @@
       "type": "critic-research",
       "documentDate": "2019-03-13",
       "reviewedAt": "2026-09-28",
-      "finding": "Public preview: Amélie Berthaut took over the old Gerbet holdings; Échezeaux holdings enlarged from the 2018 vintage. Remainder is Premium content, not read.",
-      "access": "preview-only"
+      "finding": "Premium article supplied by the repository owner; only facts are recorded. From the 2018 vintage 0.2126 ha: Les Quartiers de Nuits 360 (0.0975 ha), part of Les Treux 508 (0.0276 ha; the rest presumably rented by another domaine) and Champs Traversins 821, 822 (0.0875 ha, from 2018). Amélie Berthaut took over two thirds of the Domaine Gerbet vineyards; first Échezeaux vintage 2013.",
+      "access": "premium-supplied-by-repository-owner"
     },
     {
       "id": "winehog-grivot",
@@ -1069,10 +1069,11 @@
         "Domaine Berthaut-Gerbet"
       ],
       "basis": "partial-succession-lead",
-      "finding": "Estate history explicitly says only PART of the Gerbet vines joined Berthaut-Gerbet. Which of D0360/D0508/D0821, if any, is farmed by this domaine needs confirmation.",
+      "finding": "Estate history explicitly says only PART of the Gerbet vines joined Berthaut-Gerbet. Which of D0360/D0508/D0821, if any, is farmed by this domaine needs confirmation. Winehog (2019) names D0360, D0821 and part of D0508 as Berthaut-Gerbet plots; the remainder of D0508 is presumably farmed by another domaine.",
       "sourceIds": [
         "gerbet",
-        "berthaut"
+        "berthaut",
+        "winehog-berthaut-gerbet"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1529,17 +1530,17 @@
     },
     {
       "id": "wh-dessus-millot",
-      "title": "Jean-Marc Millot, Échezeaux du Dessus",
+      "title": "Jean-Marc Millot: three named plots in Échezeaux du Dessus",
       "parcelIds": [
         "212670000D0798",
         "212670000D0799",
         "212670000D0800"
       ],
-      "basis": "critic-attribution-area-reconstructed",
-      "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.5981 ha as confirmed and describes the Cuvée 1949 from very old Échezeaux du Dessus vines; D0798–D0800 total 5 981 m² and carry no company record.",
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (January 2019) names cadastre 798, 799 and 800, 0.5981 ha, owned through the Gouroux family; the areas equal the cadastral sum exactly and confirm the earlier area reconstruction. None has a company record, consistent with private family ownership. A 1986 court case against Mongeard-Mugneret gave Millot the right to vinify these plots, so Mongeard had farmed them before. Cuvée 1949, from 2017, comes from part of D0798/D0799.",
       "sourceIds": [
-        "winehog-dessus",
-        "winehog-millot"
+        "winehog-millot",
+        "winehog-dessus"
       ],
       "producer": "Domaine Jean-Marc Millot"
     },
@@ -1625,17 +1626,19 @@
     },
     {
       "id": "wh-berthaut-gerbet",
-      "title": "Berthaut-Gerbet enlarged its Échezeaux from 2018",
+      "title": "Berthaut-Gerbet: four named plots, one only in part",
       "parcelIds": [
         "212670000D0360",
         "212670000D0508",
-        "212670000D0821"
+        "212670000D0821",
+        "212670000D0822"
       ],
-      "basis": "critic-holding-description",
-      "finding": "Winehog says Amélie Berthaut took over the old Gerbet holdings and enlarged the Échezeaux from the 2018 vintage. These are the Gerbet Sirugue GFA references; the article preview does not say which parcels are farmed.",
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (March 2019) names 360 in Les Quartiers de Nuits (0.0975 ha), part of 508 in Les Treux (0.0276 ha) and, from the 2018 vintage, 821 and 822 in Champs Traversins (0.0875 ha), 0.2126 ha in total. D0360 and D0821 + D0822 equal their cadastral areas exactly. D0508 is 901 m², so about 625 m² of a parcel held by the Gerbet Sirugue GFA is presumably farmed by another, unnamed domaine. D0360, D0508 and D0821 are held by GFA Domaine Gerbet Sirugue; D0822, divided with D0821 from former D0300 in 2019, has no company record. Amélie Berthaut took over two thirds of the Gerbet vineyards.",
       "sourceIds": [
         "winehog-berthaut-gerbet"
-      ]
+      ],
+      "producer": "Domaine Berthaut-Gerbet"
     },
     {
       "id": "wh-grivot",

@@ -27,10 +27,10 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 114,
+    "holderLead": 115,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
-    "unresolved": 144,
+    "unresolved": 143,
     "currentFarmerConfirmed": 0,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 36
@@ -3842,7 +3842,15 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
@@ -4075,7 +4083,15 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
@@ -8680,10 +8696,10 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean-Marc Millot",
-          "basis": "critic-attribution-area-reconstructed",
+          "basis": "critic-named-cadastral-reference",
           "sourceIds": [
-            "winehog-dessus",
-            "winehog-millot"
+            "winehog-millot",
+            "winehog-dessus"
           ]
         }
       ],
@@ -8713,10 +8729,10 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean-Marc Millot",
-          "basis": "critic-attribution-area-reconstructed",
+          "basis": "critic-named-cadastral-reference",
           "sourceIds": [
-            "winehog-dessus",
-            "winehog-millot"
+            "winehog-millot",
+            "winehog-dessus"
           ]
         }
       ],
@@ -8746,10 +8762,10 @@
       "candidateLeads": [
         {
           "name": "Domaine Jean-Marc Millot",
-          "basis": "critic-attribution-area-reconstructed",
+          "basis": "critic-named-cadastral-reference",
           "sourceIds": [
-            "winehog-dessus",
-            "winehog-millot"
+            "winehog-millot",
+            "winehog-dessus"
           ]
         }
       ],
@@ -9311,7 +9327,15 @@
           "basis": "partial-succession-lead",
           "sourceIds": [
             "gerbet",
-            "berthaut"
+            "berthaut",
+            "winehog-berthaut-gerbet"
+          ]
+        },
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
           ]
         }
       ],
@@ -9352,9 +9376,19 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Berthaut-Gerbet",
+          "basis": "critic-named-cadastral-reference",
+          "sourceIds": [
+            "winehog-berthaut-gerbet"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "wh-berthaut-gerbet"
+      ],
       "rightsChanges": [],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
@@ -9363,8 +9397,8 @@
       "historyFindingIds": [
         "private-splits"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

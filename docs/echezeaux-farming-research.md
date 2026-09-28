@@ -62,7 +62,9 @@ A Premium article supplied by the repository owner (facts only) names Domaine Je
 
 A second supplied article names Domaine Arnoux-Lachaux's four Les Rouges du Bas plots, **D0818–D0820** (formerly 206) and **D0677**, with exact area matches. D0677 is recorded to François Feuillet, so this implies Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019, which conflicts with the Feuillet → Duband lead for that parcel; the conflict is recorded, not resolved.
 
-Winehog's 2014 Échezeaux du Dessus areas also equal exact sums of current parcels: Perdrix = D0620 + D0621, Millot = D0798–D0800, Tremblay = D0189 + D0190, Mongeard = D0668–D0670. These parcel sets are this register's reconstruction, recorded as weak leads. The Michel Noëllat area matches D0191, D0192 and D0671–D0673, which conflicts with Mongeard and Bouchon Pourpre rights and is left unresolved. Winehog's 2020 report that Liger-Belair added an Échezeaux du Dessus plot is compatible with, but does not identify, D0673's 2024 transfer to Bouchon Pourpre.
+Two further supplied articles name **Jean-Marc Millot's D0798–D0800** (0.5981 ha, owned through the Gouroux family; a 1986 court case against Mongeard-Mugneret gave Millot the right to vinify them) and **Berthaut-Gerbet's D0360, D0821, D0822 and part of D0508** (0.2126 ha from 2018; the rest of D0508 is presumably farmed by another domaine). All areas match the cadastre.
+
+Winehog's 2014 Échezeaux du Dessus areas also equal exact sums of current parcels: Perdrix = D0620 + D0621, Millot = D0798–D0800 (since confirmed by name), Tremblay = D0189 + D0190, Mongeard = D0668–D0670. These parcel sets are this register's reconstruction, recorded as weak leads. The Michel Noëllat area matches D0191, D0192 and D0671–D0673, which conflicts with Mongeard and Bouchon Pourpre rights and is left unresolved. Winehog's 2020 report that Liger-Belair added an Échezeaux du Dessus plot is compatible with, but does not identify, D0673's 2024 transfer to Bouchon Pourpre.
 
 ### Nicole Lamarche: three exact candidate parcels
 
