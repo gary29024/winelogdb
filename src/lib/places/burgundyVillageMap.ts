@@ -15,6 +15,9 @@ export type VillageMapCatalogue={
  // Optional gzip Geobuf copy with exactly the same coordinates as dataUrl.
  geobufUrl?:string;
  geobufRawUrl?:string;
+ // Lossless GeoJSON served with HTTP Content-Encoding; the browser decodes it.
+ brotliJsonUrl?:string;
+ gzipJsonUrl?:string;
  // Display-only regional geometry. Full dataUrl remains the audited source.
  overview?:{dataUrl:string;geobufUrl:string;geobufRawUrl:string;downloadTimeoutMs:number;maxZoom:number;labelIds:string[]};
  // Large regional maps need time for a complete download on slow connections.

@@ -1,8 +1,10 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
 import {readFileSync,statSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
+const losslessMaps=JSON.parse(readFileSync('src/lib/places/burgundyLosslessMapRegistry.json','utf8')) as Record<string,{brotliJsonUrl:string;gzipJsonUrl:string}>;
 const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
@@ -1574,4 +1576,89 @@ test('an umbrella Premier Cru says what it covers; a cru that overlaps nothing h
  const meursault=page.getByRole('dialog',{name:'Meursault',exact:true});
  await expect(meursault.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await expect(meursault.locator('.village-map-overlap')).toHaveCount(0);
+});
+
+const detailedDownloadCases=[
+ ['Chablis','chablis','White','Chablis'],
+ ['Côte de Beaune-Villages','cote-de-beaune-villages','Red','Côte de Beaune'],
+ ['Petit Chablis','petit-chablis','White','Chablis'],
+ ['Pouilly-Fuissé','pouilly-fuisse','White','Mâconnais'],
+] as const;
+for(const [appellation,id,colour,region] of detailedDownloadCases)for(const route of allMapRoutes){
+ test(`Lossless detailed ${appellation} ${route}: exact HTTP-decoded map`,async({page})=>{
+  await setup(page,{appellation,region,colour,wineStyle:colour.toLowerCase(),wineName:'Vieilles Vignes',classification:null});
+  const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+  await page.goto(route);expect(downloads).toEqual([]);
+  const url=losslessMaps[id].brotliJsonUrl;
+  const pending=page.waitForResponse(r=>r.url().endsWith(url));
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:appellation,exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  const response=await pending;
+  expect(response.headers()['content-encoding']).toBe('br');
+  expect(response.headers()['cache-control']).toContain('immutable');
+  const manifest=JSON.parse(readFileSync('scripts/burgundy-lossless-map-report.json','utf8')) as {maps:{id:string;sourceSha256:string}[]};
+  expect(createHash('sha256').update(await response.body()).digest('hex')).toBe(manifest.maps.find(m=>m.id===id)!.sourceSha256);
+  expect([...new Set(downloads)]).toEqual([new URL(url,page.url()).href]);
+  await expect(dialog.locator('.village-map-overview-note')).toHaveCount(0);
+ });
+}
+
+test('Lossless detailed map: older browsers use HTTP gzip and retry keeps the same small asset',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(globalThis,'DecompressionStream',{configurable:true,value:undefined}));
+ await setup(page,{appellation:'Chablis',region:'Chablis',colour:'White',wineStyle:'white',wineName:'Vieilles Vignes',classification:null});
+ const url=losslessMaps.chablis.gzipJsonUrl,downloads:string[]=[];
+ page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
+ let available=false;
+ await page.route('**'+url,r=>available?r.continue():r.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('/shared/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ await expect(page.getByRole('alert')).toContainText('The map could not load');
+ available=true;
+ const pending=page.waitForResponse(r=>r.url().endsWith(url)&&r.status()===200);
+ await page.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ expect((await pending).headers()['content-encoding']).toBe('gzip');
+ expect([...new Set(downloads)]).toEqual([new URL(url,page.url()).href]);
+});
+
+for(const modern of [true,false]){
+ const key=modern?'brotliJsonUrl':'gzipJsonUrl';
+ const largest=[...detailedDownloadCases].sort((a,b)=>statSync('public'+losslessMaps[b[1]][key]).size-statSync('public'+losslessMaps[a[1]][key]).size)[0][1];
+ for(const [appellation,id,colour,region] of detailedDownloadCases.filter(([,id])=>fullMapMatrix||id===largest)){
+  test(`Lossless detailed ${appellation}: ${modern?'Brotli':'legacy gzip'} at 1 Mbps`,async({page,browserName},testInfo)=>{
+   test.skip(browserName!=='chromium','Chromium network throttling');
+   if(!modern)await page.addInitScript(()=>Object.defineProperty(globalThis,'DecompressionStream',{configurable:true,value:undefined}));
+   await setup(page,{appellation,region,colour,wineStyle:colour.toLowerCase(),wineName:'Vieilles Vignes',classification:null});
+   await page.goto('/shared/layout-wine');
+   await page.getByRole('button',{name:'View village map'}).click();
+   await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+   await page.keyboard.press('Escape');
+   const network=await page.context().newCDPSession(page);
+   await network.send('Network.enable');await network.send('Network.setCacheDisabled',{cacheDisabled:true});
+   await network.send('Network.emulateNetworkConditions',{offline:false,latency:150,downloadThroughput:125000,uploadThroughput:62500});
+   const url=losslessMaps[id][key],pending=page.waitForResponse(r=>r.url().endsWith(url));
+   const started=Date.now();await page.getByRole('button',{name:'View village map'}).click();
+   await expect(page.getByRole('button',{name:'Village view',exact:true})).toBeEnabled({timeout:20000});
+   const response=await pending,sizes=await response.request().sizes();
+   expect(sizes.responseBodySize).toBe(statSync('public'+url).size);
+   expect(sizes.responseBodySize).toBeLessThan(modern?600000:950000);
+   await testInfo.attach('lossless-map-network',{body:JSON.stringify({encoding:modern?'br':'gzip',downloadBytes:sizes.responseBodySize,readyAfterMs:Date.now()-started}),contentType:'application/json'});
+   await network.detach();
+  });
+ }
+}
+
+test('Lossless detailed asset is reused from the browser cache',async({page,browserName})=>{
+ test.skip(browserName!=='chromium','Chromium cache instrumentation');
+ // No request routing: Playwright routing disables the browser HTTP cache.
+ await page.goto('/login');
+ const network=await page.context().newCDPSession(page);await network.send('Network.enable');
+ await network.send('Network.setCacheDisabled',{cacheDisabled:false});
+ const requests=new Set<string>(),hits=new Set<string>(),url=losslessMaps.chablis.brotliJsonUrl;
+ network.on('Network.requestWillBeSent',e=>{if(e.request.url.endsWith(url))requests.add(e.requestId)});
+ network.on('Network.requestServedFromCache',e=>{if(requests.has(e.requestId))hits.add(e.requestId)});
+ network.on('Network.responseReceived',e=>{if(e.response.url.endsWith(url)&&e.response.fromDiskCache)hits.add(e.requestId)});
+ const read=()=>page.evaluate(async url=>{const r=await fetch(url);return {status:r.status,length:(await r.arrayBuffer()).byteLength}},url);
+ const first=await read(),second=await read();expect(second).toEqual(first);expect(first.status).toBe(200);
+ await expect.poll(()=>hits.size).toBeGreaterThan(0);await network.detach();
 });

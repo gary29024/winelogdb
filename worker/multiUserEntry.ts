@@ -1,4 +1,5 @@
 import legacy from './structureEntry';
+import {serveLosslessMap} from './losslessMapAssets';
 import { SignJWT } from 'jose';
 import { ApiError,json,seconds,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
@@ -31,7 +32,9 @@ async function internalRequest(request:Request,env:MultiUserEnv,user:string){
 function allowanceMessage(label:string,resetsAt:string){return `${label} has no free runs remaining this week. The allowance resets ${new Date(resetsAt).toISOString()}.`}
 export default {
  async fetch(request:Request,env:MultiUserEnv,ctx:ExecutionContext):Promise<Response>{
-  const path=new URL(request.url).pathname;if(!path.startsWith('/api/'))return env.ASSETS.fetch(request);
+  const path=new URL(request.url).pathname;
+  if(path.startsWith('/maps/lossless/'))return serveLosslessMap(request,env.ASSETS);
+  if(!path.startsWith('/api/'))return env.ASSETS.fetch(request);
   try{
    const auth=await authRoute(request,env);if(auth)return auth;
    const member=await authenticate(request,env);verifyOrigin(request,env);

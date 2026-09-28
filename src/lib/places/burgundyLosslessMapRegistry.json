@@ -1,0 +1,18 @@
+{
+  "chablis": {
+    "brotliJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-29d13c5661ee.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/chablis.2026-09-21.lossless-5519b55d8f1a.geojson.gz"
+  },
+  "cote-de-beaune-villages": {
+    "brotliJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-6d2676ca72a2.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/cote-de-beaune-villages.2026-09-21.lossless-7e6096958085.geojson.gz"
+  },
+  "petit-chablis": {
+    "brotliJsonUrl": "/maps/lossless/petit-chablis.2026-09-21.lossless-8cb55634396f.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/petit-chablis.2026-09-21.lossless-f8067a2adf46.geojson.gz"
+  },
+  "pouilly-fuisse": {
+    "brotliJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-fbb08177b000.geojson.br",
+    "gzipJsonUrl": "/maps/lossless/pouilly-fuisse.2026-09-21.lossless-72003feb03cf.geojson.gz"
+  }
+}

@@ -100,7 +100,10 @@ export async function loadVillageMapCatalogue(villageId:string):Promise<VillageM
  const load=loaders.get(villageId);
  if(!load)throw new Error('Village map is unavailable');
  const catalogue=(await load()).default;
- if(catalogue.mapKind!=='regional')return catalogue;
+ if(catalogue.mapKind!=='regional'){
+  const {default:lossless}=await import('./burgundyLosslessMapRegistry.json');
+  return {...catalogue,...lossless[villageId as keyof typeof lossless]};
+ }
  const {default:overviews}=await import('./burgundyRegionalOverviewRegistry.json');
  const overview=overviews[villageId as keyof typeof overviews];
  if(!overview)throw new Error('Regional overview is unavailable');
