@@ -149,6 +149,10 @@ def main():
                 'sourceUrl': config['cadastreUrl'], 'rightsUrl': config['rightsUrl'], 'schemaUrl': config['schemaUrl'],
                 'parentFeatureIds': config['parentFeatureIds'], 'minimumOverlapM2': config['minimumOverlapM2'], 'counts': counts}
     write_json(ROOT / 'src/lib/places/echezeauxParcelManifest.json', manifest)
+    holder_index = {parent: sorted({r['holderId'] for f in selected.values()
+                                  if any(o['parentFeatureId'] == parent for o in f['properties']['overlaps'])
+                                  for r in f['properties']['recordedRights']}) for parent in config['parentFeatureIds']}
+    write_json(ROOT / 'src/lib/places/echezeauxParcelHolderIndex.json', holder_index)
     report = {'sources': config, 'parentSourceSha256': expected, **manifest, 'bytes': len(payload),
               'gzipEquivalentBytes': len(gzip.compress(payload, mtime=0)), 'matchedFiscalRows': matched_rows,
               'excludedBoundaryContacts': contacts, 'communeRecordsWithoutCurrentGeometry': sorted(unmatched_refs),

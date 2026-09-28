@@ -1,4 +1,5 @@
 import app from './researchQueueEntry';
+import {parcelProducerLinksRoute} from './parcelProducerLinks';
 import { handleChampagneExtraction,processChampagneExtraction } from './champagneExtraction';
 import { tastingStructureStatement } from '../src/lib/db/wineSave';
 import { requireSession } from '../src/lib/auth/session';
@@ -42,6 +43,7 @@ export default {
   async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
     configureBatchGateway(env);
     const url=new URL(request.url),wineId=exactWineId(url.pathname);
+    const parcelLinks=await parcelProducerLinksRoute(request,env);if(parcelLinks)return parcelLinks;
     const champagneResponse=await handleChampagneExtraction(request,env);if(champagneResponse)return champagneResponse;
     const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
 
