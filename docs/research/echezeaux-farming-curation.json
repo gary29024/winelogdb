@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-29",
+  "reviewedAt": "2026-09-30",
   "parentFeatureId": "inao-denom-565",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
@@ -1311,6 +1311,301 @@
       ],
       "pageNumbering": "one-based PDF",
       "retrievalNote": "User supplied 821877008-63def6cbc361ed1a931117a6.pdf. Company-page link only; no direct download URL established. PDF not redistributed."
+    },
+    {
+      "id": "lc-statutes-2025",
+      "title": "LC: statutes updated 23 May 2025",
+      "url": "https://www.pappers.fr/entreprise/lc-883067134#actes",
+      "type": "company-filing",
+      "documentDate": "2025-05-23",
+      "reviewedAt": "2026-09-30",
+      "finding": "Retains cash contributions of EUR 999 from SAS B (750182891) and EUR 1 from Benoît Landanger, with the LC name and agricultural-property object. No D0313 schedule, land contribution or executed vineyard lease found.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2025-06-18",
+      "originalFilename": "1-LC-Actes-du-18-06-2025.pdf",
+      "sha256": "b3950f789667dde885d7d1a6f2ad6daeffd384ab704e54cc737aab0ae5dbbf6c",
+      "pageCount": 16,
+      "reviewedPages": [
+        4
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "statutesUpdatedDate": "2025-05-23"
+    },
+    {
+      "id": "liger-share-loan-2025",
+      "title": "Liger-Belair: 30 September 2025 share-loan termination",
+      "url": "https://www.pappers.fr/entreprise/domaine-du-comte-liger-belair-429010846#actes",
+      "type": "company-filing",
+      "documentDate": "2025-09-30",
+      "reviewedAt": "2026-09-30",
+      "finding": "The assembly records Bouchon Pourpre returning one borrowed SCEA share to CLB Participations on 30 September 2025, ending a 20 February 2020 share loan. This is a corporate-share change, not a land transfer, vineyard lease or farm-structure decision.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2026-04-02",
+      "originalFilename": "2-DOMAINE-DU-COMTE-LIGER-BELAIR-Actes-du-02-04-2026.pdf",
+      "sha256": "65261344239f39abdd0abb5f2acd065a339be8f8f40da02c03a08862e4f55573",
+      "pageCount": 3,
+      "reviewedPages": [
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "hor-capital-resolution-2016",
+      "title": "HOR: 24 October 2016 cash-capital resolution (short copy)",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008#actes",
+      "type": "company-filing",
+      "documentDate": "2016-10-24",
+      "reviewedAt": "2026-09-30",
+      "finding": "Five-page copy of the resolution also contained in the longer December filing: EUR 5890885 cash increase and proposed EUR 500 cash reduction. No vineyard contribution, acquisition deed or lease schedule.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2016-12-27",
+      "originalFilename": "3-HOR-VIGNOBLES-Actes-du-27-12-2016-3.pdf",
+      "sha256": "570c766b9bf887e1d90db352e89ebbcb31ba68013061f4108a70add29bb3a3bb",
+      "pageCount": 5,
+      "reviewedPages": [
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "overlappingSourceId": "hor-capital-bundle-2016"
+    },
+    {
+      "id": "bouchy-formation-retained-2019",
+      "title": "Bouchy: 1993 founding mandate retained in 2019 filing",
+      "url": "https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes",
+      "type": "company-filing",
+      "documentDate": "1993-06-22",
+      "reviewedAt": "2026-09-30",
+      "finding": "The updated statutes retain the 22 June 1993 deed. Article 39 mandates purchase of D0764/D0766 together (1260 m²) and an 18-year métayage lease to Bernard Mondange. This is a mandate, not the executed purchase or lease. The surrounding 2019 documents concern shares.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2019-08-19",
+      "originalFilename": "4-DOMAINE-BOUCHY-ET-AMIS-Actes-du-19-08-2019.pdf",
+      "sha256": "dbfc6e8530df68c11189db4e2952d9e5a83c392ce512f00078143d418863ca78",
+      "pageCount": 45,
+      "reviewedPages": [
+        26,
+        44
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "statutesUpdatedDate": "2019-04-27",
+      "dateNote": "The relevant acquisition/lease mandate belongs to the retained 1993 founding deed, not the 2019 share donation or statutes update."
+    },
+    {
+      "id": "lc-formation-2020",
+      "title": "ORIGINE / LC: 19 March 2020 cash-only formation",
+      "url": "https://www.pappers.fr/entreprise/lc-883067134#actes",
+      "type": "company-filing",
+      "documentDate": "2020-03-19",
+      "reviewedAt": "2026-09-30",
+      "finding": "Founders are SAS B (750182891), represented by Benoît Landanger, and Benoît Landanger personally; EUR 999 and EUR 1 cash contributions. No parcel list, acquisition instrument or executed vineyard lease. Establishes a corporate relationship, not D0313 farming.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2020-04-24",
+      "originalFilename": "5-LC-Actes-du-24-04-2020.pdf",
+      "sha256": "b0b7a6902fde01295fa731de88f872669d31dc1aa7ec8e18172face55a3f6934",
+      "pageCount": 17,
+      "reviewedPages": [
+        6,
+        17
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "hor-capital-bundle-2016",
+      "title": "HOR: October 2016 capital and presidency changes",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008#actes",
+      "type": "company-filing",
+      "documentDate": "2016-10-25",
+      "reviewedAt": "2026-09-30",
+      "finding": "Includes the 24 October cash-capital resolution and completion, and 25 October replacement of Arnaud Mortet by Golden Terroirs Limited as president. Retained formation annex says Néant. No land contribution, acquisition deed or lease schedule; presidency does not establish cultivation.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2016-12-27",
+      "originalFilename": "6-HOR-VIGNOBLES-Actes-du-27-12-2016-2.pdf",
+      "sha256": "7c27bbdbb34dacf188d8ee53d8762003d9cef79efb8057b3c95447671dd3be2d",
+      "pageCount": 26,
+      "reviewedPages": [
+        6,
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "documentDates": [
+        "2016-10-24",
+        "2016-10-25"
+      ]
+    },
+    {
+      "id": "bouchy-tardy-lease-recital-2019",
+      "title": "Bouchy: 5 August 2019 deed reciting the Jean Tardy lease",
+      "url": "https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes",
+      "type": "company-filing",
+      "documentDate": "2019-08-05",
+      "reviewedAt": "2026-09-30",
+      "finding": "PDF p.21 / printed p.14 names Jean Tardy as métayage tenant of D0628/D0764/D0765/D0766/D0767 (3476 m²), under the 19 October 2001 lease recited to end 18 October 2026. Permitted use by EARL du Domaine Jean Tardy et Fils is explicit. The Guillaume Tardy lease ending in 2035 concerns Nuits-Saint-Georges AE0123, not Échezeaux.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2020-02-19",
+      "originalFilename": "7-DOMAINE-BOUCHY-ET-AMIS-Actes-du-19-02-2020.pdf",
+      "sha256": "75a6ac5aa73ae74203a69483194245c5e2a150b6e4692c9db9b99197486bbebd",
+      "pageCount": 68,
+      "reviewedPages": [
+        8,
+        21,
+        41
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "dateNote": "The 2020 filing includes a 22 November 2019 share-table correction and the separate 5 August 2019 donation deed. The lease recital belongs to that August deed."
+    },
+    {
+      "id": "liger-statutes-2025",
+      "title": "Liger-Belair: statutes following the September 2025 assembly",
+      "url": "https://www.pappers.fr/entreprise/domaine-du-comte-liger-belair-429010846#actes",
+      "type": "company-filing",
+      "documentDate": "2025-09-30",
+      "reviewedAt": "2026-09-30",
+      "finding": "Cover and final update note identify the 30 September 2025 assembly. Articles 6-8 retain EUR 8000 cash formation capital and the revised share allocation after the share-loan termination. No parcel schedule or new vineyard lease; the filing is not a July 2026 farm authorisation.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2026-07-23",
+      "originalFilename": "8-DOMAINE-DU-COMTE-LIGER-BELAIR-Actes-du-23-07-2026.pdf",
+      "sha256": "9cd886606660181402e7efb43c50d8ef34d77e4cf38b14e18e30d059d8e4fece",
+      "pageCount": 23,
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        23
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "statutesUpdatedDate": "2025-09-30"
+    },
+    {
+      "id": "traversins-accounts-2023",
+      "title": "SAS Traversins: first accounts to 30 June 2023",
+      "url": "https://www.pappers.fr/entreprise/sas-traversins-911887461#comptes",
+      "type": "company-filing",
+      "documentDate": "2023-06-30",
+      "reviewedAt": "2026-09-30",
+      "finding": "First period runs 23 March 2022 to 30 June 2023. Balance sheet and annex record EUR 5957000 gross land assets/acquisitions; certification is by president Christophe Roumier. No cadastral references, vineyard area or named tenant schedule. This aggregate is not the price or scope of D0295-D0299.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2023-10-16",
+      "originalFilename": "9-SAS-TRAVERSINS-Comptes-sociaux-2023.pdf",
+      "sha256": "b7db93035679bed3e41d1364221f637e12cc576b005378f88d6f8e239354cd08",
+      "pageCount": 14,
+      "reviewedPages": [
+        3,
+        4,
+        7,
+        10,
+        11
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "dateNote": "Document date is the accounting period end; accounts state they were drawn up 7 July 2023 and approved 10 October 2023.",
+      "accountingPeriodStart": "2022-03-23",
+      "accountingPeriodEnd": "2023-06-30"
+    },
+    {
+      "id": "hor-capital-reduction-2016",
+      "title": "HOR: 14 December 2016 cash-capital reduction",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008#actes",
+      "type": "company-filing",
+      "documentDate": "2016-12-14",
+      "reviewedAt": "2026-09-30",
+      "finding": "President completes the EUR 500 cash buyback/cancellation, leaving EUR 5890885 capital. Updated statutes retain the cash-capital chronology and empty formation annex. No vineyard transfer, parcel schedule or executed lease.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2017-01-20",
+      "originalFilename": "10-HOR-VIGNOBLES-Actes-du-20-01-2017.pdf",
+      "sha256": "8528e3db57564265a3cb84b4ef39eb472d34f570ef334ec3402ffd7bacc0f272",
+      "pageCount": 20,
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "lc-object-2021",
+      "title": "ORIGINE / LC: agricultural-property object added in July 2021",
+      "url": "https://www.pappers.fr/entreprise/lc-883067134#actes",
+      "type": "company-filing",
+      "documentDate": "2021-07-15",
+      "reviewedAt": "2026-09-30",
+      "finding": "Resolution adds acquisition, sale, ownership, management and development of agricultural property to the company object. The cash capital and Landanger/SAS B structure remain. The company object permits transactions; it does not identify a completed D0313 purchase or lease.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2021-08-27",
+      "originalFilename": "11-LC-Actes-du-27-08-2021.pdf",
+      "sha256": "02e16ea270786bd07d14a05e79b8f52c1633f0f165764cfa8293f1422c5e2962",
+      "pageCount": 20,
+      "reviewedPages": [
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "traversins-formation-2022",
+      "title": "SAS Traversins: 23 March 2022 cash-only formation",
+      "url": "https://www.pappers.fr/entreprise/sas-traversins-911887461#actes",
+      "type": "company-filing",
+      "documentDate": "2022-03-23",
+      "reviewedAt": "2026-09-30",
+      "finding": "Notarial formation has EUR 1000 cash from sole shareholder Heritage Vineyards Pte. Ltd. Article 6 is a cash contribution, not a vineyard contribution. The annex is a power of attorney; no D0295-D0299 schedule or executed vineyard lease found.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2022-04-06",
+      "originalFilename": "12-SAS-TRAVERSINS-Actes-du-06-04-2022.pdf",
+      "sha256": "9ece64ea061eed8da0d76e0224d25d14a9176413cbb59df5393e89a3cb0dabb4",
+      "pageCount": 30,
+      "reviewedPages": [
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchon-continuation-2024",
+      "title": "Bouchon Pourpre: 28 October 2024 continuation resolution",
+      "url": "https://www.pappers.fr/entreprise/bouchon-pourpre-880909346#actes",
+      "type": "company-filing",
+      "documentDate": "2024-10-28",
+      "reviewedAt": "2026-09-30",
+      "finding": "Resolution continues the company after equity fell below half its capital. No D0673 acquisition deed, parcel schedule or tenancy instrument. The filing date does not date a vineyard transaction.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2025-06-03",
+      "originalFilename": "13-BOUCHON-POURPRE-Actes-du-03-06-2025.pdf",
+      "sha256": "532b7c4d392b85277d9269d77ca0215bc457fb2dc1fa0e2a5dbc7f6f0a14fa52",
+      "pageCount": 2,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed."
+    },
+    {
+      "id": "coudray-original-2004",
+      "title": "GFA Héritiers Coudray: original 26 June 2004 formation copy",
+      "url": "https://www.pappers.fr/entreprise/gfa-heritiers-coudray-477938294#actes",
+      "type": "company-filing",
+      "documentDate": "2004-06-26",
+      "reviewedAt": "2026-09-30",
+      "finding": "Corroborates the deed retained in the already reviewed 2024 copy: D0635/D0714/D0719 total 3859 m²; verbal tenancy of Société Civile Domaine Coudray-Bizot and a mandate for a separate 18-year lease. No executed lease or later renewal is added.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2004-07-23",
+      "originalFilename": "14-GFA-HERITIERS-COUDRAY-Actes-du-23-07-2004.pdf",
+      "sha256": "18a21f479415309392e1256608af42e97fe249225c6e552166c2faffcd9f34fc",
+      "pageCount": 22,
+      "reviewedPages": [
+        2,
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
+      "corroboratesSourceId": "coudray"
     }
   ],
   "holders": [
@@ -1540,7 +1835,8 @@
       "sourceIds": [
         "coudray",
         "coudray-identity",
-        "bodacc-coudray"
+        "bodacc-coudray",
+        "coudray-original-2004"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1589,12 +1885,14 @@
       "candidateNames": [
         "Domaine Jean Tardy et Fils"
       ],
-      "basis": "bottler-only-lead",
-      "finding": "GFA holds Les Treux. An auction lists a 2019 Bouchy bottle with Tardy bottling; this is not evidence Tardy farmed these five parcels, then or now. In December 2025 SCEA Domaine du Comte Liger-Belair applied to farm all five parcels; the application was suspended in April 2026.",
+      "basis": "filing-tenant-relationship",
+      "finding": "The 2019 deed names Jean Tardy as tenant of all five parcels, with permitted EARL Jean Tardy et Fils use. It recites a 2001 lease ending 18 October 2026. This strengthens the former bottler lead. Liger-Belair’s later application was suspended in April 2026; current farming and any handover remain unverified.",
       "sourceIds": [
         "bouchy",
         "bouchy-tardy",
-        "raa-2026-067"
+        "raa-2026-067",
+        "bouchy-formation-retained-2019",
+        "bouchy-tardy-lease-recital-2019"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1614,12 +1912,15 @@
       "holderId": "821877008",
       "candidateNames": [],
       "basis": "unresolved",
-      "finding": "The 2021 deed concerns D0815, now held by SCI Les Climats; its Marsannay lease recital cannot be extended to D0813/D0814. The 2016 formation deed contributes cash, not vineyards. No tenant is established for these two retained parcels.",
+      "finding": "The 2021 Marsannay tenancy recital covers D0815, not D0813/D0814. The 2016 formation and capital/presidency filings contain cash and share transactions, with no vineyard acquisition or lease schedule. No tenant is established for these two retained parcels.",
       "sourceIds": [
         "hor-filing",
         "hor-accounts",
         "bodacc-hor",
-        "hor-formation-2016"
+        "hor-formation-2016",
+        "hor-capital-resolution-2016",
+        "hor-capital-bundle-2016",
+        "hor-capital-reduction-2016"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1684,11 +1985,13 @@
         "Domaine Georges Roumier"
       ],
       "basis": "management-and-reported-estate-context",
-      "finding": "Traversins has Christophe Roumier as president; a 2023 estate-visit report describes additional Champs Traversins vines. Neither identifies these five cadastral parcels or a 2026 operating lease. Reviewed company filing text did not establish a Flagey lease or parcel operation.",
+      "finding": "Christophe Roumier is president; a 2023 visit report describes added Champs Traversins vines. Formation was cash-only. First accounts show aggregate land acquisitions, with no parcel or lease schedule. These support company chronology, not exact D0295-D0299 farming.",
       "sourceIds": [
         "traversins",
         "traversins-record",
-        "roumier-2023-visit"
+        "roumier-2023-visit",
+        "traversins-formation-2022",
+        "traversins-accounts-2023"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1747,14 +2050,17 @@
       "candidateNames": [
         "Domaine de la Pousse d'Or"
       ],
-      "basis": "registered-office-match",
-      "finding": "ORIGINE, now LC, shares its Paris office with Domaine de la Pousse d'Or, and one person became manager of both in 2022. Pousse d'Or describes a quarter-acre in the Poulaillères held by its owner's holding company; D0313 is a 0.11 ha parcel there. No lease reviewed.",
+      "basis": "management-and-estate-context",
+      "finding": "LC’s statutes name SAS B (750182891) and Benoît Landanger as cash contributors, strengthening the corporate link behind the Pousse d’Or lead. The 2021 object expansion and 2025 statutes contain no D0313 acquisition or lease schedule; current farming remains unverified.",
       "sourceIds": [
         "origine",
         "origine-rename",
         "bodacc-origine",
         "bodacc-pousse-dor",
-        "pousse-echezeaux"
+        "pousse-echezeaux",
+        "lc-formation-2020",
+        "lc-object-2021",
+        "lc-statutes-2025"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1764,11 +2070,14 @@
         "Domaine du Comte Liger-Belair"
       ],
       "basis": "management-only-lead",
-      "finding": "Bouchon Pourpre's link to Comte Liger-Belair is corporate. No accepted lease or exact-parcel current-operation evidence for D0673. SCEA Domaine du Comte Liger-Belair applied to farm D0673 in December 2025; instruction was suspended in April 2026, so no authorisation existed at that date.",
+      "finding": "The Liger-Belair link is corporate. Bouchon Pourpre’s 2024 continuation decision and September 2025 return of a borrowed SCEA share establish no D0673 transfer or lease. The farm application was suspended in April 2026; filings labelled 2026 record 2025 corporate actions, not a later authorisation.",
       "sourceIds": [
         "bouchon",
         "liger",
-        "raa-2026-067"
+        "raa-2026-067",
+        "bouchon-continuation-2024",
+        "liger-share-loan-2025",
+        "liger-statutes-2025"
       ],
       "parcelOperationConfirmed": false
     },
@@ -2014,9 +2323,10 @@
       "sourceIds": [
         "dgfip-history",
         "traversins",
-        "roumier-2023-visit"
+        "roumier-2023-visit",
+        "traversins-accounts-2023"
       ],
-      "finding": "No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming."
+      "finding": "No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming. The first accounts to 30 June 2023 record aggregate land acquisitions during the initial accounting period, but give no cadastral list or tenant schedule."
     },
     {
       "id": "bnd-d0143",
@@ -2145,6 +2455,19 @@
         "dujac"
       ],
       "finding": "A 2009 tax ruling records a métayage lease from SCE du Domaine Dujac to Société Domaine Dujac SA covering vines in Flagey-Échezeaux, 1 July 1997 to 11 November 2015. It names no parcel, and today's recorded holder of D0306 is GFA du Domaine Dujac, whose identity with the SCE is not established. It shows that owning and farming entities of one domaine can differ; it does not show who farms D0306 now."
+    },
+    {
+      "id": "bouchy-founding-mandate-1993",
+      "title": "Bouchy: 1993 mandate concerns two parcels, not all five",
+      "parcelIds": [
+        "212670000D0764",
+        "212670000D0766"
+      ],
+      "sourceIds": [
+        "bouchy-formation-retained-2019",
+        "bouchy-tardy-lease-recital-2019"
+      ],
+      "finding": "The 22 June 1993 founding deed, retained in the 2019 statutes, mandates purchase of D0764/D0766 together (1260 m²) and an 18-year métayage lease to Bernard Mondange. It does not prove either instrument was executed and does not cover D0628/D0765/D0767. The later 2019 deed separately recites Jean Tardy’s 2001 lease over all five parcels. The interval between these arrangements remains undocumented."
     }
   ],
   "externalResearch": [
@@ -3602,6 +3925,49 @@
       ],
       "finding": "The 30 June 2021 deed attributes D0815 (856 m²) from HOR Vignobles to SCI Les Climats. It names Domaine du Château de Marsannay (305242687) as métayage tenant under a 25 October 2016 lease, effective 1 September 2016 to 31 October 2040. This recital covers D0815, not D0813/D0814; current farming is unverified.",
       "appNote": "The 30 June 2021 deed transfers D0815 (856 m²) to SCI Les Climats and names Domaine du Château de Marsannay (305242687) as métayage tenant. It recites a 2016 lease ending 31 October 2040. D0813/D0814 are outside this recital; current farming is unverified."
+    },
+    {
+      "id": "bouchy-tardy-2019",
+      "sourceId": "bouchy-tardy-lease-recital-2019",
+      "title": "Bouchy: Jean Tardy tenancy and permitted EARL use",
+      "holderId": "391735321",
+      "companySiren": "391735321",
+      "documentDate": "2019-08-05",
+      "parcelAreasM2": {
+        "212670000D0628": 309,
+        "212670000D0764": 1040,
+        "212670000D0765": 1619,
+        "212670000D0766": 220,
+        "212670000D0767": 288
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Jean Tardy"
+          ],
+          "leaseType": "métayage à long terme",
+          "signedDate": "2001-10-19",
+          "effectiveFrom": "2001-10-19",
+          "recitalDate": "2019-08-05",
+          "recitedEnd": "2026-10-18",
+          "recitedDurationYears": 25,
+          "permittedUseBy": "EARL DU DOMAINE JEAN TARDY ET FILS",
+          "parcelAreasM2": {
+            "212670000D0628": 309,
+            "212670000D0764": 1040,
+            "212670000D0765": 1619,
+            "212670000D0766": 220,
+            "212670000D0767": 288
+          },
+          "pages": [
+            21
+          ],
+          "limitation": "Personal tenant and permitted operating-company use are distinct. No tenant/company SIREN is given in this clause. The separate executed lease, later amendments and actual 2026 farming or handover have not been verified. The other lease on this page (Guillaume Tardy, 2010-2035) concerns Nuits-Saint-Georges AE0123 only."
+        }
+      ],
+      "finding": "The 5 August 2019 deed recites a 25-year métayage lease to Jean Tardy over all five listed Échezeaux parcels, signed/effective 19 October 2001 and ending 18 October 2026, with permitted use by EARL du Domaine Jean Tardy et Fils. The annexed property declaration on PDF p.41 corroborates the references and areas. The 2026 Liger-Belair suspended application is separate; no completed handover is established.",
+      "appNote": "The 5 August 2019 deed names Jean Tardy as métayage tenant of these five parcels (0.3476 ha), with permitted use by EARL du Domaine Jean Tardy et Fils. It recites a 2001 lease ending 18 October 2026. Later amendments, current farming and any Liger-Belair handover remain unverified."
     }
   ]
 }

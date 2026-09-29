@@ -201,12 +201,12 @@ class FarmingResearchTests(unittest.TestCase):
         vigot = next(x for x in self.curation['externalResearch'] if x['id'] == 'vigot-d0195')
         self.assertEqual(vigot['basis'], 'estate-area-near-match')
 
-    def test_registered_office_matches_are_leads_never_farmers(self):
+    def test_corporate_connections_are_leads_never_farmers(self):
         rows = {p['reference']: p for p in self.build()['parcels']}
-        expected = {'D 0650': 'Domaine Méo-Camuzet',
-                    'D 0313': "Domaine de la Pousse d'Or"}
-        for ref, name in expected.items():
-            self.assertIn((name, 'registered-office-match'),
+        expected = {'D 0650': ('Domaine Méo-Camuzet', 'registered-office-match'),
+                    'D 0313': ("Domaine de la Pousse d'Or", 'management-and-estate-context')}
+        for ref, lead in expected.items():
+            self.assertIn(lead,
                           {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
             self.assertIsNone(rows[ref]['currentFarmer'])
         # A 1998 guide area equals the Drouhin land company's four parcels exactly; still research, not farming.
@@ -219,7 +219,7 @@ class FarmingResearchTests(unittest.TestCase):
     def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withParcelFiling'], 16)
+        self.assertEqual(result['counts']['withParcelFiling'], 21)
         for ref in ('D 0144', 'D 0128', 'D 0316'):
             self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
             self.assertIsNone(rows[ref]['currentFarmer'])
@@ -268,6 +268,28 @@ class FarmingResearchTests(unittest.TestCase):
         change = next(x for x in rows['D 0815']['rightsChanges']
                       if 'SCI LES CLIMATS' in x['after'])
         self.assertEqual((change['from'], change['to']), ('2022-01-01', '2023-01-01'))
+
+    def test_bouchy_recital_keeps_tenant_scope_and_suspended_application_separate(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'bouchy-tardy-2019')
+        lease = filing['leaseEvidence'][0]
+        self.assertEqual(sum(filing['parcelAreasM2'].values()), 3476)
+        self.assertEqual(lease['tenants'], ['Jean Tardy'])
+        self.assertEqual(lease['recitedEnd'], '2026-10-18')  # 2035 belongs to the Nuits lease.
+        self.assertNotIn('212670000D0673', filing['parcelAreasM2'])
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        for ref in ('0628', '0764', '0765', '0766', '0767'):
+            row = rows[f'D {ref}']
+            self.assertIsNone(row['currentFarmer'])
+            items = evidence['parcels'][f'212670000D{ref}']
+            item = next(i for i in items if i['kind'] == 'filing')
+            self.assertEqual(item['date'], '2019-08-05')  # Neither the lease start nor 2020 filing.
+            self.assertTrue(any(i['kind'] == 'suspended' for i in items))
+            self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+        # The 2026-labelled corporate records cannot become parcel-specific farming events.
+        for ref in ('0313', '0295', '0296', '0297', '0298', '0299', '0673'):
+            self.assertEqual(rows[f'D {ref}']['parcelFilingIds'], [])
 
     def test_disputed_location_is_excluded_even_when_only_one_alternative_is_listed(self):
         curation = copy.deepcopy(self.curation)

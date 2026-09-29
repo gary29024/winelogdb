@@ -293,7 +293,7 @@ def render_report(register, curation, history):
         f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
-        f"{counts['withParcelFiling']} parcels have reviewed company filings naming their contributions or transfers and dated lease relationships. "
+        f"{counts['withParcelFiling']} parcels have reviewed company filings naming exact references and dated lease relationships. "
         'These do not confirm operation in the target season.', '',
         'Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. '
         'No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.', '',

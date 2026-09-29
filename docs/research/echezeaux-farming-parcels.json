@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-29",
+  "reviewedAt": "2026-09-30",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
   "scope": "All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.",
@@ -36,7 +36,7 @@
     "unresolved": 127,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
-    "withParcelFiling": 16,
+    "withParcelFiling": 21,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -3370,7 +3370,9 @@
           "sourceIds": [
             "traversins",
             "traversins-record",
-            "roumier-2023-visit"
+            "roumier-2023-visit",
+            "traversins-formation-2022",
+            "traversins-accounts-2023"
           ]
         }
       ],
@@ -3444,7 +3446,9 @@
           "sourceIds": [
             "traversins",
             "traversins-record",
-            "roumier-2023-visit"
+            "roumier-2023-visit",
+            "traversins-formation-2022",
+            "traversins-accounts-2023"
           ]
         }
       ],
@@ -3518,7 +3522,9 @@
           "sourceIds": [
             "traversins",
             "traversins-record",
-            "roumier-2023-visit"
+            "roumier-2023-visit",
+            "traversins-formation-2022",
+            "traversins-accounts-2023"
           ]
         }
       ],
@@ -3592,7 +3598,9 @@
           "sourceIds": [
             "traversins",
             "traversins-record",
-            "roumier-2023-visit"
+            "roumier-2023-visit",
+            "traversins-formation-2022",
+            "traversins-accounts-2023"
           ]
         }
       ],
@@ -3666,7 +3674,9 @@
           "sourceIds": [
             "traversins",
             "traversins-record",
-            "roumier-2023-visit"
+            "roumier-2023-visit",
+            "traversins-formation-2022",
+            "traversins-accounts-2023"
           ]
         }
       ],
@@ -4144,13 +4154,16 @@
         {
           "name": "Domaine de la Pousse d'Or",
           "holderId": "883067134",
-          "basis": "registered-office-match",
+          "basis": "management-and-estate-context",
           "sourceIds": [
             "origine",
             "origine-rename",
             "bodacc-origine",
             "bodacc-pousse-dor",
-            "pousse-echezeaux"
+            "pousse-echezeaux",
+            "lc-formation-2020",
+            "lc-object-2021",
+            "lc-statutes-2025"
           ]
         }
       ],
@@ -7387,11 +7400,13 @@
         {
           "name": "Domaine Jean Tardy et Fils",
           "holderId": "391735321",
-          "basis": "bottler-only-lead",
+          "basis": "filing-tenant-relationship",
           "sourceIds": [
             "bouchy",
             "bouchy-tardy",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchy-formation-retained-2019",
+            "bouchy-tardy-lease-recital-2019"
           ]
         },
         {
@@ -7428,14 +7443,16 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bouchy-tardy-2019"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -7675,7 +7692,8 @@
           "sourceIds": [
             "coudray",
             "coudray-identity",
-            "bodacc-coudray"
+            "bodacc-coudray",
+            "coudray-original-2004"
           ]
         }
       ],
@@ -8827,7 +8845,10 @@
           "sourceIds": [
             "bouchon",
             "liger",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchon-continuation-2024",
+            "liger-share-loan-2025",
+            "liger-statutes-2025"
           ]
         },
         {
@@ -9506,7 +9527,8 @@
           "sourceIds": [
             "coudray",
             "coudray-identity",
-            "bodacc-coudray"
+            "bodacc-coudray",
+            "coudray-original-2004"
           ]
         }
       ],
@@ -9568,7 +9590,8 @@
           "sourceIds": [
             "coudray",
             "coudray-identity",
-            "bodacc-coudray"
+            "bodacc-coudray",
+            "coudray-original-2004"
           ]
         }
       ],
@@ -10046,11 +10069,13 @@
         {
           "name": "Domaine Jean Tardy et Fils",
           "holderId": "391735321",
-          "basis": "bottler-only-lead",
+          "basis": "filing-tenant-relationship",
           "sourceIds": [
             "bouchy",
             "bouchy-tardy",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchy-formation-retained-2019",
+            "bouchy-tardy-lease-recital-2019"
           ]
         },
         {
@@ -10087,14 +10112,18 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bouchy-tardy-2019"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
-      "historyFindingIds": [],
+      "historyFindingIds": [
+        "bouchy-founding-mandate-1993"
+      ],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10125,11 +10154,13 @@
         {
           "name": "Domaine Jean Tardy et Fils",
           "holderId": "391735321",
-          "basis": "bottler-only-lead",
+          "basis": "filing-tenant-relationship",
           "sourceIds": [
             "bouchy",
             "bouchy-tardy",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchy-formation-retained-2019",
+            "bouchy-tardy-lease-recital-2019"
           ]
         },
         {
@@ -10166,14 +10197,16 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bouchy-tardy-2019"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10204,11 +10237,13 @@
         {
           "name": "Domaine Jean Tardy et Fils",
           "holderId": "391735321",
-          "basis": "bottler-only-lead",
+          "basis": "filing-tenant-relationship",
           "sourceIds": [
             "bouchy",
             "bouchy-tardy",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchy-formation-retained-2019",
+            "bouchy-tardy-lease-recital-2019"
           ]
         },
         {
@@ -10245,14 +10280,18 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bouchy-tardy-2019"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
-      "historyFindingIds": [],
+      "historyFindingIds": [
+        "bouchy-founding-mandate-1993"
+      ],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10283,11 +10322,13 @@
         {
           "name": "Domaine Jean Tardy et Fils",
           "holderId": "391735321",
-          "basis": "bottler-only-lead",
+          "basis": "filing-tenant-relationship",
           "sourceIds": [
             "bouchy",
             "bouchy-tardy",
-            "raa-2026-067"
+            "raa-2026-067",
+            "bouchy-formation-retained-2019",
+            "bouchy-tardy-lease-recital-2019"
           ]
         },
         {
@@ -10324,14 +10365,16 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bouchy-tardy-2019"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
