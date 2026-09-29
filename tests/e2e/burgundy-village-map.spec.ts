@@ -9,6 +9,59 @@ const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
 
+test('Échezeaux: manually link a possible producer and retain it in owner and shared views',async({page},testInfo)=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche'});
+ const producers=[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeLocality:'Vosne-Romanée'},
+  {id:'shared::friend::anne',canonicalName:'Domaine Anne Gros',homeLocality:'Vosne-Romanée',sharedOnly:true}];
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
+ await page.route('**/api/producers',route=>route.fulfill({json:{items:producers}}));
+ await page.route('**/api/parcel-producer-links?*',async route=>{
+  const request=route.request();
+  if(request.method()==='PUT'){
+   const input=request.postDataJSON();const producer=producers.find(p=>p.id===input.producerId)!;
+   links=[{...input,producerName:producer.canonicalName,status:'manual',updatedAt:'2026-09-28'}];
+   return route.fulfill({json:links[0]});
+  }
+  if(request.method()==='DELETE'){links=[];return route.fulfill({json:{deleted:true}})}
+  return route.fulfill({json:{items:links}});
+ });
+ await page.setViewportSize({width:390,height:844});
+ const open=async(path:string)=>{
+  await page.goto(path);await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();return dialog;
+ };
+ let dialog=await open('/wines/layout-wine');
+ await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
+ await dialog.getByRole('button',{name:'Show possible matches on map'}).click();
+ await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
+ await page.screenshot({path:testInfo.outputPath('possible-producer-blue-mobile.png')});
+ await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
+ await dialog.getByRole('searchbox',{name:'Search app producers'}).fill('Nicole');
+ await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
+ await page.screenshot({path:testInfo.outputPath('producer-link-editor-mobile.png')});
+ await dialog.getByRole('button',{name:'Save producer link'}).click();
+ await expect(dialog.getByText('Manually linked · farming unverified',{exact:true})).toBeVisible();
+ await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toHaveAttribute('href','/producers/nicole');
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ // A fresh shared-wine view reloads the saved account association.
+ dialog=await open('/shared/layout-wine');
+ await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toBeVisible();
+ await dialog.getByRole('button',{name:'Show right holder on map'}).click();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await expect(dialog.getByText('Verified parcel links')).toHaveCount(0);
+ await dialog.getByRole('button',{name:'Change link'}).click();
+ await dialog.getByRole('combobox',{name:'App producer'}).selectOption('shared::friend::anne');
+ await dialog.getByRole('button',{name:'Save producer link'}).click();
+ await expect(dialog.getByRole('link',{name:'Domaine Anne Gros'})).toHaveAttribute('href','/producers/shared%3A%3Afriend%3A%3Aanne');
+ await dialog.getByRole('button',{name:'Remove link'}).click();
+ await expect(dialog.getByText('Manually linked · farming unverified',{exact:true})).toHaveCount(0);
+});
+
 for(const route of allMapRoutes){
  test(`Échezeaux pilot ${route}: named areas, parcels and dated rights stay distinct`,async({page},testInfo)=>{
   await page.setViewportSize({width:390,height:844});

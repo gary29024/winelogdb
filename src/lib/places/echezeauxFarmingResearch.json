@@ -1,0 +1,38 @@
+{
+  "reviewedAt": "2026-09-28",
+  "source": {
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf",
+    "sha256": "6c2a930a5e6d3de70b72af5bbe8b1afb9d8996506dda017574e141aca48b52df",
+    "bytes": 30832964,
+    "documentDate": "2022-11-24",
+    "dossier": "2022-204",
+    "entry": "BFC-2022-11-24-00025",
+    "pages": [
+      74,
+      75
+    ],
+    "kind": "application-receipt",
+    "applicant": "GROS ANNE",
+    "previousOperator": "DOMAINE GROS FRERE ET SOEUR",
+    "outcome": "unconfirmed",
+    "reuse": "Reuse terms not independently established; link to the official document, do not redistribute scans."
+  },
+  "parcels": [
+    {
+      "printedReference": "D0093",
+      "parcelId": "212670000D0093"
+    },
+    {
+      "printedReference": "D0177",
+      "parcelId": "212670000D0177"
+    },
+    {
+      "printedReference": "D0178",
+      "parcelId": "212670000D0178"
+    }
+  ],
+  "unresolvedReferences": [
+    "D01776"
+  ],
+  "joinScope": "Exact reference in the June 2026 snapshot only; historical geometry continuity unverified. No operator assignment."
+}
