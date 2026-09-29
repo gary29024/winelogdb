@@ -6,8 +6,8 @@ import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
 import {listParcelProducerLinks,removeParcelProducerLink,saveParcelProducerLink} from './parcelProducerApi';
 
 type Holder={id:string;name:string};
-type Props={parentId:string;holders:Holder[];editing:string;onEdit:(id:string)=>void;onShow:(id:string)=>void};
-export function ParcelProducerLinker({parentId,holders,editing,onEdit,onShow}:Props){
+type Props={parentId:string;holders:Holder[];editing:string;onEdit:(id:string)=>void;onShow:(id:string)=>void;onLinks?:(links:ParcelProducerLink[])=>void};
+export function ParcelProducerLinker({parentId,holders,editing,onEdit,onShow,onLinks}:Props){
  const [links,setLinks]=useState<ParcelProducerLink[]>([]),[loaded,setLoaded]=useState(false),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
  const [removing,setRemoving]=useState('');
  useEffect(()=>{
@@ -16,6 +16,7 @@ export function ParcelProducerLinker({parentId,holders,editing,onEdit,onShow}:Pr
    .catch(()=>{if(active)setError('Your producer links could not load. Parcel rights are still available.')});
   return()=>{active=false};
  },[parentId,attempt]);
+ useEffect(()=>{if(loaded)onLinks?.(links)},[links,loaded,onLinks]);
  const holder=holders.find(h=>h.id===editing);
  const remove=async(id:string)=>{
   setRemoving(id);setError('');
@@ -29,11 +30,12 @@ export function ParcelProducerLinker({parentId,holders,editing,onEdit,onShow}:Pr
    <p className="village-map-parcel-label">Your linked producers</p>
    <p className="village-map-note">Personal catalogue links · farming unverified. Highlighting shows the recorded right holder’s parcels.</p>
    {links.map(link=><div className="village-map-linked-producer" key={link.holderId}>
-    <strong>{ownerName(holders.find(h=>h.id===link.holderId)?.name??link.holderId)}</strong>
-    <a href={`/producers/${encodeURIComponent(link.producerId)}`}>{link.producerName}</a>
-    <span className="village-map-badge is-manual">Manually linked · farming unverified</span>
+    <div className="village-map-linked-names"><strong>{ownerName(holders.find(h=>h.id===link.holderId)?.name??link.holderId)}</strong><span aria-hidden="true">→</span>
+     <a href={`/producers/${encodeURIComponent(link.producerId)}`}>{link.producerName}</a>
+     <span className="village-map-badge is-manual">Manual link · unverified</span>
+    </div>
     <div className="village-map-link-actions">
-     <button type="button" onClick={()=>onShow(link.holderId)}>Show right holder on map</button>
+     <button type="button" onClick={()=>onShow(link.holderId)}>Show on map</button>
      <button type="button" disabled={Boolean(removing)} onClick={()=>onEdit(link.holderId)}>Change link</button>
      <button type="button" disabled={Boolean(removing)} onClick={()=>void remove(link.holderId)}>{removing===link.holderId?'Removing…':'Remove link'}</button>
     </div>
