@@ -580,6 +580,16 @@
       "access": "read"
     },
     {
+      "id": "dvf-sales",
+      "title": "DVF sale and exchange deeds, Flagey-Échezeaux, 2021–2025",
+      "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Five hash-pinned yearly files (release 2025-12) list every registered transfer for a fee by parcel and deed, without party names. Twelve deeds touch 25 Échezeaux parcels. Each purchase by a company is followed by that company's first record in the next January rights file. Prices and addresses are not kept.",
+      "access": "read"
+    },
+    {
       "id": "raa-2022-084",
       "title": "BFC bulletin 2022-084: decision BFC-2022-07-04-00011, SAS Domaine RC Les Grandes Vignes",
       "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97177/620257/file/recueil-bfc-2022-084-recueil-des-actes-administratifs-1.pdf#page=172",
@@ -1256,6 +1266,8 @@
     "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
+    "Open DVF sale records cover 2021–2025 only (five rolling years) and name no party. Earlier transfers, gifts and inheritances are not in them.",
+    "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins were blocked by this research environment's network policy (safer-bfc.fr, cote-dor.gouv.fr) and remain unsearched.",
     "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews."
   ],
   "historyFindings": [

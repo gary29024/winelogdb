@@ -9,7 +9,7 @@ import re
 
 SCHEMA_VERSION = 1
 NOTE_LIMIT = 330
-KIND_ORDER = ['authorisation', 'suspended', 'application', 'research', 'ownership', 'lineage', 'lead']
+KIND_ORDER = ['authorisation', 'suspended', 'application', 'research', 'ownership', 'sale', 'lineage', 'lead']
 EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application'}
 RESEARCH_LABELS = {
     'critic-named-cadastral-reference': 'Named by parcel number',
@@ -31,6 +31,7 @@ LEAD_LABELS = {
     'partial-succession-lead': 'Partial succession lead',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
+SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
 
 
 def require(condition, message):
@@ -121,6 +122,24 @@ def ownership_items(row):
     return items
 
 
+def sale_items(row):
+    items = []
+    for sale in row['saleRecords']:
+        item = {'kind': 'sale', 'date': sale['date'], 'title': SALE_TITLES[sale['nature']], 'sources': ['dvf-sales'],
+                'note': 'Public sale record: a date and a deed, with no buyer, seller or price. A buyer need not farm the land.'}
+        together = sale['sameDisposition'] if sale['nature'] != 'exchange' else sale['sameDisposition'] + sale['otherDispositions']
+        if together:
+            item['detail'] = ('In the same deed as ' if sale['nature'] == 'exchange' else 'Sold together with ') + \
+                ', '.join(short_reference(p) for p in together)
+        buyers = [c for c in row['candidateLeads'] if c['basis'] == 'same-sale-as-company-buyer' and c['deedId'] == sale['deedId']]
+        if buyers:
+            names = ' / '.join(title_case_owner(c['name']) for c in buyers)
+            item['detail'] += f'; those parcels were next recorded to {names}. This parcel has no company record, so its buyer is unknown.'
+            item['sources'] = ['dvf-sales', 'dgfip-history']
+        items.append(item)
+    return items
+
+
 def lead_items(row, holders):
     items = []
     for lead in row['candidateLeads']:
@@ -173,7 +192,7 @@ def build_evidence(register, curation, history, features):
             for retired, current in entry.get('predecessorReferences', {}).items():
                 if parcel_id in current:
                     add(parcel_id, research_item(entry, source_dates, via=retired))
-        for item in ownership_items(row) + lead_items(row, holders):
+        for item in ownership_items(row) + sale_items(row) + lead_items(row, holders):
             add(parcel_id, item)
     for event in curation['exactParcelEvents']:
         for parcel_id in event.get('otherCruParcelIds', []):

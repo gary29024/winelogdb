@@ -3,7 +3,7 @@ import copy
 import json
 import unittest
 
-from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, build_register
+from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, SALES, build_register
 from build_echezeaux_parcel_evidence import build_evidence
 
 
@@ -14,9 +14,11 @@ class FarmingResearchTests(unittest.TestCase):
         cls.asset = (ROOT / 'public' / cls.manifest['dataUrl'].lstrip('/')).read_bytes()
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
+        cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
 
-    def build(self, curation=None, asset=None, history=None):
-        return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history)
+    def build(self, curation=None, asset=None, history=None, sales=None):
+        return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history,
+                              sales or self.sales)
 
     def test_pinned_population_and_no_invented_farmers(self):
         result = self.build()
@@ -29,7 +31,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 124)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 116)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -128,6 +130,35 @@ class FarmingResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
             self.build(curation)
 
+    def test_a_sale_dates_a_transfer_and_leads_only_through_a_company_co_buyer(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        self.assertEqual(result['counts']['withSaleRecord'], 25)
+        self.assertEqual(result['counts']['saleLead'], 1)
+        # D0146 went in one disposition with four parcels first recorded to LES CRUOTS in January 2025.
+        lead = rows['D 0146']['candidateLeads']
+        self.assertEqual([(c['name'], c['basis']) for c in lead], [('LES CRUOTS', 'same-sale-as-company-buyer')])
+        self.assertEqual(rows['D 0146']['researchStatus'], 'sale-lead')
+        self.assertIsNone(rows['D 0146']['currentFarmer'])
+        # Parcels with their own record keep it; exchanges and sales without a company buyer give no lead.
+        self.assertFalse(any(c['basis'] == 'same-sale-as-company-buyer' for c in rows['D 0144']['candidateLeads']))
+        self.assertEqual(rows['D 0835']['candidateLeads'], [])
+        self.assertEqual(rows['D 0835']['saleRecords'][0]['nature'], 'exchange')
+        self.assertEqual(rows['D 0301']['researchStatus'], 'unresolved')
+        self.assertEqual(rows['D 0301']['researchDepth'], 'sale-record-reviewed')
+
+    def test_sale_records_must_match_snapshot_and_cru(self):
+        sales = copy.deepcopy(self.sales)
+        sales['inputs']['parcelSnapshotSha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'another snapshot'):
+            self.build(sales=sales)
+        sales = copy.deepcopy(self.sales)
+        sales['deeds'][0]['dispositions'][0]['parcelIds'].append('212670000D0093')
+        with self.assertRaisesRegex(ValueError, 'Sale record outside research cru'):
+            self.build(sales=sales)
+        # Prices and addresses are never kept.
+        self.assertTrue(all(set(d) == {'deedId', 'date', 'nature', 'dispositions'} for d in self.sales['deeds']))
+
 
 class ParcelEvidenceTests(unittest.TestCase):
     """The app file must stay a list of dated records, never a farmer assignment."""
@@ -139,7 +170,8 @@ class ParcelEvidenceTests(unittest.TestCase):
         cls.features = json.loads(cls.asset)['features']
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
-        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history)
+        cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
+        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales)
 
     def build(self, curation=None):
         return build_evidence(self.register, curation or self.curation, self.history, self.features)

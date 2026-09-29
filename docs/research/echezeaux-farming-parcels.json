@@ -20,7 +20,9 @@
       "2023-01-01",
       "2024-01-01",
       "2025-01-01"
-    ]
+    ],
+    "saleRecords": "docs/research/echezeaux-sale-records.json",
+    "saleRecordsCoverage": "2021-07-15 to 2025-10-13"
   },
   "counts": {
     "parcels": 276,
@@ -30,8 +32,10 @@
     "holderLead": 115,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
-    "unresolved": 143,
+    "saleLead": 1,
+    "unresolved": 142,
     "currentFarmerConfirmed": 0,
+    "withSaleRecord": 25,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -48,6 +52,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -103,6 +108,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -125,6 +131,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -180,6 +187,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -235,6 +243,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -290,6 +299,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -345,6 +355,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -400,6 +411,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -422,6 +434,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -476,6 +489,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -500,6 +514,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -522,6 +537,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -565,6 +581,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -587,6 +604,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -609,6 +627,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -631,6 +650,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -674,6 +694,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -717,6 +738,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -760,6 +782,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -803,6 +826,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -846,6 +870,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -868,6 +893,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -919,6 +945,20 @@
           "after": [
             "LES CRUOTS"
           ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "2024-210518",
+          "date": "2024-03-14",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0145",
+            "212670000D0146",
+            "212670000D0511",
+            "212670000D0512"
+          ],
+          "otherDispositions": []
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -976,6 +1016,20 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2024-210518",
+          "date": "2024-03-14",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0144",
+            "212670000D0146",
+            "212670000D0511",
+            "212670000D0512"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -996,19 +1050,49 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "LES CRUOTS",
+          "basis": "same-sale-as-company-buyer",
+          "sourceIds": [
+            "dvf-sales",
+            "dgfip-history"
+          ],
+          "deedId": "2024-210518",
+          "viaParcelIds": [
+            "212670000D0144",
+            "212670000D0145",
+            "212670000D0511",
+            "212670000D0512"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-210518",
+          "date": "2024-03-14",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0144",
+            "212670000D0145",
+            "212670000D0511",
+            "212670000D0512"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "sale-lead",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Ask the company buyer named in the same sale whether this parcel was included, and who farms it."
     },
     {
       "parcelId": "212670000D0147",
@@ -1022,6 +1106,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1044,6 +1129,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1066,6 +1152,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1088,6 +1175,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1110,6 +1198,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1132,6 +1221,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1186,6 +1276,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1210,11 +1301,20 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2025-231906",
+          "date": "2025-10-13",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1264,6 +1364,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1320,6 +1421,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1375,6 +1477,15 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-236336",
+          "date": "2023-05-31",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1399,6 +1510,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1421,6 +1533,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1443,6 +1556,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1465,6 +1579,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1487,6 +1602,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1509,6 +1625,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1573,6 +1690,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1639,6 +1757,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1673,6 +1792,7 @@
         "wh-grivot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1705,6 +1825,7 @@
         "wh-grivot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1755,6 +1876,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1807,6 +1929,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1861,6 +1984,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -1914,6 +2038,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -1968,6 +2093,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2000,6 +2126,7 @@
         "wh-dessus-tremblay"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2032,6 +2159,7 @@
         "wh-dessus-tremblay"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2089,6 +2217,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2146,6 +2275,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2212,6 +2342,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -2258,6 +2389,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2280,6 +2412,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2302,6 +2435,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2324,6 +2458,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2377,6 +2512,15 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-233539",
+          "date": "2023-02-24",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -2422,6 +2566,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2444,6 +2589,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2497,6 +2643,20 @@
           "after": [
             "TRAVERSINS"
           ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "2023-232668",
+          "date": "2023-02-20",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0296",
+            "212670000D0297",
+            "212670000D0298",
+            "212670000D0299"
+          ],
+          "otherDispositions": []
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -2556,6 +2716,20 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-232668",
+          "date": "2023-02-20",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0295",
+            "212670000D0297",
+            "212670000D0298",
+            "212670000D0299"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -2611,6 +2785,20 @@
           "after": [
             "TRAVERSINS"
           ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "2023-232668",
+          "date": "2023-02-20",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0295",
+            "212670000D0296",
+            "212670000D0298",
+            "212670000D0299"
+          ],
+          "otherDispositions": []
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -2670,6 +2858,20 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-232668",
+          "date": "2023-02-20",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0295",
+            "212670000D0296",
+            "212670000D0297",
+            "212670000D0299"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -2727,6 +2929,20 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-232668",
+          "date": "2023-02-20",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0295",
+            "212670000D0296",
+            "212670000D0297",
+            "212670000D0298"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -2751,11 +2967,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2023-234236",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0302",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2773,11 +3002,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2023-234236",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0301",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2795,11 +3037,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2023-234236",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0304"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2817,11 +3072,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2023-234236",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0303"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2839,6 +3107,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2882,6 +3151,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2904,6 +3174,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2947,6 +3218,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -2989,6 +3261,15 @@
           "after": [
             "ORIGINE"
           ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "2021-290133",
+          "date": "2021-07-15",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3037,6 +3318,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -3083,6 +3365,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -3151,6 +3434,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -3175,6 +3459,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3231,6 +3516,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3286,6 +3572,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3308,6 +3595,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3364,6 +3652,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3386,6 +3675,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3441,6 +3731,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3463,6 +3754,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3516,6 +3808,15 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2023-242973",
+          "date": "2023-11-08",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -3540,6 +3841,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3562,6 +3864,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3584,6 +3887,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3606,6 +3910,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3628,6 +3933,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3650,6 +3956,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3672,6 +3979,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3694,6 +4002,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3716,6 +4025,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3738,6 +4048,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3793,6 +4104,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3815,6 +4127,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3881,6 +4194,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3903,6 +4217,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3947,6 +4262,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3969,6 +4285,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3991,6 +4308,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4013,6 +4331,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4056,6 +4375,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4122,6 +4442,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4144,6 +4465,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4198,6 +4520,7 @@
         "wh-d0510"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4249,6 +4572,20 @@
           "after": [
             "LES CRUOTS"
           ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "2024-210518",
+          "date": "2024-03-14",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0144",
+            "212670000D0145",
+            "212670000D0146",
+            "212670000D0512"
+          ],
+          "otherDispositions": []
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -4306,6 +4643,20 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2024-210518",
+          "date": "2024-03-14",
+          "nature": "sale",
+          "sameDisposition": [
+            "212670000D0144",
+            "212670000D0145",
+            "212670000D0146",
+            "212670000D0511"
+          ],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -4330,6 +4681,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4394,6 +4746,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -4418,6 +4771,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4461,6 +4815,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4504,6 +4859,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4547,6 +4903,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4590,6 +4947,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4612,6 +4970,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4664,6 +5023,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4686,6 +5046,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4708,6 +5069,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4730,6 +5092,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4773,6 +5136,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4816,6 +5180,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4859,6 +5224,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -4925,6 +5291,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -4993,6 +5360,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5061,6 +5429,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5129,6 +5498,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5153,6 +5523,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5175,6 +5546,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5241,6 +5613,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5309,6 +5682,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5344,6 +5718,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5366,6 +5741,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5388,6 +5764,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5421,6 +5798,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5443,6 +5821,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5475,6 +5854,7 @@
         "wh-grivot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5507,6 +5887,7 @@
         "wh-dessus-perdrix"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5539,6 +5920,7 @@
         "wh-dessus-perdrix"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5594,6 +5976,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5649,6 +6032,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5671,6 +6055,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5693,6 +6078,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5715,6 +6101,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5791,6 +6178,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5813,6 +6201,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5866,6 +6255,7 @@
         "wh-d0631"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5899,6 +6289,7 @@
         "wh-d0632"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5943,6 +6334,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -5991,6 +6383,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6035,6 +6428,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -6059,6 +6453,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6102,6 +6497,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6159,6 +6555,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6216,6 +6613,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6273,6 +6671,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6295,6 +6694,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6341,6 +6741,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6387,6 +6788,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6433,6 +6835,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6489,6 +6892,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6544,6 +6948,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6611,6 +7016,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6678,6 +7084,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6722,6 +7129,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6754,6 +7162,7 @@
         "wh-dessus-mongeard"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6786,6 +7195,7 @@
         "wh-dessus-mongeard"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6818,6 +7228,7 @@
         "wh-dessus-mongeard"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6886,6 +7297,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -6933,6 +7345,7 @@
         "wh-dessus-noellat"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7046,6 +7459,15 @@
           ]
         }
       ],
+      "saleRecords": [
+        {
+          "deedId": "2024-214433",
+          "date": "2024-06-28",
+          "nature": "sale",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -7093,6 +7515,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7138,6 +7561,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7183,6 +7607,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7237,6 +7662,7 @@
         "wh-arnoux-lachaux"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7259,6 +7685,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7281,6 +7708,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7303,6 +7731,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7325,6 +7754,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7347,6 +7777,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7369,6 +7800,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7391,6 +7823,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7434,6 +7867,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7456,6 +7890,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7509,6 +7944,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -7557,6 +7993,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7603,6 +8040,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7625,6 +8063,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7647,6 +8086,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7669,6 +8109,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7691,6 +8132,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7713,6 +8155,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7735,6 +8178,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7757,6 +8201,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7779,6 +8224,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7801,6 +8247,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7823,6 +8270,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7845,6 +8293,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7867,6 +8316,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7889,6 +8339,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7911,6 +8362,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7954,6 +8406,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8030,6 +8483,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8106,6 +8560,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8182,6 +8637,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8258,6 +8714,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8324,6 +8781,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8392,6 +8850,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8460,6 +8919,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8505,6 +8965,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8560,6 +9021,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8582,6 +9044,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8604,6 +9067,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8626,6 +9090,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8692,6 +9157,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8716,6 +9182,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8749,6 +9216,7 @@
         "wh-dessus-millot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8782,6 +9250,7 @@
         "wh-dessus-millot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8815,6 +9284,7 @@
         "wh-dessus-millot"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8837,6 +9307,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8859,6 +9330,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8881,6 +9353,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8924,6 +9397,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8946,6 +9420,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8968,6 +9443,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9011,6 +9487,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9033,6 +9510,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9055,6 +9533,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9077,6 +9556,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9099,6 +9579,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9133,6 +9614,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9167,6 +9649,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9213,6 +9696,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -9247,6 +9731,7 @@
         "wh-arnoux-lachaux"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9279,6 +9764,7 @@
         "wh-arnoux-lachaux"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9331,6 +9817,7 @@
         "wh-arnoux-lachaux"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -9397,6 +9884,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
         "212670000D0300"
@@ -9431,6 +9919,7 @@
         "wh-berthaut-gerbet"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
         "212670000D0300"
@@ -9457,6 +9946,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0759"
@@ -9483,6 +9973,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0759"
@@ -9520,6 +10011,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0792"
@@ -9557,6 +10049,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0792"
@@ -9594,6 +10087,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0794"
@@ -9631,6 +10125,7 @@
         "wh-lamadon-2006"
       ],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0794"
@@ -9688,6 +10183,17 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-214011",
+          "date": "2024-06-26",
+          "nature": "exchange",
+          "sameDisposition": [],
+          "otherDispositions": [
+            "212670000D0833"
+          ]
+        }
+      ],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0774"
@@ -9745,6 +10251,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0774"
@@ -9802,6 +10309,17 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-214025",
+          "date": "2024-06-26",
+          "nature": "exchange",
+          "sameDisposition": [],
+          "otherDispositions": [
+            "212670000D0835"
+          ]
+        }
+      ],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0775"
@@ -9859,6 +10377,17 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-214011",
+          "date": "2024-06-26",
+          "nature": "exchange",
+          "sameDisposition": [],
+          "otherDispositions": [
+            "212670000D0830"
+          ]
+        }
+      ],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0775"
@@ -9916,6 +10445,7 @@
       ],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0775"
@@ -9942,6 +10472,17 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-214025",
+          "date": "2024-06-26",
+          "nature": "exchange",
+          "sameDisposition": [],
+          "otherDispositions": [
+            "212670000D0832"
+          ]
+        }
+      ],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0776"
@@ -9950,7 +10491,7 @@
         "private-splits"
       ],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -9968,6 +10509,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0776"
@@ -9994,6 +10536,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0160"
@@ -10020,6 +10563,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2023-01-01",
       "predecessorIds": [
         "212670000D0160"
@@ -10046,6 +10590,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2024-01-01",
       "predecessorIds": [
         "212670000D0772"
@@ -10072,6 +10617,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2024-01-01",
       "predecessorIds": [
         "212670000D0772"
@@ -10098,6 +10644,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0708"
@@ -10124,6 +10671,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0708"
@@ -10172,6 +10720,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0143"
@@ -10220,6 +10769,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0143"
@@ -10268,6 +10818,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0143"
@@ -10316,6 +10867,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0143"
@@ -10364,6 +10916,7 @@
           ]
         }
       ],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0143"
@@ -10390,6 +10943,15 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "2024-217106",
+          "date": "2024-09-30",
+          "nature": "exchange",
+          "sameDisposition": [],
+          "otherDispositions": []
+        }
+      ],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0787"
@@ -10398,7 +10960,7 @@
         "private-splits"
       ],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10416,6 +10978,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2025-01-01",
       "predecessorIds": [
         "212670000D0787"
@@ -10442,6 +11005,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10468,6 +11032,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10494,6 +11059,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10520,6 +11086,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10546,6 +11113,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10572,6 +11140,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"
@@ -10598,6 +11167,7 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
+      "saleRecords": [],
       "cadastreFirstSeen": "2026-06-01",
       "predecessorIds": [
         "212670000D0873"

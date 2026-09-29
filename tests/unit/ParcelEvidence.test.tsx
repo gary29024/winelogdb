@@ -35,7 +35,7 @@ describe('Parcel evidence panel',()=>{
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')}/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getByText('Dated records about this parcel. They show notices, owners and published research, not who farms it today.')).toBeTruthy();
+  expect(within(panel).getByText('Dated records about this parcel. They show notices, owners, sales and published research, not who farms it today.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
   expect(within(panel).getByText('Previously farmed by Domaine Daniel Rion et Fils')).toBeTruthy();
@@ -62,6 +62,15 @@ describe('Parcel evidence panel',()=>{
   const direct=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(direct).queryByText(/Inherited from former parcel/)).toBeNull();
   expect(within(direct).getByText('Named by parcel number')).toBeTruthy();
+ });
+ it('shows a sale as a dated deed with no buyer, and names the company buyer only of the other parcels',async()=>{
+  render(<ParcelEvidence parcelId={id('146')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Sale record')).toBeTruthy();
+  expect(within(panel).getByText('14 Mar 2024').getAttribute('datetime')).toBe('2024-03-14');
+  expect(within(panel).getByText(/Sold together with D0144, D0145, D0511, D0512; those parcels were next recorded to Les Cruots\. This parcel has no company record, so its buyer is unknown\./)).toBeTruthy();
+  expect(within(panel).getByText(/no buyer, seller or price/)).toBeTruthy();
+  expect(within(panel).getByRole('link',{name:/DVF sale and exchange deeds/}).getAttribute('href')).toContain('geo-dvf');
  });
  it('covers a Grands-Échezeaux parcel named in a notice',async()=>{
   render(<ParcelEvidence parcelId={id('93')}/>);
