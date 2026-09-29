@@ -206,6 +206,9 @@ class FarmingResearchTests(unittest.TestCase):
             self.assertIn((name, 'registered-office-match'),
                           {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
             self.assertIsNone(rows[ref]['currentFarmer'])
+        # A 1998 guide area equals the Drouhin land company's four parcels exactly; still research, not farming.
+        self.assertIn(('Domaine Joseph Drouhin', 'critic-attribution-area-reconstructed'),
+                      {(c['name'], c['basis']) for c in rows['D 0633']['candidateLeads']})
         # Companies with no domaine link found stay without a candidate.
         for ref in ('D 0635', 'D 0813', 'D 0815', 'D 0898'):
             self.assertEqual(rows[ref]['candidateLeads'], [])

@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **108 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **115 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **126 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **131 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -110,6 +110,23 @@ Checked 29 September 2026 in [BODACC](https://bodacc-datadila.opendatasoft.com/e
 The first three were created in 2024, and their parcels first appear in the January 2025 rights file, which supports matching the U-numbered holders (no SIREN) to these companies. The Méo-Camuzet and Pousse d'Or leads also agree with the area each estate publishes in that named area. The eight parcels move from "no named candidate" to holder leads, leaving **131** without a candidate.
 
 The other public sources were tried again. The [SAFER legal-notice site](https://annonces-legales.saferbfc.com/commune/21267) is now reachable, but it lists only notices still open, and none concern Flagey-Échezeaux or Vosne-Romanée. The prefecture site still rate-limits, the Cour de cassation search now puts up a JavaScript and cookie check, and Gallica still refuses automated reading. None of these checks was bypassed.
+
+### Unofficial sources: company aggregators and the wine press
+
+Checked 29 September 2026.
+
+- **Company aggregators.** Pappers company pages load and show each company's stated purpose; LES CRUOTS, for example, may only lease its vines on long-term rural leases. Its filed statutes, which can list the plots contributed to a land company, sit behind a Cloudflare check that was not bypassed. Infogreffe, Verif.com, Wine-Searcher, CellarTracker and Jancis Robinson refused automated reading (403).
+- **Guide Hachette** has 218 Échezeaux entries dating back to the 2001 edition. Two published areas equal exact cadastral sums:
+  - Joseph Drouhin had **52 a 63 ca in En Orveaux** (1998 vintage). The four parcels of the ORVEAUX GFA, registered at Domaine Joseph Drouhin's office, total exactly **5 263 m²**. An importer's current figure is 0.41 ha, so the whole set may not still be farmed by the domaine.
+  - François Gerbet had **18 a 76 ca in Les Quartiers de Nuits and Les Treux** (2006 vintage). **D0360 + D0508** total exactly 1 876 m². Winehog lists only part of D0508 for Berthaut-Gerbet in 2019, so the plot's use has changed since.
+- **Méo-Camuzet.** The three Grands Crus Investissement parcels total **0.4389 ha** in the cadastre, which matches the estate's 0.44 ha in Les Rouges du Bas to the hundredth.
+- **New holdings with no company record:**
+  - Michel Gros: 0.38 ha in Les Loächausses, first vintage 2022, previously part of the Gros Frère et Sœur cuvée (Vinous, quoted by a merchant).
+  - Gros Frère et Sœur: 92 ares.
+  - Nudant: 66 ares.
+  - Charlopin: 33 ares.
+  The last three name no area, so they are research targets only.
+- **A.-F. Gros conflict.** The 2025 guide places A.-F. Gros's 26 ares in Les Loächausses; the 2012 edition said Champs Traversins. The named area stays uncertain.
 
 ### Independent research: Winehog
 

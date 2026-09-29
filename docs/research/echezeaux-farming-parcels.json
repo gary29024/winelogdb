@@ -354,7 +354,7 @@
       "withoutCompanyRecordM2": 17540,
       "withoutCompanyRecordOrLead": 12,
       "withoutCompanyRecordOrLeadM2": 8151,
-      "publishedBeyondCompanyRecordsM2": 16,
+      "publishedBeyondCompanyRecordsM2": 3816,
       "holdings": [
         {
           "holdingId": "anne-gros",
@@ -366,6 +366,18 @@
           "sharedWith": [],
           "recordedToProducerM2": 7584,
           "beyondCompanyRecordsM2": 16,
+          "owners": []
+        },
+        {
+          "holdingId": "michel-gros",
+          "producer": "Domaine Michel Gros",
+          "publishedAreaHa": 0.38,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 3800,
           "owners": []
         }
       ]
@@ -4046,12 +4058,23 @@
             "bodacc-orveaux",
             "bodacc-drouhin",
             "drouhin-echezeaux",
-            "dgfip-history"
+            "dgfip-history",
+            "drouhin-hachette"
+          ]
+        },
+        {
+          "name": "Domaine Joseph Drouhin",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "drouhin-hachette",
+            "bodacc-orveaux"
           ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "drouhin-orveaux-1998"
+      ],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -4070,7 +4093,7 @@
         "family-companies-2024"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4108,12 +4131,23 @@
             "bodacc-orveaux",
             "bodacc-drouhin",
             "drouhin-echezeaux",
-            "dgfip-history"
+            "dgfip-history",
+            "drouhin-hachette"
+          ]
+        },
+        {
+          "name": "Domaine Joseph Drouhin",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "drouhin-hachette",
+            "bodacc-orveaux"
           ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "drouhin-orveaux-1998"
+      ],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -4132,7 +4166,7 @@
         "family-companies-2024"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4991,11 +5025,19 @@
           "sourceIds": [
             "winehog-berthaut-gerbet"
           ]
+        },
+        {
+          "name": "Domaine François Gerbet",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "gerbet-hachette"
+          ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [
-        "wh-berthaut-gerbet"
+        "wh-berthaut-gerbet",
+        "gerbet-2006"
       ],
       "rightsChanges": [
         {
@@ -5272,11 +5314,19 @@
           "sourceIds": [
             "winehog-berthaut-gerbet"
           ]
+        },
+        {
+          "name": "Domaine François Gerbet",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "gerbet-hachette"
+          ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [
-        "wh-berthaut-gerbet"
+        "wh-berthaut-gerbet",
+        "gerbet-2006"
       ],
       "rightsChanges": [
         {
@@ -7301,12 +7351,23 @@
             "bodacc-orveaux",
             "bodacc-drouhin",
             "drouhin-echezeaux",
-            "dgfip-history"
+            "dgfip-history",
+            "drouhin-hachette"
+          ]
+        },
+        {
+          "name": "Domaine Joseph Drouhin",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "drouhin-hachette",
+            "bodacc-orveaux"
           ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "drouhin-orveaux-1998"
+      ],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -7325,7 +7386,7 @@
         "family-companies-2024"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -7411,12 +7472,23 @@
             "bodacc-orveaux",
             "bodacc-drouhin",
             "drouhin-echezeaux",
-            "dgfip-history"
+            "dgfip-history",
+            "drouhin-hachette"
+          ]
+        },
+        {
+          "name": "Domaine Joseph Drouhin",
+          "basis": "critic-attribution-area-reconstructed",
+          "sourceIds": [
+            "drouhin-hachette",
+            "bodacc-orveaux"
           ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "drouhin-orveaux-1998"
+      ],
       "rightsChanges": [
         {
           "from": "2024-01-01",
@@ -7435,7 +7507,7 @@
         "family-companies-2024"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

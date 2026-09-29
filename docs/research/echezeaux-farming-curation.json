@@ -1106,6 +1106,83 @@
       "reviewedAt": "2026-09-29",
       "finding": "No current SAFER notice for Flagey-Échezeaux (21267) or Vosne-Romanée (21714) on 29 September 2026. The site lists only notices still open, with no archive.",
       "access": "read"
+    },
+    {
+      "id": "drouhin-hachette",
+      "title": "Guide Hachette: Joseph Drouhin, Échezeaux 1998",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/joseph-drouhin-1998-2001-3/20015640/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2001 edition): \"Cette vigne de 52,63 ares se situe En Orveaux\". No cadastral number.",
+      "access": "read",
+      "evidenceSeason": "1998"
+    },
+    {
+      "id": "gerbet-hachette",
+      "title": "Guide Hachette: Domaine François Gerbet, Échezeaux 2006",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-francois-gerbet-2006-2009-1/20092003/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2009 edition): \"18 a 76 ca en deux parcelles d'une grand-mère Bissey et d'un grand-père Sirugue, dans les Quartiers de Nuits et dans les Treux\". No cadastral number.",
+      "access": "read",
+      "evidenceSeason": "2006"
+    },
+    {
+      "id": "afgros-hachette-2022",
+      "title": "Guide Hachette: Domaine A.-F. Gros, Échezeaux 2022",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/dom-a-f-gros-2022-2025-1/202584754/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2025 edition): a 26-are plot \"au lieu-dit Les Loächausses\". The 2012 edition placed the same 26 ares in Champs Traversins.",
+      "access": "read",
+      "evidenceSeason": "2022"
+    },
+    {
+      "id": "michel-gros-vinous",
+      "title": "Vinous review quoted by The Wine Stop: Michel Gros, Échezeaux Les Loächausses 2022",
+      "url": "https://www.thewinestop.com/2022-domaine-michel-gros-echezeaux-les-loachausses-grand-cru.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Quoted review: \"the maiden release from a 0.38-hectare strip that hitherto was part of the cuvée produced by Gros Frère & Soeur\". It adds that Paul Gros is farming the same lieu-dit under his own name.",
+      "access": "read",
+      "evidenceSeason": "2022"
+    },
+    {
+      "id": "gros-fs-hachette",
+      "title": "Guide Hachette: Domaine Gros Frère et Sœur, Échezeaux 2009",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-gros-frere-et-soeur-2009-2012/20120289/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2012 edition): \"Bernard Gros exploite 92 ares en échézeaux\". No named area; the estate has no company record in this cru.",
+      "access": "read",
+      "evidenceSeason": "2009"
+    },
+    {
+      "id": "nudant-hachette",
+      "title": "Guide Hachette: Domaine Nudant, Échezeaux 2017",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/dom-nudant-2017-2020/202048383/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2020 edition): \"Le domaine dispose de 66 ares dans ce grand cru\". No named area; no company record in this cru.",
+      "access": "read",
+      "evidenceSeason": "2017"
+    },
+    {
+      "id": "charlopin-hachette",
+      "title": "Guide Hachette: Domaine Philippe Charlopin, Échezeaux 2011",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-philippe-charlopin-2011-2015-4/20155596/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2015 edition): \"exploitent 33 ares dans ce grand cru\". No named area; no company record in this cru.",
+      "access": "read",
+      "evidenceSeason": "2011"
     }
   ],
   "holders": [
@@ -1237,14 +1314,15 @@
         "Domaine Joseph Drouhin"
       ],
       "basis": "registered-office-match",
-      "finding": "ORVEAUX GFA (SIREN 984543470) is registered at Domaine Joseph Drouhin's office and managed by the Drouhin family; registered February 2024, parcels first recorded January 2025. The family publishes 0.41 ha of Échezeaux against 0.53 ha here, so not all may be farmed by the domaine.",
+      "finding": "ORVEAUX GFA (SIREN 984543470) is registered at Domaine Joseph Drouhin's office and managed by the Drouhin family. Its four parcels total exactly the 52 a 63 ca that Drouhin had in En Orveaux in 1998 (Guide Hachette). An importer now gives 0.41 ha. No lease reviewed.",
       "sourceIds": [
         "orveaux-identity",
         "orveaux-search",
         "bodacc-orveaux",
         "bodacc-drouhin",
         "drouhin-echezeaux",
-        "dgfip-history"
+        "dgfip-history",
+        "drouhin-hachette"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1300,7 +1378,7 @@
         "Domaine Méo-Camuzet"
       ],
       "basis": "registered-office-match",
-      "finding": "Registry name GRPT FONCIER VIT GRD CRUS INVESTISSEMENT (SIREN 413823873) matches; its office is the Méo-Camuzet family's address in Vosne. Méo-Camuzet publishes 0.44 ha in Les Rouges du Bas; these three parcels there cover 0.45 ha. No lease or current operation reviewed.",
+      "finding": "Registry name GRPT FONCIER VIT GRD CRUS INVESTISSEMENT (SIREN 413823873) matches; its office is the Méo-Camuzet family's address in Vosne. Méo-Camuzet publishes 0.44 ha in Les Rouges du Bas; these three parcels there total 0.4389 ha in the cadastre. No lease reviewed.",
       "sourceIds": [
         "grands-crus-identity",
         "gfv-grands-crus-registry",
@@ -2309,6 +2387,39 @@
       ],
       "producer": "Domaine Faiveley",
       "appNote": "Faiveley states it owns 0 ha 83 a 35 ca in En Orveaux: exactly the cadastral total of its company's three parcels (D0331, D0335, D0653). Owner-stated; current operation is not separately confirmed."
+    },
+    {
+      "id": "drouhin-orveaux-1998",
+      "title": "Joseph Drouhin, En Orveaux (area reconstruction)",
+      "parcelIds": [
+        "212670000D0316",
+        "212670000D0323",
+        "212670000D0633",
+        "212670000D0636"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Guide Hachette (2001) gives Drouhin 52 a 63 ca in En Orveaux. The four parcels of the ORVEAUX GFA, which is registered at Domaine Joseph Drouhin's office, total exactly 5 263 m² in the cadastre. The register reconstructs the set; the guide names no parcel, and a 1998 figure is not current farming.",
+      "sourceIds": [
+        "drouhin-hachette",
+        "bodacc-orveaux"
+      ],
+      "producer": "Domaine Joseph Drouhin",
+      "appNote": "The 1998 published area (52 a 63 ca in En Orveaux) equals these four parcels exactly. They belong to a Drouhin family land company. The guide does not name the parcels."
+    },
+    {
+      "id": "gerbet-2006",
+      "title": "Domaine François Gerbet, Quartiers de Nuits and Les Treux (area reconstruction)",
+      "parcelIds": [
+        "212670000D0360",
+        "212670000D0508"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Guide Hachette (2009 edition) gives 18 a 76 ca in two parcels, in Les Quartiers de Nuits and Les Treux. D0360 (975 m²) and D0508 (901 m²) total exactly 1 876 m² and are recorded to GFA Domaine Gerbet Sirugue. Winehog (2019) lists only part of D0508 for Berthaut-Gerbet, so its use has changed since 2006.",
+      "sourceIds": [
+        "gerbet-hachette"
+      ],
+      "producer": "Domaine François Gerbet",
+      "appNote": "The 2006 published area (18 a 76 ca in Quartiers de Nuits and Treux) equals D0360 + D0508 exactly. By 2019 only part of D0508 was listed for Berthaut-Gerbet."
     }
   ],
   "producerHoldings": [
@@ -2583,7 +2694,7 @@
         "gfv-grands-crus-registry",
         "bodacc-meo-seat"
       ],
-      "finding": "Accounted for by GFV Grands Crus Investissement (0.45 ha in Les Rouges du Bas), whose registered office is the Méo family's address. The identity is a registry lead, not a lease.",
+      "finding": "Accounted for by GFV Grands Crus Investissement (0.4389 ha in the cadastre, in Les Rouges du Bas), whose registered office is the Méo family's address. The identity is a registry lead, not a lease.",
       "producerHolderIds": [
         "U18178179"
       ],
@@ -2656,6 +2767,24 @@
       "otherPublishedAreas": []
     },
     {
+      "id": "michel-gros",
+      "producer": "Domaine Michel Gros",
+      "namedAreas": [
+        "LES LOÄCHAUSSES"
+      ],
+      "publishedAreaHa": 0.38,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "michel-gros-vinous"
+      ],
+      "finding": "First vintage 2022, from a strip previously in the Gros Frère et Sœur cuvée. No company record. Paul Gros reportedly farms in the same lieu-dit under his own name.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
       "id": "lb-cruots",
       "producer": "Domaine du Comte Liger-Belair",
       "namedAreas": [
@@ -2720,13 +2849,16 @@
       "precision": "are",
       "relation": "farmer",
       "sourceIds": [
-        "afgros-hachette"
+        "afgros-hachette",
+        "afgros-hachette-2022"
       ],
-      "finding": "\"Exploite 26 ares\"; no company record in this lieu-dit.",
+      "finding": "\"Exploite 26 ares\"; no company record in this lieu-dit. The 2025 guide places the same 26 ares in Les Loächausses instead, so the named area is uncertain.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        "Les Loächausses"
+      ]
     },
     {
       "id": "faiveley",
