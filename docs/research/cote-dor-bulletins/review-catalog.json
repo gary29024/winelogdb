@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-29",
+  "rawIndex": "index/catalog.json",
+  "reviewedParcels": "reviewed-parcels.json",
+  "reviewAudit": "review-audit.json",
+  "reviewedContext": "reviewed-context.json",
+  "summary": {
+    "reviewedFarmDecisions": 14,
+    "parcelEvidenceRows": 186,
+    "distinctPrintedParcels": 184,
+    "unresolvedCommuneRows": 2,
+    "reviewedContextNotices": 2,
+    "titleDispositions": {
+      "farm-structure-other": 48,
+      "reviewed-parcels": 9,
+      "not-farm-structure": 73
+    }
+  },
+  "sha256": {
+    "reviewed-parcels.json": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6",
+    "review-audit.json": "2c872a23f00270cf34fba797e75a5aa52b3a9ec79cf87d988cdcdfa1e28c45d4",
+    "reviewed-context.json": "ff4441ca823886409adce09edb99d5a39fd2ca4a1ffa459170168318bae6a98e",
+    "index/snapshot.json": "7d9f63e0a0bd37218fde4988f1719ef90d98e409da50f567f1d50cc67b259a51",
+    "index/page-text.jsonl.gz": "44b26860900dc387cecfde2e8cc28c04cc580873634e88cfc459e99b2e8459f9"
+  },
+  "integration": "Join modern reviews by noticeId; append legacy reviews from sources. Preserve each decision occurrence and null/uncertain fields. Do not import context beneficiaries as farming producers."
+}

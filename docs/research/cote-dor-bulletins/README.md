@@ -13,8 +13,9 @@ extractions**: 19,802 text-layer pages and 12,164 OCR pages. It preserves the fi
 unresolved alternate links as coverage gaps. This covers all communes of Côte-d'Or,
 without filtering for a particular vineyard or producer.
 
-- [1,795 notice occurrences](index/notices.json), including 130 title-based farm-structure
-  matches, remain unreviewed. They include non-farming DDT acts.
+- [1,795 notice occurrences](index/notices.json) retain their raw, unreviewed machine
+  hints. The [review overlay](review-catalog.json) classifies all 130 title matches:
+  57 agricultural farm-structure notices and 73 other permits.
 - [1,245 candidate pages](index/candidate-pages.json) provide broader research leads,
   including older layouts that do not yield reliable notice boundaries.
 - [Full page text](index/page-text.jsonl.gz) is UTF-8 JSON Lines compressed with gzip;
@@ -26,6 +27,22 @@ without filtering for a particular vineyard or producer.
 The regional corpus remains a separate, linked shard and its 4,277 searchable pages
 are retained. The combined local index contains 36,243 pages. Completion describes
 extraction, not OCR accuracy, exhaustive notice classification or verified current farmers.
+
+## Reviewed evidence
+
+The [review report](REVIEW.md) and [review catalog](review-catalog.json) contain
+**186 parcel-evidence rows from 14 image-reviewed decisions**, including five legacy
+decisions recovered outside the modern contents index. They represent 184 distinct
+printed commune/reference pairs; two rows retain an unresolved commune code.
+Dates, applicants, outcomes, printed references, area scope and source citations are
+recorded in [reviewed-parcels.json](reviewed-parcels.json), following PR #410's flat
+parcel-row approach. Separate [context records](reviewed-context.json) preserve
+Pernand-Vergelesses planting and Saint-Romain parcel-consolidation leads.
+
+The [audit](review-audit.json) records screening of all 130 title matches and a
+supplementary search across all 31,966 pages. It distinguishes image review from
+text screening and preserves competing approvals, conditional receipts and unresolved
+reference conflicts. Current farming remains unverified for every record.
 
 ## Acquire and resume
 
@@ -175,16 +192,15 @@ Search results are research leads. Inspect the cited page image and record the p
 commune, reference, date, role and scope before using a notice for parcel identification.
 An application or authorisation does not establish who currently farms the parcel.
 
-The first image-reviewed departmental example is in [reviewed-parcels.json](reviewed-parcels.json):
-the 8 March 2016 decision for EARL Domaine Philippe et Arnaud Dubreuil names four
-Savigny-lès-Beaune references (AS 74, AO 50, ZE 282 and ZE 283). Pages 40-42 were
-visually checked. The decision covers 0.638 ha in total and grants an authorisation;
-it does not verify current farming or assign an area to each parcel. The references
-are historical printed IDs, not an asserted crosswalk to today's cadastral geometry.
+The first four Dubreuil references remain in the expanded version-2 review dataset.
+Notice-level facts are under `sources`; the flat `parcels` list uses the same
+`authorised` status as the regional review. See [REVIEW.md](REVIEW.md) for exact
+coverage, schema notes, dates and scope limitations.
 
 ## Verification
 
 ```powershell
+python scripts/validate_cotedor_reviews.py
 python -m unittest discover -s scripts -p '*bulletin*.py'
 ```
 

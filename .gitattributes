@@ -3,3 +3,6 @@ public/maps/*.pbf binary
 public/maps/*.pbf.gz binary
 public/maps/lossless/*.geojson.br binary
 public/maps/lossless/*.geojson.gz binary
+# Research catalogs hash these JSON bytes; keep them stable across Windows checkouts.
+docs/research/cote-dor-bulletins/*.json text eol=lf
+docs/research/cote-dor-bulletins/index/*.json text eol=lf
