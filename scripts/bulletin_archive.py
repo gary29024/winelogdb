@@ -5,6 +5,7 @@ checkouts. PDF objects, the SQLite catalogue and retry state stay outside Git.
 No daemon: fetch performs a bounded batch and leaves deferred work on disk.
 """
 import argparse
+import errno
 import gzip
 import hashlib
 import http.client
@@ -14,6 +15,7 @@ import random
 import re
 import shutil
 import sqlite3
+import tempfile
 import time
 import unicodedata
 import urllib.error
@@ -82,10 +84,36 @@ def retry_after(value, now):
             return 0
 
 
+def atomic_text(path, value):
+    """Keep the last complete export if Windows briefly refuses a file operation."""
+    path = Path(path)
+    for attempt in range(4):
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', newline='\n',
+                                             dir=path.parent, prefix=path.name + '.',
+                                             suffix='.new', delete=False) as output:
+                temporary = Path(output.name)
+                output.write(value)
+                output.flush()
+                os.fsync(output.fileno())
+            temporary.replace(path)
+            return
+        except OSError as error:
+            if attempt == 3 or (error.errno not in (errno.EACCES, errno.EPERM, errno.EBUSY, errno.EINVAL)
+                                and getattr(error, 'winerror', None) not in (32, 33)):
+                raise
+            time.sleep(0.25 * 2 ** attempt)
+        finally:
+            if temporary is not None:
+                try:
+                    temporary.unlink(missing_ok=True)
+                except OSError:
+                    pass  # Preserve the original error; a stray .new file is not a committed export.
+
+
 def atomic_json(path, value):
-    temporary = path.with_suffix(path.suffix + '.new')
-    temporary.write_text(json.dumps(value, ensure_ascii=False), encoding='utf-8')
-    temporary.replace(path)
+    atomic_text(path, json.dumps(value, ensure_ascii=False))
 
 
 @contextmanager

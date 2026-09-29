@@ -9,11 +9,12 @@ import argparse
 import hashlib
 import json
 import os
+import sys
 import time
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from bulletin_archive import Archive, DEFAULT_ARCHIVE, Deferred, ROOT, atomic_json, read_links
+from bulletin_archive import Archive, DEFAULT_ARCHIVE, Deferred, ROOT, atomic_json, atomic_text, read_links
 
 SOURCES = ROOT / 'docs/research/cote-dor-bulletins/sources.json'
 
@@ -60,21 +61,29 @@ def pull(archive, years, *, limit=10, min_interval=3, max_wait=5, discover_only=
         result = archive.fetch_batch(limit, min_interval, max_wait, [f'cote-dor-{year}' for year in sorted(years)])
         attempted = result['attempted']
     directory = archive.root / 'manifests'
-    directory.mkdir(exist_ok=True)
     report = []
     for source in selected:
         year = source['year']
         listing = dict(archive.db.execute('SELECT * FROM listings WHERE url=?', (source['url'],)).fetchone())
         docs = [dict(r) for r in archive.db.execute('SELECT url,state,sha256,bytes,error FROM documents WHERE corpus=? ORDER BY url',
                                                    (f'cote-dor-{year}',))]
-        (directory / f'cote-dor-{year}.txt').write_text(''.join(r['url'] + '\n' for r in docs), encoding='utf-8')
         report.append({'year': year, 'listing': listing, 'knownPublicationGaps': source.get('knownPublicationGaps', []),
                        'discoveredPDFs': sum(r['state'] != 'needs-resolution' for r in docs),
                        'unresolvedDownloadLinks': [r for r in docs if r['state'] == 'needs-resolution'],
                        'downloadedPDFs': sum(r['state'] == 'downloaded' for r in docs),
                        'documents': docs})
     summary = {'pdfAttemptsThisRun': attempted, 'years': sorted(report, key=lambda r: r['year'])}
-    (directory / 'cote-dor-2016-2020.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    # These files are exports of the durable database, not prerequisites for acquisition.
+    # A transient file lock must neither truncate the previous export nor kill the job.
+    try:
+        directory.mkdir(exist_ok=True)
+        for row in report:
+            atomic_text(directory / f'cote-dor-{row["year"]}.txt',
+                        ''.join(doc['url'] + '\n' for doc in row['documents']))
+        atomic_json(directory / 'cote-dor-2016-2020.json', summary)
+    except OSError as error:
+        summary['exportError'] = str(error)
+        print(f'Manifest export failed; database progress retained: {error}', file=sys.stderr, flush=True)
     return summary
 
 
@@ -83,26 +92,45 @@ def run_until_complete(archive, years, *, limit=10, min_interval=3, max_runtime=
     started = archive.clock()
     status_path = archive.root / 'run-status.json'
     corpora = [f'cote-dor-{year}' for year in sorted(years)]
+    state = {'pid': os.getpid(), 'phase': 'running', 'startedAt': started,
+             'maxRuntimeSeconds': max_runtime, 'corpora': corpora}
+
+    def publish_status():
+        counts = dict(archive.db.execute('SELECT state,count(*) FROM documents WHERE corpus IN ('
+                                        + ','.join('?' for _ in corpora) + ') GROUP BY state', corpora))
+        state.update({'updatedAt': archive.clock(), 'pendingPDFs': counts.get('pending', 0) + counts.get('retry', 0),
+                      'downloadedPDFs': counts.get('downloaded', 0),
+                      'unresolvedDownloadLinks': counts.get('needs-resolution', 0)})
+        try:
+            atomic_json(status_path, state)
+        except OSError as error:
+            print(f'Progress file could not be updated: {error}', file=sys.stderr, flush=True)
+        print(json.dumps(state), flush=True)
+
     while True:
-        state = {'pid': os.getpid(), 'phase': 'running', 'startedAt': started,
-                 'updatedAt': archive.clock(), 'maxRuntimeSeconds': max_runtime, 'corpora': corpora}
-        atomic_json(status_path, state)
-        result = pull(archive, years, limit=limit, min_interval=min_interval, max_wait=5)
+        publish_status()
+        try:
+            result = pull(archive, years, limit=limit, min_interval=min_interval, max_wait=5)
+        except Exception as error:
+            state.update({'phase': 'failed', 'error': f'{type(error).__name__}: {error}'})
+            publish_status()
+            raise
         pending = archive.db.execute("SELECT * FROM documents WHERE state IN ('pending','retry') AND corpus IN ("
                                      + ','.join('?' for _ in corpora) + ')', corpora).fetchall()
-        state.update({'updatedAt': archive.clock(), 'pendingPDFs': len(pending),
-                      'downloadedPDFs': sum(r['downloadedPDFs'] for r in result['years']),
-                      'unresolvedDownloadLinks': sum(len(r['unresolvedDownloadLinks']) for r in result['years'])})
+        state.pop('exportError', None)
+        if result.get('exportError'):
+            state['exportError'] = result['exportError']
         discovery_pending = [r for r in result['years'] if r['listing']['state'] in ('pending', 'retry')]
-        if not pending and not discovery_pending:
+        if not pending and not discovery_pending and not result.get('exportError'):
             state['phase'] = 'finished'  # inspect manifest for blocked/needs-resolution records
         elif archive.clock() - started >= max_runtime:
             state['phase'] = 'paused-runtime-limit'
-        atomic_json(status_path, state)
-        print(json.dumps(state), flush=True)
+        publish_status()
         if state['phase'] != 'running':
             return result
         ready = min((archive.due_at(row) for row in pending), default=archive.clock() + 60)
+        if result.get('exportError'):
+            ready = max(ready, archive.clock() + 60)
         # Periodic state writes show that a long server cooldown is still being honoured.
         time.sleep(min(60, max(1, ready - archive.clock()), max(1, max_runtime - (archive.clock() - started))))
 

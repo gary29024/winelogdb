@@ -38,6 +38,12 @@ The command does not install a background service or schedule future runs.
 For an unattended acquisition in one process, add `--until-complete --max-runtime 21600`.
 It continues eligible downloads through cooldowns for up to six hours, writes progress
 to `run-status.json`, and stops when the eligible queue finishes or the runtime expires.
+Manifest and status writes use atomic replacement with bounded retries for temporary
+file locks. A failed manifest export leaves the previous complete file intact, logs the
+error and retries while preserving acquisition progress in SQLite. Unexpected job errors
+are recorded as `failed` when the status file is writable. A forcibly killed process
+cannot update its status: check the recorded PID and `updatedAt` before treating `running`
+as evidence that it is still alive.
 `finished` can still include blocked or unresolved links; inspect the year manifest.
 Rerun the same command after interruption or runtime expiry to continue. The flag does
 not install an automation or send notifications.

@@ -1,5 +1,6 @@
 """Exercise durable acquisition and integrity without contacting a government site."""
 import hashlib
+import errno
 import io
 import json
 import tempfile
@@ -7,9 +8,9 @@ import unittest
 import urllib.error
 from email.utils import formatdate
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
-from bulletin_archive import Archive, Deferred, InvalidPDF, retry_after, writer_lock
+from bulletin_archive import Archive, Deferred, InvalidPDF, atomic_json, retry_after, writer_lock
 
 PDF = b'%PDF-1.4\npublic test document\n%%EOF\n'
 URL = 'https://example.test/archive/one.pdf'
@@ -39,6 +40,34 @@ class ArchiveTests(unittest.TestCase):
 
     def advance(self):
         self.now += 10000
+
+    def test_atomic_export_retries_windows_error_without_truncating_previous_file(self):
+        path = self.root / 'manifest.json'
+        path.write_text('{"previous": true}')
+        replace = Path.replace
+        calls = []
+        def transient(source, destination):
+            calls.append(source)
+            self.assertEqual(json.loads(path.read_text()), {'previous': True})
+            if len(calls) == 1:
+                raise OSError(errno.EINVAL, 'Invalid argument')
+            return replace(source, destination)
+        with patch.object(Path, 'replace', transient), patch('bulletin_archive.time.sleep'):
+            atomic_json(path, {'complete': True})
+        self.assertEqual(json.loads(path.read_text()), {'complete': True})
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(list(self.root.glob('*.new')), [])
+
+    def test_failed_atomic_export_keeps_previous_file_and_bounds_retries(self):
+        path = self.root / 'manifest.json'
+        path.write_text('{"previous": true}')
+        with patch.object(Path, 'replace', side_effect=PermissionError(errno.EACCES, 'locked')) as replace, \
+                patch('bulletin_archive.time.sleep'):
+            with self.assertRaises(PermissionError):
+                atomic_json(path, {'complete': True})
+        self.assertEqual(replace.call_count, 4)
+        self.assertEqual(json.loads(path.read_text()), {'previous': True})
+        self.assertEqual(list(self.root.glob('*.new')), [])
 
     def test_cache_survives_restart_without_network_and_deduplicates(self):
         first = self.archive.fetch_one(URL)
@@ -298,6 +327,53 @@ class ArchiveTests(unittest.TestCase):
             run_until_complete(self.archive, {2020})
         sleep.assert_not_called()
         self.assertEqual(json.loads((self.root / 'run-status.json').read_text())['phase'], 'finished')
+
+    def test_manifest_failure_does_not_discard_download_or_stop_next_export(self):
+        from pull_cotedor_bulletins import pull
+        pull(self.archive, {2020}, discover_only=True)
+        manifest = self.root / 'manifests/cote-dor-2016-2020.json'
+        previous = manifest.read_bytes()
+        with patch('pull_cotedor_bulletins.atomic_json', side_effect=OSError(errno.EINVAL, 'Invalid argument')):
+            result = pull(self.archive, {2020}, limit=1, min_interval=0, max_wait=0)
+        self.assertEqual(result['years'][0]['downloadedPDFs'], 1)
+        self.assertIn('exportError', result)
+        self.assertEqual(manifest.read_bytes(), previous)
+        result = pull(self.archive, {2020}, discover_only=True)
+        self.assertNotIn('exportError', result)
+        self.assertEqual(json.loads(manifest.read_text())['years'][0]['downloadedPDFs'], 1)
+        self.assertEqual(self.open.call_count, 1)
+
+    def test_unexpected_runner_failure_records_failed_state_and_keeps_counts(self):
+        from pull_cotedor_bulletins import run_until_complete
+        self.archive.enqueue([URL], 'cote-dor-2020')
+        with patch('pull_cotedor_bulletins.pull', side_effect=ValueError('bad source manifest')):
+            with self.assertRaisesRegex(ValueError, 'bad source manifest'):
+                run_until_complete(self.archive, {2020})
+        state = json.loads((self.root / 'run-status.json').read_text())
+        self.assertEqual(state['phase'], 'failed')
+        self.assertEqual(state['pendingPDFs'], 1)
+        self.assertIn('bad source manifest', state['error'])
+
+    def test_runner_retries_export_failure_before_claiming_completion(self):
+        from pull_cotedor_bulletins import run_until_complete
+        report = {'years': [{'downloadedPDFs': 0, 'unresolvedDownloadLinks': [], 'listing': {'state': 'saved'}}]}
+        with patch('pull_cotedor_bulletins.pull', side_effect=[report | {'exportError': 'locked'}, report]), \
+                patch('pull_cotedor_bulletins.time.sleep') as sleep:
+            run_until_complete(self.archive, {2020})
+        sleep.assert_called_once_with(60)
+        state = json.loads((self.root / 'run-status.json').read_text())
+        self.assertEqual(state['phase'], 'finished')
+        self.assertNotIn('exportError', state)
+
+    def test_unwritable_progress_file_does_not_stop_acquisition(self):
+        from pull_cotedor_bulletins import run_until_complete
+        report = {'years': [{'downloadedPDFs': 0, 'unresolvedDownloadLinks': [], 'listing': {'state': 'saved'}}]}
+        with patch('pull_cotedor_bulletins.atomic_json', side_effect=PermissionError('locked')), \
+                patch('pull_cotedor_bulletins.pull', return_value=report) as pull, \
+                patch('pull_cotedor_bulletins.time.sleep') as sleep:
+            self.assertEqual(run_until_complete(self.archive, {2020}), report)
+        pull.assert_called_once()
+        sleep.assert_not_called()
 
     def test_unattended_runner_leaves_work_durable_at_runtime_limit(self):
         from pull_cotedor_bulletins import run_until_complete
