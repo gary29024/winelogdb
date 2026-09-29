@@ -429,6 +429,16 @@
       "access": "read"
     },
     {
+      "id": "clerget-web",
+      "title": "Christian Clerget: Échézeaux page",
+      "url": "https://www.domaine-christianclerget.fr/fr/nos-vins/echezeaux-8/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "\"Notre parcelle de grand cru Echezeaux se situe dans le climat en Orveaux, juste au-dessus du Clos de Vougeot\"; 1,09 hectare, planted 1945 and 1946, altitude 280 m; organic (Ecocert) since 2017. Same figures as the technical sheet.",
+      "access": "read"
+    },
+    {
       "id": "faivre",
       "title": "Domaine Faivre company history",
       "url": "https://entreprises.lefigaro.fr/earl-denis-thomas-21/entreprise-380128777",
@@ -2163,9 +2173,10 @@
       "precision": "hundredth-hectare",
       "relation": "farmer",
       "sourceIds": [
-        "clerget"
+        "clerget",
+        "clerget-web"
       ],
-      "finding": "Farms 1.09 ha; its company record covers 0.22 ha, so about 0.87 ha lies on land without a company record.",
+      "finding": "Farms 1.09 ha; its company record covers only D0796 (2 319 m²), so about 0.87 ha lies on land without a company record. It cannot be one contiguous block with D0796: its only unrecorded neighbour, D0797 (5 987 m²), and all unrecorded parcels touching either reach 0.96 ha at most. D0796 lies in the western middle of En Orveaux, so \"just above the Clos de Vougeot\" describes the climat, not the plot.",
       "producerHolderIds": [
         "431340140"
       ],
