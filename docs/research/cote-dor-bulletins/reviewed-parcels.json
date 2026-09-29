@@ -1,0 +1,27 @@
+{
+  "purpose": "Parcel references checked against departmental page images. A dated authorisation does not establish actual or current farming.",
+  "sources": [
+    {
+      "actId": "21-2016-03-08-001",
+      "documentDate": "2016-03-08",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "noticePages": [40, 41, 42],
+      "evidencePages": [41, 42],
+      "applicant": "EARL DOMAINE PHILIPPE et ARNAUD DUBREUIL",
+      "previousOperator": null,
+      "status": "authorisation-granted",
+      "currentFarmerVerified": false,
+      "totalNoticeAreaHa": 0.638,
+      "areaScope": "Total vineyard area across the four printed parcel references, not an allocation to each parcel.",
+      "reviewedAt": "2026-09-29",
+      "reviewMethod": "Read PDF pages 40-42 as rendered page images; page 42 Article 1 grants the authorisation and repeats the commune and parcel references.",
+      "parcels": [
+        {"communeCode": "21590", "printedCommune": "SAVIGNY-LES-BEAUNE", "printedReference": "AS 74", "reference": "AS0074"},
+        {"communeCode": "21590", "printedCommune": "SAVIGNY-LES-BEAUNE", "printedReference": "AO 50", "reference": "AO0050"},
+        {"communeCode": "21590", "printedCommune": "SAVIGNY-LES-BEAUNE", "printedReference": "ZE 282", "reference": "ZE0282"},
+        {"communeCode": "21590", "printedCommune": "SAVIGNY-LES-BEAUNE", "printedReference": "ZE 283", "reference": "ZE0283"}
+      ]
+    }
+  ]
+}

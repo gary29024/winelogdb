@@ -88,15 +88,52 @@ are recorded as access failures; they are not evidence of an HTTP rate-limit res
 
 ## Extract and search locally
 
+All **372 direct PDFs (31,966 pages, 1,951,986,640 bytes)** were acquired and
+hash-verified locally on 29 September 2026. `pdfinfo` parsed every original.
+The five alternate 2018 links remain unresolved. This acquisition audit does not
+claim that OCR, notice review or current-farmer identification is complete.
+
 Acquisition and extraction are separate, so a machine with OCR tools can work entirely
 offline on the archive. Install Poppler (`pdfinfo`, `pdftotext`, `pdftoppm`) and Tesseract
 with the French language pack on that machine. Departmental layouts vary, so use a full
 page scan instead of the BFC contents-list filter:
 
 ```powershell
-python scripts/scan_bfc_bulletins.py E:/Github/winelogdb/.tmp/bulletin-archive/manifests/cote-dor-2020.txt --archive-dir E:/Github/winelogdb/.tmp/bulletin-archive --cache-dir E:/Github/winelogdb/.tmp/bulletin-archive/scans --offline --full-text --jobs 4
+python scripts/index_cotedor_bulletins.py --archive-dir E:/Github/winelogdb/.tmp/bulletin-archive --stage all --jobs 4
 python scripts/bulletin_archive.py search 'Flagey Echezeaux' --corpus cote-dor-2020
 ```
+
+The departmental runner reads **every archived page in every commune**, without a
+vineyard or producer filter. A first pass extracts the whole PDF text layer with
+explicit page-count checks. Sparse pages are marked `pending:ocr`, then rendered
+at 200 dpi and read by French Tesseract. Successful OCR of an empty page is distinct
+from a pending or failed extraction. The text-layer threshold is a heuristic, not
+visual verification that every scanned table on an otherwise textual page was read.
+
+It appends pages to the **same SQLite search index** used by the regional corpus;
+regional pages and reviewed parcel records are retained. Omitting `--corpus` searches
+both corpora. Upserts use source URL and page, preventing duplicate pages on reruns.
+Checkpoints under `departmental-scans/` retain successful pages and retry unfinished
+ones. Use only one departmental extraction job per archive. `extraction-status.json`
+is separate from download status and reports the live page counts and failures.
+
+The runner exports `departmental-index/` after the text pass and after OCR:
+
+- `catalog.json` connects the departmental files with the existing regional index.
+- `coverage.json` tracks every source, including unresolved links and pending/failed pages.
+- `page-text.jsonl.gz` holds every extracted page, its status and source hash.
+- `notices.json` holds unreviewed modern contents entries, including non-farming DDT
+  acts. Date/applicant hints are derived from titles and IDs, not verified identities.
+  Repeated act IDs retain every occurrence and citation. Different IDs are not silently
+  merged merely because names or titles resemble one another.
+- `candidate-pages.json` keeps broad farm-structure keyword matches, including legacy
+  layouts with no reliable notice boundaries. These can include contents pages and
+  unrelated industrial authorisations; they require review.
+
+`--stage text` runs only the initial pass; `--stage ocr` resumes sparse/failed pages;
+`--stage export` refreshes the exported snapshot without changing a live extraction
+job's status. Exports and originals stay outside Git by default. The committed regional
+`notices.json` is not overwritten with departmental pages or incomplete OCR results.
 
 Search uses literal, accent-insensitive terms and returns source URL, page, source hash,
 extraction status and the local PDF path when available. Failed pages remain explicitly
@@ -114,6 +151,13 @@ dataset, or establish complete extraction. PDFs are still pending until acquired
 Search results are research leads. Inspect the cited page image and record the printed
 commune, reference, date, role and scope before using a notice for parcel identification.
 An application or authorisation does not establish who currently farms the parcel.
+
+The first image-reviewed departmental example is in [reviewed-parcels.json](reviewed-parcels.json):
+the 8 March 2016 decision for EARL Domaine Philippe et Arnaud Dubreuil names four
+Savigny-lès-Beaune references (AS 74, AO 50, ZE 282 and ZE 283). Pages 40-42 were
+visually checked. The decision covers 0.638 ha in total and grants an authorisation;
+it does not verify current farming or assign an area to each parcel. The references
+are historical printed IDs, not an asserted crosswalk to today's cadastral geometry.
 
 ## Verification
 
