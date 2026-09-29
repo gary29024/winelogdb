@@ -9,7 +9,7 @@
 .wine-village-map-button:hover:not(:disabled){border:0;background:none;color:var(--ink)}
 .wine-village-map-button svg{width:18px;height:18px;flex:none}
 .village-map-backdrop{position:fixed;inset:0;z-index:1600;display:grid;place-items:center;padding:24px;background:rgb(16 24 45 / .6)}
-.village-map-dialog{display:flex;flex-direction:column;width:min(1180px,100%);max-height:calc(100dvh - 48px);overflow:auto;border:1px solid var(--line);border-radius:var(--r-lg,18px);background:var(--paper);color:var(--ink);box-shadow:0 24px 100px #0005}
+.village-map-dialog{--village-header-h:78px;display:flex;flex-direction:column;width:min(1180px,100%);max-height:calc(100dvh - 48px);overflow:auto;border:1px solid var(--line);border-radius:var(--r-lg,18px);background:var(--paper);color:var(--ink);box-shadow:0 24px 100px #0005}
 .village-map-header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);background:var(--paper)}
 .village-map-header p,.village-map-eyebrow{margin:0 0 4px;font-size:.65rem;font-weight:750;letter-spacing:.13em;color:var(--ink-6)}
 .village-map-header h2{margin:0;font-size:1.55rem;line-height:1.15}
@@ -19,6 +19,11 @@
    letting its content overlap the footer. */
 .village-map-header,.village-map-body,.village-map-footer{flex-shrink:0}
 .village-map-main{position:relative;min-width:0;background:var(--paper);isolation:isolate}
+/* The map stays in view under the header while the side panel scrolls, so picking
+   an owner or parcel never means scrolling back up to see the result. The
+   header height is measured into a variable. */
+.village-map-main{position:sticky;top:var(--village-header-h,0px);z-index:2;align-self:start}
+@media(max-height:560px){.village-map-main{position:relative;top:auto}}
 .village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%;scroll-margin-top:90px}
 .village-map-toolbar{position:absolute;z-index:2;left:12px;top:12px;right:55px;display:flex;flex-wrap:wrap;gap:6px}
 .village-map-toolbar button{min-height:38px;padding:7px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--paper);color:var(--ink-2);font-size:.74rem;font-weight:650;box-shadow:0 1px 5px #0001;cursor:pointer}
@@ -68,8 +73,25 @@
 .village-map-producer.is-possible,.village-map-parcel-details{--parcel-match-text:#0067b1;--parcel-match-line:#003e73}
 .village-map-producer.is-possible{border:2px dashed var(--parcel-match-line);background:color-mix(in srgb,#0067b1 9%,var(--ground))}
 .village-map-producer.is-possible .village-map-link-button,.village-map-producer.is-possible .village-map-link-button:hover:not(:disabled){display:block;color:var(--parcel-match-text);min-height:44px}
-.village-map-farming-research{padding:10px;border-left:3px solid var(--line-strong);background:var(--ground);color:var(--ink-3)}
-.village-map-farming-research p{margin:6px 0}
+/* History and evidence: dated records only. Neutral ink, so wine red stays the
+   verified producer and blue the possible match. */
+.parcel-evidence{display:grid;gap:10px;min-width:0}
+.parcel-evidence h5{margin:0;font-size:.8rem}
+.parcel-evidence h6,.parcel-evidence-leads summary{display:flex;align-items:center;gap:6px;margin:0;font-size:.66rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-5)}
+.parcel-evidence h6 span,.parcel-evidence-leads summary span{padding:0 6px;border-radius:999px;background:var(--sunken);letter-spacing:0}
+.parcel-evidence ul{display:grid;gap:8px;margin:6px 0 0;padding:0;list-style:none}
+.parcel-evidence-item{display:grid;gap:3px;min-width:0;padding:9px 10px;border:1px solid var(--line);border-left:3px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--ground);overflow-wrap:anywhere}
+.parcel-evidence-item.is-authorisation{border-left-color:var(--ink-3)}
+.parcel-evidence-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.66rem;color:var(--ink-6)}
+.parcel-evidence-meta time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-3)}
+.parcel-evidence-badge{padding:1px 7px;border:1px solid var(--line-strong);border-radius:999px;background:var(--paper);color:var(--ink-3);font-weight:700}
+.parcel-evidence-item.is-authorisation .parcel-evidence-badge{border-color:var(--ink-3);color:var(--ink)}
+.parcel-evidence-item strong{font-size:.8rem;line-height:1.3;color:var(--ink)}
+.parcel-evidence-detail{font-size:.72rem;color:var(--ink-4)}
+.parcel-evidence-item p{margin:2px 0 0;font-size:.72rem;line-height:1.45;color:var(--ink-4)}
+.parcel-evidence-sources{display:flex;flex-wrap:wrap;gap:0 12px;font-size:.72rem}
+.parcel-evidence-sources a{display:inline-flex;align-items:center;min-height:32px;color:var(--wine-ink);text-underline-offset:2px}
+.parcel-evidence-leads summary{min-height:32px;cursor:pointer}
 .village-map-producer .village-map-eyebrow{margin:0}
 .village-map-producer strong{font-size:.86rem;color:var(--ink)}
 .village-map-producer-meta{color:var(--ink-5);font-variant-numeric:tabular-nums}
@@ -135,7 +157,7 @@
 .village-map-error button{min-height:44px;cursor:pointer}
 @media(max-width:740px){
  .village-map-backdrop{padding:8px}.village-map-dialog{max-height:calc(100dvh - 16px);border-radius:12px}.village-map-header{padding:13px 14px}.village-map-header h2{font-size:1.3rem}
- .village-map-body{grid-template-columns:minmax(0,1fr)}.village-map-canvas{height:45dvh;min-height:280px}.village-map-sidebar{border-left:0;border-top:1px solid var(--line);padding:15px}.village-map-selection{margin-top:16px}.village-map-selection h3{font-size:1.2rem}.village-map-context{margin-top:14px;padding-top:12px}.village-map-footer{padding:11px 15px}
+ .village-map-body{grid-template-columns:minmax(0,1fr)}.village-map-canvas{height:min(30dvh,270px);min-height:200px}.village-map-legend{gap:3px 12px;padding:8px 12px}.village-map-sidebar{border-left:0;border-top:1px solid var(--line);padding:15px}.village-map-selection{margin-top:16px}.village-map-selection h3{font-size:1.2rem}.village-map-context{margin-top:14px;padding-top:12px}.village-map-footer{padding:11px 15px}
 }
 
 .village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}

@@ -4,6 +4,7 @@ Run from any directory; --check verifies committed outputs without writing.
 Only the standard library is required. No network access or source-asset edits.
 """
 import argparse
+from build_echezeaux_parcel_evidence import build_evidence
 import hashlib
 import json
 from collections import Counter
@@ -15,6 +16,7 @@ MANIFEST = ROOT / 'src/lib/places/echezeauxParcelManifest.json'
 OUTPUT = ROOT / 'docs/research/echezeaux-farming-parcels.json'
 REPORT = ROOT / 'docs/echezeaux-farming-parcel-register.md'
 HISTORY = ROOT / 'docs/research/echezeaux-rights-history.json'
+EVIDENCE = ROOT / 'src/lib/places/echezeauxParcelEvidence.json'
 
 
 def require(condition, message):
@@ -302,7 +304,10 @@ def main():
     asset = (ROOT / 'public' / manifest['dataUrl'].lstrip('/')).read_bytes()
     register = build_register(manifest, asset, curation, history)
     outputs = {OUTPUT: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
-               REPORT: render_report(register, curation, history)}
+               REPORT: render_report(register, curation, history),
+               # Compact per-parcel evidence the app loads on demand; never read by the register itself.
+               EVIDENCE: json.dumps(build_evidence(register, curation, history, json.loads(asset)['features']),
+                                    ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'}
     for path, content in outputs.items():
         if args.check:
             require(path.exists() and path.read_text(encoding='utf-8') == content, f'Stale output: {path}')

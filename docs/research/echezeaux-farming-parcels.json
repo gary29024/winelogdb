@@ -1746,7 +1746,11 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "unresolvedPrintedReference": "D01776",
-          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and the outcome was not published in the bulletins searched.",
+          "otherCruParcelIds": [
+            "212670000D0093"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -1794,7 +1798,11 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "unresolvedPrintedReference": "D01776",
-          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and the outcome was not published in the bulletins searched.",
+          "otherCruParcelIds": [
+            "212670000D0093"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -1847,7 +1855,8 @@
           "documentDate": "2022-06-30",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+          "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It states it does not authorise cultivation, and no decision was found in the bulletins searched."
         }
       ],
       "externalResearchIds": [],
@@ -1953,7 +1962,8 @@
           "documentDate": "2022-04-04",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and no decision was found in the bulletins searched."
         }
       ],
       "externalResearchIds": [],
@@ -4648,7 +4658,8 @@
           "documentDate": "2022-04-04",
           "outcome": "unconfirmed",
           "currentFarmer": null,
-          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+          "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and no decision was found in the bulletins searched."
         }
       ],
       "externalResearchIds": [],
@@ -5770,7 +5781,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -6589,7 +6605,8 @@
           "documentDate": "2022-07-04",
           "outcome": "authorised",
           "currentFarmer": null,
-          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established.",
+          "appNote": "The same decision refuses the applicant other Vosne-Romanée parcels. Its list of communes is not split by parcel, so the commune is inferred from the previous operator. D0666 is printed at 0.0799 ha against a 0.1157 ha parcel, so its scope is unclear."
         }
       ],
       "externalResearchIds": [],
@@ -6655,7 +6672,8 @@
           "documentDate": "2022-07-04",
           "outcome": "authorised",
           "currentFarmer": null,
-          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+          "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established.",
+          "appNote": "The same decision refuses the applicant other Vosne-Romanée parcels. Its list of communes is not split by parcel, so the commune is inferred from the previous operator. D0666 is printed at 0.0799 ha against a 0.1157 ha parcel, so its scope is unclear."
         }
       ],
       "externalResearchIds": [],
@@ -6981,7 +6999,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [
@@ -7997,7 +8020,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -8068,7 +8096,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -8139,7 +8172,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -8210,7 +8248,12 @@
           "documentDate": "2026-04-07",
           "outcome": "instruction suspended for eight months from 29 April 2026",
           "currentFarmer": null,
-          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+          "otherCruParcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ]
         }
       ],
       "externalResearchIds": [],
@@ -9639,6 +9682,7 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and no decision was found in the bulletins searched.",
           "viaPredecessor": "212670000D0774"
         }
       ],
@@ -9695,6 +9739,7 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and no decision was found in the bulletins searched.",
           "viaPredecessor": "212670000D0774"
         }
       ],
@@ -9751,6 +9796,7 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It states it does not authorise cultivation, and no decision was found in the bulletins searched.",
           "viaPredecessor": "212670000D0775"
         }
       ],
@@ -9807,6 +9853,7 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It states it does not authorise cultivation, and no decision was found in the bulletins searched.",
           "viaPredecessor": "212670000D0775"
         }
       ],
@@ -9863,6 +9910,7 @@
           "outcome": "unconfirmed",
           "currentFarmer": null,
           "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+          "appNote": "Receipt of a complete application. It states it does not authorise cultivation, and no decision was found in the bulletins searched.",
           "viaPredecessor": "212670000D0775"
         }
       ],

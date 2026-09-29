@@ -62,6 +62,37 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
  await expect(dialog.getByText('Manually linked · farming unverified',{exact:true})).toHaveCount(0);
 });
 
+for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Échezeaux: the map stays in view while choosing an owner or parcel at ${viewport.width}px`,async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche'});
+ await page.route('**/api/producers',route=>route.fulfill({json:{items:[]}}));
+ await page.route('**/api/parcel-producer-links?*',route=>route.fulfill({json:{items:[]}}));
+ await page.setViewportSize(viewport);
+ await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();
+ const canvas=dialog.locator('.village-map-canvas'),owners=dialog.locator('ul.village-map-owners');
+ // Scroll down to the owner list: the map must still be on screen, under the header.
+ await owners.locator('li').last().scrollIntoViewIfNeeded();
+ await expect(canvas).toBeInViewport({ratio:0.95});
+ const headerBottom=await dialog.locator('.village-map-header').evaluate(el=>el.getBoundingClientRect().bottom);
+ expect((await canvas.boundingBox())!.y).toBeGreaterThanOrEqual(headerBottom-1);
+ await owners.getByRole('button').first().click();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await expect(canvas).toBeInViewport({ratio:0.95});
+ // A parcel picked from the finder at the foot of the panel shows its evidence without moving the map.
+ await dialog.getByText('Find a parcel by cadastral reference').click();
+ await dialog.getByLabel('Cadastral parcel').selectOption('212670000D0665');
+ const evidence=dialog.getByRole('region',{name:'History and evidence'});
+ await expect(evidence.getByText('Authorisation decision',{exact:true})).toBeVisible();
+ await expect(evidence.getByText('Authorisation decision',{exact:true})).toBeInViewport();
+ await expect(canvas).toBeInViewport({ratio:0.95});
+ const box=(await evidence.boundingBox())!,map=(await canvas.boundingBox())!;
+ if(viewport.width<=740)expect(box.y).toBeGreaterThanOrEqual(map.y+map.height-1);  // never hidden behind the pinned map
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+});
+
 for(const route of allMapRoutes){
  test(`Échezeaux pilot ${route}: named areas, parcels and dated rights stay distinct`,async({page},testInfo)=>{
   await page.setViewportSize({width:390,height:844});

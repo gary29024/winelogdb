@@ -1,11 +1,11 @@
-import {useEffect,useId,useMemo,useState} from 'react';
+import {useEffect,useId,useMemo,useRef,useState} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource} from 'maplibre-gl';
 import type {Feature,FeatureCollection,Polygon,MultiPolygon} from 'geojson';
 import {placeKey} from '../../lib/places/resolve';
 import {ownerName,possibleOwnerMatch} from '../../lib/places/echezeauxParcelOwners';
 import manifest from '../../lib/places/echezeauxParcelManifest.json';
 import {ParcelProducerLinker} from './ParcelProducerLinker';
-import farmingResearch from '../../lib/places/echezeauxFarmingResearch.json';
+import {ParcelEvidence} from './ParcelEvidence';
 
 type Right={holderId:string;siren:string|null;name:string;rightCode:string;rightLabel:string;legalForm:string;legalFormLabel:string};
 // producerNames are reviewed spellings of the producer field, as in
@@ -110,6 +110,20 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
   'recorded','unrecorded',...(owner?['owner' as const]:[]),...(verified.length?['verified' as const]:[]),
   ...(showPossible&&possible.length?['possible' as const]:[]),...(selected?['selected' as const]:[])],[show,data,owner,verified,possible,showPossible,selected]);
  useEffect(()=>{onLegend?.(legend)},[legend,onLegend]);
+ // A parcel picked from the finder at the foot of the panel, or tapped on the map, shows its details
+ // above the owner list. Bring them into view below the pinned map (or beside it on a wide screen).
+ // scrollIntoView cannot be used: it counts details hidden behind the pinned map as visible.
+ const detailsRef=useRef<HTMLDivElement>(null);
+ useEffect(()=>{
+  const details=detailsRef.current,dialog=details?.closest<HTMLElement>('.village-map-dialog');
+  if(!selectedId||!details||!dialog?.scrollBy)return;
+  const pinned=dialog.querySelector<HTMLElement>('.village-map-main'),header=dialog.querySelector<HTMLElement>('.village-map-header');
+  const rect=details.getBoundingClientRect(),view=dialog.getBoundingClientRect();
+  const stacked=Boolean(pinned)&&getComputedStyle(pinned!).position==='sticky'&&pinned!.getBoundingClientRect().right>rect.left+1;
+  const clear=(stacked?pinned!.getBoundingClientRect().bottom:header?.getBoundingClientRect().bottom??view.top)+8;
+  const delta=rect.top<clear?rect.top-clear:rect.bottom>view.bottom?Math.min(rect.bottom-view.bottom,rect.top-clear):0;
+  if(delta)dialog.scrollBy({top:delta,behavior:reducedMotion()?'instant':'smooth'});
+ },[selectedId]);
  useEffect(()=>()=>onLegend?.([]),[onLegend]);
  useEffect(()=>{
   if(!map||!show||!data)return;
@@ -162,9 +176,18 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  const fit=(bounds:[[number,number],[number,number]]|null)=>{
   if(bounds&&map)map.fitBounds(bounds,{padding:70,maxZoom:17,duration:reducedMotion()?0:400});
  };
+ // The map sticks under the header, so it is normally already in view; only scroll when it is not.
+ const ensureMapVisible=()=>{
+  const canvas=map?.getContainer?.();
+  if(!canvas?.getBoundingClientRect)return;
+  const dialog=canvas.closest<HTMLElement>('.village-map-dialog'),bounds=dialog?.getBoundingClientRect();
+  const top=(bounds?.top??0)+(dialog?.querySelector<HTMLElement>('.village-map-header')?.offsetHeight??0),rect=canvas.getBoundingClientRect();
+  if(rect.top>=top-1&&rect.bottom<=(bounds?.bottom??window.innerHeight)+1)return;
+  canvas.scrollIntoView?.({block:'start',behavior:reducedMotion()?'instant':'smooth'});
+ };
  const showOnMap=(features:ParcelFeature[])=>{
   fit(union(features));
-  map?.getContainer?.().scrollIntoView?.({block:'start',behavior:reducedMotion()?'instant':'smooth'});
+  ensureMapVisible();
  };
  const selectParcel=(id:string)=>{
   setSelectedId(id);const f=parcels.find(f=>f.properties.id===id);
@@ -184,7 +207,6 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
  const selectedMatch=selected?matches.get(selected.properties.id)??'':'';
- const research=selected&&farmingResearch.parcels.find(p=>p.parcelId===selected.properties.id);
  return <section className="village-map-parcels" aria-label="Parcel rights">
   <label className="village-map-parcel-toggle" htmlFor={switchId}>
    <span>Parcel rights<small> · {name}</small></span>
@@ -220,7 +242,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
      <span className="village-map-parcel-bar" role="img" aria-label={`${Math.round(recordedArea/totalArea*100)}% of the parcel area has recorded rights`}><b style={{width:`${recordedArea/totalArea*100}%`}}/></span>
      <span className="village-map-parcel-key"><span>{recorded.length} with recorded rights · {ha(recordedArea)}</span><span>{parcels.length-recorded.length} without a matched record</span></span>
     </div>
-    {selected&&<div className="village-map-parcel-details" aria-live="polite">
+    {selected&&<div className="village-map-parcel-details" aria-live="polite" ref={detailsRef}>
      <div className="village-map-parcel-head"><h4>Parcel {selected.properties.reference}</h4><button type="button" className="village-map-link-button" onClick={()=>setSelectedId('')}>Clear</button></div>
      <dl>
       <dt>Recorded rights</dt><dd>{rights.length?rights.map(r=><div key={`${r.holderId}:${r.rightCode}`}>{ownerName(r.name)} · {r.rightLabel}</div>):'No matched rights record'}</dd>
@@ -228,12 +250,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
       {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-possible">Possible match, unverified</dd></>}
      </dl>
-     {research&&<div className="village-map-farming-research">
-      <strong>Historical farming application · outcome unconfirmed</strong>
-      <p>Anne Gros applied for this parcel; the notice names Domaine Gros Frère et Sœur as the previous operator. The receipt dated 24 November 2022 is not an authorisation or confirmation of current farming.</p>
-      <a href={`${farmingResearch.source.url}#page=74`} target="_blank" rel="noopener noreferrer">Application 2022-204 · notice and parcel annex, pages 74–75</a>
-      <p>The printed reference {research.printedReference} matches this June 2026 parcel ID. Historical boundary continuity has not been established.</p>
-     </div>}
+     <ParcelEvidence parcelId={selected.properties.id}/>
      {[...new Map(rights.map(r=>[r.holderId,r])).values()].map(r=><button key={r.holderId} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(r.holderId)}>Link {ownerName(r.name)} to an app producer</button>)}
      {selected.properties.domaineLinks.map((link,index)=><div key={`${link.producerId}:${index}`} className="village-map-note">
       <strong>{link.name}</strong> · {link.status==='verified'?'Verified operator':'Proposed operator (unverified)'} · effective {link.effectiveDate}

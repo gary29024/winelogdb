@@ -159,6 +159,17 @@ function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTa
   return {bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
  };
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
+ // The map sticks under the dialog header while the side panel scrolls; publish the header height so
+ // the sticky offset follows it when it wraps.
+ useEffect(()=>{
+  const dialog=host.current?.closest<HTMLElement>('.village-map-dialog'),header=dialog?.querySelector<HTMLElement>('.village-map-header');
+  if(!dialog||!header||typeof ResizeObserver==='undefined')return;
+  const update=()=>dialog.style.setProperty('--village-header-h',`${header.offsetHeight}px`);
+  update();
+  const observer=new ResizeObserver(update);
+  observer.observe(header);
+  return()=>{observer.disconnect();dialog.style.removeProperty('--village-header-h')};
+ },[]);
 
  useEffect(()=>{
   if(!host.current)return;
