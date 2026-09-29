@@ -92,25 +92,23 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
     require('dvf-sales' in sources and 'dgfip-history' in sources, 'Sale records need the dvf-sales and dgfip-history sources')
     deeds_by_parcel = {}
     for deed in sales['deeds']:
-        for disposition in deed['dispositions']:
-            require(set(disposition['parcelIds']) <= ids, 'Sale record outside research cru')
-            for pid in disposition['parcelIds']:
-                deeds_by_parcel.setdefault(pid, []).append((deed, disposition))
+        require(set(deed['parcelIds']) <= ids, 'Sale record outside research cru')
+        for pid in deed['parcelIds']:
+            deeds_by_parcel.setdefault(pid, []).append(deed)
 
     def sale_rows_and_leads(pid, has_rights):
         records, leads = [], []
-        for deed, disposition in deeds_by_parcel.get(pid, []):
-            same = [x for x in disposition['parcelIds'] if x != pid]
-            others = [x for d in deed['dispositions'] if d is not disposition for x in d['parcelIds']]
+        for deed in deeds_by_parcel.get(pid, []):
+            together = [x for x in deed['parcelIds'] if x != pid]
             records.append({'deedId': deed['deedId'], 'date': deed['date'], 'nature': deed['nature'],
-                            'sameDisposition': same, 'otherDispositions': others})
-            if has_rights or deed['nature'] != 'sale':
+                            'dispositions': deed['dispositions'], 'sameDeed': together, 'otherParcels': deed['otherParcels']})
+            if has_rights or deed['nature'] != 'sale' or deed['dispositions'] != 1:
                 continue
-            # One disposition of a sale is one price for one set of parcels; a company that first appears
-            # on the other parcels in the next January file most likely bought this one too. It is a lead:
-            # the parcel may have gone to a private co-buyer, and a buyer need not farm it.
+            # A sale with a single disposition is one price for one set of parcels; a company that first
+            # appears on the other parcels in the next January file most likely bought this one too. It is a
+            # lead: the parcel may have gone to a private co-buyer, and a buyer need not farm it.
             buyers = {}
-            for other in same:
+            for other in together:
                 for change in lineage[other]['rightsChanges']:
                     if change['kind'] in BUYER_CHANGES and change['from'] <= deed['date'] < change['to']:
                         for name in change['after']:
@@ -454,20 +452,23 @@ def render_sales(register, sources):
     deeds = {}
     for r in register['parcels']:
         for s in r['saleRecords']:
-            deeds.setdefault((s['date'], s['deedId'], s['nature']), set()).add(r['parcelId'])
+            deeds.setdefault((s['date'], s['deedId'], s['nature'], s['dispositions'], s['otherParcels']), set()).add(r['parcelId'])
     source = sources['dvf-sales']
     lines = ['## Sale and exchange deeds', '',
              f"[{cell(source['title'])}]({source['url']}) ({register['inputs']['saleRecordsCoverage']}) list registered transfers "
              'for a fee by deed, without buyer or seller. Prices are not kept. A company buyer shows up as a first record in the '
-             'next January rights file; a private buyer does not show up anywhere. A parcel sold in the same disposition as '
+             'next January rights file (sometimes a year later); a private buyer does not show up anywhere. A parcel sold in a '
+             'single-disposition deed with '
              'parcels bought by a company is marked as a lead only: it may have gone to a private co-buyer, and a buyer need '
              'not farm the land. Exchanges move parcels in both directions and give no lead. Rebuilt by '
              '`python scripts/build_echezeaux_sale_records.py`.', '',
-             '| Date | Deed | Parcels | Lead for parcels without a company record |', '| --- | --- | --- | --- |']
-    for (date, deed, nature), pids in sorted(deeds.items()):
+             '| Date | Deed | Échezeaux parcels | Parcels outside the cru | Lead for parcels without a company record |',
+             '| --- | --- | --- | ---: | --- |']
+    for (date, deed, nature, dispositions, others), pids in sorted(deeds.items()):
         leads = '; '.join(f"{rows[p]['reference']}: {c['name']}" for p in sorted(pids) for c in rows[p]['candidateLeads']
                           if c['basis'] == 'same-sale-as-company-buyer') or '—'
-        lines.append(f"| {date} | {SALE_LABELS[nature]} ({deed}) | {', '.join(rows[p]['reference'] for p in sorted(pids))} | {cell(leads)} |")
+        label = f"{SALE_LABELS[nature]}, {dispositions} disposition{'s' if dispositions > 1 else ''} ({deed[:10]})"
+        lines.append(f"| {date} | {label} | {', '.join(rows[p]['reference'] for p in sorted(pids))} | {others} | {cell(leads)} |")
     return lines + ['']
 
 

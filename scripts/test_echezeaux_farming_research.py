@@ -32,7 +32,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 116)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 112)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -134,9 +134,11 @@ class FarmingResearchTests(unittest.TestCase):
     def test_a_sale_dates_a_transfer_and_leads_only_through_a_company_co_buyer(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withSaleRecord'], 25)
+        self.assertEqual(result['counts']['withSaleRecord'], 45)
+        # DVF+ reaches back to 2014: D0671 and D0673 left Assurances du Crédit Mutuel Vie in one sale, 24 December 2019.
+        self.assertEqual([(s['date'], s['nature']) for s in rows['D 0671']['saleRecords']], [('2019-12-24', 'sale')])
         self.assertEqual(result['counts']['saleLead'], 1)
-        # D0146 went in one disposition with four parcels first recorded to LES CRUOTS in January 2025.
+        # D0146 went in a single-disposition sale with four parcels first recorded to LES CRUOTS in January 2025.
         lead = rows['D 0146']['candidateLeads']
         self.assertEqual([(c['name'], c['basis']) for c in lead], [('LES CRUOTS', 'same-sale-as-company-buyer')])
         self.assertEqual(rows['D 0146']['researchStatus'], 'sale-lead')
@@ -145,6 +147,11 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertFalse(any(c['basis'] == 'same-sale-as-company-buyer' for c in rows['D 0144']['candidateLeads']))
         self.assertEqual(rows['D 0835']['candidateLeads'], [])
         self.assertEqual(rows['D 0835']['saleRecords'][0]['nature'], 'exchange')
+        # A sale with several dispositions may split parcels between buyers: no lead.
+        curation_sales = copy.deepcopy(self.sales)
+        next(d for d in curation_sales['deeds'] if '212670000D0146' in d['parcelIds'])['dispositions'] = 2
+        split = {p['reference']: p for p in self.build(sales=curation_sales)['parcels']}
+        self.assertEqual(split['D 0146']['candidateLeads'], [])
         self.assertEqual(rows['D 0301']['researchStatus'], 'unresolved')
         self.assertEqual(rows['D 0301']['researchDepth'], 'sale-record-reviewed')
 
@@ -154,11 +161,12 @@ class FarmingResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'another snapshot'):
             self.build(sales=sales)
         sales = copy.deepcopy(self.sales)
-        sales['deeds'][0]['dispositions'][0]['parcelIds'].append('212670000D0093')
+        sales['deeds'][0]['parcelIds'].append('212670000D0093')
         with self.assertRaisesRegex(ValueError, 'Sale record outside research cru'):
             self.build(sales=sales)
         # Prices and addresses are never kept.
-        self.assertTrue(all(set(d) == {'deedId', 'date', 'nature', 'dispositions'} for d in self.sales['deeds']))
+        self.assertTrue(all(set(d) == {'deedId', 'date', 'nature', 'dispositions', 'parcelIds', 'otherParcels'}
+                            for d in self.sales['deeds']))
 
     def test_census_compares_areas_and_never_places_holdings_on_parcels(self):
         result = self.build()

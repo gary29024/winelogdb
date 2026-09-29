@@ -1,238 +1,312 @@
 {
- "schemaVersion": 1,
- "dataset": "Demandes de valeurs foncières géolocalisées (DVF), Etalab",
+ "schemaVersion": 2,
+ "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
  "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
- "release": "2025-12",
+ "release": "2026-04",
  "parentFeatureId": "inao-denom-565",
- "coverage": "2021-07-15 to 2025-10-13",
+ "coverage": "2014-01-17 to 2025-11-20",
  "inputs": {
   "parcelSnapshotSha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
-  "dvf": [
-   {
-    "year": 2021,
-    "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/2021/communes/21/21267.csv",
-    "sha256": "ea739078d07d82d5fa5e90f7a9c631e28d4ce2edc716694db0e86047c0b413a1"
-   },
-   {
-    "year": 2022,
-    "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/2022/communes/21/21267.csv",
-    "sha256": "001938424d4e1977b84dd0ba23a3be80dca861bd111d25875bc053a5f4a3270d"
-   },
-   {
-    "year": 2023,
-    "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/2023/communes/21/21267.csv",
-    "sha256": "e9859fedf4d914f189b6a0834a0b2edb25ffa9d3346a4691ffa0fb94e08af644"
-   },
-   {
-    "year": 2024,
-    "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/2024/communes/21/21267.csv",
-    "sha256": "a52f614401a5420714ee9906e30e1c37f0bb16b1c8de6c42f6a4d07d18572deb"
-   },
-   {
-    "year": 2025,
-    "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/2025/communes/21/21267.csv",
-    "sha256": "b5d68c2661dd90f877036e271798a0c2021f57cda5157e4d5cf6c357420fd166"
-   }
-  ]
+  "dvfPlus": {
+   "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+   "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+   "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  }
  },
- "note": "A deed dates a transfer and groups parcels; it names no party and never establishes farming.",
+ "note": "A deed dates a transfer and groups parcels; it names no party and never establishes farming. Parcel references are those printed at the deed date.",
  "counts": {
-  "deeds": 12,
-  "parcels": 25
+  "deeds": 26,
+  "parcels": 45
  },
  "deeds": [
   {
-   "deedId": "2021-290133",
+   "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+   "date": "2015-09-15",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0308",
+    "212670000D0505",
+    "212670000D0566",
+    "212670000D0568",
+    "212670000D0569",
+    "212670000D0805",
+    "212670000D0808"
+   ],
+   "otherParcels": 3
+  },
+  {
+   "deedId": "eddb54de4383829b11631bbb9aca094b",
+   "date": "2016-05-17",
+   "nature": "sale",
+   "dispositions": 4,
+   "parcelIds": [
+    "212670000D0510"
+   ],
+   "otherParcels": 540
+  },
+  {
+   "deedId": "96de0f1f9451c37b6e504af14984d442",
+   "date": "2016-08-01",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0301",
+    "212670000D0302",
+    "212670000D0303",
+    "212670000D0304"
+   ],
+   "otherParcels": 2
+  },
+  {
+   "deedId": "0b866a7dbd78afcc392bd70c58308fbd",
+   "date": "2016-12-27",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0208"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "acca122a7d4674a4eccd505e39a431da",
+   "date": "2017-05-02",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0631",
+    "212670000D0706"
+   ],
+   "otherParcels": 25
+  },
+  {
+   "deedId": "6f27a7043ae686c4fbd89c57b62e8f2d",
+   "date": "2017-06-14",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0701"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "3785dacf309dcf366981d7c7f9973b35",
+   "date": "2017-08-29",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0820"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "6912da05a841b65d719ddc94d5f138ae",
+   "date": "2018-07-17",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0822"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "fa4f017f2fb13647aad33f44fcb4a02c",
+   "date": "2018-07-17",
+   "nature": "exchange",
+   "dispositions": 2,
+   "parcelIds": [
+    "212670000D0821"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "4fb2f3a2b294aba0348250e26f0fd373",
+   "date": "2018-09-29",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0301",
+    "212670000D0302",
+    "212670000D0303",
+    "212670000D0304"
+   ],
+   "otherParcels": 2
+  },
+  {
+   "deedId": "33d478dafafae41f088e5571010e623e",
+   "date": "2019-06-19",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0709"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "0e848233dfab925f18f3d871a39ca2e5",
+   "date": "2019-12-24",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0671",
+    "212670000D0673"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "3882e75c635fbbb5a74f52cdf06c7c3d",
+   "date": "2020-05-20",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0701"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "dd3336b6003b2affb1e64e6e647087cb",
+   "date": "2020-12-22",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0329",
+    "212670000D0737",
+    "212670000D0746"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "f4232e30493fe51fc3a893eb4fa3f654",
    "date": "2021-07-15",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0313"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0313"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2023-232668",
+   "deedId": "c154445533ad3faa7beeee636b50a5ee",
    "date": "2023-02-20",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0295",
-      "212670000D0296",
-      "212670000D0297",
-      "212670000D0298",
-      "212670000D0299"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0295",
+    "212670000D0296",
+    "212670000D0297",
+    "212670000D0298",
+    "212670000D0299"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2023-233539",
+   "deedId": "8aff8d1300bcfd01cfee6942288fdbf5",
    "date": "2023-02-24",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0203"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0203"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2023-234236",
+   "deedId": "1c901083ee306b735ec242d55f480021",
    "date": "2023-03-29",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0301",
-      "212670000D0302",
-      "212670000D0303",
-      "212670000D0304"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0301",
+    "212670000D0302",
+    "212670000D0303",
+    "212670000D0304"
+   ],
+   "otherParcels": 2
   },
   {
-   "deedId": "2023-236336",
+   "deedId": "9e838fd8f8987168ec64d0d88733987c",
    "date": "2023-05-31",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0161"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0161"
+   ],
+   "otherParcels": 30
   },
   {
-   "deedId": "2023-242973",
+   "deedId": "a0d75b409a3105b3fa089fc8fdfeda54",
    "date": "2023-11-08",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0340"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0340"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2024-210518",
+   "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
    "date": "2024-03-14",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0144",
-      "212670000D0145",
-      "212670000D0146",
-      "212670000D0511",
-      "212670000D0512"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0144",
+    "212670000D0145",
+    "212670000D0146",
+    "212670000D0511",
+    "212670000D0512"
+   ],
+   "otherParcels": 1
   },
   {
-   "deedId": "2024-214011",
+   "deedId": "72b125678a30d417d94f45a71e938ef6",
    "date": "2024-06-26",
    "nature": "exchange",
-   "dispositions": [
-    {
-     "number": "000002",
-     "parcelIds": [
-      "212670000D0830"
-     ],
-     "otherParcels": 0
-    },
-    {
-     "number": "000003",
-     "parcelIds": [
-      "212670000D0833"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 2,
+   "parcelIds": [
+    "212670000D0832",
+    "212670000D0835"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2024-214025",
+   "deedId": "8286033f8473c9d8879ae179bfae2dbe",
    "date": "2024-06-26",
    "nature": "exchange",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0835"
-     ],
-     "otherParcels": 0
-    },
-    {
-     "number": "000002",
-     "parcelIds": [
-      "212670000D0832"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 2,
+   "parcelIds": [
+    "212670000D0830",
+    "212670000D0833"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2024-214433",
+   "deedId": "8076aeee3046c6c291bfb9379f31e588",
    "date": "2024-06-28",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0673"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0673"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2024-217106",
+   "deedId": "735b3b891f835f64c6c4c3917c4e2a47",
    "date": "2024-09-30",
    "nature": "exchange",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0903"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0903"
+   ],
+   "otherParcels": 0
   },
   {
-   "deedId": "2025-231906",
+   "deedId": "163daed48655af41c557f005e3579c9b",
    "date": "2025-10-13",
    "nature": "sale",
-   "dispositions": [
-    {
-     "number": "000001",
-     "parcelIds": [
-      "212670000D0155"
-     ],
-     "otherParcels": 0
-    }
-   ]
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0155"
+   ],
+   "otherParcels": 0
   }
  ]
 }

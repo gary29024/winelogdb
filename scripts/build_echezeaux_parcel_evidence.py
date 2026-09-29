@@ -129,14 +129,17 @@ def sale_items(row):
     for sale in row['saleRecords']:
         item = {'kind': 'sale', 'date': sale['date'], 'title': SALE_TITLES[sale['nature']], 'sources': ['dvf-sales'],
                 'note': 'Public sale record: a date and a deed, with no buyer, seller or price. A buyer need not farm the land.'}
-        together = sale['sameDisposition'] if sale['nature'] != 'exchange' else sale['sameDisposition'] + sale['otherDispositions']
-        if together:
-            item['detail'] = ('In the same deed as ' if sale['nature'] == 'exchange' else 'Sold together with ') + \
-                ', '.join(short_reference(p) for p in together)
+        parts = [short_reference(p) for p in sale['sameDeed']]
+        if sale['otherParcels']:
+            parts.append(f"{sale['otherParcels']} parcel{'s' if sale['otherParcels'] > 1 else ''} outside the cru")
+        if parts:
+            # Only a single-disposition sale moves all its parcels together, for one price.
+            together = sale['nature'] == 'sale' and sale['dispositions'] == 1
+            item['detail'] = ('Sold together with ' if together else 'In the same deed as ') + ', '.join(parts)
         buyers = [c for c in row['candidateLeads'] if c['basis'] == 'same-sale-as-company-buyer' and c['deedId'] == sale['deedId']]
         if buyers:
             names = ' / '.join(title_case_owner(c['name']) for c in buyers)
-            item['detail'] += f'; those parcels were next recorded to {names}. This parcel has no company record, so its buyer is unknown.'
+            item['detail'] += f'. The Échezeaux parcels among them were next recorded to {names}; this parcel has no company record, so its buyer is unknown.'
             item['sources'] = ['dvf-sales', 'dgfip-history']
         items.append(item)
     return items

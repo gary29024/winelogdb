@@ -68,9 +68,9 @@ describe('Parcel evidence panel',()=>{
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Sale record')).toBeTruthy();
   expect(within(panel).getByText('14 Mar 2024').getAttribute('datetime')).toBe('2024-03-14');
-  expect(within(panel).getByText(/Sold together with D0144, D0145, D0511, D0512; those parcels were next recorded to Les Cruots\. This parcel has no company record, so its buyer is unknown\./)).toBeTruthy();
+  expect(within(panel).getByText(/Sold together with D0144, D0145, D0511, D0512, 1 parcel outside the cru\. The Échezeaux parcels among them were next recorded to Les Cruots; this parcel has no company record, so its buyer is unknown\./)).toBeTruthy();
   expect(within(panel).getByText(/no buyer, seller or price/)).toBeTruthy();
-  expect(within(panel).getByRole('link',{name:/DVF sale and exchange deeds/}).getAttribute('href')).toContain('geo-dvf');
+  expect(within(panel).getByRole('link',{name:/DVF\+ open-data/}).getAttribute('href')).toContain('dvfplus');
  });
  it('shows an exact-area match with the farming domaine as published research, undated',async()=>{
   render(<ParcelEvidence parcelId={id('362')}/>);

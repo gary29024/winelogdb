@@ -1,14 +1,11 @@
 {
-  "dataset": "Demandes de valeurs foncières géolocalisées (DVF), Etalab",
+  "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
   "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
-  "release": "2025-12",
+  "release": "2026-04",
   "commune": "21267",
-  "urlTemplate": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/{year}/communes/21/21267.csv",
-  "years": [
-    {"year": 2021, "sha256": "ea739078d07d82d5fa5e90f7a9c631e28d4ce2edc716694db0e86047c0b413a1"},
-    {"year": 2022, "sha256": "001938424d4e1977b84dd0ba23a3be80dca861bd111d25875bc053a5f4a3270d"},
-    {"year": 2023, "sha256": "e9859fedf4d914f189b6a0834a0b2edb25ffa9d3346a4691ffa0fb94e08af644"},
-    {"year": 2024, "sha256": "a52f614401a5420714ee9906e30e1c37f0bb16b1c8de6c42f6a4d07d18572deb"},
-    {"year": 2025, "sha256": "b5d68c2661dd90f877036e271798a0c2021f57cda5157e4d5cf6c357420fd166"}
-  ]
+  "portal": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+  "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+  "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+  "member": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+  "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
 }

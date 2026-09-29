@@ -22,7 +22,7 @@
       "2025-01-01"
     ],
     "saleRecords": "docs/research/echezeaux-sale-records.json",
-    "saleRecordsCoverage": "2021-07-15 to 2025-10-13"
+    "saleRecordsCoverage": "2014-01-17 to 2025-11-20"
   },
   "counts": {
     "parcels": 276,
@@ -35,7 +35,7 @@
     "saleLead": 1,
     "unresolved": 142,
     "currentFarmerConfirmed": 0,
-    "withSaleRecord": 25,
+    "withSaleRecord": 45,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -1362,16 +1362,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "date": "2024-03-14",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0145",
             "212670000D0146",
             "212670000D0511",
             "212670000D0512"
           ],
-          "otherDispositions": []
+          "otherParcels": 1
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -1432,16 +1433,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "date": "2024-03-14",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0144",
             "212670000D0146",
             "212670000D0511",
             "212670000D0512"
           ],
-          "otherDispositions": []
+          "otherParcels": 1
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -1473,7 +1475,7 @@
             "dvf-sales",
             "dgfip-history"
           ],
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "viaParcelIds": [
             "212670000D0144",
             "212670000D0145",
@@ -1487,16 +1489,17 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "date": "2024-03-14",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0144",
             "212670000D0145",
             "212670000D0511",
             "212670000D0512"
           ],
-          "otherDispositions": []
+          "otherParcels": 1
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -1726,11 +1729,12 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2025-231906",
+          "deedId": "163daed48655af41c557f005e3579c9b",
           "date": "2025-10-13",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -1905,11 +1909,12 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-236336",
+          "deedId": "9e838fd8f8987168ec64d0d88733987c",
           "date": "2023-05-31",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 30
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -2975,11 +2980,12 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-233539",
+          "deedId": "8aff8d1300bcfd01cfee6942288fdbf5",
           "date": "2023-02-24",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3028,7 +3034,16 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "0b866a7dbd78afcc392bd70c58308fbd",
+          "date": "2016-12-27",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3111,16 +3126,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-232668",
+          "deedId": "c154445533ad3faa7beeee636b50a5ee",
           "date": "2023-02-20",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0296",
             "212670000D0297",
             "212670000D0298",
             "212670000D0299"
           ],
-          "otherDispositions": []
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3183,16 +3199,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-232668",
+          "deedId": "c154445533ad3faa7beeee636b50a5ee",
           "date": "2023-02-20",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0295",
             "212670000D0297",
             "212670000D0298",
             "212670000D0299"
           ],
-          "otherDispositions": []
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3255,16 +3272,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-232668",
+          "deedId": "c154445533ad3faa7beeee636b50a5ee",
           "date": "2023-02-20",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0295",
             "212670000D0296",
             "212670000D0298",
             "212670000D0299"
           ],
-          "otherDispositions": []
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3327,16 +3345,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-232668",
+          "deedId": "c154445533ad3faa7beeee636b50a5ee",
           "date": "2023-02-20",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0295",
             "212670000D0296",
             "212670000D0297",
             "212670000D0299"
           ],
-          "otherDispositions": []
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3399,16 +3418,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-232668",
+          "deedId": "c154445533ad3faa7beeee636b50a5ee",
           "date": "2023-02-20",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0295",
             "212670000D0296",
             "212670000D0297",
             "212670000D0298"
           ],
-          "otherDispositions": []
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3438,15 +3458,40 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2023-234236",
-          "date": "2023-03-29",
+          "deedId": "96de0f1f9451c37b6e504af14984d442",
+          "date": "2016-08-01",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0302",
             "212670000D0303",
             "212670000D0304"
           ],
-          "otherDispositions": []
+          "otherParcels": 2
+        },
+        {
+          "deedId": "4fb2f3a2b294aba0348250e26f0fd373",
+          "date": "2018-09-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0302",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
+        },
+        {
+          "deedId": "1c901083ee306b735ec242d55f480021",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0302",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3474,15 +3519,40 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2023-234236",
-          "date": "2023-03-29",
+          "deedId": "96de0f1f9451c37b6e504af14984d442",
+          "date": "2016-08-01",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0301",
             "212670000D0303",
             "212670000D0304"
           ],
-          "otherDispositions": []
+          "otherParcels": 2
+        },
+        {
+          "deedId": "4fb2f3a2b294aba0348250e26f0fd373",
+          "date": "2018-09-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
+        },
+        {
+          "deedId": "1c901083ee306b735ec242d55f480021",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0303",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3510,15 +3580,40 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2023-234236",
-          "date": "2023-03-29",
+          "deedId": "96de0f1f9451c37b6e504af14984d442",
+          "date": "2016-08-01",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0301",
             "212670000D0302",
             "212670000D0304"
           ],
-          "otherDispositions": []
+          "otherParcels": 2
+        },
+        {
+          "deedId": "4fb2f3a2b294aba0348250e26f0fd373",
+          "date": "2018-09-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
+        },
+        {
+          "deedId": "1c901083ee306b735ec242d55f480021",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0304"
+          ],
+          "otherParcels": 2
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3546,15 +3641,40 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2023-234236",
-          "date": "2023-03-29",
+          "deedId": "96de0f1f9451c37b6e504af14984d442",
+          "date": "2016-08-01",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0301",
             "212670000D0302",
             "212670000D0303"
           ],
-          "otherDispositions": []
+          "otherParcels": 2
+        },
+        {
+          "deedId": "4fb2f3a2b294aba0348250e26f0fd373",
+          "date": "2018-09-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0303"
+          ],
+          "otherParcels": 2
+        },
+        {
+          "deedId": "1c901083ee306b735ec242d55f480021",
+          "date": "2023-03-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0301",
+            "212670000D0302",
+            "212670000D0303"
+          ],
+          "otherParcels": 2
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3694,7 +3814,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0505",
+            "212670000D0566",
+            "212670000D0568",
+            "212670000D0569",
+            "212670000D0805",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -3742,11 +3878,12 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2021-290133",
+          "deedId": "f4232e30493fe51fc3a893eb4fa3f654",
           "date": "2021-07-15",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -3940,12 +4077,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "dd3336b6003b2affb1e64e6e647087cb",
+          "date": "2020-12-22",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0737",
+            "212670000D0746"
+          ],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4299,11 +4448,12 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2023-242973",
+          "deedId": "a0d75b409a3105b3fa089fc8fdfeda54",
           "date": "2023-11-08",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -4893,7 +5043,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0566",
+            "212670000D0568",
+            "212670000D0569",
+            "212670000D0805",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5041,7 +5207,16 @@
         "wh-d0510"
       ],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "eddb54de4383829b11631bbb9aca094b",
+          "date": "2016-05-17",
+          "nature": "sale",
+          "dispositions": 4,
+          "sameDeed": [],
+          "otherParcels": 540
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5098,16 +5273,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "date": "2024-03-14",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0144",
             "212670000D0145",
             "212670000D0146",
             "212670000D0512"
           ],
-          "otherDispositions": []
+          "otherParcels": 1
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -5168,16 +5344,17 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2024-210518",
+          "deedId": "7064c2b4d1cba2dd91f644b8c7981add",
           "date": "2024-03-14",
           "nature": "sale",
-          "sameDisposition": [
+          "dispositions": 1,
+          "sameDeed": [
             "212670000D0144",
             "212670000D0145",
             "212670000D0146",
             "212670000D0511"
           ],
-          "otherDispositions": []
+          "otherParcels": 1
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -5672,7 +5849,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0505",
+            "212670000D0568",
+            "212670000D0569",
+            "212670000D0805",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5717,7 +5910,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0505",
+            "212670000D0566",
+            "212670000D0569",
+            "212670000D0805",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -5762,7 +5971,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0505",
+            "212670000D0566",
+            "212670000D0568",
+            "212670000D0805",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -6817,7 +7042,18 @@
         "wh-d0631"
       ],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "acca122a7d4674a4eccd505e39a431da",
+          "date": "2017-05-02",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0706"
+          ],
+          "otherParcels": 25
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -7881,7 +8117,18 @@
           ]
         }
       ],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "0e848233dfab925f18f3d871a39ca2e5",
+          "date": "2019-12-24",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0673"
+          ],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8047,11 +8294,22 @@
       ],
       "saleRecords": [
         {
-          "deedId": "2024-214433",
+          "deedId": "0e848233dfab925f18f3d871a39ca2e5",
+          "date": "2019-12-24",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0671"
+          ],
+          "otherParcels": 0
+        },
+        {
+          "deedId": "8076aeee3046c6c291bfb9379f31e588",
           "date": "2024-06-28",
           "nature": "sale",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2019-01-01",
@@ -8372,12 +8630,29 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "6f27a7043ae686c4fbd89c57b62e8f2d",
+          "date": "2017-06-14",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        },
+        {
+          "deedId": "3882e75c635fbbb5a74f52cdf06c7c3d",
+          "date": "2020-05-20",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8465,7 +8740,18 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "acca122a7d4674a4eccd505e39a431da",
+          "date": "2017-05-02",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0631"
+          ],
+          "otherParcels": 25
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -8544,7 +8830,16 @@
           ]
         }
       ],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "33d478dafafae41f088e5571010e623e",
+          "date": "2019-06-19",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 1
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [
@@ -8738,12 +9033,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "dd3336b6003b2affb1e64e6e647087cb",
+          "date": "2020-12-22",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0329",
+            "212670000D0746"
+          ],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8954,12 +9261,24 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "dd3336b6003b2affb1e64e6e647087cb",
+          "date": "2020-12-22",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0329",
+            "212670000D0737"
+          ],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "sale-record-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10035,7 +10354,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0505",
+            "212670000D0566",
+            "212670000D0568",
+            "212670000D0569",
+            "212670000D0808"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -10128,7 +10463,23 @@
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0308",
+            "212670000D0505",
+            "212670000D0566",
+            "212670000D0568",
+            "212670000D0569",
+            "212670000D0805"
+          ],
+          "otherParcels": 3
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -10468,7 +10819,16 @@
         "wh-arnoux-lachaux"
       ],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "3785dacf309dcf366981d7c7f9973b35",
+          "date": "2017-08-29",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
@@ -10536,7 +10896,16 @@
           ]
         }
       ],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "fa4f017f2fb13647aad33f44fcb4a02c",
+          "date": "2018-07-17",
+          "nature": "exchange",
+          "dispositions": 2,
+          "sameDeed": [],
+          "otherParcels": 1
+        }
+      ],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
         "212670000D0300"
@@ -10572,7 +10941,16 @@
         "wh-berthaut-gerbet"
       ],
       "rightsChanges": [],
-      "saleRecords": [],
+      "saleRecords": [
+        {
+          "deedId": "6912da05a841b65d719ddc94d5f138ae",
+          "date": "2018-07-17",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
       "cadastreFirstSeen": "2020-01-01",
       "predecessorIds": [
         "212670000D0300"
@@ -10845,13 +11223,14 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-214011",
+          "deedId": "8286033f8473c9d8879ae179bfae2dbe",
           "date": "2024-06-26",
           "nature": "exchange",
-          "sameDisposition": [],
-          "otherDispositions": [
+          "dispositions": 2,
+          "sameDeed": [
             "212670000D0833"
-          ]
+          ],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2025-01-01",
@@ -10973,13 +11352,14 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-214025",
+          "deedId": "72b125678a30d417d94f45a71e938ef6",
           "date": "2024-06-26",
           "nature": "exchange",
-          "sameDisposition": [],
-          "otherDispositions": [
+          "dispositions": 2,
+          "sameDeed": [
             "212670000D0835"
-          ]
+          ],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2025-01-01",
@@ -11042,13 +11422,14 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-214011",
+          "deedId": "8286033f8473c9d8879ae179bfae2dbe",
           "date": "2024-06-26",
           "nature": "exchange",
-          "sameDisposition": [],
-          "otherDispositions": [
+          "dispositions": 2,
+          "sameDeed": [
             "212670000D0830"
-          ]
+          ],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2025-01-01",
@@ -11139,13 +11520,14 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-214025",
+          "deedId": "72b125678a30d417d94f45a71e938ef6",
           "date": "2024-06-26",
           "nature": "exchange",
-          "sameDisposition": [],
-          "otherDispositions": [
+          "dispositions": 2,
+          "sameDeed": [
             "212670000D0832"
-          ]
+          ],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2025-01-01",
@@ -11623,11 +12005,12 @@
       "rightsChanges": [],
       "saleRecords": [
         {
-          "deedId": "2024-217106",
+          "deedId": "735b3b891f835f64c6c4c3917c4e2a47",
           "date": "2024-09-30",
           "nature": "exchange",
-          "sameDisposition": [],
-          "otherDispositions": []
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
         }
       ],
       "cadastreFirstSeen": "2025-01-01",

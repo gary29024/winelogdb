@@ -581,12 +581,12 @@
     },
     {
       "id": "dvf-sales",
-      "title": "DVF sale and exchange deeds, Flagey-Échezeaux, 2021–2025",
-      "url": "https://files.data.gouv.fr/geo-dvf/2025-12/csv/",
+      "title": "DVF+ open-data (Cerema), sale and exchange deeds, Flagey-Échezeaux, 2014–2025",
+      "url": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
       "type": "registry-dataset",
       "documentDate": null,
       "reviewedAt": "2026-09-29",
-      "finding": "Five hash-pinned yearly files (release 2025-12) list every registered transfer for a fee by parcel and deed, without party names. Twelve deeds touch 25 Échezeaux parcels. Each purchase by a company is followed by that company's first record in the next January rights file. Prices and addresses are not kept.",
+      "finding": "The hash-pinned April 2026 regional release keeps every deed since January 2014 (data.gouv.fr keeps five years), without party names. 26 deeds touch 45 Échezeaux parcels. Company purchases are followed by the buyer's first record in the next January rights file, sometimes a year later. Prices and addresses are not kept.",
       "access": "read"
     },
     {
@@ -1400,7 +1400,7 @@
     "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
-    "Open DVF sale records cover 2021–2025 only (five rolling years) and name no party. Earlier transfers, gifts and inheritances are not in them.",
+    "DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.",
     "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).",
     "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.",
     "Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded."

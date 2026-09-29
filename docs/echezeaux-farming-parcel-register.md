@@ -8,7 +8,7 @@ All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder grou
 
 Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 115 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, 1 were sold in the same deed as parcels bought by a named company, and 142 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-116 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+112 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.
 
@@ -890,22 +890,36 @@ A successor is accepted when it first appears in the vintage right after the ret
 
 ## Sale and exchange deeds
 
-[DVF sale and exchange deeds, Flagey-Échezeaux, 2021–2025](https://files.data.gouv.fr/geo-dvf/2025-12/csv/) (2021-07-15 to 2025-10-13) list registered transfers for a fee by deed, without buyer or seller. Prices are not kept. A company buyer shows up as a first record in the next January rights file; a private buyer does not show up anywhere. A parcel sold in the same disposition as parcels bought by a company is marked as a lead only: it may have gone to a private co-buyer, and a buyer need not farm the land. Exchanges move parcels in both directions and give no lead. Rebuilt by `python scripts/build_echezeaux_sale_records.py`.
+[DVF+ open-data (Cerema), sale and exchange deeds, Flagey-Échezeaux, 2014–2025](https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data) (2014-01-17 to 2025-11-20) list registered transfers for a fee by deed, without buyer or seller. Prices are not kept. A company buyer shows up as a first record in the next January rights file (sometimes a year later); a private buyer does not show up anywhere. A parcel sold in a single-disposition deed with parcels bought by a company is marked as a lead only: it may have gone to a private co-buyer, and a buyer need not farm the land. Exchanges move parcels in both directions and give no lead. Rebuilt by `python scripts/build_echezeaux_sale_records.py`.
 
-| Date | Deed | Parcels | Lead for parcels without a company record |
-| --- | --- | --- | --- |
-| 2021-07-15 | Sold (2021-290133) | D 0313 | — |
-| 2023-02-20 | Sold (2023-232668) | D 0295, D 0296, D 0297, D 0298, D 0299 | — |
-| 2023-02-24 | Sold (2023-233539) | D 0203 | — |
-| 2023-03-29 | Sold (2023-234236) | D 0301, D 0302, D 0303, D 0304 | — |
-| 2023-05-31 | Sold (2023-236336) | D 0161 | — |
-| 2023-11-08 | Sold (2023-242973) | D 0340 | — |
-| 2024-03-14 | Sold (2024-210518) | D 0144, D 0145, D 0146, D 0511, D 0512 | D 0146: LES CRUOTS |
-| 2024-06-26 | Exchanged (2024-214011) | D 0830, D 0833 | — |
-| 2024-06-26 | Exchanged (2024-214025) | D 0832, D 0835 | — |
-| 2024-06-28 | Sold (2024-214433) | D 0673 | — |
-| 2024-09-30 | Exchanged (2024-217106) | D 0903 | — |
-| 2025-10-13 | Sold (2025-231906) | D 0155 | — |
+| Date | Deed | Échezeaux parcels | Parcels outside the cru | Lead for parcels without a company record |
+| --- | --- | --- | ---: | --- |
+| 2015-09-15 | Sold, 1 disposition (128b5dd33f) | D 0308, D 0505, D 0566, D 0568, D 0569, D 0805, D 0808 | 3 | — |
+| 2016-05-17 | Sold, 4 dispositions (eddb54de43) | D 0510 | 540 | — |
+| 2016-08-01 | Sold, 1 disposition (96de0f1f94) | D 0301, D 0302, D 0303, D 0304 | 2 | — |
+| 2016-12-27 | Sold, 1 disposition (0b866a7dbd) | D 0208 | 0 | — |
+| 2017-05-02 | Sold, 1 disposition (acca122a7d) | D 0631, D 0706 | 25 | — |
+| 2017-06-14 | Sold, 1 disposition (6f27a7043a) | D 0701 | 0 | — |
+| 2017-08-29 | Sold, 1 disposition (3785dacf30) | D 0820 | 0 | — |
+| 2018-07-17 | Sold, 1 disposition (6912da05a8) | D 0822 | 0 | — |
+| 2018-07-17 | Exchanged, 2 dispositions (fa4f017f2f) | D 0821 | 1 | — |
+| 2018-09-29 | Sold, 1 disposition (4fb2f3a2b2) | D 0301, D 0302, D 0303, D 0304 | 2 | — |
+| 2019-06-19 | Sold, 1 disposition (33d478dafa) | D 0709 | 1 | — |
+| 2019-12-24 | Sold, 1 disposition (0e848233df) | D 0671, D 0673 | 0 | — |
+| 2020-05-20 | Sold, 1 disposition (3882e75c63) | D 0701 | 0 | — |
+| 2020-12-22 | Sold, 1 disposition (dd3336b600) | D 0329, D 0737, D 0746 | 0 | — |
+| 2021-07-15 | Sold, 1 disposition (f4232e3049) | D 0313 | 0 | — |
+| 2023-02-20 | Sold, 1 disposition (c154445533) | D 0295, D 0296, D 0297, D 0298, D 0299 | 0 | — |
+| 2023-02-24 | Sold, 1 disposition (8aff8d1300) | D 0203 | 0 | — |
+| 2023-03-29 | Sold, 1 disposition (1c901083ee) | D 0301, D 0302, D 0303, D 0304 | 2 | — |
+| 2023-05-31 | Sold, 1 disposition (9e838fd8f8) | D 0161 | 30 | — |
+| 2023-11-08 | Sold, 1 disposition (a0d75b409a) | D 0340 | 0 | — |
+| 2024-03-14 | Sold, 1 disposition (7064c2b4d1) | D 0144, D 0145, D 0146, D 0511, D 0512 | 1 | D 0146: LES CRUOTS |
+| 2024-06-26 | Exchanged, 2 dispositions (72b125678a) | D 0832, D 0835 | 0 | — |
+| 2024-06-26 | Exchanged, 2 dispositions (8286033f84) | D 0830, D 0833 | 0 | — |
+| 2024-06-28 | Sold, 1 disposition (8076aeee30) | D 0673 | 0 | — |
+| 2024-09-30 | Exchanged, 1 disposition (735b3b891f) | D 0903 | 0 | — |
+| 2025-10-13 | Sold, 1 disposition (163daed486) | D 0155 | 0 | — |
 
 ## Source log
 
@@ -967,7 +981,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **roumier-2023-visit** — [Old Vine Notes: 2023 estate visit with Georges Roumier](https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/). estate-visit-report; read; document date 2024-12-30; evidence season 2023. Reports an additional acquisition and Échezeaux combining Champs Traversins and En Orveaux. No cadastral references, legal-entity lease or 2026 operation confirmation.
 - **dgfip-history** — [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/). registry-dataset; read; document date not established. Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/echezeaux-rights-history.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.
 - **cadastre-history** — [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/). geometry; read; document date not established. Seven hash-pinned vintages were compared with the 2026-06-01 geometry to find new references, retired references and spatial successors. Overlap is not a documented division act.
-- **dvf-sales** — [DVF sale and exchange deeds, Flagey-Échezeaux, 2021–2025](https://files.data.gouv.fr/geo-dvf/2025-12/csv/). registry-dataset; read; document date not established. Five hash-pinned yearly files (release 2025-12) list every registered transfer for a fee by parcel and deed, without party names. Twelve deeds touch 25 Échezeaux parcels. Each purchase by a company is followed by that company's first record in the next January rights file. Prices and addresses are not kept.
+- **dvf-sales** — [DVF+ open-data (Cerema), sale and exchange deeds, Flagey-Échezeaux, 2014–2025](https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data). registry-dataset; read; document date not established. The hash-pinned April 2026 regional release keeps every deed since January 2014 (data.gouv.fr keeps five years), without party names. 26 deeds touch 45 Échezeaux parcels. Company purchases are followed by the buyer's first record in the next January rights file, sometimes a year later. Prices and addresses are not kept.
 - **raa-2022-084** — [BFC bulletin 2022-084: decision BFC-2022-07-04-00011, SAS Domaine RC Les Grandes Vignes](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97177/620257/file/recueil-bfc-2022-084-recueil-des-actes-administratifs-1.pdf#page=172). government-decision; read; document date 2022-07-04. Partial refusal and authorisation to farm; cédant Domaine Daniel Rion et Fils. Pages 172–175 read from the image. Republished in bulletin 2022-154 as BFC-2022-07-04-00018.
 - **raa-2022-101** — [BFC bulletin 2022-101: receipt BFC-2022-04-04-00033, SARL Domaine Michel Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97791/623936/file/recueil-bfc-2022-101-recueil-des-actes-administratifs-special.pdf#page=351). government-receipt; read; document date 2022-04-04. Receipt of a complete application, dossier 2022-053; previous operator SCE Gros frère et sœur. Page 351 read from the image.
 - **raa-2022-143** — [BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88). government-receipt; read; document date 2022-06-30. Receipt of a complete application, dossier 2022-113; previous operator Domaine Gros Frère et Sœur. Page 88 read from the image.
@@ -1002,7 +1016,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.
 - Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
-- Open DVF sale records cover 2021–2025 only (five rolling years) and name no party. Earlier transfers, gifts and inheritances are not in them.
+- DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.
 - SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).
 - Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
 - Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.

@@ -1,21 +1,24 @@
-"""Dated sale and exchange deeds for mapped Échezeaux parcels, from open DVF files.
+"""Dated sale and exchange deeds for mapped Échezeaux parcels, from open DVF+ data.
 
-DVF lists every registered transfer for a fee since 2021 (five rolling years), by
-parcel, with no party names. It tells when a parcel changed hands and which parcels
-went in the same deed; it never names a buyer, seller or farmer. Prices and
-addresses are dropped so the output cannot help re-identify private parties.
+Cerema's DVF+ open-data (release April 2026) restructures the DGFiP DVF files by
+deed and keeps every year since 2014, where the data.gouv.fr files keep only the last
+five. A deed tells when a parcel changed hands and which parcels went with it; it
+never names a buyer, seller or farmer. Prices and addresses are dropped so the output
+cannot help re-identify private parties.
 
   python scripts/build_echezeaux_sale_records.py --source-dir .tmp/echezeaux-dvf --download
   python scripts/build_echezeaux_sale_records.py --source-dir .tmp/echezeaux-dvf --check
 
-Only the standard library is required.
+Only the standard library is required. The regional archive is about 73 MB.
 """
 import argparse
 import csv
 import hashlib
 import io
 import json
+import sys
 import urllib.request
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,18 +34,12 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def source_path(source_dir, year):
-    return source_dir / f'dvf-{year}-21267.csv'
-
-
 def download(config, source_dir):
     source_dir.mkdir(parents=True, exist_ok=True)
-    for entry in config['years']:
-        url = config['urlTemplate'].format(year=entry['year'])
-        with urllib.request.urlopen(url, timeout=120) as response:
-            data = response.read()
-        require(hashlib.sha256(data).hexdigest() == entry['sha256'], f'DVF file changed: {url}')
-        source_path(source_dir, entry['year']).write_bytes(data)
+    with urllib.request.urlopen(config['url'], timeout=900) as response:
+        data = response.read()
+    require(hashlib.sha256(data).hexdigest() == config['sha256'], 'DVF+ archive changed')
+    (source_dir / config['fileName']).write_bytes(data)
 
 
 def mapped_parcels(manifest):
@@ -52,47 +49,41 @@ def mapped_parcels(manifest):
             if any(o['parentFeatureId'] == PARENT for o in f['properties']['overlaps'])}
 
 
+def parcel_list(value):
+    return [p.strip() for p in value.strip('{}').split(',') if p.strip()]
+
+
 def build(config, manifest, source_dir):
     ids = mapped_parcels(manifest)
-    rows, inputs = [], []
-    for entry in config['years']:
-        data = source_path(source_dir, entry['year']).read_bytes()
-        require(hashlib.sha256(data).hexdigest() == entry['sha256'], f"DVF {entry['year']} hash mismatch")
-        inputs.append({'year': entry['year'], 'url': config['urlTemplate'].format(year=entry['year']),
-                       'sha256': entry['sha256']})
-        rows += list(csv.DictReader(io.StringIO(data.decode('utf-8'))))
-    deeds = {}
+    data = (source_dir / config['fileName']).read_bytes()
+    require(hashlib.sha256(data).hexdigest() == config['sha256'], 'DVF+ archive hash mismatch')
+    csv.field_size_limit(sys.maxsize)  # a few deeds list thousands of parcels
+    with zipfile.ZipFile(io.BytesIO(data)) as archive:
+        rows = list(csv.DictReader(io.TextIOWrapper(archive.open(config['member']), encoding='utf-8'), delimiter='|'))
+    deeds, seen = [], set()
     for r in rows:
-        require(r['code_commune'] == config['commune'], 'Row from another commune')
-        deed = deeds.setdefault(r['id_mutation'], {'deedId': r['id_mutation'], 'date': r['date_mutation'],
-                                                   'nature': NATURES.get(r['nature_mutation'], 'other'),
-                                                   'dispositions': {}})
-        require(deed['date'] == r['date_mutation'], f"Deed with two dates: {r['id_mutation']}")
-        parcel = r['id_parcelle']
-        # A row per local or culture repeats the parcel; keep the reference once per disposition.
-        parcels = deed['dispositions'].setdefault(r['numero_disposition'], [])
-        if parcel not in parcels:
-            parcels.append(parcel)
-    kept = []
-    for deed in deeds.values():
-        all_parcels = {p for ps in deed['dispositions'].values() for p in ps}
-        if not all_parcels & ids:
+        if config['commune'] not in parcel_list(r['l_codinsee']):
             continue
-        dispositions = []
-        for number, parcels in sorted(deed['dispositions'].items()):
-            inside = sorted(p for p in parcels if p in ids)
-            dispositions.append({'number': number, 'parcelIds': inside, 'otherParcels': len(parcels) - len(inside)})
-        kept.append({'deedId': deed['deedId'], 'date': deed['date'], 'nature': deed['nature'], 'dispositions': dispositions})
-    kept.sort(key=lambda d: (d['date'], d['deedId']))
-    touched = {p for d in kept for x in d['dispositions'] for p in x['parcelIds']}
+        parcels = parcel_list(r['l_idpar'])
+        inside = sorted(set(parcels) & ids)
+        if not inside:
+            continue
+        require(r['idmutinvar'] not in seen, f"Duplicate deed {r['idmutinvar']}")
+        seen.add(r['idmutinvar'])
+        # DVF+ merges a deed's dispositions; parcels share one price and direction only when there is one.
+        deeds.append({'deedId': r['idmutinvar'], 'date': r['datemut'], 'nature': NATURES.get(r['libnatmut'], 'other'),
+                      'dispositions': int(r['nbdispo']), 'parcelIds': inside, 'otherParcels': len(set(parcels)) - len(inside)})
+    deeds.sort(key=lambda d: (d['date'], d['deedId']))
+    commune_dates = [r['datemut'] for r in rows if config['commune'] in parcel_list(r['l_codinsee'])]
     return {
-        'schemaVersion': 1, 'dataset': config['dataset'], 'licence': config['licence'], 'release': config['release'],
+        'schemaVersion': 2, 'dataset': config['dataset'], 'licence': config['licence'], 'release': config['release'],
         'parentFeatureId': PARENT,
-        'coverage': f"{min(d['date'] for d in kept)} to {max(d['date'] for d in kept)}",
-        'inputs': {'parcelSnapshotSha256': manifest['sha256'], 'dvf': inputs},
-        'note': 'A deed dates a transfer and groups parcels; it names no party and never establishes farming.',
-        'counts': {'deeds': len(kept), 'parcels': len(touched)},
-        'deeds': kept,
+        'coverage': f'{min(commune_dates)} to {max(commune_dates)}',
+        'inputs': {'parcelSnapshotSha256': manifest['sha256'], 'dvfPlus': {k: config[k] for k in ('url', 'fileName', 'sha256')}},
+        'note': ('A deed dates a transfer and groups parcels; it names no party and never establishes farming. '
+                 'Parcel references are those printed at the deed date.'),
+        'counts': {'deeds': len(deeds), 'parcels': len({p for d in deeds for p in d['parcelIds']})},
+        'deeds': deeds,
     }
 
 
