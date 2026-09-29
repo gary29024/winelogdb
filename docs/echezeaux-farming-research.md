@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **141 records**, including overlapping filing copies. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **147 records**, including overlapping filing copies. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -132,7 +132,7 @@ The fourteen-file batch reviewed **30 September 2026** raises coverage to **21 p
 - **Corporate records stay within their scope:** LC documents the Landanger/SAS B cash-contribution structure and an expanded object; HOR documents cash-capital and presidency changes; Traversins documents cash formation and aggregate land acquisitions in its first accounts. None provides the missing parcel-level acquisition/lease schedules. Liger-Belair's 2026-labelled files concern a September 2025 share-loan termination and do not resolve the April 2026 farm-application suspension. Bouchon Pourpre's filing records a 2024 continuation decision. Coudray's original copy corroborates the 2004 recital already read.
 - **Next priority:** the executed Bouchy/Tardy lease and subsequent arrangements, followed by the administrative outcome and dated cultivation evidence. A recited expiry date plus an application does not establish that a handover happened. [Full batch reading and provenance](echezeaux-statutes-research.md#additional-fourteen-file-batch-reviewed-30-september-2026).
 
-The following **nine PDFs (233 pages)** bring the total to **29 supplied PDFs**, **141 source entries** and **27 parcels with exact-reference filing evidence**. Six newly covered references are in purchase/lease mandates, not executed instruments:
+The fourth batch of **nine PDFs (233 pages)** brought the total then to **29 supplied PDFs**, **141 source entries** and **27 parcels with exact-reference filing evidence**. Six newly covered references are in purchase/lease mandates, not executed instruments:
 
 - **Grands Crus Investissement:** the 12 August 1997 mandate names D0650-D0652 and their individual areas (4,389 m²), without naming a tenant. The 2019 corporate update does not supply the missing lease or confirm Méo-Camuzet.
 - **Bonnes Pentes:** the 5 July 1999 mandate names D0645-D0647 and proposed long-term tenant Domaine Henri Naudin-Ferrand (394495493). Its combined 3,410 m² matches the cadastral sum; the individual parcel areas are from the snapshot, not individually recited in the deed.
@@ -141,13 +141,21 @@ The following **nine PDFs (233 pages)** bring the total to **29 supplied PDFs**,
 
 Twenty-four individually recited filing areas and Bonnes Pentes' three-reference aggregate match the pinned cadastre. **No current farmer is verified**, and the 127 without a named candidate and 109 inventory-only parcels are unchanged. [Detailed nine-file reading and next requests](echezeaux-statutes-research.md#additional-nine-file-batch-founding-mandates-tardy-identity-and-hor-accounts).
 
+The latest **six PDFs (174 pages)** bring the total to **35 supplied PDFs** and **147 source entries**, with exact-reference coverage unchanged at **27 parcels**:
+
+- **Bouchy lease locator:** a 24 May 2008 recital gives the publication reference for the 19 October 2001 personal lease to Jean Tardy: **Beaune, 13 December 2001, volume 2001 P no.6121**. It gives no cadastral schedule, so the five-parcel 2019 scope is not backdated to 2008.
+- **GFV Tardy:** its 27 February 2003 deed recites a separate 2000 lease ending in **2017**, compared with **2007** in the later copy. Its fourteen contributed parcels are outside the mapped grand cru; the Flagey references are section A. Neither version alters the Bouchy lease.
+- **Naudin-Ferrand:** the 1994 formation and December 2021 reserve-capital update provide no executed Bonnes Pentes D0645-D0647 lease. **Bouchy Père et Filles (512057621)** retains a Puligny-Montrachet AN0218 contribution and records a 2026 company-share change; these documents do not resolve the 2008 Les Treux proposal.
+
+[Six-file reading, provenance and remaining document requests](echezeaux-statutes-research.md#additional-six-file-batch-bouchy-lease-locator-and-scope-checks). No current farmer is verified.
+
 The app shows these as dated **Company filings and leases**, alongside ownership, notices and research. Contributions, lease recitals and mandates remain separate from verified current farming. Historical research uses an explicitly selected date source; an undated guide or estate page cannot inherit a supporting registry's date.
 
 ### Unofficial sources: company aggregators and the wine press
 
 Checked 29 September 2026.
 
-- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 29 PDFs across four batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
+- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 35 PDFs across five batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
 - **Guide Hachette** has 218 Échezeaux entries dating back to the 2001 edition. Two published areas equal exact cadastral sums:
   - Guide Hachette 2001 describes **52 a 63 ca in En Orveaux** for Joseph Drouhin's 1998 vintage. The 2024 ORVEAUX deed independently names the four parcels totalling **5,263 m² cadastral**, while explicitly giving **4,147 m² plantable and planted**, consistent with the importer's rounded 0.41 ha. The historical guide stays separate from this later deed; its date is not backfilled from a 2024 company notice.
   - François Gerbet had **18 a 76 ca in Les Quartiers de Nuits and Les Treux** (2006 vintage). **D0360 + D0508** total exactly 1 876 m². Winehog lists only part of D0508 for Berthaut-Gerbet in 2019, so the plot's use has changed since.

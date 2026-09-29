@@ -1695,7 +1695,7 @@
       "filingLabelDate": "2020-02-11",
       "reviewedAt": "2026-09-30",
       "access": "user-supplied-pdf-text-and-visual-review",
-      "finding": "PDF p.40 identifies EARL du Domaine Jean Tardy et Fils as 429171382. Page 24 recites a separate 16 June 2000 lease from Jean and Arlette Tardy to the EARL, without the five Bouchy cadastral references. It prints 18 years from 1 January 2000 ending 31 December 2007: an unresolved internal inconsistency, not silently corrected to 2017. This cannot replace Bouchy’s 2001 personal tenancy.",
+      "finding": "PDF p.40 identifies EARL du Domaine Jean Tardy et Fils as 429171382. Page 24 recites a separate 16 June 2000 lease from Jean and Arlette Tardy to the EARL. It prints 18 years from 1 January 2000 ending 31 December 2007. The earlier GFV deed of 27 February 2003 (PDF p.8) instead prints 2017 and schedules other vineyards, including Flagey section A parcels. Preserve the variant pending the executed lease; neither recital replaces Bouchy’s 2001 personal tenancy.",
       "originalFilename": "4-DOMAINE-JEAN-TARDY-ET-FILS-Actes-du-11-02-2020.pdf",
       "sha256": "f75166a63a7367fa3f75ae6174b6a884705a6211f89e712f589c178866893c2f",
       "pageCount": 57,
@@ -1787,6 +1787,177 @@
       ],
       "pageNumbering": "one-based PDF",
       "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-lease-recital-2008",
+      "title": "Bouchy: 24 May 2008 personal tenancy recital and lease publication reference",
+      "url": "https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes",
+      "type": "company-filing",
+      "documentDate": "2008-05-24",
+      "filingLabelDate": "2009-05-14",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 24 May 2008 share-gift deed recites Jean Tardy personally as tenant of the GFA Domaine Bouchy et Amis property in Flagey-Échezeaux, under a 25-year lease from 19 October 2001, published at Beaune on 13 December 2001, volume 2001 P no.6121 (PDF p.14). This clause gives no cadastral references or EARL-use permission; do not backdate the five-parcel 2019 schedule. Page 39 retains the 1993 D0764/D0766 purchase and Mondange lease mandates, not a new executed lease.",
+      "originalFilename": "1-DOMAINE-BOUCHY-ET-AMIS-Actes-du-14-05-2009.pdf",
+      "sha256": "ae127ce774c74e2b39d38c2e5f74456f0c77718b82a91f2ddcc900bfdd613f29",
+      "pageCount": 40,
+      "reviewedPages": [
+        1,
+        14,
+        39
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "naudin-formation-1994",
+      "title": "Naudin-Ferrand: 16 March 1994 formation and business-asset contributions",
+      "url": "https://www.pappers.fr/entreprise/domaine-henri-naudin-ferrand-394495493#actes",
+      "type": "company-filing",
+      "documentDate": "1994-03-16",
+      "filingLabelDate": "1994-04-06",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 14 March valuation report and 16 March statutes describe operating assets, plantations, equipment and stocks, not a cadastral Échezeaux land contribution. Article 27 authorizes farm leases with effect from 1 January 1994; the separate buildings clause anticipates a notarial lease. Neither is an executed lease for Bonnes Pentes D0645-D0647. The plantation inventory names other references, not those three.",
+      "originalFilename": "2-DOMAINE-HENRI-NAUDIN-FERRAND-Actes-du-06-04-1994.pdf",
+      "sha256": "32ece1aab1d22fd653174d551ac18f5be205bd6e809153959d035a669b0dbc62",
+      "pageCount": 70,
+      "reviewedPages": [
+        3,
+        5,
+        14,
+        19,
+        39,
+        41
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "valuationReportDate": "1994-03-14"
+    },
+    {
+      "id": "naudin-capital-2021",
+      "title": "Naudin-Ferrand: December 2021 reserve-capital increase and updated statutes",
+      "url": "https://www.pappers.fr/entreprise/domaine-henri-naudin-ferrand-394495493#actes",
+      "type": "company-filing",
+      "documentDate": "2021-12-28",
+      "filingLabelDate": "2022-02-01",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The resolution capitalizes reserves and the statutes retain the original movable-asset contribution history. No new vineyard contribution or executed D0645-D0647 lease is supplied. The meeting heading and updated Article 6 use 28 December 2021; the resolution’s quoted Article 6 prints 22 December, an internal date discrepancy.",
+      "originalFilename": "3-DOMAINE-HENRI-NAUDIN-FERRAND-Statuts-mis-à-jour-01-02-2022.pdf",
+      "sha256": "2626f4ba25a1b1a057de15b3c5bbe2c7dd57a130d9dab27714fa6cd11d364d2a",
+      "pageCount": 21,
+      "reviewedPages": [
+        2,
+        3,
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "dateNote": "28 December 2021 on PDF p.2 and updated Article 6 p.8; quoted Article 6 p.3 prints 22 December 2021."
+    },
+    {
+      "id": "bouchy-pere-filles-statutes-2026",
+      "title": "Bouchy Père et Filles: 10 June 2026 update retaining a Puligny contribution",
+      "url": "https://www.pappers.fr/entreprise/groupement-fonciere-agricole-du-domaine-bouchy-pere-et-fille-512057621#actes",
+      "type": "company-filing",
+      "documentDate": "2026-06-10",
+      "filingLabelDate": "2026-06-12",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "This distinct company, 512057621, retains a contribution of Puligny-Montrachet AN0218, Les Levrons, 1726 m² (PDF p.3), leased to Thiébault Huber for 18 years from 1 January 2008 (p.4). These are historical clauses, not a new 2026 land transaction. The June update concerns shares. This supplied copy does not link the company to Bouchy et Amis’s 2008 Les Treux SAFER proposal.",
+      "originalFilename": "4-GROUPEMENT-FONCIERE-AGRICOLE-DU-DOMAINE-BOUCHY-PERE-ET-FILLE-Copie-des-statuts-mis-à-jour-12-06-2026.pdf",
+      "sha256": "5bba4b4c200b0282c8c09f0c5cdcde1f6279da8434c3bd4578ecd98b7f7b5b8c",
+      "pageCount": 22,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "companySiren": "512057621",
+      "historicalLandScope": {
+        "commune": "Puligny-Montrachet",
+        "reference": "AN0218",
+        "areaM2": 1726,
+        "outsideResearchCru": true
+      }
+    },
+    {
+      "id": "bouchy-pere-filles-resolution-2026",
+      "title": "Bouchy Père et Filles: 10 June 2026 share-change resolution",
+      "url": "https://www.pappers.fr/entreprise/groupement-fonciere-agricole-du-domaine-bouchy-pere-et-fille-512057621#actes",
+      "type": "company-filing",
+      "documentDate": "2026-06-10",
+      "filingLabelDate": "2026-06-12",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The unanimous decision changes Article 8 following a transfer of bare ownership of company shares. It supplies no land transfer, cadastral Échezeaux schedule or operating lease. Company 512057621 must remain distinct from Domaine Bouchy et Amis, 391735321.",
+      "originalFilename": "5-GROUPEMENT-FONCIERE-AGRICOLE-DU-DOMAINE-BOUCHY-PERE-ET-FILLE-Actes-du-12-06-2026.pdf",
+      "sha256": "32e9e1b7c0aec68213223b50441c5263f5895814d24581485c4a82596ffcf071",
+      "pageCount": 2,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "companySiren": "512057621"
+    },
+    {
+      "id": "gfv-tardy-formation-2003",
+      "title": "GFV Tardy: 27 February 2003 contributions and separate 2000 lease recital",
+      "url": "https://www.pappers.fr/entreprise/grpt-foncier-viticole-tardy-jean-et-fils-448398693#actes",
+      "type": "company-filing",
+      "documentDate": "2003-02-27",
+      "filingLabelDate": "2003-05-06",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The GFV contribution schedule names fourteen parcels outside the mapped Échezeaux grand cru. Its Flagey parcels are section A, not Bouchy’s section D holding. PDF p.8 recites the 16 June 2000 lease to EARL Domaine Jean Tardy et Fils for 18 years from 1 January 2000 to 31 December 2017. The later 2020 copy prints 2007; preserve both readings pending the executed instrument. Neither lease recital changes Bouchy’s separate 2001 personal tenancy.",
+      "originalFilename": "6-GRPT-FONCIER-VITICOLE-TARDY-JEAN-ET-FILS-Actes-du-06-05-2003.pdf",
+      "sha256": "a4c017dd8e7707b05588bd93b581d62c1f3d02a20c2a42148801eca141d37b07",
+      "pageCount": 19,
+      "reviewedPages": [
+        2,
+        4,
+        5,
+        6,
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "companySiren": "448398693",
+      "leaseRecital": {
+        "signedDate": "2000-06-16",
+        "effectiveFrom": "2000-01-01",
+        "recitedEnd": "2017-12-31",
+        "recitedDurationYears": 18,
+        "tenants": [
+          "EARL DOMAINE JEAN TARDY ET FILS"
+        ],
+        "pages": [
+          8
+        ],
+        "parcelSchedulePages": [
+          4,
+          5,
+          6
+        ],
+        "outsideResearchCru": true,
+        "flageySectionAReferences": [
+          "A0256",
+          "A0257",
+          "A0953",
+          "A1020",
+          "A1021",
+          "A1022"
+        ],
+        "conflictingSourceId": "jean-tardy-deed-2020",
+        "conflictingRecitedEnd": "2007-12-31",
+        "limitation": "Contribution schedule is outside the mapped grand cru; neither recital is the executed 2000 lease. The 2017/2007 variant does not alter the separate Bouchy 2001 lease."
+      }
     }
   ],
   "holders": [
@@ -2069,7 +2240,7 @@
         "Domaine Jean Tardy et Fils"
       ],
       "basis": "filing-tenant-relationship",
-      "finding": "The 2019 deed names Jean Tardy personally, with permitted EARL use and a recited October 2026 lease end. Separate Tardy statutes identify company 429171382 and its 2024 SARL conversion. Neither corporate continuity nor the suspended Liger-Belair application proves a handover or current farming.",
+      "finding": "Jean Tardy is the personal tenant, with permitted EARL use. A 2008 recital locates the 2001 lease at Beaune, 2001 P no.6121; only the 2019 recital lists all five parcels. The recited end is October 2026. Current farming and any Liger-Belair handover remain unverified.",
       "sourceIds": [
         "bouchy",
         "bouchy-tardy",
@@ -2079,7 +2250,9 @@
         "jean-tardy-deed-2020",
         "jean-tardy-statutes-2024",
         "bouchy-safer-proposal-2008",
-        "bouchy-nuits-mandate-2010"
+        "bouchy-nuits-mandate-2010",
+        "bouchy-lease-recital-2008",
+        "gfv-tardy-formation-2003"
       ],
       "parcelOperationConfirmed": false
     },
@@ -2118,12 +2291,14 @@
         "Domaine Henri Naudin-Ferrand"
       ],
       "basis": "filing-lease-mandate",
-      "finding": "The 5 July 1999 deed mandates purchase of D0645-D0647 (3410 m² combined) and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). This strengthens the management-based lead, but the executed purchase/lease and current farming remain unverified.",
+      "finding": "The 1999 deed mandates purchase of D0645-D0647 (3410 m² combined) and a lease to Domaine Henri Naudin-Ferrand (394495493). The Naudin 1994 formation and 2021 capital update supply no executed lease for these parcels. Execution and current farming remain unverified.",
       "sourceIds": [
         "bonnes",
         "naudin",
         "naudin-sheet",
-        "bonnes-pentes-mandate-1999"
+        "bonnes-pentes-mandate-1999",
+        "naudin-formation-1994",
+        "naudin-capital-2021"
       ],
       "parcelOperationConfirmed": false
     },
@@ -2401,7 +2576,8 @@
     "The separate executed Rouget concurrent lease and Forey 2025–2048 lease have not been reviewed. Orveaux needs the 2003 lease and amendments to explain partial scope, the 4550 m² lease recital versus 4147 m² planted area, and any operating-company arrangement.",
     "D0146 is co-sold with the four later LES CRUOTS parcels but is not in the contribution tables; its owner and operator remain unassigned.",
     "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals.",
-    "The 1997 Grands Crus and 1999 Bonnes Pentes deeds supply exact-reference purchase/lease mandates, not executed instruments. Bouchy’s 2008 SAFER proposal lacks a cadastral reference and purchase outcome; Tardy’s company identity/2024 SARL conversion does not resolve the personal lease, its amendments or current cultivation."
+    "The Grands Crus 1997 and Bonnes Pentes 1999 exact-reference mandates remain without executed instruments. Naudin’s 1994 formation and 2021 capital update do not supply the Bonnes Pentes lease. Bouchy’s 2008 SAFER proposal still lacks references and outcome; the separate Père et Filles copies concern Puligny-Montrachet and do not resolve it.",
+    "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. Obtain the executed lease and amendments before backdating the five-parcel 2019 scope. GFV Tardy’s separate 2000 lease covers other vineyards and has competing 2017/2007 end-year recitals; neither changes the Bouchy lease."
   ],
   "historyFindings": [
     {
@@ -4183,6 +4359,19 @@
         "convertedTo": "SARL",
         "conversionDate": "2024-07-25",
         "limitation": "Separate corporate identity evidence; not a SIREN printed in the Bouchy lease recital, assignment of the personal tenancy or proof of cultivation."
+      },
+      "leasePublicationReferenceEvidence": {
+        "sourceId": "bouchy-lease-recital-2008",
+        "recitalDate": "2008-05-24",
+        "pages": [
+          14
+        ],
+        "office": "Beaune",
+        "publicationDate": "2001-12-13",
+        "volume": "2001 P",
+        "number": "6121",
+        "parcelReferencesStated": false,
+        "limitation": "Municipality-level recital without a cadastral schedule. The five-parcel scope is stated in 2019, not established for 2001 or 2008 by this publication reference alone."
       }
     },
     {
