@@ -69,7 +69,7 @@ export function ParcelLegend({keys}:{keys:ParcelLegendKey[]}){
 
 export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMap|null;parentId:string;producer?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void}){
  const [show,setShow]=useState(false),[data,setData]=useState<Parcels|null>(null),[error,setError]=useState(false),[attempt,setAttempt]=useState(0);
- const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[query,setQuery]=useState('');
+ const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
  const [showPossible,setShowPossible]=useState(false);
  const [linkingHolder,setLinkingHolder]=useState('');
  const switchId=useId(),parcelId=useId(),searchId=useId(),possibleId=useId(),ownersId=useId();
@@ -263,7 +263,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
      </details>:<p className="village-map-note">No matching published legal-entity record was found. Coverage exclusions and parcel changes can leave gaps; this doesn’t mean the parcel has no owner.</p>}
     </div>}
     <div>
-     <p className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</p>
+     <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length}</span></summary>
      <p className="village-map-note">A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={owner===o.id} onClick={()=>chooseOwner(o.id)}>
@@ -271,6 +271,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
      </button></li>)}</ul>
      {owner&&<button type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(owner)}>Link chosen right holder to an app producer</button>}
      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} right holders`}</button>}
+     </details>
     </div>
     <details className="village-map-parcel-finder"><summary>Find a parcel by cadastral reference</summary>
      <label htmlFor={parcelId}>Cadastral parcel</label>

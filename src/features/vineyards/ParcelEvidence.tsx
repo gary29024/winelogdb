@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useReducer,useState} from 'react';
 
 type Kind='authorisation'|'suspended'|'application'|'research'|'ownership'|'lineage'|'lead';
 type Source={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
@@ -26,6 +26,7 @@ const groups:{id:string;heading:string;kinds:Kind[]}[]=[
  {id:'notices',heading:'Official notices',kinds:['authorisation','suspended','application']},
  {id:'research',heading:'Published research',kinds:['research']},
  {id:'ownership',heading:'Ownership records',kinds:['ownership','lineage']},
+ {id:'leads',heading:'Weak leads',kinds:['lead']},
 ];
 
 const sourceLabels:Record<Source['kind'],string>={official:'Official notice',research:'Winehog',data:'Open data',company:'Company record',estate:'Estate page',other:'Other source'};
@@ -35,6 +36,9 @@ function sourceLabel(source:Source,repeated:boolean){
  if(repeated)label+=` · ${new URL(source.url).hostname.replace(/^www\./,'')}`;  // two links of one kind need telling apart
  return label;
 }
+
+// What the reader opened or closed is remembered while browsing parcels; untouched groups follow the default.
+const choices=new Map<string,boolean>();
 
 function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sources']}){
  const time=when(item);
@@ -58,7 +62,7 @@ function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sour
 }
 
 export function ParcelEvidence({parcelId}:{parcelId:string}){
- const [data,setData]=useState<ParcelEvidenceData|null>(null),[failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
+ const [data,setData]=useState<ParcelEvidenceData|null>(null),[failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0),[,bump]=useReducer((n:number)=>n+1,0);
  useEffect(()=>{
   let active=true;
   load().then(result=>{if(active){setData(result);setFailed(false)}}).catch(()=>{if(active)setFailed(true)});
@@ -69,21 +73,15 @@ export function ParcelEvidence({parcelId}:{parcelId:string}){
  if(!data)return <p className="village-map-note parcel-evidence" role="status">Loading evidence records…</p>;
  const items=data.parcels[parcelId]??[];
  if(!items.length)return <p className="village-map-note parcel-evidence">No dated records were found for this parcel. This does not mean nobody farms it.</p>;
- const leads=items.filter(i=>i.kind==='lead');
+ const shown=groups.map(group=>({...group,list:items.filter(i=>group.kinds.includes(i.kind))})).filter(group=>group.list.length>0);
+ const firstId=shown[0]?.id;
  return <section className="parcel-evidence" aria-label="History and evidence">
   <h5>History and evidence</h5>
   <p className="village-map-note">Dated records about this parcel. They show notices, owners and published research, not who farms it today.</p>
-  {groups.map(group=>{
-   const list=items.filter(i=>group.kinds.includes(i.kind));
-   return list.length>0&&<div key={group.id} className="parcel-evidence-group">
-    <h6>{group.heading} <span>{list.length}</span></h6>
-    <ul>{list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
-   </div>;
-  })}
-  {leads.length>0&&<details className="parcel-evidence-group parcel-evidence-leads">
-   <summary>Weak leads <span>{leads.length}</span></summary>
-   <p className="village-map-note">Names and ownership context only. They are not evidence of who farms this parcel.</p>
-   <ul>{leads.map((item,index)=><Item key={`${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
-  </details>}
+  {shown.map(group=><details key={group.id} className={`parcel-evidence-group parcel-evidence-${group.id}`} open={choices.get(group.id)??group.id===firstId}>
+   <summary onClick={event=>{event.preventDefault();choices.set(group.id,!(choices.get(group.id)??group.id===firstId));bump()}}>{group.heading} <span>{group.list.length}</span></summary>
+   {group.id==='leads'&&<p className="village-map-note">Names and ownership context only. They are not evidence of who farms this parcel.</p>}
+   <ul>{group.list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
+  </details>)}
  </section>;
 }

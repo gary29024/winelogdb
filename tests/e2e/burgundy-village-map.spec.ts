@@ -90,6 +90,17 @@ for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Éc
  await expect(canvas).toBeInViewport({ratio:0.95});
  const box=(await evidence.boundingBox())!,map=(await canvas.boundingBox())!;
  if(viewport.width<=740)expect(box.y).toBeGreaterThanOrEqual(map.y+map.height-1);  // never hidden behind the pinned map
+ // Sections fold away on request and come back with a click.
+ const notices=evidence.locator('details.parcel-evidence-notices'),ownerSection=dialog.locator('details.village-map-owner-section');
+ await expect(notices).toHaveJSProperty('open',true);
+ await notices.locator('summary').click();
+ await expect(evidence.getByText('Authorisation decision',{exact:true})).toBeHidden();
+ await notices.locator('summary').click();
+ await expect(evidence.getByText('Authorisation decision',{exact:true})).toBeVisible();
+ await ownerSection.locator('summary').click();
+ await expect(owners).toBeHidden();
+ await ownerSection.locator('summary').click();
+ await expect(owners).toBeVisible();
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
 });
 

@@ -1,13 +1,37 @@
 // @vitest-environment jsdom
 import {afterEach,describe,expect,it,vi} from 'vitest';
-import {cleanup,render,screen,within} from '@testing-library/react';
+import {cleanup,fireEvent,render,screen,within} from '@testing-library/react';
 import {ParcelEvidence} from '../../src/features/vineyards/ParcelEvidence';
 import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
 
 const id=(ref:string)=>`212670000D${ref.padStart(4,'0')}`;
+const fresh=async()=>{vi.resetModules();return (await import('../../src/features/vineyards/ParcelEvidence')).ParcelEvidence};
 afterEach(()=>{cleanup();vi.resetModules();vi.doUnmock('../../src/lib/places/echezeauxParcelEvidence.json')});
 
 describe('Parcel evidence panel',()=>{
+ it('opens only the first group, lets the reader open or close any group and remembers that on the next parcel',async()=>{
+  const Fresh=await fresh();
+  const {rerender}=render(<Fresh parcelId={id('665')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  const groups=()=>[...panel.querySelectorAll('details.parcel-evidence-group')] as HTMLDetailsElement[];
+  expect(groups().map(g=>g.open)).toEqual(groups().map((_,i)=>i===0));
+  expect(groups().length).toBeGreaterThan(1);
+  fireEvent.click(groups()[1].querySelector('summary')!);
+  expect(groups()[1].open).toBe(true);
+  fireEvent.click(groups()[0].querySelector('summary')!);
+  expect(groups()[0].open).toBe(false);
+  rerender(<Fresh parcelId={id('673')}/>);
+  const next=[...(await screen.findByRole('region',{name:'History and evidence'})).querySelectorAll('details.parcel-evidence-group')] as HTMLDetailsElement[];
+  expect(next.find(g=>g.classList.contains('parcel-evidence-notices'))?.open).toBe(false);
+ });
+ it('opens the weak leads when they are the only records for a parcel',async()=>{
+  const only=Object.entries(evidence.parcels as Record<string,{kind:string}[]>).find(([,items])=>items.every(i=>i.kind==='lead'));
+  if(!only)return;
+  const Fresh=await fresh();
+  render(<Fresh parcelId={only[0]}/>);
+  const leads=(await screen.findByRole('region',{name:'History and evidence'})).querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
+  expect(leads.open).toBe(true);
+ });
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')}/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});

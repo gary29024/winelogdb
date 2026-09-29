@@ -77,8 +77,16 @@
    verified producer and blue the possible match. */
 .parcel-evidence{display:grid;gap:10px;min-width:0}
 .parcel-evidence h5{margin:0;font-size:.8rem}
-.parcel-evidence h6,.parcel-evidence-leads summary{display:flex;align-items:center;gap:6px;margin:0;font-size:.66rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-5)}
-.parcel-evidence h6 span,.parcel-evidence-leads summary span{padding:0 6px;border-radius:999px;background:var(--sunken);letter-spacing:0}
+.parcel-evidence-group>summary,.village-map-owner-section>summary{list-style:none;cursor:pointer;min-height:36px}
+.parcel-evidence-group>summary::-webkit-details-marker,.village-map-owner-section>summary::-webkit-details-marker{display:none}
+.parcel-evidence-group>summary::before,.village-map-owner-section>summary::before{content:'';flex:none;width:7px;height:7px;border:solid var(--ink-5);border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
+.parcel-evidence-group[open]>summary::before,.village-map-owner-section[open]>summary::before{transform:rotate(45deg)}
+@media(prefers-reduced-motion:reduce){.parcel-evidence-group>summary::before,.village-map-owner-section>summary::before{transition:none}}
+.village-map-owner-section>summary{display:flex;align-items:center;gap:8px}
+.village-map-owner-section>summary .village-map-parcel-label{margin:0}
+.village-map-count{padding:0 6px;border-radius:999px;background:var(--sunken);font-size:.66rem;font-weight:700;color:var(--ink-5)}
+.parcel-evidence-group>summary{display:flex;align-items:center;gap:6px;margin:0;font-size:.66rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-5)}
+.parcel-evidence-group>summary span{padding:0 6px;border-radius:999px;background:var(--sunken);letter-spacing:0}
 .parcel-evidence ul{display:grid;gap:8px;margin:6px 0 0;padding:0;list-style:none}
 .parcel-evidence-item{display:grid;gap:3px;min-width:0;padding:9px 10px;border:1px solid var(--line);border-left:3px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--ground);overflow-wrap:anywhere}
 .parcel-evidence-item.is-authorisation{border-left-color:var(--ink-3)}
@@ -91,7 +99,6 @@
 .parcel-evidence-item p{margin:2px 0 0;font-size:.72rem;line-height:1.45;color:var(--ink-4)}
 .parcel-evidence-sources{display:flex;flex-wrap:wrap;gap:0 12px;font-size:.72rem}
 .parcel-evidence-sources a{display:inline-flex;align-items:center;min-height:32px;color:var(--wine-ink);text-underline-offset:2px}
-.parcel-evidence-leads summary{min-height:32px;cursor:pointer}
 .village-map-producer .village-map-eyebrow{margin:0}
 .village-map-producer strong{font-size:.86rem;color:var(--ink)}
 .village-map-producer-meta{color:var(--ink-5);font-variant-numeric:tabular-nums}
