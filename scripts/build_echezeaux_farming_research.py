@@ -29,10 +29,10 @@ def require(condition, message):
 EVENT_KINDS = {'historical-application': 'Application received', 'authorisation': 'Authorisation decision',
                'suspended-application': 'Application suspended'}
 SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
-# Rights changes that can record who bought a parcel: the buyer's first record in the next January file.
-BUYER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
+# A later holder may have received a contribution after the sale; it is not necessarily the buyer.
+LATER_HOLDER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
 EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description',
-                  'estate-area-exact-match', 'court-named-cadastral-reference'}
+                  'estate-area-exact-match', 'estate-area-near-match', 'court-named-cadastral-reference'}
 HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
@@ -86,7 +86,24 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         require(item['sourceIds'] and set(item['sourceIds']) <= sources.keys(), 'Unknown external research source')
         require(item['basis'] in EXTERNAL_BASES, f"Unknown external research basis: {item['basis']}")
         require(item.get('currentFarmer') is None, 'External research cannot establish current farming')
+        require(item.get('dateSourceId') in item['sourceIds'], 'Research needs an explicit date source')
         check_lineage(item, 'External research')
+    filings = curation['parcelFilings']
+    require(len({f['id'] for f in filings}) == len(filings), 'Duplicate filing ID')
+    by_id = {p['id']: p for p in parcels}
+    for filing in filings:
+        refs = set(filing['parcelAreasM2'])
+        require(refs and refs <= ids, 'Filing outside research cru')
+        require(filing['sourceId'] in sources, 'Unknown filing source')
+        require(filing['documentDate'] == sources[filing['sourceId']]['documentDate'], 'Filing date must be the deed date')
+        require(filing.get('currentFarmer') is None, 'Filing cannot establish current farming')
+        for pid, area in filing['parcelAreasM2'].items():
+            require(area == by_id[pid]['cadastreAreaM2'], 'Filing cadastral area differs from snapshot')
+            require(filing['holderId'] in {r['holderId'] for r in by_id[pid]['recordedRights']}, 'Filing holder differs from snapshot')
+        for lease in filing['leaseEvidence']:
+            require(set(lease.get('parcelAreasM2', {})) <= refs, 'Lease outside contributed parcels')
+            for pid, area in lease.get('parcelAreasM2', {}).items():
+                require(0 < area <= filing['parcelAreasM2'][pid], 'Lease area exceeds contributed parcel')
     require(sales['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and sales['parentFeatureId'] == parent,
             'Sale records built from another snapshot')
     require('dvf-sales' in sources and 'dgfip-history' in sources, 'Sale records need the dvf-sales and dgfip-history sources')
@@ -104,17 +121,16 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
                             'dispositions': deed['dispositions'], 'sameDeed': together, 'otherParcels': deed['otherParcels']})
             if has_rights or deed['nature'] != 'sale' or deed['dispositions'] != 1:
                 continue
-            # A sale with a single disposition is one price for one set of parcels; a company that first
-            # appears on the other parcels in the next January file most likely bought this one too. It is a
-            # lead: the parcel may have gone to a private co-buyer, and a buyer need not farm it.
-            buyers = {}
+            # Co-sale plus a later company record is a lead to investigate the sequence of transfers.
+            # Neither DVF nor an annual snapshot names the buyer at the time of the deed.
+            later_holders = {}
             for other in together:
                 for change in lineage[other]['rightsChanges']:
-                    if change['kind'] in BUYER_CHANGES and change['from'] <= deed['date'] < change['to']:
+                    if change['kind'] in LATER_HOLDER_CHANGES and change['from'] <= deed['date'] < change['to']:
                         for name in change['after']:
-                            buyers.setdefault(name, []).append(other)
-            leads += [{'name': name, 'basis': 'same-sale-as-company-buyer', 'sourceIds': ['dvf-sales', 'dgfip-history'],
-                       'deedId': deed['deedId'], 'viaParcelIds': sorted(set(refs))} for name, refs in sorted(buyers.items())]
+                            later_holders.setdefault(name, []).append(other)
+            leads += [{'name': name, 'basis': 'co-sale-with-later-company-holder', 'sourceIds': ['dvf-sales', 'dgfip-history'],
+                       'deedId': deed['deedId'], 'viaParcelIds': sorted(set(refs))} for name, refs in sorted(later_holders.items())]
         return records, leads
 
     require(named_areas['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and set(named_areas['parcels']) == ids,
@@ -126,6 +142,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         require(set(h['sourceIds']) <= sources.keys() and h['sourceIds'], f"{h['id']}: unknown holding source")
         require(set(h['producerHolderIds'] + h['ownerHolderIds']) <= holders.keys(), f"{h['id']}: unknown holder")
         require(h['relation'] in HOLDING_RELATIONS and h['precision'] in HOLDING_PRECISIONS, f"{h['id']}: unknown relation or precision")
+        require(h.get('locationStatus', 'stated') in {'stated', 'disputed'}, f"{h['id']}: unknown location status")
         # A holding describes a named area, never parcels: exact matches belong in externalResearch.
         require('parcelIds' not in h and h.get('currentFarmer') is None, f"{h['id']}: a holding cannot name parcels or a farmer")
     for entry in curation['historicalOwnerLists']:
@@ -142,6 +159,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         external = [x for x in curation['externalResearch'] if p['id'] in x['parcelIds']]
         external_inherited = [(x, retired) for x in curation['externalResearch']
                               for retired, current in x.get('predecessorReferences', {}).items() if p['id'] in current]
+        parcel_filings = [f for f in filings if p['id'] in f['parcelAreasM2']]
         leads = [{'name': name, 'holderId': hid, 'basis': holders[hid]['basis'],
                   'sourceIds': holders[hid]['sourceIds']}
                  for hid in holder_ids for name in holders[hid]['candidateNames']]
@@ -161,6 +179,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
             'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads + external_leads + sale_leads,
             'historicalEvents': events + [{**e, 'viaPredecessor': r} for e, r in inherited],
             'externalResearchIds': [x['id'] for x in external] + [x['id'] for x, _ in external_inherited],
+            'parcelFilingIds': [f['id'] for f in parcel_filings],
             # Dated legal-entity rights since 2019 and cadastral splits: context for who to ask, not farming.
             'rightsChanges': [{k: c[k] for k in ('from', 'to', 'kind', 'before', 'after')}
                               for c in lineage[p['id']]['rightsChanges']],
@@ -173,7 +192,8 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
                                'historical-application' if events or inherited else
                                'holder-lead' if leads or external_leads else
                                'sale-lead' if sale_leads else 'unresolved'),
-            'researchDepth': ('exact-reference-event-reviewed' if events or inherited else
+            'researchDepth': ('parcel-filing-reviewed' if parcel_filings else
+                              'exact-reference-event-reviewed' if events or inherited else
                               'external-research-reviewed' if external or external_inherited else
                               'holder-group-triage' if holder_ids else
                               'sale-record-reviewed' if sale_records else 'inventory-only'),
@@ -184,7 +204,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
                                    if any(e['kind'] == 'suspended-application' for e in events) else
                                    'Resolve application outcome, actual operation and cadastral continuity.'
                                    if events or inherited else 'Obtain dated parcel-specific operation evidence and scope.'
-                                   if leads else 'Ask the company buyer named in the same sale whether this parcel was included, and who farms it.'
+                                   if leads else 'Trace the co-sale and subsequent transfers; the later company holder is not necessarily the buyer. Obtain parcel-specific operation evidence.'
                                    if sale_leads else 'Identify operator through a shareable parcel-specific record; do not infer from neighbours.'),
         })
     statuses = Counter(r['researchStatus'] for r in rows)
@@ -205,6 +225,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
                    'historicalAuthorisation': statuses['historical-authorisation'],
                    'saleLead': statuses['sale-lead'], 'unresolved': statuses['unresolved'], 'currentFarmerConfirmed': 0,
                    'withSaleRecord': sum(bool(r['saleRecords']) for r in rows),
+                   'withParcelFiling': sum(bool(r['parcelFilingIds']) for r in rows),
                    'withRightsChangeSince2019': sum(bool(r['rightsChanges']) for r in rows),
                    'withCadastralPredecessor': sum(bool(r['predecessorIds']) for r in rows)},
         'namedAreaCensus': census,
@@ -231,12 +252,14 @@ def build_census(rows, holdings, named_areas, holder_names):
             # Only a live, single-area, sized holding can be compared with this area's unrecorded land.
             # A métayer farms land already recorded to its owner, so it adds nothing here.
             if (len(h['namedAreas']) == 1 and h['publishedAreaHa'] is not None and not h['endedSeason']
-                    and h['relation'] != 'metayer'):
+                    and h['relation'] != 'metayer' and h.get('locationStatus') != 'disputed'):
                 beyond = max(0, round(h['publishedAreaHa'] * 10000) - recorded)
                 beyond_total += beyond
             entries.append({'holdingId': h['id'], 'producer': h['producer'], 'publishedAreaHa': h['publishedAreaHa'],
                             'precision': h['precision'], 'relation': h['relation'], 'endedSeason': h['endedSeason'],
-                            'sharedWith': [a for a in h['namedAreas'] if a != name],
+                            'locationStatus': h.get('locationStatus', 'stated'),
+                            'sharedWith': [a for a in h['namedAreas'] if a != name] if h.get('locationStatus') != 'disputed' else [],
+                            'alternativeLocations': [a for a in h['namedAreas'] if a != name] if h.get('locationStatus') == 'disputed' else [],
                             'recordedToProducerM2': recorded, 'beyondCompanyRecordsM2': beyond,
                             'owners': [holder_names[i] for i in h['ownerHolderIds']]})
         unrecorded = [r for r in here if not r['recordedRights']]
@@ -266,10 +289,12 @@ def render_report(register, curation, history):
         f"{counts['withoutMatchedRights']} have no matched right holder. All {counts['recordedHolders']} holder groups were triaged. "
         f"{counts['holderLead']} parcels have holder-derived or independent-research leads, {counts['historicalApplication']} have an "
         f"exact-reference application or suspended application, {counts['historicalAuthorisation']} have an authorisation decision, "
-        f"{counts['saleLead']} were sold in the same deed as parcels bought by a named company, and "
+        f"{counts['saleLead']} have co-sale leads through a later company holder, and "
         f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
+        f"{counts['withParcelFiling']} parcels have reviewed company filings naming their contributions and dated lease relationships. "
+        'These do not confirm operation in the target season.', '',
         'Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. '
         'No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.', '',
         f"Geometry: {register['inputs']['cadastreDate']}. Rights: {register['inputs']['rightsAsOf']}. "
@@ -315,11 +340,21 @@ def render_report(register, curation, history):
         lines.append(f"- **{e['documentDate']} — {cell(e['applicant'])}.** {label}; previous operator "
                      f"{cell(e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
                      f". {e['summary']} [{cell(sources[e['sourceId']]['title'])}]({sources[e['sourceId']]['url']}).")
+    lines += ['', '## Parcel-specific company filings', '',
+              'Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates '
+              'are kept distinct; none proves current-season farming. See [the detailed reading and next source requests]'
+              '(echezeaux-statutes-research.md).', '']
+    for filing in curation['parcelFilings']:
+        source = sources[filing['sourceId']]
+        refs = ', '.join(f'{ref(pid)} ({area} m²)' for pid, area in filing['parcelAreasM2'].items())
+        lines += [f"- **{filing['documentDate']} - {filing['title']}**. {refs}. {filing['finding']} "
+                  f"[{cell(source['title'])}]({source['url']})."]
     lines += ['', '## Independent research', '',
               'Published vineyard research can name cadastral references or describe holdings. It is dated secondary '
               'evidence of ownership or production, cross-checked here against the recorded rights; it never establishes '
-              'current farming. "Area-reconstructed" rows are this register\'s inference: the published area equals an exact '
-              'sum of parcel areas, which the source itself does not state.', '']
+              'current farming. Area reconstructions are inferences; exact and near-area matches are distinguished. '
+              'The source itself does not name those parcels. Dates follow an explicitly selected research source, '
+              'not another supporting registry record.', '']
     for x in curation['externalResearch']:
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}" for r, cs in x.get('predecessorReferences', {}).items())
         refs = ', '.join(ref(i) for i in x['parcelIds']) + (('; via lineage: ' if x['parcelIds'] else 'via lineage: ') + via if via else '')
@@ -417,7 +452,8 @@ def render_census(register, curation, sources):
              'producer says it owns or farms, which the legal-entity files do not show. It is an area comparison only. It never '
              'places a holding on particular parcels, and a producer\'s published figure can be rounded, out of date or include '
              'leased land. A métayer farms land already recorded to its owner; a holding spread over several named areas cannot '
-             'be split, so neither is counted. `LES POULA` has no reviewed crosswalk to Les Poulaillères.', '',
+             'be split, so neither is counted. Disputed locations are listed as alternatives and excluded from numeric '
+             'climat totals. `LES POULA` has no reviewed crosswalk to Les Poulaillères.', '',
              '| Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |',
              '| --- | ---: | ---: | ---: | ---: |']
     for a in register['namedAreaCensus']:
@@ -441,6 +477,9 @@ def render_census(register, curation, sources):
                 notes.append(f"ended with the {e['endedSeason']} harvest")
             if e['sharedWith']:
                 notes.append('total also covers ' + ', '.join(area_label(s, register) for s in e['sharedWith']))
+            if e['locationStatus'] == 'disputed':
+                notes.append('location disputed; excluded from totals; alternative: ' +
+                             ', '.join(area_label(s, register) for s in e['alternativeLocations']))
             if e['relation'] != 'metayer':
                 notes.append(f"{hectares(e['recordedToProducerM2'])} recorded to linked company records here")
             if e['beyondCompanyRecordsM2'] is not None:
@@ -473,17 +512,16 @@ def render_sales(register, sources):
     source = sources['dvf-sales']
     lines = ['## Sale and exchange deeds', '',
              f"[{cell(source['title'])}]({source['url']}) ({register['inputs']['saleRecordsCoverage']}) list registered transfers "
-             'for a fee by deed, without buyer or seller. Prices are not kept. A company buyer shows up as a first record in the '
-             'next January rights file (sometimes a year later); a private buyer does not show up anywhere. A parcel sold in a '
-             'single-disposition deed with '
-             'parcels bought by a company is marked as a lead only: it may have gone to a private co-buyer, and a buyer need '
-             'not farm the land. Exchanges move parcels in both directions and give no lead. Rebuilt by '
+             'for a fee by deed, without buyer or seller. Prices are not kept. A later annual company record can follow '
+             'an intervening contribution or another transfer, so it does not identify the deed buyer. A single-disposition '
+             'co-sale with parcels later recorded to a company is only a lead to investigate those transfers. '
+             'Exchanges move parcels in both directions and give no lead. Rebuilt by '
              '`python scripts/build_echezeaux_sale_records.py`.', '',
              '| Date | Deed | Échezeaux parcels | Parcels outside the cru | Lead for parcels without a company record |',
              '| --- | --- | --- | ---: | --- |']
     for (date, deed, nature, dispositions, others), pids in sorted(deeds.items()):
         leads = '; '.join(f"{rows[p]['reference']}: {c['name']}" for p in sorted(pids) for c in rows[p]['candidateLeads']
-                          if c['basis'] == 'same-sale-as-company-buyer') or '—'
+                          if c['basis'] == 'co-sale-with-later-company-holder') or '—'
         label = f"{SALE_LABELS[nature]}, {dispositions} disposition{'s' if dispositions > 1 else ''} ({deed[:10]})"
         lines.append(f"| {date} | {label} | {', '.join(rows[p]['reference'] for p in sorted(pids))} | {others} | {cell(leads)} |")
     return lines + ['']

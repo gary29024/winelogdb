@@ -9,13 +9,14 @@ import re
 
 SCHEMA_VERSION = 1
 NOTE_LIMIT = 330
-KIND_ORDER = ['authorisation', 'suspended', 'application', 'research', 'ownership', 'sale', 'lineage', 'lead']
+KIND_ORDER = ['authorisation', 'suspended', 'application', 'filing', 'research', 'ownership', 'sale', 'lineage', 'lead']
 EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application'}
 RESEARCH_LABELS = {
     'critic-named-cadastral-reference': 'Named by parcel number',
     'critic-attribution-area-reconstructed': 'Matched by area only',
     'critic-holding-description': 'Holding described, parcel not named',
     'estate-area-exact-match': 'Matched by exact area',
+    'estate-area-near-match': 'Near-area reconstruction',
     'court-named-cadastral-reference': 'Named in a court ruling',
 }
 LEAD_LABELS = {
@@ -32,6 +33,8 @@ LEAD_LABELS = {
     'succession-lead': 'Succession lead',
     'partial-succession-lead': 'Partial succession lead',
     'registered-office-match': 'Same registered office',
+    'filing-tenant-relationship': 'Dated lease relationship',
+    'filing-family-tenant-context': 'Named individual tenant',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
 SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
@@ -93,8 +96,8 @@ def event_item(event, via=None):
 
 
 def research_item(entry, source_dates, via=None):
-    # Estate pages are often undated; the item then shows no date rather than a review date.
-    item = {'kind': 'research', 'date': min((source_dates[s] for s in entry['sourceIds'] if source_dates.get(s)), default=None),
+    # An undated primary research source stays undated even when a supporting registry is dated.
+    item = {'kind': 'research', 'date': source_dates.get(entry['dateSourceId']),
             'title': entry['title'], 'label': RESEARCH_LABELS[entry['basis']], 'note': entry['appNote'],
             'sources': list(entry['sourceIds'])}
     if via:
@@ -138,10 +141,10 @@ def sale_items(row):
             # Only a single-disposition sale moves all its parcels together, for one price.
             together = sale['nature'] == 'sale' and sale['dispositions'] == 1
             item['detail'] = ('Sold together with ' if together else 'In the same deed as ') + ', '.join(parts)
-        buyers = [c for c in row['candidateLeads'] if c['basis'] == 'same-sale-as-company-buyer' and c['deedId'] == sale['deedId']]
-        if buyers:
-            names = ' / '.join(title_case_owner(c['name']) for c in buyers)
-            item['detail'] += f'. The Échezeaux parcels among them were next recorded to {names}; this parcel has no company record, so its buyer is unknown.'
+        later_holders = [c for c in row['candidateLeads'] if c['basis'] == 'co-sale-with-later-company-holder' and c['deedId'] == sale['deedId']]
+        if later_holders:
+            names = ' / '.join(title_case_owner(c['name']) for c in later_holders)
+            item['detail'] += f'. Other parcels were later recorded to {names}. That later record does not identify the buyer of this parcel.'
             item['sources'] = ['dvf-sales', 'dgfip-history']
         items.append(item)
     return items
@@ -179,12 +182,20 @@ def build_evidence(register, curation, history, features):
     for entry in curation['externalResearch']:
         if entry['parcelIds'] or entry.get('predecessorReferences'):
             require(entry.get('appNote') and len(entry['appNote']) <= NOTE_LIMIT, f'{entry["id"]}: needs a short appNote')
+    for filing in curation['parcelFilings']:
+        for note in [filing.get('appNote'), *filing.get('appNotesByParcel', {}).values()]:
+            require(note and len(note) <= NOTE_LIMIT, f'{filing["id"]}: needs a short appNote')
 
     def add(parcel_id, item):
         parcels.setdefault(parcel_id, []).append(item)
         used.update(item['sources'])
 
     for parcel_id, row in by_id.items():
+        for filing in curation['parcelFilings']:
+            if parcel_id in filing['parcelAreasM2']:
+                add(parcel_id, {'kind': 'filing', 'date': filing['documentDate'], 'title': filing['title'],
+                                'note': filing.get('appNotesByParcel', {}).get(parcel_id, filing['appNote']),
+                                'sources': [filing['sourceId']]})
         for event in curation['exactParcelEvents']:
             if parcel_id in event['parcelIds']:
                 add(parcel_id, event_item(event))
