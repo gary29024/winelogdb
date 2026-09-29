@@ -219,7 +219,7 @@ class FarmingResearchTests(unittest.TestCase):
     def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withParcelFiling'], 21)
+        self.assertEqual(result['counts']['withParcelFiling'], 27)
         for ref in ('D 0144', 'D 0128', 'D 0316'):
             self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
             self.assertIsNone(rows[ref]['currentFarmer'])
@@ -276,6 +276,10 @@ class FarmingResearchTests(unittest.TestCase):
         lease = filing['leaseEvidence'][0]
         self.assertEqual(sum(filing['parcelAreasM2'].values()), 3476)
         self.assertEqual(lease['tenants'], ['Jean Tardy'])
+        identity = filing['operatorIdentityEvidence']
+        self.assertEqual((identity['siren'], identity['conversionDate']), ('429171382', '2024-07-25'))
+        self.assertNotIn('tenantSiren', lease)  # Company identity cannot replace the personal tenant.
+        self.assertEqual(lease['signedDate'], '2001-10-19')  # Separate Tardy 2000 lease is not imported.
         self.assertEqual(lease['recitedEnd'], '2026-10-18')  # 2035 belongs to the Nuits lease.
         self.assertNotIn('212670000D0673', filing['parcelAreasM2'])
         evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
@@ -290,6 +294,50 @@ class FarmingResearchTests(unittest.TestCase):
         # The 2026-labelled corporate records cannot become parcel-specific farming events.
         for ref in ('0313', '0295', '0296', '0297', '0298', '0299', '0673'):
             self.assertEqual(rows[f'D {ref}']['parcelFilingIds'], [])
+
+    def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
+        result = self.build()
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        grands = filings['grands-crus-mandate-1997']
+        bonnes = filings['bonnes-pentes-mandate-1999']
+        self.assertEqual(grands['leaseEvidence'][0]['tenants'], [])
+        self.assertEqual(sum(grands['parcelAreasM2'].values()), 4389)
+        self.assertEqual(bonnes['leaseEvidence'][0]['tenantSiren'], '394495493')
+        for filing, date in [(grands, '1997-08-12'), (bonnes, '1999-07-05')]:
+            self.assertEqual(filing['leaseEvidence'][0]['kind'], 'lease-mandate')
+            for pid in filing['parcelAreasM2']:
+                item = next(i for i in evidence['parcels'][pid] if i['kind'] == 'filing')
+                self.assertEqual(item['date'], date)
+                self.assertIn('authorizes', item['note'])
+                self.assertFalse(any(i['kind'] == 'authorisation' for i in evidence['parcels'][pid]))
+        lead = next(i for i in evidence['parcels']['212670000D0645'] if i['kind'] == 'lead')
+        self.assertEqual(lead['label'], 'Named in a lease mandate')
+
+    def test_aggregate_deed_area_cannot_be_presented_as_individual_recited_areas(self):
+        curation = copy.deepcopy(self.curation)
+        filing = next(f for f in curation['parcelFilings'] if f['id'] == 'bonnes-pentes-mandate-1999')
+        self.assertNotIn('parcelAreasM2', filing['leaseEvidence'][0])
+        self.assertEqual(filing['areaEvidence']['individualAreasSource'], 'pinned-cadastral-snapshot')
+        filing['areaEvidence']['recitedTotalM2'] = 3411
+        with self.assertRaisesRegex(ValueError, 'Aggregate filing area differs'):
+            self.build(curation)
+        filing['areaEvidence']['recitedTotalM2'] = 3410
+        filing['leaseEvidence'][0]['parcelIds'].append('212670000D0650')
+        with self.assertRaisesRegex(ValueError, 'Lease outside filing'):
+            self.build(curation)
+
+    def test_hor_account_area_is_not_doubled_or_promoted_to_a_parcel_lease(self):
+        source = next(s for s in self.curation['sources'] if s['id'] == 'hor-accounts')
+        self.assertEqual(source['assetAreaEvidence']['areaM2'], 3417)
+        self.assertEqual(len(source['assetAreaEvidence']['assetCategories']), 2)
+        self.assertFalse(source['assetAreaEvidence']['parcelReferencesStated'])
+        for row in self.build()['parcels']:
+            if row['reference'] in ('D 0813', 'D 0814'):
+                self.assertEqual(row['candidateLeads'], [])
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIn('hor-asset-area-2024', row['historyFindingIds'])
+                self.assertIsNone(row['currentFarmer'])
 
     def test_disputed_location_is_excluded_even_when_only_one_alternative_is_listed(self):
         curation = copy.deepcopy(self.curation)

@@ -97,11 +97,24 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         require(filing['sourceId'] in sources, 'Unknown filing source')
         require(filing['documentDate'] == sources[filing['sourceId']]['documentDate'], 'Filing date must be the deed date')
         require(filing.get('currentFarmer') is None, 'Filing cannot establish current farming')
+        if area_evidence := filing.get('areaEvidence'):
+            require(area_evidence['kind'] == 'aggregate-only' and
+                    area_evidence['individualAreasSource'] == 'pinned-cadastral-snapshot',
+                    'Aggregate filing areas need explicit cadastral provenance')
+            require(area_evidence['recitedTotalM2'] == sum(filing['parcelAreasM2'].values()),
+                    'Aggregate filing area differs from cadastral sum')
+        if identity := filing.get('operatorIdentityEvidence'):
+            require(identity['sourceIds'] and set(identity['sourceIds']) <= sources.keys(),
+                    'Unknown operating-company identity source')
         for pid, area in filing['parcelAreasM2'].items():
             require(area == by_id[pid]['cadastreAreaM2'], 'Filing cadastral area differs from snapshot')
             require(filing['holderId'] in {r['holderId'] for r in by_id[pid]['recordedRights']}, 'Filing holder differs from snapshot')
         for lease in filing['leaseEvidence']:
             require(set(lease.get('parcelAreasM2', {})) <= refs, 'Lease outside filing parcels')
+            if 'parcelIds' in lease:
+                require(set(lease['parcelIds']) <= refs, 'Lease outside filing parcels')
+                require(0 < lease['combinedAreaM2'] <= sum(filing['parcelAreasM2'][pid] for pid in lease['parcelIds']),
+                        'Combined lease area exceeds filing parcels')
             for pid, area in lease.get('parcelAreasM2', {}).items():
                 require(0 < area <= filing['parcelAreasM2'][pid], 'Lease area exceeds filing parcel')
     require(sales['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and sales['parentFeatureId'] == parent,
@@ -293,7 +306,7 @@ def render_report(register, curation, history):
         f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
-        f"{counts['withParcelFiling']} parcels have reviewed company filings naming exact references and dated lease relationships. "
+              f"{counts['withParcelFiling']} parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. "
         'These do not confirm operation in the target season.', '',
         'Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. '
         'No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.', '',
@@ -347,6 +360,8 @@ def render_report(register, curation, history):
     for filing in curation['parcelFilings']:
         source = sources[filing['sourceId']]
         refs = ', '.join(f'{ref(pid)} ({area} m²)' for pid, area in filing['parcelAreasM2'].items())
+        if filing.get('areaEvidence', {}).get('kind') == 'aggregate-only':
+            refs += ' (individual areas from the pinned cadastre; the deed recites only their combined area)'
         lines += [f"- **{filing['documentDate']} - {filing['title']}**. {refs}. {filing['finding']} "
                   f"[{cell(source['title'])}]({source['url']})."]
     lines += ['', '## Independent research', '',

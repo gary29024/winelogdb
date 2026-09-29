@@ -2,7 +2,7 @@
 
 Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux-farming-curation.json); the original PDFs are linked below, not redistributed.
 
-Twenty uploaded PDFs have now been reviewed across three batches. Exact-reference company deeds supply contribution, transfer or dated lease evidence for **21 parcels**; all 21 cadastral areas match the pinned snapshot. The latest fourteen-file batch strengthens five existing Jean Tardy leads through the Bouchy lease recital. Other files add corporate chronology or corroborate earlier readings. None alone verifies farming in the 2026 season.
+Twenty-nine uploaded PDFs have now been reviewed across four batches. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **27 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes names three further references with only a combined area, which matches their cadastral sum. The latest nine-file batch adds the Grands Crus and Bonnes Pentes mandates, verifies HOR's asset area and clarifies Tardy's company identity. None alone verifies farming in the 2026 season.
 
 Page references below are one-based PDF pages. ORVEAUX's printed page numbers are one lower than its PDF page numbers.
 
@@ -121,7 +121,7 @@ All fourteen supplied PDFs (311 pages) were screened using extracted text or Fre
 
 ### Domaine Bouchy et Amis: the Jean Tardy lease chain
 
-The **19 February 2020 filing** contains a **5 August 2019 donation-partage** (PDF pp. 7-8 / printed p. 1). Its **PDF p. 21 / printed p. 14** names **Jean Tardy personally** as tenant under a long-term **métayage lease executed and effective 19 October 2001**, for **25 years, ending 18 October 2026** as recited. The lessor permits use by **EARL DU DOMAINE JEAN TARDY ET FILS**. The personal tenant and the permitted operating company are distinct; this clause gives no SIREN for the EARL, so none is inferred from its name.
+The **19 February 2020 filing** contains a **5 August 2019 donation-partage** (PDF pp. 7-8 / printed p. 1). Its **PDF p. 21 / printed p. 14** names **Jean Tardy personally** as tenant under a long-term **métayage lease executed and effective 19 October 2001**, for **25 years, ending 18 October 2026** as recited. The lessor permits use by **EARL DU DOMAINE JEAN TARDY ET FILS**. The personal tenant and the permitted operating company are distinct; this clause gives no SIREN for the EARL. The later-supplied Tardy corporate records independently identify **429171382**, as detailed below; that company identity does not replace the personal tenant.
 
 | Flagey-Echezeaux parcel | Lieu-dit | Area m² |
 | --- | --- | ---: |
@@ -140,7 +140,7 @@ The enclosing **22 November 2019 resolution**, PDF p. 3, corrects the share-allo
 
 **Earlier mandate:** the **19 August 2019 filing** retains the **22 June 1993 founding deed** (PDF p. 26). Article 39, **PDF p. 44 / printed p. 19**, authorises acquisition of **D0764 and D0766 together, 1,260 m²**, and an **18-year métayage lease to Bernard Mondange**. These are mandates, not the executed acquisition or lease. They name only those two parcels, not the later five-parcel holding. The same retained clause also appears at PDF p. 67 of the 2020 filing. Do not redraft this 1993 instruction as a 2019 letting, or assume uninterrupted succession between Mondange and Tardy.
 
-**Data treatment:** all five cadastral areas match the pinned snapshot. The dated Jean Tardy tenancy and permitted EARL use replace the former bottler-only basis. This adds five parcels to reviewed filing coverage, now **21**. It strengthens existing candidates rather than adding new names to previously unresolved parcels.
+**Data treatment:** all five cadastral areas match the pinned snapshot. The dated Jean Tardy tenancy and permitted EARL use replace the former bottler-only basis. This batch added five parcels to reviewed filing coverage, then **21**. It strengthened existing candidates rather than adding new names to previously unresolved parcels.
 
 **2026 transition remains open:** the separately reviewed April 2026 suspension concerns Liger-Belair's application over these same five parcels, plus other land. The 2019 recital's October 2026 end date and the later application create a focused research question, not proof of expiry, non-renewal, termination, authorisation or actual handover. Seek the executed 2001 lease, amendments/renewal or termination documents, the later administrative outcome, and dated cultivation confirmation.
 
@@ -164,13 +164,64 @@ The enclosing **22 November 2019 resolution**, PDF p. 3, corrects the share-allo
 The next useful step is the missing instruments, not another broad round of company statutes: Bouchy/Tardy's 2001 lease and later arrangements; HOR's October 2016 acquisition/lease; LC's D0313 acquisition and operating arrangement; Traversins' acquisition schedule and operating lease; and Coudray's executed lease/renewals. The registry files screened here often record funding, governance or share transfers without attaching land instruments.
 
 
+## Additional nine-file batch: founding mandates, Tardy identity and HOR accounts
+
+Reviewed 30 September 2026: **nine PDFs, 233 pages**. All pages were screened with text extraction/OCR and the decisive complete pages were visually checked. Two Bouchy bundles contain scanned images larger than their displayed PDF page boxes: extracting those embedded images read-only recovered the clipped minutes. The originals were not changed. Filing labels are not substituted for the dates printed in the instruments.
+
+### GFV Grands Crus Investissement: a mandate without a named tenant
+
+The **29 September 1997** filing contains a deed signed **12 August 1997**, PDF p. 8 / printed p. 7. Article 22 empowers the manager to purchase the following Flagey-Échezeaux vines and grant a long-term rural lease:
+
+| Parcel | Area individually recited, m² |
+| --- | ---: |
+| D0650 | 307 |
+| D0651 | 1,887 |
+| D0652 | 2,195 |
+| Total | **4,389 (0.4389 ha)** |
+
+All three areas match the snapshot. The formation uses cash contributions (Article 6, PDF p. 3); the authorizations are not a land contribution or an attached executed purchase/lease. **No tenant is named**, and Méo-Camuzet is not identified in this mandate. The Méo-Camuzet lead continues to rely on the separately sourced office and published estate area. The **18 June 2019** filing contains a **3 June 2019** resolution (PDF p. 2) and retained cash-contribution history (p. 15), without a parcel or lease schedule. These records strengthen the land-company join to holder U18178179 / SIREN 413823873, not the identity of its farmer.
+
+Sources: [1997 and 2019 filings](https://www.pappers.fr/entreprise/grpt-foncier-vit-grd-crus-investissement-413823873#actes).
+
+### Les Bonnes Pentes: Naudin-Ferrand named in the lease mandate
+
+The **3 August 1999** filing contains the founding deed signed **5 July 1999**, PDF p. 4 / printed p. 1. **Article 41, PDF p. 19 / printed p. 16**, authorizes a purchase from SAFER de Bourgogne of **D0645, D0646 and D0647**, Les Rouges du Bas, and a long-term lease to **DOMAINE HENRI NAUDIN-FERRAND, SIREN 394495493**.
+
+The deed gives **34 ares 10 centiares = 3,410 m² in total**, without dividing that area among the references. The individual **1,206 + 1,583 + 621 m²** areas come from the pinned cadastre and match the combined total. The structured record marks this aggregate-only provenance. Article 7 records cash contributions; the separate executed purchase and lease are absent. This strengthens the existing Naudin-Ferrand candidate from management context to a named lease mandate, while leaving execution, term dates and current cultivation unverified.
+
+Source: [1999 notarial filing](https://www.pappers.fr/entreprise/gfa-les-bonnes-pentes-423789452/documents/GFA%20LES%20BONNES%20PENTES%20-%20Acte%20notari%C3%A9%2003-08-1999.pdf).
+
+### Two Bouchy 2014-labelled bundles: a Les Treux proposal and a separate Nuits mandate
+
+- **34-page copy:** minutes dated **15 March 2008** (recovered PDF p. 25) describe a proposed SAFER purchase of **16 ares in Échezeaux, Les Treux**, alongside **19.57 ares in Vosne-Romanée, Les Gaudichots** (recovered p. 31, item 11). They describe Jean Tardy's retirement and Guillaume's role, and seeking investors/following the sale procedure. **No cadastral reference or completed purchase is given.** Do not assign 16 ares to D0765 (1,619 m²) by near-area matching. The proposal raises a chronology question alongside the later recital of a 2001 lease over five parcels; the original lease, amendments and SAFER outcome are needed to reconcile it.
+- **31-page copy:** the **8 February 2010** consultation authorizes purchase of **Nuits-Saint-Georges AE0048 Div.P2, Aux Argillas, 1,960 m²**, and long-term métayage to **Guillaume Tardy** (recovered pp. 30-31). This is outside Échezeaux. The matching size of later AE0123 is not a formal cadastral crosswalk; the division instrument has not been reviewed. It cannot establish an Échezeaux purchase or extend Jean Tardy's Bouchy lease.
+
+Both bundles also retain corporate statutes and cash-capital changes. Their common **10 October 2014** filing label does not make the underlying resolutions contemporaneous or interchangeable. Sources: [Bouchy filing list](https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes); distinct copies are identified by page count and hash below.
+
+### Tardy: company identity and corporate continuity, not lease succession
+
+The **11 February 2020** filing contains a deed signed **13 January 2020** (PDF p. 36) and statutes identifying **EARL DU DOMAINE JEAN TARDY ET FILS, SIREN 429171382** (p. 40). The **5 August 2024** filing identifies the same company (p. 1), with Article 1 (p. 2) recording its continuation as a **SARL after the 25 July 2024 decision**. This resolves the EARL's identifier in separate corporate evidence, without asserting that the identifier was printed in Bouchy's 2019 lease clause.
+
+**Separate lease and date inconsistency:** PDF p. 24 / printed p. 23 of the 2020 Tardy bundle discusses property held by the Tardy family GFV, reciting a **16 June 2000** long-term lease from **Jean and Arlette Tardy to the EARL**. It prints **18 years from 1 January 2000, ending 31 December 2007**, followed by nine-year renewals. The inconsistent end year is visible in the scan; do not silently change it to 2017. The five Bouchy cadastral references are not supplied in that clause. Neither its term nor renewals can be imported into Bouchy's separate 19 October 2001 personal lease. Article 33 of the retained EARL statutes (p. 56) allows separate agreements making members' personally leased land available to the company; that general provision is not an executed Bouchy-specific agreement.
+
+The conversion to a SARL therefore clarifies corporate continuity only. It does not prove assignment, renewal or termination of the personal tenancy, or actual cultivation in 2026. Sources: [Tardy corporate filings](https://www.pappers.fr/entreprise/domaine-jean-tardy-et-fils-429171382#actes).
+
+### HOR accounts: count the area once, keep the tenant unresolved
+
+The **2017 accounts** cover **5 August 2016 to 30 June 2017** (PDF p. 5). The fixed-assets tax table (p. 17 / printed p. 20) records **EUR 6,550,000 aggregate land acquisitions/gross assets**, with no area, cadastral or tenant schedule. It cannot allocate a purchase price or operator to individual parcels.
+
+The full **2024 accounts**, filed **22 November 2024**, replace the previously indexed-only excerpt. **PDF p. 24 / printed p. 19** lists **Échezeaux, 0.3417 ha, acquired 25 October 2016** under both land and productive-vine assets. These are two accounting categories for the **same 3,417 m²**, not 6,834 m². This equals **D0813 (2,106) + D0814 (1,311)**, and also former **D0315 (4,273) minus D0815 (856)**. That arithmetic corroborates the retained area, but the accounts themselves do not name cadastral references or a tenant. The D0815 Marsannay tenancy recital remains limited to that transferred parcel. Neither account set provides the missing acquisition and full lease schedule.
+
+Sources: [2017 accounts list](https://www.pappers.fr/entreprise/hor-vignobles-821877008#comptes), [2024 full accounts](https://www.pappers.fr/entreprise/hor-vignobles-821877008/comptes/HOR%20VIGNOBLES%20-%20Comptes%20sociaux%202024%2022-11-2024.pdf).
+
 ## Highest-value next sources
 
-The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **133 logged source entries**. Source entries include overlapping copies, not 133 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy now strengthens five more, bringing **21 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
+The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **141 logged source entries**. Source entries include overlapping copies, not 141 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
 
 | Priority | Obtain | What it could resolve |
 | --- | --- | --- |
-| 1: Bouchy / Tardy transition | Executed 19 October 2001 lease, amendments/renewal or termination records, later Liger-Belair administrative outcome, and dated cultivation confirmation for D0628/D0764-D0767 | The 2019 deed names Jean Tardy and permitted EARL use, with a recited end of 18 October 2026. Neither that date nor the later suspended application establishes a completed handover. |
+| 1: Bouchy / Tardy transition | Executed 19 October 2001 lease and parcel amendments, actual EARL/SARL use agreement, outcome of the 2008 Les Treux SAFER proposal, renewal/termination records and later Liger-Belair administrative outcome | Reconcile the five-parcel 2019 recital with the unlocated 2008 proposal. Company 429171382's continuity and the recited October 2026 lease end do not establish current cultivation or a completed handover. |
+| 1b: newly read founding mandates | Executed Grands Crus purchase/lease following 12 August 1997 for D0650-D0652; executed Bonnes Pentes SAFER purchase and Naudin-Ferrand lease following 5 July 1999 for D0645-D0647; subsequent amendments and current cultivation confirmation | Identify the unnamed Grands Crus tenant and establish whether the Bonnes Pentes mandate was executed, with dates and scope. Founding authority alone is insufficient. |
 | 2: close the initial twelve parcels | The executed July 2024 Rouget lease, the executed Forey lease intended for 1 January 2025, and Orveaux's 20 December 2003 lease with later amendments and any operating-company agreement | Confirm execution, whole/partial scopes, successors and operator permission. For Orveaux, explain 4,550 m² leased versus 4,147 m² plantable/planted. Ask separately for dated current-season cultivation confirmation. |
 | 3: follow the Coudray and HOR lease chains | Coudray's executed 2004 long-term lease and later renewals/amendments; HOR's 25 October 2016 acquisition deed (Dijon 4, 2016P no. 3871) and same-day metayage lease with all parcel schedules; subsequent lease changes and dated cultivation confirmation | Coudray D0635/D0714/D0719 now have a historical tenant name. D0815 now has a 2021 Marsannay tenancy recital and its SCI Les Climats transfer deed. The full 2016 schedule is still needed to establish whether D0813/D0814 were included, and later records to establish who farms each parcel today. |
 | 4: D0146 | A shareable parcel schedule/title or tenant confirmation explicitly naming D0146, plus any related lease | The co-sale and the GFA contribution have different scopes. Do not infer its buyer from the DVF record or treat it as one of the four contributed parcels. |
@@ -183,7 +234,7 @@ For each response, seek the full commune/section/parcel reference; whole parcel 
 
 ## Source provenance
 
-Original user-supplied PDFs were read without modification. In the initial six-file set, Forey had extractable text and the other five were scanned. The later fourteen-file set mixes searchable and scanned pages; its LC 2025 copy also required OCR on pages whose only extractable text was a signature-envelope identifier. Text/OCR located passages and relevant full pages were visually checked. Twenty-one contribution/transfer/tenancy areas match the pinned cadastral GeoJSON exactly. Pages and hashes identify the supplied copies; source links do not imply successful automated download.
+Original user-supplied PDFs were read without modification. In the initial six-file set, Forey had extractable text and the other five were scanned. The later fourteen-file set mixes searchable and scanned pages; its LC 2025 copy also required OCR on pages whose only extractable text was a signature-envelope identifier. The latest nine-file set contains eight scans and one searchable accounts PDF; full embedded images recovered the clipped Bouchy pages. Text/OCR located passages and relevant full pages were visually checked. Twenty-four individually recited areas match the pinned cadastral GeoJSON; the three Bonnes Pentes references match its aggregate-only total. Pages and hashes identify the supplied copies; source links do not imply successful automated download.
 
 | Original filename | Pages | SHA-256 |
 | --- | ---: | --- |
@@ -224,3 +275,20 @@ Fourteen PDFs, 311 pages. All source entries retain the original filename, SHA-2
 | 12-SAS-TRAVERSINS-Actes-du-06-04-2022.pdf | 30 | 9ece64ea061eed8da0d76e0224d25d14a9176413cbb59df5393e89a3cb0dabb4 |
 | 13-BOUCHON-POURPRE-Actes-du-03-06-2025.pdf | 2 | 532b7c4d392b85277d9269d77ca0215bc457fb2dc1fa0e2a5dbc7f6f0a14fa52 |
 | 14-GFA-HERITIERS-COUDRAY-Actes-du-23-07-2004.pdf | 22 | 18a21f479415309392e1256608af42e97fe249225c6e552166c2faffcd9f34fc |
+
+
+### Nine-file batch provenance
+
+Nine PDFs, 233 pages. All nine source records include the supplied filename, SHA-256, page count, actual act/account date, filing-label date and visually reviewed pages. The existing HOR 2024 indexed source was upgraded, so this batch adds eight source entries, not nine duplicates. Full embedded scans were recovered read-only for Bouchy copy 3, pp. 3 and 24-34, and copy 7, pp. 3 and 26-31.
+
+| Original filename | Pages | SHA-256 |
+| --- | ---: | --- |
+| 1-GRPT-FONCIER-VIT-GRD-CRUS-INVESTISSEMENT-Statuts-mis-à-jour-18-06-2019.pdf | 18 | 7f09f4e9977663028e0c8314fe41a3d121d5843103d63dfc1ea1d18e724a1206 |
+| 2-GRPT-FONCIER-VIT-GRD-CRUS-INVESTISSEMENT-Actes-du-29-09-1997.pdf | 9 | ca97a43dd71d363f1dea28d2dcf7a350e36ffaab1a751e45cea38061f1e2f97a |
+| 3-DOMAINE-BOUCHY-ET-AMIS-Actes-du-10-10-2014.pdf | 34 | d56c02c69bf5ed00f67fda1dc4e1b4f89dc713d67b508ffe433e2541e88faadf |
+| 4-DOMAINE-JEAN-TARDY-ET-FILS-Actes-du-11-02-2020.pdf | 57 | f75166a63a7367fa3f75ae6174b6a884705a6211f89e712f589c178866893c2f |
+| 5-HOR-VIGNOBLES-Comptes-sociaux-2017.pdf | 21 | d31309487816321106433cb43b42624c78c37e87b62182f9bb8472f6a77c495b |
+| 6-GFA-LES-BONNES-PENTES-Acte-notarié-03-08-1999.pdf | 21 | 2eacba6c4fffa8a5d5b4ba4f2b5cfbc8e495f84c7fb8a430fdd8a4bcc5121388 |
+| 7-DOMAINE-BOUCHY-ET-AMIS-Actes-du-10-10-2014-2.pdf | 31 | 3ccb74caaf96a541f26655b25e78d179e7ab010367166f2e573466d9be0bbabc |
+| 8-HOR-VIGNOBLES-Comptes-sociaux-2024-22-11-2024.pdf | 24 | e243b39080051b9b024f33587ea418c2bf289470a4f49d1fa35cec9320545308 |
+| 9-DOMAINE-JEAN-TARDY-ET-FILS-Copie-des-statuts-mis-à-jour-05-08-2024.pdf | 18 | aa324620a8dd9e5d87438363c0bdf51195d4a5c2c6d6b454163d9b92e1388ac4 |

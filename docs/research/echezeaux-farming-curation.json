@@ -349,9 +349,28 @@
       "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008/comptes/HOR%20VIGNOBLES%20-%20Comptes%20sociaux%202024%2022-11-2024.pdf",
       "type": "company-filing",
       "documentDate": "2024-06-30",
-      "reviewedAt": "2026-09-28",
-      "finding": "Indexed fixed-assets excerpt lists 0.3417 ha Échezeaux acquired 2016. Not operator evidence, and full document not reviewed.",
-      "access": "indexed-excerpt-only"
+      "reviewedAt": "2026-09-30",
+      "finding": "Full PDF now reviewed. Page 24 lists Échezeaux 0.3417 ha acquired 25 October 2016 under both land and productive-vine assets: two categories for the same area, not 0.6834 ha. The 3417 m² equals mapped D0813+D0814, but the accounts name no cadastral references or tenant. This corroborates an area only and does not extend the D0815 Marsannay lease to these two parcels.",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "filingLabelDate": "2024-11-22",
+      "originalFilename": "8-HOR-VIGNOBLES-Comptes-sociaux-2024-22-11-2024.pdf",
+      "sha256": "e243b39080051b9b024f33587ea418c2bf289470a4f49d1fa35cec9320545308",
+      "pageCount": 24,
+      "reviewedPages": [
+        24
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "assetAreaEvidence": {
+        "namedArea": "Échezeaux",
+        "areaM2": 3417,
+        "acquiredDate": "2016-10-25",
+        "assetCategories": [
+          "land",
+          "productive-vines"
+        ],
+        "parcelReferencesStated": false
+      }
     },
     {
       "id": "bonnes",
@@ -1606,6 +1625,168 @@
       "pageNumbering": "one-based PDF",
       "retrievalNote": "User-supplied Pappers PDF. Text/OCR screened across the complete file; listed pages visually checked. Company page is a fallback source link, not a verified direct PDF download. Original PDF not redistributed.",
       "corroboratesSourceId": "coudray"
+    },
+    {
+      "id": "grands-crus-statutes-2019",
+      "title": "GFV Grands Crus Investissement: 2019 corporate update",
+      "url": "https://www.pappers.fr/entreprise/grpt-foncier-vit-grd-crus-investissement-413823873#actes",
+      "type": "company-filing",
+      "documentDate": "2019-06-03",
+      "filingLabelDate": "2019-06-18",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 3 June 2019 resolution and retained cash-contribution clause concern company ownership/capital. They supply no parcel schedule, named tenant or new land transaction.",
+      "originalFilename": "1-GRPT-FONCIER-VIT-GRD-CRUS-INVESTISSEMENT-Statuts-mis-à-jour-18-06-2019.pdf",
+      "sha256": "7f09f4e9977663028e0c8314fe41a3d121d5843103d63dfc1ea1d18e724a1206",
+      "pageCount": 18,
+      "reviewedPages": [
+        2,
+        15
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "grands-crus-mandate-1997",
+      "title": "GFV Grands Crus Investissement: 12 August 1997 purchase and lease mandates",
+      "url": "https://www.pappers.fr/entreprise/grpt-foncier-vit-grd-crus-investissement-413823873#actes",
+      "type": "company-filing",
+      "documentDate": "1997-08-12",
+      "filingLabelDate": "1997-09-29",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Article 22, PDF p.8, mandates acquisition of D0650 (307 m²), D0651 (1887 m²), D0652 (2195 m²), total 4389 m², and a long-term rural lease. No tenant is named. The formation uses cash; neither executed purchase nor lease is attached. Méo-Camuzet is not identified as tenant.",
+      "originalFilename": "2-GRPT-FONCIER-VIT-GRD-CRUS-INVESTISSEMENT-Actes-du-29-09-1997.pdf",
+      "sha256": "ca97a43dd71d363f1dea28d2dcf7a350e36ffaab1a751e45cea38061f1e2f97a",
+      "pageCount": 9,
+      "reviewedPages": [
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-safer-proposal-2008",
+      "title": "Bouchy: 15 March 2008 minutes and Les Treux SAFER proposal",
+      "url": "https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes",
+      "type": "company-filing",
+      "documentDate": "2008-03-15",
+      "filingLabelDate": "2014-10-10",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Recovered full scan p.31 describes a SAFER offering of 16 ares in Échezeaux Les Treux, with Tardy seeking investors, alongside 19.57 ares in Vosne-Romanée Les Gaudichots. No cadastral reference or completed purchase is given. Do not assign the proposal to D0765 by near-area matching.",
+      "originalFilename": "3-DOMAINE-BOUCHY-ET-AMIS-Actes-du-10-10-2014.pdf",
+      "sha256": "d56c02c69bf5ed00f67fda1dc4e1b4f89dc713d67b508ffe433e2541e88faadf",
+      "pageCount": 34,
+      "reviewedPages": [
+        25,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "scanRecovery": "Full embedded scans extracted read-only for clipped pages 3 and 24-34; OCR and visual review used the full images."
+    },
+    {
+      "id": "jean-tardy-deed-2020",
+      "title": "Jean Tardy et Fils: 13 January 2020 deed and EARL statutes",
+      "url": "https://www.pappers.fr/entreprise/domaine-jean-tardy-et-fils-429171382#actes",
+      "type": "company-filing",
+      "documentDate": "2020-01-13",
+      "filingLabelDate": "2020-02-11",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "PDF p.40 identifies EARL du Domaine Jean Tardy et Fils as 429171382. Page 24 recites a separate 16 June 2000 lease from Jean and Arlette Tardy to the EARL, without the five Bouchy cadastral references. It prints 18 years from 1 January 2000 ending 31 December 2007: an unresolved internal inconsistency, not silently corrected to 2017. This cannot replace Bouchy’s 2001 personal tenancy.",
+      "originalFilename": "4-DOMAINE-JEAN-TARDY-ET-FILS-Actes-du-11-02-2020.pdf",
+      "sha256": "f75166a63a7367fa3f75ae6174b6a884705a6211f89e712f589c178866893c2f",
+      "pageCount": 57,
+      "reviewedPages": [
+        24,
+        36,
+        40
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "hor-accounts-2017",
+      "title": "HOR Vignobles: first accounts to 30 June 2017",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008#comptes",
+      "type": "company-filing",
+      "documentDate": "2017-06-30",
+      "filingLabelDate": "2017-12-19",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "First period 5 August 2016-30 June 2017. PDF p.17 (form 2054) shows EUR 6,550,000 aggregate land acquisitions/gross assets, with no area, cadastral or tenant schedule. Do not allocate that total to individual Échezeaux parcels.",
+      "originalFilename": "5-HOR-VIGNOBLES-Comptes-sociaux-2017.pdf",
+      "sha256": "d31309487816321106433cb43b42624c78c37e87b62182f9bb8472f6a77c495b",
+      "pageCount": 21,
+      "reviewedPages": [
+        5,
+        17
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "bonnes-pentes-mandate-1999",
+      "title": "Les Bonnes Pentes: 5 July 1999 SAFER purchase and Naudin-Ferrand lease mandates",
+      "url": "https://www.pappers.fr/entreprise/gfa-les-bonnes-pentes-423789452#actes",
+      "type": "company-filing",
+      "documentDate": "1999-07-05",
+      "filingLabelDate": "1999-08-03",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Article 41, PDF p.19, mandates purchase from SAFER Bourgogne of D0645/D0646/D0647 in Les Rouges du Bas, together 3410 m², and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). The deed gives only a combined area, not individual parcel areas. Neither purchase nor lease execution is shown; formation contributions are cash.",
+      "originalFilename": "6-GFA-LES-BONNES-PENTES-Acte-notarié-03-08-1999.pdf",
+      "sha256": "2eacba6c4fffa8a5d5b4ba4f2b5cfbc8e495f84c7fb8a430fdd8a4bcc5121388",
+      "pageCount": 21,
+      "reviewedPages": [
+        4,
+        19
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-nuits-mandate-2010",
+      "title": "Bouchy: 8 February 2010 Nuits-Saint-Georges mandates",
+      "url": "https://www.pappers.fr/entreprise/domaine-bouchy-et-amis-391735321#actes",
+      "type": "company-filing",
+      "documentDate": "2010-02-08",
+      "filingLabelDate": "2014-10-10",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Recovered pp.30-31 mandate a SAFER purchase of Nuits-Saint-Georges AE0048 Div.P2, Aux Argillas, 1960 m², and long-term métayage to Guillaume Tardy. This is not Échezeaux and does not amend the Bouchy five-parcel lease. No formal AE0048-to-AE0123 cadastral lineage is supplied.",
+      "originalFilename": "7-DOMAINE-BOUCHY-ET-AMIS-Actes-du-10-10-2014-2.pdf",
+      "sha256": "3ccb74caaf96a541f26655b25e78d179e7ab010367166f2e573466d9be0bbabc",
+      "pageCount": 31,
+      "reviewedPages": [
+        30,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed.",
+      "scanRecovery": "Full embedded scans extracted read-only for clipped pages 3 and 26-31; OCR and visual review used the full images."
+    },
+    {
+      "id": "jean-tardy-statutes-2024",
+      "title": "Jean Tardy et Fils: 25 July 2024 conversion to SARL",
+      "url": "https://www.pappers.fr/entreprise/domaine-jean-tardy-et-fils-429171382#actes",
+      "type": "company-filing",
+      "documentDate": "2024-07-25",
+      "filingLabelDate": "2024-08-05",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "PDF pp.1-2 identify company 429171382 and its continuation as a SARL after the 25 July 2024 decision, having been formed as an EARL in January 2000. Corporate continuity does not establish assignment of Jean Tardy’s personal Bouchy lease, its renewal or actual 2026 cultivation.",
+      "originalFilename": "9-DOMAINE-JEAN-TARDY-ET-FILS-Copie-des-statuts-mis-à-jour-05-08-2024.pdf",
+      "sha256": "aa324620a8dd9e5d87438363c0bdf51195d4a5c2c6d6b454163d9b92e1388ac4",
+      "pageCount": 18,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened by text/OCR; listed pages visually checked. Company-page links are not verified direct PDF downloads. Original PDF not redistributed."
     }
   ],
   "holders": [
@@ -1802,13 +1983,15 @@
         "Domaine Méo-Camuzet"
       ],
       "basis": "registered-office-match",
-      "finding": "Registry name GRPT FONCIER VIT GRD CRUS INVESTISSEMENT (SIREN 413823873) matches; its office is the Méo-Camuzet family's address in Vosne. Méo-Camuzet publishes 0.44 ha in Les Rouges du Bas; these three parcels there total 0.4389 ha in the cadastre. No lease reviewed.",
+      "finding": "The 1997 deed mandates purchase and a long-term lease of D0650-D0652 (4389 m²), without naming a tenant or proving execution. Méo-Camuzet remains an office/estate-area lead; the 2019 update adds no lease.",
       "sourceIds": [
         "grands-crus-identity",
         "gfv-grands-crus-registry",
         "bodacc-meo-seat",
         "meo",
-        "meo-hedonism"
+        "meo-hedonism",
+        "grands-crus-mandate-1997",
+        "grands-crus-statutes-2019"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1886,13 +2069,17 @@
         "Domaine Jean Tardy et Fils"
       ],
       "basis": "filing-tenant-relationship",
-      "finding": "The 2019 deed names Jean Tardy as tenant of all five parcels, with permitted EARL Jean Tardy et Fils use. It recites a 2001 lease ending 18 October 2026. This strengthens the former bottler lead. Liger-Belair’s later application was suspended in April 2026; current farming and any handover remain unverified.",
+      "finding": "The 2019 deed names Jean Tardy personally, with permitted EARL use and a recited October 2026 lease end. Separate Tardy statutes identify company 429171382 and its 2024 SARL conversion. Neither corporate continuity nor the suspended Liger-Belair application proves a handover or current farming.",
       "sourceIds": [
         "bouchy",
         "bouchy-tardy",
         "raa-2026-067",
         "bouchy-formation-retained-2019",
-        "bouchy-tardy-lease-recital-2019"
+        "bouchy-tardy-lease-recital-2019",
+        "jean-tardy-deed-2020",
+        "jean-tardy-statutes-2024",
+        "bouchy-safer-proposal-2008",
+        "bouchy-nuits-mandate-2010"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1912,7 +2099,7 @@
       "holderId": "821877008",
       "candidateNames": [],
       "basis": "unresolved",
-      "finding": "The 2021 Marsannay tenancy recital covers D0815, not D0813/D0814. The 2016 formation and capital/presidency filings contain cash and share transactions, with no vineyard acquisition or lease schedule. No tenant is established for these two retained parcels.",
+      "finding": "The 2024 asset list gives 3417 m² of Échezeaux, equal to D0813+D0814, without cadastral references or a tenant. The 2017 accounts give only aggregate land assets. The 2021 Marsannay tenancy recital remains limited to D0815; no tenant is established for the retained pair.",
       "sourceIds": [
         "hor-filing",
         "hor-accounts",
@@ -1920,7 +2107,8 @@
         "hor-formation-2016",
         "hor-capital-resolution-2016",
         "hor-capital-bundle-2016",
-        "hor-capital-reduction-2016"
+        "hor-capital-reduction-2016",
+        "hor-accounts-2017"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1929,12 +2117,13 @@
       "candidateNames": [
         "Domaine Henri Naudin-Ferrand"
       ],
-      "basis": "management-and-estate-context",
-      "finding": "Claire Naudin's management of the GFA and the estate's Les Rouges du Bas sheet support a lead. No parcel-specific lease reviewed; 2019 sheet and 2022 harvest do not establish 2026 farming.",
+      "basis": "filing-lease-mandate",
+      "finding": "The 5 July 1999 deed mandates purchase of D0645-D0647 (3410 m² combined) and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). This strengthens the management-based lead, but the executed purchase/lease and current farming remain unverified.",
       "sourceIds": [
         "bonnes",
         "naudin",
-        "naudin-sheet"
+        "naudin-sheet",
+        "bonnes-pentes-mandate-1999"
       ],
       "parcelOperationConfirmed": false
     },
@@ -2199,7 +2388,7 @@
   "accessGaps": [
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
-    "Coudray and both HOR PDFs have now been supplied and visually reviewed. The executed Coudray lease/renewals, full HOR 25 October 2016 acquisition and lease schedules, and later tenant changes remain unreviewed; HOR 2024 accounts remain indexed-excerpt-only.",
+    "The Coudray and HOR deeds and both HOR accounts are now supplied and reviewed. Executed Coudray lease/renewals, HOR’s 25 October 2016 acquisition and complete lease schedules, and later tenant changes remain missing. The 2024 HOR asset list corroborates an area but gives no cadastral references or tenant.",
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
     "DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.",
@@ -2211,7 +2400,8 @@
     "Company identities were checked in BODACC and official company search. U-prefixed DGFiP holders carry no SIREN; the three reviewed 2024 founding deeds now strengthen their identity joins through exact parcel contributions. Company identity alone is not farming evidence.",
     "The separate executed Rouget concurrent lease and Forey 2025–2048 lease have not been reviewed. Orveaux needs the 2003 lease and amendments to explain partial scope, the 4550 m² lease recital versus 4147 m² planted area, and any operating-company arrangement.",
     "D0146 is co-sold with the four later LES CRUOTS parcels but is not in the contribution tables; its owner and operator remain unassigned.",
-    "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals."
+    "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals.",
+    "The 1997 Grands Crus and 1999 Bonnes Pentes deeds supply exact-reference purchase/lease mandates, not executed instruments. Bouchy’s 2008 SAFER proposal lacks a cadastral reference and purchase outcome; Tardy’s company identity/2024 SARL conversion does not resolve the personal lease, its amendments or current cultivation."
   ],
   "historyFindings": [
     {
@@ -2468,6 +2658,20 @@
         "bouchy-tardy-lease-recital-2019"
       ],
       "finding": "The 22 June 1993 founding deed, retained in the 2019 statutes, mandates purchase of D0764/D0766 together (1260 m²) and an 18-year métayage lease to Bernard Mondange. It does not prove either instrument was executed and does not cover D0628/D0765/D0767. The later 2019 deed separately recites Jean Tardy’s 2001 lease over all five parcels. The interval between these arrangements remains undocumented."
+    },
+    {
+      "id": "hor-asset-area-2024",
+      "title": "HOR: retained asset area agrees, tenant still unknown",
+      "parcelIds": [
+        "212670000D0813",
+        "212670000D0814"
+      ],
+      "sourceIds": [
+        "hor-accounts",
+        "hor-accounts-2017",
+        "hor-filing"
+      ],
+      "finding": "The full 2024 fixed-asset list repeats Échezeaux 3417 m², acquired 25 October 2016, under land and productive vines. Count the area once. It equals D0813 (2106) plus D0814 (1311), and former D0315 (4273) minus transferred D0815 (856), but the accounts themselves give no cadastral references or tenant. The 2017 aggregate land figure supplies no missing schedule. The D0815 Marsannay tenancy cannot be extended from this arithmetic."
     }
   ],
   "externalResearch": [
@@ -3967,7 +4171,88 @@
         }
       ],
       "finding": "The 5 August 2019 deed recites a 25-year métayage lease to Jean Tardy over all five listed Échezeaux parcels, signed/effective 19 October 2001 and ending 18 October 2026, with permitted use by EARL du Domaine Jean Tardy et Fils. The annexed property declaration on PDF p.41 corroborates the references and areas. The 2026 Liger-Belair suspended application is separate; no completed handover is established.",
-      "appNote": "The 5 August 2019 deed names Jean Tardy as métayage tenant of these five parcels (0.3476 ha), with permitted use by EARL du Domaine Jean Tardy et Fils. It recites a 2001 lease ending 18 October 2026. Later amendments, current farming and any Liger-Belair handover remain unverified."
+      "appNote": "The 5 August 2019 deed names Jean Tardy as métayage tenant of these five parcels (0.3476 ha), with permitted use by EARL du Domaine Jean Tardy et Fils. It recites a 2001 lease ending 18 October 2026. Later amendments, current farming and any Liger-Belair handover remain unverified.",
+      "operatorIdentityEvidence": {
+        "siren": "429171382",
+        "sourceIds": [
+          "jean-tardy-deed-2020",
+          "jean-tardy-statutes-2024"
+        ],
+        "historicalName": "EARL DU DOMAINE JEAN TARDY ET FILS",
+        "continuedName": "DOMAINE JEAN TARDY ET FILS",
+        "convertedTo": "SARL",
+        "conversionDate": "2024-07-25",
+        "limitation": "Separate corporate identity evidence; not a SIREN printed in the Bouchy lease recital, assignment of the personal tenancy or proof of cultivation."
+      }
+    },
+    {
+      "id": "grands-crus-mandate-1997",
+      "sourceId": "grands-crus-mandate-1997",
+      "title": "Grands Crus Investissement: purchase and lease mandates, tenant unnamed",
+      "holderId": "U18178179",
+      "companySiren": "413823873",
+      "documentDate": "1997-08-12",
+      "parcelAreasM2": {
+        "212670000D0650": 307,
+        "212670000D0651": 1887,
+        "212670000D0652": 2195
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [],
+          "parcelAreasM2": {
+            "212670000D0650": 307,
+            "212670000D0651": 1887,
+            "212670000D0652": 2195
+          },
+          "pages": [
+            8
+          ],
+          "limitation": "Mandate to grant a long-term rural lease; no tenant, term dates or executed instrument supplied."
+        }
+      ],
+      "finding": "Article 22 authorizes acquisition of these three parcels and a long-term rural lease, without naming a tenant. The three recited areas match the cadastre. The Méo-Camuzet candidate still relies on other corporate/estate context; neither purchase nor lease execution is shown.",
+      "appNote": "The 12 August 1997 deed authorizes purchase of D0650-D0652 (0.4389 ha) and a long-term rural lease. It names no tenant and does not prove execution. Méo-Camuzet remains a separate office/estate-area lead; current farming is unverified."
+    },
+    {
+      "id": "bonnes-pentes-mandate-1999",
+      "sourceId": "bonnes-pentes-mandate-1999",
+      "title": "Les Bonnes Pentes: SAFER purchase and Naudin-Ferrand lease mandates",
+      "holderId": "423789452",
+      "companySiren": "423789452",
+      "documentDate": "1999-07-05",
+      "parcelAreasM2": {
+        "212670000D0645": 1206,
+        "212670000D0646": 1583,
+        "212670000D0647": 621
+      },
+      "areaEvidence": {
+        "kind": "aggregate-only",
+        "recitedTotalM2": 3410,
+        "individualAreasSource": "pinned-cadastral-snapshot"
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "DOMAINE HENRI NAUDIN-FERRAND"
+          ],
+          "tenantSiren": "394495493",
+          "parcelIds": [
+            "212670000D0645",
+            "212670000D0646",
+            "212670000D0647"
+          ],
+          "combinedAreaM2": 3410,
+          "pages": [
+            19
+          ],
+          "limitation": "Mandates purchase from SAFER Bourgogne and a long-term lease. Only a combined area is recited; no executed instruments or term dates supplied."
+        }
+      ],
+      "finding": "Article 41 authorizes purchase from SAFER Bourgogne of the three named references and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). The deed gives a combined 3410 m², matching the sum of the pinned cadastral areas; individual areas come from that snapshot. Neither execution nor current cultivation is established.",
+      "appNote": "The 5 July 1999 deed authorizes a SAFER purchase of D0645-D0647, together 0.3410 ha, and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). Individual parcel areas are not recited. The executed instruments and current farming remain unverified."
     }
   ]
 }

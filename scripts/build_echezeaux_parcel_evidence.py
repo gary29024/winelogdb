@@ -34,6 +34,7 @@ LEAD_LABELS = {
     'partial-succession-lead': 'Partial succession lead',
     'registered-office-match': 'Same registered office',
     'filing-tenant-relationship': 'Dated lease relationship',
+    'filing-lease-mandate': 'Named in a lease mandate',
     'filing-family-tenant-context': 'Named individual tenant',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}

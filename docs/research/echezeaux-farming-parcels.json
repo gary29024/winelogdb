@@ -36,7 +36,7 @@
     "unresolved": 127,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
-    "withParcelFiling": 21,
+    "withParcelFiling": 27,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -7406,7 +7406,11 @@
             "bouchy-tardy",
             "raa-2026-067",
             "bouchy-formation-retained-2019",
-            "bouchy-tardy-lease-recital-2019"
+            "bouchy-tardy-lease-recital-2019",
+            "jean-tardy-deed-2020",
+            "jean-tardy-statutes-2024",
+            "bouchy-safer-proposal-2008",
+            "bouchy-nuits-mandate-2010"
           ]
         },
         {
@@ -7899,17 +7903,20 @@
         {
           "name": "Domaine Henri Naudin-Ferrand",
           "holderId": "423789452",
-          "basis": "management-and-estate-context",
+          "basis": "filing-lease-mandate",
           "sourceIds": [
             "bonnes",
             "naudin",
-            "naudin-sheet"
+            "naudin-sheet",
+            "bonnes-pentes-mandate-1999"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bonnes-pentes-mandate-1999"
+      ],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -7928,7 +7935,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -7959,17 +7966,20 @@
         {
           "name": "Domaine Henri Naudin-Ferrand",
           "holderId": "423789452",
-          "basis": "management-and-estate-context",
+          "basis": "filing-lease-mandate",
           "sourceIds": [
             "bonnes",
             "naudin",
-            "naudin-sheet"
+            "naudin-sheet",
+            "bonnes-pentes-mandate-1999"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bonnes-pentes-mandate-1999"
+      ],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -7988,7 +7998,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8019,17 +8029,20 @@
         {
           "name": "Domaine Henri Naudin-Ferrand",
           "holderId": "423789452",
-          "basis": "management-and-estate-context",
+          "basis": "filing-lease-mandate",
           "sourceIds": [
             "bonnes",
             "naudin",
-            "naudin-sheet"
+            "naudin-sheet",
+            "bonnes-pentes-mandate-1999"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "bonnes-pentes-mandate-1999"
+      ],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -8048,7 +8061,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8110,13 +8123,17 @@
             "gfv-grands-crus-registry",
             "bodacc-meo-seat",
             "meo",
-            "meo-hedonism"
+            "meo-hedonism",
+            "grands-crus-mandate-1997",
+            "grands-crus-statutes-2019"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "grands-crus-mandate-1997"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -8135,7 +8152,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8172,13 +8189,17 @@
             "gfv-grands-crus-registry",
             "bodacc-meo-seat",
             "meo",
-            "meo-hedonism"
+            "meo-hedonism",
+            "grands-crus-mandate-1997",
+            "grands-crus-statutes-2019"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "grands-crus-mandate-1997"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -8197,7 +8218,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -8234,13 +8255,17 @@
             "gfv-grands-crus-registry",
             "bodacc-meo-seat",
             "meo",
-            "meo-hedonism"
+            "meo-hedonism",
+            "grands-crus-mandate-1997",
+            "grands-crus-statutes-2019"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "grands-crus-mandate-1997"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -8259,7 +8284,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10075,7 +10100,11 @@
             "bouchy-tardy",
             "raa-2026-067",
             "bouchy-formation-retained-2019",
-            "bouchy-tardy-lease-recital-2019"
+            "bouchy-tardy-lease-recital-2019",
+            "jean-tardy-deed-2020",
+            "jean-tardy-statutes-2024",
+            "bouchy-safer-proposal-2008",
+            "bouchy-nuits-mandate-2010"
           ]
         },
         {
@@ -10160,7 +10189,11 @@
             "bouchy-tardy",
             "raa-2026-067",
             "bouchy-formation-retained-2019",
-            "bouchy-tardy-lease-recital-2019"
+            "bouchy-tardy-lease-recital-2019",
+            "jean-tardy-deed-2020",
+            "jean-tardy-statutes-2024",
+            "bouchy-safer-proposal-2008",
+            "bouchy-nuits-mandate-2010"
           ]
         },
         {
@@ -10243,7 +10276,11 @@
             "bouchy-tardy",
             "raa-2026-067",
             "bouchy-formation-retained-2019",
-            "bouchy-tardy-lease-recital-2019"
+            "bouchy-tardy-lease-recital-2019",
+            "jean-tardy-deed-2020",
+            "jean-tardy-statutes-2024",
+            "bouchy-safer-proposal-2008",
+            "bouchy-nuits-mandate-2010"
           ]
         },
         {
@@ -10328,7 +10365,11 @@
             "bouchy-tardy",
             "raa-2026-067",
             "bouchy-formation-retained-2019",
-            "bouchy-tardy-lease-recital-2019"
+            "bouchy-tardy-lease-recital-2019",
+            "jean-tardy-deed-2020",
+            "jean-tardy-statutes-2024",
+            "bouchy-safer-proposal-2008",
+            "bouchy-nuits-mandate-2010"
           ]
         },
         {
@@ -11378,7 +11419,9 @@
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
-      "historyFindingIds": [],
+      "historyFindingIds": [
+        "hor-asset-area-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -11415,7 +11458,9 @@
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
-      "historyFindingIds": [],
+      "historyFindingIds": [
+        "hor-asset-area-2024"
+      ],
       "researchStatus": "unresolved",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
