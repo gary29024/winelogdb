@@ -793,6 +793,16 @@
       "access": "read"
     },
     {
+      "id": "bizot-kermit-lynch",
+      "title": "Kermit Lynch: Domaine Bizot grower sheet",
+      "url": "https://kermitlynch.com/files/domaine-bizot.pdf",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Importer sheet: Échézeaux Grand Cru 0.5 ha, planted 1924, 1944 and 1970, from Les Orveaux; the Les Treux plot is bottled as Vosne-Romanée 1er Cru \"Élise Fermouche\", 0.2 ha, planted 1944 and 1970. The importer's wine page (behind a bot check, seen only in search snippets) gives 0.56 ha En Orveaux. Rounded; no cadastral numbers or tenure. Fermouche-Maignot is listed as a Les Treux owner in 1892.",
+      "access": "read"
+    },
+    {
       "id": "cacheux-forum",
       "title": "La Passion du Vin: Domaine Jacques Cacheux",
       "url": "https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee",
@@ -2239,19 +2249,39 @@
       "otherPublishedAreas": []
     },
     {
-      "id": "bizot",
+      "id": "bizot-orveaux",
       "producer": "Domaine Jean-Yves Bizot",
       "namedAreas": [
-        "EN ORVEAUX",
-        "LES TREUX"
+        "EN ORVEAUX"
       ],
-      "publishedAreaHa": null,
-      "precision": "none",
+      "publishedAreaHa": 0.5,
+      "precision": "approximate",
       "relation": "unstated",
       "sourceIds": [
+        "bizot-kermit-lynch",
         "bizot-interview"
       ],
-      "finding": "Two parcels, sizes not published. No company record.",
+      "finding": "Bottled as Échezeaux; 0.5 ha on the importer sheet (0.56 ha on its web page). No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bizot-treux",
+      "producer": "Domaine Jean-Yves Bizot",
+      "namedAreas": [
+        "LES TREUX"
+      ],
+      "publishedAreaHa": 0.2,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "bizot-kermit-lynch",
+        "bizot-interview",
+        "danguy-1892"
+      ],
+      "finding": "Usually declassified to Vosne-Romanée 1er Cru \"Élise Fermouche\"; the Fermouche-Maignot family owned in Les Treux in 1892. No company record.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,

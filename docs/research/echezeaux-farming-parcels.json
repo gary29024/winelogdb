@@ -129,7 +129,7 @@
       "withoutCompanyRecordM2": 42422,
       "withoutCompanyRecordOrLead": 41,
       "withoutCompanyRecordOrLeadM2": 42422,
-      "publishedBeyondCompanyRecordsM2": 18847,
+      "publishedBeyondCompanyRecordsM2": 23847,
       "holdings": [
         {
           "holdingId": "clerget",
@@ -192,17 +192,15 @@
           "owners": []
         },
         {
-          "holdingId": "bizot",
+          "holdingId": "bizot-orveaux",
           "producer": "Domaine Jean-Yves Bizot",
-          "publishedAreaHa": null,
-          "precision": "none",
+          "publishedAreaHa": 0.5,
+          "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
-          "sharedWith": [
-            "LES TREUX"
-          ],
+          "sharedWith": [],
           "recordedToProducerM2": 0,
-          "beyondCompanyRecordsM2": null,
+          "beyondCompanyRecordsM2": 5000,
           "owners": []
         },
         {
@@ -459,20 +457,18 @@
       "withoutCompanyRecordM2": 18360,
       "withoutCompanyRecordOrLead": 18,
       "withoutCompanyRecordOrLeadM2": 15483,
-      "publishedBeyondCompanyRecordsM2": 0,
+      "publishedBeyondCompanyRecordsM2": 2000,
       "holdings": [
         {
-          "holdingId": "bizot",
+          "holdingId": "bizot-treux",
           "producer": "Domaine Jean-Yves Bizot",
-          "publishedAreaHa": null,
-          "precision": "none",
+          "publishedAreaHa": 0.2,
+          "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
-          "sharedWith": [
-            "EN ORVEAUX"
-          ],
+          "sharedWith": [],
           "recordedToProducerM2": 0,
-          "beyondCompanyRecordsM2": null,
+          "beyondCompanyRecordsM2": 2000,
           "owners": []
         },
         {
