@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **89 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **92 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **118 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **139 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
