@@ -3,7 +3,8 @@ import copy
 import json
 import unittest
 
-from build_echezeaux_farming_research import ROOT, CURATION, HISTORY, MANIFEST, build_register
+from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, build_register
+from build_echezeaux_parcel_evidence import build_evidence
 
 
 class FarmingResearchTests(unittest.TestCase):
@@ -125,6 +126,56 @@ class FarmingResearchTests(unittest.TestCase):
         curation = copy.deepcopy(self.curation)
         curation['externalResearch'][0]['sourceIds'] = []
         with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
+            self.build(curation)
+
+
+class ParcelEvidenceTests(unittest.TestCase):
+    """The app file must stay a list of dated records, never a farmer assignment."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
+        cls.asset = (ROOT / 'public' / cls.manifest['dataUrl'].lstrip('/')).read_bytes()
+        cls.features = json.loads(cls.asset)['features']
+        cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
+        cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
+        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history)
+
+    def build(self, curation=None):
+        return build_evidence(self.register, curation or self.curation, self.history, self.features)
+
+    def test_committed_file_is_current_and_makes_no_farmer_claim(self):
+        built = self.build()
+        self.assertEqual(json.loads(EVIDENCE.read_text(encoding='utf-8')), built)
+        self.assertNotIn('currentFarmer', json.dumps(built))
+        for items in built['parcels'].values():
+            for item in items:
+                self.assertTrue(set(item['sources']) <= built['sources'].keys())
+                self.assertLessEqual(len(item.get('note', '')), 330)
+
+    def test_notices_reach_parcels_of_both_crus_and_split_parcels_only_by_lineage(self):
+        parcels = self.build()['parcels']
+        kinds = lambda ref: {i['kind'] for i in parcels.get(f'212670000D{ref}', [])}
+        self.assertIn('authorisation', kinds('0665'))
+        self.assertIn('application', kinds('0093'))  # Grands-Échezeaux, named in the Anne Gros notice
+        self.assertIn('suspended', kinds('0615'))
+        self.assertTrue(any(i.get('via') == 'D0792' for i in parcels['212670000D0826']))
+        self.assertNotIn('212670000D0793', parcels)  # the 1.9 m² sliver is not a successor
+
+    def test_a_record_without_a_short_app_note_is_rejected(self):
+        curation = copy.deepcopy(self.curation)
+        del curation['exactParcelEvents'][1]['appNote']
+        with self.assertRaisesRegex(ValueError, 'needs a short appNote'):
+            self.build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['externalResearch'][0]['appNote'] = 'x' * 400
+        with self.assertRaisesRegex(ValueError, 'needs a short appNote'):
+            self.build(curation)
+
+    def test_other_cru_parcels_must_exist_and_stay_outside_the_register(self):
+        curation = copy.deepcopy(self.curation)
+        curation['exactParcelEvents'][0]['otherCruParcelIds'] = ['212670000D9999']
+        with self.assertRaisesRegex(ValueError, 'Unknown other-cru parcel'):
             self.build(curation)
 
 

@@ -6,7 +6,7 @@ import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/echezeauxParcelOwners';
 import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
-import research from '../../src/lib/places/echezeauxFarmingResearch.json';
+import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 
 const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;
@@ -20,21 +20,26 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals()});
 describe('Cadastral parcel controls',()=>{
- it('shows a historical application only on its exact parcels without promoting it to a farming link',async()=>{
+ it('shows dated evidence only on its exact parcels without promoting it to a farming link',async()=>{
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
   const onLegend=vi.fn();
   render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-565" producer="Anne Gros" onLegend={onLegend}/>);
   fireEvent.click(screen.getByRole('switch'));
   fireEvent.change(await screen.findByLabelText('Cadastral parcel'),{target:{value:'212670000D0177'}});
-  expect(screen.getByText('Historical farming application · outcome unconfirmed')).toBeTruthy();
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Application received')).toBeTruthy();
+  expect(within(panel).getByText('Previously farmed by Domaine Gros Frère et Sœur')).toBeTruthy();
   expect(screen.getByText('No matched rights record')).toBeTruthy();
-  expect(screen.getByRole('link',{name:/Application 2022-204/}).getAttribute('href')).toBe(`${research.source.url}#page=74`);
+  expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('#page=74');
+  expect(screen.getByText('Not established by this rights snapshot')).toBeTruthy();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
   expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','selected']);
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
-  expect(screen.queryByText('Historical farming application · outcome unconfirmed')).toBeNull();
-  for(const parcel of research.parcels)expect(data.features.some(f=>f.properties.id===parcel.parcelId)).toBe(true);
-  expect(research.unresolvedReferences).toEqual(['D01776']);
+  await waitFor(()=>expect(screen.queryByText('Application received')).toBeNull());
+  expect(within(await screen.findByRole('region',{name:'History and evidence'})).queryByText('Anne Gros')).toBeNull();
+  // Every evidenced parcel exists in the mapped snapshot; the unresolved printed D01776 is never attached to one.
+  for(const id of Object.keys(evidence.parcels))expect(data.features.some(f=>f.properties.id===id)).toBe(true);
+  expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer|D01776/);
  });
  it('downloads only on request, keeps record details folded, preserves both rights and cleans up the overlay',async()=>{
   const sample=structuredClone(data),feature=sample.features.find(f=>f.properties.recordedRights.length&&inEchezeaux(f))!;
@@ -100,7 +105,8 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('switch'));
   await screen.findByText('THIS WINE’S PRODUCER');
   expect(screen.getByText(`${linked.length} parcel${linked.length===1?'':'s'}`,{exact:false})).toBeTruthy();
-  expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified']);
+  // The legend is reported by an effect that can trail the panel text under load.
+  await waitFor(()=>expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified']));
   const toggle=screen.getByLabelText(/Show possible matches for Mongeard-Mugneret/) as unknown as HTMLInputElement;
   expect(toggle.checked).toBe(false);
   expect(screen.queryByText('Possible match · name only')).toBeNull();

@@ -159,6 +159,17 @@ function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTa
   return {bounds:boundsOf(catalogue.bounds),fitBoundsOptions:overviewFit(host.current)};
  };
  useEffect(()=>{selectedRef.current=selectedId;selectionAction.current?.(selectedId)},[selectedId]);
+ // The map sticks under the dialog header while the side panel scrolls; publish the header height so
+ // the sticky offset follows it when it wraps.
+ useEffect(()=>{
+  const dialog=host.current?.closest<HTMLElement>('.village-map-dialog'),header=dialog?.querySelector<HTMLElement>('.village-map-header');
+  if(!dialog||!header||typeof ResizeObserver==='undefined')return;
+  const update=()=>dialog.style.setProperty('--village-header-h',`${header.offsetHeight}px`);
+  update();
+  const observer=new ResizeObserver(update);
+  observer.observe(header);
+  return()=>{observer.disconnect();dialog.style.removeProperty('--village-header-h')};
+ },[]);
 
  useEffect(()=>{
   if(!host.current)return;
@@ -348,7 +359,7 @@ function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTa
  };
  return <>
   <div className="village-map-body">
-   <div className="village-map-main">
+   <div className={`village-map-main${parcelLegend.length?' has-parcels':''}`}>
     <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>{regional?'Region view':'Village view'}</button>{grandCruArea&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>mapRef.current?.fitBounds(boundsOf(grandCruArea.bounds),{...overviewFit(host.current),maxZoom:15,duration:0})}>Grand Cru view</button>}{!regional&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>}{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">{overview?'Loading regional overview…':'Loading vineyard boundaries…'}</p>}

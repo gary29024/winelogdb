@@ -1163,7 +1163,11 @@
       "outcome": "unconfirmed",
       "currentFarmer": null,
       "unresolvedPrintedReference": "D01776",
-      "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved."
+      "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux; the receipt does not authorise cultivation. Geometry of D0177/D0178 is unchanged since January 2022. Printed D01776 is unresolved.",
+      "appNote": "Receipt of a complete application. It is not an authorisation, and the outcome was not published in the bulletins searched.",
+      "otherCruParcelIds": [
+        "212670000D0093"
+      ]
     },
     {
       "parcelIds": [
@@ -1177,7 +1181,8 @@
       "documentDate": "2022-07-04",
       "outcome": "authorised",
       "currentFarmer": null,
-      "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established."
+      "summary": "Application filed 11/01/2022, complete 01/03/2022, CDOA opinion 25/05/2022; the same decision refuses Vosne-Romanée AB references to this applicant. Article 2 lists four communes without assigning each row; the section D rows are taken as Flagey-Échezeaux because the cédant holds these references there. D0665 is printed at 0.1157 ha, its cadastral area; D0666 at 0.0799 ha against 0.1157 ha, so its scope is unresolved. D0667, held by the same right holder, is not in the decision. Whether the applicant is connected to Domaine Jean-Charles Rion is not established.",
+      "appNote": "The same decision refuses the applicant other Vosne-Romanée parcels. Its list of communes is not split by parcel, so the commune is inferred from the previous operator. D0666 is printed at 0.0799 ha against a 0.1157 ha parcel, so its scope is unclear."
     },
     {
       "parcelIds": [
@@ -1197,7 +1202,8 @@
       "documentDate": "2022-04-04",
       "outcome": "unconfirmed",
       "currentFarmer": null,
-      "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024."
+      "summary": "Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024.",
+      "appNote": "Receipt of a complete application. It is not an authorisation, and no decision was found in the bulletins searched."
     },
     {
       "parcelIds": [
@@ -1217,7 +1223,8 @@
       "documentDate": "2022-06-30",
       "outcome": "unconfirmed",
       "currentFarmer": null,
-      "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024."
+      "summary": "Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024.",
+      "appNote": "Receipt of a complete application. It states it does not authorise cultivation, and no decision was found in the bulletins searched."
     },
     {
       "parcelIds": [
@@ -1235,7 +1242,12 @@
       "documentDate": "2026-04-07",
       "outcome": "instruction suspended for eight months from 29 April 2026",
       "currentFarmer": null,
-      "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels."
+      "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot belonging to SAS Bouchon Pourpre, GFA Domaine Bouchy et Amis, SCEA Nathalie Pacareau Lamarche and Mme Geneviève Lamarche; it also names Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+      "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation.",
+      "otherCruParcelIds": [
+        "212670000D0615",
+        "212670000D0616"
+      ]
     }
   ],
   "accessGaps": [
@@ -1487,7 +1499,8 @@
       "producer": "Hospices de Beaune (owner)",
       "printedReferences": [
         "510"
-      ]
+      ],
+      "appNote": "Named by cadastral number: the Hospices de Beaune cuvée Jean-Luc Bissey, donated in 2011. Who cultivates it for the Hospices is not stated."
     },
     {
       "id": "wh-d0631",
@@ -1504,7 +1517,8 @@
       "producer": "Domaine Jayer-Gilles / Hoffmann-Jayer",
       "printedReferences": [
         "631"
-      ]
+      ],
+      "appNote": "Named by cadastral number as the Jayer-Gilles plot, in the Jayer family since 1933."
     },
     {
       "id": "wh-d0632",
@@ -1521,7 +1535,8 @@
       "producer": "Niquet-Jayer family (owner)",
       "printedReferences": [
         "632"
-      ]
+      ],
+      "appNote": "Named by cadastral number as the Niquet-Jayer plot. Its wine is now made by or sold to a négociant, who is not named."
     },
     {
       "id": "wh-dessus-perdrix",
@@ -1535,7 +1550,8 @@
       "sourceIds": [
         "winehog-dessus"
       ],
-      "producer": "Domaine des Perdrix"
+      "producer": "Domaine des Perdrix",
+      "appNote": "The published area (0.8730 ha) equals this parcel set exactly, but the article does not name the parcels. Marked \"not confirmed\" by the author."
     },
     {
       "id": "wh-dessus-millot",
@@ -1556,7 +1572,8 @@
         "798",
         "799",
         "800"
-      ]
+      ],
+      "appNote": "Three plots totalling 0.5981 ha, owned through the wife’s family. A 1986 court case against Mongeard-Mugneret gave Millot the right to vinify them."
     },
     {
       "id": "wh-dessus-tremblay",
@@ -1570,7 +1587,8 @@
       "sourceIds": [
         "winehog-dessus"
       ],
-      "producer": "Domaine Cécile Tremblay"
+      "producer": "Domaine Cécile Tremblay",
+      "appNote": "The published area (0.1775 ha) equals this parcel set exactly, but the article does not name the parcels. Marked \"not confirmed\" by the author."
     },
     {
       "id": "wh-dessus-mongeard",
@@ -1585,7 +1603,8 @@
       "sourceIds": [
         "winehog-dessus"
       ],
-      "producer": "Domaine Mongeard-Mugneret"
+      "producer": "Domaine Mongeard-Mugneret",
+      "appNote": "The published area (0.3300 ha) equals this parcel set exactly, but the article does not name the parcels. Marked \"not confirmed\" by the author."
     },
     {
       "id": "wh-dessus-noellat",
@@ -1601,7 +1620,8 @@
       "finding": "Winehog 2014 area; the parcel set is reconstructed by this register because the published area equals their exact cadastral sum. Winehog lists 0.5097 ha, not confirmed; these five references total 5 097 m². The recorded rights conflict: D0191/D0192 are held by GFA Mongeard Mugneret from 2019, D0671–D0673 by Mongeard companies (D0671/D0673 after Crédit Mutuel until 2020) and D0673 by Bouchon Pourpre from 2025. Treat the 2014 attribution as unresolved.",
       "sourceIds": [
         "winehog-dessus"
-      ]
+      ],
+      "appNote": "The published area (0.5097 ha) equals this parcel set, but it conflicts with the recorded owners, so it is left unresolved."
     },
     {
       "id": "wh-liger-belair-2020",
@@ -1614,7 +1634,8 @@
       "sourceIds": [
         "winehog-liger-belair",
         "bouchon"
-      ]
+      ],
+      "appNote": "Liger-Belair added an Échezeaux du Dessus plot from 2020, location not given. The dates fit, but it does not identify this parcel."
     },
     {
       "id": "wh-liger-belair-holdings",
@@ -1658,7 +1679,8 @@
         "508",
         "821",
         "822"
-      ]
+      ],
+      "appNote": "Four named plots (0.2126 ha) from the 2018 vintage. Only part of D0508 is Berthaut-Gerbet’s; the rest is presumably farmed by another domaine."
     },
     {
       "id": "wh-grivot",
@@ -1694,7 +1716,8 @@
           "212670000D0828",
           "212670000D0829"
         ]
-      }
+      },
+      "appNote": "Seven named plots (0.8460 ha) in Les Cruots ou Vignes Blanches and Champs Traversins."
     },
     {
       "id": "wh-lamadon-2006",
@@ -1723,7 +1746,8 @@
           "212670000D0828",
           "212670000D0829"
         ]
-      }
+      },
+      "appNote": "The Lamadon holdings were divided in 2006 between Liger-Belair (métayage), the Lamarche family and Grivot."
     },
     {
       "id": "wh-arnoux-lachaux",
@@ -1746,7 +1770,8 @@
         "820",
         "677",
         "206"
-      ]
+      ],
+      "appNote": "Four named plots in Les Rouges du Bas. D0677 is recorded to another owner, and this conflicts with an earlier lead."
     }
   ]
 }
