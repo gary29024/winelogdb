@@ -917,7 +917,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - CVI records require cooperation from authorised holders; no private records accessed.
 - Public CartoBio polygons omit operator identity.
 - HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.
-- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; earlier notices, likely in the Côte-d'Or departmental bulletins, were not searched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
+- Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
 - Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
 

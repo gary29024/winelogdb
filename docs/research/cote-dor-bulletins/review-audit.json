@@ -1,0 +1,2309 @@
+{
+  "reviewedAt": "2026-09-29",
+  "purpose": "Reproducible screening and explicit review dispositions. Raw machine notice hints remain unchanged; join this overlay by noticeId. Text screening is not visual parcel verification.",
+  "coverage": {
+    "documentYears": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "downloadedPdfs": 372,
+    "extractedPages": 31966,
+    "unresolvedDocumentLinks": 5,
+    "modernTitleMatches": 130,
+    "agriculturalFarmStructureNotices": 57,
+    "unrelatedTitleMatches": 73,
+    "imageReviewedFarmDecisions": 14,
+    "reviewedLegacyDecisions": 5,
+    "vineParcelKeywordPages": 87
+  },
+  "search": {
+    "input": "index/page-text.jsonl.gz",
+    "sha256": "44b26860900dc387cecfde2e8cc28c04cc580873634e88cfc459e99b2e8459f9",
+    "normalization": "Unicode NFD accent removal, uppercase, collapse whitespace",
+    "winePattern": "\\bVIGN(?:E|ES|OBLE|OBLES|ERON\\w*)\\b|\\bVITIC\\w*\\b",
+    "parcelPattern": "PARCELL|CADASTR|BAIL|BAUX|AUTORISATION.{0,15}EXPLOITER|CONTROLE DES STRUCTURES",
+    "logic": "Both expressions must match on the same page. Also screen all 130 modern farmStructures title matches regardless of vineyard words.",
+    "limits": [
+      "Keyword search is a discovery aid, not proof that every relevant notice was found. OCR errors, page-spanning wording and the five unresolved 2018 bulletins can hide notices.",
+      "Modern contents extraction covers selected DDT entries; legacy 2016 decisions and prefectural environmental notices may exist only in full page text.",
+      "No image review or parcel extraction is claimed for other agricultural notices or generic regulatory context.",
+      "No present-day farmer, producer entity match, cadastral succession or current geometry is verified by this dataset."
+    ]
+  },
+  "notices": [
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p34",
+      "actId": "21-2016-03-03-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 34,
+      "lastPage": 36,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionBLIN Sébastien",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p37",
+      "actId": "21-2016-03-14-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 37,
+      "lastPage": 39,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionEARL BLIN",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p40",
+      "actId": "21-2016-03-08-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 40,
+      "lastPage": 42,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionEARL DOMAINE PHILIPPE et ARNAUD DUBREUIL",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p43",
+      "actId": "21-2016-03-14-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 43,
+      "lastPage": 45,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionEARL POUILLY",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p46",
+      "actId": "21-2016-03-14-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 46,
+      "lastPage": 48,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionGAEC HAUBRY",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p49",
+      "actId": "21-2016-03-30-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 49,
+      "lastPage": 51,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionGALLIEN Benoît",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p52",
+      "actId": "21-2016-03-08-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 52,
+      "lastPage": 54,
+      "title": "Demande d'autorisation d'exploiterNotification de décisionS.C. CHATEAU DE MERCEY - DOMAINE RODET",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p55",
+      "actId": "21-2016-03-08-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "firstPage": 55,
+      "lastPage": 57,
+      "title": "Demande d'autorisation d'exploiterNotification de décision modificativeLEMEE Thomas",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorisation-withdrawn"
+    },
+    {
+      "noticeId": "d2c7586d6d372643304412de36c67db262b11b468746675f6915bc060a857d25:p62",
+      "actId": "21-2016-05-23-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10433/94729/file/RAA_026_2016.pdf",
+      "sha256": "5a1942ce79738d3afd5322a624c85afe164d54d1b9284b657b22051d3b61c876",
+      "firstPage": 62,
+      "lastPage": 64,
+      "title": "Arrêté préfectoral n° 952 portant autorisation d'exploiter un établissement chargé d'animer des stages de sensibilisation à la sécurité routière",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "3fd3b48aa146864ae8a5e7ef638acae0df811aec9b26f68a8c2e4a1ec459ca03:p65",
+      "actId": "21-2016-05-31-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "firstPage": 65,
+      "lastPage": 76,
+      "title": "Arrêté préfectoral n° 991 du 31 mai 2016 relatif au renouvellement de l'autorisation d'exploiter l'usine de dépollution des eaux usées Monge sise à Combertault renouvellement exploitation UDEP Monge",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p70",
+      "actId": "21-2016-05-20-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 70,
+      "lastPage": 72,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL CEREALES BIO DU VAL DE SAONE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p73",
+      "actId": "21-2016-05-10-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 73,
+      "lastPage": 75,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DE LA ROUE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p76",
+      "actId": "21-2016-05-30-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 76,
+      "lastPage": 78,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DES METS DESSUS",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p79",
+      "actId": "21-2016-05-30-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 79,
+      "lastPage": 81,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL GERVASONI",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p82",
+      "actId": "21-2016-05-20-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 82,
+      "lastPage": 84,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC BERTRAND",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p85",
+      "actId": "21-2016-05-09-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 85,
+      "lastPage": 87,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DE SOUS LA VELLE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p88",
+      "actId": "21-2016-05-10-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 88,
+      "lastPage": 90,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DES ROCHES",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p91",
+      "actId": "21-2016-05-20-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 91,
+      "lastPage": 93,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DUPUIS",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p94",
+      "actId": "21-2016-05-20-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 94,
+      "lastPage": 96,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC SAINT-ROCH",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p97",
+      "actId": "21-2016-05-30-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 97,
+      "lastPage": 99,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionM. MARECHAL Eric",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p109",
+      "actId": "21-2016-06-17-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 109,
+      "lastPage": 112,
+      "title": "AP portant mutation d'une autorisation d'exploiter une carrière sur la commune de COMBLANCHIEN par la Société NOUVELLE SOGEPIERRE S.A.S",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p179",
+      "actId": "21-2016-06-16-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 179,
+      "lastPage": 188,
+      "title": "Arrêté préfectoral d'enregistrement n° 1009 du 16 juin 2016 portant autorisation d'exploiter - SD SERVICES à GEVREY-CHAMBERTIN",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p203",
+      "actId": "21-2016-06-09-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 203,
+      "lastPage": 212,
+      "title": "Arrêté préfectoral portant autorisation d'exploiter le PARC EOLIEN DES USEROLES sur les communes de Poiseul-la-Ville-et-Laperrière et Billy-les-Chanceaux",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "26946b2e7a03e0bdf3a10c267d17ffd0f3dd48c8671477ff653f6b27edd23020:p213",
+      "actId": "21-2016-06-30-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10503/95079/file/RAA__035_2016.pdf",
+      "sha256": "c81c681618260798ee70bb52c41655eb1ef6708b7b4eeb92766ed67cf11e17a4",
+      "firstPage": 213,
+      "lastPage": 217,
+      "title": "Arrêté préfectoral portant modification des conditions d'autorisation d'exploiter une carrière - SA SOCALCOR sur la commune de DIENAY",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5bf8cdb8470ee885cf1b5faf827bd86719626dd25ee7f6f5e3d4ea82b8d2c68f:p78",
+      "actId": "21-2016-07-11-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10508/95104/file/RAA__036_2016.pdf",
+      "sha256": "8a7ed5bda08c15f68e4d41f521726bc1d988fe074a091c56ef08d872cc59dde6",
+      "firstPage": 78,
+      "lastPage": 113,
+      "title": "arrêté préfectoral du 11/07/2016 statuant sur la demande de renouvellement et d'extension de l'autorisation d'exploiter par la SARL BABOUILLARD Michel une carrière et ses installations annexes à COULMIER LE SEC",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5bf8cdb8470ee885cf1b5faf827bd86719626dd25ee7f6f5e3d4ea82b8d2c68f:p147",
+      "actId": "21-2016-07-11-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10508/95104/file/RAA__036_2016.pdf",
+      "sha256": "8a7ed5bda08c15f68e4d41f521726bc1d988fe074a091c56ef08d872cc59dde6",
+      "firstPage": 147,
+      "lastPage": 156,
+      "title": "Arrêté préfectoral portant modification des conditions d'autorisation d'exploiter une carrière - SAS COGNARD GRANULATS - commune de COMBERTAULT (21200)",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p17",
+      "actId": "21-2016-07-11-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 17,
+      "lastPage": 19,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DE LA CRETAGNE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p20",
+      "actId": "21-2016-07-11-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 20,
+      "lastPage": 22,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DE LA PEPINIERE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p23",
+      "actId": "21-2016-07-18-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 23,
+      "lastPage": 25,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DE LA SUZE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p26",
+      "actId": "21-2016-07-18-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 26,
+      "lastPage": 28,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL DES PLATANES",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p29",
+      "actId": "21-2016-07-18-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 29,
+      "lastPage": 31,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionEARL GUENOT",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "The phrase ARRIERE COTE VITICOLE names a natural region; the transaction is 30.0637 ha of terres at Ternant. No explicit vineyard parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p32",
+      "actId": "21-2016-07-18-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 32,
+      "lastPage": 34,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DE LA MONTOLLE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p35",
+      "actId": "21-2016-07-18-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 35,
+      "lastPage": 37,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DES PRALETS",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p38",
+      "actId": "21-2016-07-18-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 38,
+      "lastPage": 40,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC DU CHARMOIS",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p41",
+      "actId": "21-2016-07-18-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 41,
+      "lastPage": 43,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC JEANNIN",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p44",
+      "actId": "21-2016-07-18-011",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 44,
+      "lastPage": 46,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC MAUGUIN",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p47",
+      "actId": "21-2016-07-11-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 47,
+      "lastPage": 49,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGAEC SULLEROT",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p50",
+      "actId": "21-2016-07-11-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 50,
+      "lastPage": 52,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionGUILLEMARD Patrick",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p53",
+      "actId": "21-2016-07-04-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 53,
+      "lastPage": 55,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionLEGUY François",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "refused"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p56",
+      "actId": "21-2016-07-11-011",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 56,
+      "lastPage": 58,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionPION Jean Robert",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p59",
+      "actId": "21-2016-07-18-012",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 59,
+      "lastPage": 61,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionSAS LES VIGNERONS DE COEUR",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p62",
+      "actId": "21-2016-07-18-013",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 62,
+      "lastPage": 64,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionSAS VIGNOBLES DES MOUCHOTTES",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p65",
+      "actId": "21-2016-07-18-014",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 65,
+      "lastPage": 67,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionSCEA BREY MAIRE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p68",
+      "actId": "21-2016-07-11-012",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 68,
+      "lastPage": 70,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionSCEA DE DEMO Nicolas",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+      "actId": "21-2016-07-11-013",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 71,
+      "lastPage": 73,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décisionSCEA DOMAINE DE LA VOUGERAIE",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p74",
+      "actId": "21-2016-06-30-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 74,
+      "lastPage": 76,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p77",
+      "actId": "21-2016-06-09-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 77,
+      "lastPage": 79,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p80",
+      "actId": "21-2016-06-15-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 80,
+      "lastPage": 82,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p83",
+      "actId": "21-2016-06-09-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 83,
+      "lastPage": 85,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p86",
+      "actId": "21-2016-06-15-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 86,
+      "lastPage": 88,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Land at Nuits-Saint-Georges, not explicitly vines. Recital p87 says ZA 3,23 while operative Article 1 p88 says ZE 3,23. Hold conflicting references for further review; do not silently correct.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p89",
+      "actId": "21-2016-06-30-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 89,
+      "lastPage": 91,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p92",
+      "actId": "21-2016-06-28-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 92,
+      "lastPage": 94,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p95",
+      "actId": "21-2016-06-15-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 95,
+      "lastPage": 97,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p98",
+      "actId": "21-2016-06-30-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 98,
+      "lastPage": 100,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p101",
+      "actId": "21-2016-06-30-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 101,
+      "lastPage": 103,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p104",
+      "actId": "21-2016-06-09-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 104,
+      "lastPage": 106,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p107",
+      "actId": "21-2016-06-09-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "firstPage": 107,
+      "lastPage": 109,
+      "title": "Contrôle des structures agricolesDemande d'autorisation d'exploiterNotification de décision",
+      "classification": "reviewed-parcels",
+      "reviewMethod": "page-image",
+      "reason": "Parcel evidence extracted after image review.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "f7fc8a5f146b3013eb704986a19a3d799ed3ad18600b0962ff771f2d38791e81:p14",
+      "actId": "21-2016-07-19-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10510/95114/file/RAA_no_38_special.pdf",
+      "sha256": "990cba638dd6f3c267c1663c8ee55f89d44da8751d32ed55c9b46089cc1df28d",
+      "firstPage": 14,
+      "lastPage": 67,
+      "title": "Arrêté préfectoral d'autorisation d'exploiter une carrière sur la commune de CORPOYER LA CHAPELLE par la SAS GRANULATS BOURGOGNE AUVERGNE",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "ea6e4839022012f47120907562969a927692095df6fd73a6c9811eb62895cd7f:p62",
+      "actId": "21-2016-08-02-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10527/95199/file/RAA__040_2016_special.pdf",
+      "sha256": "2558ff69f12cbc2eecce9c3568bf9832a09904007926c0491085d2a2c8e4f1b8",
+      "firstPage": 62,
+      "lastPage": 68,
+      "title": "AP portant modification d'une autorisation d'exploiter une carrière - SARL SOCOVAL - Commune de Marsannay le Bois 21380",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "f5139a9a624548eebf592f7468bbe071e8304ea3b49143e67b4e4abfdfc52383:p51",
+      "actId": "21-2016-10-10-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10601/95569/file/RAA_050_2016.pdf",
+      "sha256": "3bb8d25d502d213ebdcdbbc4f9e91a49dcd558b31d1e0ff441a6df3551ce686b",
+      "firstPage": 51,
+      "lastPage": 53,
+      "title": "AP n° 1260 portant retrait de l'autorisation d'exploiter un établissement chargé d'animer les stages de sensibilisation à la sécurité routière - société ASCUR DIJON",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "7dd93bea5f5aa6b97c7a14b398bc47674727c614add06b6cd26229712561a69b:p29",
+      "actId": "21-2016-09-23-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10612/95624/file/RAA_052_2016.pdf",
+      "sha256": "255e169ba1366e817f084b9337a0ff7b3a95acf9b332bdd84a2c8f8f68c35d65",
+      "firstPage": 29,
+      "lastPage": 40,
+      "title": "Arrêté préfectoral n° 1237 relatif au renouvellement de l'autorisation d'exploiter la station d'épuration communale des eaux usées de MONTBARD (21)",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "e784b48715b4d3f4611a244d486a964e029420b13914ec3759fa25668f43fe43:p42",
+      "actId": "21-2016-11-15-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10687/95999/file/raa_057_2016.pdf",
+      "sha256": "55ad0a54825a6565876baebcf8b77ac25bdcf965b9163274ba9e684cabafc3ec",
+      "firstPage": 42,
+      "lastPage": 45,
+      "title": "Arrêté préfectoral du 15 novembre 2016 portant mutation, au profit de la SARL GRANULATS DU CHATILLONNAIS, de l'autorisation d'exploiter la carrière située à PRUSLY SUR OURCE",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "bf94753602a51b1cbe030e64b9cc546ee0b29707da9f08edd0a8f3cadec30bb5:p161",
+      "actId": "21-2016-11-17-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10698/96054/file/raa_058_2016.pdf",
+      "sha256": "18fb943050e9a1990f8e51c88152ccaff45d9a80dd4c9925f7c3102bd16fa87c",
+      "firstPage": 161,
+      "lastPage": 164,
+      "title": "Arrêté portant autorisation d'exploiter au titre du contrôle des structures agricolesEARL BUTHIOT",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "bf94753602a51b1cbe030e64b9cc546ee0b29707da9f08edd0a8f3cadec30bb5:p165",
+      "actId": "21-2016-11-17-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10698/96054/file/raa_058_2016.pdf",
+      "sha256": "18fb943050e9a1990f8e51c88152ccaff45d9a80dd4c9925f7c3102bd16fa87c",
+      "firstPage": 165,
+      "lastPage": 168,
+      "title": "Arrêté portant autorisation d'exploiter au titre du contrôle des structures agricolesEARL VARIOT",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "bf94753602a51b1cbe030e64b9cc546ee0b29707da9f08edd0a8f3cadec30bb5:p169",
+      "actId": "21-2016-11-17-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10698/96054/file/raa_058_2016.pdf",
+      "sha256": "18fb943050e9a1990f8e51c88152ccaff45d9a80dd4c9925f7c3102bd16fa87c",
+      "firstPage": 169,
+      "lastPage": 172,
+      "title": "Arrêté portant autorisation d'exploiter au titre du contrôle des structures agricolesSCEA THIVANT",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "authorised"
+    },
+    {
+      "noticeId": "bf94753602a51b1cbe030e64b9cc546ee0b29707da9f08edd0a8f3cadec30bb5:p173",
+      "actId": "21-2016-11-17-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10698/96054/file/raa_058_2016.pdf",
+      "sha256": "18fb943050e9a1990f8e51c88152ccaff45d9a80dd4c9925f7c3102bd16fa87c",
+      "firstPage": 173,
+      "lastPage": 176,
+      "title": "Arrêté portant refus d'exploiter au titre du contrôle des structures agricolesEARL DELAYE",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Agricultural farm-structure notice; text screening found no explicit vineyard parcel identification for this review. Not promoted to image-reviewed parcel evidence.",
+      "statusHint": "refused"
+    },
+    {
+      "noticeId": "10450d735a452757b637b700405dd6e44d2cc01789a7845b0389fe2f98ba869e:p90",
+      "actId": "21-2016-11-28-042",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10705/96089/file/raa_059_2016.pdf",
+      "sha256": "74936be190b1bf418ff1b60b93affd8bac3b945e62a878359f1d919ed883b0b3",
+      "firstPage": 90,
+      "lastPage": 127,
+      "title": "AP portant autorisation d'exploiter une installation classée pour la protection de l'environnement - Société GLOBAL HYGIENE commune d'AuxonneSAS GLOBAL HYGIENE A AUXONNE",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "ac34bc940b97bda0fa65ca1cd7091da636b2e6d57641ed3c29f6b24066bd7ae8:p113",
+      "actId": "21-2016-12-13-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10709/96109/file/raa_060_2016.pdf",
+      "sha256": "41de6a9bd66515a294385f12f09112f3f25a7371869dc03728f4da00b0606caa",
+      "firstPage": 113,
+      "lastPage": 121,
+      "title": "Arrêté préfectoral d'enregistrement n° 1344 portant autorisation d'exploiter - SAS Jean ALLER - Commune de Spoy 21120",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "916da2c463a9b14232714b6b1a91cd004b900189b63b24e6be10071a6baa12fd:p47",
+      "actId": "21-2017-02-20-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10761/96369/file/raa_011_2017.pdf",
+      "sha256": "b859c60d08bc52409170d5cc8bee206bd78af757a593f6f1788060c8ce4251dd",
+      "firstPage": 47,
+      "lastPage": 49,
+      "title": "AP n° 89 du 20 février 2017 portant retrait de l'autorisation d'exploiter un établissement chargé d'animer les stages de sensibilisation à la sécurité routière.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "6835c2d49ebf7fe3bce19f4c222bf56c6c86808a6a4b03f70473c5f8c9b3ed8f:p27",
+      "actId": "21-2017-03-13-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10777/96449/file/raa_015_2017.pdf",
+      "sha256": "5f8d5b2d34124df0094f64540eef4e5d271fa4e6dd619f7f825256cfd7b8507f",
+      "firstPage": 27,
+      "lastPage": 84,
+      "title": "Arrêté préfectoral portant autorisation d'exploiter SARL MICHEL BROT - MARIGNY LE CAHOUET",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "3d0676405c1d38dbe37866b8f286ebbce66265e633b51fc1e23870c8ccc2fc51:p44",
+      "actId": "21-2017-03-17-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10778/96454/file/raa_016_2017.pdf",
+      "sha256": "6ccb92065b2f2f7730bc3ce5b1f2141eafce6a1c3830eeb32c7f2490fdc26361",
+      "firstPage": 44,
+      "lastPage": 46,
+      "title": "arrêté préfectoral n° 131 portant retrait de l'autorisation d'exploiter un établissement - AFTRAL - chargé d'aminer les stages de sensibilisation à la sécurité routière",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "8239c908db09897487780c4290a336ee97d4b3c46ccb765b920020e42cd68dcc:p61",
+      "actId": "21-2017-03-21-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10799/96559/file/raa_017_2017.pdf",
+      "sha256": "01df9425cf620b3352e6557daf780b9c67a62a064d01e0c15a7b60d0d16a3d13",
+      "firstPage": 61,
+      "lastPage": 100,
+      "title": "Arrêté préfectoral d'autorisation d'exploiter une carrière à ciel ouvert de matériaux alluvionnaires et ses installations annexes sur les communes de TRECLUN et de CHAMPDOTRE - L. MAGGIONI SA",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "8239c908db09897487780c4290a336ee97d4b3c46ccb765b920020e42cd68dcc:p116",
+      "actId": "21-2017-03-15-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10799/96559/file/raa_017_2017.pdf",
+      "sha256": "01df9425cf620b3352e6557daf780b9c67a62a064d01e0c15a7b60d0d16a3d13",
+      "firstPage": 116,
+      "lastPage": 123,
+      "title": "Arrêté préfectoral portant modification des conditions d'autorisation d'exploiter une carrière sur la commune de DIJON - COLAS EST",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "7a379348807d201b4386df1243325ba59c410b4e7ce93c3be9f36a4fa2d4ea27:p51",
+      "actId": "21-2017-06-07-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10875/96939/file/raa_031_2017.pdf",
+      "sha256": "6a4b94855c694a9492fa1f2b39912b27770245e183424063d6a73f13b58224b1",
+      "firstPage": 51,
+      "lastPage": 93,
+      "title": "Arrêté préfectoral DREAL portant autorisation d'exploiter une installation classée pour la protection de l'environnement - Sté MYRAL SAS commune d'Is sur Tille",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "58877a2f6dc85c8f12758444e14af2628825fea77b334d8ce414013c0ef475d6:p78",
+      "actId": "21-2017-07-03-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10906/97094/file/raa_037_2017_special.pdf",
+      "sha256": "4c8c54164f70d8e9e154817529591669cf8bd132e47d52bb8f6d2d876d80b20a",
+      "firstPage": 78,
+      "lastPage": 89,
+      "title": "Arrêté préfectoral complémentaire n° 458 du 03-07-2017 relatif à l'autorisation d'exploiter la station d'épuration communale des eaux usées de VENAREY LES LAUMES",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "58877a2f6dc85c8f12758444e14af2628825fea77b334d8ce414013c0ef475d6:p105",
+      "actId": "21-2017-07-07-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10906/97094/file/raa_037_2017_special.pdf",
+      "sha256": "4c8c54164f70d8e9e154817529591669cf8bd132e47d52bb8f6d2d876d80b20a",
+      "firstPage": 105,
+      "lastPage": 114,
+      "title": "Arrêté préfectoral n° 417 du 07-07-2017 relatif à la régularisation de l'autorisation d'exploiter la station d'épuration de l'aire d'autoroute de Beaune-Merceuil",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "58877a2f6dc85c8f12758444e14af2628825fea77b334d8ce414013c0ef475d6:p133",
+      "actId": "21-2017-07-11-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10906/97094/file/raa_037_2017_special.pdf",
+      "sha256": "4c8c54164f70d8e9e154817529591669cf8bd132e47d52bb8f6d2d876d80b20a",
+      "firstPage": 133,
+      "lastPage": 143,
+      "title": "Arrêté préfectoral n° 482 du 11 juillet 2017 relatif à la régularisation de l'autorisation d'exploiter la station de traitement des eaux usées de l'école de gendarmerie (ex BA 102) à OUGES",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1b506a0a351b1928fa1734ce1e82bfe462ec3b9b2c02625a75312cd5de7c282d:p78",
+      "actId": "21-2017-08-08-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11015/97639/file/raa_041_2017_special.pdf",
+      "sha256": "06ac24f865492ce3a4c14c5987dd5cc7383a818332f1af16b799f3669e4ae07e",
+      "firstPage": 78,
+      "lastPage": 123,
+      "title": "Arrêté préfectoral DREAL portant autorisation d'exploiter une installation classée pour la protection de l'environnement - Société GUINTOLI - DIJON",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "d340fb295953e2290b95a2287b695fa96b263c93c77bd3606d168160959f8b44:p40",
+      "actId": "21-2017-09-25-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11115/98139/file/raa_050_2017.pdf",
+      "sha256": "60ac5b5e0cc2c51c1cfc01032d26c2fb08346e53bf8b1b17e3304a2a6376a928",
+      "firstPage": 40,
+      "lastPage": 46,
+      "title": "Arrêté préfectoral n° 641 du 25-09-2017 complémentaire à l'AP du 25 mai 2004 portant autorisation d'exploiter la station d'épuration des eaux usées de GENLIS",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "bc13d9c5ce39c936322741b886f9f928dc04f6d804e7d57443eebe22fe9bfc76:p72",
+      "actId": "21-2017-10-16-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11138/98254/file/raa_052_2017.pdf",
+      "sha256": "85c22a7474439393853d910b2c2680d8e8ac52814f7fd1b16f754c889f0ba75a",
+      "firstPage": 72,
+      "lastPage": 78,
+      "title": "Arrêté Préfectoral d'Enregistrement concernant la SAS Bourgogne Recyclage portant autorisation d'exploiter",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "4a866a351d14589a83862ac5cf11018e131f2318e2858b243f4cdde20f3c2b39:p90",
+      "actId": "21-2017-10-30-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "firstPage": 90,
+      "lastPage": 95,
+      "title": "Arrêté Préfectoral DDPP d'Enregistrement n° 728 portant autorisation d'exploiter : JEAN FRANCOIS FAIVRE - 21250 MONTMAIN",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "4a866a351d14589a83862ac5cf11018e131f2318e2858b243f4cdde20f3c2b39:p96",
+      "actId": "21-2017-11-02-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "firstPage": 96,
+      "lastPage": 100,
+      "title": "Arrêté Préfectoral DDPP d'Enregistrement n° 733 portant autorisation d'exploiter concernant l'EARL DES EPOCHES - 21400 POTHIERES",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "70b77f1c3081dcd0ee31aac1de11dca5c00b1c4bc76003c37fa019fc2ddc4eae:p18",
+      "actId": "21-2017-11-06-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11188/98504/file/raa_056_2017.pdf",
+      "sha256": "40251b296f065d77ddf46df0d59b7bbd98e4654b8501dd52198b0842cab252f2",
+      "firstPage": 18,
+      "lastPage": 24,
+      "title": "Arrêté préfectoral du 06 novembre 2017 portant renouvellement de l'autorisation d'exploiter la station d'épuration de Santenay",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "70b77f1c3081dcd0ee31aac1de11dca5c00b1c4bc76003c37fa019fc2ddc4eae:p25",
+      "actId": "21-2017-11-06-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11188/98504/file/raa_056_2017.pdf",
+      "sha256": "40251b296f065d77ddf46df0d59b7bbd98e4654b8501dd52198b0842cab252f2",
+      "firstPage": 25,
+      "lastPage": 31,
+      "title": "Arrêté préfectoral du 6 novembre 2017 portant renouvellement de l'autorisation d'exploiter la station d'épuration de Pluvet",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "70b77f1c3081dcd0ee31aac1de11dca5c00b1c4bc76003c37fa019fc2ddc4eae:p42",
+      "actId": "21-2017-11-06-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11188/98504/file/raa_056_2017.pdf",
+      "sha256": "40251b296f065d77ddf46df0d59b7bbd98e4654b8501dd52198b0842cab252f2",
+      "firstPage": 42,
+      "lastPage": 52,
+      "title": "Arrêté préfectoral n° 742 du 6 novembre 2011 portant renouvellement de l'autorisation d'exploiter la station d'épuration de Montigny-Mornay-Villeneuve sur Vingeanne",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "70b77f1c3081dcd0ee31aac1de11dca5c00b1c4bc76003c37fa019fc2ddc4eae:p53",
+      "actId": "21-2017-11-13-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11188/98504/file/raa_056_2017.pdf",
+      "sha256": "40251b296f065d77ddf46df0d59b7bbd98e4654b8501dd52198b0842cab252f2",
+      "firstPage": 53,
+      "lastPage": 59,
+      "title": "Arrêté Préfectoral d’Enregistrement portant autorisation d'exploiter SMICTOM DE LA PLAINE DIJONNAISE à Longecourt en Plaine",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "34c8a888caf4eb80b8cb22f3a439a2c5edacff6d3921315a5890fa2f0a9abe2a:p34",
+      "actId": "21-2017-11-03-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11198/98554/file/raa_057_2017.pdf",
+      "sha256": "f34350595621e3f43b4a2ba482322c37df0e4e27513baa3362a826f22b5d9a00",
+      "firstPage": 34,
+      "lastPage": 40,
+      "title": "Arrêté Préfectoral DREAL d'enregistrement portant autorisation d'exploiter la déchetterie de MACONGE (annule et remplace l'arrêté du 11 octobre 2017)",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5c237dc301ae3dd2d3d3d77f4f9c0b76b689418b585a64d0e003a067c68d7d9c:p34",
+      "actId": "21-2017-11-16-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11201/98569/file/raa_058_2017.pdf",
+      "sha256": "4ca39eb8ea667340a69156e105ccbee963b148b3e292fdc68944ceaa8ec3d0b4",
+      "firstPage": 34,
+      "lastPage": 45,
+      "title": "Arrêté préfectoral 751 relatif à l'autorisation d'exploiter la station d'épuration des eaux usées de Flagey- Echezeaux",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5c237dc301ae3dd2d3d3d77f4f9c0b76b689418b585a64d0e003a067c68d7d9c:p54",
+      "actId": "21-2017-11-16-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11201/98569/file/raa_058_2017.pdf",
+      "sha256": "4ca39eb8ea667340a69156e105ccbee963b148b3e292fdc68944ceaa8ec3d0b4",
+      "firstPage": 54,
+      "lastPage": 66,
+      "title": "Arrêté préfectoral n° 752 du 16 novembre 2017 portant renouvellement de l'autorisation d'exploiter la station d'épuration des eaux usées de Brochon et abrogeant l'AP du 6 juin 1991",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "6c756163a85136918e82bfe683e082416d66b914ddb65271b03feea691af40a5:p30",
+      "actId": "21-2017-12-20-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11283/98979/file/recueil-21-2017-062-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "5fdd96e391a4a7770cf688f9de8bdf63c2b5be45d3fee387fd90fd26eef99ba7",
+      "firstPage": 30,
+      "lastPage": 40,
+      "title": "Arrêté préfectoral n° 820 du 20/12/2017 portant renouvellement relatif à l'autorisation d'exploiter la station d'épuration des eaux usées de SAULIEU",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "df8153c2702a33ea5f097f60f33b7653a7dbe5ffa7168d82eb998d9935ffa9e6:p18",
+      "actId": "21-2018-01-11-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11365/99389/file/raa_013_2018.pdf",
+      "sha256": "1bc5ad3d0de6433665b0d2b9717d8af2edcb5eda5e0e56ff5c6cb7db8e17b9a7",
+      "firstPage": 18,
+      "lastPage": 29,
+      "title": "Arrêté préfectoral n° 27 du 11 janvier 2018 relatif à l'autorisation d'exploiter la station d'épuration des eaux usées de QUINCEY",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1fde0d284b5e4ad10f4efe01ea238d8366761abfebf805a98c85e752775e2b5f:p140",
+      "actId": "21-2018-02-12-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11535/100239/file/raa_016_2018.pdf",
+      "sha256": "01b7d3fdfbb0fa0a90869f16d74b7a513796bf5d32ff4c91ca7e1e6b1aac777a",
+      "firstPage": 140,
+      "lastPage": 144,
+      "title": "Arrêté préfectoral portant autorisation d'exploiter une ICPE au titre de la procédure d’enregistrement de l'EARL SOMMANT",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5641fd2f1eccc8debf7289f7fc2e7a204b646e3b84634fef0ea18cd25723dd83:p28",
+      "actId": "21-2018-03-02-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11908/102104/file/raa_022_2018.pdf",
+      "sha256": "64f8a98675e60cb4a6fecb5e224d7220e08ca7fb7e815205ae4e7e78a078ec2b",
+      "firstPage": 28,
+      "lastPage": 38,
+      "title": "Arrêté préfectoral complémentaire n° 202 du 2-03-2018 relatif à l'autorisation d'exploiter la station d'épuration communale (station récente) des eaux usées de CLENAY-SAINT JULIEN - Station 2 sise rue des Varennes",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5641fd2f1eccc8debf7289f7fc2e7a204b646e3b84634fef0ea18cd25723dd83:p70",
+      "actId": "21-2018-03-02-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11908/102104/file/raa_022_2018.pdf",
+      "sha256": "64f8a98675e60cb4a6fecb5e224d7220e08ca7fb7e815205ae4e7e78a078ec2b",
+      "firstPage": 70,
+      "lastPage": 79,
+      "title": "Arrêté préfectoral n° 201 du 2 mars 2018 portant renouvellement à l'autorisation d'exploiter la station d'épuration communale des eaux usées de CLENAY-SAINT JULIEN - Station 1 (ancienne station)",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "bddef2ed90a6c45a8db077a2723934615e8ea8ef8709c9eb16fd77a399819ebf:p63",
+      "actId": "21-2018-04-17-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12516/105144/file/raa_027_2018.pdf",
+      "sha256": "e9552a7da0bfe4e7c27c3677d037d0dbc2ebedbf2eb92f931a1be001bb2ab865",
+      "firstPage": 63,
+      "lastPage": 65,
+      "title": "ARRETE PREFECTORAL N° 294 du 17 avril 2018 portant renouvellement d’autorisation d’exploiter un établissement chargé d’animer les stages de sensibilisation à la sécurité routière",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "473e1aa8ddf328c829c5bfafe2ea8987b2b8de8bc327e1b330201ca1cd4d6669:p57",
+      "actId": "21-2018-05-03-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12538/105254/file/raa_031_2018.pdf",
+      "sha256": "9d526f4970bb9ebc199c55bde8290fc0ffc8823a839774556484520a14eef09c",
+      "firstPage": 57,
+      "lastPage": 60,
+      "title": "Arrêté préfectoral n° 361 (DREAL) portant transfert de l'autorisation d'exploiter une carrière à Baigneux les Juifs 21450",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "c464bf5b3122deb5884b9ab9ceec6ac101c1e675ba8de3df445b4c503fc564b0:p37",
+      "actId": "21-2018-04-17-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12547/105299/file/raa_034_2018.pdf",
+      "sha256": "f1619f73c1e8ccfcf80090a4eb9cfe01d33511f72f3455a1eace05f168cbff4b",
+      "firstPage": 37,
+      "lastPage": 39,
+      "title": "ARRETE PREFECTORAL N° 295 du 17 avril 2018 portant renouvellement d’autorisation d’exploiter un établissement chargé d’animer les stages de sensibilisation à la sécurité routière",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "c464bf5b3122deb5884b9ab9ceec6ac101c1e675ba8de3df445b4c503fc564b0:p62",
+      "actId": "21-2018-05-18-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12547/105299/file/raa_034_2018.pdf",
+      "sha256": "f1619f73c1e8ccfcf80090a4eb9cfe01d33511f72f3455a1eace05f168cbff4b",
+      "firstPage": 62,
+      "lastPage": 69,
+      "title": "Arrêté préfectoral portant prescriptions spécifiques complémentaires à déclaration concernant l'autorisation d'exploiter le système d'assainissement de la commune de SELONGEY",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "44b7b916cec20eb736fc526dc80b09f4442028cabe25d51d840602e0747d64e1:p28",
+      "actId": "21-2018-06-11-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12599/105559/file/raa_040_2018.pdf",
+      "sha256": "da487bf000268a08e70f95ee62b01431adb71dd45080e8cfb12bd88cdcf76aa2",
+      "firstPage": 28,
+      "lastPage": 30,
+      "title": "ARRETE PREFECTORAL N° 451 abrogeant l’arrêté préfectoral n° 633 du 17 septembre 2015 d’autorisation d’exploiter sous le n° E 1002104720, délivrée à Monsieur Laurent PROST en qualité de représentant de l’établissement d’enseignement, à titre onéreux, de la conduite des véhicules à moteur et de la sécurité routière, dénommé « Auto-école ABC DU CASTEL », situé 25 Rue Daubenton, 21000 DIJON.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "44b7b916cec20eb736fc526dc80b09f4442028cabe25d51d840602e0747d64e1:p31",
+      "actId": "21-2018-06-11-006",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12599/105559/file/raa_040_2018.pdf",
+      "sha256": "da487bf000268a08e70f95ee62b01431adb71dd45080e8cfb12bd88cdcf76aa2",
+      "firstPage": 31,
+      "lastPage": 33,
+      "title": "ARRETE PREFECTORAL N° 452 abrogeant l’arrêté préfectoral n° 131 du 13 mars 2014 d’autorisation d’exploiter sous le n° E 0902104630, délivrée à Monsieur Laurent PROST en qualité de représentant de l’établissement d’enseignement, à titre onéreux, de la conduite des véhicules à moteur et de la sécurité routière, dénommé « Auto-école ABC SAINT ANDRE », situé 32 Route de Dijon, 21110 LONGECOURT EN PLAINE.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "44b7b916cec20eb736fc526dc80b09f4442028cabe25d51d840602e0747d64e1:p34",
+      "actId": "21-2018-06-11-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12599/105559/file/raa_040_2018.pdf",
+      "sha256": "da487bf000268a08e70f95ee62b01431adb71dd45080e8cfb12bd88cdcf76aa2",
+      "firstPage": 34,
+      "lastPage": 37,
+      "title": "ARRETE PREFECTORAL N° 455 abrogeant l’arrêté préfectoral n° 221 du 3 mai 2013 d’autorisation d’exploiter sous le n° E 0802104580, délivrée à Monsieur Laurent PROST en qualité de représentant de l’établissement d’enseignement, à titre onéreux, de la conduite des véhicules à moteur et de la sécurité routière, dénommé « Auto-école ABC DES DUCS », situé 103 Rue Jean-Jacques Rousseau, 21000 DIJON.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "2c447fb05de22bde9d578d60b579f31371c423203be03d1781d04a4969166e24:p83",
+      "actId": "21-2018-07-03-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12611/105619/file/raa_041_2018_special.pdf",
+      "sha256": "37ff625a80c5076364ccaa548039690fea5f2eeae3a3dc761c2a93424929e1d7",
+      "firstPage": 83,
+      "lastPage": 85,
+      "title": "ARRETE PREFECTORAL N° 571 du 3 juillet 2018 portant autorisation d’exploiter un établissement chargé d’animer les stages de sensibilisation à la sécurité routière.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "9de11e0ef3e1760495f1f83e294b1635d9280db1f36d75666fd50294643deecd:p82",
+      "actId": "21-2018-07-06-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12623/105679/file/raa_043_2018.pdf",
+      "sha256": "b6eb3d28766b755cf10e04f045c21b14e1662042a03d49a156d352c4b860059c",
+      "firstPage": 82,
+      "lastPage": 86,
+      "title": "Arrêté préfectoral n° 613 du 6 juillet 2018 modifiant l'arrêté préfectoral n° 991 du 31 mai 2016 relatif au renouvellement de l'autorisation d'exploiter l'usine de dépollution des eaux usées Monge à COMBERTAULT",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "8b6dac32728cd6ceac9bb95435034dc8ac157b257533b1673b07a697bab8e14b:p38",
+      "actId": "21-2018-07-05-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12624/105684/file/raa_044_2018_special.pdf",
+      "sha256": "5580a870ac656e4390539c778e991421a40e698cbc96bbae5783fadf461bf885",
+      "firstPage": 38,
+      "lastPage": 41,
+      "title": "ARRETE PREFECTORAL N° 577 abrogeant l’arrêté préfectoral N° 604 du 3 mars 2016 d’autorisation d’exploiter sous le N° E 0302104100, délivrée à Monsieur Claude AUBERTIN en qualité de représentant de l’établissement d’enseignement, à titre onéreux, de la conduite des véhicules à moteur et de la sécurité routière, dénommé « Auto-école AUBERTIN », situé 6 avenue du 8 septembre, 21200 BEAUNE.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "8b6dac32728cd6ceac9bb95435034dc8ac157b257533b1673b07a697bab8e14b:p42",
+      "actId": "21-2018-07-05-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12624/105684/file/raa_044_2018_special.pdf",
+      "sha256": "5580a870ac656e4390539c778e991421a40e698cbc96bbae5783fadf461bf885",
+      "firstPage": 42,
+      "lastPage": 44,
+      "title": "ARRETE PREFECTORAL N° 587 abrogeant l’arrêté préfectoral N° 604 du 3 mars 2016 d’autorisation d’exploiter sous le N° E 0302103020, délivrée à Monsieur Claude AUBERTIN en qualité de représentant de l’établissement d’enseignement, à titre onéreux, de la conduite des véhicules à moteur et de la sécurité routière, dénommé « Auto-école AUBERTIN », situé 9 Rue du Grenier à sel, 21700 NUITS SAINT GEORGES.",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "8b6dac32728cd6ceac9bb95435034dc8ac157b257533b1673b07a697bab8e14b:p65",
+      "actId": "21-2018-07-19-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12624/105684/file/raa_044_2018_special.pdf",
+      "sha256": "5580a870ac656e4390539c778e991421a40e698cbc96bbae5783fadf461bf885",
+      "firstPage": 65,
+      "lastPage": 67,
+      "title": "ARRETE PREFECTORAL N° 627 du 18 juillet 2018 portant autorisation d’exploiter un établissement chargé d’animer les stages de sensibilisation à la sécurité routière.ABC PERMIS A POINTSANNULE ET REMPLACE L'ARRETE N° 571 PUBLIE LE 3 JUILLET 2018",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "583a4aee36668ed5988d602b3fc67956bf503c643ed2435079d3750106d6f316:p45",
+      "actId": "21-2018-09-06-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12735/106239/file/raa-057-2018.pdf",
+      "sha256": "12351c5c4107e8e90b8c9808ffff9f8656af2d54bc0d1ca8c3303ee274ea4e06",
+      "firstPage": 45,
+      "lastPage": 51,
+      "title": "Arrêté préfectoral n°734 portant prescriptions complémentaires à l'autorisation d'exploiter la station d'épuration des eaux usées de VITTEAUX",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "583a4aee36668ed5988d602b3fc67956bf503c643ed2435079d3750106d6f316:p55",
+      "actId": "21-2018-09-11-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12735/106239/file/raa-057-2018.pdf",
+      "sha256": "12351c5c4107e8e90b8c9808ffff9f8656af2d54bc0d1ca8c3303ee274ea4e06",
+      "firstPage": 55,
+      "lastPage": 62,
+      "title": "Arrêté préfectoral portant prescriptions spécifiques complémentaires à déclaration concernant l'autorisation d'exploiter le système d'assainissement de la commune de POUILLY EN AUXOIS",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1b83474c376fbf4ea5217910839ae4663ce4dcfcbafe12f728c5fd7a8e38a35b:p70",
+      "actId": "21-2018-11-15-011",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12910/107114/file/raa-071-2018.pdf",
+      "sha256": "6269922be8b8be5afdae75f91a41a85d5bb96cb819bf4610baca91da5669075b",
+      "firstPage": 70,
+      "lastPage": 73,
+      "title": "Arrêté préfectoral N°839 du 15/11/18 portant transfert d'une autorisation d'exploiter la carrière de Chassagne Montrachet de la société ROCAMAT à la société POLYCOR",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1b83474c376fbf4ea5217910839ae4663ce4dcfcbafe12f728c5fd7a8e38a35b:p74",
+      "actId": "21-2018-11-15-012",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12910/107114/file/raa-071-2018.pdf",
+      "sha256": "6269922be8b8be5afdae75f91a41a85d5bb96cb819bf4610baca91da5669075b",
+      "firstPage": 74,
+      "lastPage": 77,
+      "title": "Arrêté préfectoral N°839 du 15/11/18 portant transfert d'une autorisation d'exploiter la carrière de Corgoloin de la société ROCAMAT à la société POLYCOR",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1b83474c376fbf4ea5217910839ae4663ce4dcfcbafe12f728c5fd7a8e38a35b:p78",
+      "actId": "21-2018-11-15-013",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12910/107114/file/raa-071-2018.pdf",
+      "sha256": "6269922be8b8be5afdae75f91a41a85d5bb96cb819bf4610baca91da5669075b",
+      "firstPage": 78,
+      "lastPage": 81,
+      "title": "Arrêté préfectoral N°839 du 15/11/18 portant transfert d'une autorisation d'exploiter la carrière de Villers-la-Faye de la société ROCAMAT à la société POLYCOR",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "b050e189f313f848e784256f95e1aab3e1ef8893b2d09309e25a212c061d87c9:p23",
+      "actId": "21-2018-11-26-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12914/107134/file/raa-072-2018-special-2.pdf",
+      "sha256": "b039f20c7c741b70d1e876f3d601b9e41bb2b7845444a699bda3359fd1b99d19",
+      "firstPage": 23,
+      "lastPage": 25,
+      "title": "ARRETE PREFECTORAL n° 870 du 26 novembre 2018 portant autorisation d’exploiter un établissement chargé d’animer les stages de sensibilisation à la sécurité routière nommé « FRANCE STAGE PERMIS ».",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "b1c25b539334dbe160c4675da27d88c1476b9b13537675021369dc62468d211d:p40",
+      "actId": "21-2018-12-04-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12926/107194/file/raa-073-2018.pdf",
+      "sha256": "4bfc112c59a132eb5a331de5ee60fbcfcb7ea6c1784a3edd83da16ebca23b9ad",
+      "firstPage": 40,
+      "lastPage": 52,
+      "title": "Arrêté Préfectoral n° 891 du 4 décembre 2018 portant renouvellement à l'autorisation d'exploiter la station d'épuration de CHATILLON-SUR-SEINE (21).",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5c100609539e8664ec756096867873c0e34040cc427c39264e595b90df62c81d:p64",
+      "actId": "21-2018-12-20-040",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12955/107339/file/raa_002_2019.pdf",
+      "sha256": "a4f2895ef76abe2548a6002b2bb0f294e9601b45b38188f3b915ad524a80ac60",
+      "firstPage": 64,
+      "lastPage": 84,
+      "title": "Arrêté préfectoral (DREAL) portant autorisation d'exploiter - SAS BIODEPE 21120 SPOY",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "7f55f6da96424991120eb0c56ed8b8a64d808bf93eaea021ed654f604d7c66ef:p67",
+      "actId": "21-2019-01-16-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12975/107439/file/raa_006_2019.pdf",
+      "sha256": "e07c05e13478dc485af63c9232c021de27ec8aa47098fc6455685502b5b8168c",
+      "firstPage": 67,
+      "lastPage": 79,
+      "title": "Annexes à l'arrêté préfectoral DREAL portant autorisation d'exploiter une installations classée pour la protection de l'environnement - Sté SOCALCOR - Diénay",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "7f55f6da96424991120eb0c56ed8b8a64d808bf93eaea021ed654f604d7c66ef:p80",
+      "actId": "21-2019-01-16-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12975/107439/file/raa_006_2019.pdf",
+      "sha256": "e07c05e13478dc485af63c9232c021de27ec8aa47098fc6455685502b5b8168c",
+      "firstPage": 80,
+      "lastPage": 111,
+      "title": "Arrêté préfectoral DREAL portant autorisation d'exploiter une installation classée pour la protection de l'environnement - Société SOCALCOR - DIENAY",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "2359b3a98ff8c1d42f4a90238a432852a84febebe6fde8a6367455ec8fdbb05b:p48",
+      "actId": "21-2019-01-31-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13010/107614/file/raa_010_2019_special.pdf.pdf",
+      "sha256": "66fd822cc2c2af78470494de03707a312e930af32039ff801b565366ce86822b",
+      "firstPage": 48,
+      "lastPage": 52,
+      "title": "Arrêté préfectoral N°62 du 31 janvier 2019 portant prolongation d'une autorisation d'exploiter une carrière à Beaunotte et Meulson par la SN SOGEPIERRE",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "1c38807aff3141d65f898c66cf02cffda32753d3e4b0b05a1fe98332c1d37f1b:p52",
+      "actId": "21-2019-03-05-005",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13087/107999/file/raa_018_2019-special.pdf",
+      "sha256": "7455c864522f048c0efbb781eceef2be49cb4b2d618dc06b548dc8abfa27f763",
+      "firstPage": 52,
+      "lastPage": 61,
+      "title": "Arrêté préfectoral n° 127 (DREAL) portant prolongation d'autorisation d'exploiter une carrière à Prenois - Société EQIOM Granulats",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "0815534b319297a23b39a80cc5305d4342e6df3e1090190c899adfdf575a7022:p89",
+      "actId": "21-2019-05-03-007",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13200/108564/file/raa_030_2019.pdf",
+      "sha256": "d6c0056f88bfde8bd031f029e67e685875692234d729af3efd602488976d1e46",
+      "firstPage": 89,
+      "lastPage": 93,
+      "title": "Arrêté préfectoral n° 294 du 3 mai 2019 portant prolongation d’une autorisation d’exploiter une carrière à CHAMESSON, exploitée par la société nouvelle SOGEPIERRE, et dérogeant aux dispositions de l’article R. 181-49 du Code de l’environnement",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "50ce0d47cb7a6dfad4ec743107d6e0575f5091abbda8f5f16cdfae327c63df6b:p28",
+      "actId": "21-2019-03-04-012",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13346/109294/file/recueil-21-2019-041-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "0df444a19335ddf64e2b2cf9baf008ea08dd3b1e38f51d58b572e85dd1f04d3d",
+      "firstPage": 28,
+      "lastPage": 29,
+      "title": "Accusé de réception de dossier complet n° 2019-026 valant autorisation implicite d'exploiter sous 4 mois à compter du 4 mars 2019 au titre du contrôle des structures agricoles - EARL DEFFONTAINES VINCENT 21140 VIC-DE-CHASSENAY",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Receipt describes possible implicit approval after four months only if no decision is notified; instruction may extend to six months. Do not convert elapsed time into a verified authorisation. No vineyard-specific parcel evidence extracted.",
+      "statusHint": "application-received"
+    },
+    {
+      "noticeId": "8ec0c895aba623cea20e73aced3cf737893a61a4ed5e784b4f8d39a336a1047b:p26",
+      "actId": "21-2019-03-08-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13361/109369/file/raa_042_2019.pdf",
+      "sha256": "cbf8f8d8fd47d75c00b2a5d3f7976fe69172a98b87fffd066f093a62e841173b",
+      "firstPage": 26,
+      "lastPage": 27,
+      "title": "Accusé de réception du 7 mars 2019 de dossier complet valant autorisation tacite d'exploiter passé un délai de 4 mois au titre du contrôle des structures agricoles (EARL BOLLOTTE)",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Receipt describes possible implicit approval after four months only if no decision is notified; instruction may extend to six months. Do not convert elapsed time into a verified authorisation. No vineyard-specific parcel evidence extracted.",
+      "statusHint": "application-received"
+    },
+    {
+      "noticeId": "8ec0c895aba623cea20e73aced3cf737893a61a4ed5e784b4f8d39a336a1047b:p28",
+      "actId": "21-2019-03-07-010",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13361/109369/file/raa_042_2019.pdf",
+      "sha256": "cbf8f8d8fd47d75c00b2a5d3f7976fe69172a98b87fffd066f093a62e841173b",
+      "firstPage": 28,
+      "lastPage": 29,
+      "title": "Accusé de réception du 7 mars 2019 de dossier complet valant autorisation tacite d'exploiter passé un délai de 4 mois au titre du contrôle des structures agricoles (GAEC DE SAINT ROCH)",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Receipt describes possible implicit approval after four months only if no decision is notified; instruction may extend to six months. Do not convert elapsed time into a verified authorisation. No vineyard-specific parcel evidence extracted.",
+      "statusHint": "application-received"
+    },
+    {
+      "noticeId": "8ec0c895aba623cea20e73aced3cf737893a61a4ed5e784b4f8d39a336a1047b:p30",
+      "actId": "21-2019-03-07-009",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13361/109369/file/raa_042_2019.pdf",
+      "sha256": "cbf8f8d8fd47d75c00b2a5d3f7976fe69172a98b87fffd066f093a62e841173b",
+      "firstPage": 30,
+      "lastPage": 31,
+      "title": "Accusé de réception du 7 mars 2019 de dossier complet valant autorisation tacite d'exploiter passé un délai de 4 mois au titre du contrôle des structures agricoles (Jean Robert PION)",
+      "classification": "farm-structure-other",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Receipt describes possible implicit approval after four months only if no decision is notified; instruction may extend to six months. Do not convert elapsed time into a verified authorisation. No vineyard-specific parcel evidence extracted.",
+      "statusHint": "application-received"
+    },
+    {
+      "noticeId": "da2918fe6d13e921015eaef359d5adf3d15a41fec10a3264532a2bd76fc4e366:p42",
+      "actId": "21-2019-08-20-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13449/109809/file/raa_053-2019-special.pdf",
+      "sha256": "a274916295c7836090b358416bf026a5e3ae16271513390940f3dbe4a31fa2cb",
+      "firstPage": 42,
+      "lastPage": 48,
+      "title": "Arrêté préfectoral n°606 du 20 août 2019 portant création et autorisation d'exploiter la station de traitement des eaux usées sur le territoire de la commune de CHEVANNES",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "4ed10f163dc7a64ac7585876ac40b2a5fd51318b5993e872e447f1e8d67c747b:p3",
+      "actId": "21-2019-09-23-003",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13522/110174/file/raa_061-2019-special.pdf",
+      "sha256": "ea1f4ce9d1b8f08f29db8c16292bd5a0bed48645a4ae38601c60571b28f0fe6d",
+      "firstPage": 3,
+      "lastPage": 7,
+      "title": "Arrêté Préfectoral complémentaire n° 709 du 23 septembre 2019 à l'Arrêté Préfectoral n° 991 du 31 mai 2016 relatif au renouvellement de l'autorisation d'exploiter l'usine de dépollution des eaux usées Monge à COMBERTAULT",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "bedcca19073943b7594abfc2570cbb39c65213c90e2032718c33bd43395bb06a:p47",
+      "actId": "21-2020-01-28-004",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13827/111699/file/raa_016_2020-special.pdf",
+      "sha256": "fa6d52661627e32c24074365dd87b3cac5b755faab418bddf755498bd94a05de",
+      "firstPage": 47,
+      "lastPage": 48,
+      "title": "Mention de l'arrêté préfectoral du 28 janvier 2020 portant autorisation d'exploiter l'eau minérale naturelle des forages \"LITHIUM\" et \"SANTANA\" situés sur la commune de Santenay (21) pour une utilisation à des fins thérapeutiques dans un établissement thermal",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "b01e720a40019a5d502a177de97f80e316d54d997d0602d7802719a5c9a5a80b:p3",
+      "actId": "21-2020-05-15-001",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14049/112809/file/raa-035-2020-special.pdf",
+      "sha256": "64e3352bb77b1ce97df0cd1353eddfd796928e527d9850215e86f92a407f352c",
+      "firstPage": 3,
+      "lastPage": 12,
+      "title": "ARRÊTÉ PRÉFECTORAL N° RELATIF A L'AUTORISATION D’EXPLOITER 2 STATIONS DE TRAITEMENT DES EAUX USÉES SUR LA COMMUNE DE DÉTAIN-ET-BRUANT",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "5c57b9a17ab9b39aed479b92bad2a0c7aeacd177e397f0185ca50ff42097da6d:p10",
+      "actId": "21-2020-08-06-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14235/113739/file/raa_052_2020.pdf",
+      "sha256": "95bf2230718ac10052cf3c5ad509c85dbc8119d9bdb64e25af181c5c0978db66",
+      "firstPage": 10,
+      "lastPage": 21,
+      "title": "Arrêté préfectoral n°816 du 6/08/2020 portant renouvellement de l'autorisation d'exploiter la station d'épuration des eaux usées de Meuilley par la communauté de communes de Gevrey-Chambertin et de Nuits-Saint-Georges",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "57253876a5d1d74eaf054a01ac359318ec4cb84538db9406b541a0adeb4b85e2:p43",
+      "actId": "21-2020-10-02-002",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14437/114749/file/recueil-21-2020-073-recueil-des-actes-administratifs-special-2.pdf",
+      "sha256": "d4eafec289370d5a638e0671408ed2aebbc66b5d28c0f918b333735823281de4",
+      "firstPage": 43,
+      "lastPage": 46,
+      "title": "Arrêté préfectoral n° 1007 du 02 octobre 2020 portant transfert d'une autorisation d'exploiter une carrière à Buffon",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    },
+    {
+      "noticeId": "e7d762c27e9c3a19d3ebef8e6f75f60db33d5cbf32ccac72ae7d633911373a04:p135",
+      "actId": "21-2020-11-04-008",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14538/115254/file/raa-082-2020-special.pdf",
+      "sha256": "d1170d319d7ab89e675cf71dfddca97882ff4a79b9a3ed2969c5906a1a712e92",
+      "firstPage": 135,
+      "lastPage": 139,
+      "title": "Arrêté préfectoral n° 111 du 04 novembre 2020 portant prolongation d'une autorisation d'exploiter une carrière à Chamesson - Société NOUVELLE SOGEPIERRE SAS",
+      "classification": "not-farm-structure",
+      "reviewMethod": "title-and-text-screening",
+      "reason": "Authorisation concerns an installation, quarry, water/waste system, wind farm or driving school, not agricultural farm-structure control. An agricultural company name alone does not change the type of permit."
+    }
+  ],
+  "keywordPages": [
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10295/94039/file/RAA__009_2016.pdf",
+      "sha256": "c1289cadef6bbf9d95b2d3c30f079f60db14928e2050f702564ed4181cc2e67b",
+      "page": 25,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "491af62a9b07a43dfcd653fb5ec630d4bbea5683a0bf370d383bd7deac7d643c:p24:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10296/94044/file/RAA__010_2016.pdf",
+      "sha256": "9ce3b0ba99dfca14faa3ea499f5c98adb04a44eaab003fbf3d21c880af60a859",
+      "page": 12,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "c7af2d73a28dc6308f1a6ce3c0f1f1f2fb06c202c19baf54df52aded9c9068cb:p11:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10296/94044/file/RAA__010_2016.pdf",
+      "sha256": "9ce3b0ba99dfca14faa3ea499f5c98adb04a44eaab003fbf3d21c880af60a859",
+      "page": 24,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "c7af2d73a28dc6308f1a6ce3c0f1f1f2fb06c202c19baf54df52aded9c9068cb:p23:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10296/94044/file/RAA__010_2016.pdf",
+      "sha256": "9ce3b0ba99dfca14faa3ea499f5c98adb04a44eaab003fbf3d21c880af60a859",
+      "page": 25,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "c7af2d73a28dc6308f1a6ce3c0f1f1f2fb06c202c19baf54df52aded9c9068cb:p23:reviewed",
+        "c7af2d73a28dc6308f1a6ce3c0f1f1f2fb06c202c19baf54df52aded9c9068cb:p25:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10296/94044/file/RAA__010_2016.pdf",
+      "sha256": "9ce3b0ba99dfca14faa3ea499f5c98adb04a44eaab003fbf3d21c880af60a859",
+      "page": 26,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "c7af2d73a28dc6308f1a6ce3c0f1f1f2fb06c202c19baf54df52aded9c9068cb:p25:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10302/94074/file/RAA__011_2016.pdf",
+      "sha256": "99fe49c2d121409c394b50854adeeb06ed5800bec2a3e43ac884f71103b7450b",
+      "page": 7,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10362/94374/file/RAA__013_2016.pdf",
+      "sha256": "5089a4833362f5d488ca1e383313a6358350d6e30b934113e3479f8a4cbc54cb",
+      "page": 8,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10366/94394/file/RAA__014_2016.pdf",
+      "sha256": "b7cbfd2467e244c26b2c6b3a59c194daeccb9b692759c30a4706f02bfb987f52",
+      "page": 13,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "c7030092eca5323ab2863901423dcae1c3b14ede85cef8f66958391ac1d8a116:p12:reviewed"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 41,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p40"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 42,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p40"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 53,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p52"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 54,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "4e126ab3fc86f09f832092695f8c4f76d1bc320d685dfa010e615773897b4111:p52"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 2,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 79,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 80,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 81,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 82,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 87,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10447/94799/file/RAA__030_2016.pdf",
+      "sha256": "9e88fd6eecf4698b98fd70eca6fcb86eceee278418468725e051e943d12d5cff",
+      "page": 88,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 3,
+      "classification": "contents-or-cover",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 30,
+      "classification": "natural-region-not-land-use",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 59,
+      "classification": "contents-or-cover",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p59"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 60,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p59"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 61,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p59"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 62,
+      "classification": "contents-or-cover",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p62"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 63,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p62"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 72,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 81,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p80"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 87,
+      "classification": "natural-region-not-land-use",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 102,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p101"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 105,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p104"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 106,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p104"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10509/95109/file/RAA_no_37_du_27_juillet_2016.pdf",
+      "sha256": "7db395e438736c833987903e4d5ed398b4f7be170100c19c5c32e7e040d2fd70",
+      "page": 108,
+      "classification": "reviewed-parcels",
+      "reviewedNoticeIds": [
+        "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p107"
+      ]
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10669/95909/file/RAA_055_2016.pdf",
+      "sha256": "d8c481d0e92c769e544693ae65cf6ee4bbf32c5f3fbd72a70439160ee882f37c",
+      "page": 84,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10669/95909/file/RAA_055_2016.pdf",
+      "sha256": "d8c481d0e92c769e544693ae65cf6ee4bbf32c5f3fbd72a70439160ee882f37c",
+      "page": 85,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10687/95999/file/raa_057_2016.pdf",
+      "sha256": "55ad0a54825a6565876baebcf8b77ac25bdcf965b9163274ba9e684cabafc3ec",
+      "page": 2,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10687/95999/file/raa_057_2016.pdf",
+      "sha256": "55ad0a54825a6565876baebcf8b77ac25bdcf965b9163274ba9e684cabafc3ec",
+      "page": 49,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10804/96584/file/raa_018_2017.pdf",
+      "sha256": "d0b299134b929a914e8f71ec08a295fa9559981a93bde0a2686fe28ae931f16f",
+      "page": 120,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10804/96584/file/raa_018_2017.pdf",
+      "sha256": "d0b299134b929a914e8f71ec08a295fa9559981a93bde0a2686fe28ae931f16f",
+      "page": 121,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10804/96584/file/raa_018_2017.pdf",
+      "sha256": "d0b299134b929a914e8f71ec08a295fa9559981a93bde0a2686fe28ae931f16f",
+      "page": 124,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11015/97639/file/raa_041_2017_special.pdf",
+      "sha256": "06ac24f865492ce3a4c14c5987dd5cc7383a818332f1af16b799f3669e4ae07e",
+      "page": 140,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11060/97864/file/recueil-21-2017-043-recueil-des-actes-administratifs.pdf",
+      "sha256": "ecc7ebedf33b262f2811461838462f1149f86bc144151b35ff2f9dad8d9e6b71",
+      "page": 49,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11115/98139/file/raa_050_2017.pdf",
+      "sha256": "60ac5b5e0cc2c51c1cfc01032d26c2fb08346e53bf8b1b17e3304a2a6376a928",
+      "page": 56,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11115/98139/file/raa_050_2017.pdf",
+      "sha256": "60ac5b5e0cc2c51c1cfc01032d26c2fb08346e53bf8b1b17e3304a2a6376a928",
+      "page": 57,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 3,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 46,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 47,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 48,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 49,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 50,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11154/98334/file/raa_054_2017_special.pdf",
+      "sha256": "7b48d09ad059a174764aa5688bc144eed08e04da977bcd50955533096b27a15e",
+      "page": 51,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11283/98979/file/recueil-21-2017-062-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "5fdd96e391a4a7770cf688f9de8bdf63c2b5be45d3fee387fd90fd26eef99ba7",
+      "page": 2,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11283/98979/file/recueil-21-2017-062-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "5fdd96e391a4a7770cf688f9de8bdf63c2b5be45d3fee387fd90fd26eef99ba7",
+      "page": 7,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11283/98979/file/recueil-21-2017-062-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "5fdd96e391a4a7770cf688f9de8bdf63c2b5be45d3fee387fd90fd26eef99ba7",
+      "page": 8,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11288/99004/file/recueil-21-2017-063-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "7ba751cf5cc156da9266aeb67513f94ab57ae7b44fb89968e670b2b808199d00",
+      "page": 2,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11288/99004/file/recueil-21-2017-063-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "7ba751cf5cc156da9266aeb67513f94ab57ae7b44fb89968e670b2b808199d00",
+      "page": 11,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11288/99004/file/recueil-21-2017-063-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "7ba751cf5cc156da9266aeb67513f94ab57ae7b44fb89968e670b2b808199d00",
+      "page": 12,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11807/101599/file/raa_020_2018.pdf",
+      "sha256": "898d8c985b679e888f9bc9b6986a12b8738f5d94253d86ddc6f30b9d901bfbc3",
+      "page": 63,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11908/102104/file/raa_022_2018.pdf",
+      "sha256": "64f8a98675e60cb4a6fecb5e224d7220e08ca7fb7e815205ae4e7e78a078ec2b",
+      "page": 60,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12261/103869/file/recueil-21-2018-025-recueil-des-actes-administratifs.pdf",
+      "sha256": "961023a33364aa81005c81a111497e1ce080b33aca7fdc61bf21665f619c4149",
+      "page": 16,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12261/103869/file/recueil-21-2018-025-recueil-des-actes-administratifs.pdf",
+      "sha256": "961023a33364aa81005c81a111497e1ce080b33aca7fdc61bf21665f619c4149",
+      "page": 18,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12532/105224/file/raa_030_2018_special.pdf",
+      "sha256": "906b04b0c0ec675ff09ee1dcc8efc9a77437b36e1221029d7daa092b284b9e41",
+      "page": 64,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12623/105679/file/raa_043_2018.pdf",
+      "sha256": "b6eb3d28766b755cf10e04f045c21b14e1662042a03d49a156d352c4b860059c",
+      "page": 81,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12728/106204/file/raa-056-2018.pdf",
+      "sha256": "488126bd150e3604df9a516da5150adc0e3539844cfef65d7edb528745f1326f",
+      "page": 25,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12728/106204/file/raa-056-2018.pdf",
+      "sha256": "488126bd150e3604df9a516da5150adc0e3539844cfef65d7edb528745f1326f",
+      "page": 26,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12864/106884/file/raa-064-2018.pdf",
+      "sha256": "efea77ed159c8eedeac637578e80d5f94be039085255d2fdfccdafa2d722e55b",
+      "page": 35,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12864/106884/file/raa-064-2018.pdf",
+      "sha256": "efea77ed159c8eedeac637578e80d5f94be039085255d2fdfccdafa2d722e55b",
+      "page": 36,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12864/106884/file/raa-064-2018.pdf",
+      "sha256": "efea77ed159c8eedeac637578e80d5f94be039085255d2fdfccdafa2d722e55b",
+      "page": 37,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12864/106884/file/raa-064-2018.pdf",
+      "sha256": "efea77ed159c8eedeac637578e80d5f94be039085255d2fdfccdafa2d722e55b",
+      "page": 38,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12864/106884/file/raa-064-2018.pdf",
+      "sha256": "efea77ed159c8eedeac637578e80d5f94be039085255d2fdfccdafa2d722e55b",
+      "page": 39,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13072/107924/file/raa_016_2019-special.pdf",
+      "sha256": "0642f45638c3b977149b23722d7d59a6f7d94f0b96a91cfb3431ce765e5918f4",
+      "page": 27,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13072/107924/file/raa_016_2019-special.pdf",
+      "sha256": "0642f45638c3b977149b23722d7d59a6f7d94f0b96a91cfb3431ce765e5918f4",
+      "page": 28,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13184/108484/file/raa_029_2019-special.pdf",
+      "sha256": "2845ac6d816c79c724b5a460388eb4137aa9184d6bee79d385b8866e319959b4",
+      "page": 10,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13184/108484/file/raa_029_2019-special.pdf",
+      "sha256": "2845ac6d816c79c724b5a460388eb4137aa9184d6bee79d385b8866e319959b4",
+      "page": 64,
+      "classification": "association-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13184/108484/file/raa_029_2019-special.pdf",
+      "sha256": "2845ac6d816c79c724b5a460388eb4137aa9184d6bee79d385b8866e319959b4",
+      "page": 65,
+      "classification": "association-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13346/109294/file/recueil-21-2019-041-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "0df444a19335ddf64e2b2cf9baf008ea08dd3b1e38f51d58b572e85dd1f04d3d",
+      "page": 2,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13456/109844/file/raa_055-2019-special.pdf",
+      "sha256": "936d066811ed1140a6a5d082cea14f7f9d7caa2bfae6490222c2917cc9ea2028",
+      "page": 49,
+      "classification": "reviewed-planting-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13456/109844/file/raa_055-2019-special.pdf",
+      "sha256": "936d066811ed1140a6a5d082cea14f7f9d7caa2bfae6490222c2917cc9ea2028",
+      "page": 50,
+      "classification": "reviewed-planting-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13456/109844/file/raa_055-2019-special.pdf",
+      "sha256": "936d066811ed1140a6a5d082cea14f7f9d7caa2bfae6490222c2917cc9ea2028",
+      "page": 51,
+      "classification": "reviewed-planting-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13508/110104/file/raa_059_2019.pdf",
+      "sha256": "0d15fd08a5e517af8b4ebee0e01b02dc48daff375e3ef6fece5c259d12c9e119",
+      "page": 51,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13508/110104/file/raa_059_2019.pdf",
+      "sha256": "0d15fd08a5e517af8b4ebee0e01b02dc48daff375e3ef6fece5c259d12c9e119",
+      "page": 52,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13604/110584/file/raa_071_2019.pdf",
+      "sha256": "d5570dd26ef13d4dd9e12ce086792d48d424c06848d0e75d51aa2e57cf7246cf",
+      "page": 63,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13604/110584/file/raa_071_2019.pdf",
+      "sha256": "d5570dd26ef13d4dd9e12ce086792d48d424c06848d0e75d51aa2e57cf7246cf",
+      "page": 78,
+      "classification": "association-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13604/110584/file/raa_071_2019.pdf",
+      "sha256": "d5570dd26ef13d4dd9e12ce086792d48d424c06848d0e75d51aa2e57cf7246cf",
+      "page": 79,
+      "classification": "association-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14141/113269/file/raa_043_2020.pdf",
+      "sha256": "ea28194d9b9b475ac9abfc75c10aa530aee5b93a39e4bd4a60279f5c911cc6a0",
+      "page": 37,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14419/114659/file/raa_068_2020.pdf",
+      "sha256": "462063c05d7d1e182eedad909652785a1d8c4c87ca4616f589b5499d9cf08f38",
+      "page": 31,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14419/114659/file/raa_068_2020.pdf",
+      "sha256": "462063c05d7d1e182eedad909652785a1d8c4c87ca4616f589b5499d9cf08f38",
+      "page": 32,
+      "classification": "other-context",
+      "reviewedNoticeIds": []
+    }
+  ]
+}

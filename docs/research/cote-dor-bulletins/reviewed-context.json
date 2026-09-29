@@ -1,0 +1,202 @@
+{
+  "purpose": "Image-reviewed contextual leads, explicitly excluded from farmer/producer parcel attribution.",
+  "sources": [
+    {
+      "noticeId": "64b7e4f5deaaeed4ec89e3416c0fd70905a9004060b65f085e4e2910d8a0313c:p47:context",
+      "actId": "21-2019-09-02-006",
+      "documentDate": "2019-09-02",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13456/109844/file/raa_055-2019-special.pdf",
+      "sha256": "936d066811ed1140a6a5d082cea14f7f9d7caa2bfae6490222c2917cc9ea2028",
+      "noticePages": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "evidencePages": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "reviewedAt": "2026-09-29",
+      "reviewMethod": "Read cited evidence pages as Poppler page images at 1800 pixels on the long edge.",
+      "kind": "environmental-derogation",
+      "beneficiary": "Commune de Pernand-Vergelesses",
+      "currentFarmer": null,
+      "currentFarmerVerified": false,
+      "summary": "Planting project at Sur Forêts. The municipality is the environmental-permit beneficiary; no farming domaine is named. Maximum planting footprint 7.7 ha, distinct from over 14 ha of ecological compensation. Planting-work derogation valid until 31 December 2022; not evidence that planting took place. Article 7 preserves the need for other approvals.",
+      "communeCode": "21480",
+      "printedCommune": "PERNAND-VERGELESSES",
+      "maximumPlantingAreaHa": 7.7,
+      "worksValidityEnd": "2022-12-31",
+      "plantingReferences": [
+        {
+          "printedReference": "AI 431",
+          "reference": "AI0431",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 435",
+          "reference": "AI0435",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 436",
+          "reference": "AI0436",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 437",
+          "reference": "AI0437",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 438",
+          "reference": "AI0438",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 439",
+          "reference": "AI0439",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 441",
+          "reference": "AI0441",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 442",
+          "reference": "AI0442",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 446",
+          "reference": "AI0446",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 447",
+          "reference": "AI0447",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 448",
+          "reference": "AI0448",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 449",
+          "reference": "AI0449",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 450",
+          "reference": "AI0450",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 451",
+          "reference": "AI0451",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 461",
+          "reference": "AI0461",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 462",
+          "reference": "AI0462",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 463",
+          "reference": "AI0463",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 471 (pro parte)",
+          "reference": "AI0471",
+          "partial": true
+        },
+        {
+          "printedReference": "AI 472",
+          "reference": "AI0472",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 473",
+          "reference": "AI0473",
+          "partial": false
+        },
+        {
+          "printedReference": "AI 474",
+          "reference": "AI0474",
+          "partial": false
+        }
+      ],
+      "compensationReferences": [
+        "AI0222",
+        "AI0452",
+        "AI0453",
+        "AI0455",
+        "AI0456",
+        "AI0457",
+        "AI0459",
+        "AI0460",
+        "AI0467",
+        "AI0468",
+        "AI0469",
+        "AI0470"
+      ],
+      "nextEvidence": "Municipal lease allocation, final planting plan and subsequent notices; do not map the municipality to a wine producer."
+    },
+    {
+      "noticeId": "855a11105216d309497377ed0e19b5ddd606f816859f209ddbb1366033137fbf:p77:context",
+      "actId": "21-2019-11-19-005",
+      "documentDate": "2019-11-19",
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13604/110584/file/raa_071_2019.pdf",
+      "sha256": "d5570dd26ef13d4dd9e12ce086792d48d424c06848d0e75d51aa2e57cf7246cf",
+      "noticePages": [
+        77,
+        78,
+        79,
+        80
+      ],
+      "evidencePages": [
+        78,
+        79,
+        80
+      ],
+      "reviewedAt": "2026-09-29",
+      "reviewMethod": "Read cited evidence pages as Poppler page images at 1800 pixels on the long edge.",
+      "kind": "owners-association-transformation",
+      "beneficiary": "Association syndicale autorisée viticole de Saint Romain - Le Jarron",
+      "currentFarmer": null,
+      "currentFarmerVerified": false,
+      "summary": "Authorises transformation of the owners association and describes parcel consolidation and future vineyard works. Gilles Buisson is identified as an owner and temporary administrator, not as farmer of every parcel. Article 6 points to the parcel schedule, plan and statutes for municipal posting; these must be obtained before any parcel-owner crosswalk, and ownership still does not establish farming.",
+      "previousNotice": {
+        "actId": "21-2019-04-23-005",
+        "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13184/108484/file/raa_029_2019-special.pdf",
+        "pages": [
+          64,
+          65,
+          66
+        ],
+        "reviewMethod": "text-screening"
+      },
+      "nextEvidence": "Obtain the annexed parcel schedule, perimeter plan and later consolidation/lease records; trace historical to current parcel identifiers."
+    }
+  ]
+}

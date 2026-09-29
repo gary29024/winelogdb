@@ -38,6 +38,11 @@ Each bulletin starts with a machine-readable contents list naming the issuing se
 
 ## Adding a year
 
+For persistent acquisition, offline search and the **Côte-d'Or departmental 2016–2020**
+queue, use the [shared archive workflow](../cote-dor-bulletins/README.md). The scanner's
+`--archive-dir` mode uses that archive's persistent host cooldown and retained PDF objects;
+`--offline` separates extraction from all network access.
+
 The prefecture's listing pages refuse automated clients (Cloudflare), while the PDFs download normally. Open [the listing page for the year](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/Documents-publications/Recueils-des-actes-administratifs) in a browser, save it, extract every `recueil-bfc-*.pdf` link into `links-YYYY.txt`, then run:
 
 ```sh
