@@ -32,7 +32,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 112)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 109)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -120,7 +120,7 @@ class FarmingResearchTests(unittest.TestCase):
         # Inherited references are labelled and must follow accepted lineage, not a spatial sliver.
         self.assertEqual(rows['D 0826']['candidateLeads'][0]['basis'],
                          'critic-named-cadastral-reference on predecessor D0792')
-        self.assertEqual(rows['D 0793']['candidateLeads'], [])
+        self.assertFalse(any('Grivot' in c['name'] or 'predecessor' in c['basis'] for c in rows['D 0793']['candidateLeads']))
         curation = copy.deepcopy(self.curation)
         grivot = next(x for x in curation['externalResearch'] if x['id'] == 'wh-grivot')
         grivot['predecessorReferences']['212670000D0792'].append('212670000D0793')
@@ -197,6 +197,21 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertIsNone(rows['D 0362']['currentFarmer'])
         self.assertIn('vigot-d0195', rows['D 0195']['externalResearchIds'])
 
+    def test_public_sources_add_research_but_never_a_farmer(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        # A 2007 court ruling names D 152 with its exact area; the pseudonymised family stays unnamed.
+        self.assertIn('court-d0152', rows['D 0152']['externalResearchIds'])
+        self.assertEqual(rows['D 0152']['candidateLeads'], [])
+        # Liger-Belair's exact Cruots area equals D0793 + D0795; a lead, not a farmer.
+        for ref in ('D 0793', 'D 0795'):
+            self.assertIn(('Domaine du Comte Liger-Belair', 'estate-area-exact-match'),
+                          {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        curation = copy.deepcopy(self.curation)
+        curation['historicalOwnerLists'][0]['namedArea'] = 'LES POULAILLERES'
+        with self.assertRaisesRegex(ValueError, 'Unknown named area'):
+            self.build(curation)
+
 
 class ParcelEvidenceTests(unittest.TestCase):
     """The app file must stay a list of dated records, never a farmer assignment."""
@@ -231,7 +246,8 @@ class ParcelEvidenceTests(unittest.TestCase):
         self.assertIn('application', kinds('0093'))  # Grands-Échezeaux, named in the Anne Gros notice
         self.assertIn('suspended', kinds('0615'))
         self.assertTrue(any(i.get('via') == 'D0792' for i in parcels['212670000D0826']))
-        self.assertNotIn('212670000D0793', parcels)  # the 1.9 m² sliver is not a successor
+        # D0793 touched retired D0792 by only 1.9 m², so it is not a successor and inherits nothing from it.
+        self.assertFalse(any(i.get('via') == 'D0792' for i in parcels.get('212670000D0793', [])))
 
     def test_a_record_without_a_short_app_note_is_rejected(self):
         curation = copy.deepcopy(self.curation)

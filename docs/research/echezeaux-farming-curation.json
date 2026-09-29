@@ -852,6 +852,70 @@
       "reviewedAt": "2026-09-29",
       "finding": "Estate page (April 2022): 1 ha from Clos Saint-Denis, Échezeaux du Dessus (four fifths) and Les Poulaillères. The Dessus plots are D0798–D0800 (Winehog).",
       "access": "read"
+    },
+    {
+      "id": "ca-dijon-2007",
+      "title": "Cour d'appel de Dijon, 10 May 2007, no. 06/01482 (Juricaf)",
+      "url": "https://juricaf.org/arret/FRANCE-COURDAPPELDEDIJON-20070510-061482",
+      "type": "court-decision",
+      "documentDate": "2007-05-10",
+      "reviewedAt": "2026-09-29",
+      "finding": "Pseudonymised inheritance ruling. Lists \"section D no 152 lieudit Clos Saint Denis pour 3 a 13 ca\" at Flagey-Échezeaux among vines of an undivided estate (death in 2002), leased on a long-term rural lease from 25 December 1982 to one heir and his spouse. Preferential allocation to that heir was refused; partition left to a notary.",
+      "access": "read"
+    },
+    {
+      "id": "caa-lyon-2009-dujac",
+      "title": "Cour administrative d'appel de Lyon, 20 October 2009, no. 07LY00299 (Juricaf)",
+      "url": "https://juricaf.org/arret/FRANCE-COURADMINISTRATIVEDAPPELDELYON-20091020-07LY00299",
+      "type": "court-decision",
+      "documentDate": "2009-10-20",
+      "reviewedAt": "2026-09-29",
+      "finding": "Tax ruling: SCE du Domaine Dujac leased buildings and vines in Morey-Saint-Denis, Chambolle-Musigny, Gevrey-Chambertin and Flagey-Échezeaux to Société Domaine Dujac SA by métayage from 1 July 1997 to 11 November 2015, one third of the crop to the owner. No parcel references.",
+      "access": "read"
+    },
+    {
+      "id": "liger-belair-climats",
+      "title": "Domaine du Comte Liger-Belair: our climats",
+      "url": "https://www.liger-belair.fr/en/our-climats/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Échezeaux 0.6157 ha: Cruots ou Vignes Blanches 0.3299 ha, Champs Traversins 0.2546 ha, Clos Saint-Denis 0.0312 ha; vine ages given as of 2017. No cadastral numbers or tenure.",
+      "access": "read",
+      "evidenceSeason": "2017"
+    },
+    {
+      "id": "afgros-hachette",
+      "title": "Guide Hachette: Domaine A.-F. Gros, Échezeaux 2009",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-a-f-gros-2009-2012/20124676/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2012 edition): \"Le domaine exploite 26 ares dans le climat En Champs Traversins\". No cadastral number.",
+      "access": "read",
+      "evidenceSeason": "2009"
+    },
+    {
+      "id": "danguy-1892",
+      "title": "Danguy & Aubertin, Les grands vins de Bourgogne (la Côte-d'Or), 1892 (Internet Archive)",
+      "url": "https://archive.org/details/vindebourgognela00unse",
+      "type": "book",
+      "documentDate": "1892-01-01",
+      "reviewedAt": "2026-09-29",
+      "finding": "Public-domain guide listing the \"principaux propriétaires\" of each Flagey-Échezeaux climat (pp. 427–429). The Internet Archive files this scan under the wrong title. Historical owners only.",
+      "access": "read",
+      "evidenceSeason": "1892"
+    },
+    {
+      "id": "rodier-1920",
+      "title": "Camille Rodier, Le vin de Bourgogne (la Côte-d'Or), first edition, c. 1920 (Internet Archive)",
+      "url": "https://archive.org/details/grandsvinsdebour00unse",
+      "type": "book",
+      "documentDate": "1920-01-01",
+      "reviewedAt": "2026-09-29",
+      "finding": "Lists owners (\"à MM.\") and areas of each Échezeaux climat. The Internet Archive files this scan under the wrong title; the latest year printed is 1921. Historical owners only.",
+      "access": "read",
+      "evidenceSeason": "1920"
     }
   ],
   "holders": [
@@ -1403,7 +1467,9 @@
     "DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.",
     "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).",
     "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.",
-    "Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded."
+    "Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.",
+    "Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified.",
+    "Gallica text pages now require a proof-of-work check that was not bypassed; the 1892 and c. 1920 guides were read from Internet Archive scans (OCR, names checked by eye). Lavalle (1855) was not found in a readable copy."
   ],
   "historyFindings": [
     {
@@ -1628,6 +1694,18 @@
         "dgfip-history"
       ],
       "finding": "These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can."
+    },
+    {
+      "id": "dujac-metayage-1997",
+      "title": "Dujac land company sharecropped its vines to the operating company, 1997–2015",
+      "parcelIds": [
+        "212670000D0306"
+      ],
+      "sourceIds": [
+        "caa-lyon-2009-dujac",
+        "dujac"
+      ],
+      "finding": "A 2009 tax ruling records a métayage lease from SCE du Domaine Dujac to Société Domaine Dujac SA covering vines in Flagey-Échezeaux, 1 July 1997 to 11 November 2015. It names no parcel, and today's recorded holder of D0306 is GFA du Domaine Dujac, whose identity with the SCE is not established. It shows that owning and farming entities of one domaine can differ; it does not show who farms D0306 now."
     }
   ],
   "externalResearch": [
@@ -1949,6 +2027,51 @@
       ],
       "producer": "Domaine Georges Mugneret-Gibourg (since 2017; earlier Fabrice Vigot, métayage)",
       "appNote": "Fabrice Vigot sharecropped 59.63 ares here for Mugneret-Gibourg, matching this parcel's area. Mugneret-Gibourg reports taking these vines back for the 2017 harvest."
+    },
+    {
+      "id": "court-d0152",
+      "title": "Clos Saint-Denis D 152 in a 2007 inheritance ruling",
+      "parcelIds": [
+        "212670000D0152"
+      ],
+      "basis": "court-named-cadastral-reference",
+      "finding": "The Dijon appeal court lists \"section D no 152, Clos Saint Denis, 3 a 13 ca\": exactly D0152's cadastral area (313 m²). In 2002–2007 it belonged to an undivided family estate and had been farmed since 25 December 1982 by one heir under a long-term rural lease. The ruling is pseudonymised; the family is not identified here. The later partition and today's farmer are unknown.",
+      "sourceIds": [
+        "ca-dijon-2007"
+      ],
+      "appNote": "Named by parcel number in a 2007 court ruling: part of a family estate, farmed since 1982 by one heir under a long-term lease. The ruling is pseudonymised; who farms it today is unknown."
+    },
+    {
+      "id": "lb-cruots-d0793-d0795",
+      "title": "Liger-Belair, Les Cruots ou Vignes Blanches (area reconstruction)",
+      "parcelIds": [
+        "212670000D0793",
+        "212670000D0795"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Liger-Belair publishes 0.3299 ha in Cruots ou Vignes Blanches, and Winehog describes two plots from the 2006 Lamadon division (métayage). D0793 (2 992 m²) and D0795 (307 m²) total exactly 3 299 m²; among parcels in this lieu-dit without a company record, the only other exact combination includes Grivot's named plots. The two parcels alternate with Grivot's former D0792 and D0794, also from the Lamadon division. This register reconstructs the set; the estate does not name the parcels.",
+      "sourceIds": [
+        "liger-belair-climats",
+        "winehog-liger-belair",
+        "winehog-grivot"
+      ],
+      "producer": "Domaine du Comte Liger-Belair",
+      "appNote": "Liger-Belair's published 0.3299 ha in Les Cruots equals D0793 + D0795 exactly. They alternate with Grivot's plots from the same 2006 Lamadon division. Reconstructed from areas; the estate names no parcel."
+    },
+    {
+      "id": "lb-csd-d0155",
+      "title": "Liger-Belair, Clos Saint-Denis (area match, weak)",
+      "parcelIds": [
+        "212670000D0155"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Liger-Belair publishes 0.0312 ha in Clos Saint-Denis. D0155 (312 m², no company record) is the only exact match; D0152 (313 m²) differs by 1 m² and has its own court history. D0155 was sold on 13 October 2025 (DVF+). A single small parcel is a weak identification.",
+      "sourceIds": [
+        "liger-belair-climats",
+        "dvf-sales"
+      ],
+      "producer": "Domaine du Comte Liger-Belair",
+      "appNote": "Liger-Belair's published 0.0312 ha in Clos Saint-Denis equals this parcel exactly, but a neighbouring 313 m² parcel is almost as close. Weak; the parcel was sold in October 2025."
     }
   ],
   "producerHoldings": [
@@ -2246,6 +2369,355 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "lb-cruots",
+      "producer": "Domaine du Comte Liger-Belair",
+      "namedAreas": [
+        "LES CRUOTS OU VIGNES BLANCHES"
+      ],
+      "publishedAreaHa": 0.3299,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "liger-belair-climats",
+        "winehog-liger-belair"
+      ],
+      "finding": "Two plots, métayage from the 2006 Lamadon division (Winehog); exactly D0793 + D0795. No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "lb-traversins",
+      "producer": "Domaine du Comte Liger-Belair",
+      "namedAreas": [
+        "LES CHAMPS TRAVERSINS"
+      ],
+      "publishedAreaHa": 0.2546,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "liger-belair-climats"
+      ],
+      "finding": "Five parcel combinations without company records match exactly, so no parcel is identified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "lb-csd",
+      "producer": "Domaine du Comte Liger-Belair",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.0312,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "liger-belair-climats"
+      ],
+      "finding": "Matches D0155 exactly (weak: D0152 is 1 m² larger).",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "af-gros",
+      "producer": "Domaine A.-F. Gros",
+      "namedAreas": [
+        "LES CHAMPS TRAVERSINS"
+      ],
+      "publishedAreaHa": 0.26,
+      "precision": "are",
+      "relation": "farmer",
+      "sourceIds": [
+        "afgros-hachette"
+      ],
+      "finding": "\"Exploite 26 ares\"; no company record in this lieu-dit.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
+  "historicalOwnerLists": [
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "ECHEZEAUX DU DESSUS",
+      "printedName": "Les Échezeaux du Dessus",
+      "owners": [
+        "Henri Camuzet",
+        "Héritiers Mongeard-Collardot",
+        "Guillon",
+        "J.-B. Pillet",
+        "Liger-Belair",
+        "de Villaine et Chambon"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "EN ORVEAUX",
+      "printedName": "En Orveau",
+      "owners": [
+        "J. Bossu",
+        "Loison-Rémy",
+        "Choquier",
+        "Petit-Emonin",
+        "Paul Faiveley",
+        "Pierre Roger",
+        "J.-B. Laurier"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": null,
+      "printedName": "Les Poulaillères",
+      "owners": [
+        "Bissey",
+        "A. Noirot",
+        "de Contenson",
+        "Thivet",
+        "Modot-Fauconney",
+        "de Villaine et Chambon"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES LOÄCHAUSSES",
+      "printedName": "Les Loächausses",
+      "owners": [
+        "Henri Gouroux",
+        "J. Gros-Renaudot"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
+      "printedName": "Les Cruots",
+      "owners": [
+        "Choquier",
+        "Jaillet",
+        "Henri Gouroux",
+        "H. Lamarche",
+        "J. Gros-Renaudot"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES CHAMPS TRAVERSINS",
+      "printedName": "Les Champs-Traversins",
+      "owners": [
+        "F. Grivelet-Modot",
+        "H. Lamarche",
+        "Jaillet"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES ROUGES DU BAS",
+      "printedName": "Les Rouges-du-Bas",
+      "owners": [
+        "E. Camuzet",
+        "Liger-Belair",
+        "Confuron-Bornot",
+        "D. François",
+        "P. Faiveley",
+        "Thomas",
+        "Galland",
+        "Trapet"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES BEAUX-MONTS BAS",
+      "printedName": "Les Beaux-Monts-Bas",
+      "owners": [
+        "Arnoux",
+        "H. Lamarche",
+        "Gilles-Boiteux",
+        "Mouillon",
+        "Grivot"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "CLOS SAINT-DENIS",
+      "printedName": "Le Clos Saint-Denis",
+      "owners": [
+        "Henri Gouroux",
+        "Modot-Fauconney",
+        "Jaillet",
+        "Tisserandot",
+        "H. Lamarche",
+        "de Villaine et Chambon"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES QUARTIERS DE NUITS",
+      "printedName": "Les Quartiers-de-Nuits",
+      "owners": [
+        "Gaudemet",
+        "Mugneret",
+        "Loison-Rémy"
+      ]
+    },
+    {
+      "sourceId": "rodier-1920",
+      "year": 1920,
+      "namedArea": "LES TREUX",
+      "printedName": "Les Treux",
+      "owners": [
+        "Gaudemet",
+        "J.-B. Pillet",
+        "J. Gros-Renaudot",
+        "Thomas",
+        "Héritiers Mongeard-Collardot"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "CLOS SAINT-DENIS",
+      "printedName": "Le Clos Saint-Denis",
+      "owners": [
+        "\"très divisé\" (very divided; no owners listed)"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES LOÄCHAUSSES",
+      "printedName": "Les Achausses ou Loachausses",
+      "owners": [
+        "Dr Chanut",
+        "Duvaux",
+        "Gros",
+        "Jean-Baptiste Mongeard"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES BEAUX-MONTS BAS",
+      "printedName": "Les Beaux-Monts-Bas",
+      "owners": [
+        "Duvaux",
+        "Fermouche-Lhote",
+        "Fermouche-Maignot",
+        "Grivot-Renevet",
+        "Dr Truchetet"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES CHAMPS TRAVERSINS",
+      "printedName": "Les Champs-Traversins",
+      "owners": [
+        "Dufouleur",
+        "Duvaux",
+        "Gros"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
+      "printedName": "Les Cruots ou Vignes Blanches",
+      "owners": [
+        "Belair",
+        "Camuzet",
+        "Dr Chanut",
+        "Faiveley"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "ECHEZEAUX DU DESSUS",
+      "printedName": "Les Eschezeaux du Dessus",
+      "owners": [
+        "Camuzet",
+        "Clerget-Duchemin",
+        "Duvaux",
+        "Jean-Baptiste Mongeard",
+        "Jean-Baptiste Pillet",
+        "S. Lhote fils"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "EN ORVEAUX",
+      "printedName": "En Orveaux",
+      "owners": [
+        "Audiffred",
+        "Jules Belin",
+        "Dr Chanut",
+        "Govin",
+        "Guichard-Potheret et fils",
+        "Rasse",
+        "Viennot"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": null,
+      "printedName": "Les Poulaillères",
+      "owners": [
+        "Chambon",
+        "Duvaux",
+        "Joseph Mongeard",
+        "Mugnier"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES QUARTIERS DE NUITS",
+      "printedName": "Les Quartiers-de-Nuits",
+      "owners": [
+        "Dr Chanut",
+        "Rasse"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES ROUGES DU BAS",
+      "printedName": "Les Rouges du Bas",
+      "owners": [
+        "Duvaux",
+        "Faiveley-Fermouche",
+        "Trapet"
+      ]
+    },
+    {
+      "sourceId": "danguy-1892",
+      "year": 1892,
+      "namedArea": "LES TREUX",
+      "printedName": "Les Treux",
+      "owners": [
+        "Dr Chanut",
+        "Fermouche-Maignot",
+        "Marillier"
+      ]
     }
   ]
 }

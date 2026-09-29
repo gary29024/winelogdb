@@ -29,11 +29,11 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 115,
+    "holderLead": 118,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
     "saleLead": 1,
-    "unresolved": 142,
+    "unresolved": 139,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
     "withRightsChangeSince2019": 76,
@@ -47,9 +47,9 @@
       "areaM2": 16867,
       "withoutCompanyRecord": 7,
       "withoutCompanyRecordM2": 6520,
-      "withoutCompanyRecordOrLead": 7,
-      "withoutCompanyRecordOrLeadM2": 6520,
-      "publishedBeyondCompanyRecordsM2": 0,
+      "withoutCompanyRecordOrLead": 6,
+      "withoutCompanyRecordOrLeadM2": 6191,
+      "publishedBeyondCompanyRecordsM2": 312,
       "holdings": [
         {
           "holdingId": "lamarche",
@@ -77,6 +77,18 @@
           ],
           "recordedToProducerM2": 0,
           "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "lb-csd",
+          "producer": "Domaine du Comte Liger-Belair",
+          "publishedAreaHa": 0.0312,
+          "precision": "square-metre",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 312,
           "owners": []
         }
       ]
@@ -230,8 +242,33 @@
       "withoutCompanyRecordM2": 10661,
       "withoutCompanyRecordOrLead": 13,
       "withoutCompanyRecordOrLeadM2": 9714,
-      "publishedBeyondCompanyRecordsM2": 0,
-      "holdings": []
+      "publishedBeyondCompanyRecordsM2": 5146,
+      "holdings": [
+        {
+          "holdingId": "lb-traversins",
+          "producer": "Domaine du Comte Liger-Belair",
+          "publishedAreaHa": 0.2546,
+          "precision": "square-metre",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 2546,
+          "owners": []
+        },
+        {
+          "holdingId": "af-gros",
+          "producer": "Domaine A.-F. Gros",
+          "publishedAreaHa": 0.26,
+          "precision": "are",
+          "relation": "farmer",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 2600,
+          "owners": []
+        }
+      ]
     },
     {
       "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
@@ -240,9 +277,9 @@
       "areaM2": 32050,
       "withoutCompanyRecord": 18,
       "withoutCompanyRecordM2": 21046,
-      "withoutCompanyRecordOrLead": 10,
-      "withoutCompanyRecordOrLeadM2": 12639,
-      "publishedBeyondCompanyRecordsM2": 700,
+      "withoutCompanyRecordOrLead": 8,
+      "withoutCompanyRecordOrLeadM2": 9230,
+      "publishedBeyondCompanyRecordsM2": 3999,
       "holdings": [
         {
           "holdingId": "cacheux",
@@ -282,6 +319,18 @@
           ],
           "recordedToProducerM2": 6471,
           "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "lb-cruots",
+          "producer": "Domaine du Comte Liger-Belair",
+          "publishedAreaHa": 0.3299,
+          "precision": "square-metre",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 3299,
           "owners": []
         }
       ]
@@ -1619,14 +1668,16 @@
       "holderResearchIds": [],
       "candidateLeads": [],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "court-d0152"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1723,9 +1774,20 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine du Comte Liger-Belair",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "liger-belair-climats",
+            "dvf-sales"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "lb-csd-d0155"
+      ],
       "rightsChanges": [],
       "saleRecords": [
         {
@@ -1740,8 +1802,8 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "sale-record-reviewed",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -3748,7 +3810,9 @@
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
-      "historyFindingIds": [],
+      "historyFindingIds": [
+        "dujac-metayage-1997"
+      ],
       "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
@@ -10010,16 +10074,28 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine du Comte Liger-Belair",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "liger-belair-climats",
+            "winehog-liger-belair",
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "lb-cruots-d0793-d0795"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -10034,16 +10110,28 @@
       "recordedRights": [],
       "recordMatch": "unknown",
       "holderResearchIds": [],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine du Comte Liger-Belair",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "liger-belair-climats",
+            "winehog-liger-belair",
+            "winehog-grivot"
+          ]
+        }
+      ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "lb-cruots-d0793-d0795"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "inventory-only",
+      "researchStatus": "holder-lead",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

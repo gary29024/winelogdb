@@ -32,7 +32,7 @@ SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auct
 # Rights changes that can record who bought a parcel: the buyer's first record in the next January file.
 BUYER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
 EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description',
-                  'estate-area-exact-match'}
+                  'estate-area-exact-match', 'court-named-cadastral-reference'}
 HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
@@ -128,6 +128,10 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         require(h['relation'] in HOLDING_RELATIONS and h['precision'] in HOLDING_PRECISIONS, f"{h['id']}: unknown relation or precision")
         # A holding describes a named area, never parcels: exact matches belong in externalResearch.
         require('parcelIds' not in h and h.get('currentFarmer') is None, f"{h['id']}: a holding cannot name parcels or a farmer")
+    for entry in curation['historicalOwnerLists']:
+        require(entry['sourceId'] in sources and entry['owners'], 'Historical owner list needs a source and names')
+        # Printed climat names are kept as printed; only reviewed cadastral names join the census.
+        require(entry['namedArea'] is None or entry['namedArea'] in area_names, f"Unknown named area: {entry['namedArea']}")
 
     rows = []
     for p in parcels:
@@ -444,6 +448,19 @@ def render_census(register, curation, sources):
             holding = holdings[e['holdingId']]
             cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in holding['sourceIds'])
             lines.append(f"  - {cell(e['producer'])}: {size} ({e['precision']}); {'; '.join(notes)}. {holding['finding']} {cited}.")
+    lists = curation['historicalOwnerLists']
+    years = sorted({(x['year'], x['sourceId']) for x in lists})
+    lines += ['', '**Owners named in old guides**', '',
+              'Historical context only: family names a century and more ago, not owners or farmers today. Printed climat '
+              'names are kept; Les Poulaillères has no reviewed cadastral crosswalk. Sources: ' +
+              ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for _, s in years) + '.', '',
+              '| Climat (as printed) | ' + ' | '.join(str(y) for y, _ in years) + ' |', '| --- |' + ' --- |' * len(years)]
+    keys = sorted({x['namedArea'] or x['printedName'] for x in lists}, key=lambda k: k.lower())
+    for key in keys:
+        entries = {(x['year'], x['sourceId']): x for x in lists if (x['namedArea'] or x['printedName']) == key}
+        label = area_label(key, register) if any(x['namedArea'] for x in entries.values()) else key
+        lines.append(f"| {cell(label)} | " + ' | '.join(cell(', '.join(entries[y]['owners'])) if y in entries else '—'
+                                                    for y in years) + ' |')
     return lines + ['']
 
 

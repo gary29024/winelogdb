@@ -16,6 +16,7 @@ RESEARCH_LABELS = {
     'critic-attribution-area-reconstructed': 'Matched by area only',
     'critic-holding-description': 'Holding described, parcel not named',
     'estate-area-exact-match': 'Matched by exact area',
+    'court-named-cadastral-reference': 'Named in a court ruling',
 }
 LEAD_LABELS = {
     'brand-identity-confirmed': 'Brand identity confirmed',
@@ -67,7 +68,7 @@ def short_reference(parcel_id):
 
 
 SOURCE_KINDS = {
-    'critic-research': 'research', 'registry-dataset': 'data', 'geometry': 'data',
+    'critic-research': 'research', 'registry-dataset': 'data', 'geometry': 'data', 'court-decision': 'official',
     'registry': 'company', 'registry-aggregator': 'company', 'company-filing': 'company', 'legal-notice-republisher': 'company',
     'estate': 'estate', 'estate-hosted-press': 'estate', 'estate-visit-report': 'estate',
 }

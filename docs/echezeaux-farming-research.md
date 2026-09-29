@@ -10,9 +10,9 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **83 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **112 parcels have inventory records only** (12 more now have a dated sale record).
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **89 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
-The resulting categories are **115 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **142 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
+The resulting categories are **118 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **139 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
 Useful findings beyond the original examples:
 
@@ -79,6 +79,17 @@ Checked 29 September 2026. Producers' own pages, importer sheets, merchant texts
 - **Consistency checks:** Domaine d'Eugénie (0.94 ha published; 0.93 ha recorded, including D0340 bought in November 2023), Jean Tardy (0.34 ha in Les Treux; 0.35 ha recorded to Domaine Bouchy et Amis) and Anne Gros (0.76 ha) match their company records.
 
 The census compares areas only: it never places a holding on particular parcels, because a rounded figure can fit thousands of parcel combinations. It shows where the remaining gaps are and which producers to ask. Les Poulaillères is shown under its cadastral name `LES POULA`, whose crosswalk is still unreviewed.
+
+### Court rulings, Liger-Belair's exact areas and the old guides
+
+Checked 29 September 2026; public sources only, no outreach.
+
+- **Court rulings** (searched on [Juricaf](https://juricaf.org/); the Cour de cassation search soon required a CAPTCHA, which was not bypassed). A Dijon appeal ruling of 10 May 2007 lists "section D no 152, Clos Saint Denis, 3 a 13 ca": exactly **D0152** (313 m², no company record). It was then part of an undivided family estate and had been farmed since 25 December 1982 by one heir under a long-term rural lease. The ruling is pseudonymised and the family is not identified here. A 2009 Lyon tax ruling records that SCE du Domaine Dujac sharecropped its vines, including Flagey-Échezeaux, to Société Domaine Dujac SA from 1997 to 2015: owning and farming entities of one domaine can differ.
+- **Liger-Belair** publishes its Échezeaux to the square metre: Cruots 0.3299 ha, Champs Traversins 0.2546 ha, Clos Saint-Denis 0.0312 ha. **D0793 + D0795** total exactly 3 299 m²; among parcels in Les Cruots without a company record, the only other exact combination includes Grivot's named plots. The two parcels alternate with Grivot's former D0792 and D0794, which fits Winehog's account of the 2006 Lamadon division between Liger-Belair (métayage), the Lamarche family and Grivot. **D0155** (312 m²) matches the Clos Saint-Denis figure, but D0152 is only 1 m² larger, so that lead is weak. Five parcel sets match the Champs Traversins figure, so none is recorded. These are area reconstructions; the estate names no parcel.
+- **A.-F. Gros** "exploite 26 ares" in Champs Traversins (Guide Hachette), with no company record there.
+- **Old guides.** Danguy & Aubertin (1892) and Camille Rodier (first edition, c. 1920), read from Internet Archive scans (filed there under each other's titles), list owners by climat. Many families are still present: Camuzet (Méo-Camuzet) and Confuron-Bornot in Les Rouges du Bas; Gros-Renaudot in Les Loächausses, Cruots and Treux; Gouroux (still owning Millot's Dessus plots) in Loächausses, Cruots and Clos Saint-Denis; Lamarche, Liger-Belair, Faiveley, Grivot and Arnoux. The register shows both lists per named area as historical context only.
+
+With these additions, 139 parcels have no named candidate. The main remaining gaps are En Orveaux (4.24 ha without a company record or lead), Les Treux (1.55 ha) and Les Loächausses (0.82 ha).
 
 ### Independent research: Winehog
 

@@ -6,9 +6,9 @@ Reviewed 2026-09-28; target season 2026.
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 115 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, 1 were sold in the same deed as parcels bought by a named company, and 142 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 118 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, 1 were sold in the same deed as parcels bought by a named company, and 139 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-112 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+109 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.
 
@@ -456,12 +456,12 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 
 | Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
 | --- | ---: | ---: | ---: | ---: |
-| Clos Saint-Denis | 14 (1.69 ha) | 7 (0.65 ha) | 7 (0.65 ha) | 0.00 ha |
+| Clos Saint-Denis | 14 (1.69 ha) | 7 (0.65 ha) | 6 (0.62 ha) | 0.03 ha |
 | Échezeaux du Dessus | 26 (4.52 ha) | 16 (2.69 ha) | 3 (0.02 ha) | 0.00 ha |
 | En Orveaux | 67 (8.01 ha) | 41 (4.24 ha) | 41 (4.24 ha) | 1.88 ha |
 | Les Beaux Monts Bas | 5 (0.79 ha) | 5 (0.79 ha) | 4 (0.44 ha) | 0.00 ha |
-| Les Champs Traversins | 26 (3.57 ha) | 16 (1.07 ha) | 13 (0.97 ha) | 0.00 ha |
-| Les Cruots ou Vignes Blanches | 23 (3.21 ha) | 18 (2.10 ha) | 10 (1.26 ha) | 0.07 ha |
+| Les Champs Traversins | 26 (3.57 ha) | 16 (1.07 ha) | 13 (0.97 ha) | 0.51 ha |
+| Les Cruots ou Vignes Blanches | 23 (3.21 ha) | 18 (2.10 ha) | 8 (0.92 ha) | 0.40 ha |
 | Les Loächausses | 22 (2.51 ha) | 20 (1.75 ha) | 12 (0.82 ha) | 0.00 ha |
 | LES POULA (cadastral; unreviewed) | 15 (5.24 ha) | 7 (0.90 ha) | 7 (0.90 ha) | 0.00 ha |
 | Les Quartiers de Nuits | 4 (1.15 ha) | 2 (0.40 ha) | 2 (0.40 ha) | 0.00 ha |
@@ -473,6 +473,7 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 - **Clos Saint-Denis**
   - Domaine François Lamarche / Nicole Lamarche: 1.35 ha (hundredth-hectare); states it farms; total also covers Les Cruots ou Vignes Blanches; 0.45 ha recorded to linked company records here. 1.35 ha in 2009 against 1.10 ha now recorded to Nicole Lamarche: about 0.25 ha may be leased land without a company record. [Burgundy Report: Domaine François Lamarche profile (2009)](https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/).
   - Domaine Jean-Marc Millot: 1.0 ha (approximate); tenure not stated; total also covers Échezeaux du Dessus; 0.00 ha recorded to linked company records here. Dessus plots D0798–D0800 are owned by the Gouroux family (no company record). Also names Les Poulaillères. [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2), [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/).
+  - Domaine du Comte Liger-Belair: 0.0312 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.03 ha beyond company records. Matches D0155 exactly (weak: D0152 is 1 m² larger). [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/).
 - **Échezeaux du Dessus**
   - Domaine Jean-Marc Millot: 1.0 ha (approximate); tenure not stated; total also covers Clos Saint-Denis; 0.00 ha recorded to linked company records here. Dessus plots D0798–D0800 are owned by the Gouroux family (no company record). Also names Les Poulaillères. [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2), [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/).
 - **En Orveaux**
@@ -483,10 +484,14 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
   - Domaine Jean-Pierre Guyon: 0.22 ha (are); tenure not stated; 0.00 ha recorded to linked company records here; 0.22 ha beyond company records. No company record. [Wine Journey: Jean-Pierre Guyon, Échezeaux 2020](https://www.winejourney.com.sg/products/copy-of-domaine-jean-pierre-guyon-vosne-romanee-premiere-cru-en-orveaux-rouge-2020).
   - Domaine Jean-Yves Bizot: area not published (none); tenure not stated; total also covers Les Treux; 0.00 ha recorded to linked company records here. Two parcels, sizes not published. No company record. [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html).
   - Domaine Jacques Cacheux: 1.0 ha (approximate); states ownership; total also covers Les Cruots ou Vignes Blanches; 0.00 ha recorded to linked company records here. About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed. [La Passion du Vin: Domaine Jacques Cacheux](https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee).
+- **Les Champs Traversins**
+  - Domaine du Comte Liger-Belair: 0.2546 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.25 ha beyond company records. Five parcel combinations without company records match exactly, so no parcel is identified. [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/).
+  - Domaine A.-F. Gros: 0.26 ha (are); states it farms; 0.00 ha recorded to linked company records here; 0.26 ha beyond company records. "Exploite 26 ares"; no company record in this lieu-dit. [Guide Hachette: Domaine A.-F. Gros, Échezeaux 2009](https://www.hachette-vins.com/guide-vins/les-vins/domaine-a-f-gros-2009-2012/20124676/).
 - **Les Cruots ou Vignes Blanches**
   - Domaine Jacques Cacheux: 1.0 ha (approximate); states ownership; total also covers En Orveaux; 0.00 ha recorded to linked company records here. About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed. [La Passion du Vin: Domaine Jacques Cacheux](https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee).
   - Domaine Georges Noëllat: 0.07 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.07 ha beyond company records. No company record. [Becky Wasserman: Georges Noëllat, Échezeaux](https://www.beckywasserman.com/domaines/georges-noellat/echezeaux-grand-cru/).
   - Domaine François Lamarche / Nicole Lamarche: 1.35 ha (hundredth-hectare); states it farms; total also covers Clos Saint-Denis; 0.65 ha recorded to linked company records here. 1.35 ha in 2009 against 1.10 ha now recorded to Nicole Lamarche: about 0.25 ha may be leased land without a company record. [Burgundy Report: Domaine François Lamarche profile (2009)](https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/).
+  - Domaine du Comte Liger-Belair: 0.3299 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.33 ha beyond company records. Two plots, métayage from the 2006 Lamadon division (Winehog); exactly D0793 + D0795. No company record. [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/), [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/).
 - **Les Loächausses**
   - Domaine Anne Gros: 0.76 ha (hundredth-hectare); states ownership; 0.76 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.76 ha recorded to Anne Gros. [Anne Gros: Échezeaux](https://www.anne-gros.com/products-category/echezeaux/).
 - **Les Quartiers de Nuits**
@@ -497,6 +502,24 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 - **Les Treux**
   - Domaine Jean-Yves Bizot: area not published (none); tenure not stated; total also covers En Orveaux; 0.00 ha recorded to linked company records here. Two parcels, sizes not published. No company record. [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html).
   - Domaine Jean Tardy: 0.34 ha (hundredth-hectare); tenure not stated; 0.35 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.35 ha recorded to Domaine Bouchy et Amis in Les Treux. [Becky Wasserman: Jean Tardy, Échezeaux Les Treux](https://www.beckywasserman.com/domaines/jean-tardy/echezeaux-grand-cru-les-treux-vieilles-vignes/).
+
+**Owners named in old guides**
+
+Historical context only: family names a century and more ago, not owners or farmers today. Printed climat names are kept; Les Poulaillères has no reviewed cadastral crosswalk. Sources: [Danguy & Aubertin, Les grands vins de Bourgogne (la Côte-d'Or), 1892 (Internet Archive)](https://archive.org/details/vindebourgognela00unse), [Camille Rodier, Le vin de Bourgogne (la Côte-d'Or), first edition, c. 1920 (Internet Archive)](https://archive.org/details/grandsvinsdebour00unse).
+
+| Climat (as printed) | 1892 | 1920 |
+| --- | --- | --- |
+| Clos Saint-Denis | "très divisé" (very divided; no owners listed) | Henri Gouroux, Modot-Fauconney, Jaillet, Tisserandot, H. Lamarche, de Villaine et Chambon |
+| Échezeaux du Dessus | Camuzet, Clerget-Duchemin, Duvaux, Jean-Baptiste Mongeard, Jean-Baptiste Pillet, S. Lhote fils | Henri Camuzet, Héritiers Mongeard-Collardot, Guillon, J.-B. Pillet, Liger-Belair, de Villaine et Chambon |
+| En Orveaux | Audiffred, Jules Belin, Dr Chanut, Govin, Guichard-Potheret et fils, Rasse, Viennot | J. Bossu, Loison-Rémy, Choquier, Petit-Emonin, Paul Faiveley, Pierre Roger, J.-B. Laurier |
+| Les Beaux Monts Bas | Duvaux, Fermouche-Lhote, Fermouche-Maignot, Grivot-Renevet, Dr Truchetet | Arnoux, H. Lamarche, Gilles-Boiteux, Mouillon, Grivot |
+| Les Champs Traversins | Dufouleur, Duvaux, Gros | F. Grivelet-Modot, H. Lamarche, Jaillet |
+| Les Cruots ou Vignes Blanches | Belair, Camuzet, Dr Chanut, Faiveley | Choquier, Jaillet, Henri Gouroux, H. Lamarche, J. Gros-Renaudot |
+| Les Loächausses | Dr Chanut, Duvaux, Gros, Jean-Baptiste Mongeard | Henri Gouroux, J. Gros-Renaudot |
+| Les Poulaillères | Chambon, Duvaux, Joseph Mongeard, Mugnier | Bissey, A. Noirot, de Contenson, Thivet, Modot-Fauconney, de Villaine et Chambon |
+| Les Quartiers de Nuits | Dr Chanut, Rasse | Gaudemet, Mugneret, Loison-Rémy |
+| Les Rouges du Bas | Duvaux, Faiveley-Fermouche, Trapet | E. Camuzet, Liger-Belair, Confuron-Bornot, D. François, P. Faiveley, Thomas, Galland, Trapet |
+| Les Treux | Dr Chanut, Fermouche-Maignot, Marillier | Gaudemet, J.-B. Pillet, J. Gros-Renaudot, Thomas, Héritiers Mongeard-Collardot |
 
 ## Every mapped parcel
 
@@ -536,7 +559,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0152 | Clos Saint-Denis | 290.05 | None | Unresolved | Unconfirmed |
 | D 0153 | Clos Saint-Denis | 512.51 | None | Unresolved | Unconfirmed |
 | D 0154 | Clos Saint-Denis | 272.04 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0155 | Clos Saint-Denis | 329.53 | None | Unresolved | Unconfirmed |
+| D 0155 | Clos Saint-Denis | 329.53 | None | Domaine du Comte Liger-Belair (estate-area-exact-match) | Unconfirmed |
 | D 0156 | Clos Saint-Denis | 666.31 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
 | D 0157 | Clos Saint-Denis | 620.10 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
 | D 0161 | Les Cruots ou Vignes Blanches | 1854.32 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context) | Unconfirmed |
@@ -721,8 +744,8 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0771 | Les Champs Traversins | 1781.55 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
 | D 0773 | Les Champs Traversins | 3616.29 | [778233098](#holder-778233098) | Domaine Jacques Prieur (estate-context) | Unconfirmed |
 | D 0788 | Les Treux | 1469.97 | None | Unresolved | Unconfirmed |
-| D 0793 | Les Cruots ou Vignes Blanches | 3107.39 | None | Unresolved | Unconfirmed |
-| D 0795 | Les Cruots ou Vignes Blanches | 302.41 | None | Unresolved | Unconfirmed |
+| D 0793 | Les Cruots ou Vignes Blanches | 3107.39 | None | Domaine du Comte Liger-Belair (estate-area-exact-match) | Unconfirmed |
+| D 0795 | Les Cruots ou Vignes Blanches | 302.41 | None | Domaine du Comte Liger-Belair (estate-area-exact-match) | Unconfirmed |
 | D 0796 | En Orveaux | 2206.05 | [431340140](#holder-431340140) | Domaine Christian Clerget (estate-context) | Unconfirmed |
 | D 0797 | En Orveaux | 6066.76 | None | Unresolved | Unconfirmed |
 | D 0798 | Échezeaux du Dessus | 1884.73 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
@@ -812,6 +835,9 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas** (D 0818, D 0819, D 0820, D 0677; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article. Sources: [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/).
 - **Gérard Mugneret, Les Quartiers de Nuits (métayage)** (D 0362; estate-area-exact-match). Domaine Gérard Mugneret states that it sharecrops 0.6462 ha in Les Quartiers de Nuits owned by Domaine Georges Mugneret-Gibourg. That equals the cadastral area of D0362 (6 462 m²), the owner's only parcel in this lieu-dit. The page is undated and names no parcel. Sources: [Gérard Mugneret: Échezeaux](https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/), [Mugneret-Gibourg: Échezeaux](https://www.mugneret-gibourg.com/fr/vin/9/echezeaux-grand-cru).
 - **Fabrice Vigot métayage, Les Rouges du Bas, ended 2017** (D 0195; estate-area-exact-match). Fabrice Vigot states 59.63 ares in Les Rouges du Bas "en métayage Mugneret-Gibourg"; Mugneret-Gibourg's only parcel there, D0195, measures 5 965 m² in the cadastre (5 963 m² mapped). Mugneret-Gibourg reports the first harvest of vines formerly sharecropped by Vigot in 2017, so Vigot's page predates that return. Sources: [Fabrice Vigot: Échezeaux](https://www.domainevigot.com/+-Echezeaux-+), [Mugneret-Gibourg: 2017 vintage](https://www.mugneret-gibourg.com/fr/millesimes/47/millesime-2017).
+- **Clos Saint-Denis D 152 in a 2007 inheritance ruling** (D 0152; court-named-cadastral-reference). The Dijon appeal court lists "section D no 152, Clos Saint Denis, 3 a 13 ca": exactly D0152's cadastral area (313 m²). In 2002–2007 it belonged to an undivided family estate and had been farmed since 25 December 1982 by one heir under a long-term rural lease. The ruling is pseudonymised; the family is not identified here. The later partition and today's farmer are unknown. Sources: [Cour d'appel de Dijon, 10 May 2007, no. 06/01482 (Juricaf)](https://juricaf.org/arret/FRANCE-COURDAPPELDEDIJON-20070510-061482).
+- **Liger-Belair, Les Cruots ou Vignes Blanches (area reconstruction)** (D 0793, D 0795; estate-area-exact-match). Liger-Belair publishes 0.3299 ha in Cruots ou Vignes Blanches, and Winehog describes two plots from the 2006 Lamadon division (métayage). D0793 (2 992 m²) and D0795 (307 m²) total exactly 3 299 m²; among parcels in this lieu-dit without a company record, the only other exact combination includes Grivot's named plots. The two parcels alternate with Grivot's former D0792 and D0794, also from the Lamadon division. This register reconstructs the set; the estate does not name the parcels. Sources: [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/), [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/), [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
+- **Liger-Belair, Clos Saint-Denis (area match, weak)** (D 0155; estate-area-exact-match). Liger-Belair publishes 0.0312 ha in Clos Saint-Denis. D0155 (312 m², no company record) is the only exact match; D0152 (313 m²) differs by 1 m² and has its own court history. D0155 was sold on 13 October 2025 (DVF+). A single small parcel is a weak identification. Sources: [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/), [DVF+ open-data (Cerema), sale and exchange deeds, Flagey-Échezeaux, 2014–2025](https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data).
 
 ## Rights history and parcel lineage
 
@@ -832,6 +858,7 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 - **Other first company records, 2023–2024** (D 0161, D 0203, D 0313, D 0340). DOMAINE ARNOUX - LACHAUX (D0161), EARL DOMAINE FAIVRE (D0203) and DOMAINE D'EUGENIE (D0340) first appear on 1 January 2024, ORIGINE (D0313) on 1 January 2023. These are recent acquisitions or transfers into a company; ask for the deed or lease date together with operation evidence. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
 - **Romanée-Conti record reformatted, parcels unchanged** (D 0194, D 0768, D 0769, D 0770). The same four references move from a MAJIC-only record (2019) through a provisional U-number (2020) to SIREN 778269407 (2021), as SC DOM DE LA ROMANEE CONTI becomes DOMAINE DE LA ROMANEE CONTI. This is consistent with reformatting rather than a sale, but the file alone cannot prove identity. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Domaine de la Romanée-Conti: Échezeaux](https://www.romanee-conti.fr/fr/9-grand-crus/2/echezeaux).
 - **Split parcels with no company record in any year** (D 0822, D 0824, D 0825, D 0826, D 0827, D 0828, D 0829, D 0830, D 0831, D 0832, D 0833, D 0834, D 0835, D 0836, D 0841, D 0842, D 0843, D 0844, D 0871, D 0872, D 0903, D 0904, D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911). These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can. Sources: [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
+- **Dujac land company sharecropped its vines to the operating company, 1997–2015** (D 0306). A 2009 tax ruling records a métayage lease from SCE du Domaine Dujac to Société Domaine Dujac SA covering vines in Flagey-Échezeaux, 1 July 1997 to 11 November 2015. It names no parcel, and today's recorded holder of D0306 is GFA du Domaine Dujac, whose identity with the SCE is not established. It shows that owning and farming entities of one domaine can differ; it does not show who farms D0306 now. Sources: [Cour administrative d'appel de Lyon, 20 October 2009, no. 07LY00299 (Juricaf)](https://juricaf.org/arret/FRANCE-COURADMINISTRATIVEDAPPELDELYON-20091020-07LY00299), [Dujac: Échezeaux sheet](https://www.dujac.com/en/pdf/7-echezeaux-grand-cru.pdf).
 
 **Every recorded change**
 
@@ -1008,6 +1035,12 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **meo-hedonism** — [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009). merchant; read; document date not established; evidence season 2009. Merchant text: "a 0.44ha parcel" in Les Rouges du Bas. The estate itself says about 1 acre, planted at the end of the 1940s.
 - **meo** — [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux). estate; read; document date not established. Estate page: a plot of about 1 acre in Les Rouges du Bas, first planted at the end of the 1940s. No cadastral number.
 - **millot-estate** — [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2). estate; read; document date 2022-04-01. Estate page (April 2022): 1 ha from Clos Saint-Denis, Échezeaux du Dessus (four fifths) and Les Poulaillères. The Dessus plots are D0798–D0800 (Winehog).
+- **ca-dijon-2007** — [Cour d'appel de Dijon, 10 May 2007, no. 06/01482 (Juricaf)](https://juricaf.org/arret/FRANCE-COURDAPPELDEDIJON-20070510-061482). court-decision; read; document date 2007-05-10. Pseudonymised inheritance ruling. Lists "section D no 152 lieudit Clos Saint Denis pour 3 a 13 ca" at Flagey-Échezeaux among vines of an undivided estate (death in 2002), leased on a long-term rural lease from 25 December 1982 to one heir and his spouse. Preferential allocation to that heir was refused; partition left to a notary.
+- **caa-lyon-2009-dujac** — [Cour administrative d'appel de Lyon, 20 October 2009, no. 07LY00299 (Juricaf)](https://juricaf.org/arret/FRANCE-COURADMINISTRATIVEDAPPELDELYON-20091020-07LY00299). court-decision; read; document date 2009-10-20. Tax ruling: SCE du Domaine Dujac leased buildings and vines in Morey-Saint-Denis, Chambolle-Musigny, Gevrey-Chambertin and Flagey-Échezeaux to Société Domaine Dujac SA by métayage from 1 July 1997 to 11 November 2015, one third of the crop to the owner. No parcel references.
+- **liger-belair-climats** — [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/). estate; read; document date not established; evidence season 2017. Échezeaux 0.6157 ha: Cruots ou Vignes Blanches 0.3299 ha, Champs Traversins 0.2546 ha, Clos Saint-Denis 0.0312 ha; vine ages given as of 2017. No cadastral numbers or tenure.
+- **afgros-hachette** — [Guide Hachette: Domaine A.-F. Gros, Échezeaux 2009](https://www.hachette-vins.com/guide-vins/les-vins/domaine-a-f-gros-2009-2012/20124676/). press; read; document date not established; evidence season 2009. Guide entry (2012 edition): "Le domaine exploite 26 ares dans le climat En Champs Traversins". No cadastral number.
+- **danguy-1892** — [Danguy & Aubertin, Les grands vins de Bourgogne (la Côte-d'Or), 1892 (Internet Archive)](https://archive.org/details/vindebourgognela00unse). book; read; document date 1892-01-01; evidence season 1892. Public-domain guide listing the "principaux propriétaires" of each Flagey-Échezeaux climat (pp. 427–429). The Internet Archive files this scan under the wrong title. Historical owners only.
+- **rodier-1920** — [Camille Rodier, Le vin de Bourgogne (la Côte-d'Or), first edition, c. 1920 (Internet Archive)](https://archive.org/details/grandsvinsdebour00unse). book; read; document date 1920-01-01; evidence season 1920. Lists owners ("à MM.") and areas of each Échezeaux climat. The Internet Archive files this scan under the wrong title; the latest year printed is 1921. Historical owners only.
 
 ## Remaining evidence and access gaps
 
@@ -1020,5 +1053,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).
 - Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
 - Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.
+- Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified.
+- Gallica text pages now require a proof-of-work check that was not bypassed; the 1892 and c. 1920 guides were read from Internet Archive scans (OCR, names checked by eye). Lavalle (1855) was not found in a readable copy.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.
