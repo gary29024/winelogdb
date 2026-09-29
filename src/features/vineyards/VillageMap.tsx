@@ -359,7 +359,7 @@ function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTa
  };
  return <>
   <div className="village-map-body">
-   <div className="village-map-main">
+   <div className={`village-map-main${parcelLegend.length?' has-parcels':''}`}>
     <div className="village-map-toolbar"><button type="button" disabled={!ready||Boolean(error)} onClick={villageView}>{regional?'Region view':'Village view'}</button>{grandCruArea&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>mapRef.current?.fitBounds(boundsOf(grandCruArea.bounds),{...overviewFit(host.current),maxZoom:15,duration:0})}>Grand Cru view</button>}{!regional&&<button type="button" disabled={!ready||Boolean(error)} onClick={()=>zoomTo(selected)}>Zoom to selection</button>}{catalogue.areas?.map(area=><button type="button" key={area.id} disabled={!ready||Boolean(error)} aria-label={`${area.label}: ${area.name}`} onClick={()=>mapRef.current?.fitBounds(boundsOf(area.bounds),{padding:50,duration:0})}>{area.label}</button>)}</div>
     <div className="village-map-canvas" ref={host} aria-busy={!ready&&!error}/>
     {!ready&&!error&&<p className="village-map-loading" role="status">{overview?'Loading regional overview…':'Loading vineyard boundaries…'}</p>}

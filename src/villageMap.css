@@ -22,8 +22,8 @@
 /* The map stays in view under the header while the side panel scrolls, so picking
    an owner or parcel never means scrolling back up to see the result. The
    header height is measured into a variable. */
-.village-map-main{position:sticky;top:var(--village-header-h,0px);z-index:2;align-self:start}
-@media(max-height:560px){.village-map-main{position:relative;top:auto}}
+.village-map-main.has-parcels{position:sticky;top:var(--village-header-h,0px);z-index:2;align-self:start}
+@media(max-height:560px){.village-map-main.has-parcels{position:relative;top:auto}}
 .village-map-canvas{height:min(59dvh,580px);min-height:300px;width:100%;scroll-margin-top:90px}
 .village-map-toolbar{position:absolute;z-index:2;left:12px;top:12px;right:55px;display:flex;flex-wrap:wrap;gap:6px}
 .village-map-toolbar button{min-height:38px;padding:7px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--paper);color:var(--ink-2);font-size:.74rem;font-weight:650;box-shadow:0 1px 5px #0001;cursor:pointer}
@@ -164,7 +164,7 @@
 .village-map-error button{min-height:44px;cursor:pointer}
 @media(max-width:740px){
  .village-map-backdrop{padding:8px}.village-map-dialog{max-height:calc(100dvh - 16px);border-radius:12px}.village-map-header{padding:13px 14px}.village-map-header h2{font-size:1.3rem}
- .village-map-body{grid-template-columns:minmax(0,1fr)}.village-map-canvas{height:min(30dvh,270px);min-height:200px}.village-map-legend{gap:3px 12px;padding:8px 12px}.village-map-sidebar{border-left:0;border-top:1px solid var(--line);padding:15px}.village-map-selection{margin-top:16px}.village-map-selection h3{font-size:1.2rem}.village-map-context{margin-top:14px;padding-top:12px}.village-map-footer{padding:11px 15px}
+ .village-map-body{grid-template-columns:minmax(0,1fr)}.village-map-canvas{height:45dvh;min-height:280px}.has-parcels .village-map-canvas{height:min(30dvh,270px);min-height:200px}.has-parcels .village-map-legend{gap:3px 12px;padding:8px 12px}.village-map-sidebar{border-left:0;border-top:1px solid var(--line);padding:15px}.village-map-selection{margin-top:16px}.village-map-selection h3{font-size:1.2rem}.village-map-context{margin-top:14px;padding-top:12px}.village-map-footer{padding:11px 15px}
 }
 
 .village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}
