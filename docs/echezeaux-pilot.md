@@ -1,5 +1,7 @@
 # Échezeaux named areas and cadastral parcels
 
+Follow-up for #376: [farming-domain research, exact-reference case studies and manual producer links](echezeaux-farming-research.md).
+
 This pilot advances #344 and #364 without closing either issue. It adds two
 independent layers to the existing Vosne-Romanée / Flagey-Échezeaux map. The
 official INAO features, wine identities and other village maps remain unchanged.

@@ -220,10 +220,24 @@ jobs:
             playwright-report/
           retention-days: 7
 
+  research-data:
+    name: Research data in sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Committed research outputs match the curation file
+        run: python scripts/build_echezeaux_farming_research.py --check
+      - name: Research builder tests
+        run: python -m unittest discover -s scripts -p 'test_echezeaux_farming_research.py'
+
   regression:
     name: Regression and browser tests
     if: always()
-    needs: [scope, quality, unit, browser, webkit]
+    needs: [scope, quality, unit, browser, webkit, research-data]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
@@ -237,9 +251,11 @@ jobs:
           CHROMIUM_RESULT: ${{ needs.browser.result }}
           WEBKIT_MODE: ${{ needs.scope.outputs.webkit }}
           WEBKIT_RESULT: ${{ needs.webkit.result }}
+          RESEARCH_RESULT: ${{ needs.research-data.result }}
         run: |
           test "$SCOPE_RESULT" = success
           test "$QUALITY_RESULT" = success
+          test "$RESEARCH_RESULT" = success
           if [ "$UNIT_MODE" != none ]; then test "$UNIT_RESULT" = success; fi
           if [ "$CHROMIUM_MODE" != none ]; then test "$CHROMIUM_RESULT" = success; fi
           if [ "$WEBKIT_MODE" = true ]; then test "$WEBKIT_RESULT" = success; fi
