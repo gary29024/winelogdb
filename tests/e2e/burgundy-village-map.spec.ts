@@ -45,13 +45,15 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
  await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
  await page.screenshot({path:testInfo.outputPath('producer-link-editor-mobile.png')});
  await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manually linked · farming unverified',{exact:true})).toBeVisible();
+ await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
  await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toHaveAttribute('href','/producers/nicole');
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  // A fresh shared-wine view reloads the saved account association.
  dialog=await open('/shared/layout-wine');
  await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toBeVisible();
- await dialog.getByRole('button',{name:'Show right holder on map'}).click();
+ // The link for this wine's producer opens the map on that holder's parcels, not the whole cru.
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await dialog.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.getByText('Verified parcel links')).toHaveCount(0);
  await dialog.getByRole('button',{name:'Change link'}).click();
@@ -59,7 +61,7 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
  await dialog.getByRole('button',{name:'Save producer link'}).click();
  await expect(dialog.getByRole('link',{name:'Domaine Anne Gros'})).toHaveAttribute('href','/producers/shared%3A%3Afriend%3A%3Aanne');
  await dialog.getByRole('button',{name:'Remove link'}).click();
- await expect(dialog.getByText('Manually linked · farming unverified',{exact:true})).toHaveCount(0);
+ await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
 });
 
 for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Échezeaux: the map stays in view while choosing an owner or parcel at ${viewport.width}px`,async({page})=>{

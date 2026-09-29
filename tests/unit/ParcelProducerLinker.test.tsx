@@ -21,7 +21,7 @@ describe('parcel producer catalogue linking',()=>{
   fireEvent.change(screen.getByLabelText('Search app producers'),{target:{value:'Nicole'}});
   fireEvent.change(select,{target:{value:'nicole'}});
   fireEvent.click(screen.getByRole('button',{name:'Save producer link'}));
-  await screen.findByText('Manually linked · farming unverified');
+  await screen.findByText('Manual link · unverified');
   expect(saveParcelProducerLink).toHaveBeenCalledWith('inao-denom-565',holder.id,'nicole');
   expect(screen.getByRole('link',{name:'Domaine Nicole Lamarche'}).getAttribute('href')).toBe('/producers/nicole');
   expect(onEdit).toHaveBeenCalledWith('');
@@ -31,7 +31,7 @@ describe('parcel producer catalogue linking',()=>{
   const onEdit=vi.fn(),onShow=vi.fn();
   render(<ParcelProducerLinker parentId="inao-denom-565" holders={[holder]} editing="" onEdit={onEdit} onShow={onShow}/>);
   await screen.findByRole('link');expect(listProducers).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole('button',{name:'Show right holder on map'}));expect(onShow).toHaveBeenCalledWith(holder.id);
+  fireEvent.click(screen.getByRole('button',{name:'Show on map'}));expect(onShow).toHaveBeenCalledWith(holder.id);
   fireEvent.click(screen.getByRole('button',{name:'Change link'}));expect(onEdit).toHaveBeenCalledWith(holder.id);
   fireEvent.click(screen.getByRole('button',{name:'Remove link'}));
   await waitFor(()=>expect(screen.queryByRole('link')).toBeNull());
@@ -48,6 +48,6 @@ describe('parcel producer catalogue linking',()=>{
   await screen.findByText('Try saving again');
   expect(screen.getByRole('combobox')).toHaveProperty('value','nicole');
   fireEvent.click(screen.getByRole('button',{name:'Save producer link'}));
-  await screen.findByText('Manually linked · farming unverified');
+  await screen.findByText('Manual link · unverified');
  });
 });
