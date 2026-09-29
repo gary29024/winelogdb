@@ -1,0 +1,26 @@
+{
+  "completedAt": "2026-09-29T03:33:51.354815+00:00",
+  "summary": {
+    "documentReferences": 377,
+    "downloadedPDFs": 372,
+    "completePDFs": 372,
+    "indexedPages": 31966,
+    "pendingPages": 0,
+    "failedPages": 0,
+    "candidatePages": 1245,
+    "noticeOccurrences": 1795,
+    "farmStructureOccurrences": 130
+  },
+  "pageStatuses": {
+    "ocr": 12164,
+    "text-layer": 19802
+  },
+  "verification": "All exported pages matched the shared SQLite index by URL, page, source hash, extraction status and exact text. Notice IDs are unique and every source/page range is present. OCR completion is not a guarantee of text accuracy or current farming.",
+  "files": {
+    "catalog.json": "7c272ad0d28a1c6b6d608418d9a1cd08fe27300b66a3f67c85c0d8f8ee8a0be3",
+    "coverage.json": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34",
+    "notices.json": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89",
+    "candidate-pages.json": "adb309e22c6de2926f43bc910b6403212cfff66e9e06abf88eb7b00d1525abe9",
+    "page-text.jsonl.gz": "44b26860900dc387cecfde2e8cc28c04cc580873634e88cfc459e99b2e8459f9"
+  }
+}

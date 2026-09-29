@@ -5,6 +5,28 @@ This is separate from the [BFC regional index](../bfc-bulletins/README.md): regi
 coverage does not establish departmental coverage. The 2019 listing states that
 bulletins 26 and 72 do not exist; they are documented publication gaps, not failed downloads.
 
+## Completed index snapshot
+
+The [committed snapshot](index/catalog.json) completed on 29 September 2026 contains
+all **31,966 pages from the 372 downloaded PDFs**, with **zero pending or failed
+extractions**: 19,802 text-layer pages and 12,164 OCR pages. It preserves the five
+unresolved alternate links as coverage gaps. This covers all communes of Côte-d'Or,
+without filtering for a particular vineyard or producer.
+
+- [1,795 notice occurrences](index/notices.json), including 130 title-based farm-structure
+  matches, remain unreviewed. They include non-farming DDT acts.
+- [1,245 candidate pages](index/candidate-pages.json) provide broader research leads,
+  including older layouts that do not yield reliable notice boundaries.
+- [Full page text](index/page-text.jsonl.gz) is UTF-8 JSON Lines compressed with gzip;
+  each row contains the source URL, PDF SHA-256, page number, extraction status and text.
+- [Coverage](index/coverage.json) and [snapshot checksums](index/snapshot.json) establish
+  which sources and pages were processed. All exported pages were checked against the
+  shared SQLite search index by exact text, status and source hash.
+
+The regional corpus remains a separate, linked shard and its 4,277 searchable pages
+are retained. The combined local index contains 36,243 pages. Completion describes
+extraction, not OCR accuracy, exhaustive notice classification or verified current farmers.
+
 ## Acquire and resume
 
 Use one stable directory outside Git across every checkout. Python 3.11+ is sufficient
@@ -132,7 +154,8 @@ The runner exports `departmental-index/` after the text pass and after OCR:
 
 `--stage text` runs only the initial pass; `--stage ocr` resumes sparse/failed pages;
 `--stage export` refreshes the exported snapshot without changing a live extraction
-job's status. Exports and originals stay outside Git by default. The committed regional
+job's status. Working exports and originals stay outside Git by default; the validated
+completed export is published under `index/` for reuse without repeating OCR. The committed regional
 `notices.json` is not overwritten with departmental pages or incomplete OCR results.
 
 Search uses literal, accent-insensitive terms and returns source URL, page, source hash,
