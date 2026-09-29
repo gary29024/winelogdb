@@ -115,6 +115,7 @@
 .village-map-linked-names span{color:var(--ink-6)}
 .village-map-linked-producer .village-map-link-actions{align-items:center;gap:0 12px;font-size:.72rem}
 .village-map-linked-producer .village-map-link-actions button{min-height:32px;padding:0;border:0;background:none;color:var(--wine-ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.village-map-linked-producer .village-map-link-actions button:hover:not(:disabled){border:0;background:none;color:var(--wine)}
 .village-map-linked-producer .village-map-badge{font-size:.62rem}
 .village-map-link-editor select{width:100%;min-width:0;min-height:44px;font:inherit}
 .village-map-link-actions{display:flex;flex-wrap:wrap;gap:8px}
