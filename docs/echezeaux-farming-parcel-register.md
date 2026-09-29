@@ -1,12 +1,12 @@
 # Échezeaux parcel farming research register
 
-Reviewed 2026-09-28; target season 2026.
+Reviewed 2026-09-29; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
 All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.
 
-Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 118 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, 1 were sold in the same deed as parcels bought by a named company, and 139 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 276 mapped parcels, 119 have recorded rights and 157 have no matched right holder. All 36 holder groups were triaged. 126 parcels have holder-derived or independent-research leads, 16 have an exact-reference application or suspended application, 2 have an authorisation decision, 1 were sold in the same deed as parcels bought by a named company, and 131 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
 109 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
@@ -144,11 +144,11 @@ Sources: [Hoffmann-Jayer: Échezeaux du Dessus](https://www.hoffmann-jayer.com/f
 
 Parcels (4): D 0316, D 0323, D 0633, D 0636.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-unresolved. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Joseph Drouhin. **Basis:** registered-office-match. **Current farming:** unconfirmed.
 
-A similarly named ORVEAUX GFV has Drouhin connections, but its SIREN was not joined to this DGFiP holder. Do not assign Drouhin or treat company managers as farmers.
+ORVEAUX GFA (SIREN 984543470) is registered at Domaine Joseph Drouhin's office and managed by the Drouhin family; registered February 2024, parcels first recorded January 2025. The family publishes 0.41 ha of Échezeaux against 0.53 ha here, so not all may be farmed by the domaine.
 
-Sources: [ORVEAUX company record](https://www.pappers.fr/entreprise/orveaux-984543470), [Official company search: GROUPEMENT FONCIER VITICOLE DE ORVEAUX](https://recherche-entreprises.api.gouv.fr/search?q=GROUPEMENT%20FONCIER%20VITICOLE%20DE%20ORVEAUX&per_page=5).
+Sources: [ORVEAUX company record](https://www.pappers.fr/entreprise/orveaux-984543470), [Official company search: GROUPEMENT FONCIER VITICOLE DE ORVEAUX](https://recherche-entreprises.api.gouv.fr/search?q=GROUPEMENT%20FONCIER%20VITICOLE%20DE%20ORVEAUX&per_page=5), [BODACC: ORVEAUX GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22984543470%22&order_by=dateparution), [BODACC: Domaine Joseph Drouhin](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22314306747%22&order_by=dateparution), [Dreyfus Ashby: Joseph Drouhin Échezeaux](https://dreyfusashby.com/product/joseph-drouhin-echezeaux/), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
 
 <a id="holder-382058188"></a>
 
@@ -204,11 +204,11 @@ Sources: [RVF: Jack Confuron-Cotetidot](https://www.larvf.com/%2Cdomaine-jack-co
 
 Parcels (3): D 0650, D 0651, D 0652.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-unresolved. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Méo-Camuzet. **Basis:** registered-office-match. **Current farming:** unconfirmed.
 
-Name search returned similarly named investment companies, not a demonstrated identity or lease for this GFV. No farmer assigned.
+Registry name GRPT FONCIER VIT GRD CRUS INVESTISSEMENT (SIREN 413823873) matches; its office is the Méo-Camuzet family's address in Vosne. Méo-Camuzet publishes 0.44 ha in Les Rouges du Bas; these three parcels there cover 0.45 ha. No lease or current operation reviewed.
 
-Sources: [Official company search: GRANDS CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=GRANDS%20CRUS%20INVESTISSEMENT&per_page=5).
+Sources: [Official company search: GRANDS CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=GRANDS%20CRUS%20INVESTISSEMENT&per_page=5), [Official company search: GRPT FONCIER VIT GRD CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=413823873&per_page=5), [BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)), [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux), [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009).
 
 <a id="holder-200047827"></a>
 
@@ -230,9 +230,9 @@ Parcels (3): D 0635, D 0714, D 0719.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-unresolved. **Current farming:** unconfirmed.
 
-Official name search found GFA Héritiers Coudray SIREN 477938294. The U-prefixed holder crosswalk and Échezeaux tenant remain unverified; inaccessible filing was not treated as proof.
+Official name search found GFA Héritiers Coudray, SIREN 477938294, now registered in Hérault and managed by the family. No link to a Burgundy domaine or tenant was found; the U-prefixed crosswalk remains unverified.
 
-Sources: [GFA Héritiers Coudray 2024 statutes](https://www.pappers.fr/entreprise/gfa-heritiers-coudray-477938294/documents/GFA%20HERITIERS%20COUDRAY%20-%20Copie%20des%20statuts%20mis%20%C3%A0%20jour%2015-11-2024.pdf), [Official company search: GFA HERITIERS COUDRAY](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20HERITIERS%20COUDRAY&per_page=5).
+Sources: [GFA Héritiers Coudray 2024 statutes](https://www.pappers.fr/entreprise/gfa-heritiers-coudray-477938294/documents/GFA%20HERITIERS%20COUDRAY%20-%20Copie%20des%20statuts%20mis%20%C3%A0%20jour%2015-11-2024.pdf), [Official company search: GFA HERITIERS COUDRAY](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20HERITIERS%20COUDRAY&per_page=5), [BODACC: GFA Héritiers Coudray notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22477938294%22&order_by=dateparution).
 
 <a id="holder-u33046436"></a>
 
@@ -240,11 +240,11 @@ Sources: [GFA Héritiers Coudray 2024 statutes](https://www.pappers.fr/entrepris
 
 Parcels (4): D 0144, D 0145, D 0511, D 0512.
 
-**Candidate to investigate:** Domaine Emmanuel Rouget. **Basis:** weak-identity-lead. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Emmanuel Rouget. **Basis:** registered-office-match. **Current farming:** unconfirmed.
 
-The similarly named LES CRUOTS GFA has Rouget connections. Both the DGFiP-holder identity and its tenant are unverified. This is a research lead only, not a farmer assignment.
+LES CRUOTS GFA (SIREN 930915806) is registered at the Rouget family's operating address in Flagey and managed by the family. Registered July 2024; these parcels first appear in the January 2025 file. It is a land company: no lease or current operation of these four parcels was reviewed.
 
-Sources: [LES CRUOTS company record](https://www.pappers.fr/entreprise/les-cruots-930915806).
+Sources: [LES CRUOTS company record](https://www.pappers.fr/entreprise/les-cruots-930915806), [BODACC: LES CRUOTS GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22930915806%22&order_by=dateparution), [BODACC: Rouget Père et Fils notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22834133936%22&order_by=dateparution), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
 
 <a id="holder-778233098"></a>
 
@@ -302,9 +302,9 @@ Parcels (2): D 0813, D 0814.
 
 **Candidate to investigate:** Unresolved. **Basis:** unresolved. **Current farming:** unconfirmed.
 
-HOR accounts describe owned Échezeaux assets, while an indexed filing concerns SCI Les Climats. Full filing/lease could not be reviewed; no farmer inferred from asset ownership or acreage.
+HOR Vignobles is owned by a foreign holding company, not a named domaine. Its accounts describe owned Échezeaux assets, and an indexed filing concerns SCI Les Climats. No farmer inferred from ownership or acreage.
 
-Sources: [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf), [HOR Vignobles 2024 accounts](https://www.pappers.fr/entreprise/hor-vignobles-821877008/comptes/HOR%20VIGNOBLES%20-%20Comptes%20sociaux%202024%2022-11-2024.pdf).
+Sources: [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf), [HOR Vignobles 2024 accounts](https://www.pappers.fr/entreprise/hor-vignobles-821877008/comptes/HOR%20VIGNOBLES%20-%20Comptes%20sociaux%202024%2022-11-2024.pdf), [BODACC: HOR Vignobles notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22821877008%22&order_by=dateparution).
 
 <a id="holder-423789452"></a>
 
@@ -336,11 +336,11 @@ Sources: [Capitain-Gagnerot: Échezeaux](https://www.capitain-gagnerot.com/en/ec
 
 Parcels (4): D 0128, D 0154, D 0156, D 0157.
 
-**Candidate to investigate:** Domaine Forey Père et Fils. **Basis:** weak-identity-lead. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Forey Père et Fils. **Basis:** registered-office-match. **Current farming:** unconfirmed.
 
-Official name search found the GFA, while an importer describes Forey holdings in Clos Saint-Denis and Les Treux. Neither establishes the U-prefixed identity crosswalk or farmer of the four references.
+GFA FAMILLE FOREY BJ (SIREN 937826790) shares its office and a manager with SCE du Domaine Forey Père & Fils. Registered November 2024; these parcels first appear in January 2025. The importer names Forey vines in Clos Saint-Denis and Les Treux, as here. No lease reviewed.
 
-Sources: [Forey importer: holdings](https://www.gibsonfamilygrp.com/domaineforey), [Official company search: GFA FAMILLE FOREY BJ](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5).
+Sources: [Forey importer: holdings](https://www.gibsonfamilygrp.com/domaineforey), [Official company search: GFA FAMILLE FOREY BJ](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5), [BODACC: GFA FAMILLE FOREY BJ registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22937826790%22&order_by=dateparution), [BODACC: SCE du Domaine Forey Père & Fils](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22326589686%22&order_by=dateparution), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
 
 <a id="holder-353847510"></a>
 
@@ -420,11 +420,11 @@ Sources: [Domaine Faivre company history](https://entreprises.lefigaro.fr/earl-d
 
 Parcels (1): D 0313.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine de la Pousse d'Or. **Basis:** registered-office-match. **Current farming:** unconfirmed.
 
-Official API now returns LC for the same SIREN as ORIGINE. This corrects identity research but does not establish today's farmer of D0313.
+ORIGINE, now LC, shares its Paris office with Domaine de la Pousse d'Or, and one person became manager of both in 2022. Pousse d'Or describes a quarter-acre in the Poulaillères held by its owner's holding company; D0313 is a 0.11 ha parcel there. No lease reviewed.
 
-Sources: [Official company search: LC, formerly Origine](https://recherche-entreprises.api.gouv.fr/search?q=883067134&per_page=5), [Origine to LC legal notice](https://entreprises.lefigaro.fr/origine-75/entreprise-883067134).
+Sources: [Official company search: LC, formerly Origine](https://recherche-entreprises.api.gouv.fr/search?q=883067134&per_page=5), [Origine to LC legal notice](https://entreprises.lefigaro.fr/origine-75/entreprise-883067134), [BODACC: ORIGINE (now LC) notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22883067134%22&order_by=dateparution), [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution), [North Berkeley Imports: Pousse d'Or Échezeaux sheet](https://www.northberkeleyimports.com/wordpress/wp-content/uploads/2016/06/POUSSE_echezeaux.pdf).
 
 <a id="holder-880909346"></a>
 
@@ -446,9 +446,9 @@ Parcels (1): D 0815.
 
 **Candidate to investigate:** Unresolved. **Basis:** unresolved. **Current farming:** unconfirmed.
 
-Indexed 2021 filing describes an En Orveaux asset transfer involving SCI Les Climats. Full reference and lease not reviewed. Ownership transfer is not farming evidence.
+SCI Les Climats, Beaune, is managed by a member of the Follin-Arbelet family; the name alone is not linked to a domaine. An indexed 2021 filing describes an En Orveaux asset transfer involving it. Ownership transfer is not farming evidence.
 
-Sources: [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf).
+Sources: [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf), [BODACC: SCI Les Climats registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22798977476%22&order_by=dateparution).
 
 ## Named-area census
 
@@ -465,7 +465,7 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | Les Loächausses | 22 (2.51 ha) | 20 (1.75 ha) | 12 (0.82 ha) | 0.00 ha |
 | LES POULA (cadastral; unreviewed) | 15 (5.24 ha) | 7 (0.90 ha) | 7 (0.90 ha) | 0.00 ha |
 | Les Quartiers de Nuits | 4 (1.15 ha) | 2 (0.40 ha) | 2 (0.40 ha) | 0.00 ha |
-| Les Rouges du Bas | 20 (3.08 ha) | 6 (0.86 ha) | 6 (0.86 ha) | 0.44 ha |
+| Les Rouges du Bas | 20 (3.08 ha) | 6 (0.86 ha) | 6 (0.86 ha) | 0.00 ha |
 | Les Treux | 54 (5.07 ha) | 19 (1.84 ha) | 18 (1.55 ha) | 0.20 ha |
 
 **Published holdings by named area**
@@ -495,11 +495,13 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
   - Domaine du Comte Liger-Belair: 0.3299 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.33 ha beyond company records. Two plots, métayage from the 2006 Lamadon division (Winehog); exactly D0793 + D0795. No company record. [Domaine du Comte Liger-Belair: our climats](https://www.liger-belair.fr/en/our-climats/), [Winehog: Terroir Insight – Domaine du Comte Liger-Belair Echezeaux, new plot](https://winehog.org/terroir-insight-domaine-du-comte-liger-belair-echezeaux-2-40616/).
 - **Les Loächausses**
   - Domaine Anne Gros: 0.76 ha (hundredth-hectare); states ownership; 0.76 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.76 ha recorded to Anne Gros. [Anne Gros: Échezeaux](https://www.anne-gros.com/products-category/echezeaux/).
+- **LES POULA (cadastral; unreviewed)**
+  - Domaine de la Pousse d'Or: 0.1 ha (approximate); tenure not stated; 0.11 ha recorded to linked company records here; 0.00 ha beyond company records. A quarter-acre in the Poulaillères, held by a holding company owned by the estate's owner; ORIGINE (now LC) shares Pousse d'Or's office. [North Berkeley Imports: Pousse d'Or Échezeaux sheet](https://www.northberkeleyimports.com/wordpress/wp-content/uploads/2016/06/POUSSE_echezeaux.pdf), [BODACC: ORIGINE (now LC) notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22883067134%22&order_by=dateparution), [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution).
 - **Les Quartiers de Nuits**
   - Domaine Gérard Mugneret: 0.6462 ha (square-metre); sharecrops (métayage); owner recorded as DOMAINE GEORGES MUGNERET GIBOURG. Sharecrops land recorded to Mugneret-Gibourg (D0362). [Gérard Mugneret: Échezeaux](https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/).
 - **Les Rouges du Bas**
   - Domaine Fabrice Vigot: 0.5963 ha (square-metre); sharecrops (métayage); owner recorded as DOMAINE GEORGES MUGNERET GIBOURG; ended with the 2017 harvest. Sharecropped land recorded to Mugneret-Gibourg (D0195) until the 2017 harvest. [Fabrice Vigot: Échezeaux](https://www.domainevigot.com/+-Echezeaux-+), [Mugneret-Gibourg: 2017 vintage](https://www.mugneret-gibourg.com/fr/millesimes/47/millesime-2017).
-  - Domaine Méo-Camuzet: 0.44 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.44 ha beyond company records. No company record. [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux), [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009).
+  - Domaine Méo-Camuzet: 0.44 ha (hundredth-hectare); tenure not stated; 0.45 ha recorded to linked company records here; 0.00 ha beyond company records. Accounted for by GFV Grands Crus Investissement (0.45 ha in Les Rouges du Bas), whose registered office is the Méo family's address. The identity is a registry lead, not a lease. [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux), [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009), [Official company search: GRPT FONCIER VIT GRD CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=413823873&per_page=5), [BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)).
 - **Les Treux**
   - Domaine Jean-Yves Bizot: 0.2 ha (approximate); tenure not stated; 0.00 ha recorded to linked company records here; 0.20 ha beyond company records. Usually declassified to Vosne-Romanée 1er Cru "Élise Fermouche"; the Fermouche-Maignot family owned in Les Treux in 1892. No company record. [Kermit Lynch: Domaine Bizot grower sheet](https://kermitlynch.com/files/domaine-bizot.pdf), [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html), [Danguy & Aubertin, Les grands vins de Bourgogne (la Côte-d'Or), 1892 (Internet Archive)](https://archive.org/details/vindebourgognela00unse).
   - Domaine Jean Tardy: 0.34 ha (hundredth-hectare); tenure not stated; 0.35 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.35 ha recorded to Domaine Bouchy et Amis in Les Treux. [Becky Wasserman: Jean Tardy, Échezeaux Les Treux](https://www.beckywasserman.com/domaines/jean-tardy/echezeaux-grand-cru-les-treux-vieilles-vignes/).
@@ -537,7 +539,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0122 | Les Treux | 417.76 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
 | D 0123 | Les Treux | 305.90 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
 | D 0124 | Les Treux | 1429.69 | None | Unresolved | Unconfirmed |
-| D 0128 | Les Treux | 1467.98 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0128 | Les Treux | 1467.98 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (registered-office-match) | Unconfirmed |
 | D 0129 | Les Treux | 856.48 | None | Unresolved | Unconfirmed |
 | D 0130 | Les Treux | 306.27 | None | Unresolved | Unconfirmed |
 | D 0131 | Les Treux | 914.54 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
@@ -550,8 +552,8 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0138 | Les Treux | 455.88 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
 | D 0139 | Les Treux | 557.82 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
 | D 0142 | Les Treux | 894.59 | None | Unresolved | Unconfirmed |
-| D 0144 | Les Treux | 513.65 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0145 | Les Treux | 462.67 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0144 | Les Treux | 513.65 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (registered-office-match) | Unconfirmed |
+| D 0145 | Les Treux | 462.67 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (registered-office-match) | Unconfirmed |
 | D 0146 | Les Treux | 2876.33 | None | LES CRUOTS (same-sale-as-company-buyer) | Unconfirmed |
 | D 0147 | Clos Saint-Denis | 1390.95 | None | Unresolved | Unconfirmed |
 | D 0149 | Clos Saint-Denis | 3059.74 | None | Unresolved | Unconfirmed |
@@ -559,10 +561,10 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0151 | Clos Saint-Denis | 479.79 | None | Unresolved | Unconfirmed |
 | D 0152 | Clos Saint-Denis | 290.05 | None | Unresolved | Unconfirmed |
 | D 0153 | Clos Saint-Denis | 512.51 | None | Unresolved | Unconfirmed |
-| D 0154 | Clos Saint-Denis | 272.04 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0154 | Clos Saint-Denis | 272.04 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (registered-office-match) | Unconfirmed |
 | D 0155 | Clos Saint-Denis | 329.53 | None | Domaine du Comte Liger-Belair (estate-area-exact-match) | Unconfirmed |
-| D 0156 | Clos Saint-Denis | 666.31 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0157 | Clos Saint-Denis | 620.10 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0156 | Clos Saint-Denis | 666.31 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (registered-office-match) | Unconfirmed |
+| D 0157 | Clos Saint-Denis | 620.10 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (registered-office-match) | Unconfirmed |
 | D 0161 | Les Cruots ou Vignes Blanches | 1854.32 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context) | Unconfirmed |
 | D 0162 | Les Cruots ou Vignes Blanches | 877.41 | None | Unresolved | Unconfirmed |
 | D 0163 | Les Cruots ou Vignes Blanches | 118.48 | None | Unresolved | Unconfirmed |
@@ -604,9 +606,9 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0306 | Les Champs Traversins | 6902.87 | [322396185](#holder-322396185) | Domaine Dujac (estate-context) | Unconfirmed |
 | D 0307 | LES POULA (cadastral; unreviewed) | 1672.35 | None | Unresolved | Unconfirmed |
 | D 0308 | LES POULA (cadastral; unreviewed) | 20.60 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0313 | LES POULA (cadastral; unreviewed) | 1099.74 | [883067134](#holder-883067134) | Unresolved | Unconfirmed |
-| D 0316 | En Orveaux | 816.71 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
-| D 0323 | En Orveaux | 2269.76 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0313 | LES POULA (cadastral; unreviewed) | 1099.74 | [883067134](#holder-883067134) | Domaine de la Pousse d'Or (registered-office-match) | Unconfirmed |
+| D 0316 | En Orveaux | 816.71 | [U32852627](#holder-u32852627) | Domaine Joseph Drouhin (registered-office-match) | Unconfirmed |
+| D 0323 | En Orveaux | 2269.76 | [U32852627](#holder-u32852627) | Domaine Joseph Drouhin (registered-office-match) | Unconfirmed |
 | D 0326 | En Orveaux | 59.30 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
 | D 0329 | En Orveaux | 22.46 | None | Unresolved | Unconfirmed |
 | D 0331 | En Orveaux | 440.94 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed); Domaine Faiveley (estate-area-exact-match) | Unconfirmed |
@@ -639,8 +641,8 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0508 | Les Treux | 856.08 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
 | D 0509 | Les Champs Traversins | 1068.41 | None | Unresolved | Unconfirmed |
 | D 0510 | Échezeaux du Dessus | 4429.22 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context); Hospices de Beaune (owner) (critic-named-cadastral-reference) | Unconfirmed |
-| D 0511 | Les Cruots ou Vignes Blanches | 2331.61 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0512 | Les Cruots ou Vignes Blanches | 346.37 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0511 | Les Cruots ou Vignes Blanches | 2331.61 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (registered-office-match) | Unconfirmed |
+| D 0512 | Les Cruots ou Vignes Blanches | 346.37 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (registered-office-match) | Unconfirmed |
 | D 0515 | Les Beaux Monts Bas | 466.91 | None | Unresolved | Unconfirmed |
 | D 0519 | Clos Saint-Denis | 4537.28 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
 | D 0530 | LES POULA (cadastral; unreviewed) | 2361.69 | None | Unresolved | Unconfirmed |
@@ -681,18 +683,18 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0629 | Les Treux | 394.39 | None | Unresolved | Unconfirmed |
 | D 0631 | Échezeaux du Dessus | 5417.97 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context); Domaine Jayer-Gilles / Hoffmann-Jayer (critic-named-cadastral-reference) | Unconfirmed |
 | D 0632 | Échezeaux du Dessus | 5162.31 | None | Niquet-Jayer family (owner) (critic-named-cadastral-reference) | Unconfirmed |
-| D 0633 | En Orveaux | 1440.86 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0633 | En Orveaux | 1440.86 | [U32852627](#holder-u32852627) | Domaine Joseph Drouhin (registered-office-match) | Unconfirmed |
 | D 0635 | En Orveaux | 265.46 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
-| D 0636 | En Orveaux | 780.10 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0636 | En Orveaux | 780.10 | [U32852627](#holder-u32852627) | Domaine Joseph Drouhin (registered-office-match) | Unconfirmed |
 | D 0637 | Les Rouges du Bas | 1690.25 | None | Unresolved | Unconfirmed |
 | D 0638 | Les Rouges du Bas | 1699.79 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
 | D 0645 | Les Rouges du Bas | 1121.96 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
 | D 0646 | Les Rouges du Bas | 1539.16 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
 | D 0647 | Les Rouges du Bas | 635.30 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
 | D 0649 | Les Rouges du Bas | 3750.37 | None | Unresolved | Unconfirmed |
-| D 0650 | Les Rouges du Bas | 364.41 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
-| D 0651 | Les Rouges du Bas | 1787.02 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
-| D 0652 | Les Rouges du Bas | 2317.52 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
+| D 0650 | Les Rouges du Bas | 364.41 | [U18178179](#holder-u18178179) | Domaine Méo-Camuzet (registered-office-match) | Unconfirmed |
+| D 0651 | Les Rouges du Bas | 1787.02 | [U18178179](#holder-u18178179) | Domaine Méo-Camuzet (registered-office-match) | Unconfirmed |
+| D 0652 | Les Rouges du Bas | 2317.52 | [U18178179](#holder-u18178179) | Domaine Méo-Camuzet (registered-office-match) | Unconfirmed |
 | D 0653 | En Orveaux | 2944.15 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed); Domaine Faiveley (estate-area-exact-match) | Unconfirmed |
 | D 0654 | En Orveaux | 232.86 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
 | D 0665 | Les Treux | 1150.81 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead); SAS Domaine RC Les Grandes Vignes (Quincey) (authorisation) | Unconfirmed |
@@ -856,7 +858,7 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 - **HOR Vignobles transfer to SCI Les Climats dated to 2022** (D 0815). D0815 passes from HOR VIGNOBLES to SCI LES CLIMATS between the 2022 and 2023 files, while D0813 and D0814 stay with HOR. This places the En Orveaux transfer suggested by the indexed HOR filing on D0815. The farmer remains unresolved. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf).
 - **Traversins rights start on 1 January 2024** (D 0295, D 0296, D 0297, D 0298, D 0299). No company record through 2023; TRAVERSINS (SIREN 911887461) from 1 January 2024. The timing matches the 2023 report of additional Champs Traversins vines. That strengthens the lead's timing, not its parcel scope or farming. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [SAS Traversins: 2023 statutes](https://www.pappers.fr/entreprise/sas-traversins-911887461/documents/SAS%20TRAVERSINS%20-%20Statuts%20mis%20%C3%A0%20jour%2023-02-2023.pdf), [Old Vine Notes: 2023 estate visit with Georges Roumier](https://oldvinenotes.com/2024/12/30/2023-a-large-crop-of-variable-reds-and-somewhat-better-whites/).
 - **U22079769 is an undivided-ownership placeholder for former D0143** (D 0898, D 0899, D 0900, D 0901, D 0902). PROPRIETAIRES DU BND 267 D0143 held D0143 from 2019 to 2024. The 2025 cadastre divides D0143 into these five references and the same record follows. It denotes co-owners of undivided property, not a company to identify; ask the owners directly. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/).
-- **Family land companies first recorded in 2025** (D 0128, D 0154, D 0156, D 0157, D 0316, D 0323, D 0633, D 0636, D 0144, D 0145, D 0511, D 0512). GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. This is consistent with family land moving into land-holding companies during 2024. Their U-numbers carry no SIREN, so names remain leads only. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Official company search: GFA FAMILLE FOREY BJ](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5), [ORVEAUX company record](https://www.pappers.fr/entreprise/orveaux-984543470), [LES CRUOTS company record](https://www.pappers.fr/entreprise/les-cruots-930915806).
+- **Family land companies first recorded in 2025** (D 0128, D 0154, D 0156, D 0157, D 0316, D 0323, D 0633, D 0636, D 0144, D 0145, D 0511, D 0512). GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. BODACC dates their registration to February, July and November 2024, consistent with family land moving into land-holding companies that year. Their U-numbers carry no SIREN, so the identity rests on name, date, registered office and managing family together; the companies are owners, not proven farmers. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Official company search: GFA FAMILLE FOREY BJ](https://recherche-entreprises.api.gouv.fr/search?q=GFA%20FAMILLE%20FOREY%20BJ&per_page=5), [ORVEAUX company record](https://www.pappers.fr/entreprise/orveaux-984543470), [LES CRUOTS company record](https://www.pappers.fr/entreprise/les-cruots-930915806), [BODACC: GFA FAMILLE FOREY BJ registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22937826790%22&order_by=dateparution), [BODACC: ORVEAUX GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22984543470%22&order_by=dateparution), [BODACC: LES CRUOTS GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22930915806%22&order_by=dateparution).
 - **Other first company records, 2023–2024** (D 0161, D 0203, D 0313, D 0340). DOMAINE ARNOUX - LACHAUX (D0161), EARL DOMAINE FAIVRE (D0203) and DOMAINE D'EUGENIE (D0340) first appear on 1 January 2024, ORIGINE (D0313) on 1 January 2023. These are recent acquisitions or transfers into a company; ask for the deed or lease date together with operation evidence. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
 - **Romanée-Conti record reformatted, parcels unchanged** (D 0194, D 0768, D 0769, D 0770). The same four references move from a MAJIC-only record (2019) through a provisional U-number (2020) to SIREN 778269407 (2021), as SC DOM DE LA ROMANEE CONTI becomes DOMAINE DE LA ROMANEE CONTI. This is consistent with reformatting rather than a sale, but the file alone cannot prove identity. Sources: [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/), [Domaine de la Romanée-Conti: Échezeaux](https://www.romanee-conti.fr/fr/9-grand-crus/2/echezeaux).
 - **Split parcels with no company record in any year** (D 0822, D 0824, D 0825, D 0826, D 0827, D 0828, D 0829, D 0830, D 0831, D 0832, D 0833, D 0834, D 0835, D 0836, D 0841, D 0842, D 0843, D 0844, D 0871, D 0872, D 0903, D 0904, D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911). These references were created by dividing earlier parcels after 2019. Neither they nor their predecessors carry a company record in any year, which points to private owners. The legal-entity files cannot identify them; only owners, notaries or shared CVI extracts can. Sources: [Etalab cadastre vintages, Flagey-Échezeaux, 2019–2025](https://files.data.gouv.fr/cadastre/etalab-cadastre/), [DGFiP legal-entity parcel files, situations at 1 January 2019–2024](https://data.economie.gouv.fr/explore/dataset/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/).
@@ -1046,6 +1048,22 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **afgros-hachette** — [Guide Hachette: Domaine A.-F. Gros, Échezeaux 2009](https://www.hachette-vins.com/guide-vins/les-vins/domaine-a-f-gros-2009-2012/20124676/). press; read; document date not established; evidence season 2009. Guide entry (2012 edition): "Le domaine exploite 26 ares dans le climat En Champs Traversins". No cadastral number.
 - **danguy-1892** — [Danguy & Aubertin, Les grands vins de Bourgogne (la Côte-d'Or), 1892 (Internet Archive)](https://archive.org/details/vindebourgognela00unse). book; read; document date 1892-01-01; evidence season 1892. Public-domain guide listing the "principaux propriétaires" of each Flagey-Échezeaux climat (pp. 427–429). The Internet Archive files this scan under the wrong title. Historical owners only.
 - **rodier-1920** — [Camille Rodier, Le vin de Bourgogne (la Côte-d'Or), first edition, c. 1920 (Internet Archive)](https://archive.org/details/grandsvinsdebour00unse). book; read; document date 1920-01-01; evidence season 1920. Lists owners ("à MM.") and areas of each Échezeaux climat. The Internet Archive files this scan under the wrong title; the latest year printed is 1921. Historical owners only.
+- **bodacc-cruots** — [BODACC: LES CRUOTS GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22930915806%22&order_by=dateparution). registry; read; document date 2024-08-02. GFA registered at Dijon on 30 July 2024, activity from 2 July 2024. Registered office 18 route de Gilly, Flagey-Échezeaux; both managers belong to the Rouget family. Its parcels first appear in the 1 January 2025 rights file.
+- **bodacc-rouget** — [BODACC: Rouget Père et Fils notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22834133936%22&order_by=dateparution). registry; read; document date 2018-01-05. The Rouget family operating company has its registered office at 18 route de Gilly, Flagey-Échezeaux: the same address as the LES CRUOTS GFA.
+- **bodacc-forey-gfa** — [BODACC: GFA FAMILLE FOREY BJ registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22937826790%22&order_by=dateparution). registry; read; document date 2024-11-30. GFA registered on 28 November 2024. Registered office 11 route de Flagey-Échezeaux, Vosne-Romanée; both managers belong to the Forey family. Its parcels first appear in the 1 January 2025 rights file.
+- **bodacc-forey-sce** — [BODACC: SCE du Domaine Forey Père & Fils](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22326589686%22&order_by=dateparution). registry; read; document date 2024-07-07. The domaine's farming company (object: running vineyards it owns or leases) moved its registered office to 11 route de Flagey-Échezeaux in July 2024, the GFA's address, and shares a manager with the GFA.
+- **bodacc-orveaux** — [BODACC: ORVEAUX GFA registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22984543470%22&order_by=dateparution). registry; read; document date 2024-02-15. GFA registered in February 2024 at 1 rue d'Enfer, Beaune; both managers belong to the Drouhin family. The ORVEAUX parcels first appear in the 1 January 2025 rights file.
+- **bodacc-drouhin** — [BODACC: Domaine Joseph Drouhin](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22314306747%22&order_by=dateparution). registry; read; document date not established. Domaine Joseph Drouhin's registered office is 1 rue d'Enfer, Beaune: the ORVEAUX GFA's address.
+- **drouhin-echezeaux** — [Dreyfus Ashby: Joseph Drouhin Échezeaux](https://dreyfusashby.com/product/joseph-drouhin-echezeaux/). importer; read; document date not established. "The Drouhin family owns a .41 ha (one acre) vineyard there." No named area or cadastral reference. The four ORVEAUX parcels cover 0.53 ha of cru, so the figures differ.
+- **gfv-grands-crus-registry** — [Official company search: GRPT FONCIER VIT GRD CRUS INVESTISSEMENT](https://recherche-entreprises.api.gouv.fr/search?q=413823873&per_page=5). registry; read; document date not established. SIREN 413823873, a groupement foncier created in 1997 whose abbreviated name matches GFV GRANDS CRUS INVESTISSEMENT. Registered office 11 rue des Grands Crus, Vosne-Romanée. A sister company, Corton Investissement, has the same office and manager.
+- **bodacc-meo-seat** — [BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)). registry; read; document date not established. Méo-Camuzet Frère et Sœurs, GFA Méo Camuzet Parents and the Méo family's other companies have their registered office at 11 rue des Grands Crus, the same address as the Grands Crus Investissement companies.
+- **bodacc-origine** — [BODACC: ORIGINE (now LC) notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22883067134%22&order_by=dateparution). registry; read; document date 2025-06-27. Farming company (SCEA) registered in Paris in April 2020 at 217-219 rue du Faubourg Saint-Honoré. Its manager changed in September 2022; renamed LC in 2025. D0313 is first recorded to it on 1 January 2023.
+- **bodacc-pousse-dor** — [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution). registry; read; document date 2022-09-08. SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.
+- **pousse-echezeaux** — [North Berkeley Imports: Pousse d'Or Échezeaux sheet](https://www.northberkeleyimports.com/wordpress/wp-content/uploads/2016/06/POUSSE_echezeaux.pdf). importer; read; document date not established. "Estate vines total a quarter-acre from lieu-dit 'Poullailères'"; the parcel "is not directly estate-owned, but managed by a holding company owned by" the estate's owner-winemaker. D0313 (0.11 ha, LES POULA) is ORIGINE's only parcel.
+- **bodacc-coudray** — [BODACC: GFA Héritiers Coudray notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22477938294%22&order_by=dateparution). registry; read; document date 2024-11-19. Managed by a member of the Coudray family; the registration moved from Dijon to Montpellier in 2024. No link to a Burgundy domaine was found.
+- **bodacc-hor** — [BODACC: HOR Vignobles notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22821877008%22&order_by=dateparution). registry; read; document date 2017-01-04. SAS chaired by Golden Terroirs Limited, a foreign holding company, with a registered office in a Dijon business park. Object: owning and running vineyards. No link to a named domaine was found.
+- **bodacc-les-climats** — [BODACC: SCI Les Climats registration](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22798977476%22&order_by=dateparution). registry; read; document date 2013-12-22. SCI registered in Beaune in 2013 and managed by a member of the Follin-Arbelet family. The shared family name is not evidence of a link to Domaine Follin-Arbelet.
+- **safer-notices** — [SAFER Bourgogne-Franche-Comté legal notices](https://annonces-legales.saferbfc.com/commune/21267). government-index; read; document date not established. No current SAFER notice for Flagey-Échezeaux (21267) or Vosne-Romanée (21714) on 29 September 2026. The site lists only notices still open, with no archive.
 
 ## Remaining evidence and access gaps
 
@@ -1055,10 +1073,11 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
 - DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.
-- SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).
+- The Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests. SAFER legal notices were reached at annonces-legales.saferbfc.com (29 September 2026), but the site keeps only notices still open, so past SAFER sales remain unseen.
 - Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
 - Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.
-- Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified.
+- Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified. A second attempt on 29 September 2026 met a JavaScript and cookie check, which was not bypassed.
 - Gallica text pages now require a proof-of-work check that was not bypassed; the 1892 and c. 1920 guides were read from Internet Archive scans (OCR, names checked by eye). Lavalle (1855) was not found in a readable copy.
+- Company identities were checked on 29 September 2026 in BODACC notices and the official company search. U-prefixed DGFiP holders carry no SIREN, so each match rests on name, registered office, management family and first-recorded date together. Directors are summarised by family, not named. A land company is not a farmer.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

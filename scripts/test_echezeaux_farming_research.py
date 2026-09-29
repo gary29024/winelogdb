@@ -197,6 +197,19 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertIsNone(rows['D 0362']['currentFarmer'])
         self.assertIn('vigot-d0195', rows['D 0195']['externalResearchIds'])
 
+    def test_registered_office_matches_are_leads_never_farmers(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        expected = {'D 0144': 'Domaine Emmanuel Rouget', 'D 0128': 'Domaine Forey Père et Fils',
+                    'D 0316': 'Domaine Joseph Drouhin', 'D 0650': 'Domaine Méo-Camuzet',
+                    'D 0313': "Domaine de la Pousse d'Or"}
+        for ref, name in expected.items():
+            self.assertIn((name, 'registered-office-match'),
+                          {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        # Companies with no domaine link found stay without a candidate.
+        for ref in ('D 0635', 'D 0813', 'D 0815', 'D 0898'):
+            self.assertEqual(rows[ref]['candidateLeads'], [])
+
     def test_public_sources_add_research_but_never_a_farmer(self):
         rows = {p['reference']: p for p in self.build()['parcels']}
         # A 2007 court ruling names D 152 with its exact area; the pseudonymised family stays unnamed.

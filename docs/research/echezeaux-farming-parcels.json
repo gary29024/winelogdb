@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-28",
+  "reviewedAt": "2026-09-29",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
   "scope": "All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.",
@@ -29,11 +29,11 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 118,
+    "holderLead": 126,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
     "saleLead": 1,
-    "unresolved": 139,
+    "unresolved": 131,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
     "withRightsChangeSince2019": 76,
@@ -380,7 +380,20 @@
       "withoutCompanyRecordOrLead": 7,
       "withoutCompanyRecordOrLeadM2": 8996,
       "publishedBeyondCompanyRecordsM2": 0,
-      "holdings": []
+      "holdings": [
+        {
+          "holdingId": "pousse-dor",
+          "producer": "Domaine de la Pousse d'Or",
+          "publishedAreaHa": 0.1,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 1100,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        }
+      ]
     },
     {
       "sourceName": "LES QUARTIERS DE NUITS",
@@ -418,7 +431,7 @@
       "withoutCompanyRecordM2": 8552,
       "withoutCompanyRecordOrLead": 6,
       "withoutCompanyRecordOrLeadM2": 8552,
-      "publishedBeyondCompanyRecordsM2": 4400,
+      "publishedBeyondCompanyRecordsM2": 0,
       "holdings": [
         {
           "holdingId": "vigot",
@@ -442,8 +455,8 @@
           "relation": "unstated",
           "endedSeason": null,
           "sharedWith": [],
-          "recordedToProducerM2": 0,
-          "beyondCompanyRecordsM2": 4400,
+          "recordedToProducerM2": 4469,
+          "beyondCompanyRecordsM2": 0,
           "owners": []
         }
       ]
@@ -926,10 +939,13 @@
         {
           "name": "Domaine Forey Père et Fils",
           "holderId": "U33360620",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
             "forey",
-            "forey-identity"
+            "forey-identity",
+            "bodacc-forey-gfa",
+            "bodacc-forey-sce",
+            "dgfip-history"
           ]
         }
       ],
@@ -1398,9 +1414,12 @@
         {
           "name": "Domaine Emmanuel Rouget",
           "holderId": "U33046436",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
-            "cruots"
+            "cruots",
+            "bodacc-cruots",
+            "bodacc-rouget",
+            "dgfip-history"
           ]
         }
       ],
@@ -1469,9 +1488,12 @@
         {
           "name": "Domaine Emmanuel Rouget",
           "holderId": "U33046436",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
-            "cruots"
+            "cruots",
+            "bodacc-cruots",
+            "bodacc-rouget",
+            "dgfip-history"
           ]
         }
       ],
@@ -1740,10 +1762,13 @@
         {
           "name": "Domaine Forey Père et Fils",
           "holderId": "U33360620",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
             "forey",
-            "forey-identity"
+            "forey-identity",
+            "bodacc-forey-gfa",
+            "bodacc-forey-sce",
+            "dgfip-history"
           ]
         }
       ],
@@ -1842,10 +1867,13 @@
         {
           "name": "Domaine Forey Père et Fils",
           "holderId": "U33360620",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
             "forey",
-            "forey-identity"
+            "forey-identity",
+            "bodacc-forey-gfa",
+            "bodacc-forey-sce",
+            "dgfip-history"
           ]
         }
       ],
@@ -1900,10 +1928,13 @@
         {
           "name": "Domaine Forey Père et Fils",
           "holderId": "U33360620",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
             "forey",
-            "forey-identity"
+            "forey-identity",
+            "bodacc-forey-gfa",
+            "bodacc-forey-sce",
+            "dgfip-history"
           ]
         }
       ],
@@ -3934,7 +3965,20 @@
       "holderResearchIds": [
         "883067134"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine de la Pousse d'Or",
+          "holderId": "883067134",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "origine",
+            "origine-rename",
+            "bodacc-origine",
+            "bodacc-pousse-dor",
+            "pousse-echezeaux"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -3963,12 +4007,12 @@
       "historyFindingIds": [
         "recent-company-records"
       ],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0316",
@@ -3991,7 +4035,21 @@
       "holderResearchIds": [
         "U32852627"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Joseph Drouhin",
+          "holderId": "U32852627",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "orveaux-identity",
+            "orveaux-search",
+            "bodacc-orveaux",
+            "bodacc-drouhin",
+            "drouhin-echezeaux",
+            "dgfip-history"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -4011,12 +4069,12 @@
       "historyFindingIds": [
         "family-companies-2024"
       ],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0323",
@@ -4039,7 +4097,21 @@
       "holderResearchIds": [
         "U32852627"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Joseph Drouhin",
+          "holderId": "U32852627",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "orveaux-identity",
+            "orveaux-search",
+            "bodacc-orveaux",
+            "bodacc-drouhin",
+            "drouhin-echezeaux",
+            "dgfip-history"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -4059,12 +4131,12 @@
       "historyFindingIds": [
         "family-companies-2024"
       ],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0326",
@@ -5344,9 +5416,12 @@
         {
           "name": "Domaine Emmanuel Rouget",
           "holderId": "U33046436",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
-            "cruots"
+            "cruots",
+            "bodacc-cruots",
+            "bodacc-rouget",
+            "dgfip-history"
           ]
         }
       ],
@@ -5415,9 +5490,12 @@
         {
           "name": "Domaine Emmanuel Rouget",
           "holderId": "U33046436",
-          "basis": "weak-identity-lead",
+          "basis": "registered-office-match",
           "sourceIds": [
-            "cruots"
+            "cruots",
+            "bodacc-cruots",
+            "bodacc-rouget",
+            "dgfip-history"
           ]
         }
       ],
@@ -7212,7 +7290,21 @@
       "holderResearchIds": [
         "U32852627"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Joseph Drouhin",
+          "holderId": "U32852627",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "orveaux-identity",
+            "orveaux-search",
+            "bodacc-orveaux",
+            "bodacc-drouhin",
+            "drouhin-echezeaux",
+            "dgfip-history"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -7232,12 +7324,12 @@
       "historyFindingIds": [
         "family-companies-2024"
       ],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0635",
@@ -7308,7 +7400,21 @@
       "holderResearchIds": [
         "U32852627"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Joseph Drouhin",
+          "holderId": "U32852627",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "orveaux-identity",
+            "orveaux-search",
+            "bodacc-orveaux",
+            "bodacc-drouhin",
+            "drouhin-echezeaux",
+            "dgfip-history"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -7328,12 +7434,12 @@
       "historyFindingIds": [
         "family-companies-2024"
       ],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0637",
@@ -7626,7 +7732,20 @@
       "holderResearchIds": [
         "U18178179"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Méo-Camuzet",
+          "holderId": "U18178179",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "grands-crus-identity",
+            "gfv-grands-crus-registry",
+            "bodacc-meo-seat",
+            "meo",
+            "meo-hedonism"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -7646,12 +7765,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0651",
@@ -7674,7 +7793,20 @@
       "holderResearchIds": [
         "U18178179"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Méo-Camuzet",
+          "holderId": "U18178179",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "grands-crus-identity",
+            "gfv-grands-crus-registry",
+            "bodacc-meo-seat",
+            "meo",
+            "meo-hedonism"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -7694,12 +7826,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0652",
@@ -7722,7 +7854,20 @@
       "holderResearchIds": [
         "U18178179"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Méo-Camuzet",
+          "holderId": "U18178179",
+          "basis": "registered-office-match",
+          "sourceIds": [
+            "grands-crus-identity",
+            "gfv-grands-crus-registry",
+            "bodacc-meo-seat",
+            "meo",
+            "meo-hedonism"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "rightsChanges": [
@@ -7742,12 +7887,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0653",

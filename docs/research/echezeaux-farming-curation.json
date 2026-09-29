@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-28",
+  "reviewedAt": "2026-09-29",
   "parentFeatureId": "inao-denom-565",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
@@ -946,6 +946,166 @@
       "finding": "Lists owners (\"à MM.\") and areas of each Échezeaux climat. The Internet Archive files this scan under the wrong title; the latest year printed is 1921. Historical owners only.",
       "access": "read",
       "evidenceSeason": "1920"
+    },
+    {
+      "id": "bodacc-cruots",
+      "title": "BODACC: LES CRUOTS GFA registration",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22930915806%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2024-08-02",
+      "reviewedAt": "2026-09-29",
+      "finding": "GFA registered at Dijon on 30 July 2024, activity from 2 July 2024. Registered office 18 route de Gilly, Flagey-Échezeaux; both managers belong to the Rouget family. Its parcels first appear in the 1 January 2025 rights file.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-rouget",
+      "title": "BODACC: Rouget Père et Fils notices",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22834133936%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2018-01-05",
+      "reviewedAt": "2026-09-29",
+      "finding": "The Rouget family operating company has its registered office at 18 route de Gilly, Flagey-Échezeaux: the same address as the LES CRUOTS GFA.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-forey-gfa",
+      "title": "BODACC: GFA FAMILLE FOREY BJ registration",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22937826790%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2024-11-30",
+      "reviewedAt": "2026-09-29",
+      "finding": "GFA registered on 28 November 2024. Registered office 11 route de Flagey-Échezeaux, Vosne-Romanée; both managers belong to the Forey family. Its parcels first appear in the 1 January 2025 rights file.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-forey-sce",
+      "title": "BODACC: SCE du Domaine Forey Père & Fils",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22326589686%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2024-07-07",
+      "reviewedAt": "2026-09-29",
+      "finding": "The domaine's farming company (object: running vineyards it owns or leases) moved its registered office to 11 route de Flagey-Échezeaux in July 2024, the GFA's address, and shares a manager with the GFA.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-orveaux",
+      "title": "BODACC: ORVEAUX GFA registration",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22984543470%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2024-02-15",
+      "reviewedAt": "2026-09-29",
+      "finding": "GFA registered in February 2024 at 1 rue d'Enfer, Beaune; both managers belong to the Drouhin family. The ORVEAUX parcels first appear in the 1 January 2025 rights file.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-drouhin",
+      "title": "BODACC: Domaine Joseph Drouhin",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22314306747%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Domaine Joseph Drouhin's registered office is 1 rue d'Enfer, Beaune: the ORVEAUX GFA's address.",
+      "access": "read"
+    },
+    {
+      "id": "drouhin-echezeaux",
+      "title": "Dreyfus Ashby: Joseph Drouhin Échezeaux",
+      "url": "https://dreyfusashby.com/product/joseph-drouhin-echezeaux/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "\"The Drouhin family owns a .41 ha (one acre) vineyard there.\" No named area or cadastral reference. The four ORVEAUX parcels cover 0.53 ha of cru, so the figures differ.",
+      "access": "read"
+    },
+    {
+      "id": "gfv-grands-crus-registry",
+      "title": "Official company search: GRPT FONCIER VIT GRD CRUS INVESTISSEMENT",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=413823873&per_page=5",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "SIREN 413823873, a groupement foncier created in 1997 whose abbreviated name matches GFV GRANDS CRUS INVESTISSEMENT. Registered office 11 rue des Grands Crus, Vosne-Romanée. A sister company, Corton Investissement, has the same office and manager.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-meo-seat",
+      "title": "BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Méo-Camuzet Frère et Sœurs, GFA Méo Camuzet Parents and the Méo family's other companies have their registered office at 11 rue des Grands Crus, the same address as the Grands Crus Investissement companies.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-origine",
+      "title": "BODACC: ORIGINE (now LC) notices",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22883067134%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2025-06-27",
+      "reviewedAt": "2026-09-29",
+      "finding": "Farming company (SCEA) registered in Paris in April 2020 at 217-219 rue du Faubourg Saint-Honoré. Its manager changed in September 2022; renamed LC in 2025. D0313 is first recorded to it on 1 January 2023.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-pousse-dor",
+      "title": "BODACC: Domaine de la Pousse d'Or notices",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2022-09-08",
+      "reviewedAt": "2026-09-29",
+      "finding": "SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.",
+      "access": "read"
+    },
+    {
+      "id": "pousse-echezeaux",
+      "title": "North Berkeley Imports: Pousse d'Or Échezeaux sheet",
+      "url": "https://www.northberkeleyimports.com/wordpress/wp-content/uploads/2016/06/POUSSE_echezeaux.pdf",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "\"Estate vines total a quarter-acre from lieu-dit 'Poullailères'\"; the parcel \"is not directly estate-owned, but managed by a holding company owned by\" the estate's owner-winemaker. D0313 (0.11 ha, LES POULA) is ORIGINE's only parcel.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-coudray",
+      "title": "BODACC: GFA Héritiers Coudray notices",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22477938294%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2024-11-19",
+      "reviewedAt": "2026-09-29",
+      "finding": "Managed by a member of the Coudray family; the registration moved from Dijon to Montpellier in 2024. No link to a Burgundy domaine was found.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-hor",
+      "title": "BODACC: HOR Vignobles notices",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22821877008%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2017-01-04",
+      "reviewedAt": "2026-09-29",
+      "finding": "SAS chaired by Golden Terroirs Limited, a foreign holding company, with a registered office in a Dijon business park. Object: owning and running vineyards. No link to a named domaine was found.",
+      "access": "read"
+    },
+    {
+      "id": "bodacc-les-climats",
+      "title": "BODACC: SCI Les Climats registration",
+      "url": "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22798977476%22&order_by=dateparution",
+      "type": "registry",
+      "documentDate": "2013-12-22",
+      "reviewedAt": "2026-09-29",
+      "finding": "SCI registered in Beaune in 2013 and managed by a member of the Follin-Arbelet family. The shared family name is not evidence of a link to Domaine Follin-Arbelet.",
+      "access": "read"
+    },
+    {
+      "id": "safer-notices",
+      "title": "SAFER Bourgogne-Franche-Comté legal notices",
+      "url": "https://annonces-legales.saferbfc.com/commune/21267",
+      "type": "government-index",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "No current SAFER notice for Flagey-Échezeaux (21267) or Vosne-Romanée (21714) on 29 September 2026. The site lists only notices still open, with no archive.",
+      "access": "read"
     }
   ],
   "holders": [
@@ -1073,12 +1233,18 @@
     },
     {
       "holderId": "U32852627",
-      "candidateNames": [],
-      "basis": "identity-unresolved",
-      "finding": "A similarly named ORVEAUX GFV has Drouhin connections, but its SIREN was not joined to this DGFiP holder. Do not assign Drouhin or treat company managers as farmers.",
+      "candidateNames": [
+        "Domaine Joseph Drouhin"
+      ],
+      "basis": "registered-office-match",
+      "finding": "ORVEAUX GFA (SIREN 984543470) is registered at Domaine Joseph Drouhin's office and managed by the Drouhin family; registered February 2024, parcels first recorded January 2025. The family publishes 0.41 ha of Échezeaux against 0.53 ha here, so not all may be farmed by the domaine.",
       "sourceIds": [
         "orveaux-identity",
-        "orveaux-search"
+        "orveaux-search",
+        "bodacc-orveaux",
+        "bodacc-drouhin",
+        "drouhin-echezeaux",
+        "dgfip-history"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1130,11 +1296,17 @@
     },
     {
       "holderId": "U18178179",
-      "candidateNames": [],
-      "basis": "identity-unresolved",
-      "finding": "Name search returned similarly named investment companies, not a demonstrated identity or lease for this GFV. No farmer assigned.",
+      "candidateNames": [
+        "Domaine Méo-Camuzet"
+      ],
+      "basis": "registered-office-match",
+      "finding": "Registry name GRPT FONCIER VIT GRD CRUS INVESTISSEMENT (SIREN 413823873) matches; its office is the Méo-Camuzet family's address in Vosne. Méo-Camuzet publishes 0.44 ha in Les Rouges du Bas; these three parcels there cover 0.45 ha. No lease or current operation reviewed.",
       "sourceIds": [
-        "grands-crus-identity"
+        "grands-crus-identity",
+        "gfv-grands-crus-registry",
+        "bodacc-meo-seat",
+        "meo",
+        "meo-hedonism"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1155,10 +1327,11 @@
       "holderId": "U22264880",
       "candidateNames": [],
       "basis": "identity-unresolved",
-      "finding": "Official name search found GFA Héritiers Coudray SIREN 477938294. The U-prefixed holder crosswalk and Échezeaux tenant remain unverified; inaccessible filing was not treated as proof.",
+      "finding": "Official name search found GFA Héritiers Coudray, SIREN 477938294, now registered in Hérault and managed by the family. No link to a Burgundy domaine or tenant was found; the U-prefixed crosswalk remains unverified.",
       "sourceIds": [
         "coudray",
-        "coudray-identity"
+        "coudray-identity",
+        "bodacc-coudray"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1167,10 +1340,13 @@
       "candidateNames": [
         "Domaine Emmanuel Rouget"
       ],
-      "basis": "weak-identity-lead",
-      "finding": "The similarly named LES CRUOTS GFA has Rouget connections. Both the DGFiP-holder identity and its tenant are unverified. This is a research lead only, not a farmer assignment.",
+      "basis": "registered-office-match",
+      "finding": "LES CRUOTS GFA (SIREN 930915806) is registered at the Rouget family's operating address in Flagey and managed by the family. Registered July 2024; these parcels first appear in the January 2025 file. It is a land company: no lease or current operation of these four parcels was reviewed.",
       "sourceIds": [
-        "cruots"
+        "cruots",
+        "bodacc-cruots",
+        "bodacc-rouget",
+        "dgfip-history"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1229,10 +1405,11 @@
       "holderId": "821877008",
       "candidateNames": [],
       "basis": "unresolved",
-      "finding": "HOR accounts describe owned Échezeaux assets, while an indexed filing concerns SCI Les Climats. Full filing/lease could not be reviewed; no farmer inferred from asset ownership or acreage.",
+      "finding": "HOR Vignobles is owned by a foreign holding company, not a named domaine. Its accounts describe owned Échezeaux assets, and an indexed filing concerns SCI Les Climats. No farmer inferred from ownership or acreage.",
       "sourceIds": [
         "hor-filing",
-        "hor-accounts"
+        "hor-accounts",
+        "bodacc-hor"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1267,11 +1444,14 @@
       "candidateNames": [
         "Domaine Forey Père et Fils"
       ],
-      "basis": "weak-identity-lead",
-      "finding": "Official name search found the GFA, while an importer describes Forey holdings in Clos Saint-Denis and Les Treux. Neither establishes the U-prefixed identity crosswalk or farmer of the four references.",
+      "basis": "registered-office-match",
+      "finding": "GFA FAMILLE FOREY BJ (SIREN 937826790) shares its office and a manager with SCE du Domaine Forey Père & Fils. Registered November 2024; these parcels first appear in January 2025. The importer names Forey vines in Clos Saint-Denis and Les Treux, as here. No lease reviewed.",
       "sourceIds": [
         "forey",
-        "forey-identity"
+        "forey-identity",
+        "bodacc-forey-gfa",
+        "bodacc-forey-sce",
+        "dgfip-history"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1353,12 +1533,17 @@
     },
     {
       "holderId": "883067134",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "finding": "Official API now returns LC for the same SIREN as ORIGINE. This corrects identity research but does not establish today's farmer of D0313.",
+      "candidateNames": [
+        "Domaine de la Pousse d'Or"
+      ],
+      "basis": "registered-office-match",
+      "finding": "ORIGINE, now LC, shares its Paris office with Domaine de la Pousse d'Or, and one person became manager of both in 2022. Pousse d'Or describes a quarter-acre in the Poulaillères held by its owner's holding company; D0313 is a 0.11 ha parcel there. No lease reviewed.",
       "sourceIds": [
         "origine",
-        "origine-rename"
+        "origine-rename",
+        "bodacc-origine",
+        "bodacc-pousse-dor",
+        "pousse-echezeaux"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1380,9 +1565,10 @@
       "holderId": "798977476",
       "candidateNames": [],
       "basis": "unresolved",
-      "finding": "Indexed 2021 filing describes an En Orveaux asset transfer involving SCI Les Climats. Full reference and lease not reviewed. Ownership transfer is not farming evidence.",
+      "finding": "SCI Les Climats, Beaune, is managed by a member of the Follin-Arbelet family; the name alone is not linked to a domaine. An indexed 2021 filing describes an En Orveaux asset transfer involving it. Ownership transfer is not farming evidence.",
       "sourceIds": [
-        "hor-filing"
+        "hor-filing",
+        "bodacc-les-climats"
       ],
       "parcelOperationConfirmed": false
     }
@@ -1495,11 +1681,12 @@
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
     "DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.",
-    "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).",
+    "The Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests. SAFER legal notices were reached at annonces-legales.saferbfc.com (29 September 2026), but the site keeps only notices still open, so past SAFER sales remain unseen.",
     "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.",
     "Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.",
-    "Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified.",
-    "Gallica text pages now require a proof-of-work check that was not bypassed; the 1892 and c. 1920 guides were read from Internet Archive scans (OCR, names checked by eye). Lavalle (1855) was not found in a readable copy."
+    "Court decisions were searched on Juricaf (29 September 2026). The Cour de cassation Judilibre search returned ten results for Flagey-Echezeaux once, then required a CAPTCHA; it was not bypassed, and the Judilibre API needs a registered key. Rulings are pseudonymised and were not re-identified. A second attempt on 29 September 2026 met a JavaScript and cookie check, which was not bypassed.",
+    "Gallica text pages now require a proof-of-work check that was not bypassed; the 1892 and c. 1920 guides were read from Internet Archive scans (OCR, names checked by eye). Lavalle (1855) was not found in a readable copy.",
+    "Company identities were checked on 29 September 2026 in BODACC notices and the official company search. U-prefixed DGFiP holders carry no SIREN, so each match rests on name, registered office, management family and first-recorded date together. Directors are summarised by family, not named. A land company is not a farmer."
   ],
   "historyFindings": [
     {
@@ -1652,9 +1839,12 @@
         "dgfip-history",
         "forey-identity",
         "orveaux-identity",
-        "cruots"
+        "cruots",
+        "bodacc-forey-gfa",
+        "bodacc-orveaux",
+        "bodacc-cruots"
       ],
-      "finding": "GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. This is consistent with family land moving into land-holding companies during 2024. Their U-numbers carry no SIREN, so names remain leads only."
+      "finding": "GFA FAMILLE FOREY BJ, GROUPEMENT FONCIER VITICOLE DE ORVEAUX and LES CRUOTS first appear on 1 January 2025 on references that existed earlier without a company record. BODACC dates their registration to February, July and November 2024, consistent with family land moving into land-holding companies that year. Their U-numbers carry no SIREN, so the identity rests on name, date, registered office and managing family together; the companies are owners, not proven farmers."
     },
     {
       "id": "recent-company-records",
@@ -2389,10 +2579,36 @@
       "relation": "unstated",
       "sourceIds": [
         "meo",
-        "meo-hedonism"
+        "meo-hedonism",
+        "gfv-grands-crus-registry",
+        "bodacc-meo-seat"
       ],
-      "finding": "No company record.",
-      "producerHolderIds": [],
+      "finding": "Accounted for by GFV Grands Crus Investissement (0.45 ha in Les Rouges du Bas), whose registered office is the Méo family's address. The identity is a registry lead, not a lease.",
+      "producerHolderIds": [
+        "U18178179"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "pousse-dor",
+      "producer": "Domaine de la Pousse d'Or",
+      "namedAreas": [
+        "LES POULA"
+      ],
+      "publishedAreaHa": 0.1,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "pousse-echezeaux",
+        "bodacc-origine",
+        "bodacc-pousse-dor"
+      ],
+      "finding": "A quarter-acre in the Poulaillères, held by a holding company owned by the estate's owner; ORIGINE (now LC) shares Pousse d'Or's office.",
+      "producerHolderIds": [
+        "883067134"
+      ],
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []

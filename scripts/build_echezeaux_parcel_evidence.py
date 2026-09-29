@@ -31,6 +31,7 @@ LEAD_LABELS = {
     'reported-operator-relationship': 'Reported relationship',
     'succession-lead': 'Succession lead',
     'partial-succession-lead': 'Partial succession lead',
+    'registered-office-match': 'Same registered office',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
 SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}

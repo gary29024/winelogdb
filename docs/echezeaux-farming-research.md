@@ -10,9 +10,9 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **92 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **108 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
-The resulting categories are **118 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **139 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
+The resulting categories are **126 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **131 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
 Useful findings beyond the original examples:
 
@@ -90,6 +90,26 @@ Checked 29 September 2026; public sources only, no outreach.
 - **Old guides.** Danguy & Aubertin (1892) and Camille Rodier (first edition, c. 1920), read from Internet Archive scans (filed there under each other's titles), list owners by climat. Many families are still present: Camuzet (Méo-Camuzet) and Confuron-Bornot in Les Rouges du Bas; Gros-Renaudot in Les Loächausses, Cruots and Treux; Gouroux (still owning Millot's Dessus plots) in Loächausses, Cruots and Clos Saint-Denis; Lamarche, Liger-Belair, Faiveley, Grivot and Arnoux. The register shows both lists per named area as historical context only.
 
 With these additions, 139 parcels have no named candidate. The main remaining gaps are En Orveaux (4.24 ha without a company record or lead), Les Treux (1.55 ha) and Les Loächausses (0.82 ha).
+
+### Reverse search of land companies without a domaine name
+
+Checked 29 September 2026 in [BODACC](https://bodacc-datadila.opendatasoft.com/explore/dataset/annonces-commerciales/) legal notices and the [official company search](https://recherche-entreprises.api.gouv.fr/). Nine right-holder groups carried no recognisable domaine name. For each one, the registry gives the registered office, the family that manages it and the registration date, and these were compared with domaine companies. Directors are summarised by family, not named. A land company owns vines; it does not prove who farms them.
+
+| Holder in rights file | Parcels | Registry finding | Lead |
+| --- | --- | --- | --- |
+| LES CRUOTS | D0144, D0145, D0511, D0512 | GFA registered July 2024 at the Rouget family's operating address, 18 route de Gilly, Flagey; managed by the family | Domaine Emmanuel Rouget |
+| GFA FAMILLE FOREY BJ | D0128, D0154, D0156, D0157 | Registered November 2024; same office and a shared manager with SCE du Domaine Forey Père & Fils | Domaine Forey Père et Fils |
+| GROUPEMENT FONCIER VITICOLE DE ORVEAUX | D0316, D0323, D0633, D0636 | GFA registered February 2024 at Domaine Joseph Drouhin's office, 1 rue d'Enfer, Beaune; managed by the Drouhin family | Domaine Joseph Drouhin (0.41 ha published against 0.53 ha here) |
+| GFV GRANDS CRUS INVESTISSEMENT | D0650, D0651, D0652 | Abbreviated registry name matches SIREN 413823873, office 11 rue des Grands Crus, Vosne: the Méo-Camuzet family's address | Domaine Méo-Camuzet (0.44 ha published in Les Rouges du Bas; these parcels cover 0.45 ha there) |
+| ORIGINE, now LC | D0313 | Paris office shared with SAS Domaine de la Pousse d'Or; one person became manager of both in 2022 | Domaine de la Pousse d'Or (a quarter-acre in the Poulaillères, held by its owner's holding company) |
+| GFA HERITIERS COUDRAY | D0635, D0714, D0719 | Family GFA, registration moved to Hérault in 2024 | None found |
+| HOR VIGNOBLES | D0813, D0814 | Chaired by a foreign holding company | None found |
+| SCI LES CLIMATS | D0815 | Beaune SCI managed by a member of the Follin-Arbelet family; the name alone is not a domaine link | None found |
+| PROPRIETAIRES DU BND 267 D0143 | D0898–D0902 | Undivided co-owners, not a company | Not searchable |
+
+The first three were created in 2024, and their parcels first appear in the January 2025 rights file, which supports matching the U-numbered holders (no SIREN) to these companies. The Méo-Camuzet and Pousse d'Or leads also agree with the area each estate publishes in that named area. The eight parcels move from "no named candidate" to holder leads, leaving **131** without a candidate.
+
+The other public sources were tried again. The [SAFER legal-notice site](https://annonces-legales.saferbfc.com/commune/21267) is now reachable, but it lists only notices still open, and none concern Flagey-Échezeaux or Vosne-Romanée. The prefecture site still rate-limits, the Cour de cassation search now puts up a JavaScript and cookie check, and Gallica still refuses automated reading. None of these checks was bypassed.
 
 ### Independent research: Winehog
 
