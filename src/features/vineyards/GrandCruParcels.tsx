@@ -1,10 +1,11 @@
-import {useEffect,useId,useMemo,useRef,useState} from 'react';
+import {useCallback,useEffect,useId,useMemo,useRef,useState} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource} from 'maplibre-gl';
 import type {Feature,FeatureCollection,Polygon,MultiPolygon} from 'geojson';
 import {placeKey} from '../../lib/places/resolve';
 import {ownerName,possibleOwnerMatch} from '../../lib/places/echezeauxParcelOwners';
 import manifest from '../../lib/places/echezeauxParcelManifest.json';
 import {ParcelProducerLinker} from './ParcelProducerLinker';
+import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
 import {ParcelEvidence} from './ParcelEvidence';
 
 type Right={holderId:string;siren:string|null;name:string;rightCode:string;rightLabel:string;legalForm:string;legalFormLabel:string};
@@ -72,6 +73,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
  const [showPossible,setShowPossible]=useState(false);
  const [linkingHolder,setLinkingHolder]=useState('');
+ const autoFocused=useRef(false);
  const switchId=useId(),parcelId=useId(),searchId=useId(),possibleId=useId(),ownersId=useId();
  useEffect(()=>{
   if(!show||data)return;
@@ -197,6 +199,17 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
   const next=owner===id?'':id;setOwner(next);setSelectedId('');
   if(next)fit(union(parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===next))));
  };
+ // A right holder linked to this wine's producer is the likeliest place for the wine, so the map
+ // opens on that holder's parcels instead of the whole cru, once each time the layer is turned on.
+ const focusLinked=useCallback((links:ParcelProducerLink[])=>{
+  if(autoFocused.current||!wineProducer)return;
+  const link=links.find(l=>placeKey(l.producerName)===placeKey(wineProducer));
+  const holderParcels=link?parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===link.holderId)):[];
+  if(!link||!holderParcels.length)return;
+  const bounds=union(holderParcels);
+  autoFocused.current=true;setOwner(link.holderId);
+  if(bounds&&map)map.fitBounds(bounds,{padding:70,maxZoom:17,duration:0});
+ },[parcels,wineProducer,map]);
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
@@ -210,7 +223,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
  return <section className="village-map-parcels" aria-label="Parcel rights">
   <label className="village-map-parcel-toggle" htmlFor={switchId}>
    <span>Parcel rights<small> · {name}</small></span>
-   <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setError(false);setOwner('');setSelectedId('')}}/>
+   <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setError(false);setOwner('');setSelectedId('');autoFocused.current=false}}/>
   </label>
   <p className="village-map-note">Legal-entity rights recorded on 1 January 2025. These do not establish who currently farms the vines.</p>
   {show&&<>
@@ -236,7 +249,7 @@ export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMa
       <button type="button" className="village-map-link-button" onClick={()=>{setOwner('');setSelectedId('');showOnMap(possible)}}>Show possible matches on map</button>
      </div>}
     </>}
-    <ParcelProducerLinker parentId={parentId} holders={owners} editing={linkingHolder} onEdit={setLinkingHolder} onShow={id=>{setOwner(id);setSelectedId('');showOnMap(parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===id)))}}/>
+    <ParcelProducerLinker parentId={parentId} holders={owners} editing={linkingHolder} onEdit={setLinkingHolder} onLinks={focusLinked} onShow={id=>{setOwner(id);setSelectedId('');showOnMap(parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===id)))}}/>
     <div className="village-map-parcel-share">
      <span><strong>{parcels.length}</strong> parcels in {name}</span>
      <span className="village-map-parcel-bar" role="img" aria-label={`${Math.round(recordedArea/totalArea*100)}% of the parcel area has recorded rights`}><b style={{width:`${recordedArea/totalArea*100}%`}}/></span>
