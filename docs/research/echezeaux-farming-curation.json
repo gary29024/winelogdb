@@ -762,6 +762,16 @@
       "evidenceSeason": "2011"
     },
     {
+      "id": "guyon-sheet",
+      "title": "Jean-Pierre Guyon: Échezeaux Grand Cru technical sheet",
+      "url": "https://jeanpierreguyon.com/wp-content/uploads/16_echezeaux_-grand_cru_en_orveaux_pinot_noir.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Estate sheet: \"Surface : 22 ares\", climat En Orveaux at the bottom of the Combe d'Orveaux, vines about 70 years old, organic. Rounded to the are, so about 2 500 sets of up to four unrecorded En Orveaux parcels fit; no parcel is identified.",
+      "access": "read"
+    },
+    {
       "id": "guyon-echezeaux",
       "title": "Wine Journey: Jean-Pierre Guyon, Échezeaux 2020",
       "url": "https://www.winejourney.com.sg/products/copy-of-domaine-jean-pierre-guyon-vosne-romanee-premiere-cru-en-orveaux-rouge-2020",
@@ -2219,9 +2229,10 @@
       "precision": "are",
       "relation": "unstated",
       "sourceIds": [
+        "guyon-sheet",
         "guyon-echezeaux"
       ],
-      "finding": "No company record.",
+      "finding": "No company record. The estate's own sheet gives 22 ares at the bottom of the Combe d'Orveaux; too rounded to identify parcels.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
