@@ -718,6 +718,140 @@
       "reviewedAt": "2026-09-28",
       "access": "premium-supplied-by-repository-owner",
       "finding": "Premium article supplied by the repository owner; only facts are recorded. Four plots in Les Rouges du Bas, 0.6204 ha: former cadastre 206, now 818, 819 and 820 (0.4535 ha), and 677 (0.1669 ha). Échezeaux produced since the late 1970s."
+    },
+    {
+      "id": "gerard-mugneret",
+      "title": "Gérard Mugneret: Échezeaux",
+      "url": "https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "States 0.6462 ha in Les Quartiers de Nuits, sharecropped (métayage) and owned by Domaine Georges Mugneret-Gibourg. No cadastral number.",
+      "access": "read"
+    },
+    {
+      "id": "vigot",
+      "title": "Fabrice Vigot: Échezeaux",
+      "url": "https://www.domainevigot.com/+-Echezeaux-+",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "States 59.63 ares in Les Rouges du Bas \"en métayage Mugneret-Gibourg\". Undated; Mugneret-Gibourg reports taking these vines back for the 2017 harvest.",
+      "access": "read"
+    },
+    {
+      "id": "bouchard-orveaux",
+      "title": "Gran Châteaux: Bouchard Père & Fils, Échezeaux En Orveaux 2022",
+      "url": "https://www.granchateaux.ch/fr/echezeaux-en-orveaux-grand-cru-domaine-bouchard-pere-fils-2022.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Merchant text: Bouchard Père & Fils \"est propriétaire de 39 ares\" at the bottom of the Combe d'Orveau. No cadastral number.",
+      "access": "read",
+      "evidenceSeason": "2022"
+    },
+    {
+      "id": "dmugneret-hachette",
+      "title": "Guide Hachette: Dominique Mugneret, En Orveaux 2011",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/dominique-mugneret-en-orveaux-2011-2014/20147347/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Guide entry (2014 edition): \"Dominique Mugneret exploite 40 ares\" of En Orveaux, Échezeaux grand cru. No cadastral number.",
+      "access": "read",
+      "evidenceSeason": "2011"
+    },
+    {
+      "id": "guyon-echezeaux",
+      "title": "Wine Journey: Jean-Pierre Guyon, Échezeaux 2020",
+      "url": "https://www.winejourney.com.sg/products/copy-of-domaine-jean-pierre-guyon-vosne-romanee-premiere-cru-en-orveaux-rouge-2020",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Merchant sheet for the Échezeaux grand cru: 22 ares, lower Combe d'Orveaux. Guyon's 34 ares of En Orveaux cited elsewhere are Vosne-Romanée premier cru, not Échezeaux.",
+      "access": "read",
+      "evidenceSeason": "2020"
+    },
+    {
+      "id": "bizot-interview",
+      "title": "Bergman's Bourgogne: interview with Jean-Yves Bizot",
+      "url": "https://www.bourgogne-info.eu/html/domaine_bizot.html",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Bizot describes two Échezeaux parcels, in Les Treux and Les Orveaux. No area, cadastral number or tenure.",
+      "access": "read"
+    },
+    {
+      "id": "cacheux-forum",
+      "title": "La Passion du Vin: Domaine Jacques Cacheux",
+      "url": "https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Forum post quoting the domaine: \"Nous possédons 1 ha incluant 5 parcelles parmi lesquelles les Cruots, la Combe d'Orveau, les Poulallières.\" No cadastral numbers.",
+      "access": "read"
+    },
+    {
+      "id": "tardy-wasserman",
+      "title": "Becky Wasserman: Jean Tardy, Échezeaux Les Treux",
+      "url": "https://www.beckywasserman.com/domaines/jean-tardy/echezeaux-grand-cru-les-treux-vieilles-vignes/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Importer sheet: 0.34 ha in Les Treux, planted 1937. Consistent with the 0.3493 ha recorded to Domaine Bouchy et Amis in Les Treux; tenure not stated.",
+      "access": "read"
+    },
+    {
+      "id": "gnoellat-wasserman",
+      "title": "Becky Wasserman: Georges Noëllat, Échezeaux",
+      "url": "https://www.beckywasserman.com/domaines/georges-noellat/echezeaux-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Importer sheet: 0.07 ha in Cruots, planted before 1915. No company record matches this holding.",
+      "access": "read"
+    },
+    {
+      "id": "lamarche-2009",
+      "title": "Burgundy Report: Domaine François Lamarche profile (2009)",
+      "url": "https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/",
+      "type": "press",
+      "documentDate": "2009-07-01",
+      "reviewedAt": "2026-09-29",
+      "finding": "Lists 1.35 ha of Échezeaux from Cruots and Clos Saint-Denis; the domaine then owned 8 of 11 ha and leased the rest. The company record (Nicole Lamarche) covers 1.10 ha.",
+      "access": "read"
+    },
+    {
+      "id": "meo-hedonism",
+      "title": "Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009",
+      "url": "https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Merchant text: \"a 0.44ha parcel\" in Les Rouges du Bas. The estate itself says about 1 acre, planted at the end of the 1940s.",
+      "access": "read",
+      "evidenceSeason": "2009"
+    },
+    {
+      "id": "meo",
+      "title": "Méo-Camuzet: Échezeaux",
+      "url": "https://www.meo-camuzet.com/en/the-wines/6/echezeaux",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-09-29",
+      "finding": "Estate page: a plot of about 1 acre in Les Rouges du Bas, first planted at the end of the 1940s. No cadastral number.",
+      "access": "read"
+    },
+    {
+      "id": "millot-estate",
+      "title": "Jean-Marc Millot: Échezeaux",
+      "url": "https://jean-marc-millot.com/en/portfolio-item/echezeaux-2",
+      "type": "estate",
+      "documentDate": "2022-04-01",
+      "reviewedAt": "2026-09-29",
+      "finding": "Estate page (April 2022): 1 ha from Clos Saint-Denis, Échezeaux du Dessus (four fifths) and Les Poulaillères. The Dessus plots are D0798–D0800 (Winehog).",
+      "access": "read"
     }
   ],
   "holders": [
@@ -1267,8 +1401,9 @@
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
     "Open DVF sale records cover 2021–2025 only (five rolling years) and name no party. Earlier transfers, gifts and inheritances are not in them.",
-    "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins were blocked by this research environment's network policy (safer-bfc.fr, cote-dor.gouv.fr) and remain unsearched.",
-    "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews."
+    "SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).",
+    "Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.",
+    "Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded."
   ],
   "historyFindings": [
     {
@@ -1784,6 +1919,333 @@
         "206"
       ],
       "appNote": "Four named plots in Les Rouges du Bas. D0677 is recorded to another owner, and this conflicts with an earlier lead."
+    },
+    {
+      "id": "gm-d0362",
+      "title": "Gérard Mugneret, Les Quartiers de Nuits (métayage)",
+      "parcelIds": [
+        "212670000D0362"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Domaine Gérard Mugneret states that it sharecrops 0.6462 ha in Les Quartiers de Nuits owned by Domaine Georges Mugneret-Gibourg. That equals the cadastral area of D0362 (6 462 m²), the owner's only parcel in this lieu-dit. The page is undated and names no parcel.",
+      "sourceIds": [
+        "gerard-mugneret",
+        "mugneret"
+      ],
+      "producer": "Domaine Gérard Mugneret (métayer)",
+      "appNote": "The farming domaine states it sharecrops 0.6462 ha here for Mugneret-Gibourg: exactly this parcel's registered area, and the owner's only parcel in Les Quartiers de Nuits. Undated; parcel not named."
+    },
+    {
+      "id": "vigot-d0195",
+      "title": "Fabrice Vigot métayage, Les Rouges du Bas, ended 2017",
+      "parcelIds": [
+        "212670000D0195"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Fabrice Vigot states 59.63 ares in Les Rouges du Bas \"en métayage Mugneret-Gibourg\"; Mugneret-Gibourg's only parcel there, D0195, measures 5 965 m² in the cadastre (5 963 m² mapped). Mugneret-Gibourg reports the first harvest of vines formerly sharecropped by Vigot in 2017, so Vigot's page predates that return.",
+      "sourceIds": [
+        "vigot",
+        "mugneret2017"
+      ],
+      "producer": "Domaine Georges Mugneret-Gibourg (since 2017; earlier Fabrice Vigot, métayage)",
+      "appNote": "Fabrice Vigot sharecropped 59.63 ares here for Mugneret-Gibourg, matching this parcel's area. Mugneret-Gibourg reports taking these vines back for the 2017 harvest."
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "gerard-mugneret",
+      "producer": "Domaine Gérard Mugneret",
+      "namedAreas": [
+        "LES QUARTIERS DE NUITS"
+      ],
+      "publishedAreaHa": 0.6462,
+      "precision": "square-metre",
+      "relation": "metayer",
+      "sourceIds": [
+        "gerard-mugneret"
+      ],
+      "finding": "Sharecrops land recorded to Mugneret-Gibourg (D0362).",
+      "producerHolderIds": [],
+      "ownerHolderIds": [
+        "513459719"
+      ],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "vigot",
+      "producer": "Domaine Fabrice Vigot",
+      "namedAreas": [
+        "LES ROUGES DU BAS"
+      ],
+      "publishedAreaHa": 0.5963,
+      "precision": "square-metre",
+      "relation": "metayer",
+      "sourceIds": [
+        "vigot",
+        "mugneret2017"
+      ],
+      "finding": "Sharecropped land recorded to Mugneret-Gibourg (D0195) until the 2017 harvest.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [
+        "513459719"
+      ],
+      "endedSeason": "2017",
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "clerget",
+      "producer": "Domaine Christian Clerget",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 1.09,
+      "precision": "hundredth-hectare",
+      "relation": "farmer",
+      "sourceIds": [
+        "clerget"
+      ],
+      "finding": "Farms 1.09 ha; its company record covers 0.22 ha, so about 0.87 ha lies on land without a company record.",
+      "producerHolderIds": [
+        "431340140"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "eugenie",
+      "producer": "Domaine d'Eugénie",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 0.94,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "eugenie"
+      ],
+      "finding": "Matches the 0.93 ha recorded to the domaine, including D0340 bought in November 2023.",
+      "producerHolderIds": [
+        "326533213"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bouchard",
+      "producer": "Bouchard Père & Fils",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 0.39,
+      "precision": "are",
+      "relation": "owner",
+      "sourceIds": [
+        "bouchard-orveaux"
+      ],
+      "finding": "No company record: a stated owner whose parcels are not in the legal-entity files.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "dmugneret",
+      "producer": "Domaine Dominique Mugneret",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 0.4,
+      "precision": "are",
+      "relation": "farmer",
+      "sourceIds": [
+        "dmugneret-hachette"
+      ],
+      "finding": "No company record; tenure not stated.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "guyon",
+      "producer": "Domaine Jean-Pierre Guyon",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 0.22,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "guyon-echezeaux"
+      ],
+      "finding": "No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bizot",
+      "producer": "Domaine Jean-Yves Bizot",
+      "namedAreas": [
+        "EN ORVEAUX",
+        "LES TREUX"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "bizot-interview"
+      ],
+      "finding": "Two parcels, sizes not published. No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "cacheux",
+      "producer": "Domaine Jacques Cacheux",
+      "namedAreas": [
+        "EN ORVEAUX",
+        "LES CRUOTS OU VIGNES BLANCHES"
+      ],
+      "publishedAreaHa": 1.0,
+      "precision": "approximate",
+      "relation": "owner",
+      "sourceIds": [
+        "cacheux-forum"
+      ],
+      "finding": "About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        "Les Poulaillères"
+      ]
+    },
+    {
+      "id": "tardy",
+      "producer": "Domaine Jean Tardy",
+      "namedAreas": [
+        "LES TREUX"
+      ],
+      "publishedAreaHa": 0.34,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "tardy-wasserman"
+      ],
+      "finding": "Matches the 0.35 ha recorded to Domaine Bouchy et Amis in Les Treux.",
+      "producerHolderIds": [
+        "391735321"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "gnoellat",
+      "producer": "Domaine Georges Noëllat",
+      "namedAreas": [
+        "LES CRUOTS OU VIGNES BLANCHES"
+      ],
+      "publishedAreaHa": 0.07,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "gnoellat-wasserman"
+      ],
+      "finding": "No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "lamarche",
+      "producer": "Domaine François Lamarche / Nicole Lamarche",
+      "namedAreas": [
+        "LES CRUOTS OU VIGNES BLANCHES",
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 1.35,
+      "precision": "hundredth-hectare",
+      "relation": "farmer",
+      "sourceIds": [
+        "lamarche-2009"
+      ],
+      "finding": "1.35 ha in 2009 against 1.10 ha now recorded to Nicole Lamarche: about 0.25 ha may be leased land without a company record.",
+      "producerHolderIds": [
+        "397738634"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "meo",
+      "producer": "Domaine Méo-Camuzet",
+      "namedAreas": [
+        "LES ROUGES DU BAS"
+      ],
+      "publishedAreaHa": 0.44,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "meo",
+        "meo-hedonism"
+      ],
+      "finding": "No company record.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "millot",
+      "producer": "Domaine Jean-Marc Millot",
+      "namedAreas": [
+        "CLOS SAINT-DENIS",
+        "ECHEZEAUX DU DESSUS"
+      ],
+      "publishedAreaHa": 1.0,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "millot-estate",
+        "winehog-millot"
+      ],
+      "finding": "Dessus plots D0798–D0800 are owned by the Gouroux family (no company record). Also names Les Poulaillères.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        "Les Poulaillères"
+      ]
+    },
+    {
+      "id": "anne-gros",
+      "producer": "Domaine Anne Gros",
+      "namedAreas": [
+        "LES LOÄCHAUSSES"
+      ],
+      "publishedAreaHa": 0.76,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "anne"
+      ],
+      "finding": "Matches the 0.76 ha recorded to Anne Gros.",
+      "producerHolderIds": [
+        "348024928"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ]
 }

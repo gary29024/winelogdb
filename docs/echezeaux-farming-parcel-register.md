@@ -450,288 +450,336 @@ Indexed 2021 filing describes an En Orveaux asset transfer involving SCI Les Cli
 
 Sources: [HOR Vignobles 2021 filing](https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf).
 
+## Named-area census
+
+Parcels are grouped by the cadastral lieu-dit holding most of their geometry. For each named area the census compares land without a company record with the Échezeaux holdings producers publish there. "Beyond company records" is a published area minus the land recorded to company records linked to that producer in the same named area: land the producer says it owns or farms, which the legal-entity files do not show. It is an area comparison only. It never places a holding on particular parcels, and a producer's published figure can be rounded, out of date or include leased land. A métayer farms land already recorded to its owner; a holding spread over several named areas cannot be split, so neither is counted. `LES POULA` has no reviewed crosswalk to Les Poulaillères.
+
+| Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
+| --- | ---: | ---: | ---: | ---: |
+| Clos Saint-Denis | 14 (1.69 ha) | 7 (0.65 ha) | 7 (0.65 ha) | 0.00 ha |
+| Échezeaux du Dessus | 26 (4.52 ha) | 16 (2.69 ha) | 3 (0.02 ha) | 0.00 ha |
+| En Orveaux | 67 (8.01 ha) | 41 (4.24 ha) | 41 (4.24 ha) | 1.88 ha |
+| Les Beaux Monts Bas | 5 (0.79 ha) | 5 (0.79 ha) | 4 (0.44 ha) | 0.00 ha |
+| Les Champs Traversins | 26 (3.57 ha) | 16 (1.07 ha) | 13 (0.97 ha) | 0.00 ha |
+| Les Cruots ou Vignes Blanches | 23 (3.21 ha) | 18 (2.10 ha) | 10 (1.26 ha) | 0.07 ha |
+| Les Loächausses | 22 (2.51 ha) | 20 (1.75 ha) | 12 (0.82 ha) | 0.00 ha |
+| LES POULA (cadastral; unreviewed) | 15 (5.24 ha) | 7 (0.90 ha) | 7 (0.90 ha) | 0.00 ha |
+| Les Quartiers de Nuits | 4 (1.15 ha) | 2 (0.40 ha) | 2 (0.40 ha) | 0.00 ha |
+| Les Rouges du Bas | 20 (3.08 ha) | 6 (0.86 ha) | 6 (0.86 ha) | 0.44 ha |
+| Les Treux | 54 (5.07 ha) | 19 (1.84 ha) | 18 (1.55 ha) | 0.00 ha |
+
+**Published holdings by named area**
+
+- **Clos Saint-Denis**
+  - Domaine François Lamarche / Nicole Lamarche: 1.35 ha (hundredth-hectare); states it farms; total also covers Les Cruots ou Vignes Blanches; 0.45 ha recorded to linked company records here. 1.35 ha in 2009 against 1.10 ha now recorded to Nicole Lamarche: about 0.25 ha may be leased land without a company record. [Burgundy Report: Domaine François Lamarche profile (2009)](https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/).
+  - Domaine Jean-Marc Millot: 1.0 ha (approximate); tenure not stated; total also covers Échezeaux du Dessus; 0.00 ha recorded to linked company records here. Dessus plots D0798–D0800 are owned by the Gouroux family (no company record). Also names Les Poulaillères. [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2), [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/).
+- **Échezeaux du Dessus**
+  - Domaine Jean-Marc Millot: 1.0 ha (approximate); tenure not stated; total also covers Clos Saint-Denis; 0.00 ha recorded to linked company records here. Dessus plots D0798–D0800 are owned by the Gouroux family (no company record). Also names Les Poulaillères. [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2), [Winehog: Terroir View – Jean-Marc Millot Echezeaux "Cuvée 1949"](https://winehog.org/terroir-view-jean-marc-millot-echezeaux-37123/).
+- **En Orveaux**
+  - Domaine Christian Clerget: 1.09 ha (hundredth-hectare); states it farms; 0.22 ha recorded to linked company records here; 0.87 ha beyond company records. Farms 1.09 ha; its company record covers 0.22 ha, so about 0.87 ha lies on land without a company record. [Christian Clerget: En Orveaux sheet](https://static.domaine-christianclerget.fr/media/vins/14/pages-de-ft-echezeaux-en.pdf).
+  - Domaine d'Eugénie: 0.94 ha (hundredth-hectare); tenure not stated; 0.93 ha recorded to linked company records here; 0.01 ha beyond company records. Matches the 0.93 ha recorded to the domaine, including D0340 bought in November 2023. [Domaine d'Eugénie: wines](https://domaine-eugenie.com/les-vins).
+  - Bouchard Père & Fils: 0.39 ha (are); states ownership; 0.00 ha recorded to linked company records here; 0.39 ha beyond company records. No company record: a stated owner whose parcels are not in the legal-entity files. [Gran Châteaux: Bouchard Père & Fils, Échezeaux En Orveaux 2022](https://www.granchateaux.ch/fr/echezeaux-en-orveaux-grand-cru-domaine-bouchard-pere-fils-2022.html).
+  - Domaine Dominique Mugneret: 0.4 ha (are); states it farms; 0.00 ha recorded to linked company records here; 0.40 ha beyond company records. No company record; tenure not stated. [Guide Hachette: Dominique Mugneret, En Orveaux 2011](https://www.hachette-vins.com/guide-vins/les-vins/dominique-mugneret-en-orveaux-2011-2014/20147347/).
+  - Domaine Jean-Pierre Guyon: 0.22 ha (are); tenure not stated; 0.00 ha recorded to linked company records here; 0.22 ha beyond company records. No company record. [Wine Journey: Jean-Pierre Guyon, Échezeaux 2020](https://www.winejourney.com.sg/products/copy-of-domaine-jean-pierre-guyon-vosne-romanee-premiere-cru-en-orveaux-rouge-2020).
+  - Domaine Jean-Yves Bizot: area not published (none); tenure not stated; total also covers Les Treux; 0.00 ha recorded to linked company records here. Two parcels, sizes not published. No company record. [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html).
+  - Domaine Jacques Cacheux: 1.0 ha (approximate); states ownership; total also covers Les Cruots ou Vignes Blanches; 0.00 ha recorded to linked company records here. About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed. [La Passion du Vin: Domaine Jacques Cacheux](https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee).
+- **Les Cruots ou Vignes Blanches**
+  - Domaine Jacques Cacheux: 1.0 ha (approximate); states ownership; total also covers En Orveaux; 0.00 ha recorded to linked company records here. About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed. [La Passion du Vin: Domaine Jacques Cacheux](https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee).
+  - Domaine Georges Noëllat: 0.07 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.07 ha beyond company records. No company record. [Becky Wasserman: Georges Noëllat, Échezeaux](https://www.beckywasserman.com/domaines/georges-noellat/echezeaux-grand-cru/).
+  - Domaine François Lamarche / Nicole Lamarche: 1.35 ha (hundredth-hectare); states it farms; total also covers Clos Saint-Denis; 0.65 ha recorded to linked company records here. 1.35 ha in 2009 against 1.10 ha now recorded to Nicole Lamarche: about 0.25 ha may be leased land without a company record. [Burgundy Report: Domaine François Lamarche profile (2009)](https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/).
+- **Les Loächausses**
+  - Domaine Anne Gros: 0.76 ha (hundredth-hectare); states ownership; 0.76 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.76 ha recorded to Anne Gros. [Anne Gros: Échezeaux](https://www.anne-gros.com/products-category/echezeaux/).
+- **Les Quartiers de Nuits**
+  - Domaine Gérard Mugneret: 0.6462 ha (square-metre); sharecrops (métayage); owner recorded as DOMAINE GEORGES MUGNERET GIBOURG. Sharecrops land recorded to Mugneret-Gibourg (D0362). [Gérard Mugneret: Échezeaux](https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/).
+- **Les Rouges du Bas**
+  - Domaine Fabrice Vigot: 0.5963 ha (square-metre); sharecrops (métayage); owner recorded as DOMAINE GEORGES MUGNERET GIBOURG; ended with the 2017 harvest. Sharecropped land recorded to Mugneret-Gibourg (D0195) until the 2017 harvest. [Fabrice Vigot: Échezeaux](https://www.domainevigot.com/+-Echezeaux-+), [Mugneret-Gibourg: 2017 vintage](https://www.mugneret-gibourg.com/fr/millesimes/47/millesime-2017).
+  - Domaine Méo-Camuzet: 0.44 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.44 ha beyond company records. No company record. [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux), [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009).
+- **Les Treux**
+  - Domaine Jean-Yves Bizot: area not published (none); tenure not stated; total also covers En Orveaux; 0.00 ha recorded to linked company records here. Two parcels, sizes not published. No company record. [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html).
+  - Domaine Jean Tardy: 0.34 ha (hundredth-hectare); tenure not stated; 0.35 ha recorded to linked company records here; 0.00 ha beyond company records. Matches the 0.35 ha recorded to Domaine Bouchy et Amis in Les Treux. [Becky Wasserman: Jean Tardy, Échezeaux Les Treux](https://www.beckywasserman.com/domaines/jean-tardy/echezeaux-grand-cru-les-treux-vieilles-vignes/).
+
 ## Every mapped parcel
 
 All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence links are in the JSON register. “Holder” points to the investigations above. “None” means no matched record, not no farmer.
 
-| Reference | Cru overlap (m²) | Holder research ID | Candidate to investigate — never verified | Current farmer |
-| --- | ---: | --- | --- | --- |
-| D 0114 | 1273.41 | None | Unresolved | Unconfirmed |
-| D 0117 | 1319.97 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0118 | 1644.70 | None | Unresolved | Unconfirmed |
-| D 0119 | 2071.37 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0120 | 4681.17 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0121 | 921.21 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0122 | 417.76 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0123 | 305.90 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0124 | 1429.69 | None | Unresolved | Unconfirmed |
-| D 0128 | 1467.98 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0129 | 856.48 | None | Unresolved | Unconfirmed |
-| D 0130 | 306.27 | None | Unresolved | Unconfirmed |
-| D 0131 | 914.54 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0132 | 327.18 | None | Unresolved | Unconfirmed |
-| D 0133 | 882.32 | None | Unresolved | Unconfirmed |
-| D 0134 | 1175.78 | None | Unresolved | Unconfirmed |
-| D 0135 | 248.26 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0136 | 195.55 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0137 | 483.25 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0138 | 455.88 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0139 | 557.82 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
-| D 0142 | 894.59 | None | Unresolved | Unconfirmed |
-| D 0144 | 513.65 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0145 | 462.67 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0146 | 2876.33 | None | LES CRUOTS (same-sale-as-company-buyer) | Unconfirmed |
-| D 0147 | 1390.95 | None | Unresolved | Unconfirmed |
-| D 0149 | 3059.74 | None | Unresolved | Unconfirmed |
-| D 0150 | 457.65 | None | Unresolved | Unconfirmed |
-| D 0151 | 479.79 | None | Unresolved | Unconfirmed |
-| D 0152 | 290.05 | None | Unresolved | Unconfirmed |
-| D 0153 | 512.51 | None | Unresolved | Unconfirmed |
-| D 0154 | 272.04 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0155 | 329.53 | None | Unresolved | Unconfirmed |
-| D 0156 | 666.31 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0157 | 620.10 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
-| D 0161 | 1854.32 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context) | Unconfirmed |
-| D 0162 | 877.41 | None | Unresolved | Unconfirmed |
-| D 0163 | 118.48 | None | Unresolved | Unconfirmed |
-| D 0164 | 242.47 | None | Unresolved | Unconfirmed |
-| D 0165 | 1087.22 | None | Unresolved | Unconfirmed |
-| D 0166 | 2962.15 | None | Unresolved | Unconfirmed |
-| D 0167 | 278.04 | None | Unresolved | Unconfirmed |
-| D 0168 | 664.44 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
-| D 0169 | 5806.96 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
-| D 0172 | 5378.66 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0176 | 366.86 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0177 | 264.81 | None | Anne Gros (historical-application) | Unconfirmed |
-| D 0178 | 3462.16 | None | Anne Gros (historical-application) | Unconfirmed |
-| D 0181 | 365.44 | None | SAS Domaine AF Gros (Pommard) (historical-application) | Unconfirmed |
-| D 0183 | 259.51 | [348024928](#holder-348024928) | Domaine Anne Gros (estate-context) | Unconfirmed |
-| D 0184 | 145.08 | None | SARL Domaine Michel Gros (historical-application) | Unconfirmed |
-| D 0189 | 1038.22 | None | Domaine Cécile Tremblay (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0190 | 736.31 | None | Domaine Cécile Tremblay (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0191 | 1036.63 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0192 | 1013.51 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0194 | 156.96 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0195 | 5963.29 | [513459719](#holder-513459719) | Domaine Georges Mugneret-Gibourg (estate-context) | Unconfirmed |
-| D 0200 | 826.47 | None | Unresolved | Unconfirmed |
-| D 0201 | 534.25 | None | Unresolved | Unconfirmed |
-| D 0202 | 1437.81 | None | Unresolved | Unconfirmed |
-| D 0203 | 1431.07 | [380128777](#holder-380128777) | EARL Domaine Faivre (identity-only) | Unconfirmed |
-| D 0208 | 333.49 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
-| D 0293 | 2528.47 | None | Unresolved | Unconfirmed |
-| D 0295 | 1114.18 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
-| D 0296 | 428.50 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
-| D 0297 | 513.98 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
-| D 0298 | 326.49 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
-| D 0299 | 235.88 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
-| D 0301 | 406.35 | None | Unresolved | Unconfirmed |
-| D 0302 | 405.37 | None | Unresolved | Unconfirmed |
-| D 0303 | 390.38 | None | Unresolved | Unconfirmed |
-| D 0304 | 498.09 | None | Unresolved | Unconfirmed |
-| D 0305 | 759.53 | None | Unresolved | Unconfirmed |
-| D 0306 | 6902.87 | [322396185](#holder-322396185) | Domaine Dujac (estate-context) | Unconfirmed |
-| D 0307 | 1672.35 | None | Unresolved | Unconfirmed |
-| D 0308 | 20.60 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0313 | 1099.74 | [883067134](#holder-883067134) | Unresolved | Unconfirmed |
-| D 0316 | 816.71 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
-| D 0323 | 2269.76 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
-| D 0326 | 59.30 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0329 | 22.46 | None | Unresolved | Unconfirmed |
-| D 0331 | 440.94 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
-| D 0332 | 277.45 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0333 | 1216.18 | None | Unresolved | Unconfirmed |
-| D 0335 | 4951.58 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
-| D 0337 | 4.96 | None | Unresolved | Unconfirmed |
-| D 0338 | 813.12 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0339 | 560.97 | None | Unresolved | Unconfirmed |
-| D 0340 | 3867.14 | [326533213](#holder-326533213) | Domaine d'Eugénie (estate-context) | Unconfirmed |
-| D 0341 | 945.68 | None | Unresolved | Unconfirmed |
-| D 0342 | 706.33 | None | Unresolved | Unconfirmed |
-| D 0343 | 773.58 | None | Unresolved | Unconfirmed |
-| D 0344 | 1945.08 | None | Unresolved | Unconfirmed |
-| D 0345 | 495.74 | None | Unresolved | Unconfirmed |
-| D 0346 | 459.76 | None | Unresolved | Unconfirmed |
-| D 0347 | 475.74 | None | Unresolved | Unconfirmed |
-| D 0348 | 396.76 | None | Unresolved | Unconfirmed |
-| D 0349 | 296.14 | None | Unresolved | Unconfirmed |
-| D 0351 | 2691.97 | None | Unresolved | Unconfirmed |
-| D 0352 | 5480.18 | [326533213](#holder-326533213) | Domaine d'Eugénie (estate-context) | Unconfirmed |
-| D 0354 | 3923.56 | None | Unresolved | Unconfirmed |
-| D 0360 | 967.38 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
-| D 0361 | 416.15 | None | Unresolved | Unconfirmed |
-| D 0362 | 6560.17 | [513459719](#holder-513459719) | Domaine Georges Mugneret-Gibourg (estate-context) | Unconfirmed |
-| D 0364 | 3540.05 | None | Unresolved | Unconfirmed |
-| D 0503 | 312.98 | None | Unresolved | Unconfirmed |
-| D 0504 | 428.55 | None | Unresolved | Unconfirmed |
-| D 0505 | 594.46 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0508 | 856.08 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
-| D 0509 | 1068.41 | None | Unresolved | Unconfirmed |
-| D 0510 | 4429.22 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context); Hospices de Beaune (owner) (critic-named-cadastral-reference) | Unconfirmed |
-| D 0511 | 2331.61 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0512 | 346.37 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
-| D 0515 | 466.91 | None | Unresolved | Unconfirmed |
-| D 0519 | 4537.28 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
-| D 0530 | 2361.69 | None | Unresolved | Unconfirmed |
-| D 0536 | 809.45 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
-| D 0537 | 1313.25 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
-| D 0538 | 2076.80 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
-| D 0539 | 225.44 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
-| D 0557 | 108.04 | None | Unresolved | Unconfirmed |
-| D 0558 | 936.94 | None | SARL Domaine Michel Gros (historical-application) | Unconfirmed |
-| D 0563 | 673.59 | None | Unresolved | Unconfirmed |
-| D 0564 | 1372.40 | None | Unresolved | Unconfirmed |
-| D 0565 | 995.45 | None | Unresolved | Unconfirmed |
-| D 0566 | 937.50 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0568 | 860.76 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0569 | 12615.45 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0579 | 1627.46 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0581 | 50.25 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0583 | 244.38 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0584 | 320.09 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0585 | 47.27 | None | Unresolved | Unconfirmed |
-| D 0586 | 468.70 | None | Unresolved | Unconfirmed |
-| D 0587 | 703.95 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0588 | 55.93 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
-| D 0590 | 430.25 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0591 | 53.77 | None | Unresolved | Unconfirmed |
-| D 0592 | 1057.73 | None | Unresolved | Unconfirmed |
-| D 0593 | 58.38 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0595 | 125.01 | None | Unresolved | Unconfirmed |
-| D 0599 | 81.85 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0620 | 4335.65 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0621 | 4426.96 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0622 | 122.91 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0623 | 52.43 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0625 | 719.60 | None | Unresolved | Unconfirmed |
-| D 0626 | 2363.37 | None | Unresolved | Unconfirmed |
-| D 0627 | 154.92 | None | Unresolved | Unconfirmed |
-| D 0628 | 245.66 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0629 | 394.39 | None | Unresolved | Unconfirmed |
-| D 0631 | 5417.97 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context); Domaine Jayer-Gilles / Hoffmann-Jayer (critic-named-cadastral-reference) | Unconfirmed |
-| D 0632 | 5162.31 | None | Niquet-Jayer family (owner) (critic-named-cadastral-reference) | Unconfirmed |
-| D 0633 | 1440.86 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
-| D 0635 | 265.46 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
-| D 0636 | 780.10 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
-| D 0637 | 1690.25 | None | Unresolved | Unconfirmed |
-| D 0638 | 1699.79 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
-| D 0645 | 1121.96 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
-| D 0646 | 1539.16 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
-| D 0647 | 635.30 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
-| D 0649 | 3750.37 | None | Unresolved | Unconfirmed |
-| D 0650 | 364.41 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
-| D 0651 | 1787.02 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
-| D 0652 | 2317.52 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
-| D 0653 | 2944.15 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
-| D 0654 | 232.86 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0665 | 1150.81 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead); SAS Domaine RC Les Grandes Vignes (Quincey) (authorisation) | Unconfirmed |
-| D 0666 | 1215.50 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead); SAS Domaine RC Les Grandes Vignes (Quincey) (authorisation) | Unconfirmed |
-| D 0667 | 1226.31 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead) | Unconfirmed |
-| D 0668 | 1131.13 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0669 | 1006.14 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0670 | 1118.48 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
-| D 0671 | 1023.36 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0672 | 1076.38 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
-| D 0673 | 1059.85 | [880909346](#holder-880909346) | Domaine du Comte Liger-Belair (management-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0674 | 1703.58 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
-| D 0675 | 1443.35 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
-| D 0676 | 271.01 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
-| D 0677 | 1617.53 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
-| D 0678 | 845.12 | None | Unresolved | Unconfirmed |
-| D 0679 | 800.99 | None | Unresolved | Unconfirmed |
-| D 0680 | 737.41 | None | Unresolved | Unconfirmed |
-| D 0700 | 1019.91 | None | Unresolved | Unconfirmed |
-| D 0701 | 568.96 | None | Unresolved | Unconfirmed |
-| D 0704 | 176.84 | None | Unresolved | Unconfirmed |
-| D 0705 | 12.82 | None | Unresolved | Unconfirmed |
-| D 0706 | 14.38 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context) | Unconfirmed |
-| D 0707 | 38.76 | None | Unresolved | Unconfirmed |
-| D 0709 | 7324.05 | [348024928](#holder-348024928) | Domaine Anne Gros (estate-context) | Unconfirmed |
-| D 0714 | 152.73 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
-| D 0719 | 3422.02 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
-| D 0723 | 440.85 | None | Unresolved | Unconfirmed |
-| D 0725 | 664.28 | None | Unresolved | Unconfirmed |
-| D 0736 | 105.86 | None | Unresolved | Unconfirmed |
-| D 0737 | 271.54 | None | Unresolved | Unconfirmed |
-| D 0738 | 84.56 | None | Unresolved | Unconfirmed |
-| D 0739 | 1006.86 | None | Unresolved | Unconfirmed |
-| D 0740 | 154.14 | None | Unresolved | Unconfirmed |
-| D 0741 | 49.72 | None | Unresolved | Unconfirmed |
-| D 0742 | 152.02 | None | Unresolved | Unconfirmed |
-| D 0743 | 186.34 | None | Unresolved | Unconfirmed |
-| D 0744 | 2707.04 | None | Unresolved | Unconfirmed |
-| D 0745 | 295.86 | None | Unresolved | Unconfirmed |
-| D 0746 | 220.73 | None | Unresolved | Unconfirmed |
-| D 0747 | 1763.77 | None | Unresolved | Unconfirmed |
-| D 0760 | 9762.30 | [036380046](#holder-036380046) | Domaine du Clos Frantin / Albert Bichot (estate-context) | Unconfirmed |
-| D 0764 | 990.12 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0765 | 1761.03 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0766 | 226.05 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0767 | 269.84 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0768 | 3976.76 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0769 | 233.14 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0770 | 40.74 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0771 | 1781.55 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
-| D 0773 | 3616.29 | [778233098](#holder-778233098) | Domaine Jacques Prieur (estate-context) | Unconfirmed |
-| D 0788 | 1469.97 | None | Unresolved | Unconfirmed |
-| D 0793 | 3107.39 | None | Unresolved | Unconfirmed |
-| D 0795 | 302.41 | None | Unresolved | Unconfirmed |
-| D 0796 | 2206.05 | [431340140](#holder-431340140) | Domaine Christian Clerget (estate-context) | Unconfirmed |
-| D 0797 | 6066.76 | None | Unresolved | Unconfirmed |
-| D 0798 | 1884.73 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0799 | 2612.97 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0800 | 1621.64 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
-| D 0802 | 1316.01 | None | Unresolved | Unconfirmed |
-| D 0803 | 992.81 | None | Unresolved | Unconfirmed |
-| D 0804 | 1652.71 | None | Unresolved | Unconfirmed |
-| D 0805 | 12935.87 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0806 | 1273.82 | None | Unresolved | Unconfirmed |
-| D 0807 | 1304.88 | None | Unresolved | Unconfirmed |
-| D 0808 | 14297.09 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
-| D 0809 | 713.93 | None | Unresolved | Unconfirmed |
-| D 0810 | 891.39 | None | Unresolved | Unconfirmed |
-| D 0811 | 3925.05 | None | Unresolved | Unconfirmed |
-| D 0812 | 2660.45 | None | Unresolved | Unconfirmed |
-| D 0813 | 2104.69 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
-| D 0814 | 1310.55 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
-| D 0815 | 855.99 | [798977476](#holder-798977476) | Unresolved | Unconfirmed |
-| D 0818 | 591.93 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
-| D 0819 | 1027.71 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
-| D 0820 | 3009.27 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
-| D 0821 | 386.56 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
-| D 0822 | 457.83 | None | Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
-| D 0824 | 521.48 | None | Unresolved | Unconfirmed |
-| D 0825 | 218.26 | None | Unresolved | Unconfirmed |
-| D 0826 | 1053.72 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
-| D 0827 | 1067.09 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
-| D 0828 | 102.88 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
-| D 0829 | 90.63 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
-| D 0830 | 159.25 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
-| D 0831 | 2602.23 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
-| D 0832 | 177.40 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
-| D 0833 | 158.01 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
-| D 0834 | 4844.52 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
-| D 0835 | 178.35 | None | Unresolved | Unconfirmed |
-| D 0836 | 1301.70 | None | Unresolved | Unconfirmed |
-| D 0841 | 1846.74 | None | Unresolved | Unconfirmed |
-| D 0842 | 1817.12 | None | Unresolved | Unconfirmed |
-| D 0843 | 902.64 | None | Unresolved | Unconfirmed |
-| D 0844 | 903.70 | None | Unresolved | Unconfirmed |
-| D 0871 | 523.82 | None | Unresolved | Unconfirmed |
-| D 0872 | 43.32 | None | Unresolved | Unconfirmed |
-| D 0898 | 823.93 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
-| D 0899 | 782.51 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
-| D 0900 | 779.31 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
-| D 0901 | 2251.47 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
-| D 0902 | 134.79 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
-| D 0903 | 135.90 | None | Unresolved | Unconfirmed |
-| D 0904 | 901.03 | None | Unresolved | Unconfirmed |
-| D 0905 | 991.80 | None | Unresolved | Unconfirmed |
-| D 0906 | 1116.11 | None | Unresolved | Unconfirmed |
-| D 0907 | 1113.93 | None | Unresolved | Unconfirmed |
-| D 0908 | 1114.78 | None | Unresolved | Unconfirmed |
-| D 0909 | 557.26 | None | Unresolved | Unconfirmed |
-| D 0910 | 557.16 | None | Unresolved | Unconfirmed |
-| D 0911 | 544.71 | None | Unresolved | Unconfirmed |
+| Reference | Named area | Cru overlap (m²) | Holder research ID | Candidate to investigate — never verified | Current farmer |
+| --- | --- | ---: | --- | --- | --- |
+| D 0114 | Les Treux | 1273.41 | None | Unresolved | Unconfirmed |
+| D 0117 | Les Treux | 1319.97 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0118 | Les Treux | 1644.70 | None | Unresolved | Unconfirmed |
+| D 0119 | Les Treux | 2071.37 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0120 | Les Treux | 4681.17 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0121 | Les Treux | 921.21 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0122 | Les Treux | 417.76 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0123 | Les Treux | 305.90 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0124 | Les Treux | 1429.69 | None | Unresolved | Unconfirmed |
+| D 0128 | Les Treux | 1467.98 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0129 | Les Treux | 856.48 | None | Unresolved | Unconfirmed |
+| D 0130 | Les Treux | 306.27 | None | Unresolved | Unconfirmed |
+| D 0131 | Les Treux | 914.54 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0132 | Les Treux | 327.18 | None | Unresolved | Unconfirmed |
+| D 0133 | Les Treux | 882.32 | None | Unresolved | Unconfirmed |
+| D 0134 | Les Treux | 1175.78 | None | Unresolved | Unconfirmed |
+| D 0135 | Les Treux | 248.26 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0136 | Les Treux | 195.55 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0137 | Les Treux | 483.25 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0138 | Les Treux | 455.88 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0139 | Les Treux | 557.82 | [353847510](#holder-353847510) | Domaine Michel Noëllat (estate-context) | Unconfirmed |
+| D 0142 | Les Treux | 894.59 | None | Unresolved | Unconfirmed |
+| D 0144 | Les Treux | 513.65 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0145 | Les Treux | 462.67 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0146 | Les Treux | 2876.33 | None | LES CRUOTS (same-sale-as-company-buyer) | Unconfirmed |
+| D 0147 | Clos Saint-Denis | 1390.95 | None | Unresolved | Unconfirmed |
+| D 0149 | Clos Saint-Denis | 3059.74 | None | Unresolved | Unconfirmed |
+| D 0150 | Clos Saint-Denis | 457.65 | None | Unresolved | Unconfirmed |
+| D 0151 | Clos Saint-Denis | 479.79 | None | Unresolved | Unconfirmed |
+| D 0152 | Clos Saint-Denis | 290.05 | None | Unresolved | Unconfirmed |
+| D 0153 | Clos Saint-Denis | 512.51 | None | Unresolved | Unconfirmed |
+| D 0154 | Clos Saint-Denis | 272.04 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0155 | Clos Saint-Denis | 329.53 | None | Unresolved | Unconfirmed |
+| D 0156 | Clos Saint-Denis | 666.31 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0157 | Clos Saint-Denis | 620.10 | [U33360620](#holder-u33360620) | Domaine Forey Père et Fils (weak-identity-lead) | Unconfirmed |
+| D 0161 | Les Cruots ou Vignes Blanches | 1854.32 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context) | Unconfirmed |
+| D 0162 | Les Cruots ou Vignes Blanches | 877.41 | None | Unresolved | Unconfirmed |
+| D 0163 | Les Cruots ou Vignes Blanches | 118.48 | None | Unresolved | Unconfirmed |
+| D 0164 | Les Cruots ou Vignes Blanches | 242.47 | None | Unresolved | Unconfirmed |
+| D 0165 | Les Cruots ou Vignes Blanches | 1087.22 | None | Unresolved | Unconfirmed |
+| D 0166 | Les Cruots ou Vignes Blanches | 2962.15 | None | Unresolved | Unconfirmed |
+| D 0167 | Les Cruots ou Vignes Blanches | 278.04 | None | Unresolved | Unconfirmed |
+| D 0168 | Les Cruots ou Vignes Blanches | 664.44 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
+| D 0169 | Les Cruots ou Vignes Blanches | 5806.96 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
+| D 0172 | Les Cruots ou Vignes Blanches | 5378.66 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0176 | Les Cruots ou Vignes Blanches | 366.86 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0177 | Les Cruots ou Vignes Blanches | 264.81 | None | Anne Gros (historical-application) | Unconfirmed |
+| D 0178 | Les Beaux Monts Bas | 3462.16 | None | Anne Gros (historical-application) | Unconfirmed |
+| D 0181 | Les Loächausses | 365.44 | None | SAS Domaine AF Gros (Pommard) (historical-application) | Unconfirmed |
+| D 0183 | Les Loächausses | 259.51 | [348024928](#holder-348024928) | Domaine Anne Gros (estate-context) | Unconfirmed |
+| D 0184 | Les Loächausses | 145.08 | None | SARL Domaine Michel Gros (historical-application) | Unconfirmed |
+| D 0189 | Échezeaux du Dessus | 1038.22 | None | Domaine Cécile Tremblay (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0190 | Échezeaux du Dessus | 736.31 | None | Domaine Cécile Tremblay (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0191 | Échezeaux du Dessus | 1036.63 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0192 | Échezeaux du Dessus | 1013.51 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0194 | Échezeaux du Dessus | 156.96 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0195 | Les Rouges du Bas | 5963.29 | [513459719](#holder-513459719) | Domaine Georges Mugneret-Gibourg (estate-context); Domaine Georges Mugneret-Gibourg (since 2017; earlier Fabrice Vigot, métayage) (estate-area-exact-match) | Unconfirmed |
+| D 0200 | Les Rouges du Bas | 826.47 | None | Unresolved | Unconfirmed |
+| D 0201 | Les Rouges du Bas | 534.25 | None | Unresolved | Unconfirmed |
+| D 0202 | Les Rouges du Bas | 1437.81 | None | Unresolved | Unconfirmed |
+| D 0203 | Les Rouges du Bas | 1431.07 | [380128777](#holder-380128777) | EARL Domaine Faivre (identity-only) | Unconfirmed |
+| D 0208 | Les Rouges du Bas | 333.49 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
+| D 0293 | Les Champs Traversins | 2528.47 | None | Unresolved | Unconfirmed |
+| D 0295 | Les Champs Traversins | 1114.18 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
+| D 0296 | Les Champs Traversins | 428.50 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
+| D 0297 | Les Champs Traversins | 513.98 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
+| D 0298 | Les Champs Traversins | 326.49 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
+| D 0299 | Les Champs Traversins | 235.88 | [911887461](#holder-911887461) | Domaine Georges Roumier (management-and-reported-estate-context) | Unconfirmed |
+| D 0301 | Les Champs Traversins | 406.35 | None | Unresolved | Unconfirmed |
+| D 0302 | Les Champs Traversins | 405.37 | None | Unresolved | Unconfirmed |
+| D 0303 | Les Champs Traversins | 390.38 | None | Unresolved | Unconfirmed |
+| D 0304 | Les Champs Traversins | 498.09 | None | Unresolved | Unconfirmed |
+| D 0305 | Les Champs Traversins | 759.53 | None | Unresolved | Unconfirmed |
+| D 0306 | Les Champs Traversins | 6902.87 | [322396185](#holder-322396185) | Domaine Dujac (estate-context) | Unconfirmed |
+| D 0307 | LES POULA (cadastral; unreviewed) | 1672.35 | None | Unresolved | Unconfirmed |
+| D 0308 | LES POULA (cadastral; unreviewed) | 20.60 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0313 | LES POULA (cadastral; unreviewed) | 1099.74 | [883067134](#holder-883067134) | Unresolved | Unconfirmed |
+| D 0316 | En Orveaux | 816.71 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0323 | En Orveaux | 2269.76 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0326 | En Orveaux | 59.30 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0329 | En Orveaux | 22.46 | None | Unresolved | Unconfirmed |
+| D 0331 | En Orveaux | 440.94 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
+| D 0332 | En Orveaux | 277.45 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0333 | En Orveaux | 1216.18 | None | Unresolved | Unconfirmed |
+| D 0335 | En Orveaux | 4951.58 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
+| D 0337 | En Orveaux | 4.96 | None | Unresolved | Unconfirmed |
+| D 0338 | En Orveaux | 813.12 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0339 | En Orveaux | 560.97 | None | Unresolved | Unconfirmed |
+| D 0340 | En Orveaux | 3867.14 | [326533213](#holder-326533213) | Domaine d'Eugénie (estate-context) | Unconfirmed |
+| D 0341 | En Orveaux | 945.68 | None | Unresolved | Unconfirmed |
+| D 0342 | En Orveaux | 706.33 | None | Unresolved | Unconfirmed |
+| D 0343 | En Orveaux | 773.58 | None | Unresolved | Unconfirmed |
+| D 0344 | En Orveaux | 1945.08 | None | Unresolved | Unconfirmed |
+| D 0345 | En Orveaux | 495.74 | None | Unresolved | Unconfirmed |
+| D 0346 | En Orveaux | 459.76 | None | Unresolved | Unconfirmed |
+| D 0347 | En Orveaux | 475.74 | None | Unresolved | Unconfirmed |
+| D 0348 | En Orveaux | 396.76 | None | Unresolved | Unconfirmed |
+| D 0349 | En Orveaux | 296.14 | None | Unresolved | Unconfirmed |
+| D 0351 | En Orveaux | 2691.97 | None | Unresolved | Unconfirmed |
+| D 0352 | En Orveaux | 5480.18 | [326533213](#holder-326533213) | Domaine d'Eugénie (estate-context) | Unconfirmed |
+| D 0354 | En Orveaux | 3923.56 | None | Unresolved | Unconfirmed |
+| D 0360 | Les Quartiers de Nuits | 967.38 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
+| D 0361 | Les Quartiers de Nuits | 416.15 | None | Unresolved | Unconfirmed |
+| D 0362 | Les Quartiers de Nuits | 6560.17 | [513459719](#holder-513459719) | Domaine Georges Mugneret-Gibourg (estate-context); Domaine Gérard Mugneret (métayer) (estate-area-exact-match) | Unconfirmed |
+| D 0364 | Les Quartiers de Nuits | 3540.05 | None | Unresolved | Unconfirmed |
+| D 0503 | Les Rouges du Bas | 312.98 | None | Unresolved | Unconfirmed |
+| D 0504 | Les Treux | 428.55 | None | Unresolved | Unconfirmed |
+| D 0505 | LES POULA (cadastral; unreviewed) | 594.46 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0508 | Les Treux | 856.08 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
+| D 0509 | Les Champs Traversins | 1068.41 | None | Unresolved | Unconfirmed |
+| D 0510 | Échezeaux du Dessus | 4429.22 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context); Hospices de Beaune (owner) (critic-named-cadastral-reference) | Unconfirmed |
+| D 0511 | Les Cruots ou Vignes Blanches | 2331.61 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0512 | Les Cruots ou Vignes Blanches | 346.37 | [U33046436](#holder-u33046436) | Domaine Emmanuel Rouget (weak-identity-lead) | Unconfirmed |
+| D 0515 | Les Beaux Monts Bas | 466.91 | None | Unresolved | Unconfirmed |
+| D 0519 | Clos Saint-Denis | 4537.28 | [397738634](#holder-397738634) | Domaine Nicole Lamarche (identity-only) | Unconfirmed |
+| D 0530 | LES POULA (cadastral; unreviewed) | 2361.69 | None | Unresolved | Unconfirmed |
+| D 0536 | Les Treux | 809.45 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
+| D 0537 | Les Treux | 1313.25 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
+| D 0538 | Les Treux | 2076.80 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
+| D 0539 | Les Treux | 225.44 | [348334384](#holder-348334384) | Domaine Confuron-Cotetidot (secondary-estate-context) | Unconfirmed |
+| D 0557 | Les Loächausses | 108.04 | None | Unresolved | Unconfirmed |
+| D 0558 | Les Loächausses | 936.94 | None | SARL Domaine Michel Gros (historical-application) | Unconfirmed |
+| D 0563 | En Orveaux | 673.59 | None | Unresolved | Unconfirmed |
+| D 0564 | En Orveaux | 1372.40 | None | Unresolved | Unconfirmed |
+| D 0565 | En Orveaux | 995.45 | None | Unresolved | Unconfirmed |
+| D 0566 | LES POULA (cadastral; unreviewed) | 937.50 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0568 | LES POULA (cadastral; unreviewed) | 860.76 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0569 | LES POULA (cadastral; unreviewed) | 12615.45 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0579 | En Orveaux | 1627.46 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0581 | En Orveaux | 50.25 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0583 | En Orveaux | 244.38 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0584 | En Orveaux | 320.09 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0585 | En Orveaux | 47.27 | None | Unresolved | Unconfirmed |
+| D 0586 | En Orveaux | 468.70 | None | Unresolved | Unconfirmed |
+| D 0587 | En Orveaux | 703.95 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0588 | En Orveaux | 55.93 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (estate-context) | Unconfirmed |
+| D 0590 | Les Champs Traversins | 430.25 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0591 | Les Champs Traversins | 53.77 | None | Unresolved | Unconfirmed |
+| D 0592 | Les Champs Traversins | 1057.73 | None | Unresolved | Unconfirmed |
+| D 0593 | Les Champs Traversins | 58.38 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0595 | Les Treux | 125.01 | None | Unresolved | Unconfirmed |
+| D 0599 | Les Cruots ou Vignes Blanches | 81.85 | None | Domaine Jean Grivot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0620 | Échezeaux du Dessus | 4335.65 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0621 | Échezeaux du Dessus | 4426.96 | None | Domaine des Perdrix (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0622 | Les Treux | 122.91 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0623 | Les Treux | 52.43 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0625 | Les Treux | 719.60 | None | Unresolved | Unconfirmed |
+| D 0626 | Les Treux | 2363.37 | None | Unresolved | Unconfirmed |
+| D 0627 | Les Treux | 154.92 | None | Unresolved | Unconfirmed |
+| D 0628 | Les Treux | 245.66 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0629 | Les Treux | 394.39 | None | Unresolved | Unconfirmed |
+| D 0631 | Échezeaux du Dessus | 5417.97 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context); Domaine Jayer-Gilles / Hoffmann-Jayer (critic-named-cadastral-reference) | Unconfirmed |
+| D 0632 | Échezeaux du Dessus | 5162.31 | None | Niquet-Jayer family (owner) (critic-named-cadastral-reference) | Unconfirmed |
+| D 0633 | En Orveaux | 1440.86 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0635 | En Orveaux | 265.46 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
+| D 0636 | En Orveaux | 780.10 | [U32852627](#holder-u32852627) | Unresolved | Unconfirmed |
+| D 0637 | Les Rouges du Bas | 1690.25 | None | Unresolved | Unconfirmed |
+| D 0638 | Les Rouges du Bas | 1699.79 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
+| D 0645 | Les Rouges du Bas | 1121.96 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
+| D 0646 | Les Rouges du Bas | 1539.16 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
+| D 0647 | Les Rouges du Bas | 635.30 | [423789452](#holder-423789452) | Domaine Henri Naudin-Ferrand (management-and-estate-context) | Unconfirmed |
+| D 0649 | Les Rouges du Bas | 3750.37 | None | Unresolved | Unconfirmed |
+| D 0650 | Les Rouges du Bas | 364.41 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
+| D 0651 | Les Rouges du Bas | 1787.02 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
+| D 0652 | Les Rouges du Bas | 2317.52 | [U18178179](#holder-u18178179) | Unresolved | Unconfirmed |
+| D 0653 | En Orveaux | 2944.15 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
+| D 0654 | En Orveaux | 232.86 | [778269498](#holder-778269498) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0665 | Les Treux | 1150.81 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead); SAS Domaine RC Les Grandes Vignes (Quincey) (authorisation) | Unconfirmed |
+| D 0666 | Les Treux | 1215.50 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead); SAS Domaine RC Les Grandes Vignes (Quincey) (authorisation) | Unconfirmed |
+| D 0667 | Les Treux | 1226.31 | [379998115](#holder-379998115) | Domaine Jean-Charles Rion (succession-lead) | Unconfirmed |
+| D 0668 | Échezeaux du Dessus | 1131.13 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0669 | Échezeaux du Dessus | 1006.14 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0670 | Échezeaux du Dessus | 1118.48 | None | Domaine Mongeard-Mugneret (critic-attribution-area-reconstructed) | Unconfirmed |
+| D 0671 | Échezeaux du Dessus | 1023.36 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0672 | Échezeaux du Dessus | 1076.38 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
+| D 0673 | Échezeaux du Dessus | 1059.85 | [880909346](#holder-880909346) | Domaine du Comte Liger-Belair (management-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0674 | Les Rouges du Bas | 1703.58 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
+| D 0675 | Les Rouges du Bas | 1443.35 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
+| D 0676 | Les Rouges du Bas | 271.01 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship) | Unconfirmed |
+| D 0677 | Les Rouges du Bas | 1617.53 | [382058188](#holder-382058188) | Domaine David Duband (reported-operator-relationship); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0678 | LES POULA (cadastral; unreviewed) | 845.12 | None | Unresolved | Unconfirmed |
+| D 0679 | LES POULA (cadastral; unreviewed) | 800.99 | None | Unresolved | Unconfirmed |
+| D 0680 | LES POULA (cadastral; unreviewed) | 737.41 | None | Unresolved | Unconfirmed |
+| D 0700 | En Orveaux | 1019.91 | None | Unresolved | Unconfirmed |
+| D 0701 | En Orveaux | 568.96 | None | Unresolved | Unconfirmed |
+| D 0704 | Échezeaux du Dessus | 176.84 | None | Unresolved | Unconfirmed |
+| D 0705 | Échezeaux du Dessus | 12.82 | None | Unresolved | Unconfirmed |
+| D 0706 | Échezeaux du Dessus | 14.38 | [383925674](#holder-383925674) | Domaine Hoffmann-Jayer (estate-context) | Unconfirmed |
+| D 0707 | Échezeaux du Dessus | 38.76 | None | Unresolved | Unconfirmed |
+| D 0709 | Les Loächausses | 7324.05 | [348024928](#holder-348024928) | Domaine Anne Gros (estate-context) | Unconfirmed |
+| D 0714 | En Orveaux | 152.73 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
+| D 0719 | En Orveaux | 3422.02 | [U22264880](#holder-u22264880) | Unresolved | Unconfirmed |
+| D 0723 | En Orveaux | 440.85 | None | Unresolved | Unconfirmed |
+| D 0725 | En Orveaux | 664.28 | None | Unresolved | Unconfirmed |
+| D 0736 | En Orveaux | 105.86 | None | Unresolved | Unconfirmed |
+| D 0737 | En Orveaux | 271.54 | None | Unresolved | Unconfirmed |
+| D 0738 | En Orveaux | 84.56 | None | Unresolved | Unconfirmed |
+| D 0739 | En Orveaux | 1006.86 | None | Unresolved | Unconfirmed |
+| D 0740 | En Orveaux | 154.14 | None | Unresolved | Unconfirmed |
+| D 0741 | En Orveaux | 49.72 | None | Unresolved | Unconfirmed |
+| D 0742 | En Orveaux | 152.02 | None | Unresolved | Unconfirmed |
+| D 0743 | En Orveaux | 186.34 | None | Unresolved | Unconfirmed |
+| D 0744 | En Orveaux | 2707.04 | None | Unresolved | Unconfirmed |
+| D 0745 | En Orveaux | 295.86 | None | Unresolved | Unconfirmed |
+| D 0746 | En Orveaux | 220.73 | None | Unresolved | Unconfirmed |
+| D 0747 | En Orveaux | 1763.77 | None | Unresolved | Unconfirmed |
+| D 0760 | Les Champs Traversins | 9762.30 | [036380046](#holder-036380046) | Domaine du Clos Frantin / Albert Bichot (estate-context) | Unconfirmed |
+| D 0764 | Les Treux | 990.12 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0765 | Les Treux | 1761.03 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0766 | Les Treux | 226.05 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0767 | Les Treux | 269.84 | [391735321](#holder-391735321) | Domaine Jean Tardy et Fils (bottler-only-lead); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
+| D 0768 | Clos Saint-Denis | 3976.76 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0769 | Clos Saint-Denis | 233.14 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0770 | Clos Saint-Denis | 40.74 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0771 | Les Champs Traversins | 1781.55 | [778230359](#holder-778230359) | Domaine Louis Jadot (secondary-estate-context) | Unconfirmed |
+| D 0773 | Les Champs Traversins | 3616.29 | [778233098](#holder-778233098) | Domaine Jacques Prieur (estate-context) | Unconfirmed |
+| D 0788 | Les Treux | 1469.97 | None | Unresolved | Unconfirmed |
+| D 0793 | Les Cruots ou Vignes Blanches | 3107.39 | None | Unresolved | Unconfirmed |
+| D 0795 | Les Cruots ou Vignes Blanches | 302.41 | None | Unresolved | Unconfirmed |
+| D 0796 | En Orveaux | 2206.05 | [431340140](#holder-431340140) | Domaine Christian Clerget (estate-context) | Unconfirmed |
+| D 0797 | En Orveaux | 6066.76 | None | Unresolved | Unconfirmed |
+| D 0798 | Échezeaux du Dessus | 1884.73 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0799 | Échezeaux du Dessus | 2612.97 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0800 | Échezeaux du Dessus | 1621.64 | None | Domaine Jean-Marc Millot (critic-named-cadastral-reference) | Unconfirmed |
+| D 0802 | Les Beaux Monts Bas | 1316.01 | None | Unresolved | Unconfirmed |
+| D 0803 | Les Beaux Monts Bas | 992.81 | None | Unresolved | Unconfirmed |
+| D 0804 | Les Beaux Monts Bas | 1652.71 | None | Unresolved | Unconfirmed |
+| D 0805 | LES POULA (cadastral; unreviewed) | 12935.87 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0806 | LES POULA (cadastral; unreviewed) | 1273.82 | None | Unresolved | Unconfirmed |
+| D 0807 | LES POULA (cadastral; unreviewed) | 1304.88 | None | Unresolved | Unconfirmed |
+| D 0808 | LES POULA (cadastral; unreviewed) | 14297.09 | [778269407](#holder-778269407) | Domaine de la Romanée-Conti (estate-context) | Unconfirmed |
+| D 0809 | En Orveaux | 713.93 | None | Unresolved | Unconfirmed |
+| D 0810 | En Orveaux | 891.39 | None | Unresolved | Unconfirmed |
+| D 0811 | En Orveaux | 3925.05 | None | Unresolved | Unconfirmed |
+| D 0812 | En Orveaux | 2660.45 | None | Unresolved | Unconfirmed |
+| D 0813 | En Orveaux | 2104.69 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
+| D 0814 | En Orveaux | 1310.55 | [821877008](#holder-821877008) | Unresolved | Unconfirmed |
+| D 0815 | En Orveaux | 855.99 | [798977476](#holder-798977476) | Unresolved | Unconfirmed |
+| D 0818 | Échezeaux du Dessus | 591.93 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0819 | Échezeaux du Dessus | 1027.71 | None | Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0820 | Échezeaux du Dessus | 3009.27 | [328972344](#holder-328972344) | Domaine Arnoux-Lachaux (estate-context); Domaine Arnoux-Lachaux (critic-named-cadastral-reference) | Unconfirmed |
+| D 0821 | Les Champs Traversins | 386.56 | [326603305](#holder-326603305) | Domaine Berthaut-Gerbet (partial-succession-lead); Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
+| D 0822 | Les Champs Traversins | 457.83 | None | Domaine Berthaut-Gerbet (critic-named-cadastral-reference) | Unconfirmed |
+| D 0824 | Les Champs Traversins | 521.48 | None | Unresolved | Unconfirmed |
+| D 0825 | Les Champs Traversins | 218.26 | None | Unresolved | Unconfirmed |
+| D 0826 | Les Cruots ou Vignes Blanches | 1053.72 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
+| D 0827 | Les Cruots ou Vignes Blanches | 1067.09 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0792) | Unconfirmed |
+| D 0828 | Les Cruots ou Vignes Blanches | 102.88 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
+| D 0829 | Les Cruots ou Vignes Blanches | 90.63 | None | Domaine Jean Grivot (critic-named-cadastral-reference on predecessor D0794) | Unconfirmed |
+| D 0830 | Les Loächausses | 159.25 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
+| D 0831 | Les Loächausses | 2602.23 | None | SARL Domaine Michel Gros (historical-application on predecessor D0774) | Unconfirmed |
+| D 0832 | Les Loächausses | 177.40 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
+| D 0833 | Les Loächausses | 158.01 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
+| D 0834 | Les Loächausses | 4844.52 | None | SAS Domaine AF Gros (Pommard) (historical-application on predecessor D0775) | Unconfirmed |
+| D 0835 | Les Loächausses | 178.35 | None | Unresolved | Unconfirmed |
+| D 0836 | Les Loächausses | 1301.70 | None | Unresolved | Unconfirmed |
+| D 0841 | Les Cruots ou Vignes Blanches | 1846.74 | None | Unresolved | Unconfirmed |
+| D 0842 | Les Cruots ou Vignes Blanches | 1817.12 | None | Unresolved | Unconfirmed |
+| D 0843 | Les Champs Traversins | 902.64 | None | Unresolved | Unconfirmed |
+| D 0844 | Les Champs Traversins | 903.70 | None | Unresolved | Unconfirmed |
+| D 0871 | Les Loächausses | 523.82 | None | Unresolved | Unconfirmed |
+| D 0872 | Les Loächausses | 43.32 | None | Unresolved | Unconfirmed |
+| D 0898 | Les Treux | 823.93 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
+| D 0899 | Les Treux | 782.51 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
+| D 0900 | Les Treux | 779.31 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
+| D 0901 | Les Treux | 2251.47 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
+| D 0902 | Les Treux | 134.79 | [U22079769](#holder-u22079769) | Unresolved | Unconfirmed |
+| D 0903 | Les Treux | 135.90 | None | Unresolved | Unconfirmed |
+| D 0904 | Les Treux | 901.03 | None | Unresolved | Unconfirmed |
+| D 0905 | Les Loächausses | 991.80 | None | Unresolved | Unconfirmed |
+| D 0906 | Les Loächausses | 1116.11 | None | Unresolved | Unconfirmed |
+| D 0907 | Les Loächausses | 1113.93 | None | Unresolved | Unconfirmed |
+| D 0908 | Les Loächausses | 1114.78 | None | Unresolved | Unconfirmed |
+| D 0909 | Les Loächausses | 557.26 | None | Unresolved | Unconfirmed |
+| D 0910 | Les Loächausses | 557.16 | None | Unresolved | Unconfirmed |
+| D 0911 | Les Loächausses | 544.71 | None | Unresolved | Unconfirmed |
 
 ## Exact-reference administrative events
 
@@ -762,6 +810,8 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Domaine Jean Grivot: seven named Échezeaux plots** (D 0172, D 0176, D 0599, D 0590, D 0593; via lineage: D 0792 (retired) → D 0826, D 0827; D 0794 (retired) → D 0828, D 0829; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 172, 176, 792, 794 and 599 in Les Cruots ou Vignes Blanches and 590, 593 in Champs Traversins as the source of the Grivot Échezeaux. Published areas equal the cadastral sums exactly (7 970 m² and 490 m²). D0792 and D0794 were divided during 2022; their evidence reaches D0826/D0827 and D0828/D0829 only through accepted lineage, and those rows are labelled as inherited. None of the plots has a company record in any year 2019–2025, consistent with private family ownership. The article describes farming for the Grivot Échezeaux as of 2019, not a dated current lease. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
 - **Lamadon holdings divided in 2006** (D 0590, D 0593; via lineage: D 0792 (retired) → D 0826, D 0827; D 0794 (retired) → D 0828, D 0829; critic-holding-description). Winehog reports that the Lamadon family stopped production in 2006 and divided its plots between Louis-Michel Liger-Belair (métayage), the Lamarche family and the Grivot family; Grivot received 792/794 and presumably 590/593. The Liger-Belair and Lamarche shares are not identified by cadastral number. Sources: [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/).
 - **Domaine Arnoux-Lachaux: four named plots in Les Rouges du Bas** (D 0818, D 0819, D 0820, D 0677; critic-named-cadastral-reference). Winehog (May 2019) names cadastre 818, 819, 820 (formerly 206; 0.4535 ha) and 677 (0.1669 ha); the published areas equal the cadastral areas exactly. Rights agree for D0820 (DOMAINE ARNOUX - LACHAUX); D0818/D0819 have no company record. D0677 is recorded to FRANCOIS FEUILLET, so the article implies that Arnoux-Lachaux farmed a Feuillet-owned parcel in 2019. That conflicts with the holder-level Duband lead for D0677; both remain unconfirmed. Former reference 206 predates the 2019 cadastre vintage and is not traced. D0161, held by Arnoux-Lachaux from 2024, is not in the 2019 article. Sources: [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/).
+- **Gérard Mugneret, Les Quartiers de Nuits (métayage)** (D 0362; estate-area-exact-match). Domaine Gérard Mugneret states that it sharecrops 0.6462 ha in Les Quartiers de Nuits owned by Domaine Georges Mugneret-Gibourg. That equals the cadastral area of D0362 (6 462 m²), the owner's only parcel in this lieu-dit. The page is undated and names no parcel. Sources: [Gérard Mugneret: Échezeaux](https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/), [Mugneret-Gibourg: Échezeaux](https://www.mugneret-gibourg.com/fr/vin/9/echezeaux-grand-cru).
+- **Fabrice Vigot métayage, Les Rouges du Bas, ended 2017** (D 0195; estate-area-exact-match). Fabrice Vigot states 59.63 ares in Les Rouges du Bas "en métayage Mugneret-Gibourg"; Mugneret-Gibourg's only parcel there, D0195, measures 5 965 m² in the cadastre (5 963 m² mapped). Mugneret-Gibourg reports the first harvest of vines formerly sharecropped by Vigot in 2017, so Vigot's page predates that return. Sources: [Fabrice Vigot: Échezeaux](https://www.domainevigot.com/+-Echezeaux-+), [Mugneret-Gibourg: 2017 vintage](https://www.mugneret-gibourg.com/fr/millesimes/47/millesime-2017).
 
 ## Rights history and parcel lineage
 
@@ -931,6 +981,19 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **winehog-grivot** — [Winehog: Terroir Insight – Domaine Jean Grivot Echezeaux](https://winehog.org/terroir-insight-domaine-jean-grivot-echezeaux-37550/). critic-research; premium-supplied-by-repository-owner; document date 2019-05-11. Premium article supplied by the repository owner; only facts are recorded. Grivot Échezeaux from seven plots, 0.8460 ha: Les Cruots ou Vignes Blanches 172, 176, 792, 794, 599 (0.7970 ha) and Champs Traversins 590, 593 (0.0490 ha). 172/176 presumably via the Jayer family; 792/794 and presumably 590/593 from the Lamadon holdings divided in 2006 between Liger-Belair (métayage), the Lamarche family and the Grivot family.
 - **raa-2026-067** — [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28). government-decision; read; document date 2026-04-07. Suspends for eight months from publication (29 April 2026) the instruction of an application registered 11/12/2025 and complete 06/01/2026, for excessive enlargement. Pages 28–30 read from the image.
 - **winehog-arnoux-lachaux** — [Winehog: Terroir View – Domaine Arnoux-Lachaux, Echezeaux](https://winehog.org/terroir-view-arnoux-lachaux-echezeaux-37470/). critic-research; premium-supplied-by-repository-owner; document date 2019-05-04. Premium article supplied by the repository owner; only facts are recorded. Four plots in Les Rouges du Bas, 0.6204 ha: former cadastre 206, now 818, 819 and 820 (0.4535 ha), and 677 (0.1669 ha). Échezeaux produced since the late 1970s.
+- **gerard-mugneret** — [Gérard Mugneret: Échezeaux](https://www.gerard-mugneret.fr/en/appellation/en-echezeaux-grand-cru/). estate; read; document date not established. States 0.6462 ha in Les Quartiers de Nuits, sharecropped (métayage) and owned by Domaine Georges Mugneret-Gibourg. No cadastral number.
+- **vigot** — [Fabrice Vigot: Échezeaux](https://www.domainevigot.com/+-Echezeaux-+). estate; read; document date not established. States 59.63 ares in Les Rouges du Bas "en métayage Mugneret-Gibourg". Undated; Mugneret-Gibourg reports taking these vines back for the 2017 harvest.
+- **bouchard-orveaux** — [Gran Châteaux: Bouchard Père & Fils, Échezeaux En Orveaux 2022](https://www.granchateaux.ch/fr/echezeaux-en-orveaux-grand-cru-domaine-bouchard-pere-fils-2022.html). merchant; read; document date not established; evidence season 2022. Merchant text: Bouchard Père & Fils "est propriétaire de 39 ares" at the bottom of the Combe d'Orveau. No cadastral number.
+- **dmugneret-hachette** — [Guide Hachette: Dominique Mugneret, En Orveaux 2011](https://www.hachette-vins.com/guide-vins/les-vins/dominique-mugneret-en-orveaux-2011-2014/20147347/). press; read; document date not established; evidence season 2011. Guide entry (2014 edition): "Dominique Mugneret exploite 40 ares" of En Orveaux, Échezeaux grand cru. No cadastral number.
+- **guyon-echezeaux** — [Wine Journey: Jean-Pierre Guyon, Échezeaux 2020](https://www.winejourney.com.sg/products/copy-of-domaine-jean-pierre-guyon-vosne-romanee-premiere-cru-en-orveaux-rouge-2020). merchant; read; document date not established; evidence season 2020. Merchant sheet for the Échezeaux grand cru: 22 ares, lower Combe d'Orveaux. Guyon's 34 ares of En Orveaux cited elsewhere are Vosne-Romanée premier cru, not Échezeaux.
+- **bizot-interview** — [Bergman's Bourgogne: interview with Jean-Yves Bizot](https://www.bourgogne-info.eu/html/domaine_bizot.html). press; read; document date not established. Bizot describes two Échezeaux parcels, in Les Treux and Les Orveaux. No area, cadastral number or tenure.
+- **cacheux-forum** — [La Passion du Vin: Domaine Jacques Cacheux](https://www.lapassionduvin.com/bourgognebeaujolais/22026-domaine-jacques-cacheux-fils-vosne-romanee). press; read; document date not established. Forum post quoting the domaine: "Nous possédons 1 ha incluant 5 parcelles parmi lesquelles les Cruots, la Combe d'Orveau, les Poulallières." No cadastral numbers.
+- **tardy-wasserman** — [Becky Wasserman: Jean Tardy, Échezeaux Les Treux](https://www.beckywasserman.com/domaines/jean-tardy/echezeaux-grand-cru-les-treux-vieilles-vignes/). importer; read; document date not established. Importer sheet: 0.34 ha in Les Treux, planted 1937. Consistent with the 0.3493 ha recorded to Domaine Bouchy et Amis in Les Treux; tenure not stated.
+- **gnoellat-wasserman** — [Becky Wasserman: Georges Noëllat, Échezeaux](https://www.beckywasserman.com/domaines/georges-noellat/echezeaux-grand-cru/). importer; read; document date not established. Importer sheet: 0.07 ha in Cruots, planted before 1915. No company record matches this holding.
+- **lamarche-2009** — [Burgundy Report: Domaine François Lamarche profile (2009)](https://www.burgundy-report.com/burgundy-report-extra/07-2009/profile-domaine-francois-lamarche-vosne-romanee/). press; read; document date 2009-07-01. Lists 1.35 ha of Échezeaux from Cruots and Clos Saint-Denis; the domaine then owned 8 of 11 ha and leased the rest. The company record (Nicole Lamarche) covers 1.10 ha.
+- **meo-hedonism** — [Hedonism: Méo-Camuzet, Échezeaux Les Rouges du Bas 2009](https://hedonism.co.uk/product/echezeaux-les-rouges-du-bas-meo-camuzet-2009). merchant; read; document date not established; evidence season 2009. Merchant text: "a 0.44ha parcel" in Les Rouges du Bas. The estate itself says about 1 acre, planted at the end of the 1940s.
+- **meo** — [Méo-Camuzet: Échezeaux](https://www.meo-camuzet.com/en/the-wines/6/echezeaux). estate; read; document date not established. Estate page: a plot of about 1 acre in Les Rouges du Bas, first planted at the end of the 1940s. No cadastral number.
+- **millot-estate** — [Jean-Marc Millot: Échezeaux](https://jean-marc-millot.com/en/portfolio-item/echezeaux-2). estate; read; document date 2022-04-01. Estate page (April 2022): 1 ha from Clos Saint-Denis, Échezeaux du Dessus (four fifths) and Les Poulaillères. The Dessus plots are D0798–D0800 (Winehog).
 
 ## Remaining evidence and access gaps
 
@@ -940,7 +1003,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so "no decision found" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.
 - Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.
 - Open DVF sale records cover 2021–2025 only (five rolling years) and name no party. Earlier transfers, gifts and inheritances are not in them.
-- SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins were blocked by this research environment's network policy (safer-bfc.fr, cote-dor.gouv.fr) and remain unsearched.
+- SAFER land-agency notices, the Côte-d'Or prefecture site and pre-2016 departmental bulletins remain unsearched: cote-dor.gouv.fr rate-limits automated requests, and the SAFER Bourgogne-Franche-Comté notice site was not reached at the addresses tried (safer-bfc.fr, saferbfc.fr).
 - Winehog Premium articles were read only where supplied by the repository owner (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet); the Grands-Échezeaux articles and others only as public previews.
+- Producer holdings were collected from estate, importer, merchant and guide pages on 29 September 2026. Several merchant pages refused automated reading (403/429); figures seen only in search summaries were not recorded.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

@@ -18,6 +18,7 @@ REPORT = ROOT / 'docs/echezeaux-farming-parcel-register.md'
 HISTORY = ROOT / 'docs/research/echezeaux-rights-history.json'
 EVIDENCE = ROOT / 'src/lib/places/echezeauxParcelEvidence.json'
 SALES = ROOT / 'docs/research/echezeaux-sale-records.json'
+NAMED_AREAS = ROOT / 'docs/research/echezeaux-parcel-named-areas.json'
 
 
 def require(condition, message):
@@ -30,10 +31,13 @@ EVENT_KINDS = {'historical-application': 'Application received', 'authorisation'
 SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
 # Rights changes that can record who bought a parcel: the buyer's first record in the next January file.
 BUYER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
-EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description'}
+EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description',
+                  'estate-area-exact-match'}
+HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
+HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
-def build_register(manifest, asset, curation, history, sales):
+def build_register(manifest, asset, curation, history, sales, named_areas):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
     # canonical LF bytes hashed by build_echezeaux_parcels.py, without reserialising.
     asset = asset.replace(b'\r\n', b'\n')
@@ -115,6 +119,18 @@ def build_register(manifest, asset, curation, history, sales):
                        'deedId': deed['deedId'], 'viaParcelIds': sorted(set(refs))} for name, refs in sorted(buyers.items())]
         return records, leads
 
+    require(named_areas['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and set(named_areas['parcels']) == ids,
+            'Named areas must cover every and only mapped parcel of this snapshot')
+    area_names = {a['sourceName'] for a in named_areas['parcels'].values()}
+    holder_names = {r['holderId']: r['name'] for p in parcels for r in p['recordedRights']}
+    for h in curation['producerHoldings']:
+        require(h['namedAreas'] and set(h['namedAreas']) <= area_names, f"{h['id']}: unknown named area")
+        require(set(h['sourceIds']) <= sources.keys() and h['sourceIds'], f"{h['id']}: unknown holding source")
+        require(set(h['producerHolderIds'] + h['ownerHolderIds']) <= holders.keys(), f"{h['id']}: unknown holder")
+        require(h['relation'] in HOLDING_RELATIONS and h['precision'] in HOLDING_PRECISIONS, f"{h['id']}: unknown relation or precision")
+        # A holding describes a named area, never parcels: exact matches belong in externalResearch.
+        require('parcelIds' not in h and h.get('currentFarmer') is None, f"{h['id']}: a holding cannot name parcels or a farmer")
+
     rows = []
     for p in parcels:
         holder_ids = sorted({r['holderId'] for r in p['recordedRights']})
@@ -137,6 +153,7 @@ def build_register(manifest, asset, curation, history, sales):
         sale_records, sale_leads = sale_rows_and_leads(p['id'], bool(p['recordedRights']))
         rows.append({
             'parcelId': p['id'], 'reference': p['reference'], 'commune': p['commune'],
+            'namedArea': named_areas['parcels'][p['id']]['sourceName'],
             'cruOverlapM2': next(o['areaM2'] for o in p['overlaps'] if o['parentFeatureId'] == parent),
             'recordedRights': p['recordedRights'], 'recordMatch': p['recordMatch'],
             'holderResearchIds': holder_ids, 'candidateLeads': leads + event_leads + external_leads + sale_leads,
@@ -169,6 +186,7 @@ def build_register(manifest, asset, curation, history, sales):
                                    if sale_leads else 'Identify operator through a shareable parcel-specific record; do not infer from neighbours.'),
         })
     statuses = Counter(r['researchStatus'] for r in rows)
+    census = build_census(rows, curation['producerHoldings'], named_areas, holder_names)
     return {
         'schemaVersion': 1, 'reviewedAt': curation['reviewedAt'], 'targetSeason': curation['targetSeason'],
         'status': curation['status'], 'scope': curation['scope'], 'parentFeatureId': parent,
@@ -187,8 +205,47 @@ def build_register(manifest, asset, curation, history, sales):
                    'withSaleRecord': sum(bool(r['saleRecords']) for r in rows),
                    'withRightsChangeSince2019': sum(bool(r['rightsChanges']) for r in rows),
                    'withCadastralPredecessor': sum(bool(r['predecessorIds']) for r in rows)},
+        'namedAreaCensus': census,
         'parcels': rows,
     }
+
+
+def build_census(rows, holdings, named_areas, holder_names):
+    """Per named area: land without a company record, and published holdings that could account for it.
+
+    A holding is published by a producer for a whole named area. The census only compares areas;
+    it never places a holding on particular parcels."""
+    reviewed = {a['sourceName']: a['name'] for a in named_areas['parcels'].values()}
+    census = []
+    for name in sorted({r['namedArea'] for r in rows}):
+        here = [r for r in rows if r['namedArea'] == name]
+        m2 = lambda items: round(sum(r['cruOverlapM2'] for r in items))
+        entries, beyond_total = [], 0
+        for h in holdings:
+            if name not in h['namedAreas']:
+                continue
+            recorded = m2([r for r in here if {x['holderId'] for x in r['recordedRights']} & set(h['producerHolderIds'])])
+            beyond = None
+            # Only a live, single-area, sized holding can be compared with this area's unrecorded land.
+            # A métayer farms land already recorded to its owner, so it adds nothing here.
+            if (len(h['namedAreas']) == 1 and h['publishedAreaHa'] is not None and not h['endedSeason']
+                    and h['relation'] != 'metayer'):
+                beyond = max(0, round(h['publishedAreaHa'] * 10000) - recorded)
+                beyond_total += beyond
+            entries.append({'holdingId': h['id'], 'producer': h['producer'], 'publishedAreaHa': h['publishedAreaHa'],
+                            'precision': h['precision'], 'relation': h['relation'], 'endedSeason': h['endedSeason'],
+                            'sharedWith': [a for a in h['namedAreas'] if a != name],
+                            'recordedToProducerM2': recorded, 'beyondCompanyRecordsM2': beyond,
+                            'owners': [holder_names[i] for i in h['ownerHolderIds']]})
+        unrecorded = [r for r in here if not r['recordedRights']]
+        census.append({
+            'sourceName': name, 'name': reviewed[name], 'parcels': len(here), 'areaM2': m2(here),
+            'withoutCompanyRecord': len(unrecorded), 'withoutCompanyRecordM2': m2(unrecorded),
+            'withoutCompanyRecordOrLead': sum(r['researchStatus'] == 'unresolved' for r in unrecorded),
+            'withoutCompanyRecordOrLeadM2': m2([r for r in unrecorded if r['researchStatus'] == 'unresolved']),
+            'publishedBeyondCompanyRecordsM2': beyond_total, 'holdings': entries,
+        })
+    return census
 
 
 def cell(value):
@@ -230,16 +287,17 @@ def render_report(register, curation, history):
                   f"**Basis:** {h['basis']}. **Current farming:** unconfirmed.", '', h['finding'], '',
                   'Sources: ' + (', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in h['sourceIds'])
                                  or 'No usable independent source located; recorded rights only.') + '.', '']
+    lines += render_census(register, curation, sources)
     lines += ['## Every mapped parcel', '',
               'All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence links are in the JSON register. '
               '“Holder” points to the investigations above. “None” means no matched record, not no farmer.', '',
-              '| Reference | Cru overlap (m²) | Holder research ID | Candidate to investigate — never verified | Current farmer |',
-              '| --- | ---: | --- | --- | --- |']
+              '| Reference | Named area | Cru overlap (m²) | Holder research ID | Candidate to investigate — never verified | Current farmer |',
+              '| --- | --- | ---: | --- | --- | --- |']
     for r in register['parcels']:
         # Explicit anchors below avoid renderer-specific slug rules for accented holder names.
         holders = ', '.join(f"[{h}](#holder-{h.lower()})" for h in r['holderResearchIds']) or 'None'
         leads = '; '.join(f"{c['name']} ({c['basis']})" for c in r['candidateLeads']) or 'Unresolved'
-        lines.append(f"| {cell(r['reference'])} | {r['cruOverlapM2']:.2f} | {holders} | {cell(leads)} | Unconfirmed |")
+        lines.append(f"| {cell(r['reference'])} | {area_label(r['namedArea'], register)} | {r['cruOverlapM2']:.2f} | {holders} | {cell(leads)} | Unconfirmed |")
     rows_by_id = {r['parcelId']: r for r in register['parcels']}
     ref = lambda pid: rows_by_id[pid]['reference'] if pid in rows_by_id else f"{pid[8:10].lstrip('0')} {pid[10:]}"
     lines += ['', '## Exact-reference administrative events', '',
@@ -340,6 +398,57 @@ def render_history(register, curation, history, sources):
     return lines + ['']
 
 
+def area_label(source_name, register):
+    reviewed = {a['sourceName']: a['name'] for a in register['namedAreaCensus']}
+    return reviewed[source_name] or f'{source_name} (cadastral; unreviewed)'
+
+
+def hectares(m2):
+    return f'{m2 / 10000:.2f} ha'
+
+
+def render_census(register, curation, sources):
+    lines = ['## Named-area census', '',
+             'Parcels are grouped by the cadastral lieu-dit holding most of their geometry. For each named area the census '
+             'compares land without a company record with the Échezeaux holdings producers publish there. "Beyond company '
+             'records" is a published area minus the land recorded to company records linked to that producer in the same named area: land the '
+             'producer says it owns or farms, which the legal-entity files do not show. It is an area comparison only. It never '
+             'places a holding on particular parcels, and a producer\'s published figure can be rounded, out of date or include '
+             'leased land. A métayer farms land already recorded to its owner; a holding spread over several named areas cannot '
+             'be split, so neither is counted. `LES POULA` has no reviewed crosswalk to Les Poulaillères.', '',
+             '| Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |',
+             '| --- | ---: | ---: | ---: | ---: |']
+    for a in register['namedAreaCensus']:
+        lines.append(f"| {area_label(a['sourceName'], register)} | {a['parcels']} ({hectares(a['areaM2'])}) | "
+                     f"{a['withoutCompanyRecord']} ({hectares(a['withoutCompanyRecordM2'])}) | "
+                     f"{a['withoutCompanyRecordOrLead']} ({hectares(a['withoutCompanyRecordOrLeadM2'])}) | {hectares(a['publishedBeyondCompanyRecordsM2'])} |")
+    lines += ['', '**Published holdings by named area**', '']
+    holdings = {h['id']: h for h in curation['producerHoldings']}
+    relations = {'owner': 'states ownership', 'farmer': 'states it farms', 'metayer': 'sharecrops (métayage)',
+                 'unstated': 'tenure not stated'}
+    for a in register['namedAreaCensus']:
+        if not a['holdings']:
+            continue
+        lines.append(f"- **{area_label(a['sourceName'], register)}**")
+        for e in a['holdings']:
+            size = f"{e['publishedAreaHa']} ha" if e['publishedAreaHa'] is not None else 'area not published'
+            notes = [relations[e['relation']]]
+            if e['owners']:
+                notes.append('owner recorded as ' + ' / '.join(e['owners']))
+            if e['endedSeason']:
+                notes.append(f"ended with the {e['endedSeason']} harvest")
+            if e['sharedWith']:
+                notes.append('total also covers ' + ', '.join(area_label(s, register) for s in e['sharedWith']))
+            if e['relation'] != 'metayer':
+                notes.append(f"{hectares(e['recordedToProducerM2'])} recorded to linked company records here")
+            if e['beyondCompanyRecordsM2'] is not None:
+                notes.append(f"{hectares(e['beyondCompanyRecordsM2'])} beyond company records")
+            holding = holdings[e['holdingId']]
+            cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in holding['sourceIds'])
+            lines.append(f"  - {cell(e['producer'])}: {size} ({e['precision']}); {'; '.join(notes)}. {holding['finding']} {cited}.")
+    return lines + ['']
+
+
 def render_sales(register, sources):
     rows = {r['parcelId']: r for r in register['parcels']}
     deeds = {}
@@ -370,8 +479,9 @@ def main():
     curation = json.loads(CURATION.read_text(encoding='utf-8'))
     history = json.loads(HISTORY.read_text(encoding='utf-8'))
     sales = json.loads(SALES.read_text(encoding='utf-8'))
+    named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
     asset = (ROOT / 'public' / manifest['dataUrl'].lstrip('/')).read_bytes()
-    register = build_register(manifest, asset, curation, history, sales)
+    register = build_register(manifest, asset, curation, history, sales, named_areas)
     outputs = {OUTPUT: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
                REPORT: render_report(register, curation, history),
                # Compact per-parcel evidence the app loads on demand; never read by the register itself.

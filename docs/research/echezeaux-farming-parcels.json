@@ -39,11 +39,402 @@
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
+  "namedAreaCensus": [
+    {
+      "sourceName": "CLOS SAINT-DENIS",
+      "name": "Clos Saint-Denis",
+      "parcels": 14,
+      "areaM2": 16867,
+      "withoutCompanyRecord": 7,
+      "withoutCompanyRecordM2": 6520,
+      "withoutCompanyRecordOrLead": 7,
+      "withoutCompanyRecordOrLeadM2": 6520,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": [
+        {
+          "holdingId": "lamarche",
+          "producer": "Domaine François Lamarche / Nicole Lamarche",
+          "publishedAreaHa": 1.35,
+          "precision": "hundredth-hectare",
+          "relation": "farmer",
+          "endedSeason": null,
+          "sharedWith": [
+            "LES CRUOTS OU VIGNES BLANCHES"
+          ],
+          "recordedToProducerM2": 4537,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "millot",
+          "producer": "Domaine Jean-Marc Millot",
+          "publishedAreaHa": 1.0,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [
+            "ECHEZEAUX DU DESSUS"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "ECHEZEAUX DU DESSUS",
+      "name": "Échezeaux du Dessus",
+      "parcels": 26,
+      "areaM2": 45160,
+      "withoutCompanyRecord": 16,
+      "withoutCompanyRecordM2": 26923,
+      "withoutCompanyRecordOrLead": 3,
+      "withoutCompanyRecordOrLeadM2": 228,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": [
+        {
+          "holdingId": "millot",
+          "producer": "Domaine Jean-Marc Millot",
+          "publishedAreaHa": 1.0,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [
+            "CLOS SAINT-DENIS"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "EN ORVEAUX",
+      "name": "En Orveaux",
+      "parcels": 67,
+      "areaM2": 80116,
+      "withoutCompanyRecord": 41,
+      "withoutCompanyRecordM2": 42422,
+      "withoutCompanyRecordOrLead": 41,
+      "withoutCompanyRecordOrLeadM2": 42422,
+      "publishedBeyondCompanyRecordsM2": 18847,
+      "holdings": [
+        {
+          "holdingId": "clerget",
+          "producer": "Domaine Christian Clerget",
+          "publishedAreaHa": 1.09,
+          "precision": "hundredth-hectare",
+          "relation": "farmer",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 2206,
+          "beyondCompanyRecordsM2": 8694,
+          "owners": []
+        },
+        {
+          "holdingId": "eugenie",
+          "producer": "Domaine d'Eugénie",
+          "publishedAreaHa": 0.94,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 9347,
+          "beyondCompanyRecordsM2": 53,
+          "owners": []
+        },
+        {
+          "holdingId": "bouchard",
+          "producer": "Bouchard Père & Fils",
+          "publishedAreaHa": 0.39,
+          "precision": "are",
+          "relation": "owner",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 3900,
+          "owners": []
+        },
+        {
+          "holdingId": "dmugneret",
+          "producer": "Domaine Dominique Mugneret",
+          "publishedAreaHa": 0.4,
+          "precision": "are",
+          "relation": "farmer",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 4000,
+          "owners": []
+        },
+        {
+          "holdingId": "guyon",
+          "producer": "Domaine Jean-Pierre Guyon",
+          "publishedAreaHa": 0.22,
+          "precision": "are",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 2200,
+          "owners": []
+        },
+        {
+          "holdingId": "bizot",
+          "producer": "Domaine Jean-Yves Bizot",
+          "publishedAreaHa": null,
+          "precision": "none",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [
+            "LES TREUX"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "cacheux",
+          "producer": "Domaine Jacques Cacheux",
+          "publishedAreaHa": 1.0,
+          "precision": "approximate",
+          "relation": "owner",
+          "endedSeason": null,
+          "sharedWith": [
+            "LES CRUOTS OU VIGNES BLANCHES"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "LES BEAUX-MONTS BAS",
+      "name": "Les Beaux Monts Bas",
+      "parcels": 5,
+      "areaM2": 7891,
+      "withoutCompanyRecord": 5,
+      "withoutCompanyRecordM2": 7891,
+      "withoutCompanyRecordOrLead": 4,
+      "withoutCompanyRecordOrLeadM2": 4428,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": []
+    },
+    {
+      "sourceName": "LES CHAMPS TRAVERSINS",
+      "name": "Les Champs Traversins",
+      "parcels": 26,
+      "areaM2": 35729,
+      "withoutCompanyRecord": 16,
+      "withoutCompanyRecordM2": 10661,
+      "withoutCompanyRecordOrLead": 13,
+      "withoutCompanyRecordOrLeadM2": 9714,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": []
+    },
+    {
+      "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
+      "name": "Les Cruots ou Vignes Blanches",
+      "parcels": 23,
+      "areaM2": 32050,
+      "withoutCompanyRecord": 18,
+      "withoutCompanyRecordM2": 21046,
+      "withoutCompanyRecordOrLead": 10,
+      "withoutCompanyRecordOrLeadM2": 12639,
+      "publishedBeyondCompanyRecordsM2": 700,
+      "holdings": [
+        {
+          "holdingId": "cacheux",
+          "producer": "Domaine Jacques Cacheux",
+          "publishedAreaHa": 1.0,
+          "precision": "approximate",
+          "relation": "owner",
+          "endedSeason": null,
+          "sharedWith": [
+            "EN ORVEAUX"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "gnoellat",
+          "producer": "Domaine Georges Noëllat",
+          "publishedAreaHa": 0.07,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 700,
+          "owners": []
+        },
+        {
+          "holdingId": "lamarche",
+          "producer": "Domaine François Lamarche / Nicole Lamarche",
+          "publishedAreaHa": 1.35,
+          "precision": "hundredth-hectare",
+          "relation": "farmer",
+          "endedSeason": null,
+          "sharedWith": [
+            "CLOS SAINT-DENIS"
+          ],
+          "recordedToProducerM2": 6471,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "LES LOÄCHAUSSES",
+      "name": "Les Loächausses",
+      "parcels": 22,
+      "areaM2": 25123,
+      "withoutCompanyRecord": 20,
+      "withoutCompanyRecordM2": 17540,
+      "withoutCompanyRecordOrLead": 12,
+      "withoutCompanyRecordOrLeadM2": 8151,
+      "publishedBeyondCompanyRecordsM2": 16,
+      "holdings": [
+        {
+          "holdingId": "anne-gros",
+          "producer": "Domaine Anne Gros",
+          "publishedAreaHa": 0.76,
+          "precision": "hundredth-hectare",
+          "relation": "owner",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 7584,
+          "beyondCompanyRecordsM2": 16,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "LES POULA",
+      "name": null,
+      "parcels": 15,
+      "areaM2": 52358,
+      "withoutCompanyRecord": 7,
+      "withoutCompanyRecordM2": 8996,
+      "withoutCompanyRecordOrLead": 7,
+      "withoutCompanyRecordOrLeadM2": 8996,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": []
+    },
+    {
+      "sourceName": "LES QUARTIERS DE NUITS",
+      "name": "Les Quartiers de Nuits",
+      "parcels": 4,
+      "areaM2": 11484,
+      "withoutCompanyRecord": 2,
+      "withoutCompanyRecordM2": 3956,
+      "withoutCompanyRecordOrLead": 2,
+      "withoutCompanyRecordOrLeadM2": 3956,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": [
+        {
+          "holdingId": "gerard-mugneret",
+          "producer": "Domaine Gérard Mugneret",
+          "publishedAreaHa": 0.6462,
+          "precision": "square-metre",
+          "relation": "metayer",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": [
+            "DOMAINE GEORGES MUGNERET GIBOURG"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceName": "LES ROUGES DU BAS",
+      "name": "Les Rouges du Bas",
+      "parcels": 20,
+      "areaM2": 30781,
+      "withoutCompanyRecord": 6,
+      "withoutCompanyRecordM2": 8552,
+      "withoutCompanyRecordOrLead": 6,
+      "withoutCompanyRecordOrLeadM2": 8552,
+      "publishedBeyondCompanyRecordsM2": 4400,
+      "holdings": [
+        {
+          "holdingId": "vigot",
+          "producer": "Domaine Fabrice Vigot",
+          "publishedAreaHa": 0.5963,
+          "precision": "square-metre",
+          "relation": "metayer",
+          "endedSeason": "2017",
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": [
+            "DOMAINE GEORGES MUGNERET GIBOURG"
+          ]
+        },
+        {
+          "holdingId": "meo",
+          "producer": "Domaine Méo-Camuzet",
+          "publishedAreaHa": 0.44,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 4400,
+          "owners": []
+        }
+      ]
+    },
+    {
+      "sourceName": "LES TREUX",
+      "name": "Les Treux",
+      "parcels": 54,
+      "areaM2": 50690,
+      "withoutCompanyRecord": 19,
+      "withoutCompanyRecordM2": 18360,
+      "withoutCompanyRecordOrLead": 18,
+      "withoutCompanyRecordOrLeadM2": 15483,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": [
+        {
+          "holdingId": "bizot",
+          "producer": "Domaine Jean-Yves Bizot",
+          "publishedAreaHa": null,
+          "precision": "none",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [
+            "EN ORVEAUX"
+          ],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "tardy",
+          "producer": "Domaine Jean Tardy",
+          "publishedAreaHa": 0.34,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 3493,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        }
+      ]
+    }
+  ],
   "parcels": [
     {
       "parcelId": "212670000D0114",
       "reference": "D 0114",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1273.41,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -67,6 +458,7 @@
       "parcelId": "212670000D0117",
       "reference": "D 0117",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1319.9743,
       "recordedRights": [
         {
@@ -123,6 +515,7 @@
       "parcelId": "212670000D0118",
       "reference": "D 0118",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1644.7,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -146,6 +539,7 @@
       "parcelId": "212670000D0119",
       "reference": "D 0119",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 2071.3683,
       "recordedRights": [
         {
@@ -202,6 +596,7 @@
       "parcelId": "212670000D0120",
       "reference": "D 0120",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 4681.1651,
       "recordedRights": [
         {
@@ -258,6 +653,7 @@
       "parcelId": "212670000D0121",
       "reference": "D 0121",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 921.2108,
       "recordedRights": [
         {
@@ -314,6 +710,7 @@
       "parcelId": "212670000D0122",
       "reference": "D 0122",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 417.7615,
       "recordedRights": [
         {
@@ -370,6 +767,7 @@
       "parcelId": "212670000D0123",
       "reference": "D 0123",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 305.8953,
       "recordedRights": [
         {
@@ -426,6 +824,7 @@
       "parcelId": "212670000D0124",
       "reference": "D 0124",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1429.6902,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -449,6 +848,7 @@
       "parcelId": "212670000D0128",
       "reference": "D 0128",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1467.9846,
       "recordedRights": [
         {
@@ -506,6 +906,7 @@
       "parcelId": "212670000D0129",
       "reference": "D 0129",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 856.4797,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -529,6 +930,7 @@
       "parcelId": "212670000D0130",
       "reference": "D 0130",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 306.2653,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -552,6 +954,7 @@
       "parcelId": "212670000D0131",
       "reference": "D 0131",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 914.5443,
       "recordedRights": [
         {
@@ -596,6 +999,7 @@
       "parcelId": "212670000D0132",
       "reference": "D 0132",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 327.1849,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -619,6 +1023,7 @@
       "parcelId": "212670000D0133",
       "reference": "D 0133",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 882.3232,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -642,6 +1047,7 @@
       "parcelId": "212670000D0134",
       "reference": "D 0134",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1175.7794,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -665,6 +1071,7 @@
       "parcelId": "212670000D0135",
       "reference": "D 0135",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 248.2565,
       "recordedRights": [
         {
@@ -709,6 +1116,7 @@
       "parcelId": "212670000D0136",
       "reference": "D 0136",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 195.5519,
       "recordedRights": [
         {
@@ -753,6 +1161,7 @@
       "parcelId": "212670000D0137",
       "reference": "D 0137",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 483.2505,
       "recordedRights": [
         {
@@ -797,6 +1206,7 @@
       "parcelId": "212670000D0138",
       "reference": "D 0138",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 455.8761,
       "recordedRights": [
         {
@@ -841,6 +1251,7 @@
       "parcelId": "212670000D0139",
       "reference": "D 0139",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 557.82,
       "recordedRights": [
         {
@@ -885,6 +1296,7 @@
       "parcelId": "212670000D0142",
       "reference": "D 0142",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 894.5945,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -908,6 +1320,7 @@
       "parcelId": "212670000D0144",
       "reference": "D 0144",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 513.6502,
       "recordedRights": [
         {
@@ -977,6 +1390,7 @@
       "parcelId": "212670000D0145",
       "reference": "D 0145",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 462.6717,
       "recordedRights": [
         {
@@ -1046,6 +1460,7 @@
       "parcelId": "212670000D0146",
       "reference": "D 0146",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 2876.3337,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1098,6 +1513,7 @@
       "parcelId": "212670000D0147",
       "reference": "D 0147",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 1390.9508,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1121,6 +1537,7 @@
       "parcelId": "212670000D0149",
       "reference": "D 0149",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 3059.7417,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1144,6 +1561,7 @@
       "parcelId": "212670000D0150",
       "reference": "D 0150",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 457.6515,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1167,6 +1585,7 @@
       "parcelId": "212670000D0151",
       "reference": "D 0151",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 479.7881,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1190,6 +1609,7 @@
       "parcelId": "212670000D0152",
       "reference": "D 0152",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 290.054,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1213,6 +1633,7 @@
       "parcelId": "212670000D0153",
       "reference": "D 0153",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 512.5123,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1236,6 +1657,7 @@
       "parcelId": "212670000D0154",
       "reference": "D 0154",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 272.0419,
       "recordedRights": [
         {
@@ -1293,6 +1715,7 @@
       "parcelId": "212670000D0155",
       "reference": "D 0155",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 329.5296,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1324,6 +1747,7 @@
       "parcelId": "212670000D0156",
       "reference": "D 0156",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 666.3121,
       "recordedRights": [
         {
@@ -1381,6 +1805,7 @@
       "parcelId": "212670000D0157",
       "reference": "D 0157",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 620.0955,
       "recordedRights": [
         {
@@ -1438,6 +1863,7 @@
       "parcelId": "212670000D0161",
       "reference": "D 0161",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1854.3214,
       "recordedRights": [
         {
@@ -1502,6 +1928,7 @@
       "parcelId": "212670000D0162",
       "reference": "D 0162",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 877.4077,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1525,6 +1952,7 @@
       "parcelId": "212670000D0163",
       "reference": "D 0163",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 118.4813,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1548,6 +1976,7 @@
       "parcelId": "212670000D0164",
       "reference": "D 0164",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 242.4724,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1571,6 +2000,7 @@
       "parcelId": "212670000D0165",
       "reference": "D 0165",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1087.2169,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1594,6 +2024,7 @@
       "parcelId": "212670000D0166",
       "reference": "D 0166",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 2962.1527,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1617,6 +2048,7 @@
       "parcelId": "212670000D0167",
       "reference": "D 0167",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 278.0405,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1640,6 +2072,7 @@
       "parcelId": "212670000D0168",
       "reference": "D 0168",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 664.4411,
       "recordedRights": [
         {
@@ -1707,6 +2140,7 @@
       "parcelId": "212670000D0169",
       "reference": "D 0169",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 5806.9552,
       "recordedRights": [
         {
@@ -1774,6 +2208,7 @@
       "parcelId": "212670000D0172",
       "reference": "D 0172",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 5378.6641,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1807,6 +2242,7 @@
       "parcelId": "212670000D0176",
       "reference": "D 0176",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 366.8576,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1840,6 +2276,7 @@
       "parcelId": "212670000D0177",
       "reference": "D 0177",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 264.8129,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1893,6 +2330,7 @@
       "parcelId": "212670000D0178",
       "reference": "D 0178",
       "commune": "21267",
+      "namedArea": "LES BEAUX-MONTS BAS",
       "cruOverlapM2": 3462.1647,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1946,6 +2384,7 @@
       "parcelId": "212670000D0181",
       "reference": "D 0181",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 365.4379,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -1999,6 +2438,7 @@
       "parcelId": "212670000D0183",
       "reference": "D 0183",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 259.5051,
       "recordedRights": [
         {
@@ -2055,6 +2495,7 @@
       "parcelId": "212670000D0184",
       "reference": "D 0184",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 145.0757,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2108,6 +2549,7 @@
       "parcelId": "212670000D0189",
       "reference": "D 0189",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1038.2214,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2141,6 +2583,7 @@
       "parcelId": "212670000D0190",
       "reference": "D 0190",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 736.3081,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2174,6 +2617,7 @@
       "parcelId": "212670000D0191",
       "reference": "D 0191",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1036.6261,
       "recordedRights": [
         {
@@ -2232,6 +2676,7 @@
       "parcelId": "212670000D0192",
       "reference": "D 0192",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1013.5054,
       "recordedRights": [
         {
@@ -2290,6 +2735,7 @@
       "parcelId": "212670000D0194",
       "reference": "D 0194",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 156.959,
       "recordedRights": [
         {
@@ -2359,6 +2805,7 @@
       "parcelId": "212670000D0195",
       "reference": "D 0195",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 5963.2872,
       "recordedRights": [
         {
@@ -2384,17 +2831,27 @@
             "mugneret",
             "mugneret2017"
           ]
+        },
+        {
+          "name": "Domaine Georges Mugneret-Gibourg (since 2017; earlier Fabrice Vigot, métayage)",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "vigot",
+            "mugneret2017"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "vigot-d0195"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -2404,6 +2861,7 @@
       "parcelId": "212670000D0200",
       "reference": "D 0200",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 826.469,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2427,6 +2885,7 @@
       "parcelId": "212670000D0201",
       "reference": "D 0201",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 534.2481,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2450,6 +2909,7 @@
       "parcelId": "212670000D0202",
       "reference": "D 0202",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1437.8139,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2473,6 +2933,7 @@
       "parcelId": "212670000D0203",
       "reference": "D 0203",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1431.0658,
       "recordedRights": [
         {
@@ -2537,6 +2998,7 @@
       "parcelId": "212670000D0208",
       "reference": "D 0208",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 333.491,
       "recordedRights": [
         {
@@ -2581,6 +3043,7 @@
       "parcelId": "212670000D0293",
       "reference": "D 0293",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 2528.4689,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2604,6 +3067,7 @@
       "parcelId": "212670000D0295",
       "reference": "D 0295",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 1114.1797,
       "recordedRights": [
         {
@@ -2675,6 +3139,7 @@
       "parcelId": "212670000D0296",
       "reference": "D 0296",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 428.4972,
       "recordedRights": [
         {
@@ -2746,6 +3211,7 @@
       "parcelId": "212670000D0297",
       "reference": "D 0297",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 513.9803,
       "recordedRights": [
         {
@@ -2817,6 +3283,7 @@
       "parcelId": "212670000D0298",
       "reference": "D 0298",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 326.4897,
       "recordedRights": [
         {
@@ -2888,6 +3355,7 @@
       "parcelId": "212670000D0299",
       "reference": "D 0299",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 235.877,
       "recordedRights": [
         {
@@ -2959,6 +3427,7 @@
       "parcelId": "212670000D0301",
       "reference": "D 0301",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 406.3458,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -2994,6 +3463,7 @@
       "parcelId": "212670000D0302",
       "reference": "D 0302",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 405.3674,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3029,6 +3499,7 @@
       "parcelId": "212670000D0303",
       "reference": "D 0303",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 390.3786,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3064,6 +3535,7 @@
       "parcelId": "212670000D0304",
       "reference": "D 0304",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 498.0943,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3099,6 +3571,7 @@
       "parcelId": "212670000D0305",
       "reference": "D 0305",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 759.5256,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3122,6 +3595,7 @@
       "parcelId": "212670000D0306",
       "reference": "D 0306",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 6902.8694,
       "recordedRights": [
         {
@@ -3166,6 +3640,7 @@
       "parcelId": "212670000D0307",
       "reference": "D 0307",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 1672.3549,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3189,6 +3664,7 @@
       "parcelId": "212670000D0308",
       "reference": "D 0308",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 20.5994,
       "recordedRights": [
         {
@@ -3233,6 +3709,7 @@
       "parcelId": "212670000D0313",
       "reference": "D 0313",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 1099.7441,
       "recordedRights": [
         {
@@ -3288,6 +3765,7 @@
       "parcelId": "212670000D0316",
       "reference": "D 0316",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 816.71,
       "recordedRights": [
         {
@@ -3335,6 +3813,7 @@
       "parcelId": "212670000D0323",
       "reference": "D 0323",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2269.7646,
       "recordedRights": [
         {
@@ -3382,6 +3861,7 @@
       "parcelId": "212670000D0326",
       "reference": "D 0326",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 59.297,
       "recordedRights": [
         {
@@ -3451,6 +3931,7 @@
       "parcelId": "212670000D0329",
       "reference": "D 0329",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 22.4589,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3474,6 +3955,7 @@
       "parcelId": "212670000D0331",
       "reference": "D 0331",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 440.9394,
       "recordedRights": [
         {
@@ -3531,6 +4013,7 @@
       "parcelId": "212670000D0332",
       "reference": "D 0332",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 277.4491,
       "recordedRights": [
         {
@@ -3587,6 +4070,7 @@
       "parcelId": "212670000D0333",
       "reference": "D 0333",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1216.1754,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3610,6 +4094,7 @@
       "parcelId": "212670000D0335",
       "reference": "D 0335",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 4951.5837,
       "recordedRights": [
         {
@@ -3667,6 +4152,7 @@
       "parcelId": "212670000D0337",
       "reference": "D 0337",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 4.9612,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3690,6 +4176,7 @@
       "parcelId": "212670000D0338",
       "reference": "D 0338",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 813.1154,
       "recordedRights": [
         {
@@ -3746,6 +4233,7 @@
       "parcelId": "212670000D0339",
       "reference": "D 0339",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 560.9679,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3769,6 +4257,7 @@
       "parcelId": "212670000D0340",
       "reference": "D 0340",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 3867.1424,
       "recordedRights": [
         {
@@ -3833,6 +4322,7 @@
       "parcelId": "212670000D0341",
       "reference": "D 0341",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 945.678,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3856,6 +4346,7 @@
       "parcelId": "212670000D0342",
       "reference": "D 0342",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 706.3289,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3879,6 +4370,7 @@
       "parcelId": "212670000D0343",
       "reference": "D 0343",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 773.5839,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3902,6 +4394,7 @@
       "parcelId": "212670000D0344",
       "reference": "D 0344",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1945.0759,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3925,6 +4418,7 @@
       "parcelId": "212670000D0345",
       "reference": "D 0345",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 495.7413,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3948,6 +4442,7 @@
       "parcelId": "212670000D0346",
       "reference": "D 0346",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 459.762,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3971,6 +4466,7 @@
       "parcelId": "212670000D0347",
       "reference": "D 0347",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 475.738,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -3994,6 +4490,7 @@
       "parcelId": "212670000D0348",
       "reference": "D 0348",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 396.7596,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4017,6 +4514,7 @@
       "parcelId": "212670000D0349",
       "reference": "D 0349",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 296.1387,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4040,6 +4538,7 @@
       "parcelId": "212670000D0351",
       "reference": "D 0351",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2691.9697,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4063,6 +4562,7 @@
       "parcelId": "212670000D0352",
       "reference": "D 0352",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 5480.1766,
       "recordedRights": [
         {
@@ -4119,6 +4619,7 @@
       "parcelId": "212670000D0354",
       "reference": "D 0354",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 3923.5627,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4142,6 +4643,7 @@
       "parcelId": "212670000D0360",
       "reference": "D 0360",
       "commune": "21267",
+      "namedArea": "LES QUARTIERS DE NUITS",
       "cruOverlapM2": 967.3835,
       "recordedRights": [
         {
@@ -4209,6 +4711,7 @@
       "parcelId": "212670000D0361",
       "reference": "D 0361",
       "commune": "21267",
+      "namedArea": "LES QUARTIERS DE NUITS",
       "cruOverlapM2": 416.1477,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4232,6 +4735,7 @@
       "parcelId": "212670000D0362",
       "reference": "D 0362",
       "commune": "21267",
+      "namedArea": "LES QUARTIERS DE NUITS",
       "cruOverlapM2": 6560.1734,
       "recordedRights": [
         {
@@ -4257,17 +4761,27 @@
             "mugneret",
             "mugneret2017"
           ]
+        },
+        {
+          "name": "Domaine Gérard Mugneret (métayer)",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "gerard-mugneret",
+            "mugneret"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "gm-d0362"
+      ],
       "rightsChanges": [],
       "saleRecords": [],
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4277,6 +4791,7 @@
       "parcelId": "212670000D0364",
       "reference": "D 0364",
       "commune": "21267",
+      "namedArea": "LES QUARTIERS DE NUITS",
       "cruOverlapM2": 3540.0541,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4300,6 +4815,7 @@
       "parcelId": "212670000D0503",
       "reference": "D 0503",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 312.9765,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4323,6 +4839,7 @@
       "parcelId": "212670000D0504",
       "reference": "D 0504",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 428.554,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4346,6 +4863,7 @@
       "parcelId": "212670000D0505",
       "reference": "D 0505",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 594.4561,
       "recordedRights": [
         {
@@ -4390,6 +4908,7 @@
       "parcelId": "212670000D0508",
       "reference": "D 0508",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 856.0751,
       "recordedRights": [
         {
@@ -4457,6 +4976,7 @@
       "parcelId": "212670000D0509",
       "reference": "D 0509",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 1068.4119,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4480,6 +5000,7 @@
       "parcelId": "212670000D0510",
       "reference": "D 0510",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 4429.2181,
       "recordedRights": [
         {
@@ -4535,6 +5056,7 @@
       "parcelId": "212670000D0511",
       "reference": "D 0511",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 2331.6124,
       "recordedRights": [
         {
@@ -4604,6 +5126,7 @@
       "parcelId": "212670000D0512",
       "reference": "D 0512",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 346.3725,
       "recordedRights": [
         {
@@ -4673,6 +5196,7 @@
       "parcelId": "212670000D0515",
       "reference": "D 0515",
       "commune": "21267",
+      "namedArea": "LES BEAUX-MONTS BAS",
       "cruOverlapM2": 466.9142,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4696,6 +5220,7 @@
       "parcelId": "212670000D0519",
       "reference": "D 0519",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 4537.2814,
       "recordedRights": [
         {
@@ -4763,6 +5288,7 @@
       "parcelId": "212670000D0530",
       "reference": "D 0530",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 2361.6888,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4786,6 +5312,7 @@
       "parcelId": "212670000D0536",
       "reference": "D 0536",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 809.4548,
       "recordedRights": [
         {
@@ -4830,6 +5357,7 @@
       "parcelId": "212670000D0537",
       "reference": "D 0537",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1313.2472,
       "recordedRights": [
         {
@@ -4874,6 +5402,7 @@
       "parcelId": "212670000D0538",
       "reference": "D 0538",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 2076.7961,
       "recordedRights": [
         {
@@ -4918,6 +5447,7 @@
       "parcelId": "212670000D0539",
       "reference": "D 0539",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 225.4371,
       "recordedRights": [
         {
@@ -4962,6 +5492,7 @@
       "parcelId": "212670000D0557",
       "reference": "D 0557",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 108.0411,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -4985,6 +5516,7 @@
       "parcelId": "212670000D0558",
       "reference": "D 0558",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 936.942,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5038,6 +5570,7 @@
       "parcelId": "212670000D0563",
       "reference": "D 0563",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 673.5859,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5061,6 +5594,7 @@
       "parcelId": "212670000D0564",
       "reference": "D 0564",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1372.4017,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5084,6 +5618,7 @@
       "parcelId": "212670000D0565",
       "reference": "D 0565",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 995.4504,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5107,6 +5642,7 @@
       "parcelId": "212670000D0566",
       "reference": "D 0566",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 937.4986,
       "recordedRights": [
         {
@@ -5151,6 +5687,7 @@
       "parcelId": "212670000D0568",
       "reference": "D 0568",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 860.7601,
       "recordedRights": [
         {
@@ -5195,6 +5732,7 @@
       "parcelId": "212670000D0569",
       "reference": "D 0569",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 12615.4507,
       "recordedRights": [
         {
@@ -5239,6 +5777,7 @@
       "parcelId": "212670000D0579",
       "reference": "D 0579",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1627.462,
       "recordedRights": [
         {
@@ -5308,6 +5847,7 @@
       "parcelId": "212670000D0581",
       "reference": "D 0581",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 50.2494,
       "recordedRights": [
         {
@@ -5377,6 +5917,7 @@
       "parcelId": "212670000D0583",
       "reference": "D 0583",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 244.3761,
       "recordedRights": [
         {
@@ -5446,6 +5987,7 @@
       "parcelId": "212670000D0584",
       "reference": "D 0584",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 320.0898,
       "recordedRights": [
         {
@@ -5515,6 +6057,7 @@
       "parcelId": "212670000D0585",
       "reference": "D 0585",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 47.2742,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5538,6 +6081,7 @@
       "parcelId": "212670000D0586",
       "reference": "D 0586",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 468.7006,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5561,6 +6105,7 @@
       "parcelId": "212670000D0587",
       "reference": "D 0587",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 703.9521,
       "recordedRights": [
         {
@@ -5630,6 +6175,7 @@
       "parcelId": "212670000D0588",
       "reference": "D 0588",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 55.9317,
       "recordedRights": [
         {
@@ -5699,6 +6245,7 @@
       "parcelId": "212670000D0590",
       "reference": "D 0590",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 430.2505,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5733,6 +6280,7 @@
       "parcelId": "212670000D0591",
       "reference": "D 0591",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 53.7716,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5756,6 +6304,7 @@
       "parcelId": "212670000D0592",
       "reference": "D 0592",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 1057.7304,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5779,6 +6328,7 @@
       "parcelId": "212670000D0593",
       "reference": "D 0593",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 58.3756,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5813,6 +6363,7 @@
       "parcelId": "212670000D0595",
       "reference": "D 0595",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 125.0096,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5836,6 +6387,7 @@
       "parcelId": "212670000D0599",
       "reference": "D 0599",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 81.8505,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5869,6 +6421,7 @@
       "parcelId": "212670000D0620",
       "reference": "D 0620",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 4335.6534,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5902,6 +6455,7 @@
       "parcelId": "212670000D0621",
       "reference": "D 0621",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 4426.964,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -5935,6 +6489,7 @@
       "parcelId": "212670000D0622",
       "reference": "D 0622",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 122.9135,
       "recordedRights": [
         {
@@ -5991,6 +6546,7 @@
       "parcelId": "212670000D0623",
       "reference": "D 0623",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 52.4298,
       "recordedRights": [
         {
@@ -6047,6 +6603,7 @@
       "parcelId": "212670000D0625",
       "reference": "D 0625",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 719.5992,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6070,6 +6627,7 @@
       "parcelId": "212670000D0626",
       "reference": "D 0626",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 2363.3666,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6093,6 +6651,7 @@
       "parcelId": "212670000D0627",
       "reference": "D 0627",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 154.9181,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6116,6 +6675,7 @@
       "parcelId": "212670000D0628",
       "reference": "D 0628",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 245.661,
       "recordedRights": [
         {
@@ -6193,6 +6753,7 @@
       "parcelId": "212670000D0629",
       "reference": "D 0629",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 394.3939,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6216,6 +6777,7 @@
       "parcelId": "212670000D0631",
       "reference": "D 0631",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 5417.9731,
       "recordedRights": [
         {
@@ -6270,6 +6832,7 @@
       "parcelId": "212670000D0632",
       "reference": "D 0632",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 5162.3053,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6304,6 +6867,7 @@
       "parcelId": "212670000D0633",
       "reference": "D 0633",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1440.8643,
       "recordedRights": [
         {
@@ -6351,6 +6915,7 @@
       "parcelId": "212670000D0635",
       "reference": "D 0635",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 265.4579,
       "recordedRights": [
         {
@@ -6398,6 +6963,7 @@
       "parcelId": "212670000D0636",
       "reference": "D 0636",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 780.0955,
       "recordedRights": [
         {
@@ -6445,6 +7011,7 @@
       "parcelId": "212670000D0637",
       "reference": "D 0637",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1690.25,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6468,6 +7035,7 @@
       "parcelId": "212670000D0638",
       "reference": "D 0638",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1699.7942,
       "recordedRights": [
         {
@@ -6512,6 +7080,7 @@
       "parcelId": "212670000D0645",
       "reference": "D 0645",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1121.9631,
       "recordedRights": [
         {
@@ -6570,6 +7139,7 @@
       "parcelId": "212670000D0646",
       "reference": "D 0646",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1539.1593,
       "recordedRights": [
         {
@@ -6628,6 +7198,7 @@
       "parcelId": "212670000D0647",
       "reference": "D 0647",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 635.3028,
       "recordedRights": [
         {
@@ -6686,6 +7257,7 @@
       "parcelId": "212670000D0649",
       "reference": "D 0649",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 3750.3729,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -6709,6 +7281,7 @@
       "parcelId": "212670000D0650",
       "reference": "D 0650",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 364.4131,
       "recordedRights": [
         {
@@ -6756,6 +7329,7 @@
       "parcelId": "212670000D0651",
       "reference": "D 0651",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1787.0156,
       "recordedRights": [
         {
@@ -6803,6 +7377,7 @@
       "parcelId": "212670000D0652",
       "reference": "D 0652",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 2317.5155,
       "recordedRights": [
         {
@@ -6850,6 +7425,7 @@
       "parcelId": "212670000D0653",
       "reference": "D 0653",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2944.1525,
       "recordedRights": [
         {
@@ -6907,6 +7483,7 @@
       "parcelId": "212670000D0654",
       "reference": "D 0654",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 232.8618,
       "recordedRights": [
         {
@@ -6963,6 +7540,7 @@
       "parcelId": "212670000D0665",
       "reference": "D 0665",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1150.8129,
       "recordedRights": [
         {
@@ -7031,6 +7609,7 @@
       "parcelId": "212670000D0666",
       "reference": "D 0666",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1215.4985,
       "recordedRights": [
         {
@@ -7099,6 +7678,7 @@
       "parcelId": "212670000D0667",
       "reference": "D 0667",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1226.313,
       "recordedRights": [
         {
@@ -7144,6 +7724,7 @@
       "parcelId": "212670000D0668",
       "reference": "D 0668",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1131.1267,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7177,6 +7758,7 @@
       "parcelId": "212670000D0669",
       "reference": "D 0669",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1006.1442,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7210,6 +7792,7 @@
       "parcelId": "212670000D0670",
       "reference": "D 0670",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1118.4775,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7243,6 +7826,7 @@
       "parcelId": "212670000D0671",
       "reference": "D 0671",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1023.3626,
       "recordedRights": [
         {
@@ -7314,6 +7898,7 @@
       "parcelId": "212670000D0672",
       "reference": "D 0672",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1076.3755,
       "recordedRights": [
         {
@@ -7360,6 +7945,7 @@
       "parcelId": "212670000D0673",
       "reference": "D 0673",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1059.8509,
       "recordedRights": [
         {
@@ -7484,6 +8070,7 @@
       "parcelId": "212670000D0674",
       "reference": "D 0674",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1703.5796,
       "recordedRights": [
         {
@@ -7530,6 +8117,7 @@
       "parcelId": "212670000D0675",
       "reference": "D 0675",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1443.35,
       "recordedRights": [
         {
@@ -7576,6 +8164,7 @@
       "parcelId": "212670000D0676",
       "reference": "D 0676",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 271.0119,
       "recordedRights": [
         {
@@ -7622,6 +8211,7 @@
       "parcelId": "212670000D0677",
       "reference": "D 0677",
       "commune": "21267",
+      "namedArea": "LES ROUGES DU BAS",
       "cruOverlapM2": 1617.5336,
       "recordedRights": [
         {
@@ -7677,6 +8267,7 @@
       "parcelId": "212670000D0678",
       "reference": "D 0678",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 845.1163,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7700,6 +8291,7 @@
       "parcelId": "212670000D0679",
       "reference": "D 0679",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 800.9917,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7723,6 +8315,7 @@
       "parcelId": "212670000D0680",
       "reference": "D 0680",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 737.4061,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7746,6 +8339,7 @@
       "parcelId": "212670000D0700",
       "reference": "D 0700",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1019.9084,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7769,6 +8363,7 @@
       "parcelId": "212670000D0701",
       "reference": "D 0701",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 568.9557,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7792,6 +8387,7 @@
       "parcelId": "212670000D0704",
       "reference": "D 0704",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 176.8393,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7815,6 +8411,7 @@
       "parcelId": "212670000D0705",
       "reference": "D 0705",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 12.8181,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7838,6 +8435,7 @@
       "parcelId": "212670000D0706",
       "reference": "D 0706",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 14.3758,
       "recordedRights": [
         {
@@ -7882,6 +8480,7 @@
       "parcelId": "212670000D0707",
       "reference": "D 0707",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 38.7647,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -7905,6 +8504,7 @@
       "parcelId": "212670000D0709",
       "reference": "D 0709",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 7324.0503,
       "recordedRights": [
         {
@@ -7961,6 +8561,7 @@
       "parcelId": "212670000D0714",
       "reference": "D 0714",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 152.7331,
       "recordedRights": [
         {
@@ -8008,6 +8609,7 @@
       "parcelId": "212670000D0719",
       "reference": "D 0719",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 3422.0164,
       "recordedRights": [
         {
@@ -8055,6 +8657,7 @@
       "parcelId": "212670000D0723",
       "reference": "D 0723",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 440.8451,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8078,6 +8681,7 @@
       "parcelId": "212670000D0725",
       "reference": "D 0725",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 664.2779,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8101,6 +8705,7 @@
       "parcelId": "212670000D0736",
       "reference": "D 0736",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 105.8601,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8124,6 +8729,7 @@
       "parcelId": "212670000D0737",
       "reference": "D 0737",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 271.5439,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8147,6 +8753,7 @@
       "parcelId": "212670000D0738",
       "reference": "D 0738",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 84.5613,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8170,6 +8777,7 @@
       "parcelId": "212670000D0739",
       "reference": "D 0739",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1006.8584,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8193,6 +8801,7 @@
       "parcelId": "212670000D0740",
       "reference": "D 0740",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 154.1359,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8216,6 +8825,7 @@
       "parcelId": "212670000D0741",
       "reference": "D 0741",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 49.7197,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8239,6 +8849,7 @@
       "parcelId": "212670000D0742",
       "reference": "D 0742",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 152.0231,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8262,6 +8873,7 @@
       "parcelId": "212670000D0743",
       "reference": "D 0743",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 186.3383,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8285,6 +8897,7 @@
       "parcelId": "212670000D0744",
       "reference": "D 0744",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2707.0369,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8308,6 +8921,7 @@
       "parcelId": "212670000D0745",
       "reference": "D 0745",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 295.8571,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8331,6 +8945,7 @@
       "parcelId": "212670000D0746",
       "reference": "D 0746",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 220.732,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8354,6 +8969,7 @@
       "parcelId": "212670000D0747",
       "reference": "D 0747",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1763.7743,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -8377,6 +8993,7 @@
       "parcelId": "212670000D0760",
       "reference": "D 0760",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 9762.3047,
       "recordedRights": [
         {
@@ -8421,6 +9038,7 @@
       "parcelId": "212670000D0764",
       "reference": "D 0764",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 990.1239,
       "recordedRights": [
         {
@@ -8498,6 +9116,7 @@
       "parcelId": "212670000D0765",
       "reference": "D 0765",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1761.0325,
       "recordedRights": [
         {
@@ -8575,6 +9194,7 @@
       "parcelId": "212670000D0766",
       "reference": "D 0766",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 226.0469,
       "recordedRights": [
         {
@@ -8652,6 +9272,7 @@
       "parcelId": "212670000D0767",
       "reference": "D 0767",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 269.8415,
       "recordedRights": [
         {
@@ -8729,6 +9350,7 @@
       "parcelId": "212670000D0768",
       "reference": "D 0768",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 3976.7642,
       "recordedRights": [
         {
@@ -8798,6 +9420,7 @@
       "parcelId": "212670000D0769",
       "reference": "D 0769",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 233.1393,
       "recordedRights": [
         {
@@ -8867,6 +9490,7 @@
       "parcelId": "212670000D0770",
       "reference": "D 0770",
       "commune": "21267",
+      "namedArea": "CLOS SAINT-DENIS",
       "cruOverlapM2": 40.7397,
       "recordedRights": [
         {
@@ -8936,6 +9560,7 @@
       "parcelId": "212670000D0771",
       "reference": "D 0771",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 1781.5537,
       "recordedRights": [
         {
@@ -8980,6 +9605,7 @@
       "parcelId": "212670000D0773",
       "reference": "D 0773",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 3616.2884,
       "recordedRights": [
         {
@@ -9036,6 +9662,7 @@
       "parcelId": "212670000D0788",
       "reference": "D 0788",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 1469.9723,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9059,6 +9686,7 @@
       "parcelId": "212670000D0793",
       "reference": "D 0793",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 3107.3911,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9082,6 +9710,7 @@
       "parcelId": "212670000D0795",
       "reference": "D 0795",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 302.4068,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9105,6 +9734,7 @@
       "parcelId": "212670000D0796",
       "reference": "D 0796",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2206.0487,
       "recordedRights": [
         {
@@ -9174,6 +9804,7 @@
       "parcelId": "212670000D0797",
       "reference": "D 0797",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 6066.7606,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9197,6 +9828,7 @@
       "parcelId": "212670000D0798",
       "reference": "D 0798",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1884.7334,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9231,6 +9863,7 @@
       "parcelId": "212670000D0799",
       "reference": "D 0799",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 2612.9707,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9265,6 +9898,7 @@
       "parcelId": "212670000D0800",
       "reference": "D 0800",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1621.6389,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9299,6 +9933,7 @@
       "parcelId": "212670000D0802",
       "reference": "D 0802",
       "commune": "21267",
+      "namedArea": "LES BEAUX-MONTS BAS",
       "cruOverlapM2": 1316.0082,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9322,6 +9957,7 @@
       "parcelId": "212670000D0803",
       "reference": "D 0803",
       "commune": "21267",
+      "namedArea": "LES BEAUX-MONTS BAS",
       "cruOverlapM2": 992.8131,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9345,6 +9981,7 @@
       "parcelId": "212670000D0804",
       "reference": "D 0804",
       "commune": "21267",
+      "namedArea": "LES BEAUX-MONTS BAS",
       "cruOverlapM2": 1652.7135,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9368,6 +10005,7 @@
       "parcelId": "212670000D0805",
       "reference": "D 0805",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 12935.8713,
       "recordedRights": [
         {
@@ -9412,6 +10050,7 @@
       "parcelId": "212670000D0806",
       "reference": "D 0806",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 1273.8219,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9435,6 +10074,7 @@
       "parcelId": "212670000D0807",
       "reference": "D 0807",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 1304.8768,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9458,6 +10098,7 @@
       "parcelId": "212670000D0808",
       "reference": "D 0808",
       "commune": "21267",
+      "namedArea": "LES POULA",
       "cruOverlapM2": 14297.0887,
       "recordedRights": [
         {
@@ -9502,6 +10143,7 @@
       "parcelId": "212670000D0809",
       "reference": "D 0809",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 713.927,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9525,6 +10167,7 @@
       "parcelId": "212670000D0810",
       "reference": "D 0810",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 891.3924,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9548,6 +10191,7 @@
       "parcelId": "212670000D0811",
       "reference": "D 0811",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 3925.0474,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9571,6 +10215,7 @@
       "parcelId": "212670000D0812",
       "reference": "D 0812",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2660.4474,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9594,6 +10239,7 @@
       "parcelId": "212670000D0813",
       "reference": "D 0813",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 2104.6939,
       "recordedRights": [
         {
@@ -9629,6 +10275,7 @@
       "parcelId": "212670000D0814",
       "reference": "D 0814",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 1310.5546,
       "recordedRights": [
         {
@@ -9664,6 +10311,7 @@
       "parcelId": "212670000D0815",
       "reference": "D 0815",
       "commune": "21267",
+      "namedArea": "EN ORVEAUX",
       "cruOverlapM2": 855.9885,
       "recordedRights": [
         {
@@ -9713,6 +10361,7 @@
       "parcelId": "212670000D0818",
       "reference": "D 0818",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 591.9266,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9746,6 +10395,7 @@
       "parcelId": "212670000D0819",
       "reference": "D 0819",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 1027.7109,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9779,6 +10429,7 @@
       "parcelId": "212670000D0820",
       "reference": "D 0820",
       "commune": "21267",
+      "namedArea": "ECHEZEAUX DU DESSUS",
       "cruOverlapM2": 3009.2685,
       "recordedRights": [
         {
@@ -9832,6 +10483,7 @@
       "parcelId": "212670000D0821",
       "reference": "D 0821",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 386.557,
       "recordedRights": [
         {
@@ -9901,6 +10553,7 @@
       "parcelId": "212670000D0822",
       "reference": "D 0822",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 457.8266,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9938,6 +10591,7 @@
       "parcelId": "212670000D0824",
       "reference": "D 0824",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 521.4833,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9965,6 +10619,7 @@
       "parcelId": "212670000D0825",
       "reference": "D 0825",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 218.2648,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -9992,6 +10647,7 @@
       "parcelId": "212670000D0826",
       "reference": "D 0826",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1053.7194,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10030,6 +10686,7 @@
       "parcelId": "212670000D0827",
       "reference": "D 0827",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1067.094,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10068,6 +10725,7 @@
       "parcelId": "212670000D0828",
       "reference": "D 0828",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 102.8794,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10106,6 +10764,7 @@
       "parcelId": "212670000D0829",
       "reference": "D 0829",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 90.6296,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10144,6 +10803,7 @@
       "parcelId": "212670000D0830",
       "reference": "D 0830",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 159.2474,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10212,6 +10872,7 @@
       "parcelId": "212670000D0831",
       "reference": "D 0831",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 2602.234,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10270,6 +10931,7 @@
       "parcelId": "212670000D0832",
       "reference": "D 0832",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 177.4037,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10338,6 +11000,7 @@
       "parcelId": "212670000D0833",
       "reference": "D 0833",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 158.0131,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10406,6 +11069,7 @@
       "parcelId": "212670000D0834",
       "reference": "D 0834",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 4844.5185,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10464,6 +11128,7 @@
       "parcelId": "212670000D0835",
       "reference": "D 0835",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 178.3502,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10501,6 +11166,7 @@
       "parcelId": "212670000D0836",
       "reference": "D 0836",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 1301.6995,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10528,6 +11194,7 @@
       "parcelId": "212670000D0841",
       "reference": "D 0841",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1846.7427,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10555,6 +11222,7 @@
       "parcelId": "212670000D0842",
       "reference": "D 0842",
       "commune": "21267",
+      "namedArea": "LES CRUOTS OU VIGNES BLANCHES",
       "cruOverlapM2": 1817.1189,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10582,6 +11250,7 @@
       "parcelId": "212670000D0843",
       "reference": "D 0843",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 902.6357,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10609,6 +11278,7 @@
       "parcelId": "212670000D0844",
       "reference": "D 0844",
       "commune": "21267",
+      "namedArea": "LES CHAMPS TRAVERSINS",
       "cruOverlapM2": 903.6988,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10636,6 +11306,7 @@
       "parcelId": "212670000D0871",
       "reference": "D 0871",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 523.8173,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10663,6 +11334,7 @@
       "parcelId": "212670000D0872",
       "reference": "D 0872",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 43.3152,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10690,6 +11362,7 @@
       "parcelId": "212670000D0898",
       "reference": "D 0898",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 823.9269,
       "recordedRights": [
         {
@@ -10739,6 +11412,7 @@
       "parcelId": "212670000D0899",
       "reference": "D 0899",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 782.5079,
       "recordedRights": [
         {
@@ -10788,6 +11462,7 @@
       "parcelId": "212670000D0900",
       "reference": "D 0900",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 779.3094,
       "recordedRights": [
         {
@@ -10837,6 +11512,7 @@
       "parcelId": "212670000D0901",
       "reference": "D 0901",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 2251.4696,
       "recordedRights": [
         {
@@ -10886,6 +11562,7 @@
       "parcelId": "212670000D0902",
       "reference": "D 0902",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 134.7871,
       "recordedRights": [
         {
@@ -10935,6 +11612,7 @@
       "parcelId": "212670000D0903",
       "reference": "D 0903",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 135.9034,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10970,6 +11648,7 @@
       "parcelId": "212670000D0904",
       "reference": "D 0904",
       "commune": "21267",
+      "namedArea": "LES TREUX",
       "cruOverlapM2": 901.0288,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -10997,6 +11676,7 @@
       "parcelId": "212670000D0905",
       "reference": "D 0905",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 991.8029,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11024,6 +11704,7 @@
       "parcelId": "212670000D0906",
       "reference": "D 0906",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 1116.1095,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11051,6 +11732,7 @@
       "parcelId": "212670000D0907",
       "reference": "D 0907",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 1113.9339,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11078,6 +11760,7 @@
       "parcelId": "212670000D0908",
       "reference": "D 0908",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 1114.7826,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11105,6 +11788,7 @@
       "parcelId": "212670000D0909",
       "reference": "D 0909",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 557.2605,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11132,6 +11816,7 @@
       "parcelId": "212670000D0910",
       "reference": "D 0910",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 557.1555,
       "recordedRights": [],
       "recordMatch": "unknown",
@@ -11159,6 +11844,7 @@
       "parcelId": "212670000D0911",
       "reference": "D 0911",
       "commune": "21267",
+      "namedArea": "LES LOÄCHAUSSES",
       "cruOverlapM2": 544.707,
       "recordedRights": [],
       "recordMatch": "unknown",

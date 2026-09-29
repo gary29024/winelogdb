@@ -3,7 +3,7 @@ import copy
 import json
 import unittest
 
-from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, SALES, build_register
+from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, NAMED_AREAS, SALES, build_register
 from build_echezeaux_parcel_evidence import build_evidence
 
 
@@ -15,10 +15,11 @@ class FarmingResearchTests(unittest.TestCase):
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
         cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
+        cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
 
-    def build(self, curation=None, asset=None, history=None, sales=None):
+    def build(self, curation=None, asset=None, history=None, sales=None, named_areas=None):
         return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history,
-                              sales or self.sales)
+                              sales or self.sales, named_areas or self.named_areas)
 
     def test_pinned_population_and_no_invented_farmers(self):
         result = self.build()
@@ -159,6 +160,35 @@ class FarmingResearchTests(unittest.TestCase):
         # Prices and addresses are never kept.
         self.assertTrue(all(set(d) == {'deedId', 'date', 'nature', 'dispositions'} for d in self.sales['deeds']))
 
+    def test_census_compares_areas_and_never_places_holdings_on_parcels(self):
+        result = self.build()
+        census = {a['sourceName']: a for a in result['namedAreaCensus']}
+        self.assertEqual(sum(a['withoutCompanyRecord'] for a in census.values()), 157)
+        self.assertIsNone(census['LES POULA']['name'])  # no reviewed crosswalk to Les Poulaillères
+        orveaux = {e['holdingId']: e for e in census['EN ORVEAUX']['holdings']}
+        self.assertEqual(orveaux['clerget']['beyondCompanyRecordsM2'], 10900 - orveaux['clerget']['recordedToProducerM2'])
+        self.assertIsNone(orveaux['cacheux']['beyondCompanyRecordsM2'])  # spread over two named areas
+        vigot = next(e for e in census['LES ROUGES DU BAS']['holdings'] if e['holdingId'] == 'vigot')
+        self.assertIsNone(vigot['beyondCompanyRecordsM2'])  # a métayer farms land already recorded to its owner
+        self.assertTrue(all(p['candidateLeads'] == [] for p in result['parcels']
+                            if p['namedArea'] == 'EN ORVEAUX' and p['researchStatus'] == 'unresolved'))
+        curation = copy.deepcopy(self.curation)
+        curation['producerHoldings'][0]['parcelIds'] = ['212670000D0362']
+        with self.assertRaisesRegex(ValueError, 'cannot name parcels'):
+            self.build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['producerHoldings'][0]['namedAreas'] = ['LES POULAILLERES']
+        with self.assertRaisesRegex(ValueError, 'unknown named area'):
+            self.build(curation)
+
+    def test_exact_area_match_names_the_farmer_as_research_only(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        self.assertIn('gm-d0362', rows['D 0362']['externalResearchIds'])
+        self.assertIn(('Domaine Gérard Mugneret (métayer)', 'estate-area-exact-match'),
+                      {(c['name'], c['basis']) for c in rows['D 0362']['candidateLeads']})
+        self.assertIsNone(rows['D 0362']['currentFarmer'])
+        self.assertIn('vigot-d0195', rows['D 0195']['externalResearchIds'])
+
 
 class ParcelEvidenceTests(unittest.TestCase):
     """The app file must stay a list of dated records, never a farmer assignment."""
@@ -171,7 +201,8 @@ class ParcelEvidenceTests(unittest.TestCase):
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
         cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
-        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales)
+        cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
+        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales, cls.named_areas)
 
     def build(self, curation=None):
         return build_evidence(self.register, curation or self.curation, self.history, self.features)

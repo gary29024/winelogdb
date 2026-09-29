@@ -15,6 +15,7 @@ RESEARCH_LABELS = {
     'critic-named-cadastral-reference': 'Named by parcel number',
     'critic-attribution-area-reconstructed': 'Matched by area only',
     'critic-holding-description': 'Holding described, parcel not named',
+    'estate-area-exact-match': 'Matched by exact area',
 }
 LEAD_LABELS = {
     'brand-identity-confirmed': 'Brand identity confirmed',
@@ -90,7 +91,8 @@ def event_item(event, via=None):
 
 
 def research_item(entry, source_dates, via=None):
-    item = {'kind': 'research', 'date': min(source_dates[s] for s in entry['sourceIds'] if source_dates.get(s)),
+    # Estate pages are often undated; the item then shows no date rather than a review date.
+    item = {'kind': 'research', 'date': min((source_dates[s] for s in entry['sourceIds'] if source_dates.get(s)), default=None),
             'title': entry['title'], 'label': RESEARCH_LABELS[entry['basis']], 'note': entry['appNote'],
             'sources': list(entry['sourceIds'])}
     if via:

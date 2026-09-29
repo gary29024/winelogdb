@@ -72,6 +72,13 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByText(/no buyer, seller or price/)).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/DVF sale and exchange deeds/}).getAttribute('href')).toContain('geo-dvf');
  });
+ it('shows an exact-area match with the farming domaine as published research, undated',async()=>{
+  render(<ParcelEvidence parcelId={id('362')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Matched by exact area')).toBeTruthy();
+  expect(within(panel).getByText('Gérard Mugneret, Les Quartiers de Nuits (métayage)')).toBeTruthy();
+  expect(within(panel).getByText(/sharecrops 0\.6462 ha/)).toBeTruthy();
+ });
  it('covers a Grands-Échezeaux parcel named in a notice',async()=>{
   render(<ParcelEvidence parcelId={id('93')}/>);
   expect(within(await screen.findByRole('region',{name:'History and evidence'})).getByText('Application received')).toBeTruthy();
