@@ -29,14 +29,14 @@
     "recordedHolders": 36,
     "withRecordedRights": 119,
     "withoutMatchedRights": 157,
-    "holderLead": 126,
+    "holderLead": 130,
     "historicalApplication": 16,
     "historicalAuthorisation": 2,
     "saleLead": 1,
-    "unresolved": 131,
+    "unresolved": 127,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
-    "withParcelFiling": 12,
+    "withParcelFiling": 16,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -7667,10 +7667,23 @@
       "holderResearchIds": [
         "U22264880"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Coudray-Bizot",
+          "holderId": "U22264880",
+          "basis": "filing-tenant-relationship",
+          "sourceIds": [
+            "coudray",
+            "coudray-identity",
+            "bodacc-coudray"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "coudray-2004"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7688,12 +7701,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "holder-lead",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0636",
@@ -9485,10 +9498,23 @@
       "holderResearchIds": [
         "U22264880"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Coudray-Bizot",
+          "holderId": "U22264880",
+          "basis": "filing-tenant-relationship",
+          "sourceIds": [
+            "coudray",
+            "coudray-identity",
+            "bodacc-coudray"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "coudray-2004"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -9506,12 +9532,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "holder-lead",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0719",
@@ -9534,10 +9560,23 @@
       "holderResearchIds": [
         "U22264880"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Coudray-Bizot",
+          "holderId": "U22264880",
+          "basis": "filing-tenant-relationship",
+          "sourceIds": [
+            "coudray",
+            "coudray-identity",
+            "bodacc-coudray"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "coudray-2004"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -9555,12 +9594,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "holder-lead",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0723",
@@ -11362,10 +11401,22 @@
       "holderResearchIds": [
         "798977476"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine du Château de Marsannay",
+          "holderId": "798977476",
+          "basis": "filing-tenant-relationship",
+          "sourceIds": [
+            "hor-filing",
+            "bodacc-les-climats"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "hor-climats-2021"
+      ],
       "rightsChanges": [
         {
           "from": "2022-01-01",
@@ -11385,12 +11436,12 @@
       "historyFindingIds": [
         "hor-climats"
       ],
-      "researchStatus": "unresolved",
-      "researchDepth": "holder-group-triage",
+      "researchStatus": "holder-lead",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0818",

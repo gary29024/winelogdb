@@ -213,13 +213,13 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertIn(('Domaine Joseph Drouhin', 'critic-attribution-area-reconstructed'),
                       {(c['name'], c['basis']) for c in rows['D 0633']['candidateLeads']})
         # Companies with no domaine link found stay without a candidate.
-        for ref in ('D 0635', 'D 0813', 'D 0815', 'D 0898'):
+        for ref in ('D 0813', 'D 0814', 'D 0898'):
             self.assertEqual(rows[ref]['candidateLeads'], [])
 
     def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withParcelFiling'], 12)
+        self.assertEqual(result['counts']['withParcelFiling'], 16)
         for ref in ('D 0144', 'D 0128', 'D 0316'):
             self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
             self.assertIsNone(rows[ref]['currentFarmer'])
@@ -241,6 +241,33 @@ class FarmingResearchTests(unittest.TestCase):
         curation['parcelFilings'][0]['currentFarmer'] = 'Rouget'
         with self.assertRaisesRegex(ValueError, 'cannot establish current farming'):
             self.build(curation)
+
+    def test_coudray_and_hor_deeds_keep_historical_dates_and_exact_lease_scope(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        sources = {s['id']: s for s in self.curation['sources']}
+        self.assertEqual(sources['coudray']['documentDate'], '2004-06-26')
+        self.assertEqual(sources['coudray']['statutesUpdatedDate'], '2024-09-05')
+        self.assertEqual(sources['coudray']['filingLabelDate'], '2024-11-15')
+        for ref in ('D 0635', 'D 0714', 'D 0719'):
+            self.assertEqual(rows[ref]['parcelFilingIds'], ['coudray-2004'])
+            self.assertIn('Domaine Coudray-Bizot', {c['name'] for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        self.assertIn('Domaine du Château de Marsannay',
+                      {c['name'] for c in rows['D 0815']['candidateLeads']})
+        self.assertIsNone(rows['D 0815']['currentFarmer'])
+        for ref in ('D 0813', 'D 0814'):
+            self.assertEqual(rows[ref]['parcelFilingIds'], [])
+            self.assertEqual(rows[ref]['candidateLeads'], [])
+        evidence = build_evidence(result, self.curation, self.history,
+                                  json.loads(self.asset)['features'])
+        for pid, date in [('212670000D0635', '2004-06-26'), ('212670000D0815', '2021-06-30')]:
+            filing = next(x for x in evidence['parcels'][pid] if x['kind'] == 'filing')
+            self.assertEqual(filing['date'], date)
+        # The primary deed date must not overwrite the observed annual-record interval.
+        change = next(x for x in rows['D 0815']['rightsChanges']
+                      if 'SCI LES CLIMATS' in x['after'])
+        self.assertEqual((change['from'], change['to']), ('2022-01-01', '2023-01-01'))
 
     def test_disputed_location_is_excluded_even_when_only_one_alternative_is_listed(self):
         curation = copy.deepcopy(self.curation)

@@ -10,9 +10,9 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **118 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **119 records**. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
-The resulting categories are **126 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **131 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
+The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
 Useful findings beyond the original examples:
 
@@ -36,7 +36,7 @@ The pilot used one rights file (1 January 2025). The same DGFiP legal-entity fil
 - **Nicole Lamarche:** SIREN 397738634 was recorded as **FONCIER VITI DOM FRANCOIS LAMARCHE** in 2020–2021 and as NICOLE LAMARCHE from 2022. Same SIREN, so one renamed legal entity; this strengthens the identity link to the Lamarche domaine for D0168, D0169 and D0519.
 - **Anne Gros application:** D0177, D0178 and Grands-Échezeaux D0093 have identical geometry and area in the January 2022 vintage and today, so the receipt's printed references denote today's parcels. D0177/D0178 never carry a company record (consistent with private owners). No vintage contains a D1776. Anne Gros's company rights on D0183/D0709 begin on 1 January 2021.
 - **D0673 left Mongeard-Mugneret during 2024:** held by Assurances du Crédit Mutuel Vie until 2020, Domaine Mongeard Mugneret 2021–2024, then **Bouchon Pourpre** in 2025.
-- **HOR Vignobles → SCI Les Climats:** D0815 changes holder between the 2022 and 2023 files while D0813/D0814 stay with HOR. This places the transfer seen only in an indexed filing excerpt on an exact reference.
+- **HOR Vignobles → SCI Les Climats:** D0815 changes recorded holder between the 2022 and 2023 annual snapshots, while D0813/D0814 remain with HOR. The subsequently supplied notarial deed independently dates the D0815 transfer to **30 June 2021**, and names Domaine du Château de Marsannay as its tenant. The annual observation interval is not the transaction date.
 - **Traversins** rights begin on 1 January 2024, matching the 2023 report of additional Roumier vines in Champs Traversins (timing only, not scope).
 - **Capitain → Capitain-Gagnerot (2020)** and **Clerget GFV → SCEV du Domaine Christian Clerget (2023)** are transfers between different SIRENs, not renames.
 - **U22079769 is not a company:** "Propriétaires du BND 267 D0143" is the undivided-ownership record of former D0143, which the 2025 cadastre divided into D0898–D0902.
@@ -102,22 +102,28 @@ Checked 29 September 2026 in [BODACC](https://bodacc-datadila.opendatasoft.com/e
 | GROUPEMENT FONCIER VITICOLE DE ORVEAUX | D0316, D0323, D0633, D0636 | February 2024 deed names the contributions and Laurent Jousset-Drouhin personally as tenant, with partial scope | Drouhin family tenancy; operating-company arrangement unresolved |
 | GFV GRANDS CRUS INVESTISSEMENT | D0650, D0651, D0652 | Abbreviated registry name matches SIREN 413823873, office 11 rue des Grands Crus, Vosne: the Méo-Camuzet family's address | Domaine Méo-Camuzet (0.44 ha published in Les Rouges du Bas; these parcels cover 0.45 ha there) |
 | ORIGINE, now LC | D0313 | Paris office shared with SAS Domaine de la Pousse d'Or; one person became manager of both in 2022 | Domaine de la Pousse d'Or (a quarter-acre in the Poulaillères, held by its owner's holding company) |
-| GFA HERITIERS COUDRAY | D0635, D0714, D0719 | Family GFA, registration moved to Hérault in 2024 | None found |
-| HOR VIGNOBLES | D0813, D0814 | Chaired by a foreign holding company | None found |
-| SCI LES CLIMATS | D0815 | Beaune SCI managed by a member of the Follin-Arbelet family; the name alone is not a domaine link | None found |
+| GFA HERITIERS COUDRAY | D0635, D0714, D0719 | Original 26 June 2004 deed retained in the 2024 copy names these parcels and an existing verbal lease | Domaine Coudray-Bizot; execution of the mandated long-term lease, renewal and current farming unverified |
+| HOR VIGNOBLES | D0813, D0814 | Cash-only 2016 formation; 2021 transfer deed concerns D0815, not a lease schedule for these retained parcels | None established for D0813/D0814 |
+| SCI LES CLIMATS | D0815 | 30 June 2021 deed transfers 856 m² from HOR and recites a 2016 métayage lease to SIREN 305242687 | Domaine du Château de Marsannay; current farming unverified |
 | PROPRIETAIRES DU BND 267 D0143 | D0898–D0902 | Undivided co-owners, not a company | Not searchable |
 
-The first three were created in 2024, and their parcels first appear in the January 2025 rights file, which supports matching the U-numbered holders (no SIREN) to these companies. The Méo-Camuzet and Pousse d'Or leads also agree with the area each estate publishes in that named area. The eight parcels move from "no named candidate" to holder leads, leaving **131** without a candidate.
+The first three were created in 2024, and their parcels first appear in the January 2025 rights file, which supports matching the U-numbered holders (no SIREN) to these companies. The Méo-Camuzet and Pousse d'Or leads also agree with the area each estate publishes in that named area. That first pass added eight holder leads, leaving 131 without a candidate. The subsequently supplied Coudray and HOR deeds add four dated tenant leads, leaving **127**.
 
 The other public sources were tried again. The [SAFER legal-notice site](https://annonces-legales.saferbfc.com/commune/21267) is now reachable, but it lists only notices still open, and none concern Flagey-Échezeaux or Vosne-Romanée. The prefecture site still rate-limits, the Cour de cassation search now puts up a JavaScript and cookie check, and Gallica still refuses automated reading. None of these checks was bypassed.
 
-### Reviewed 2024 founding deeds
+### Reviewed company deeds and dated tenancy evidence
 
-The three user-supplied Pappers copies explicitly name **twelve parcels**, whose cadastral areas all match the pinned snapshot. Their contribution dates are **9 February (Orveaux), 2 July (Les Cruots), and 22 November 2024 (Forey)**, distinct from the dates on their filing labels. [Detailed reading, source pages, hashes and next document requests](echezeaux-statutes-research.md).
+The first three user-supplied Pappers copies explicitly name **twelve parcels**, whose cadastral areas all match the pinned snapshot. Their contribution dates are **9 February (Orveaux), 2 July (Les Cruots), and 22 November 2024 (Forey)**, distinct from the dates on their filing labels. [Detailed reading, source pages, hashes and next document requests](echezeaux-statutes-research.md).
 
 - **Les Cruots:** four parcels, 0.3669 ha. Nicolas and Guillaume Rouget bought them in March and contributed them in July. The deed recites the old lease and a concurrent new lease to the brothers, with permission for use by **EARL 809967854**, distinct from the other Rouget company used in the earlier office comparison. D0146 is not in the contribution tables.
 - **Orveaux:** four parcels, 0.5263 ha cadastral; 0.4147 ha plantable/planted. The lease recital to **Laurent Jousset-Drouhin personally** enumerates 0.4550 ha, with only parts of D0316, D0323 and D0633. Its annex broadly calls the lease total; the detailed partial areas are retained. Neither scope nor tenant is silently replaced by the domaine brand.
 - **Forey:** four parcels, 0.3005 ha. The deed names **SCE du Domaine Forey Père & Fils (326589686)** as oral-lease tenant. It separately mandates a 2025–2048 lease; the signed new lease has not been reviewed. The 1992 lease elsewhere in the deed excludes these four parcels.
+
+The second set of three PDFs adds four exact tenant leads, bringing **sixteen parcels** under reviewed filing evidence:
+
+- **Coudray:** D0635/D0714/D0719 total **0.3859 ha**. The original **26 June 2004** deed names Société Civile Domaine Coudray-Bizot as verbal-lease tenant and mandates a separate 18-year lease. The cover update is 5 September 2024 and the filing label 15 November 2024; neither newly dates the historical tenancy recital. Execution, renewal and current farming remain unverified.
+- **HOR → SCI Les Climats:** the **30 June 2021** deed transfers **D0815, 856 m²**, and names **Domaine du Château de Marsannay (305242687)** as métayage tenant. It recites a lease signed 25 October 2016, effective 1 September 2016 to 31 October 2040. D0813/D0814 are not covered by this clause. The transfer predates its appearance in the annual rights records.
+- **HOR formation:** signed **1 August 2016**, with €500 contributed in cash and no pre-formation transactions in its annex. It supplies no vineyard lease schedule. The later transfer deed recites acquisition of parent D0315 on 25 October 2016; that acquisition and the same-day lease are the next useful documents.
 
 The app shows these as dated **Company filings and leases**, alongside ownership, notices and research. Contributions, lease recitals and mandates remain separate from verified current farming. Historical research uses an explicitly selected date source; an undated guide or estate page cannot inherit a supporting registry's date.
 
@@ -125,7 +131,7 @@ The app shows these as dated **Company filings and leases**, alongside ownership
 
 Checked 29 September 2026.
 
-- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied the Les Cruots, Orveaux and Forey copies; their exact contribution and lease pages were visually reviewed. Links, dates, pages and hashes are recorded without republishing the PDFs. Coudray and HOR remain unread in full. Other blocked services remain access gaps.
+- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied Les Cruots, Orveaux, Forey, Coudray and two HOR copies; their relevant full contribution, transfer and tenancy pages were visually reviewed. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed leases and later amendments remain outstanding; the HOR accounts are still indexed-excerpt-only. Other blocked services remain access gaps.
 - **Guide Hachette** has 218 Échezeaux entries dating back to the 2001 edition. Two published areas equal exact cadastral sums:
   - Guide Hachette 2001 describes **52 a 63 ca in En Orveaux** for Joseph Drouhin's 1998 vintage. The 2024 ORVEAUX deed independently names the four parcels totalling **5,263 m² cadastral**, while explicitly giving **4,147 m² plantable and planted**, consistent with the importer's rounded 0.41 ha. The historical guide stays separate from this later deed; its date is not backfilled from a 2024 company notice.
   - François Gerbet had **18 a 76 ca in Les Quartiers de Nuits and Les Treux** (2006 vintage). **D0360 + D0508** total exactly 1 876 m². Winehog lists only part of D0508 for Berthaut-Gerbet in 2019, so the plot's use has changed since.

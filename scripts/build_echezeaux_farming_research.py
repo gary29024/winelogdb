@@ -101,9 +101,9 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
             require(area == by_id[pid]['cadastreAreaM2'], 'Filing cadastral area differs from snapshot')
             require(filing['holderId'] in {r['holderId'] for r in by_id[pid]['recordedRights']}, 'Filing holder differs from snapshot')
         for lease in filing['leaseEvidence']:
-            require(set(lease.get('parcelAreasM2', {})) <= refs, 'Lease outside contributed parcels')
+            require(set(lease.get('parcelAreasM2', {})) <= refs, 'Lease outside filing parcels')
             for pid, area in lease.get('parcelAreasM2', {}).items():
-                require(0 < area <= filing['parcelAreasM2'][pid], 'Lease area exceeds contributed parcel')
+                require(0 < area <= filing['parcelAreasM2'][pid], 'Lease area exceeds filing parcel')
     require(sales['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and sales['parentFeatureId'] == parent,
             'Sale records built from another snapshot')
     require('dvf-sales' in sources and 'dgfip-history' in sources, 'Sale records need the dvf-sales and dgfip-history sources')
@@ -293,7 +293,7 @@ def render_report(register, curation, history):
         f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
-        f"{counts['withParcelFiling']} parcels have reviewed company filings naming their contributions and dated lease relationships. "
+        f"{counts['withParcelFiling']} parcels have reviewed company filings naming their contributions or transfers and dated lease relationships. "
         'These do not confirm operation in the target season.', '',
         'Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. '
         'No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.', '',

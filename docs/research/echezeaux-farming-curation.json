@@ -220,13 +220,30 @@
     },
     {
       "id": "coudray",
-      "title": "GFA Héritiers Coudray 2024 statutes",
+      "title": "GFA Héritiers Coudray: 2004 founding deed retained in 2024 statutes",
       "url": "https://www.pappers.fr/entreprise/gfa-heritiers-coudray-477938294/documents/GFA%20HERITIERS%20COUDRAY%20-%20Copie%20des%20statuts%20mis%20%C3%A0%20jour%2015-11-2024.pdf",
       "type": "company-filing",
-      "documentDate": "2024-11-15",
-      "reviewedAt": "2026-09-28",
-      "finding": "Indexed excerpt concerns other communes. Full PDF text/render could not be inspected; not used to assign any operator.",
-      "access": "indexed-excerpt-only"
+      "documentDate": "2004-06-26",
+      "reviewedAt": "2026-09-29",
+      "finding": "The 26 June 2004 founding deed, retained in statutes updated 5 September 2024, names D0635/D0714/D0719 (3859 m²) and an existing verbal lease to Société Civile Domaine Coudray-Bizot. It mandates a separate 18-year lease; execution, renewal and current farming are unverified.",
+      "access": "owner-supplied-pdf-visually-reviewed",
+      "filingLabelDate": "2024-11-15",
+      "sha256": "cdd19a2d2ef2bb9b48419949c8989420f112a6df756b8d79d695150b8db58db0",
+      "pageCount": 22,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        21,
+        22
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User supplied the Pappers copy after browser access was blocked. Source linked, PDF not redistributed.",
+      "statutesUpdatedDate": "2024-09-05",
+      "dateNote": "The cover update and filing label are 2024; the contribution and tenancy recital belong to the original 26 June 2004 deed, not a newly attested 2024 lease."
     },
     {
       "id": "cruots",
@@ -302,13 +319,29 @@
     },
     {
       "id": "hor-filing",
-      "title": "HOR Vignobles 2021 filing",
+      "title": "HOR Vignobles: 2021 D0815 transfer and lease recital",
       "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008/documents/HOR%20VIGNOBLES%20-%20Statuts%20mis%20%C3%A0%20jour%2008-10-2021.pdf",
       "type": "company-filing",
-      "documentDate": "2021-10-08",
-      "reviewedAt": "2026-09-28",
-      "finding": "Indexed excerpt describes a Flagey En Orveaux transfer involving SCI Les Climats. Full PDF could not be retrieved/rendered; no exact reference or lease accepted.",
-      "access": "indexed-excerpt-only"
+      "documentDate": "2021-06-30",
+      "reviewedAt": "2026-09-29",
+      "finding": "The 30 June 2021 deed attributes D0815 (856 m²) from HOR Vignobles to SCI Les Climats. It names Domaine du Château de Marsannay (305242687) as métayage tenant under a 25 October 2016 lease, effective 1 September 2016 to 31 October 2040. This recital covers D0815, not D0813/D0814; current farming is unverified.",
+      "access": "owner-supplied-pdf-visually-reviewed",
+      "filingLabelDate": "2021-10-08",
+      "sha256": "61dbb683d2f867e630c52b2d9088b185c4e2cb894d2b72195b8ff4005432f9dc",
+      "pageCount": 47,
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        30,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User supplied the Pappers copy after browser access was blocked. Source linked, PDF not redistributed."
     },
     {
       "id": "hor-accounts",
@@ -528,7 +561,7 @@
       "type": "registry",
       "documentDate": null,
       "reviewedAt": "2026-09-28",
-      "finding": "Name search returns GFA Héritiers Coudray, SIREN 477938294; no crosswalk to the DGFiP U-prefixed identifier or operating lease.",
+      "finding": "Name search identifies GFA Héritiers Coudray, SIREN 477938294. This registry response alone supplies neither a DGFiP U-number crosswalk nor a lease; the subsequently supplied deed independently matches the three parcels and areas.",
       "access": "read"
     },
     {
@@ -1078,7 +1111,7 @@
       "type": "registry",
       "documentDate": "2024-11-19",
       "reviewedAt": "2026-09-29",
-      "finding": "Managed by a member of the Coudray family; the registration moved from Dijon to Montpellier in 2024. No link to a Burgundy domaine was found.",
+      "finding": "The registration moved from Dijon to Montpellier in 2024 and names family management. This notice alone does not identify a tenant; see the subsequently reviewed 2004 deed in the 2024 statutes.",
       "access": "read"
     },
     {
@@ -1257,6 +1290,27 @@
       ],
       "pageNumbering": "one-based PDF; ORVEAUX printed page numbers are one lower",
       "retrievalNote": "Pappers browser PDF requests were blocked by Cloudflare; user supplied the copy. Source linked, PDF not redistributed."
+    },
+    {
+      "id": "hor-formation-2016",
+      "title": "HOR Vignobles: formation statutes, 1 August 2016",
+      "url": "https://www.pappers.fr/entreprise/hor-vignobles-821877008",
+      "type": "company-filing",
+      "documentDate": "2016-08-01",
+      "filingLabelDate": "2016-08-05",
+      "reviewedAt": "2026-09-29",
+      "finding": "Article 6 records a €500 cash contribution, not vineyard assets. Signed 1 August 2016; the annex of pre-formation transactions says Néant. It supplies no parcel schedule or executed vineyard lease. The later D0815 deed dates acquisition of parent D0315 to 25 October 2016.",
+      "access": "owner-supplied-pdf-visually-reviewed",
+      "sha256": "fafad55a00ae7086264799abf25995212ee124fbcc464ec753461710eaf457bb",
+      "pageCount": 19,
+      "reviewedPages": [
+        1,
+        4,
+        16,
+        17
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User supplied 821877008-63def6cbc361ed1a931117a6.pdf. Company-page link only; no direct download URL established. PDF not redistributed."
     }
   ],
   "holders": [
@@ -1478,9 +1532,11 @@
     },
     {
       "holderId": "U22264880",
-      "candidateNames": [],
-      "basis": "identity-unresolved",
-      "finding": "Official name search found GFA Héritiers Coudray, SIREN 477938294, now registered in Hérault and managed by the family. No link to a Burgundy domaine or tenant was found; the U-prefixed crosswalk remains unverified.",
+      "candidateNames": [
+        "Domaine Coudray-Bizot"
+      ],
+      "basis": "filing-tenant-relationship",
+      "finding": "The original 26 June 2004 deed matches these three parcels (3859 m²) and names Société Civile Domaine Coudray-Bizot as verbal-lease tenant. The 2024 copy retains that historical recital and an 18-year lease mandate; execution, renewal and current farming are unverified.",
       "sourceIds": [
         "coudray",
         "coudray-identity",
@@ -1558,11 +1614,12 @@
       "holderId": "821877008",
       "candidateNames": [],
       "basis": "unresolved",
-      "finding": "HOR Vignobles is owned by a foreign holding company, not a named domaine. Its accounts describe owned Échezeaux assets, and an indexed filing concerns SCI Les Climats. No farmer inferred from ownership or acreage.",
+      "finding": "The 2021 deed concerns D0815, now held by SCI Les Climats; its Marsannay lease recital cannot be extended to D0813/D0814. The 2016 formation deed contributes cash, not vineyards. No tenant is established for these two retained parcels.",
       "sourceIds": [
         "hor-filing",
         "hor-accounts",
-        "bodacc-hor"
+        "bodacc-hor",
+        "hor-formation-2016"
       ],
       "parcelOperationConfirmed": false
     },
@@ -1717,9 +1774,11 @@
     },
     {
       "holderId": "798977476",
-      "candidateNames": [],
-      "basis": "unresolved",
-      "finding": "SCI Les Climats, Beaune, is managed by a member of the Follin-Arbelet family; the name alone is not linked to a domaine. An indexed 2021 filing describes an En Orveaux asset transfer involving it. Ownership transfer is not farming evidence.",
+      "candidateNames": [
+        "Domaine du Château de Marsannay"
+      ],
+      "basis": "filing-tenant-relationship",
+      "finding": "The 30 June 2021 deed transfers D0815 to SCI Les Climats and names Domaine du Château de Marsannay (305242687) as métayage tenant under a 2016 lease with a recited end in 2040. This is dated tenancy evidence; current farming remains unverified.",
       "sourceIds": [
         "hor-filing",
         "bodacc-les-climats"
@@ -1831,7 +1890,7 @@
   "accessGaps": [
     "CVI records require cooperation from authorised holders; no private records accessed.",
     "Public CartoBio polygons omit operator identity.",
-    "HOR Vignobles and Coudray PDF full text/render unavailable; indexed excerpts retained only as leads.",
+    "Coudray and both HOR PDFs have now been supplied and visually reviewed. The executed Coudray lease/renewals, full HOR 25 October 2016 acquisition and lease schedules, and later tenant changes remain unreviewed; HOR 2024 accounts remain indexed-excerpt-only.",
     "Regional bulletins 2019–2026 were read for Côte-d'Or DDT notices (2026 to the end of September). Farm-structure notices appear there regularly only from 2021; the Côte-d'Or departmental bulletins for 2016–2020 were later searched in full (31,966 pages, PR #412). Their only Flagey-Échezeaux vineyard decision (Maison Louis Bouillot, signed 18 November 2015, RAA 10 of 2016) prints section A references (A 9–11, 13, 15, 30–32, 893–900), none of them in the 276 mapped section D parcels, so it creates no parcel link. Departmental bulletins before 2016 and the five unresolved 2018 references remain unsearched, so \"no decision found\" means none in the searched corpus. The DDT notice page and cote-dor.gouv.fr refused automated access.",
     "Cadastral lineage covers the 2019–2026 vintages only; earlier divisions are not traced.",
     "DVF+ sale records start in January 2014 and end in November 2025, and name no party. Gifts, inheritances and transfers without a price are not in them. Deeds printed with a parcel reference retired before 2019 are not traced to today's parcels.",
@@ -1932,7 +1991,7 @@
     },
     {
       "id": "hor-climats",
-      "title": "HOR Vignobles transfer to SCI Les Climats dated to 2022",
+      "title": "D0815: 2021 transfer deed precedes the annual rights-record change",
       "parcelIds": [
         "212670000D0815"
       ],
@@ -1940,7 +1999,7 @@
         "dgfip-history",
         "hor-filing"
       ],
-      "finding": "D0815 passes from HOR VIGNOBLES to SCI LES CLIMATS between the 2022 and 2023 files, while D0813 and D0814 stay with HOR. This places the En Orveaux transfer suggested by the indexed HOR filing on D0815. The farmer remains unresolved."
+      "finding": "The deed transfers D0815 from HOR Vignobles to SCI Les Climats on 30 June 2021 and names Domaine du Château de Marsannay as tenant. The annual files only show the holder change between the 2022 and 2023 snapshots; that observation interval is not the transaction date. D0813/D0814 remain recorded to HOR and are not covered by the D0815 tenancy recital."
     },
     {
       "id": "traversins-timing",
@@ -3434,6 +3493,115 @@
       ],
       "finding": "Regis Forey contributes D0128, D0154, D0156 and D0157, totalling 3005 m². Page 19 names the SCE (326589686) as their tenant under an oral lease. Page 35 mandates a lease from 1 January 2025 through 31 December 2048, without proving execution. The 1992 lease on page 17 explicitly excludes these four parcels.",
       "appNote": "These four parcels total 0.3005 ha. The deed names SCE du Domaine Forey Père & Fils (326589686) as tenant under an oral lease. It authorizes a 2025–2048 lease; the executed new lease was not reviewed. Current farming remains unverified."
+    },
+    {
+      "id": "coudray-2004",
+      "sourceId": "coudray",
+      "title": "Coudray: 2004 contributions and Coudray-Bizot tenancy",
+      "holderId": "U22264880",
+      "companySiren": "477938294",
+      "documentDate": "2004-06-26",
+      "parcelAreasM2": {
+        "212670000D0635": 313,
+        "212670000D0714": 139,
+        "212670000D0719": 3407
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-oral-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Coudray-Bizot"
+          ],
+          "recitalDate": "2004-06-26",
+          "parcelAreasM2": {
+            "212670000D0635": 313,
+            "212670000D0714": 139,
+            "212670000D0719": 3407
+          },
+          "pages": [
+            8
+          ],
+          "limitation": "Historical founding-deed recital retained in the 2024 update; not a new statement of 2024 occupancy."
+        },
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "Société Civile Domaine Coudray-Bizot"
+          ],
+          "mandatedEffectiveFrom": "2004-06-26",
+          "initialDurationYears": 18,
+          "pages": [
+            8,
+            21
+          ],
+          "limitation": "Mandate and prospective recital for a separate long-term lease, not its executed copy or evidence of renewal."
+        }
+      ],
+      "finding": "The 26 June 2004 founding deed, retained in statutes updated 5 September 2024, names D0635/D0714/D0719 (3859 m²) and an existing verbal lease to Société Civile Domaine Coudray-Bizot. It mandates a separate 18-year lease; execution, renewal and current farming are unverified.",
+      "appNote": "The 26 June 2004 deed lists these three parcels (0.3859 ha) and names Domaine Coudray-Bizot as tenant under a verbal lease. It mandates a separate 18-year lease. The 2024 filing retains this old recital; execution, renewal and current farming are unverified."
+    },
+    {
+      "id": "hor-climats-2021",
+      "sourceId": "hor-filing",
+      "title": "D0815: transfer to SCI Les Climats and Marsannay tenancy",
+      "holderId": "798977476",
+      "companySiren": "798977476",
+      "filingCompanySiren": "821877008",
+      "documentDate": "2021-06-30",
+      "parcelAreasM2": {
+        "212670000D0815": 856
+      },
+      "transferRecital": {
+        "kind": "capital-reduction-attribution-in-kind",
+        "fromCompany": "HOR Vignobles",
+        "fromSiren": "821877008",
+        "toCompany": "SCI Les Climats",
+        "toSiren": "798977476",
+        "resolutionDate": "2021-05-31",
+        "propertyTransferDate": "2021-06-30",
+        "pages": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "predecessorRecital": {
+        "parcelId": "212670000D0315",
+        "cadastreAreaM2": 4273,
+        "acquisitionDate": "2016-10-25",
+        "publicationDate": "2016-11-10",
+        "publicationReference": "Dijon 4, volume 2016P, number 3871",
+        "pages": [
+          7,
+          8
+        ],
+        "limitation": "The deed explicitly derives D0815 from D0315. It does not establish a lease scope for the other modern parcels; the cadastral plan on PDF p.30 is not a tenant schedule."
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "DOMAINE DU CHATEAU DE MARSANNAY"
+          ],
+          "tenantSiren": "305242687",
+          "leaseType": "métayage viticole",
+          "signedDate": "2016-10-25",
+          "effectiveFrom": "2016-09-01",
+          "recitedEnd": "2040-10-31",
+          "recitedDurationYears": 24,
+          "parcelAreasM2": {
+            "212670000D0815": 856
+          },
+          "pages": [
+            9
+          ],
+          "limitation": "Preserves the deed's stated duration and dates. Recital attaches to D0815 only, not D0813/D0814. Separate executed lease and later amendments not reviewed; current farming unverified."
+        }
+      ],
+      "finding": "The 30 June 2021 deed attributes D0815 (856 m²) from HOR Vignobles to SCI Les Climats. It names Domaine du Château de Marsannay (305242687) as métayage tenant under a 25 October 2016 lease, effective 1 September 2016 to 31 October 2040. This recital covers D0815, not D0813/D0814; current farming is unverified.",
+      "appNote": "The 30 June 2021 deed transfers D0815 (856 m²) to SCI Les Climats and names Domaine du Château de Marsannay (305242687) as métayage tenant. It recites a 2016 lease ending 31 October 2040. D0813/D0814 are outside this recital; current farming is unverified."
     }
   ]
 }
