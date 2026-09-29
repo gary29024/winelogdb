@@ -91,8 +91,8 @@
       "url": "https://domaine-faiveley.com/fiche-vin/echezeaux-en-orveaux-grand-cru/",
       "type": "estate",
       "documentDate": null,
-      "reviewedAt": "2026-09-28",
-      "finding": "Describes 0.8335 ha En Orveaux. No exact cadastral IDs.",
+      "reviewedAt": "2026-09-29",
+      "finding": "States \"0 ha 83 a 35 ca\" En Orveaux, owned (\"we currently own 0.83 ha\"), planted 1950, 1956 and 1982, between Prieur's Musigny and Faiveley's Combe d'Orveau. The figure equals the cadastral total of D0331, D0335 and D0653 (8 335 m²). No cadastral IDs.",
       "access": "read"
     },
     {
@@ -2072,6 +2072,23 @@
       ],
       "producer": "Domaine du Comte Liger-Belair",
       "appNote": "Liger-Belair's published 0.0312 ha in Clos Saint-Denis equals this parcel exactly, but a neighbouring 313 m² parcel is almost as close. Weak; the parcel was sold in October 2025."
+    },
+    {
+      "id": "faiveley-orveaux-exact",
+      "title": "Faiveley, En Orveaux (area equals its three company parcels)",
+      "parcelIds": [
+        "212670000D0331",
+        "212670000D0335",
+        "212670000D0653"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Faiveley states it owns 0 ha 83 a 35 ca in En Orveaux. The three parcels recorded to CVVB (SIREN 775567928, Faiveley's legal entity) total exactly 8 335 m² in the cadastre (440 + 4 941 + 2 954). The published holding is therefore these three parcels and nothing more; it adds nothing to the unrecorded En Orveaux land.",
+      "sourceIds": [
+        "faiveley",
+        "faiveley-identity"
+      ],
+      "producer": "Domaine Faiveley",
+      "appNote": "Faiveley states it owns 0 ha 83 a 35 ca in En Orveaux: exactly the cadastral total of its company's three parcels (D0331, D0335, D0653). Owner-stated; current operation is not separately confirmed."
     }
   ],
   "producerHoldings": [
@@ -2439,6 +2456,27 @@
       ],
       "finding": "\"Exploite 26 ares\"; no company record in this lieu-dit.",
       "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "faiveley",
+      "producer": "Domaine Faiveley",
+      "namedAreas": [
+        "EN ORVEAUX"
+      ],
+      "publishedAreaHa": 0.8335,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "faiveley",
+        "faiveley-identity"
+      ],
+      "finding": "Equals the cadastral total of its three company parcels exactly; nothing beyond company records.",
+      "producerHolderIds": [
+        "775567928"
+      ],
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []

@@ -218,6 +218,18 @@
           "recordedToProducerM2": 0,
           "beyondCompanyRecordsM2": null,
           "owners": []
+        },
+        {
+          "holdingId": "faiveley",
+          "producer": "Domaine Faiveley",
+          "publishedAreaHa": 0.8335,
+          "precision": "square-metre",
+          "relation": "owner",
+          "endedSeason": null,
+          "sharedWith": [],
+          "recordedToProducerM2": 8337,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
         }
       ]
     },
@@ -4194,10 +4206,20 @@
             "faiveley-identity",
             "faiveley"
           ]
+        },
+        {
+          "name": "Domaine Faiveley",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "faiveley",
+            "faiveley-identity"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "faiveley-orveaux-exact"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4216,7 +4238,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -4333,10 +4355,20 @@
             "faiveley-identity",
             "faiveley"
           ]
+        },
+        {
+          "name": "Domaine Faiveley",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "faiveley",
+            "faiveley-identity"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "faiveley-orveaux-exact"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -4355,7 +4387,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -7751,10 +7783,20 @@
             "faiveley-identity",
             "faiveley"
           ]
+        },
+        {
+          "name": "Domaine Faiveley",
+          "basis": "estate-area-exact-match",
+          "sourceIds": [
+            "faiveley",
+            "faiveley-identity"
+          ]
         }
       ],
       "historicalEvents": [],
-      "externalResearchIds": [],
+      "externalResearchIds": [
+        "faiveley-orveaux-exact"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -7773,7 +7815,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "external-research-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
