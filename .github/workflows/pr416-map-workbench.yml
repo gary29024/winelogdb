@@ -1,0 +1,23 @@
+name: PR416 map workbench
+on:
+  push:
+    branches: [automation/pr416-map-ui-20260930]
+    paths: [.github/workflows/pr416-map-workbench.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 2636db60af5a1e4f138d0ade84a30fbfdad10436
+          persist-credentials: false
+      - name: Export source snapshot for offline review
+        run: git archive --format=tar HEAD | gzip > "$RUNNER_TEMP/pr416-source.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr416-source
+          path: ${{ runner.temp }}/pr416-source.tar.gz
+          retention-days: 1
