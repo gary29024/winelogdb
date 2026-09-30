@@ -36,7 +36,7 @@
     "unresolved": 127,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
-    "withParcelFiling": 27,
+    "withParcelFiling": 28,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -10889,7 +10889,9 @@
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "clerget-d0796-2002"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -10921,7 +10923,7 @@
         "clerget-transfer"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
