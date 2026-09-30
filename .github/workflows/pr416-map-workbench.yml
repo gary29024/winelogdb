@@ -4,20 +4,72 @@ on:
     branches: [automation/pr416-map-ui-20260930]
     paths: [.github/workflows/pr416-map-workbench.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: 2636db60af5a1e4f138d0ade84a30fbfdad10436
-          persist-credentials: false
-      - name: Export source snapshot for offline review
-        run: git archive --format=tar HEAD | gzip > "$RUNNER_TEMP/pr416-source.tar.gz"
+          fetch-depth: 0
+      - name: Apply reviewed patch to PR baseline
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64,gzip,hashlib,subprocess
+          parts=[Path(f'.workbench/map-patch-{i}.b64').read_text() for i in range(3)]
+          parts[2]=parts[2].replace('1J4cnRw7p6duhdqN','1J4cnRw7p6drhdqN')
+          patch=gzip.decompress(base64.b64decode(''.join(parts)))
+          assert hashlib.sha256(patch).hexdigest()=='48b1d840e8f7346cca31efb6b5c6a392d77adc5b7fa9fefb4d530841232369f7'
+          subprocess.run(['git','checkout','--detach','2636db60af5a1e4f138d0ade84a30fbfdad10436'],check=True)
+          subprocess.run(['git','apply','--check','-'],input=patch,check=True)
+          subprocess.run(['git','apply','-'],input=patch,check=True)
+          PY
+      - name: Regenerate research and verify guards
+        run: |
+          python scripts/build_echezeaux_farming_research.py
+          python scripts/build_echezeaux_farming_research.py --check
+          python -m unittest discover -s scripts -p test_echezeaux_farming_research.py
+      - uses: ./.github/actions/test-setup
+      - name: Component and grouping regressions
+        run: npx vitest run tests/unit/GrandCruParcels.test.tsx tests/unit/ParcelProducerLinker.test.tsx tests/unit/parcelDomaineGroups.test.ts tests/unit/ParcelEvidence.test.tsx
+      - name: Lint and production build
+        run: |
+          npm run lint
+          npm run build
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium webkit
+      - name: Desktop and mobile Chromium parcel flows
+        run: npx playwright test tests/e2e/burgundy-village-map.spec.ts --project=chromium --grep 'Échezeaux'
+      - name: iPhone WebKit parcel regressions
+        shell: bash
+        run: |
+          cat > playwright.pr416.config.ts <<'EOF'
+          import {defineConfig,devices} from '@playwright/test';
+          import base from './playwright.config';
+          export default defineConfig({...base,projects:[{name:'parcel-iphone',testMatch:'**/burgundy-village-map.spec.ts',use:{...devices['iPhone 15 Pro'],browserName:'webkit'}}],outputDir:'test-results-webkit'});
+          EOF
+          npx playwright test --config=playwright.pr416.config.ts --grep 'Échezeaux: (manually link|scoped manual)'
+          rm playwright.pr416.config.ts
+      - name: Stage tested result without changing PR
+        shell: bash
+        run: |
+          git config user.name 'gary29024'
+          git config user.email '31164068+gary29024@users.noreply.github.com'
+          git add src scripts tests docs
+          git diff --cached --check
+          tree=$(git write-tree)
+          result=$(git commit-tree "$tree" -p 2636db60af5a1e4f138d0ade84a30fbfdad10436 -m 'Fix wine-scoped parcel links and show researched domaine groups')
+          git push origin "$result:refs/heads/automation/pr416-map-tested-20260930"
+          echo "Tested commit: $result" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: pr416-source
-          path: ${{ runner.temp }}/pr416-source.tar.gz
+          name: pr416-map-validation
+          path: |
+            test-results/
+            test-results-webkit/
+            playwright-report/
           retention-days: 1
