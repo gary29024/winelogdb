@@ -187,7 +187,7 @@ This matters most in En Orveaux. Published holdings there cannot safely be assig
 
 Free registry indexes nevertheless expose higher-value documents to inspect. Christian Clerget has two family landholding vehicles with notarial formation/donation records, one of which (GFV 430384354) was absorbed into the operating domaine in 2023. Jean-Yves Bizot's 434002390 entity has a 2002 notarial **acte d'apport**. Bouchard's former Maison entity has a 2026 **apport partiel d'actif** covering a viticultural-production branch. Cacheux and Guyon have capital/notarial records, and Michel Gros has a 2019 notarial family act. These are research targets only until the full document supplies parcel or tenancy scope.
 
-Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration.
+Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are now logged separately, bringing the current research source log to **164 entries** without adding any parcel candidate.
 
 ### Independent research: Winehog
 
