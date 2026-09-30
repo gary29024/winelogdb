@@ -30,6 +30,17 @@ describe('parcel presentation without identity or farming promotion',()=>{
   const groups=groupParcelRightHolders([parcel('p',['unknown'])],'cru');
   expect(groups[0]).toMatchObject({id:'unknown',domaine:false,name:'GFA Unknown',sources:[]});
  });
+ it('names a domaine heading only from identity or estate research, never from tenancy',()=>{
+  const rows=[parcel('p1',['estate']),parcel('p2',['office']),parcel('p3',['tenant'])];
+  const groups=groupParcelRightHolders(rows,'cru',{estate:context,office:{...context,name:'Domaine Lead',basis:'registered-office-match'},
+   tenant:{...context,name:'Domaine Tenant',basis:'filing-tenant-relationship'}});
+  expect(groups.find(g=>g.holderIds.includes('estate'))).toMatchObject({name:'Domaine Example',domaine:true,basisLabel:'Estate source'});
+  expect(groups.find(g=>g.holderIds.includes('office'))).toMatchObject({name:'GFA Office',domaine:false,lead:{name:'Domaine Lead',label:'office address only'},sources:['estate']});
+  const tenant=groups.find(g=>g.holderIds.includes('tenant'));
+  expect(tenant).toMatchObject({name:'GFA Tenant',domaine:false,basisLabel:'',sources:[]});
+  expect(tenant).not.toHaveProperty('lead');
+  expect(JSON.stringify(groups)).not.toMatch(/Domaine Tenant/);
+ });
  it('publishes research names and their actual sources, not verified-farmer fields',()=>{
   expect(evidence.holderDomains['775567928'].name).toMatch(/Faiveley/);
   expect(evidence.holderDomains['U32852627'].name).toMatch(/Drouhin/);

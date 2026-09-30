@@ -31,7 +31,7 @@ describe('Cadastral parcel controls',()=>{
   expect(within(panel).getByText('Previously farmed by Domaine Gros Frère et Sœur')).toBeTruthy();
   expect(screen.getByText('No matched rights record')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('#page=74');
-  expect(screen.getByText('Not established by this rights snapshot')).toBeTruthy();
+  expect(screen.queryByText('Current farming domaine')).toBeNull();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
   expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','selected']);
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});

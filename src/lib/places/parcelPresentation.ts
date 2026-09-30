@@ -4,7 +4,18 @@ import type {ParcelProducerLink} from './parcelProducerLinks';
 
 export type HolderResearch={name:string;basis:string;note:string;sources:string[]};
 type ParcelRow={properties:{id:string;recordedRights:{holderId:string;name:string}[];overlaps:{parentFeatureId:string;areaM2:number}[]}};
-export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[];legalNames:string[];areaM2:number;count:number;sources:string[]};
+export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[];legalNames:string[];areaM2:number;count:number;sources:string[];
+ basisLabel:string;lead?:{name:string;label:string}};
+
+// No current farmer is verified, so only identity/estate research may name a
+// domaine heading. Weak leads stay under the legal name, labelled as leads.
+// Tenancy, lease and operator relationships are never shown in this list.
+const headingLabels:Record<string,string>={
+ 'estate-context':'Estate source','secondary-estate-context':'Estate source','management-and-estate-context':'Estate source',
+ 'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only'};
+const leadLabels:Record<string,string>={
+ 'registered-office-match':'office address only','management-only-lead':'shared management only',
+ 'succession-lead':'ownership succession lead','partial-succession-lead':'ownership succession lead'};
 
 // A saved catalogue identity is not a fuzzy producer-name suggestion.
 // Prefer the account's ID; only missing IDs use the complete normalized name.
@@ -26,21 +37,23 @@ export function groupParcelRightHolders(parcels:readonly ParcelRow[],parentId:st
   const overlap=parcel.properties.overlaps.find(o=>o.parentFeatureId===parentId);
   if(!overlap)continue;
   for(const right of parcel.properties.recordedRights){
-   const context=research[right.holderId];
+   const found=research[right.holderId];
+   const context=found&&headingLabels[found.basis]?found:undefined;
+   const lead=found&&leadLabels[found.basis]?{name:found.name,label:leadLabels[found.basis]}:undefined;
    const id=context?`domaine:${placeKey(context.name)}`:right.holderId;
    let group=groups.get(id);
    if(!group){
     group={id,name:context?.name??ownerName(right.name),domaine:Boolean(context),holderIds:[],legalNames:[],sources:[],areaM2:0,count:0,
-     parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
+     basisLabel:context?headingLabels[context.basis]:'',lead,parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
     groups.set(id,group);
    }
    group.holders.add(right.holderId);group.names.add(ownerName(right.name));
-   for(const source of context?.sources??[])group.sourceIds.add(source);
+   for(const source of (context??(lead?found:undefined))?.sources??[])group.sourceIds.add(source);
    if(!group.parcels.has(parcel.properties.id)){
     group.parcels.add(parcel.properties.id);group.areaM2+=overlap.areaM2;group.count++;
    }
   }
  }
  return [...groups.values()].map(g=>({id:g.id,name:g.name,domaine:g.domaine,holderIds:[...g.holders].sort(),legalNames:[...g.names].sort(),
-  sources:[...g.sourceIds].sort(),areaM2:g.areaM2,count:g.count})).sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
+  sources:[...g.sourceIds].sort(),areaM2:g.areaM2,count:g.count,basisLabel:g.basisLabel,...(g.lead?{lead:g.lead}:{})})).sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
 }

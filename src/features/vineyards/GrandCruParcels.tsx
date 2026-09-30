@@ -235,7 +235,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
  const listed=groupByDomaine?domaineOwners:legalOwners;
  const needle=placeKey(query);
- const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames].join(' ')).includes(needle)):listed.slice(0,6);
+ const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
@@ -245,7 +245,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
    <span>Parcel rights<small> · {name}</small></span>
    <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setShowPossible(false);setError(false);setOwner('');setSelectedId('');autoFocused.current=false}}/>
   </label>
-  <p className="village-map-note">Legal-entity rights recorded on 1 January 2025. These do not establish who currently farms the vines.</p>
+  <p className="village-map-note">Legal-entity rights recorded on 1 January 2025. Shows who holds recorded rights, not who farms the vines.</p>
   {show&&<>
    {!data&&!error&&<p className="village-map-note" role="status">Loading cadastral parcels…</p>}
    {error&&<div className="village-map-parcel-error" role="alert"><p>Parcel data could not load. The cru map remains available.</p><button type="button" onClick={()=>{setError(false);setAttempt(a=>a+1)}}>Retry parcels</button></div>}
@@ -265,7 +265,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
       {possibleOwners.map(o=><div key={o.id}><strong>{ownerName(o.name)}</strong><br/><span className="village-map-producer-meta">{plural(o.count,'parcel')} · {ha(o.areaM2)}</span>
        <button type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(o.id)}>Link {ownerName(o.name)} to an app producer</button>
       </div>)}
-      <p className="village-map-note">These recorded right holders’ names resemble the producer’s. This dataset has no verified evidence that {wineProducer} farms these parcels.</p>
+      <p className="village-map-note">These recorded right holders’ names resemble the producer’s. A name match is not a verified link to {wineProducer}.</p>
       <button type="button" className="village-map-link-button" onClick={()=>{setSelectedId('');showOnMap(possible)}}>Show possible matches on map</button>
      </div>}
     </>}
@@ -279,7 +279,6 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
      <div className="village-map-parcel-head"><h4>Parcel {selected.properties.reference}</h4><button type="button" className="village-map-link-button" onClick={()=>setSelectedId('')}>Clear</button></div>
      <dl>
       <dt>Recorded rights</dt><dd>{rights.length?rights.map(r=><div key={`${r.holderId}:${r.rightCode}`}>{ownerName(r.name)} · {r.rightLabel}</div>):'No matched rights record'}</dd>
-      <dt>Current farming domaine</dt><dd>Not established by this rights snapshot</dd>
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
       {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-possible">Possible match, unverified</dd></>}
      </dl>
@@ -296,24 +295,23 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
      </details>:<p className="village-map-note">No matching published legal-entity record was found. Coverage exclusions and parcel changes can leave gaps; this doesn’t mean the parcel has no owner.</p>}
     </div>}
     <div>
-     <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length}</span></summary>
+     <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
      <label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>
-     <p className="village-map-note">{groupByDomaine?'Domaine headings are research links, not proof of ownership or current farming. Recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     <p className="village-map-note">{groupByDomaine?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
      {groupByDomaine&&parentId==='inao-denom-565'&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
      {groupByDomaine&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
-      <span className="village-map-owner-name">{o.name}{o.domaine&&<small>{o.legalNames.join(' · ')}<br/>Research link · farming unverified</small>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
+      <span className="village-map-owner-name">{o.name}{o.domaine&&<small>{o.legalNames.join(' · ')}</small>}{o.lead&&<small>Research lead: {o.lead.name}</small>}{(o.basisLabel||o.lead)&&<span className={`village-map-basis${o.lead?' is-lead':''}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
      </button>{isChosen(o)&&o.sources.length>0&&<div className="village-map-group-sources">{o.sources.map(id=>{const source=research?.sources[id];return source?<a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>:null})}</div>}</li>)}</ul>
      {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
-     {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} right holders`}</button>}
+     {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${groupByDomaine?'entries':'right holders'}`}</button>}
      </details>
     </div>
     <details className="village-map-parcel-finder"><summary>Find a parcel by cadastral reference</summary>
      <label htmlFor={parcelId}>Cadastral parcel</label>
      <select id={parcelId} value={selectedId} onChange={e=>selectParcel(e.target.value)}><option value="">Choose from {parcels.length} parcels</option>{parcels.map(f=><option key={f.properties.id} value={f.properties.id}>{f.properties.reference} · {f.properties.recordedRights.length?[...new Set(f.properties.recordedRights.map(r=>ownerName(r.name)))].join(', '):'no matched rights record'}</option>)}</select>
     </details>
-    <p className="village-map-note">Recorded rights and name matches do not establish who farms the vines or made this bottle.</p>
     <details><summary>About this data</summary>
      <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, June 2026, and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of 1 January 2025, both Licence Ouverte 2.0. Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
     </details>
