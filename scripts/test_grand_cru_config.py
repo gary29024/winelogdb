@@ -81,6 +81,14 @@ class ConfigTests(unittest.TestCase):
         vougeot = next(n for n in audit['neighbours'] if n['commune'] == '21716')
         self.assertEqual(vougeot['contactsOverMinimumOverlap'], 11)  # measured, never imported
         self.assertLess(vougeot['maxParcelPercent'], 5)
+        for slug, split in (('echezeaux', (8.2, 1.4, 6.8)), ('grands-echezeaux', (1.8, 0.0, 1.8))):
+            report = read_json(REPORT_DIR / f'{slug}-commune-audit.json')
+            parts = report['notCoveredByBundleParcels']
+            # Area outside the bundle's parcels is split, never all called gaps between parcels.
+            self.assertEqual((report['notCoveredByBundleParcelsM2'], parts['coveredByNeighbourParcelsM2'],
+                              parts['coveredByNoParcelM2']), split)
+        echezeaux = {n['commune']: n for n in read_json(ROOT / 'scripts/grand-crus/reports/echezeaux-commune-audit.json')['neighbours']}
+        self.assertEqual((echezeaux['21714']['contactsOverMinimumOverlap'], echezeaux['21133']['contactsOverMinimumOverlap']), (3, 3))
 
     def test_multi_commune_bundle(self):
         bundle = {'parcels': {'commune': '21150', 'additionalCommunes': [{'commune': '21512', 'cadastreUrl': 'u', 'cadastreSha256': 's'}]}}
