@@ -143,7 +143,7 @@
         {
           "holdingId": "clerget",
           "producer": "Domaine Christian Clerget",
-          "publishedAreaHa": 19,
+          "publishedAreaHa": 1.09,
           "precision": "hundredth-hectare",
           "relation": "farmer",
           "endedSeason": null,
