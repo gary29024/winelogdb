@@ -36,6 +36,9 @@ used for Échezeaux; Grands-Échezeaux adds only its evidence file.
   Chambolle-Musigny touch the cru by 0 m². Along the Clos de Vougeot wall, 12 Vougeot parcels
   touch it by 148 m² in all (at most 48 m², 2.15% of any one parcel). That is where the INAO
   line and the cadastral commune line disagree, not Grands-Échezeaux land.
+  The shared bundle pins the [Cadastre licence](https://www.data.gouv.fr/datasets/cadastre)
+  and [DGFiP rights licence](https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales)
+  alongside their source URLs, snapshot dates and hashes.
 - **Named areas.** One cadastral lieu-dit, `LES GRANDS ECHEZEAUX`, holds 100% of every parcel
   ([per-parcel file](parcel-named-areas.json)). The [Bourgogne wine board page](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/grands-echezeaux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE0Jnw%3D)
   names the same single climat. Since it is the whole cru, no separate named-area layer is

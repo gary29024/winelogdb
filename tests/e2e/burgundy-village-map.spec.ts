@@ -179,14 +179,13 @@ for(const route of allMapRoutes){
 const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;evidenceFrom:string[]};
- const bundle=read(`scripts/grand-crus/bundles/${cru.bundle}.json`) as {villageMap:string};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string};
  const parcels=(read(`public${manifest.dataUrl}`) as {features:{id:string;properties:{overlaps:{parentFeatureId:string}[]}}[]}).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId)).map(f=>f.id);
  const evidenced=cru.evidenceFrom.flatMap(source=>Object.keys(read(`src/lib/places/grandCruParcels/${source}.evidence.json`).parcels))
   .filter(id=>parcels.includes(id)).sort();
- const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===bundle.villageMap)!;
+ const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===cru.villageMaps[0])!;
  return {...cru,village:village.name,parcels,evidenced};
 })();
 test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and domaine grouping from its config`,async({page})=>{

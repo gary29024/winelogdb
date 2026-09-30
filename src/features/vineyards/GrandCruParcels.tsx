@@ -322,7 +322,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
      <select id={parcelId} value={selectedId} onChange={e=>selectParcel(e.target.value)}><option value="">Choose from {parcels.length} parcels</option>{parcels.map(f=><option key={f.properties.id} value={f.properties.id}>{f.properties.reference} · {f.properties.recordedRights.length?[...new Set(f.properties.recordedRights.map(r=>ownerName(r.name)))].join(', '):'no matched rights record'}</option>)}</select>
     </details>
     <details><summary>About this data</summary>
-     <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, {monthYear(manifest.cadastreDate)}, and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of {longDate(manifest.rightsAsOf)}, both Licence Ouverte 2.0. Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
+     <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, {monthYear(manifest.cadastreDate)} (<a href={manifest.cadastreLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.cadastreLicence}</a>), and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of {longDate(manifest.rightsAsOf)} (<a href={manifest.rightsLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.rightsLicence}</a>). Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
     </details>
    </>}
   </>}

@@ -14,7 +14,8 @@ export type EvidenceSourceId='echezeaux'|'grands-echezeaux';
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
  /** Village map (burgundyVillageMapRegistry id) that shows this cru's parcels. */
- villageMap:string;bundle:ParcelBundleId;
+ /** Every village map where this INAO feature is available. */
+ villageMaps:readonly string[];bundle:ParcelBundleId;
  /** Research evidence files read by the panel and domaine grouping; empty until the cru has research. */
  evidenceFrom:EvidenceSourceId[];
 };
@@ -22,13 +23,14 @@ export type GrandCru={
 // Mirrors scripts/grand-crus/<slug>.json (checked by tests/unit/grandCruRegistry.test.ts).
 // Components look crus up here; they never name a cru or INAO feature themselves.
 export const grandCrus:readonly GrandCru[]=[
- {slug:'echezeaux',name:'Échezeaux',parentFeatureId:'inao-denom-565',villageMap:'vosne-romanee',bundle:'flagey-echezeaux',evidenceFrom:['echezeaux']},
- {slug:'grands-echezeaux',name:'Grands-Échezeaux',parentFeatureId:'inao-denom-645',villageMap:'vosne-romanee',bundle:'flagey-echezeaux',evidenceFrom:['grands-echezeaux']},
+ {slug:'echezeaux',name:'Échezeaux',parentFeatureId:'inao-denom-565',villageMaps:['vosne-romanee'],bundle:'flagey-echezeaux',evidenceFrom:['echezeaux']},
+ {slug:'grands-echezeaux',name:'Grands-Échezeaux',parentFeatureId:'inao-denom-645',villageMaps:['vosne-romanee'],bundle:'flagey-echezeaux',evidenceFrom:['grands-echezeaux']},
 ];
 
+export const cruOnVillageMap=(cru:GrandCru,villageMap:string)=>cru.villageMaps.includes(villageMap);
 /** The cru with parcel rights for this INAO feature, optionally only on a given village map. */
 export function grandCruFor(parentFeatureId:string,villageMap?:string){
- return grandCrus.find(cru=>cru.parentFeatureId===parentFeatureId&&(!villageMap||cru.villageMap===villageMap));
+ return grandCrus.find(cru=>cru.parentFeatureId===parentFeatureId&&(!villageMap||cruOnVillageMap(cru,villageMap)));
 }
 
 export function parcelManifestFor(parentFeatureId:string):ParcelManifest|undefined{

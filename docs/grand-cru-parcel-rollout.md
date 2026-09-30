@@ -83,11 +83,12 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
    Browser tests stay one representative journey, parameterised by config, so the
    Chromium matrix does not grow with each cru.
 
-**Done in #417.** Échezeaux regenerates with identical hashes for every data file
-(parcel and named-area GeoJSON, manifest, holder index, app evidence, named areas,
-rights history, sale records, both build reports). Only the research register's
-input paths and rebuild commands changed, because the files moved. Grands-Échezeaux
-now gets the evidence panel and domaine grouping through the registry.
+**Done in #417.** Échezeaux retains identical parcel and named-area GeoJSON,
+holder index, app evidence, rights history and sale records. The parcel manifest
+and named-area catalogue/report now carry the pinned source licence labels; the
+parcel report also records them. The research register's input paths and rebuild
+commands changed because the files moved. Grands-Échezeaux gets the evidence panel
+and domaine grouping through the registry.
 Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grands-echezeaux/README.md).
 
 ### Adding a cru
@@ -97,8 +98,12 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    to `parcels.parentFeatureIds`. Otherwise create `<bundle-id>.json`: `villageMap`,
    `assetName`, the pinned `parcels` block (first commune, then `additionalCommunes`),
    `lieuxDits` per commune, and optionally `rightsHistory` and `saleRecords`.
+   Pin the cadastre and rights licence labels and their dataset pages alongside the
+   source URLs and hashes. Use `additionalVillageMaps` when the bundle's INAO features
+   appear across more than one village map; copies of the same feature must agree.
 2. **Cru config** `scripts/grand-crus/<slug>.json`: `slug`, `name`,
-   `parentFeatureId`, `issue`, `tier`, `bundle` and `evidenceFrom`. Add
+   `parentFeatureId`, `issue`, `tier`, `bundle`, `villageMaps` (every map where the
+   feature can be explored) and `evidenceFrom`. Add
    `appellationId` and `namedPlots` once named areas are reviewed,
    `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
    once `docs/research/<slug>/curation.json` exists.
@@ -116,8 +121,8 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
 
 4. **App.** Add the cru (and a new bundle's manifest, holder index and any evidence
    loader) to `src/lib/places/grandCruParcels/registry.ts`, `holders.ts` and
-   `evidence.ts`. `tests/unit/grandCruRegistry.test.ts` fails until the registry
-   matches the configs. Components need no change.
+   `evidence.ts`. List all of its `villageMaps` in the registry. The unit test fails
+   until the registry matches the configs. Components need no change.
 
 Outputs by convention: research in `docs/research/<slug>/`; app files in
 `src/lib/places/grandCruParcels/` (`<bundle>.manifest.json`, `<bundle>.holders.json`,

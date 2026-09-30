@@ -43,7 +43,7 @@ def main():
         assert all(f['properties']['commune'] == insee for f in features)
         inputs += features
         lieux_dits.append((insee, source))
-    catalogue, source_bytes, _ = village_map(bundle)
+    catalogue, source_bytes, _ = village_map(bundle, cru['parentFeatureId'])
     parent_feature = next(f for f in json.loads(source_bytes)['features'] if f['id'] == cru['parentFeatureId'])
     parent = shape(parent_feature['geometry'])
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
@@ -86,7 +86,7 @@ def main():
     # The display source names one snapshot; a multi-commune cru lists every pinned file in its report.
     first = lieux_dits[0][1]
     source = {'name': 'Cadastre Etalab lieux-dits', 'date': cadastre_date, 'url': first['url'],
-              'sha256': first['sha256'], 'license': 'Licence Ouverte 2.0'}
+              'sha256': first['sha256'], 'license': bundle['parcels']['cadastreLicence']}
     layer = {'dataUrl': data_url, 'parentFeatureId': cru['parentFeatureId'], 'source': source,
              'coverageNote': config['coverageNote'], 'features': metadata}
     write_json(named_plot_catalogue_path(cru), layer)
