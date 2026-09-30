@@ -1,0 +1,376 @@
+name: PR416 parcel UI verification
+on:
+  push:
+    branches: [research/echezeaux-bouchy-1995-expansion]
+    paths: [.github/workflows/pr416-ui-once.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 2
+      - uses: ./.github/actions/test-setup
+      - name: Apply scoped UI changes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          def edit(path, old, new, count=1):
+              p = Path(path)
+              text = p.read_text()
+              assert text.count(old) == count, (path, old[:100], text.count(old), count)
+              p.write_text(text.replace(old, new))
+          def write(path, content):
+              Path(path).write_text(content.lstrip('\n'))
+
+          write('src/lib/places/parcelPresentation.ts', r'''
+          import {placeKey} from './resolve';
+          import {ownerName} from './echezeauxParcelOwners';
+          import type {ParcelProducerLink} from './parcelProducerLinks';
+
+          export type HolderResearch={name:string;basis:string;note:string;sources:string[]};
+          type ParcelRow={properties:{id:string;recordedRights:{holderId:string;name:string}[];overlaps:{parentFeatureId:string;areaM2:number}[]}};
+          export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[];legalNames:string[];areaM2:number;count:number;sources:string[]};
+
+          // A saved catalogue identity is not a fuzzy producer-name suggestion.
+          // Prefer the account's ID; only missing IDs use the complete normalized name.
+          // In particular Gros, Mugneret and Bizot family members must not collapse.
+          const producerKey=(name:string)=>placeKey(name).replace(/^domaines?\s+/, '');
+          export function matchesLinkedProducer(link:ParcelProducerLink, producer?:string|null, producerId?:string|null):boolean{
+           if(producerId)return link.producerId===producerId;
+           if(producer===undefined||producer===null)return true; // Generic catalogue browsing, not a known wine producer.
+           const key=producerKey(producer);
+           return Boolean(key)&&producerKey(link.producerName)===key;
+          }
+
+          /** Presentation of recorded rights, never an assignment of ownership or farming.
+           * Each group is the union of its holders' parcels in this cru. Duplicate
+           * rights and co-ownership inside a group cannot multiply its area/count. */
+          export function groupParcelRightHolders(parcels:readonly ParcelRow[],parentId:string,research:Record<string,HolderResearch>={}):HolderGroup[]{
+           const groups=new Map<string,HolderGroup&{parcels:Set<string>;holders:Set<string>;names:Set<string>;sourceIds:Set<string>}>();
+           for(const parcel of parcels){
+            const overlap=parcel.properties.overlaps.find(o=>o.parentFeatureId===parentId);
+            if(!overlap)continue;
+            for(const right of parcel.properties.recordedRights){
+             const context=research[right.holderId];
+             const id=context?`domaine:${placeKey(context.name)}`:right.holderId;
+             let group=groups.get(id);
+             if(!group){
+              group={id,name:context?.name??ownerName(right.name),domaine:Boolean(context),holderIds:[],legalNames:[],sources:[],areaM2:0,count:0,
+               parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
+              groups.set(id,group);
+             }
+             group.holders.add(right.holderId);group.names.add(ownerName(right.name));
+             for(const source of context?.sources??[])group.sourceIds.add(source);
+             if(!group.parcels.has(parcel.properties.id)){
+              group.parcels.add(parcel.properties.id);group.areaM2+=overlap.areaM2;group.count++;
+             }
+            }
+           }
+           return [...groups.values()].map(g=>({id:g.id,name:g.name,domaine:g.domaine,holderIds:[...g.holders].sort(),legalNames:[...g.names].sort(),
+            sources:[...g.sourceIds].sort(),areaM2:g.areaM2,count:g.count})).sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
+          }
+          ''')
+
+          # Export the already lazy/cached evidence loader: no extra API, D1 or AI work.
+          path='src/features/vineyards/ParcelEvidence.tsx'
+          edit(path,"import {useEffect,useReducer,useState} from 'react';", "import {useEffect,useReducer,useState} from 'react';\nimport type {HolderResearch} from '../../lib/places/parcelPresentation';")
+          edit(path,'export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>};','export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>;holderDomains?:Record<string,HolderResearch>};')
+          edit(path,'const load=()=>cached??=', 'export const loadParcelEvidence=()=>cached??=')
+          edit(path,'  load().then(result=>', '  loadParcelEvidence().then(result=>')
+
+          path='scripts/build_echezeaux_parcel_evidence.py'
+          edit(path,"    return {\n        'schemaVersion': SCHEMA_VERSION,", "    # Domaine headings are sourced research context, not verified operators.\n    # Ambiguous/missing candidates retain the legal holder name in the UI.\n    holder_domains = {hid: {'name': h['candidateNames'][0], 'basis': h['basis'],\n                            'note': h['finding'], 'sources': list(h['sourceIds'])}\n                      for hid, h in holders.items() if len(h['candidateNames']) == 1}\n    used.update(s for h in holder_domains.values() for s in h['sources'])\n    return {\n        'holderDomains': dict(sorted(holder_domains.items())),\n        'schemaVersion': SCHEMA_VERSION,")
+
+          # Carry stable catalogue identity through both owner and shared wine map entry points.
+          path='src/features/wines/WineFacts.tsx'
+          edit(path,"type PillWine=Facts&{classification?:", "type PillWine=Facts&{producerId?:string|null;classification?:")
+          edit(path,'<WineVillageMap target={mapTarget} producer={wine.producer}/>', '<WineVillageMap target={mapTarget} producer={wine.producer} producerId={wine.producerId}/>')
+          path='src/features/vineyards/WineVillageMap.tsx'
+          edit(path,'WineVillageMap({target,producer}:{target:BurgundyVillageMapTarget;producer?:string|null})', 'WineVillageMap({target,producer,producerId}:{target:BurgundyVillageMapTarget;producer?:string|null;producerId?:string|null})')
+          edit(path,'target={target} producer={producer}/>', 'target={target} producer={producer} producerId={producerId}/>')
+          path='src/features/vineyards/VillageMap.tsx'
+          edit(path,'VillageMap({target,producer}:{target:BurgundyVillageMapTarget;producer?:string|null})', 'VillageMap({target,producer,producerId}:{target:BurgundyVillageMapTarget;producer?:string|null;producerId?:string|null})')
+          edit(path,'catalogue={catalogue} producer={producer}/>', 'catalogue={catalogue} producer={producer} producerId={producerId}/>')
+          edit(path,'VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue;producer?:string|null})', 'VillageMapView({target,catalogue,producer,producerId}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue;producer?:string|null;producerId?:string|null})')
+          edit(path,'parentId={namedParent} producer={producer} onLegend=', 'parentId={namedParent} producer={producer} producerId={producerId} onLegend=')
+
+          # Scope displayed/sent links, but retain the full account data for explicit edits.
+          path='src/features/vineyards/ParcelProducerLinker.tsx'
+          edit(path,"import {useEffect,useId,useState} from 'react';", "import {useEffect,useId,useMemo,useState} from 'react';\nimport {matchesLinkedProducer} from '../../lib/places/parcelPresentation';")
+          edit(path,'type Props={parentId:string;holders:Holder[];', 'type Props={parentId:string;producer?:string|null;producerId?:string|null;holders:Holder[];')
+          edit(path,'ParcelProducerLinker({parentId,holders,editing,onEdit,onShow,onLinks}:Props)', 'ParcelProducerLinker({parentId,producer,producerId,holders,editing,onEdit,onShow,onLinks}:Props)')
+          edit(path,"[loaded,setLoaded]=useState(false)","[loadedParent,setLoadedParent]=useState('')")
+          edit(path,'setLoaded(true);', 'setLoadedParent(parentId);')
+          edit(path,' useEffect(()=>{if(loaded)onLinks?.(links)},[links,loaded,onLinks]);', " const loaded=loadedParent===parentId;\n const visibleLinks=useMemo(()=>loaded?links.filter(link=>holders.some(h=>h.id===link.holderId)&&matchesLinkedProducer(link,producer,producerId)):[],[loaded,links,holders,producer,producerId]);\n useEffect(()=>{if(loaded)onLinks?.(visibleLinks)},[visibleLinks,loaded,onLinks]);")
+          edit(path,'{links.length>0&&<>','{visibleLinks.length>0&&<>')
+          edit(path,'{links.map(link=>','{visibleLinks.map(link=>')
+          edit(path,"onEdit('');setError('')}}/>", "onEdit('');setError('');if(matchesLinkedProducer(link,producer,producerId))onShow(link.holderId)}}/>")
+
+          path='src/features/vineyards/GrandCruParcels.tsx'
+          edit(path,"import {ParcelEvidence} from './ParcelEvidence';", "import {ParcelEvidence,loadParcelEvidence,type ParcelEvidenceData} from './ParcelEvidence';\nimport {groupParcelRightHolders,matchesLinkedProducer,type HolderGroup} from '../../lib/places/parcelPresentation';")
+          edit(path,"export function GrandCruParcels({map,parentId,producer,onLegend}:{map:MapLibreMap|null;parentId:string;producer?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void}){", "type Props={map:MapLibreMap|null;parentId:string;producer?:string|null;producerId?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void};\nexport function GrandCruParcels(props:Props){\n // A wine/producer or cru change must not inherit another view's links or selection.\n return <GrandCruParcelsView key={`${props.parentId}:${props.producerId??''}:${props.producer??''}`} {...props}/>;\n}\nfunction GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){")
+          edit(path," const [showPossible,setShowPossible]=useState(false);", " const [showPossible,setShowPossible]=useState(false);\n const [groupByDomaine,setGroupByDomaine]=useState(true),[research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);\n useEffect(()=>{\n  if(!show||research||parentId!=='inao-denom-565')return;\n  let active=true;\n  void loadParcelEvidence().then(value=>{if(active){setResearch(value);setResearchFailed(false)}}).catch(()=>{if(active)setResearchFailed(true)});\n  return()=>{active=false};\n },[show,parentId,research,attempt]);")
+          edit(path," const wineProducer=producer?.trim()??'';", " const domaineOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId,research?.holderDomains),[parcels,parentId,research]);\n const legalOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId),[parcels,parentId]);\n const chosenHolders=useMemo(()=>new Set(domaineOwners.find(g=>g.id===owner)?.holderIds??(owners.some(h=>h.id===owner)?[owner]:[])),[domaineOwners,owners,owner]);\n const isChosen=(group:HolderGroup)=>group.holderIds.length===chosenHolders.size&&group.holderIds.every(id=>chosenHolders.has(id));\n const wineProducer=producer?.trim()??'';")
+          edit(path,"owner&&f.properties.recordedRights.some(r=>r.holderId===owner)?'owner'", "chosenHolders.size>0&&f.properties.recordedRights.some(r=>chosenHolders.has(r.holderId))?'owner'")
+          edit(path,'[parcels,owner,verified,possible,showPossible]);','[parcels,chosenHolders,verified,possible,showPossible]);')
+          edit(path,"...(showPossible&&possible.length?['possible' as const]:[])", "...([...matches.values()].includes('possible')?['possible' as const]:[])")
+          edit(path,'[show,data,owner,verified,possible,showPossible,selected]);','[show,data,owner,verified,matches,selected]);')
+          edit(path,'  setSelectedId(id);const f=parcels.find(f=>f.properties.id===id);','  autoFocused.current=true;setSelectedId(id);const f=parcels.find(f=>f.properties.id===id);')
+          edit(path,"  const next=owner===id?'':id;setOwner(next);setSelectedId('');\n  if(next)fit(union(parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===next))));", "  const group=domaineOwners.find(g=>g.id===id)??legalOwners.find(g=>g.id===id);\n  if(!group)return;\n  autoFocused.current=true;\n  const next=isChosen(group)?'':id;setOwner(next);setSelectedId('');\n  if(next)fit(union(parcels.filter(f=>f.properties.recordedRights.some(r=>group.holderIds.includes(r.holderId)))));")
+          edit(path,'  if(autoFocused.current||!wineProducer)return;','  if(autoFocused.current||(!wineProducer&&!producerId))return;')
+          edit(path,'  const link=links.find(l=>placeKey(l.producerName)===placeKey(wineProducer));','  const link=links.find(l=>matchesLinkedProducer(l,wineProducer,producerId));')
+          edit(path,' },[parcels,wineProducer,map]);',' },[parcels,wineProducer,producerId,map]);')
+          edit(path,' const listed=owners;', ' const listed=groupByDomaine?domaineOwners:legalOwners;')
+          edit(path,'placeKey(o.name).includes(needle)',"placeKey([o.name,...o.legalNames].join(' ')).includes(needle)")
+          edit(path,'onChange={event=>{setShowPossible(event.target.checked);setOwner(\'\')}}','onChange={event=>setShowPossible(event.target.checked)}')
+          edit(path,"onClick={()=>{setOwner('');setSelectedId('');showOnMap(possible)}}", "onClick={()=>{setSelectedId('');showOnMap(possible)}}")
+          edit(path,'<ParcelProducerLinker parentId={parentId} holders=', '<ParcelProducerLinker parentId={parentId} producer={wineProducer} producerId={producerId} holders=')
+          edit(path,"onShow={id=>{setOwner(id);setSelectedId('');showOnMap(","onShow={id=>{autoFocused.current=true;setOwner(id);setSelectedId('');showOnMap(")
+          edit(path,'     <p className="village-map-note">A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>', '''     <label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>
+               <p className="village-map-note">{groupByDomaine?'Domaine headings are research links, not proof of ownership or current farming. Recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+               {groupByDomaine&&parentId==='inao-denom-565'&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
+               {groupByDomaine&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}''')
+          edit(path,'aria-pressed={owner===o.id}', 'aria-pressed={isChosen(o)}')
+          edit(path,'<span>{ownerName(o.name)}</span><span className="village-map-owner-qty">', '<span className="village-map-owner-name">{o.name}{o.domaine&&<small>{o.legalNames.join(\' · \')}<br/>Research link · farming unverified</small>}</span><span className="village-map-owner-qty">')
+          edit(path,'     </button></li>)}</ul>', '''     </button>{isChosen(o)&&o.sources.length>0&&<div className="village-map-group-sources">{o.sources.map(id=>{const source=research?.sources[id];return source?<a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>:null})}</div>}</li>)}</ul>''')
+          edit(path,'     {owner&&<button type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(owner)}>Link chosen right holder to an app producer</button>}', '''     {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}''')
+          # Clear suggestions on an explicit new layer session, independently of persisted links.
+          edit(path,"setShow(event.target.checked);setError(false);setOwner('');", "setShow(event.target.checked);setShowPossible(false);setError(false);setOwner('');")
+
+          p=Path('src/villageMap.css')
+          p.write_text(p.read_text()+'''
+          /* Research names lead; legal identities and uncertainty remain readable on phones. */
+          .village-map-grouping{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;font-size:.85rem}
+          .village-map-grouping select{flex:1;min-width:0;max-width:100%}
+          .village-map-owner-name{min-width:0;overflow-wrap:anywhere}
+          .village-map-owner-name small{display:block;margin-top:.2rem;font-size:.75rem;line-height:1.4;color:var(--muted)}
+          .village-map-group-sources{display:flex;flex-wrap:wrap;gap:.35rem .8rem;padding:.25rem .5rem .65rem;font-size:.75rem;overflow-wrap:anywhere}
+          ''')
+
+          # Existing tests asking specifically for registry labels select the registry mode.
+          path='tests/unit/GrandCruParcels.test.tsx'
+          edit(path,"  await screen.findByText('Recorded right holders by mapped area');", "  await screen.findByText('Recorded right holders by mapped area');\n  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});")
+          edit(path,"  fireEvent.click(screen.getByRole('button',{name:/Domaine de la Romanee Conti/}));", "  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});\n  fireEvent.click(screen.getByRole('button',{name:/Domaine de la Romanee Conti/}));")
+
+          write('tests/unit/parcelPresentation.test.ts', r'''
+          import {describe,it,expect} from 'vitest';
+          import {groupParcelRightHolders,matchesLinkedProducer,type HolderResearch} from '../../src/lib/places/parcelPresentation';
+          import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
+          const link={holderId:'holder',producerId:'nicole',producerName:'Domaine Nicole Lamarche',status:'manual' as const,updatedAt:'2026-09-30'};
+          const context:HolderResearch={name:'Domaine Example',basis:'estate-context',note:'Unverified context',sources:['estate']};
+          const parcel=(id:string,ids:string[],area=100,parent='cru')=>({properties:{id,recordedRights:ids.map(holderId=>({holderId,name:`GFA ${holderId}`})),overlaps:[{parentFeatureId:parent,areaM2:area}]}});
+          describe('parcel presentation without identity or farming promotion',()=>{
+           it('uses exact catalogue identity before normalized full-name fallback',()=>{
+            expect(matchesLinkedProducer(link,'Old producer spelling','nicole')).toBe(true);
+            expect(matchesLinkedProducer(link,'Domaine Nicole Lamarche','another-id')).toBe(false);
+            expect(matchesLinkedProducer(link,'Nicole Lamarche')).toBe(true);
+            expect(matchesLinkedProducer(link,'Jean-Marc Millot')).toBe(false);
+            expect(matchesLinkedProducer(link,'Lamarche')).toBe(false);
+            expect(matchesLinkedProducer(link,'')).toBe(false);
+            expect(matchesLinkedProducer(link)).toBe(true);
+           });
+           it('does not confuse related domaines',()=>{
+            expect(matchesLinkedProducer({...link,producerName:'Domaine Coudray-Bizot'},'Domaine Jean-Yves Bizot')).toBe(false);
+            expect(matchesLinkedProducer({...link,producerName:'Anne Gros'},'Michel Gros')).toBe(false);
+            expect(matchesLinkedProducer({...link,producerName:'Domaine Méo-Camuzet'},'Meo Camuzet')).toBe(true);
+           });
+           it('counts the union of parcels once for multiple rights/holders of one domaine',()=>{
+            const rows=[parcel('p1',['a','a','b'],120),parcel('p2',['b'],80),parcel('outside',['a'],999,'other')];
+            const groups=groupParcelRightHolders(rows,'cru',{a:context,b:context});
+            expect(groups).toHaveLength(1);
+            expect(groups[0]).toMatchObject({name:'Domaine Example',holderIds:['a','b'],areaM2:200,count:2,sources:['estate'],domaine:true});
+            expect(groupParcelRightHolders(rows,'cru')).toHaveLength(2);
+           });
+           it('retains unresolved legal identities rather than creating a domaine from their spelling',()=>{
+            const groups=groupParcelRightHolders([parcel('p',['unknown'])],'cru');
+            expect(groups[0]).toMatchObject({id:'unknown',domaine:false,name:'GFA Unknown',sources:[]});
+           });
+           it('publishes research names and their actual sources, not verified-farmer fields',()=>{
+            expect(evidence.holderDomains['775567928'].name).toMatch(/Faiveley/);
+            expect(evidence.holderDomains['U32852627'].name).toMatch(/Drouhin/);
+            for(const item of Object.values(evidence.holderDomains)){
+             expect(item.sources.length).toBeGreaterThan(0);
+             for(const id of item.sources)expect(id in evidence.sources).toBe(true);
+             expect(item).not.toHaveProperty('currentFarmer');
+             expect(item).not.toHaveProperty('verified');
+            }
+           });
+          });
+          ''')
+
+          write('tests/unit/ParcelMapFeedback.test.tsx', r'''
+          // @vitest-environment jsdom
+          import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
+          import {act,cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/react';
+          import {readFileSync} from 'node:fs';
+          import type {Map as MapLibreMap} from 'maplibre-gl';
+          import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
+          import {ParcelProducerLinker} from '../../src/features/vineyards/ParcelProducerLinker';
+          import {listParcelProducerLinks,saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
+          import {listProducers} from '../../src/features/producers/api';
+          import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
+          vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(),saveParcelProducerLink:vi.fn(),removeParcelProducerLink:vi.fn()}));
+          vi.mock('../../src/features/producers/api',()=>({listProducers:vi.fn()}));
+          const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;
+          const holder={id:'397738634',name:'NICOLE LAMARCHE'};
+          const link={holderId:holder.id,producerId:'nicole',producerName:'Domaine Nicole Lamarche',status:'manual' as const,updatedAt:'2026-09-30'};
+          function mapStub(){
+           const layers=new Set<string>(),sources=new Map<string,{setData:(data:unknown)=>void}>();
+           let styled:{features:{properties:{id:string;match:string}}[]}={features:[]};
+           const setData=(value:unknown)=>{styled=value as typeof styled};
+           return {getStyle:vi.fn(()=>({})),getLayer:vi.fn(id=>layers.has(id)),getSource:vi.fn(id=>sources.get(id)),
+            addLayer:vi.fn(layer=>layers.add(layer.id)),addSource:vi.fn((id,value)=>{setData(value.data);sources.set(id,{setData})}),
+            setFilter:vi.fn(),on:vi.fn(),off:vi.fn(),removeLayer:vi.fn(id=>layers.delete(id)),removeSource:vi.fn(id=>sources.delete(id)),fitBounds:vi.fn(),
+            match:(id:string)=>styled.features.find(f=>f.properties.id===id)?.properties.match};
+          }
+          beforeEach(()=>{vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[]});vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)))});
+          afterEach(()=>{cleanup();vi.unstubAllGlobals();vi.resetAllMocks()});
+          describe('PR416 map feedback',()=>{
+           it('hides Nicole account links and prevents autofocus on a Millot wine, but preserves the saved link',async()=>{
+            vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[link]});
+            const map=mapStub();
+            const view=render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot" producerId="millot"/>);
+            fireEvent.click(screen.getByRole('switch'));
+            await waitFor(()=>expect(listParcelProducerLinks).toHaveBeenCalled());
+            const panel=screen.getByLabelText('Your producer links');
+            expect(within(panel).queryByRole('link',{name:'Domaine Nicole Lamarche'})).toBeNull();
+            expect(map.fitBounds).not.toHaveBeenCalled();
+            view.rerender(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
+            expect(screen.getByRole('switch')).toHaveProperty('checked',false);
+            fireEvent.click(screen.getByRole('switch'));
+            expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
+            await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
+           });
+           it('keeps the manual highlight and selected parcel while suggestions are switched on and off',async()=>{
+            vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[link]});
+            const map=mapStub();
+            render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
+            fireEvent.click(screen.getByRole('switch'));
+            await screen.findByRole('link',{name:'Domaine Nicole Lamarche'});
+            await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
+            fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
+            const toggle=screen.getByLabelText(/Show possible matches/);
+            for(let i=0;i<4;i++){
+             fireEvent.click(toggle);
+             expect(map.match('212670000D0168')).toBe('owner');
+             expect(screen.getByLabelText('Cadastral parcel')).toHaveProperty('value','212670000D0168');
+            }
+            expect(saveParcelProducerLink).not.toHaveBeenCalled();
+           });
+           it('immediately highlights a newly saved matching link and preserves it when the preview is unchecked',async()=>{
+            vi.mocked(listProducers).mockResolvedValue({items:[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeCountry:'France',homeRegion:'Burgundy',homeLocality:'Vosne-Romanée',tastedCount:1,catalogCount:1,researchedAt:null}]});
+            vi.mocked(saveParcelProducerLink).mockResolvedValue(link);
+            const map=mapStub();
+            render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
+            fireEvent.click(screen.getByRole('switch'));
+            fireEvent.click(await screen.findByLabelText(/Show possible matches/));
+            expect(map.match('212670000D0168')).toBe('possible');
+            fireEvent.click(screen.getByRole('button',{name:'Link Nicole Lamarche to an app producer'}));
+            fireEvent.change(await screen.findByLabelText('App producer'),{target:{value:'nicole'}});
+            fireEvent.click(screen.getByRole('button',{name:'Save producer link'}));
+            await screen.findByText('Manual link · unverified');
+            await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
+            fireEvent.click(screen.getByLabelText(/Show possible matches/));
+            expect(map.match('212670000D0168')).toBe('owner');
+           });
+           it('does not show a stale response from another cru and uses exact IDs after a producer rename',async()=>{
+            let resolve!:(value:{items:typeof link[]})=>void;
+            vi.mocked(listParcelProducerLinks).mockReturnValueOnce(new Promise(done=>{resolve=done})).mockResolvedValue({items:[]});
+            const onLinks=vi.fn(),props={holders:[holder],editing:'',onEdit:vi.fn(),onShow:vi.fn(),onLinks};
+            const view=render(<ParcelProducerLinker {...props} parentId="old" producer="Nicole Lamarche" producerId="nicole"/>);
+            view.rerender(<ParcelProducerLinker {...props} parentId="new" producer="Jean-Marc Millot" producerId="millot"/>);
+            await act(async()=>resolve({items:[link]}));
+            expect(screen.queryByRole('link')).toBeNull();
+            expect(onLinks).not.toHaveBeenCalledWith([link]);
+            vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[link]});
+            view.rerender(<ParcelProducerLinker {...props} parentId="renamed" producer="A renamed catalogue producer" producerId="nicole"/>);
+            expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
+           });
+           it('groups by sourced domaine names with legal identities underneath, and preserves highlighting when modes change',async()=>{
+            const map=mapStub();
+            render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
+            fireEvent.click(screen.getByRole('switch'));
+            await screen.findByLabelText('Group right holders by');
+            fireEvent.click(screen.getByRole('button',{name:/Show all .* right holders/}));
+            const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
+            const faiveley=await within(list).findByRole('button',{name:/Domaine Faiveley/});
+            expect(faiveley.textContent).toMatch(/Consortium Viticole/);
+            expect(faiveley.textContent).toMatch(/farming unverified/);
+            fireEvent.change(screen.getByPlaceholderText('Search right holders'),{target:{value:'Consortium'}});
+            expect(within(list).getByRole('button',{name:/Faiveley/})).toBeTruthy();
+            fireEvent.click(faiveley);
+            expect(map.match('212670000D0331')).toBe('owner');
+            expect(within(list).getAllByRole('link').length).toBeGreaterThan(0);
+            fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
+            expect(map.match('212670000D0331')).toBe('owner');
+            expect(within(list).getByRole('button',{name:/Consortium Viticole/})).toHaveProperty('ariaPressed','true');
+            expect(screen.queryByText('Verified parcel links')).toBeNull();
+           });
+          });
+          ''')
+
+          # Extend, rather than discard, the existing mobile/shared browser journey.
+          path='tests/e2e/burgundy-village-map.spec.ts'
+          edit(path," await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');\n await dialog.getByRole('button',{name:'Show on map'}).click();", " await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');\n await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();\n await dialog.getByRole('checkbox',{name:/Show possible matches/}).uncheck();\n await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');\n await dialog.getByRole('button',{name:'Show on map'}).click();")
+          edit(path," await expect(dialog.getByRole('link',{name:'Domaine Anne Gros'})).toHaveAttribute('href','/producers/shared%3A%3Afriend%3A%3Aanne');\n await dialog.getByRole('button',{name:'Remove link'}).click();", " // A deliberate reassignment stays saved, but must not appear on Nicole's wine.\n await expect(dialog.getByRole('link',{name:'Domaine Anne Gros',exact:true})).toHaveCount(0);\n await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);\n expect(links[0].producerId).toBe('shared::friend::anne');\n await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();\n await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();\n await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');\n await dialog.getByRole('button',{name:'Save producer link'}).click();\n await dialog.getByRole('button',{name:'Remove link'}).click();")
+          edit(path,"  const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});", "  await dialog.getByLabel('Group right holders by').selectOption('holder');\n  const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});")
+
+          # Guard that generated headings are exactly the reviewed curation, not a fuzzy join.
+          path='scripts/test_echezeaux_farming_research.py'
+          p=Path(path);text=p.read_text();marker='    def test_pinned_population_and_no_invented_farmers(self):'
+          assert marker in text
+          test='''    def test_domaine_headings_keep_research_sources_and_never_confirm_farming(self):
+                  result = self.build()
+                  evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+                  expected = {h['holderId']: h for h in self.curation['holders'] if len(h['candidateNames']) == 1}
+                  self.assertEqual(set(evidence['holderDomains']), set(expected))
+                  for hid, context in evidence['holderDomains'].items():
+                      self.assertEqual(context['name'], expected[hid]['candidateNames'][0])
+                      self.assertEqual(context['sources'], expected[hid]['sourceIds'])
+                      self.assertTrue(set(context['sources']) <= evidence['sources'].keys())
+                      self.assertNotIn('currentFarmer', context)
+                      self.assertNotIn('verified', context)
+                  self.assertEqual(result['counts']['currentFarmerConfirmed'], 0)
+                  self.assertEqual(result['counts']['unresolved'], 127)
+
+          '''
+          # Keep method-body indentation consistent with the rest of this unittest class.
+          test='\n'.join(line[6:] if line.startswith('                  ') else line for line in test.split('\n'))
+          p.write_text(text.replace(marker,test+marker))
+
+          p=Path('docs/echezeaux-farming-research.md')
+          p.write_text(p.read_text()+'''
+          ## Parcel UI follow-up for PR416
+
+          Saved catalogue links are filtered by the wine's producer ID, with full normalized-name fallback only when the ID is absent. Other saved cru links remain stored but are not shown as this wine's producers. Producer/cru changes start a fresh selection session; a late link response from the previous session is discarded.
+
+          Possible-name suggestions and the chosen legal-holder highlight are independent. Toggling suggestions no longer clears the selection or the selected parcel. Manual/legal-holder selection takes visual precedence over a weaker name suggestion and never becomes a verified-farming colour.
+
+          The holder list defaults to researched domaine headings, with the legal holder names and an unverified label underneath. Readers can switch to Legal holder. Headings and source links are generated from the reviewed curation; unknown/ambiguous candidates retain their legal names. Group area/count is the union of parcels, so multiple rights or holders in the same group do not double-count land. This presentation does not modify the legal-rights snapshot, assign new parcels, create saved links or confirm a current farmer.
+          ''')
+          PY
+      - name: Generate and test the actual repository outputs
+        run: |
+          python scripts/build_echezeaux_farming_research.py
+          python scripts/build_echezeaux_farming_research.py --check
+          python -m unittest discover -s scripts -p 'test_echezeaux_farming_research.py'
+          bunx vitest run tests/unit/parcelPresentation.test.ts tests/unit/ParcelMapFeedback.test.tsx tests/unit/GrandCruParcels.test.tsx tests/unit/ParcelProducerLinker.test.tsx tests/unit/parcelProducerLinks.test.ts
+          bun run lint
+          bun run build
+      - name: Browser regression for parcel controls
+        run: |
+          bunx playwright install --with-deps chromium
+          bunx playwright test tests/e2e/burgundy-village-map.spec.ts --project=chromium --grep 'Échezeaux:'
+      - name: Stage only tested changes without modifying the PR head
+        run: |
+          rm .github/workflows/pr416-ui-once.yml
+          git config user.name 'gary29024'
+          git config user.email '31164068+gary29024@users.noreply.github.com'
+          git add src/features/vineyards/GrandCruParcels.tsx src/features/vineyards/ParcelProducerLinker.tsx src/features/vineyards/ParcelEvidence.tsx src/features/vineyards/VillageMap.tsx src/features/vineyards/WineVillageMap.tsx src/features/wines/WineFacts.tsx src/lib/places/parcelPresentation.ts src/lib/places/echezeauxParcelEvidence.json src/villageMap.css scripts/build_echezeaux_parcel_evidence.py scripts/test_echezeaux_farming_research.py tests/unit/parcelPresentation.test.ts tests/unit/ParcelMapFeedback.test.tsx tests/unit/GrandCruParcels.test.tsx tests/e2e/burgundy-village-map.spec.ts docs/echezeaux-farming-research.md .github/workflows/pr416-ui-once.yml
+          git diff --cached --check
+          git commit -m 'Fix parcel link scope, preserve selection and group researched domaines'
+          git push origin HEAD:refs/heads/automation/pr416-parcel-ui-20260930
