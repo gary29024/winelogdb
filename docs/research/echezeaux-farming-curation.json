@@ -2420,6 +2420,143 @@
       ],
       "pageNumbering": "one-based PDF",
       "retrievalNote": "User-supplied Le Figaro/registry-mirror scan. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "michel-gros-donation-2019",
+      "title": "Domaine Michel Gros: 9 April 2019 donation-partage and updated statutes",
+      "url": "https://www.pappers.fr/entreprise/domaine-michel-gros-422835017",
+      "type": "company-filing",
+      "documentDate": "2019-04-09",
+      "filingLabelDate": "2019-05-10",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 67-page notarial donation-partage contains detailed family immovable/property schedules and company-share arrangements, but no Flagey-Echezeaux section-D or Échezeaux/Les Loächausses parcel schedule. It therefore does not locate Michel Gros's published 0.38 ha Les Loächausses holding.",
+      "originalFilename": "DOMAINE MICHEL GROS - Actes du 10-05-2019.pdf",
+      "sha256": "52bb643db8f8e62ccf04554e1096033a160442738b09a82056e4ec309536ba4b",
+      "pageCount": 67,
+      "reviewedPages": [
+        3,
+        6,
+        8,
+        10,
+        14,
+        15,
+        16,
+        19,
+        31,
+        45,
+        52,
+        53,
+        54
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers scan. Complete file screened visually; property schedules and updated statutes reviewed. Original PDF not redistributed."
+    },
+    {
+      "id": "clerget-gfv-fusion-2023",
+      "title": "GFV Christian et Isabelle Clerget: 11 December 2023 merger into Domaine Christian Clerget",
+      "url": "https://www.pappers.fr/entreprise/domaine-christian-clerget-431340140",
+      "type": "company-filing",
+      "documentDate": "2023-12-11",
+      "filingLabelDate": "2023-12-22",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The merger project transfers the entire patrimony of GFV Christian et Isabelle Clerget (430384354) to SCEV du Domaine Christian Clerget (431340140), with EUR 6.177713m of land at real/appraisal value. It does not enumerate cadastral parcels; it expressly says the origin of title for transferred real estate will be set out in a later notarial deposit act after definitive completion.",
+      "originalFilename": "actes-430384354-20231222.pdf",
+      "sha256": "b39d14e644a7fe7b11cc76960ed686dbf18a3a63167b015727c398193e59bbfa",
+      "pageCount": 18,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry scan. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "clerget-gfv-formation-2000",
+      "title": "GFV Christian et Isabelle Clerget: 31 March 2000 cash-only formation",
+      "url": "https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html",
+      "type": "company-filing",
+      "documentDate": "2000-03-31",
+      "filingLabelDate": "2000-04-28",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The initial GFV formation is cash-only: Christian and Isabelle Clerget each contribute EUR 1,200. No vineyard parcel is contributed at formation. The later 2002 notarial act is the relevant immovable contribution.",
+      "originalFilename": "actes-430384354-20000428.pdf",
+      "sha256": "45830d6734707cd611411569012e13e745ca52caca83abf1e2c8338f9a4e94bf",
+      "pageCount": 23,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry scan. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "clerget-gfv-apport-2002",
+      "title": "GFV Christian et Isabelle Clerget: 18 January 2002 D0796 En Orveaux contribution",
+      "url": "https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html",
+      "type": "company-filing",
+      "documentDate": "2002-01-18",
+      "filingLabelDate": "2002-07-03",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Christian and Isabelle Clerget contribute two immovable vineyard parcels to the GFV. The Flagey-Echezeaux parcel is section D no.796, lieu-dit En Orveaux, AOC Echezeaux Grand Cru, 23 ares 19 centiares (2319 m²). This exactly explains the historical/current company right on D0796; the deed names no tenant or additional En Orveaux parcel.",
+      "originalFilename": "actes-430384354-20020703.pdf",
+      "sha256": "7f8afa24f771b2049736ee09f52c6998b7978ae865cfc5a4da28fb484f0f0710",
+      "pageCount": 29,
+      "reviewedPages": [
+        1,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry scan. Complete file screened visually; exact immovable-contribution schedule checked. Original PDF not redistributed."
+    },
+    {
+      "id": "cacheux-capital-cession-2006",
+      "title": "Cacheux: 31 December 2005 cash capital increase and family share transfer",
+      "url": "https://www.pappers.fr/entreprise/scev-domaine-cacheux-jacques-et-fils-392906095",
+      "type": "company-filing",
+      "documentDate": "2005-12-31",
+      "filingLabelDate": "2006-10-18",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The filing records a family share transfer, euro conversion and capital increase subscribed through liquid/current-account claims. Retained statutes describe the original contributions as movable assets and allow associated owners' rural land to be made available separately; no vineyard parcel schedule or Échezeaux cadastral reference is supplied.",
+      "originalFilename": "SCEV DOMAINE CACHEUX JACQUES ET FILS - Actes du 18-10-2006.pdf",
+      "sha256": "b02b722a7471a8fd7c77e57acc2b1fdc50eccd318dec448a26515ac312418e91",
+      "pageCount": 29,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        10,
+        11,
+        16,
+        17,
+        21
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers/free registry scan. Complete file screened visually. Original PDF not redistributed.",
+      "dateNote": "The corporate resolutions and share transfer are dated 31 December 2005; the registry filing label is 18 October 2006."
     }
   ],
   "holders": [
@@ -3040,8 +3177,9 @@
     "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals.",
     "The Grands Crus 1997 and Bonnes Pentes 1999 exact-reference mandates remain without executed instruments. Naudin’s 1994 formation and 2021 capital update do not supply the Bonnes Pentes lease. Bouchy’s 1995 resolutions now identify D0628/D0765/D0767 and a Mondange lease mandate, completing the five-parcel historical mandate scope with 1993 D0764/D0766; execution and the 2008 SAFER proposal outcome remain unverified.",
     "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. The free public/mirror corpus still does not expose that executed lease or its amendments. The 1995 resolution reconstructs the earlier five-parcel acquisition/lease mandate chain but does not prove execution or succession into the 2001 Tardy lease.",
-    "Bouchard's supplied 16 February 2026 partial-asset treaty is only 28 pages even though its table of contents places Annex 3.1 (detailed transferred assets) at pp.40-79 and later annexes through p.82. The main treaty confirms land and rural-lease-related production are split between transferred and retained activities, but without Annex 3.1 no Échezeaux parcel can be identified. Seek a free full annexed copy only.",
-    "Cacheux's 24 March 2021 filing was reviewed and is a cash/current-account capital increase with no parcel schedule. The 18 October 2006 capital/cession filing remains unavailable from the attempted free download; because the newer filing and retained statutes point to partner-owned land being made available separately, treat 2006 as lower-priority and do not use paid access."
+    "Bouchard's 16 February 2026 partial-asset treaty remains only 28 pages across the free mirrors checked; its own contents place Annex 3.1 (detailed transferred assets) at pp.40-79 and later annexes through p.82, but those annexes are not present. Treat the free Bouchard route as exhausted unless a separately indexed annex/full filing appears; do not keep redownloading the same 28-page body.",
+    "Cacheux's 31 December 2005 / filed 18 October 2006 bundle and 8 February 2021 capital filing have both now been reviewed. Both concern cash/current-account/share changes and retain no cadastral vineyard schedule. The operating-company route is exhausted for now; search a separate family landholding/lease instrument instead.",
+    "Clerget D0796 is now traced exactly: contributed to GFV Christian et Isabelle Clerget on 18 January 2002 and carried into SCEV du Domaine Christian Clerget by the 11 December 2023 universal merger. The merger project says the origin of title for transferred real estate will be stated in a later notarial deposit act; a free 15 December 2023 Domaine Christian Clerget filing is therefore worth checking. The remaining c.0.87 ha of the published 1.09 ha En Orveaux holding is still unplaced."
   ],
   "historyFindings": [
     {
@@ -3124,9 +3262,11 @@
       ],
       "sourceIds": [
         "dgfip-history",
-        "clerget"
+        "clerget",
+        "clerget-gfv-apport-2002",
+        "clerget-gfv-fusion-2023"
       ],
-      "finding": "GFV CHRISTIAN ET ISABELLE CLERGET (SIREN 430384354) through 2023, SCEV DU DOMAINE CHRISTIAN CLERGET (SIREN 431340140) from 2024. Ownership by the domaine company is closer to the operator, but it is not a lease or operation record."
+      "finding": "The 18 January 2002 deed contributes D0796 En Orveaux (2319 m², AOC Echezeaux Grand Cru) to GFV Christian et Isabelle Clerget (430384354). The 11 December 2023 merger transfers the GFV's entire patrimony into SCEV du Domaine Christian Clerget (431340140), and the annual DGFiP rights snapshots change from the GFV through 2023 to the SCEV from 2024. This establishes the ownership succession for D0796, not current cultivation."
     },
     {
       "id": "hor-climats",
@@ -3814,9 +3954,12 @@
         "clerget",
         "clerget-web",
         "clerget-gfa-formation-1996",
-        "clerget-gfa-donation-2000"
+        "clerget-gfa-donation-2000",
+        "clerget-gfv-formation-2000",
+        "clerget-gfv-apport-2002",
+        "clerget-gfv-fusion-2023"
       ],
-      "finding": "Farms 1.09 ha; its company record covers only D0796 (2319 m²), leaving about 0.87 ha beyond the current legal-entity record. The separate GFA Domaine Clerget deeds were reviewed: their exact schedule contains only Flagey D0376 Les Violettes (Vosne-Romanée), not mapped Échezeaux, so that GFA does not explain the gap. No additional parcel is assigned by area or proximity.",
+      "finding": "Farms 1.09 ha En Orveaux. The exact 18 January 2002 deed contributes D0796 (2319 m²) to GFV Christian et Isabelle Clerget; the 11 December 2023 merger transfers the GFV's entire patrimony into SCEV du Domaine Christian Clerget, matching the annual rights change to current holder 431340140. This explains only D0796, about 0.23 ha; roughly 0.87 ha of the published holding remains without a matched company record and is not assigned by area or proximity.",
       "producerHolderIds": [
         "431340140"
       ],
@@ -3955,9 +4098,10 @@
       "relation": "owner",
       "sourceIds": [
         "cacheux-forum",
-        "cacheux-capital-2021"
+        "cacheux-capital-2021",
+        "cacheux-capital-cession-2006"
       ],
-      "finding": "Published research describes about 1 ha in five parcels across En Orveaux/Cruots (plus Les Poulaillères). The 2021 company capital increase is cash/current-account based; retained statutes allow partner-owned rural land to be put at the company's disposal by separate agreement but provide no parcel schedule. The five parcels remain unlocated.",
+      "finding": "Published research describes about 1 ha in five parcels across En Orveaux/Cruots (plus Les Poulaillères). Both the 2005/2006 and 2021 operating-company capital filings were reviewed: they concern cash/current-account/share changes, while the statutes allow partner-owned rural land to be made available separately. Neither filing supplies a cadastral schedule, so the five parcels remain unlocated.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -4121,9 +4265,10 @@
       "precision": "hundredth-hectare",
       "relation": "unstated",
       "sourceIds": [
-        "michel-gros-vinous"
+        "michel-gros-vinous",
+        "michel-gros-donation-2019"
       ],
-      "finding": "First vintage 2022, from a strip previously in the Gros Frère et Sœur cuvée. No company record. Paul Gros reportedly farms in the same lieu-dit under his own name.",
+      "finding": "First vintage 2022, from a strip previously in the Gros Frère et Sœur cuvée. The 9 April 2019 donation-partage contains detailed family property schedules but no Flagey-Echezeaux/section-D or Les Loächausses parcel, so it does not locate the published 0.38 ha holding. Paul Gros reportedly farms in the same lieu-dit under his own name.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -4952,6 +5097,44 @@
       ],
       "finding": "The 15 September 1995 resolutions authorize purchase of D0628/D0765/D0767, together 2216 m², and a long-term rural métayage lease to Bernard Mondange. Together with the 1993 D0764/D0766 mandate (1260 m²), the two mandate groups total the same five parcels and 3476 m² later listed in the 2019 Tardy recital. Neither resolution proves execution or uninterrupted succession.",
       "appNote": "The 1995 resolution authorizes purchase of D0628/D0765/D0767 (0.2216 ha) and a long-term métayage lease to Bernard Mondange. Together with the 1993 D0764/D0766 mandate, this accounts for the same five parcels later listed in 2019. Execution and later succession remain unverified."
+    },
+    {
+      "id": "clerget-d0796-2002",
+      "sourceId": "clerget-gfv-apport-2002",
+      "title": "Clerget: D0796 En Orveaux contribution to predecessor GFV",
+      "holderId": "431340140",
+      "companySiren": "431340140",
+      "filingCompanySiren": "430384354",
+      "documentDate": "2002-01-18",
+      "parcelAreasM2": {
+        "212670000D0796": 2319
+      },
+      "transferRecital": {
+        "kind": "immovable-contribution",
+        "fromParties": [
+          "Christian Clerget",
+          "Isabelle Clerget"
+        ],
+        "toCompany": "GFV CHRISTIAN ET ISABELLE CLERGET",
+        "toSiren": "430384354",
+        "contributionDate": "2002-01-18",
+        "pages": [
+          25,
+          26
+        ]
+      },
+      "successorEvidence": {
+        "sourceId": "clerget-gfv-fusion-2023",
+        "fromCompany": "GFV CHRISTIAN ET ISABELLE CLERGET",
+        "fromSiren": "430384354",
+        "toCompany": "SCEV DU DOMAINE CHRISTIAN CLERGET",
+        "toSiren": "431340140",
+        "effectiveDate": "2023-12-11",
+        "limitation": "The merger project transfers the entire patrimony but does not itself enumerate D0796; the link relies on the exact 2002 contribution plus the legal universal transfer and annual rights history."
+      },
+      "leaseEvidence": [],
+      "finding": "The 18 January 2002 deed contributes D0796 En Orveaux (2319 m²) to GFV Christian et Isabelle Clerget. The GFV is later absorbed by SCEV du Domaine Christian Clerget on 11 December 2023, matching the annual recorded-rights succession. The chain establishes ownership, not cultivation, and does not identify the remaining published En Orveaux acreage.",
+      "appNote": "The 2002 deed places D0796 (0.2319 ha) in GFV Christian et Isabelle Clerget; the 2023 merger transfers the GFV's entire patrimony to the current Domaine Christian Clerget company. Ownership succession is documented, but current farming and the rest of the domaine's 1.09 ha En Orveaux holding remain unverified."
     }
   ]
 }
