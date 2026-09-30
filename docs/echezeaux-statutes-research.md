@@ -2,7 +2,7 @@
 
 Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux-farming-curation.json); the original PDFs are linked below, not redistributed.
 
-Fifty uploaded PDFs have now been reviewed across seven batches, including free registry-mirror copies. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **27 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest seven-file unresolved-parcel batch mostly produces negative but useful evidence: it rules out several operating-company/GFA filings as the missing Échezeaux parcel schedules and identifies Bouchard Annex 3.1 as the next free document worth pursuing. None alone verifies farming in the 2026 season.
+Fifty-five uploaded PDFs have now been reviewed across eight batches, including free registry-mirror copies. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **28 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest seven-file unresolved-parcel batch mostly produces negative but useful evidence: it rules out several operating-company/GFA filings as the missing Échezeaux parcel schedules and identifies Bouchard Annex 3.1 as the next free document worth pursuing. None alone verifies farming in the 2026 season.
 
 Page references below are one-based PDF pages. ORVEAUX's printed page numbers are one lower than its PDF page numbers.
 
@@ -303,7 +303,7 @@ These records are **not yet parcel evidence**. They are queued because the free 
 | **Georges Noëllat 388646846** | [Pappers](https://www.pappers.fr/entreprise/earl-du-vignoble-georges-noellat-388646846): **22 Jul 2013 notarial donation**, **15 Oct 2013** and **19 Jun 2015** capital increases | Lower priority: the published Cruots holding is only about 0.07 ha, but the filings are free and could contain a parcel schedule. |
 | **Dominique Mugneret / former EARL 325694750** | [Pappers operating-entity history](https://www.pappers.fr/entreprise/earl-dominique-mugneret-325694750) and [related 448871863 entity](https://www.pappers.fr/entreprise/dominique-mugneret-448871863) | Hachette reports 40 ares En Orveaux, while the historic operating EARL has since been dissolved. A related 2007 notarial filing may clarify company/share succession, but this is lower priority than the contribution deeds above. |
 
-The ranking is by expected evidential yield, **not** by presumed farmer. Nothing in this table changes candidate leads, parcel filings or current farmer fields. A filing enters parcel evidence only after its full text names an exact cadastral reference, a formally traceable predecessor, or another sufficiently specific operation/tenancy scope. The nine free filing indexes above remain logged for discovery provenance. Seven underlying filings have now also been reviewed, bringing the current source log to **171 entries**; the new documents still do not justify a parcel assignment.
+The ranking is by expected evidential yield, **not** by presumed farmer. Nothing in this table changes candidate leads, parcel filings or current farmer fields. A filing enters parcel evidence only after its full text names an exact cadastral reference, a formally traceable predecessor, or another sufficiently specific operation/tenancy scope. The nine free filing indexes above remain logged for discovery provenance. Twelve underlying filings have now also been reviewed, bringing the current source log to **176 entries**. One of the new deeds supplies an exact ownership chain for D0796; the rest narrow or eliminate leads without assigning unnamed parcels.
 
 ## Seven-file unresolved-parcel batch: Clerget, Bizot, Guyon, Cacheux and Bouchard
 
@@ -357,9 +357,52 @@ However, the supplied copy is only **28 pages**. Its own table of contents place
 
 Source: [Vignoble des Cabottes / former Maison Bouchard Père & Fils](https://entreprises.lefigaro.fr/vignoble-des-cabottes-21/entreprise-515420255).
 
+## Five-file follow-up: Clerget D0796 ownership chain; Gros and Cacheux negative results
+
+Five more free filings (**166 pages**) were reviewed after the seven-file unresolved-parcel batch.
+
+### Christian Clerget: D0796 is now an exact deed-backed ownership chain
+
+The **18 January 2002** notarial contribution to **GFV Christian et Isabelle Clerget (430384354)** names:
+
+- commune **Flagey-Échezeaux**;
+- section **D no.796**;
+- lieu-dit **En Orveaux**;
+- appellation **Échezeaux Grand Cru**; and
+- area **23 a 19 ca (2,319 m²)**.
+
+This is the same D0796 currently recorded to **SCEV du Domaine Christian Clerget (431340140)**. The earlier **31 March 2000** GFV formation is cash-only, so the vineyard arrives through the 2002 immovable contribution rather than at formation.
+
+The **11 December 2023 merger project** then transfers the **entire patrimony** of the GFV into the SCEV Domaine Christian Clerget. Its balance values land at **EUR 6.177713m**. It does not enumerate parcels, but it expressly says that the origin of title for the transferred real estate is to be set out in a later **notarial deposit act** after definitive completion. The annual DGFiP rights history independently changes D0796 from the GFV through 2023 to the SCEV from 2024.
+
+**Data treatment:** D0796 now has a reviewed parcel filing and documented ownership succession. This is **not current-farmer confirmation**. The deed-backed 0.2319 ha explains only part of Clerget's published 1.09 ha En Orveaux holding; roughly 0.87 ha remains unplaced.
+
+**Next free Clerget target:** the Domaine Christian Clerget filing dated **15 December 2023**, described by public indexes as *Projet de Fusion - Augmentation de Capital - Statuts mis à jour - Acte modificatif*. The merger project itself says a later deposit act should record the origins of title, so inspect this filing before searching more generic Clerget documents.
+
+Sources: [GFV Christian et Isabelle Clerget](https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html), [Domaine Christian Clerget](https://www.pappers.fr/entreprise/domaine-christian-clerget-431340140).
+
+### Michel Gros 2019: detailed family property schedule, but no Échezeaux parcel
+
+The **9 April 2019 donation-partage** is detailed and names numerous family properties and rural assets, but the reviewed schedules contain no Flagey-Échezeaux section-D / Échezeaux / Les Loächausses parcel. It therefore does not locate the published 0.38 ha Michel Gros holding.
+
+This is a useful negative result: do not map Michel Gros's Loächausses acreage from this family deed.
+
+### Cacheux 2005/2006: downloaded successfully, but still no land schedule
+
+The previously troublesome **18 October 2006 filing** was obtained. Its operative resolutions and share-transfer documents are dated **31 December 2005**. They concern:
+- euro conversion of capital;
+- an increase subscribed through liquid/current-account claims; and
+- a small family share transfer.
+
+The retained statutes describe the old contributions as movable assets and allow partner-owned rural land to be made available separately. No cadastral vineyard schedule appears. Together with the reviewed 2021 capital increase, this makes the **operating-company Cacheux route low-yield** for locating its five published Échezeaux parcels.
+
+### Bouchard annex route: pause it
+
+All free Bouchard copies checked expose the same **28-page treaty body**. The treaty's own contents place Annex 3.1 at pp.40-79, but those pages are absent. Until a separately indexed annex/full filing appears, treat this route as exhausted rather than repeatedly downloading the same file.
+
 ## Highest-value next sources
 
-The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **171 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
+The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **176 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
 
 Current phase: **free public and registry-mirror sources only**. Paid land-registry/SPF copies and direct domaine/CVI requests are deferred. In the table below, “obtain” means locate a freely accessible public or mirror copy; otherwise leave the gap open.
 
@@ -482,4 +525,18 @@ Seven PDFs, **221 pages**. All supplied copies were read without modification; s
 | GFA DOMAINE CLERGET - Actes du 25-04-1996.pdf | 34 | 2656dc1129910baabcdcc7c85f0d8417f0845133bbb38939cb4f9b8e0ff282c9 |
 | RUBYPAYEUR - SCEV DOMAINE CACHEUX JACQUES ET FILS - Proces-verbal d%27assemblee generale extraordinaire.pdf | 23 | 2200d56f648991e909deb5b2f06eb1f3a2c8efafba2a4782382eaf6cd3275069 |
 | Societe Civile D'exploitation Du Domaine Guyon - Actes du 21-05-2001.pdf | 29 | 35d3bc5cc6442f4bb6214750c47e7bcc3409ebb8f7e68df9635a97491037a492 |
+
+
+
+### Five-file follow-up provenance
+
+Five PDFs, **166 pages**. All scans were visually screened and the decisive property/capital schedules were checked.
+
+| Original filename | Pages | SHA-256 |
+| --- | ---: | --- |
+| DOMAINE MICHEL GROS - Actes du 10-05-2019.pdf | 67 | 52bb643db8f8e62ccf04554e1096033a160442738b09a82056e4ec309536ba4b |
+| actes-430384354-20231222.pdf | 18 | b39d14e644a7fe7b11cc76960ed686dbf18a3a63167b015727c398193e59bbfa |
+| actes-430384354-20000428.pdf | 23 | 45830d6734707cd611411569012e13e745ca52caca83abf1e2c8338f9a4e94bf |
+| actes-430384354-20020703.pdf | 29 | 7f8afa24f771b2049736ee09f52c6998b7978ae865cfc5a4da28fb484f0f0710 |
+| SCEV DOMAINE CACHEUX JACQUES ET FILS - Actes du 18-10-2006.pdf | 29 | b02b722a7471a8fd7c77e57acc2b1fdc50eccd318dec448a26515ac312418e91 |
 
