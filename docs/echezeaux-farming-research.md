@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **171 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **176 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -187,7 +187,7 @@ This matters most in En Orveaux. Published holdings there cannot safely be assig
 
 Free registry indexes nevertheless expose higher-value documents to inspect. Christian Clerget has two family landholding vehicles with notarial formation/donation records, one of which (GFV 430384354) was absorbed into the operating domaine in 2023. Jean-Yves Bizot's 434002390 entity has a 2002 notarial **acte d'apport**. Bouchard's former Maison entity has a 2026 **apport partiel d'actif** covering a viticultural-production branch. Cacheux and Guyon have capital/notarial records, and Michel Gros has a 2019 notarial family act. These are research targets only until the full document supplies parcel or tenancy scope.
 
-Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are logged separately, and seven underlying filings have now also been reviewed, bringing the current research source log to **171 entries** without adding any parcel candidate.
+Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are logged separately, and twelve underlying filings have now also been reviewed, bringing the current research source log to **176 entries**. One additional parcel, D0796, now has exact deed-backed ownership evidence; no current farmer has been confirmed.
 
 ### Reviewed free filings: what they eliminated
 
@@ -200,6 +200,22 @@ The first unresolved-parcel filing batch reviewed seven free PDFs (**221 pages**
 - **Bouchard:** the 2026 partial-asset treaty is the one genuinely promising document, but the free 28-page copy omits **Annex 3.1**, which its own contents place at pp.40-79 and which should contain the detailed transferred assets. The main treaty confirms land and rural-lease-related production are split between the transferred and retained businesses, but it cannot place the published 39 ares En Orveaux.
 
 Accordingly, none of these documents changes `candidateLeads`, `currentFarmer` or parcel colouring. The most useful next free document is a **complete annexed Bouchard 2026 treaty**, especially Annex 3.1; otherwise continue with other notarial landholding vehicles rather than ordinary operating-company capital records.
+
+### Second free-filing pass: exact Clerget D0796 ownership chain
+
+The next five filings produce one material exact-reference result.
+
+**D0796 En Orveaux** is expressly contributed on **18 January 2002** by Christian and Isabelle Clerget to **GFV Christian et Isabelle Clerget (430384354)** as **Échezeaux Grand Cru, 23 a 19 ca**. The **11 December 2023** merger then transfers the GFV's entire patrimony to **SCEV du Domaine Christian Clerget (431340140)**. This matches the annual legal-entity rights history, which moves D0796 from the GFV to the SCEV between the 2023 and 2024 snapshots.
+
+The result is an ownership chain, not an operating-tenancy finding. It explains **0.2319 ha** of the domaine's published **1.09 ha En Orveaux** holding; roughly **0.87 ha remains unplaced** and is not filled by acreage or adjacency. The app therefore adds a dated filing item for D0796 while keeping `currentFarmer` null.
+
+The same batch also narrows several dead ends:
+- **Michel Gros 2019 donation-partage:** detailed family property schedules but no Flagey-Échezeaux/Les Loächausses parcel.
+- **Cacheux 2005/2006:** capital/share changes only; no vineyard schedule. Together with 2021, the operating-company filing route is low-yield.
+- **Clerget GFV 2000 formation:** cash-only; D0796 enters in the separate 2002 contribution.
+- **Bouchard:** all checked free copies remain the same 28-page treaty body, without Annex 3.1.
+
+The Clerget merger project expressly says that the origin of title for transferred real estate will be stated in a later notarial deposit act. The next free document to inspect is therefore the **15 December 2023 Domaine Christian Clerget filing** on the absorbing company's record, rather than another general capital/statutes document.
 
 ### Independent research: Winehog
 
