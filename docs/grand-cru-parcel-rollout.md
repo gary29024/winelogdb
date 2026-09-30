@@ -120,3 +120,24 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
 - Free public sources only for Tiers 1–2; hashes, dates and page anchors recorded;
   original PDFs not committed.
 - Parcel and evidence files load only when "Show parcels" is switched on.
+
+## 7. How to start each piece of work
+
+Give Claude one of these requests. Each one points at the issue, so the scope,
+tier and checklist come from there.
+
+| Step | Request |
+| --- | --- |
+| Once, first | "Implement #417 using docs/grand-cru-parcel-rollout.md. Prove it on Grands-Échezeaux (#377)." |
+| Each cru, Tier 1 | "Start Grand Cru #378 (Clos de Vougeot), Tier 1, following docs/grand-cru-parcel-rollout.md." |
+| Optional Tier 2 | "Do Tier 2 research for #378." Attach or link any PDFs you want reviewed. |
+| Shared village | "Prepare the Gevrey-Chambertin bundle for #391–#399, then start #391, Tier 1." |
+
+Each cru gets its own branch and PR, and the issue closes only after that PR is
+reviewed and merged. Suggested order: #377, #378, then one village bundle at a time
+(Vosne-Romanée, Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin,
+Puligny/Chassagne, the Corton hill), and Chablis (#408) last.
+
+Some government download sites may refuse connections from the cloud session. If
+a download is blocked, Claude reports it and gives the commands to run locally,
+as was done for earlier map batches.
