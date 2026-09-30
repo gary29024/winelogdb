@@ -2146,6 +2146,96 @@
       "pageNumbering": "one-based PDF",
       "retrievalNote": "User-supplied Pappers PDF. Complete bilingual filing screened visually. Original PDF not redistributed.",
       "dateNote": "Founders signed the statutes on 20 January 2020; the registry copy was filed 27 January 2020."
+    },
+    {
+      "id": "clerget-gfv-free-index",
+      "title": "GFV Christian et Isabelle Clerget: free filing index",
+      "url": "https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists the 22 December 2023 fusion project and 2000/2002 notarial acts for this viticultural landholding GFV, which was absorbed into Domaine Christian Clerget in 2023. The index itself gives no Échezeaux cadastral schedule or tenancy and creates no parcel candidate."
+    },
+    {
+      "id": "clerget-gfa-free-index",
+      "title": "GFA Domaine Clerget: free filing index",
+      "url": "https://www.pappers.fr/entreprise/gfa-domaine-clerget-404866196",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists a 25 April 1996 notarial constitution and 5 October 2000 donation-partage for a Clerget agricultural landholding vehicle. Full deeds are research targets; the company relationship does not identify Échezeaux parcels or their operator."
+    },
+    {
+      "id": "bouchard-free-index",
+      "title": "Vignoble des Cabottes / former Maison Bouchard Père & Fils: free filing index",
+      "url": "https://entreprises.lefigaro.fr/vignoble-des-cabottes-21/entreprise-515420255",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists the 18 February 2026 project d'apport partiel d'actif. Public notices say the transferred branch includes viticultural production, vinification, bottling and commercialization; no Échezeaux parcel schedule has yet been reviewed."
+    },
+    {
+      "id": "cacheux-free-index",
+      "title": "SCEV Domaine Cacheux Jacques et Fils: free filing index",
+      "url": "https://rubypayeur.com/societe/scev-domaine-cacheux-jacques-et-fils-392906095",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists free filings including capital increases dated 18 October 2006 and 24 March 2021. Published Échezeaux holdings remain named-area context only until a full filing supplies a cadastral or lease schedule."
+    },
+    {
+      "id": "guyon-free-index",
+      "title": "SCEA Domaine Guyon: free filing index",
+      "url": "https://entreprises.lefigaro.fr/societe-civile-d-exploitation-du-domaine-guyon-21/entreprise-381071141",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists a 21 May 2001 capital increase and 5 July 2016 notarial act. Historical published acreage and a Lavigne-family fermage remain too ambiguous to identify cadastral parcels without the full instruments."
+    },
+    {
+      "id": "bizot-free-index",
+      "title": "Jean-Yves Bizot / former Marie-Thérèse Javouhey entity: free filing index",
+      "url": "https://www.pappers.fr/entreprise/jean-yves-bizot-434002390",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists a 29 May 2002 notarial asset-contribution filing (ACTE D'APPORT) and a 4 January 2001 constitution. These are high-value targets for the unplaced Bizot Échezeaux holdings, but the index itself names no mapped parcel."
+    },
+    {
+      "id": "michel-gros-free-index",
+      "title": "Domaine Michel Gros: free filing index",
+      "url": "https://www.pappers.fr/entreprise/domaine-michel-gros-422835017",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists a 10 May 2019 notarial family act and 23 April 2019 succession/share act. Michel Gros's published Les Loächausses holding remains unplaced until the full deeds show land or lease scope."
+    },
+    {
+      "id": "georges-noellat-free-index",
+      "title": "EARL du Vignoble Georges Noëllat: free filing index",
+      "url": "https://www.pappers.fr/entreprise/earl-du-vignoble-georges-noellat-388646846",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "Lists a 22 July 2013 notarial donation and 2013/2015 capital increases. The published small Cruots holding has no cadastral ID; these filings are lower-priority targets and do not yet create a parcel lead."
+    },
+    {
+      "id": "dominique-mugneret-free-index",
+      "title": "EARL Dominique Mugneret and related company: free filing indexes",
+      "url": "https://www.pappers.fr/entreprise/earl-dominique-mugneret-325694750",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-09-30",
+      "access": "read",
+      "finding": "The historical operating EARL was dissolved in 2022; a related Dominique Mugneret company (448871863) lists a 14 November 2007 notarial filing. Hachette's 40-are En Orveaux holding remains named-area evidence only."
     }
   ],
   "holders": [
