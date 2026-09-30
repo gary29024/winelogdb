@@ -229,10 +229,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Committed research outputs match the curation file
-        run: python scripts/build_echezeaux_farming_research.py --check
-      - name: Research builder tests
-        run: python -m unittest discover -s scripts -p 'test_echezeaux_farming_research.py'
+      # Loops over every scripts/grand-crus/<slug>.json; a cru without research yet has its config validated.
+      - name: Committed research outputs match every cru's curation
+        run: python scripts/build_grand_cru_research.py --all --check
+      - name: Research builder and cru config tests
+        working-directory: scripts
+        run: python -m unittest test_grand_cru_research test_grand_cru_config
 
   regression:
     name: Regression and browser tests

@@ -2,16 +2,16 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {cleanup,fireEvent,render,screen,within} from '@testing-library/react';
 import {ParcelEvidence} from '../../src/features/vineyards/ParcelEvidence';
-import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
+import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 
 const id=(ref:string)=>`212670000D${ref.padStart(4,'0')}`;
 const fresh=async()=>{vi.resetModules();return (await import('../../src/features/vineyards/ParcelEvidence')).ParcelEvidence};
-afterEach(()=>{cleanup();vi.resetModules();vi.doUnmock('../../src/lib/places/echezeauxParcelEvidence.json')});
+afterEach(()=>{cleanup();vi.resetModules();vi.doUnmock('../../src/lib/places/grandCruParcels/echezeaux.evidence.json')});
 
 describe('Parcel evidence panel',()=>{
  it('opens only the first group, lets the reader open or close any group and remembers that on the next parcel',async()=>{
   const Fresh=await fresh();
-  const {rerender}=render(<Fresh parcelId={id('665')}/>);
+  const {rerender}=render(<Fresh parcelId={id('665')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   const groups=()=>[...panel.querySelectorAll('details.parcel-evidence-group')] as HTMLDetailsElement[];
   expect(groups().map(g=>g.open)).toEqual(groups().map((_,i)=>i===0));
@@ -20,7 +20,7 @@ describe('Parcel evidence panel',()=>{
   expect(groups()[1].open).toBe(true);
   fireEvent.click(groups()[0].querySelector('summary')!);
   expect(groups()[0].open).toBe(false);
-  rerender(<Fresh parcelId={id('673')}/>);
+  rerender(<Fresh parcelId={id('673')} parentId="inao-denom-565"/>);
   const next=[...(await screen.findByRole('region',{name:'History and evidence'})).querySelectorAll('details.parcel-evidence-group')] as HTMLDetailsElement[];
   expect(next.find(g=>g.classList.contains('parcel-evidence-notices'))?.open).toBe(false);
  });
@@ -28,12 +28,12 @@ describe('Parcel evidence panel',()=>{
   const only=Object.entries(evidence.parcels as Record<string,{kind:string}[]>).find(([,items])=>items.every(i=>i.kind==='lead'));
   if(!only)return;
   const Fresh=await fresh();
-  render(<Fresh parcelId={only[0]}/>);
+  render(<Fresh parcelId={only[0]} parentId="inao-denom-565"/>);
   const leads=(await screen.findByRole('region',{name:'History and evidence'})).querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
   expect(leads.open).toBe(true);
  });
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
-  render(<ParcelEvidence parcelId={id('665')}/>);
+  render(<ParcelEvidence parcelId={id('665')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Dated notices, ownership, sales, company filings and published research.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
@@ -45,7 +45,7 @@ describe('Parcel evidence panel',()=>{
   expect(within(leads).getByText('Names and ownership context only.')).toBeTruthy();
  });
  it('shows a suspended application as procedural and keeps it off any farming claim',async()=>{
-  render(<ParcelEvidence parcelId={id('673')}/>);
+  render(<ParcelEvidence parcelId={id('673')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Application suspended')).toBeTruthy();
   expect(within(panel).getByText(/Not an authorisation/)).toBeTruthy();
@@ -53,18 +53,18 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByText('Recorded owner changed to Bouchon Pourpre')).toBeTruthy();
  });
  it('labels evidence inherited through a divided parcel and keeps directly named references distinct',async()=>{
-  render(<ParcelEvidence parcelId={id('826')}/>);
+  render(<ParcelEvidence parcelId={id('826')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getAllByText('Inherited from former parcel D0792').length).toBeGreaterThan(0);
   expect(within(panel).getByText('Created by dividing D0792')).toBeTruthy();
   cleanup();
-  render(<ParcelEvidence parcelId={id('172')}/>);
+  render(<ParcelEvidence parcelId={id('172')} parentId="inao-denom-565"/>);
   const direct=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(direct).queryByText(/Inherited from former parcel/)).toBeNull();
   expect(within(direct).getByText('Named by parcel number')).toBeTruthy();
  });
  it('shows a co-sale and a later company holder without identifying the buyer',async()=>{
-  render(<ParcelEvidence parcelId={id('146')}/>);
+  render(<ParcelEvidence parcelId={id('146')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Sale record')).toBeTruthy();
   expect(within(panel).getByText('14 Mar 2024').getAttribute('datetime')).toBe('2024-03-14');
@@ -73,7 +73,7 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByRole('link',{name:/DVF\+ open-data/}).getAttribute('href')).toContain('dvfplus');
  });
  it('shows an exact-area match with the farming domaine as published research, undated',async()=>{
-  render(<ParcelEvidence parcelId={id('362')}/>);
+  render(<ParcelEvidence parcelId={id('362')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Matched by exact area')).toBeTruthy();
   expect(within(panel).getByText('Gérard Mugneret, Les Quartiers de Nuits (métayage)')).toBeTruthy();
@@ -81,7 +81,7 @@ describe('Parcel evidence panel',()=>{
  });
  it('shows the deed date and individual partial tenancy separately from historical research',async()=>{
   const Fresh=await fresh();
-  render(<Fresh parcelId={id('316')}/>);
+  render(<Fresh parcelId={id('316')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   const filings=panel.querySelector('details.parcel-evidence-filings') as HTMLDetailsElement;
   expect(filings.open).toBe(true);
@@ -93,32 +93,32 @@ describe('Parcel evidence panel',()=>{
   expect(within(research).getByText(/Guide Hachette 2001 \(1998 vintage\)/)).toBeTruthy();
  });
  it('labels the historical Vigot figure as a near-area reconstruction',async()=>{
-  render(<ParcelEvidence parcelId={id('195')}/>);
+  render(<ParcelEvidence parcelId={id('195')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Near-area reconstruction')).toBeTruthy();
   expect(within(panel).queryByText('Matched by exact area')).toBeNull();
   expect(within(panel).getByText(/5963 m²; this parcel is 5965 m² cadastral/)).toBeTruthy();
  });
- it('covers a Grands-Échezeaux parcel named in a notice',async()=>{
-  render(<ParcelEvidence parcelId={id('93')}/>);
+ it('covers a Grands-Échezeaux parcel named in a notice, through the cru registry',async()=>{
+  render(<ParcelEvidence parcelId={id('93')} parentId="inao-denom-645"/>);
   expect(within(await screen.findByRole('region',{name:'History and evidence'})).getByText('Application received')).toBeTruthy();
  });
  it('says only that no dated records were found',async()=>{
   expect(evidence.parcels).not.toHaveProperty(id('1'));
-  render(<ParcelEvidence parcelId={id('1')}/>);
+  render(<ParcelEvidence parcelId={id('1')} parentId="inao-denom-565"/>);
   expect(await screen.findByText('No dated records were found for this parcel.')).toBeTruthy();
  });
  it('reports a failed load and recovers on retry',async()=>{
   vi.resetModules();
-  vi.doMock('../../src/lib/places/echezeauxParcelEvidence.json',()=>{throw new Error('offline')});
+  vi.doMock('../../src/lib/places/grandCruParcels/echezeaux.evidence.json',()=>{throw new Error('offline')});
   const {ParcelEvidence:Fresh}=await import('../../src/features/vineyards/ParcelEvidence');
-  render(<Fresh parcelId={id('665')}/>);
+  render(<Fresh parcelId={id('665')} parentId="inao-denom-565"/>);
   expect((await screen.findByRole('alert')).textContent).toContain('Evidence records could not load');
-  vi.doUnmock('../../src/lib/places/echezeauxParcelEvidence.json');
+  vi.doUnmock('../../src/lib/places/grandCruParcels/echezeaux.evidence.json');
   vi.resetModules();
   const {ParcelEvidence:Again}=await import('../../src/features/vineyards/ParcelEvidence');
   cleanup();
-  render(<Again parcelId={id('665')}/>);
+  render(<Again parcelId={id('665')} parentId="inao-denom-565"/>);
   expect(await screen.findByRole('region',{name:'History and evidence'})).toBeTruthy();
  });
 });

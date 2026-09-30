@@ -1,6 +1,6 @@
 # Échezeaux: company deeds, dated tenancies and next source requests
 
-Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux-farming-curation.json); the original PDFs are linked below, not redistributed.
+Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux/curation.json); the original PDFs are linked below, not redistributed.
 
 Fifty-six distinct supplied PDF copies have now been reviewed, including free registry mirrors. The duplicate upload of the 39-page Clerget completion filing is counted once. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **28 parcels**. Twenty-five individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest Clerget filing confirms definitive merger completion without adding a cadastral schedule. Its missing notarial property material and the missing Bouchard annex remain gaps; repeated copies are not further evidence. None alone verifies farming in the 2026 season.
 

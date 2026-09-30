@@ -1,5 +1,5 @@
 import {placeKey} from './resolve';
-import {ownerName} from './echezeauxParcelOwners';
+import {ownerName} from './parcelOwners';
 import type {ParcelProducerLink} from './parcelProducerLinks';
 
 export type HolderResearch={name:string;basis:string;note:string;sources:string[]};

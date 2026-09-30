@@ -6,7 +6,7 @@
     "date": "2026-06-01",
     "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz",
     "sha256": "39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f",
-    "license": "Licence Ouverte 2.0"
+    "license": "Licence Ouverte / Open Licence"
   },
   "coverageNote": "Échezeaux pilot: 10 cadastral named areas are mapped. Les Poulaillères remains unverified because the cadastral source says “LES POULA”. Cadastral areas are not separate INAO cru boundaries or producer holdings.",
   "features": [

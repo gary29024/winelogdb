@@ -3,7 +3,7 @@ import {burgundyAtlasWinePlace} from './burgundyAtlas';
 import {placeKey} from './resolve';
 import {PLACES} from './hierarchy';
 import appellations from './burgundyAtlasAppellationLinks.json';
-import index from './echezeauxNamedPlotIndex.json';
+import index from './grandCruParcels/echezeaux.named-plot-index.json';
 
 type Wine=WineFacts&{classification?:string|null;wineStyle?:string|null};
 const marker=/\b(?:grand cru|aoc|aop)\b/g;

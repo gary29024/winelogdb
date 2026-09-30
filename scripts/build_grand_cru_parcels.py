@@ -1,29 +1,33 @@
-"""Reproducible cadastral parcel / historical legal-entity-rights pilot.
+"""Reproducible cadastral parcels and legal-entity rights for a cru's commune bundle.
 
-Use the pinned GIS requirements and --source-dir containing the inputs named
-in scripts/echezeaux-parcels.json. Geometry is never clipped or simplified;
-the INAO intersection is a separate area measurement, not parcel ownership.
+  python scripts/build_grand_cru_parcels.py --cru echezeaux
+
+Builds one parcel file for the whole bundle (every cru it serves, never split at a
+commune line), its manifest, holder index and report. Use the pinned GIS requirements
+(scripts/burgundy-map-requirements.txt) and the inputs fetched by
+download_grand_cru_sources.py. Geometry is never clipped or simplified; each cru
+intersection is a separate area measurement, not parcel ownership.
 """
 import argparse
 import csv
 import gzip
-import hashlib
 import io
 import json
 import re
 import zlib
-from pathlib import Path
 
 from pyproj import Transformer
 from shapely.geometry import shape
 from shapely.ops import transform
 
-from build_burgundy_village_map import ROOT, read_json, write_json
+from build_burgundy_village_map import ROOT, write_json
+from grand_cru import (bundle_parent_features, cadastre_sources, communes, holder_index_path, load_cru, manifest_path,
+                       parcel_report_path, parcels_file, pinned, schema_file, sha256, source_dir)
 
 
-def parcel_id(row):
+def parcel_id(row, allowed=('21267',)):
     department, direction, commune = row[:3]
-    assert department == '21' and direction == '0' and commune == '267'
+    assert department + commune in allowed and direction == '0'
     prefix, section, number = row[4].strip() or '000', row[5].strip(), row[6].strip()
     assert prefix.isdigit() and len(prefix) <= 3 and re.fullmatch('[A-Z0-9]{1,2}', section)
     assert number.isdigit() and len(number) <= 4
@@ -54,37 +58,39 @@ def record_match(props):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--source-dir', type=Path, required=True)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--cru', required=True)
+    parser.add_argument('--source-dir')
     args = parser.parse_args()
-    config = read_json(ROOT / 'scripts/echezeaux-parcels.json')
-    def source(name, digest):
-        data = (args.source_dir / name).read_bytes()
-        assert hashlib.sha256(data).hexdigest() == digest, f'Review changed input: {name}'
-        return data
-    cadastre = source('parcelles-21267.json.gz', config['cadastreSha256'])
-    rights = source(config['rightsMember'], config['rightsMemberSha256'])
+    _, bundle = load_cru(args.cru)
+    config = bundle['parcels']
+    directory = source_dir(bundle, args.source_dir)
+    rights = pinned(directory, config['rightsMember'], config['rightsMemberSha256'])
     assert zlib.crc32(rights) == config['rightsMemberCrc32']
-    source('dgfip-2025-description.odt', config['schemaSha256'])
-    parcels = json.loads(gzip.decompress(cadastre))['features']
+    pinned(directory, schema_file(bundle), config['schemaSha256'])
+    allowed = communes(bundle)
+    parcels = []
+    for insee, _, digest in cadastre_sources(bundle):
+        for f in json.loads(gzip.decompress(pinned(directory, parcels_file(insee), digest)))['features']:
+            assert f['properties']['commune'] == insee
+            parcels.append(f)
     current_ids = {p['properties']['id'] for p in parcels}
-    catalogue = read_json(ROOT / 'src/lib/places/vosneVillageMapCatalogue.json')
-    canonical = (ROOT / ('public' + catalogue['dataUrl'])).read_text(encoding='utf8').replace('\r\n', '\n').encode()
-    expected = next(m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == 'vosne-romanee')['sourceSha256']
-    assert hashlib.sha256(canonical).hexdigest() == expected
-    parents = {f['id']: f for f in json.loads(canonical)['features'] if f['id'] in config['parentFeatureIds']}
-    assert set(parents) == set(config['parentFeatureIds'])
+    parents, source_hashes = bundle_parent_features(bundle)
+    expected = source_hashes[bundle['villageMap']]
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
     projected = {id: transform(project, shape(f['geometry'])) for id, f in parents.items()}
     selected, contacts = {}, []
     for f in parcels:
         props = f['properties']
-        assert props['commune'] == config['commune']
         geometry = shape(f['geometry'])
         assert geometry.is_valid
         metric = transform(project, geometry)
         overlaps = []
         for parent_id, parent in projected.items():
+            # Only communes INAO lists for the cru are its parcels; other communes' contacts are
+            # boundary disagreements, measured by build_grand_cru_commune_audit.py.
+            if props['commune'] not in parents[parent_id]['properties']['communes']:
+                continue
             overlap = metric.intersection(parent).area
             if overlap > config['minimumOverlapM2']:
                 overlaps.append({'parentFeatureId': parent_id, 'name': parents[parent_id]['properties']['name'],
@@ -96,7 +102,7 @@ def main():
         assert props['id'] not in selected
         point = geometry.representative_point()
         selected[props['id']] = {'type': 'Feature', 'id': props['id'], 'geometry': f['geometry'], 'properties': {
-            'id': props['id'], 'reference': f"{props['section']} {str(props['numero']).zfill(4)}", 'commune': config['commune'],
+            'id': props['id'], 'reference': f"{props['section']} {str(props['numero']).zfill(4)}", 'commune': props['commune'],
             'cadastreAreaM2': props['contenance'], 'geometryAreaM2': round(metric.area, 4),
             'bounds': list(geometry.bounds), 'labelPoint': [point.x, point.y], 'overlaps': overlaps,
             'recordedRights': [], 'domaineLinks': [], 'recordMatch': 'unknown', 'recordAreasM2': [],
@@ -106,13 +112,13 @@ def main():
     assert len(header) == 24 and header[17:20] == ['Code droit - par', 'N° Majic - par', 'N° SIREN - par'] and header[23] == 'Dénomination - par'
     unmatched_refs, matched_rows = set(), 0
     for row in rows:
-        assert len(row) == len(header), 'Review changed 2025 schema'
-        if row[0] != '21' or row[2] != '267':
+        assert len(row) == len(header), 'Review changed schema'
+        if row[0] + row[2] not in allowed:
             continue
-        id = parcel_id(row)
+        id = parcel_id(row, allowed)
         if id not in selected:
-            # Retain only missing geometry references for the commune; normal
-            # parcels elsewhere in Flagey are not failed pilot joins.
+            # Retain only missing geometry references for the bundle's communes; normal
+            # parcels elsewhere in those communes are not failed cru joins.
             if id not in current_ids:
                 unmatched_refs.add(id)
             continue
@@ -135,8 +141,8 @@ def main():
                 assert link['producerId'] and link['role'] == 'operator' and p['recordMatch'] != 'area-mismatch'
     result = {'type': 'FeatureCollection', 'features': [selected[id] for id in sorted(selected)]}
     payload = (json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n').encode()
-    digest = hashlib.sha256(payload).hexdigest()
-    data_url = f'/maps/echezeaux-parcels.{config["cadastreDate"]}.{digest[:12]}.geojson'
+    digest = sha256(payload)
+    data_url = f'/maps/{bundle["assetName"]}.{config["cadastreDate"]}.{digest[:12]}.geojson'
     (ROOT / ('public' + data_url)).write_bytes(payload)
     counts = {'parcels': len(selected), 'withRecordedRights': sum(bool(f['properties']['recordedRights']) for f in selected.values()),
               'rightRecords': sum(len(f['properties']['recordedRights']) for f in selected.values()),
@@ -147,20 +153,25 @@ def main():
               'proposedDomaineLinks': sum(l['status'] == 'proposed' for f in selected.values() for l in f['properties']['domaineLinks'])}
     manifest = {'dataUrl': data_url, 'sha256': digest, 'cadastreDate': config['cadastreDate'], 'rightsAsOf': config['rightsAsOf'],
                 'sourceUrl': config['cadastreUrl'], 'rightsUrl': config['rightsUrl'], 'schemaUrl': config['schemaUrl'],
+                'cadastreLicence': config['cadastreLicence'], 'cadastreLicenceUrl': config['cadastreLicenceUrl'],
+                'rightsLicence': config['rightsLicence'], 'rightsLicenceUrl': config['rightsLicenceUrl'],
                 'parentFeatureIds': config['parentFeatureIds'], 'minimumOverlapM2': config['minimumOverlapM2'], 'counts': counts}
-    write_json(ROOT / 'src/lib/places/echezeauxParcelManifest.json', manifest)
+    write_json(manifest_path(bundle), manifest)
     holder_index = {parent: sorted({r['holderId'] for f in selected.values()
                                   if any(o['parentFeatureId'] == parent for o in f['properties']['overlaps'])
                                   for r in f['properties']['recordedRights']}) for parent in config['parentFeatureIds']}
-    write_json(ROOT / 'src/lib/places/echezeauxParcelHolderIndex.json', holder_index)
+    write_json(holder_index_path(bundle), holder_index)
     report = {'sources': config, 'parentSourceSha256': expected, **manifest, 'bytes': len(payload),
               'gzipEquivalentBytes': len(gzip.compress(payload, mtime=0)), 'matchedFiscalRows': matched_rows,
               'excludedBoundaryContacts': contacts, 'communeRecordsWithoutCurrentGeometry': sorted(unmatched_refs),
               'byCru': {id: {'parcels': sum(any(o['parentFeatureId'] == id for o in f['properties']['overlaps']) for f in selected.values()),
                              'areaHa': sum(o['areaM2'] for f in selected.values() for o in f['properties']['overlaps'] if o['parentFeatureId'] == id) / 10000}
                         for id in parents}}
-    write_json(ROOT / 'scripts/echezeaux-parcel-report.json', report)
-    print(json.dumps({'counts': counts, 'bytes': len(payload), 'gzipEquivalentBytes': report['gzipEquivalentBytes'], 'byCru': report['byCru']}))
+    if len(source_hashes) > 1:
+        report['parentSourceSha256ByMap'] = source_hashes
+    write_json(parcel_report_path(bundle), report)
+    print(json.dumps({'bundle': bundle['id'], 'counts': counts, 'bytes': len(payload),
+                      'gzipEquivalentBytes': report['gzipEquivalentBytes'], 'byCru': report['byCru']}))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,104 @@
+{
+  "slug": "echezeaux",
+  "name": "Échezeaux",
+  "parentFeatureId": "inao-denom-565",
+  "appellationId": 179,
+  "issue": 376,
+  "tier": 1,
+  "bundle": "flagey-echezeaux",
+  "villageMaps": ["vosne-romanee"],
+  "rightsHistoryPurpose": "Dated legal-entity rights and cadastral lineage for the Échezeaux research register. Evidence of recorded rights and parcel splits only; never of farming.",
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/echezeaux",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/echezeaux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzA2Jnw%3D",
+    "nameSourceChecked": "2026-09-28",
+    "coverageNote": "Échezeaux pilot: 10 cadastral named areas are mapped. Les Poulaillères remains unverified because the cadastral source says “LES POULA”. Cadastral areas are not separate INAO cru boundaries or producer holdings.",
+    "plots": [
+      {
+        "id": "clos-saint-denis",
+        "name": "Clos Saint-Denis",
+        "sourceName": "CLOS SAINT-DENIS",
+        "aliases": [
+          "Clos St Denis"
+        ]
+      },
+      {
+        "id": "echezeaux-du-dessus",
+        "name": "Échezeaux du Dessus",
+        "sourceName": "ECHEZEAUX DU DESSUS",
+        "aliases": [
+          "Les Échezeaux du Dessus"
+        ]
+      },
+      {
+        "id": "en-orveaux",
+        "name": "En Orveaux",
+        "sourceName": "EN ORVEAUX",
+        "aliases": []
+      },
+      {
+        "id": "les-beaux-monts-bas",
+        "name": "Les Beaux Monts Bas",
+        "sourceName": "LES BEAUX-MONTS BAS",
+        "aliases": []
+      },
+      {
+        "id": "les-champs-traversins",
+        "name": "Les Champs Traversins",
+        "sourceName": "LES CHAMPS TRAVERSINS",
+        "aliases": [
+          "Champs Traversins"
+        ]
+      },
+      {
+        "id": "les-cruots-ou-vignes-blanches",
+        "name": "Les Cruots ou Vignes Blanches",
+        "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
+        "aliases": [
+          "Les Cruots",
+          "Vignes Blanches",
+          "Les Vignes Blanches"
+        ]
+      },
+      {
+        "id": "les-loachausses",
+        "name": "Les Loächausses",
+        "sourceName": "LES LOÄCHAUSSES",
+        "aliases": []
+      },
+      {
+        "id": "les-quartiers-de-nuits",
+        "name": "Les Quartiers de Nuits",
+        "sourceName": "LES QUARTIERS DE NUITS",
+        "aliases": []
+      },
+      {
+        "id": "les-rouges-du-bas",
+        "name": "Les Rouges du Bas",
+        "sourceName": "LES ROUGES DU BAS",
+        "aliases": []
+      },
+      {
+        "id": "les-treux",
+        "name": "Les Treux",
+        "sourceName": "LES TREUX",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "Les Poulaillères",
+        "sourceCandidate": "LES POULA",
+        "reason": "The cadastral name differs; no verified crosswalk has been found. Do not infer this identity from proximity or complete the cru by filling the gap."
+      }
+    ]
+  },
+  "research": {
+    "curation": true,
+    "methodDoc": "docs/echezeaux-farming-research.md",
+    "filingsDoc": "docs/echezeaux-statutes-research.md"
+  },
+  "evidenceFrom": [
+    "echezeaux"
+  ]
+}

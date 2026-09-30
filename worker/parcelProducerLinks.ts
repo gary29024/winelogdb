@@ -2,8 +2,7 @@ import {requireSession} from '../src/lib/auth/session';
 import {ApiError,boundedBytes} from '../src/lib/credits/primitives';
 import {parseSharedProducerId,sharedProducerId} from '../src/lib/producers/sharedRef';
 import type {ParcelProducerLink} from '../src/lib/places/parcelProducerLinks';
-import manifest from '../src/lib/places/echezeauxParcelManifest.json';
-import holders from '../src/lib/places/echezeauxParcelHolderIndex.json';
+import {parcelRightsSnapshot} from '../src/lib/places/grandCruParcels/holders';
 
 type Env={DB:D1Database;AUTH_SECRET:string};
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'private, no-store'}});
@@ -20,7 +19,8 @@ export async function parcelProducerLinksRoute(request:Request,env:Env):Promise<
  catch{return json({error:'Unauthorized'},401)}
  try{
   const parent=url.searchParams.get('parent')??'',snapshot=url.searchParams.get('snapshot')??'';
-  if(!manifest.parentFeatureIds.includes(parent)||snapshot!==manifest.rightsAsOf)throw new ApiError(400,'Unsupported parcel rights snapshot');
+  const rights=parcelRightsSnapshot(parent);
+  if(!rights||snapshot!==rights.rightsAsOf)throw new ApiError(400,'Unsupported parcel rights snapshot');
   if(request.method==='GET'){
    const result=await env.DB.prepare(`SELECT l.holder_id,p.owner_id AS producer_owner_id,p.id AS producer_id,p.canonical_name,l.updated_at
     FROM parcel_producer_links l JOIN producers p ON p.owner_id=l.producer_owner_id AND p.id=l.producer_id
@@ -37,7 +37,7 @@ export async function parcelProducerLinksRoute(request:Request,env:Env):Promise<
   try{const value:unknown=JSON.parse(new TextDecoder().decode(bytes));if(!value||typeof value!=='object'||Array.isArray(value))throw new Error();input=value as Record<string,unknown>}
   catch{throw new ApiError(400,'Expected a JSON object')}
   const holder=typeof input.holderId==='string'?input.holderId:'';
-  if(!(holders as Record<string,string[]>)[parent]?.includes(holder))throw new ApiError(400,'Right holder is not in this cru snapshot');
+  if(!rights.holderIds.includes(holder))throw new ApiError(400,'Right holder is not in this cru snapshot');
   if(request.method==='DELETE'){
    await env.DB.prepare('DELETE FROM parcel_producer_links WHERE owner_id=? AND parent_feature_id=? AND rights_snapshot=? AND holder_id=?')
     .bind(owner,parent,snapshot,holder).run();

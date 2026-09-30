@@ -9,6 +9,7 @@ import { loadVillageMapData } from '../../lib/places/loadVillageMapData';
 import laMoutonne from '../../lib/places/laMoutonneApproximation.json';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { GrandCruParcels,ParcelLegend,type ParcelLegendKey } from './GrandCruParcels';
+import { grandCruFor } from '../../lib/places/grandCruParcels/registry';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const tiers:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village',regional:'Regional denomination'};
@@ -383,7 +384,7 @@ function VillageMapView({target,catalogue,producer,producerId}:{target:BurgundyV
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==wineSelectionId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
-    {catalogue.id==='vosne-romanee'&&['inao-denom-565','inao-denom-645'].includes(namedParent)&&<GrandCruParcels key={namedParent} map={ready?mapRef.current:null} parentId={namedParent} producer={producer} producerId={producerId} onLegend={setParcelLegend}/>}
+    {grandCruFor(namedParent,catalogue.id)&&<GrandCruParcels key={namedParent} map={ready?mapRef.current:null} parentId={namedParent} producer={producer} producerId={producerId} onLegend={setParcelLegend}/>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':regional&&catalogue.features[0].coverage==='partial'?'Choose a commune to centre the overview. Coverage of this appellation is incomplete.':regional?(catalogue.features.length>1?`Compare the overview with the published ${catalogue.features[1].sectorColour??'red'}-only sector. Choosing a commune centres the view and keeps that area highlighted.`:catalogue.communes.length>1?'Choose a commune to centre the overview. The highlight continues to show the whole denomination.':`The map shows the full denomination in ${catalogue.communes[0].name}.`):'The map shows the appellation area across its producing communes.'}</p>
     <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:regional?`Regional denomination · ${countLabel(catalogue.communes.length,'commune','communes')}`:'Village appellation area'}{(!regional||catalogue.communes.length===1)&&<><br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</>}</p>
     {catalogue.coverageNote&&<p className="village-map-note">{catalogue.coverageNote}</p>}{namedVisible&&<p className="village-map-note">{catalogue.namedPlots?.coverageNote}</p>}

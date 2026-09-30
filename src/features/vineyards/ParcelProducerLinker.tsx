@@ -1,7 +1,7 @@
 import {useEffect,useId,useMemo,useState} from 'react';
 import {matchesLinkedProducer} from '../../lib/places/parcelPresentation';
 import {listProducers,type ProducerSummary} from '../producers/api';
-import {ownerName} from '../../lib/places/echezeauxParcelOwners';
+import {ownerName} from '../../lib/places/parcelOwners';
 import {placeKey} from '../../lib/places/resolve';
 import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
 import {listParcelProducerLinks,removeParcelProducerLink,saveParcelProducerLink} from './parcelProducerApi';

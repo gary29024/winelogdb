@@ -631,7 +631,7 @@
       "type": "registry-dataset",
       "documentDate": null,
       "reviewedAt": "2026-09-28",
-      "finding": "Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/echezeaux-rights-history.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.",
+      "finding": "Côte-d'Or members for each year were read by HTTP range and hash-pinned in scripts/grand-crus/bundles/flagey-echezeaux.json. They date company-type rights on each reference; they omit private individuals and say nothing about farming.",
       "access": "read"
     },
     {

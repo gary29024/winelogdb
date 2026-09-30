@@ -1,4 +1,4 @@
-"""App-facing evidence file for the Échezeaux parcel panel.
+"""App-facing evidence file for a cru's parcel panel (src/lib/places/grandCruParcels/<slug>.evidence.json).
 
 Turns the research register into one short, dated list of records per parcel
 (official notices, published research, ownership changes and weak leads) so the

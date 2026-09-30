@@ -83,6 +83,53 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
    Browser tests stay one representative journey, parameterised by config, so the
    Chromium matrix does not grow with each cru.
 
+**Done in #417.** Échezeaux retains identical parcel and named-area GeoJSON,
+holder index, app evidence, rights history and sale records. The parcel manifest
+and named-area catalogue/report now carry the pinned source licence labels; the
+parcel report also records them. The research register's input paths and rebuild
+commands changed because the files moved. Grands-Échezeaux gets the evidence panel
+and domaine grouping through the registry.
+Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grands-echezeaux/README.md).
+
+### Adding a cru
+
+1. **Bundle.** If its communes already have a bundle in `scripts/grand-crus/bundles/`
+   (e.g. `flagey-echezeaux.json`), add the cru's slug to `crus` and its INAO feature
+   to `parcels.parentFeatureIds`. Otherwise create `<bundle-id>.json`: `villageMap`,
+   `assetName`, the pinned `parcels` block (first commune, then `additionalCommunes`),
+   `lieuxDits` per commune, and optionally `rightsHistory` and `saleRecords`.
+   Pin the cadastre and rights licence labels and their dataset pages alongside the
+   source URLs and hashes. Use `additionalVillageMaps` when the bundle's INAO features
+   appear across more than one village map; copies of the same feature must agree.
+2. **Cru config** `scripts/grand-crus/<slug>.json`: `slug`, `name`,
+   `parentFeatureId`, `issue`, `tier`, `bundle`, `villageMaps` (every map where the
+   feature can be explored) and `evidenceFrom`. Add
+   `appellationId` and `namedPlots` once named areas are reviewed,
+   `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
+   once `docs/research/<slug>/curation.json` exists.
+3. **Build**, from the repository root:
+
+   ```sh
+   python scripts/download_grand_cru_sources.py --cru <slug>   # once per bundle
+   python scripts/build_grand_cru_parcels.py --cru <slug>      # rebuilds the whole bundle
+   python scripts/build_grand_cru_named_plots.py --cru <slug>
+   python scripts/build_grand_cru_parcel_named_areas.py --cru <slug>
+   python scripts/build_grand_cru_rights_history.py --cru <slug>
+   python scripts/build_grand_cru_sale_records.py --cru <slug>
+   python scripts/build_grand_cru_research.py --cru <slug>     # --all --check is what CI runs
+   ```
+
+4. **App.** Add the cru (and a new bundle's manifest, holder index and any evidence
+   loader) to `src/lib/places/grandCruParcels/registry.ts`, `holders.ts` and
+   `evidence.ts`. List all of its `villageMaps` in the registry. The unit test fails
+   until the registry matches the configs. Components need no change.
+
+Outputs by convention: research in `docs/research/<slug>/`; app files in
+`src/lib/places/grandCruParcels/` (`<bundle>.manifest.json`, `<bundle>.holders.json`,
+`<slug>.evidence.json`, `<slug>.named-plots.json`); build reports in
+`scripts/grand-crus/reports/`. The browser journey
+`Grand Cru parcels: … from its config` runs one cru (`WINELOG_E2E_CRU=<slug>`).
+
 ## 4. Per-cru differences to plan for
 
 | Case | Crus | What changes |
@@ -111,6 +158,10 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
 
 ## 6. Rules that stay the same everywhere
 
+- Parcels come only from the communes INAO lists for the cru. Where a neighbouring
+  commune's parcels touch the boundary (the INAO line and the cadastral commune line
+  disagree by a few metres), `build_grand_cru_commune_audit.py` measures and publishes
+  them; they are never added as parcels, whatever their area.
 - Legal holder, applicant, previous operator, authorised operator, verified operator
   and bottler are different things. None is inferred from another.
 - UI wording: "Recorded right holder", "Research link · farming unverified",
