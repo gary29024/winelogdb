@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **147 records**, including overlapping filing copies. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **177 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -149,13 +149,24 @@ The latest **six PDFs (174 pages)** bring the total to **35 supplied PDFs** and 
 
 [Six-file reading, provenance and remaining document requests](echezeaux-statutes-research.md#additional-six-file-batch-bouchy-lease-locator-and-scope-checks). No current farmer is verified.
 
+
+The next **eight free public/mirror filings (121 pages)** bring the supplied corpus to **43 PDFs** and **155 logged source entries**, with exact-reference filing coverage still **27 parcels**. One filing materially improves the Bouchy chronology without confirming execution:
+
+- **Bouchy 1995:** the 15 September resolutions authorize acquisition of **D0628/D0765/D0767, together 2,216 m² (22 a 16 ca)** in Les Treux and a long-term rural métayage lease to **Bernard Mondange**. Added to the 1993 **D0764/D0766, 1,260 m²** mandate, the two historical mandate groups total exactly the **same five parcels and 3,476 m²** later listed in the 2019 Jean Tardy recital. This explains the expansion from two references to five, but neither mandate proves that the purchases/leases were executed or that Mondange's relationship passed uninterrupted to Tardy.
+- **Wine/output rights are not farming evidence:** the 1998 share transfer preserves the seller's wine rights for the **1995-1997 harvests** after the company shares changed hands; the 2007/2008 transfers use the same structure for later vintages. A bottle, harvest entitlement or company-share transfer therefore cannot by itself identify the cultivator.
+- **Negative corporate results remain useful:** the March 2000 bundle only retains earlier mandates; the 2016 donation/share filings and 2018 statutes add no vineyard transaction; **Bouchon Pourpre's 20 January 2020 formation is cash-only**, with no D0673 contribution, acquisition schedule or vineyard lease in the formation annex.
+
+[Eight-file free-mirror reading and provenance](echezeaux-statutes-research.md#additional-eight-file-free-publicmirror-batch-bouchy-historical-scope).
+
 The app shows these as dated **Company filings and leases**, alongside ownership, notices and research. Contributions, lease recitals and mandates remain separate from verified current farming. Historical research uses an explicitly selected date source; an undated guide or estate page cannot inherit a supporting registry's date.
 
 ### Unofficial sources: company aggregators and the wine press
 
 Checked 29 September 2026.
 
-- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 35 PDFs across five batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
+Current research is intentionally limited to **free public or mirror sources**. Paid land-registry copies and direct domaine/CVI cooperation are deferred; mirror copies are treated as access paths to the underlying registry filing, not as independent corroboration.
+
+- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 43 PDFs across six batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
 - **Guide Hachette** has 218 Échezeaux entries dating back to the 2001 edition. Two published areas equal exact cadastral sums:
   - Guide Hachette 2001 describes **52 a 63 ca in En Orveaux** for Joseph Drouhin's 1998 vintage. The 2024 ORVEAUX deed independently names the four parcels totalling **5,263 m² cadastral**, while explicitly giving **4,147 m² plantable and planted**, consistent with the importer's rounded 0.41 ha. The historical guide stays separate from this later deed; its date is not backfilled from a 2024 company notice.
   - François Gerbet had **18 a 76 ca in Les Quartiers de Nuits and Les Treux** (2006 vintage). **D0360 + D0508** total exactly 1 876 m². Winehog lists only part of D0508 for Berthaut-Gerbet in 2019, so the plot's use has changed since.
@@ -167,6 +178,50 @@ Checked 29 September 2026.
   - Charlopin: 33 ares.
   The last three name no area, so they are research targets only.
 - **A.-F. Gros conflict.** The 2025 guide places its 26 ares in Les Loächausses; the 2012 edition gives Champs Traversins. Both are modeled as disputed alternatives, and the area is excluded from both climat totals until the location is resolved.
+
+### Free filing mirrors for the 127 unresolved parcels
+
+Checked 30 September 2026. The free-source phase now searches company mirrors for **associated landholding vehicles and notarial contribution acts**, not merely the producer's operating company. Of the 127 parcels without a named candidate, 120 have no matched legal-entity right; 109 remain inventory-only.
+
+This matters most in En Orveaux. Published holdings there cannot safely be assigned by acreage: brute-force matching among 41 unresolved no-company parcels gives 283 combinations around Guyon's 20.4 ares, 1,740 around Bouchard's 39 ares, 1,585 around Dominique Mugneret's 40 ares, 2,730 around Bizot's c. 0.50 ha and 4,355 around the c. 0.87 ha gap between Christian Clerget's published holding and its current company record. These figures are a guardrail against false precision, not candidate rankings.
+
+Free registry indexes nevertheless expose higher-value documents to inspect. Christian Clerget has two family landholding vehicles with notarial formation/donation records, one of which (GFV 430384354) was absorbed into the operating domaine in 2023. Jean-Yves Bizot's 434002390 entity has a 2002 notarial **acte d'apport**. Bouchard's former Maison entity has a 2026 **apport partiel d'actif** covering a viticultural-production branch. Cacheux and Guyon have capital/notarial records, and Michel Gros has a 2019 notarial family act. These are research targets only until the full document supplies parcel or tenancy scope.
+
+Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are logged separately, and twelve underlying filings have now also been reviewed, bringing the current research source log to **176 entries**. One additional parcel, D0796, now has exact deed-backed ownership evidence; no current farmer has been confirmed.
+
+### Reviewed free filings: what they eliminated
+
+The first unresolved-parcel filing batch reviewed seven free PDFs (**221 pages**) and did **not** identify a new exact Échezeaux parcel. That negative evidence is useful:
+
+- **Christian Clerget:** the separate GFA Domaine Clerget formation/donation deeds contain an exact vineyard schedule, but their only Flagey parcel is **D0376 Les Violettes, AOC Vosne-Romanée**. The GFA therefore does not explain the missing c.0.87 ha behind Clerget's 1.09 ha En Orveaux statement.
+- **Jean-Pierre Guyon:** the 2001 capital increase is cash/current-account based and the retained 1991 contribution is movable operating assets. The 2016 notarial act transfers company shares and converts the legal form. Neither filing supplies the partner-owned rural-land schedule contemplated by the statutes.
+- **Jean-Yves Bizot predecessor entity:** the 2002 notarial contribution transfers an operating business and movable assets, not a cadastral vineyard schedule. It does not identify the later En Orveaux or Les Treux holdings.
+- **Cacheux:** the 2021 increase is also funded through shareholder current-account claims. The statutes permit partner-owned rural land to be made available separately but name no parcels. The unavailable 2006 filing is therefore lower priority rather than worth paid access.
+- **Bouchard:** the 2026 partial-asset treaty is the one genuinely promising document, but the free 28-page copy omits **Annex 3.1**, which its own contents place at pp.40-79 and which should contain the detailed transferred assets. The main treaty confirms land and rural-lease-related production are split between the transferred and retained businesses, but it cannot place the published 39 ares En Orveaux.
+
+Accordingly, none of these documents changes `candidateLeads`, `currentFarmer` or parcel colouring. The most useful next free document is a **complete annexed Bouchard 2026 treaty**, especially Annex 3.1; otherwise continue with other notarial landholding vehicles rather than ordinary operating-company capital records.
+
+### Second free-filing pass: exact Clerget D0796 ownership chain
+
+The next five filings produce one material exact-reference result.
+
+**D0796 En Orveaux** is expressly contributed on **18 January 2002** by Christian and Isabelle Clerget to **GFV Christian et Isabelle Clerget (430384354)** as **Échezeaux Grand Cru, 23 a 19 ca**. The **11 December 2023** merger then transfers the GFV's entire patrimony to **SCEV du Domaine Christian Clerget (431340140)**. This matches the annual legal-entity rights history, which moves D0796 from the GFV to the SCEV between the 2023 and 2024 snapshots.
+
+The result is an ownership chain, not an operating-tenancy finding. It explains **0.2319 ha** of the domaine's published **1.09 ha En Orveaux** holding; roughly **0.87 ha remains unplaced** and is not filled by acreage or adjacency. The app therefore adds a dated filing item for D0796 while keeping `currentFarmer` null.
+
+The same batch also narrows several dead ends:
+- **Michel Gros 2019 donation-partage:** detailed family property schedules but no Flagey-Échezeaux/Les Loächausses parcel.
+- **Cacheux 2005/2006:** capital/share changes only; no vineyard schedule. Together with 2021, the operating-company filing route is low-yield.
+- **Clerget GFV 2000 formation:** cash-only; D0796 enters in the separate 2002 contribution.
+- **Bouchard:** all checked free copies remain the same 28-page treaty body, without Annex 3.1.
+
+The Clerget merger project expressly says that the origin of title for transferred real estate will be stated in a later notarial deposit act. The absorbing-company filing labelled **15 December 2023** has now been reviewed: it supplies explicit completion decisions, but not the separate notarial property-origin schedule. No repeat upload of that bundle is needed.
+
+### Clerget merger completion is now documented separately
+
+The 39-page absorbing-company filing labelled **15 December 2023** contains unanimous decisions dated **11 December 2023** expressly recording definitive merger completion (PDF pp.2-3). This is stronger evidence than the project alone. The embedded 18-page project repeats previously reviewed material and is not independent corroboration. Two identical uploads of this 39-page file are counted as one source.
+
+The same bundle still does not contain the notarial deposit act or cadastral property annex referenced at PDF p.12. It strengthens D0796's ownership-succession evidence but identifies no further parcel or current farmer. Current totals remain **28 parcels with exact company-filing evidence and 127 without a named candidate**; the source log is **177 entries**. No further upload is requested for this batch.
 
 ### Independent research: Winehog
 
@@ -239,7 +294,7 @@ The Douane's [Fiche de compte](https://www.douane.gouv.fr/service-en-ligne/explo
 
 Minimum future claim record: relation type; printed reference; resolved parcel IDs and geometry snapshot/hash; whole/partial scope; legal entity and producer crosswalk evidence; document/page/dossier IDs; URL/hash/retrieval date/reuse terms; effective interval; verified-as-of date; reviewer; supersession/withdrawal reason. A review date must not substitute for an operation date. These verification features remain proposed work under #364.
 
-The smallest useful evidence request is dated confirmation for **D0168, D0169 and D0519** from Nicole Lamarche, plus the outcome/current operation of **D0177, D0178 and D0093** from Anne Gros. No outreach was sent.
+If direct outreach is enabled later, the smallest useful evidence request would be dated confirmation for **D0168, D0169 and D0519** from Nicole Lamarche, plus the outcome/current operation of **D0177, D0178 and D0093** from Anne Gros. For the current free-source phase, no outreach is planned.
 
 ## Implemented behaviour and deployment
 
@@ -254,3 +309,11 @@ The smallest useful evidence request is dated confirmation for **D0168, D0169 an
 - **Map stays in view.** The map is pinned under the dialog header while the side panel scrolls (both on a phone and beside the panel on a wide screen), so choosing an owner or parcel no longer means scrolling back up. A parcel picked from the finder scrolls its details into the space below the pinned map. On a phone the map is shorter (30% of the screen height) and the legend more compact to leave room; on very short windows it is not pinned. See [before and after](mockups/echezeaux-map-pinned.png).
 
 Apply **`0087_parcel_producer_links.sql`** through the normal deployment migration process before enabling the API. This change does not deploy or close #376/#364/#344; current-farming verification remains incomplete.
+
+## Parcel UI follow-up for PR416
+
+Saved catalogue links are filtered by the wine's producer ID, with full normalized-name fallback only when the ID is absent. Other saved cru links remain stored but are not shown as this wine's producers. Producer/cru changes start a fresh selection session; a late link response from the previous session is discarded.
+
+Possible-name suggestions and the chosen legal-holder highlight are independent. Toggling suggestions no longer clears the selection or the selected parcel. Manual/legal-holder selection takes visual precedence over a weaker name suggestion and never becomes a verified-farming colour.
+
+The holder list defaults to researched domaine headings, with the legal holder names and an unverified label underneath. Readers can switch to Legal holder. Headings and source links are generated from the reviewed curation; unknown/ambiguous candidates retain their legal names. Group area/count is the union of parcels, so multiple rights or holders in the same group do not double-count land. This presentation does not modify the legal-rights snapshot, assign new parcels, create saved links or confirm a current farmer.

@@ -14,7 +14,7 @@ import '../../wineFacts.css';
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 
-type PillWine=Facts&{classification?:'grand_cru'|'premier_cru'|'village'|null};
+type PillWine=Facts&{producerId?:string|null;classification?:'grand_cru'|'premier_cru'|'village'|null};
 
 /**
  * The identity pills: appellation with its denomination, the cru tier, grapes.
@@ -32,7 +32,7 @@ export function WineFactPills({wine,extra}:{wine:PillWine;extra?:ReactNode}){
   {wine.classification&&<span className={`detail-classification detail-classification-${wine.classification}`}>{classificationLabel[wine.classification]}</span>}
   {grapes.map(grape=><span key={grape}>{grape}</span>)}
   {extra}
- </div>{(atlasPlace||mapTarget)&&<div className="wine-atlas-context">{mapTarget&&<WineVillageMap target={mapTarget} producer={wine.producer}/>}<BurgundyAtlasLink place={atlasPlace}/></div>}</>;
+ </div>{(atlasPlace||mapTarget)&&<div className="wine-atlas-context">{mapTarget&&<WineVillageMap target={mapTarget} producer={wine.producer} producerId={wine.producerId}/>}<BurgundyAtlasLink place={atlasPlace}/></div>}</>;
 }
 
 /** A ruled label/value table. One shape for Wine details and Your experience. */

@@ -175,3 +175,14 @@
 }
 
 .village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}
+
+/* Research names lead; legal identities and uncertainty remain readable on phones. */
+.village-map-grouping{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;font-size:.85rem}
+.village-map-grouping select{flex:1;min-width:0;max-width:100%}
+.village-map-owner-name{min-width:0;overflow-wrap:anywhere}
+.village-map-owner-name small{display:block;margin-top:.2rem;font-size:.75rem;line-height:1.4;color:var(--muted)}
+.village-map-group-sources{display:flex;flex-wrap:wrap;gap:.35rem .8rem;padding:.25rem .5rem .65rem;font-size:.75rem;overflow-wrap:anywhere}
+/* How a domaine heading was found; a weak lead stays visibly weaker. No farming claim. */
+.village-map-basis{justify-self:start;display:inline-block;margin-top:.3rem;padding:1px 8px;border:1px solid var(--line-strong);border-radius:999px;background:var(--ground);color:var(--ink-4);font-size:.66rem;font-weight:700;line-height:1.5}
+.village-map-basis.is-lead{border-style:dashed;border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
+.village-map-link-notice{margin:0;padding:9px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--ground);color:var(--ink-4);font-size:.76rem;line-height:1.45}

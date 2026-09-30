@@ -1,13 +1,14 @@
 import {useEffect,useReducer,useState} from 'react';
+import type {HolderResearch} from '../../lib/places/parcelPresentation';
 
 type Kind='authorisation'|'suspended'|'application'|'filing'|'research'|'ownership'|'sale'|'lineage'|'lead';
 type Source={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
 export type EvidenceItem={kind:Kind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[]};
-export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>};
+export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>;holderDomains?:Record<string,HolderResearch>};
 
 // Loaded on first use so the map itself does not carry the research records.
 let cached:Promise<ParcelEvidenceData>|null=null;
-const load=()=>cached??=import('../../lib/places/echezeauxParcelEvidence.json')
+export const loadParcelEvidence=()=>cached??=import('../../lib/places/echezeauxParcelEvidence.json')
  .then(module=>module.default as unknown as ParcelEvidenceData).catch(error=>{cached=null;throw error});
 
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -24,7 +25,7 @@ const badges:Record<Kind,string>={authorisation:'Authorisation decision',suspend
  filing:'Company filing',research:'Published research',ownership:'Ownership record',sale:'Sale record',lineage:'Parcel history',lead:'Weak lead'};
 const groups:{id:string;heading:string;kinds:Kind[]}[]=[
  {id:'notices',heading:'Official notices',kinds:['authorisation','suspended','application']},
- {id:'filings',heading:'Company filings and leases',kinds:['filing']},
+ {id:'filings',heading:'Company filings',kinds:['filing']},
  {id:'research',heading:'Published research',kinds:['research']},
  {id:'ownership',heading:'Ownership and sales',kinds:['ownership','sale','lineage']},
  {id:'leads',heading:'Weak leads',kinds:['lead']},
@@ -66,22 +67,22 @@ export function ParcelEvidence({parcelId}:{parcelId:string}){
  const [data,setData]=useState<ParcelEvidenceData|null>(null),[failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0),[,bump]=useReducer((n:number)=>n+1,0);
  useEffect(()=>{
   let active=true;
-  load().then(result=>{if(active){setData(result);setFailed(false)}}).catch(()=>{if(active)setFailed(true)});
+  loadParcelEvidence().then(result=>{if(active){setData(result);setFailed(false)}}).catch(()=>{if(active)setFailed(true)});
   return()=>{active=false};
  },[attempt]);
  if(failed)return <div className="parcel-evidence" role="alert"><p className="village-map-note">Evidence records could not load. Parcel rights are still available.</p>
   <button type="button" className="village-map-link-button" onClick={()=>setAttempt(n=>n+1)}>Retry evidence</button></div>;
  if(!data)return <p className="village-map-note parcel-evidence" role="status">Loading evidence records…</p>;
  const items=data.parcels[parcelId]??[];
- if(!items.length)return <p className="village-map-note parcel-evidence">No dated records were found for this parcel. This does not mean nobody farms it.</p>;
+ if(!items.length)return <p className="village-map-note parcel-evidence">No dated records were found for this parcel.</p>;
  const shown=groups.map(group=>({...group,list:items.filter(i=>group.kinds.includes(i.kind))})).filter(group=>group.list.length>0);
  const firstId=shown[0]?.id;
  return <section className="parcel-evidence" aria-label="History and evidence">
   <h5>History and evidence</h5>
-  <p className="village-map-note">Dated notices, ownership, sales, lease records and published research. Current farming still needs confirmation.</p>
+  <p className="village-map-note">Dated notices, ownership, sales, company filings and published research.</p>
   {shown.map(group=><details key={group.id} className={`parcel-evidence-group parcel-evidence-${group.id}`} open={choices.get(group.id)??group.id===firstId}>
    <summary onClick={event=>{event.preventDefault();choices.set(group.id,!(choices.get(group.id)??group.id===firstId));bump()}}>{group.heading} <span>{group.list.length}</span></summary>
-   {group.id==='leads'&&<p className="village-map-note">Names and ownership context only. They are not evidence of who farms this parcel.</p>}
+   {group.id==='leads'&&<p className="village-map-note">Names and ownership context only.</p>}
    <ul>{group.list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
   </details>)}
  </section>;

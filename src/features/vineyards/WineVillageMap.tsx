@@ -12,7 +12,7 @@ class MapBoundary extends Component<{children:ReactNode},{failed:boolean}>{
  render(){return this.state.failed?<p className="village-map-message" role="alert">The map could not load. Close it and reload the page to try again.</p>:this.props.children}
 }
 
-export function WineVillageMap({target,producer}:{target:BurgundyVillageMapTarget;producer?:string|null}){
+export function WineVillageMap({target,producer,producerId}:{target:BurgundyVillageMapTarget;producer?:string|null;producerId?:string|null}){
  const mapName=target.mapKind==='regional'?'regional map':'village map';
  const [open,setOpen]=useState(false);
  const dialog=useRef<HTMLDivElement>(null),opener=useRef<HTMLButtonElement>(null);
@@ -26,7 +26,7 @@ export function WineVillageMap({target,producer}:{target:BurgundyVillageMapTarge
   {open&&createPortal(<div className="village-map-backdrop" onClick={event=>{if(event.target===event.currentTarget)setOpen(false)}}>
    <div className="village-map-dialog" ref={dialog} role="dialog" aria-modal="true" aria-labelledby={title} tabIndex={-1}>
     <header className="village-map-header"><div><p>{target.region==='Burgundy'?'BURGUNDY':`BURGUNDY · ${target.region.toLocaleUpperCase('en')}`}</p><h2 id={title}>{target.villageName}</h2></div><button type="button" className="village-map-close" aria-label={`Close ${mapName}`} onClick={()=>setOpen(false)}>×</button></header>
-    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading {mapName}…</p>}><VillageMap key={`${target.villageId}:${target.namedPlotId??target.locationContext?.selectionId??target.featureId}`} target={target} producer={producer}/></Suspense></MapBoundary>
+    <MapBoundary><Suspense fallback={<p className="village-map-message" role="status">Loading {mapName}…</p>}><VillageMap key={`${target.villageId}:${target.namedPlotId??target.locationContext?.selectionId??target.featureId}`} target={target} producer={producer} producerId={producerId}/></Suspense></MapBoundary>
    </div>
   </div>,document.body)}
  </>;

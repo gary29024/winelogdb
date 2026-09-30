@@ -36,7 +36,7 @@
     "unresolved": 127,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 45,
-    "withParcelFiling": 27,
+    "withParcelFiling": 28,
     "withRightsChangeSince2019": 76,
     "withCadastralPredecessor": 35
   },
@@ -71,7 +71,7 @@
         {
           "holdingId": "millot",
           "producer": "Domaine Jean-Marc Millot",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
@@ -114,7 +114,7 @@
         {
           "holdingId": "millot",
           "producer": "Domaine Jean-Marc Millot",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
@@ -227,7 +227,7 @@
         {
           "holdingId": "cacheux",
           "producer": "Domaine Jacques Cacheux",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "owner",
           "endedSeason": null,
@@ -325,7 +325,7 @@
         {
           "holdingId": "cacheux",
           "producer": "Domaine Jacques Cacheux",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "owner",
           "endedSeason": null,
@@ -7450,7 +7450,8 @@
       ],
       "externalResearchIds": [],
       "parcelFilingIds": [
-        "bouchy-tardy-2019"
+        "bouchy-tardy-2019",
+        "bouchy-mondange-expansion-1995"
       ],
       "rightsChanges": [],
       "saleRecords": [],
@@ -10243,7 +10244,8 @@
       ],
       "externalResearchIds": [],
       "parcelFilingIds": [
-        "bouchy-tardy-2019"
+        "bouchy-tardy-2019",
+        "bouchy-mondange-expansion-1995"
       ],
       "rightsChanges": [],
       "saleRecords": [],
@@ -10423,7 +10425,8 @@
       ],
       "externalResearchIds": [],
       "parcelFilingIds": [
-        "bouchy-tardy-2019"
+        "bouchy-tardy-2019",
+        "bouchy-mondange-expansion-1995"
       ],
       "rightsChanges": [],
       "saleRecords": [],
@@ -10886,7 +10889,9 @@
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "clerget-d0796-2002"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -10918,7 +10923,7 @@
         "clerget-transfer"
       ],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",

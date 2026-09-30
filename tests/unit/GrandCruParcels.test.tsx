@@ -31,7 +31,7 @@ describe('Cadastral parcel controls',()=>{
   expect(within(panel).getByText('Previously farmed by Domaine Gros Frère et Sœur')).toBeTruthy();
   expect(screen.getByText('No matched rights record')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('#page=74');
-  expect(screen.getByText('Not established by this rights snapshot')).toBeTruthy();
+  expect(screen.queryByText('Current farming domaine')).toBeNull();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
   expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','selected']);
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
@@ -52,6 +52,7 @@ describe('Cadastral parcel controls',()=>{
   expect(fetcher).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('switch',{name:/Parcel rights/}));
   await screen.findByText('Recorded right holders by mapped area');
+  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
   expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/% of the parcel area has recorded rights/);
   expect(screen.getByRole('button',{name:/Domaine de la Romanee Conti/})).toBeTruthy();
   fireEvent.click(screen.getByRole('button',{name:/Show all .* right holders/}));
@@ -150,6 +151,7 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('switch'));
   await screen.findByText('THIS WINE’S PRODUCER');
   expect(screen.queryByRole('link',{name:/Evidence for parcel/})).toBeNull();
+  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
   fireEvent.click(screen.getByRole('button',{name:/Domaine de la Romanee Conti/}));
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:linked[1].properties.id}});
   expect(screen.getByRole('link',{name:'Evidence for parcel 1'}).getAttribute('href')).toBe('https://example.test/parcel-1');

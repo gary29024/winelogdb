@@ -196,7 +196,7 @@ def build_evidence(register, curation, history, features):
             if parcel_id in filing['parcelAreasM2']:
                 add(parcel_id, {'kind': 'filing', 'date': filing['documentDate'], 'title': filing['title'],
                                 'note': filing.get('appNotesByParcel', {}).get(parcel_id, filing['appNote']),
-                                'sources': [filing['sourceId']]})
+                                'sources': list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))})
         for event in curation['exactParcelEvents']:
             if parcel_id in event['parcelIds']:
                 add(parcel_id, event_item(event))
@@ -221,7 +221,14 @@ def build_evidence(register, curation, history, features):
         items.sort(key=sort_key)
         for item in items:
             require(all(s in sources or s in {'dgfip-history', 'cadastre-history'} for s in item['sources']), 'Unknown evidence source')
+    # Domaine headings are sourced research context, not verified operators.
+    # Ambiguous/missing candidates retain the legal holder name in the UI.
+    holder_domains = {hid: {'name': h['candidateNames'][0], 'basis': h['basis'],
+                            'note': h['finding'], 'sources': list(h['sourceIds'])}
+                      for hid, h in holders.items() if len(h['candidateNames']) == 1}
+    used.update(s for h in holder_domains.values() for s in h['sources'])
     return {
+        'holderDomains': dict(sorted(holder_domains.items())),
         'schemaVersion': SCHEMA_VERSION,
         'note': 'Dated records per parcel. None states who farms a parcel today; each needs a dated confirmation of actual operation.',
         'reviewedAt': curation['reviewedAt'],

@@ -35,14 +35,14 @@ describe('Parcel evidence panel',()=>{
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')}/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getByText('Dated notices, ownership, sales, lease records and published research. Current farming still needs confirmation.')).toBeTruthy();
+  expect(within(panel).getByText('Dated notices, ownership, sales, company filings and published research.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
   expect(within(panel).getByText('Previously farmed by Domaine Daniel Rion et Fils')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('recueil-bfc-2022-084');
   const leads=panel.querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
   expect(leads.open).toBe(false);
-  expect(within(leads).getByText(/not evidence of who farms/)).toBeTruthy();
+  expect(within(leads).getByText('Names and ownership context only.')).toBeTruthy();
  });
  it('shows a suspended application as procedural and keeps it off any farming claim',async()=>{
   render(<ParcelEvidence parcelId={id('673')}/>);
@@ -103,10 +103,10 @@ describe('Parcel evidence panel',()=>{
   render(<ParcelEvidence parcelId={id('93')}/>);
   expect(within(await screen.findByRole('region',{name:'History and evidence'})).getByText('Application received')).toBeTruthy();
  });
- it('says only that no dated records were found, never that nobody farms the parcel',async()=>{
+ it('says only that no dated records were found',async()=>{
   expect(evidence.parcels).not.toHaveProperty(id('1'));
   render(<ParcelEvidence parcelId={id('1')}/>);
-  expect(await screen.findByText('No dated records were found for this parcel. This does not mean nobody farms it.')).toBeTruthy();
+  expect(await screen.findByText('No dated records were found for this parcel.')).toBeTruthy();
  });
  it('reports a failed load and recovers on retry',async()=>{
   vi.resetModules();

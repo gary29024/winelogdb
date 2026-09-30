@@ -21,6 +21,20 @@ class FarmingResearchTests(unittest.TestCase):
         return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history,
                               sales or self.sales, named_areas or self.named_areas)
 
+    def test_domaine_headings_keep_research_sources_and_never_confirm_farming(self):
+        result = self.build()
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        expected = {h['holderId']: h for h in self.curation['holders'] if len(h['candidateNames']) == 1}
+        self.assertEqual(set(evidence['holderDomains']), set(expected))
+        for hid, context in evidence['holderDomains'].items():
+            self.assertEqual(context['name'], expected[hid]['candidateNames'][0])
+            self.assertEqual(context['sources'], expected[hid]['sourceIds'])
+            self.assertTrue(set(context['sources']) <= evidence['sources'].keys())
+            self.assertNotIn('currentFarmer', context)
+            self.assertNotIn('verified', context)
+        self.assertEqual(result['counts']['currentFarmerConfirmed'], 0)
+        self.assertEqual(result['counts']['unresolved'], 127)
+
     def test_pinned_population_and_no_invented_farmers(self):
         result = self.build()
         self.assertEqual(result['counts']['parcels'], 276)
@@ -219,7 +233,7 @@ class FarmingResearchTests(unittest.TestCase):
     def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withParcelFiling'], 27)
+        self.assertEqual(result['counts']['withParcelFiling'], 28)
         for ref in ('D 0144', 'D 0128', 'D 0316'):
             self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
             self.assertIsNone(rows[ref]['currentFarmer'])
@@ -294,6 +308,74 @@ class FarmingResearchTests(unittest.TestCase):
         # The 2026-labelled corporate records cannot become parcel-specific farming events.
         for ref in ('0313', '0295', '0296', '0297', '0298', '0299', '0673'):
             self.assertEqual(rows[f'D {ref}']['parcelFilingIds'], [])
+
+    def test_bouchy_1995_mandate_completes_the_historical_five_parcel_scope_without_proving_execution(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        old = filings['bouchy-mondange-expansion-1995']
+        later = filings['bouchy-tardy-2019']
+        self.assertEqual(set(old['parcelAreasM2']), {
+            '212670000D0628', '212670000D0765', '212670000D0767'
+        })
+        self.assertEqual(old['areaEvidence']['recitedTotalM2'], 2216)
+        self.assertEqual(old['leaseEvidence'][0]['tenants'], ['Bernard Mondange'])
+        self.assertEqual(old['leaseEvidence'][0]['kind'], 'lease-mandate')
+        self.assertEqual(sum(old['parcelAreasM2'].values()) + 1260, sum(later['parcelAreasM2'].values()))
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        for ref in ('0628', '0765', '0767'):
+            row = rows[f'D {ref}']
+            self.assertIn('bouchy-mondange-expansion-1995', row['parcelFilingIds'])
+            items = [i for i in evidence['parcels'][f'212670000D{ref}'] if i['kind'] == 'filing']
+            self.assertEqual([i['date'] for i in items[:2]], ['2019-08-05', '1995-09-15'])
+            self.assertIsNone(row['currentFarmer'])
+
+    def test_clerget_d0796_deed_and_fusion_establish_ownership_chain_not_current_farming(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        filing = filings['clerget-d0796-2002']
+        self.assertEqual(filing['parcelAreasM2'], {'212670000D0796': 2319})
+        self.assertEqual(filing['filingCompanySiren'], '430384354')
+        self.assertEqual(filing['holderId'], '431340140')
+        self.assertEqual(filing['successorEvidence']['toSiren'], '431340140')
+        self.assertEqual(filing['successorEvidence']['effectiveDate'], '2023-12-11')
+        row = rows['D 0796']
+        self.assertIn('clerget-d0796-2002', row['parcelFilingIds'])
+        self.assertEqual(row['researchDepth'], 'parcel-filing-reviewed')
+        self.assertIsNone(row['currentFarmer'])
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        items = evidence['parcels']['212670000D0796']
+        filing_item = next(i for i in items if i['kind'] == 'filing')
+        self.assertEqual(filing_item['date'], '2002-01-18')
+        self.assertTrue(any(i['kind'] == 'ownership' and i['date'] == '2024' for i in items))
+        self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+
+    def test_clerget_completion_source_is_cited_without_redating_the_deed(self):
+        sid = 'clerget-merger-completion-2023'
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'clerget-d0796-2002')
+        source = next(s for s in self.curation['sources'] if s['id'] == sid)
+        self.assertEqual(source['documentDate'], '2023-12-11')
+        self.assertEqual(source['filingLabelDate'], '2023-12-15')
+        self.assertEqual(source['pageCount'], 39)
+        self.assertEqual(sum(s.get('sha256') == source['sha256'] for s in self.curation['sources']), 1)
+        self.assertEqual(filing['successorEvidence']['sourceId'], sid)
+        self.assertEqual(filing['successorEvidence']['completionDate'], '2023-12-11')
+        result = self.build()
+        self.assertEqual(result['counts']['unresolved'], 127)
+        self.assertEqual(result['counts']['withParcelFiling'], 28)
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        item = next(i for i in evidence['parcels']['212670000D0796'] if i['kind'] == 'filing')
+        self.assertEqual(item['date'], '2002-01-18')
+        self.assertEqual(item['sources'], ['clerget-gfv-apport-2002', sid, 'dgfip-history'])
+        self.assertTrue(all(p['currentFarmer'] is None for p in result['parcels']))
+
+    def test_unknown_supporting_filing_source_is_rejected(self):
+        curation = copy.deepcopy(self.curation)
+        filing = next(f for f in curation['parcelFilings'] if f['id'] == 'clerget-d0796-2002')
+        filing['supportingSourceIds'] = ['not-a-source']
+        with self.assertRaisesRegex(ValueError, 'Unknown supporting filing source'):
+            self.build(curation)
 
     def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
         result = self.build()
