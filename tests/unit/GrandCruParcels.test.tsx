@@ -4,9 +4,9 @@ import {cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/r
 import {readFileSync} from 'node:fs';
 import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
-import {ownerName,possibleOwnerMatch} from '../../src/lib/places/echezeauxParcelOwners';
-import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
-import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
+import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
+import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
+import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 
 const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;
@@ -40,6 +40,28 @@ describe('Cadastral parcel controls',()=>{
   // Every evidenced parcel exists in the mapped snapshot; the unresolved printed D01776 is never attached to one.
   for(const id of Object.keys(evidence.parcels))expect(data.features.some(f=>f.properties.id===id)).toBe(true);
   expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer|D01776/);
+ });
+ it('gives Grands-Échezeaux the evidence panel and domaine grouping through the cru registry',async()=>{
+  const fetcher=vi.fn(async()=>Response.json(data));vi.stubGlobal('fetch',fetcher);
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-645" producer="Anne Gros"/>);
+  expect(screen.getByText('· Grands-Échezeaux')).toBeTruthy();
+  fireEvent.click(screen.getByRole('switch'));
+  // The same Flagey bundle file serves both crus: one download, filtered to this cru's parcels.
+  expect(await screen.findByText(/parcels in Grands-Échezeaux/)).toBeTruthy();
+  expect(fetcher).toHaveBeenCalledWith(manifest.dataUrl,expect.anything());
+  expect(screen.getByText('32',{selector:'strong'})).toBeTruthy();
+  const holders=within(screen.getByRole('list',{name:'Recorded right holders by mapped area'}));
+  expect(await holders.findByText('Domaine Anne Gros')).toBeTruthy();
+  expect(screen.getByText(/Domaine headings are research links, not proof of ownership/)).toBeTruthy();
+  fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0093'}});
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Application received')).toBeTruthy();
+  expect(within(panel).getByText('Anne Gros')).toBeTruthy();
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
+ });
+ it('renders nothing for a cru without parcel data',()=>{
+  const view=render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-655"/>);
+  expect(view.container.innerHTML).toBe('');
  });
  it('downloads only on request, keeps record details folded, preserves both rights and cleans up the overlay',async()=>{
   const sample=structuredClone(data),feature=sample.features.find(f=>f.properties.recordedRights.length&&inEchezeaux(f))!;

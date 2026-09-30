@@ -1,8 +1,9 @@
 import {apiFetch,authHeaders} from '../../lib/auth/client';
 import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
-import manifest from '../../lib/places/echezeauxParcelManifest.json';
+import {parcelManifestFor} from '../../lib/places/grandCruParcels/registry';
 
-const path=(parent:string)=>`/api/parcel-producer-links?parent=${encodeURIComponent(parent)}&snapshot=${manifest.rightsAsOf}`;
+// Links are keyed by the cru and its bundle's rights snapshot, so a new snapshot starts with no links.
+const path=(parent:string)=>`/api/parcel-producer-links?parent=${encodeURIComponent(parent)}&snapshot=${parcelManifestFor(parent)?.rightsAsOf??''}`;
 async function read<T>(response:Response):Promise<T>{
  const value=await response.json() as T&{error?:string};
  if(!response.ok)throw new Error(value.error||'Could not load producer links');

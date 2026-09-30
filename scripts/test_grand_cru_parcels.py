@@ -1,6 +1,6 @@
 """Regression cases absent from this pilot's single-right snapshot."""
 import unittest
-from build_echezeaux_parcels import add_right, parcel_id, record_match
+from build_grand_cru_parcels import add_right, parcel_id, record_match
 
 
 def row(holder='123456789', right='P - Propriétaire', area='500'):
@@ -17,6 +17,16 @@ class RightsJoinTests(unittest.TestCase):
         invalid[2] = '268'
         with self.assertRaises(AssertionError):
             parcel_id(invalid)
+
+    def test_multi_commune_bundle_references(self):
+        # Puligny/Chassagne crus span two communes: each keeps its own INSEE code, never the first commune's.
+        puligny = row()
+        puligny[2] = '512'
+        self.assertEqual(parcel_id(puligny, ('21150', '21512')), '215120000A0007')
+        from build_grand_cru_rights_history import parcel_id as history_id
+        self.assertEqual(history_id(puligny), '215120000A0007')
+        with self.assertRaises(AssertionError):
+            parcel_id(puligny, ('21150',))
 
     def test_multiple_rights_and_subdivision_deduplication(self):
         props = {'recordedRights': [], 'recordAreasM2': [], 'cadastreAreaM2': 500}

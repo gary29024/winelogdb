@@ -3,8 +3,18 @@ import copy
 import json
 import unittest
 
-from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, NAMED_AREAS, SALES, build_register
-from build_echezeaux_parcel_evidence import build_evidence
+from build_grand_cru_evidence import build_evidence
+from build_grand_cru_research import Context, build_register as build_cru_register
+from grand_cru import ROOT, load_cru, manifest_path
+
+CONTEXT = Context(*load_cru('echezeaux'))
+CURATION, EVIDENCE, HISTORY, SALES, NAMED_AREAS = (CONTEXT.curation, CONTEXT.evidence, CONTEXT.history, CONTEXT.sales,
+                                                   CONTEXT.named_areas)
+MANIFEST = manifest_path(CONTEXT.bundle)
+
+
+def build_register(*inputs):
+    return build_cru_register(*inputs, CONTEXT)
 
 
 class FarmingResearchTests(unittest.TestCase):

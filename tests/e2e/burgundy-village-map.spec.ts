@@ -174,6 +174,41 @@ for(const route of allMapRoutes){
  });
 }
 
+// One representative parcel journey, parameterised by scripts/grand-crus/<slug>.json, so the Chromium
+// matrix does not grow with each cru. WINELOG_E2E_CRU picks another configured cru.
+const parcelCru=(()=>{
+ const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
+ const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;evidenceFrom:string[]};
+ const bundle=read(`scripts/grand-crus/bundles/${cru.bundle}.json`) as {villageMap:string};
+ const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string};
+ const parcels=(read(`public${manifest.dataUrl}`) as {features:{id:string;properties:{overlaps:{parentFeatureId:string}[]}}[]}).features
+  .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId)).map(f=>f.id);
+ const evidenced=cru.evidenceFrom.flatMap(source=>Object.keys(read(`src/lib/places/grandCruParcels/${source}.evidence.json`).parcels))
+  .filter(id=>parcels.includes(id)).sort();
+ const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===bundle.villageMap)!;
+ return {...cru,village:village.name,parcels,evidenced};
+})();
+test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and domaine grouping from its config`,async({page})=>{
+ await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru'});
+ await page.route('**/api/parcel-producer-links?*',route=>route.fulfill({json:{items:[]}}));
+ await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
+ await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
+ await expect(dialog.getByText(`${parcelCru.parcels.length} parcels in ${parcelCru.name}`,{exact:false})).toBeVisible();
+ if(parcelCru.evidenceFrom.length)await expect(dialog.getByLabel('Group right holders by')).toHaveValue('domaine');
+ await dialog.getByText('Find a parcel by cadastral reference').click();
+ const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
+ await expect(parcel.getByRole('option')).toHaveCount(parcelCru.parcels.length+1);
+ await parcel.selectOption(parcelCru.evidenced[0]??parcelCru.parcels[0]);
+ const details=dialog.locator('.village-map-parcel-details');
+ if(parcelCru.evidenced.length)await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
+ else await expect(details).toContainText('No dated records were found for this parcel.');
+ await expect(details.getByText('Verified operator')).toHaveCount(0);
+});
+
 test('Échezeaux pilot: a verified producer link and opt-in name matches',async({page},testInfo)=>{
  await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Mongeard-Mugneret'});
  // No verified links are published yet, so this adds one to a copy of the real data.

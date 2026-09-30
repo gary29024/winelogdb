@@ -2,7 +2,10 @@
 import json
 import unittest
 
-from build_echezeaux_rights_history import OUTPUT, classify
+from build_grand_cru_rights_history import classify
+from grand_cru import load_cru, research_path
+
+OUTPUT = research_path(load_cru('echezeaux')[0], 'rights-history.json')
 
 A = {'siren': '303514681', 'majic': None, 'name': 'DOMAINE MONGEARD MUGNERET', 'rightCode': 'P'}
 

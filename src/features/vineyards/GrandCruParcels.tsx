@@ -2,11 +2,12 @@ import {useCallback,useEffect,useId,useMemo,useRef,useState} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource} from 'maplibre-gl';
 import type {Feature,FeatureCollection,Polygon,MultiPolygon} from 'geojson';
 import {placeKey} from '../../lib/places/resolve';
-import {ownerName,possibleOwnerMatch} from '../../lib/places/echezeauxParcelOwners';
-import manifest from '../../lib/places/echezeauxParcelManifest.json';
+import {ownerName,possibleOwnerMatch} from '../../lib/places/parcelOwners';
+import {grandCruFor,parcelBundles,type GrandCru} from '../../lib/places/grandCruParcels/registry';
+import {hasParcelEvidence,loadParcelEvidence,type ParcelEvidenceData} from '../../lib/places/grandCruParcels/evidence';
 import {ParcelProducerLinker} from './ParcelProducerLinker';
 import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
-import {ParcelEvidence,loadParcelEvidence,type ParcelEvidenceData} from './ParcelEvidence';
+import {ParcelEvidence} from './ParcelEvidence';
 import {groupParcelRightHolders,matchesLinkedProducer,type HolderGroup} from '../../lib/places/parcelPresentation';
 
 type Right={holderId:string;siren:string|null;name:string;rightCode:string;rightLabel:string;legalForm:string;legalFormLabel:string};
@@ -29,6 +30,10 @@ const layers=['cadastral-parcel-hatch','cadastral-parcel-owner','cadastral-parce
 const ink='#26324a',ochre='#8a5a12',crimson='#c51f45',possibleBlue='#0067b1';
 const ha=(m2:number)=>`${(m2/10000).toFixed(2)} ha`;
 const plural=(n:number,one:string,many=`${one}s`)=>`${n} ${n===1?one:many}`;
+// Snapshot dates come from the cru's bundle manifest, e.g. "1 January 2025" and "June 2026".
+const utc=(iso:string)=>new Date(`${iso}T00:00:00Z`);
+const longDate=(iso:string)=>utc(iso).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+const monthYear=(iso:string)=>utc(iso).toLocaleDateString('en-GB',{month:'long',year:'numeric',timeZone:'UTC'});
 
 const overlapIn=(f:ParcelFeature,parentId:string)=>f.properties.overlaps.find(o=>o.parentFeatureId===parentId);
 const producerIs=(link:DomaineLink,producer:string)=>link.status==='verified'&&Boolean(placeKey(producer))&&link.producerNames.some(name=>placeKey(name)===placeKey(producer));
@@ -70,21 +75,25 @@ export function ParcelLegend({keys}:{keys:ParcelLegendKey[]}){
 }
 
 type Props={map:MapLibreMap|null;parentId:string;producer?:string|null;producerId?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void};
+/** Parcel rights for any cru in the registry; renders nothing for a feature without parcel data. */
 export function GrandCruParcels(props:Props){
+ const cru=grandCruFor(props.parentId);
+ if(!cru)return null;
  // A wine/producer or cru change must not inherit another view's links or selection.
- return <GrandCruParcelsView key={`${props.parentId}:${props.producerId??''}:${props.producer??''}`} {...props}/>;
+ return <GrandCruParcelsView key={`${props.parentId}:${props.producerId??''}:${props.producer??''}`} {...props} cru={cru}/>;
 }
-function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
+function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Props&{cru:GrandCru}){
+ const manifest=parcelBundles[cru.bundle],withResearch=hasParcelEvidence(parentId);
  const [show,setShow]=useState(false),[data,setData]=useState<Parcels|null>(null),[error,setError]=useState(false),[attempt,setAttempt]=useState(0);
  const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
  const [showPossible,setShowPossible]=useState(false);
  const [groupByDomaine,setGroupByDomaine]=useState(true),[research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);
  useEffect(()=>{
-  if(!show||research||parentId!=='inao-denom-565')return;
+  if(!show||research||!withResearch)return;
   let active=true;
-  void loadParcelEvidence().then(value=>{if(active){setResearch(value);setResearchFailed(false)}}).catch(()=>{if(active)setResearchFailed(true)});
+  void loadParcelEvidence(parentId).then(value=>{if(active){setResearch(value);setResearchFailed(false)}}).catch(()=>{if(active)setResearchFailed(true)});
   return()=>{active=false};
- },[show,parentId,research,attempt]);
+ },[show,parentId,withResearch,research,attempt]);
  const [linkingHolder,setLinkingHolder]=useState('');
  const autoFocused=useRef(false);
  const switchId=useId(),parcelId=useId(),searchId=useId(),possibleId=useId(),ownersId=useId();
@@ -100,8 +109,8 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
    if(!disposed)setData(value);
   }).catch(()=>{if(!disposed)setError(true)}).finally(()=>clearTimeout(timeout));
   return()=>{disposed=true;controller.abort();clearTimeout(timeout)};
- },[show,data,attempt]);
- const name=parentId==='inao-denom-565'?'Échezeaux':'Grands-Échezeaux';
+ },[show,data,attempt,manifest]);
+ const name=cru.name;
  const overlapOf=(f:ParcelFeature)=>overlapIn(f,parentId);
  const parcels=useMemo(()=>data?.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===parentId))??[],[data,parentId]);
  const owners=useMemo(()=>rightHolders(parcels,parentId),[parcels,parentId]);
@@ -245,7 +254,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
    <span>Parcel rights<small> · {name}</small></span>
    <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setShowPossible(false);setError(false);setOwner('');setSelectedId('');autoFocused.current=false}}/>
   </label>
-  <p className="village-map-note">Legal-entity rights recorded on 1 January 2025. Shows who holds recorded rights, not who farms the vines.</p>
+  <p className="village-map-note">Legal-entity rights recorded on {longDate(manifest.rightsAsOf)}. Shows who holds recorded rights, not who farms the vines.</p>
   {show&&<>
    {!data&&!error&&<p className="village-map-note" role="status">Loading cadastral parcels…</p>}
    {error&&<div className="village-map-parcel-error" role="alert"><p>Parcel data could not load. The cru map remains available.</p><button type="button" onClick={()=>{setError(false);setAttempt(a=>a+1)}}>Retry parcels</button></div>}
@@ -282,7 +291,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
       {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-possible">Possible match, unverified</dd></>}
      </dl>
-     <ParcelEvidence parcelId={selected.properties.id}/>
+     <ParcelEvidence parcelId={selected.properties.id} parentId={parentId}/>
      {[...new Map(rights.map(r=>[r.holderId,r])).values()].map(r=><button key={r.holderId} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(r.holderId)}>Link {ownerName(r.name)} to an app producer</button>)}
      {selected.properties.domaineLinks.map((link,index)=><div key={`${link.producerId}:${index}`} className="village-map-note">
       <strong>{link.name}</strong> · {link.status==='verified'?'Verified operator':'Proposed operator (unverified)'} · effective {link.effectiveDate}
@@ -291,14 +300,14 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
      {selected.properties.recordMatch==='area-mismatch'&&<p className="village-map-overlap">The parcel reference matches, but its recorded area differs between snapshots. These historical rights must not be treated as a verified current holding.</p>}
      {rights.length?<details><summary>Record details</summary>
       <ul>{rights.map(r=><li key={`${r.holderId}:${r.rightCode}`}>{r.name} · {r.rightCode} — {r.rightLabel} · {r.legalFormLabel}<br/>{r.siren?`SIREN ${r.siren}`:`DGFiP identifier ${r.holderId} (not a SIREN)`}</li>)}</ul>
-      <p>Cadastral reference {selected.properties.id}. Rights recorded as of 1 January 2025. Recorded parcel area {selected.properties.cadastreAreaM2.toLocaleString('en')} m²; {name} overlap {Math.round(overlap?.areaM2??0).toLocaleString('en')} m² ({overlap?.parcelPercent.toFixed(1)}% of its mapped geometry).</p>
+      <p>Cadastral reference {selected.properties.id}. Rights recorded as of {longDate(manifest.rightsAsOf)}. Recorded parcel area {selected.properties.cadastreAreaM2.toLocaleString('en')} m²; {name} overlap {Math.round(overlap?.areaM2??0).toLocaleString('en')} m² ({overlap?.parcelPercent.toFixed(1)}% of its mapped geometry).</p>
      </details>:<p className="village-map-note">No matching published legal-entity record was found. Coverage exclusions and parcel changes can leave gaps; this doesn’t mean the parcel has no owner.</p>}
     </div>}
     <div>
      <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
      <label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>
      <p className="village-map-note">{groupByDomaine?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
-     {groupByDomaine&&parentId==='inao-denom-565'&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
+     {groupByDomaine&&withResearch&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
      {groupByDomaine&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
@@ -313,7 +322,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend}:Props){
      <select id={parcelId} value={selectedId} onChange={e=>selectParcel(e.target.value)}><option value="">Choose from {parcels.length} parcels</option>{parcels.map(f=><option key={f.properties.id} value={f.properties.id}>{f.properties.reference} · {f.properties.recordedRights.length?[...new Set(f.properties.recordedRights.map(r=>ownerName(r.name)))].join(', '):'no matched rights record'}</option>)}</select>
     </details>
     <details><summary>About this data</summary>
-     <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, June 2026, and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of 1 January 2025, both Licence Ouverte 2.0. Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
+     <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, {monthYear(manifest.cadastreDate)}, and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of {longDate(manifest.rightsAsOf)}, both Licence Ouverte 2.0. Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
     </details>
    </>}
   </>}

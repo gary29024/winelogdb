@@ -1,15 +1,7 @@
 import {useEffect,useReducer,useState} from 'react';
-import type {HolderResearch} from '../../lib/places/parcelPresentation';
+import {loadParcelEvidence,type EvidenceItem,type EvidenceKind as Kind,type EvidenceSource as Source,type ParcelEvidenceData} from '../../lib/places/grandCruParcels/evidence';
 
-type Kind='authorisation'|'suspended'|'application'|'filing'|'research'|'ownership'|'sale'|'lineage'|'lead';
-type Source={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
-export type EvidenceItem={kind:Kind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[]};
-export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>;holderDomains?:Record<string,HolderResearch>};
-
-// Loaded on first use so the map itself does not carry the research records.
-let cached:Promise<ParcelEvidenceData>|null=null;
-export const loadParcelEvidence=()=>cached??=import('../../lib/places/echezeauxParcelEvidence.json')
- .then(module=>module.default as unknown as ParcelEvidenceData).catch(error=>{cached=null;throw error});
+export type {EvidenceItem,ParcelEvidenceData};
 
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function when(item:EvidenceItem){
@@ -63,13 +55,13 @@ function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sour
  </li>;
 }
 
-export function ParcelEvidence({parcelId}:{parcelId:string}){
+export function ParcelEvidence({parcelId,parentId}:{parcelId:string;parentId:string}){
  const [data,setData]=useState<ParcelEvidenceData|null>(null),[failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0),[,bump]=useReducer((n:number)=>n+1,0);
  useEffect(()=>{
   let active=true;
-  loadParcelEvidence().then(result=>{if(active){setData(result);setFailed(false)}}).catch(()=>{if(active)setFailed(true)});
+  loadParcelEvidence(parentId).then(result=>{if(active){setData(result);setFailed(false)}}).catch(()=>{if(active)setFailed(true)});
   return()=>{active=false};
- },[attempt]);
+ },[parentId,attempt]);
  if(failed)return <div className="parcel-evidence" role="alert"><p className="village-map-note">Evidence records could not load. Parcel rights are still available.</p>
   <button type="button" className="village-map-link-button" onClick={()=>setAttempt(n=>n+1)}>Retry evidence</button></div>;
  if(!data)return <p className="village-map-note parcel-evidence" role="status">Loading evidence records…</p>;

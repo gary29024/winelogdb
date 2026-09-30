@@ -1,29 +1,41 @@
-"""Build a research register, never an operator overlay, from the pinned pilot.
+"""Build a cru's research register, never an operator overlay, from its pinned parcel bundle.
 
+  python scripts/build_grand_cru_research.py --cru echezeaux
+  python scripts/build_grand_cru_research.py --cru echezeaux --check
+  python scripts/build_grand_cru_research.py --all --check      # every configured cru, as CI runs it
+
+Reads docs/research/<slug>/curation.json and the generated rights history, sale records
+and named areas in the same folder; writes the register (JSON and Markdown) there and the
+app's lazy evidence file to src/lib/places/grandCruParcels/<slug>.evidence.json.
+A cru without research configured yet only has its config and registry entry validated.
 Run from any directory; --check verifies committed outputs without writing.
 Only the standard library is required. No network access or source-asset edits.
 """
 import argparse
-from build_echezeaux_parcel_evidence import build_evidence
-import hashlib
 import json
 from collections import Counter
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-CURATION = ROOT / 'docs/research/echezeaux-farming-curation.json'
-MANIFEST = ROOT / 'src/lib/places/echezeauxParcelManifest.json'
-OUTPUT = ROOT / 'docs/research/echezeaux-farming-parcels.json'
-REPORT = ROOT / 'docs/echezeaux-farming-parcel-register.md'
-HISTORY = ROOT / 'docs/research/echezeaux-rights-history.json'
-EVIDENCE = ROOT / 'src/lib/places/echezeauxParcelEvidence.json'
-SALES = ROOT / 'docs/research/echezeaux-sale-records.json'
-NAMED_AREAS = ROOT / 'docs/research/echezeaux-parcel-named-areas.json'
+from build_grand_cru_evidence import build_evidence
+from grand_cru import (command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset, read_json, relative,
+                       require, research_path, sha256, ROOT)
 
 
-def require(condition, message):
-    if not condition:
-        raise ValueError(message)
+class Context:
+    """Where a cru's research lives and how its register refers to it."""
+
+    def __init__(self, cru, bundle):
+        self.cru, self.bundle = cru, bundle
+        self.curation = research_path(cru, 'curation.json')
+        self.output = research_path(cru, 'register.json')
+        self.report = research_path(cru, 'register.md')
+        self.history = research_path(cru, 'rights-history.json')
+        self.sales = research_path(cru, 'sale-records.json')
+        self.named_areas = research_path(cru, 'parcel-named-areas.json')
+        self.evidence = evidence_path(cru)
+
+    def link(self, path):
+        """Markdown link target from the report to a repository file."""
+        return relative(ROOT / path if isinstance(path, str) else path, self.report.parent)
 
 
 EVENT_KINDS = {'historical-application': 'Application received', 'authorisation': 'Authorisation decision',
@@ -37,11 +49,12 @@ HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
-def build_register(manifest, asset, curation, history, sales, named_areas):
+def build_register(manifest, asset, curation, history, sales, named_areas, context):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
-    # canonical LF bytes hashed by build_echezeaux_parcels.py, without reserialising.
+    # canonical LF bytes hashed by build_grand_cru_parcels.py, without reserialising.
     asset = asset.replace(b'\r\n', b'\n')
-    require(hashlib.sha256(asset).hexdigest() == manifest['sha256'], 'Parcel snapshot hash changed')
+    require(sha256(asset) == manifest['sha256'], 'Parcel snapshot hash changed')
+    require(curation['parentFeatureId'] == context.cru['parentFeatureId'], 'Curation belongs to another cru')
     parent = curation['parentFeatureId']
     require(parent in manifest['parentFeatureIds'], 'Research cru absent from snapshot')
     parcels = sorted((f['properties'] for f in json.loads(asset)['features']
@@ -226,12 +239,12 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
     return {
         'schemaVersion': 1, 'reviewedAt': curation['reviewedAt'], 'targetSeason': curation['targetSeason'],
         'status': curation['status'], 'scope': curation['scope'], 'parentFeatureId': parent,
-        'inputs': {'curation': 'docs/research/echezeaux-farming-curation.json',
+        'inputs': {'curation': relative(context.curation),
                    'dataUrl': manifest['dataUrl'], 'sha256': manifest['sha256'],
                    'cadastreDate': manifest['cadastreDate'], 'rightsAsOf': manifest['rightsAsOf'],
-                   'rightsHistory': 'docs/research/echezeaux-rights-history.json',
+                   'rightsHistory': relative(context.history),
                    'rightsHistoryYears': [r['asOf'] for r in history['inputs']['rights']],
-                   'saleRecords': 'docs/research/echezeaux-sale-records.json', 'saleRecordsCoverage': sales['coverage']},
+                   'saleRecords': relative(context.sales), 'saleRecordsCoverage': sales['coverage']},
         'counts': {'parcels': len(rows), 'recordedHolders': len(holders),
                    'withRecordedRights': sum(bool(r['recordedRights']) for r in rows),
                    'withoutMatchedRights': sum(not r['recordedRights'] for r in rows),
@@ -291,11 +304,31 @@ def cell(value):
     return str(value).replace('|', '\\|').replace('\n', ' ')
 
 
-def render_report(register, curation, history):
+def commune_label(context):
+    names = {c['id']: c['name'] for c in context.catalogue['communes']}
+    codes = sorted({p['commune'] for p in context.parcels})
+    listed = ', '.join(f'{code} ({names[code]})' for code in codes)
+    return f"commune{'s' if len(codes) > 1 else ''} {listed}"
+
+
+def other_cru_note(curation, context):
+    """Parcels of other crus named in this cru's notices stay outside its register."""
+    ids = sorted({pid for e in curation['exactParcelEvents'] for pid in e.get('otherCruParcelIds', [])})
+    if not ids:
+        return ''
+    features = {f['id']: f for f in context.features}
+    names = sorted({o['name'] for pid in ids for o in features[pid]['properties']['overlaps']
+                    if o['parentFeatureId'] != context.cru['parentFeatureId']})
+    first = ids[0]
+    return f" {' and '.join(names)} references (such as {first[8:10].lstrip('0')}{first[10:]}) are outside this register."
+
+
+def render_report(register, curation, history, context):
     counts = register['counts']
     sources = {s['id']: s for s in curation['sources']}
+    name, research = context.cru['name'], context.cru['research']
     lines = [
-        '# Échezeaux parcel farming research register', '',
+        f'# {name} parcel farming research register', '',
         f"Reviewed {register['reviewedAt']}; target season {register['targetSeason']}.", '',
         '**Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**', '',
         register['scope'], '',
@@ -313,10 +346,10 @@ def render_report(register, curation, history):
         'No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.', '',
         f"Geometry: {register['inputs']['cadastreDate']}. Rights: {register['inputs']['rightsAsOf']}. "
         'Areas measure the intersection with the cru, not ownership shares or planted hectares. A mapped intersection may include a sliver or land whose farming applicability remains unknown.', '',
-        'Generated by `python scripts/build_echezeaux_farming_research.py`; use `--check` to verify. '
-        'Edit [curation](research/echezeaux-farming-curation.json), not this report. '
-        '[Machine-readable parcel register](research/echezeaux-farming-parcels.json) · '
-        '[Evidence method and app behaviour](echezeaux-farming-research.md).', '',
+        f"Generated by `{command('build_grand_cru_research.py', context.cru)}`; use `--check` to verify. "
+        f'Edit [curation]({context.link(context.curation)}), not this report. '
+        f'[Machine-readable parcel register]({context.link(context.output)}) · '
+        f"[Evidence method and app behaviour]({context.link(research['methodDoc'])}).", '',
         '## Holder investigations', '',
     ]
     for h in curation['holders']:
@@ -328,9 +361,9 @@ def render_report(register, curation, history):
                   f"**Basis:** {h['basis']}. **Current farming:** unconfirmed.", '', h['finding'], '',
                   'Sources: ' + (', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in h['sourceIds'])
                                  or 'No usable independent source located; recorded rights only.') + '.', '']
-    lines += render_census(register, curation, sources)
+    lines += render_census(register, curation, sources, context)
     lines += ['## Every mapped parcel', '',
-              'All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence links are in the JSON register. '
+              f'All references are in {commune_label(context)}. Full IDs and evidence links are in the JSON register. '
               '“Holder” points to the investigations above. “None” means no matched record, not no farmer.', '',
               '| Reference | Named area | Cru overlap (m²) | Holder research ID | Candidate to investigate — never verified | Current farmer |',
               '| --- | --- | ---: | --- | --- | --- |']
@@ -345,7 +378,7 @@ def render_report(register, curation, history):
               'Farm-structure notices published by the Côte-d\'Or DDT name the applicant, the previous operator and the '
               'cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an '
               'authorisation is a dated decision, not proof of actual or current operation. References were read from the '
-              'page image. Grands-Échezeaux references (such as D0093) are outside this register.', '']
+              'page image.' + other_cru_note(curation, context), '']
     for e in sorted(curation['exactParcelEvents'], key=lambda e: e['documentDate']):
         refs = ', '.join(ref(i) for i in e['parcelIds'])
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}"
@@ -357,7 +390,7 @@ def render_report(register, curation, history):
     lines += ['', '## Parcel-specific company filings', '',
               'Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates '
               'are kept distinct; none proves current-season farming. See [the detailed reading and next source requests]'
-              '(echezeaux-statutes-research.md).', '']
+              f"({context.link(research['filingsDoc'])}).", '']
     for filing in curation['parcelFilings']:
         source_ids = list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))
         cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in source_ids)
@@ -379,8 +412,8 @@ def render_report(register, curation, history):
         cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in x['sourceIds'])
         lines.append(f"- **{cell(x['title'])}** ({refs}; {x['basis']}). {x['finding']} Sources: {cited}.")
     lines.append('')
-    lines += render_history(register, curation, history, sources)
-    lines += render_sales(register, sources)
+    lines += render_history(register, curation, history, sources, context)
+    lines += render_sales(register, sources, context)
     lines += ['## Source log', '',
               'Publication/document dates and vintage seasons are separate fields in the curation. An undated page, '
               'recent upload or review date does not establish operation in the target season.', '']
@@ -411,7 +444,7 @@ CHANGE_LABELS = {
 }
 
 
-def render_history(register, curation, history, sources):
+def render_history(register, curation, history, sources, context):
     counts, rows = history['counts'], {r['parcelId']: r for r in register['parcels']}
     years = register['inputs']['rightsHistoryYears']
     lines = ['## Rights history and parcel lineage', '',
@@ -422,8 +455,8 @@ def render_history(register, curation, history, sources):
              f"{counts['retiredReferences']} retired references overlapped the cru. "
              'Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, '
              'or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. '
-             '[Full yearly records and lineage](research/echezeaux-rights-history.json), rebuilt by '
-             '`python scripts/build_echezeaux_rights_history.py`.', '',
+             f'[Full yearly records and lineage]({context.link(context.history)}), rebuilt by '
+             f"`{command('build_grand_cru_rights_history.py', context.cru)}`.", '',
              '**Reviewed findings**', '']
     for f in curation['historyFindings']:
         refs = ', '.join(rows[i]['reference'] for i in f['parcelIds'])
@@ -461,16 +494,19 @@ def hectares(m2):
     return f'{m2 / 10000:.2f} ha'
 
 
-def render_census(register, curation, sources):
+def render_census(register, curation, sources, context):
+    unresolved = context.cru['namedPlots']['unresolved']
+    crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." for u in unresolved)
+    printed = ''.join(f"; {u['name']} has no reviewed cadastral crosswalk" for u in unresolved)
     lines = ['## Named-area census', '',
              'Parcels are grouped by the cadastral lieu-dit holding most of their geometry. For each named area the census '
-             'compares land without a company record with the Échezeaux holdings producers publish there. "Beyond company '
+             f'compares land without a company record with the {context.cru["name"]} holdings producers publish there. "Beyond company '
              'records" is a published area minus the land recorded to company records linked to that producer in the same named area: land the '
              'producer says it owns or farms, which the legal-entity files do not show. It is an area comparison only. It never '
              'places a holding on particular parcels, and a producer\'s published figure can be rounded, out of date or include '
              'leased land. A métayer farms land already recorded to its owner; a holding spread over several named areas cannot '
              'be split, so neither is counted. Disputed locations are listed as alternatives and excluded from numeric '
-             'climat totals. `LES POULA` has no reviewed crosswalk to Les Poulaillères.', '',
+             'climat totals.' + crosswalks, '',
              '| Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |',
              '| --- | ---: | ---: | ---: | ---: |']
     for a in register['namedAreaCensus']:
@@ -508,7 +544,7 @@ def render_census(register, curation, sources):
     years = sorted({(x['year'], x['sourceId']) for x in lists})
     lines += ['', '**Owners named in old guides**', '',
               'Historical context only: family names a century and more ago, not owners or farmers today. Printed climat '
-              'names are kept; Les Poulaillères has no reviewed cadastral crosswalk. Sources: ' +
+              f'names are kept{printed}. Sources: ' +
               ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for _, s in years) + '.', '',
               '| Climat (as printed) | ' + ' | '.join(str(y) for y, _ in years) + ' |', '| --- |' + ' --- |' * len(years)]
     keys = sorted({x['namedArea'] or x['printedName'] for x in lists}, key=lambda k: k.lower())
@@ -520,7 +556,7 @@ def render_census(register, curation, sources):
     return lines + ['']
 
 
-def render_sales(register, sources):
+def render_sales(register, sources, context):
     rows = {r['parcelId']: r for r in register['parcels']}
     deeds = {}
     for r in register['parcels']:
@@ -533,8 +569,8 @@ def render_sales(register, sources):
              'an intervening contribution or another transfer, so it does not identify the deed buyer. A single-disposition '
              'co-sale with parcels later recorded to a company is only a lead to investigate those transfers. '
              'Exchanges move parcels in both directions and give no lead. Rebuilt by '
-             '`python scripts/build_echezeaux_sale_records.py`.', '',
-             '| Date | Deed | Échezeaux parcels | Parcels outside the cru | Lead for parcels without a company record |',
+             f"`{command('build_grand_cru_sale_records.py', context.cru)}`.", '',
+             f'| Date | Deed | {context.cru["name"]} parcels | Parcels outside the cru | Lead for parcels without a company record |',
              '| --- | --- | --- | ---: | --- |']
     for (date, deed, nature, dispositions, others), pids in sorted(deeds.items()):
         leads = '; '.join(f"{rows[p]['reference']}: {c['name']}" for p in sorted(pids) for c in rows[p]['candidateLeads']
@@ -544,28 +580,56 @@ def render_sales(register, sources):
     return lines + ['']
 
 
+def load_inputs(context):
+    manifest = load_manifest(context.bundle)
+    return {'manifest': manifest, 'asset': parcel_asset(manifest), 'curation': read_json(context.curation),
+            'history': read_json(context.history), 'sales': read_json(context.sales), 'named_areas': read_json(context.named_areas)}
+
+
+def outputs(context):
+    """Every generated research file of one cru, as {path: content}."""
+    inputs = load_inputs(context)
+    features = json.loads(inputs['asset'])['features']
+    context.features = features
+    context.parcels = [f['properties'] for f in features
+                       if any(o['parentFeatureId'] == context.cru['parentFeatureId'] for o in f['properties']['overlaps'])]
+    context.catalogue = read_json(ROOT / 'src/lib/places' / next(
+        m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == context.bundle['villageMap'])['catalogue'])
+    register = build_register(inputs['manifest'], inputs['asset'], inputs['curation'], inputs['history'],
+                              inputs['sales'], inputs['named_areas'], context)
+    return {context.output: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
+            context.report: render_report(register, inputs['curation'], inputs['history'], context),
+            # Compact per-parcel evidence the app loads on demand; never read by the register itself.
+            context.evidence: json.dumps(build_evidence(register, inputs['curation'], inputs['history'], features),
+                                         ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'}, register
+
+
+def run(slug, check):
+    cru, bundle = load_cru(slug)
+    if 'research' not in cru:
+        print(json.dumps({'cru': slug, 'research': 'not configured; config and bundle validated',
+                          'evidenceFrom': cru['evidenceFrom']}))
+        return
+    context = Context(cru, bundle)
+    files, register = outputs(context)
+    for path, content in files.items():
+        if check:
+            require(path.exists() and path.read_text(encoding='utf-8') == content, f'Stale output: {relative(path)}')
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding='utf-8', newline='\n')
+    print(json.dumps({'cru': slug, **register['counts']}))
+
+
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    target = parser.add_mutually_exclusive_group(required=True)
+    target.add_argument('--cru')
+    target.add_argument('--all', action='store_true')
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
-    curation = json.loads(CURATION.read_text(encoding='utf-8'))
-    history = json.loads(HISTORY.read_text(encoding='utf-8'))
-    sales = json.loads(SALES.read_text(encoding='utf-8'))
-    named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
-    asset = (ROOT / 'public' / manifest['dataUrl'].lstrip('/')).read_bytes()
-    register = build_register(manifest, asset, curation, history, sales, named_areas)
-    outputs = {OUTPUT: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
-               REPORT: render_report(register, curation, history),
-               # Compact per-parcel evidence the app loads on demand; never read by the register itself.
-               EVIDENCE: json.dumps(build_evidence(register, curation, history, json.loads(asset)['features']),
-                                    ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'}
-    for path, content in outputs.items():
-        if args.check:
-            require(path.exists() and path.read_text(encoding='utf-8') == content, f'Stale output: {path}')
-        else:
-            path.write_text(content, encoding='utf-8', newline='\n')
-    print(json.dumps(register['counts']))
+    for slug in cru_slugs() if args.all else [args.cru]:
+        run(slug, args.check)
 
 
 if __name__ == '__main__':

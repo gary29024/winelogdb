@@ -1,0 +1,12 @@
+{
+  "slug": "grands-echezeaux",
+  "name": "Grands-Échezeaux",
+  "parentFeatureId": "inao-denom-645",
+  "issue": 377,
+  "tier": 1,
+  "bundle": "flagey-echezeaux",
+  "note": "No cru-specific research yet (#377). The evidence panel and domaine grouping read the Échezeaux research file, whose exact-reference notices also name Grands-Échezeaux parcels (e.g. D0093) and whose domaine research is keyed by legal holder.",
+  "evidenceFrom": [
+    "echezeaux"
+  ]
+}

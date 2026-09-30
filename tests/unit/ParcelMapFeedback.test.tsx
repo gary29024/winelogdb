@@ -7,7 +7,7 @@ import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCr
 import {ParcelProducerLinker} from '../../src/features/vineyards/ParcelProducerLinker';
 import {listParcelProducerLinks,saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
 import {listProducers} from '../../src/features/producers/api';
-import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
+import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(),saveParcelProducerLink:vi.fn(),removeParcelProducerLink:vi.fn()}));
 vi.mock('../../src/features/producers/api',()=>({listProducers:vi.fn()}));
 const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;

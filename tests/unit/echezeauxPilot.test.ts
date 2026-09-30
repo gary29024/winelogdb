@@ -4,11 +4,11 @@ import {createHash} from 'node:crypto';
 import {burgundyVillageMapTarget} from '../../src/lib/places/burgundyVillageMap';
 import {loadVillageMapCatalogue} from '../../src/lib/places/loadVillageMapCatalogue';
 import {loadVillageMapData} from '../../src/lib/places/loadVillageMapData';
-import named from '../../src/lib/places/echezeauxNamedPlotIndex.json';
-import namedCatalogue from '../../src/lib/places/echezeauxNamedPlotCatalogue.json';
-import parcelManifest from '../../src/lib/places/echezeauxParcelManifest.json';
-import namedReport from '../../scripts/echezeaux-named-plot-report.json';
-import parcelReport from '../../scripts/echezeaux-parcel-report.json';
+import named from '../../src/lib/places/grandCruParcels/echezeaux.named-plot-index.json';
+import namedCatalogue from '../../src/lib/places/grandCruParcels/echezeaux.named-plots.json';
+import parcelManifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
+import namedReport from '../../scripts/grand-crus/reports/echezeaux-named-plots.json';
+import parcelReport from '../../scripts/grand-crus/reports/flagey-echezeaux-parcels.json';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
 
 const wine={country:'France',region:'Burgundy',appellation:'Échezeaux',classification:'grand_cru',colour:'red',wineName:''};

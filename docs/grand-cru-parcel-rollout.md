@@ -83,6 +83,47 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
    Browser tests stay one representative journey, parameterised by config, so the
    Chromium matrix does not grow with each cru.
 
+**Done in #417.** Échezeaux regenerates with identical hashes for every data file
+(parcel and named-area GeoJSON, manifest, holder index, app evidence, named areas,
+rights history, sale records, both build reports). Only the research register's
+input paths and rebuild commands changed, because the files moved. Grands-Échezeaux
+now gets the evidence panel and domaine grouping through the registry.
+
+### Adding a cru
+
+1. **Bundle.** If its communes already have a bundle in `scripts/grand-crus/bundles/`
+   (e.g. `flagey-echezeaux.json`), add the cru's slug to `crus` and its INAO feature
+   to `parcels.parentFeatureIds`. Otherwise create `<bundle-id>.json`: `villageMap`,
+   `assetName`, the pinned `parcels` block (first commune, then `additionalCommunes`),
+   `lieuxDits` per commune, and optionally `rightsHistory` and `saleRecords`.
+2. **Cru config** `scripts/grand-crus/<slug>.json`: `slug`, `name`,
+   `parentFeatureId`, `issue`, `tier`, `bundle` and `evidenceFrom`. Add
+   `appellationId` and `namedPlots` once named areas are reviewed,
+   `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
+   once `docs/research/<slug>/curation.json` exists.
+3. **Build**, from the repository root:
+
+   ```sh
+   python scripts/download_grand_cru_sources.py --cru <slug>   # once per bundle
+   python scripts/build_grand_cru_parcels.py --cru <slug>      # rebuilds the whole bundle
+   python scripts/build_grand_cru_named_plots.py --cru <slug>
+   python scripts/build_grand_cru_parcel_named_areas.py --cru <slug>
+   python scripts/build_grand_cru_rights_history.py --cru <slug>
+   python scripts/build_grand_cru_sale_records.py --cru <slug>
+   python scripts/build_grand_cru_research.py --cru <slug>     # --all --check is what CI runs
+   ```
+
+4. **App.** Add the cru (and a new bundle's manifest, holder index and any evidence
+   loader) to `src/lib/places/grandCruParcels/registry.ts`, `holders.ts` and
+   `evidence.ts`. `tests/unit/grandCruRegistry.test.ts` fails until the registry
+   matches the configs. Components need no change.
+
+Outputs by convention: research in `docs/research/<slug>/`; app files in
+`src/lib/places/grandCruParcels/` (`<bundle>.manifest.json`, `<bundle>.holders.json`,
+`<slug>.evidence.json`, `<slug>.named-plots.json`); build reports in
+`scripts/grand-crus/reports/`. The browser journey
+`Grand Cru parcels: … from its config` runs one cru (`WINELOG_E2E_CRU=<slug>`).
+
 ## 4. Per-cru differences to plan for
 
 | Case | Crus | What changes |

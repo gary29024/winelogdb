@@ -37,77 +37,77 @@
   "sha256": "ec9f1b0809d52c82c1226e24df213d9ada1e62341c5e35995847ca3b737aeee8",
   "bytes": 37133,
   "gzipEquivalentBytes": 12207,
-  "parentHa": 38.82566020002819,
-  "mappedHa": 33.589539059393275,
-  "unmappedHa": 5.236121204412333,
+  "parentHa": 38.825660200022746,
+  "mappedHa": 33.5895390593443,
+  "unmappedHa": 5.2361212044290335,
   "plots": [
     {
       "id": "echezeaux-plot-clos-saint-denis",
-      "sourceHa": 1.7337755648379727,
-      "clippedHa": 1.6866967944924152,
+      "sourceHa": 1.73377556483169,
+      "clippedHa": 1.6866967944903009,
       "parts": 4,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-echezeaux-du-dessus",
-      "sourceHa": 4.64444250500026,
-      "clippedHa": 4.516110466573335,
+      "sourceHa": 4.644442505001459,
+      "clippedHa": 4.516110466564418,
       "parts": 4,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-en-orveaux",
-      "sourceHa": 10.057005505825881,
-      "clippedHa": 8.011794141338818,
+      "sourceHa": 10.057005505813889,
+      "clippedHa": 8.011794141338122,
       "parts": 4,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-beaux-monts-bas",
-      "sourceHa": 6.458667021907209,
-      "clippedHa": 0.789088039716576,
+      "sourceHa": 6.458667021908865,
+      "clippedHa": 0.7890880397088883,
       "parts": 11,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-champs-traversins",
-      "sourceHa": 3.682669872753713,
-      "clippedHa": 3.572980240896916,
+      "sourceHa": 3.682669872743032,
+      "clippedHa": 3.5729802408864706,
       "parts": 6,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-cruots-ou-vignes-blanches",
-      "sourceHa": 3.2196426744767455,
-      "clippedHa": 3.204981883665343,
+      "sourceHa": 3.219642674479923,
+      "clippedHa": 3.204981883666806,
       "parts": 2,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-loachausses",
-      "sourceHa": 2.648126990402722,
-      "clippedHa": 2.512374776131396,
+      "sourceHa": 2.648126990395303,
+      "clippedHa": 2.512374776127119,
       "parts": 4,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-quartiers-de-nuits",
-      "sourceHa": 2.649011397156209,
-      "clippedHa": 1.1484055649882319,
+      "sourceHa": 2.6490113971549607,
+      "clippedHa": 1.1484055649799556,
       "parts": 1,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-rouges-du-bas",
-      "sourceHa": 3.1898674132696714,
-      "clippedHa": 3.078051575940894,
+      "sourceHa": 3.189867413271828,
+      "clippedHa": 3.0780515759289298,
       "parts": 1,
       "holes": 0
     },
     {
       "id": "echezeaux-plot-les-treux",
-      "sourceHa": 5.17771535665251,
-      "clippedHa": 5.0690555756493465,
+      "sourceHa": 5.177715356656607,
+      "clippedHa": 5.069055575653284,
       "parts": 6,
       "holes": 0
     }

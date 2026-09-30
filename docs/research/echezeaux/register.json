@@ -6,12 +6,12 @@
   "scope": "All 276 mapped Échezeaux parcels inventoried; all 36 recorded right-holder groups triaged. Not an exhaustive search of every cadastral reference or inaccessible archive.",
   "parentFeatureId": "inao-denom-565",
   "inputs": {
-    "curation": "docs/research/echezeaux-farming-curation.json",
+    "curation": "docs/research/echezeaux/curation.json",
     "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
     "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
     "cadastreDate": "2026-06-01",
     "rightsAsOf": "2025-01-01",
-    "rightsHistory": "docs/research/echezeaux-rights-history.json",
+    "rightsHistory": "docs/research/echezeaux/rights-history.json",
     "rightsHistoryYears": [
       "2019-01-01",
       "2020-01-01",
@@ -21,7 +21,7 @@
       "2024-01-01",
       "2025-01-01"
     ],
-    "saleRecords": "docs/research/echezeaux-sale-records.json",
+    "saleRecords": "docs/research/echezeaux/sale-records.json",
     "saleRecordsCoverage": "2014-01-17 to 2025-11-20"
   },
   "counts": {

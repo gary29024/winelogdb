@@ -1,0 +1,267 @@
+"""Shared configuration, paths and pinned-input helpers for the Grand Cru parcel pipeline.
+
+Each cru has one config, scripts/grand-crus/<slug>.json, naming its INAO feature,
+research tier and the commune bundle it belongs to. A bundle,
+scripts/grand-crus/bundles/<id>.json, pins everything fetched once per commune set:
+cadastre and lieux-dits snapshots, DGFiP rights files, cadastre vintages and DVF+.
+Several crus share one bundle (Flagey serves Échezeaux and Grands-Échezeaux), so
+downloads are never repeated, while each cru keeps its own research folder:
+
+  docs/research/<slug>/                     curation and generated register (never shared)
+  src/lib/places/grandCruParcels/           app-facing manifests, holder indexes and evidence
+
+Only the standard library is needed here; geometry builders import shapely themselves.
+"""
+import hashlib
+import json
+import os
+import struct
+import urllib.request
+import zlib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+CONFIG_DIR = ROOT / 'scripts/grand-crus'
+BUNDLE_DIR = CONFIG_DIR / 'bundles'
+REPORT_DIR = CONFIG_DIR / 'reports'
+APP_DIR = ROOT / 'src/lib/places/grandCruParcels'
+RESEARCH_DIR = ROOT / 'docs/research'
+SOURCE_ROOT = ROOT / '.tmp/grand-cru-sources'
+TIERS = {1, 2, 3}
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def read_json(path):
+    return json.loads(Path(path).read_text(encoding='utf-8'))
+
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def cru_slugs():
+    return sorted(p.stem for p in CONFIG_DIR.glob('*.json'))
+
+
+def bundle_ids():
+    return sorted(p.stem for p in BUNDLE_DIR.glob('*.json'))
+
+
+def load_bundle(bundle_id):
+    bundle = read_json(BUNDLE_DIR / f'{bundle_id}.json')
+    require(bundle['id'] == bundle_id, f'Bundle file name differs from its id: {bundle_id}')
+    return bundle
+
+
+def load_cru(slug):
+    """Return (cru, bundle), checking that the two configs agree."""
+    path = CONFIG_DIR / f'{slug}.json'
+    require(path.exists(), f'Unknown cru: {slug}. Configured: {", ".join(cru_slugs())}')
+    cru = read_json(path)
+    require(cru['slug'] == slug, f'Cru file name differs from its slug: {slug}')
+    require(cru['tier'] in TIERS, f'{slug}: research tier must be 1, 2 or 3')
+    bundle = load_bundle(cru['bundle'])
+    require(slug in bundle['crus'], f'{slug} is not listed in bundle {bundle["id"]}')
+    require(cru['parentFeatureId'] in bundle['parcels']['parentFeatureIds'], f'{slug}: INAO feature absent from its bundle')
+    for other in cru['evidenceFrom']:
+        require((CONFIG_DIR / f'{other}.json').exists() and 'research' in read_json(CONFIG_DIR / f'{other}.json'),
+                f'{slug}: evidence source {other} has no research configured')
+    return cru, bundle
+
+
+def communes(bundle):
+    """INSEE codes of every commune in a bundle; the first is the one the pilot schema names."""
+    parcels = bundle['parcels']
+    return [parcels['commune']] + [c['commune'] for c in parcels.get('additionalCommunes', [])]
+
+
+def cadastre_sources(bundle):
+    """Current cadastral parcel snapshot per commune: [(insee, url, sha256)]."""
+    parcels = bundle['parcels']
+    return [(parcels['commune'], parcels['cadastreUrl'], parcels['cadastreSha256'])] + [
+        (c['commune'], c['cadastreUrl'], c['cadastreSha256']) for c in parcels.get('additionalCommunes', [])]
+
+
+def source_dir(bundle, override=None):
+    return Path(override) if override else SOURCE_ROOT / bundle['id']
+
+
+# Conventional file names inside a bundle's source directory, shared by the downloader and every builder.
+def parcels_file(insee):
+    return f'parcelles-{insee}.json.gz'
+
+
+def vintage_file(insee, date):
+    return f'parcelles-{insee}-{date}.json.gz'
+
+
+def lieux_dits_file(insee):
+    return f'lieux-dits-{insee}.json.gz'
+
+
+def schema_file(bundle):
+    return f'dgfip-{bundle["parcels"]["rightsAsOf"][:4]}-description.odt'
+
+
+def pinned(directory, name, digest):
+    data = (Path(directory) / name).read_bytes()
+    require(sha256(data) == digest, f'Review changed input: {name}')
+    return data
+
+
+# Conventional output paths. One cru's research lives only in its own folder.
+def manifest_path(bundle):
+    return APP_DIR / f'{bundle["id"]}.manifest.json'
+
+
+def holder_index_path(bundle):
+    return APP_DIR / f'{bundle["id"]}.holders.json'
+
+
+def parcel_report_path(bundle):
+    return REPORT_DIR / f'{bundle["id"]}-parcels.json'
+
+
+def evidence_path(cru):
+    return APP_DIR / f'{cru["slug"]}.evidence.json'
+
+
+def named_plot_catalogue_path(cru):
+    return APP_DIR / f'{cru["slug"]}.named-plots.json'
+
+
+def named_plot_index_path(cru):
+    return APP_DIR / f'{cru["slug"]}.named-plot-index.json'
+
+
+def named_plot_report_path(cru):
+    return REPORT_DIR / f'{cru["slug"]}-named-plots.json'
+
+
+def research_dir(cru):
+    return RESEARCH_DIR / cru['slug']
+
+
+def research_path(cru, name):
+    """name is one of curation.json, register.json, register.md, rights-history.json, sale-records.json, parcel-named-areas.json."""
+    return research_dir(cru) / name
+
+
+def relative(path, start=ROOT):
+    """Repository-relative POSIX path, as written into generated files and links."""
+    return Path(os.path.relpath(path, start)).as_posix()
+
+
+def command(script, cru):
+    return f'python scripts/{script} --cru {cru["slug"]}'
+
+
+def load_manifest(bundle):
+    return read_json(manifest_path(bundle))
+
+
+def parcel_asset(manifest):
+    """The bundle's published parcel file, as LF bytes. Git autocrlf may add CRs in a Windows checkout."""
+    asset = (ROOT / 'public' / manifest['dataUrl'].lstrip('/')).read_bytes().replace(b'\r\n', b'\n')
+    require(sha256(asset) == manifest['sha256'], 'Parcel snapshot hash changed')
+    return asset
+
+
+def in_cru(feature, parent):
+    return any(o['parentFeatureId'] == parent for o in feature['properties']['overlaps'])
+
+
+def village_map(bundle):
+    """The exact reviewed village map (INAO boundaries) and its catalogue, never an unreviewed rebuild."""
+    entry = next(m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == bundle['villageMap'])
+    catalogue = read_json(ROOT / 'src/lib/places' / entry['catalogue'])
+    canonical = (ROOT / ('public' + catalogue['dataUrl'])).read_text(encoding='utf8').replace('\r\n', '\n').encode()
+    require(sha256(canonical) == entry['sourceSha256'], 'Review changed parent source')
+    return catalogue, canonical, entry['sourceSha256']
+
+
+def write_or_check(path, content, check):
+    path = Path(path)
+    if check:
+        require(path.exists() and path.read_text(encoding='utf-8') == content, f'Stale output: {relative(path)}')
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding='utf-8', newline='\n')
+
+
+# Downloads: only pinned inputs, verified by hash; ZIP members are read by HTTP range, never extracted from disk.
+def fetch(url, byte_range=None):
+    headers = {'Accept-Encoding': 'identity'}
+    if byte_range:
+        headers['Range'] = byte_range
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=900) as response:
+        require(not byte_range or response.status == 206, f'Range request not honoured: {url}')
+        return response.read()
+
+
+def zip_member(url, member):
+    """Read one deflated member of a remote ZIP (including ZIP64 directories)."""
+    tail = fetch(url, 'bytes=-65557')
+    end = tail.rfind(b'PK\x05\x06')
+    require(end >= 0, 'ZIP end record missing')
+    size, offset = struct.unpack('<II', tail[end + 12:end + 20])
+    if offset == 0xFFFFFFFF:
+        z64 = tail.rfind(b'PK\x06\x06')
+        size, offset = struct.unpack('<QQ', tail[z64 + 40:z64 + 56])
+    directory, found, p = fetch(url, f'bytes={offset}-{offset + size - 1}'), [], 0
+    while p < len(directory):
+        require(directory[p:p + 4] == b'PK\x01\x02', 'Invalid central directory')
+        method, = struct.unpack('<H', directory[p + 10:p + 12])
+        crc, compressed, uncompressed = struct.unpack('<III', directory[p + 16:p + 28])
+        name_len, extra_len, comment_len = struct.unpack('<HHH', directory[p + 28:p + 34])
+        local, = struct.unpack('<I', directory[p + 42:p + 46])
+        name = directory[p + 46:p + 46 + name_len].decode('cp437')
+        extra, q = directory[p + 46 + name_len:p + 46 + name_len + extra_len], 0
+        while q < len(extra):
+            tag, length = struct.unpack('<HH', extra[q:q + 4])
+            if tag == 1:  # ZIP64: 8-byte values replace, in order, each saturated 4-byte field.
+                values = iter(struct.unpack(f'<{length // 8}Q', extra[q + 4:q + 4 + length // 8 * 8]))
+                uncompressed = next(values) if uncompressed == 0xFFFFFFFF else uncompressed
+                compressed = next(values) if compressed == 0xFFFFFFFF else compressed
+                local = next(values) if local == 0xFFFFFFFF else local
+            q += 4 + length
+        if name.split('/')[-1] == member:
+            found.append((method, crc, compressed, uncompressed, local))
+        p += 46 + name_len + extra_len + comment_len
+    require(len(found) == 1, f'Missing or ambiguous ZIP member: {member}')
+    method, crc, compressed, uncompressed, local = found[0]
+    require(method == 8, 'Unexpected ZIP compression')
+    header = fetch(url, f'bytes={local}-{local + 29}')
+    require(header[:4] == b'PK\x03\x04', 'Invalid local header')
+    start = local + 30 + sum(struct.unpack('<HH', header[26:30]))
+    data = zlib.decompress(fetch(url, f'bytes={start}-{start + compressed - 1}'), -15)
+    require(len(data) == uncompressed and zlib.crc32(data) == crc, f'ZIP member check failed: {member}')
+    return data
+
+
+def cadastre_url(url):
+    # cadastre.data.gouv.fr redirects here; the file is the same pinned snapshot.
+    return url.replace('https://cadastre.data.gouv.fr/data/', 'https://files.data.gouv.fr/cadastre/')
+
+
+def bundle_sources(bundle):
+    """Every pinned input of a bundle: [(file name, sha256, fetcher)]. Each is downloaded once for all its crus."""
+    parcels = bundle['parcels']
+    wanted = [(parcels_file(insee), digest, lambda url=url: fetch(cadastre_url(url))) for insee, url, digest in cadastre_sources(bundle)]
+    wanted += [(lieux_dits_file(insee), s['sha256'], lambda s=s: fetch(cadastre_url(s['url']))) for insee, s in bundle['lieuxDits'].items()]
+    wanted.append((schema_file(bundle), parcels['schemaSha256'], lambda: fetch(parcels['schemaUrl'])))
+    wanted.append((parcels['rightsMember'], parcels['rightsMemberSha256'], lambda: zip_member(parcels['rightsUrl'], parcels['rightsMember'])))
+    history = bundle.get('rightsHistory')
+    if history:
+        wanted += [(r['member'], r['sha256'], lambda r=r: zip_member(r['url'], r['member'])) for r in history['rights']]
+        wanted += [(vintage_file(c.get('commune', parcels['commune']), c['date']), c['sha256'], lambda c=c: fetch(c['url']))
+                   for c in history['cadastre']]
+    if sales := bundle.get('saleRecords'):
+        wanted.append((sales['fileName'], sales['sha256'], lambda: fetch(sales['url'])))
+    names = [name for name, _, _ in wanted]
+    require(len(names) == len(set(names)), 'Duplicate source file in bundle')
+    return wanted

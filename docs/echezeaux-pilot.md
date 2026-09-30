@@ -42,7 +42,7 @@ identities. Producer names alone never select holdings.
 - The existing canonical Vosne map supplies INAO features `565` and `645`.
   Both builders verify its committed source hash before using it.
 - Exact URLs, SHA-256 checksums, dates and the ZIP member CRC are committed in
-  `scripts/echezeaux-named-plots.json` and `scripts/echezeaux-parcels.json`.
+  `scripts/grand-crus/echezeaux.json` (cru) and `scripts/grand-crus/bundles/flagey-echezeaux.json` (Flagey commune bundle).
 
 Named areas are intersected in WGS84, retaining all polygon parts and holes.
 No coordinate rounding, simplification, snapping or positive-area sliver removal
@@ -50,7 +50,7 @@ is applied. EPSG:2154 diagnostics check validity, containment and non-overlap.
 
 Parcel geometry is copied unchanged. EPSG:2154 intersections measure overlap;
 an overlap **greater than 1 m²** admits a parcel. All smaller positive contacts
-are listed separately in `echezeaux-parcel-report.json`. This threshold suppresses
+are listed separately in `scripts/grand-crus/reports/flagey-echezeaux-parcels.json`. This threshold suppresses
 tiny edge contacts and is not a legal assertion about a parcel's inclusion in
 the appellation. The cadastral recorded area and computed geometry area are
 different quantities; the UI explicitly labels each.
@@ -128,14 +128,16 @@ the #363 backlog. Size checks cap the gzip equivalents at 15 KB and 45 KB.
 
 ## Reproduce and refresh
 
-Run from the repository root with Node and Python plus the pinned GIS packages:
+Run from the repository root with Python plus the pinned GIS packages. The
+scripts are shared by every Grand Cru ([rollout playbook](grand-cru-parcel-rollout.md));
+the Flagey bundle serves Échezeaux and Grands-Échezeaux, so its sources download once:
 
 ```sh
 python -m pip install -r scripts/burgundy-map-requirements.txt
-node scripts/download_echezeaux_sources.mjs .tmp/echezeaux-sources
-python scripts/test_echezeaux_parcels.py
-python scripts/build_echezeaux_named_plots.py --source-dir .tmp/echezeaux-sources
-python scripts/build_echezeaux_parcels.py --source-dir .tmp/echezeaux-sources
+python scripts/download_grand_cru_sources.py --cru echezeaux
+python scripts/test_grand_cru_parcels.py
+python scripts/build_grand_cru_named_plots.py --cru echezeaux
+python scripts/build_grand_cru_parcels.py --cru echezeaux
 npx vitest run tests/unit/echezeauxPilot.test.ts tests/unit/burgundyVillageMap.test.ts
 ```
 

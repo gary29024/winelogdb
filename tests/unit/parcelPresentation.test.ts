@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {groupParcelRightHolders,matchesLinkedProducer,type HolderResearch} from '../../src/lib/places/parcelPresentation';
-import evidence from '../../src/lib/places/echezeauxParcelEvidence.json';
+import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 const link={holderId:'holder',producerId:'nicole',producerName:'Domaine Nicole Lamarche',status:'manual' as const,updatedAt:'2026-09-30'};
 const context:HolderResearch={name:'Domaine Example',basis:'estate-context',note:'Unverified context',sources:['estate']};
 const parcel=(id:string,ids:string[],area=100,parent='cru')=>({properties:{id,recordedRights:ids.map(holderId=>({holderId,name:`GFA ${holderId}`})),overlaps:[{parentFeatureId:parent,areaM2:area}]}});

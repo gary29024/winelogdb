@@ -4,8 +4,8 @@ import {migratedSqliteD1} from './support/sqliteD1';
 import {createSession} from '../../src/lib/auth/session';
 import {sharedProducerId} from '../../src/lib/producers/sharedRef';
 import {parcelProducerLinksRoute} from '../../worker/parcelProducerLinks';
-import manifest from '../../src/lib/places/echezeauxParcelManifest.json';
-import holders from '../../src/lib/places/echezeauxParcelHolderIndex.json';
+import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
+import holders from '../../src/lib/places/grandCruParcels/flagey-echezeaux.holders.json';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
 
 const secret='parcel-producer-tests-secret-long-enough',parent='inao-denom-565',holder=holders[parent][0];
