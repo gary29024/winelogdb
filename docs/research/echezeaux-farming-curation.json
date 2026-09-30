@@ -1958,6 +1958,194 @@
         "conflictingRecitedEnd": "2007-12-31",
         "limitation": "Contribution schedule is outside the mapped grand cru; neither recital is the executed 2000 lease. The 2017/2007 variant does not alter the separate Bouchy 2001 lease."
       }
+    },
+    {
+      "id": "bouchy-mondange-expansion-1995",
+      "title": "Bouchy: 15 September 1995 Les Treux acquisition and Mondange lease mandates",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "1995-09-15",
+      "filingLabelDate": "1995-11-08",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 15 September 1995 resolutions authorize acquisition of 22 ares 16 centiares in Échezeaux Les Treux, section D 0628/D0765/D0767, and a long-term rural métayage lease of that vineyard to Bernard Mondange. The resolutions are authority to act, not proof that the purchase or lease was executed.",
+      "originalFilename": "Domaine Bouchy Et Amis - Actes du 08-11-1995.pdf",
+      "sha256": "3f22bc178635bf83e78fa36812557a43463f11cc82f4fdfb7af2ebdaadc2df2c",
+      "pageCount": 32,
+      "reviewedPages": [
+        26,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry-mirror PDF from Le Figaro Entreprises. Complete file screened visually; decisive resolution checked at PDF p.31. Mirror provenance is not independent corroboration of the underlying registry filing. Original PDF not redistributed.",
+      "dateNote": "The relevant resolutions are signed 15 September 1995; the registry copy was filed 8 November 1995."
+    },
+    {
+      "id": "bouchy-share-transfer-1998",
+      "title": "Bouchy: 14 April 1998 share transfer retaining 1995-1997 wine rights",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "1998-04-14",
+      "filingLabelDate": "1998-06-08",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "An 800-share transfer leaves the transferor the wine rights attached to the vineyard for the 1995, 1996 and 1997 harvests, including receipt, tasting, bottling and related costs. This separates wine/output rights from the share transfer and does not identify a vineyard tenant or farmer.",
+      "originalFilename": "Domaine Bouchy Et Amis - Actes du 08-06-1998.pdf",
+      "sha256": "7c084077140a5f7d4f69d0d9b6ed59161a240259bb2f8daa4b2450702ba99e22",
+      "pageCount": 12,
+      "reviewedPages": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry-mirror PDF from Le Figaro Entreprises. Complete file screened visually; wine-rights clause checked at PDF p.7. Mirror provenance is not independent corroboration of the underlying registry filing. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-seat-statutes-2000",
+      "title": "Bouchy: March 2000 seat-transfer deed and retained statutes",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "2000-03-15",
+      "filingLabelDate": "2000-03-15",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The seat-transfer bundle and retained statutes add no executed vineyard acquisition or lease. The retained Article 39 again carries the 1993 D0764/D0766 purchase mandate and proposed long-term métayage to Bernard Mondange.",
+      "originalFilename": "DOMAINE BOUCHY ET AMIS - Actes du 15-03-2000.pdf",
+      "sha256": "0149e749f0ee78f6d57204e0b614961c18ae8d43f4bb10b32506681aaf521e6a",
+      "pageCount": 32,
+      "reviewedPages": [
+        1,
+        3,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened visually; relevant retained clauses checked. Original PDF not redistributed.",
+      "dateNote": "The bundle contains a 15 March 2000 authenticated seat transfer, 24 October 1998 minutes and retained earlier statutes; the 1993 parcel mandate is historical."
+    },
+    {
+      "id": "bouchy-share-transfer-2007",
+      "title": "Bouchy: June 2007 share transfers retaining 2006 wine rights",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "2007-06-13",
+      "filingLabelDate": "2007-07-09",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The share-transfer deeds preserve the transferor's wine rights from the 2006 harvest after the company-share transfer, including receipt, tasting, bottling and related costs. They contain no vineyard transfer, cadastral schedule or tenant change.",
+      "originalFilename": "DOMAINE BOUCHY ET AMIS - Actes du 09-07-2007.pdf",
+      "sha256": "7f90efb83baf56badfa55e52535a6c5aa9e670d4f7db9c40311f28abbebf10f6",
+      "pageCount": 8,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-share-transfers-2008",
+      "title": "Bouchy: 2008 share-transfer bundle retaining vintage wine rights",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": null,
+      "filingLabelDate": "2008-05-16",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "Four share-transfer copies concern company interests and preserve sellers' rights to wine from the preceding harvest. They provide no vineyard transfer, cadastral schedule, lease amendment or tenant succession.",
+      "originalFilename": "DOMAINE BOUCHY ET AMIS - Actes du 16-05-2008.pdf",
+      "sha256": "f2528667be6655f32282077ed28bc076ae7c926118991a84f3d086db1955eaca",
+      "pageCount": 16,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened visually. The bundle contains several share-transfer deeds, so no single deed date is used for the source record. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-donation-2016-filed-2018",
+      "title": "Bouchy: 22 October 2016 donation-partage of company shares",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "2016-10-22",
+      "filingLabelDate": "2018-12-06",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The notarial donation-partage transfers company-share interests within a family and updates the share allocation. It does not transfer an Échezeaux parcel, name a tenant or amend the Bouchy vineyard lease.",
+      "originalFilename": "DOMAINE BOUCHY ET AMIS - Actes du 06-12-2018.pdf",
+      "sha256": "9333342b1b213f39b2269df128a98bd16a25145704bc663e874bef3d3fe8b040",
+      "pageCount": 18,
+      "reviewedPages": [
+        3,
+        4,
+        7,
+        10,
+        11,
+        12,
+        13
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchy-statutes-filed-2018",
+      "title": "Bouchy: statutes filed 6 December 2018 retaining the historical parcel mandates",
+      "url": "https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321",
+      "type": "company-filing",
+      "documentDate": "2016-10-22",
+      "filingLabelDate": "2018-12-06",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The updated statutes retain the original Bouchy object and historical Article 39 mandate for D0764/D0766. They add no executed vineyard acquisition, lease or tenant change; the filing date must not be treated as a new land event.",
+      "originalFilename": "DOMAINE BOUCHY ET AMIS - Actes du 06-12-2018 2.pdf",
+      "sha256": "80a5480895fd0e3ffeda227d873f41054c34b99e4dbb27010b9310574a48d105",
+      "pageCount": 22,
+      "reviewedPages": [
+        2,
+        3,
+        7,
+        21
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete file screened visually; retained parcel mandate checked at PDF p.21. Original PDF not redistributed."
+    },
+    {
+      "id": "bouchon-formation-2020",
+      "title": "Bouchon Pourpre: 20 January 2020 cash-only formation",
+      "url": "https://www.pappers.fr/entreprise/bouchon-pourpre-880909346#actes",
+      "type": "company-filing",
+      "documentDate": "2020-01-20",
+      "filingLabelDate": "2020-01-27",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The bilingual formation deed permits vineyard acquisition, leasing, fermage and métayage, but the founders contribute only EUR 10,000 in cash. Its formation annex records only bank-account opening; there is no D0673 contribution, acquisition schedule or vineyard lease.",
+      "originalFilename": "BOUCHON POURPRE - Acte sous seing privé 27-01-2020.pdf",
+      "sha256": "8e67404f937538f3a5bb0e793341b63fb3b1e039bf8a3ddcbbdcf83dc3f32d4f",
+      "pageCount": 33,
+      "reviewedPages": [
+        2,
+        3,
+        5,
+        28,
+        29,
+        30,
+        32,
+        33
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers PDF. Complete bilingual filing screened visually. Original PDF not redistributed.",
+      "dateNote": "Founders signed the statutes on 20 January 2020; the registry copy was filed 27 January 2020."
     }
   ],
   "holders": [
@@ -2576,8 +2764,8 @@
     "The separate executed Rouget concurrent lease and Forey 2025–2048 lease have not been reviewed. Orveaux needs the 2003 lease and amendments to explain partial scope, the 4550 m² lease recital versus 4147 m² planted area, and any operating-company arrangement.",
     "D0146 is co-sold with the four later LES CRUOTS parcels but is not in the contribution tables; its owner and operator remain unassigned.",
     "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals.",
-    "The Grands Crus 1997 and Bonnes Pentes 1999 exact-reference mandates remain without executed instruments. Naudin’s 1994 formation and 2021 capital update do not supply the Bonnes Pentes lease. Bouchy’s 2008 SAFER proposal still lacks references and outcome; the separate Père et Filles copies concern Puligny-Montrachet and do not resolve it.",
-    "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. Obtain the executed lease and amendments before backdating the five-parcel 2019 scope. GFV Tardy’s separate 2000 lease covers other vineyards and has competing 2017/2007 end-year recitals; neither changes the Bouchy lease."
+    "The Grands Crus 1997 and Bonnes Pentes 1999 exact-reference mandates remain without executed instruments. Naudin’s 1994 formation and 2021 capital update do not supply the Bonnes Pentes lease. Bouchy’s 1995 resolutions now identify D0628/D0765/D0767 and a Mondange lease mandate, completing the five-parcel historical mandate scope with 1993 D0764/D0766; execution and the 2008 SAFER proposal outcome remain unverified.",
+    "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. The free public/mirror corpus still does not expose that executed lease or its amendments. The 1995 resolution reconstructs the earlier five-parcel acquisition/lease mandate chain but does not prove execution or succession into the 2001 Tardy lease."
   ],
   "historyFindings": [
     {
@@ -3479,7 +3667,7 @@
         "EN ORVEAUX",
         "LES CRUOTS OU VIGNES BLANCHES"
       ],
-      "publishedAreaHa": 1.0,
+      "publishedAreaHa": 1,
       "precision": "approximate",
       "relation": "owner",
       "sourceIds": [
@@ -3604,7 +3792,7 @@
         "CLOS SAINT-DENIS",
         "ECHEZEAUX DU DESSUS"
       ],
-      "publishedAreaHa": 1.0,
+      "publishedAreaHa": 1,
       "precision": "approximate",
       "relation": "unstated",
       "sourceIds": [
@@ -4442,6 +4630,44 @@
       ],
       "finding": "Article 41 authorizes purchase from SAFER Bourgogne of the three named references and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). The deed gives a combined 3410 m², matching the sum of the pinned cadastral areas; individual areas come from that snapshot. Neither execution nor current cultivation is established.",
       "appNote": "The 5 July 1999 deed authorizes a SAFER purchase of D0645-D0647, together 0.3410 ha, and a long-term lease to Domaine Henri Naudin-Ferrand (394495493). Individual parcel areas are not recited. The executed instruments and current farming remain unverified."
+    },
+    {
+      "id": "bouchy-mondange-expansion-1995",
+      "sourceId": "bouchy-mondange-expansion-1995",
+      "title": "Bouchy: D0628/D0765/D0767 purchase and Mondange lease mandates",
+      "holderId": "391735321",
+      "companySiren": "391735321",
+      "documentDate": "1995-09-15",
+      "parcelAreasM2": {
+        "212670000D0628": 309,
+        "212670000D0765": 1619,
+        "212670000D0767": 288
+      },
+      "areaEvidence": {
+        "kind": "aggregate-only",
+        "recitedTotalM2": 2216,
+        "individualAreasSource": "pinned-cadastral-snapshot"
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "Bernard Mondange"
+          ],
+          "parcelIds": [
+            "212670000D0628",
+            "212670000D0765",
+            "212670000D0767"
+          ],
+          "combinedAreaM2": 2216,
+          "pages": [
+            31
+          ],
+          "limitation": "The resolution authorizes the GFA to acquire the vineyard and grant a long-term rural métayage lease to Bernard Mondange. No executed purchase or lease is attached."
+        }
+      ],
+      "finding": "The 15 September 1995 resolutions authorize purchase of D0628/D0765/D0767, together 2216 m², and a long-term rural métayage lease to Bernard Mondange. Together with the 1993 D0764/D0766 mandate (1260 m²), the two mandate groups total the same five parcels and 3476 m² later listed in the 2019 Tardy recital. Neither resolution proves execution or uninterrupted succession.",
+      "appNote": "The 1995 resolution authorizes purchase of D0628/D0765/D0767 (0.2216 ha) and a long-term métayage lease to Bernard Mondange. Together with the 1993 D0764/D0766 mandate, this accounts for the same five parcels later listed in 2019. Execution and later succession remain unverified."
     }
   ]
 }
