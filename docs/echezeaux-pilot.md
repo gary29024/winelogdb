@@ -57,9 +57,11 @@ different quantities; the UI explicitly labels each.
 
 Only communes INAO lists for the cru are imported; for Échezeaux that is Flagey-Échezeaux
 (21267) alone. The [commune audit](../scripts/grand-crus/reports/echezeaux-commune-audit.json)
-confirms that Flagey parcels cover the boundary apart from 8.2 m² of gaps between parcels. It
-also measures where neighbouring communes' parcels touch it: Vosne-Romanée by 25.7 m² (AC0304,
-AC0003, AB0059) and Chambolle-Musigny by 20.4 m² (AN0078, A0301, AN0006), each at most 0.44%
+confirms that Flagey parcels cover the boundary apart from 8.2 m². Of that, neighbouring-commune
+parcels cover 1.4 m² and no parcel covers 6.8 m² (gaps between parcels, roads and paths). The
+audit also measures where neighbouring communes' parcels touch the boundary: Vosne-Romanée by
+25.7 m² (four parcels; AC0304, AC0003 and AB0059 are over the 1 m² threshold, AC0002 is 0.64 m²)
+and Chambolle-Musigny by 20.4 m² (AN0078, A0301 and AN0006, all over 1 m²), each at most 0.44%
 of its parcel; Vougeot not at all. These are places where the INAO line and the cadastral
 commune line disagree by a few metres. They are published in the audit, not added as
 Échezeaux parcels, so the 276-parcel count and every holder total are unchanged.

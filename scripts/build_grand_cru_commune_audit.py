@@ -5,7 +5,7 @@
 
 Import scope is the communes INAO lists for the cru. The audit proves that scope is complete:
 every INAO commune is in the bundle, and the bundle's parcels cover the boundary apart from
-small gaps between parcels (roads, paths). Neighbouring communes pinned in the bundle's
+a small remainder. Neighbouring communes pinned in the bundle's
 "auditCommunes" are measured, never imported: where the INAO line and the cadastral commune
 line disagree, their parcels touch the cru by a few square metres. Each contact is published
 with its area and share of the parcel.
@@ -39,17 +39,20 @@ def build(cru, bundle, directory):
     own = []
     for insee, _, digest in cadastre_sources(bundle):
         own += parcels(parcels_file(insee), digest)
-    covered = unary_union(own).intersection(boundary).area
+    own_cover = unary_union(own)
+    covered = own_cover.intersection(boundary).area
     uncovered = boundary.area - covered
+    outside_bundle = boundary.difference(own_cover)
     require(uncovered / boundary.area <= MAX_UNCOVERED_SHARE, f'{cru["slug"]}: bundle communes leave {uncovered:.1f} m² uncovered')
     inao = feature['properties']['communes']
     require(set(inao) <= set(communes(bundle)), f'{cru["slug"]}: INAO commune missing from the bundle: {sorted(set(inao) - set(communes(bundle)))}')
-    neighbours = []
+    neighbours, neighbour_parcels = [], []
     for insee, source in sorted(bundle.get('auditCommunes', {}).items()):
         require(insee not in inao, f'{cru["slug"]}: INAO lists {insee}; import it in the bundle instead of auditing it')
         contacts = []
         for f in json.loads(gzip.decompress(pinned(directory, audit_file(insee), source['sha256'])))['features']:
             metric = transform(project, shape(f['geometry']))
+            neighbour_parcels.append(metric)
             overlap = metric.intersection(boundary).area
             if overlap > 0:
                 contacts.append({'parcelId': f['properties']['id'], 'overlapM2': round(overlap, 2),
@@ -60,6 +63,9 @@ def build(cru, bundle, directory):
                            'contactsOverMinimumOverlap': sum(c['overlapM2'] > bundle['parcels']['minimumOverlapM2'] for c in contacts),
                            'maxParcelPercent': max((c['parcelPercent'] for c in contacts), default=0),
                            'contacts': contacts})
+    # Part of the area outside the bundle's parcels is where neighbouring parcels reach over the INAO line;
+    # the rest is covered by no parcel at all (gaps between parcels, roads, paths).
+    by_neighbours = unary_union(neighbour_parcels).intersection(outside_bundle).area if neighbour_parcels else 0.0
     report = read_json(parcel_report_path(bundle))
     contacts = [c for c in report['excludedBoundaryContacts'] if c['parentFeatureId'] == cru['parentFeatureId']]
     return {
@@ -68,12 +74,15 @@ def build(cru, bundle, directory):
         'bundleCommunes': [{'commune': insee, 'name': names.get(insee), 'url': url, 'sha256': digest}
                            for insee, url, digest in cadastre_sources(bundle)],
         'boundaryAreaM2': round(boundary.area, 1),
-        'coveredByBundleParcelsM2': round(covered, 1), 'uncoveredM2': round(uncovered, 1),
+        'coveredByBundleParcelsM2': round(covered, 1), 'notCoveredByBundleParcelsM2': round(uncovered, 1),
+        'notCoveredByBundleParcels': {'coveredByNeighbourParcelsM2': round(by_neighbours, 1),
+                                      'coveredByNoParcelM2': round(uncovered - by_neighbours, 1)},
         'neighbours': neighbours,
         'excludedEdgeContacts': len(contacts),
         'note': ('Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary '
                  'and the cadastral commune line disagree; they are measured here and never added as parcels, whatever '
-                 'their area. Uncovered area is the gaps between cadastral parcels inside the boundary.'),
+                 'their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the '
+                 'part no parcel covers (gaps between parcels, roads and paths).'),
     }
 
 
@@ -86,7 +95,7 @@ def main():
     cru, bundle = load_cru(args.cru)
     result = build(cru, bundle, source_dir(bundle, args.source_dir))
     write_or_check(commune_audit_path(cru), json.dumps(result, ensure_ascii=False, indent=2) + '\n', args.check)
-    print(json.dumps({'uncoveredM2': result['uncoveredM2'], 'excludedEdgeContacts': result['excludedEdgeContacts'],
+    print(json.dumps({'notCoveredByBundleParcelsM2': result['notCoveredByBundleParcelsM2'], **result['notCoveredByBundleParcels'], 'excludedEdgeContacts': result['excludedEdgeContacts'],
                       'neighbours': {n['name']: [n['contactAreaM2'], n['contactsOverMinimumOverlap'], n['maxParcelPercent']]
                                      for n in result['neighbours']}}, ensure_ascii=False))
 

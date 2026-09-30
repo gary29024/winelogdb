@@ -31,8 +31,8 @@ used for Échezeaux; Grands-Échezeaux adds only its evidence file.
 - **Parcels and commune audit.** The pinned Etalab snapshot of 2026-06-01 gives 32 parcels,
   full polygons, with the cru overlap measured separately; no edge contact was left out. The
   [commune audit](../../../scripts/grand-crus/reports/grands-echezeaux-commune-audit.json) confirms
-  INAO lists only Flagey (21267) and that Flagey parcels cover the boundary apart from 1.8 m² of
-  gaps between parcels. Neighbouring communes are measured, never imported. Vosne-Romanée and
+  INAO lists only Flagey (21267) and that Flagey parcels cover the boundary apart from 1.8 m²,
+  which no parcel covers (gaps between parcels). Neighbouring communes are measured, never imported. Vosne-Romanée and
   Chambolle-Musigny touch the cru by 0 m². Along the Clos de Vougeot wall, 12 Vougeot parcels
   touch it by 148 m² in all (at most 48 m², 2.15% of any one parcel). That is where the INAO
   line and the cadastral commune line disagree, not Grands-Échezeaux land.
@@ -70,8 +70,9 @@ Details, sources and every parcel: [register](register.md) (generated from [cura
 
 - Private individuals are not in the legal-entity files: 13 parcels (2.06 ha) have no matched
   company record. That does not mean they have no owner.
-- Tier 2 (company filings, leases, published holdings and articles) and Tier 3 (land-registry
-  copies, outreach) have not been done.
+- Tier 2 (company filings, leases, published holdings and articles) is tracked for every cru in
+  #420; Tier 3 (land-registry copies, outreach) is deferred. Farming evidence and any verified
+  operator link stay with #364; unresolved named-area and source gaps with #344.
 - The Domaine de la Romanée-Conti Grands-Échezeaux page shows its figures only in a browser
   and was not read.
 - The cru's edge along Vougeot is uncertain by a few metres: the INAO boundary and the cadastral

@@ -15,7 +15,11 @@
   ],
   "boundaryAreaM2": 388256.6,
   "coveredByBundleParcelsM2": 388248.4,
-  "uncoveredM2": 8.2,
+  "notCoveredByBundleParcelsM2": 8.2,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 1.4,
+    "coveredByNoParcelM2": 6.8
+  },
   "neighbours": [
     {
       "commune": "21133",
@@ -86,5 +90,5 @@
     }
   ],
   "excludedEdgeContacts": 24,
-  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Uncovered area is the gaps between cadastral parcels inside the boundary."
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths)."
 }
