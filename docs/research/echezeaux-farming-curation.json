@@ -2236,6 +2236,190 @@
       "reviewedAt": "2026-09-30",
       "access": "read",
       "finding": "The historical operating EARL was dissolved in 2022; a related Dominique Mugneret company (448871863) lists a 14 November 2007 notarial filing. Hachette's 40-are En Orveaux holding remains named-area evidence only."
+    },
+    {
+      "id": "bouchard-apport-project-2026",
+      "title": "Maison Bouchard Père & Fils: 16 February 2026 partial-asset contribution project",
+      "url": "https://entreprises.lefigaro.fr/vignoble-des-cabottes-21/entreprise-515420255",
+      "type": "company-filing",
+      "documentDate": "2026-02-16",
+      "filingLabelDate": "2026-02-18",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 28-page treaty transfers a viticultural branch to Nominoë and states that rural leases are inalienable, with production from leased parcels supplied to the beneficiary. It also transfers land assets while excluding 35 ha of vines for the retained prestige activity. Exact land/lease details are said to be in Annex 3.1 (pp.40-79 of the intended treaty), which is absent from the supplied 28-page copy; no Échezeaux parcel can be assigned.",
+      "originalFilename": "Vignoble Des Cabottes - Actes du 18-02-2026.pdf",
+      "sha256": "a8c381e918b062ca5962a6edc7fc9c4068282c0959e313782a287f28c0348732",
+      "pageCount": 28,
+      "reviewedPages": [
+        2,
+        5,
+        10,
+        13,
+        19,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied free registry-mirror PDF. Main treaty reviewed in full. The table of contents refers to annexes extending to p.82, but the supplied copy ends at p.28; Annex 3.1 is not present. Original PDF not redistributed."
+    },
+    {
+      "id": "bizot-gibourg-apport-2002",
+      "title": "Marie-Thérèse Javouhey / later Jean-Yves Bizot entity: 7 May 2002 operating-business contribution",
+      "url": "https://www.pappers.fr/entreprise/jean-yves-bizot-434002390",
+      "type": "company-filing",
+      "documentDate": "2002-05-07",
+      "filingLabelDate": "2002-05-29",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The notarial contribution by Robert and Marie-Thérèse Gibourg transfers a viticultural operating business and movable assets into the EARL, with no immovable vineyard title conveyed in the reviewed act. The attached operating-area/appellation material and accounts contain no cadastral reference or named En Orveaux/Les Treux parcel that can identify Bizot's later Échezeaux holdings.",
+      "originalFilename": "JEAN-YVES BIZOT - Actes du 29-05-2002.pdf",
+      "sha256": "35a3a1272be7559a32416d8804026c9768963883b3a244cce8b0ff6290d84405",
+      "pageCount": 56,
+      "reviewedPages": [
+        3,
+        4,
+        5,
+        11,
+        26,
+        29,
+        53,
+        54,
+        55
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers scan. Complete file screened visually; decisive contribution, operating-area and updated-statute pages reviewed. Original PDF not redistributed.",
+      "dateNote": "The contribution deed is dated 7 May 2002; the registry filing label is 29 May 2002."
+    },
+    {
+      "id": "guyon-share-conversion-2016",
+      "title": "Domaine Guyon: 2016 share transfer and EARL-to-SCE conversion",
+      "url": "https://entreprises.lefigaro.fr/societe-civile-d-exploitation-du-domaine-guyon-21/entreprise-381071141",
+      "type": "company-filing",
+      "documentDate": "2016-04-12",
+      "filingLabelDate": "2016-07-05",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 12 April 2016 notarial act transfers 2,200 company shares to Financière B.G.F.; the 3 June 2016 resolution converts the EARL to a société civile. Retained statutes describe the original contribution as movable business assets and allow associated owners' rural land to be made available by separate convention. No En Orveaux cadastral or lease schedule is supplied.",
+      "originalFilename": "Societe Civile D'exploitation Du Domaine Guyon - Actes du 05-07-2016.pdf",
+      "sha256": "5336f39649986f1937ba5394783e722cba22f78b3abdcdd0da1a0fdefb8ee671",
+      "pageCount": 32,
+      "reviewedPages": [
+        2,
+        6,
+        7,
+        8,
+        16,
+        21,
+        26
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Le Figaro/registry-mirror scan. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "clerget-gfa-donation-2000",
+      "title": "GFA Domaine Clerget: 1 August 2000 donation-partage and retained vineyard schedule",
+      "url": "https://www.pappers.fr/entreprise/gfa-domaine-clerget-404866196",
+      "type": "company-filing",
+      "documentDate": "2000-08-01",
+      "filingLabelDate": "2000-10-05",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The donation-partage transfers bare ownership of GFA shares. It reproduces the GFA vineyard schedule and the 1996 long-term rural lease to Christian and Isabelle Clerget. The only Flagey-Échezeaux reference shown is D0376 Les Violettes, 3785 m², classified Vosne-Romanée; no mapped Échezeaux grand-cru parcel is present, so this GFA does not explain Clerget's unplaced En Orveaux holding.",
+      "originalFilename": "GFA DOMAINE CLERGET - Actes du 05-10-2000.pdf",
+      "sha256": "dfb4f992d997027772de08c928aeab35757e645c04d9874a60aeacd1abcc0275",
+      "pageCount": 19,
+      "reviewedPages": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers scan. Complete file screened visually; parcel schedules checked. Original PDF not redistributed."
+    },
+    {
+      "id": "clerget-gfa-formation-1996",
+      "title": "GFA Domaine Clerget: 9 March 1996 formation and vineyard contributions",
+      "url": "https://www.pappers.fr/entreprise/gfa-domaine-clerget-404866196",
+      "type": "company-filing",
+      "documentDate": "1996-03-09",
+      "filingLabelDate": "1996-04-25",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The formation deed contributes an exact multi-commune vineyard schedule to the GFA. Its sole Flagey-Échezeaux parcel is D0376 Les Violettes, 3785 m², under AOC Vosne-Romanée. No mapped Échezeaux grand-cru parcel appears; the deed therefore rules out this GFA as the source of Christian Clerget's missing En Orveaux acreage.",
+      "originalFilename": "GFA DOMAINE CLERGET - Actes du 25-04-1996.pdf",
+      "sha256": "2656dc1129910baabcdcc7c85f0d8417f0845133bbb38939cb4f9b8e0ff282c9",
+      "pageCount": 34,
+      "reviewedPages": [
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Pappers scan. Complete file screened visually; parcel contribution schedule checked. Original PDF not redistributed."
+    },
+    {
+      "id": "cacheux-capital-2021",
+      "title": "Cacheux: 8 February 2021 cash/current-account capital increase",
+      "url": "https://rubypayeur.com/societe/scev-domaine-cacheux-jacques-et-fils-392906095",
+      "type": "company-filing",
+      "documentDate": "2021-02-08",
+      "filingLabelDate": "2021-03-24",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 2021 capital increase is funded by compensation against shareholder current-account claims, not by a vineyard contribution. Retained statutes say associated owners may make rural real estate available to the operating company by separate agreement, but no parcel designation is attached. It does not identify Cacheux's five published Échezeaux parcels.",
+      "originalFilename": "RUBYPAYEUR - SCEV DOMAINE CACHEUX JACQUES ET FILS - Proces-verbal d%27assemblee generale extraordinaire.pdf",
+      "sha256": "2200d56f648991e909deb5b2f06eb1f3a2c8efafba2a4782382eaf6cd3275069",
+      "pageCount": 23,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied RubyPayeur scan. Complete file screened visually. Original PDF not redistributed."
+    },
+    {
+      "id": "guyon-capital-2001",
+      "title": "Domaine Guyon: 3 April 2001 cash capital increase and retained 1991 movable contribution",
+      "url": "https://entreprises.lefigaro.fr/societe-civile-d-exploitation-du-domaine-guyon-21/entreprise-381071141",
+      "type": "company-filing",
+      "documentDate": "2001-04-03",
+      "filingLabelDate": "2001-05-21",
+      "reviewedAt": "2026-09-30",
+      "access": "user-supplied-pdf-text-and-visual-review",
+      "finding": "The 2001 capital increase is subscribed through liquid/current-account claims. The retained 1991 formation contribution consists of equipment, plantations, participations, raw materials and wine stocks rather than vineyard land; the statutes allow associated owners' rural land to be made available separately but give no parcel schedule. It does not identify Guyon's 22 ares En Orveaux.",
+      "originalFilename": "Societe Civile D'exploitation Du Domaine Guyon - Actes du 21-05-2001.pdf",
+      "sha256": "35d3bc5cc6442f4bb6214750c47e7bcc3409ebb8f7e68df9635a97491037a492",
+      "pageCount": 29,
+      "reviewedPages": [
+        2,
+        4,
+        5,
+        8,
+        11,
+        12,
+        24,
+        25,
+        26,
+        27
+      ],
+      "pageNumbering": "one-based PDF",
+      "retrievalNote": "User-supplied Le Figaro/registry-mirror scan. Complete file screened visually. Original PDF not redistributed."
     }
   ],
   "holders": [
@@ -2855,7 +3039,9 @@
     "D0146 is co-sold with the four later LES CRUOTS parcels but is not in the contribution tables; its owner and operator remain unassigned.",
     "A.-F. Gros has conflicting named-area claims; its 0.26 ha is excluded from both alternative climat totals.",
     "The Grands Crus 1997 and Bonnes Pentes 1999 exact-reference mandates remain without executed instruments. Naudin’s 1994 formation and 2021 capital update do not supply the Bonnes Pentes lease. Bouchy’s 1995 resolutions now identify D0628/D0765/D0767 and a Mondange lease mandate, completing the five-parcel historical mandate scope with 1993 D0764/D0766; execution and the 2008 SAFER proposal outcome remain unverified.",
-    "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. The free public/mirror corpus still does not expose that executed lease or its amendments. The 1995 resolution reconstructs the earlier five-parcel acquisition/lease mandate chain but does not prove execution or succession into the 2001 Tardy lease."
+    "Bouchy’s 2008 recital supplies the 19 October 2001 lease publication pointer: Beaune, 13 December 2001, volume 2001 P no.6121. The free public/mirror corpus still does not expose that executed lease or its amendments. The 1995 resolution reconstructs the earlier five-parcel acquisition/lease mandate chain but does not prove execution or succession into the 2001 Tardy lease.",
+    "Bouchard's supplied 16 February 2026 partial-asset treaty is only 28 pages even though its table of contents places Annex 3.1 (detailed transferred assets) at pp.40-79 and later annexes through p.82. The main treaty confirms land and rural-lease-related production are split between transferred and retained activities, but without Annex 3.1 no Échezeaux parcel can be identified. Seek a free full annexed copy only.",
+    "Cacheux's 24 March 2021 filing was reviewed and is a cash/current-account capital increase with no parcel schedule. The 18 October 2006 capital/cession filing remains unavailable from the attempted free download; because the newer filing and retained statutes point to partner-owned land being made available separately, treat 2006 as lower-priority and do not use paid access."
   ],
   "historyFindings": [
     {
@@ -3626,9 +3812,11 @@
       "relation": "farmer",
       "sourceIds": [
         "clerget",
-        "clerget-web"
+        "clerget-web",
+        "clerget-gfa-formation-1996",
+        "clerget-gfa-donation-2000"
       ],
-      "finding": "Farms 1.09 ha; its company record covers only D0796 (2 319 m²), so about 0.87 ha lies on land without a company record. It cannot be one contiguous block with D0796: its only unrecorded neighbour, D0797 (5 987 m²), and all unrecorded parcels touching either reach 0.96 ha at most. D0796 lies in the western middle of En Orveaux, so \"just above the Clos de Vougeot\" describes the climat, not the plot.",
+      "finding": "Farms 1.09 ha; its company record covers only D0796 (2319 m²), leaving about 0.87 ha beyond the current legal-entity record. The separate GFA Domaine Clerget deeds were reviewed: their exact schedule contains only Flagey D0376 Les Violettes (Vosne-Romanée), not mapped Échezeaux, so that GFA does not explain the gap. No additional parcel is assigned by area or proximity.",
       "producerHolderIds": [
         "431340140"
       ],
@@ -3666,9 +3854,10 @@
       "precision": "are",
       "relation": "owner",
       "sourceIds": [
-        "bouchard-orveaux"
+        "bouchard-orveaux",
+        "bouchard-apport-project-2026"
       ],
-      "finding": "No company record: a stated owner whose parcels are not in the legal-entity files.",
+      "finding": "Published source states ownership of 39 ares En Orveaux, with no company-record match. The 2026 Bouchard partial-asset treaty could be relevant because it transfers vineyard land/operations, but the supplied copy omits Annex 3.1 where the detailed land and contract list should appear. No parcel is assigned.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -3703,9 +3892,11 @@
       "relation": "unstated",
       "sourceIds": [
         "guyon-sheet",
-        "guyon-echezeaux"
+        "guyon-echezeaux",
+        "guyon-capital-2001",
+        "guyon-share-conversion-2016"
       ],
-      "finding": "No company record. The estate's own sheet gives 22 ares at the bottom of the Combe d'Orveaux; too rounded to identify parcels.",
+      "finding": "Estate sheet gives 22 ares at the bottom of Combe d'Orveaux. The 2001/2016 operating-company filings were reviewed: capital/share changes concern cash or company interests, and the original contribution is movable business assets; partner-owned rural land may be made available separately, but no parcel schedule is attached. Area remains too ambiguous to identify parcels.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -3722,9 +3913,10 @@
       "relation": "unstated",
       "sourceIds": [
         "bizot-kermit-lynch",
-        "bizot-interview"
+        "bizot-interview",
+        "bizot-gibourg-apport-2002"
       ],
-      "finding": "Bottled as Échezeaux; 0.5 ha on the importer sheet (0.56 ha on its web page). No company record.",
+      "finding": "Importer sheet gives about 0.5 ha En Orveaux. The 2002 notarial contribution into the predecessor entity transfers an operating business and movable assets, not a cadastral vineyard schedule, so it does not identify Bizot's later Échezeaux parcels.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -3742,9 +3934,10 @@
       "sourceIds": [
         "bizot-kermit-lynch",
         "bizot-interview",
-        "danguy-1892"
+        "danguy-1892",
+        "bizot-gibourg-apport-2002"
       ],
-      "finding": "Usually declassified to Vosne-Romanée 1er Cru \"Élise Fermouche\"; the Fermouche-Maignot family owned in Les Treux in 1892. No company record.",
+      "finding": "Usually declassified to Vosne-Romanée 1er Cru \"Élise Fermouche\"; published at about 0.2 ha in Les Treux. The 2002 predecessor-entity contribution supplies no cadastral vineyard schedule, so it does not identify this parcel. Fermouche-Maignot is listed as a Les Treux owner in 1892.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -3761,9 +3954,10 @@
       "precision": "approximate",
       "relation": "owner",
       "sourceIds": [
-        "cacheux-forum"
+        "cacheux-forum",
+        "cacheux-capital-2021"
       ],
-      "finding": "About 1 ha in five parcels; no company record. Also names Les Poulaillères, whose cadastral crosswalk is unreviewed.",
+      "finding": "Published research describes about 1 ha in five parcels across En Orveaux/Cruots (plus Les Poulaillères). The 2021 company capital increase is cash/current-account based; retained statutes allow partner-owned rural land to be put at the company's disposal by separate agreement but provide no parcel schedule. The five parcels remain unlocated.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
