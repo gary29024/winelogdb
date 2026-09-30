@@ -179,6 +179,16 @@ Current research is intentionally limited to **free public or mirror sources**. 
   The last three name no area, so they are research targets only.
 - **A.-F. Gros conflict.** The 2025 guide places its 26 ares in Les Loächausses; the 2012 edition gives Champs Traversins. Both are modeled as disputed alternatives, and the area is excluded from both climat totals until the location is resolved.
 
+### Free filing mirrors for the 127 unresolved parcels
+
+Checked 30 September 2026. The free-source phase now searches company mirrors for **associated landholding vehicles and notarial contribution acts**, not merely the producer's operating company. Of the 127 parcels without a named candidate, 120 have no matched legal-entity right; 109 remain inventory-only.
+
+This matters most in En Orveaux. Published holdings there cannot safely be assigned by acreage: brute-force matching among 41 unresolved no-company parcels gives 283 combinations around Guyon's 20.4 ares, 1,740 around Bouchard's 39 ares, 1,585 around Dominique Mugneret's 40 ares, 2,730 around Bizot's c. 0.50 ha and 4,355 around the c. 0.87 ha gap between Christian Clerget's published holding and its current company record. These figures are a guardrail against false precision, not candidate rankings.
+
+Free registry indexes nevertheless expose higher-value documents to inspect. Christian Clerget has two family landholding vehicles with notarial formation/donation records, one of which (GFV 430384354) was absorbed into the operating domaine in 2023. Jean-Yves Bizot's 434002390 entity has a 2002 notarial **acte d'apport**. Bouchard's former Maison entity has a 2026 **apport partiel d'actif** covering a viticultural-production branch. Cacheux and Guyon have capital/notarial records, and Michel Gros has a 2019 notarial family act. These are research targets only until the full document supplies parcel or tenancy scope.
+
+Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration.
+
 ### Independent research: Winehog
 
 [Winehog's Flagey-Échezeaux vineyard articles](https://winehog.org/vineyards/flagey-echezeaux-vineyard-articles/) (Steen Öhman) map holdings by climat. Public articles were used in full. Premium articles were used only where the repository owner supplied them (Grivot, Arnoux-Lachaux, Millot, Berthaut-Gerbet), recording facts and links only; other Premium articles contributed their public preview. Three plots are named by cadastral number and all agree with the recorded rights: **D0510** (Hospices de Beaune, Cuvée Jean-Luc Bissey, donated 2011), **D0631** (Jayer-Gilles; recorded holder Domaine Hoffmann-Jayer) and **D0632** (Niquet-Jayer; no company record, consistent with private owners).
