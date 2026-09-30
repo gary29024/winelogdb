@@ -4,10 +4,12 @@
   "parentFeatureId": "inao-denom-645",
   "appellationId": 184,
   "issue": 377,
-  "tier": 1,
+  "tier": 2,
   "bundle": "flagey-echezeaux",
-  "villageMaps": ["vosne-romanee"],
-  "note": "Tier 1. Shares the Flagey bundle with Échezeaux; research lives only in docs/research/grands-echezeaux/.",
+  "villageMaps": [
+    "vosne-romanee"
+  ],
+  "note": "Tier 2 research (#423), following Tier 1 (#377). Shares the Flagey bundle with Échezeaux; research remains in docs/research/grands-echezeaux/.",
   "rightsHistoryPurpose": "Dated legal-entity rights and cadastral lineage for the Grands-Échezeaux research register. Evidence of recorded rights and parcel splits only; never of farming.",
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/grands-echezeaux",
@@ -26,7 +28,8 @@
     "unresolved": []
   },
   "research": {
-    "methodDoc": "docs/research/grands-echezeaux/README.md"
+    "methodDoc": "docs/research/grands-echezeaux/README.md",
+    "filingsDoc": "docs/research/grands-echezeaux/filings.md"
   },
   "evidenceFrom": [
     "grands-echezeaux"

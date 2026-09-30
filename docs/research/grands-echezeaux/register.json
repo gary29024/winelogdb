@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-30",
+  "reviewedAt": "2026-10-01",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
-  "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all 9 recorded right holders triaged at Tier 1. Not an exhaustive search of every archive.",
+  "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all nine recorded right holders revisited at Tier 2. Nineteen selected free company filings (804 pages), published whole-cru holdings and all seven Winehog vineyard-article previews reviewed. Seven parcels have exact-reference filing evidence. No verified current farmer; not an exhaustive search of every archive.",
   "parentFeatureId": "inao-denom-645",
   "inputs": {
     "curation": "docs/research/grands-echezeaux/curation.json",
@@ -29,14 +29,14 @@
     "recordedHolders": 9,
     "withRecordedRights": 19,
     "withoutMatchedRights": 13,
-    "holderLead": 14,
+    "holderLead": 16,
     "historicalApplication": 3,
     "historicalAuthorisation": 0,
     "saleLead": 0,
-    "unresolved": 15,
+    "unresolved": 13,
     "currentFarmerConfirmed": 0,
     "withSaleRecord": 5,
-    "withParcelFiling": 0,
+    "withParcelFiling": 7,
     "withRightsChangeSince2019": 13,
     "withCadastralPredecessor": 1
   },
@@ -50,8 +50,36 @@
       "withoutCompanyRecordM2": 20579,
       "withoutCompanyRecordOrLead": 13,
       "withoutCompanyRecordOrLeadM2": 20579,
-      "publishedBeyondCompanyRecordsM2": 91,
+      "publishedBeyondCompanyRecordsM2": 21630,
       "holdings": [
+        {
+          "holdingId": "drc-ge",
+          "producer": "Domaine de la Romanée-Conti",
+          "publishedAreaHa": 3.5263,
+          "precision": "square-metre",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 35268,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        },
+        {
+          "holdingId": "mongeard-ge",
+          "producer": "Domaine Mongeard-Mugneret",
+          "publishedAreaHa": 1.444,
+          "precision": "square-metre",
+          "relation": "farmer",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 11210,
+          "beyondCompanyRecordsM2": 3230,
+          "owners": []
+        },
         {
           "holdingId": "eugenie-ge",
           "producer": "Domaine d'Eugénie",
@@ -67,8 +95,178 @@
           "owners": []
         },
         {
-          "holdingId": "mongeard-ge",
-          "producer": "Domaine Mongeard-Mugneret",
+          "holdingId": "anne-ge",
+          "producer": "Domaine Anne Gros",
+          "publishedAreaHa": 0.37,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 3702,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        },
+        {
+          "holdingId": "bichot-ge",
+          "producer": "Domaine du Clos Frantin / Albert Bichot",
+          "publishedAreaHa": 0.25,
+          "precision": "hundredth-hectare",
+          "relation": "owner",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 2540,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        },
+        {
+          "holdingId": "drouhin-ge",
+          "producer": "Maison Joseph Drouhin",
+          "publishedAreaHa": 0.47,
+          "precision": "hundredth-hectare",
+          "relation": "owner",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 4761,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        },
+        {
+          "holdingId": "villamont-ge",
+          "producer": "Domaine Henri de Villamont",
+          "publishedAreaHa": 0.5,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 4591,
+          "beyondCompanyRecordsM2": 409,
+          "owners": []
+        },
+        {
+          "holdingId": "lamarche-owner-ge",
+          "producer": "SCEA Nathalie Pacareau Lamarche (historical Domaine Lamarche holding)",
+          "publishedAreaHa": 0.3007,
+          "precision": "square-metre",
+          "relation": "owner",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 3145,
+          "beyondCompanyRecordsM2": 0,
+          "owners": []
+        },
+        {
+          "holdingId": "liger-ge",
+          "producer": "Domaine du Comte Liger-Belair",
+          "publishedAreaHa": 0.3007,
+          "precision": "square-metre",
+          "relation": "metayer",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": [
+            "NATHALIE PACAREAU LAMARCHE"
+          ]
+        },
+        {
+          "holdingId": "thenard-ge",
+          "producer": "Domaine Thenard",
+          "publishedAreaHa": 0.55,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 5500,
+          "owners": []
+        },
+        {
+          "holdingId": "noellat-ge",
+          "producer": "Domaine Georges Noëllat",
+          "publishedAreaHa": 0.4,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 4000,
+          "owners": []
+        },
+        {
+          "holdingId": "desaunay-ge",
+          "producer": "Domaine Desaunay-Bissey",
+          "publishedAreaHa": 0.34,
+          "precision": "approximate",
+          "relation": "farmer",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 3400,
+          "owners": []
+        },
+        {
+          "holdingId": "millot-ge",
+          "producer": "Domaine Jean-Marc Millot",
+          "publishedAreaHa": 0.2,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 2000,
+          "owners": []
+        },
+        {
+          "holdingId": "clf-ge",
+          "producer": "Domaine Coquard-Loison-Fleurot",
+          "publishedAreaHa": 0.18,
+          "precision": "hundredth-hectare",
+          "relation": "owner",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 1800,
+          "owners": []
+        },
+        {
+          "holdingId": "sirugue-ge",
+          "producer": "Arnaud & Sophie Sirugue-Noëllat (formerly Robert Sirugue)",
+          "publishedAreaHa": 0.12,
+          "precision": "hundredth-hectare",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": 1200,
+          "owners": []
+        },
+        {
+          "holdingId": "kohut-ge",
+          "producer": "Domaine Kohut (historical report; current area unconfirmed)",
           "publishedAreaHa": null,
           "precision": "none",
           "relation": "unstated",
@@ -76,7 +274,21 @@
           "locationStatus": "stated",
           "sharedWith": [],
           "alternativeLocations": [],
-          "recordedToProducerM2": 11210,
+          "recordedToProducerM2": 0,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        },
+        {
+          "holdingId": "gros-frere-historical-ge",
+          "producer": "Domaine Gros Frère et Sœur (historical lease/holding)",
+          "publishedAreaHa": null,
+          "precision": "none",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 0,
           "beyondCompanyRecordsM2": null,
           "owners": []
         }
@@ -209,10 +421,12 @@
         {
           "name": "Domaine Anne Gros",
           "holderId": "348024928",
-          "basis": "identity-only",
+          "basis": "secondary-estate-context",
           "sourceIds": [
             "register-anne-gros",
-            "anne-application"
+            "anne-contribution-2019",
+            "anne-application",
+            "anne-decanter"
           ]
         },
         {
@@ -240,7 +454,9 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "anne-gros-bare-contribution"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -257,7 +473,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -288,9 +504,12 @@
         {
           "name": "Domaine de la Romanée-Conti",
           "holderId": "778269407",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-drc"
+            "register-drc",
+            "drc-ge",
+            "drc-stat-2024",
+            "winehog-drc"
           ]
         }
       ],
@@ -371,9 +590,12 @@
         {
           "name": "Domaine de la Romanée-Conti",
           "holderId": "778269407",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-drc"
+            "register-drc",
+            "drc-ge",
+            "drc-stat-2024",
+            "winehog-drc"
           ]
         }
       ],
@@ -454,15 +676,21 @@
         {
           "name": "Maison Joseph Drouhin",
           "holderId": "393095955",
-          "basis": "management-only-lead",
+          "basis": "management-and-estate-context",
           "sourceIds": [
-            "register-sepv"
+            "register-sepv",
+            "sepv-apports-1994",
+            "sepv-capital-1995",
+            "sepv-stat-ccm",
+            "drouhin-ge"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "sepv-robert-contribution"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -492,7 +720,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -525,14 +753,19 @@
           "holderId": "778269498",
           "basis": "estate-context",
           "sourceIds": [
+            "register-mongeard-gfa",
             "mongeard-ge",
-            "register-mongeard-gfa"
+            "mongeard-sheet",
+            "mongeard-gfa-1964",
+            "mongeard-gfa-2022"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "mongeard-gfa-founding"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -551,7 +784,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -584,14 +817,19 @@
           "holderId": "778269498",
           "basis": "estate-context",
           "sourceIds": [
+            "register-mongeard-gfa",
             "mongeard-ge",
-            "register-mongeard-gfa"
+            "mongeard-sheet",
+            "mongeard-gfa-1964",
+            "mongeard-gfa-2022"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "mongeard-gfa-founding"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -610,7 +848,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -668,8 +906,11 @@
           "holderId": "303514681",
           "basis": "estate-context",
           "sourceIds": [
+            "register-mongeard",
             "mongeard-ge",
-            "register-mongeard"
+            "mongeard-sheet",
+            "mongeard-sa-2025",
+            "mongeard-sa-apport"
           ]
         }
       ],
@@ -715,8 +956,10 @@
           "holderId": "326533213",
           "basis": "estate-context",
           "sourceIds": [
+            "register-eugenie",
             "eugenie-wines",
-            "register-eugenie"
+            "eugenie-stat-2006",
+            "winehog-eugenie"
           ]
         }
       ],
@@ -774,8 +1017,10 @@
           "holderId": "326533213",
           "basis": "estate-context",
           "sourceIds": [
+            "register-eugenie",
             "eugenie-wines",
-            "register-eugenie"
+            "eugenie-stat-2006",
+            "winehog-eugenie"
           ]
         }
       ],
@@ -831,9 +1076,12 @@
         {
           "name": "Domaine de la Romanée-Conti",
           "holderId": "778269407",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-drc"
+            "register-drc",
+            "drc-ge",
+            "drc-stat-2024",
+            "winehog-drc"
           ]
         }
       ],
@@ -941,14 +1189,19 @@
           "holderId": "778269498",
           "basis": "estate-context",
           "sourceIds": [
+            "register-mongeard-gfa",
             "mongeard-ge",
-            "register-mongeard-gfa"
+            "mongeard-sheet",
+            "mongeard-gfa-1964",
+            "mongeard-gfa-2022"
           ]
         }
       ],
       "historicalEvents": [],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "mongeard-gfa-founding"
+      ],
       "rightsChanges": [
         {
           "from": "2019-01-01",
@@ -967,7 +1220,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "holder-lead",
-      "researchDepth": "holder-group-triage",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -996,11 +1249,15 @@
       ],
       "candidateLeads": [
         {
-          "name": "Albert Bichot",
+          "name": "Domaine du Clos Frantin / Albert Bichot",
           "holderId": "036380046",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-bichot"
+            "register-bichot",
+            "bichot-ge",
+            "bichot-sheet",
+            "bichot-merger-2007",
+            "bichot-lease-2014"
           ]
         }
       ],
@@ -1092,6 +1349,18 @@
       ],
       "candidateLeads": [
         {
+          "name": "Domaine du Comte Liger-Belair",
+          "holderId": "538257932",
+          "basis": "reported-operator-relationship",
+          "sourceIds": [
+            "register-lamarche",
+            "lamarche-contribution",
+            "winehog-liger",
+            "liger-decanter-2022",
+            "raa-2026-067"
+          ]
+        },
+        {
           "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
           "basis": "suspended-application",
           "sourceIds": [
@@ -1117,7 +1386,9 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "lamarche-genevieve-contribution"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -1134,7 +1405,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1163,6 +1434,18 @@
       ],
       "candidateLeads": [
         {
+          "name": "Domaine du Comte Liger-Belair",
+          "holderId": "538257932",
+          "basis": "reported-operator-relationship",
+          "sourceIds": [
+            "register-lamarche",
+            "lamarche-contribution",
+            "winehog-liger",
+            "liger-decanter-2022",
+            "raa-2026-067"
+          ]
+        },
+        {
           "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
           "basis": "suspended-application",
           "sourceIds": [
@@ -1188,7 +1471,9 @@
         }
       ],
       "externalResearchIds": [],
-      "parcelFilingIds": [],
+      "parcelFilingIds": [
+        "lamarche-genevieve-contribution"
+      ],
       "rightsChanges": [
         {
           "from": "2020-01-01",
@@ -1205,7 +1490,7 @@
       "predecessorIds": [],
       "historyFindingIds": [],
       "researchStatus": "historical-application",
-      "researchDepth": "exact-reference-event-reviewed",
+      "researchDepth": "parcel-filing-reviewed",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
@@ -1232,7 +1517,21 @@
       "holderResearchIds": [
         "U18178008"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Henri de Villamont",
+          "holderId": "U18178008",
+          "basis": "management-and-estate-context",
+          "sourceIds": [
+            "modot-stat-ccm",
+            "modot-stat-2002",
+            "modot-official",
+            "villamont-legal",
+            "villamont-ge",
+            "villamont-sheet"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "parcelFilingIds": [],
@@ -1253,12 +1552,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0618",
@@ -1281,7 +1580,21 @@
       "holderResearchIds": [
         "U18178008"
       ],
-      "candidateLeads": [],
+      "candidateLeads": [
+        {
+          "name": "Domaine Henri de Villamont",
+          "holderId": "U18178008",
+          "basis": "management-and-estate-context",
+          "sourceIds": [
+            "modot-stat-ccm",
+            "modot-stat-2002",
+            "modot-official",
+            "villamont-legal",
+            "villamont-ge",
+            "villamont-sheet"
+          ]
+        }
+      ],
       "historicalEvents": [],
       "externalResearchIds": [],
       "parcelFilingIds": [],
@@ -1302,12 +1615,12 @@
       "cadastreFirstSeen": "2019-01-01",
       "predecessorIds": [],
       "historyFindingIds": [],
-      "researchStatus": "unresolved",
+      "researchStatus": "holder-lead",
       "researchDepth": "holder-group-triage",
       "currentFarmer": null,
       "verifiedAsOf": null,
       "operationScope": "unconfirmed",
-      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
     },
     {
       "parcelId": "212670000D0619",
@@ -1332,11 +1645,15 @@
       ],
       "candidateLeads": [
         {
-          "name": "Albert Bichot",
+          "name": "Domaine du Clos Frantin / Albert Bichot",
           "holderId": "036380046",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-bichot"
+            "register-bichot",
+            "bichot-ge",
+            "bichot-sheet",
+            "bichot-merger-2007",
+            "bichot-lease-2014"
           ]
         }
       ],
@@ -1382,8 +1699,11 @@
           "holderId": "303514681",
           "basis": "estate-context",
           "sourceIds": [
+            "register-mongeard",
             "mongeard-ge",
-            "register-mongeard"
+            "mongeard-sheet",
+            "mongeard-sa-2025",
+            "mongeard-sa-apport"
           ]
         }
       ],
@@ -1507,9 +1827,12 @@
         {
           "name": "Domaine de la Romanée-Conti",
           "holderId": "778269407",
-          "basis": "identity-only",
+          "basis": "estate-context",
           "sourceIds": [
-            "register-drc"
+            "register-drc",
+            "drc-ge",
+            "drc-stat-2024",
+            "winehog-drc"
           ]
         }
       ],

@@ -1,9 +1,11 @@
-# Grands-Échezeaux parcels: Tier 1 research (#377)
+# Grands-Échezeaux parcels: Tier 1 (#377) and Tier 2 (#423)
 
 Grands-Échezeaux (INAO `inao-denom-645`, 9.07 ha, commune 21267 Flagey-Échezeaux) is the
 second cru through the generic pipeline ([rollout playbook](../../grand-cru-parcel-rollout.md)).
-It shares the Flagey commune bundle with Échezeaux, so no source was downloaded twice. It is
-validated on its own, and its research lives only in this folder.
+It shares the pinned Flagey commune bundle with Échezeaux. Tier 2 revisits all nine recorded
+holders using free company filings, published holdings and independent research. It is
+validated on its own, and its research lives only in this folder. Reviewed 1 October 2026;
+target season 2026.
 
 **No parcel has a confirmed current farmer.** Recorded rights, notices, sales and estate pages
 are dated evidence for further research, not farming links.
@@ -18,13 +20,36 @@ are dated evidence for further research, not farming links.
 | Parcels whose rights changed 2019–2025 | 13, with 15 changes: 4 first company records, 7 renames of the same SIREN, 4 identifier changes that cannot be proved continuous |
 | Parcels with an authorisation / application or suspension | 3 (D0093 application, 2022; D0615 and D0616 suspended application, 2026) |
 | Parcels with sale records (DVF) | 5, in 3 deeds (2015, 2023, 2025) |
-| Parcels with holder or research leads | 17 (14 holder leads, 3 notice parcels) |
-| Parcels with no lead | 15 |
+| Parcels with exact-reference company filings | 7, in 4 contribution records (1.8024 ha cadastral area) |
+| Parcels with holder or research leads | 19 (16 holder leads, 3 notice parcels) |
+| Parcels with no lead | 13 |
+| Published holdings compared by named area | 17 entries in Les Grands Échezeaux: 15 sized statements, including 1 métayer; 2 historical entries excluded from numeric comparison |
 | Verified farming links | 0 |
-| Raw / gzip payload | Parcels: shared Flagey file, 239,882 / 35,324 bytes (unchanged). Evidence: 14,412 / 2,808 bytes |
+| Raw / gzip payload | Parcels: shared Flagey file, 239,882 / 35,324 bytes (unchanged). Evidence: 28,216 / 5,298 bytes |
 
 Both files load only when "Parcel rights" is switched on. The parcel file is the one already
 used for Échezeaux; Grands-Échezeaux adds only its evidence file.
+
+## Named-area comparison
+
+| Named area | Mapped area | Without company records | Published beyond linked company records |
+| --- | ---: | ---: | ---: |
+| Les Grands Échezeaux | 32 parcels, 9.0704 ha | 13 parcels, 2.0579 ha | 2.1630 ha |
+
+The final column sums positive differences between selected published whole-area holdings
+and the **mapped cru-overlap area** of their linked company records. It is a research
+comparison, not an estimate of privately owned or planted land. Cadastral legal area and
+mapped overlap differ; published statements have different dates, precision and scope. The
+sum exceeds the unmatched mapped area by 0.1051 ha, so it cannot reconcile those parcels.
+No holding was assigned to a parcel from its area or location.
+
+The [generated census](register.md#named-area-census) lists each statement with its precision,
+tenure wording and company comparison. The [curation](curation.json) retains alternative
+figures and source IDs: Noëllat 0.30 / 0.38 / 0.40 ha; Villamont 0.16 / 0.43 / approximately
+0.5 ha; Drouhin 0.47 / 0.48 ha. Liger-Belair's reported métayage is excluded from the sum
+because the owner is already counted. Gros Frère et Sœur's historical 0.3662 ha and the
+quoted 2017 Kohut 0.07 ha are retained outside the numeric comparison; no last harvest or
+continued current holding is invented.
 
 ## What was done
 
@@ -58,11 +83,29 @@ used for Échezeaux; Grands-Échezeaux adds only its evidence file.
   - Only image-reviewed rows entered the register.
 - **Sales** ([sale-records.json](sale-records.json)). DVF+ April 2026 release: dates, deed
   types and references only.
-- **Holders.** All nine were triaged from the official company search and the estates' own
-  pages. Domaine headings in the app come only from those sources: "Registry identity only"
-  (Romanée-Conti, Anne Gros, Albert Bichot) or "Estate source" (Mongeard-Mugneret, d'Eugénie).
-  SEPV is shown only as a weak lead (shared management with the Drouhin family). The Lamarche
-  SCEA and SCI Dom Veuve Paul Modot remain unresolved.
+- **Company filings.** Nine free filing indexes and 19 selected corporate PDFs (804 pages)
+  were screened by text/OCR; relevant schedules, dates and lease recitals were read from
+  page images. Four records name seven current parcels with matching cadastral areas:
+  Mongeard GFA D0104/D0105/D0535, SEPV D0103, Anne Gros D0093 and Lamarche SCEA D0615/D0616.
+  [Detailed readings](filings.md) link every selected PDF with page anchors, document/deposit
+  dates and SHA-256 hashes. General lease powers, required leasing and planned terminations
+  remain distinct from an executed lease.
+- **Holders.** All nine leads were revisited. SEPV's 1994 vineyard contribution and completed
+  capital resolutions strengthen the Drouhin link beyond shared management. Modot's
+  statutory abbreviation and office establish a crosswalk to SIREN 778173500; Schenk group
+  sources support a Villamont lead, with no lease found. The Lamarche contribution and
+  reported 2022 Liger-Belair métayage are kept separate from the 2026 suspension. The rendered
+  Romanée-Conti estate page states 3.5263 ha, resolving the browser access gap. Current estate
+  sheets also strengthen Mongeard and Clos Frantin/Bichot. App domaine headings describe
+  research context and retain **Research link · farming unverified**.
+- **Independent research and holdings.** All seven Grands-Échezeaux vineyard articles linked
+  from Winehog's Flagey index were read to their free-access boundary, plus the later
+  Liger-Belair preview, a signed Jasper Morris comparison, estate/importer/merchant sources
+  and the free Decanter vintage table. The free DRC aerial has no cadastral numbers. The
+  Eugénie asset schedule prints literal **D11**, without an area or accepted lineage; it is
+  not expanded to D0111. Millot's estate timeline says first harvest in 1986, while Winehog
+  tentatively infers 1997; the conflict remains recorded. Old 1855/1892 owner lists are
+  explicitly secondary transcriptions, not original-volume verification.
 
 Details, sources and every parcel: [register](register.md) (generated from [curation](curation.json)).
 
@@ -70,15 +113,26 @@ Details, sources and every parcel: [register](register.md) (generated from [cura
 
 - Private individuals are not in the legal-entity files: 13 parcels (2.06 ha) have no matched
   company record. That does not mean they have no owner.
-- Tier 2 (company filings, leases, published holdings and articles) is tracked for every cru in
-  #420; Tier 3 (land-registry copies, outreach) is deferred. Farming evidence and any verified
-  operator link stay with #364; unresolved named-area and source gaps with #344.
-- The Domaine de la Romanée-Conti Grands-Échezeaux page shows its figures only in a browser
-  and was not read.
+- This Tier 2 review selects potentially useful filings; it does not read every corporate
+  archive. Tier 3 (paid land-registry copies, outreach) remains deferred. Farming evidence
+  and any verified operator link stay with #364; unresolved named-area/source gaps with #344.
+- No source confirms actual parcel farming in 2026. Anne's bare ownership and retained
+  usufruct, the intended old lease end, Lamarche's separate planned termination, SEPV/Modot
+  operating leases and the Mongeard GFA tenant remain unresolved. No later outcome of the
+  Liger-Belair suspension was found.
+- Winehog's subscriber-only parcel details were not accessed. A Drouhin importer PDF returned
+  403, and the live Vinous review returned a loading shell; free estate/Decanter sources
+  were reviewed instead. Current holding areas for Kohut and Gros Frère et Sœur, and the
+  conflicting published figures above, remain unresolved.
 - The cru's edge along Vougeot is uncertain by a few metres: the INAO boundary and the cadastral
   commune line differ there (see the commune audit).
 - Notices outside the regional (2019–2026) and departmental (2016–2020) bulletins were not
   searched. Lineage covers 2019–2026; DVF+ runs from January 2014 to November 2025 and names no party.
+
+Source URLs, raw-byte hashes, exact UTC retrieval times, document dates and reviewed pages
+are recorded in curation. Upload directories and wine vintages do not fill missing document
+dates. Original PDFs are linked publicly and not committed. See the register's full access
+gap list and the [filing inventory](filings.md) for the next evidence needed.
 
 ## Rebuild
 

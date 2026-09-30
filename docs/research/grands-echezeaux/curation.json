@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-09-30",
+  "reviewedAt": "2026-10-01",
   "parentFeatureId": "inao-denom-645",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
-  "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all 9 recorded right holders triaged at Tier 1. Not an exhaustive search of every archive.",
+  "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all nine recorded right holders revisited at Tier 2. Nineteen selected free company filings (804 pages), published whole-cru holdings and all seven Winehog vineyard-article previews reviewed. Seven parcels have exact-reference filing evidence. No verified current farmer; not an exhaustive search of every archive.",
   "rules": [
     "Candidate names are research hypotheses, never verified farmers.",
     "Rights as of 2025-01-01, modern cadastral geometry and estate descriptions are different evidence.",
@@ -14,7 +14,8 @@
     "No automatic assignment from area, adjacency, named area, wine bottler, manager or similar company name.",
     "Company filings record contributions and dated lease recitals; lease mandates are not proof of execution or current operation.",
     "Research dates come from an explicitly selected source; supporting registry dates never fill an undated research source.",
-    "Disputed named-area locations are alternatives and contribute nothing to definite climat totals."
+    "Disputed named-area locations are alternatives and contribute nothing to definite climat totals.",
+    "Literal printed references without accepted lineage, and historical holdings without confirmed continuation, do not become current parcel assignments."
   ],
   "sources": [
     {
@@ -93,19 +94,27 @@
       "url": "https://mongeard.com/fr/vin/grands-echezeaux-grand-cru/",
       "type": "estate",
       "documentDate": null,
-      "reviewedAt": "2026-09-30",
+      "reviewedAt": "2026-10-01",
       "access": "read",
-      "finding": "Lists a Grands-Échezeaux Grand Cru among the estate's wines. No area, plot description or cadastral references."
+      "finding": "Publishes superficie en production of 1 ha 44 a 40 ca (1.4440 ha), distinct from the area of the whole appellation. No cadastral references.",
+      "retrievedAt": "2026-09-30T15:53:02.508966+00:00",
+      "sha256": "07847c09f11277ebdd6e6dfa91bf7ae0c1f26023aa45eaf5868907a5747af2d8",
+      "bytes": 52785,
+      "retrievedFrom": "https://mongeard.com/fr/vin/grands-echezeaux-grand-cru/"
     },
     {
       "id": "eugenie-wines",
-      "title": "Domaine d'Eugénie: wines",
+      "title": "Domaine d’Eugénie: wines",
       "url": "https://domaine-eugenie.com/les-vins",
       "type": "estate",
       "documentDate": null,
-      "reviewedAt": "2026-09-30",
+      "reviewedAt": "2026-10-01",
       "access": "read",
-      "finding": "Grands-Échezeaux: 0.5 ha, south-east exposure, at the extreme south of the appellation, rows starting just above the south-west wall of Clos de Vougeot. No cadastral IDs."
+      "finding": "Grands-Échezeaux 0.5 ha at the extreme south, above the Clos de Vougeot wall. Approximate holding/location description; no cadastral IDs.",
+      "retrievedAt": "2026-09-30T15:57:32.827708+00:00",
+      "sha256": "7753b98d247d1b69bd57e9f914e40e6663fdf8fadcb03214091f418e41e15334",
+      "bytes": 153559,
+      "retrievedFrom": "https://domaine-eugenie.com/les-vins"
     },
     {
       "id": "register-drc",
@@ -186,6 +195,1083 @@
       "reviewedAt": "2026-09-30",
       "finding": "Beaune company run by the Bichot family (Albert Bichot). Confirms legal identity only.",
       "access": "read"
+    },
+    {
+      "id": "sepv-apports-1994",
+      "title": "SEPV: contribution auditor report and vineyard schedules",
+      "url": "https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d#page=4",
+      "type": "company-filing",
+      "documentDate": "1994-12-20",
+      "reviewedAt": "2026-10-01",
+      "finding": "The proposed Robert Jousset Drouhin contribution includes his viticultural business. Its Grands Echezeaux schedule prints Flagey Echezeaux D103, 47.40 ares (4,740 m²). The long-term lease discount on page 26 concerns Clos des Mouches, not this cru.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:28:48.985377+00:00",
+      "sha256": "d5b123bcb2862567dbe2635f7fe14d59edc1c44b30fd064df5e05e9f6cf59c48",
+      "bytes": 495212,
+      "retrievedFrom": "https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d",
+      "reviewedPages": [
+        4,
+        6,
+        10,
+        24,
+        26
+      ],
+      "pageCount": 27,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "1994-12-22"
+    },
+    {
+      "id": "sepv-capital-1995",
+      "title": "SEPV: 30 December 1994 contribution and capital resolutions",
+      "url": "https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be#page=1",
+      "type": "company-filing",
+      "documentDate": "1994-12-30",
+      "reviewedAt": "2026-10-01",
+      "finding": "Resolution 12 approves Robert Jousset Drouhin’s contribution including his personal business; resolution 43 records fulfilment of the capital condition and definitive completion. The companion auditor report supplies D103 and its area. The cover labels the minutes 30/11/94; the actual minutes say 30 December 1994.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:28:48.986378+00:00",
+      "sha256": "e55e002a0015247082d93ed60a10e3888435951b5188a7c35ca91f82ab35eafe",
+      "bytes": 1844576,
+      "retrievedFrom": "https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be",
+      "reviewedPages": [
+        1,
+        4,
+        7,
+        21,
+        22,
+        35,
+        36
+      ],
+      "pageCount": 54,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "1995-02-13",
+      "filingLabelDocumentDate": "1994-11-30"
+    },
+    {
+      "id": "sepv-stat-ccm",
+      "title": "SEPV: 2022 board minutes and updated statutes",
+      "url": "https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb#page=3",
+      "type": "company-filing",
+      "documentDate": "2022-07-07",
+      "reviewedAt": "2026-10-01",
+      "finding": "Article 2 names a majority participation in Maison Joseph Drouhin SA, SIREN 515620417. This is a documented corporate relationship, stronger than a shared surname; no Grands-Échezeaux parcel schedule or parcel-specific lease appears.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:29.199939+00:00",
+      "sha256": "f6f698ff81a9aa2db33c615329a4248c51e2be5c659234e874b2a1aa0edf2b63",
+      "bytes": 2893465,
+      "retrievedFrom": "https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb",
+      "reviewedPages": [
+        3,
+        6
+      ],
+      "pageCount": 48,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2022-08-02"
+    },
+    {
+      "id": "lamarche-contribution",
+      "title": "Nathalie Pacareau Lamarche SCEA: Geneviève Lamarche contribution",
+      "url": "https://actes.ccm2.net/acte/774241ed-6892-4f3b-a05b-7be257111ff5#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-12-18",
+      "reviewedAt": "2026-10-01",
+      "finding": "Full-property contribution of D615 (879 m²) and D616 (2,128 m²), 3,007 m² combined. Page 33 recites an 18-year lease to Nathalie Pacareau signed 20 December 2011 and effective 22 December, with mise à disposition to the SCEA. A separate same-day termination deed is planned; it is not reproduced.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:29.198938+00:00",
+      "sha256": "3c94efabf0d38d77ab83bd605c2cbe1d3cbcc712956f383bc1903d69db329bac",
+      "bytes": 2544861,
+      "retrievedFrom": "https://actes.ccm2.net/acte/774241ed-6892-4f3b-a05b-7be257111ff5",
+      "reviewedPages": [
+        1,
+        28,
+        31,
+        33,
+        46
+      ],
+      "pageCount": 52,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2020-01-15"
+    },
+    {
+      "id": "lamarche-stat-2011",
+      "title": "Nathalie Pacareau Lamarche SCEA: founding statutes",
+      "url": "https://actes.ccm2.net/acte/e67e5ee5-db4f-4ef6-96f4-bab629f6c968#page=1",
+      "type": "company-filing",
+      "documentDate": "2011-11-22",
+      "reviewedAt": "2026-10-01",
+      "finding": "Founding cash capital and general powers to take leases. No Grands-Échezeaux reference or executed parcel-specific lease; the later contribution provides the dated recital.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:28:48.986878+00:00",
+      "sha256": "b860c80922417aadabe1956f086aed776eac090b3d0a2a7169750469f96d004a",
+      "bytes": 205869,
+      "retrievedFrom": "https://actes.ccm2.net/acte/e67e5ee5-db4f-4ef6-96f4-bab629f6c968",
+      "reviewedPages": [
+        1,
+        22
+      ],
+      "pageCount": 22,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2011-12-06"
+    },
+    {
+      "id": "anne-contribution-2019",
+      "title": "Anne Gros SARL: bare-ownership contribution",
+      "url": "https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-11-27",
+      "reviewedAt": "2026-10-01",
+      "finding": "D93, 3,662 m², is contributed in bare ownership; Colette Gros retains usufruct. The deed recites a 16 July 1981 lease to SCE Gros Frère et Sœur, an intended notice ending 31 December 2021, and an obligation to formalise a lease. No executed replacement or actual end is shown.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:57.181441+00:00",
+      "sha256": "b8dc58de10557da901b6c746d698d887f3c19de7d7c7d9a42406b2af7a2757dd",
+      "bytes": 2110770,
+      "retrievedFrom": "https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38",
+      "reviewedPages": [
+        1,
+        3,
+        7,
+        12,
+        13,
+        14
+      ],
+      "pageCount": 40,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2019-12-04"
+    },
+    {
+      "id": "anne-stat-2022",
+      "title": "Anne Gros: SARL to SAS transformation",
+      "url": "https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-02-28",
+      "reviewedAt": "2026-10-01",
+      "finding": "The minutes dated 28 February 2022 convert the SARL into a SAS. No new Grands-Échezeaux conveyance, cadastral schedule or parcel-specific lease; the deposit certificate supplies 5 April 2022.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:57.786890+00:00",
+      "sha256": "b39bebb6f970a0c891f9ba47c3745b421b2b76fa270216cdd4dcf65fc4aeb9e5",
+      "bytes": 1495634,
+      "retrievedFrom": "https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "pageCount": 30,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2022-04-05"
+    },
+    {
+      "id": "mongeard-gfa-1964",
+      "title": "Mongeard-Mugneret: founding contribution and 1997 GFA statutes",
+      "url": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5#page=1",
+      "type": "company-filing",
+      "documentDate": "1964-02-12",
+      "reviewedAt": "2026-10-01",
+      "finding": "The founding contribution schedule and its reproduction in the 1997 statutes print D535 (5,575 m²), D105 (290 m²), D104 (750 m²), total 6,615 m². Article 2 requires long-term leasing and forbids direct exploitation by the GFA; it does not identify an executed lease or tenant.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:51.068565+00:00",
+      "sha256": "4bb2a3e2d7753a75d511193e13fec2fbfbb4c2c1ec62b4b0add5674923c64ef9",
+      "bytes": 3121196,
+      "retrievedFrom": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5",
+      "reviewedPages": [
+        1,
+        2,
+        7,
+        48,
+        65
+      ],
+      "pageCount": 74,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2002-10-22",
+      "otherDocumentDates": [
+        {
+          "date": "1997-12-31",
+          "kind": "GFA transformation and updated statutes"
+        },
+        {
+          "date": "1998-01-01",
+          "kind": "transformation effective date"
+        }
+      ]
+    },
+    {
+      "id": "mongeard-gfa-2022",
+      "title": "Mongeard-Mugneret GFA: share gift and updated statutes",
+      "url": "https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-05-25",
+      "reviewedAt": "2026-10-01",
+      "finding": "Gift of company shares and updated statutes, not a new land contribution. No Grands-Échezeaux cadastral schedule or executed lease reviewed here.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:51.069066+00:00",
+      "sha256": "36b403704aa63d30b73d968bbb89609b1cd67a4ba915fc88406fc192db2665e0",
+      "bytes": 2110638,
+      "retrievedFrom": "https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageCount": 31,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2022-06-17"
+    },
+    {
+      "id": "mongeard-sa-2025",
+      "title": "Domaine Mongeard-Mugneret SA: 2025 statutes",
+      "url": "https://actes.ccm2.net/acte/76e0c83d-c961-45ee-9ea3-d3939b8de6ef#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-07-25",
+      "reviewedAt": "2026-10-01",
+      "finding": "Current operating-company statutes contain general corporate provisions, without a Grands-Échezeaux parcel schedule or lease. They do not identify the buyer in the separate 2023 D0681 sale.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:51.069567+00:00",
+      "sha256": "8d634c9c46e826e834169d43032dbe53cd6a42edfe7096ab17f9d1d2dabf8e2d",
+      "bytes": 2045953,
+      "retrievedFrom": "https://actes.ccm2.net/acte/76e0c83d-c961-45ee-9ea3-d3939b8de6ef",
+      "reviewedPages": [
+        1
+      ],
+      "pageCount": 32,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2025-11-03"
+    },
+    {
+      "id": "mongeard-sa-apport",
+      "title": "Domaine Mongeard-Mugneret SA: 2025 special-benefits report",
+      "url": "https://actes.ccm2.net/acte/cbf7044b-2a3a-4511-9a1e-49475db7e777#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-07-24",
+      "reviewedAt": "2026-10-01",
+      "finding": "Although indexed as a commissaire aux apports report, this document evaluates particular dividend advantages. It is not a vineyard-property contribution and names no Grands-Échezeaux parcel.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:54.233289+00:00",
+      "sha256": "97feff1abfb5b58e13e8bc37a8d1aaac21ed996cc9354d757878aaa43b0d2c0e",
+      "bytes": 1268892,
+      "retrievedFrom": "https://actes.ccm2.net/acte/cbf7044b-2a3a-4511-9a1e-49475db7e777",
+      "reviewedPages": [
+        1,
+        3,
+        5
+      ],
+      "pageCount": 5,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2025-09-15"
+    },
+    {
+      "id": "modot-stat-ccm",
+      "title": "SCI Domaine Veuve Paul Modot: Schenk share changes and statutes",
+      "url": "https://actes.ccm2.net/acte/3182750#page=1",
+      "type": "company-filing",
+      "documentDate": "2023-02-22",
+      "reviewedAt": "2026-10-01",
+      "finding": "SIREN 778173500; Article 3 abbreviates the company as SCI Domaine Vve Paul MODOT, at 2 rue du Docteur Guyot, Savigny. The shares are held by Schenk Holding and Schenk Suisse after the Obrist merger. No Grands-Échezeaux cadastral schedule or lease.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:29.199439+00:00",
+      "sha256": "17d07757adffddd898dd8de40feee7f44dfc3c577f8ec17a36008a9df1059a7b",
+      "bytes": 955332,
+      "retrievedFrom": "https://actes.ccm2.net/acte/3182750",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        7,
+        8
+      ],
+      "pageCount": 18,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2023-04-18"
+    },
+    {
+      "id": "modot-stat-2002",
+      "title": "SCI Domaine Veuve Paul Modot: 2001 capital conversion and statutes",
+      "url": "https://actes.ccm2.net/acte/6949588#page=1",
+      "type": "company-filing",
+      "documentDate": "2001-06-26",
+      "reviewedAt": "2026-10-01",
+      "finding": "Same company abbreviation and office confirm the identity crosswalk. The founding 8 February 1964 contribution is cash, not a Grands-Échezeaux property schedule. No parcel-specific lease.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:30:30.497417+00:00",
+      "sha256": "285127edc379e6bf88dc8b28e5519423647163f36009199a7e661ad864e30ec3",
+      "bytes": 630715,
+      "retrievedFrom": "https://actes.ccm2.net/acte/6949588",
+      "reviewedPages": [
+        1,
+        3,
+        7
+      ],
+      "pageCount": 18,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2002-02-05"
+    },
+    {
+      "id": "drc-stat-2024",
+      "title": "Romanée-Conti: 2024 share deeds and updated statutes",
+      "url": "https://actes.ccm2.net/acte/34207319#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-07-27",
+      "reviewedAt": "2026-10-01",
+      "finding": "The 135-page bundle reproduces the 1954 Grands-Échezeaux wine/brand inventory in its capital history. This is not a cadastral vineyard schedule, and no Grands-Échezeaux parcel-specific lease was found.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:51.067564+00:00",
+      "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
+      "bytes": 8473781,
+      "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
+      "reviewedPages": [
+        1,
+        44,
+        47,
+        104
+      ],
+      "pageCount": 135,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2024-11-14"
+    },
+    {
+      "id": "drc-stat-2004",
+      "title": "Romanée-Conti: 2003 meeting and statutes",
+      "url": "https://actes.ccm2.net/acte/5409358#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "reviewedAt": "2026-10-01",
+      "finding": "The older statutes repeat the Grands-Échezeaux wine/brand inventory, without cadastral references or a parcel-specific land lease.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:51.068064+00:00",
+      "sha256": "8490ca607cdfb6ded3aae9dc22f92226f64ea6a7922d50d02590bf98aefb2c9e",
+      "bytes": 2082952,
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409358",
+      "reviewedPages": [
+        1,
+        34
+      ],
+      "pageCount": 63,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2004-01-29"
+    },
+    {
+      "id": "eugenie-stat-2022",
+      "title": "Domaine d’Eugénie: 2022 meeting and statutes",
+      "url": "https://actes.ccm2.net/acte/20639588#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-09-30",
+      "reviewedAt": "2026-10-01",
+      "finding": "Current statutes do not name Grands-Échezeaux cadastral references or a parcel-specific lease.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:54.303789+00:00",
+      "sha256": "ce38a3174eecc89f94057872b702b0ba3237d54d06652045a794ace1bbb670bd",
+      "bytes": 1030069,
+      "retrievedFrom": "https://actes.ccm2.net/acte/20639588",
+      "reviewedPages": [
+        1,
+        3,
+        7,
+        10
+      ],
+      "pageCount": 24,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2022-12-30"
+    },
+    {
+      "id": "eugenie-stat-2006",
+      "title": "René Engel / Eugénie: 2006 share transfer bundle",
+      "url": "https://actes.ccm2.net/acte/20639620#page=2",
+      "type": "company-filing",
+      "documentDate": "2006-09-20",
+      "reviewedAt": "2026-10-01",
+      "finding": "Corporate share transfers and a July protocol establish Engel/Artémis context. The 31 July 2006 planting-asset schedule prints “GRANDS ECHEZEAUX D11” without an area. D11 is retained literally; no evidence expands it to D0111 or links it to today’s parcels.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:55.171570+00:00",
+      "sha256": "f53fe1e6bd1c1945f3ce831e22350dcbc394e620c03947d67ef2b854f34e73fa",
+      "bytes": 1475545,
+      "retrievedFrom": "https://actes.ccm2.net/acte/20639620",
+      "reviewedPages": [
+        2,
+        3,
+        19,
+        23,
+        45
+      ],
+      "pageCount": 59,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2006-12-07",
+      "evidenceSeason": "2006"
+    },
+    {
+      "id": "bichot-merger-2007",
+      "title": "Bichot: 2007 merger contribution agreement",
+      "url": "https://actes.ccm2.net/acte/22570244#page=1",
+      "type": "company-filing",
+      "documentDate": "2007-05-15",
+      "reviewedAt": "2026-10-01",
+      "finding": "The agreement is signed 15 May 2007; the cover’s 15 March date labels a board document. The lease annex concerns other communes and supplies no Flagey/Grands-Échezeaux reference.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:59.134874+00:00",
+      "sha256": "7fd51fdfc87736c5e24d0ab5721d1c4c80a7f3f051fc117cdec3fe837682d154",
+      "bytes": 2514196,
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570244",
+      "reviewedPages": [
+        1,
+        18,
+        20,
+        21
+      ],
+      "pageCount": 58,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2007-06-19",
+      "filingLabelDocumentDate": "2007-03-15"
+    },
+    {
+      "id": "bichot-lease-2014",
+      "title": "Bichot: Lupe Cholet commercial location-gérance",
+      "url": "https://actes.ccm2.net/acte/22570320#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-08-28",
+      "reviewedAt": "2026-10-01",
+      "finding": "This is location-gérance of a commercial wine business, not a rural Grands-Échezeaux lease. No reference in this cru appears.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:14:58.685840+00:00",
+      "sha256": "6ce243a2e112960de49860dd14b4720e74642cc7238fb1d066473ac31199098d",
+      "bytes": 1297628,
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570320",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "pageCount": 14,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "filingDate": "2014-11-07"
+    },
+    {
+      "id": "figaro-drc",
+      "title": "Le Figaro free filing index: Romanée-Conti",
+      "url": "https://entreprises.lefigaro.fr/domaine-de-la-romanee-conti-21/entreprise-778269407",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:17.205786+00:00",
+      "sha256": "af69c6c5959fe17094aa3ffb494463af7069764a9d850c00b9093bd152476781",
+      "bytes": 144799,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/domaine-de-la-romanee-conti-21/entreprise-778269407"
+    },
+    {
+      "id": "figaro-mongeard-gfa",
+      "title": "Le Figaro free filing index: Mongeard-Mugneret GFA",
+      "url": "https://entreprises.lefigaro.fr/gfa-mongeard-mugneret-et-fils-21/entreprise-778269498",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:17.206287+00:00",
+      "sha256": "e2d9dfd7e00239f87d47ad890b86c343f6dddb2efab3c58f5449ffffc86de642",
+      "bytes": 103830,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/gfa-mongeard-mugneret-et-fils-21/entreprise-778269498"
+    },
+    {
+      "id": "figaro-mongeard-sa",
+      "title": "Le Figaro free filing index: Mongeard-Mugneret SA",
+      "url": "https://entreprises.lefigaro.fr/domaine-mongeard-mugneret-21/entreprise-303514681",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:17.206786+00:00",
+      "sha256": "08e759992ffe44c26fa6489f73fe80dbc8109e33e464131fc6b3dbf2b5652571",
+      "bytes": 132081,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/sa-domaine-mongeard-mugneret-21/entreprise-303514681"
+    },
+    {
+      "id": "figaro-eugenie",
+      "title": "Le Figaro free filing index: Eugénie",
+      "url": "https://entreprises.lefigaro.fr/domaine-d-eugenie-21/entreprise-326533213",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:17.207287+00:00",
+      "sha256": "5364f82751d668e1d4e6e1ed094d0713f6aae6b59dfd7a94ae166a611518fb3c",
+      "bytes": 105431,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/domaine-d-eugenie-21/entreprise-326533213"
+    },
+    {
+      "id": "figaro-anne",
+      "title": "Le Figaro free filing index: Anne Gros",
+      "url": "https://entreprises.lefigaro.fr/anne-gros-21/entreprise-348024928",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:17.207786+00:00",
+      "sha256": "efb5cd0341718960bced2684c0b9af585cb3a62dec2bf77bb425b057abe20b4f",
+      "bytes": 128287,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/anne-gros-21/entreprise-348024928"
+    },
+    {
+      "id": "figaro-bichot",
+      "title": "Le Figaro free filing index: Bichot SA",
+      "url": "https://entreprises.lefigaro.fr/bichot-sa-21/entreprise-036380046",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:18.397028+00:00",
+      "sha256": "61bba1403ad4392d613c7ea7061c5758a6a24289b78d8b0e798ee046dcb6bef6",
+      "bytes": 174351,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/bichot-sa-21/entreprise-036380046"
+    },
+    {
+      "id": "figaro-sepv",
+      "title": "Le Figaro free filing index: SEPV",
+      "url": "https://entreprises.lefigaro.fr/societe-d-exploitation-et-participation-viti-vinicole-sepv-21/entreprise-393095955",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:55:40.499400+00:00",
+      "sha256": "d7d67af1ce863fbb9f40f9b429845215da8715b14346019e6f83b78185b71334",
+      "bytes": 167576,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/societe-d-exploitation-et-participation-viti-vinicole-sepv-21/entreprise-393095955"
+    },
+    {
+      "id": "figaro-modot",
+      "title": "Le Figaro free filing index: SCI Domaine Veuve Paul Modot",
+      "url": "https://entreprises.lefigaro.fr/sci-dom-veuve-paul-modot-21/entreprise-778173500",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:55:40.498899+00:00",
+      "sha256": "a017dd6184f7d7d042a29d5af8567ac2d8903bb42441fbc11bdd70e374a93a83",
+      "bytes": 105184,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/sci-du-domaine-veuve-paul-modot-21/entreprise-778173500"
+    },
+    {
+      "id": "figaro-lamarche",
+      "title": "Le Figaro free filing index: Nathalie Pacareau Lamarche SCEA",
+      "url": "https://entreprises.lefigaro.fr/nathalie-pacareau-lamarche-21/entreprise-538257932",
+      "type": "registry-aggregator",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free document index used to select contributions, capital changes and statutes for review. Deposit labels are checked separately from dates inside the PDFs. This review does not cover every share-only filing in the archive.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:55:40.498399+00:00",
+      "sha256": "e48252b8b712d0583137a8c0338756ee27c88f71f2f1f75997b2b492db09815a",
+      "bytes": 106988,
+      "retrievedFrom": "https://entreprises.lefigaro.fr/nathalie-pacareau-lamarche-21/entreprise-538257932"
+    },
+    {
+      "id": "mongeard-sheet",
+      "title": "Mongeard-Mugneret: Grands-Échezeaux technical sheet",
+      "url": "https://mongeard.com/wp-content/uploads/2025/09/ft-mongeard_mugneret_2025-fr-grands-echezeaux-gc.pdf#page=1",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Holding in production 1.4440 ha; whole-appellation figure 9.1445 ha is a different measure. The 2025 upload path is not a document date.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:54:29.520498+00:00",
+      "sha256": "c6e44c8fe21b6228e6efa9a3b2bd8fe01d9a02294f67782b558f77727d5d036d",
+      "bytes": 1313413,
+      "retrievedFrom": "https://mongeard.com/wp-content/uploads/2025/09/ft-mongeard_mugneret_2025-fr-grands-echezeaux-gc.pdf",
+      "reviewedPages": [
+        1
+      ],
+      "pageCount": 1,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images."
+    },
+    {
+      "id": "drc-ge",
+      "title": "Domaine de la Romanée-Conti: Grands-Échezeaux",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/4/grands-echezeaux",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "The estate page was read in a browser: 3.5263 ha. This resolves the Tier 1 browser access gap; the undated holding statement supplies no farming season or parcel list.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:53:02.508466+00:00",
+      "sha256": "7bd332b4ee3f58bf91084c0b9d64834d283670ade37761ccc0aeb73346ebc374",
+      "bytes": 224870,
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/4/grands-echezeaux",
+      "reviewMethod": "Browser accessibility tree; 3,5263 ha read from rendered estate page."
+    },
+    {
+      "id": "villamont-ge",
+      "title": "Henri de Villamont: domaine vineyards",
+      "url": "https://henridevillamont.fr/fr/notre-travail-domaine-henri-de-villamont",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "States half a hectare of Grands-Échezeaux. This approximate estate holding differs from the separate 16-are technical sheet and the 0.43-ha guide figure; their scopes are not resolved.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:54:29.520998+00:00",
+      "sha256": "12bc228e894860bc24aefd4666b3e3ae2c1fc3fd49919591bdda3cf26da6b089",
+      "bytes": 23981,
+      "retrievedFrom": "https://henridevillamont.fr/fr/notre-travail-domaine-henri-de-villamont"
+    },
+    {
+      "id": "villamont-sheet",
+      "title": "Henri de Villamont: Grands-Échezeaux technical sheet",
+      "url": "https://www.henridevillamont.fr/sites/default/files/2018-09/FT%20Grands%20Echezeaux.pdf#page=1",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Prints 16 ares (0.16 ha). It does not explain whether this is one parcel, a wine-specific subset or the whole holding. The 2018 upload path is not a document date.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:15:00.995098+00:00",
+      "sha256": "cc22c3765126c6f6cd15c4b50304490bfeaa6ef402bd7dc81da0f690c6e9c555",
+      "bytes": 51839,
+      "retrievedFrom": "https://www.henridevillamont.fr/sites/default/files/2018-09/FT%20Grands%20Echezeaux.pdf",
+      "reviewedPages": [
+        1
+      ],
+      "pageCount": 1,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images."
+    },
+    {
+      "id": "villamont-legal",
+      "title": "Henri de Villamont: legal notice",
+      "url": "https://henridevillamont.fr/mentions-legales",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Identifies Domaine Henri de Villamont with Groupe Schenk, 5 rue du Docteur Guyot, Savigny. Together with the Modot share filings, this supports a group/estate lead, not a lease or identical street address.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:19.294433+00:00",
+      "sha256": "3d001baecbdd07bfd5727131b08eb3a28b753fc75a130bfdd17f524713526575",
+      "bytes": 33228,
+      "retrievedFrom": "https://henridevillamont.fr/mentions-legales"
+    },
+    {
+      "id": "modot-official",
+      "title": "Official company search: SCI Domaine Veuve Paul Modot",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Official search by SIREN 778173500 confirms the company named by its abbreviation and office in the statutes. The DGFiP provisional holder identifier U18178008 remains unchanged.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:55:40.499899+00:00",
+      "sha256": "cab10da69ea414ead95eb308fd5b858fa7d47eada29dcc292585ef495b4b6146",
+      "bytes": 3449,
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1"
+    },
+    {
+      "id": "bichot-ge",
+      "title": "Albert Bichot: Domaine du Clos Frantin Grands-Échezeaux",
+      "url": "https://catalogue.albert-bichot.com/MGLW1F",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Publishes 0.25 ha in two plots, without cadastral IDs. The alternative current catalogue resolves the earlier 404.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:31.754966+00:00",
+      "sha256": "e6a78c07d0c925a46046b929ad449b3741b002adf7998a147b9f2c156142a531",
+      "bytes": 35132,
+      "retrievedFrom": "https://catalogue.albert-bichot.com/MGLW1F"
+    },
+    {
+      "id": "bichot-sheet",
+      "title": "Albert Bichot: Clos Frantin Grands-Échezeaux technical sheet",
+      "url": "https://www.albert-bichot.com/fichiers/Grands_Echezeaux_Grand_Cru_Domaine_du_Clos_Frantin--Domaines_Albert_Bichot--vin_co_MGLW1F.pdf#page=1",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Publishes 0.25 ha in two plots and identifies Albert Bichot as proprietor. No parcel IDs; vintage ratings are not a land-deed or operation date.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:15:01.031079+00:00",
+      "sha256": "32a1b238a29f06535354190380cc108c45ea8cd7902e4c7a3c0c3871350a7328",
+      "bytes": 2732454,
+      "retrievedFrom": "https://www.albert-bichot.com/fichiers/Grands_Echezeaux_Grand_Cru_Domaine_du_Clos_Frantin--Domaines_Albert_Bichot--vin_co_MGLW1F.pdf",
+      "reviewedPages": [
+        1
+      ],
+      "pageCount": 1,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images."
+    },
+    {
+      "id": "drouhin-ge",
+      "title": "Joseph Drouhin: Grands-Échezeaux 2023",
+      "url": "https://www.drouhin.com/fr_FR/vin/grands-echezeaux-grand-cru/2023",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Confirms the house’s Grands-Échezeaux wine but does not state a cru-specific holding area. The 2023 wine vintage is not a publication or lease date.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:31.755467+00:00",
+      "sha256": "a96bda1907970aecfaae394c590d03b5b6f728a113f1838715c96e98c26d846f",
+      "bytes": 135913,
+      "retrievedFrom": "https://www.drouhin.com/fr_FR/vin/grands-echezeaux-grand-cru/2023",
+      "evidenceSeason": "2023"
+    },
+    {
+      "id": "drouhin-sheet",
+      "title": "Joseph Drouhin: Grands-Échezeaux 2023 technical sheet",
+      "url": "https://www.drouhin.com/fr_FR/winepdf/grands-echezeaux-grand-cru/2023#page=1",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "The free two-page estate sheet supplies no cru-specific holding area or parcel reference. A blocked importer PDF is unnecessary for the wine description.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:40.335077+00:00",
+      "sha256": "bbdebc1d7f5bd71168e01651ef6a8a6e4c8d52176c82c6499430283010ac12ee",
+      "bytes": 350497,
+      "retrievedFrom": "https://www.drouhin.com/fr_FR/winepdf/grands-echezeaux-grand-cru/2023",
+      "pageCount": 2,
+      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "evidenceSeason": "2023",
+      "reviewedPages": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "thenard-ge",
+      "title": "Domaine Thenard: Grands-Échezeaux",
+      "url": "https://www.domainethenard.fr/grands-echezeaux",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "States 0.55 ha. The older guide reports 0.54 ha; no exact legal-entity or parcel assignment follows from either figure.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:37.164610+00:00",
+      "sha256": "0d30b653dd37ae2b28699e408f53fa74671ba55bd3fb6b9e90217841335c444b",
+      "bytes": 227393,
+      "retrievedFrom": "https://www.domainethenard.fr/grands-echezeaux"
+    },
+    {
+      "id": "noellat-importer",
+      "title": "Becky Wasserman: Georges Noëllat Grands-Échezeaux",
+      "url": "https://www.beckywasserman.com/domaines/georges-noellat/grands-echezeaux-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Lists 0.40 ha without references. Winehog’s 2022 preview reports 0.30 ha and Jasper Morris’s 2020 post 0.38 ha; no dated change or common measurement basis resolves the differences.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:37.165611+00:00",
+      "sha256": "4e53264272fea7574d1b19c906228fbf0af4a247b6a18635dce86456017562f1",
+      "bytes": 59090,
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/georges-noellat/grands-echezeaux-grand-cru/"
+    },
+    {
+      "id": "desaunay-importer",
+      "title": "Finesse: Domaine Desaunay-Bissey",
+      "url": "https://finesse-wine.co.jp/producteur/bourgogne/300/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Japanese importer describes approximately 0.34 ha of Grands-Échezeaux, about half owned and half under fermage, near Clos de Vougeot. No cadastral references.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:20:28.413127+00:00",
+      "sha256": "e060001530a2a5ee7569b1b12cefac962d726841a85611f2184084b7ca8160ac",
+      "bytes": 54406,
+      "retrievedFrom": "https://finesse-wine.co.jp/producteur/bourgogne/300/"
+    },
+    {
+      "id": "millot-ge",
+      "title": "Jean-Marc Millot: Grands-Échezeaux technical details",
+      "url": "https://jean-marc-millot.com/portfolio-item/grands-echezeaux-grand-cru",
+      "type": "estate",
+      "documentDate": "2022-01-06",
+      "reviewedAt": "2026-10-01",
+      "finding": "States 0.2 ha, displayed page date 6 January 2022. The older guide’s 0.2015 ha is retained as a separate, more precise published figure.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:18.721961+00:00",
+      "sha256": "78aef52e77b72484832f29c3e7e9ee0da8f0729227d56475bc804c47fdd85572",
+      "bytes": 104394,
+      "retrievedFrom": "https://jean-marc-millot.com/portfolio-item/grands-echezeaux-grand-cru"
+    },
+    {
+      "id": "millot-history",
+      "title": "Jean-Marc Millot: domaine history",
+      "url": "https://jean-marc-millot.com/le-domaine",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Timeline labels the Gouroux/Millot merger and first Grands-Échezeaux harvest 1986. This differs from Winehog’s tentative 1997 first-harvest inference; neither supplies parcel IDs.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:39.604536+00:00",
+      "sha256": "36d16d04a1836b57e3211a6c1feca6978d53428669d7968b47cd3455fceed1ff",
+      "bytes": 127016,
+      "retrievedFrom": "https://jean-marc-millot.com/le-domaine"
+    },
+    {
+      "id": "clf-holdings",
+      "title": "Pearl of Burgundy: Coquard-Loison-Fleurot holdings",
+      "url": "https://www.pearlofburgundy.com/our-wines/domaine-coquard-loison-fleurot/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Holding table lists 0.18 ha of Grands-Échezeaux and describes family-owned vineyards. Winehog’s 2019 CLF preview gives 0.1755 ha; no parcel IDs.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:04:19.293933+00:00",
+      "sha256": "d61a1449d975256b8b0a75163eb97ce6327d458ad747838f7c1f5dd9c3a35f72",
+      "bytes": 80885,
+      "retrievedFrom": "https://www.pearlofburgundy.com/our-wines/domaine-coquard-loison-fleurot/"
+    },
+    {
+      "id": "sirugue-merchant",
+      "title": "VinsMotions: Arnaud & Sophie Sirugue-Noëllat",
+      "url": "https://www.vinsmotions.com/weinshop/burgund/produzenten/sirugue-noellat.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Reports succession from Robert Sirugue from the 2023 harvest and 0.12 ha of Grands-Échezeaux. The older guide’s 0.1205 ha belongs to the Robert Sirugue name; no parcel reference is stated.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:37.166610+00:00",
+      "sha256": "6c5dabfb820e288c017d4cf2e1ac8be44b49a9286d753bb7f799ab96c2f0fd51",
+      "bytes": 83919,
+      "retrievedFrom": "https://www.vinsmotions.com/weinshop/burgund/produzenten/sirugue-noellat.html"
+    },
+    {
+      "id": "kohut-ge",
+      "title": "Domaine Kohut: Échezeaux & Grands-Échezeaux",
+      "url": "https://domaine-kohut.com/product/echezeaux-grands-echezeaux/?lang=en",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Combined product heading mentions both crus, but its text discusses En Orveau in Échezeaux. No separable Grands-Échezeaux area. It does not establish continuation of the quoted 2017 0.07-ha holding.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:37.165611+00:00",
+      "sha256": "44d0e7fa49eb05fc654a8299ab410d4d5157e47f5b77a00242854bf92c1f3d24",
+      "bytes": 81842,
+      "retrievedFrom": "https://domaine-kohut.com/product/echezeaux-grands-echezeaux/?lang=en"
+    },
+    {
+      "id": "anne-decanter",
+      "title": "Decanter: Domaine Anne Gros profile",
+      "url": "https://www.decanter.com/premium/domaine-anne-gros-from-burgundy-to-languedoc-with-elegance-and-finesse-566529/",
+      "type": "critic-research",
+      "documentDate": "2025-12-02",
+      "reviewedAt": "2026-10-01",
+      "finding": "Accessible profile updated 2 December 2025 reports 0.37 ha acquired in a 2022 family reshuffle. The 2019 deed concerns bare ownership; the profile’s acquisition wording does not establish a new 2022 land deed or parcel operation.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:26:28.440899+00:00",
+      "sha256": "53e09cc53a505e7cca25bf50f84943dce56a8fefe7b9c8d1fdbe358a2db15f8b",
+      "bytes": 1976226,
+      "retrievedFrom": "https://www.decanter.com/premium/domaine-anne-gros-from-burgundy-to-languedoc-with-elegance-and-finesse-566529/"
+    },
+    {
+      "id": "liger-decanter-2022",
+      "title": "Decanter: Burgundy 2022 red wine score table",
+      "url": "https://www.decanter.com/burgundy-2022-red-wine-score-table/",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Free 2022 Grands-Échezeaux row states 0.31 ha worked en métayage from Nathalie Pacareau Lamarche, first vintage. This is reported 2022 tenure, not proof of farming after the 2026 suspended application.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:30:30.496919+00:00",
+      "sha256": "1d18bb4a331d2eb781f1187fb4d723cfacafd4bd7bb12d5bf36841bbe2f00328",
+      "bytes": 2242937,
+      "retrievedFrom": "https://www.decanter.com/burgundy-2022-red-wine-score-table/",
+      "evidenceSeason": "2022"
+    },
+    {
+      "id": "winehog-index",
+      "title": "Winehog: Flagey-Échezeaux vineyard article index",
+      "url": "https://winehog.org/vineyards/flagey-echezeaux-vineyard-articles/",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "All seven linked Grands-Échezeaux vineyard articles were reviewed to their free-access boundary: Romanée-Conti, Millot, CLF, Eugénie, Sirugue, Noëllat and Liger-Belair. Subscriber-only details were not accessed.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:55:40.500399+00:00",
+      "sha256": "02aa7bb60aa6ab1eae622fd33f3e81f1756630aa77bfa1975f9d3b6312f1f3b1",
+      "bytes": 142024,
+      "retrievedFrom": "https://winehog.org/vineyards/flagey-echezeaux-vineyard-articles/"
+    },
+    {
+      "id": "winehog-drc",
+      "title": "Winehog: Romanée-Conti Grands-Échezeaux",
+      "url": "https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-grands-echezeaux-20840/",
+      "type": "critic-research",
+      "documentDate": "2014-08-24",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free article describes four plots in the central vineyard. Its public annotated aerial locates a DRC strip but has no printed cadastral numbers; area and location are not used to assign today’s parcels.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:29.200939+00:00",
+      "sha256": "ad95b77be1beac574377ee55ed6a55d7424d6a2541a8c622dfcd7c9e6fe3509f",
+      "bytes": 156519,
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-grands-echezeaux-20840/"
+    },
+    {
+      "id": "winehog-liger",
+      "title": "Winehog: Liger-Belair Grands-Échezeaux expansion",
+      "url": "https://winehog.org/domaine-comte-liger-belair-grands-echezeaux-51226/",
+      "type": "critic-research",
+      "documentDate": "2022-03-04",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview reports a long-term arrangement with Nathalie Pacareau Lamarche from the 2022 vintage and 0.3007 ha. No cadastral reference is in the accessible text.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:57:29.200439+00:00",
+      "sha256": "6ee74f0bcd33c6108c26c31cd1c201b35766d7fb98ac6755e99b5f8c0475a1eb",
+      "bytes": 175970,
+      "retrievedFrom": "https://winehog.org/domaine-comte-liger-belair-grands-echezeaux-51226/"
+    },
+    {
+      "id": "winehog-liger-2023",
+      "title": "Winehog: Liger-Belair tasting and new vineyards",
+      "url": "https://winehog.org/visit-domaine-du-comte-liger-belair-tasting-2021s-2-2-58874/",
+      "type": "critic-research",
+      "documentDate": "2023-05-20",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview describes Grands-Échezeaux leased from Nathalie Pacareau, 0.30 ha and first 2022 wine. No cadastral IDs or current-season continuation evidence.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:20:28.414624+00:00",
+      "sha256": "4cec314285b8bbd9b1c4f756ba646b9330183feb4c2168873d7be36d701eff45",
+      "bytes": 169908,
+      "retrievedFrom": "https://winehog.org/visit-domaine-du-comte-liger-belair-tasting-2021s-2-2-58874/"
+    },
+    {
+      "id": "winehog-noellat",
+      "title": "Winehog: Georges Noëllat Grands-Échezeaux",
+      "url": "https://winehog.org/domaine-georges-noellat-grands-echezeaux-51651/",
+      "type": "critic-research",
+      "documentDate": "2022-01-31",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview lists the Noëllat holding as 0.30 ha. Detailed parcel discussion is subscriber-only; the figure is retained alongside the importer’s 0.40 and Morris’s 0.38 ha.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:54:29.996807+00:00",
+      "sha256": "c4c2622d667f2e87affd0d78e46d66bf31d3dbc8c3c9c3c705db76f8592e1587",
+      "bytes": 172357,
+      "retrievedFrom": "https://winehog.org/domaine-georges-noellat-grands-echezeaux-51651/"
+    },
+    {
+      "id": "winehog-millot",
+      "title": "Winehog: Jean-Marc Millot Grands-Échezeaux",
+      "url": "https://winehog.org/terroir-insight-domaine-jean-marc-millot-grands-echezeaux-2-37356/",
+      "type": "critic-research",
+      "documentDate": "2019-03-24",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview provides a 14-producer holding list and 0.2015 ha for Millot. Its Gouroux/Mongeard lease history and presumed 1997 first harvest are secondary, explicitly tentative historical context, not parcel operation.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T15:54:29.994807+00:00",
+      "sha256": "5964977928ab72e6c0e1b6d4786b682f961672767a0e5eb27dafbd78fa3905f0",
+      "bytes": 167353,
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-jean-marc-millot-grands-echezeaux-2-37356/"
+    },
+    {
+      "id": "winehog-clf",
+      "title": "Winehog: Coquard-Loison-Fleurot Grands-Échezeaux",
+      "url": "https://winehog.org/terroir-insight-domaine-coquard-loison-fleurot-grands-echezeaux-37368/",
+      "type": "critic-research",
+      "documentDate": "2019-03-29",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview gives 0.1755 ha for CLF; the importer rounds to 0.18. Detailed parcel discussion is subscriber-only.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:15:04.565589+00:00",
+      "sha256": "6d09831bbdc5b9de69cd10e8423b589bef1b476513758d62ac9327be3ee3e21e",
+      "bytes": 158495,
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-coquard-loison-fleurot-grands-echezeaux-37368/"
+    },
+    {
+      "id": "winehog-eugenie",
+      "title": "Winehog: Eugénie Grands-Échezeaux",
+      "url": "https://winehog.org/domaine-deugenie-grands-echezeaux-2-37559/",
+      "type": "critic-research",
+      "documentDate": "2019-05-18",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview reports Pinault’s 2006 acquisition of the Engel vineyards and distinguishes the Clos Frantin estate-building transaction. No accessible cadastral references.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:15:02.823736+00:00",
+      "sha256": "930897b523c570d24eca538bfbe1b176ce51b3e8faa62a09d6e7f12bc7cbf6d5",
+      "bytes": 159984,
+      "retrievedFrom": "https://winehog.org/domaine-deugenie-grands-echezeaux-2-37559/"
+    },
+    {
+      "id": "winehog-sirugue",
+      "title": "Winehog: Robert Sirugue Grands-Échezeaux and owner lists",
+      "url": "https://winehog.org/terroir-insight-domaine-sirugue-grands-echezeaux-38335/",
+      "type": "critic-research",
+      "documentDate": "2020-01-14",
+      "reviewedAt": "2026-10-01",
+      "finding": "Free preview gives Sirugue 0.1205 ha and Villamont 0.43 ha, and transcribes the 1855 Lavalle and 1892 Danguy/Aubertin owner lists. These old-guide lists are reviewed through this secondary source, not original-book verification.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:15:02.621067+00:00",
+      "sha256": "2e2e624e82dbf29d1d4a9561db6c1b2c8dee0a13f05594100d72f7f03b33bb00",
+      "bytes": 157689,
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-sirugue-grands-echezeaux-38335/"
+    },
+    {
+      "id": "jasper-2020",
+      "title": "Jasper Morris: public Grands-Échezeaux holding comparison, post 8",
+      "url": "https://wine-pages.com/community/threads/ech%C3%A9zeaux-versus-grands-ech%C3%A9zeaux.9705/",
+      "type": "critic-research",
+      "documentDate": "2020-04-29",
+      "reviewedAt": "2026-10-01",
+      "finding": "The signed author post explicitly says the first figure is Grands-Échezeaux, the second Échezeaux. Drouhin 0.48 and Noëllat 0.38 ha differ from other published figures; these are dated whole-cru holdings, without parcel IDs.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:39.125037+00:00",
+      "sha256": "c2e256473a1ae80276b8054fce3ccf880d92aa3df004e53b2f524bece5dd93aa",
+      "bytes": 212668,
+      "retrievedFrom": "https://wine-pages.com/community/threads/ech%C3%A9zeaux-versus-grands-ech%C3%A9zeaux.9705/"
+    },
+    {
+      "id": "monocepage-ge",
+      "title": "Monocépage: Grands-Échezeaux guide holdings",
+      "url": "https://monocepage.com/gc-grands-echezeaux-et-echezeaux/",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Quotes Bourgogne Aujourd’hui no.137 (October–November 2017), including Kohut 0.07 ha and Villamont 0.43. The text says fourteen owners but enumerates thirteen; the original magazine was not reviewed. Dated quoted context, not a current parcel census.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:17:37.166111+00:00",
+      "sha256": "e10500549529c3963496b292b1a6d7aacc698dfd808da6ad3a1c7e939c068405",
+      "bytes": 164105,
+      "retrievedFrom": "https://monocepage.com/gc-grands-echezeaux-et-echezeaux/",
+      "quotedEvidenceDate": "2017-10/2017-11"
+    },
+    {
+      "id": "drc-photo-2012",
+      "title": "Winehog Romanée-Conti article: drc-photo-2012",
+      "url": "https://winehog.org/wp-content/uploads/2012/05/20120517-090056.jpg",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Wine label, not a parcel schedule.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:49:49.678294+00:00",
+      "sha256": "0d9adecf491b6c9caf2f4126cbdb5c08f85b178f6b78b55da38d2c0a06f224ca",
+      "bytes": 38503,
+      "retrievedFrom": "https://winehog.org/wp-content/uploads/2012/05/20120517-090056.jpg",
+      "articleSourceId": "winehog-drc",
+      "dateLimitation": "Upload directory is not evidence of an image date."
+    },
+    {
+      "id": "drc-photo-3806",
+      "title": "Winehog Romanée-Conti article: drc-photo-3806",
+      "url": "https://winehog.org/wp-content/uploads/2014/08/IMG_3806.jpg",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Annotated aerial showing a DRC central strip; no cadastral numbers.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:49:49.678794+00:00",
+      "sha256": "850d01520f783697dfd0eca086619b5dd1deefd32cb0857201c6ae9db8f70928",
+      "bytes": 311700,
+      "retrievedFrom": "https://winehog.org/wp-content/uploads/2014/08/IMG_3806.jpg",
+      "articleSourceId": "winehog-drc",
+      "dateLimitation": "Upload directory is not evidence of an image date."
+    },
+    {
+      "id": "drc-photo-3809",
+      "title": "Winehog Romanée-Conti article: drc-photo-3809",
+      "url": "https://winehog.org/wp-content/uploads/2014/08/IMG_3809.jpg",
+      "type": "critic-research",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "finding": "Vineyard photograph; no cadastral numbers.",
+      "access": "read",
+      "retrievedAt": "2026-09-30T16:49:49.679294+00:00",
+      "sha256": "7228101969361c3ef2e72e04bbe01e3b266ca8f1be30b34973e807fc46a12e9b",
+      "bytes": 383957,
+      "retrievedFrom": "https://winehog.org/wp-content/uploads/2014/08/IMG_3809.jpg",
+      "articleSourceId": "winehog-drc",
+      "dateLimitation": "Upload directory is not evidence of an image date."
     }
   ],
   "holders": [
@@ -194,12 +1280,15 @@
       "candidateNames": [
         "Domaine de la Romanée-Conti"
       ],
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "register-drc"
+        "register-drc",
+        "drc-ge",
+        "drc-stat-2024",
+        "winehog-drc"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "The recorded holder is the estate company itself (3.53 ha of the cru, four parcels). D0823's earlier records read SC DOM DE LA ROMANEE CONTI without a SIREN. The estate's Grands-Échezeaux page shows its figures only in a browser and was not read."
+      "finding": "The rendered estate page states 3.5263 ha. The recorded company holds four parcels; Winehog describes a central holding without cadastral IDs. Reviewed corporate inventories name wine/brands, not a land lease. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778269498",
@@ -208,11 +1297,14 @@
       ],
       "basis": "estate-context",
       "sourceIds": [
+        "register-mongeard-gfa",
         "mongeard-ge",
-        "register-mongeard-gfa"
+        "mongeard-sheet",
+        "mongeard-gfa-1964",
+        "mongeard-gfa-2022"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "A family land-holding GFA (named MONGEARD MUGNERET ET FILS until 2019). The estate lists a Grands-Échezeaux wine but publishes no area; no lease was reviewed that says who farms the GFA's three parcels."
+      "finding": "The contribution schedule names D0104, D0105 and D0535 (0.6615 ha). The estate states 1.4440 ha in production across its holding. GFA statutes require long-term leasing but identify no executed lease or tenant. Current parcel farming unconfirmed."
     },
     {
       "holderId": "303514681",
@@ -221,11 +1313,14 @@
       ],
       "basis": "estate-context",
       "sourceIds": [
+        "register-mongeard",
         "mongeard-ge",
-        "register-mongeard"
+        "mongeard-sheet",
+        "mongeard-sa-2025",
+        "mongeard-sa-apport"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "The operating estate lists a Grands-Échezeaux wine. D0681 was first recorded to it on 1 January 2024, after a sale deed of 21 November 2023. Kept separate from the GFA; farming of D0107 and D0681 unconfirmed."
+      "finding": "The estate states 1.4440 ha in production, compared jointly with the SA and GFA rights. D0681 first appears to the SA in 2024 after a 2023 sale. Reviewed SA filings name no cru parcel or lease. Farming of D0107 and D0681 unconfirmed."
     },
     {
       "holderId": "326533213",
@@ -234,67 +1329,103 @@
       ],
       "basis": "estate-context",
       "sourceIds": [
+        "register-eugenie",
         "eugenie-wines",
-        "register-eugenie"
+        "eugenie-stat-2006",
+        "winehog-eugenie"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "The estate describes 0.5 ha at the extreme south of the appellation, above the Clos de Vougeot wall. D0111 and D0112 total 0.49 ha of the cru at its southern edge: consistent, but not a parcel-by-parcel statement."
+      "finding": "The estate describes 0.5 ha at the southern edge. A 2006 planting schedule prints “GRANDS ECHEZEAUX D11”, without an area; it is not expanded to D0111. The share-transfer history supplies estate context. Current parcel farming unconfirmed."
     },
     {
       "holderId": "393095955",
       "candidateNames": [
         "Maison Joseph Drouhin"
       ],
-      "basis": "management-only-lead",
+      "basis": "management-and-estate-context",
       "sourceIds": [
-        "register-sepv"
+        "register-sepv",
+        "sepv-apports-1994",
+        "sepv-capital-1995",
+        "sepv-stat-ccm",
+        "drouhin-ge"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "A Beaune investment company (SEPV) whose board includes Jousset-Drouhin family members. Shared management only: not evidence that Drouhin farms D0103 or makes wine from it."
+      "finding": "The 1994 contribution report lists D103, 0.4740 ha; the minutes record completion of Robert Drouhin’s business contribution. SEPV statutes name a majority stake in Maison Joseph Drouhin. This strengthens the estate lead; no current parcel-specific lease or farming confirmation."
     },
     {
       "holderId": "348024928",
       "candidateNames": [
         "Domaine Anne Gros"
       ],
-      "basis": "identity-only",
+      "basis": "secondary-estate-context",
       "sourceIds": [
         "register-anne-gros",
-        "anne-application"
+        "anne-contribution-2019",
+        "anne-application",
+        "anne-decanter"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "SAS Anne Gros is first recorded on D0093 on 1 January 2021. The 2022 receipt names Anne Gros, at the same address, as applicant for D0093 with previous operator Domaine Gros Frère et Sœur. Its outcome was not published."
+      "finding": "The 2019 deed contributes bare ownership of D0093 (0.3662 ha), retaining Colette Gros’s usufruct. It recites the Gros Frère et Sœur lease and an intended 2021 end, not an executed replacement. The 2022 application and later profile strengthen the lead; current farming unconfirmed."
     },
     {
       "holderId": "538257932",
-      "candidateNames": [],
-      "basis": "unresolved",
+      "candidateNames": [
+        "Domaine du Comte Liger-Belair"
+      ],
+      "basis": "reported-operator-relationship",
       "sourceIds": [
         "register-lamarche",
+        "lamarche-contribution",
+        "winehog-liger",
+        "liger-decanter-2022",
         "raa-2026-067"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "First recorded on D0615 and D0616 on 1 January 2021. The April 2026 order suspending the Liger-Belair application names this SCEA among the owners of the land applied for. Who farms the parcels is not stated."
+      "finding": "The 2019 deed contributes D0615/D0616 (0.3007 ha) to the Lamarche SCEA. Critics report Liger-Belair’s 2022 métayage arrangement. Its application for these parcels was suspended in April 2026. Ownership, reported tenancy and authorisation remain distinct; current farming unconfirmed."
     },
     {
       "holderId": "U18178008",
-      "candidateNames": [],
-      "basis": "unresolved",
-      "sourceIds": [],
+      "candidateNames": [
+        "Domaine Henri de Villamont"
+      ],
+      "basis": "management-and-estate-context",
+      "sourceIds": [
+        "modot-stat-ccm",
+        "modot-stat-2002",
+        "modot-official",
+        "villamont-legal",
+        "villamont-ge",
+        "villamont-sheet"
+      ],
       "parcelOperationConfirmed": false,
-      "finding": "Provisional DGFiP identifier without a SIREN; the official company search found no match for the recorded name. No usable source located."
+      "finding": "Statutes identify SCI Domaine Vve Paul Modot (SIREN 778173500) and Schenk shareholders; Villamont’s legal page identifies Groupe Schenk. Estate figures differ (0.5 ha versus 16 ares). The provisional DGFiP ID is retained. Group context does not prove a lease or current farming.",
+      "legalIdentityCrosswalk": {
+        "companySiren": "778173500",
+        "basis": "Exact statutory abbreviation and registered office; confirmed by official SIREN search.",
+        "sourceIds": [
+          "modot-stat-ccm",
+          "modot-stat-2002",
+          "modot-official"
+        ],
+        "limitation": "Does not rewrite the provisional DGFiP ID or prove identifier continuity in the annual rights files."
+      }
     },
     {
       "holderId": "036380046",
       "candidateNames": [
-        "Albert Bichot"
+        "Domaine du Clos Frantin / Albert Bichot"
       ],
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "register-bichot"
+        "register-bichot",
+        "bichot-ge",
+        "bichot-sheet",
+        "bichot-merger-2007",
+        "bichot-lease-2014"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "BICHOT SA is the Albert Bichot house company. No Grands-Échezeaux holding statement was read (the Clos Frantin product page tried returned 404)."
+      "finding": "The current Clos Frantin page and estate sheet state 0.25 ha in two plots. The reviewed merger annex does not name this cru; Lupe Cholet’s location-gérance is commercial, not a rural lease. Estate context strengthens the Bichot lead; current parcel farming unconfirmed."
     }
   ],
   "exactParcelEvents": [
@@ -329,12 +1460,19 @@
     }
   ],
   "accessGaps": [
-    "Tier 1 only: no company filings, deeds or leases (Tier 2) and no land-registry copies or outreach (Tier 3).",
-    "Private individuals are not in the legal-entity files: 13 parcels (2.06 ha of the cru) have no matched company record.",
-    "The Domaine de la Romanée-Conti Grands-Échezeaux page renders its figures in the browser and was not read.",
-    "SCI Dom Veuve Paul Modot has only a provisional DGFiP identifier and no match in the official company search.",
-    "Notices published outside the regional (2019–2026) and departmental (2016–2020) bulletins, and pre-2016 bulletins, were not searched.",
-    "Cadastral lineage covers the 2019–2026 vintages only. DVF+ sale records run from January 2014 to November 2025 and name no party."
+    "Tier 2 reviewed all nine holder groups via free filing indexes and 19 selected filings (804 pages); this is not an exhaustive reading of every corporate archive. Paid land-registry copies and outreach remain Tier 3.",
+    "Private individuals are absent from the legal-entity file: 13 parcels (2.06 ha of the cru) have no matched company record. Published holdings compare whole named-area totals and do not assign those parcels.",
+    "No current parcel-specific executed lease plus actual-operation evidence was found. Anne’s intended 2021 lease end, Lamarche’s planned 2019 termination and the Mongeard GFA statutory leasing requirement do not prove execution or current farming.",
+    "SEPV’s D103 contribution schedule is resolved, but no cru-specific current lease to Maison Joseph Drouhin was found. Its 2019/2020 guide holding is 0.47 ha versus Morris’s 0.48; the current estate page states no holding area.",
+    "Liger-Belair’s reported 2022 métayage arrangement and the April 2026 suspended application remain separate. No later decision or evidence of who farms D0615/D0616 meanwhile was found.",
+    "The Modot legal identity crosswalk to SIREN 778173500 is supported, but its provisional DGFiP identifier and unprovable historical identifier continuity are retained. Schenk/Villamont group context does not supply a land lease.",
+    "Villamont publishes approximately 0.5 ha and a separate 16-are sheet; the older guide gives 0.43 ha. No dated change or scope explanation resolves these figures. Noëllat’s 0.30/0.38/0.40-ha figures are also unresolved.",
+    "The Eugénie planting schedule’s literal D11 remains unmatched. The Millot estate timeline (1986) conflicts with Winehog’s tentative first-harvest inference (1997); neither gives current cadastral references.",
+    "The SA Mongeard filings do not supply the named 2023 conveyance for D0681. DVF records its sale without party names; a later company record is not proof of the original buyer or farmer.",
+    "All seven Grands-Échezeaux vineyard articles in the Winehog index were read to their public boundary. Six restrict detailed parcel discussion to subscribers. The free DRC aerial was read but contains no cadastral numbers; subscriber-only parcel maps were not accessed.",
+    "The Dreyfus Ashby Drouhin importer PDF returned HTTP 403; the free estate sheet was reviewed instead. The live Vinous 2022 review returned only a loading shell; the free Decanter table supplies the reported métayage fact. Search snippets are not treated as retrieved articles.",
+    "The quoted 2017 magazine owner list and original 1855/1892 guide volumes were not independently retrieved. Kohut’s separate current holding and Gros Frère et Sœur’s actual last harvest remain unconfirmed.",
+    "Notices outside the regional (2019–2026) and departmental (2016–2020) bulletins, and pre-2016 bulletins, were not searched. Cadastral lineage covers 2019–2026; DVF+ runs from January 2014 to November 2025 and names no party."
   ],
   "historyFindings": [
     {
@@ -362,23 +1500,171 @@
       "finding": "D0097 was last seen in the 2019 cadastre; D0823 first appears in 2020 and lies within it (31,019 m² shared). Its records name SC DOM DE LA ROMANEE CONTI until 2020 and DOMAINE DE LA ROMANEE CONTI from 2021; the earlier record has no SIREN, so continuity is not proved by the files alone."
     }
   ],
-  "externalResearch": [],
+  "externalResearch": [
+    {
+      "id": "drc-central-description",
+      "title": "Romanée-Conti central holding, no printed cadastral numbers",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The 2014 free article describes four central plots. The reviewed aerial annotates a central DRC strip but prints no cadastral numbers. The estate’s undated 3.5263-ha statement is corroborating whole-cru context, not a dated parcel claim.",
+      "sourceIds": [
+        "winehog-drc",
+        "drc-photo-2012",
+        "drc-photo-3806",
+        "drc-photo-3809",
+        "drc-ge"
+      ],
+      "dateSourceId": "winehog-drc",
+      "currentFarmer": null,
+      "printedReferences": []
+    },
+    {
+      "id": "liger-2022-arrangement",
+      "title": "Liger-Belair: reported 2022 Pacareau Lamarche arrangement",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The March 2022 preview states a long-term 0.3007-ha arrangement; the free Decanter 2022 row explicitly describes métayage and 0.31 ha. The 2026 application is suspended, so publication of a 2022 wine does not prove later authorisation or continued farming. Accessible critic texts name no cadastral references.",
+      "sourceIds": [
+        "winehog-liger",
+        "winehog-liger-2023",
+        "liger-decanter-2022",
+        "raa-2026-067"
+      ],
+      "dateSourceId": "winehog-liger",
+      "currentFarmer": null,
+      "evidenceSeason": "2022"
+    },
+    {
+      "id": "noellat-area-differences",
+      "title": "Noëllat: differing 0.30, 0.38 and 0.40-ha figures",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog’s 2022 public list, Morris’s 2020 first-column comparison and the undated importer sheet give three different holding areas. Their precision, dates and sources are preserved; no parcel attribution or expansion date is inferred.",
+      "sourceIds": [
+        "winehog-noellat",
+        "jasper-2020",
+        "noellat-importer"
+      ],
+      "dateSourceId": "winehog-noellat",
+      "currentFarmer": null
+    },
+    {
+      "id": "millot-history-differences",
+      "title": "Millot: tentative critic history versus estate timeline",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog tentatively places the first Millot Grands-Échezeaux harvest around 1997 after an older Mongeard/Gouroux lease. The estate’s timeline places the merger and first harvest in 1986. The discrepancy remains unresolved; the 0.2015/0.2-ha figures do not locate parcels.",
+      "sourceIds": [
+        "winehog-millot",
+        "millot-history",
+        "millot-ge"
+      ],
+      "dateSourceId": "winehog-millot",
+      "currentFarmer": null
+    },
+    {
+      "id": "clf-rounding",
+      "title": "Coquard-Loison-Fleurot: precise guide figure and rounded importer holding",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The 2019 public preview gives 0.1755 ha; the importer lists 0.18 ha. These are consistent under rounding but remain separate published statements without parcel IDs.",
+      "sourceIds": [
+        "winehog-clf",
+        "clf-holdings"
+      ],
+      "dateSourceId": "winehog-clf",
+      "currentFarmer": null
+    },
+    {
+      "id": "eugenie-engel-context",
+      "title": "Eugénie: Engel acquisition context and unmatched printed D11",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The 2019 article reports a 2006 Engel acquisition. The reviewed corporate transfer bundle separately contains a planting-asset line printed “GRANDS ECHEZEAUX D11”, with no area. No accepted lineage connects that literal reference to today’s D0111/D0112; it is not attached to a current parcel.",
+      "sourceIds": [
+        "winehog-eugenie",
+        "eugenie-stat-2006",
+        "eugenie-wines"
+      ],
+      "dateSourceId": "winehog-eugenie",
+      "currentFarmer": null,
+      "printedReferences": [
+        "D11"
+      ]
+    },
+    {
+      "id": "sirugue-succession-context",
+      "title": "Sirugue: historical area and reported 2023 brand succession",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The 2020 guide list gives Robert Sirugue 0.1205 ha. The merchant reports Arnaud & Sophie Sirugue-Noëllat succeeding from the 2023 harvest and 0.12 ha. No cadastral reference or executed transfer/lease is supplied.",
+      "sourceIds": [
+        "winehog-sirugue",
+        "sirugue-merchant"
+      ],
+      "dateSourceId": "winehog-sirugue",
+      "currentFarmer": null
+    },
+    {
+      "id": "morris-dated-comparison",
+      "title": "Jasper Morris: dated two-cru comparison",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The 29 April 2020 signed post identifies the first figure as Grands-Échezeaux and the second as Échezeaux. Its Drouhin 0.48 and Noëllat 0.38 ha differ from the Winehog lists. Figures from the Échezeaux column are not imported into this census.",
+      "sourceIds": [
+        "jasper-2020",
+        "winehog-millot",
+        "winehog-sirugue"
+      ],
+      "dateSourceId": "jasper-2020",
+      "currentFarmer": null
+    },
+    {
+      "id": "anne-acquisition-wording",
+      "title": "Anne Gros: profile acquisition wording and earlier bare ownership",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The December 2025 profile reports 0.37 ha acquired in a 2022 family reshuffle. A primary deed already contributes bare ownership in November 2019. Different rights and loosely described acquisition dates remain distinct; the 2022 application is not an executed lease or farming confirmation.",
+      "sourceIds": [
+        "anne-decanter",
+        "anne-contribution-2019",
+        "anne-application"
+      ],
+      "dateSourceId": "anne-decanter",
+      "currentFarmer": null
+    },
+    {
+      "id": "quoted-2017-owner-list",
+      "title": "Quoted 2017 guide: Kohut and enumeration gap",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "The undated secondary page quotes a 2017 magazine owner list including Kohut 0.07 ha. It says fourteen owners but transcribes thirteen. The original magazine was not reviewed; the combined Kohut product page does not establish a separate current Grands-Échezeaux holding.",
+      "sourceIds": [
+        "monocepage-ge",
+        "kohut-ge"
+      ],
+      "dateSourceId": "monocepage-ge",
+      "currentFarmer": null,
+      "quotedEvidenceSeason": "2017"
+    }
+  ],
   "producerHoldings": [
     {
-      "id": "eugenie-ge",
-      "producer": "Domaine d'Eugénie",
+      "id": "drc-ge",
+      "producer": "Domaine de la Romanée-Conti",
       "namedAreas": [
         "LES GRANDS ECHEZEAUX"
       ],
-      "publishedAreaHa": 0.5,
-      "precision": "approximate",
+      "publishedAreaHa": 3.5263,
+      "precision": "square-metre",
       "relation": "unstated",
       "sourceIds": [
-        "eugenie-wines"
+        "drc-ge",
+        "winehog-drc"
       ],
-      "finding": "Published as 0.5 ha at the extreme south of the appellation.",
+      "finding": "Exact stated whole-cru holding read from the rendered estate page. Its four company records are compared only in aggregate; no farming season is stated.",
       "producerHolderIds": [
-        "326533213"
+        "778269407"
       ],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -390,13 +1676,14 @@
       "namedAreas": [
         "LES GRANDS ECHEZEAUX"
       ],
-      "publishedAreaHa": null,
-      "precision": "none",
-      "relation": "unstated",
+      "publishedAreaHa": 1.444,
+      "precision": "square-metre",
+      "relation": "farmer",
       "sourceIds": [
-        "mongeard-ge"
+        "mongeard-ge",
+        "mongeard-sheet"
       ],
-      "finding": "A Grands-Échezeaux wine is listed; no area is published.",
+      "finding": "Estate states area in production, 1 ha 44 a 40 ca. Compared jointly with the separate operating SA and family GFA records; the statement names no parcel or lease tenant.",
       "producerHolderIds": [
         "303514681",
         "778269498"
@@ -404,8 +1691,614 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "eugenie-ge",
+      "producer": "Domaine d'Eugénie",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.5,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "eugenie-wines",
+        "winehog-eugenie"
+      ],
+      "finding": "Approximate southern-edge holding; location and area do not establish operation of individual parcels.",
+      "producerHolderIds": [
+        "326533213"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "anne-ge",
+      "producer": "Domaine Anne Gros",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.37,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "anne-decanter",
+        "anne-contribution-2019"
+      ],
+      "finding": "The 2025 profile reports 0.37 ha with a 2022 acquisition narrative. The 2019 deed establishes earlier bare ownership. The holding comparison is provisional and does not settle current tenancy or usufruct.",
+      "producerHolderIds": [
+        "348024928"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bichot-ge",
+      "producer": "Domaine du Clos Frantin / Albert Bichot",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.25,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "bichot-ge",
+        "bichot-sheet"
+      ],
+      "finding": "Estate states 0.25 ha in two unnamed plots; proprietor wording is retained without using it as a parcel farming claim.",
+      "producerHolderIds": [
+        "036380046"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "drouhin-ge",
+      "producer": "Maison Joseph Drouhin",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.47,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "winehog-millot",
+        "winehog-sirugue",
+        "jasper-2020",
+        "drouhin-ge",
+        "sepv-apports-1994"
+      ],
+      "finding": "Dated 2019/2020 guide lists give 0.47 ha; Morris gives 0.48 ha in 2020. The estate’s current wine page supplies no area. Compared with SEPV only as a documented corporate/estate lead, not proof of operation.",
+      "producerHolderIds": [
+        "393095955"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.48,
+          "precision": "hundredth-hectare",
+          "sourceId": "jasper-2020",
+          "context": "29 April 2020 Grands-Échezeaux column; differs from the 0.47-ha guide figure."
+        }
+      ]
+    },
+    {
+      "id": "villamont-ge",
+      "producer": "Domaine Henri de Villamont",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.5,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "villamont-ge",
+        "villamont-sheet",
+        "winehog-sirugue",
+        "modot-stat-ccm",
+        "villamont-legal"
+      ],
+      "finding": "Estate page says half a hectare; its undated sheet says 16 ares and the 2020 guide 0.43 ha. Scope is unresolved. Modot company rights are a Schenk-group comparison only; no lease joins the estate to those parcels.",
+      "producerHolderIds": [
+        "U18178008"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.16,
+          "precision": "are",
+          "sourceId": "villamont-sheet",
+          "context": "Undated technical sheet, scope unexplained."
+        },
+        {
+          "publishedAreaHa": 0.43,
+          "precision": "hundredth-hectare",
+          "sourceId": "winehog-sirugue",
+          "context": "2020 guide list, secondary holding figure."
+        }
+      ]
+    },
+    {
+      "id": "lamarche-owner-ge",
+      "producer": "SCEA Nathalie Pacareau Lamarche (historical Domaine Lamarche holding)",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.3007,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "winehog-sirugue",
+        "lamarche-contribution"
+      ],
+      "finding": "The dated guide holding and primary contribution both state 0.3007 ha. Compared as the land-holding SCEA’s ownership, distinct from the reported Liger-Belair tenancy and the historical wine brand.",
+      "producerHolderIds": [
+        "538257932"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "liger-ge",
+      "producer": "Domaine du Comte Liger-Belair",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.3007,
+      "precision": "square-metre",
+      "relation": "metayer",
+      "sourceIds": [
+        "winehog-liger",
+        "winehog-liger-2023",
+        "liger-decanter-2022",
+        "raa-2026-067"
+      ],
+      "finding": "Reported arrangement from the 2022 vintage. Winehog gives 0.3007 ha (later 0.30); Decanter’s free 2022 row says 0.31 ha and métayage. Excluded from the beyond-company sum because the land is already counted to the owner. 2026 continuation unconfirmed.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [
+        "538257932"
+      ],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.31,
+          "precision": "hundredth-hectare",
+          "sourceId": "liger-decanter-2022",
+          "context": "2022 vintage score-table row; differs from 0.3007."
+        },
+        {
+          "publishedAreaHa": 0.3,
+          "precision": "hundredth-hectare",
+          "sourceId": "winehog-liger-2023",
+          "context": "May 2023 public preview."
+        }
+      ]
+    },
+    {
+      "id": "thenard-ge",
+      "producer": "Domaine Thenard",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.55,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "thenard-ge",
+        "winehog-millot"
+      ],
+      "finding": "Current undated estate statement 0.55 ha; older guide 0.54 ha. No reviewed corporate/parcel join.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.54,
+          "precision": "hundredth-hectare",
+          "sourceId": "winehog-millot",
+          "context": "2019 guide holding list."
+        }
+      ]
+    },
+    {
+      "id": "noellat-ge",
+      "producer": "Domaine Georges Noëllat",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.4,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "noellat-importer",
+        "winehog-noellat",
+        "jasper-2020"
+      ],
+      "finding": "Importer 0.40 ha, dated Winehog 2022 list 0.30 ha and Morris 2020 post 0.38 ha. Their difference is unresolved; no area is used to select parcels.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.3,
+          "precision": "hundredth-hectare",
+          "sourceId": "winehog-noellat",
+          "context": "31 January 2022 public preview."
+        },
+        {
+          "publishedAreaHa": 0.38,
+          "precision": "hundredth-hectare",
+          "sourceId": "jasper-2020",
+          "context": "29 April 2020 Grands-Échezeaux column."
+        }
+      ]
+    },
+    {
+      "id": "desaunay-ge",
+      "producer": "Domaine Desaunay-Bissey",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.34,
+      "precision": "approximate",
+      "relation": "farmer",
+      "sourceIds": [
+        "desaunay-importer",
+        "winehog-millot"
+      ],
+      "finding": "Importer states approximately 0.34 ha, about half owned and half under fermage. It does not give parcel IDs or an exact tenure split.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "millot-ge",
+      "producer": "Domaine Jean-Marc Millot",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.2,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "millot-ge",
+        "winehog-millot",
+        "millot-history"
+      ],
+      "finding": "Estate page dated 6 January 2022 states 0.2 ha; the 2019 guide gives 0.2015 ha. Estate and critic first-harvest histories differ (1986 versus tentative 1997). No parcel assignment.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.2015,
+          "precision": "square-metre",
+          "sourceId": "winehog-millot",
+          "context": "2019 guide list; more precise than estate figure."
+        }
+      ]
+    },
+    {
+      "id": "clf-ge",
+      "producer": "Domaine Coquard-Loison-Fleurot",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.18,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "clf-holdings",
+        "winehog-clf"
+      ],
+      "finding": "Importer states family-owned holding 0.18 ha; the 2019 public preview states 0.1755 ha. Consistent rounding is possible, without a cadastral join.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.1755,
+          "precision": "square-metre",
+          "sourceId": "winehog-clf",
+          "context": "29 March 2019 public preview."
+        }
+      ]
+    },
+    {
+      "id": "sirugue-ge",
+      "producer": "Arnaud & Sophie Sirugue-Noëllat (formerly Robert Sirugue)",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": 0.12,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "sirugue-merchant",
+        "winehog-sirugue"
+      ],
+      "finding": "Merchant reports brand succession from the 2023 harvest and 0.12 ha. The 2020 Robert Sirugue figure is 0.1205 ha; succession and continuation are reported, without a reviewed parcel transfer.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.1205,
+          "precision": "square-metre",
+          "sourceId": "winehog-sirugue",
+          "context": "2020 Robert Sirugue guide holding."
+        }
+      ]
+    },
+    {
+      "id": "kohut-ge",
+      "producer": "Domaine Kohut (historical report; current area unconfirmed)",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "monocepage-ge",
+        "kohut-ge"
+      ],
+      "finding": "The secondary page quotes a 2017 holding of 0.07 ha; the combined estate product page does not isolate a Grands-Échezeaux area. Historical figure retained outside the numeric current comparison.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.07,
+          "precision": "hundredth-hectare",
+          "sourceId": "monocepage-ge",
+          "context": "Quoted October–November 2017 magazine list; original not reviewed."
+        }
+      ]
+    },
+    {
+      "id": "gros-frere-historical-ge",
+      "producer": "Domaine Gros Frère et Sœur (historical lease/holding)",
+      "namedAreas": [
+        "LES GRANDS ECHEZEAUX"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "winehog-sirugue",
+        "anne-contribution-2019",
+        "anne-application"
+      ],
+      "finding": "2020 guide gives 0.3662 ha; the 2019 deed recites its lease and intended 2021 end. Actual end was not verified, so no ended harvest is invented. Historical figure is retained outside the numeric comparison to avoid double counting Anne Gros’s reported holding.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.3662,
+          "precision": "square-metre",
+          "sourceId": "winehog-sirugue",
+          "context": "2020 guide holding; later lease outcome unresolved."
+        }
+      ]
     }
   ],
-  "historicalOwnerLists": [],
-  "parcelFilings": []
+  "historicalOwnerLists": [
+    {
+      "sourceId": "winehog-sirugue",
+      "year": 1855,
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "printedName": "Grands Echezeaux",
+      "owners": [
+        "Duveaux",
+        "Chanut",
+        "Royer-Duvergey",
+        "de Bahezre",
+        "Gillotte",
+        "Marillier"
+      ],
+      "originalSourceReviewed": false,
+      "transcriptionBasis": "Winehog’s public transcription of Lavalle; original volume not reviewed."
+    },
+    {
+      "sourceId": "winehog-sirugue",
+      "year": 1892,
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "printedName": "Grands Echezeaux",
+      "owners": [
+        "Dr. Chanut",
+        "Dufouleur",
+        "Duvaux",
+        "Faiveley-Fermouche",
+        "Mongeard",
+        "Rasse"
+      ],
+      "originalSourceReviewed": false,
+      "transcriptionBasis": "Winehog’s public transcription of Danguy & Aubertin; original volume not reviewed."
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "mongeard-gfa-founding",
+      "sourceId": "mongeard-gfa-1964",
+      "title": "Mongeard-Mugneret founding contribution",
+      "holderId": "778269498",
+      "companySiren": "778269498",
+      "documentDate": "1964-02-12",
+      "parcelAreasM2": {
+        "212670000D0104": 750,
+        "212670000D0105": 290,
+        "212670000D0535": 5575
+      },
+      "leaseEvidence": [],
+      "finding": "Founding real-estate schedule reproduced in the 1997 GFA statutes; all three printed references and individual areas match today’s pinned cadastre and GFA rights. Statutory long-term leasing is a requirement, not proof of a signed lease or tenant.",
+      "appNote": "The founding contribution schedule, reproduced in 1997 GFA statutes, names these three references (0.6615 ha). Statutes require long-term leasing but identify no signed lease or tenant. Current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        7,
+        48,
+        65
+      ],
+      "filingDate": "2002-10-22",
+      "printedReferences": [
+        "D104",
+        "D105",
+        "D535"
+      ],
+      "tenure": "full-property contribution"
+    },
+    {
+      "id": "sepv-robert-contribution",
+      "sourceId": "sepv-capital-1995",
+      "title": "SEPV: Robert Drouhin business contribution",
+      "holderId": "393095955",
+      "companySiren": "393095955",
+      "documentDate": "1994-12-30",
+      "parcelAreasM2": {
+        "212670000D0103": 4740
+      },
+      "leaseEvidence": [],
+      "finding": "The 20 December report prints D103 and 47.40 ares in Robert Drouhin’s personal viticultural business. The 30 December minutes approve that contribution and record completion after the capital condition was fulfilled. No Grands-Échezeaux-specific lease is supplied; a lease discount elsewhere concerns Clos des Mouches.",
+      "appNote": "The companion 1994 report names D103 (47.40 ares); the 30 December minutes approve Robert Drouhin’s business contribution and record completion. This is contribution history, not a current lease or farming confirmation.",
+      "supportingSourceIds": [
+        "sepv-apports-1994"
+      ],
+      "pages": [
+        21,
+        22,
+        35,
+        36
+      ],
+      "filingDate": "1995-02-13",
+      "printedReferences": [
+        "D103"
+      ]
+    },
+    {
+      "id": "anne-gros-bare-contribution",
+      "sourceId": "anne-contribution-2019",
+      "title": "Anne Gros: bare-ownership contribution",
+      "holderId": "348024928",
+      "companySiren": "348024928",
+      "documentDate": "2019-11-27",
+      "parcelAreasM2": {
+        "212670000D0093": 3662
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "SCE Gros Frère et Sœur"
+          ],
+          "signedDate": "1981-07-16",
+          "initialTermYears": 25,
+          "renewalRecital": "Tacit annual renewal after the initial term.",
+          "intendedEnd": "2021-12-31",
+          "pages": [
+            14
+          ],
+          "limitation": "Notice is recited as intended; no executed end or replacement lease has been reviewed."
+        },
+        {
+          "kind": "lease-formalisation-obligation",
+          "tenants": [],
+          "pages": [
+            14
+          ],
+          "limitation": "Company must formalise a lease with minimum conditions matching the prior rent; no named new tenant or executed lease."
+        }
+      ],
+      "finding": "Anne Gros contributes bare ownership of D93; Colette Gros retains usufruct. The existing Gros Frère et Sœur lease is recited, with intended termination at 31 December 2021 and a requirement to formalise a lease. Neither the actual end nor a signed replacement is proved by this deed or the later application.",
+      "appNote": "Bare ownership of D93 (0.3662 ha) contributed; Colette Gros retains usufruct. Deed recites a Gros Frère et Sœur lease and an intended end on 31 December 2021, plus a lease obligation. Actual end, replacement lease and current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        7,
+        12,
+        13,
+        14
+      ],
+      "filingDate": "2019-12-04",
+      "printedReferences": [
+        "D93"
+      ],
+      "tenure": "bare ownership; usufruct retained"
+    },
+    {
+      "id": "lamarche-genevieve-contribution",
+      "sourceId": "lamarche-contribution",
+      "title": "Lamarche SCEA: Geneviève’s full-property contribution",
+      "holderId": "538257932",
+      "companySiren": "538257932",
+      "documentDate": "2019-12-18",
+      "parcelAreasM2": {
+        "212670000D0615": 879,
+        "212670000D0616": 2128
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Nathalie Pacareau"
+          ],
+          "signedDate": "2011-12-20",
+          "effectiveFrom": "2011-12-22",
+          "initialTermYears": 18,
+          "pages": [
+            33
+          ],
+          "operatorPermission": {
+            "companyName": "SCEA Nathalie Pacareau Lamarche",
+            "siren": "538257932",
+            "relation": "recited-mise-a-disposition"
+          },
+          "limitation": "The 2019 deed plans separate same-day termination; no executed termination or continuing term is established."
+        },
+        {
+          "kind": "planned-separate-termination",
+          "tenants": [
+            "Nathalie Pacareau"
+          ],
+          "plannedDate": "2019-12-18",
+          "pages": [
+            33
+          ],
+          "limitation": "Separate act to be received, not the executed termination act itself."
+        }
+      ],
+      "finding": "Full-property contribution of D615 and D616 to SCEA Nathalie Pacareau Lamarche. The 2011 individual lease and mise à disposition are recited. A separate same-day lease termination is planned; the termination deed, original lease and availability agreement are not reproduced. The reported 2022 Liger-Belair relationship and 2026 suspension are separate evidence.",
+      "appNote": "D615 and D616 (0.3007 ha) contributed in full ownership. Deed recites Nathalie Pacareau’s 2011 lease and availability to the SCEA, with separate termination planned the same day. Termination and replacement lease not reviewed; current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        31,
+        33,
+        46
+      ],
+      "filingDate": "2020-01-15",
+      "printedReferences": [
+        "D615",
+        "D616"
+      ],
+      "tenure": "full-property contribution"
+    }
+  ],
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "eugenie-stat-2006",
+      "page": 45,
+      "printedReference": "D11",
+      "printedCru": "GRANDS ECHEZEAUX",
+      "documentContextDate": "2006-07-31",
+      "parcelIds": [],
+      "areaM2": null,
+      "limitation": "Planting-asset schedule with no area; literal D11 is not D0111. No accepted cadastral lineage resolves it."
+    }
+  ]
 }
