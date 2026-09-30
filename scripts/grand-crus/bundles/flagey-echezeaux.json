@@ -139,5 +139,12 @@
     "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
     "member": "1_DONNEES_LIVRAISON/dvf_plus.csv",
     "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  },
+  "auditCommunes": {
+    "21714": {
+      "name": "Vosne-Romanée",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+      "sha256": "2c57f75516a8161b8fd1d16284dad5374bf0da76fb9eaed4d4224454ad877bc1"
+    }
   }
 }

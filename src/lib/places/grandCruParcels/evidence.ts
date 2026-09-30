@@ -9,6 +9,7 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  echezeaux:()=>import('./echezeaux.evidence.json'),
+ 'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
 };
 
 const empty=():ParcelEvidenceData=>({sources:{},parcels:{},holderDomains:{}});

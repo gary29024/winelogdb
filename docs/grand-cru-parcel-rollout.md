@@ -88,6 +88,7 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
 rights history, sale records, both build reports). Only the research register's
 input paths and rebuild commands changed, because the files moved. Grands-Échezeaux
 now gets the evidence panel and domaine grouping through the registry.
+Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grands-echezeaux/README.md).
 
 ### Adding a cru
 

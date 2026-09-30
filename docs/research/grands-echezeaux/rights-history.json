@@ -1,0 +1,3528 @@
+{
+ "schemaVersion": 1,
+ "purpose": "Dated legal-entity rights and cadastral lineage for the Grands-Échezeaux research register. Evidence of recorded rights and parcel splits only; never of farming.",
+ "parentFeatureId": "inao-denom-645",
+ "inputs": {
+  "parcelSnapshotSha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+  "rights": [
+   {
+    "asOf": "2019-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+    "member": "PM_19_NB_210.txt",
+    "sha256": "c6eb0f3a4245dca6ce3df156cd009477f3ae1ebd481f16b89b88a619c74865f6"
+   },
+   {
+    "asOf": "2020-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+    "member": "PM_20_NB_210.txt",
+    "sha256": "70d7e9e25850f14b7fcdf7da9a0ee85e167266154b24c7a2d76606f2e26200ff"
+   },
+   {
+    "asOf": "2021-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+    "member": "PM_21_NB_210.txt",
+    "sha256": "4de26600ed99a6cff6e66d6230d8db415f5f2c41fa1f590da4ee3a7470eaa0d3"
+   },
+   {
+    "asOf": "2022-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+    "member": "PM_22_NB_210.txt",
+    "sha256": "ecb09a6501c3b3a0c541e3881307efe42425d859f300af53a51e97c5888dc2f0"
+   },
+   {
+    "asOf": "2023-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+    "member": "PM_23_NB_210.txt",
+    "sha256": "661faf904f5ea3cedaad58338812d5ae438af520ff81c4b05bd672dfe6cd6956"
+   },
+   {
+    "asOf": "2024-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+    "member": "PM_24_NB_210.csv",
+    "sha256": "2ee57e0bf697c63731e8a62592cf49b0b342d74270434462b845685ba2d936ad"
+   },
+   {
+    "asOf": "2025-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "member": "PM_25_NB_210.csv",
+    "sha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17"
+   }
+  ],
+  "cadastre": [
+   {
+    "date": "2019-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "cbed6b823a386f796ef89ea51cd4cdeba70eb323d79ddc9950e5fcc661ff9802"
+   },
+   {
+    "date": "2020-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "b17a9307528168edd0243c8ca7b6af7825f9f9f251c4bf8d0a651cc9cf438ebd"
+   },
+   {
+    "date": "2021-02-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-02-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "2ac698fd4e98cb89ee15bf6b6461a6f2a4cd9e0b5cc002b8327b14725047a831"
+   },
+   {
+    "date": "2022-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "1e41cb5f136db44f143032c05efeabc94bdc96fa8e26ee0d3bb87ee3df7b08bf"
+   },
+   {
+    "date": "2023-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "b5ab40ff1820e9871e9edd3251d5921d4b79eb09ae39c90aa1add66c0f99107f"
+   },
+   {
+    "date": "2024-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "2c6ef32bb3475c018fcbf6965914d40ddca88b819b9d55d6c37b0e3a34163cfa"
+   },
+   {
+    "date": "2025-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-01-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "ec859de99fd6df80604617c41e8383450835f012222d6a38694a4185cd5c7b53"
+   },
+   {
+    "date": "2026-06-01",
+    "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+    "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1"
+   }
+  ]
+ },
+ "rules": [
+  "A recorded right is legal-entity ownership or another real right on 1 January, never farming.",
+  "Private individuals are not in the legal-entity files: no record does not mean no owner.",
+  "Holder continuity is proved only by the same SIREN; names alone are hints for review.",
+  "Lineage is accepted only when a successor first appears in the next vintage and lies at least 95% inside the retired reference; other overlaps are rejected candidates. It is rule-based, not a documented division act."
+ ],
+ "counts": {
+  "parcels": 32,
+  "withAnyRightsChange": 13,
+  "createdSinceFirstVintage": 1,
+  "withPredecessor": 1,
+  "retiredReferences": 1,
+  "changeKinds": {
+   "record-appeared": 4,
+   "same-holder-renamed": 7,
+   "unprovable-identifier-change": 4
+  }
+ },
+ "retiredParcels": [
+  {
+   "parcelId": "212670000D0097",
+   "reference": "D 0097",
+   "lastSeenCadastre": "2019-01-01",
+   "cruOverlapM2": 31018.8,
+   "areaM2": 31019.6,
+   "successors": [
+    {
+     "parcelId": "212670000D0823",
+     "sharedAreaM2": 31019.0,
+     "shareOfSuccessor": 1.0,
+     "shareOfRetired": 1.0,
+     "successorFirstSeen": "2020-01-01",
+     "accepted": true
+    }
+   ],
+   "rightsHistory": []
+  }
+ ],
+ "parcels": [
+  {
+   "parcelId": "212670000D0089",
+   "reference": "D 0089",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0090",
+   "reference": "D 0090",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.5
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0091",
+   "reference": "D 0091",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0092",
+   "reference": "D 0092",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0093",
+   "reference": "D 0093",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "348024928",
+       "majic": null,
+       "name": "ANNE GROS",
+       "rightCode": "N"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "348024928",
+       "majic": null,
+       "name": "ANNE GROS",
+       "rightCode": "N"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "348024928",
+       "majic": null,
+       "name": "ANNE GROS",
+       "rightCode": "N"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "348024928",
+       "majic": null,
+       "name": "ANNE GROS",
+       "rightCode": "N"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "348024928",
+       "majic": null,
+       "name": "ANNE GROS",
+       "rightCode": "N"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2020-01-01",
+     "to": "2021-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "ANNE GROS"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0094",
+   "reference": "D 0094",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0095",
+   "reference": "D 0095",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.7
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0096",
+   "reference": "D 0096",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.6
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0102",
+   "reference": "D 0102",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.3
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0103",
+   "reference": "D 0103",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 2.3
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "S E P V",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "393095955",
+       "majic": null,
+       "name": "SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "S E P V"
+     ],
+     "after": [
+      "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+     ]
+    },
+    {
+     "from": "2023-01-01",
+     "to": "2024-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+     ],
+     "after": [
+      "SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0104",
+   "reference": "D 0104",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.4
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "MONGEARD MUGNERET ET FILS"
+     ],
+     "after": [
+      "GFA MONGEARD MUGNERET ET FILS"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0105",
+   "reference": "D 0105",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "MONGEARD MUGNERET ET FILS"
+     ],
+     "after": [
+      "GFA MONGEARD MUGNERET ET FILS"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0106",
+   "reference": "D 0106",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0107",
+   "reference": "D 0107",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.7
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0111",
+   "reference": "D 0111",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE D'EUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE D'EUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2023-01-01",
+     "to": "2024-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "DOMAINE DEUGENIE"
+     ],
+     "after": [
+      "DOMAINE D'EUGENIE"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0112",
+   "reference": "D 0112",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE DEUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE D'EUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "326533213",
+       "majic": null,
+       "name": "DOMAINE D'EUGENIE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2023-01-01",
+     "to": "2024-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "DOMAINE DEUGENIE"
+     ],
+     "after": [
+      "DOMAINE D'EUGENIE"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0500",
+   "reference": "D 0500",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0506",
+   "reference": "D 0506",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0507",
+   "reference": "D 0507",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.7
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0535",
+   "reference": "D 0535",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269498",
+       "majic": null,
+       "name": "GFA MONGEARD MUGNERET ET FILS",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "MONGEARD MUGNERET ET FILS"
+     ],
+     "after": [
+      "GFA MONGEARD MUGNERET ET FILS"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0612",
+   "reference": "D 0612",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0613",
+   "reference": "D 0613",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 2.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0614",
+   "reference": "D 0614",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.3
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0615",
+   "reference": "D 0615",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2020-01-01",
+     "to": "2021-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "NATHALIE PACAREAU LAMARCHE"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0616",
+   "reference": "D 0616",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.4
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "538257932",
+       "majic": null,
+       "name": "NATHALIE PACAREAU LAMARCHE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2020-01-01",
+     "to": "2021-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "NATHALIE PACAREAU LAMARCHE"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0617",
+   "reference": "D 0617",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.3
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": null,
+       "majic": "PBCLSG",
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "unprovable-identifier-change",
+     "before": [
+      "SCI DOM VEUVE PAUL MODOT"
+     ],
+     "after": [
+      "SCI DOM VEUVE PAUL MODOT"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0618",
+   "reference": "D 0618",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.9
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": null,
+       "majic": "PBCLSG",
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "U18178008",
+       "majic": null,
+       "name": "SCI DOM VEUVE PAUL MODOT",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "unprovable-identifier-change",
+     "before": [
+      "SCI DOM VEUVE PAUL MODOT"
+     ],
+     "after": [
+      "SCI DOM VEUVE PAUL MODOT"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0619",
+   "reference": "D 0619",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.7
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "036380046",
+       "majic": null,
+       "name": "BICHOT SA",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0681",
+   "reference": "D 0681",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "303514681",
+       "majic": null,
+       "name": "DOMAINE MONGEARD MUGNERET",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2023-01-01",
+     "to": "2024-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "DOMAINE MONGEARD MUGNERET"
+     ]
+    }
+   ]
+  },
+  {
+   "parcelId": "212670000D0682",
+   "reference": "D 0682",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.5
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0683",
+   "reference": "D 0683",
+   "firstSeenCadastre": "2019-01-01",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": []
+  },
+  {
+   "parcelId": "212670000D0823",
+   "reference": "D 0823",
+   "firstSeenCadastre": "2020-01-01",
+   "predecessorIds": [
+    "212670000D0097"
+   ],
+   "cadastre": [
+    {
+     "date": "2019-01-01",
+     "present": false,
+     "symmetricDifferenceM2": null
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": null,
+       "majic": "PBCLJ7",
+       "name": "SC DOM DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "U18177982",
+       "majic": null,
+       "name": "SC DOM DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "unprovable-identifier-change",
+     "before": [
+      "SC DOM DE LA ROMANEE CONTI"
+     ],
+     "after": [
+      "SC DOM DE LA ROMANEE CONTI"
+     ]
+    },
+    {
+     "from": "2020-01-01",
+     "to": "2021-01-01",
+     "kind": "unprovable-identifier-change",
+     "before": [
+      "SC DOM DE LA ROMANEE CONTI"
+     ],
+     "after": [
+      "DOMAINE DE LA ROMANEE CONTI"
+     ]
+    }
+   ]
+  }
+ ]
+}

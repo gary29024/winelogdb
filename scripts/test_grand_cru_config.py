@@ -40,9 +40,8 @@ class ConfigTests(unittest.TestCase):
             for path in (context.curation, context.output, context.report, context.history, context.sales, context.named_areas):
                 self.assertEqual(path.parent, RESEARCH_DIR / slug, relative(path))
             self.assertEqual(context.evidence, APP_DIR / f'{slug}.evidence.json')
-        # A cru without its own research reads another's evidence, never writes it.
-        self.assertNotIn('research', load_cru('grands-echezeaux')[0])
-        self.assertEqual(load_cru('grands-echezeaux')[0]['evidenceFrom'], ['echezeaux'])
+            # Once a cru has its own research, its panel reads only that research.
+            self.assertEqual(cru['evidenceFrom'], [slug])
 
     def test_mismatched_configs_fail(self):
         cru, bundle = copy.deepcopy(load_cru('grands-echezeaux'))

@@ -1,0 +1,172 @@
+{
+ "schemaVersion": 1,
+ "parentFeatureId": "inao-denom-645",
+ "inputs": {
+  "parcelSnapshotSha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+  "lieuxDitsUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz",
+  "lieuxDitsSha256": "39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f"
+ },
+ "note": "Cadastral lieu-dit by largest share of parcel geometry. \"name\" is null where no reviewed crosswalk exists.",
+ "parcels": {
+  "212670000D0089": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0090": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0091": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0092": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0093": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0094": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0095": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0096": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0102": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0103": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0104": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0105": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0106": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0107": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0111": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0112": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0500": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0506": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0507": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0535": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0612": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0613": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0614": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0615": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0616": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0617": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0618": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0619": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0681": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0682": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0683": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  },
+  "212670000D0823": {
+   "sourceName": "LES GRANDS ECHEZEAUX",
+   "name": "Les Grands Échezeaux",
+   "share": 1.0
+  }
+ }
+}

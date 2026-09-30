@@ -9,7 +9,7 @@ export const parcelBundles={'flagey-echezeaux':flageyEchezeaux} satisfies Record
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='echezeaux';
+export type EvidenceSourceId='echezeaux'|'grands-echezeaux';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -23,7 +23,7 @@ export type GrandCru={
 // Components look crus up here; they never name a cru or INAO feature themselves.
 export const grandCrus:readonly GrandCru[]=[
  {slug:'echezeaux',name:'Échezeaux',parentFeatureId:'inao-denom-565',villageMap:'vosne-romanee',bundle:'flagey-echezeaux',evidenceFrom:['echezeaux']},
- {slug:'grands-echezeaux',name:'Grands-Échezeaux',parentFeatureId:'inao-denom-645',villageMap:'vosne-romanee',bundle:'flagey-echezeaux',evidenceFrom:['echezeaux']},
+ {slug:'grands-echezeaux',name:'Grands-Échezeaux',parentFeatureId:'inao-denom-645',villageMap:'vosne-romanee',bundle:'flagey-echezeaux',evidenceFrom:['grands-echezeaux']},
 ];
 
 /** The cru with parcel rights for this INAO feature, optionally only on a given village map. */

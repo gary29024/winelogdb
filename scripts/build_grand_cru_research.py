@@ -390,7 +390,9 @@ def render_report(register, curation, history, context):
     lines += ['', '## Parcel-specific company filings', '',
               'Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates '
               'are kept distinct; none proves current-season farming. See [the detailed reading and next source requests]'
-              f"({context.link(research['filingsDoc'])}).", '']
+              f"({context.link(research['filingsDoc'])}).", ''] if curation['parcelFilings'] else [
+              '', '## Parcel-specific company filings', '',
+              'No company filings have been reviewed for this cru. Deeds, contributions and leases are Tier 2 research.', '']
     for filing in curation['parcelFilings']:
         source_ids = list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))
         cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in source_ids)
@@ -399,12 +401,14 @@ def render_report(register, curation, history, context):
             refs += ' (individual areas from the pinned cadastre; the deed recites only their combined area)'
         lines += [f"- **{filing['documentDate']} - {filing['title']}**. {refs}. {filing['finding']} "
                   f"{cited}."]
-    lines += ['', '## Independent research', '',
+    lines += ['', '## Independent research', ''] + ([
+              'No published vineyard research naming parcels has been reviewed for this cru (Tier 2).', '']
+              if not curation['externalResearch'] else [
               'Published vineyard research can name cadastral references or describe holdings. It is dated secondary '
               'evidence of ownership or production, cross-checked here against the recorded rights; it never establishes '
               'current farming. Area reconstructions are inferences; exact and near-area matches are distinguished. '
               'The source itself does not name those parcels. Dates follow an explicitly selected research source, '
-              'not another supporting registry record.', '']
+              'not another supporting registry record.', ''])
     for x in curation['externalResearch']:
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}" for r, cs in x.get('predecessorReferences', {}).items())
         refs = ', '.join(ref(i) for i in x['parcelIds']) + (('; via lineage: ' if x['parcelIds'] else 'via lineage: ') + via if via else '')
@@ -541,6 +545,8 @@ def render_census(register, curation, sources, context):
             cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in holding['sourceIds'])
             lines.append(f"  - {cell(e['producer'])}: {size} ({e['precision']}); {'; '.join(notes)}. {holding['finding']} {cited}.")
     lists = curation['historicalOwnerLists']
+    if not lists:
+        return lines + ['']
     years = sorted({(x['year'], x['sourceId']) for x in lists})
     lines += ['', '**Owners named in old guides**', '',
               'Historical context only: family names a century and more ago, not owners or farmers today. Printed climat '

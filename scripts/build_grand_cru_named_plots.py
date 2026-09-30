@@ -33,6 +33,8 @@ def main():
     cru, bundle = load_cru(args.cru)
     require('namedPlots' in cru, f'{cru["slug"]}: no reviewed named areas configured yet')
     config, cadastre_date = cru['namedPlots'], bundle['parcels']['cadastreDate']
+    # A cru that is a single named area keeps its whole-cru outline; a duplicate layer adds nothing.
+    require(config.get('displayLayer', True), f'{cru["slug"]}: no named-area display layer ({config["coverageNote"]})')
     directory = source_dir(bundle, args.source_dir)
     inputs, lieux_dits = [], []
     for insee in communes(bundle):

@@ -35,7 +35,7 @@ describe('Grand Cru registry',()=>{
   expect(grands.holderIds).toHaveLength(9);
   expect(parcelRightsSnapshot('inao-denom-655')).toBeUndefined();
  });
- it('loads Grands-Échezeaux evidence from the Échezeaux research, including the D0093 application',async()=>{
+ it('loads Grands-Échezeaux evidence from its own research, including the D0093 application',async()=>{
   const evidence=await loadParcelEvidence('inao-denom-645');
   expect(evidence.parcels['212670000D0093']?.map(i=>i.kind)).toContain('application');
   expect(await loadParcelEvidence('inao-denom-655')).toEqual({sources:{},parcels:{},holderDomains:{}});

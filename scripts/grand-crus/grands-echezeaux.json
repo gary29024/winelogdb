@@ -2,11 +2,32 @@
   "slug": "grands-echezeaux",
   "name": "Grands-Échezeaux",
   "parentFeatureId": "inao-denom-645",
+  "appellationId": 184,
   "issue": 377,
   "tier": 1,
   "bundle": "flagey-echezeaux",
-  "note": "No cru-specific research yet (#377). The evidence panel and domaine grouping read the Échezeaux research file, whose exact-reference notices also name Grands-Échezeaux parcels (e.g. D0093) and whose domaine research is keyed by legal holder.",
+  "note": "Tier 1. Shares the Flagey bundle with Échezeaux; research lives only in docs/research/grands-echezeaux/.",
+  "rightsHistoryPurpose": "Dated legal-entity rights and cadastral lineage for the Grands-Échezeaux research register. Evidence of recorded rights and parcel splits only; never of farming.",
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/grands-echezeaux",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/grands-echezeaux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE0Jnw%3D",
+    "nameSourceChecked": "2026-09-30",
+    "coverageNote": "Grands-Échezeaux: one cadastral named area, Les Grands Échezeaux, covers the whole cru. No separate display layer is published; the map keeps the whole-cru outline.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "les-grands-echezeaux",
+        "name": "Les Grands Échezeaux",
+        "sourceName": "LES GRANDS ECHEZEAUX",
+        "aliases": []
+      }
+    ],
+    "unresolved": []
+  },
+  "research": {
+    "methodDoc": "docs/research/grands-echezeaux/README.md"
+  },
   "evidenceFrom": [
-    "echezeaux"
+    "grands-echezeaux"
   ]
 }

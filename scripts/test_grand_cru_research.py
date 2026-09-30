@@ -533,3 +533,38 @@ class ParcelEvidenceTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class GrandsEchezeauxTests(unittest.TestCase):
+    """The second cru through the generic pipeline: its own research, no farmer claims."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('grands-echezeaux'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+
+    def test_pinned_population_and_no_invented_farmers(self):
+        counts = self.register['counts']
+        self.assertEqual((counts['parcels'], counts['recordedHolders'], counts['withRecordedRights']), (32, 9, 19))
+        self.assertEqual(counts['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+        self.assertNotIn('currentFarmer', json.dumps(self.evidence))
+
+    def test_notices_reach_only_their_exact_parcels(self):
+        kinds = lambda ref: {i['kind'] for i in self.evidence['parcels'].get(f'212670000D{ref}', [])}
+        self.assertIn('application', kinds('0093'))
+        self.assertEqual({'suspended'}, kinds('0615') & {'suspended', 'application', 'authorisation'})
+        self.assertEqual(kinds('0089'), set())  # no company record, no notice, no sale
+
+    def test_research_stays_in_its_own_folder(self):
+        for path in self.files:
+            self.assertTrue(path == self.context.evidence or path.parent.name == 'grands-echezeaux', path)
+        self.assertTrue(self.register['inputs']['curation'].startswith('docs/research/grands-echezeaux/'))
+
+    def test_weak_leads_never_become_domaine_headings(self):
+        drouhin = self.evidence['holderDomains']['393095955']
+        self.assertEqual(drouhin['basis'], 'management-only-lead')
+        self.assertNotIn('538257932', self.evidence['holderDomains'])  # unresolved Lamarche SCEA
+        self.assertNotIn('U18178008', self.evidence['holderDomains'])  # no SIREN, no source

@@ -1,0 +1,1559 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-30",
+  "targetSeason": "2026",
+  "status": "current-farmer-identification-incomplete",
+  "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all 9 recorded right holders triaged at Tier 1. Not an exhaustive search of every archive.",
+  "parentFeatureId": "inao-denom-645",
+  "inputs": {
+    "curation": "docs/research/grands-echezeaux/curation.json",
+    "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
+    "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+    "cadastreDate": "2026-06-01",
+    "rightsAsOf": "2025-01-01",
+    "rightsHistory": "docs/research/grands-echezeaux/rights-history.json",
+    "rightsHistoryYears": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "saleRecords": "docs/research/grands-echezeaux/sale-records.json",
+    "saleRecordsCoverage": "2014-01-17 to 2025-11-20"
+  },
+  "counts": {
+    "parcels": 32,
+    "recordedHolders": 9,
+    "withRecordedRights": 19,
+    "withoutMatchedRights": 13,
+    "holderLead": 14,
+    "historicalApplication": 3,
+    "historicalAuthorisation": 0,
+    "saleLead": 0,
+    "unresolved": 15,
+    "currentFarmerConfirmed": 0,
+    "withSaleRecord": 5,
+    "withParcelFiling": 0,
+    "withRightsChangeSince2019": 13,
+    "withCadastralPredecessor": 1
+  },
+  "namedAreaCensus": [
+    {
+      "sourceName": "LES GRANDS ECHEZEAUX",
+      "name": "Les Grands Échezeaux",
+      "parcels": 32,
+      "areaM2": 90704,
+      "withoutCompanyRecord": 13,
+      "withoutCompanyRecordM2": 20579,
+      "withoutCompanyRecordOrLead": 13,
+      "withoutCompanyRecordOrLeadM2": 20579,
+      "publishedBeyondCompanyRecordsM2": 91,
+      "holdings": [
+        {
+          "holdingId": "eugenie-ge",
+          "producer": "Domaine d'Eugénie",
+          "publishedAreaHa": 0.5,
+          "precision": "approximate",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 4909,
+          "beyondCompanyRecordsM2": 91,
+          "owners": []
+        },
+        {
+          "holdingId": "mongeard-ge",
+          "producer": "Domaine Mongeard-Mugneret",
+          "publishedAreaHa": null,
+          "precision": "none",
+          "relation": "unstated",
+          "endedSeason": null,
+          "locationStatus": "stated",
+          "sharedWith": [],
+          "alternativeLocations": [],
+          "recordedToProducerM2": 11210,
+          "beyondCompanyRecordsM2": null,
+          "owners": []
+        }
+      ]
+    }
+  ],
+  "parcels": [
+    {
+      "parcelId": "212670000D0089",
+      "reference": "D 0089",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 145.8443,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0090",
+      "reference": "D 0090",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 5517.4632,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0091",
+      "reference": "D 0091",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 2288.7106,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0092",
+      "reference": "D 0092",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1244.5383,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0093",
+      "reference": "D 0093",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 3702.1835,
+      "recordedRights": [
+        {
+          "holderId": "348024928",
+          "siren": "348024928",
+          "name": "ANNE GROS",
+          "rightCode": "N",
+          "rightLabel": "Nu-propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "348024928"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Anne Gros",
+          "holderId": "348024928",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-anne-gros",
+            "anne-application"
+          ]
+        },
+        {
+          "name": "Anne Gros",
+          "basis": "historical-application",
+          "sourceIds": [
+            "anne-application"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0093"
+          ],
+          "sourceId": "anne-application",
+          "kind": "historical-application",
+          "applicant": "Anne Gros",
+          "previousOperator": "Domaine Gros Frère et Sœur",
+          "documentDate": "2022-11-24",
+          "outcome": "unconfirmed",
+          "currentFarmer": null,
+          "summary": "Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux, including Grands-Échezeaux D0093; the receipt does not authorise cultivation.",
+          "appNote": "Receipt of a complete application. It is not an authorisation, and the outcome was not published in the bulletins searched."
+        }
+      ],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "ANNE GROS"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Resolve application outcome, actual operation and cadastral continuity."
+    },
+    {
+      "parcelId": "212670000D0094",
+      "reference": "D 0094",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 752.3187,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine de la Romanée-Conti",
+          "holderId": "778269407",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-drc"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0096",
+            "212670000D0500"
+          ],
+          "otherParcels": 7
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0095",
+      "reference": "D 0095",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 2007.7448,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0096",
+      "reference": "D 0096",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 2810.054,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine de la Romanée-Conti",
+          "holderId": "778269407",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-drc"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0094",
+            "212670000D0500"
+          ],
+          "otherParcels": 7
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0102",
+      "reference": "D 0102",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 729.3066,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0103",
+      "reference": "D 0103",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 4761.288,
+      "recordedRights": [
+        {
+          "holderId": "393095955",
+          "siren": "393095955",
+          "name": "SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5599",
+          "legalFormLabel": "SA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "393095955"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Maison Joseph Drouhin",
+          "holderId": "393095955",
+          "basis": "management-only-lead",
+          "sourceIds": [
+            "register-sepv"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "S E P V"
+          ],
+          "after": [
+            "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+          ]
+        },
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+          ],
+          "after": [
+            "SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0104",
+      "reference": "D 0104",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 803.0307,
+      "recordedRights": [
+        {
+          "holderId": "778269498",
+          "siren": "778269498",
+          "name": "GFA MONGEARD MUGNERET ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269498"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "holderId": "778269498",
+          "basis": "estate-context",
+          "sourceIds": [
+            "mongeard-ge",
+            "register-mongeard-gfa"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0105",
+      "reference": "D 0105",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 253.518,
+      "recordedRights": [
+        {
+          "holderId": "778269498",
+          "siren": "778269498",
+          "name": "GFA MONGEARD MUGNERET ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269498"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "holderId": "778269498",
+          "basis": "estate-context",
+          "sourceIds": [
+            "mongeard-ge",
+            "register-mongeard-gfa"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0106",
+      "reference": "D 0106",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 567.6727,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0107",
+      "reference": "D 0107",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 3274.0611,
+      "recordedRights": [
+        {
+          "holderId": "303514681",
+          "siren": "303514681",
+          "name": "DOMAINE MONGEARD MUGNERET",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "303514681"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "holderId": "303514681",
+          "basis": "estate-context",
+          "sourceIds": [
+            "mongeard-ge",
+            "register-mongeard"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0111",
+      "reference": "D 0111",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 3599.7154,
+      "recordedRights": [
+        {
+          "holderId": "326533213",
+          "siren": "326533213",
+          "name": "DOMAINE D'EUGENIE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "326533213"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine d'Eugénie",
+          "holderId": "326533213",
+          "basis": "estate-context",
+          "sourceIds": [
+            "eugenie-wines",
+            "register-eugenie"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DEUGENIE"
+          ],
+          "after": [
+            "DOMAINE D'EUGENIE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0112",
+      "reference": "D 0112",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1308.8208,
+      "recordedRights": [
+        {
+          "holderId": "326533213",
+          "siren": "326533213",
+          "name": "DOMAINE D'EUGENIE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "326533213"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine d'Eugénie",
+          "holderId": "326533213",
+          "basis": "estate-context",
+          "sourceIds": [
+            "eugenie-wines",
+            "register-eugenie"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DEUGENIE"
+          ],
+          "after": [
+            "DOMAINE D'EUGENIE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0500",
+      "reference": "D 0500",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 686.7389,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine de la Romanée-Conti",
+          "holderId": "778269407",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-drc"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+          "date": "2015-09-15",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "212670000D0094",
+            "212670000D0096"
+          ],
+          "otherParcels": 7
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0506",
+      "reference": "D 0506",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1221.9672,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0507",
+      "reference": "D 0507",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1265.6184,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0535",
+      "reference": "D 0535",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 5457.0241,
+      "recordedRights": [
+        {
+          "holderId": "778269498",
+          "siren": "778269498",
+          "name": "GFA MONGEARD MUGNERET ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269498"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "holderId": "778269498",
+          "basis": "estate-context",
+          "sourceIds": [
+            "mongeard-ge",
+            "register-mongeard-gfa"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "MONGEARD MUGNERET ET FILS"
+          ],
+          "after": [
+            "GFA MONGEARD MUGNERET ET FILS"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0612",
+      "reference": "D 0612",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1499.4019,
+      "recordedRights": [
+        {
+          "holderId": "036380046",
+          "siren": "036380046",
+          "name": "BICHOT SA",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5699",
+          "legalFormLabel": "SA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "036380046"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Albert Bichot",
+          "holderId": "036380046",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-bichot"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0613",
+      "reference": "D 0613",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 804.9188,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0614",
+      "reference": "D 0614",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1831.2315,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0615",
+      "reference": "D 0615",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 684.3437,
+      "recordedRights": [
+        {
+          "holderId": "538257932",
+          "siren": "538257932",
+          "name": "NATHALIE PACAREAU LAMARCHE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "538257932"
+      ],
+      "candidateLeads": [
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot, including Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation."
+        }
+      ],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "NATHALIE PACAREAU LAMARCHE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
+    },
+    {
+      "parcelId": "212670000D0616",
+      "reference": "D 0616",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 2460.8054,
+      "recordedRights": [
+        {
+          "holderId": "538257932",
+          "siren": "538257932",
+          "name": "NATHALIE PACAREAU LAMARCHE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "538257932"
+      ],
+      "candidateLeads": [
+        {
+          "name": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "basis": "suspended-application",
+          "sourceIds": [
+            "raa-2026-067"
+          ]
+        }
+      ],
+      "historicalEvents": [
+        {
+          "parcelIds": [
+            "212670000D0615",
+            "212670000D0616"
+          ],
+          "sourceId": "raa-2026-067",
+          "kind": "suspended-application",
+          "applicant": "SCEA Domaine du Comte Liger-Belair (Vosne-Romanée)",
+          "previousOperator": "Not stated",
+          "documentDate": "2026-04-07",
+          "outcome": "instruction suspended for eight months from 29 April 2026",
+          "currentFarmer": null,
+          "summary": "The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot, including Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels.",
+          "appNote": "Examination suspended for eight months from 29 April 2026 as an excessive enlargement. Anyone may apply for the same land meanwhile. Not an authorisation."
+        }
+      ],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "NATHALIE PACAREAU LAMARCHE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "historical-application",
+      "researchDepth": "exact-reference-event-reviewed",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Check the decision after the suspension ends, and who farms meanwhile."
+    },
+    {
+      "parcelId": "212670000D0617",
+      "reference": "D 0617",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 749.8,
+      "recordedRights": [
+        {
+          "holderId": "U18178008",
+          "siren": null,
+          "name": "SCI DOM VEUVE PAUL MODOT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U18178008"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SCI DOM VEUVE PAUL MODOT"
+          ],
+          "after": [
+            "SCI DOM VEUVE PAUL MODOT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0618",
+      "reference": "D 0618",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 3840.9385,
+      "recordedRights": [
+        {
+          "holderId": "U18178008",
+          "siren": null,
+          "name": "SCI DOM VEUVE PAUL MODOT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U18178008"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SCI DOM VEUVE PAUL MODOT"
+          ],
+          "after": [
+            "SCI DOM VEUVE PAUL MODOT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0619",
+      "reference": "D 0619",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1040.4187,
+      "recordedRights": [
+        {
+          "holderId": "036380046",
+          "siren": "036380046",
+          "name": "BICHOT SA",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5699",
+          "legalFormLabel": "SA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "036380046"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Albert Bichot",
+          "holderId": "036380046",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-bichot"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0681",
+      "reference": "D 0681",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1422.0341,
+      "recordedRights": [
+        {
+          "holderId": "303514681",
+          "siren": "303514681",
+          "name": "DOMAINE MONGEARD MUGNERET",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "303514681"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine Mongeard-Mugneret",
+          "holderId": "303514681",
+          "basis": "estate-context",
+          "sourceIds": [
+            "mongeard-ge",
+            "register-mongeard"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE MONGEARD MUGNERET"
+          ]
+        }
+      ],
+      "saleRecords": [
+        {
+          "deedId": "9cfb02ce89b74b76d7dbb56fb7bab673",
+          "date": "2023-11-21",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [
+        "d0681-sale-then-record"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    },
+    {
+      "parcelId": "212670000D0682",
+      "reference": "D 0682",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1434.6038,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "c6dfe8e4861fb858cd3dc20849c2f947",
+          "date": "2025-07-31",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 0
+        }
+      ],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "sale-record-reviewed",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0683",
+      "reference": "D 0683",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 1518.954,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2019-01-01",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "212670000D0823",
+      "reference": "D 0823",
+      "commune": "21267",
+      "namedArea": "LES GRANDS ECHEZEAUX",
+      "cruOverlapM2": 31019.0799,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [
+        {
+          "name": "Domaine de la Romanée-Conti",
+          "holderId": "778269407",
+          "basis": "identity-only",
+          "sourceIds": [
+            "register-drc"
+          ]
+        }
+      ],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DE LA ROMANEE CONTI"
+          ],
+          "after": [
+            "DOMAINE DE LA ROMANEE CONTI"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "cadastreFirstSeen": "2020-01-01",
+      "predecessorIds": [
+        "212670000D0097"
+      ],
+      "historyFindingIds": [
+        "d0823-lineage"
+      ],
+      "researchStatus": "holder-lead",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Obtain dated parcel-specific operation evidence and scope."
+    }
+  ]
+}

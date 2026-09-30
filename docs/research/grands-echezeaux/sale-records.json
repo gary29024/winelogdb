@@ -1,0 +1,55 @@
+{
+ "schemaVersion": 2,
+ "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
+ "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
+ "release": "2026-04",
+ "parentFeatureId": "inao-denom-645",
+ "coverage": "2014-01-17 to 2025-11-20",
+ "inputs": {
+  "parcelSnapshotSha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+  "dvfPlus": {
+   "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+   "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+   "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  }
+ },
+ "note": "A deed dates a transfer and groups parcels; it names no party and never establishes farming. Parcel references are those printed at the deed date.",
+ "counts": {
+  "deeds": 3,
+  "parcels": 5
+ },
+ "deeds": [
+  {
+   "deedId": "128b5dd33faccb0dd4dfe32275b25d4d",
+   "date": "2015-09-15",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0094",
+    "212670000D0096",
+    "212670000D0500"
+   ],
+   "otherParcels": 7
+  },
+  {
+   "deedId": "9cfb02ce89b74b76d7dbb56fb7bab673",
+   "date": "2023-11-21",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0681"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "c6dfe8e4861fb858cd3dc20849c2f947",
+   "date": "2025-07-31",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "212670000D0682"
+   ],
+   "otherParcels": 0
+  }
+ ]
+}

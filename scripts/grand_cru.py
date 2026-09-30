@@ -103,6 +103,11 @@ def lieux_dits_file(insee):
     return f'lieux-dits-{insee}.json.gz'
 
 
+def audit_file(insee):
+    """A neighbouring commune's parcels, used only to prove a cru does not cross into it."""
+    return f'audit-parcelles-{insee}.json.gz'
+
+
 def schema_file(bundle):
     return f'dgfip-{bundle["parcels"]["rightsAsOf"][:4]}-description.odt'
 
@@ -136,6 +141,10 @@ def named_plot_catalogue_path(cru):
 
 def named_plot_index_path(cru):
     return APP_DIR / f'{cru["slug"]}.named-plot-index.json'
+
+
+def commune_audit_path(cru):
+    return REPORT_DIR / f'{cru["slug"]}-commune-audit.json'
 
 
 def named_plot_report_path(cru):
@@ -260,6 +269,8 @@ def bundle_sources(bundle):
         wanted += [(r['member'], r['sha256'], lambda r=r: zip_member(r['url'], r['member'])) for r in history['rights']]
         wanted += [(vintage_file(c.get('commune', parcels['commune']), c['date']), c['sha256'], lambda c=c: fetch(c['url']))
                    for c in history['cadastre']]
+    wanted += [(audit_file(insee), a['sha256'], lambda a=a: fetch(cadastre_url(a['url'])))
+               for insee, a in bundle.get('auditCommunes', {}).items()]
     if sales := bundle.get('saleRecords'):
         wanted.append((sales['fileName'], sales['sha256'], lambda: fetch(sales['url'])))
     names = [name for name, _, _ in wanted]
