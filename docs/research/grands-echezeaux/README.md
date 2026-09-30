@@ -30,9 +30,12 @@ used for Échezeaux; Grands-Échezeaux adds only its evidence file.
 
 - **Parcels and commune audit.** The pinned Etalab snapshot of 2026-06-01 gives 32 parcels,
   full polygons, with the cru overlap measured separately; no edge contact was left out. The
-  [commune audit](../../../scripts/grand-crus/reports/grands-echezeaux-commune-audit.json) checks
-  the boundary against Vosne-Romanée (21714), pinned for this purpose: no Vosne parcel
-  overlaps the cru (0 m²). Flagey parcels cover the boundary except 1.8 m² of gaps between parcels.
+  [commune audit](../../../scripts/grand-crus/reports/grands-echezeaux-commune-audit.json) confirms
+  INAO lists only Flagey (21267) and that Flagey parcels cover the boundary apart from 1.8 m² of
+  gaps between parcels. Neighbouring communes are measured, never imported. Vosne-Romanée and
+  Chambolle-Musigny touch the cru by 0 m². Along the Clos de Vougeot wall, 12 Vougeot parcels
+  touch it by 148 m² in all (at most 48 m², 2.15% of any one parcel). That is where the INAO
+  line and the cadastral commune line disagree, not Grands-Échezeaux land.
 - **Named areas.** One cadastral lieu-dit, `LES GRANDS ECHEZEAUX`, holds 100% of every parcel
   ([per-parcel file](parcel-named-areas.json)). The [Bourgogne wine board page](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/grands-echezeaux,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE0Jnw%3D)
   names the same single climat. Since it is the whole cru, no separate named-area layer is
@@ -68,6 +71,8 @@ Details, sources and every parcel: [register](register.md) (generated from [cura
   copies, outreach) have not been done.
 - The Domaine de la Romanée-Conti Grands-Échezeaux page shows its figures only in a browser
   and was not read.
+- The cru's edge along Vougeot is uncertain by a few metres: the INAO boundary and the cadastral
+  commune line differ there (see the commune audit).
 - Notices outside the regional (2019–2026) and departmental (2016–2020) bulletins were not
   searched. Lineage covers 2019–2026; DVF+ runs from January 2014 to November 2025 and names no party.
 

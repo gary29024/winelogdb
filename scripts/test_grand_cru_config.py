@@ -55,6 +55,23 @@ class ConfigTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unknown cru'):
             load_cru('clos-de-vougeot-typo')
 
+    def test_only_inao_communes_are_imported(self):
+        import json
+        for bundle_id in bundle_ids():
+            bundle = load_bundle(bundle_id)
+            manifest = read_json(APP_DIR / f'{bundle_id}.manifest.json')
+            catalogue = read_json(ROOT / 'src/lib/places' / next(
+                m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == bundle['villageMap'])['catalogue'])
+            inao = {f['id']: set(f['communes']) for f in catalogue['features']}
+            features = json.loads((ROOT / ('public' + manifest['dataUrl'])).read_text(encoding='utf-8'))['features']
+            for f in features:
+                for o in f['properties']['overlaps']:
+                    self.assertIn(f['properties']['commune'], inao[o['parentFeatureId']], f['id'])
+        audit = read_json(ROOT / 'scripts/grand-crus/reports/grands-echezeaux-commune-audit.json')
+        vougeot = next(n for n in audit['neighbours'] if n['commune'] == '21716')
+        self.assertEqual(vougeot['contactsOverMinimumOverlap'], 11)  # measured, never imported
+        self.assertLess(vougeot['maxParcelPercent'], 5)
+
     def test_multi_commune_bundle(self):
         bundle = {'parcels': {'commune': '21150', 'additionalCommunes': [{'commune': '21512', 'cadastreUrl': 'u', 'cadastreSha256': 's'}]}}
         self.assertEqual(communes(bundle), ['21150', '21512'])

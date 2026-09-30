@@ -153,6 +153,10 @@ Outputs by convention: research in `docs/research/<slug>/`; app files in
 
 ## 6. Rules that stay the same everywhere
 
+- Parcels come only from the communes INAO lists for the cru. Where a neighbouring
+  commune's parcels touch the boundary (the INAO line and the cadastral commune line
+  disagree by a few metres), `build_grand_cru_commune_audit.py` measures and publishes
+  them; they are never added as parcels, whatever their area.
 - Legal holder, applicant, previous operator, authorised operator, verified operator
   and bottler are different things. None is inferred from another.
 - UI wording: "Recorded right holder", "Research link · farming unverified",

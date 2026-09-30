@@ -88,6 +88,10 @@ def main():
         metric = transform(project, geometry)
         overlaps = []
         for parent_id, parent in projected.items():
+            # Only communes INAO lists for the cru are its parcels; other communes' contacts are
+            # boundary disagreements, measured by build_grand_cru_commune_audit.py.
+            if props['commune'] not in parents[parent_id]['properties']['communes']:
+                continue
             overlap = metric.intersection(parent).area
             if overlap > config['minimumOverlapM2']:
                 overlaps.append({'parentFeatureId': parent_id, 'name': parents[parent_id]['properties']['name'],

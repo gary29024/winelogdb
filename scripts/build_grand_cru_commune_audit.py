@@ -3,10 +3,12 @@
   python scripts/build_grand_cru_commune_audit.py --cru grands-echezeaux
   python scripts/build_grand_cru_commune_audit.py --cru grands-echezeaux --check
 
-Proves the bundle's communes are the right ones: no parcel of a neighbouring commune pinned in
-the bundle's "auditCommunes" may overlap the cru by more than the bundle's minimum
-overlap, and the bundle's own parcels must cover the cru apart from small gaps between
-parcels (roads, paths). Edge contacts left out of the parcel file are listed.
+Import scope is the communes INAO lists for the cru. The audit proves that scope is complete:
+every INAO commune is in the bundle, and the bundle's parcels cover the boundary apart from
+small gaps between parcels (roads, paths). Neighbouring communes pinned in the bundle's
+"auditCommunes" are measured, never imported: where the INAO line and the cadastral commune
+line disagree, their parcels touch the cru by a few square metres. Each contact is published
+with its area and share of the parcel.
 Requires scripts/burgundy-map-requirements.txt and download_grand_cru_sources.py inputs.
 """
 import argparse
@@ -17,7 +19,7 @@ from pyproj import Transformer
 from shapely.geometry import shape
 from shapely.ops import transform, unary_union
 
-from grand_cru import (audit_file, cadastre_sources, commune_audit_path, load_cru, parcel_report_path, parcels_file,
+from grand_cru import (audit_file, cadastre_sources, communes, commune_audit_path, load_cru, parcel_report_path, parcels_file,
                        pinned, read_json, require, source_dir, village_map, write_or_check)
 
 MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would leave far more
@@ -40,28 +42,38 @@ def build(cru, bundle, directory):
     covered = unary_union(own).intersection(boundary).area
     uncovered = boundary.area - covered
     require(uncovered / boundary.area <= MAX_UNCOVERED_SHARE, f'{cru["slug"]}: bundle communes leave {uncovered:.1f} m² uncovered')
+    inao = feature['properties']['communes']
+    require(set(inao) <= set(communes(bundle)), f'{cru["slug"]}: INAO commune missing from the bundle: {sorted(set(inao) - set(communes(bundle)))}')
     neighbours = []
     for insee, source in sorted(bundle.get('auditCommunes', {}).items()):
-        # The same rule as parcel admission: a neighbouring parcel overlapping by more than the minimum
-        # would belong in the cru's parcel set, so the bundle would be missing a commune.
-        overlaps = [p.intersection(boundary).area for p in parcels(audit_file(insee), source['sha256'])]
-        crossing = [a for a in overlaps if a > bundle['parcels']['minimumOverlapM2']]
-        require(not crossing, f'{cru["slug"]} crosses into commune {insee}: {len(crossing)} parcels over the minimum overlap')
+        require(insee not in inao, f'{cru["slug"]}: INAO lists {insee}; import it in the bundle instead of auditing it')
+        contacts = []
+        for f in json.loads(gzip.decompress(pinned(directory, audit_file(insee), source['sha256'])))['features']:
+            metric = transform(project, shape(f['geometry']))
+            overlap = metric.intersection(boundary).area
+            if overlap > 0:
+                contacts.append({'parcelId': f['properties']['id'], 'overlapM2': round(overlap, 2),
+                                 'parcelPercent': round(100 * overlap / metric.area, 3)})
+        contacts.sort(key=lambda c: (-c['overlapM2'], c['parcelId']))
         neighbours.append({'commune': insee, 'name': source['name'], 'url': source['url'], 'sha256': source['sha256'],
-                           'overlapM2': round(sum(overlaps), 1), 'edgeContacts': sum(a > 0 for a in overlaps)})
+                           'contactAreaM2': round(sum(c['overlapM2'] for c in contacts), 1),
+                           'contactsOverMinimumOverlap': sum(c['overlapM2'] > bundle['parcels']['minimumOverlapM2'] for c in contacts),
+                           'maxParcelPercent': max((c['parcelPercent'] for c in contacts), default=0),
+                           'contacts': contacts})
     report = read_json(parcel_report_path(bundle))
     contacts = [c for c in report['excludedBoundaryContacts'] if c['parentFeatureId'] == cru['parentFeatureId']]
     return {
         'schemaVersion': 1, 'parentFeatureId': cru['parentFeatureId'], 'name': cru['name'],
-        'inaoCommunes': feature['properties']['communes'],
+        'inaoCommunes': inao,
         'bundleCommunes': [{'commune': insee, 'name': names.get(insee), 'url': url, 'sha256': digest}
                            for insee, url, digest in cadastre_sources(bundle)],
         'boundaryAreaM2': round(boundary.area, 1),
         'coveredByBundleParcelsM2': round(covered, 1), 'uncoveredM2': round(uncovered, 1),
         'neighbours': neighbours,
         'excludedEdgeContacts': len(contacts),
-        'note': ('Uncovered area is the gaps between cadastral parcels inside the boundary. A neighbour overlap at or '
-                 'below the minimum overlap is an edge contact, not a cross-commune parcel.'),
+        'note': ('Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary '
+                 'and the cadastral commune line disagree; they are measured here and never added as parcels, whatever '
+                 'their area. Uncovered area is the gaps between cadastral parcels inside the boundary.'),
     }
 
 
@@ -74,7 +86,9 @@ def main():
     cru, bundle = load_cru(args.cru)
     result = build(cru, bundle, source_dir(bundle, args.source_dir))
     write_or_check(commune_audit_path(cru), json.dumps(result, ensure_ascii=False, indent=2) + '\n', args.check)
-    print(json.dumps({k: result[k] for k in ('uncoveredM2', 'neighbours', 'excludedEdgeContacts')}))
+    print(json.dumps({'uncoveredM2': result['uncoveredM2'], 'excludedEdgeContacts': result['excludedEdgeContacts'],
+                      'neighbours': {n['name']: [n['contactAreaM2'], n['contactsOverMinimumOverlap'], n['maxParcelPercent']]
+                                     for n in result['neighbours']}}, ensure_ascii=False))
 
 
 if __name__ == '__main__':

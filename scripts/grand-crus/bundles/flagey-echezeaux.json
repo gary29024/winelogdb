@@ -141,10 +141,20 @@
     "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
   },
   "auditCommunes": {
+    "21133": {
+      "name": "Chambolle-Musigny",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+      "sha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34"
+    },
     "21714": {
       "name": "Vosne-Romanée",
       "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
       "sha256": "2c57f75516a8161b8fd1d16284dad5374bf0da76fb9eaed4d4224454ad877bc1"
+    },
+    "21716": {
+      "name": "Vougeot",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd"
     }
   }
 }
