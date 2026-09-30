@@ -316,6 +316,27 @@ class FarmingResearchTests(unittest.TestCase):
             self.assertEqual([i['date'] for i in items[:2]], ['2019-08-05', '1995-09-15'])
             self.assertIsNone(row['currentFarmer'])
 
+    def test_clerget_d0796_deed_and_fusion_establish_ownership_chain_not_current_farming(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        filing = filings['clerget-d0796-2002']
+        self.assertEqual(filing['parcelAreasM2'], {'212670000D0796': 2319})
+        self.assertEqual(filing['filingCompanySiren'], '430384354')
+        self.assertEqual(filing['holderId'], '431340140')
+        self.assertEqual(filing['successorEvidence']['toSiren'], '431340140')
+        self.assertEqual(filing['successorEvidence']['effectiveDate'], '2023-12-11')
+        row = rows['D 0796']
+        self.assertIn('clerget-d0796-2002', row['parcelFilingIds'])
+        self.assertEqual(row['researchDepth'], 'parcel-filing-reviewed')
+        self.assertIsNone(row['currentFarmer'])
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        items = evidence['parcels']['212670000D0796']
+        filing_item = next(i for i in items if i['kind'] == 'filing')
+        self.assertEqual(filing_item['date'], '2002-01-18')
+        self.assertTrue(any(i['kind'] == 'ownership' and i['date'] == '2024' for i in items))
+        self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+
     def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
         result = self.build()
         evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
