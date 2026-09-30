@@ -83,13 +83,14 @@ describe('PR416 map feedback',()=>{
   expect(screen.queryByRole('link',{name:'Domaine Nicole Lamarche'})).toBeNull();
   expect(onShow).not.toHaveBeenCalled();
  });
- it('keeps weak leads and tenancy-based research under the legal holder name',async()=>{
+ it('heads a weak lead with its domaine name as its own row, and keeps tenancy-based research under the legal holder name',async()=>{
   render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
   fireEvent.click(screen.getByRole('switch'));
   fireEvent.click(await screen.findByRole('button',{name:/Show all \d+ entries/}));
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
-  const office=await within(list).findByRole('button',{name:/GFV Grands Crus Investissement/});
-  expect(office.textContent).toMatch(/Research lead: Domaine Méo-Camuzet/);
+  const office=await within(list).findByRole('button',{name:/^Domaine Méo-Camuzet/});
+  expect(office.textContent).toMatch(/GFV Grands Crus Investissement/);
+  expect(office.textContent).toMatch(/0.45 ha · 3/);
   expect(office.textContent).toMatch(/Weak lead · office address only/);
   expect(within(list).getByRole('button',{name:/SCI les Climats|SCI Les Climats/i}).textContent).not.toMatch(/Marsannay/);
   expect(within(list).queryByRole('button',{name:/^Domaine du Château de Marsannay/})).toBeNull();

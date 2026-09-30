@@ -7,8 +7,9 @@ type ParcelRow={properties:{id:string;recordedRights:{holderId:string;name:strin
 export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[];legalNames:string[];areaM2:number;count:number;sources:string[];
  basisLabel:string;lead?:{name:string;label:string}};
 
-// No current farmer is verified, so only identity/estate research may name a
-// domaine heading. Weak leads stay under the legal name, labelled as leads.
+// No current farmer is verified, so only identity/estate research may group
+// holders under a domaine. A weak lead names its own row (legal name beneath,
+// labelled as a lead) but never merges into, or adds area to, a domaine group.
 // Tenancy, lease and operator relationships are never shown in this list.
 const headingLabels:Record<string,string>={
  'estate-context':'Estate source','secondary-estate-context':'Estate source','management-and-estate-context':'Estate source',
@@ -43,7 +44,7 @@ export function groupParcelRightHolders(parcels:readonly ParcelRow[],parentId:st
    const id=context?`domaine:${placeKey(context.name)}`:right.holderId;
    let group=groups.get(id);
    if(!group){
-    group={id,name:context?.name??ownerName(right.name),domaine:Boolean(context),holderIds:[],legalNames:[],sources:[],areaM2:0,count:0,
+    group={id,name:context?.name??lead?.name??ownerName(right.name),domaine:Boolean(context),holderIds:[],legalNames:[],sources:[],areaM2:0,count:0,
      basisLabel:context?headingLabels[context.basis]:'',lead,parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
     groups.set(id,group);
    }

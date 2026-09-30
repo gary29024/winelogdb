@@ -35,7 +35,7 @@ describe('parcel presentation without identity or farming promotion',()=>{
   const groups=groupParcelRightHolders(rows,'cru',{estate:context,office:{...context,name:'Domaine Lead',basis:'registered-office-match'},
    tenant:{...context,name:'Domaine Tenant',basis:'filing-tenant-relationship'}});
   expect(groups.find(g=>g.holderIds.includes('estate'))).toMatchObject({name:'Domaine Example',domaine:true,basisLabel:'Estate source'});
-  expect(groups.find(g=>g.holderIds.includes('office'))).toMatchObject({name:'GFA Office',domaine:false,lead:{name:'Domaine Lead',label:'office address only'},sources:['estate']});
+  expect(groups.find(g=>g.holderIds.includes('office'))).toMatchObject({name:'Domaine Lead',domaine:false,legalNames:['GFA Office'],lead:{name:'Domaine Lead',label:'office address only'},sources:['estate']});
   const tenant=groups.find(g=>g.holderIds.includes('tenant'));
   expect(tenant).toMatchObject({name:'GFA Tenant',domaine:false,basisLabel:'',sources:[]});
   expect(tenant).not.toHaveProperty('lead');
