@@ -267,6 +267,44 @@ Source: [free Le Figaro Entreprises registry mirror](https://entreprises.lefigar
 
 These files reinforce the rule already used by the app: a share transfer, harvest entitlement, bottler name, company manager or broad corporate object is not current-farmer evidence.
 
+## Free-source hunt for the 127 parcels without a named candidate
+
+Checked 30 September 2026 after the Bouchy batch. The unresolved set is now being searched through free company-filing mirrors and public indexes before considering any paid or private source. Of **127 parcels without a named candidate**, **120 have no matched legal-entity right at all**; the other seven are D0813/D0814 under HOR Vignobles and the five current successors of former BND D0143. **109 parcels remain inventory-only.**
+
+The largest unresolved concentrations are **En Orveaux (43 parcels)**, **Les Treux (23)**, **Les Champs Traversins (13)** and **Les Loächausses (12)**. This makes the next useful target an associated landholding company or notarial contribution deed, not more size matching.
+
+### Why published acreage cannot identify the unnamed parcels
+
+The En Orveaux test now makes the ambiguity measurable. Among its 41 unresolved parcels without a company record, matching published holdings by area alone produces hundreds or thousands of plausible combinations even before adjacency or historical boundaries are considered:
+
+| Published holding tested | Area tolerance / maximum parcel count | Matching combinations |
+| --- | --- | ---: |
+| Jean-Pierre Guyon, 20.4 ares | ±5 m² / 4 | 283 |
+| Bouchard Père & Fils, 39 ares | ±50 m² / 4 | 1,740 |
+| Dominique Mugneret, 40 ares | ±50 m² / 4 | 1,585 |
+| Jean-Yves Bizot, c. 0.50 ha | ±100 m² / 4 | 2,730 |
+| Christian Clerget, c. 0.87 ha beyond the current company record | ±50 m² / 5 | 4,355 |
+
+These counts deliberately use generous brute-force combinations rather than selecting a preferred answer. A rounded published area therefore remains a **search clue only**. It must not create parcel candidates in the app.
+
+### Highest-yield free filing targets
+
+These records are **not yet parcel evidence**. They are queued because the free indexes describe acts likely to contain contributions, vineyard schedules, mergers or notarial recitals. A company relationship alone does not assign its land to Échezeaux.
+
+| Target | Free records to inspect next | Why it is promising |
+| --- | --- | --- |
+| **Christian Clerget — GFV 430384354** | [Societe.com index](https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html): **22 Dec 2023 fusion project**, **3 Jul 2002 notarial act**, **28 Apr 2000 notarial act** | GFV's declared purpose is ownership/administration of viticultural real estate and it was absorbed into Domaine Christian Clerget (431340140) in 2023. A full fusion or contribution schedule could explain part of the domaine's published 1.09 ha En Orveaux holding. Do not infer that it does until the schedules are read. |
+| **Christian Clerget — GFA 404866196** | [Pappers](https://www.pappers.fr/entreprise/gfa-domaine-clerget-404866196): **25 Apr 1996 notarial constitution**, **5 Oct 2000 donation-partage** | Separate agricultural landholding vehicle linked to the Clerget family and, later, the operating domaine. Its deeds may name contributed vineyard parcels. |
+| **Bouchard Père & Fils / Vignoble des Cabottes 515420255** | [Le Figaro Entreprises](https://entreprises.lefigaro.fr/vignoble-des-cabottes-21/entreprise-515420255): **18 Feb 2026 project d'apport partiel d'actif** | The 2026 transfer covers a branch including viticultural production, vinification and bottling. The project or annexes may enumerate vineyard assets. Bouchard's published 39 ares En Orveaux remains unplaced until an exact schedule is found. |
+| **Cacheux 392906095** | [RubyPayeur](https://rubypayeur.com/societe/scev-domaine-cacheux-jacques-et-fils-392906095): **18 Oct 2006 capital increase**, then **24 Mar 2021 capital increase** | Published research describes about 1 ha across five Échezeaux parcels in En Orveaux/Cruots, but no cadastral IDs. Capital-increase papers are more likely than ordinary annual minutes to expose asset contributions. |
+| **Jean-Pierre Guyon 381071141** | [Le Figaro Entreprises](https://entreprises.lefigaro.fr/societe-civile-d-exploitation-du-domaine-guyon-21/entreprise-381071141): **21 May 2001 capital increase**, **5 Jul 2016 notarial act** | Historical research gives 20.4 ares En Orveaux and a former Lavigne-family fermage, but size is far too ambiguous. The notarial/capital documents may supply a property or lease schedule. |
+| **Jean-Yves Bizot / former Marie-Thérèse Javouhey entity 434002390** | [Pappers](https://www.pappers.fr/entreprise/jean-yves-bizot-434002390): **29 May 2002 notarial ACTE D'APPORT**, then **4 Jan 2001 constitution** | The 2002 filing is explicitly an asset contribution and capital increase. Bizot has published Échezeaux holdings in En Orveaux and Les Treux without company-record matches, so this is one of the most targeted free documents available. |
+| **Michel Gros 422835017** | [Pappers](https://www.pappers.fr/entreprise/domaine-michel-gros-422835017): **10 May 2019 notarial act**, then **23 Apr 2019 succession/share act** | The domaine's 0.38 ha Les Loächausses holding is published but unplaced. The notarial deed predates the 2022 first vintage and could clarify family-asset transfers, but may still concern shares rather than vineyard land. |
+| **Georges Noëllat 388646846** | [Pappers](https://www.pappers.fr/entreprise/earl-du-vignoble-georges-noellat-388646846): **22 Jul 2013 notarial donation**, **15 Oct 2013** and **19 Jun 2015** capital increases | Lower priority: the published Cruots holding is only about 0.07 ha, but the filings are free and could contain a parcel schedule. |
+| **Dominique Mugneret / former EARL 325694750** | [Pappers operating-entity history](https://www.pappers.fr/entreprise/earl-dominique-mugneret-325694750) and [related 448871863 entity](https://www.pappers.fr/entreprise/dominique-mugneret-448871863) | Hachette reports 40 ares En Orveaux, while the historic operating EARL has since been dissolved. A related 2007 notarial filing may clarify company/share succession, but this is lower priority than the contribution deeds above. |
+
+The ranking is by expected evidential yield, **not** by presumed farmer. Nothing in this table changes candidate leads, parcel filings or current farmer fields. A filing enters parcel evidence only after its full text names an exact cadastral reference, a formally traceable predecessor, or another sufficiently specific operation/tenancy scope.
+
 ## Highest-value next sources
 
 The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **155 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
