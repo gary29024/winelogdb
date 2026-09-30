@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **147 records**, including overlapping filing copies. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **171 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -187,7 +187,19 @@ This matters most in En Orveaux. Published holdings there cannot safely be assig
 
 Free registry indexes nevertheless expose higher-value documents to inspect. Christian Clerget has two family landholding vehicles with notarial formation/donation records, one of which (GFV 430384354) was absorbed into the operating domaine in 2023. Jean-Yves Bizot's 434002390 entity has a 2002 notarial **acte d'apport**. Bouchard's former Maison entity has a 2026 **apport partiel d'actif** covering a viticultural-production branch. Cacheux and Guyon have capital/notarial records, and Michel Gros has a 2019 notarial family act. These are research targets only until the full document supplies parcel or tenancy scope.
 
-Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are now logged separately, bringing the current research source log to **164 entries** without adding any parcel candidate.
+Detailed target dates and free mirror links are maintained in [the deed/source reading](echezeaux-statutes-research.md#free-source-hunt-for-the-127-parcels-without-a-named-candidate). Mirrors are alternative access to the same underlying registry filing, not independent corroboration. Nine discovery indexes are logged separately, and seven underlying filings have now also been reviewed, bringing the current research source log to **171 entries** without adding any parcel candidate.
+
+### Reviewed free filings: what they eliminated
+
+The first unresolved-parcel filing batch reviewed seven free PDFs (**221 pages**) and did **not** identify a new exact Échezeaux parcel. That negative evidence is useful:
+
+- **Christian Clerget:** the separate GFA Domaine Clerget formation/donation deeds contain an exact vineyard schedule, but their only Flagey parcel is **D0376 Les Violettes, AOC Vosne-Romanée**. The GFA therefore does not explain the missing c.0.87 ha behind Clerget's 1.09 ha En Orveaux statement.
+- **Jean-Pierre Guyon:** the 2001 capital increase is cash/current-account based and the retained 1991 contribution is movable operating assets. The 2016 notarial act transfers company shares and converts the legal form. Neither filing supplies the partner-owned rural-land schedule contemplated by the statutes.
+- **Jean-Yves Bizot predecessor entity:** the 2002 notarial contribution transfers an operating business and movable assets, not a cadastral vineyard schedule. It does not identify the later En Orveaux or Les Treux holdings.
+- **Cacheux:** the 2021 increase is also funded through shareholder current-account claims. The statutes permit partner-owned rural land to be made available separately but name no parcels. The unavailable 2006 filing is therefore lower priority rather than worth paid access.
+- **Bouchard:** the 2026 partial-asset treaty is the one genuinely promising document, but the free 28-page copy omits **Annex 3.1**, which its own contents place at pp.40-79 and which should contain the detailed transferred assets. The main treaty confirms land and rural-lease-related production are split between the transferred and retained businesses, but it cannot place the published 39 ares En Orveaux.
+
+Accordingly, none of these documents changes `candidateLeads`, `currentFarmer` or parcel colouring. The most useful next free document is a **complete annexed Bouchard 2026 treaty**, especially Annex 3.1; otherwise continue with other notarial landholding vehicles rather than ordinary operating-company capital records.
 
 ### Independent research: Winehog
 
