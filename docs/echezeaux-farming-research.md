@@ -309,3 +309,11 @@ If direct outreach is enabled later, the smallest useful evidence request would 
 - **Map stays in view.** The map is pinned under the dialog header while the side panel scrolls (both on a phone and beside the panel on a wide screen), so choosing an owner or parcel no longer means scrolling back up. A parcel picked from the finder scrolls its details into the space below the pinned map. On a phone the map is shorter (30% of the screen height) and the legend more compact to leave room; on very short windows it is not pinned. See [before and after](mockups/echezeaux-map-pinned.png).
 
 Apply **`0087_parcel_producer_links.sql`** through the normal deployment migration process before enabling the API. This change does not deploy or close #376/#364/#344; current-farming verification remains incomplete.
+
+## Parcel UI follow-up for PR416
+
+Saved catalogue links are filtered by the wine's producer ID, with full normalized-name fallback only when the ID is absent. Other saved cru links remain stored but are not shown as this wine's producers. Producer/cru changes start a fresh selection session; a late link response from the previous session is discarded.
+
+Possible-name suggestions and the chosen legal-holder highlight are independent. Toggling suggestions no longer clears the selection or the selected parcel. Manual/legal-holder selection takes visual precedence over a weaker name suggestion and never becomes a verified-farming colour.
+
+The holder list defaults to researched domaine headings, with the legal holder names and an unverified label underneath. Readers can switch to Legal holder. Headings and source links are generated from the reviewed curation; unknown/ambiguous candidates retain their legal names. Group area/count is the union of parcels, so multiple rights or holders in the same group do not double-count land. This presentation does not modify the legal-rights snapshot, assign new parcels, create saved links or confirm a current farmer.

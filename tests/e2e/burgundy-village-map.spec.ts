@@ -53,13 +53,23 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
  await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toBeVisible();
  // The link for this wine's producer opens the map on that holder's parcels, not the whole cru.
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
+ await dialog.getByRole('checkbox',{name:/Show possible matches/}).uncheck();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await dialog.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.getByText('Verified parcel links')).toHaveCount(0);
  await dialog.getByRole('button',{name:'Change link'}).click();
  await dialog.getByRole('combobox',{name:'App producer'}).selectOption('shared::friend::anne');
  await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByRole('link',{name:'Domaine Anne Gros'})).toHaveAttribute('href','/producers/shared%3A%3Afriend%3A%3Aanne');
+ // A deliberate reassignment stays saved, but must not appear on Nicole's wine.
+ await expect(dialog.getByRole('link',{name:'Domaine Anne Gros',exact:true})).toHaveCount(0);
+ await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ expect(links[0].producerId).toBe('shared::friend::anne');
+ await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
+ await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
+ await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
+ await dialog.getByRole('button',{name:'Save producer link'}).click();
  await dialog.getByRole('button',{name:'Remove link'}).click();
  await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
 });
@@ -126,6 +136,7 @@ for(const route of allMapRoutes){
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(false);
   const toggle=dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'});
   await toggle.check();
+  await dialog.getByLabel('Group right holders by').selectOption('holder');
   const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
   await expect(owners.getByRole('button')).toHaveCount(6);
   // The reference finder stays folded; it is the keyboard route to any parcel.

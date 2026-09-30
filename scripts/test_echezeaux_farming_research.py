@@ -21,6 +21,20 @@ class FarmingResearchTests(unittest.TestCase):
         return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history,
                               sales or self.sales, named_areas or self.named_areas)
 
+    def test_domaine_headings_keep_research_sources_and_never_confirm_farming(self):
+        result = self.build()
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        expected = {h['holderId']: h for h in self.curation['holders'] if len(h['candidateNames']) == 1}
+        self.assertEqual(set(evidence['holderDomains']), set(expected))
+        for hid, context in evidence['holderDomains'].items():
+            self.assertEqual(context['name'], expected[hid]['candidateNames'][0])
+            self.assertEqual(context['sources'], expected[hid]['sourceIds'])
+            self.assertTrue(set(context['sources']) <= evidence['sources'].keys())
+            self.assertNotIn('currentFarmer', context)
+            self.assertNotIn('verified', context)
+        self.assertEqual(result['counts']['currentFarmerConfirmed'], 0)
+        self.assertEqual(result['counts']['unresolved'], 127)
+
     def test_pinned_population_and_no_invented_farmers(self):
         result = self.build()
         self.assertEqual(result['counts']['parcels'], 276)

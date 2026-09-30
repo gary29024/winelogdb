@@ -175,3 +175,10 @@
 }
 
 .village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}
+
+/* Research names lead; legal identities and uncertainty remain readable on phones. */
+.village-map-grouping{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;font-size:.85rem}
+.village-map-grouping select{flex:1;min-width:0;max-width:100%}
+.village-map-owner-name{min-width:0;overflow-wrap:anywhere}
+.village-map-owner-name small{display:block;margin-top:.2rem;font-size:.75rem;line-height:1.4;color:var(--muted)}
+.village-map-group-sources{display:flex;flex-wrap:wrap;gap:.35rem .8rem;padding:.25rem .5rem .65rem;font-size:.75rem;overflow-wrap:anywhere}

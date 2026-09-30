@@ -89,7 +89,7 @@ function isBoundaryData(value:unknown,catalogue:VillageMapCatalogue):value is Fe
  return catalogue.features.every(expected=>features.some(f=>f.id===expected.id&&['Polygon','MultiPolygon'].includes(f.geometry?.type??'')));
 }
 
-export default function VillageMap({target,producer}:{target:BurgundyVillageMapTarget;producer?:string|null}){
+export default function VillageMap({target,producer,producerId}:{target:BurgundyVillageMapTarget;producer?:string|null;producerId?:string|null}){
  const mapName=target.mapKind==='regional'?'regional map':'village map';
  const [catalogue,setCatalogue]=useState<VillageMapCatalogue|null>(null),[failed,setFailed]=useState(false);
  const requiredIds=[target.featureId,...(target.namedPlotId?[target.namedPlotId]:[]),...(target.locationContext?.featureIds??[])].join(',');
@@ -105,10 +105,10 @@ export default function VillageMap({target,producer}:{target:BurgundyVillageMapT
  // reliably recover; a fresh page can. GeoJSON download failures retry below.
  if(failed)return <div className="village-map-message" role="alert"><p>The {mapName} could not load. Reload the page to try again.</p><button type="button" className="village-map-return" onClick={()=>window.location.reload()}>Reload page</button></div>;
  if(!catalogue)return <p className="village-map-message" role="status">Loading {mapName}…</p>;
- return <VillageMapView target={target} catalogue={catalogue} producer={producer}/>;
+ return <VillageMapView target={target} catalogue={catalogue} producer={producer} producerId={producerId}/>;
 }
 
-function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue;producer?:string|null}){
+function VillageMapView({target,catalogue,producer,producerId}:{target:BurgundyVillageMapTarget;catalogue:VillageMapCatalogue;producer?:string|null;producerId?:string|null}){
  const [parcelLegend,setParcelLegend]=useState<ParcelLegendKey[]>([]);
  const regional=catalogue.mapKind==='regional';
  const overview=catalogue.overview;
@@ -383,7 +383,7 @@ function VillageMapView({target,catalogue,producer}:{target:BurgundyVillageMapTa
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==wineSelectionId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
-    {catalogue.id==='vosne-romanee'&&['inao-denom-565','inao-denom-645'].includes(namedParent)&&<GrandCruParcels key={namedParent} map={ready?mapRef.current:null} parentId={namedParent} producer={producer} onLegend={setParcelLegend}/>}
+    {catalogue.id==='vosne-romanee'&&['inao-denom-565','inao-denom-645'].includes(namedParent)&&<GrandCruParcels key={namedParent} map={ready?mapRef.current:null} parentId={namedParent} producer={producer} producerId={producerId} onLegend={setParcelLegend}/>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':regional&&catalogue.features[0].coverage==='partial'?'Choose a commune to centre the overview. Coverage of this appellation is incomplete.':regional?(catalogue.features.length>1?`Compare the overview with the published ${catalogue.features[1].sectorColour??'red'}-only sector. Choosing a commune centres the view and keeps that area highlighted.`:catalogue.communes.length>1?'Choose a commune to centre the overview. The highlight continues to show the whole denomination.':`The map shows the full denomination in ${catalogue.communes[0].name}.`):'The map shows the appellation area across its producing communes.'}</p>
     <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:regional?`Regional denomination · ${countLabel(catalogue.communes.length,'commune','communes')}`:'Village appellation area'}{(!regional||catalogue.communes.length===1)&&<><br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</>}</p>
     {catalogue.coverageNote&&<p className="village-map-note">{catalogue.coverageNote}</p>}{namedVisible&&<p className="village-map-note">{catalogue.namedPlots?.coverageNote}</p>}
