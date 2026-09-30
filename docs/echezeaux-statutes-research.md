@@ -2,7 +2,7 @@
 
 Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux-farming-curation.json); the original PDFs are linked below, not redistributed.
 
-Fifty-five uploaded PDFs have now been reviewed across eight batches, including free registry-mirror copies. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **28 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest seven-file unresolved-parcel batch mostly produces negative but useful evidence: it rules out several operating-company/GFA filings as the missing Échezeaux parcel schedules and identifies Bouchard Annex 3.1 as the next free document worth pursuing. None alone verifies farming in the 2026 season.
+Fifty-six distinct supplied PDF copies have now been reviewed, including free registry mirrors. The duplicate upload of the 39-page Clerget completion filing is counted once. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **28 parcels**. Twenty-five individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest Clerget filing confirms definitive merger completion without adding a cadastral schedule. Its missing notarial property material and the missing Bouchard annex remain gaps; repeated copies are not further evidence. None alone verifies farming in the 2026 season.
 
 Page references below are one-based PDF pages. ORVEAUX's printed page numbers are one lower than its PDF page numbers.
 
@@ -377,7 +377,7 @@ The **11 December 2023 merger project** then transfers the **entire patrimony** 
 
 **Data treatment:** D0796 now has a reviewed parcel filing and documented ownership succession. This is **not current-farmer confirmation**. The deed-backed 0.2319 ha explains only part of Clerget's published 1.09 ha En Orveaux holding; roughly 0.87 ha remains unplaced.
 
-**Next free Clerget target:** the Domaine Christian Clerget filing dated **15 December 2023**, described by public indexes as *Projet de Fusion - Augmentation de Capital - Statuts mis à jour - Acte modificatif*. The merger project itself says a later deposit act should record the origins of title, so inspect this filing before searching more generic Clerget documents.
+**Clerget follow-up completed:** the absorbing-company filing labelled 15 December 2023 is now reviewed. It confirms completion but contains no property-origin annex or notarial deposit act. Do not request this same filing again.
 
 Sources: [GFV Christian et Isabelle Clerget](https://www.societe.com/societe/gfv-christian-et-isabelle-clerget-430384354.html), [Domaine Christian Clerget](https://www.pappers.fr/entreprise/domaine-christian-clerget-431340140).
 
@@ -400,9 +400,25 @@ The retained statutes describe the old contributions as movable assets and allow
 
 All free Bouchard copies checked expose the same **28-page treaty body**. The treaty's own contents place Annex 3.1 at pp.40-79, but those pages are absent. Until a separately indexed annex/full filing appears, treat this route as exhausted rather than repeatedly downloading the same file.
 
+## Clerget completion filing: 15 December 2023 label, 11 December decisions
+
+The newly supplied **39-page** bundle was uploaded twice with identical bytes (SHA-256 below); count it once. It contains the absorbing company's unanimous decisions (PDF pp.2-5), the previously reviewed merger project (pp.6-23), and updated statutes (pp.24-39).
+
+**New evidence, PDF pp.2-3:** the absorbing company approves the merger, records satisfaction of the conditions, and expressly declares definitive completion on **11 December 2023**. The earlier project alone did not establish completion. The **15 December 2023** filing label and annual DGFiP observation dates are different events and must not replace the completion date.
+
+**Still missing:** the project repeated at PDF p.12 refers to origins of title being set out in a separate notarial deposit act and to an annex describing the properties. Neither that instrument nor a cadastral property annex appears anywhere in this 39-page bundle. The retained original contributions in the operating-company statutes (pp.26-27) describe cash and movable business assets, not an additional En Orveaux parcel schedule.
+
+D0796 remains the exact parcel identified by the **2002** contribution. The new completion decisions strengthen the corporate succession already suggested by annual rights records; they do not themselves enumerate D0796 or identify any further parcel. Keep **28 parcels with exact filing evidence, 127 unresolved parcels and zero confirmed current farmers**. The source log now contains **177 entries**. Cadastre area for D0796 is 2,319 m²; the census uses its approximately 2,206 m² cru overlap, so the approximate 0.87 ha published-area gap is not a surveyed area of unidentified cultivated land.
+
+The dated D0796 app entry now cites the 2002 deed, the separate completion filing and the annual rights data. Its displayed deed date remains **18 January 2002**. The strict generator check is retained and all generated outputs are rebuilt rather than manually patched.
+
+**Next upload:** none requested for this completed batch. Reopen the Clerget/Bouchard annex searches only for a specifically identified, freely accessible new property or tenancy instrument, not another mirror of the same bundle. Paid records and domaine cooperation remain deferred.
+
+Source: [Domaine Christian Clerget, absorbing-company filing](https://entreprises.lefigaro.fr/scev-du-domaine-christian-clerget-21/entreprise-431340140).
+
 ## Highest-value next sources
 
-The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **176 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
+The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **177 logged source entries**. Source entries include overlapping copies and discovery indexes; they are not a count of independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
 
 Current phase: **free public and registry-mirror sources only**. Paid land-registry/SPF copies and direct domaine/CVI requests are deferred. In the table below, “obtain” means locate a freely accessible public or mirror copy; otherwise leave the gap open.
 
@@ -540,3 +556,11 @@ Five PDFs, **166 pages**. All scans were visually screened and the decisive prop
 | actes-430384354-20020703.pdf | 29 | 7f8afa24f771b2049736ee09f52c6998b7978ae865cfc5a4da28fb484f0f0710 |
 | SCEV DOMAINE CACHEUX JACQUES ET FILS - Actes du 18-10-2006.pdf | 29 | b02b722a7471a8fd7c77e57acc2b1fdc50eccd318dec448a26515ac312418e91 |
 
+
+### Clerget completion filing provenance
+
+| Supplied filename | PDF pages | SHA-256 |
+| --- | ---: | --- |
+| Domaine Christian Clerget - Actes du 15-12-2023.pdf | 39 | 70b58304b30e9e80330f7a7d429ac4c17da4045b486892e144ed3ff42c55be3c |
+
+The second upload, `Domaine Christian Clerget - Actes du 15-12-2023(1).pdf`, is byte-identical and is not counted as a second source. All 39 pages were reviewed visually; original PDFs are not redistributed.

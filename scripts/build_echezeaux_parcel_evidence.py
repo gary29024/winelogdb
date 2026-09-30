@@ -196,7 +196,7 @@ def build_evidence(register, curation, history, features):
             if parcel_id in filing['parcelAreasM2']:
                 add(parcel_id, {'kind': 'filing', 'date': filing['documentDate'], 'title': filing['title'],
                                 'note': filing.get('appNotesByParcel', {}).get(parcel_id, filing['appNote']),
-                                'sources': [filing['sourceId']]})
+                                'sources': list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))})
         for event in curation['exactParcelEvents']:
             if parcel_id in event['parcelIds']:
                 add(parcel_id, event_item(event))

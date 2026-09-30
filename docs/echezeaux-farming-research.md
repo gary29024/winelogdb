@@ -10,7 +10,7 @@ A cadastral parcel can be joined to a dated legal right holder. Today's farmer n
 
 ### Expanded investigation: every mapped Échezeaux parcel
 
-The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **176 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
+The [parcel research register](echezeaux-farming-parcel-register.md) now inventories **all 276 parcels** and records investigations for **all 36 right-holder groups**, with a source log of **177 records**, including overlapping filing copies and free-mirror discovery indexes. The log distinguishes inspected sources, indexed excerpts, public previews, owner-supplied Premium articles and unavailable material. This is not an exhaustive search of every cadastral reference: **109 parcels have inventory records only**.
 
 The resulting categories are **130 parcels with holder-derived or independent-research leads**, **16 with an exact-reference application or suspension**, **2 with an authorisation decision**, **1 sale lead** and **127 without a named candidate**. (The first version of this register, before the rights history, notice scan and Winehog research, had 54 sources, 155 inventory-only parcels, 100 holder leads, two applications and 174 unresolved.) All current-farmer fields remain unconfirmed. Candidate strength varies; a management connection or bottler name is much weaker than an independently described operating relationship. The register states the basis for each lead instead of treating all names as equally plausible farmers.
 
@@ -215,7 +215,13 @@ The same batch also narrows several dead ends:
 - **Clerget GFV 2000 formation:** cash-only; D0796 enters in the separate 2002 contribution.
 - **Bouchard:** all checked free copies remain the same 28-page treaty body, without Annex 3.1.
 
-The Clerget merger project expressly says that the origin of title for transferred real estate will be stated in a later notarial deposit act. The next free document to inspect is therefore the **15 December 2023 Domaine Christian Clerget filing** on the absorbing company's record, rather than another general capital/statutes document.
+The Clerget merger project expressly says that the origin of title for transferred real estate will be stated in a later notarial deposit act. The absorbing-company filing labelled **15 December 2023** has now been reviewed: it supplies explicit completion decisions, but not the separate notarial property-origin schedule. No repeat upload of that bundle is needed.
+
+### Clerget merger completion is now documented separately
+
+The 39-page absorbing-company filing labelled **15 December 2023** contains unanimous decisions dated **11 December 2023** expressly recording definitive merger completion (PDF pp.2-3). This is stronger evidence than the project alone. The embedded 18-page project repeats previously reviewed material and is not independent corroboration. Two identical uploads of this 39-page file are counted as one source.
+
+The same bundle still does not contain the notarial deposit act or cadastral property annex referenced at PDF p.12. It strengthens D0796's ownership-succession evidence but identifies no further parcel or current farmer. Current totals remain **28 parcels with exact company-filing evidence and 127 without a named candidate**; the source log is **177 entries**. No further upload is requested for this batch.
 
 ### Independent research: Winehog
 

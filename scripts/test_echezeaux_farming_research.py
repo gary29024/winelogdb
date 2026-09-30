@@ -219,7 +219,7 @@ class FarmingResearchTests(unittest.TestCase):
     def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
         result = self.build()
         rows = {p['reference']: p for p in result['parcels']}
-        self.assertEqual(result['counts']['withParcelFiling'], 27)
+        self.assertEqual(result['counts']['withParcelFiling'], 28)
         for ref in ('D 0144', 'D 0128', 'D 0316'):
             self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
             self.assertIsNone(rows[ref]['currentFarmer'])
@@ -336,6 +336,32 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(filing_item['date'], '2002-01-18')
         self.assertTrue(any(i['kind'] == 'ownership' and i['date'] == '2024' for i in items))
         self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+
+    def test_clerget_completion_source_is_cited_without_redating_the_deed(self):
+        sid = 'clerget-merger-completion-2023'
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'clerget-d0796-2002')
+        source = next(s for s in self.curation['sources'] if s['id'] == sid)
+        self.assertEqual(source['documentDate'], '2023-12-11')
+        self.assertEqual(source['filingLabelDate'], '2023-12-15')
+        self.assertEqual(source['pageCount'], 39)
+        self.assertEqual(sum(s.get('sha256') == source['sha256'] for s in self.curation['sources']), 1)
+        self.assertEqual(filing['successorEvidence']['sourceId'], sid)
+        self.assertEqual(filing['successorEvidence']['completionDate'], '2023-12-11')
+        result = self.build()
+        self.assertEqual(result['counts']['unresolved'], 127)
+        self.assertEqual(result['counts']['withParcelFiling'], 28)
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        item = next(i for i in evidence['parcels']['212670000D0796'] if i['kind'] == 'filing')
+        self.assertEqual(item['date'], '2002-01-18')
+        self.assertEqual(item['sources'], ['clerget-gfv-apport-2002', sid, 'dgfip-history'])
+        self.assertTrue(all(p['currentFarmer'] is None for p in result['parcels']))
+
+    def test_unknown_supporting_filing_source_is_rejected(self):
+        curation = copy.deepcopy(self.curation)
+        filing = next(f for f in curation['parcelFilings'] if f['id'] == 'clerget-d0796-2002')
+        filing['supportingSourceIds'] = ['not-a-source']
+        with self.assertRaisesRegex(ValueError, 'Unknown supporting filing source'):
+            self.build(curation)
 
     def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
         result = self.build()

@@ -95,6 +95,7 @@ def build_register(manifest, asset, curation, history, sales, named_areas):
         refs = set(filing['parcelAreasM2'])
         require(refs and refs <= ids, 'Filing outside research cru')
         require(filing['sourceId'] in sources, 'Unknown filing source')
+        require(set(filing.get('supportingSourceIds', [])) <= sources.keys(), 'Unknown supporting filing source')
         require(filing['documentDate'] == sources[filing['sourceId']]['documentDate'], 'Filing date must be the deed date')
         require(filing.get('currentFarmer') is None, 'Filing cannot establish current farming')
         if area_evidence := filing.get('areaEvidence'):
@@ -358,12 +359,13 @@ def render_report(register, curation, history):
               'are kept distinct; none proves current-season farming. See [the detailed reading and next source requests]'
               '(echezeaux-statutes-research.md).', '']
     for filing in curation['parcelFilings']:
-        source = sources[filing['sourceId']]
+        source_ids = list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))
+        cited = ', '.join(f"[{cell(sources[s]['title'])}]({sources[s]['url']})" for s in source_ids)
         refs = ', '.join(f'{ref(pid)} ({area} m²)' for pid, area in filing['parcelAreasM2'].items())
         if filing.get('areaEvidence', {}).get('kind') == 'aggregate-only':
             refs += ' (individual areas from the pinned cadastre; the deed recites only their combined area)'
         lines += [f"- **{filing['documentDate']} - {filing['title']}**. {refs}. {filing['finding']} "
-                  f"[{cell(source['title'])}]({source['url']})."]
+                  f"{cited}."]
     lines += ['', '## Independent research', '',
               'Published vineyard research can name cadastral references or describe holdings. It is dated secondary '
               'evidence of ownership or production, cross-checked here against the recorded rights; it never establishes '
