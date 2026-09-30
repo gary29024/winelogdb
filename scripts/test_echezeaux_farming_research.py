@@ -295,6 +295,27 @@ class FarmingResearchTests(unittest.TestCase):
         for ref in ('0313', '0295', '0296', '0297', '0298', '0299', '0673'):
             self.assertEqual(rows[f'D {ref}']['parcelFilingIds'], [])
 
+    def test_bouchy_1995_mandate_completes_the_historical_five_parcel_scope_without_proving_execution(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        old = filings['bouchy-mondange-expansion-1995']
+        later = filings['bouchy-tardy-2019']
+        self.assertEqual(set(old['parcelAreasM2']), {
+            '212670000D0628', '212670000D0765', '212670000D0767'
+        })
+        self.assertEqual(old['areaEvidence']['recitedTotalM2'], 2216)
+        self.assertEqual(old['leaseEvidence'][0]['tenants'], ['Bernard Mondange'])
+        self.assertEqual(old['leaseEvidence'][0]['kind'], 'lease-mandate')
+        self.assertEqual(sum(old['parcelAreasM2'].values()) + 1260, sum(later['parcelAreasM2'].values()))
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        for ref in ('0628', '0765', '0767'):
+            row = rows[f'D {ref}']
+            self.assertIn('bouchy-mondange-expansion-1995', row['parcelFilingIds'])
+            items = [i for i in evidence['parcels'][f'212670000D{ref}'] if i['kind'] == 'filing']
+            self.assertEqual([i['date'] for i in items[:2]], ['2019-08-05', '1995-09-15'])
+            self.assertIsNone(row['currentFarmer'])
+
     def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
         result = self.build()
         evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
