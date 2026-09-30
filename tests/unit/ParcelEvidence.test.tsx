@@ -35,7 +35,7 @@ describe('Parcel evidence panel',()=>{
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')}/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getByText('Dated records about this parcel. They show notices, owners and published research, not who farms it today.')).toBeTruthy();
+  expect(within(panel).getByText('Dated notices, ownership, sales, lease records and published research. Current farming still needs confirmation.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
   expect(within(panel).getByText('Previously farmed by Domaine Daniel Rion et Fils')).toBeTruthy();
@@ -62,6 +62,42 @@ describe('Parcel evidence panel',()=>{
   const direct=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(direct).queryByText(/Inherited from former parcel/)).toBeNull();
   expect(within(direct).getByText('Named by parcel number')).toBeTruthy();
+ });
+ it('shows a co-sale and a later company holder without identifying the buyer',async()=>{
+  render(<ParcelEvidence parcelId={id('146')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Sale record')).toBeTruthy();
+  expect(within(panel).getByText('14 Mar 2024').getAttribute('datetime')).toBe('2024-03-14');
+  expect(within(panel).getByText(/Other parcels were later recorded to Les Cruots\. That later record does not identify the buyer of this parcel\./)).toBeTruthy();
+  expect(within(panel).getByText(/no buyer, seller or price/)).toBeTruthy();
+  expect(within(panel).getByRole('link',{name:/DVF\+ open-data/}).getAttribute('href')).toContain('dvfplus');
+ });
+ it('shows an exact-area match with the farming domaine as published research, undated',async()=>{
+  render(<ParcelEvidence parcelId={id('362')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Matched by exact area')).toBeTruthy();
+  expect(within(panel).getByText('Gérard Mugneret, Les Quartiers de Nuits (métayage)')).toBeTruthy();
+  expect(within(panel).getByText(/sharecrops 0\.6462 ha/)).toBeTruthy();
+ });
+ it('shows the deed date and individual partial tenancy separately from historical research',async()=>{
+  const Fresh=await fresh();
+  render(<Fresh parcelId={id('316')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  const filings=panel.querySelector('details.parcel-evidence-filings') as HTMLDetailsElement;
+  expect(filings.open).toBe(true);
+  expect(within(filings).getByText('9 Feb 2024').getAttribute('datetime')).toBe('2024-02-09');
+  expect(within(filings).getByText(/Laurent Jousset-Drouhin personally as tenant of 726 m² of this 826 m² parcel/)).toBeTruthy();
+  expect(within(filings).getByRole('link',{name:/ORVEAUX: founding deed/}).getAttribute('href')).toContain('12-02-2024.pdf');
+  const research=panel.querySelector<HTMLElement>('details.parcel-evidence-research')!;
+  expect(research.querySelector('time')).toBeNull();
+  expect(within(research).getByText(/Guide Hachette 2001 \(1998 vintage\)/)).toBeTruthy();
+ });
+ it('labels the historical Vigot figure as a near-area reconstruction',async()=>{
+  render(<ParcelEvidence parcelId={id('195')}/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Near-area reconstruction')).toBeTruthy();
+  expect(within(panel).queryByText('Matched by exact area')).toBeNull();
+  expect(within(panel).getByText(/5963 m²; this parcel is 5965 m² cadastral/)).toBeTruthy();
  });
  it('covers a Grands-Échezeaux parcel named in a notice',async()=>{
   render(<ParcelEvidence parcelId={id('93')}/>);

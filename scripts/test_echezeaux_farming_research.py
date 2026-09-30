@@ -3,7 +3,7 @@ import copy
 import json
 import unittest
 
-from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, build_register
+from build_echezeaux_farming_research import ROOT, CURATION, EVIDENCE, HISTORY, MANIFEST, NAMED_AREAS, SALES, build_register
 from build_echezeaux_parcel_evidence import build_evidence
 
 
@@ -14,9 +14,12 @@ class FarmingResearchTests(unittest.TestCase):
         cls.asset = (ROOT / 'public' / cls.manifest['dataUrl'].lstrip('/')).read_bytes()
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
+        cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
+        cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
 
-    def build(self, curation=None, asset=None, history=None):
-        return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history)
+    def build(self, curation=None, asset=None, history=None, sales=None, named_areas=None):
+        return build_register(self.manifest, asset or self.asset, curation or self.curation, history or self.history,
+                              sales or self.sales, named_areas or self.named_areas)
 
     def test_pinned_population_and_no_invented_farmers(self):
         result = self.build()
@@ -29,7 +32,7 @@ class FarmingResearchTests(unittest.TestCase):
         self.assertEqual(rows['212670000D0177']['researchStatus'], 'historical-application')
         self.assertEqual(rows['212670000D0178']['researchStatus'], 'historical-application')
         self.assertTrue(all(p['currentFarmer'] is None and p['verifiedAsOf'] is None for p in rows.values()))
-        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 124)
+        self.assertEqual(sum(p['researchDepth'] == 'inventory-only' for p in rows.values()), 109)
 
     def test_snapshot_drift_fails_before_join(self):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
@@ -117,7 +120,7 @@ class FarmingResearchTests(unittest.TestCase):
         # Inherited references are labelled and must follow accepted lineage, not a spatial sliver.
         self.assertEqual(rows['D 0826']['candidateLeads'][0]['basis'],
                          'critic-named-cadastral-reference on predecessor D0792')
-        self.assertEqual(rows['D 0793']['candidateLeads'], [])
+        self.assertFalse(any('Grivot' in c['name'] or 'predecessor' in c['basis'] for c in rows['D 0793']['candidateLeads']))
         curation = copy.deepcopy(self.curation)
         grivot = next(x for x in curation['externalResearch'] if x['id'] == 'wh-grivot')
         grivot['predecessorReferences']['212670000D0792'].append('212670000D0793')
@@ -126,6 +129,241 @@ class FarmingResearchTests(unittest.TestCase):
         curation = copy.deepcopy(self.curation)
         curation['externalResearch'][0]['sourceIds'] = []
         with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
+            self.build(curation)
+
+    def test_a_sale_lead_names_a_later_holder_without_asserting_a_buyer(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        self.assertEqual(result['counts']['withSaleRecord'], 45)
+        # DVF+ reaches back to 2014: D0671 and D0673 left Assurances du Crédit Mutuel Vie in one sale, 24 December 2019.
+        self.assertEqual([(s['date'], s['nature']) for s in rows['D 0671']['saleRecords']], [('2019-12-24', 'sale')])
+        self.assertEqual(result['counts']['saleLead'], 1)
+        # D0146 went in a single-disposition sale with four parcels first recorded to LES CRUOTS in January 2025.
+        lead = rows['D 0146']['candidateLeads']
+        self.assertEqual([(c['name'], c['basis']) for c in lead], [('LES CRUOTS', 'co-sale-with-later-company-holder')])
+        self.assertIn('not necessarily the buyer', rows['D 0146']['nextEvidenceNeeded'])
+        self.assertEqual(rows['D 0146']['parcelFilingIds'], [])
+        self.assertEqual(rows['D 0146']['researchStatus'], 'sale-lead')
+        self.assertIsNone(rows['D 0146']['currentFarmer'])
+        # Parcels with their own record keep it; exchanges and sales without a later company holder give no lead.
+        self.assertFalse(any(c['basis'] == 'co-sale-with-later-company-holder' for c in rows['D 0144']['candidateLeads']))
+        self.assertEqual(rows['D 0835']['candidateLeads'], [])
+        self.assertEqual(rows['D 0835']['saleRecords'][0]['nature'], 'exchange')
+        # A sale with several dispositions may split parcels between buyers: no lead.
+        curation_sales = copy.deepcopy(self.sales)
+        next(d for d in curation_sales['deeds'] if '212670000D0146' in d['parcelIds'])['dispositions'] = 2
+        split = {p['reference']: p for p in self.build(sales=curation_sales)['parcels']}
+        self.assertEqual(split['D 0146']['candidateLeads'], [])
+        self.assertEqual(rows['D 0301']['researchStatus'], 'unresolved')
+        self.assertEqual(rows['D 0301']['researchDepth'], 'sale-record-reviewed')
+
+    def test_sale_records_must_match_snapshot_and_cru(self):
+        sales = copy.deepcopy(self.sales)
+        sales['inputs']['parcelSnapshotSha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'another snapshot'):
+            self.build(sales=sales)
+        sales = copy.deepcopy(self.sales)
+        sales['deeds'][0]['parcelIds'].append('212670000D0093')
+        with self.assertRaisesRegex(ValueError, 'Sale record outside research cru'):
+            self.build(sales=sales)
+        # Prices and addresses are never kept.
+        self.assertTrue(all(set(d) == {'deedId', 'date', 'nature', 'dispositions', 'parcelIds', 'otherParcels'}
+                            for d in self.sales['deeds']))
+
+    def test_census_compares_areas_and_never_places_holdings_on_parcels(self):
+        result = self.build()
+        census = {a['sourceName']: a for a in result['namedAreaCensus']}
+        self.assertEqual(sum(a['withoutCompanyRecord'] for a in census.values()), 157)
+        self.assertIsNone(census['LES POULA']['name'])  # no reviewed crosswalk to Les Poulaillères
+        orveaux = {e['holdingId']: e for e in census['EN ORVEAUX']['holdings']}
+        self.assertEqual(orveaux['clerget']['beyondCompanyRecordsM2'], 10900 - orveaux['clerget']['recordedToProducerM2'])
+        self.assertIsNone(orveaux['cacheux']['beyondCompanyRecordsM2'])  # spread over two named areas
+        vigot = next(e for e in census['LES ROUGES DU BAS']['holdings'] if e['holdingId'] == 'vigot')
+        self.assertIsNone(vigot['beyondCompanyRecordsM2'])  # a métayer farms land already recorded to its owner
+        self.assertTrue(all(p['candidateLeads'] == [] for p in result['parcels']
+                            if p['namedArea'] == 'EN ORVEAUX' and p['researchStatus'] == 'unresolved'))
+        curation = copy.deepcopy(self.curation)
+        curation['producerHoldings'][0]['parcelIds'] = ['212670000D0362']
+        with self.assertRaisesRegex(ValueError, 'cannot name parcels'):
+            self.build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['producerHoldings'][0]['namedAreas'] = ['LES POULAILLERES']
+        with self.assertRaisesRegex(ValueError, 'unknown named area'):
+            self.build(curation)
+
+    def test_exact_area_match_names_the_farmer_as_research_only(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        self.assertIn('gm-d0362', rows['D 0362']['externalResearchIds'])
+        self.assertIn(('Domaine Gérard Mugneret (métayer)', 'estate-area-exact-match'),
+                      {(c['name'], c['basis']) for c in rows['D 0362']['candidateLeads']})
+        self.assertIsNone(rows['D 0362']['currentFarmer'])
+        self.assertIn('vigot-d0195', rows['D 0195']['externalResearchIds'])
+        vigot = next(x for x in self.curation['externalResearch'] if x['id'] == 'vigot-d0195')
+        self.assertEqual(vigot['basis'], 'estate-area-near-match')
+
+    def test_corporate_connections_are_leads_never_farmers(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        expected = {'D 0650': ('Domaine Méo-Camuzet', 'registered-office-match'),
+                    'D 0313': ("Domaine de la Pousse d'Or", 'management-and-estate-context')}
+        for ref, lead in expected.items():
+            self.assertIn(lead,
+                          {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        # A 1998 guide area equals the Drouhin land company's four parcels exactly; still research, not farming.
+        self.assertIn(('Domaine Joseph Drouhin', 'critic-attribution-area-reconstructed'),
+                      {(c['name'], c['basis']) for c in rows['D 0633']['candidateLeads']})
+        # Companies with no domaine link found stay without a candidate.
+        for ref in ('D 0813', 'D 0814', 'D 0898'):
+            self.assertEqual(rows[ref]['candidateLeads'], [])
+
+    def test_filings_preserve_dates_roles_and_partial_scope_without_confirming_farmers(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        self.assertEqual(result['counts']['withParcelFiling'], 27)
+        for ref in ('D 0144', 'D 0128', 'D 0316'):
+            self.assertEqual(rows[ref]['researchDepth'], 'parcel-filing-reviewed')
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        cruots = filings['les-cruots-2024']
+        self.assertEqual(cruots['acquisitionRecital']['date'], '2024-03-14')
+        self.assertEqual(cruots['leaseEvidence'][1]['operatorPermission']['siren'], '809967854')
+        self.assertNotIn('212670000D0146', cruots['parcelAreasM2'])
+        orveaux = filings['orveaux-2024']
+        self.assertEqual((sum(orveaux['parcelAreasM2'].values()), orveaux['plantableAndPlantedAreaM2'],
+                          sum(orveaux['leaseEvidence'][0]['parcelAreasM2'].values())), (5263, 4147, 4550))
+        self.assertEqual(orveaux['leaseEvidence'][0]['tenants'], ['Laurent Jousset-Drouhin'])
+        self.assertEqual(filings['forey-2024']['leaseEvidence'][1]['kind'], 'lease-mandate')
+        curation = copy.deepcopy(self.curation)
+        curation['parcelFilings'][1]['leaseEvidence'][0]['parcelAreasM2']['212670000D0316'] = 827
+        with self.assertRaisesRegex(ValueError, 'Lease area exceeds'):
+            self.build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['parcelFilings'][0]['currentFarmer'] = 'Rouget'
+        with self.assertRaisesRegex(ValueError, 'cannot establish current farming'):
+            self.build(curation)
+
+    def test_coudray_and_hor_deeds_keep_historical_dates_and_exact_lease_scope(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        sources = {s['id']: s for s in self.curation['sources']}
+        self.assertEqual(sources['coudray']['documentDate'], '2004-06-26')
+        self.assertEqual(sources['coudray']['statutesUpdatedDate'], '2024-09-05')
+        self.assertEqual(sources['coudray']['filingLabelDate'], '2024-11-15')
+        for ref in ('D 0635', 'D 0714', 'D 0719'):
+            self.assertEqual(rows[ref]['parcelFilingIds'], ['coudray-2004'])
+            self.assertIn('Domaine Coudray-Bizot', {c['name'] for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        self.assertIn('Domaine du Château de Marsannay',
+                      {c['name'] for c in rows['D 0815']['candidateLeads']})
+        self.assertIsNone(rows['D 0815']['currentFarmer'])
+        for ref in ('D 0813', 'D 0814'):
+            self.assertEqual(rows[ref]['parcelFilingIds'], [])
+            self.assertEqual(rows[ref]['candidateLeads'], [])
+        evidence = build_evidence(result, self.curation, self.history,
+                                  json.loads(self.asset)['features'])
+        for pid, date in [('212670000D0635', '2004-06-26'), ('212670000D0815', '2021-06-30')]:
+            filing = next(x for x in evidence['parcels'][pid] if x['kind'] == 'filing')
+            self.assertEqual(filing['date'], date)
+        # The primary deed date must not overwrite the observed annual-record interval.
+        change = next(x for x in rows['D 0815']['rightsChanges']
+                      if 'SCI LES CLIMATS' in x['after'])
+        self.assertEqual((change['from'], change['to']), ('2022-01-01', '2023-01-01'))
+
+    def test_bouchy_recital_keeps_tenant_scope_and_suspended_application_separate(self):
+        result = self.build()
+        rows = {p['reference']: p for p in result['parcels']}
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'bouchy-tardy-2019')
+        lease = filing['leaseEvidence'][0]
+        self.assertEqual(sum(filing['parcelAreasM2'].values()), 3476)
+        self.assertEqual(lease['tenants'], ['Jean Tardy'])
+        identity = filing['operatorIdentityEvidence']
+        self.assertEqual((identity['siren'], identity['conversionDate']), ('429171382', '2024-07-25'))
+        self.assertNotIn('tenantSiren', lease)  # Company identity cannot replace the personal tenant.
+        self.assertEqual(lease['signedDate'], '2001-10-19')  # Separate Tardy 2000 lease is not imported.
+        self.assertEqual(lease['recitedEnd'], '2026-10-18')  # 2035 belongs to the Nuits lease.
+        self.assertNotIn('212670000D0673', filing['parcelAreasM2'])
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        for ref in ('0628', '0764', '0765', '0766', '0767'):
+            row = rows[f'D {ref}']
+            self.assertIsNone(row['currentFarmer'])
+            items = evidence['parcels'][f'212670000D{ref}']
+            item = next(i for i in items if i['kind'] == 'filing')
+            self.assertEqual(item['date'], '2019-08-05')  # Neither the lease start nor 2020 filing.
+            self.assertTrue(any(i['kind'] == 'suspended' for i in items))
+            self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+        # The 2026-labelled corporate records cannot become parcel-specific farming events.
+        for ref in ('0313', '0295', '0296', '0297', '0298', '0299', '0673'):
+            self.assertEqual(rows[f'D {ref}']['parcelFilingIds'], [])
+
+    def test_founding_mandates_keep_named_and_unnamed_tenants_distinct(self):
+        result = self.build()
+        evidence = build_evidence(result, self.curation, self.history, json.loads(self.asset)['features'])
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        grands = filings['grands-crus-mandate-1997']
+        bonnes = filings['bonnes-pentes-mandate-1999']
+        self.assertEqual(grands['leaseEvidence'][0]['tenants'], [])
+        self.assertEqual(sum(grands['parcelAreasM2'].values()), 4389)
+        self.assertEqual(bonnes['leaseEvidence'][0]['tenantSiren'], '394495493')
+        for filing, date in [(grands, '1997-08-12'), (bonnes, '1999-07-05')]:
+            self.assertEqual(filing['leaseEvidence'][0]['kind'], 'lease-mandate')
+            for pid in filing['parcelAreasM2']:
+                item = next(i for i in evidence['parcels'][pid] if i['kind'] == 'filing')
+                self.assertEqual(item['date'], date)
+                self.assertIn('authorizes', item['note'])
+                self.assertFalse(any(i['kind'] == 'authorisation' for i in evidence['parcels'][pid]))
+        lead = next(i for i in evidence['parcels']['212670000D0645'] if i['kind'] == 'lead')
+        self.assertEqual(lead['label'], 'Named in a lease mandate')
+
+    def test_aggregate_deed_area_cannot_be_presented_as_individual_recited_areas(self):
+        curation = copy.deepcopy(self.curation)
+        filing = next(f for f in curation['parcelFilings'] if f['id'] == 'bonnes-pentes-mandate-1999')
+        self.assertNotIn('parcelAreasM2', filing['leaseEvidence'][0])
+        self.assertEqual(filing['areaEvidence']['individualAreasSource'], 'pinned-cadastral-snapshot')
+        filing['areaEvidence']['recitedTotalM2'] = 3411
+        with self.assertRaisesRegex(ValueError, 'Aggregate filing area differs'):
+            self.build(curation)
+        filing['areaEvidence']['recitedTotalM2'] = 3410
+        filing['leaseEvidence'][0]['parcelIds'].append('212670000D0650')
+        with self.assertRaisesRegex(ValueError, 'Lease outside filing'):
+            self.build(curation)
+
+    def test_hor_account_area_is_not_doubled_or_promoted_to_a_parcel_lease(self):
+        source = next(s for s in self.curation['sources'] if s['id'] == 'hor-accounts')
+        self.assertEqual(source['assetAreaEvidence']['areaM2'], 3417)
+        self.assertEqual(len(source['assetAreaEvidence']['assetCategories']), 2)
+        self.assertFalse(source['assetAreaEvidence']['parcelReferencesStated'])
+        for row in self.build()['parcels']:
+            if row['reference'] in ('D 0813', 'D 0814'):
+                self.assertEqual(row['candidateLeads'], [])
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIn('hor-asset-area-2024', row['historyFindingIds'])
+                self.assertIsNone(row['currentFarmer'])
+
+    def test_disputed_location_is_excluded_even_when_only_one_alternative_is_listed(self):
+        curation = copy.deepcopy(self.curation)
+        holding = next(h for h in curation['producerHoldings'] if h['id'] == 'af-gros')
+        for areas in [['LES CHAMPS TRAVERSINS', 'LES LOÄCHAUSSES'], ['LES CHAMPS TRAVERSINS']]:
+            holding['namedAreas'] = areas
+            census = {a['sourceName']: a for a in self.build(curation)['namedAreaCensus']}
+            for area in areas:
+                entry = next(h for h in census[area]['holdings'] if h['holdingId'] == 'af-gros')
+                self.assertIsNone(entry['beyondCompanyRecordsM2'])
+                self.assertEqual(entry['sharedWith'], [])
+            self.assertEqual(census['LES CHAMPS TRAVERSINS']['publishedBeyondCompanyRecordsM2'], 2546)
+
+    def test_public_sources_add_research_but_never_a_farmer(self):
+        rows = {p['reference']: p for p in self.build()['parcels']}
+        # A 2007 court ruling names D 152 with its exact area; the pseudonymised family stays unnamed.
+        self.assertIn('court-d0152', rows['D 0152']['externalResearchIds'])
+        self.assertEqual(rows['D 0152']['candidateLeads'], [])
+        # Liger-Belair's exact Cruots area equals D0793 + D0795; a lead, not a farmer.
+        for ref in ('D 0793', 'D 0795'):
+            self.assertIn(('Domaine du Comte Liger-Belair', 'estate-area-exact-match'),
+                          {(c['name'], c['basis']) for c in rows[ref]['candidateLeads']})
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        curation = copy.deepcopy(self.curation)
+        curation['historicalOwnerLists'][0]['namedArea'] = 'LES POULAILLERES'
+        with self.assertRaisesRegex(ValueError, 'Unknown named area'):
             self.build(curation)
 
 
@@ -139,7 +377,9 @@ class ParcelEvidenceTests(unittest.TestCase):
         cls.features = json.loads(cls.asset)['features']
         cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
-        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history)
+        cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
+        cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
+        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales, cls.named_areas)
 
     def build(self, curation=None):
         return build_evidence(self.register, curation or self.curation, self.history, self.features)
@@ -160,7 +400,8 @@ class ParcelEvidenceTests(unittest.TestCase):
         self.assertIn('application', kinds('0093'))  # Grands-Échezeaux, named in the Anne Gros notice
         self.assertIn('suspended', kinds('0615'))
         self.assertTrue(any(i.get('via') == 'D0792' for i in parcels['212670000D0826']))
-        self.assertNotIn('212670000D0793', parcels)  # the 1.9 m² sliver is not a successor
+        # D0793 touched retired D0792 by only 1.9 m², so it is not a successor and inherits nothing from it.
+        self.assertFalse(any(i.get('via') == 'D0792' for i in parcels.get('212670000D0793', [])))
 
     def test_a_record_without_a_short_app_note_is_rejected(self):
         curation = copy.deepcopy(self.curation)
@@ -177,6 +418,25 @@ class ParcelEvidenceTests(unittest.TestCase):
         curation['exactParcelEvents'][0]['otherCruParcelIds'] = ['212670000D9999']
         with self.assertRaisesRegex(ValueError, 'Unknown other-cru parcel'):
             self.build(curation)
+
+    def test_research_date_comes_only_from_the_selected_source(self):
+        parcels = self.build()['parcels']
+        drouhin = next(i for i in parcels['212670000D0316'] if i['kind'] == 'research')
+        self.assertIsNone(drouhin['date'])  # 1998 vintage / 2001 guide, not a 2024 BODACC notice.
+        millot = next(i for i in parcels['212670000D0798'] if i['kind'] == 'research')
+        self.assertEqual(millot['date'], '2019-01-04')  # Named references are from the newer article.
+        vigot = next(i for i in parcels['212670000D0195'] if i['kind'] == 'research')
+        self.assertEqual(vigot['date'], '2006-11-17')
+        self.assertEqual(vigot['label'], 'Near-area reconstruction')
+
+    def test_filings_use_deed_dates_and_parcel_specific_lease_scope(self):
+        parcels = self.build()['parcels']
+        item = next(i for i in parcels['212670000D0316'] if i['kind'] == 'filing')
+        self.assertEqual(item['date'], '2024-02-09')
+        self.assertIn('726 m² of this 826 m² parcel', item['note'])
+        whole = next(i for i in parcels['212670000D0636'] if i['kind'] == 'filing')
+        self.assertIn('753 m² (this whole cadastral parcel)', whole['note'])
+        self.assertFalse(any(i['kind'] == 'filing' for i in parcels['212670000D0146']))
 
 
 if __name__ == '__main__':

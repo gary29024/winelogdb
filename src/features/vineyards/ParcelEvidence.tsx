@@ -1,6 +1,6 @@
 import {useEffect,useReducer,useState} from 'react';
 
-type Kind='authorisation'|'suspended'|'application'|'research'|'ownership'|'lineage'|'lead';
+type Kind='authorisation'|'suspended'|'application'|'filing'|'research'|'ownership'|'sale'|'lineage'|'lead';
 type Source={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
 export type EvidenceItem={kind:Kind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[]};
 export type ParcelEvidenceData={sources:Record<string,Source>;parcels:Record<string,EvidenceItem[]>};
@@ -21,11 +21,12 @@ function when(item:EvidenceItem){
  return {text:`${d} ${months[m-1]} ${y}`,iso:date};
 }
 const badges:Record<Kind,string>={authorisation:'Authorisation decision',suspended:'Application suspended',application:'Application received',
- research:'Published research',ownership:'Ownership record',lineage:'Parcel history',lead:'Weak lead'};
+ filing:'Company filing',research:'Published research',ownership:'Ownership record',sale:'Sale record',lineage:'Parcel history',lead:'Weak lead'};
 const groups:{id:string;heading:string;kinds:Kind[]}[]=[
  {id:'notices',heading:'Official notices',kinds:['authorisation','suspended','application']},
+ {id:'filings',heading:'Company filings and leases',kinds:['filing']},
  {id:'research',heading:'Published research',kinds:['research']},
- {id:'ownership',heading:'Ownership records',kinds:['ownership','lineage']},
+ {id:'ownership',heading:'Ownership and sales',kinds:['ownership','sale','lineage']},
  {id:'leads',heading:'Weak leads',kinds:['lead']},
 ];
 
@@ -77,7 +78,7 @@ export function ParcelEvidence({parcelId}:{parcelId:string}){
  const firstId=shown[0]?.id;
  return <section className="parcel-evidence" aria-label="History and evidence">
   <h5>History and evidence</h5>
-  <p className="village-map-note">Dated records about this parcel. They show notices, owners and published research, not who farms it today.</p>
+  <p className="village-map-note">Dated notices, ownership, sales, lease records and published research. Current farming still needs confirmation.</p>
   {shown.map(group=><details key={group.id} className={`parcel-evidence-group parcel-evidence-${group.id}`} open={choices.get(group.id)??group.id===firstId}>
    <summary onClick={event=>{event.preventDefault();choices.set(group.id,!(choices.get(group.id)??group.id===firstId));bump()}}>{group.heading} <span>{group.list.length}</span></summary>
    {group.id==='leads'&&<p className="village-map-note">Names and ownership context only. They are not evidence of who farms this parcel.</p>}
