@@ -71,7 +71,7 @@
         {
           "holdingId": "millot",
           "producer": "Domaine Jean-Marc Millot",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
@@ -114,7 +114,7 @@
         {
           "holdingId": "millot",
           "producer": "Domaine Jean-Marc Millot",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "unstated",
           "endedSeason": null,
@@ -143,7 +143,7 @@
         {
           "holdingId": "clerget",
           "producer": "Domaine Christian Clerget",
-          "publishedAreaHa": 1.09,
+          "publishedAreaHa": 19,
           "precision": "hundredth-hectare",
           "relation": "farmer",
           "endedSeason": null,
@@ -227,7 +227,7 @@
         {
           "holdingId": "cacheux",
           "producer": "Domaine Jacques Cacheux",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "owner",
           "endedSeason": null,
@@ -325,7 +325,7 @@
         {
           "holdingId": "cacheux",
           "producer": "Domaine Jacques Cacheux",
-          "publishedAreaHa": 1.0,
+          "publishedAreaHa": 1,
           "precision": "approximate",
           "relation": "owner",
           "endedSeason": null,
