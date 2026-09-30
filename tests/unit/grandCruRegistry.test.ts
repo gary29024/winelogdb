@@ -1,10 +1,10 @@
 import {describe,expect,it} from 'vitest';
 import {readdirSync,readFileSync} from 'node:fs';
-import {grandCruFor,grandCrus,parcelBundles,parcelManifestFor} from '../../src/lib/places/grandCruParcels/registry';
+import {cruOnVillageMap,grandCruFor,grandCrus,parcelBundles,parcelManifestFor} from '../../src/lib/places/grandCruParcels/registry';
 import {loadParcelEvidence,mergeParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence';
 import {parcelRightsSnapshot} from '../../src/lib/places/grandCruParcels/holders';
 
-type CruConfig={slug:string;name:string;parentFeatureId:string;bundle:string;evidenceFrom:string[];research?:object};
+type CruConfig={slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[];research?:object};
 type BundleConfig={id:string;crus:string[];villageMap:string;parcels:{parentFeatureIds:string[]}};
 const read=<T>(path:string)=>JSON.parse(readFileSync(path,'utf8')) as T;
 const configs=readdirSync('scripts/grand-crus').filter(name=>name.endsWith('.json')).map(name=>read<CruConfig>(`scripts/grand-crus/${name}`));
@@ -15,8 +15,8 @@ describe('Grand Cru registry',()=>{
   expect(grandCrus.map(c=>c.slug).sort()).toEqual(configs.map(c=>c.slug).sort());
   for(const config of configs){
    const cru=grandCruFor(config.parentFeatureId)!;
-   const bundle=bundles.find(b=>b.id===config.bundle)!;
-   expect(cru).toMatchObject({slug:config.slug,name:config.name,bundle:config.bundle,evidenceFrom:config.evidenceFrom,villageMap:bundle.villageMap});
+   expect(cru).toMatchObject({slug:config.slug,name:config.name,bundle:config.bundle,evidenceFrom:config.evidenceFrom,villageMaps:config.villageMaps});
+   for(const map of config.villageMaps)expect(grandCruFor(config.parentFeatureId,map)).toBe(cru);
    expect(parcelManifestFor(config.parentFeatureId)).toBe(parcelBundles[cru.bundle]);
    for(const source of config.evidenceFrom)expect(configs.find(c=>c.slug===source)?.research).toBeTruthy();
   }
@@ -28,6 +28,10 @@ describe('Grand Cru registry',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
   expect(grandCruFor('inao-denom-655')).toBeUndefined();
+  const multiMapCru={...grandCrus[0],villageMaps:['chassagne-montrachet','puligny-montrachet']};
+  expect(cruOnVillageMap(multiMapCru,'chassagne-montrachet')).toBe(true);
+  expect(cruOnVillageMap(multiMapCru,'puligny-montrachet')).toBe(true);
+  expect(cruOnVillageMap(multiMapCru,'vosne-romanee')).toBe(false);
  });
  it('keeps each cru’s producer links on its own rights snapshot and holders',()=>{
   const echezeaux=parcelRightsSnapshot('inao-denom-565')!,grands=parcelRightsSnapshot('inao-denom-645')!;

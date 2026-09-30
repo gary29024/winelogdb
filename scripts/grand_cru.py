@@ -67,6 +67,9 @@ def load_cru(slug):
     bundle = load_bundle(cru['bundle'])
     require(slug in bundle['crus'], f'{slug} is not listed in bundle {bundle["id"]}')
     require(cru['parentFeatureId'] in bundle['parcels']['parentFeatureIds'], f'{slug}: INAO feature absent from its bundle')
+    maps = cru['villageMaps']
+    require(maps and len(maps) == len(set(maps)), f'{slug}: villageMaps must be nonempty and unique')
+    require(set(maps) <= set(bundle_village_maps(bundle)), f'{slug}: village map absent from its bundle')
     for other in cru['evidenceFrom']:
         require((CONFIG_DIR / f'{other}.json').exists() and 'research' in read_json(CONFIG_DIR / f'{other}.json'),
                 f'{slug}: evidence source {other} has no research configured')
@@ -184,13 +187,67 @@ def in_cru(feature, parent):
     return any(o['parentFeatureId'] == parent for o in feature['properties']['overlaps'])
 
 
-def village_map(bundle):
-    """The exact reviewed village map (INAO boundaries) and its catalogue, never an unreviewed rebuild."""
-    entry = next(m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == bundle['villageMap'])
+def bundle_village_maps(bundle):
+    """The primary INAO source map and any other maps covered by this commune bundle."""
+    maps = [bundle['villageMap'], *bundle.get('additionalVillageMaps', [])]
+    require(len(maps) == len(set(maps)), f'{bundle["id"]}: duplicate village map')
+    return maps
+
+
+def _village_map(map_id):
+    """One exact reviewed village map (INAO boundaries) and its catalogue."""
+    entry = next(m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == map_id)
     catalogue = read_json(ROOT / 'src/lib/places' / entry['catalogue'])
     canonical = (ROOT / ('public' + catalogue['dataUrl'])).read_text(encoding='utf8').replace('\r\n', '\n').encode()
     require(sha256(canonical) == entry['sourceSha256'], 'Review changed parent source')
     return catalogue, canonical, entry['sourceSha256']
+
+
+def village_map(bundle, parent_feature_id=None):
+    """The bundle's primary map, or a map containing a particular INAO feature.
+
+    A cru can be shown on several village maps. Repeated copies of its official
+    feature must agree before any builder uses one of them.
+    """
+    found = []
+    for map_id in bundle_village_maps(bundle):
+        item = _village_map(map_id)
+        if parent_feature_id is None:
+            return item
+        feature = next((f for f in json.loads(item[1])['features'] if f['id'] == parent_feature_id), None)
+        if feature is not None:
+            found.append((item, feature))
+    require(found, f'{bundle["id"]}: {parent_feature_id} absent from every village map')
+    require(all(feature == found[0][1] for _, feature in found[1:]),
+            f'{bundle["id"]}: {parent_feature_id} differs between village maps')
+    return found[0][0]
+
+
+def bundle_parent_features(bundle):
+    """Collect every configured INAO feature across a bundle's village maps."""
+    wanted = set(bundle['parcels']['parentFeatureIds'])
+    parents, source_hashes = {}, {}
+    for map_id in bundle_village_maps(bundle):
+        _, canonical, digest = _village_map(map_id)
+        source_hashes[map_id] = digest
+        for feature in json.loads(canonical)['features']:
+            if feature['id'] not in wanted:
+                continue
+            previous = parents.setdefault(feature['id'], feature)
+            require(previous == feature, f'{feature["id"]} differs between village maps')
+    require(set(parents) == wanted, f'{bundle["id"]}: INAO features missing from village maps: {sorted(wanted - set(parents))}')
+    return parents, source_hashes
+
+
+def bundle_commune_names(bundle):
+    """Names from all reviewed village catalogues in a multi-map bundle."""
+    names = {}
+    for map_id in bundle_village_maps(bundle):
+        catalogue, _, _ = _village_map(map_id)
+        for commune in catalogue['communes']:
+            previous = names.setdefault(commune['id'], commune['name'])
+            require(previous == commune['name'], f'{commune["id"]} differs between village maps')
+    return names
 
 
 def write_or_check(path, content, check):

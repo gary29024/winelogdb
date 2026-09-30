@@ -81,7 +81,7 @@ def build(cru, bundle, manifest, directory):
     current = {f['id']: f for f in json.loads(parcel_asset(manifest))['features'] if in_cru(f, parent)}
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
     metric = {i: transform(project, shape(f['geometry'])) for i, f in current.items()}
-    _, canonical, _ = village_map(bundle)
+    _, canonical, _ = village_map(bundle, parent)
     cru_shape = transform(project, shape(next(f for f in json.loads(canonical)['features'] if f['id'] == parent)['geometry']))
 
     snapshots = [(r['asOf'], read_rights(pinned(directory, r['member'], r['sha256']), r['encoding'], allowed))

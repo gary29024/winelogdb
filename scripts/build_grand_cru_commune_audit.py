@@ -19,7 +19,7 @@ from pyproj import Transformer
 from shapely.geometry import shape
 from shapely.ops import transform, unary_union
 
-from grand_cru import (audit_file, cadastre_sources, communes, commune_audit_path, load_cru, parcel_report_path, parcels_file,
+from grand_cru import (audit_file, bundle_commune_names, cadastre_sources, communes, commune_audit_path, load_cru, parcel_report_path, parcels_file,
                        pinned, read_json, require, source_dir, village_map, write_or_check)
 
 MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would leave far more
@@ -27,10 +27,10 @@ MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would lea
 
 def build(cru, bundle, directory):
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
-    catalogue, canonical, _ = village_map(bundle)
+    _, canonical, _ = village_map(bundle, cru['parentFeatureId'])
     feature = next(f for f in json.loads(canonical)['features'] if f['id'] == cru['parentFeatureId'])
     boundary = transform(project, shape(feature['geometry']))
-    names = {c['id']: c['name'] for c in catalogue['communes']}
+    names = bundle_commune_names(bundle)
 
     def parcels(name, digest):
         return [transform(project, shape(f['geometry']))

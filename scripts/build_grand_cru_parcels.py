@@ -21,8 +21,8 @@ from shapely.geometry import shape
 from shapely.ops import transform
 
 from build_burgundy_village_map import ROOT, write_json
-from grand_cru import (cadastre_sources, communes, holder_index_path, load_cru, manifest_path, parcel_report_path,
-                       parcels_file, pinned, schema_file, sha256, source_dir, village_map)
+from grand_cru import (bundle_parent_features, cadastre_sources, communes, holder_index_path, load_cru, manifest_path,
+                       parcel_report_path, parcels_file, pinned, schema_file, sha256, source_dir)
 
 
 def parcel_id(row, allowed=('21267',)):
@@ -75,9 +75,8 @@ def main():
             assert f['properties']['commune'] == insee
             parcels.append(f)
     current_ids = {p['properties']['id'] for p in parcels}
-    _, canonical, expected = village_map(bundle)
-    parents = {f['id']: f for f in json.loads(canonical)['features'] if f['id'] in config['parentFeatureIds']}
-    assert set(parents) == set(config['parentFeatureIds'])
+    parents, source_hashes = bundle_parent_features(bundle)
+    expected = source_hashes[bundle['villageMap']]
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
     projected = {id: transform(project, shape(f['geometry'])) for id, f in parents.items()}
     selected, contacts = {}, []
@@ -154,6 +153,8 @@ def main():
               'proposedDomaineLinks': sum(l['status'] == 'proposed' for f in selected.values() for l in f['properties']['domaineLinks'])}
     manifest = {'dataUrl': data_url, 'sha256': digest, 'cadastreDate': config['cadastreDate'], 'rightsAsOf': config['rightsAsOf'],
                 'sourceUrl': config['cadastreUrl'], 'rightsUrl': config['rightsUrl'], 'schemaUrl': config['schemaUrl'],
+                'cadastreLicence': config['cadastreLicence'], 'cadastreLicenceUrl': config['cadastreLicenceUrl'],
+                'rightsLicence': config['rightsLicence'], 'rightsLicenceUrl': config['rightsLicenceUrl'],
                 'parentFeatureIds': config['parentFeatureIds'], 'minimumOverlapM2': config['minimumOverlapM2'], 'counts': counts}
     write_json(manifest_path(bundle), manifest)
     holder_index = {parent: sorted({r['holderId'] for f in selected.values()
@@ -166,6 +167,8 @@ def main():
               'byCru': {id: {'parcels': sum(any(o['parentFeatureId'] == id for o in f['properties']['overlaps']) for f in selected.values()),
                              'areaHa': sum(o['areaM2'] for f in selected.values() for o in f['properties']['overlaps'] if o['parentFeatureId'] == id) / 10000}
                         for id in parents}}
+    if len(source_hashes) > 1:
+        report['parentSourceSha256ByMap'] = source_hashes
     write_json(parcel_report_path(bundle), report)
     print(json.dumps({'bundle': bundle['id'], 'counts': counts, 'bytes': len(payload),
                       'gzipEquivalentBytes': report['gzipEquivalentBytes'], 'byCru': report['byCru']}))

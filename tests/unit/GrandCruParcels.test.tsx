@@ -58,6 +58,9 @@ describe('Cadastral parcel controls',()=>{
   expect(within(panel).getByText('Application received')).toBeTruthy();
   expect(within(panel).getByText('Anne Gros')).toBeTruthy();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
+  fireEvent.click(screen.getByText('About this data'));
+  expect(screen.getByRole('link',{name:manifest.cadastreLicence}).getAttribute('href')).toBe(manifest.cadastreLicenceUrl);
+  expect(screen.getByRole('link',{name:manifest.rightsLicence}).getAttribute('href')).toBe(manifest.rightsLicenceUrl);
  });
  it('renders nothing for a cru without parcel data',()=>{
   const view=render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-655"/>);

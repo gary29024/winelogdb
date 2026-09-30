@@ -16,8 +16,8 @@ import json
 from collections import Counter
 
 from build_grand_cru_evidence import build_evidence
-from grand_cru import (command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset, read_json, relative,
-                       require, research_path, sha256, ROOT)
+from grand_cru import (bundle_commune_names, command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset,
+                       read_json, relative, require, research_path, sha256, ROOT)
 
 
 class Context:
@@ -305,9 +305,8 @@ def cell(value):
 
 
 def commune_label(context):
-    names = {c['id']: c['name'] for c in context.catalogue['communes']}
     codes = sorted({p['commune'] for p in context.parcels})
-    listed = ', '.join(f'{code} ({names[code]})' for code in codes)
+    listed = ', '.join(f'{code} ({context.commune_names[code]})' for code in codes)
     return f"commune{'s' if len(codes) > 1 else ''} {listed}"
 
 
@@ -599,8 +598,7 @@ def outputs(context):
     context.features = features
     context.parcels = [f['properties'] for f in features
                        if any(o['parentFeatureId'] == context.cru['parentFeatureId'] for o in f['properties']['overlaps'])]
-    context.catalogue = read_json(ROOT / 'src/lib/places' / next(
-        m for m in read_json(ROOT / 'scripts/burgundy-lossless-map-report.json')['maps'] if m['id'] == context.bundle['villageMap'])['catalogue'])
+    context.commune_names = bundle_commune_names(context.bundle)
     register = build_register(inputs['manifest'], inputs['asset'], inputs['curation'], inputs['history'],
                               inputs['sales'], inputs['named_areas'], context)
     return {context.output: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
