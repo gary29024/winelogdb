@@ -149,13 +149,24 @@ The latest **six PDFs (174 pages)** bring the total to **35 supplied PDFs** and 
 
 [Six-file reading, provenance and remaining document requests](echezeaux-statutes-research.md#additional-six-file-batch-bouchy-lease-locator-and-scope-checks). No current farmer is verified.
 
+
+The next **eight free public/mirror filings (121 pages)** bring the supplied corpus to **43 PDFs** and **155 logged source entries**, with exact-reference filing coverage still **27 parcels**. One filing materially improves the Bouchy chronology without confirming execution:
+
+- **Bouchy 1995:** the 15 September resolutions authorize acquisition of **D0628/D0765/D0767, together 2,216 m² (22 a 16 ca)** in Les Treux and a long-term rural métayage lease to **Bernard Mondange**. Added to the 1993 **D0764/D0766, 1,260 m²** mandate, the two historical mandate groups total exactly the **same five parcels and 3,476 m²** later listed in the 2019 Jean Tardy recital. This explains the expansion from two references to five, but neither mandate proves that the purchases/leases were executed or that Mondange's relationship passed uninterrupted to Tardy.
+- **Wine/output rights are not farming evidence:** the 1998 share transfer preserves the seller's wine rights for the **1995-1997 harvests** after the company shares changed hands; the 2007/2008 transfers use the same structure for later vintages. A bottle, harvest entitlement or company-share transfer therefore cannot by itself identify the cultivator.
+- **Negative corporate results remain useful:** the March 2000 bundle only retains earlier mandates; the 2016 donation/share filings and 2018 statutes add no vineyard transaction; **Bouchon Pourpre's 20 January 2020 formation is cash-only**, with no D0673 contribution, acquisition schedule or vineyard lease in the formation annex.
+
+[Eight-file free-mirror reading and provenance](echezeaux-statutes-research.md#additional-eight-file-free-publicmirror-batch-bouchy-historical-scope).
+
 The app shows these as dated **Company filings and leases**, alongside ownership, notices and research. Contributions, lease recitals and mandates remain separate from verified current farming. Historical research uses an explicitly selected date source; an undated guide or estate page cannot inherit a supporting registry's date.
 
 ### Unofficial sources: company aggregators and the wine press
 
 Checked 29 September 2026.
 
-- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 35 PDFs across five batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
+Current research is intentionally limited to **free public or mirror sources**. Paid land-registry copies and direct domaine/CVI cooperation are deferred; mirror copies are treated as access paths to the underlying registry filing, not as independent corroboration.
+
+- **Company aggregators.** Pappers company pages load, but direct filing requests met Cloudflare checks. The owner subsequently supplied 43 PDFs across six batches; relevant full pages were visually reviewed, including the previously indexed-only HOR 2024 accounts. Links, dates, pages and hashes are recorded without republishing the PDFs. Separate executed acquisitions/leases and later amendments remain outstanding. Other blocked services remain access gaps.
 - **Guide Hachette** has 218 Échezeaux entries dating back to the 2001 edition. Two published areas equal exact cadastral sums:
   - Guide Hachette 2001 describes **52 a 63 ca in En Orveaux** for Joseph Drouhin's 1998 vintage. The 2024 ORVEAUX deed independently names the four parcels totalling **5,263 m² cadastral**, while explicitly giving **4,147 m² plantable and planted**, consistent with the importer's rounded 0.41 ha. The historical guide stays separate from this later deed; its date is not backfilled from a 2024 company notice.
   - François Gerbet had **18 a 76 ca in Les Quartiers de Nuits and Les Treux** (2006 vintage). **D0360 + D0508** total exactly 1 876 m². Winehog lists only part of D0508 for Berthaut-Gerbet in 2019, so the plot's use has changed since.
@@ -239,7 +250,7 @@ The Douane's [Fiche de compte](https://www.douane.gouv.fr/service-en-ligne/explo
 
 Minimum future claim record: relation type; printed reference; resolved parcel IDs and geometry snapshot/hash; whole/partial scope; legal entity and producer crosswalk evidence; document/page/dossier IDs; URL/hash/retrieval date/reuse terms; effective interval; verified-as-of date; reviewer; supersession/withdrawal reason. A review date must not substitute for an operation date. These verification features remain proposed work under #364.
 
-The smallest useful evidence request is dated confirmation for **D0168, D0169 and D0519** from Nicole Lamarche, plus the outcome/current operation of **D0177, D0178 and D0093** from Anne Gros. No outreach was sent.
+If direct outreach is enabled later, the smallest useful evidence request would be dated confirmation for **D0168, D0169 and D0519** from Nicole Lamarche, plus the outcome/current operation of **D0177, D0178 and D0093** from Anne Gros. For the current free-source phase, no outreach is planned.
 
 ## Implemented behaviour and deployment
 
