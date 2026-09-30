@@ -2,7 +2,7 @@
 
 Reviewed 30 September 2026. Facts are curated in [the research data](research/echezeaux-farming-curation.json); the original PDFs are linked below, not redistributed.
 
-Thirty-five uploaded PDFs have now been reviewed across five batches. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **27 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes names three further references with only a combined area, which matches their cadastral sum. The latest six-file batch supplies Bouchy’s lease publication reference, clarifies the separate Tardy lease and excludes unsupported inferences from Naudin and Bouchy Père et Filles corporate records. None alone verifies farming in the 2026 season.
+Forty-three uploaded PDFs have now been reviewed across six batches, including free registry-mirror copies. Exact-reference company deeds supply contribution, transfer, dated tenancy or purchase/lease mandates for **27 parcels**. Twenty-four individual areas match the pinned snapshot; Bonnes Pentes and the 1995 Bouchy mandate add aggregate-only schedules whose totals match the pinned cadastral sums. The latest eight-file batch reconstructs the historical Bouchy five-parcel mandate chain and records negative corporate/share findings without promoting them to current farming. None alone verifies farming in the 2026 season.
 
 Page references below are one-based PDF pages. ORVEAUX's printed page numbers are one lower than its PDF page numbers.
 
@@ -243,9 +243,35 @@ The two **12 June 2026** filings concern **GFA du Domaine Bouchy Père et Filles
 
 Article 8 (**statutes p.7**) and the accompanying two-page **10 June 2026 resolution** concern a company-share change, not a transfer or lease of vineyard land. These supplied copies do not connect this company to the unlocated 2008 Les Treux SAFER proposal. No holder or Échezeaux parcel assignment is added for it. This is a limit of these documents, not a claim about every asset the company may ever have owned. Source: [Bouchy Père et Filles filings](https://www.pappers.fr/entreprise/groupement-fonciere-agricole-du-domaine-bouchy-pere-et-fille-512057621#actes).
 
+## Additional eight-file free public/mirror batch: Bouchy historical scope
+
+Eight PDFs, 121 pages, were reviewed after #415 using free Pappers and Le Figaro Entreprises copies. Registry mirrors are treated as access paths to the underlying filing, not as independent corroboration. This batch raises the source log to **155 entries** while exact-reference filing coverage remains **27 parcels**.
+
+### 15 September 1995: the missing three-parcel Bouchy mandate
+
+The decisive new document is the **15 September 1995** written consultation retained in the filing deposited 8 November 1995. Resolution 3 authorizes the GFA to acquire from Mme Claude Thomas, épouse Robert Pelletier, an Échezeaux Les Treux vineyard of **22 ares 16 centiares (2,216 m²)**, section D **0628, 0765 and 0767**. Resolution 4 authorizes a **long-term rural métayage lease to Bernard Mondange** over that same vineyard.
+
+The deed recites only the combined 2,216 m²; the individual **309 + 1,619 + 288 m²** figures come from the pinned cadastre and sum exactly to the stated total. This is therefore stored with aggregate-only provenance.
+
+The earlier **22 June 1993** founding mandate names **D0764 + D0766, 1,260 m²** and also proposes a long-term métayage lease to Bernard Mondange. The two mandate groups therefore total **3,476 m² across D0628/D0764-D0767**, exactly the five-parcel scope later scheduled in the **5 August 2019 Jean Tardy recital**. This materially explains how the historical two-reference mandate expands to the later five-parcel holding. It does **not** prove that either purchase or Mondange lease was executed, or that the later Tardy tenancy succeeded directly from Mondange without intervening arrangements.
+
+Source: [free Le Figaro Entreprises registry mirror](https://entreprises.lefigaro.fr/domaine-bouchy-et-amis-75/entreprise-391735321).
+
+### Share transfers and corporate copies: useful limits
+
+- **14 April 1998 share transfer:** the seller keeps the wine rights attached to the vineyard for the **1995, 1996 and 1997 harvests** after the company shares change hands, including receipt, tasting, bottling and related costs. This is direct documentary support for keeping company-share ownership, harvest/output rights, bottling and farming separate.
+- **2007 and 2008 share transfers:** later deeds repeat the same pattern for vintage wine rights. They add no cadastral acquisition, lease amendment or tenant succession.
+- **15 March 2000 bundle:** the seat-transfer documents and retained statutes add no executed vineyard transaction; they repeat the old 1993 mandate.
+- **22 October 2016 donation/share records, filed in 2018:** these move company-share interests and update the share table, not vineyard parcels or tenancy.
+- **Bouchon Pourpre, 20 January 2020:** the bilingual formation deed permits vineyard acquisition, leasing, fermage and métayage, but the founders contribute only **EUR 10,000 in cash**. The formation annex records only bank-account opening. It provides no D0673 contribution, acquisition schedule or vineyard lease.
+
+These files reinforce the rule already used by the app: a share transfer, harvest entitlement, bottler name, company manager or broad corporate object is not current-farmer evidence.
+
 ## Highest-value next sources
 
-The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **147 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
+The register now has **127 parcels without a named candidate** and **109 with inventory records only**, with **155 logged source entries**. Source entries include overlapping copies, not 147 independent instruments. The first three deeds strengthened twelve leads; Coudray and the HOR transfer added four; Bouchy added five; the Grands Crus and Bonnes Pentes mandates add six, bringing **27 parcels** under reviewed filing evidence. No current farmer is confirmed. Work outward from exact references, and keep owner, tenant, cultivating entity, grape recipient and bottler distinct.
+
+Current phase: **free public and registry-mirror sources only**. Paid land-registry/SPF copies and direct domaine/CVI requests are deferred. In the table below, “obtain” means locate a freely accessible public or mirror copy; otherwise leave the gap open.
 
 | Priority | Obtain | What it could resolve |
 | --- | --- | --- |
@@ -257,9 +283,9 @@ The register now has **127 parcels without a named candidate** and **109 with in
 | 5: changed Gros and Liger-Belair holdings | Outcomes and parcel annexes for the 2022 Gros applications and their modern split references; subsequent decision/current operator for the April 2026 Liger-Belair suspension affecting D0673 and D0628/D0764-D0767 | Applications and suspended applications cannot be promoted to actual operation. A.-F. Gros's 26 ares also needs an exact reference or dated plan to resolve Traversins versus Loächausses. |
 | 6: private holdings and competing leads | Dated cadastral parcel schedules from the domaines, including a map for split/partial plots | Prioritise D0508's multiple-use scope; Feuillet/Duband versus Arnoux-Lachaux on D0677; the former D0143 BND successors D0898-D0902; and the remaining private holdings in En Orveaux. |
 
-A domaine can provide an appropriately shareable extract from Douane's [Fiche de compte / CVI](https://www.douane.gouv.fr/service-en-ligne/exploitation-viti-vinicole-fiche-de-compte). The official service, checked 29 September 2026, supplies planted/uprooted parcel information and CSV exports to enrolled users. This is a request for cooperation from the authorised holder, not a public bulk lookup. A concise dated statement from the operating entity can also help when a full extract is unnecessary.
+Paid land-registry copies and direct domaine/CVI cooperation are intentionally **deferred** in this phase. Continue with free company filings and mirrors (Pappers, Le Figaro Entreprises, Societe.com/RNE indexes), BODACC/legal notices, prefectural bulletins, open court decisions, DVF+/cadastre, archived producer/importer pages and other lawfully accessible public sources. A mirror copy is provenance for the same underlying filing, not a second independent source.
 
-For each response, seek the full commune/section/parcel reference; whole parcel or a precisely described portion; planted area; legal operating entity and SIREN where applicable; ownership/lease/métayage role; relevant start/end dates; season actually cultivated; and permission to use the supplied facts. For partial parcels, request a marked plan rather than colouring the whole cadastral polygon. No outreach has been sent.
+If direct outreach is enabled later, seek the full commune/section/parcel reference; whole parcel or a precisely described portion; planted area; legal operating entity and SIREN where applicable; ownership/lease/métayage role; relevant start/end dates; season actually cultivated; and permission to use the supplied facts. No outreach has been sent.
 
 ## Source provenance
 
@@ -334,3 +360,20 @@ Six PDFs, 174 pages. All six source records preserve actual act dates, filing-la
 | 4-GROUPEMENT-FONCIERE-AGRICOLE-DU-DOMAINE-BOUCHY-PERE-ET-FILLE-Copie-des-statuts-mis-à-jour-12-06-2026.pdf | 22 | 5bba4b4c200b0282c8c09f0c5cdcde1f6279da8434c3bd4578ecd98b7f7b5b8c |
 | 5-GROUPEMENT-FONCIERE-AGRICOLE-DU-DOMAINE-BOUCHY-PERE-ET-FILLE-Actes-du-12-06-2026.pdf | 2 | 32e9e1b7c0aec68213223b50441c5263f5895814d24581485c4a82596ffcf071 |
 | 6-GRPT-FONCIER-VITICOLE-TARDY-JEAN-ET-FILS-Actes-du-06-05-2003.pdf | 19 | a4c017dd8e7707b05588bd93b581d62c1f3d02a20c2a42148801eca141d37b07 |
+
+
+### Eight-file free public/mirror batch provenance
+
+Eight PDFs, 121 pages. The Le Figaro copies are registry mirrors and are not counted as independent corroboration of the underlying filing. All supplied copies were read without modification.
+
+| Original filename | Pages | SHA-256 |
+| --- | ---: | --- |
+| Domaine Bouchy Et Amis - Actes du 08-11-1995.pdf | 32 | 3f22bc178635bf83e78fa36812557a43463f11cc82f4fdfb7af2ebdaadc2df2c |
+| Domaine Bouchy Et Amis - Actes du 08-06-1998.pdf | 12 | 7c084077140a5f7d4f69d0d9b6ed59161a240259bb2f8daa4b2450702ba99e22 |
+| DOMAINE BOUCHY ET AMIS - Actes du 15-03-2000.pdf | 32 | 0149e749f0ee78f6d57204e0b614961c18ae8d43f4bb10b32506681aaf521e6a |
+| DOMAINE BOUCHY ET AMIS - Actes du 09-07-2007.pdf | 8 | 7f90efb83baf56badfa55e52535a6c5aa9e670d4f7db9c40311f28abbebf10f6 |
+| DOMAINE BOUCHY ET AMIS - Actes du 16-05-2008.pdf | 16 | f2528667be6655f32282077ed28bc076ae7c926118991a84f3d086db1955eaca |
+| DOMAINE BOUCHY ET AMIS - Actes du 06-12-2018.pdf | 18 | 9333342b1b213f39b2269df128a98bd16a25145704bc663e874bef3d3fe8b040 |
+| DOMAINE BOUCHY ET AMIS - Actes du 06-12-2018 2.pdf | 22 | 80a5480895fd0e3ffeda227d873f41054c34b99e4dbb27010b9310574a48d105 |
+| BOUCHON POURPRE - Acte sous seing privé 27-01-2020.pdf | 33 | 8e67404f937538f3a5bb0e793341b63fb3b1e039bf8a3ddcbbdcf83dc3f32d4f |
+
