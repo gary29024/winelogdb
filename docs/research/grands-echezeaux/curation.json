@@ -1389,17 +1389,17 @@
       "candidateNames": [
         "Domaine Henri de Villamont"
       ],
-      "basis": "management-and-estate-context",
+      "basis": "group-and-estate-context",
       "sourceIds": [
         "modot-stat-ccm",
-        "modot-stat-2002",
         "modot-official",
         "villamont-legal",
         "villamont-ge",
-        "villamont-sheet"
+        "villamont-sheet",
+        "winehog-sirugue"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Statutes identify SCI Domaine Vve Paul Modot (SIREN 778173500) and Schenk shareholders; Villamont’s legal page identifies Groupe Schenk. Estate figures differ (0.5 ha versus 16 ares). The provisional DGFiP ID is retained. Group context does not prove a lease or current farming.",
+      "finding": "Statutes tie SCI Domaine Vve Paul Modot (SIREN 778173500) to Groupe Schenk, named on Villamont’s legal page. Its recorded area, 0.434 ha (mapped 0.46 ha), matches a 2020 guide’s 0.43 ha; Villamont also states 0.5 ha and 16 ares. No lease or current farming found.",
       "legalIdentityCrosswalk": {
         "companySiren": "778173500",
         "basis": "Exact statutory abbreviation and registered office; confirmed by official SIREN search.",

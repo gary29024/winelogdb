@@ -1521,14 +1521,14 @@
         {
           "name": "Domaine Henri de Villamont",
           "holderId": "U18178008",
-          "basis": "management-and-estate-context",
+          "basis": "group-and-estate-context",
           "sourceIds": [
             "modot-stat-ccm",
-            "modot-stat-2002",
             "modot-official",
             "villamont-legal",
             "villamont-ge",
-            "villamont-sheet"
+            "villamont-sheet",
+            "winehog-sirugue"
           ]
         }
       ],
@@ -1584,14 +1584,14 @@
         {
           "name": "Domaine Henri de Villamont",
           "holderId": "U18178008",
-          "basis": "management-and-estate-context",
+          "basis": "group-and-estate-context",
           "sourceIds": [
             "modot-stat-ccm",
-            "modot-stat-2002",
             "modot-official",
             "villamont-legal",
             "villamont-ge",
-            "villamont-sheet"
+            "villamont-sheet",
+            "winehog-sirugue"
           ]
         }
       ],

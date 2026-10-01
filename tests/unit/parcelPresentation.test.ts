@@ -41,6 +41,10 @@ describe('parcel presentation without identity or farming promotion',()=>{
   expect(tenant).not.toHaveProperty('lead');
   expect(JSON.stringify(groups)).not.toMatch(/Domaine Tenant/);
  });
+ it('labels a parent-group estate link apart from a direct estate source',()=>{
+  const groups=groupParcelRightHolders([parcel('p',['group'])],'cru',{group:{...context,name:'Domaine Group',basis:'group-and-estate-context'}});
+  expect(groups[0]).toMatchObject({name:'Domaine Group',domaine:true,legalNames:['GFA Group'],basisLabel:'Estate source via group'});
+ });
  it('publishes research names and their actual sources, not verified-farmer fields',()=>{
   expect(evidence.holderDomains['775567928'].name).toMatch(/Faiveley/);
   expect(evidence.holderDomains['U32852627'].name).toMatch(/Drouhin/);

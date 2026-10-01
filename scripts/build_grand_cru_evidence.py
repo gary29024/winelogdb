@@ -24,6 +24,7 @@ LEAD_LABELS = {
     'estate-context': 'Estate context',
     'secondary-estate-context': 'Estate context (secondary source)',
     'management-and-estate-context': 'Management and estate context',
+    'group-and-estate-context': 'Parent group and estate context',
     'management-and-reported-estate-context': 'Management and reported estate context',
     'management-only-lead': 'Management link only',
     'bottler-only-lead': 'Bottler only',

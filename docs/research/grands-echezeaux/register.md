@@ -110,11 +110,11 @@ Sources: [Official company search: Nathalie Pacareau Lamarche](https://recherche
 
 Parcels (2): D 0617, D 0618.
 
-**Candidate to investigate:** Domaine Henri de Villamont. **Basis:** management-and-estate-context. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Henri de Villamont. **Basis:** group-and-estate-context. **Current farming:** unconfirmed.
 
-Statutes identify SCI Domaine Vve Paul Modot (SIREN 778173500) and Schenk shareholders; Villamont’s legal page identifies Groupe Schenk. Estate figures differ (0.5 ha versus 16 ares). The provisional DGFiP ID is retained. Group context does not prove a lease or current farming.
+Statutes tie SCI Domaine Vve Paul Modot (SIREN 778173500) to Groupe Schenk, named on Villamont’s legal page. Its recorded area, 0.434 ha (mapped 0.46 ha), matches a 2020 guide’s 0.43 ha; Villamont also states 0.5 ha and 16 ares. No lease or current farming found.
 
-Sources: [SCI Domaine Veuve Paul Modot: Schenk share changes and statutes](https://actes.ccm2.net/acte/3182750#page=1), [SCI Domaine Veuve Paul Modot: 2001 capital conversion and statutes](https://actes.ccm2.net/acte/6949588#page=1), [Official company search: SCI Domaine Veuve Paul Modot](https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1), [Henri de Villamont: legal notice](https://henridevillamont.fr/mentions-legales), [Henri de Villamont: domaine vineyards](https://henridevillamont.fr/fr/notre-travail-domaine-henri-de-villamont), [Henri de Villamont: Grands-Échezeaux technical sheet](https://www.henridevillamont.fr/sites/default/files/2018-09/FT%20Grands%20Echezeaux.pdf#page=1).
+Sources: [SCI Domaine Veuve Paul Modot: Schenk share changes and statutes](https://actes.ccm2.net/acte/3182750#page=1), [Official company search: SCI Domaine Veuve Paul Modot](https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1), [Henri de Villamont: legal notice](https://henridevillamont.fr/mentions-legales), [Henri de Villamont: domaine vineyards](https://henridevillamont.fr/fr/notre-travail-domaine-henri-de-villamont), [Henri de Villamont: Grands-Échezeaux technical sheet](https://www.henridevillamont.fr/sites/default/files/2018-09/FT%20Grands%20Echezeaux.pdf#page=1), [Winehog: Robert Sirugue Grands-Échezeaux and owner lists](https://winehog.org/terroir-insight-domaine-sirugue-grands-echezeaux-38335/).
 
 <a id="holder-036380046"></a>
 
@@ -196,8 +196,8 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 | D 0614 | Les Grands Échezeaux | 1831.23 | None | Unresolved | Unconfirmed |
 | D 0615 | Les Grands Échezeaux | 684.34 | [538257932](#holder-538257932) | Domaine du Comte Liger-Belair (reported-operator-relationship); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
 | D 0616 | Les Grands Échezeaux | 2460.81 | [538257932](#holder-538257932) | Domaine du Comte Liger-Belair (reported-operator-relationship); SCEA Domaine du Comte Liger-Belair (Vosne-Romanée) (suspended-application) | Unconfirmed |
-| D 0617 | Les Grands Échezeaux | 749.80 | [U18178008](#holder-u18178008) | Domaine Henri de Villamont (management-and-estate-context) | Unconfirmed |
-| D 0618 | Les Grands Échezeaux | 3840.94 | [U18178008](#holder-u18178008) | Domaine Henri de Villamont (management-and-estate-context) | Unconfirmed |
+| D 0617 | Les Grands Échezeaux | 749.80 | [U18178008](#holder-u18178008) | Domaine Henri de Villamont (group-and-estate-context) | Unconfirmed |
+| D 0618 | Les Grands Échezeaux | 3840.94 | [U18178008](#holder-u18178008) | Domaine Henri de Villamont (group-and-estate-context) | Unconfirmed |
 | D 0619 | Les Grands Échezeaux | 1040.42 | [036380046](#holder-036380046) | Domaine du Clos Frantin / Albert Bichot (estate-context) | Unconfirmed |
 | D 0681 | Les Grands Échezeaux | 1422.03 | [303514681](#holder-303514681) | Domaine Mongeard-Mugneret (estate-context) | Unconfirmed |
 | D 0682 | Les Grands Échezeaux | 1434.60 | None | Unresolved | Unconfirmed |

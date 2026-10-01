@@ -25,7 +25,7 @@ are dated evidence for further research, not farming links.
 | Parcels with no lead | 13 |
 | Published holdings compared by named area | 17 entries in Les Grands Échezeaux: 15 sized statements, including 1 métayer; 2 historical entries excluded from numeric comparison |
 | Verified farming links | 0 |
-| Raw / gzip payload | Parcels: shared Flagey file, 239,882 / 35,324 bytes (unchanged). Evidence: 28,216 / 5,298 bytes |
+| Raw / gzip payload | Parcels: shared Flagey file, 239,882 / 35,324 bytes (unchanged). Evidence: 28,201 / 5,316 bytes |
 
 Both files load only when "Parcel rights" is switched on. The parcel file is the one already
 used for Échezeaux; Grands-Échezeaux adds only its evidence file.
@@ -93,7 +93,8 @@ continued current holding is invented.
 - **Holders.** All nine leads were revisited. SEPV's 1994 vineyard contribution and completed
   capital resolutions strengthen the Drouhin link beyond shared management. Modot's
   statutory abbreviation and office establish a crosswalk to SIREN 778173500; Schenk group
-  sources support a Villamont lead, with no lease found. The Lamarche contribution and
+  sources support a Villamont lead, labelled "via group". Its two parcels' recorded area,
+  0.434 ha, matches a 2020 guide's 0.43 ha; no lease was found. The Lamarche contribution and
   reported 2022 Liger-Belair métayage are kept separate from the 2026 suspension. The rendered
   Romanée-Conti estate page states 3.5263 ha, resolving the browser access gap. Current estate
   sheets also strengthen Mongeard and Clos Frantin/Bichot. App domaine headings describe
