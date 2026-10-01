@@ -6,7 +6,7 @@ import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
 import { deepSearchSchema,type DeepSearchResult } from '../../src/lib/db/schema';
 import { adoptFriendResearch,assembleDeepSearch } from '../../src/lib/research/cache';
-import { sharedResearchForReader } from '../../src/lib/research/readableWine';
+import { recordSharedResearchComplete,sharedResearchForReader } from '../../src/lib/research/readableWine';
 import { isDeepSearchComplete } from '../../src/lib/research/completeness';
 import { tastingStructureSchema,type TastingStructure } from '../../src/lib/wine/tastingStructure';
 import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../../src/lib/wine/sparklingDetails';
@@ -103,7 +103,12 @@ export async function sharedWineResearch(db:D1Database,viewer:string,row:Record<
  const {targets,cache}=await sharedResearchForReader(db,viewer,row as Record<string,unknown>&{owner_id:unknown});
  // Showing a friend's research makes it the reader's own, as on the owner's page.
  if(cache.size)ctx?.waitUntil(adoptFriendResearch(db,viewer,cache).catch(()=>undefined));
- return cache.size?publishDeepSearch(assembleDeepSearch(cache,targets),vintage):publishedDeepSearch(row.deep_search_json,vintage);
+ if(!cache.size){const snapshot=publishedDeepSearch(row.deep_search_json,vintage);return snapshot&&{...snapshot,origin:'shared'}}
+ // Who paid for the sections shown: research the reader ran is theirs, not
+ // "shared research", even though the bottle came from a friend.
+ const shown=targets.map(target=>cache.get(target.scope)).filter((entry):entry is NonNullable<typeof entry>=>Boolean(entry));
+ const mine=shown.filter(entry=>!entry.contributorId||entry.contributorId===viewer).length;
+ return {...publishDeepSearch(assembleDeepSearch(cache,targets),vintage),origin:mine===shown.length?'yours':mine?'mixed':'shared'};
 }
 
 /**
@@ -374,7 +379,10 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
   const owner=String(wine.owner_id);
   const photos=(await env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
    .bind(shared[1],owner).all<{id:string}>()).results;
-  return json({...sharedWine(wine),deepSearch:await sharedWineResearch(env.DB,member.id,wine,ctx),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
+  const deepSearch=await sharedWineResearch(env.DB,member.id,wine,ctx),complete=Boolean(deepSearch&&deepSearch.complete!==false);
+  const recorded=recordSharedResearchComplete(env.DB,member.id,owner,shared[1],complete).catch(error=>console.error(JSON.stringify({event:'shared_research_flag_failed',error:(error as Error).message})));
+  if(ctx)ctx.waitUntil(recorded);else await recorded;
+  return json({...sharedWine(wine),deepSearch,photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
  }
  return null;
 }

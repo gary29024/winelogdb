@@ -303,8 +303,9 @@ describe('shared wines as recipient journal history',()=>{
   expect(detail).toMatchObject({tastingDate:'2026-08-14',venue:null,rating:null});
   const listed=await (await socialRoute(new Request('https://wine.example/api/shared/wines'),e,member('bob')))!.json() as {items:Record<string,unknown>[]};
   expect(listed.items.find(item=>item.id==='shared-facts')?.tastingDate).toBe('2026-08-14');
-  // bob's own date wins once he logs one.
-  database.sql.exec("INSERT INTO shared_wine_preferences(recipient_id,owner_id,wine_id,favorite,tasting_notes,tasting_date,updated_at) VALUES('bob','alice','shared-facts',0,'','2026-09-02','now')");
+  // bob's own date wins once he logs one. Viewing the researched bottle already
+  // gave him a preference row (its journal research mark), so this upserts.
+  database.sql.exec("INSERT INTO shared_wine_preferences(recipient_id,owner_id,wine_id,favorite,tasting_notes,tasting_date,updated_at) VALUES('bob','alice','shared-facts',0,'','2026-09-02','now') ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET tasting_date=excluded.tasting_date");
   const saved=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-facts'),e,member('bob')))!.json() as Record<string,unknown>;
   expect(saved.tastingDate).toBe('2026-09-02');
   expect(detail).toMatchObject({

@@ -10,6 +10,7 @@ import { cleanupOrphanCuvee,cuveeStyleFamily,ensureAllCuveeLinksForProducer,ensu
 import { ensureWineIdentity } from '../src/lib/wine/identity';
 import { setCuveePrimaryName } from '../src/lib/cuvees/primaryName';
 import { ensureProducerCatalogCuveesSeeded } from '../src/lib/cuvees/catalogSeed';
+import type { CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 import { changeCuveeCatalogLink,changeCuveeCatalogLinkSchema,createCuveeCatalogLink,createCuveeCatalogLinkSchema,getProducerCuveeCatalogState,unlinkCuveeCatalogLink,unlinkCuveeCatalogLinkSchema } from '../src/lib/cuvees/catalogLinks';
 import { listJournalPage } from '../src/lib/journal/list';
 import { listCellarPage } from '../src/lib/cellar/list';
@@ -198,11 +199,14 @@ app.get('/api/producers/:id',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(!response.ok)return response;
   try{
-    const body=await response.clone().json() as Record<string,unknown>&{sharedOnly?:boolean;aliases?:string[];tastedWines?:Array<Record<string,unknown>&{id:string;cuveeId:string|null;vintage:number|null;shared?:boolean}>};
+    const body=await response.clone().json() as Record<string,unknown>&{sharedOnly?:boolean;aliases?:string[];catalog?:unknown;catalogSource?:string;tastedWines?:Array<Record<string,unknown>&{id:string;cuveeId:string|null;vintage:number|null;shared?:boolean}>};
     // A shared-only producer is a read-through view of a friend's producer.
     // It has no recipient-owned cuvee identities to seed or repair.
     if(body.sharedOnly)return response;
-    const known=body.aliases&&body.tastedWines?{aliases:body.aliases,wines:body.tastedWines.filter(wine=>!wine.shared).map(wine=>({id:wine.id,cuvee_id:wine.cuveeId,vintage:wine.vintage}))}:undefined;
+    // The imported LWIN range stands in for a missing researched one, so its
+    // wines must be linkable as well.
+    const displayCatalog=body.catalogSource==='lwin'&&Array.isArray(body.catalog)?body.catalog as CatalogPresentationLike[]:undefined;
+    const known=body.aliases&&body.tastedWines?{aliases:body.aliases,wines:body.tastedWines.filter(wine=>!wine.shared).map(wine=>({id:wine.id,cuvee_id:wine.cuveeId,vintage:wine.vintage})),displayCatalog}:undefined;
     const state=await getProducerCuveeCatalogState(c.env.DB,owner,producerId,known);
     const tastedWines=(body.tastedWines??[]).map(wine=>{const wineId=String(wine.id??'');return {...wine,cuveeId:typeof wine.cuveeId==='string'?wine.cuveeId:null,catalogCuveeId:state.wineCatalogTargets[wineId]??null}});
     const headers=new Headers(response.headers);headers.delete('Content-Length');headers.set('Content-Type','application/json; charset=utf-8');

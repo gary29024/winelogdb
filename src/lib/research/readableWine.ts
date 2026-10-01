@@ -120,3 +120,16 @@ export async function sharedResearchForReader(db:D1Database,reader:string,source
   }
   return {targets,cache};
 }
+
+/**
+ * Keep the reader's journal mark for a shared bottle in step with the report
+ * they were just shown. The owner's research_complete never changes for
+ * research the reader ran, so the reader's own flag lives on their preference
+ * row. A row is only created to record a completed report.
+ */
+export async function recordSharedResearchComplete(db:D1Database,viewer:string,owner:string,wineId:string,complete:boolean){
+ const now=new Date().toISOString();
+ if(complete)await db.prepare(`INSERT INTO shared_wine_preferences(recipient_id,owner_id,wine_id,favorite,research_complete,created_at,updated_at) VALUES(?,?,?,0,1,?,?)
+   ON CONFLICT(recipient_id,owner_id,wine_id) DO UPDATE SET research_complete=1 WHERE shared_wine_preferences.research_complete<>1`).bind(viewer,owner,wineId,now,now).run();
+ else await db.prepare('UPDATE shared_wine_preferences SET research_complete=0 WHERE recipient_id=? AND owner_id=? AND wine_id=? AND research_complete<>0').bind(viewer,owner,wineId).run();
+}
