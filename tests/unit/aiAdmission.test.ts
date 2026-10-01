@@ -2,6 +2,7 @@ import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { realD1 } from './support/realD1';
 import { quote,reserve } from '../../worker/multiUser/credits';
 import { stamp,type Member } from '../../worker/multiUser/common';
+import { createWineResearchRun,updateWineResearchRun } from '../../src/lib/research/backgroundJobs';
 
 const owner:Member={id:'owner',email:'owner@example.com',display_name:'Owner',role:'owner',status:'active'};
 const member:Member={id:'member',email:'member@example.com',display_name:'Member',role:'member',status:'active'};
@@ -59,6 +60,45 @@ describe('unlimited owner AI admission',()=>{
   await (await prepareResearch('owner-one')).run();const before=counts();
   await expect(second.run()).rejects.toMatchObject({status:409,message:expect.stringContaining('Another research request in your account')});
   expect(counts()).toEqual(before);
+ });
+ it('clears a terminal operation’s leftover locks before quoting another wine',async()=>{
+  const {operation}=await (await prepareResearch('owner-one')).run();
+  database.sql.prepare("UPDATE credit_operations SET status='failed' WHERE id=?").run(operation.id);
+  const next=await prepareResearch('owner-overlap');
+  expect(next.q.units.length).toBeGreaterThan(0);
+  expect(database.sql.prepare('SELECT count(*) AS n FROM research_work WHERE operation_id=?').get(operation.id)!.n).toBe(0);
+  expect((await next.run()).existing).toBe(false);
+ });
+ it('releases an abandoned reservation that never dispatched or submitted work',async()=>{
+  const {operation}=await (await prepareResearch('owner-one')).run();
+  database.sql.prepare('UPDATE credit_operations SET created_at=? WHERE id=?').run(new Date(Date.now()-16*60_000).toISOString(),operation.id);
+  const next=await prepareResearch('owner-overlap');
+  expect(database.sql.prepare('SELECT status FROM credit_operations WHERE id=?').get(operation.id)!.status).toBe('failed');
+  expect((await next.run()).operation.status).toBe('reserved');
+ });
+ it('releases the same wine’s undispatched reservation instead of reusing it indefinitely',async()=>{
+  const {operation}=await (await prepareResearch('owner-one')).run();
+  database.sql.prepare('UPDATE credit_operations SET created_at=? WHERE id=?').run(new Date(Date.now()-16*60_000).toISOString(),operation.id);
+  const next=await prepareResearch('owner-one');
+  expect(next.q.existingOperationId).toBeUndefined();expect(next.q.units).toHaveLength(4);
+  expect(database.sql.prepare('SELECT status FROM credit_operations WHERE id=?').get(operation.id)!.status).toBe('failed');
+  expect((await next.run()).operation.id).not.toBe(operation.id);
+ });
+ it('reconciles a failed same-wine run before deciding that an old request is still active',async()=>{
+  const {operation}=await (await prepareResearch('owner-one')).run();
+  await createWineResearchRun(database.db,'owner','owner-one','none','known-failed-run',operation.id);
+  await updateWineResearchRun(database.db,'owner','known-failed-run','failed','Grounding was unavailable','failed');
+  const next=await prepareResearch('owner-one');
+  expect(next.q.existingOperationId).toBeUndefined();expect(next.q.units).toHaveLength(4);
+  expect(database.sql.prepare('SELECT status FROM credit_operations WHERE id=?').get(operation.id)!.status).toBe('failed');
+  expect((await next.run()).existing).toBe(false);
+ });
+ it('describes an uncertain previous request as a hold instead of claiming another run is active',async()=>{
+  const {operation}=await (await prepareResearch('owner-one')).run();
+  database.sql.prepare("UPDATE credit_operations SET status='review' WHERE id=?").run(operation.id);
+  database.sql.prepare("INSERT INTO provider_operations(id,operation_id,state,created_at,updated_at) VALUES(?,?,'uncertain',?,?)").run('held-provider',operation.id,stamp(),stamp());
+  await expect(prepareResearch('owner-overlap')).rejects.toMatchObject({status:409,message:expect.stringContaining('previous research request')});
+  expect(database.sql.prepare('SELECT count(*) AS n FROM research_work WHERE operation_id=?').get(operation.id)!.n).toBeGreaterThan(0);
  });
 });
 

@@ -1,5 +1,6 @@
 import { AI_MODELS } from '../ai/policy';
 import { producerRangeAllowed } from './rangeAccess';
+import { lwinRangeFirst } from './lwinRange';
 import { gatewayErrorDetails,isRetryableZaiProviderCode } from './gatewayError';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
 import { RESEARCH_STALE_DAYS } from '../research/freshness';
@@ -221,6 +222,7 @@ export async function tryDirectProducerRangeRefresh(env:Env,owner:string,produce
   // batch researcher, so it has to ask the same question rather than inherit
   // an answer it never sees.
   if(!await producerRangeAllowed(env.DB,owner))return {handled:false as const,reason:'wine range research is not available on this account'};
+  if(!rangeOnly&&await lwinRangeFirst(env.DB,owner,producerId))return {handled:false as const,reason:'LWIN range shown first'};
   if(refreshProfile)return {handled:false as const,reason:'profile refresh requested'};if(!directRangeProviders(env).length)return {handled:false as const,reason:'no cheap provider'};
   const row=await env.DB.prepare('SELECT canonical_name,profile,home_country,profile_researched_at,official_website_url,catalog_json,catalog_researched_json,catalog_sources_json,sources_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<ProducerRow>();if(!row)return {handled:false as const,reason:'producer not found'};
   if(!rangeOnly&&!profileFreshForDirectRange(row))return {handled:false as const,reason:'profile requires research'};

@@ -43,6 +43,8 @@ export type SharedWine = SharedWineExperience&{
   */
  producerId:string|null;
  wineName:string;
+ /** Day the owner's first dated photo was taken; only a default for the viewer's own drinking date. */
+ photoDate?:string|null;
  vintage:number|null;
  vintageKind?:'vintage'|'non_vintage'|'multi_vintage'|'unknown'|null;
  releaseDesignation?:string|null;

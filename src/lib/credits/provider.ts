@@ -15,10 +15,10 @@ export type CreditExemption={exempt:true;reason:string};
  */
 export type CreditDenial={deny:true;reason:string};
 export type ProviderAuthorization=CreditContext|CreditExemption|CreditDenial;
-/** An unresolved send blocks retries and model fallbacks for the whole operation. */
+/** An unresolved send fences its namespace; legacy receipts fence the whole operation. */
 export async function providerNeedsReconciliation(context?:ProviderAuthorization){
  if(!context||!('operationId' in context))return false;
- return Boolean(await context.db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state IN ('submitted','uncertain') LIMIT 1").bind(context.operationId).first());
+ return Boolean(await context.db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND namespace IN ('',?) AND state IN ('submitted','uncertain') LIMIT 1").bind(context.operationId,context.namespace).first());
 }
 const exempted=(value?:ProviderAuthorization):value is CreditExemption=>Boolean(value&&'exempt' in value);
 const denied=(value?:ProviderAuthorization):value is CreditDenial=>Boolean(value&&'deny' in value);
@@ -58,12 +58,12 @@ export async function durableProvider(context:ProviderAuthorization|undefined,ke
  if(existing?.state==='saved')return new Response(existing.response_body,{status:existing.response_status,headers:JSON.parse(existing.response_headers)});
  if(context.replayOnly)throw new ApiError(409,'Saved provider response is unavailable for recovery');
  if(existing){await db.prepare("UPDATE provider_operations SET state='uncertain',updated_at=? WHERE id=? AND state='submitted'").bind(stamp(),id).run();throw new ApiError(409,'Provider completion needs reconciliation')}
- if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND state='uncertain' LIMIT 1").bind(operationId).first())throw new ApiError(409,'Provider completion needs reconciliation');
- const claimed=await db.prepare(`INSERT OR IGNORE INTO provider_operations(id,operation_id,state,created_at,updated_at)
-  SELECT ?,?,'submitted',?,? FROM credit_operations o WHERE o.id=? AND o.status IN ('reserved','running','review')
+ if(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND namespace IN ('',?) AND state='uncertain' LIMIT 1").bind(operationId,context.namespace).first())throw new ApiError(409,'Provider completion needs reconciliation');
+ const claimed=await db.prepare(`INSERT OR IGNORE INTO provider_operations(id,operation_id,namespace,state,created_at,updated_at)
+  SELECT ?,?,?,'submitted',?,? FROM credit_operations o WHERE o.id=? AND o.status IN ('reserved','running','review')
   AND (o.path NOT LIKE '/api/wines/%/deep-search' OR o.created_at>=?)
-  AND NOT EXISTS(SELECT 1 FROM provider_operations p WHERE p.operation_id=o.id AND p.state='uncertain')`)
-  .bind(id,operationId,stamp(),stamp(),operationId,new Date(Date.now()-WINE_RESEARCH_RECOVERY_MS).toISOString()).run();
+  AND NOT EXISTS(SELECT 1 FROM provider_operations p WHERE p.operation_id=o.id AND p.namespace IN ('',?) AND p.state='uncertain')`)
+  .bind(id,operationId,context.namespace,stamp(),stamp(),operationId,new Date(Date.now()-WINE_RESEARCH_RECOVERY_MS).toISOString(),context.namespace).run();
  if(!claimed.meta.changes)throw new ApiError(409,'Provider operation already submitted or no longer available');
  try{
   const response=await send(),bytes=await boundedBytes(response.body,1_800_000),body=new TextDecoder().decode(bytes);

@@ -24,7 +24,44 @@ async function recoverSavedWineReply(db:D1Database,op:CreditOperation){
  return true;
 }
 
-export type JobEnvelope={owner?:string;kind?:string;requestId?:string;sessionId?:string;campaignId?:string;cleanup?:boolean;_creditOperationId?:string;_outboxId?:string};
+/** A late producer receipt is replayed independently of other campaign holds. */
+async function recoverSavedProducerReply(db:D1Database,op:CreditOperation){
+ if(op.status!=='review'||!op.run_id||!/^\/api\/producers\/(?:research-batch|[^/]+\/research)$/.test(op.path)||Date.parse(op.created_at)<Date.now()-WINE_RESEARCH_RECOVERY_MS)return false;
+ const jobs=await db.prepare(`SELECT b.id,b.target_id,b.request_id FROM research_batch_jobs b
+  JOIN vertex_batch_emulation_jobs v ON 'vertex-batches/'||v.id=b.google_batch_name
+  JOIN producer_research_runs r ON r.owner_id=b.owner_id AND r.request_id=b.request_id AND r.status='failed'
+  WHERE b.owner_id=? AND b.target_kind='producer' AND b.status='failed' AND v.requests_json<>'[]' AND v.state='JOB_STATE_SUCCEEDED'
+  AND NOT EXISTS(SELECT 1 FROM provider_operations p WHERE p.operation_id=? AND p.namespace IN ('','queue','queue:producer:'||b.target_id) AND p.state IN ('submitted','uncertain'))
+  AND NOT EXISTS(SELECT 1 FROM queue_outbox q WHERE q.id='producer-recovery:'||?||':'||b.id)
+  AND EXISTS(SELECT 1 FROM json_each(?) u WHERE json_extract(u.value,'$.targetId')=b.target_id)
+  AND (b.request_id=? OR (?='/api/producers/research-batch' AND EXISTS(
+    SELECT 1 FROM producer_research_campaign_items i JOIN producer_research_campaigns c ON c.id=i.campaign_id
+    WHERE c.id=? AND c.status<>'cancelled' AND i.producer_id=b.target_id AND i.request_id=b.request_id)))
+  ORDER BY b.attempt DESC LIMIT 6`).bind(op.user_id,op.id,op.id,op.units_json,op.run_id,op.path,op.run_id).all<{id:string;target_id:string;request_id:string}>();
+ for(const job of jobs.results){
+  if(await db.prepare(`SELECT 1 FROM provider_operations WHERE operation_id=? AND namespace IN ('','queue',?)
+   AND state IN ('submitted','uncertain') LIMIT 1`).bind(op.id,`queue:producer:${job.target_id}`).first())continue;
+  const id=`producer-recovery:${op.id}:${job.id}`;
+  if(await db.prepare('SELECT id FROM queue_outbox WHERE id=?').bind(id).first())continue;
+  try{const result=await db.batch([
+   outboxStatement(db,{kind:'producer_batch_poll',owner:op.user_id,producerId:job.target_id,requestId:job.request_id,jobId:job.id,pollCount:0},op.id,0,id),
+   db.prepare("UPDATE research_batch_jobs SET status='running',updated_at=? WHERE id=? AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),job.id,id),
+   db.prepare("UPDATE producer_research_runs SET status='running',stage='saving',completed_at=NULL,updated_at=? WHERE owner_id=? AND request_id=? AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.user_id,job.request_id,id),
+   ...(op.path==='/api/producers/research-batch'?[
+    db.prepare("UPDATE producer_research_campaign_items SET status='running',message=NULL,updated_at=? WHERE campaign_id=? AND producer_id=? AND request_id=? AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.run_id,job.target_id,job.request_id,id),
+    db.prepare("UPDATE producer_research_campaigns SET status='running',finished_at=NULL,updated_at=? WHERE id=? AND status<>'cancelled' AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.run_id,id),
+    outboxStatement(db,{kind:'producer_campaign_tick',owner:op.user_id,campaignId:op.run_id},op.id,30,`${id}:tick`)
+   ]:[]),
+   db.prepare("UPDATE credit_operations SET status='running',updated_at=? WHERE id=? AND status='review' AND EXISTS(SELECT 1 FROM queue_outbox WHERE id=?)").bind(stamp(),op.id,id)
+  ]);
+  if(!result[0].meta.changes)return false;
+  }catch(error){if(!await db.prepare('SELECT id FROM queue_outbox WHERE id=?').bind(id).first())throw error}
+  return true;
+ }
+ return false;
+}
+
+export type JobEnvelope={owner?:string;kind?:string;producerId?:string;requestId?:string;sessionId?:string;campaignId?:string;cleanup?:boolean;_creditOperationId?:string;_outboxId?:string};
 /** Only these concrete handlers are cleanup-only; an arbitrary cleanup flag is not an AI exemption. */
 export const isQueueCleanup=(job:JobEnvelope)=>job.kind==='recognition_batch_cleanup'||job.kind==='champagne_extraction'&&job.cleanup===true;
 export function durableQueue(queue:Queue<unknown>,db:D1Database,operationId?:string):Queue<unknown>{
@@ -57,6 +94,7 @@ export async function flushOutbox(db:D1Database,queue:Queue<unknown>,operationId
 export async function maintainOperation(db:D1Database,op:CreditOperation){
  if(!['reserved','running','review'].includes(op.status))return;
  if(await recoverSavedWineReply(db,op))return;
+ if(await recoverSavedProducerReply(db,op))return;
  const winePath=op.path.match(/^\/api\/wines\/([^/]+)\/deep-search$/);
  if((op.status==='reserved'||winePath)&&Date.parse(op.created_at)<Date.now()-15*60_000&&!await db.prepare('SELECT id FROM queue_outbox WHERE operation_id=? LIMIT 1').bind(op.id).first()){
   // HTTP can stop after marking the operation running but before dispatch.
@@ -108,7 +146,7 @@ export async function maintainJobs(db:D1Database,queue:Queue<unknown>,bucket?:R2
   for(const row of pending.results){await meteredBucket(bucket,db,row.owner_id).delete(row.object_key);await db.prepare('DELETE FROM storage_deletions WHERE object_key=?').bind(row.object_key).run()}
  }
 }
-export async function claimDelivery(db:D1Database,id:string,leaseSeconds=600){
+export async function claimDelivery(db:D1Database,id:string,leaseSeconds=720){
  const leaseUntil=seconds()+leaseSeconds;
  return (await db.prepare('INSERT INTO queue_deliveries(id,lease_until) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET lease_until=excluded.lease_until WHERE queue_deliveries.done=0 AND queue_deliveries.lease_until<?').bind(id,leaseUntil,seconds()).run()).meta.changes?leaseUntil:false;
 }

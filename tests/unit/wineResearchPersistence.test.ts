@@ -160,7 +160,7 @@ describe('member Deep Search through HTTP and the queue',()=>{
   expect(await flow.status()).toMatchObject({status:success?'complete':'failed',retryBlocked:false});expect(flow.provider).not.toHaveBeenCalled();
  });
  it('does not let an expired delivery release its successor lease',async()=>{
-  const first=await claimDelivery(database.db,'lease');vi.setSystemTime(Date.now()+601_000);
+  const first=await claimDelivery(database.db,'lease');vi.setSystemTime((Number(first)+1)*1000);
   await claimDelivery(database.db,'lease');
   const successor=database.sql.prepare('SELECT * FROM queue_deliveries').get();
   await finishDelivery(database.db,'lease',true,first);

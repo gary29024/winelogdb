@@ -128,6 +128,7 @@ export function ProducerDetailPage(){
  // The wine range is the expensive half of producer research, so members get the
  // profile, practices and contacts only. There is nothing to refresh range-only.
  const rangeAllowed=!memberView&&!producer?.sharedOnly;
+ const lwinRange=rangeAllowed&&producer?.catalogSource==='lwin';
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
  async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
@@ -340,11 +341,12 @@ export function ProducerDetailPage(){
   finally{setConfirmingName('')}
  }
 
- async function runResearch(refreshProfile=false){
+ async function runResearch(refreshProfile=false,verifyRange=false){
   if(producer?.sharedOnly)return;
-  const rangeOnly=rangeAllowed&&Boolean(producer?.researchedAt)&&!refreshProfile;
-  const scope=rangeAllowed?'current/recent wine range':'producer-wide winemaking practices';
-  if(!confirm((rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+`Research this producer’s home location, public contacts and ${scope}? The job runs in the background and continues even if you close WineLog.`)))return;
+  const rangeOnly=verifyRange||rangeAllowed&&Boolean(producer?.researchedAt)&&!refreshProfile;
+  // An LWIN range is already shown; the range search runs only from "Verify range".
+  const scope=rangeAllowed&&!lwinRange?'current/recent wine range':'producer-wide winemaking practices';
+  if(!confirm((verifyRange?'Check this LWIN range against the producer’s own pages? This runs a paid range search; the job continues in the background if you close WineLog.':rangeOnly?'Refresh this producer’s wine range only? AI usage may be incurred. The job continues in the background if you close WineLog.':(refreshProfile?'Refresh the saved profile even if it is still current? This uses an additional research request. ':'')+`Research this producer’s home location, public contacts and ${scope}? The job runs in the background and continues even if you close WineLog.`)))return;
   setError('');setNotice('');
   try{
    const accepted=await researchProducer(id,undefined,refreshProfile,rangeOnly);if(accepted.cached){window.location.reload();return}if(accepted.waitingForFriend){setFriendOperation(accepted.creditOperationId??'');return}const run=await getProducerResearchStatus(id,accepted.researchRequestId);
@@ -429,14 +431,19 @@ export function ProducerDetailPage(){
    </li>)}</ul>
   </section>}
   {error&&<p className="producer-error" role="alert">{error}</p>}{friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>window.location.reload()}/>}{notice&&<p className="producer-notice" role="status">{notice}</p>}
-  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div>{!producer.sharedOnly&&(memberView?<button type="button" className="primary" disabled={researching} onClick={()=>void runResearch(hasProducerResearch||inheritedResearch)}>{researching?'Research running…':hasOwnProducerResearch?'Refresh profile':'Research producer'}</button>:<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{hasProducerResearch&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>)}</div>
+  <section className="detail-section"><div className="producer-section-title"><div><p className="section-label">Producer research</p><h2>{rangeAllowed?'Profile & range':'Producer profile'}</h2></div>{!producer.sharedOnly&&(memberView?<button type="button" className="primary" disabled={researching} onClick={()=>void runResearch(hasProducerResearch||inheritedResearch)}>{researching?'Research running…':hasOwnProducerResearch?'Refresh profile':'Research producer'}</button>:lwinRange?(hasProducerResearch
+   // An LWIN range is shown unverified. Verifying it is the paid range search and
+   // goes through the same research route and credit confirmation as the others.
+   ?<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch(false,true)}>{researching?'Research running…':'Verify wine range'}</button><button type="button" disabled={researching} onClick={()=>void runResearch(true)}>Refresh profile</button></>
+   :<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':'Research producer'}</button><button type="button" disabled={researching} onClick={()=>void runResearch(false,true)}>Verify wine range</button></>)
+   :<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{hasProducerResearch&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>)}</div>
    {researchRun&&(!memberView||researchRun.status!=='complete')&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong>{technicalView&&<span>{researchRun.message}</span>}</div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>{technicalView?'Request':'Support ID'} {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
    {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>{producer.sharedOnly?'No shared producer profile is available yet.':rangeAllowed?'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.':'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices and header image.'}</p>}
    {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p>{!memberView&&<small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small>}</div>}
    <ProducerContacts producer={producer} onChanged={reload} readOnly={producer.sharedOnly}/>
    {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
-     <div><SectionLabel>Wine range</SectionLabel><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} {axis==='style'?`style${catalogGroups.length===1?'':'s'}`:axis==='village'?`village${catalogGroups.length===1?'':'s'}`:`tier${catalogGroups.length===1?'':'s'}`}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong></div>
+     <div><SectionLabel>Wine range</SectionLabel><strong>{catalogTotals.wines} wine{catalogTotals.wines===1?'':'s'} · {catalogGroups.length} {axis==='style'?`style${catalogGroups.length===1?'':'s'}`:axis==='village'?`village${catalogGroups.length===1?'':'s'}`:`tier${catalogGroups.length===1?'':'s'}`}{catalogTotals.tasted?` · ${catalogTotals.tasted} tasted`:''}</strong>{lwinRange&&<small className="producer-range-source">From the LWIN catalogue · not yet verified</small>}</div>
      <button type="button" className="range-toggle-all" onClick={toggleAllCategories}>{allCategoriesCollapsed?'Expand all':'Collapse all'}</button>
     </div>
     {/* One set of wines, three questions. Whichever axis separates them opens
@@ -469,7 +476,7 @@ export function ProducerDetailPage(){
         <div style={{minWidth:0}}><strong>{row.displayName}</strong>{row.meta.length>0&&<span className="catalog-meta">{row.meta.join(' · ')}</span>}{row.note.short&&<small className="catalog-notes" style={{overflowWrap:'anywhere',wordBreak:'break-word'}} title={row.note.full}>{row.note.short}</small>}</div>
         <div className="catalog-row-actions">
          {Boolean(row.identity?.tastedCount)&&<span className="tasted-badge">Tasted{row.releaseCount?` · ${row.releaseCount} release${row.releaseCount===1?'':'s'}`:row.identity&&row.identity.tastedCount>1?` · ${row.identity.tastedCount}`:''}</span>}
-         {Boolean(row.decisionKey)&&<button type="button" className="catalog-fix" aria-expanded={fixing} onClick={()=>startFixing(row.decisionKey)}>{fixing?'Close':'Duplicate?'}</button>}
+         {Boolean(row.decisionKey)&&!lwinRange&&<button type="button" className="catalog-fix" aria-expanded={fixing} onClick={()=>startFixing(row.decisionKey)}>{fixing?'Close':'Duplicate?'}</button>}
         </div>
         {fixing&&<div className="catalog-fix-panel">
          <p>Is “{row.label}” a duplicate of another wine in this range, or not a real wine at all? Producer research keeps re-applying whichever you choose.</p>

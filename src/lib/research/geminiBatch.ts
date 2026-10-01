@@ -199,7 +199,10 @@ async function executeVertexEntry(env:GatewayRuntimeEnv,model:string,displayName
       // cannot guarantee completion if a transport/body reader ignores signals.
       const outcome=await Promise.race([
         (async()=>{
-          const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:Math.max(1,Math.floor(timeoutMs/1000)),...(entry.providerKey?{idempotencyKey:`${entry.providerKey}:${attempt}`}:{})});
+          // Let Vertex return its timeout response before our client deadline.
+          // A received error is retryable; aborting at the same instant loses
+          // the receipt and needlessly holds the entire request for review.
+          const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{...metadata,attempt,tier:'flex'},{serviceTier:'flex',serverTimeoutSeconds:Math.max(1,Math.floor((timeoutMs-10_000)/1000)),...(entry.providerKey?{idempotencyKey:`${entry.providerKey}:${attempt}`}:{})});
           if(response.ok)return {payload:await response.json() as GeminiInlineResponse['response'],status:response.status};
           return {status:response.status,error:(await response.text()).replace(/\s+/g,' ').trim().slice(0,700)||`HTTP ${response.status}`};
         })(),
@@ -244,7 +247,7 @@ async function executeStoredVertexBatch(env:GatewayRuntimeEnv,name:string,row:St
   // Old persisted requests predate stable entry keys. If any receipt exists,
   // resume them conservatively: a changed transport deadline cannot buy work.
   const legacyReplay=row.state==='JOB_STATE_RUNNING'&&entries.some(entry=>!entry.providerKey)&&context&&'operationId' in context
-    &&Boolean(await db.prepare('SELECT id FROM provider_operations WHERE operation_id=? LIMIT 1').bind(context.operationId).first());
+    &&Boolean(await db.prepare("SELECT id FROM provider_operations WHERE operation_id=? AND namespace IN ('',?) LIMIT 1").bind(context.operationId,context.namespace).first());
   const replayOnly=retainedReply||legacyReplay;
   if(retainedReply&&isTerminalBatchState(row.state)){
     const reopened=await db.prepare("UPDATE vertex_batch_emulation_jobs SET state='JOB_STATE_PENDING',updated_at=? WHERE id=? AND state=? AND updated_at=?")

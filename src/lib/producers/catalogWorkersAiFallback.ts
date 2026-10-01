@@ -1,5 +1,6 @@
 import { AI_MODELS } from '../ai/policy';
 import { producerRangeAllowed } from './rangeAccess';
+import { lwinRangeFirst } from './lwinRange';
 import { crawlOfficialRange as crawl,officialRangePrompt as prompt,safeHttps,host,sameOfficialSite,sourceArray,normalizeDirectRangeResult,profileFreshForDirectRange } from './catalogDirectResearch';
 import { saveResearchedCatalog,syncMissingCandidates,type CatalogRangeWine } from './catalogRangeOverlay';
 import { recordAiUsage,type AiUsageEnv } from '../usage/aiUsage';
@@ -55,6 +56,7 @@ async function reportProgress(db:D1Database,owner:string,producerId:string,reque
 async function completeRun(db:D1Database,owner:string,producerId:string,requestId:string,message:string){const done=now(),row=await db.prepare('SELECT started_at FROM producer_research_runs WHERE owner_id=? AND producer_id=? AND request_id=?').bind(owner,producerId,requestId).first<{started_at:string}>(),duration=row?.started_at?Math.max(0,Date.parse(done)-Date.parse(row.started_at)):null;await db.prepare("UPDATE producer_research_runs SET status='complete',stage='complete',attempt=1,message=?,updated_at=?,completed_at=?,duration_ms=? WHERE owner_id=? AND producer_id=? AND request_id=? AND status='running'").bind(message,done,done,duration,owner,producerId,requestId).run()}
 
 export async function tryWorkersAiProducerRangeRefresh(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
+  if(!rangeOnly&&await lwinRangeFirst(env.DB,owner,producerId))return {handled:false as const,reason:'LWIN range shown first'};
   // The wine range is owner-only. This path runs from the queue before the
   // batch researcher, so it has to ask the same question rather than inherit
   // an answer it never sees.

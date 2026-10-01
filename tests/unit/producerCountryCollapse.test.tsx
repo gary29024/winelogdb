@@ -146,7 +146,7 @@ describe('the producer library by country',()=>{
     const entry=host!.querySelector('.research-campaign-link') as HTMLAnchorElement;
     expect(entry).toBeTruthy();
     expect(entry.getAttribute('href')).toBe('/producers/research-batch');
-    expect(entry.textContent).toContain('4 producers never researched');
+    expect(entry.textContent).toContain('4 producers awaiting research');
     expect(host!.querySelector('.research-campaign-choices')).toBeNull();
     expect(host!.querySelector('.research-campaign-confirm')).toBeNull();
   });

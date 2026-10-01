@@ -201,6 +201,29 @@ async function readResearchCache(db:D1Database,owner:string,targets:ResearchTarg
     return null;
   });
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
+  // Producer runs also save profiles on the producer itself. Views and quotes
+  // must see that research before deciding another wine needs to buy it.
+  const producerTarget=includePriorKeys?targets.find(target=>target.scope==='producer'&&!cache.has('producer')):undefined;
+  if(producerTarget?.subject.producerId){
+    const row=await db.prepare(`SELECT profile,winemaking_practices,sources_json,research_model,profile_researched_at,researched_at,updated_at
+      FROM producers WHERE owner_id=? AND id=?`).bind(owner,producerTarget.subject.producerId).first<Record<string,unknown>>();
+    if(row){
+      const payload={producerDetails:text(row.profile),producerWinemakingPractices:text(row.winemaking_practices)},sources=parseJson<ResearchSource[]>(row.sources_json,[]);
+      if(scopePassesQuality('producer',payload,producerTarget,sources))cache.set('producer',{target:producerTarget,payload,sources,model:text(row.research_model)||'producer-research',researchedAt:text(row.profile_researched_at)||text(row.researched_at)||text(row.updated_at)});
+      else if(scopeIsComplete('producer',payload)){
+        // Repair the old text-only producer copy from a bottle's saved report.
+        // Exact text equality prevents borrowing evidence from unrelated or
+        // subsequently edited research under the same producer identity.
+        const saved=await db.prepare(`SELECT deep_search_json FROM wines WHERE owner_id=? AND producer_id=?
+          AND json_valid(deep_search_json) AND json_extract(deep_search_json,'$.producerDetails')=?
+          AND json_extract(deep_search_json,'$.producerWinemakingPractices')=? ORDER BY deep_search_updated_at DESC LIMIT 1`)
+          .bind(owner,producerTarget.subject.producerId,payload.producerDetails,payload.producerWinemakingPractices).first<{deep_search_json:string}>();
+        const parsed=deepSearchSchema.safeParse(parseJson(saved?.deep_search_json,null));
+        const restored=parsed.success?splitDeepSearchResult(parsed.data,[producerTarget])[0]:undefined;
+        if(restored)cache.set('producer',restored);
+      }
+    }
+  }
   if(includeFriends){
     // One query for every missing scope, rather than one per scope and one per
     // alias key inside it. A wine view used to pay for up to eight sequential
@@ -216,20 +239,23 @@ async function readResearchCache(db:D1Database,owner:string,targets:ResearchTarg
   return cache;
 }
 
-// Execution after an explicit refresh must only see the new, current-key rows.
+// Execution uses current identity keys; views can also recover older identities.
 export const loadResearchCache=(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends=false)=>readResearchCache(db,owner,targets,includeFriends,false);
 // Views, quotes and initial preparation must agree on research saved before
-// producer/cuvée IDs were assigned. Recovery is read-only and uses one query.
+// producer/cuvée IDs were assigned. Recovery is read-only and can restore a
+// missing producer scope from its profile or an identical saved bottle report.
 export function loadWineResearchCache(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends=false,snapshot?:unknown){
   const parsed=deepSearchSchema.safeParse(typeof snapshot==='string'?parseJson(snapshot,null):snapshot);
   return readResearchCache(db,owner,targets,includeFriends,true,parsed.success?parsed.data:undefined);
 }
 
 /** Copy already owned scopes to their current identity without republishing an
- * adopted friend's work or overwriting a current result. */
+ * adopted friend's work or overwriting a valid current result. */
 export async function seedResolvedResearch(db:D1Database,owner:string,cache:Map<ResearchScope,CachedResearch>){
   await adoptFriendResearch(db,owner,cache);
-  await Promise.all([...cache.values()].filter(entry=>!entry.contributorId||entry.contributorId===owner).map(entry=>seedResearchCache(db,owner,entry)));
+  const current=await loadResearchCache(db,owner,[...cache.values()].map(entry=>entry.target));
+  await Promise.all([...cache.values()].filter(entry=>!entry.contributorId||entry.contributorId===owner).map(entry=>
+    current.has(entry.target.scope)?seedResearchCache(db,owner,entry):upsertResearchCache(db,owner,entry)));
   for(const entry of cache.values())if(entry.provenance){
     // Repair missing evidence in place only if the stored text still matches.
     await db.prepare(`UPDATE research_cache SET provenance_json=? WHERE owner_id=? AND scope=? AND cache_key=? AND result_json=? AND model=? AND researched_at=? AND coalesce(provenance_json,'{}') IN ('{}','null','')`)
