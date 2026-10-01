@@ -3,7 +3,7 @@ import {grandCruFor,type EvidenceSourceId} from './registry';
 
 export type EvidenceKind='authorisation'|'suspended'|'application'|'notice'|'filing'|'research'|'ownership'|'sale'|'filiation'|'lineage'|'lead';
 export type EvidenceSource={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
-export type EvidenceContextPath={referencePath:string[];eventPath:string[];qualifications:string[];assignment?:string};
+export type EvidenceContextPath={referencePath:string[];eventPath:string[];qualifications:string[];assignment?:string;method?:'documented-dfi'|'spatial-inference'};
 export type EvidenceItem={kind:EvidenceKind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[];
  dateRole?:string;method?:'documented-dfi'|'spatial-inference';originalReferenceId?:string;originalScope?:string;contextPaths?:EvidenceContextPath[]};
 export type ParcelTracing={earliestSupportedEvent:{date:string;dateRole:string};paths:EvidenceContextPath[];

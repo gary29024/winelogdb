@@ -50,5 +50,19 @@ class SpatialLineageTests(unittest.TestCase):
         self.assertEqual(conflicts[0]['assignment'], 'unassigned')
 
 
+    def test_spatial_cycle_and_impossible_observation_order_stop_explicitly(self):
+        candidate = lambda cid, mother, daughter, last, nxt: {'id': cid, 'motherId': mother, 'daughterId': daughter, 'accepted': True,
+                                                               'lastMotherObservation': last, 'nextObtainedVintage': nxt}
+        rows, _ = trace_spatial_ancestry([C], [candidate('a', M, C, '2017-07-06', '2017-10-12'),
+                                               candidate('b', C, M, '2017-07-06', '2017-10-12')], [])
+        self.assertIn('cycle', {t['reason'] for t in rows[0]['terminals']})
+        self.assertEqual([p['referenceId'] for p in rows[0]['paths']], [M])
+        # An older generation cannot be first observed after its child was already retired.
+        rows, _ = trace_spatial_ancestry([C], [candidate('a', I, C, '2017-10-12', '2018-01-02'),
+                                               candidate('b', M, I, '2019-01-01', '2019-04-01')], [])
+        stop = next(t for t in rows[0]['terminals'] if t['reason'] == 'impossible-observation-chronology')
+        self.assertEqual(stop['candidateId'], 'b')
+        self.assertEqual([p['referenceId'] for p in rows[0]['paths']], [I])
+
 if __name__ == '__main__':
     unittest.main()

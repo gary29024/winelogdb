@@ -142,5 +142,96 @@ class OfficialFiliationTests(unittest.TestCase):
         self.assertEqual(parsed['events'][0]['motherIds'], [P(' D0001'), P(' D0009')])
 
 
+class UnresolvedDfiRecordTests(unittest.TestCase):
+    """Each schema problem stays in the catalogue, blocks traversal and names its kind."""
+
+    def kinds(self, parsed):
+        return {issue['kind'] for issue in parsed['issues']}
+
+    def test_interleaved_lots_are_nonconsecutive_and_untraceable(self):
+        first, second = pair(1, [' D0001'], [' D0002']).splitlines(True), pair(2, [' D0003'], [' D0004']).splitlines(True)
+        rows, parsed = trace([P(' D0002')], first[0] + second[0] + first[1] + second[1])
+        self.assertIn('nonconsecutive-row-pair', self.kinds(parsed))
+        self.assertTrue(all(not e['traceable'] for e in parsed['events']))
+        self.assertEqual(rows[0]['ancestorIds'], [])
+        self.assertEqual(rows[0]['terminals'][0]['reason'], 'unresolved-dfi-event')
+
+    def test_invalid_validation_date_is_kept_raw(self):
+        _, parsed = trace([P(' D0002')], pair(1, [' D0001'], [' D0002'], '19901340'))
+        issue = next(i for i in parsed['issues'] if i['kind'] == 'invalid-validation-date')
+        self.assertEqual(issue['rawDate'], '19901340')
+        self.assertFalse(parsed['events'][0]['traceable'])
+
+    def test_validation_after_the_source_snapshot_is_not_trusted(self):
+        _, parsed = trace([P(' D0002')], pair(1, [' D0001'], [' D0002'], '20270101'))
+        issue = next(i for i in parsed['issues'] if i['kind'] == 'validation-after-source-snapshot')
+        self.assertEqual((issue['validationDate'], issue['sourceAsOf']), ('2027-01-01', '2026-07-01'))
+        self.assertFalse(parsed['events'][0]['traceable'])
+
+    def test_rows_of_one_lot_with_different_dates_conflict(self):
+        mother = pair(1, [' D0001'], [' D0002'], '19900101').splitlines(True)[0]
+        daughter = pair(1, [' D0001'], [' D0002'], '19900202').splitlines(True)[1]
+        rows, parsed = trace([P(' D0002')], mother + daughter)
+        self.assertIn('conflicting-event-metadata', self.kinds(parsed))
+        self.assertEqual(rows[0]['terminals'][0]['reason'], 'unresolved-dfi-event')
+
+    def test_new_reference_without_any_document_is_a_named_gap(self):
+        parsed = parse(b'')
+        rows = trace_ancestry([P(' D0009')], parsed['events'], geometry_as_of='2026-06-01',
+                              first_seen={P(' D0009'): '2021-02-01'}, earliest_geometry='2017-07-06')
+        self.assertEqual(rows[0]['terminals'][0]['reason'], 'missing-document-for-observed-new-reference')
+        rows = trace_ancestry([P(' D0009')], parsed['events'], geometry_as_of='2026-06-01',
+                              first_seen={P(' D0009'): '2017-07-06'}, earliest_geometry='2017-07-06')
+        self.assertEqual(rows[0]['terminals'][0]['reason'], 'source-boundary-or-unrecorded-event')
+
+
+class CommittedHistoryTests(unittest.TestCase):
+    """The committed delivery keeps the source-checked examples (CI has no raw DFI member to rebuild it)."""
+
+    @staticmethod
+    def history(slug):
+        import json
+        from grand_cru import RESEARCH_DIR
+        return json.loads((RESEARCH_DIR / slug / 'rights-history.json').read_text(encoding='utf-8'))
+
+    def event(self, history, event_id):
+        return next(e for e in history['documentedEvents'] if e['id'] == event_id)
+
+    def parcel(self, history, parcel_id):
+        return next(p for p in history['parcels'] if p['parcelId'] == parcel_id)
+
+    def test_committed_1991_echezeaux_lot(self):
+        history = self.history('echezeaux')
+        event = self.event(history, '210:267:000:0000196:00001')
+        self.assertEqual((event['validationDate'], event['motherIds'], event['daughterIds'], event['scope'], event['traceable']),
+                         ('1991-01-22', ['212670000D0327'], ['212670000D0736', '212670000D0737'], 'split-event-group', True))
+        for daughter in event['daughterIds']:
+            ancestry = self.parcel(history, daughter)['documentedAncestry']
+            self.assertIn('212670000D0327', ancestry['ancestorIds'])
+            self.assertEqual(ancestry['earliestValidationDate'], '1991-01-22')
+
+    def test_committed_1989_vougeot_lot_and_three_generation_chain(self):
+        history = self.history('clos-de-vougeot')
+        event = self.event(history, '210:716:000:0000052:00001')
+        self.assertEqual((event['validationDate'], event['motherIds'], event['daughterIds']),
+                         ('1989-04-20', ['217160000A0022'], ['217160000A0408', '217160000A0409', '217160000A0410']))
+        # A0567 reaches A0022 through the retired A0409, which the 1989 lot keeps although it is outside the cru.
+        parcel = self.parcel(history, '217160000A0567')
+        oldest = next(p for p in parcel['documentedAncestry']['paths'] if p['referenceId'] == '217160000A0022')
+        self.assertEqual(oldest['referencePath'], ['217160000A0567', '217160000A0409', '217160000A0022'])
+        self.assertEqual(oldest['eventPath'], ['210:716:000:0000103:00001', '210:716:000:0000052:00001'])
+        self.assertEqual(parcel['earliestSupportedEvent'], {'date': '1989-04-20', 'dateRole': 'dfi-validation'})
+
+    def test_committed_rejected_411_candidates_stay_in_the_audit(self):
+        # Successors that first appear later than the next vintage, and slivers, remain rejected and visible.
+        def successors(slug, retired):
+            row = next(r for r in self.history(slug)['retiredParcels'] if r['parcelId'] == retired)
+            return {s['parcelId']: s['accepted'] for s in row['successors']}
+        vougeot = successors('clos-de-vougeot', '217160000A0032')
+        self.assertEqual((vougeot['217160000A0579'], vougeot['217160000A0580']), (False, False))
+        self.assertTrue(vougeot['217160000A0563'])
+        self.assertFalse(successors('echezeaux', '212670000D0792')['212670000D0793'])
+
+
 if __name__ == '__main__':
     unittest.main()

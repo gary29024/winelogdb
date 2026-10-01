@@ -55,7 +55,7 @@ for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).ent
   await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
   expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
   await panel.getByText('Source coverage and tracing',{exact:true}).click();
-  await expect(panel.getByText(`Earliest supported event: ${trace.earliestSupportedEvent.date}`,{exact:false})).toBeVisible();
+  await expect(panel.locator('.parcel-evidence-tracing').getByText(/Earliest supported event:/).locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`)).toBeVisible();
   if(slug==='chablis-grand-cru'){
    await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
    await expect(panel.getByText(/All Yonne departmental notice publication years/)).toBeVisible();

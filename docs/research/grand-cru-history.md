@@ -143,7 +143,9 @@ evidence together. Complete the remaining issue-specific acceptance before
 closing that issue. A historical extension does not complete a named-area
 crosswalk or producer investigation.
 
-App evidence schema 2 adds optional date roles, original-scope paths, per-parcel
+The evidence panel shows each former-reference record's original scope (for example every
+parcel in a deed together) and whether a route is an official DGFiP record or a map-overlap
+inference. App evidence schema 2 adds optional date roles, original-scope paths, per-parcel
 tracing and per-parent coverage while retaining the existing source/parcel/holder
 fields. Configured `evidenceFrom` fallbacks still merge sources in order. Only crus
 with a committed commune-edge audit are wired into the app; each evidence file is a
