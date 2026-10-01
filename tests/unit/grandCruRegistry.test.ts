@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
-import {readdirSync,readFileSync} from 'node:fs';
+import {existsSync,readdirSync,readFileSync} from 'node:fs';
 import {cruOnVillageMap,grandCruFor,grandCrus,parcelBundles,parcelManifestFor} from '../../src/lib/places/grandCruParcels/registry';
-import {loadParcelEvidence,mergeParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence';
+import {loadParcelEvidence,mergeParcelEvidence,type ParcelEvidenceData} from '../../src/lib/places/grandCruParcels/evidence';
 import {parcelRightsSnapshot} from '../../src/lib/places/grandCruParcels/holders';
 
 type CruConfig={slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[];research?:object};
@@ -9,20 +9,25 @@ type BundleConfig={id:string;crus:string[];villageMap:string;parcels:{parentFeat
 const read=<T>(path:string)=>JSON.parse(readFileSync(path,'utf8')) as T;
 const configs=readdirSync('scripts/grand-crus').filter(name=>name.endsWith('.json')).map(name=>read<CruConfig>(`scripts/grand-crus/${name}`));
 const bundles=readdirSync('scripts/grand-crus/bundles').map(name=>read<BundleConfig>(`scripts/grand-crus/bundles/${name}`));
+// A cru reaches the app only once its commune-edge audit is committed (scripts/grand_cru.py app_cru_slugs).
+const audited=(slug:string)=>existsSync(`scripts/grand-crus/reports/${slug}-commune-audit.json`);
+const shown=configs.filter(c=>audited(c.slug)),hidden=configs.filter(c=>!audited(c.slug));
 
 describe('Grand Cru registry',()=>{
  it('mirrors every cru config and commune bundle used by the build scripts',()=>{
-  expect(grandCrus.map(c=>c.slug).sort()).toEqual(configs.map(c=>c.slug).sort());
-  for(const config of configs){
+  expect(grandCrus.map(c=>c.slug).sort()).toEqual(shown.map(c=>c.slug).sort());
+  for(const config of hidden)expect(grandCruFor(config.parentFeatureId),config.slug).toBeUndefined();
+  for(const config of shown){
    const cru=grandCruFor(config.parentFeatureId)!;
    expect(cru).toMatchObject({slug:config.slug,name:config.name,bundle:config.bundle,evidenceFrom:config.evidenceFrom,villageMaps:config.villageMaps});
    for(const map of config.villageMaps)expect(grandCruFor(config.parentFeatureId,map)).toBe(cru);
    expect(parcelManifestFor(config.parentFeatureId)).toBe(parcelBundles[cru.bundle]);
    for(const source of config.evidenceFrom)expect(configs.find(c=>c.slug===source)?.research).toBeTruthy();
   }
-  expect(Object.keys(parcelBundles).sort()).toEqual(bundles.map(b=>b.id).sort());
-  for(const bundle of bundles)expect([...parcelBundles[bundle.id as keyof typeof parcelBundles].parentFeatureIds].sort())
-   .toEqual(grandCrus.filter(c=>c.bundle===bundle.id).map(c=>c.parentFeatureId).sort());
+  expect(Object.keys(parcelBundles).sort()).toEqual([...new Set(shown.map(c=>c.bundle))].sort());
+  for(const id of Object.keys(parcelBundles))expect([...parcelBundles[id as keyof typeof parcelBundles].parentFeatureIds].sort())
+   .toEqual(configs.filter(c=>c.bundle===id).map(c=>c.parentFeatureId).sort());
+  expect(bundles.map(b=>b.id)).toEqual(expect.arrayContaining(Object.keys(parcelBundles)));
  });
  it('offers domaine grouping exactly where a cru’s research files link holders to domaines',async()=>{
   for(const cru of grandCrus){
@@ -33,7 +38,7 @@ describe('Grand Cru registry',()=>{
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
-  expect(grandCruFor('inao-denom-655')?.name).toBe('La Romanée');
+  expect(grandCruFor('inao-denom-655')).toBeUndefined();  // La Romanée: history delivered, commune audit pending
   expect(grandCruFor('inao-denom-unknown')).toBeUndefined();
   const multiMapCru={...grandCrus[0],villageMaps:['chassagne-montrachet','puligny-montrachet']};
   expect(cruOnVillageMap(multiMapCru,'chassagne-montrachet')).toBe(true);
@@ -51,16 +56,17 @@ describe('Grand Cru registry',()=>{
   expect(evidence.parcels['212670000D0093']?.map(i=>i.kind)).toContain('application');
   expect(await loadParcelEvidence('inao-denom-unknown')).toEqual({sources:{},parcels:{},holderDomains:{}});
  });
- it('delivers every rollout cru with its own lazy history and independent Yonne coverage',async()=>{
-  expect(grandCrus).toHaveLength(33);
-  for(const cru of grandCrus){
-   const data=await loadParcelEvidence(cru.parentFeatureId);
+ it('keeps a history file for every rollout cru, with independent Yonne coverage',()=>{
+  expect(configs).toHaveLength(33);
+  // Hidden crus are not wired into the app, so read every research file directly.
+  for(const cru of configs){
+   const data=read<ParcelEvidenceData>(`src/lib/places/grandCruParcels/${cru.slug}.evidence.json`);
    const coverage=data.coverage?.[cru.parentFeatureId];
    expect(coverage,cru.slug).toBeTruthy();
    expect(Object.keys(data.tracing??{}).length,cru.slug).toBeGreaterThan(0);
    expect(coverage?.rightsImported).toEqual(['2019-01-01','2020-01-01','2021-01-01','2022-01-01','2023-01-01','2024-01-01','2025-01-01']);
   }
-  const chablis=await loadParcelEvidence('inao-denom-439');
+  const chablis=read<ParcelEvidenceData>('src/lib/places/grandCruParcels/chablis-grand-cru.evidence.json');
   expect(chablis.coverage?.['inao-denom-439'].dfiSources.map(s=>s.department)).toEqual(['89']);
   expect(chablis.coverage?.['inao-denom-439'].notices?.missingDepartmentIndexes).toEqual(['89']);
   expect(Object.keys(chablis.tracing??{}).every(id=>id.startsWith('89068'))).toBe(true);

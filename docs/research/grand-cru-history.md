@@ -6,7 +6,7 @@ lazy app evidence. The [independent audit](../../scripts/grand-crus/reports/hist
 links every delivery and records the complete raw-source cross-checks and payload
 sizes. This supplies the history basis for each Tier 1 issue; the 30 new cru
 registers still mark named-area and producer research as unreviewed. Their full
-Tier 1 commune-edge audits also remain pending; the independent history audit
+Tier 1 commune-edge audits also remain pending, so they stay off the app's maps; the independent history audit
 checks that their current geometry matches the raw commune source. The three
 existing crus retain their reviewed commune and named-area audit gates.
 
@@ -145,14 +145,17 @@ crosswalk or producer investigation.
 
 App evidence schema 2 adds optional date roles, original-scope paths, per-parcel
 tracing and per-parent coverage while retaining the existing source/parcel/holder
-fields. Configured `evidenceFrom` fallbacks still merge sources in order. All 33
-evidence files use dynamic imports, and browser checks ensure a cru fetches only
-its configured evidence. The map, manual producer association and verified
+fields. Configured `evidenceFrom` fallbacks still merge sources in order. Only crus
+with a committed commune-edge audit are wired into the app; each evidence file is a
+dynamic import, and browser checks ensure a cru fetches only its configured evidence.
+The other 30 crus' history files are complete but stay off the maps until their audits. The map, manual producer association and verified
 farming gates remain available to subsequent Tier 1 work.
 
 After `npm run build`, run `python scripts/measure_grand_cru_payload.py` to produce
 the [production payload report](../../scripts/grand-crus/reports/history-payload.json).
-It measures all eight parcel assets and 33 compiled evidence chunks and checks
+It measures the app-visible parcel assets and compiled evidence chunks and checks
 that neither the initial page nor the map's static imports include history.
-CI runs this check after each selected production build. The register audit's
+CI runs it after each selected production build, so a history chunk leaking into
+those imports fails the build. The recorded sizes are refreshed rather than
+compared, because builds are not byte-reproducible without a lockfile. The register audit's
 gzip counts measure source JSON; the production report measures compiled JS.

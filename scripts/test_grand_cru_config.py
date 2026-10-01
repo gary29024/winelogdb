@@ -7,7 +7,7 @@ from unittest import mock
 
 import grand_cru
 from build_grand_cru_research import Context
-from grand_cru import (APP_DIR, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
+from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
                        named_plot_report_path, bundle_ids, bundle_parent_features, bundle_sources,
                        bundle_village_maps, communes, cru_slugs, load_bundle, load_cru, read_json, relative, village_map)
 
@@ -130,14 +130,16 @@ class ConfigTests(unittest.TestCase):
         # was built from today's pins and stays within its limit, and that a reviewed remainder names those pins.
         for slug in cru_slugs():
             cru, bundle = load_cru(slug)
-            if cru.get('research', {}).get('delivery') == 'historical-extension':
-                # #461 supplies historical evidence before the remaining per-cru Tier 1 reviews.
-                # These deliveries must keep their unreviewed work explicit, rather than claim completion.
+            path = commune_audit_path(cru)
+            if not path.exists():
+                # #461 supplies historical evidence before the remaining per-cru Tier 1 reviews. Until its commune-edge
+                # audit is committed, a cru keeps its unreviewed work explicit and stays off the app's maps.
+                self.assertEqual(cru.get('research', {}).get('delivery'), 'historical-extension',
+                                 f'{slug}: commit build_grand_cru_commune_audit.py output')
                 self.assertEqual(cru['research']['namedAreas'], 'unreviewed', slug)
                 self.assertEqual(cru['research']['producerResearch'], 'unreviewed', slug)
+                self.assertNotIn(slug, app_cru_slugs(), f'{slug}: hidden from the app until its commune audit passes')
                 continue
-            path = commune_audit_path(cru)
-            self.assertTrue(path.exists(), f'{slug}: commit build_grand_cru_commune_audit.py output')
             report = read_json(path)
             pins = {insee: digest for insee, _, digest in cadastre_sources(bundle)}
             self.assertEqual({c['commune']: c['sha256'] for c in report['bundleCommunes']}, pins, f'{slug}: stale commune audit')

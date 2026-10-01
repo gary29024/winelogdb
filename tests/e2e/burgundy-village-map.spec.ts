@@ -1,5 +1,5 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
-import {readFileSync,statSync} from 'node:fs';
+import {existsSync,readFileSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 import {ownerName} from '../../src/lib/places/parcelOwners';
@@ -12,9 +12,13 @@ const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
 
-// Cover each shared history bundle, including cross-commune crus and Yonne, on a real map.
-for(const [index,slug] of ['echezeaux','clos-de-vougeot','richebourg','bonnes-mares',
- 'chambertin','montrachet','corton','chablis-grand-cru'].entries()){
+// Only crus with a committed commune-edge audit reach the app (scripts/grand_cru.py app_cru_slugs);
+// the others' history files are checked by the unit and Python tests instead.
+const auditedCru=(slug:string)=>existsSync(`scripts/grand-crus/reports/${slug}-commune-audit.json`);
+// White-only crus need a white wine for their village map to open.
+const whiteCru=(slug:string)=>/chablis|montrachet|charlemagne/.test(slug);
+// Cover each app-visible history bundle on a real map.
+for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).entries()){
  test(`Official history: ${slug} loads its own evidence and preserves dated source roles`,async({page},testInfo)=>{
   test.setTimeout(60_000); // Allow a cold local Vite/Worker startup before the real map assertions.
   const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
@@ -26,7 +30,7 @@ for(const [index,slug] of ['echezeaux','clos-de-vougeot','richebourg','bonnes-ma
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.setViewportSize({width:slug==='chablis-grand-cru'?320:390,height:900});
   await setup(page,{appellation:cru.name,wineName:cru.name,classification:'grand_cru',
-   ...(slug==='chablis-grand-cru'||slug==='montrachet'?{colour:'White',wineStyle:'white'}:{})});
+   ...(whiteCru(slug)?{colour:'White',wineStyle:'white'}:{})});
   const loaded=new Set<string>();
   page.on('request',request=>{
    const match=request.url().match(/grandCruParcels\/([^/?]+)\.evidence\.json/);
@@ -232,8 +236,9 @@ for(const route of allMapRoutes){
 // matrix does not grow with each cru. WINELOG_E2E_CRU picks another configured cru.
 const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
+ if(!auditedCru(slug))throw new Error(`${slug} is hidden from the app until its commune-edge audit is committed`);
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
  const features=(read(`public${manifest.dataUrl}`) as Parcels).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
@@ -253,7 +258,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.setViewportSize({width:390,height:844});
  const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
- await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id});
+ await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id,
+  ...(whiteCru(parcelCru.slug)?{colour:'White',wineStyle:'white'}:{})});
  await page.route('**/api/producers',route=>route.fulfill({json:{items:[producer,other]}}));
  let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
  await page.route('**/api/parcel-producer-links?*',async route=>{

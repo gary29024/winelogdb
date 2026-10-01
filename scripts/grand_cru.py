@@ -172,6 +172,19 @@ def commune_audit_path(cru):
     return REPORT_DIR / f'{cru["slug"]}-commune-audit.json'
 
 
+def app_cru_slugs():
+    """Crus the app may show: only those whose commune-edge audit is committed (checked by test_grand_cru_config).
+
+    A cru without one keeps its research and history files, but stays off the maps until its Tier 1 audit passes.
+    """
+    return [slug for slug in cru_slugs() if commune_audit_path(load_cru(slug)[0]).exists()]
+
+
+def app_bundle_ids():
+    """Bundles that serve at least one app-visible cru."""
+    return sorted({load_cru(slug)[0]['bundle'] for slug in app_cru_slugs()})
+
+
 def named_plot_report_path(cru):
     return REPORT_DIR / f'{cru["slug"]}-named-plots.json'
 

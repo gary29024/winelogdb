@@ -1,17 +1,20 @@
 """Generate the app's cru/bundle registry, holder imports and lazy evidence loaders.
 
+Only crus with a committed commune-edge audit are wired into the app (grand_cru.app_cru_slugs);
+the others keep their research and history files but stay off the maps until that audit passes.
+
 Only registry declarations are replaced; the runtime lookup/merge/cache functions
 remain normal TypeScript. Run after adding a config; --check detects stale wiring.
 """
 import argparse
 import json
 
-from grand_cru import APP_DIR, bundle_ids, cru_slugs, load_cru, read_json, write_or_check
+from grand_cru import APP_DIR, app_bundle_ids, app_cru_slugs, load_cru, read_json, write_or_check
 
 
 def generate(check=False):
-    bundles = bundle_ids()
-    crus = [load_cru(s)[0] for s in cru_slugs()]
+    bundles = app_bundle_ids()
+    crus = [load_cru(s)[0] for s in app_cru_slugs()]
     path = APP_DIR / 'registry.ts'
     source = path.read_text(encoding='utf-8')
     start = source.index('/** A commune bundle')

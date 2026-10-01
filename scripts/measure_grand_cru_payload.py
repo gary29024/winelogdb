@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import re
 
-from grand_cru import (REPORT_DIR, ROOT, bundle_ids, cru_slugs, load_bundle, load_manifest,
+from grand_cru import (REPORT_DIR, ROOT, app_bundle_ids, app_cru_slugs, load_bundle, load_manifest,
                        parcel_asset, relative, require, sha256, write_or_check)
 
 
@@ -26,7 +26,7 @@ def static_modules(pending, dist):
 
 def measure(dist):
     chunks = []
-    for slug in cru_slugs():
+    for slug in app_cru_slugs():  # hidden crus are not bundled into the app
         paths = list((dist / 'assets').glob(f'{slug}.evidence-*.js'))
         require(len(paths) == 1, f'Missing/ambiguous production evidence chunk: {slug}; rebuild first')
         raw = paths[0].read_bytes()
@@ -41,7 +41,7 @@ def measure(dist):
     map_modules = static_modules(map_paths, dist)
     require(all((ROOT / c['file']).resolve() not in initial | map_modules for c in chunks), 'History leaked into initial or map static imports')
     bundles = []
-    for bundle_id in bundle_ids():
+    for bundle_id in app_bundle_ids():
         manifest = load_manifest(load_bundle(bundle_id))
         raw = parcel_asset(manifest)
         bundles.append({'bundle': bundle_id, 'dataUrl': manifest['dataUrl'], 'sha256': sha256(raw),

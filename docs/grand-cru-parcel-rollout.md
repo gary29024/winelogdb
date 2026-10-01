@@ -13,7 +13,9 @@ requires official evidence back to the earliest available records for all 33 cru
 The shared acquisition/parser and historical backfills now cover all 33 crus.
 See the [history delivery and source gaps](research/grand-cru-history.md). The 30
 new cru registers supply the historical basis; their remaining Tier 1 commune-edge,
-named-area and producer reviews are still pending.
+named-area and producer reviews are still pending, so they stay off the app's maps
+until their commune-edge audit is committed. Earlier notice bulletins (Côte-d'Or
+2004–2015, every Yonne year) were located but not obtained; #461 stays open for them.
 
 ## 1. What Échezeaux established
 
@@ -22,7 +24,7 @@ named-area and producer reviews are still pending.
 | Cadastral parcels, cru overlap, named areas, DGFiP rights snapshot | #374 | No: scripts and manifest are Échezeaux-only |
 | Manual producer links (D1 `parcel_producer_links`) | #409 | Yes: keyed by `parent_feature_id` and rights snapshot |
 | Original rights history 2019–2025 and inferred spatial lineage (≥95% inside, next vintage only) | #411 | Baseline method; spatial inference stays distinct from official filiation |
-| Official DFI filiation and history to the earliest available records | #461 | Shared acquisition/parser, all 33 backfills and independent raw-source audit delivered; remaining source gaps recorded |
+| Official DFI filiation and history to the earliest available records | #461 | Shared acquisition/parser, all 33 history files and the raw-source audit exist; earlier notice bulletins and per-cru review remain open in #461 |
 | Côte-d'Or farm-structure notices: regional 2019–2026 (#410), departmental 2016–2020 (#412) | #410, #412 | Yes: indexes cover every Côte-d'Or commune |
 | Per-parcel dated evidence panel, lazy-loaded | #413 | Component yes, data file and loader no |
 | Pinned map, open on linked holder, consistent folding | #414 | Yes: applies to every village map |
@@ -69,73 +71,6 @@ cru. Tier 3 stays deferred everywhere.
 8. Published counts (table in section 5) and limitations, in
    `docs/research/<slug>/README.md`. The research `--check` fails when the table
    disagrees with the generated register.
-
-### Historical coverage required by #461
-
-“Earliest available” is determined separately for recorded rights, parcel
-filiation, geometry, sales and administrative notices. It is not a universal
-starting year or a claim of continuous ownership. Recheck official catalogues at
-implementation and pin the observed availability.
-
-As checked on 1 October 2026, the [DGFiP rights catalogue](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales)
-lists 1 January 2019–2025, with no earlier or 2026 rights file listed.
-[Official DFI records](https://www.data.gouv.fr/datasets/documents-de-filiation-informatises-dfi-des-parcelles)
-can extend parcel ancestry to departmental computerisation in the 1980s–1990s;
-rural land-consolidation changes lack correspondence in this source.
-[Etalab geometry archives](https://files.data.gouv.fr/cadastre/etalab-cadastre/)
-start at 6 July 2017. Actual commune availability and earliest reachable events
-must be established independently; those different dates never backdate rights.
-
-For each commune bundle and cru:
-
-1. **Acquire and pin official evidence.** Inventory the relevant department and
-   commune releases; obtain the latest complete official DFI member and schema,
-   all available annual rights files, and all available commune cadastre
-   vintages through the pinned current geometry, including intermediate releases.
-   Reuse department/bundle downloads. Retain catalogue/download URLs, licences,
-   source/as-of dates, schema/member identity, raw-byte hashes, sizes and exact
-   UTC retrieval times. Publish available, obtained and missing ranges separately.
-2. **Trace the full event chain.** Parse paired DFI mother/daughter rows with
-   document ID, analysis lot, change type, validation date and exact full parcel
-   IDs. Preserve complete sets in one-to-many and many-to-many event groups;
-   do not infer individual geographic correspondences within an ambiguous lot.
-   From every mapped parcel, traverse all reachable predecessors, including
-   intermediate retired references, to a source boundary or explicit unresolved
-   gap. Retain public-domain/non-cadastral events and terminal reasons. Detect
-   malformed/missing pairs, identity conflicts, chronology problems and cycles.
-3. **Separate documented filiation from spatial inference.** Check DFI against
-   dated geometry where available and publish discrepancies. The original #411
-   rule still requires first appearance in the next pinned vintage and at least
-   95% of the successor inside the retired polygon, but its result is an inferred
-   spatial relationship, not an official document. Retain rejected candidates
-   and conflicting records. Historical context outside today's cru never adds
-   land to the current map.
-4. **Research older references with their original scope.** Re-query official
-   rights, sales and reviewed notice records over each source's available range.
-   Keep original dates/references and the full event path when displaying
-   historical evidence on a current parcel. Partial scope and ambiguous
-   many-to-many routes remain qualified or unassigned. Filiation does not
-   automatically transfer a holder, tenant, applicant or farmer.
-5. **Publish coverage and limitations.** State rights years, DFI release/commune
-   coverage and earliest/latest reachable events, geometry vintages, sale/notice
-   ranges, parcels with documented/pre-2019 ancestry, distinct documents and lots,
-   inferred-only relationships, unresolved references and missing intervals.
-   Each parcel records its earliest supported event and where tracing stops.
-   Validation/release/first-seen dates do not establish acquisition or creation;
-   a failed download or unsearched interval is a gap, not absent history.
-6. **Validate the delivery.** Use the shared acquisition/parser work from #461,
-   then independently rebuild and review each cru. Regressions must cover the
-   source-checked 1991 Échezeaux and 1989 Vougeot examples, multiple generations,
-   many-to-many/partial scope, missing records, chronology/cycles and the rejected
-   #411 slivers. Generated-data checks must reproduce pinned outputs. Keep
-   app evidence lazy-loaded and measure the payload after adding history.
-
-Validate first on Échezeaux, Grands-Échezeaux and Clos de Vougeot, then proceed
-once per shared commune bundle. Open cru issues must pass this expanded gate
-before closing. Previously completed #376/#377 retain their original results;
-their additional history backfills are tracked explicitly in #461.
-A legacy Tier 1 completion or a catalogue's theoretical start does not complete
-the historical extension for a cru.
 
 ### Historical coverage required by #461
 
@@ -299,7 +234,9 @@ evidence together with the history and coverage report.
    generated registry matches every config. The generator enables `domaineGrouping`
    only when the cru's research files contain holder-to-domaine links (`holderDomains`).
    Otherwise the app shows legal holders without a grouping control or domaine-research
-   messages. Components need no change.
+   messages. Only crus with a committed commune-edge audit are wired into the app
+   (`app_cru_slugs` in `grand_cru.py`); `test_grand_cru_config` fails if a cru without
+   one is anything but a pending historical-extension delivery. Components need no change.
 5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
    method, sources and limitations. Commit every build report, including the
    commune audit and the named-area audit. Historical-extension deliveries use
