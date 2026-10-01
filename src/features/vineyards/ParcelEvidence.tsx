@@ -45,7 +45,19 @@ const stopReasons:Record<string,string>={
  'unresolved-dfi-event':'Unresolved DFI event group',cycle:'Cyclic correspondence requires review',
  'impossible-chronology':'Conflicting chronology requires review',
 };
+// The original record's scope stays visible, so a former parcel's record is never read as this parcel's.
+const scopes:Record<string,string>={'entire-printed-parcel-reference':'Scope: the whole former parcel as recorded',
+ 'complete-deed-parcel-group':'Scope: every parcel in the deed together',
+ 'original-research-reference-and-stated-area':'Scope: the reference and area stated by the research',
+ 'printed-notice-reference-and-area':'Scope: the reference and area printed in the notice'};
+const methods:Record<NonNullable<EvidenceItem['method']>,string>={'documented-dfi':'Official DGFiP filiation record',
+ 'spatial-inference':'Inferred from map overlap, not an official record'};
 const shortRef=(id:string)=>`${id.slice(8,10).replace(/^0/,'')}${id.slice(10)}`;
+
+function EventDate({date}:{date:string}){
+ const time=when({kind:'filiation',date,title:'',sources:[]});
+ return time?<time dateTime={time.iso}>{time.text}</time>:<>{date}</>;
+}
 
 function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sources']}){
  const time=when(item);
@@ -58,9 +70,11 @@ function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sour
   <strong>{item.title}</strong>
   {item.detail&&<span className="parcel-evidence-detail">{item.detail}</span>}
   {item.via&&<span className="parcel-evidence-detail">Record names former parcel {item.via}</span>}
+  {item.originalScope&&<span className="parcel-evidence-detail">{scopes[item.originalScope]??`Scope: ${item.originalScope.replaceAll('-',' ')}`}</span>}
+  {item.method&&<span className="parcel-evidence-detail">{methods[item.method]}</span>}
   {item.note&&<p>{item.note}</p>}
   {Boolean(item.contextPaths?.length)&&<details><summary>Historical reference paths</summary><ul>{item.contextPaths!.map((path,index)=><li key={index}>
-   {path.referencePath.map(shortRef).join(' ← ')}
+   {path.method&&`${methods[path.method]}: `}{path.referencePath.map(shortRef).join(' ← ')}
    {path.assignment==='unassigned-context'&&' · Unassigned context'}
    {path.qualifications.length>0&&` · ${path.qualifications.map(q=>q.replaceAll('-',' ')).join('; ')}`}
   </li>)}</ul></details>}
@@ -99,7 +113,7 @@ export function ParcelEvidence({parcelId,parentId}:{parcelId:string;parentId:str
    <ul>{group.list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
   </details>)}
   {tracing&&<details className="parcel-evidence-tracing"><summary>Source coverage and tracing</summary>
-   <p className="village-map-note">Earliest supported event: {tracing.earliestSupportedEvent.date} · {dateRoles[tracing.earliestSupportedEvent.dateRole]??tracing.earliestSupportedEvent.dateRole}. First observations do not establish creation or ownership.</p>
+   <p className="village-map-note">Earliest supported event: <EventDate date={tracing.earliestSupportedEvent.date}/> · {dateRoles[tracing.earliestSupportedEvent.dateRole]??tracing.earliestSupportedEvent.dateRole}. First observations do not establish creation or ownership.</p>
    {coverage&&<p className="village-map-note">Rights snapshots imported: {coverage.rightsImported.map(d=>d.slice(0,4)).join(', ')}. {coverage.missingSources.length} failed source downloads.</p>}
    {coverage?.sales&&<p className="village-map-note">Sale catalogue coverage: {coverage.sales.availableRange?.start??'not established'} to {coverage.sales.availableRange?.end??'not established'}. Observed commune deeds: {coverage.sales.observedCommuneRange?.join(' to ')??'none matched'}.</p>}
    {coverage?.notices&&<details><summary>Administrative notice coverage and gaps</summary>{Object.entries(coverage.notices.availabilityAudit.departments).map(([department,audit])=><div key={department}>

@@ -122,19 +122,34 @@ describe('Parcel evidence panel',()=>{
   render(<Fresh parcelId={id('736')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Official event group: D0327 → D0736, D0737')).toBeTruthy();
-  expect(within(panel).getByText('22 Jan 1991').getAttribute('datetime')).toBe('1991-01-22');
+  expect(within(panel).getAllByText('22 Jan 1991').every(t=>t.getAttribute('datetime')==='1991-01-22')).toBe(true);
   expect(within(panel).getAllByText('DFI validation date').length).toBeGreaterThan(0);
-  expect(within(panel).getByText(/Earliest supported event: 1991-01-22/)).toBeTruthy();
+  expect(within(panel).getByText(/Earliest supported event:/).querySelector('time')?.getAttribute('datetime')).toBe('1991-01-22');
   expect(within(panel).getByText(/No earlier correspondence in the obtained DFI file/)).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/DGFiP official DFI/}).getAttribute('href')).toContain('juillet_2026');
   expect(within(panel).queryByText(/Created by/)).toBeNull();
+ });
+ it('shows each former record’s original scope and whether a route is official or inferred',async()=>{
+  const Fresh=await fresh();
+  const {unmount}=render(<Fresh parcelId={id('898')} parentId="inao-denom-565"/>);
+  let panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getAllByText('Scope: the whole former parcel as recorded').length).toBeGreaterThan(0);
+  expect(within(panel).getAllByText(/^Official DGFiP filiation record: /).length).toBeGreaterThan(0);
+  unmount();
+  render(<Fresh parcelId="217160000A0581" parentId="inao-denom-546"/>);
+  panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getAllByText('Scope: every parcel in the deed together').length).toBeGreaterThan(0);
+  cleanup();
+  render(<Fresh parcelId={id('818')} parentId="inao-denom-565"/>);
+  panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getAllByText('Inferred from map overlap, not an official record').length).toBeGreaterThan(0);
  });
  it('retains the outside-cru daughter in the verified 1989 Vougeot event',async()=>{
   const Fresh=await fresh();
   render(<Fresh parcelId="217160000A0408" parentId="inao-denom-546"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Official event group: A0022 → A0408, A0409, A0410')).toBeTruthy();
-  expect(within(panel).getByText('20 Apr 1989').getAttribute('datetime')).toBe('1989-04-20');
+  expect(within(panel).getAllByText('20 Apr 1989').every(t=>t.getAttribute('datetime')==='1989-04-20')).toBe(true);
   expect(within(panel).queryByText('Verified operator')).toBeNull();
  });
  it('reports a failed load and recovers on retry',async()=>{
