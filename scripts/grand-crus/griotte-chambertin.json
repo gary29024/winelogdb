@@ -1,0 +1,22 @@
+{
+  "slug": "griotte-chambertin",
+  "name": "Griotte-Chambertin",
+  "parentFeatureId": "inao-denom-646",
+  "appellationId": 185,
+  "issue": 394,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Griotte-Chambertin (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "griotte-chambertin"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

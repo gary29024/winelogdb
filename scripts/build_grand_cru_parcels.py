@@ -17,12 +17,11 @@ import re
 import zlib
 
 from pyproj import Transformer
-from shapely.geometry import shape
+from shapely.geometry import box, shape
 from shapely.ops import transform
 
-from build_burgundy_village_map import ROOT, write_json
-from grand_cru import (bundle_parent_features, cadastre_sources, communes, holder_index_path, load_cru, manifest_path,
-                       parcel_report_path, parcels_file, pinned, schema_file, sha256, source_dir)
+from grand_cru import (ROOT, bundle_parent_features, cadastre_sources, communes, holder_index_path, load_cru, manifest_path,
+                       parcel_report_path, parcels_file, pinned, schema_file, sha256, source_dir, write_or_check)
 
 
 def parcel_id(row, allowed=('21267',)):
@@ -61,6 +60,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--cru', required=True)
     parser.add_argument('--source-dir')
+    parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     _, bundle = load_cru(args.cru)
     config = bundle['parcels']
@@ -79,10 +79,15 @@ def main():
     expected = source_hashes[bundle['villageMap']]
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
     projected = {id: transform(project, shape(f['geometry'])) for id, f in parents.items()}
-    selected, contacts = {}, []
+    selected, contacts, invalid_outside = {}, [], []
     for f in parcels:
         props = f['properties']
         geometry = shape(f['geometry'])
+        relevant = [p for pid, p in parents.items() if props['commune'] in p['properties']['communes']]
+        if not geometry.is_valid and all(not box(*geometry.bounds).intersects(shape(p['geometry'])) for p in relevant):
+            invalid_outside.append({'parcelId': props['id'], 'bounds': list(geometry.bounds),
+                                    'reason': 'Invalid source geometry; bounding box disjoint from every relevant INAO cru.'})
+            continue
         assert geometry.is_valid
         metric = transform(project, geometry)
         overlaps = []
@@ -143,7 +148,9 @@ def main():
     payload = (json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n').encode()
     digest = sha256(payload)
     data_url = f'/maps/{bundle["assetName"]}.{config["cadastreDate"]}.{digest[:12]}.geojson'
-    (ROOT / ('public' + data_url)).write_bytes(payload)
+    write_or_check(ROOT / ('public' + data_url), payload.decode('utf-8'), args.check)
+    def write_json(path, value):
+        write_or_check(path, json.dumps(value, ensure_ascii=False, indent=2) + '\n', args.check)
     counts = {'parcels': len(selected), 'withRecordedRights': sum(bool(f['properties']['recordedRights']) for f in selected.values()),
               'rightRecords': sum(len(f['properties']['recordedRights']) for f in selected.values()),
               'unknownRights': sum(not f['properties']['recordedRights'] for f in selected.values()),
@@ -164,6 +171,7 @@ def main():
     report = {'sources': config, 'parentSourceSha256': expected, **manifest, 'bytes': len(payload),
               'gzipEquivalentBytes': len(gzip.compress(payload, mtime=0)), 'matchedFiscalRows': matched_rows,
               'excludedBoundaryContacts': contacts, 'communeRecordsWithoutCurrentGeometry': sorted(unmatched_refs),
+              'invalidGeometryOutsideCru': invalid_outside,
               'byCru': {id: {'parcels': sum(any(o['parentFeatureId'] == id for o in f['properties']['overlaps']) for f in selected.values()),
                              'areaHa': sum(o['areaM2'] for f in selected.values() for o in f['properties']['overlaps'] if o['parentFeatureId'] == id) / 10000}
                         for id in parents}}

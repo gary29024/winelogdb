@@ -1,0 +1,22 @@
+{
+  "slug": "clos-de-la-roche",
+  "name": "Clos de la Roche",
+  "parentFeatureId": "inao-denom-544",
+  "appellationId": 160,
+  "issue": 390,
+  "tier": 1,
+  "bundle": "chambolle-morey",
+  "villageMaps": [
+    "morey-saint-denis"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Clos de la Roche (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "clos-de-la-roche"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

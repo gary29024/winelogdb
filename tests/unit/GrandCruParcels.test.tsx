@@ -107,7 +107,7 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.getByRole('link',{name:manifest.rightsLicence}).getAttribute('href')).toBe(manifest.rightsLicenceUrl);
  });
  it('renders nothing for a cru without parcel data',()=>{
-  const view=render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-655"/>);
+  const view=render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-unknown"/>);
   expect(view.container.innerHTML).toBe('');
  });
  it('downloads only on request, keeps record details folded, preserves both rights and cleans up the overlay',async()=>{

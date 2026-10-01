@@ -1,0 +1,1978 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "targetSeason": "2026",
+  "status": "historical-extension-inventory",
+  "scope": "All 17 mapped Romanée-Saint-Vivant parcels and 11 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "parentFeatureId": "inao-denom-1085",
+  "inputs": {
+    "curation": "docs/research/romanee-saint-vivant/curation.json",
+    "dataUrl": "/maps/vosne-romanee-parcels.2026-06-01.ef82eec2364d.geojson",
+    "sha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+    "cadastreDate": "2026-06-01",
+    "rightsAsOf": "2025-01-01",
+    "rightsHistory": "docs/research/romanee-saint-vivant/rights-history.json",
+    "rightsHistoryYears": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "saleRecords": "docs/research/romanee-saint-vivant/sale-records.json",
+    "saleRecordsCoverage": "2014-01-20 to 2025-12-17"
+  },
+  "counts": {
+    "parcels": 17,
+    "recordedHolders": 11,
+    "withRecordedRights": 16,
+    "withoutMatchedRights": 1,
+    "holderLead": 0,
+    "historicalApplication": 0,
+    "historicalAuthorisation": 0,
+    "saleLead": 0,
+    "unresolved": 17,
+    "currentFarmerConfirmed": 0,
+    "withSaleRecord": 2,
+    "withParcelFiling": 0,
+    "withRightsChangeSince2019": 10,
+    "withCadastralPredecessor": 4
+  },
+  "namedAreaCensus": [
+    {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "parcels": 17,
+      "areaM2": 94424,
+      "withoutCompanyRecord": 1,
+      "withoutCompanyRecordM2": 2422,
+      "withoutCompanyRecordOrLead": 1,
+      "withoutCompanyRecordOrLeadM2": 2422,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": []
+    }
+  ],
+  "historyCoverage": {
+    "inventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+    "catalogueDate": "2026-10-01",
+    "rightsAvailable": {
+      "21": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ]
+    },
+    "rightsImported": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "dfiSources": [
+      {
+        "id": "dfi-21-2026-07-01",
+        "kind": "dfi",
+        "department": "21",
+        "departmentCode": "210",
+        "asOf": "2026-07-01",
+        "sourceReleaseDate": null,
+        "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+        "member": "dfiano-dep210-01072026.txt",
+        "fileName": "dfiano-dep210-01072026.txt",
+        "schemaVersion": "2025-01",
+        "encoding": "ascii",
+        "licence": "Licence Ouverte v2.0 (Etalab)",
+        "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+        "retrievedAt": "2026-10-01T08:51:47Z",
+        "size": 36175805,
+        "sha256": "f24ff17542f2e80921c7cce9e537b060ecdd0bff9280bbdd3e30dd1d3f6ea83e",
+        "status": "obtained"
+      }
+    ],
+    "dfiSchema": [
+      {
+        "id": "dfi-schema-2025-01",
+        "kind": "dfi-schema",
+        "schemaVersion": "2025-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_descriptif_du_fichier_janvier2025_pdf",
+        "fileName": "dfi-schema-2025-01.pdf",
+        "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+        "sourceReleaseDate": null,
+        "asOf": null,
+        "licence": "Licence Ouverte v2.0 (Etalab)",
+        "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+        "retrievedAt": "2026-10-01T08:50:33Z",
+        "sha256": "f17bd818fac3003e1c6d1bad9a236e94cdcdb615dc89b85a82cd8b366ea4d498",
+        "size": 38057,
+        "transportSha256": "6e967a42ab20a7f6940f00fb7758e5c8faa110017f0e5053cc80fd1219beffdf",
+        "transportSize": 35599,
+        "httpContentEncoding": "gzip",
+        "status": "obtained"
+      }
+    ],
+    "dfiCommuneCoverage": [
+      {
+        "commune": "21714",
+        "sourceId": "dfi-21-2026-07-01",
+        "completeDepartmentMemberObtained": true,
+        "earliestValidationDateInCommune": "1989-05-05",
+        "latestValidationDateInCommune": "2026-06-29"
+      }
+    ],
+    "earliestReachableDfiValidationDate": "1990-01-18",
+    "latestReachableDfiValidationDate": "2022-05-16",
+    "geometry": {
+      "21714": {
+        "dates": [
+          "2017-07-06",
+          "2017-10-12",
+          "2018-01-02",
+          "2018-04-03",
+          "2018-06-29",
+          "2018-10-01",
+          "2019-01-01",
+          "2019-04-01",
+          "2019-07-01",
+          "2019-10-01",
+          "2020-01-01",
+          "2020-07-01",
+          "2020-10-01",
+          "2021-02-01",
+          "2021-04-01",
+          "2021-07-01",
+          "2021-10-01",
+          "2022-01-01",
+          "2022-04-01",
+          "2022-07-01",
+          "2022-10-01",
+          "2023-01-01",
+          "2023-04-01",
+          "2023-07-01",
+          "2023-10-01",
+          "2024-01-01",
+          "2024-04-01",
+          "2024-07-01",
+          "2024-10-01",
+          "2025-01-01",
+          "2025-04-01",
+          "2025-09-01",
+          "2025-12-01",
+          "2026-03-01",
+          "2026-06-01"
+        ],
+        "afterPinnedGeometry": [
+          "2026-09-01"
+        ],
+        "pinnedCurrentGeometry": "2026-06-01",
+        "obtainedDates": [
+          "2017-07-06",
+          "2017-10-12",
+          "2018-01-02",
+          "2018-04-03",
+          "2018-06-29",
+          "2018-10-01",
+          "2019-01-01",
+          "2019-04-01",
+          "2019-07-01",
+          "2019-10-01",
+          "2020-01-01",
+          "2020-07-01",
+          "2020-10-01",
+          "2021-02-01",
+          "2021-04-01",
+          "2021-07-01",
+          "2021-10-01",
+          "2022-01-01",
+          "2022-04-01",
+          "2022-07-01",
+          "2022-10-01",
+          "2023-01-01",
+          "2023-04-01",
+          "2023-07-01",
+          "2023-10-01",
+          "2024-01-01",
+          "2024-04-01",
+          "2024-07-01",
+          "2024-10-01",
+          "2025-01-01",
+          "2025-04-01",
+          "2025-09-01",
+          "2025-12-01",
+          "2026-03-01",
+          "2026-06-01"
+        ]
+      }
+    },
+    "currentParcelsWithDocumentedAncestors": 7,
+    "currentParcelsWithPre2019DfiEvents": 3,
+    "distinctDfiDocuments": 3,
+    "distinctDfiAnalysisLots": 3,
+    "inferredOnlyCurrentParcels": 0,
+    "unresolvedEvents": 0,
+    "traversalIssues": [],
+    "terminalReasons": {
+      "source-boundary-or-unrecorded-event": 17
+    },
+    "missingSources": [
+      {
+        "id": "notices-21-earlier-pdf",
+        "kind": "notice-bulletin",
+        "department": "21",
+        "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "fileName": "notices-21-earlier-pdf.pdf",
+        "sourceReleaseDate": null,
+        "asOf": null,
+        "licence": "Official public administrative bulletin; reuse terms not stated on the inaccessible listing",
+        "licenceUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "status": "missing",
+        "attemptedAt": "2026-10-01T10:20:39Z",
+        "reason": "Remote end closed connection without response"
+      }
+    ],
+    "salesAndNotices": "Independent inventories and original-reference matches are published with sale records and notice audits.",
+    "spatialCandidatesAccepted": 4,
+    "spatialCandidatesRejected": 0,
+    "spatialConflicts": [],
+    "sales": {
+      "release": "2026-04",
+      "availableStart": "2014-01-01",
+      "availableRange": {
+        "end": "2025-12-31",
+        "start": "2014-01-01"
+      },
+      "provenance": [
+        {
+          "id": "sales-bfc-2026-1",
+          "kind": "sales",
+          "region": "Bourgogne-Franche-Comté",
+          "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+          "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+          "schemaVersion": "DVF+ open data 2026-1",
+          "sourceReleaseDate": null,
+          "asOf": null,
+          "releaseLabel": "2026-1",
+          "archiveMember": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+          "catalogueUrl": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+          "licence": "Licence Ouverte / Open Licence 2.0",
+          "licenceUrl": "https://www.data.gouv.fr/datasets/dvf-open-data",
+          "resolvedUrl": "https://euw9.boxcloud.com/d/1/a1!LJ4MCXxPN4UVIGIB98At0O_1mmyimSuR9ICNo6hINwpv-6_F9oZwSeLL6_MHgQ-g0XGb2Ds1ttcN5__Nnz9BJlmhx-jKQWpc7Aj3b0dFf_mA5tG5s0a6Yz9SunCWeRKAHETRynQc_K18uEbRZIeJoQ8l6JbkKXuxY_4EUgdK_d9bXrkzMHLNOCmeL8Y8QU5eNNIYaaTKCm6gwDzZVsFK9v_RMcDrzO8cFUamNB4crylqk6kOpjxMrpgBPJPQD1tg9fsIOdXzdq9ySGNMnP3GftjyAYgVp-fO_Gg3BayelaMDpdSB8X-Z4Xf39gmzk_FGanxbTVtsqn-DRP0l52-RzKSiP8r4Py6dHhAPxAb6lGq6vu9eYAzDOVnfNdLTqjdk25FZVciKqm0Ns6NI22fb12aijWXuRRQF4RvXvazaN8aPCRqTwAxOMeTLAAG4hUrB2QUDOqA3grtuulkV0NCyre8KfplBaXiRFK9edaLgQdbl8HblDZonh3lo1byNUgVK3uECXdSEWg9zmKzZoDtL-kSj8V4Vf2Zk2kIoW0oTXydIsjLGTatFKbtFYIx-op3bqQrN1PDZrXiw5T0UzxUcS0Q9OhYNU0HG9JLLJNBXBKIaTKlah6XXwRxCNM5cpvYQxYmysqTuNPVKbBjNNkQK1BjggKXzp5_CCmBqj7NmHDaYBKd6B-PzAjegeGGOg_OhVvDtG4osvPebfwKzTl92lGCA8kKrPsuwZzSRRLECJRdle-Q0pgGT7B0ujNaUvJP3m01skixaiFs9wo_YcPlDriioamUMv-hdtEU4UrRIIgh0puje48gmOSwBhEmVYuHGnil-xy8mRXFY994AlQaTHCkJ-estiPCUMYAxn_aYz01_Xf5gPDgFnQ0vztvCSkl_gGpNFHBb3WNAf_5yNgPwJyGLvSmb4_OMtoD6uRF-BpzKMcOpknpIkjgfBOfAEp2uhM1auy9pET76bF3JCzFzLL0EWrQv5vu7kRX-yDJPmSmt3XDLl6I-31JyZLt1_etyjvgk1AuPwXWxpvSU0ELBHCSgdLXhhjRNsbArJZBeskKRdplNR62ugFWmezYG99-Zt-oxJXLI1ORUoVqO_iA5j9mjvCXHzoCxQP8CjwXuA4ziMgDtMtb5V7fwnx8qEoAOdHQ9i9kpLp9aFepOfNF20OLGSPflMOhG39Z_zRmfkj0_eVjKqnJHTTLz9UyZqF9YrKeVWXHvZt3Pz-V9JJPuYT0Cp1bAOfp4hIdvPhmcWyFudRCxN7-489da4YQQTx7WD4Wn9oplfiF46UqNOiO3m_m_BNaNpokBD5tUFE5tV1nHhbek8886Mm25lp6rJmsXBsEB6Xm0V5bGISvMRA9NprXpiDEC6twxpBV3XpwDe8qk1Ozbdyot_jjdERv3rmvPL1lIK1K-VZRsJVC_lynJ/download",
+          "httpContentEncoding": null,
+          "transportSha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+          "transportSize": 72937314,
+          "status": "obtained",
+          "retrievedAt": "2026-10-01T10:09:26Z",
+          "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+          "size": 72937314
+        }
+      ],
+      "observedDatasetRange": [
+        "2014-01-02",
+        "2025-12-31"
+      ],
+      "observedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "historicalReferencesQueried": [
+        "21714000AC0271",
+        "21714000AC0273",
+        "21714000AL0002"
+      ],
+      "earlierOfficialRecordsAudit": {
+        "catalogue": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-catalogue.json",
+        "catalogueMetadata": {
+          "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+          "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+          "httpContentEncoding": null,
+          "transportSha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+          "transportSize": 8953,
+          "sha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+          "size": 8953,
+          "retrievedAt": "2026-10-01T10:12:31Z",
+          "status": "obtained"
+        },
+        "releaseListing": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-box.html",
+        "latestReleaseFolderObserved": "avril_2026",
+        "previousReleaseFolderObserved": "versions_anterieures",
+        "earlierThanAvailableStart": "No earlier deed period is declared by this open-data catalogue. Restricted DV3F/DVF records are not treated as public DVF+ coverage.",
+        "coverageMeaning": "Catalogue temporal coverage is separate from observed dates in this region/commune; not a claim of uninterrupted records."
+      },
+      "limitation": "Observed deed ranges are not uninterrupted coverage or creation dates. Sales do not reach back to the oldest DFI event."
+    },
+    "notices": {
+      "indexes": [
+        {
+          "id": "regional-bfc-cote-dor",
+          "department": "21",
+          "publicationYearsIndexed": [
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "summary": {
+            "bulletins": 1277,
+            "notScanned": 0,
+            "downloadFailed": 0,
+            "extractionIncomplete": 0,
+            "fullOcrNoContents": 1,
+            "failedPages": 0,
+            "withCoteDorNotices": 269,
+            "coteDorNotices": 1412,
+            "farmStructureNotices": 1120
+          },
+          "earlierAvailableYearsAudit": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          },
+          "unsearchedIntervals": [
+            "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+            "Departmental 2021–2026 publications outside the existing index",
+            "Regional publications before 2019 and any notice outside the indexed corpus"
+          ]
+        },
+        {
+          "id": "departmental-cote-dor",
+          "department": "21",
+          "publicationYearsIndexed": [
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+          ],
+          "summary": {
+            "documentReferences": 377,
+            "downloadedPDFs": 372,
+            "completePDFs": 372,
+            "indexedPages": 31966,
+            "pendingPages": 0,
+            "failedPages": 0,
+            "candidatePages": 1245,
+            "noticeOccurrences": 1795,
+            "farmStructureOccurrences": 130
+          },
+          "earlierAvailableYearsAudit": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          },
+          "unsearchedIntervals": [
+            "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+            "Departmental 2021–2026 publications outside the existing index",
+            "Regional publications before 2019 and any notice outside the indexed corpus"
+          ]
+        }
+      ],
+      "missingDepartmentIndexes": [],
+      "availabilityAudit": {
+        "path": "scripts/grand-crus/sources/notice-coverage-2026-10-01.json",
+        "sha256": "ae6ad9c539a83ba3ba112f0a8148be4785271d844ae97dae2ee19629e0c4c5ae",
+        "departments": {
+          "21": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          }
+        }
+      },
+      "reachableReferencesQueried": [
+        "21714000AC0230",
+        "21714000AC0231",
+        "21714000AC0271",
+        "21714000AC0273",
+        "21714000AC0298",
+        "21714000AC0299",
+        "21714000AC0300",
+        "21714000AC0301",
+        "21714000AC0357",
+        "21714000AC0358",
+        "21714000AC0359",
+        "21714000AC0360",
+        "21714000AL0001",
+        "21714000AL0002",
+        "21714000AL0325",
+        "21714000AL0326",
+        "21714000AL0327",
+        "21714000AL0328",
+        "21714000AL0329",
+        "21714000AL0330"
+      ],
+      "reviewedMatches": 0,
+      "unreviewedSearchCandidates": 0,
+      "earliestMatchedActDate": null,
+      "latestMatchedActDate": null,
+      "limitation": "Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event."
+    }
+  },
+  "historicalReferenceSales": [],
+  "noticeReviewCandidates": [],
+  "parcels": [
+    {
+      "parcelId": "21714000AC0230",
+      "reference": "AC 0230",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 22120.4552,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "e6f230d2efd34aab81137a3b1c781c19",
+          "date": "2017-10-28",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "21714000AC0231"
+          ],
+          "otherParcels": 1
+        }
+      ],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0230",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0230",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0230"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0231",
+      "reference": "AC 0231",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 30696.2951,
+      "recordedRights": [
+        {
+          "holderId": "778269407",
+          "siren": "778269407",
+          "name": "DOMAINE DE LA ROMANEE CONTI",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778269407"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "e6f230d2efd34aab81137a3b1c781c19",
+          "date": "2017-10-28",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [
+            "21714000AC0230"
+          ],
+          "otherParcels": 1
+        }
+      ],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0231",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0231",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0231"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0298",
+      "reference": "AC 0298",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 1704.4049,
+      "recordedRights": [
+        {
+          "holderId": "U33201044",
+          "siren": null,
+          "name": "GFV LES HERITIERS CONFURON",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U33201044"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFV LES HERITIERS CONFURON"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0298",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0298",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0298"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0299",
+      "reference": "AC 0299",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 2437.3009,
+      "recordedRights": [
+        {
+          "holderId": "U14149307",
+          "siren": null,
+          "name": "SCI DOM LEROY",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U14149307"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SCI DOM LEROY"
+          ],
+          "after": [
+            "SCI DOM LEROY"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0299",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0299",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0299"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0300",
+      "reference": "AC 0300",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 3205.1621,
+      "recordedRights": [
+        {
+          "holderId": "U33201044",
+          "siren": null,
+          "name": "GFV LES HERITIERS CONFURON",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U33201044"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "GFV LES HERITIERS CONFURON"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0300",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0300",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0300"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0301",
+      "reference": "AC 0301",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 7560.9357,
+      "recordedRights": [
+        {
+          "holderId": "U14149307",
+          "siren": null,
+          "name": "SCI DOM LEROY",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U14149307"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SCI DOM LEROY"
+          ],
+          "after": [
+            "SCI DOM LEROY"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0301",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0301",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AC0301"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0357",
+      "reference": "AC 0357",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 906.2147,
+      "recordedRights": [
+        {
+          "holderId": "438871279",
+          "siren": "438871279",
+          "name": "GFV HUDELOT NOELLAT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "438871279"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "GFV HUDELOT NOELLAT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2022-07-01",
+      "predecessorIds": [
+        "21714000AC0271"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0357",
+        "eventIds": [
+          "210:714:000:0000369:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000369:00001"
+        ],
+        "ancestorIds": [
+          "21714000AC0271"
+        ],
+        "earliestValidationDate": "2022-05-16",
+        "latestValidationDate": "2022-05-16",
+        "paths": [
+          {
+            "referenceId": "21714000AC0271",
+            "eventPath": [
+              "210:714:000:0000369:00001"
+            ],
+            "referencePath": [
+              "21714000AC0357",
+              "21714000AC0271"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0271",
+            "eventPath": [
+              "210:714:000:0000369:00001"
+            ],
+            "referencePath": [
+              "21714000AC0357",
+              "21714000AC0271"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2022-05-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0358",
+      "reference": "AC 0358",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 889.4226,
+      "recordedRights": [
+        {
+          "holderId": "438871279",
+          "siren": "438871279",
+          "name": "GFV HUDELOT NOELLAT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "438871279"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "GFV HUDELOT NOELLAT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2022-07-01",
+      "predecessorIds": [
+        "21714000AC0271"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0358",
+        "eventIds": [
+          "210:714:000:0000369:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000369:00001"
+        ],
+        "ancestorIds": [
+          "21714000AC0271"
+        ],
+        "earliestValidationDate": "2022-05-16",
+        "latestValidationDate": "2022-05-16",
+        "paths": [
+          {
+            "referenceId": "21714000AC0271",
+            "eventPath": [
+              "210:714:000:0000369:00001"
+            ],
+            "referencePath": [
+              "21714000AC0358",
+              "21714000AC0271"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0271",
+            "eventPath": [
+              "210:714:000:0000369:00001"
+            ],
+            "referencePath": [
+              "21714000AC0358",
+              "21714000AC0271"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2022-05-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0359",
+      "reference": "AC 0359",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 1575.1499,
+      "recordedRights": [
+        {
+          "holderId": "438871279",
+          "siren": "438871279",
+          "name": "GFV HUDELOT NOELLAT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "438871279"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "GFV HUDELOT NOELLAT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2022-07-01",
+      "predecessorIds": [
+        "21714000AC0273"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0359",
+        "eventIds": [
+          "210:714:000:0000370:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000370:00001"
+        ],
+        "ancestorIds": [
+          "21714000AC0273"
+        ],
+        "earliestValidationDate": "2022-05-16",
+        "latestValidationDate": "2022-05-16",
+        "paths": [
+          {
+            "referenceId": "21714000AC0273",
+            "eventPath": [
+              "210:714:000:0000370:00001"
+            ],
+            "referencePath": [
+              "21714000AC0359",
+              "21714000AC0273"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0273",
+            "eventPath": [
+              "210:714:000:0000370:00001"
+            ],
+            "referencePath": [
+              "21714000AC0359",
+              "21714000AC0273"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2022-05-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AC0360",
+      "reference": "AC 0360",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 1465.6335,
+      "recordedRights": [
+        {
+          "holderId": "438871279",
+          "siren": "438871279",
+          "name": "GFV HUDELOT NOELLAT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "438871279"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2022-01-01",
+          "to": "2023-01-01",
+          "kind": "new-parcel-reference",
+          "before": [],
+          "after": [
+            "GFV HUDELOT NOELLAT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2022-07-01",
+      "predecessorIds": [
+        "21714000AC0273"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AC0360",
+        "eventIds": [
+          "210:714:000:0000370:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000370:00001"
+        ],
+        "ancestorIds": [
+          "21714000AC0273"
+        ],
+        "earliestValidationDate": "2022-05-16",
+        "latestValidationDate": "2022-05-16",
+        "paths": [
+          {
+            "referenceId": "21714000AC0273",
+            "eventPath": [
+              "210:714:000:0000370:00001"
+            ],
+            "referencePath": [
+              "21714000AC0360",
+              "21714000AC0273"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AC0273",
+            "eventPath": [
+              "210:714:000:0000370:00001"
+            ],
+            "referencePath": [
+              "21714000AC0360",
+              "21714000AC0273"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2022-05-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0001",
+      "reference": "AL 0001",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 7743.2783,
+      "recordedRights": [
+        {
+          "holderId": "528291362",
+          "siren": "528291362",
+          "name": "VIGNOBLE LATOUR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        },
+        {
+          "holderId": "U21852238",
+          "siren": null,
+          "name": "GFA DOM CORTON GRANCEY",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "528291362",
+        "U21852238"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA DOM CORTON GRANCEY",
+            "VIGNOBLE LATOUR"
+          ],
+          "after": [
+            "GFA DOM CORTON GRANCEY",
+            "VIGNOBLE LATOUR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0001",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0001",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AL0001"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0325",
+      "reference": "AL 0325",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 1662.3854,
+      "recordedRights": [
+        {
+          "holderId": "484070800",
+          "siren": "484070800",
+          "name": "NICHOLEM",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "484070800"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0325",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0325",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AL0325"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0326",
+      "reference": "AL 0326",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 1682.6324,
+      "recordedRights": [
+        {
+          "holderId": "405387101",
+          "siren": "405387101",
+          "name": "FAMILLE CATHIARD",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "405387101"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0326",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0326",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AL0326"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0327",
+      "reference": "AL 0327",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 3405.4126,
+      "recordedRights": [
+        {
+          "holderId": "328972344",
+          "siren": "328972344",
+          "name": "DOMAINE ARNOUX - LACHAUX",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "328972344"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0327",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0327",
+            "eventPath": [],
+            "referencePath": [
+              "21714000AL0327"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0328",
+      "reference": "AL 0328",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 2549.7361,
+      "recordedRights": [
+        {
+          "holderId": "322235748",
+          "siren": "322235748",
+          "name": "DE L ARLOT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "322235748"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0328",
+        "eventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "ancestorIds": [
+          "21714000AL0002"
+        ],
+        "earliestValidationDate": "1990-01-18",
+        "latestValidationDate": "1990-01-18",
+        "paths": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0328",
+              "21714000AL0002"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0328",
+              "21714000AL0002"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1990-01-18",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0329",
+      "reference": "AL 0329",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 2422.1485,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0329",
+        "eventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "ancestorIds": [
+          "21714000AL0002"
+        ],
+        "earliestValidationDate": "1990-01-18",
+        "latestValidationDate": "1990-01-18",
+        "paths": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0329",
+              "21714000AL0002"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0329",
+              "21714000AL0002"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1990-01-18",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21714000AL0330",
+      "reference": "AL 0330",
+      "commune": "21714",
+      "namedArea": null,
+      "cruOverlapM2": 2397.3768,
+      "recordedRights": [
+        {
+          "holderId": "931134381",
+          "siren": "931134381",
+          "name": "MEMOIRE DE VIGNES",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "931134381"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "MEMOIRE DE VIGNES"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21714000AL0330",
+        "eventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "supportedEventIds": [
+          "210:714:000:0000226:00001"
+        ],
+        "ancestorIds": [
+          "21714000AL0002"
+        ],
+        "earliestValidationDate": "1990-01-18",
+        "latestValidationDate": "1990-01-18",
+        "paths": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0330",
+              "21714000AL0002"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21714000AL0002",
+            "eventPath": [
+              "210:714:000:0000226:00001"
+            ],
+            "referencePath": [
+              "21714000AL0330",
+              "21714000AL0002"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1990-01-18",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    }
+  ]
+}

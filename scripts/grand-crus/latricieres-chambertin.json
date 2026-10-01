@@ -1,0 +1,22 @@
+{
+  "slug": "latricieres-chambertin",
+  "name": "Latricières-Chambertin",
+  "parentFeatureId": "inao-denom-666",
+  "appellationId": 193,
+  "issue": 397,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Latricières-Chambertin (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "latricieres-chambertin"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

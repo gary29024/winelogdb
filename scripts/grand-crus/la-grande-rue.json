@@ -1,0 +1,22 @@
+{
+  "slug": "la-grande-rue",
+  "name": "La Grande Rue",
+  "parentFeatureId": "inao-denom-654",
+  "appellationId": 189,
+  "issue": 384,
+  "tier": 1,
+  "bundle": "vosne-romanee",
+  "villageMaps": [
+    "vosne-romanee"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for La Grande Rue (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "la-grande-rue"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

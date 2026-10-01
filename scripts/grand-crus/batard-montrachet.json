@@ -1,0 +1,23 @@
+{
+  "slug": "batard-montrachet",
+  "name": "Bâtard-Montrachet",
+  "parentFeatureId": "inao-denom-273",
+  "appellationId": 130,
+  "issue": 402,
+  "tier": 1,
+  "bundle": "montrachet",
+  "villageMaps": [
+    "chassagne-montrachet",
+    "puligny-montrachet"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Bâtard-Montrachet (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "batard-montrachet"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

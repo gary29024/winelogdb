@@ -1,0 +1,7995 @@
+{
+ "schemaVersion": 2,
+ "purpose": "Official filiation, dated legal-entity rights and original-reference evidence for Ruchottes-Chambertin (#461). None establishes current farming.",
+ "parentFeatureId": "inao-denom-1086",
+ "inputs": {
+  "parcelSnapshotSha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+  "rights": [
+   {
+    "asOf": "2019-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+    "member": "PM_19_NB_210.txt",
+    "sha256": "c6eb0f3a4245dca6ce3df156cd009477f3ae1ebd481f16b89b88a619c74865f6"
+   },
+   {
+    "asOf": "2020-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+    "member": "PM_20_NB_210.txt",
+    "sha256": "70d7e9e25850f14b7fcdf7da9a0ee85e167266154b24c7a2d76606f2e26200ff"
+   },
+   {
+    "asOf": "2021-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+    "member": "PM_21_NB_210.txt",
+    "sha256": "4de26600ed99a6cff6e66d6230d8db415f5f2c41fa1f590da4ee3a7470eaa0d3"
+   },
+   {
+    "asOf": "2022-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+    "member": "PM_22_NB_210.txt",
+    "sha256": "ecb09a6501c3b3a0c541e3881307efe42425d859f300af53a51e97c5888dc2f0"
+   },
+   {
+    "asOf": "2023-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+    "member": "PM_23_NB_210.txt",
+    "sha256": "661faf904f5ea3cedaad58338812d5ae438af520ff81c4b05bd672dfe6cd6956"
+   },
+   {
+    "asOf": "2024-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+    "member": "PM_24_NB_210.csv",
+    "sha256": "2ee57e0bf697c63731e8a62592cf49b0b342d74270434462b845685ba2d936ad"
+   },
+   {
+    "asOf": "2025-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "member": "PM_25_NB_210.csv",
+    "sha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17"
+   }
+  ],
+  "cadastre": [
+   {
+    "date": "2017-07-06",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-07-06/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "87d7027c19c79451416d543f660eebe1ba9365c51ca8822eadc4a59f42a93b16"
+   },
+   {
+    "date": "2017-10-12",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-10-12/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "6d11d46910210cf1b962f4982b58136dccfdc6cbdbf665460faa53043e4dd50f"
+   },
+   {
+    "date": "2018-01-02",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-01-02/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "845acf2b356112800a062e7f51ab1689a169d1f27901fc5c1be10e561338af6f"
+   },
+   {
+    "date": "2018-04-03",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-04-03/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "7a011ae191cc14df405a6f88a3e27fb89cdabb852cfa5abbcd3bc2ed60690c42"
+   },
+   {
+    "date": "2018-06-29",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-06-29/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "731ea879e77175b495353183b8ddc960d34f236bda6eece70f7ad021a97b46c9"
+   },
+   {
+    "date": "2018-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "ce858bbe42e0f6a1c828d8c790941763e8cddab2fb0b325774d9d316fc5c2486"
+   },
+   {
+    "date": "2019-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "373e5c13de0d4170414865cf2626b73ee9c40488f12bd7e3be69b57ebb5dd102"
+   },
+   {
+    "date": "2019-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "804339126144c663584ff77636168778dd8af189f6210936cea6b59310c1b9de"
+   },
+   {
+    "date": "2019-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "6df447822c49d078ad6181782eff04ccd182465aa4936caf257ec6bd8f436695"
+   },
+   {
+    "date": "2019-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "d94db4d69034d267974fb236fe9dd4a516c37fa94324df6bc75c20b8ba8c13e8"
+   },
+   {
+    "date": "2020-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "5f350a5f54b20608c36dabed3f9f612a156fab8d299f9dddb44e57330af538ab"
+   },
+   {
+    "date": "2020-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "09de81bae937dc18f62082934968500f206ab0b02fe675efdf800d8247fc6f55"
+   },
+   {
+    "date": "2020-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "9b831ff36b4cf823d2fc12fe404df1cb16b2da7310328c2125e4ea0cb76d2cdc"
+   },
+   {
+    "date": "2021-02-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-02-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "50944cdd62aa91cee081d17181a3a8388d62bdb4f5e7607e6df6176bf05a6822"
+   },
+   {
+    "date": "2021-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "3b621ee3099b01c12706cd5af4bf52a4f6fc3a69ef9816e5bb9e55852631d588"
+   },
+   {
+    "date": "2021-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "375d1499dc0ddd67548382be6be3c785fbc21601f69a079aa4ab611559153e43"
+   },
+   {
+    "date": "2021-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "0679d79400b0fb6a99d1a802ce7838a31ad9754a6dd2795b437be19dc0233635"
+   },
+   {
+    "date": "2022-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "0b398cf41e2c3a40ccb04e827e517c901c5eef13320db3188841ebdeb56e1eef"
+   },
+   {
+    "date": "2022-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "0c999caaf9d1501b15f42100fbc6b6ef0134ed9120f07fe9877a1ba548269137"
+   },
+   {
+    "date": "2022-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "717386a3f32d10a983271292e95c37acb62c30c76c9888a2883e9ad702469d38"
+   },
+   {
+    "date": "2022-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "f0410dd16de9b3780e0328b3ebc1f946aa2d8266e59ea776670202dc7f8704c5"
+   },
+   {
+    "date": "2023-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "506a66150537ab91f1ef02da0e1f718a51f7ed96807b8653ba5b3db209b2ccf8"
+   },
+   {
+    "date": "2023-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "80757fc91d44ee9ef763f4bd9d8fcda68c6eba9237b8c8ebf760b95f9f48c61a"
+   },
+   {
+    "date": "2023-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "a6c1c7fe8df3c8c47e6af58b96a07fbce920c2ae88298ac20ab9b54c628ee789"
+   },
+   {
+    "date": "2023-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "3f7d0442d11b96b869f31afd22efcf41119b4a46eea73e4447f693ba3dac538b"
+   },
+   {
+    "date": "2024-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "68282dbe4eb80b374d5da6eb8c789ac4d85eca345da90c18f169d782fbbb7379"
+   },
+   {
+    "date": "2024-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "102821629cd26fab66dec860f22d7f496a6833910320f8c3bd0e86d7867866e0"
+   },
+   {
+    "date": "2024-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-07-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "3bfc8c805e5e8e7706f3f02a9d99642096cee7b9096afbab328957facc03733b"
+   },
+   {
+    "date": "2024-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-10-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "e6b9a0b996253eeffc83c2c9194d806d98041d4e497e1eb8d99e2da3b441b288"
+   },
+   {
+    "date": "2025-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-01-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "aec026859bf63f96c4df2cb8559a5a1293818eb6b27a6eee53da5aa6b2cc8171"
+   },
+   {
+    "date": "2025-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-04-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "5388c8b819ed21e64bc9acf472e5a9e079b0835c203f29fee08f7e658a290824"
+   },
+   {
+    "date": "2025-09-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-09-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "17793e91c41a1d4b17961729fa5673b65b9255d42f28cca6a47c5539d646fcad"
+   },
+   {
+    "date": "2025-12-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-12-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "fb934a4844eec061e0ca689cbaa0db797a34fe3addf708ba667e8153b774cc9a"
+   },
+   {
+    "date": "2026-03-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-03-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "34864441716da12fedf0f9370eb2073311ac3bb9d261d5a3c2fb71af00fc4b59"
+   },
+   {
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "sha256": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+   }
+  ],
+  "officialInventory": "scripts/grand-crus/sources/inventory-2026-10-01.json"
+ },
+ "rules": [
+  "A recorded right is legal-entity ownership or another real right on 1 January, never farming.",
+  "Private individuals are not in the legal-entity files: no record does not mean no owner.",
+  "Holder continuity is proved only by the same SIREN; names alone are hints for review.",
+  "Lineage is accepted only when a successor first appears in the next vintage and lies at least 95% inside the retired reference; other overlaps are rejected candidates. It is rule-based, not a documented division act.",
+  "Documented DFI event groups are primary filiation evidence; spatial candidates remain labelled inference.",
+  "All reachable predecessor generations and original date roles are retained, without a calendar cutoff.",
+  "Many-to-many lots do not assert individual geographic parent-child matches; partial routes stay qualified.",
+  "Historical-reference rights are contextual records on their original reference, never transferred current rights.",
+  "First supported events and source-boundary stops do not establish creation, original ownership or uninterrupted continuity."
+ ],
+ "counts": {
+  "parcels": 26,
+  "withAnyRightsChange": 9,
+  "firstObservedAfterEarliestVintage": 0,
+  "withPredecessor": 0,
+  "retiredReferences": 0,
+  "changeKinds": {
+   "holder-changed": 2,
+   "record-appeared": 4,
+   "same-holder-renamed": 3
+  }
+ },
+ "retiredParcels": [],
+ "parcels": [
+  {
+   "parcelId": "21295000BS0071",
+   "reference": "BS 0071",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CVVB",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "775567928",
+       "majic": null,
+       "name": "CONSORTIUM VITICOLE VINICOLE BOURGOGNE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2019-01-01",
+     "to": "2020-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "CVVB"
+     ],
+     "after": [
+      "CONSORTIUM VITICOLE VINICOLE BOURGOGNE"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0071",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0071",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0071"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0071",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0071",
+      "referencePath": [
+       "21295000BS0071"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0084",
+   "reference": "BS 0084",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0084",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0084",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0084"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0084",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0084",
+      "referencePath": [
+       "21295000BS0084"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0087",
+   "reference": "BS 0087",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.6
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.6
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0087",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0087",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0087"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0087",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0087",
+      "referencePath": [
+       "21295000BS0087"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0088",
+   "reference": "BS 0088",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0088",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0088",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0088"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0088",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0088",
+      "referencePath": [
+       "21295000BS0088"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0089",
+   "reference": "BS 0089",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0089",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0089",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0089"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0089",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0089",
+      "referencePath": [
+       "21295000BS0089"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0090",
+   "reference": "BS 0090",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "DU MEIX COQUEBRIQUE"
+     ],
+     "after": [
+      "GFA DU MEIX COQUEBRIQUE"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0090",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0090",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0090"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0090",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0090",
+      "referencePath": [
+       "21295000BS0090"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0092",
+   "reference": "BS 0092",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "353939127",
+       "majic": null,
+       "name": "GFA DU MEIX COQUEBRIQUE",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "same-holder-renamed",
+     "before": [
+      "DU MEIX COQUEBRIQUE"
+     ],
+     "after": [
+      "GFA DU MEIX COQUEBRIQUE"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0092",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0092",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0092"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0092",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0092",
+      "referencePath": [
+       "21295000BS0092"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0093",
+   "reference": "BS 0093",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "SAS CHRISTOPHE ROUMIER"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0093",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0093",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0093"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0093",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0093",
+      "referencePath": [
+       "21295000BS0093"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0094",
+   "reference": "BS 0094",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.9
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.9
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "SAS CHRISTOPHE ROUMIER"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0094",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0094",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0094"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0094",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0094",
+      "referencePath": [
+       "21295000BS0094"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0095",
+   "reference": "BS 0095",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "SAS CHRISTOPHE ROUMIER"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0095",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0095",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0095"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0095",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0095",
+      "referencePath": [
+       "21295000BS0095"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0096",
+   "reference": "BS 0096",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.5
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.5
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "789059151",
+       "majic": null,
+       "name": "SAS CHRISTOPHE ROUMIER",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2021-01-01",
+     "to": "2022-01-01",
+     "kind": "record-appeared",
+     "before": [],
+     "after": [
+      "SAS CHRISTOPHE ROUMIER"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0096",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0096",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0096"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0096",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0096",
+      "referencePath": [
+       "21295000BS0096"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0098",
+   "reference": "BS 0098",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0098",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0098",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0098"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0098",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0098",
+      "referencePath": [
+       "21295000BS0098"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0099",
+   "reference": "BS 0099",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0099",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0099",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0099"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0099",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0099",
+      "referencePath": [
+       "21295000BS0099"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0100",
+   "reference": "BS 0100",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "305242687",
+       "majic": null,
+       "name": "DOMAINE DU CHATEAU DE MARSANNAY",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2024-01-01",
+     "to": "2025-01-01",
+     "kind": "holder-changed",
+     "before": [
+      "CORIBEL"
+     ],
+     "after": [
+      "DOMAINE DU CHATEAU DE MARSANNAY"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0100",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0100",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0100"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0100",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0100",
+      "referencePath": [
+       "21295000BS0100"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0101",
+   "reference": "BS 0101",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.9
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.9
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "212102958",
+       "majic": null,
+       "name": "COMMUNE DE GEVREY-CHAMBERTIN",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0101",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0101",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0101"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0101",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0101",
+      "referencePath": [
+       "21295000BS0101"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0117",
+   "reference": "BS 0117",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "753606664",
+       "majic": null,
+       "name": "HUGO",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0117",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0117",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0117"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0117",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0117",
+      "referencePath": [
+       "21295000BS0117"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0118",
+   "reference": "BS 0118",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0118",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0118",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0118"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0118",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0118",
+      "referencePath": [
+       "21295000BS0118"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0134",
+   "reference": "BS 0134",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.5
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.5
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0134",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0134",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0134"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0134",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0134",
+      "referencePath": [
+       "21295000BS0134"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0135",
+   "reference": "BS 0135",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "315401596",
+       "majic": null,
+       "name": "CORIBEL",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "305242687",
+       "majic": null,
+       "name": "DOMAINE DU CHATEAU DE MARSANNAY",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [
+    {
+     "from": "2024-01-01",
+     "to": "2025-01-01",
+     "kind": "holder-changed",
+     "before": [
+      "CORIBEL"
+     ],
+     "after": [
+      "DOMAINE DU CHATEAU DE MARSANNAY"
+     ]
+    }
+   ],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0135",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0135",
+      "eventPath": [],
+      "referencePath": [
+       "21295000BS0135"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0135",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0135",
+      "referencePath": [
+       "21295000BS0135"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0152",
+   "reference": "BS 0152",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.8
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0152",
+    "eventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0091"
+    ],
+    "earliestValidationDate": "2008-10-06",
+    "latestValidationDate": "2008-10-06",
+    "paths": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0152",
+       "21295000BS0091"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0152",
+       "21295000BS0091"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2008-10-06",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0152",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0152",
+      "referencePath": [
+       "21295000BS0152"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001446:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0153",
+   "reference": "BS 0153",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.6
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.6
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0153",
+    "eventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0091"
+    ],
+    "earliestValidationDate": "2008-10-06",
+    "latestValidationDate": "2008-10-06",
+    "paths": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0153",
+       "21295000BS0091"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0153",
+       "21295000BS0091"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2008-10-06",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0153",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0153",
+      "referencePath": [
+       "21295000BS0153"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001446:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0154",
+   "reference": "BS 0154",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.1
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0154",
+    "eventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0091"
+    ],
+    "earliestValidationDate": "2008-10-06",
+    "latestValidationDate": "2008-10-06",
+    "paths": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0154",
+       "21295000BS0091"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0154",
+       "21295000BS0091"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2008-10-06",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0154",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0154",
+      "referencePath": [
+       "21295000BS0154"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001446:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0155",
+   "reference": "BS 0155",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0155",
+    "eventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001446:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0091"
+    ],
+    "earliestValidationDate": "2008-10-06",
+    "latestValidationDate": "2008-10-06",
+    "paths": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0155",
+       "21295000BS0091"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0091",
+      "eventPath": [
+       "210:295:000:0001446:00001"
+      ],
+      "referencePath": [
+       "21295000BS0155",
+       "21295000BS0091"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2008-10-06",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0155",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0155",
+      "referencePath": [
+       "21295000BS0155"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001446:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0156",
+   "reference": "BS 0156",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.7
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.7
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0156",
+    "eventIds": [
+     "210:295:000:0001463:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001463:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0085",
+     "21295000BS0111"
+    ],
+    "earliestValidationDate": "2009-04-14",
+    "latestValidationDate": "2009-04-14",
+    "paths": [
+     {
+      "referenceId": "21295000BS0085",
+      "eventPath": [
+       "210:295:000:0001463:00001"
+      ],
+      "referencePath": [
+       "21295000BS0156",
+       "21295000BS0085"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "partial-current-parcel-scope"
+      ],
+      "scope": "historical-reference-context"
+     },
+     {
+      "referenceId": "21295000BS0111",
+      "eventPath": [
+       "210:295:000:0001463:00001"
+      ],
+      "referencePath": [
+       "21295000BS0156",
+       "21295000BS0111"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "partial-current-parcel-scope"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0085",
+      "eventPath": [
+       "210:295:000:0001463:00001"
+      ],
+      "referencePath": [
+       "21295000BS0156",
+       "21295000BS0085"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "partial-current-parcel-scope"
+      ]
+     },
+     {
+      "referenceId": "21295000BS0111",
+      "eventPath": [
+       "210:295:000:0001463:00001"
+      ],
+      "referencePath": [
+       "21295000BS0156",
+       "21295000BS0111"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "partial-current-parcel-scope"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2009-04-14",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0156",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0156",
+      "referencePath": [
+       "21295000BS0156"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001463:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0157",
+   "reference": "BS 0157",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.3
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0157",
+    "eventIds": [
+     "210:295:000:0001539:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001539:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0083"
+    ],
+    "earliestValidationDate": "2015-06-29",
+    "latestValidationDate": "2015-06-29",
+    "paths": [
+     {
+      "referenceId": "21295000BS0083",
+      "eventPath": [
+       "210:295:000:0001539:00001"
+      ],
+      "referencePath": [
+       "21295000BS0157",
+       "21295000BS0083"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0083",
+      "eventPath": [
+       "210:295:000:0001539:00001"
+      ],
+      "referencePath": [
+       "21295000BS0157",
+       "21295000BS0083"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2015-06-29",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0157",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0157",
+      "referencePath": [
+       "21295000BS0157"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001539:00001"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21295000BS0158",
+   "reference": "BS 0158",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.4
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": []
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": []
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21295000BS0158",
+    "eventIds": [
+     "210:295:000:0001539:00001"
+    ],
+    "supportedEventIds": [
+     "210:295:000:0001539:00001"
+    ],
+    "ancestorIds": [
+     "21295000BS0083"
+    ],
+    "earliestValidationDate": "2015-06-29",
+    "latestValidationDate": "2015-06-29",
+    "paths": [
+     {
+      "referenceId": "21295000BS0083",
+      "eventPath": [
+       "210:295:000:0001539:00001"
+      ],
+      "referencePath": [
+       "21295000BS0158",
+       "21295000BS0083"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0083",
+      "eventPath": [
+       "210:295:000:0001539:00001"
+      ],
+      "referencePath": [
+       "21295000BS0158",
+       "21295000BS0083"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": [
+       "former-parcel-includes-other-daughters"
+      ]
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2015-06-29",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21295000BS0158",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21295000BS0158",
+      "referencePath": [
+       "21295000BS0158"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:295:000:0001539:00001"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "documentedEvents": [
+  {
+   "id": "210:295:000:0001446:00001",
+   "departmentCode": "210",
+   "department": "21",
+   "commune": "21295",
+   "sectionPrefix": "000",
+   "documentId": "0001446",
+   "analysisLot": "00001",
+   "changeType": "1",
+   "changeLabel": "document d'arpentage",
+   "validationDate": "2008-10-06",
+   "dateRole": "dfi-validation",
+   "method": "documented-dfi",
+   "motherIds": [
+    "21295000BS0091"
+   ],
+   "daughterIds": [
+    "21295000BS0152",
+    "21295000BS0153",
+    "21295000BS0154",
+    "21295000BS0155"
+   ],
+   "printedMothers": [
+    "BS0091"
+   ],
+   "printedDaughters": [
+    "BS0152",
+    "BS0153",
+    "BS0154",
+    "BS0155"
+   ],
+   "sourceLines": [
+    173865,
+    173866
+   ],
+   "issues": [],
+   "traceable": true,
+   "scope": "split-event-group",
+   "sourceId": "dfi-21-2026-07-01"
+  },
+  {
+   "id": "210:295:000:0001463:00001",
+   "departmentCode": "210",
+   "department": "21",
+   "commune": "21295",
+   "sectionPrefix": "000",
+   "documentId": "0001463",
+   "analysisLot": "00001",
+   "changeType": "2",
+   "changeLabel": "croquis de conservation",
+   "validationDate": "2009-04-14",
+   "dateRole": "dfi-validation",
+   "method": "documented-dfi",
+   "motherIds": [
+    "21295000BS0085",
+    "21295000BS0111"
+   ],
+   "daughterIds": [
+    "21295000BS0156"
+   ],
+   "printedMothers": [
+    "BS0085",
+    "BS0111"
+   ],
+   "printedDaughters": [
+    "BS0156"
+   ],
+   "sourceLines": [
+    173905,
+    173906
+   ],
+   "issues": [],
+   "traceable": true,
+   "scope": "merge-event-group",
+   "sourceId": "dfi-21-2026-07-01"
+  },
+  {
+   "id": "210:295:000:0001539:00001",
+   "departmentCode": "210",
+   "department": "21",
+   "commune": "21295",
+   "sectionPrefix": "000",
+   "documentId": "0001539",
+   "analysisLot": "00001",
+   "changeType": "5",
+   "changeLabel": "document d'arpentage numérique",
+   "validationDate": "2015-06-29",
+   "dateRole": "dfi-validation",
+   "method": "documented-dfi",
+   "motherIds": [
+    "21295000BS0083"
+   ],
+   "daughterIds": [
+    "21295000BS0157",
+    "21295000BS0158"
+   ],
+   "printedMothers": [
+    "BS0083"
+   ],
+   "printedDaughters": [
+    "BS0157",
+    "BS0158"
+   ],
+   "sourceLines": [
+    174211,
+    174212
+   ],
+   "issues": [],
+   "traceable": true,
+   "scope": "split-event-group",
+   "sourceId": "dfi-21-2026-07-01"
+  }
+ ],
+ "dfiParseIssues": [],
+ "historicalReferenceRights": [],
+ "geometryReconciliation": [
+  {
+   "eventId": "210:295:000:0001446:00001",
+   "validationDate": "2008-10-06",
+   "dateRole": "dfi-validation",
+   "beforeObservation": null,
+   "afterObservation": "2017-07-06",
+   "mothersObservedBefore": [],
+   "daughtersObservedAfter": [
+    "21295000BS0152",
+    "21295000BS0153",
+    "21295000BS0154",
+    "21295000BS0155"
+   ],
+   "daughtersObservedBeforeValidation": [],
+   "mothersObservedAfterValidation": [],
+   "unobservedMotherIds": [
+    "21295000BS0091"
+   ],
+   "unobservedDaughterIds": [],
+   "status": "before-earliest-obtained-geometry",
+   "limitation": "An intermediate reference can appear and retire between releases. Missing observed geometry does not negate a DFI event."
+  },
+  {
+   "eventId": "210:295:000:0001463:00001",
+   "validationDate": "2009-04-14",
+   "dateRole": "dfi-validation",
+   "beforeObservation": null,
+   "afterObservation": "2017-07-06",
+   "mothersObservedBefore": [],
+   "daughtersObservedAfter": [
+    "21295000BS0156"
+   ],
+   "daughtersObservedBeforeValidation": [],
+   "mothersObservedAfterValidation": [],
+   "unobservedMotherIds": [
+    "21295000BS0085",
+    "21295000BS0111"
+   ],
+   "unobservedDaughterIds": [],
+   "status": "before-earliest-obtained-geometry",
+   "limitation": "An intermediate reference can appear and retire between releases. Missing observed geometry does not negate a DFI event."
+  },
+  {
+   "eventId": "210:295:000:0001539:00001",
+   "validationDate": "2015-06-29",
+   "dateRole": "dfi-validation",
+   "beforeObservation": null,
+   "afterObservation": "2017-07-06",
+   "mothersObservedBefore": [],
+   "daughtersObservedAfter": [
+    "21295000BS0157",
+    "21295000BS0158"
+   ],
+   "daughtersObservedBeforeValidation": [],
+   "mothersObservedAfterValidation": [],
+   "unobservedMotherIds": [
+    "21295000BS0083"
+   ],
+   "unobservedDaughterIds": [],
+   "status": "before-earliest-obtained-geometry",
+   "limitation": "An intermediate reference can appear and retire between releases. Missing observed geometry does not negate a DFI event."
+  }
+ ],
+ "coverage": {
+  "inventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+  "catalogueDate": "2026-10-01",
+  "rightsAvailable": {
+   "21": [
+    "2019-01-01",
+    "2020-01-01",
+    "2021-01-01",
+    "2022-01-01",
+    "2023-01-01",
+    "2024-01-01",
+    "2025-01-01"
+   ]
+  },
+  "rightsImported": [
+   "2019-01-01",
+   "2020-01-01",
+   "2021-01-01",
+   "2022-01-01",
+   "2023-01-01",
+   "2024-01-01",
+   "2025-01-01"
+  ],
+  "dfiSources": [
+   {
+    "id": "dfi-21-2026-07-01",
+    "kind": "dfi",
+    "department": "21",
+    "departmentCode": "210",
+    "asOf": "2026-07-01",
+    "sourceReleaseDate": null,
+    "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+    "member": "dfiano-dep210-01072026.txt",
+    "fileName": "dfiano-dep210-01072026.txt",
+    "schemaVersion": "2025-01",
+    "encoding": "ascii",
+    "licence": "Licence Ouverte v2.0 (Etalab)",
+    "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+    "retrievedAt": "2026-10-01T08:51:47Z",
+    "size": 36175805,
+    "sha256": "f24ff17542f2e80921c7cce9e537b060ecdd0bff9280bbdd3e30dd1d3f6ea83e",
+    "status": "obtained"
+   }
+  ],
+  "dfiSchema": [
+   {
+    "id": "dfi-schema-2025-01",
+    "kind": "dfi-schema",
+    "schemaVersion": "2025-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_descriptif_du_fichier_janvier2025_pdf",
+    "fileName": "dfi-schema-2025-01.pdf",
+    "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+    "sourceReleaseDate": null,
+    "asOf": null,
+    "licence": "Licence Ouverte v2.0 (Etalab)",
+    "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+    "retrievedAt": "2026-10-01T08:50:33Z",
+    "sha256": "f17bd818fac3003e1c6d1bad9a236e94cdcdb615dc89b85a82cd8b366ea4d498",
+    "size": 38057,
+    "transportSha256": "6e967a42ab20a7f6940f00fb7758e5c8faa110017f0e5053cc80fd1219beffdf",
+    "transportSize": 35599,
+    "httpContentEncoding": "gzip",
+    "status": "obtained"
+   }
+  ],
+  "dfiCommuneCoverage": [
+   {
+    "commune": "21295",
+    "sourceId": "dfi-21-2026-07-01",
+    "completeDepartmentMemberObtained": true,
+    "earliestValidationDateInCommune": "1989-04-12",
+    "latestValidationDateInCommune": "2026-06-22"
+   }
+  ],
+  "earliestReachableDfiValidationDate": "2008-10-06",
+  "latestReachableDfiValidationDate": "2015-06-29",
+  "geometry": {
+   "21295": {
+    "dates": [
+     "2017-07-06",
+     "2017-10-12",
+     "2018-01-02",
+     "2018-04-03",
+     "2018-06-29",
+     "2018-10-01",
+     "2019-01-01",
+     "2019-04-01",
+     "2019-07-01",
+     "2019-10-01",
+     "2020-01-01",
+     "2020-07-01",
+     "2020-10-01",
+     "2021-02-01",
+     "2021-04-01",
+     "2021-07-01",
+     "2021-10-01",
+     "2022-01-01",
+     "2022-04-01",
+     "2022-07-01",
+     "2022-10-01",
+     "2023-01-01",
+     "2023-04-01",
+     "2023-07-01",
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01",
+     "2025-09-01",
+     "2025-12-01",
+     "2026-03-01",
+     "2026-06-01"
+    ],
+    "afterPinnedGeometry": [
+     "2026-09-01"
+    ],
+    "pinnedCurrentGeometry": "2026-06-01",
+    "obtainedDates": [
+     "2017-07-06",
+     "2017-10-12",
+     "2018-01-02",
+     "2018-04-03",
+     "2018-06-29",
+     "2018-10-01",
+     "2019-01-01",
+     "2019-04-01",
+     "2019-07-01",
+     "2019-10-01",
+     "2020-01-01",
+     "2020-07-01",
+     "2020-10-01",
+     "2021-02-01",
+     "2021-04-01",
+     "2021-07-01",
+     "2021-10-01",
+     "2022-01-01",
+     "2022-04-01",
+     "2022-07-01",
+     "2022-10-01",
+     "2023-01-01",
+     "2023-04-01",
+     "2023-07-01",
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01",
+     "2025-09-01",
+     "2025-12-01",
+     "2026-03-01",
+     "2026-06-01"
+    ]
+   }
+  },
+  "currentParcelsWithDocumentedAncestors": 7,
+  "currentParcelsWithPre2019DfiEvents": 7,
+  "distinctDfiDocuments": 3,
+  "distinctDfiAnalysisLots": 3,
+  "inferredOnlyCurrentParcels": 0,
+  "unresolvedEvents": 0,
+  "traversalIssues": [],
+  "terminalReasons": {
+   "source-boundary-or-unrecorded-event": 27
+  },
+  "missingSources": [
+   {
+    "id": "notices-21-earlier-pdf",
+    "kind": "notice-bulletin",
+    "department": "21",
+    "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+    "fileName": "notices-21-earlier-pdf.pdf",
+    "sourceReleaseDate": null,
+    "asOf": null,
+    "licence": "Official public administrative bulletin; reuse terms not stated on the inaccessible listing",
+    "licenceUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+    "status": "missing",
+    "attemptedAt": "2026-10-01T10:20:39Z",
+    "reason": "Remote end closed connection without response"
+   }
+  ],
+  "salesAndNotices": "Independent inventories and original-reference matches are published with sale records and notice audits.",
+  "spatialCandidatesAccepted": 0,
+  "spatialCandidatesRejected": 0,
+  "spatialConflicts": []
+ },
+ "spatialCandidates": [],
+ "spatialConflicts": []
+}

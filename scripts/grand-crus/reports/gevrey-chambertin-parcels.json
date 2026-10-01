@@ -1,0 +1,150 @@
+{
+  "sources": {
+    "commune": "21295",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+    "cadastreSha256": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_210.csv",
+    "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+    "rightsMemberCrc32": 3267936763,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-447",
+      "inao-denom-448",
+      "inao-denom-475",
+      "inao-denom-646",
+      "inao-denom-477",
+      "inao-denom-809",
+      "inao-denom-666",
+      "inao-denom-808",
+      "inao-denom-1086"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": [],
+    "additionalCommunes": []
+  },
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "dataUrl": "/maps/gevrey-chambertin-parcels.2026-06-01.ff650df461c3.geojson",
+  "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-447",
+    "inao-denom-448",
+    "inao-denom-475",
+    "inao-denom-646",
+    "inao-denom-477",
+    "inao-denom-809",
+    "inao-denom-666",
+    "inao-denom-808",
+    "inao-denom-1086"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 442,
+    "withRecordedRights": 265,
+    "rightRecords": 267,
+    "unknownRights": 177,
+    "areaMismatches": 0,
+    "multipleRights": 2,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  },
+  "bytes": 420894,
+  "gzipEquivalentBytes": 62023,
+  "matchedFiscalRows": 270,
+  "excludedBoundaryContacts": [
+    {
+      "parcelId": "21295000BM0999",
+      "parentFeatureId": "inao-denom-666",
+      "overlapM2": 0.6794808988530379
+    },
+    {
+      "parcelId": "21295000BN0002",
+      "parentFeatureId": "inao-denom-448",
+      "overlapM2": 0.3175863690126399
+    },
+    {
+      "parcelId": "21295000BO0138",
+      "parentFeatureId": "inao-denom-447",
+      "overlapM2": 0.12302086108207161
+    },
+    {
+      "parcelId": "21295000BO0138",
+      "parentFeatureId": "inao-denom-448",
+      "overlapM2": 0.12302086108207161
+    },
+    {
+      "parcelId": "21295000BO0119",
+      "parentFeatureId": "inao-denom-1086",
+      "overlapM2": 0.585019378295187
+    }
+  ],
+  "communeRecordsWithoutCurrentGeometry": [
+    "21295000AC0010",
+    "21295000AC0019",
+    "21295000AC0421",
+    "21295000AE0254",
+    "21295000BN0041",
+    "21295000BN0069",
+    "21295000BN0117",
+    "21295000BP0013",
+    "21295000BP0014",
+    "21295000BS0037",
+    "21295000CH0158"
+  ],
+  "invalidGeometryOutsideCru": [],
+  "byCru": {
+    "inao-denom-447": {
+      "parcels": 137,
+      "areaHa": 28.218077830000002
+    },
+    "inao-denom-448": {
+      "parcels": 56,
+      "areaHa": 15.334881919999999
+    },
+    "inao-denom-475": {
+      "parcels": 23,
+      "areaHa": 5.46107961
+    },
+    "inao-denom-477": {
+      "parcels": 157,
+      "areaHa": 30.80019314
+    },
+    "inao-denom-646": {
+      "parcels": 20,
+      "areaHa": 2.71163473
+    },
+    "inao-denom-666": {
+      "parcels": 25,
+      "areaHa": 7.32487102
+    },
+    "inao-denom-808": {
+      "parcels": 62,
+      "areaHa": 9.08179372
+    },
+    "inao-denom-809": {
+      "parcels": 157,
+      "areaHa": 30.80019314
+    },
+    "inao-denom-1086": {
+      "parcels": 26,
+      "areaHa": 3.28044339
+    }
+  }
+}

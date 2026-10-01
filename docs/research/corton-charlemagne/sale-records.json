@@ -1,0 +1,725 @@
+{
+ "schemaVersion": 3,
+ "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
+ "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
+ "release": "2026-04",
+ "parentFeatureId": "inao-denom-550",
+ "coverage": "2014-01-07 to 2025-12-22",
+ "sourceCoverage": {
+  "release": "2026-04",
+  "availableStart": "2014-01-01",
+  "availableRange": {
+   "end": "2025-12-31",
+   "start": "2014-01-01"
+  },
+  "provenance": [
+   {
+    "id": "sales-bfc-2026-1",
+    "kind": "sales",
+    "region": "Bourgogne-Franche-Comté",
+    "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+    "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+    "schemaVersion": "DVF+ open data 2026-1",
+    "sourceReleaseDate": null,
+    "asOf": null,
+    "releaseLabel": "2026-1",
+    "archiveMember": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+    "catalogueUrl": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+    "licence": "Licence Ouverte / Open Licence 2.0",
+    "licenceUrl": "https://www.data.gouv.fr/datasets/dvf-open-data",
+    "resolvedUrl": "https://euw9.boxcloud.com/d/1/a1!LJ4MCXxPN4UVIGIB98At0O_1mmyimSuR9ICNo6hINwpv-6_F9oZwSeLL6_MHgQ-g0XGb2Ds1ttcN5__Nnz9BJlmhx-jKQWpc7Aj3b0dFf_mA5tG5s0a6Yz9SunCWeRKAHETRynQc_K18uEbRZIeJoQ8l6JbkKXuxY_4EUgdK_d9bXrkzMHLNOCmeL8Y8QU5eNNIYaaTKCm6gwDzZVsFK9v_RMcDrzO8cFUamNB4crylqk6kOpjxMrpgBPJPQD1tg9fsIOdXzdq9ySGNMnP3GftjyAYgVp-fO_Gg3BayelaMDpdSB8X-Z4Xf39gmzk_FGanxbTVtsqn-DRP0l52-RzKSiP8r4Py6dHhAPxAb6lGq6vu9eYAzDOVnfNdLTqjdk25FZVciKqm0Ns6NI22fb12aijWXuRRQF4RvXvazaN8aPCRqTwAxOMeTLAAG4hUrB2QUDOqA3grtuulkV0NCyre8KfplBaXiRFK9edaLgQdbl8HblDZonh3lo1byNUgVK3uECXdSEWg9zmKzZoDtL-kSj8V4Vf2Zk2kIoW0oTXydIsjLGTatFKbtFYIx-op3bqQrN1PDZrXiw5T0UzxUcS0Q9OhYNU0HG9JLLJNBXBKIaTKlah6XXwRxCNM5cpvYQxYmysqTuNPVKbBjNNkQK1BjggKXzp5_CCmBqj7NmHDaYBKd6B-PzAjegeGGOg_OhVvDtG4osvPebfwKzTl92lGCA8kKrPsuwZzSRRLECJRdle-Q0pgGT7B0ujNaUvJP3m01skixaiFs9wo_YcPlDriioamUMv-hdtEU4UrRIIgh0puje48gmOSwBhEmVYuHGnil-xy8mRXFY994AlQaTHCkJ-estiPCUMYAxn_aYz01_Xf5gPDgFnQ0vztvCSkl_gGpNFHBb3WNAf_5yNgPwJyGLvSmb4_OMtoD6uRF-BpzKMcOpknpIkjgfBOfAEp2uhM1auy9pET76bF3JCzFzLL0EWrQv5vu7kRX-yDJPmSmt3XDLl6I-31JyZLt1_etyjvgk1AuPwXWxpvSU0ELBHCSgdLXhhjRNsbArJZBeskKRdplNR62ugFWmezYG99-Zt-oxJXLI1ORUoVqO_iA5j9mjvCXHzoCxQP8CjwXuA4ziMgDtMtb5V7fwnx8qEoAOdHQ9i9kpLp9aFepOfNF20OLGSPflMOhG39Z_zRmfkj0_eVjKqnJHTTLz9UyZqF9YrKeVWXHvZt3Pz-V9JJPuYT0Cp1bAOfp4hIdvPhmcWyFudRCxN7-489da4YQQTx7WD4Wn9oplfiF46UqNOiO3m_m_BNaNpokBD5tUFE5tV1nHhbek8886Mm25lp6rJmsXBsEB6Xm0V5bGISvMRA9NprXpiDEC6twxpBV3XpwDe8qk1Ozbdyot_jjdERv3rmvPL1lIK1K-VZRsJVC_lynJ/download",
+    "httpContentEncoding": null,
+    "transportSha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+    "transportSize": 72937314,
+    "status": "obtained",
+    "retrievedAt": "2026-10-01T10:09:26Z",
+    "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+    "size": 72937314
+   }
+  ],
+  "observedDatasetRange": [
+   "2014-01-02",
+   "2025-12-31"
+  ],
+  "observedCommuneRange": [
+   "2014-01-07",
+   "2025-12-22"
+  ],
+  "historicalReferencesQueried": [
+   "210100000A0001",
+   "210100000A0002",
+   "210100000A0007",
+   "210100000A0010",
+   "210100000A0013",
+   "210100000A0068",
+   "210100000A0094",
+   "210100000A0095",
+   "210100000A0098",
+   "210100000A0100",
+   "210100000A0102",
+   "210100000A0139",
+   "210100000A0146",
+   "210100000B0001",
+   "210100000B0010",
+   "210100000B0040",
+   "210100000B0041",
+   "210100000B0072",
+   "210100000C0001",
+   "210100000C0002",
+   "210100000C0004",
+   "210100000C0006",
+   "210100000C0008",
+   "210100000C0009",
+   "210100000C0012",
+   "210100000C0105",
+   "210100000C0121",
+   "21480000AL0069",
+   "21480000AL0070",
+   "21480000AL0071",
+   "21480000AL0083",
+   "21480000AL0088",
+   "21480000AL0090",
+   "21480000AL0101",
+   "21480000AL0102",
+   "21480000AL0110",
+   "21480000AL0111",
+   "21480000AL0131",
+   "21480000AL0138",
+   "21480000AL0139",
+   "21480000AL0146",
+   "21480000AL0148",
+   "21480000AL0152",
+   "21480000AL0153",
+   "21480000AL0162",
+   "21480000AL0163",
+   "21480000AL0165",
+   "21480000AL0167",
+   "21480000AL0194",
+   "21480000AL0195",
+   "21480000AL0196",
+   "21480000AL0217",
+   "21480000AL0218",
+   "21480000AL0225",
+   "21480000AL0229",
+   "21480000AL0235",
+   "21480000AL0236",
+   "21480000AL0259",
+   "21480000AL0277",
+   "21480000AL0283",
+   "21480000AL0290",
+   "21480000AL0291",
+   "21480000AL0292",
+   "21480000AL0293",
+   "21480000AL0294",
+   "21480000AL0297",
+   "21480000AL0298",
+   "21480000AL0300",
+   "21480000AL0301",
+   "21480000AL0302",
+   "21480000AL0303",
+   "21480000AL0304",
+   "21480000AL0305",
+   "21480000AL0306",
+   "21480000AL0307",
+   "21480000AL0352",
+   "21606000AH0110",
+   "21606000AH0189",
+   "21606000AH0190",
+   "21606000AH0191",
+   "21606000AK0004",
+   "21606000AK0137",
+   "21606000AK0140",
+   "21606000AK0141",
+   "21606000AK0142"
+  ],
+  "earlierOfficialRecordsAudit": {
+   "catalogue": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-catalogue.json",
+   "catalogueMetadata": {
+    "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+    "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+    "httpContentEncoding": null,
+    "transportSha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+    "transportSize": 8953,
+    "sha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+    "size": 8953,
+    "retrievedAt": "2026-10-01T10:12:31Z",
+    "status": "obtained"
+   },
+   "releaseListing": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-box.html",
+   "latestReleaseFolderObserved": "avril_2026",
+   "previousReleaseFolderObserved": "versions_anterieures",
+   "earlierThanAvailableStart": "No earlier deed period is declared by this open-data catalogue. Restricted DV3F/DVF records are not treated as public DVF+ coverage.",
+   "coverageMeaning": "Catalogue temporal coverage is separate from observed dates in this region/commune; not a claim of uninterrupted records."
+  },
+  "limitation": "Observed deed ranges are not uninterrupted coverage or creation dates. Sales do not reach back to the oldest DFI event."
+ },
+ "inputs": {
+  "parcelSnapshotSha256": "d644b286b60b00fe9c8e23e18b4ba3bf4f15b8ddcbbc7ab06eab0c6859f1b036",
+  "dvfPlus": {
+   "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+   "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+   "member": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+   "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  }
+ },
+ "note": "A deed dates a transfer and groups parcels; it names no party and never establishes farming. Parcel references are those printed at the deed date.",
+ "counts": {
+  "deeds": 23,
+  "parcels": 40,
+  "historicalReferenceDeeds": 1,
+  "unassignedHistoricalContextPaths": 0
+ },
+ "deeds": [
+  {
+   "deedId": "15e248d4e81bc8e5a0b31c7da0fb7164",
+   "date": "2014-02-18",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000C0003"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "b95b2bf074c3a284cfebe29777b147a2",
+   "date": "2014-02-18",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AH0129",
+    "21606000AH0130"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "1e97f2c6beb54ac9d7fd4c9d3eabc92f",
+   "date": "2014-03-13",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000C0046"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "3b5c3be9fc1c306d930afed5e589efe0",
+   "date": "2014-08-04",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0076",
+    "21480000AL0077"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "65f4983ed8ba48ebab94109b28a9c847",
+   "date": "2015-09-22",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0328",
+    "21480000AL0332"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "eddb54de4383829b11631bbb9aca094b",
+   "date": "2016-05-17",
+   "nature": "sale",
+   "dispositions": 4,
+   "parcelIds": [
+    "210100000A0005",
+    "210100000A0006",
+    "210100000C0035",
+    "210100000C0036",
+    "210100000C0037",
+    "210100000C0087"
+   ],
+   "otherParcels": 535
+  },
+  {
+   "deedId": "c92beb701479688522a718eaa2c93feb",
+   "date": "2017-12-15",
+   "nature": "sale",
+   "dispositions": 2,
+   "parcelIds": [
+    "21480000AL0150",
+    "21480000AL0151"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "1503635cd9fcb14eb449079ce5b6ffe3",
+   "date": "2018-12-18",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0284"
+   ],
+   "otherParcels": 7
+  },
+  {
+   "deedId": "a5f7a427edcbadee4c669e58632506a4",
+   "date": "2018-12-18",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0142",
+    "21480000AL0145",
+    "21480000AL0147",
+    "21480000AL0161",
+    "21480000AL0169"
+   ],
+   "otherParcels": 15
+  },
+  {
+   "deedId": "eb77502740848ecfbb04109a7727a05b",
+   "date": "2019-06-25",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0356"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "8b8303fdafd7d1b39078602be42975d6",
+   "date": "2019-11-27",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21480000AL0326",
+    "21480000AL0334"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "82e5ad458c9e6c57b9d582a995e87023",
+   "date": "2020-12-11",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AH0171"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "d1c6f9aebe935ef8287ca7a67382678d",
+   "date": "2021-01-11",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000C0011"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "d65760e7a03dfa0a0ac8f4ff7ae1d32e",
+   "date": "2022-10-20",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000A0039"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "1fbceec1bd4345056901bc910b9eea19",
+   "date": "2022-11-22",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000A0131"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "4a0ae26edae762a863740974312ac7f1",
+   "date": "2023-06-29",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AK0003",
+    "21606000AK0111",
+    "21606000AK0143"
+   ],
+   "otherParcels": 3
+  },
+  {
+   "deedId": "04c414a481e8ecc559ece646aeaf2cd4",
+   "date": "2023-07-25",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AH0125",
+    "21606000AH0126"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "4468f0916b20424d73a289855be5afa2",
+   "date": "2023-08-28",
+   "nature": "exchange",
+   "dispositions": 2,
+   "parcelIds": [
+    "21480000AL0072",
+    "21480000AL0073"
+   ],
+   "otherParcels": 3
+  },
+  {
+   "deedId": "4ebc0e742825759ab2fadf6722f6f31e",
+   "date": "2024-07-24",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000C0011"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "6a9c55e50c14256b6db138c6b661fc3a",
+   "date": "2025-01-30",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000A0028"
+   ],
+   "otherParcels": 11
+  },
+  {
+   "deedId": "c2c1ec650240e88274d92541a3cc9a54",
+   "date": "2025-04-24",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AH0172"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "fdcfa34dec32f4089a8d765445269da8",
+   "date": "2025-10-16",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "21606000AH0108"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "5358721e6a121e1f93ef7baa3168f209",
+   "date": "2025-11-25",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "210100000A0123"
+   ],
+   "otherParcels": 0
+  }
+ ],
+ "historicalDeeds": [
+  {
+   "deedId": "20429ba73ca6466f7b8b85ea5098b809",
+   "date": "2017-04-10",
+   "nature": "sale",
+   "dispositions": 1,
+   "dateRole": "deed-date",
+   "originalParcelIds": [
+    "210100000A0007",
+    "210100000A0010",
+    "210100000A0094",
+    "21480000AD0012",
+    "21480000AE0162",
+    "21480000AE0236",
+    "21480000AK0289",
+    "21480000AK0414",
+    "21480000AK0423",
+    "21480000AK0424",
+    "21480000AK0427",
+    "21480000AK0428",
+    "21480000AK0455",
+    "21480000AK0652",
+    "21480000AK0654",
+    "21480000AL0217",
+    "21480000AL0218"
+   ],
+   "matchedHistoricalReferenceIds": [
+    "210100000A0007",
+    "210100000A0010",
+    "210100000A0094",
+    "21480000AL0217",
+    "21480000AL0218"
+   ],
+   "originalScope": "complete-deed-parcel-group",
+   "contextPaths": [
+    {
+     "currentParcelId": "210100000A0138",
+     "originalReferenceId": "210100000A0007",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00001"
+     ],
+     "referencePath": [
+      "210100000A0138",
+      "210100000A0007"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0143",
+     "originalReferenceId": "210100000A0010",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00003"
+     ],
+     "referencePath": [
+      "210100000A0143",
+      "210100000A0010"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0144",
+     "originalReferenceId": "210100000A0010",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00003"
+     ],
+     "referencePath": [
+      "210100000A0144",
+      "210100000A0010"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0140",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0140",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0141",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0141",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0142",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0142",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0145",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000232:00001",
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0145",
+      "210100000A0139",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0147",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000246:00001",
+      "210:010:000:0000232:00001",
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0147",
+      "210100000A0146",
+      "210100000A0139",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "210100000A0148",
+     "originalReferenceId": "210100000A0094",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:010:000:0000246:00001",
+      "210:010:000:0000232:00001",
+      "210:010:000:0000231:00002"
+     ],
+     "referencePath": [
+      "210100000A0148",
+      "210100000A0146",
+      "210100000A0139",
+      "210100000A0094"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "21480000AL0353",
+     "originalReferenceId": "21480000AL0217",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:480:000:0000296:00001"
+     ],
+     "referencePath": [
+      "21480000AL0353",
+      "21480000AL0217"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "21480000AL0365",
+     "originalReferenceId": "21480000AL0217",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:480:000:0000316:00001",
+      "210:480:000:0000296:00001"
+     ],
+     "referencePath": [
+      "21480000AL0365",
+      "21480000AL0352",
+      "21480000AL0217"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "21480000AL0366",
+     "originalReferenceId": "21480000AL0217",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:480:000:0000316:00001",
+      "210:480:000:0000296:00001"
+     ],
+     "referencePath": [
+      "21480000AL0366",
+      "21480000AL0352",
+      "21480000AL0217"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "21480000AL0354",
+     "originalReferenceId": "21480000AL0218",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:480:000:0000296:00002"
+     ],
+     "referencePath": [
+      "21480000AL0354",
+      "21480000AL0218"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    },
+    {
+     "currentParcelId": "21480000AL0355",
+     "originalReferenceId": "21480000AL0218",
+     "originalDate": "2017-04-10",
+     "eventPath": [
+      "210:480:000:0000296:00002"
+     ],
+     "referencePath": [
+      "21480000AL0355",
+      "21480000AL0218"
+     ],
+     "method": "documented-dfi",
+     "assignment": "historical-context",
+     "qualifications": [
+      "former-parcel-includes-other-daughters"
+     ],
+     "limitation": "Filiation supplies reference context; it does not transfer rights, sale parties or farming."
+    }
+   ],
+   "limitation": "Historical-reference context only. Ambiguous and partial routes stay unassigned; no sale, party or operator is transferred to a current parcel."
+  }
+ ]
+}

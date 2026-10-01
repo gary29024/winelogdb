@@ -130,6 +130,12 @@ class ConfigTests(unittest.TestCase):
         # was built from today's pins and stays within its limit, and that a reviewed remainder names those pins.
         for slug in cru_slugs():
             cru, bundle = load_cru(slug)
+            if cru.get('research', {}).get('delivery') == 'historical-extension':
+                # #461 supplies historical evidence before the remaining per-cru Tier 1 reviews.
+                # These deliveries must keep their unreviewed work explicit, rather than claim completion.
+                self.assertEqual(cru['research']['namedAreas'], 'unreviewed', slug)
+                self.assertEqual(cru['research']['producerResearch'], 'unreviewed', slug)
+                continue
             path = commune_audit_path(cru)
             self.assertTrue(path.exists(), f'{slug}: commit build_grand_cru_commune_audit.py output')
             report = read_json(path)

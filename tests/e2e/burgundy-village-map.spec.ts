@@ -4,12 +4,63 @@ import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 import {ownerName} from '../../src/lib/places/parcelOwners';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
+import type {ParcelEvidenceData} from '../../src/features/vineyards/ParcelEvidence';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
 const losslessMaps=JSON.parse(readFileSync('src/lib/places/burgundyLosslessMapRegistry.json','utf8')) as Record<string,{brotliJsonUrl:string;gzipJsonUrl:string}>;
 const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
+
+// Cover each shared history bundle, including cross-commune crus and Yonne, on a real map.
+for(const [index,slug] of ['echezeaux','clos-de-vougeot','richebourg','bonnes-mares',
+ 'chambertin','montrachet','corton','chablis-grand-cru'].entries()){
+ test(`Official history: ${slug} loads its own evidence and preserves dated source roles`,async({page},testInfo)=>{
+  test.setTimeout(60_000); // Allow a cold local Vite/Worker startup before the real map assertions.
+  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
+  const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;villageMaps:string[];evidenceFrom:string[]};
+  const evidence=read(`src/lib/places/grandCruParcels/${slug}.evidence.json`) as ParcelEvidenceData;
+  const [parcelId,trace]=Object.entries(evidence.tracing!).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation')!;
+  const villages=read('src/lib/places/burgundyVillageMapRegistry.json').villages as {id:string;name:string}[];
+  const names=cru.villageMaps.map(id=>villages.find(v=>v.id===id)!.name);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.setViewportSize({width:slug==='chablis-grand-cru'?320:390,height:900});
+  await setup(page,{appellation:cru.name,wineName:cru.name,classification:'grand_cru',
+   ...(slug==='chablis-grand-cru'||slug==='montrachet'?{colour:'White',wineStyle:'white'}:{})});
+  const loaded=new Set<string>();
+  page.on('request',request=>{
+   const match=request.url().match(/grandCruParcels\/([^/?]+)\.evidence\.json/);
+   if(match)loaded.add(match[1]);
+  });
+  await page.goto(allMapRoutes[index%2],{waitUntil:'domcontentloaded'});
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog).toHaveAccessibleName(new RegExp(`^(${names.join('|')})$`));
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(cru.parentFeatureId);
+  expect([...loaded]).toEqual([]);
+  await dialog.getByRole('switch',{name:`Parcel rights · ${cru.name}`}).check();
+  await dialog.getByText('Find a parcel by cadastral reference').click();
+  await dialog.getByLabel('Cadastral parcel').selectOption(parcelId);
+  const panel=dialog.getByRole('region',{name:'History and evidence'});
+  await expect(panel).toBeVisible();
+  const history=panel.locator('details.parcel-evidence-history');
+  if(!await history.evaluate((el:HTMLDetailsElement)=>el.open))await history.locator('summary').click();
+  await expect(history.getByText('DFI validation date',{exact:true}).first()).toBeVisible();
+  await expect(history.locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`).first()).toBeVisible();
+  await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
+  expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
+  await panel.getByText('Source coverage and tracing',{exact:true}).click();
+  await expect(panel.getByText(`Earliest supported event: ${trace.earliestSupportedEvent.date}`,{exact:false})).toBeVisible();
+  if(slug==='chablis-grand-cru'){
+   await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
+   await expect(panel.getByText(/All Yonne departmental notice publication years/)).toBeVisible();
+  }
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
+  await page.screenshot({path:testInfo.outputPath(`${slug}-official-history-mobile.png`)});
+ });
+}
 
 test('Échezeaux: manually link a possible producer and retain it in owner and shared views',async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
@@ -82,11 +133,12 @@ for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Éc
  await page.route('**/api/producers',route=>route.fulfill({json:{items:[]}}));
  await page.route('**/api/parcel-producer-links?*',route=>route.fulfill({json:{items:[]}}));
  await page.setViewportSize(viewport);
- await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ await page.goto('/wines/layout-wine',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'View village map'}).click();
  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();
  const canvas=dialog.locator('.village-map-canvas'),owners=dialog.locator('ul.village-map-owners');
+ await expect(owners.locator('li').last()).toBeVisible();
  // Scroll down to the owner list: the map must still be on screen, under the header.
  await owners.locator('li').last().scrollIntoViewIfNeeded();
  await expect(canvas).toBeInViewport({ratio:0.95});

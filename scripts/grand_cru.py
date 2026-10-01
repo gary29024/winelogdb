@@ -12,6 +12,7 @@ downloads are never repeated, while each cru keeps its own research folder:
 
 Only the standard library is needed here; geometry builders import shapely themselves.
 """
+import gzip
 import hashlib
 import json
 import os
@@ -116,9 +117,30 @@ def schema_file(bundle):
 
 
 def pinned(directory, name, digest):
-    data = (Path(directory) / name).read_bytes()
+    path = Path(directory) / name
+    if not path.exists():
+        # Department rights/DFI and historical geometry are acquired once, even
+        # when several bundles consume them. Legacy bundle-local inputs work too.
+        path = SOURCE_ROOT / 'shared' / name
+    data = path.read_bytes()
     require(sha256(data) == digest, f'Review changed input: {name}')
     return data
+
+
+def official_inventory(bundle):
+    config = bundle.get('officialHistory')
+    return read_json(ROOT / config['inventory']) if config else None
+
+
+def official_sources(bundle, kind):
+    inventory = official_inventory(bundle)
+    if inventory is None:
+        return []
+    config = bundle['officialHistory']
+    return [s for s in inventory['sources'] if s['kind'] == kind
+            and (kind == 'dfi-schema' or s.get('department') in config['departments']
+                 or kind == 'sales' and s.get('region') == 'Bourgogne-Franche-Comté'
+                 or s.get('commune') in config['communes'])]
 
 
 # Conventional output paths. One cru's research lives only in its own folder.
@@ -266,7 +288,13 @@ def fetch(url, byte_range=None):
         headers['Range'] = byte_range
     with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=900) as response:
         require(not byte_range or response.status == 206, f'Range request not honoured: {url}')
-        return response.read()
+        data = response.read()
+        # The publisher sometimes ignores identity, including for the PDF schema.
+        # Decode HTTP transport compression; .json.gz resources retain their gzip bytes.
+        encoding = response.headers.get('Content-Encoding', '').lower()
+        require(not byte_range or encoding in ('', 'identity'), f'Compressed range response: {url}')
+        require(encoding in ('', 'identity', 'gzip'), f'Unsupported HTTP content encoding: {encoding}')
+        return gzip.decompress(data) if encoding == 'gzip' else data
 
 
 def zip_member(url, member):
@@ -330,6 +358,11 @@ def bundle_sources(bundle):
                for insee, a in bundle.get('auditCommunes', {}).items()]
     if sales := bundle.get('saleRecords'):
         wanted.append((sales['fileName'], sales['sha256'], lambda: fetch(sales['url'])))
+    for kind in ('dfi', 'dfi-schema'):
+        for item in official_sources(bundle, kind):
+            if item['status'] == 'obtained':
+                wanted.append((item['fileName'], item['sha256'],
+                               lambda item=item: zip_member(item['url'], item['member']) if item.get('member') else fetch(item['url'])))
     names = [name for name, _, _ in wanted]
     require(len(names) == len(set(names)), 'Duplicate source file in bundle')
     return wanted

@@ -1,0 +1,1125 @@
+{
+ "schemaVersion": 2,
+ "purpose": "Official filiation, dated legal-entity rights and original-reference evidence for Romanée-Conti (#461). None establishes current farming.",
+ "parentFeatureId": "inao-denom-1084",
+ "inputs": {
+  "parcelSnapshotSha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+  "rights": [
+   {
+    "asOf": "2019-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+    "member": "PM_19_NB_210.txt",
+    "sha256": "c6eb0f3a4245dca6ce3df156cd009477f3ae1ebd481f16b89b88a619c74865f6"
+   },
+   {
+    "asOf": "2020-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+    "member": "PM_20_NB_210.txt",
+    "sha256": "70d7e9e25850f14b7fcdf7da9a0ee85e167266154b24c7a2d76606f2e26200ff"
+   },
+   {
+    "asOf": "2021-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+    "member": "PM_21_NB_210.txt",
+    "sha256": "4de26600ed99a6cff6e66d6230d8db415f5f2c41fa1f590da4ee3a7470eaa0d3"
+   },
+   {
+    "asOf": "2022-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+    "member": "PM_22_NB_210.txt",
+    "sha256": "ecb09a6501c3b3a0c541e3881307efe42425d859f300af53a51e97c5888dc2f0"
+   },
+   {
+    "asOf": "2023-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+    "member": "PM_23_NB_210.txt",
+    "sha256": "661faf904f5ea3cedaad58338812d5ae438af520ff81c4b05bd672dfe6cd6956"
+   },
+   {
+    "asOf": "2024-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+    "member": "PM_24_NB_210.csv",
+    "sha256": "2ee57e0bf697c63731e8a62592cf49b0b342d74270434462b845685ba2d936ad"
+   },
+   {
+    "asOf": "2025-01-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "member": "PM_25_NB_210.csv",
+    "sha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17"
+   }
+  ],
+  "cadastre": [
+   {
+    "date": "2017-07-06",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-07-06/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "d788070b93ccea23ac3e77d61b24dac8e843370cf4426fb6f04a3d721f68861c"
+   },
+   {
+    "date": "2017-10-12",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-10-12/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "41dff840ba1f7514977a05b2e360a5acd1360766d3954a3d76b9054db2be9f58"
+   },
+   {
+    "date": "2018-01-02",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-01-02/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "18c32ad024e4e67b62a117c97cc0afaf5b972f2e64c65d043bddbf72fe89b6df"
+   },
+   {
+    "date": "2018-04-03",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-04-03/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "395b19b62be50733d8ff3075497eee678dbe1cdefdbbf2af855ff3e071a4418c"
+   },
+   {
+    "date": "2018-06-29",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-06-29/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "5635d6d70e27cde558a7f4c22411a499f485dfbe4c0cd06587a36aa20b550295"
+   },
+   {
+    "date": "2018-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "395b19b62be50733d8ff3075497eee678dbe1cdefdbbf2af855ff3e071a4418c"
+   },
+   {
+    "date": "2019-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "756553408a690f58fee3f1c1849995bbde4bcf544909ffdce2ab7707b7f1e5bc"
+   },
+   {
+    "date": "2019-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "a633777abc081561bf695a83ef9ff58baca23ee86086e0a0ab06968108168174"
+   },
+   {
+    "date": "2019-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "4348ac440668a4a1926749524951ad24821e40c93e47b8506e8fa1a9c019c6c8"
+   },
+   {
+    "date": "2019-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "4348ac440668a4a1926749524951ad24821e40c93e47b8506e8fa1a9c019c6c8"
+   },
+   {
+    "date": "2020-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "cb34a84849b325c93e638da0b740aa403eb426e409911c42eb858467f11ce108"
+   },
+   {
+    "date": "2020-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "db05b028967496a5f0a71ac991b856154f64f368214fe3b0739715fb055ae2ea"
+   },
+   {
+    "date": "2020-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "db05b028967496a5f0a71ac991b856154f64f368214fe3b0739715fb055ae2ea"
+   },
+   {
+    "date": "2021-02-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-02-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "dca08485efae86527c4dbe346d0b96281901faf46c41e2812d88b2a786139ab4"
+   },
+   {
+    "date": "2021-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "858b1ceca0c406a40447d06aa23f79780ddd02dc65c343cc9a5624156fff8f76"
+   },
+   {
+    "date": "2021-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "049e9a09d789449c421c9dcabe106da6c6cda8bcd7737a49b97177629af56deb"
+   },
+   {
+    "date": "2021-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "0cbefabfd586866f104999499998959dcf6aabdf565abcf0800d0913cc25432e"
+   },
+   {
+    "date": "2022-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "b0320fdaf692b05de8386c0641f01a5c169fa6dae798478cc2466b8a503f005a"
+   },
+   {
+    "date": "2022-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "ac6cf6ec86cab57a1988e6474b1d6874902a08e3076107284a0c2c75364ac8e1"
+   },
+   {
+    "date": "2022-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "55b26f5d78fa5190b6d452447e0de4d9820a5510a3278cb4062b5c458fbc7e09"
+   },
+   {
+    "date": "2022-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "55b26f5d78fa5190b6d452447e0de4d9820a5510a3278cb4062b5c458fbc7e09"
+   },
+   {
+    "date": "2023-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "9afe212b50b6ea90deb8a37cb2c25cd3ce8d6513bac67287274eeb013280e932"
+   },
+   {
+    "date": "2023-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "a0d38b8b7240900e0bb4e2cf6fc0e098b8edd6a4215cbd9f8d4b1f64f9e2744a"
+   },
+   {
+    "date": "2023-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "499bdd8590fe68eef47a3678cdc8cce9cc1b8de48b6c902903854f741f6cb85b"
+   },
+   {
+    "date": "2023-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "41b89d035b1014998aea387519978b60657c3537343b9d17aeab963c21b504d5"
+   },
+   {
+    "date": "2024-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "1b1c7159388be0c2d59ab3ac7079e6fd1cff8826ff09046b88372cbd165afacf"
+   },
+   {
+    "date": "2024-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "1b1c7159388be0c2d59ab3ac7079e6fd1cff8826ff09046b88372cbd165afacf"
+   },
+   {
+    "date": "2024-07-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-07-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "e274d76d240db07eb64285e8fa06c3f9b620bc5a3619497452776b1e5cd850bb"
+   },
+   {
+    "date": "2024-10-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-10-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "beaf5ac489e914183c1df205bc0ff710e750485f704b8f563533e6dd0c475afb"
+   },
+   {
+    "date": "2025-01-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-01-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "c1614c3051743ed59e5f1c09e0ec579daeac7ee0b91c14b9028159531aae8fdb"
+   },
+   {
+    "date": "2025-04-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-04-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "41f41a4d683065f3fead9fbc323b6edec94f58ab67d4133cd41a384148c65dcd"
+   },
+   {
+    "date": "2025-09-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-09-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "96024b42ff0461ea1c043481a37f5bcd4c070013ac755fe7d6ed699955d95a85"
+   },
+   {
+    "date": "2025-12-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-12-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "96024b42ff0461ea1c043481a37f5bcd4c070013ac755fe7d6ed699955d95a85"
+   },
+   {
+    "date": "2026-03-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-03-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "f8d00681e848735853104bdd3f54b66b3ea45a5c93e2a0961af824db193661b6"
+   },
+   {
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+    "sha256": "2c57f75516a8161b8fd1d16284dad5374bf0da76fb9eaed4d4224454ad877bc1"
+   }
+  ],
+  "officialInventory": "scripts/grand-crus/sources/inventory-2026-10-01.json"
+ },
+ "rules": [
+  "A recorded right is legal-entity ownership or another real right on 1 January, never farming.",
+  "Private individuals are not in the legal-entity files: no record does not mean no owner.",
+  "Holder continuity is proved only by the same SIREN; names alone are hints for review.",
+  "Lineage is accepted only when a successor first appears in the next vintage and lies at least 95% inside the retired reference; other overlaps are rejected candidates. It is rule-based, not a documented division act.",
+  "Documented DFI event groups are primary filiation evidence; spatial candidates remain labelled inference.",
+  "All reachable predecessor generations and original date roles are retained, without a calendar cutoff.",
+  "Many-to-many lots do not assert individual geographic parent-child matches; partial routes stay qualified.",
+  "Historical-reference rights are contextual records on their original reference, never transferred current rights.",
+  "First supported events and source-boundary stops do not establish creation, original ownership or uninterrupted continuity."
+ ],
+ "counts": {
+  "parcels": 2,
+  "withAnyRightsChange": 0,
+  "firstObservedAfterEarliestVintage": 0,
+  "withPredecessor": 0,
+  "retiredReferences": 0,
+  "changeKinds": {}
+ },
+ "retiredParcels": [],
+ "parcels": [
+  {
+   "parcelId": "21714000AN0072",
+   "reference": "AN 0072",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.2
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21714000AN0072",
+    "eventIds": [],
+    "supportedEventIds": [],
+    "ancestorIds": [],
+    "earliestValidationDate": null,
+    "latestValidationDate": null,
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21714000AN0072",
+      "eventPath": [],
+      "referencePath": [
+       "21714000AN0072"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "2017-07-06",
+    "dateRole": "first-observed-cadastral-release"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21714000AN0072",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21714000AN0072",
+      "referencePath": [
+       "21714000AN0072"
+      ],
+      "candidatePath": [],
+      "reason": "no-accepted-spatial-predecessor"
+     }
+    ]
+   }
+  },
+  {
+   "parcelId": "21714000AN0258",
+   "reference": "AN 0258",
+   "firstSeenCadastre": "2017-07-06",
+   "predecessorIds": [],
+   "cadastre": [
+    {
+     "date": "2017-07-06",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2017-10-12",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-01-02",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-04-03",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2018-06-29",
+     "present": true,
+     "symmetricDifferenceM2": 1.3
+    },
+    {
+     "date": "2018-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 1.3
+    },
+    {
+     "date": "2019-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2019-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2020-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-02-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2021-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2022-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2023-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-07-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2024-10-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-01-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-04-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-09-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2025-12-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    },
+    {
+     "date": "2026-03-01",
+     "present": true,
+     "symmetricDifferenceM2": 0.0
+    }
+   ],
+   "rightsHistory": [
+    {
+     "asOf": "2019-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2020-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2021-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2022-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2023-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2024-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    },
+    {
+     "asOf": "2025-01-01",
+     "records": [
+      {
+       "siren": "778269407",
+       "majic": null,
+       "name": "DOMAINE DE LA ROMANEE CONTI",
+       "rightCode": "P"
+      }
+     ]
+    }
+   ],
+   "rightsChanges": [],
+   "documentedAncestry": {
+    "parcelId": "21714000AN0258",
+    "eventIds": [
+     "210:714:000:0000241:00001"
+    ],
+    "supportedEventIds": [
+     "210:714:000:0000241:00001"
+    ],
+    "ancestorIds": [
+     "21714000AN0073"
+    ],
+    "earliestValidationDate": "1994-05-30",
+    "latestValidationDate": "1994-05-30",
+    "paths": [
+     {
+      "referenceId": "21714000AN0073",
+      "eventPath": [
+       "210:714:000:0000241:00001"
+      ],
+      "referencePath": [
+       "21714000AN0258",
+       "21714000AN0073"
+      ],
+      "method": "documented-dfi",
+      "qualifications": [],
+      "scope": "historical-reference-context"
+     }
+    ],
+    "terminals": [
+     {
+      "referenceId": "21714000AN0073",
+      "eventPath": [
+       "210:714:000:0000241:00001"
+      ],
+      "referencePath": [
+       "21714000AN0258",
+       "21714000AN0073"
+      ],
+      "reason": "source-boundary-or-unrecorded-event",
+      "qualifications": []
+     }
+    ],
+    "issues": []
+   },
+   "earliestSupportedEvent": {
+    "date": "1994-05-30",
+    "dateRole": "dfi-validation"
+   },
+   "spatialPredecessorIds": [],
+   "inferredAncestry": {
+    "parcelId": "21714000AN0258",
+    "paths": [],
+    "terminals": [
+     {
+      "referenceId": "21714000AN0258",
+      "referencePath": [
+       "21714000AN0258"
+      ],
+      "candidatePath": [],
+      "reason": "documented-dfi-correspondence-takes-precedence",
+      "officialEventIds": [
+       "210:714:000:0000241:00001"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "documentedEvents": [
+  {
+   "id": "210:714:000:0000241:00001",
+   "departmentCode": "210",
+   "department": "21",
+   "commune": "21714",
+   "sectionPrefix": "000",
+   "documentId": "0000241",
+   "analysisLot": "00001",
+   "changeType": "2",
+   "changeLabel": "croquis de conservation",
+   "validationDate": "1994-05-30",
+   "dateRole": "dfi-validation",
+   "method": "documented-dfi",
+   "motherIds": [
+    "21714000AN0073"
+   ],
+   "daughterIds": [
+    "21714000AN0258"
+   ],
+   "printedMothers": [
+    "AN0073"
+   ],
+   "printedDaughters": [
+    "AN0258"
+   ],
+   "sourceLines": [
+    407583,
+    407584
+   ],
+   "issues": [],
+   "traceable": true,
+   "scope": "one-to-one-event-group",
+   "sourceId": "dfi-21-2026-07-01"
+  }
+ ],
+ "dfiParseIssues": [],
+ "historicalReferenceRights": [],
+ "geometryReconciliation": [
+  {
+   "eventId": "210:714:000:0000241:00001",
+   "validationDate": "1994-05-30",
+   "dateRole": "dfi-validation",
+   "beforeObservation": null,
+   "afterObservation": "2017-07-06",
+   "mothersObservedBefore": [],
+   "daughtersObservedAfter": [
+    "21714000AN0258"
+   ],
+   "daughtersObservedBeforeValidation": [],
+   "mothersObservedAfterValidation": [],
+   "unobservedMotherIds": [
+    "21714000AN0073"
+   ],
+   "unobservedDaughterIds": [],
+   "status": "before-earliest-obtained-geometry",
+   "limitation": "An intermediate reference can appear and retire between releases. Missing observed geometry does not negate a DFI event."
+  }
+ ],
+ "coverage": {
+  "inventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+  "catalogueDate": "2026-10-01",
+  "rightsAvailable": {
+   "21": [
+    "2019-01-01",
+    "2020-01-01",
+    "2021-01-01",
+    "2022-01-01",
+    "2023-01-01",
+    "2024-01-01",
+    "2025-01-01"
+   ]
+  },
+  "rightsImported": [
+   "2019-01-01",
+   "2020-01-01",
+   "2021-01-01",
+   "2022-01-01",
+   "2023-01-01",
+   "2024-01-01",
+   "2025-01-01"
+  ],
+  "dfiSources": [
+   {
+    "id": "dfi-21-2026-07-01",
+    "kind": "dfi",
+    "department": "21",
+    "departmentCode": "210",
+    "asOf": "2026-07-01",
+    "sourceReleaseDate": null,
+    "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+    "member": "dfiano-dep210-01072026.txt",
+    "fileName": "dfiano-dep210-01072026.txt",
+    "schemaVersion": "2025-01",
+    "encoding": "ascii",
+    "licence": "Licence Ouverte v2.0 (Etalab)",
+    "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+    "retrievedAt": "2026-10-01T08:51:47Z",
+    "size": 36175805,
+    "sha256": "f24ff17542f2e80921c7cce9e537b060ecdd0bff9280bbdd3e30dd1d3f6ea83e",
+    "status": "obtained"
+   }
+  ],
+  "dfiSchema": [
+   {
+    "id": "dfi-schema-2025-01",
+    "kind": "dfi-schema",
+    "schemaVersion": "2025-01",
+    "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_descriptif_du_fichier_janvier2025_pdf",
+    "fileName": "dfi-schema-2025-01.pdf",
+    "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+    "sourceReleaseDate": null,
+    "asOf": null,
+    "licence": "Licence Ouverte v2.0 (Etalab)",
+    "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+    "retrievedAt": "2026-10-01T08:50:33Z",
+    "sha256": "f17bd818fac3003e1c6d1bad9a236e94cdcdb615dc89b85a82cd8b366ea4d498",
+    "size": 38057,
+    "transportSha256": "6e967a42ab20a7f6940f00fb7758e5c8faa110017f0e5053cc80fd1219beffdf",
+    "transportSize": 35599,
+    "httpContentEncoding": "gzip",
+    "status": "obtained"
+   }
+  ],
+  "dfiCommuneCoverage": [
+   {
+    "commune": "21714",
+    "sourceId": "dfi-21-2026-07-01",
+    "completeDepartmentMemberObtained": true,
+    "earliestValidationDateInCommune": "1989-05-05",
+    "latestValidationDateInCommune": "2026-06-29"
+   }
+  ],
+  "earliestReachableDfiValidationDate": "1994-05-30",
+  "latestReachableDfiValidationDate": "1994-05-30",
+  "geometry": {
+   "21714": {
+    "dates": [
+     "2017-07-06",
+     "2017-10-12",
+     "2018-01-02",
+     "2018-04-03",
+     "2018-06-29",
+     "2018-10-01",
+     "2019-01-01",
+     "2019-04-01",
+     "2019-07-01",
+     "2019-10-01",
+     "2020-01-01",
+     "2020-07-01",
+     "2020-10-01",
+     "2021-02-01",
+     "2021-04-01",
+     "2021-07-01",
+     "2021-10-01",
+     "2022-01-01",
+     "2022-04-01",
+     "2022-07-01",
+     "2022-10-01",
+     "2023-01-01",
+     "2023-04-01",
+     "2023-07-01",
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01",
+     "2025-09-01",
+     "2025-12-01",
+     "2026-03-01",
+     "2026-06-01"
+    ],
+    "afterPinnedGeometry": [
+     "2026-09-01"
+    ],
+    "pinnedCurrentGeometry": "2026-06-01",
+    "obtainedDates": [
+     "2017-07-06",
+     "2017-10-12",
+     "2018-01-02",
+     "2018-04-03",
+     "2018-06-29",
+     "2018-10-01",
+     "2019-01-01",
+     "2019-04-01",
+     "2019-07-01",
+     "2019-10-01",
+     "2020-01-01",
+     "2020-07-01",
+     "2020-10-01",
+     "2021-02-01",
+     "2021-04-01",
+     "2021-07-01",
+     "2021-10-01",
+     "2022-01-01",
+     "2022-04-01",
+     "2022-07-01",
+     "2022-10-01",
+     "2023-01-01",
+     "2023-04-01",
+     "2023-07-01",
+     "2023-10-01",
+     "2024-01-01",
+     "2024-04-01",
+     "2024-07-01",
+     "2024-10-01",
+     "2025-01-01",
+     "2025-04-01",
+     "2025-09-01",
+     "2025-12-01",
+     "2026-03-01",
+     "2026-06-01"
+    ]
+   }
+  },
+  "currentParcelsWithDocumentedAncestors": 1,
+  "currentParcelsWithPre2019DfiEvents": 1,
+  "distinctDfiDocuments": 1,
+  "distinctDfiAnalysisLots": 1,
+  "inferredOnlyCurrentParcels": 0,
+  "unresolvedEvents": 0,
+  "traversalIssues": [],
+  "terminalReasons": {
+   "source-boundary-or-unrecorded-event": 2
+  },
+  "missingSources": [
+   {
+    "id": "notices-21-earlier-pdf",
+    "kind": "notice-bulletin",
+    "department": "21",
+    "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+    "fileName": "notices-21-earlier-pdf.pdf",
+    "sourceReleaseDate": null,
+    "asOf": null,
+    "licence": "Official public administrative bulletin; reuse terms not stated on the inaccessible listing",
+    "licenceUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+    "status": "missing",
+    "attemptedAt": "2026-10-01T10:20:39Z",
+    "reason": "Remote end closed connection without response"
+   }
+  ],
+  "salesAndNotices": "Independent inventories and original-reference matches are published with sale records and notice audits.",
+  "spatialCandidatesAccepted": 0,
+  "spatialCandidatesRejected": 0,
+  "spatialConflicts": []
+ },
+ "spatialCandidates": [],
+ "spatialConflicts": []
+}

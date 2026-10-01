@@ -1,16 +1,56 @@
 import type {HolderResearch} from '../parcelPresentation';
 import {grandCruFor,type EvidenceSourceId} from './registry';
 
-export type EvidenceKind='authorisation'|'suspended'|'application'|'filing'|'research'|'ownership'|'sale'|'lineage'|'lead';
+export type EvidenceKind='authorisation'|'suspended'|'application'|'notice'|'filing'|'research'|'ownership'|'sale'|'filiation'|'lineage'|'lead';
 export type EvidenceSource={title:string;url:string;kind:'official'|'research'|'data'|'company'|'estate'|'other';date:string|null};
-export type EvidenceItem={kind:EvidenceKind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[]};
-export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Record<string,EvidenceItem[]>;holderDomains?:Record<string,HolderResearch>};
+export type EvidenceContextPath={referencePath:string[];eventPath:string[];qualifications:string[];assignment?:string};
+export type EvidenceItem={kind:EvidenceKind;date:string|null;title:string;detail?:string;note?:string;label?:string;via?:string;sources:string[];
+ dateRole?:string;method?:'documented-dfi'|'spatial-inference';originalReferenceId?:string;originalScope?:string;contextPaths?:EvidenceContextPath[]};
+export type ParcelTracing={earliestSupportedEvent:{date:string;dateRole:string};paths:EvidenceContextPath[];
+ terminals:(EvidenceContextPath&{referenceId:string;reason:string})[];issues:unknown[]};
+export type HistoryCoverage={rightsImported:string[];earliestReachableDfiValidationDate:string|null;latestReachableDfiValidationDate:string|null;
+ missingSources:unknown[];dfiSources:{asOf:string;department:string}[];
+ sales?:{availableRange?:{start:string;end:string};observedCommuneRange:string[]|null};
+ notices?:{availabilityAudit:{departments:Record<string,{earliestPublishedYearLocated:number;latestPublishedYearLocated:number;
+  availabilityStatus:string;unsearchedIntervals:string[]}>};missingDepartmentIndexes:string[]};};
+export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Record<string,EvidenceItem[]>;holderDomains?:Record<string,HolderResearch>;
+ coverage?:Record<string,HistoryCoverage>;tracing?:Record<string,ParcelTracing>};
 
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
- echezeaux:()=>import('./echezeaux.evidence.json'),
- 'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
+ 'batard-montrachet':()=>import('./batard-montrachet.evidence.json'),
+ 'bienvenues-batard-montrachet':()=>import('./bienvenues-batard-montrachet.evidence.json'),
+ 'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
+ 'chablis-grand-cru':()=>import('./chablis-grand-cru.evidence.json'),
+ 'chambertin':()=>import('./chambertin.evidence.json'),
+ 'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
+ 'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),
+ 'charlemagne':()=>import('./charlemagne.evidence.json'),
+ 'charmes-chambertin':()=>import('./charmes-chambertin.evidence.json'),
+ 'chevalier-montrachet':()=>import('./chevalier-montrachet.evidence.json'),
+ 'clos-de-la-roche':()=>import('./clos-de-la-roche.evidence.json'),
+ 'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
+ 'clos-des-lambrays':()=>import('./clos-des-lambrays.evidence.json'),
+ 'clos-saint-denis':()=>import('./clos-saint-denis.evidence.json'),
+ 'corton':()=>import('./corton.evidence.json'),
+ 'corton-charlemagne':()=>import('./corton-charlemagne.evidence.json'),
+ 'criots-batard-montrachet':()=>import('./criots-batard-montrachet.evidence.json'),
+ 'echezeaux':()=>import('./echezeaux.evidence.json'),
+ 'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
+ 'griotte-chambertin':()=>import('./griotte-chambertin.evidence.json'),
+ 'la-grande-rue':()=>import('./la-grande-rue.evidence.json'),
+ 'la-romanee':()=>import('./la-romanee.evidence.json'),
+ 'la-tache':()=>import('./la-tache.evidence.json'),
+ 'latricieres-chambertin':()=>import('./latricieres-chambertin.evidence.json'),
+ 'mazis-chambertin':()=>import('./mazis-chambertin.evidence.json'),
+ 'mazoyeres-chambertin':()=>import('./mazoyeres-chambertin.evidence.json'),
+ 'montrachet':()=>import('./montrachet.evidence.json'),
+ 'musigny':()=>import('./musigny.evidence.json'),
+ 'richebourg':()=>import('./richebourg.evidence.json'),
+ 'romanee-conti':()=>import('./romanee-conti.evidence.json'),
+ 'romanee-saint-vivant':()=>import('./romanee-saint-vivant.evidence.json'),
+ 'ruchottes-chambertin':()=>import('./ruchottes-chambertin.evidence.json'),
 };
 
 const empty=():ParcelEvidenceData=>({sources:{},parcels:{},holderDomains:{}});
@@ -22,6 +62,8 @@ export function mergeParcelEvidence(files:ParcelEvidenceData[]):ParcelEvidenceDa
   Object.assign(merged.sources,file.sources);
   for(const [id,items] of Object.entries(file.parcels))merged.parcels[id]=[...merged.parcels[id]??[],...items];
   for(const [id,research] of Object.entries(file.holderDomains??{}))merged.holderDomains![id]??=research;
+  if(file.coverage)Object.assign(merged.coverage??={},file.coverage);
+  for(const [id,tracing] of Object.entries(file.tracing??{}))(merged.tracing??={})[id]??=tracing;
  }
  return merged;
 }

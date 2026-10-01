@@ -1,0 +1,22 @@
+{
+  "slug": "la-romanee",
+  "name": "La Romanée",
+  "parentFeatureId": "inao-denom-655",
+  "appellationId": 190,
+  "issue": 382,
+  "tier": 1,
+  "bundle": "vosne-romanee",
+  "villageMaps": [
+    "vosne-romanee"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for La Romanée (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "la-romanee"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

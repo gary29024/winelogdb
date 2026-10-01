@@ -1,0 +1,35 @@
+{
+  "dataUrl": "/maps/gevrey-chambertin-parcels.2026-06-01.ff650df461c3.geojson",
+  "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-447",
+    "inao-denom-448",
+    "inao-denom-475",
+    "inao-denom-646",
+    "inao-denom-477",
+    "inao-denom-809",
+    "inao-denom-666",
+    "inao-denom-808",
+    "inao-denom-1086"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 442,
+    "withRecordedRights": 265,
+    "rightRecords": 267,
+    "unknownRights": 177,
+    "areaMismatches": 0,
+    "multipleRights": 2,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

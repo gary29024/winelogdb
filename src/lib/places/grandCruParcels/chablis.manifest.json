@@ -1,0 +1,27 @@
+{
+  "dataUrl": "/maps/chablis-parcels.2026-06-01.56b25a5e7459.geojson",
+  "sha256": "56b25a5e7459cc0a0fc18fc56c179520902c53b4c3e4bf4619995f7d1c49b9d2",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-439"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 417,
+    "withRecordedRights": 296,
+    "rightRecords": 297,
+    "unknownRights": 121,
+    "areaMismatches": 0,
+    "multipleRights": 1,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

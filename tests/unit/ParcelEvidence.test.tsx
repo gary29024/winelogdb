@@ -52,15 +52,15 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByText('1 Jan 2025')).toBeTruthy();  // rights snapshot, not an operating date
   expect(within(panel).getByText('Recorded right holder changed to Bouchon Pourpre')).toBeTruthy();
  });
- it('labels evidence inherited through a divided parcel and keeps directly named references distinct',async()=>{
+ it('labels former-reference context and spatial inference without claiming creation or inheritance',async()=>{
   render(<ParcelEvidence parcelId={id('826')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getAllByText('Inherited from former parcel D0792').length).toBeGreaterThan(0);
-  expect(within(panel).getByText('Created by dividing D0792')).toBeTruthy();
+  expect(within(panel).getAllByText('Record names former parcel D0792').length).toBeGreaterThan(0);
+  expect(within(panel).getByText('Spatial inference from former parcel D0792')).toBeTruthy();
+  expect(within(panel).queryByText(/Created by dividing/)).toBeNull();
   cleanup();
   render(<ParcelEvidence parcelId={id('172')} parentId="inao-denom-565"/>);
   const direct=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(direct).queryByText(/Inherited from former parcel/)).toBeNull();
   expect(within(direct).getByText('Named by parcel number')).toBeTruthy();
  });
  it('shows a co-sale and a later company holder without identifying the buyer',async()=>{
@@ -107,15 +107,35 @@ describe('Parcel evidence panel',()=>{
   render(<ParcelEvidence parcelId="217160000A0005" parentId="inao-denom-546"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Rights record')).toBeTruthy();
-  expect(within(panel).getByText('First legal-entity right on record: Anne Gros')).toBeTruthy();
+  expect(within(panel).getByText('Legal-entity right first observed in these snapshots: Anne Gros')).toBeTruthy();
   expect(within(panel).getByText(/Rights and sales/)).toBeTruthy();
   expect(within(panel).queryByText('Ownership record')).toBeNull();
   expect(within(panel).queryByText('Verified operator')).toBeNull();
  });
- it('says only that no dated records were found',async()=>{
+ it('qualifies an unmatched reference against the reviewed sources',async()=>{
   expect(evidence.parcels).not.toHaveProperty(id('1'));
   render(<ParcelEvidence parcelId={id('1')} parentId="inao-denom-565"/>);
-  expect(await screen.findByText('No dated records were found for this parcel.')).toBeTruthy();
+  expect(await screen.findByText('No matched records in the reviewed sources for this parcel.')).toBeTruthy();
+ });
+ it('shows the 1991 DFI validation, whole event group and source-boundary stop',async()=>{
+  const Fresh=await fresh();
+  render(<Fresh parcelId={id('736')} parentId="inao-denom-565"/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Official event group: D0327 → D0736, D0737')).toBeTruthy();
+  expect(within(panel).getByText('22 Jan 1991').getAttribute('datetime')).toBe('1991-01-22');
+  expect(within(panel).getAllByText('DFI validation date').length).toBeGreaterThan(0);
+  expect(within(panel).getByText(/Earliest supported event: 1991-01-22/)).toBeTruthy();
+  expect(within(panel).getByText(/No earlier correspondence in the obtained DFI file/)).toBeTruthy();
+  expect(within(panel).getByRole('link',{name:/DGFiP official DFI/}).getAttribute('href')).toContain('juillet_2026');
+  expect(within(panel).queryByText(/Created by/)).toBeNull();
+ });
+ it('retains the outside-cru daughter in the verified 1989 Vougeot event',async()=>{
+  const Fresh=await fresh();
+  render(<Fresh parcelId="217160000A0408" parentId="inao-denom-546"/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Official event group: A0022 → A0408, A0409, A0410')).toBeTruthy();
+  expect(within(panel).getByText('20 Apr 1989').getAttribute('datetime')).toBe('1989-04-20');
+  expect(within(panel).queryByText('Verified operator')).toBeNull();
  });
  it('reports a failed load and recovers on retry',async()=>{
   vi.resetModules();

@@ -1,0 +1,316 @@
+{
+ "schemaVersion": 1,
+ "parentFeatureId": "inao-denom-351",
+ "inputs": {
+  "parcelSnapshotSha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+  "history": "docs/research/bienvenues-batard-montrachet/rights-history.json",
+  "indexes": [
+   {
+    "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+    "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+   },
+   {
+    "path": "docs/research/bfc-bulletins/notices.json",
+    "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+   },
+   {
+    "path": "docs/research/bfc-bulletins/coverage.json",
+    "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+    "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/index/notices.json",
+    "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+    "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+   },
+   {
+    "path": "docs/research/bienvenues-batard-montrachet/curation.json",
+    "sha256": "81f59ccec25caf9adb5b071743331e3230b3223b6881ba7b1868c3d8d4c1f0d2"
+   }
+  ]
+ },
+ "coverage": {
+  "indexes": [
+   {
+    "id": "regional-bfc-cote-dor",
+    "department": "21",
+    "publicationYearsIndexed": [
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025,
+     2026
+    ],
+    "summary": {
+     "bulletins": 1277,
+     "notScanned": 0,
+     "downloadFailed": 0,
+     "extractionIncomplete": 0,
+     "fullOcrNoContents": 1,
+     "failedPages": 0,
+     "withCoteDorNotices": 269,
+     "coteDorNotices": 1412,
+     "farmStructureNotices": 1120
+    },
+    "earlierAvailableYearsAudit": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    },
+    "unsearchedIntervals": [
+     "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+     "Departmental 2021–2026 publications outside the existing index",
+     "Regional publications before 2019 and any notice outside the indexed corpus"
+    ]
+   },
+   {
+    "id": "departmental-cote-dor",
+    "department": "21",
+    "publicationYearsIndexed": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020
+    ],
+    "summary": {
+     "documentReferences": 377,
+     "downloadedPDFs": 372,
+     "completePDFs": 372,
+     "indexedPages": 31966,
+     "pendingPages": 0,
+     "failedPages": 0,
+     "candidatePages": 1245,
+     "noticeOccurrences": 1795,
+     "farmStructureOccurrences": 130
+    },
+    "earlierAvailableYearsAudit": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    },
+    "unsearchedIntervals": [
+     "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+     "Departmental 2021–2026 publications outside the existing index",
+     "Regional publications before 2019 and any notice outside the indexed corpus"
+    ]
+   }
+  ],
+  "missingDepartmentIndexes": [],
+  "availabilityAudit": {
+   "path": "scripts/grand-crus/sources/notice-coverage-2026-10-01.json",
+   "sha256": "ae6ad9c539a83ba3ba112f0a8148be4785271d844ae97dae2ee19629e0c4c5ae",
+   "departments": {
+    "21": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    }
+   }
+  },
+  "reachableReferencesQueried": [
+   "21512000AI0001",
+   "21512000AI0002",
+   "21512000AI0004",
+   "21512000AI0005",
+   "21512000AI0007",
+   "21512000AI0017",
+   "21512000AI0019",
+   "21512000AI0020",
+   "21512000AI0022",
+   "21512000AI0023",
+   "21512000AI0024",
+   "21512000AI0026",
+   "21512000AI0027",
+   "21512000AI0108",
+   "21512000AI0109",
+   "21512000AI0110",
+   "21512000AI0111",
+   "21512000AI0112",
+   "21512000AI0113",
+   "21512000AI0121",
+   "21512000AI0122",
+   "21512000AI0123",
+   "21512000AI0128",
+   "21512000AI0129",
+   "21512000AI0130",
+   "21512000AI0131",
+   "21512000AI0134",
+   "21512000AI0135",
+   "21512000AI0136",
+   "21512000AI0137",
+   "21512000AI0138",
+   "21512000AI0139",
+   "21512000AI0140",
+   "21512000AI0141",
+   "21512000AI0142",
+   "21512000AI0143",
+   "21512000AI0144",
+   "21512000AI0145",
+   "21512000AI0155",
+   "21512000AI0156",
+   "21512000AI0159",
+   "21512000AI0160",
+   "21512000AI0161",
+   "21512000AI0162",
+   "21512000AI0163",
+   "21512000AI0164",
+   "21512000AI0165"
+  ],
+  "reviewedMatches": 0,
+  "unreviewedSearchCandidates": 0,
+  "earliestMatchedActDate": null,
+  "latestMatchedActDate": null,
+  "limitation": "Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event."
+ },
+ "reviewedMatches": [],
+ "unreviewedCandidates": [],
+ "unassignedReviewedReferences": []
+}

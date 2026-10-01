@@ -1,0 +1,22 @@
+{
+  "slug": "chevalier-montrachet",
+  "name": "Chevalier-Montrachet",
+  "parentFeatureId": "inao-denom-539",
+  "appellationId": 157,
+  "issue": 401,
+  "tier": 1,
+  "bundle": "montrachet",
+  "villageMaps": [
+    "puligny-montrachet"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Chevalier-Montrachet (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "chevalier-montrachet"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

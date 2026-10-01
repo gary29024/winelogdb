@@ -1,0 +1,22 @@
+{
+  "slug": "clos-de-tart",
+  "name": "Clos de Tart",
+  "parentFeatureId": "inao-denom-545",
+  "appellationId": 161,
+  "issue": 387,
+  "tier": 1,
+  "bundle": "chambolle-morey",
+  "villageMaps": [
+    "morey-saint-denis"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Clos de Tart (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "clos-de-tart"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

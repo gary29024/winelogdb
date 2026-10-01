@@ -1,0 +1,9 @@
+{
+  "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+  "retrievedAt": "2026-10-01T08:50:32Z",
+  "sha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+  "size": 4271,
+  "transportSha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+  "transportSize": 4271,
+  "httpContentEncoding": null
+}

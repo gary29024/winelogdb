@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-548",
+  "inputs": {
+    "parcelSnapshotSha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a"
+  },
+  "reviewStatus": "named-area-crosswalk-unreviewed",
+  "limitation": "The label below is a review status only. It does not assign a cadastral lieu-dit, official climat, vineyard subdivision or producer holding.",
+  "parcels": {
+    "21442000AB0242": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0243": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0244": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0245": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0246": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0248": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0250": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0253": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0255": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0256": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0270": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0297": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0299": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0301": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0304": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0305": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0306": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0307": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0403": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0404": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0405": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0406": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0409": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0410": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0419": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0433": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0437": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0438": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0455": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0470": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0471": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0472": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0473": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0475": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0476": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0493": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AB0494": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0019": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0020": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0021": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0022": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0025": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0027": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0028": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0230": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0231": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0232": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0233": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21442000AP0252": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    }
+  }
+}

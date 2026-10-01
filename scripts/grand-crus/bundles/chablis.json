@@ -1,0 +1,383 @@
+{
+  "id": "chablis",
+  "name": "Chablis",
+  "note": "Shared official-history inputs for #461. Named-area and producer research require their own Tier 1/Tier 2 review.",
+  "crus": [
+    "chablis-grand-cru"
+  ],
+  "villageMap": "chablis",
+  "additionalVillageMaps": [],
+  "assetName": "chablis-parcels",
+  "parcels": {
+    "commune": "89068",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+    "cadastreSha256": "7b34d5adab14ee4ff813c75809f96fe7873adbb7fe332c12d9bb68811e203f5b",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_890.csv",
+    "rightsMemberSha256": "7901c21a017867994fc1e1ee09ab84b9f01b201bd164ea7654ffba1ab6332379",
+    "rightsMemberCrc32": 2840461715,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-439"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": [],
+    "additionalCommunes": []
+  },
+  "lieuxDits": {
+    "89068": {
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-lieux_dits.json.gz",
+      "sha256": "c69dbfcb19482d35068e3d0ab53c88c6edf86570d14172d98995d2145e52623e"
+    }
+  },
+  "rightsHistory": {
+    "successorInsideShare": 0.95,
+    "rights": [
+      {
+        "asOf": "2019-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_62_a_976_zip",
+        "member": "PM_19_NB_890.txt",
+        "sha256": "c21537411cc932178a4d172bd169410f7e2484096eb7987f5085681ed887f30d",
+        "size": 34913431,
+        "encoding": "latin-1",
+        "department": "89"
+      },
+      {
+        "asOf": "2020-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_62_a_976_zip",
+        "member": "PM_20_NB_890.txt",
+        "sha256": "3db877f2df981b081bd0a45786a0ddeaa2fac49ec16eac4610e72583efce8fb6",
+        "size": 35828256,
+        "encoding": "latin-1",
+        "department": "89"
+      },
+      {
+        "asOf": "2021-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_61_a_976_zip",
+        "member": "PM_21_NB_890.txt",
+        "sha256": "dbbcc0c47a82957ee5ecaff6db600667321bd4bd808d5a21d0662b3debb73b16",
+        "size": 36806941,
+        "encoding": "latin-1",
+        "department": "89"
+      },
+      {
+        "asOf": "2022-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_62_a_976_zip",
+        "member": "PM_22_NB_890.txt",
+        "sha256": "b7792065200bab2ba37d9150b79f340ddb9ab3a3fc55a28c67d3dbe711879893",
+        "size": 37492171,
+        "encoding": "latin-1",
+        "department": "89"
+      },
+      {
+        "asOf": "2023-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_62_a_976_zip",
+        "member": "PM_23_NB_890.txt",
+        "sha256": "dc40afbea48aeb2b1e3cdf30a0eb307f4e6478cbd1715862e38d820fb40d5f77",
+        "size": 37994115,
+        "encoding": "latin-1",
+        "department": "89"
+      },
+      {
+        "asOf": "2024-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichiers_des_parcelles_situation_2024_dpts_61_a_976_zip",
+        "member": "PM_24_NB_890.csv",
+        "sha256": "b34cad42e2100f47a426f0d0b1b48f839b553f43117d2b7ab728e475fdd7e708",
+        "size": 31878456,
+        "encoding": "utf-8-sig",
+        "department": "89"
+      }
+    ],
+    "cadastre": [
+      {
+        "date": "2017-07-06",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-07-06/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "6bb32b10592b1d36c0c37055cf3227bde807e1de257116859cee2aef3b5e1243",
+        "size": 818796
+      },
+      {
+        "date": "2017-10-12",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2017-10-12/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "db4cf9f14a3a4c7d102095c96477ae1ead0d4e3a75d4aa8bbb9ea132042bebb1",
+        "size": 792893
+      },
+      {
+        "date": "2018-01-02",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-01-02/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "7af320699e807bec59dbfab936056076e20252e5520bf5e377c1741861d85b01",
+        "size": 793217
+      },
+      {
+        "date": "2018-04-03",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-04-03/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "a727d1f00c811b255664be12548b578dc311cfc118f6674f892c01d08781245d",
+        "size": 831397
+      },
+      {
+        "date": "2018-06-29",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-06-29/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "7c2ab7f4c9b375c8ba6e6fd58680eb3febb46b03f697368044b689d831a4bdc7",
+        "size": 831688
+      },
+      {
+        "date": "2018-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2018-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "427b0acad0d2c1aea9e5b5a97b56d74f7c214af1cff49b584ee07b76eff3e6d9",
+        "size": 831590
+      },
+      {
+        "date": "2019-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "d1b6c818657ec59507ce24c3675bcb360dcc527faa615e2470eb0b5088c22b59",
+        "size": 832246
+      },
+      {
+        "date": "2019-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "2592c93320aaf0b4a597c48ab970368cd8acaf0029391461774dd42f3db08c40",
+        "size": 832187
+      },
+      {
+        "date": "2019-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "447584bc73ce0459bf4dc100ed0b8fa8dd584a1affdd99cfdb8f8389f5443519",
+        "size": 835393
+      },
+      {
+        "date": "2019-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "07070b5f0f3598bea7f9c595b11cc32ac04c29d57eeac0d5f1f0522b061ace8e",
+        "size": 835978
+      },
+      {
+        "date": "2020-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "960721b2b0906f5f8cb591e6a9735f21dfe01eb365916b3deda00fc390ce9a3d",
+        "size": 837101
+      },
+      {
+        "date": "2020-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "ba7b30a80e216630522dd822f60e8fac44d5eea4476defdf3c5fb2e6cd07c770",
+        "size": 837421
+      },
+      {
+        "date": "2020-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "07dc0eb9484c773f3fbea89db99e0068245489bc83a3a1d95f34781ad47573d6",
+        "size": 837705
+      },
+      {
+        "date": "2021-02-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-02-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "2de3d157668c2c6eb0d1d35a328e7f79f1a4b7fb4481cf957012c58709f11676",
+        "size": 838166
+      },
+      {
+        "date": "2021-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "2de3d157668c2c6eb0d1d35a328e7f79f1a4b7fb4481cf957012c58709f11676",
+        "size": 838166
+      },
+      {
+        "date": "2021-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "db1010475bb93225c54b3e6b3f6568e585680b7508917242c7ad7a47e43a102a",
+        "size": 838202
+      },
+      {
+        "date": "2021-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "83ac0bb36f697187afacbd1b0f2227b36450025a19eee44a60256b50351fb1e9",
+        "size": 838864
+      },
+      {
+        "date": "2022-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "67e015d20e219b95c83f707ad6001cb7775fedd8a35bcb501d75740373ec6ac9",
+        "size": 838937
+      },
+      {
+        "date": "2022-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "188ef7eedba302acdd0c0ff66b86a6d76f3c81bbd75062a45087f7b43239b359",
+        "size": 839323
+      },
+      {
+        "date": "2022-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "c50acb1ad8eb084012be6f6bbab519721994317a63632b17371d81f4d4157b27",
+        "size": 839694
+      },
+      {
+        "date": "2022-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "332e09b0b9a1995c72c75b8a15f98295cd7261dea942d9fa3ccf2ef60e2f260a",
+        "size": 839765
+      },
+      {
+        "date": "2023-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "8817ad11053030f3aeb5bb1ae51d2f7c8793391a93bcf52c063587031318732e",
+        "size": 839888
+      },
+      {
+        "date": "2023-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "d01cc51082e78dc05dd1a3f82297459a03b92d9f354aa80e3730ce53fafcad96",
+        "size": 840256
+      },
+      {
+        "date": "2023-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "a88a567fe6510588d147a036e98e98f18588b95c81111c58a9a2da82840e0777",
+        "size": 840246
+      },
+      {
+        "date": "2023-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "53bb7ba4fb64bb8bd266aca9abfa3398c33e52f795db1e361b041b312c64c8f4",
+        "size": 840630
+      },
+      {
+        "date": "2024-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "4503748b25689e86e0c64da99acfe0da07fb566c896bb51042a1dc03a31012d4",
+        "size": 841310
+      },
+      {
+        "date": "2024-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "b0fa8e66eff3eee06e0885f7ffea1389963b1e5a07ec97bdbe630b6ee0e607e8",
+        "size": 841379
+      },
+      {
+        "date": "2024-07-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-07-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "cc351ff1d0909c4bb9938b4416cdef415cb4276ea21ee3031bc5e903bd0ecb77",
+        "size": 842713
+      },
+      {
+        "date": "2024-10-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-10-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "1228d846abb3a49593547493501d32faec1b2283200470803915c5910a2ee31a",
+        "size": 831169
+      },
+      {
+        "date": "2025-01-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-01-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "46c7852c78f6f78ab292d00220df5342ed8271370c5631d194795f0be4448659",
+        "size": 830617
+      },
+      {
+        "date": "2025-04-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-04-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "94fe0926f9edeefead959c979e920f93508e73ebe2261cd5f2018a03722f08b8",
+        "size": 830621
+      },
+      {
+        "date": "2025-09-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-09-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "387812efae8d6c7cc28ad237a5a0a3a896a577835adddabe2508aede63730fbd",
+        "size": 830834
+      },
+      {
+        "date": "2025-12-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-12-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "103af96097332224336985ca288137b825f4f63e3aacf6729fe81af54dc63ae6",
+        "size": 831331
+      },
+      {
+        "date": "2026-03-01",
+        "commune": "89068",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-03-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+        "sha256": "dbf732c72d4378c09e5a122d5f3a8168e4847bae74599b7c6939e88f6b745a79",
+        "size": 831779
+      }
+    ]
+  },
+  "saleRecords": {
+    "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
+    "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
+    "release": "2026-04",
+    "portal": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+    "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+    "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+    "member": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+    "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+    "availableStart": "2014-01-01",
+    "availableRange": {
+      "end": "2025-12-31",
+      "start": "2014-01-01"
+    },
+    "earlierOfficialRecordsAudit": {
+      "catalogue": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-catalogue.json",
+      "catalogueMetadata": {
+        "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+        "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+        "httpContentEncoding": null,
+        "transportSha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+        "transportSize": 8953,
+        "sha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+        "size": 8953,
+        "retrievedAt": "2026-10-01T10:12:31Z",
+        "status": "obtained"
+      },
+      "releaseListing": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-box.html",
+      "latestReleaseFolderObserved": "avril_2026",
+      "previousReleaseFolderObserved": "versions_anterieures",
+      "earlierThanAvailableStart": "No earlier deed period is declared by this open-data catalogue. Restricted DV3F/DVF records are not treated as public DVF+ coverage.",
+      "coverageMeaning": "Catalogue temporal coverage is separate from observed dates in this region/commune; not a claim of uninterrupted records."
+    }
+  },
+  "officialHistory": {
+    "inventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+    "departments": [
+      "89"
+    ],
+    "communes": [
+      "89068"
+    ]
+  }
+}

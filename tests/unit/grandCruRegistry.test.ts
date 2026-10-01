@@ -33,7 +33,8 @@ describe('Grand Cru registry',()=>{
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
-  expect(grandCruFor('inao-denom-655')).toBeUndefined();
+  expect(grandCruFor('inao-denom-655')?.name).toBe('La Romanée');
+  expect(grandCruFor('inao-denom-unknown')).toBeUndefined();
   const multiMapCru={...grandCrus[0],villageMaps:['chassagne-montrachet','puligny-montrachet']};
   expect(cruOnVillageMap(multiMapCru,'chassagne-montrachet')).toBe(true);
   expect(cruOnVillageMap(multiMapCru,'puligny-montrachet')).toBe(true);
@@ -43,12 +44,26 @@ describe('Grand Cru registry',()=>{
   const echezeaux=parcelRightsSnapshot('inao-denom-565')!,grands=parcelRightsSnapshot('inao-denom-645')!;
   expect(echezeaux.rightsAsOf).toBe('2025-01-01');
   expect(grands.holderIds).toHaveLength(9);
-  expect(parcelRightsSnapshot('inao-denom-655')).toBeUndefined();
+  expect(parcelRightsSnapshot('inao-denom-unknown')).toBeUndefined();
  });
  it('loads Grands-Échezeaux evidence from its own research, including the D0093 application',async()=>{
   const evidence=await loadParcelEvidence('inao-denom-645');
   expect(evidence.parcels['212670000D0093']?.map(i=>i.kind)).toContain('application');
-  expect(await loadParcelEvidence('inao-denom-655')).toEqual({sources:{},parcels:{},holderDomains:{}});
+  expect(await loadParcelEvidence('inao-denom-unknown')).toEqual({sources:{},parcels:{},holderDomains:{}});
+ });
+ it('delivers every rollout cru with its own lazy history and independent Yonne coverage',async()=>{
+  expect(grandCrus).toHaveLength(33);
+  for(const cru of grandCrus){
+   const data=await loadParcelEvidence(cru.parentFeatureId);
+   const coverage=data.coverage?.[cru.parentFeatureId];
+   expect(coverage,cru.slug).toBeTruthy();
+   expect(Object.keys(data.tracing??{}).length,cru.slug).toBeGreaterThan(0);
+   expect(coverage?.rightsImported).toEqual(['2019-01-01','2020-01-01','2021-01-01','2022-01-01','2023-01-01','2024-01-01','2025-01-01']);
+  }
+  const chablis=await loadParcelEvidence('inao-denom-439');
+  expect(chablis.coverage?.['inao-denom-439'].dfiSources.map(s=>s.department)).toEqual(['89']);
+  expect(chablis.coverage?.['inao-denom-439'].notices?.missingDepartmentIndexes).toEqual(['89']);
+  expect(Object.keys(chablis.tracing??{}).every(id=>id.startsWith('89068'))).toBe(true);
  });
  it('loads Vougeot’s 69 holders and dated notices without inventing domaine research',async()=>{
   expect(grandCruFor('inao-denom-546','vougeot')?.slug).toBe('clos-de-vougeot');

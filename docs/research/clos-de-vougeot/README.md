@@ -21,8 +21,8 @@ sale or cadastral predecessor never establishes actual farming.
 | Parcels with holder or research leads | 7 (7 notice parcels; no holder leads) |
 | Parcels with no lead | 157 |
 | Verified farming links | 0 |
-| Official history to earliest records (#461) | Pending: 2019–2025 rights and next-vintage lineage only |
-| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 20,295 / 2,411 bytes |
+| Official history to earliest records (#461) | Official DFI validates reachable references from 1989-04-20; all 35 geometry vintages (2017–2026) and 2019–2025 rights imported; notice archive gaps remain explicit |
+| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 187,322 / 14,301 bytes |
 
 A lead is a named candidate in the [register](register.md): a holder lead from
 reviewed research, a parcel named in an official notice, or a co-sale lead. A recorded
@@ -32,10 +32,11 @@ candidate. All 69 holder identities are inventoried, but this Tier 1 review esta
 no holder-to-domaine crosswalk, so the app shows legal holders without a domaine
 grouping control.
 
-The history above is the original Tier 1 baseline. [#461](https://github.com/gary29024/winelogdb/issues/461)
-extends Tier 1 to official parcel filiation (DFI) and every older record source back to
-its earliest availability. That work is pending for this cru, and #378 stays open until
-it is delivered and reviewed.
+The [#461 historical extension](../grand-cru-history.md) adds official parcel
+filiation, every catalogue-listed historical vintage and original-reference evidence.
+The [independent audit](../../../scripts/grand-crus/reports/history-rollout-audit.md)
+records dated coverage and unresolved notice archive gaps. The cru issue remains
+subject to review of its complete Tier 1 delivery.
 
 Both geometry and evidence load only after switching on Parcel rights.
 

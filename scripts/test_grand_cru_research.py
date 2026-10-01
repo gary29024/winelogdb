@@ -13,8 +13,8 @@ CURATION, EVIDENCE, HISTORY, SALES, NAMED_AREAS = (CONTEXT.curation, CONTEXT.evi
 MANIFEST = manifest_path(CONTEXT.bundle)
 
 
-def build_register(*inputs):
-    return build_cru_register(*inputs, CONTEXT)
+def build_register(*inputs, notice_records=None):
+    return build_cru_register(*inputs, CONTEXT, notice_records)
 
 
 class FarmingResearchTests(unittest.TestCase):
@@ -358,7 +358,7 @@ class FarmingResearchTests(unittest.TestCase):
         items = evidence['parcels']['212670000D0796']
         filing_item = next(i for i in items if i['kind'] == 'filing')
         self.assertEqual(filing_item['date'], '2002-01-18')
-        self.assertTrue(any(i['kind'] == 'ownership' and i['date'] == '2024' for i in items))
+        self.assertTrue(any(i['kind'] == 'ownership' and i['date'] == '2024-01-01' for i in items))
         self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
 
     def test_clerget_completion_source_is_cited_without_redating_the_deed(self):
@@ -471,7 +471,8 @@ class ParcelEvidenceTests(unittest.TestCase):
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
         cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
         cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
-        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales, cls.named_areas)
+        cls.register = build_register(cls.manifest, cls.asset, cls.curation, cls.history, cls.sales, cls.named_areas,
+                                      notice_records=json.loads(CONTEXT.notices.read_text(encoding='utf-8')))
 
     def build(self, curation=None):
         return build_evidence(self.register, curation or self.curation, self.history, self.features)
@@ -555,8 +556,10 @@ class ResultsTableTests(unittest.TestCase):
     def test_history_row_and_measured_payload_are_required(self):
         with self.assertRaisesRegex(ValueError, 'Official history to earliest records'):
             self.table_check(lambda text: '\n'.join(line for line in text.splitlines() if 'Official history' not in line))
-        with self.assertRaisesRegex(ValueError, 'evidence file as 20,295 / 2,411'):
-            self.table_check(lambda text: text.replace('20,295 / 2,411', '20,295 / 2,430'))
+        with self.assertRaisesRegex(ValueError, 'payload row must give the evidence file'):
+            self.table_check(lambda text: '\n'.join(line.split('Evidence:')[0] + 'Evidence: 1 / 1 bytes |'
+                                                   if line.startswith('| Raw / gzip payload') else line
+                                                   for line in text.splitlines()))
 
 if __name__ == '__main__':
     unittest.main()

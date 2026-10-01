@@ -1,0 +1,133 @@
+{
+  "sources": {
+    "commune": "21150",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+    "cadastreSha256": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_210.csv",
+    "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+    "rightsMemberCrc32": 3267936763,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-927",
+      "inao-denom-539",
+      "inao-denom-273",
+      "inao-denom-351",
+      "inao-denom-564"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": [],
+    "additionalCommunes": [
+      {
+        "commune": "21512",
+        "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-parcelles.json.gz",
+        "cadastreSha256": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+      }
+    ]
+  },
+  "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+  "dataUrl": "/maps/montrachet-parcels.2026-06-01.772994c2e4a4.geojson",
+  "sha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-927",
+    "inao-denom-539",
+    "inao-denom-273",
+    "inao-denom-351",
+    "inao-denom-564"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 201,
+    "withRecordedRights": 103,
+    "rightRecords": 107,
+    "unknownRights": 98,
+    "areaMismatches": 0,
+    "multipleRights": 4,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  },
+  "bytes": 177348,
+  "gzipEquivalentBytes": 27064,
+  "matchedFiscalRows": 110,
+  "excludedBoundaryContacts": [
+    {
+      "parcelId": "21512000AH0183",
+      "parentFeatureId": "inao-denom-927",
+      "overlapM2": 0.5240476134936672
+    },
+    {
+      "parcelId": "21512000AH0061",
+      "parentFeatureId": "inao-denom-539",
+      "overlapM2": 0.01766206707833315
+    },
+    {
+      "parcelId": "21512000AI0120",
+      "parentFeatureId": "inao-denom-351",
+      "overlapM2": 0.7395902326859426
+    }
+  ],
+  "communeRecordsWithoutCurrentGeometry": [
+    "21150000AB0085",
+    "21150000AN0182",
+    "21150000AO0302",
+    "21150000AO0392",
+    "21150000AO0393",
+    "21512000AE0207",
+    "21512000AI0127",
+    "21512000AI0128",
+    "21512000AK0003",
+    "21512000AK0019",
+    "21512000AK0023",
+    "21512000AL0067",
+    "21512000AO0072",
+    "21512000AO0530",
+    "21512000AO0532",
+    "21512000AO0534",
+    "21512000AT0100",
+    "21512000AT0101"
+  ],
+  "invalidGeometryOutsideCru": [],
+  "byCru": {
+    "inao-denom-273": {
+      "parcels": 89,
+      "areaHa": 11.80469785
+    },
+    "inao-denom-564": {
+      "parcels": 11,
+      "areaHa": 1.54390446
+    },
+    "inao-denom-927": {
+      "parcels": 47,
+      "areaHa": 7.96474571
+    },
+    "inao-denom-351": {
+      "parcels": 38,
+      "areaHa": 3.6733113900000003
+    },
+    "inao-denom-539": {
+      "parcels": 44,
+      "areaHa": 7.58381168
+    }
+  },
+  "parentSourceSha256ByMap": {
+    "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+    "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+  }
+}

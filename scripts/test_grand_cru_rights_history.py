@@ -29,6 +29,15 @@ class ClassifyTests(unittest.TestCase):
     def test_different_sirens_are_a_holder_change_even_with_similar_names(self):
         self.assertEqual(classify([A], [{**A, 'siren': '880909346'}], True), 'holder-changed')
 
+    def test_unchanged_provisional_id_does_not_prove_a_company_rename(self):
+        provisional = {**A, 'siren': 'U18856436'}
+        self.assertEqual(classify([provisional], [{**provisional, 'name': 'A NEW NAME'}], True), 'unprovable-identifier-change')
+
+    def test_short_and_unicode_numeric_identifiers_are_not_sirens(self):
+        for identifier in ['123', '123456789', '000000000', '\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19']:
+            record = {**A, 'siren': identifier}
+            self.assertEqual(classify([record], [{**record, 'name': 'NEW NAME'}], True), 'unprovable-identifier-change')
+
 
 class LineageTests(unittest.TestCase):
     """Uses the committed history, so it runs without the raw cadastre inputs."""
@@ -41,7 +50,7 @@ class LineageTests(unittest.TestCase):
 
     def test_boundary_sliver_to_an_existing_parcel_is_not_succession(self):
         sliver = self.retired['212670000D0792']['0793']
-        self.assertEqual((sliver['sharedAreaM2'], sliver['successorFirstSeen'], sliver['accepted']), (1.9, '2019-01-01', False))
+        self.assertEqual((sliver['sharedAreaM2'], sliver['successorFirstSeen'], sliver['accepted']), (1.9, '2017-07-06', False))
         self.assertEqual(self.rows['212670000D0793']['predecessorIds'], [])
         self.assertTrue(self.retired['212670000D0792']['0826']['accepted'])
 

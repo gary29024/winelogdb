@@ -1,0 +1,22 @@
+{
+  "slug": "chambertin-clos-de-beze",
+  "name": "Chambertin-Clos de Bèze",
+  "parentFeatureId": "inao-denom-448",
+  "appellationId": 149,
+  "issue": 392,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Chambertin-Clos de Bèze (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "chambertin-clos-de-beze"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-564",
+  "inputs": {
+    "parcelSnapshotSha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5"
+  },
+  "reviewStatus": "named-area-crosswalk-unreviewed",
+  "limitation": "The label below is a review status only. It does not assign a cadastral lieu-dit, official climat, vineyard subdivision or producer holding.",
+  "parcels": {
+    "21150000AE0090": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0091": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0092": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0093": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0097": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0179": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0180": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0189": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0190": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0191": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    },
+    "21150000AE0192": {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "basis": "review-status-only"
+    }
+  }
+}

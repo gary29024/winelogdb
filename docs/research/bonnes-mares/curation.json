@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "targetSeason": "2026",
+  "parentFeatureId": "inao-denom-361",
+  "status": "historical-extension-inventory",
+  "scope": "All 130 mapped Bonnes-Mares parcels and 30 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "sources": [
+    {
+      "id": "dgfip-current",
+      "title": "DGFiP department 21 legal-entity rights, 2025-01-01",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+      "type": "registry-dataset",
+      "documentDate": "2025-01-01",
+      "access": "read",
+      "finding": "Exact current references and every holder/right code retained. Rights are not farming."
+    },
+    {
+      "id": "dgfip-history",
+      "title": "DGFiP available annual legal-entity rights",
+      "url": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "access": "read",
+      "finding": "Pinned annual source members and original-reference dates are in rights-history.json and the shared inventory."
+    },
+    {
+      "id": "cadastre-history",
+      "title": "Etalab available commune geometry vintages",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+      "type": "geometry",
+      "documentDate": null,
+      "access": "read",
+      "finding": "Full current geometry is preserved. Earlier observations support separately labelled spatial inference."
+    },
+    {
+      "id": "dvf-sales",
+      "title": "Cerema DVF+ open-data, Bourgogne-Franche-Comté",
+      "url": "https://www.data.gouv.fr/datasets/dvf-open-data",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "access": "read",
+      "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    }
+  ],
+  "holders": [
+    {
+      "holderId": "212101331",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "322396185",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "326418761",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "330763426",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "343567632",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "350591319",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "383339470",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "401584503",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "429825250",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "480400407",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "482772282",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "491471041",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "515420255",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "515620193",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "778173427",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "778252445",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "794244434",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "818134116",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "841127582",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18178981",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21117863",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21119406",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21119549",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21155571",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21197768",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21373997",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21401984",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21459182",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21586080",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21966026",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+    }
+  ],
+  "historyFindings": [],
+  "exactParcelEvents": [],
+  "externalResearch": [],
+  "parcelFilings": [],
+  "producerHoldings": [],
+  "historicalOwnerLists": [],
+  "accessGaps": [
+    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
+    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
+    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
+    "Current farming remains unconfirmed for every parcel."
+  ]
+}

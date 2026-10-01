@@ -1,0 +1,22 @@
+{
+  "slug": "musigny",
+  "name": "Musigny",
+  "parentFeatureId": "inao-denom-973",
+  "appellationId": 211,
+  "issue": 385,
+  "tier": 1,
+  "bundle": "chambolle-morey",
+  "villageMaps": [
+    "chambolle-musigny"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Musigny (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "musigny"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

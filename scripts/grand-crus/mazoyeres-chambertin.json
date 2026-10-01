@@ -1,0 +1,22 @@
+{
+  "slug": "mazoyeres-chambertin",
+  "name": "Mazoyères-Chambertin",
+  "parentFeatureId": "inao-denom-809",
+  "appellationId": 202,
+  "issue": 396,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Mazoyères-Chambertin (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "mazoyeres-chambertin"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

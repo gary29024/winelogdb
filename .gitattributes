@@ -6,3 +6,5 @@ public/maps/lossless/*.geojson.gz binary
 # Research catalogs hash these JSON bytes; keep them stable across Windows checkouts.
 docs/research/cote-dor-bulletins/*.json text eol=lf
 docs/research/cote-dor-bulletins/index/*.json text eol=lf
+# Official catalogue snapshots retain exact downloaded bytes and raw SHA-256 hashes.
+scripts/grand-crus/sources/catalogues/** -text

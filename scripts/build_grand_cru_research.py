@@ -32,6 +32,7 @@ class Context:
         self.report = research_path(cru, 'register.md')
         self.history = research_path(cru, 'rights-history.json')
         self.sales = research_path(cru, 'sale-records.json')
+        self.notices = research_path(cru, 'notice-history.json')
         self.named_areas = research_path(cru, 'parcel-named-areas.json')
         self.evidence = evidence_path(cru)
 
@@ -51,7 +52,7 @@ HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
-def build_register(manifest, asset, curation, history, sales, named_areas, context):
+def build_register(manifest, asset, curation, history, sales, named_areas, context, notice_records=None):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
     # canonical LF bytes hashed by build_grand_cru_parcels.py, without reserialising.
     asset = asset.replace(b'\r\n', b'\n')
@@ -226,9 +227,19 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
                               for c in lineage[p['id']]['rightsChanges']],
             # Dated transfers by deed, without parties or prices: when a parcel changed hands, not who farms it.
             'saleRecords': sale_records,
+            'historicalReferenceSales': [{**d, 'contextPaths': [path for path in d['contextPaths'] if path['currentParcelId'] == p['id']]}
+                                        for d in sales.get('historicalDeeds', [])
+                                        if any(path['currentParcelId'] == p['id'] for path in d['contextPaths'])],
+            'reviewedNoticeReferences': [{**n, 'contextPaths': [path for path in n['contextPaths'] if path['currentParcelId'] == p['id']]}
+                                         for n in (notice_records or {}).get('reviewedMatches', [])
+                                         if p['id'] in n['directCurrentParcelIds'] or
+                                         any(path['currentParcelId'] == p['id'] for path in n['contextPaths'])],
             'cadastreFirstSeen': lineage[p['id']]['firstSeenCadastre'],
             'predecessorIds': lineage[p['id']]['predecessorIds'],
             'historyFindingIds': [f['id'] for f in curation['historyFindings'] if p['id'] in f['parcelIds']],
+            **({'documentedAncestry': lineage[p['id']]['documentedAncestry'],
+                'earliestSupportedEvent': lineage[p['id']]['earliestSupportedEvent']}
+               if 'documentedAncestry' in lineage[p['id']] else {}),
             'researchStatus': ('historical-authorisation' if any(e['kind'] == 'authorisation' for e in events) else
                                'historical-application' if events or inherited else
                                'holder-lead' if leads or external_leads else
@@ -270,6 +281,11 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
                    'withRightsChangeSince2019': sum(bool(r['rightsChanges']) for r in rows),
                    'withCadastralPredecessor': sum(bool(r['predecessorIds']) for r in rows)},
         'namedAreaCensus': census,
+        **({'historyCoverage': {**history['coverage'], 'sales': sales.get('sourceCoverage'),
+                               'notices': (notice_records or {}).get('coverage')},
+            'historicalReferenceSales': sales.get('historicalDeeds', []),
+            'noticeReviewCandidates': (notice_records or {}).get('unreviewedCandidates', [])}
+           if 'coverage' in history else {}),
         'parcels': rows,
     }
 
@@ -388,7 +404,7 @@ def render_report(register, curation, history, context):
     rows_by_id = {r['parcelId']: r for r in register['parcels']}
     ref = lambda pid: rows_by_id[pid]['reference'] if pid in rows_by_id else f"{pid[8:10].lstrip('0')} {pid[10:]}"
     lines += ['', '## Exact-reference administrative events', '',
-              'Farm-structure notices published by the Côte-d\'Or DDT name the applicant, the previous operator and the '
+              'Reviewed farm-structure notices name the applicant, the previous operator and the '
               'cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an '
               'authorisation is a dated decision, not proof of actual or current operation. References were read from the '
               'page image.' + other_cru_note(curation, context), '']
@@ -431,6 +447,7 @@ def render_report(register, curation, history, context):
     lines.append('')
     lines += render_history(register, curation, history, sources, context)
     lines += render_sales(register, sources, context)
+    lines += render_evidence_coverage(register, context)
     lines += ['## Source log', '',
               'Publication/document dates and vintage seasons are separate fields in the curation. An undated page, '
               'recent upload or review date does not establish operation in the target season.', '']
@@ -452,11 +469,11 @@ def render_report(register, curation, history, context):
 
 CHANGE_LABELS = {
     'record-appeared': 'First company record on an existing parcel',
-    'new-parcel-reference': 'Record on a newly created parcel reference',
+    'new-parcel-reference': 'Record on a reference absent from the preceding obtained geometry',
     'record-disappeared': 'Company record ended',
     'same-holder-renamed': 'Same SIREN, new name',
     'right-type-changed': 'Same holder, different right',
-    'unprovable-identifier-change': 'Identifier changed; earlier record had no SIREN',
+    'unprovable-identifier-change': 'Company identity continuity unproved',
     'holder-changed': 'Different SIREN',
 }
 
@@ -468,7 +485,7 @@ def render_history(register, curation, history, sources, context):
              f"The legal-entity rights files for 1 January {years[0][:4]}–{years[-1][:4]} were compared with the pinned "
              f"{register['inputs']['rightsAsOf']} snapshot, and Etalab cadastre vintages from {history['inputs']['cadastre'][0]['date']} "
              f"with the {register['inputs']['cadastreDate']} geometry. {counts['withAnyRightsChange']} of {counts['parcels']} parcels had "
-             f"a recorded-rights change; {counts['createdSinceFirstVintage']} current references did not exist in the first vintage, and "
+             f"a recorded-rights change; {counts['firstObservedAfterEarliestVintage']} current references were not observed in the first obtained vintage, and "
              f"{counts['retiredReferences']} retired references overlapped the cru. "
              'Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, '
              'or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. '
@@ -499,6 +516,46 @@ def render_history(register, curation, history, sources, context):
         rejected = ', '.join(f"{name(s)} ({s['sharedAreaM2']} m²)" for s in p['successors'] if not s['accepted']) or '—'
         names = sorted({r['name'] for h in p['rightsHistory'] for r in h['records']})
         lines.append(f"| {p['reference']} | {p['lastSeenCadastre']} | {accepted} | {rejected} | {cell(' / '.join(names)) or 'None'} |")
+    if 'coverage' in history:
+        coverage = history['coverage']
+        lines += ['', '**Official DFI ancestry and source coverage (#461)**', '',
+                  'DFI dates below are validation dates. Event groups preserve all mothers and daughters, including context outside '
+                  "today's cru. They never transfer a right, sale party or farmer. A first observation or tracing stop is not creation, "
+                  'original ownership or uninterrupted continuity.', '',
+                  f"Pinned source inventory: [{coverage['catalogueDate']}]({context.link(ROOT / coverage['inventory'])}). "
+                  f"{coverage['currentParcelsWithDocumentedAncestors']} current parcels have documented ancestors; "
+                  f"{coverage['currentParcelsWithPre2019DfiEvents']} reach pre-2019 events. "
+                  f"{coverage['distinctDfiDocuments']} documents / {coverage['distinctDfiAnalysisLots']} analysis lots. "
+                  f"Reachable validation dates: {coverage['earliestReachableDfiValidationDate'] or 'none matched'} to "
+                  f"{coverage['latestReachableDfiValidationDate'] or 'none matched'}. "
+                  f"{len(coverage['missingSources'])} source failures, {coverage['unresolvedEvents']} unresolved event groups, "
+                  f"{len(coverage['traversalIssues'])} traversal conflicts.", '',
+                  '| Commune | Geometry available / obtained / missing | Earliest / latest obtained observation |',
+                  '| --- | ---: | --- |']
+        for commune, geo in coverage['geometry'].items():
+            dates = geo['obtainedDates']
+            lines.append(f"| {commune} | {len(geo['dates'])} / {len(dates)} / {len(set(geo['dates']) - set(dates))} | "
+                         f"{min(dates) if dates else 'none'} / {max(dates) if dates else 'none'} |")
+        lines += ['', '**Complete documented event groups**', '',
+                  '| Validation date | Department / commune / prefix | Document / analysis lot | Change | All mothers | All daughters |',
+                  '| --- | --- | --- | --- | --- | --- |']
+        for event in sorted(history['documentedEvents'], key=lambda e: (e['validationDate'] or '', e['id'])):
+            lines.append(f"| {event['validationDate'] or 'unresolved'} | {event['departmentCode']} / {event['commune']} / {event['sectionPrefix']} | "
+                         f"{event['documentId']} / {event['analysisLot']} | {event['changeLabel']} | "
+                         f"{', '.join(event['motherIds']) or 'non-cadastral domain'} | {', '.join(event['daughterIds']) or 'public domain'} |")
+        lines += ['', '**Every current parcel: earliest supported event and tracing stops**', '',
+                  '| Current reference | Earliest supported event (date role) | Documented ancestors (context only) | Tracing stops |',
+                  '| --- | --- | --- | --- |']
+        for row in history['parcels']:
+            earliest = row['earliestSupportedEvent']
+            traced = row['documentedAncestry']
+            stops = '; '.join(f"{t['referenceId']}: {t['reason']}" for t in traced['terminals'])
+            lines.append(f"| {row['reference']} | {earliest['date']} ({earliest['dateRole']}) | "
+                         f"{', '.join(traced['ancestorIds']) or 'none documented'} | {stops} |")
+        lines += ['', 'Full event paths, original-reference rights, date discrepancies and geometry comparisons are in '
+                  f'[the generated history]({context.link(context.history)}). Missing earlier DFI correspondence includes the '
+                  'departmental computerisation boundary and rural consolidation gaps; no earlier owner is inferred. '
+                  'Sale and notice coverage is independent and does not extend back to the oldest DFI event.', '']
     return lines + ['']
 
 
@@ -512,6 +569,10 @@ def hectares(m2):
 
 
 def render_census(register, curation, sources, context):
+    if 'namedPlots' not in context.cru:
+        return ['## Named-area review', '',
+                'Named-area and climat crosswalks remain unreviewed. The exact whole-cru INAO feature is preserved; '
+                'no cadastral name, internal subdivision or producer holding is assigned by this history delivery.', '']
     unresolved = context.cru['namedPlots']['unresolved']
     crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." for u in unresolved)
     printed = ''.join(f"; {u['name']} has no reviewed cadastral crosswalk" for u in unresolved)
@@ -599,10 +660,43 @@ def render_sales(register, sources, context):
     return lines + ['']
 
 
+def render_evidence_coverage(register, context):
+    coverage = register.get('historyCoverage', {})
+    if not coverage:
+        return []
+    sales, notices = coverage.get('sales'), coverage.get('notices')
+    lines = ['## Independent sale and notice coverage', '',
+             'DFI validation dates do not extend the coverage of sales or notices. Original dates, references and scope stay with each record. '
+             'Historical context never transfers rights, sale parties or farming.', '']
+    if sales:
+        lines += [f"Sales catalogue range: {sales.get('availableRange')}. Observed regional deeds: {sales['observedDatasetRange']}; "
+                  f"observed commune deeds: {sales['observedCommuneRange']}. "
+                  f"[Full original-reference sale groups and paths]({context.link(context.sales)}).", '',
+                  '| Deed date | Original references | Context on current references |', '| --- | --- | --- |']
+        for deed in register.get('historicalReferenceSales', []):
+            routes = '; '.join(f"{' → '.join(p['referencePath'])} ({p['assignment']}; {', '.join(p['qualifications']) or 'context only'})"
+                               for p in deed['contextPaths'])
+            lines.append(f"| {deed['date']} | {', '.join(deed['originalParcelIds'])} | {cell(routes)} |")
+        lines.append('')
+    if notices:
+        lines += [f"Reviewed notice matches: {notices['reviewedMatches']}; unreviewed search candidates: {notices['unreviewedSearchCandidates']}. "
+                  f"Matched act dates: {notices['earliestMatchedActDate'] or 'none matched'} to {notices['latestMatchedActDate'] or 'none matched'}. "
+                  f"[Original readings, areas, paths and unresolved references]({context.link(context.notices)}).", '']
+        for department, audit in notices['availabilityAudit']['departments'].items():
+            lines += [f"Department {department}: published years located as early as {audit['earliestPublishedYearLocated']} and through "
+                      f"{audit['latestPublishedYearLocated']}. {audit['availabilityStatus']}. "
+                      'Obtained index ranges: ' + cell(audit['obtainedIndexRanges']) + '.', '']
+            lines += ['- ' + interval for interval in audit['unsearchedIntervals']]
+            lines += ['', f"Failed earlier PDF: [{department} official bulletin]({audit['failedPublishedPdf']['url']}). "
+                      + audit['failedPublishedPdf']['reason'] + '. These are coverage gaps, not absent notices.', '']
+    return lines
+
+
 def load_inputs(context):
     manifest = load_manifest(context.bundle)
     return {'manifest': manifest, 'asset': parcel_asset(manifest), 'curation': read_json(context.curation),
-            'history': read_json(context.history), 'sales': read_json(context.sales), 'named_areas': read_json(context.named_areas)}
+            'history': read_json(context.history), 'sales': read_json(context.sales), 'named_areas': read_json(context.named_areas),
+            'notice_records': read_json(context.notices) if context.notices.exists() else None}
 
 
 def outputs(context):
@@ -614,7 +708,7 @@ def outputs(context):
                        if any(o['parentFeatureId'] == context.cru['parentFeatureId'] for o in f['properties']['overlaps'])]
     context.commune_names = bundle_commune_names(context.bundle)
     register = build_register(inputs['manifest'], inputs['asset'], inputs['curation'], inputs['history'],
-                              inputs['sales'], inputs['named_areas'], context)
+                              inputs['sales'], inputs['named_areas'], context, inputs['notice_records'])
     return {context.output: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
             context.report: render_report(register, inputs['curation'], inputs['history'], context),
             # Compact per-parcel evidence the app loads on demand; never read by the register itself.

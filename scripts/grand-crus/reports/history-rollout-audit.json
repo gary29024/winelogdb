@@ -1,0 +1,3089 @@
+{
+  "schemaVersion": 1,
+  "sourceInventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+  "reviewMethod": "Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, complete current holder/right sets, INAO identity and per-parcel paths/coverage cross-check; does not call builders.",
+  "sourceResourcesObtained": 451,
+  "sourceResourcesMissing": 2,
+  "crus": 33,
+  "sharedBundles": 8,
+  "distinctCurrentParcels": 2721,
+  "currentFarmerConfirmed": 0,
+  "evidenceBytesTotal": 4299400,
+  "evidenceGzipBytesTotal": 360502,
+  "deliveries": [
+    {
+      "cru": "echezeaux",
+      "issue": 376,
+      "parentFeatureId": "inao-denom-565",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21267"
+      ],
+      "parcels": 276,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1991-01-22",
+      "latestReachableDfiValidationDate": "2026-04-13",
+      "documentedAncestors": 82,
+      "pre2019Events": 64,
+      "documents": 30,
+      "lots": 47,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21267": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-17",
+        "2025-11-20"
+      ],
+      "noticeMatches": 30,
+      "unreviewedNoticeCandidates": 2,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "bcd566b3376feed550b03fd9f11f3d71ab97f63f769db0d253f1d6a0013545e0",
+      "evidenceSha256": "d6dca50c38ee4902734325f5aef4beb3c607955fdf7ae5c71fd8442f1aafa058",
+      "evidenceBytes": 425918,
+      "evidenceGzipBytes": 36751,
+      "earliestRawEventSample": {
+        "id": "210:267:000:0000196:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21267",
+        "sectionPrefix": "000",
+        "documentId": "0000196",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1991-01-22",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "212670000D0327"
+        ],
+        "daughterIds": [
+          "212670000D0736",
+          "212670000D0737"
+        ],
+        "printedMothers": [
+          " D0327"
+        ],
+        "printedDaughters": [
+          " D0736",
+          " D0737"
+        ],
+        "sourceLines": [
+          142313,
+          142314
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "grands-echezeaux",
+      "issue": 377,
+      "parentFeatureId": "inao-denom-645",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21267"
+      ],
+      "parcels": 32,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "2019-03-12",
+      "latestReachableDfiValidationDate": "2019-03-12",
+      "documentedAncestors": 1,
+      "pre2019Events": 0,
+      "documents": 1,
+      "lots": 1,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21267": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-17",
+        "2025-11-20"
+      ],
+      "noticeMatches": 6,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "df68c304a7549f04d66ff08a7c4ac6344983f2b756162f641740c5649143bcbc",
+      "evidenceSha256": "76dbc94e16ae07abdc8503f56a8e0a885ec2409fbf80c58718b729c7da8d2f7d",
+      "evidenceBytes": 56883,
+      "evidenceGzipBytes": 11047,
+      "earliestRawEventSample": {
+        "id": "210:267:000:0000326:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21267",
+        "sectionPrefix": "000",
+        "documentId": "0000326",
+        "analysisLot": "00001",
+        "changeType": "5",
+        "changeLabel": "document d'arpentage numérique",
+        "validationDate": "2019-03-12",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "212670000D0097"
+        ],
+        "daughterIds": [
+          "212670000D0823"
+        ],
+        "printedMothers": [
+          " D0097"
+        ],
+        "printedDaughters": [
+          " D0823"
+        ],
+        "sourceLines": [
+          142689,
+          142690
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "one-to-one-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "clos-de-vougeot",
+      "issue": 378,
+      "parentFeatureId": "inao-denom-546",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21716"
+      ],
+      "parcels": 164,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vougeot": "452bfc2ca94f0dd3a18c1058686d0ef4dceaa9339c3728f620e0022ff4a899fb"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-20",
+      "latestReachableDfiValidationDate": "2025-05-12",
+      "documentedAncestors": 68,
+      "pre2019Events": 58,
+      "documents": 34,
+      "lots": 36,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21716": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-03-26",
+        "2025-08-29"
+      ],
+      "noticeMatches": 7,
+      "unreviewedNoticeCandidates": 2,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "fee10aaf4534072c75d35f59a33ebcf55375207cd6961180d3846e409626342d",
+      "evidenceSha256": "8b405bdfc5b5844f7f3552e54d1ffb427fd8ca5f3a6dc2eb27c0bb295ed0fddc",
+      "evidenceBytes": 187322,
+      "evidenceGzipBytes": 14301,
+      "earliestRawEventSample": {
+        "id": "210:716:000:0000052:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21716",
+        "sectionPrefix": "000",
+        "documentId": "0000052",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1989-04-20",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "217160000A0022"
+        ],
+        "daughterIds": [
+          "217160000A0408",
+          "217160000A0409",
+          "217160000A0410"
+        ],
+        "printedMothers": [
+          " A0022"
+        ],
+        "printedDaughters": [
+          " A0408",
+          " A0409",
+          " A0410"
+        ],
+        "sourceLines": [
+          408233,
+          408234
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "richebourg",
+      "issue": 379,
+      "parentFeatureId": "inao-denom-1083",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 58,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1995-09-18",
+      "latestReachableDfiValidationDate": "2025-05-12",
+      "documentedAncestors": 32,
+      "pre2019Events": 11,
+      "documents": 6,
+      "lots": 13,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "cee4a61cb8b089d53f3b499b14c3ff8b5ad185a2a4206ae6a6c3d0668207f0c1",
+      "evidenceSha256": "f9b2d7c83f94dfedefd0cc52516d705b31fdd3cb154265d807e67ee0753c4ec9",
+      "evidenceBytes": 136266,
+      "evidenceGzipBytes": 10068,
+      "earliestRawEventSample": {
+        "id": "210:714:000:0000246:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21714",
+        "sectionPrefix": "000",
+        "documentId": "0000246",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1995-09-18",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21714000AN0177"
+        ],
+        "daughterIds": [
+          "21714000AN0259",
+          "21714000AN0260",
+          "21714000AN0261"
+        ],
+        "printedMothers": [
+          "AN0177"
+        ],
+        "printedDaughters": [
+          "AN0259",
+          "AN0260",
+          "AN0261"
+        ],
+        "sourceLines": [
+          407593,
+          407594
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "romanee-saint-vivant",
+      "issue": 380,
+      "parentFeatureId": "inao-denom-1085",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 17,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-01-18",
+      "latestReachableDfiValidationDate": "2022-05-16",
+      "documentedAncestors": 7,
+      "pre2019Events": 3,
+      "documents": 3,
+      "lots": 3,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "f6bf2e611dd609daa6845ac38f4ef02442368b3c4c7a2b389492290ba77c61e1",
+      "evidenceSha256": "e63219f1a376e572dd579a851223ce26c026b356d390930ead08bffb8f6d8874",
+      "evidenceBytes": 46268,
+      "evidenceGzipBytes": 7150,
+      "earliestRawEventSample": {
+        "id": "210:714:000:0000226:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21714",
+        "sectionPrefix": "000",
+        "documentId": "0000226",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1990-01-18",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21714000AL0002"
+        ],
+        "daughterIds": [
+          "21714000AL0328",
+          "21714000AL0329",
+          "21714000AL0330"
+        ],
+        "printedMothers": [
+          "AL0002"
+        ],
+        "printedDaughters": [
+          "AL0328",
+          "AL0329",
+          "AL0330"
+        ],
+        "sourceLines": [
+          407547,
+          407548
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "romanee-conti",
+      "issue": 381,
+      "parentFeatureId": "inao-denom-1084",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 2,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1994-05-30",
+      "latestReachableDfiValidationDate": "1994-05-30",
+      "documentedAncestors": 1,
+      "pre2019Events": 1,
+      "documents": 1,
+      "lots": 1,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "0746ed1c20fa1cbd68f1a71539907f57dd9f0f865c7d46f498078cd89f7a9fa4",
+      "evidenceSha256": "d82102d4b485461325f22a987a465fcee0a189a31989175f759c061c70ebb827",
+      "evidenceBytes": 18752,
+      "evidenceGzipBytes": 5291,
+      "earliestRawEventSample": {
+        "id": "210:714:000:0000241:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21714",
+        "sectionPrefix": "000",
+        "documentId": "0000241",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1994-05-30",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21714000AN0073"
+        ],
+        "daughterIds": [
+          "21714000AN0258"
+        ],
+        "printedMothers": [
+          "AN0073"
+        ],
+        "printedDaughters": [
+          "AN0258"
+        ],
+        "sourceLines": [
+          407583,
+          407584
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "one-to-one-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "la-romanee",
+      "issue": 382,
+      "parentFeatureId": "inao-denom-655",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 1,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": null,
+      "latestReachableDfiValidationDate": null,
+      "documentedAncestors": 0,
+      "pre2019Events": 0,
+      "documents": 0,
+      "lots": 0,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "f04387b9c053009973fe2fb0db5c1abefdc97856734c245cee057f79580f4bfd",
+      "evidenceSha256": "34b341188f32d30e8063683dfdf33f74e08699f60bcd05921af4326cd570bc63",
+      "evidenceBytes": 16401,
+      "evidenceGzipBytes": 4927,
+      "earliestRawEventSample": null
+    },
+    {
+      "cru": "la-tache",
+      "issue": 383,
+      "parentFeatureId": "inao-denom-656",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 2,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": null,
+      "latestReachableDfiValidationDate": null,
+      "documentedAncestors": 0,
+      "pre2019Events": 0,
+      "documents": 0,
+      "lots": 0,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "c1c7e8e21b13fc57705dc4442070fb55a4f44ad91054fd98dc051f447c4dea70",
+      "evidenceSha256": "09760db3725036b3e1642e816ee1e3db915d7104f6cf4b3e52cb0b39038b27cc",
+      "evidenceBytes": 16717,
+      "evidenceGzipBytes": 4948,
+      "earliestRawEventSample": null
+    },
+    {
+      "cru": "la-grande-rue",
+      "issue": 384,
+      "parentFeatureId": "inao-denom-654",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21714"
+      ],
+      "parcels": 3,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "vosne-romanee": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": null,
+      "latestReachableDfiValidationDate": null,
+      "documentedAncestors": 0,
+      "pre2019Events": 0,
+      "documents": 0,
+      "lots": 0,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21714": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-20",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "958b46e05480c585a2cee3ea580dcde7951695559fe528f46c182a2a334edf3f",
+      "evidenceSha256": "59ec60054587dd52f31835776ff1ea047980ee5735d68543a8867270b3ec97a4",
+      "evidenceBytes": 18435,
+      "evidenceGzipBytes": 5221,
+      "earliestRawEventSample": null
+    },
+    {
+      "cru": "musigny",
+      "issue": 385,
+      "parentFeatureId": "inao-denom-973",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21133"
+      ],
+      "parcels": 51,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1994-02-15",
+      "latestReachableDfiValidationDate": "2024-07-15",
+      "documentedAncestors": 7,
+      "pre2019Events": 3,
+      "documents": 6,
+      "lots": 7,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21133": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-03-31",
+        "2025-12-29"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "c13997657f7b2dce7a0cbe3431e85dceae608ee433bc469a7440b4182813ac1b",
+      "evidenceSha256": "560b7dacf043ad04e7c5266ede8c92194c6b4171a1500cd40ab04831c70d7aff",
+      "evidenceBytes": 56158,
+      "evidenceGzipBytes": 7993,
+      "earliestRawEventSample": {
+        "id": "210:133:000:0000257:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21133",
+        "sectionPrefix": "000",
+        "documentId": "0000257",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1994-02-15",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21133000AN0016"
+        ],
+        "daughterIds": [
+          "21133000AN0070",
+          "21133000AN0071"
+        ],
+        "printedMothers": [
+          "AN0016"
+        ],
+        "printedDaughters": [
+          "AN0070",
+          "AN0071"
+        ],
+        "sourceLines": [
+          73215,
+          73216
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "bonnes-mares",
+      "issue": 386,
+      "parentFeatureId": "inao-denom-361",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21133",
+        "21442"
+      ],
+      "parcels": 130,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-01-10",
+      "latestReachableDfiValidationDate": "2020-11-09",
+      "documentedAncestors": 22,
+      "pre2019Events": 22,
+      "documents": 7,
+      "lots": 11,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21133": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21442": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-14",
+        "2025-12-29"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "6b3858b449ea3202d3faec3d3a206c16c65c7075bd072214dccd30d37ec2f03b",
+      "evidenceSha256": "ae588ff99f92d1e7ce5a72903d539010d14355efac53ebe909c8f4e76ca16aa1",
+      "evidenceBytes": 94865,
+      "evidenceGzipBytes": 9519,
+      "earliestRawEventSample": {
+        "id": "210:133:000:0000254:00002",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21133",
+        "sectionPrefix": "000",
+        "documentId": "0000254",
+        "analysisLot": "00002",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1990-01-10",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21133000AB0341"
+        ],
+        "daughterIds": [
+          "21133000AB0363",
+          "21133000AB0364",
+          "21133000AB0365"
+        ],
+        "printedMothers": [
+          "AB0341"
+        ],
+        "printedDaughters": [
+          "AB0363",
+          "AB0364",
+          "AB0365"
+        ],
+        "sourceLines": [
+          73205,
+          73206
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "clos-de-tart",
+      "issue": 387,
+      "parentFeatureId": "inao-denom-545",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21442"
+      ],
+      "parcels": 17,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-18",
+      "latestReachableDfiValidationDate": "2003-11-04",
+      "documentedAncestors": 5,
+      "pre2019Events": 5,
+      "documents": 4,
+      "lots": 4,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21442": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-14",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "494a6d0b7d18ac28cb7f51652df08fa4a736cca06c2097c07293395a59439133",
+      "evidenceSha256": "35f8e9d5c510392437ecfd7921bee694df0f5589db17608c6d8d8c57b6d9ce7a",
+      "evidenceBytes": 88809,
+      "evidenceGzipBytes": 7239,
+      "earliestRawEventSample": {
+        "id": "210:442:000:0000359:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21442",
+        "sectionPrefix": "000",
+        "documentId": "0000359",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1989-04-18",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21442000AR0140"
+        ],
+        "daughterIds": [
+          "21442000AR0141",
+          "21442000AR0142",
+          "21442000AR0143"
+        ],
+        "printedMothers": [
+          "AR0140"
+        ],
+        "printedDaughters": [
+          "AR0141",
+          "AR0142",
+          "AR0143"
+        ],
+        "sourceLines": [
+          247663,
+          247664
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "clos-des-lambrays",
+      "issue": 388,
+      "parentFeatureId": "inao-denom-547",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21442"
+      ],
+      "parcels": 22,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": null,
+      "latestReachableDfiValidationDate": null,
+      "documentedAncestors": 0,
+      "pre2019Events": 0,
+      "documents": 0,
+      "lots": 0,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21442": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-14",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 2,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "ea37d040ef901310ef29be1d7d8769ee29c1e7a6edeafb6874b2d1635714a5d9",
+      "evidenceSha256": "b156df6451d1c4936d4b09b0da2db0e2f7f07cfd1d632d496d1b141e33eab812",
+      "evidenceBytes": 26809,
+      "evidenceGzipBytes": 5662,
+      "earliestRawEventSample": null
+    },
+    {
+      "cru": "clos-saint-denis",
+      "issue": 389,
+      "parentFeatureId": "inao-denom-548",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21442"
+      ],
+      "parcels": 49,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-14",
+      "latestReachableDfiValidationDate": "1995-12-05",
+      "documentedAncestors": 14,
+      "pre2019Events": 14,
+      "documents": 5,
+      "lots": 11,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21442": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-14",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "6c420b07a1a95bf88e2f238112af0164d47513a7508eac0c4ca937cd1c5ea890",
+      "evidenceSha256": "2ee34e1191a45750e1cf955313ffdede691d6a6c7cb99062e7d0c23813f58d5b",
+      "evidenceBytes": 60890,
+      "evidenceGzipBytes": 7707,
+      "earliestRawEventSample": {
+        "id": "210:442:000:0000352:00003",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21442",
+        "sectionPrefix": "000",
+        "documentId": "0000352",
+        "analysisLot": "00003",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1989-04-14",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21442000AB0260",
+          "21442000AB0261",
+          "21442000AB0412",
+          "21442000AB0414",
+          "21442000AB0417"
+        ],
+        "daughterIds": [
+          "21442000AB0470"
+        ],
+        "printedMothers": [
+          "AB0260",
+          "AB0261",
+          "AB0412",
+          "AB0414",
+          "AB0417"
+        ],
+        "printedDaughters": [
+          "AB0470"
+        ],
+        "sourceLines": [
+          247611,
+          247612
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "merge-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "clos-de-la-roche",
+      "issue": 390,
+      "parentFeatureId": "inao-denom-544",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21442"
+      ],
+      "parcels": 112,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+        "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-14",
+      "latestReachableDfiValidationDate": "2025-03-03",
+      "documentedAncestors": 34,
+      "pre2019Events": 28,
+      "documents": 8,
+      "lots": 25,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21442": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-14",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "617b86f0290d216934130e034eed79daa0e9290e32f64869774145014246f7d6",
+      "evidenceSha256": "7124192764fc9e2a29f2950fe787e767354a11782aa1dc59ff3449bb57cc3bae",
+      "evidenceBytes": 114119,
+      "evidenceGzipBytes": 10475,
+      "earliestRawEventSample": {
+        "id": "210:442:000:0000352:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21442",
+        "sectionPrefix": "000",
+        "documentId": "0000352",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1989-04-14",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21442000AB0202",
+          "21442000AB0203"
+        ],
+        "daughterIds": [
+          "21442000AB0465"
+        ],
+        "printedMothers": [
+          "AB0202",
+          "AB0203"
+        ],
+        "printedDaughters": [
+          "AB0465"
+        ],
+        "sourceLines": [
+          247607,
+          247608
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "merge-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "chambertin",
+      "issue": 391,
+      "parentFeatureId": "inao-denom-447",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 137,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-17",
+      "latestReachableDfiValidationDate": "2024-11-04",
+      "documentedAncestors": 34,
+      "pre2019Events": 32,
+      "documents": 10,
+      "lots": 14,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "a93bce196e398e8dd6d0064d5233cec1f6f0d06c22f5a9ceeaf30dd1caf20e4b",
+      "evidenceSha256": "95ccfeb5ac5271036c76cac45d3cbf2752b7b3ebcb4d5a24ceaa62fc86d2cf9a",
+      "evidenceBytes": 101460,
+      "evidenceGzipBytes": 9615,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001073:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001073",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1989-04-17",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BO0080"
+        ],
+        "daughterIds": [
+          "21295000BO0121",
+          "21295000BO0122"
+        ],
+        "printedMothers": [
+          "BO0080"
+        ],
+        "printedDaughters": [
+          "BO0121",
+          "BO0122"
+        ],
+        "sourceLines": [
+          172641,
+          172642
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "chambertin-clos-de-beze",
+      "issue": 392,
+      "parentFeatureId": "inao-denom-448",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 56,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-17",
+      "latestReachableDfiValidationDate": "2024-11-04",
+      "documentedAncestors": 11,
+      "pre2019Events": 9,
+      "documents": 6,
+      "lots": 6,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "49155050a9f7af504b997b23f65b0c6f2589fed04e34ed3505068b6adc4e703c",
+      "evidenceSha256": "72cb36bc3598eadf5cd2698bf6438ed9de7682cec6cf10ddea98ce1123ce1dff",
+      "evidenceBytes": 53607,
+      "evidenceGzipBytes": 7334,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001073:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001073",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1989-04-17",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BO0080"
+        ],
+        "daughterIds": [
+          "21295000BO0121",
+          "21295000BO0122"
+        ],
+        "printedMothers": [
+          "BO0080"
+        ],
+        "printedDaughters": [
+          "BO0121",
+          "BO0122"
+        ],
+        "sourceLines": [
+          172641,
+          172642
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "chapelle-chambertin",
+      "issue": 393,
+      "parentFeatureId": "inao-denom-475",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 23,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "2022-05-16",
+      "latestReachableDfiValidationDate": "2025-06-02",
+      "documentedAncestors": 6,
+      "pre2019Events": 0,
+      "documents": 2,
+      "lots": 3,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "7aeb779531ea9763dd94a666e5a933596027e10ce87bb6fc8796cbaf7640b3f6",
+      "evidenceSha256": "2dc0c699fff07df10ed726d412e2b6c989ffcbcdb1f89e2ce8474ce1a9e4657d",
+      "evidenceBytes": 57082,
+      "evidenceGzipBytes": 7301,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001587:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001587",
+        "analysisLot": "00001",
+        "changeType": "5",
+        "changeLabel": "document d'arpentage numérique",
+        "validationDate": "2022-05-16",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BP0259"
+        ],
+        "daughterIds": [
+          "21295000BP0335",
+          "21295000BP0336"
+        ],
+        "printedMothers": [
+          "BP0259"
+        ],
+        "printedDaughters": [
+          "BP0335",
+          "BP0336"
+        ],
+        "sourceLines": [
+          176479,
+          176480
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "griotte-chambertin",
+      "issue": 394,
+      "parentFeatureId": "inao-denom-646",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 20,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "2023-12-18",
+      "latestReachableDfiValidationDate": "2025-06-02",
+      "documentedAncestors": 5,
+      "pre2019Events": 0,
+      "documents": 3,
+      "lots": 3,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "cae9f4ceadd7bc31321db8feec8762eff018a57d4a153d2766cf5cdc6d6a05a8",
+      "evidenceSha256": "cb9715738b1a99b1c7fe0017b0666b6552200369715ff9e4b077b045fcd1ffb0",
+      "evidenceBytes": 56055,
+      "evidenceGzipBytes": 7328,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001640:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001640",
+        "analysisLot": "00001",
+        "changeType": "5",
+        "changeLabel": "document d'arpentage numérique",
+        "validationDate": "2023-12-18",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BP0279"
+        ],
+        "daughterIds": [
+          "21295000BP0349",
+          "21295000BP0350"
+        ],
+        "printedMothers": [
+          "BP0279"
+        ],
+        "printedDaughters": [
+          "BP0349",
+          "BP0350"
+        ],
+        "sourceLines": [
+          176647,
+          176648
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "charmes-chambertin",
+      "issue": 395,
+      "parentFeatureId": "inao-denom-477",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 157,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-11-05",
+      "latestReachableDfiValidationDate": "2025-06-02",
+      "documentedAncestors": 27,
+      "pre2019Events": 12,
+      "documents": 11,
+      "lots": 13,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "4770d495f734599ba4cb763dd4bc875178a252d02ad8ce28b774e68452772b51",
+      "evidenceSha256": "56eeaadba05ea4aac04b2656e6a7b9c4814fef720b51752dbd65ecd1d161f784",
+      "evidenceBytes": 137747,
+      "evidenceGzipBytes": 10861,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001102:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001102",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1990-11-05",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BM0089"
+        ],
+        "daughterIds": [
+          "21295000BM0959",
+          "21295000BM0960"
+        ],
+        "printedMothers": [
+          "BM0089"
+        ],
+        "printedDaughters": [
+          "BM0959",
+          "BM0960"
+        ],
+        "sourceLines": [
+          172695,
+          172696
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "mazoyeres-chambertin",
+      "issue": 396,
+      "parentFeatureId": "inao-denom-809",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 157,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-11-05",
+      "latestReachableDfiValidationDate": "2025-06-02",
+      "documentedAncestors": 27,
+      "pre2019Events": 12,
+      "documents": 11,
+      "lots": 13,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "d9b8bae9ed6e5d03676c8e19489d92452d24df0edee0409ddb905e244e559fc7",
+      "evidenceSha256": "b48ab8bce59e5c9addca5240676434bbc08b642e0eaaa30b989c77fe7cef3a07",
+      "evidenceBytes": 137747,
+      "evidenceGzipBytes": 10861,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001102:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001102",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1990-11-05",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BM0089"
+        ],
+        "daughterIds": [
+          "21295000BM0959",
+          "21295000BM0960"
+        ],
+        "printedMothers": [
+          "BM0089"
+        ],
+        "printedDaughters": [
+          "BM0959",
+          "BM0960"
+        ],
+        "sourceLines": [
+          172695,
+          172696
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "latricieres-chambertin",
+      "issue": 397,
+      "parentFeatureId": "inao-denom-666",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 25,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1995-09-25",
+      "latestReachableDfiValidationDate": "2023-02-13",
+      "documentedAncestors": 11,
+      "pre2019Events": 10,
+      "documents": 6,
+      "lots": 6,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "c360faead2fcbc9c77c8e4e3cec19cd73a08a48fc0823f8d964884e8a238cb23",
+      "evidenceSha256": "08b9d2c6ccde48c959e25cbeaf13028a6a429dd2cc157a2a8ccf1e6c4b2c1e11",
+      "evidenceBytes": 42752,
+      "evidenceGzipBytes": 6486,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001212:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001212",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1995-09-25",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BM0003"
+        ],
+        "daughterIds": [
+          "21295000BM0963",
+          "21295000BM0964"
+        ],
+        "printedMothers": [
+          "BM0003"
+        ],
+        "printedDaughters": [
+          "BM0963",
+          "BM0964"
+        ],
+        "sourceLines": [
+          173055,
+          173056
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "mazis-chambertin",
+      "issue": 398,
+      "parentFeatureId": "inao-denom-808",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 62,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1993-05-03",
+      "latestReachableDfiValidationDate": "2026-03-02",
+      "documentedAncestors": 7,
+      "pre2019Events": 3,
+      "documents": 5,
+      "lots": 5,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "cc318b55d01a55a46281cbf5fbec91712a4e05a4a00fb37bc6e12658c5a01e8a",
+      "evidenceSha256": "e43d793510ba98f50e3eeab965216c2a9dc2db63a1ce8a6b4e7ad5659bb8042a",
+      "evidenceBytes": 62969,
+      "evidenceGzipBytes": 8225,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001154:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001154",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1993-05-03",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BS0014"
+        ],
+        "daughterIds": [
+          "21295000BS0142",
+          "21295000BS0143",
+          "21295000BS0144"
+        ],
+        "printedMothers": [
+          "BS0014"
+        ],
+        "printedDaughters": [
+          "BS0142",
+          "BS0143",
+          "BS0144"
+        ],
+        "sourceLines": [
+          172833,
+          172834
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "ruchottes-chambertin",
+      "issue": 399,
+      "parentFeatureId": "inao-denom-1086",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21295"
+      ],
+      "parcels": 26,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "gevrey-chambertin": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "2008-10-06",
+      "latestReachableDfiValidationDate": "2015-06-29",
+      "documentedAncestors": 7,
+      "pre2019Events": 7,
+      "documents": 3,
+      "lots": 3,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21295": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-14",
+        "2025-12-15"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "1e81ad55cf8a85c86ffe5b76a0c5c0bd96e9645c0c74ef20f3a6027365c64564",
+      "evidenceSha256": "d5eadb88e31af1b1405693ad0d6229eb903ddef535339d2a07883ea182965587",
+      "evidenceBytes": 36480,
+      "evidenceGzipBytes": 6456,
+      "earliestRawEventSample": {
+        "id": "210:295:000:0001446:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21295",
+        "sectionPrefix": "000",
+        "documentId": "0001446",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "2008-10-06",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21295000BS0091"
+        ],
+        "daughterIds": [
+          "21295000BS0152",
+          "21295000BS0153",
+          "21295000BS0154",
+          "21295000BS0155"
+        ],
+        "printedMothers": [
+          "BS0091"
+        ],
+        "printedDaughters": [
+          "BS0152",
+          "BS0153",
+          "BS0154",
+          "BS0155"
+        ],
+        "sourceLines": [
+          173865,
+          173866
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "montrachet",
+      "issue": 400,
+      "parentFeatureId": "inao-denom-927",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "parcels": 47,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+        "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1994-06-28",
+      "latestReachableDfiValidationDate": "2023-02-27",
+      "documentedAncestors": 20,
+      "pre2019Events": 6,
+      "documents": 7,
+      "lots": 10,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21150": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21512": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-03",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "4bfa9b758006fd57d2a327ffb1023bf44db9220cc54bbf0915c330015a4c7135",
+      "evidenceSha256": "d6149e64ef953a3fe494df177c82b7d3b75c407b2c22cc4ec8cd4b9e3a8241e0",
+      "evidenceBytes": 117928,
+      "evidenceGzipBytes": 9318,
+      "earliestRawEventSample": {
+        "id": "210:150:000:0000315:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21150",
+        "sectionPrefix": "000",
+        "documentId": "0000315",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1994-06-28",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21150000AE0131"
+        ],
+        "daughterIds": [
+          "21150000AE0172",
+          "21150000AE0173"
+        ],
+        "printedMothers": [
+          "AE0131"
+        ],
+        "printedDaughters": [
+          "AE0172",
+          "AE0173"
+        ],
+        "sourceLines": [
+          76959,
+          76960
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "chevalier-montrachet",
+      "issue": 401,
+      "parentFeatureId": "inao-denom-539",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21512"
+      ],
+      "parcels": 44,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+        "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-09-22",
+      "latestReachableDfiValidationDate": "2020-03-16",
+      "documentedAncestors": 21,
+      "pre2019Events": 19,
+      "documents": 13,
+      "lots": 13,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21512": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-03",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "3b8dfc7ea5c0ab5a6271c710cb962fa6a0451fd426384b25f93bea660710a4d8",
+      "evidenceSha256": "7ddbb06399cc1d36d8155666f399f14814e07dc89e75332048ba493d12233369",
+      "evidenceBytes": 87806,
+      "evidenceGzipBytes": 8769,
+      "earliestRawEventSample": {
+        "id": "210:512:000:0000202:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21512",
+        "sectionPrefix": "000",
+        "documentId": "0000202",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1989-09-22",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "215120000H0123"
+        ],
+        "daughterIds": [
+          "21512000AH0123"
+        ],
+        "printedMothers": [
+          " H0123"
+        ],
+        "printedDaughters": [
+          "AH0123"
+        ],
+        "sourceLines": [
+          294883,
+          294884
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "one-to-one-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "batard-montrachet",
+      "issue": 402,
+      "parentFeatureId": "inao-denom-273",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21150",
+        "21512"
+      ],
+      "parcels": 89,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+        "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1993-12-09",
+      "latestReachableDfiValidationDate": "2026-03-12",
+      "documentedAncestors": 33,
+      "pre2019Events": 24,
+      "documents": 15,
+      "lots": 15,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21150": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21512": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-03",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "0a69b1bfa00a32a670a9b51592a44f03e748b6e6c280483e3f4fa7c5c0dc0cf6",
+      "evidenceSha256": "1e1aa75224149f30751be41b76917854dcf91a5b885180c7afea59441c5c63f6",
+      "evidenceBytes": 117516,
+      "evidenceGzipBytes": 10157,
+      "earliestRawEventSample": {
+        "id": "210:150:000:0000313:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21150",
+        "sectionPrefix": "000",
+        "documentId": "0000313",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1993-12-09",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21150000AE0043"
+        ],
+        "daughterIds": [
+          "21150000AE0170",
+          "21150000AE0171"
+        ],
+        "printedMothers": [
+          "AE0043"
+        ],
+        "printedDaughters": [
+          "AE0170",
+          "AE0171"
+        ],
+        "sourceLines": [
+          76955,
+          76956
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "bienvenues-batard-montrachet",
+      "issue": 403,
+      "parentFeatureId": "inao-denom-351",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21512"
+      ],
+      "parcels": 38,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+        "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1993-10-04",
+      "latestReachableDfiValidationDate": "2026-03-12",
+      "documentedAncestors": 23,
+      "pre2019Events": 20,
+      "documents": 7,
+      "lots": 9,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21512": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-03",
+        "2025-12-17"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "2465f555b5bed9feefcb948e746d4e514072e727bce71aecbdb50ffb25a496c2",
+      "evidenceSha256": "3efbbebc577531b02dfc636077b91aaf2143703cc3a4822c5289cab7e73b8150",
+      "evidenceBytes": 71041,
+      "evidenceGzipBytes": 8172,
+      "earliestRawEventSample": {
+        "id": "210:512:000:0000245:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21512",
+        "sectionPrefix": "000",
+        "documentId": "0000245",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1993-10-04",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21512000AI0027"
+        ],
+        "daughterIds": [
+          "21512000AI0130",
+          "21512000AI0131"
+        ],
+        "printedMothers": [
+          "AI0027"
+        ],
+        "printedDaughters": [
+          "AI0130",
+          "AI0131"
+        ],
+        "sourceLines": [
+          295049,
+          295050
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "criots-batard-montrachet",
+      "issue": 404,
+      "parentFeatureId": "inao-denom-564",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21150"
+      ],
+      "parcels": 11,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chassagne-montrachet": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+        "puligny-montrachet": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "2001-03-15",
+      "latestReachableDfiValidationDate": "2013-04-22",
+      "documentedAncestors": 6,
+      "pre2019Events": 6,
+      "documents": 3,
+      "lots": 3,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21150": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-08",
+        "2025-12-12"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "d30efc41342ec251ab21901585d0daf6b25ed94656e8078961e9230de0d65c09",
+      "evidenceSha256": "0ca0805a12efb96e557c45b474ef0672450a75619c94d85cf56878481c016932",
+      "evidenceBytes": 26678,
+      "evidenceGzipBytes": 5806,
+      "earliestRawEventSample": {
+        "id": "210:150:000:0000382:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21150",
+        "sectionPrefix": "000",
+        "documentId": "0000382",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "2001-03-15",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "21150000AE0094"
+        ],
+        "daughterIds": [
+          "21150000AE0179",
+          "21150000AE0180"
+        ],
+        "printedMothers": [
+          "AE0094"
+        ],
+        "printedDaughters": [
+          "AE0179",
+          "AE0180"
+        ],
+        "sourceLines": [
+          77127,
+          77128
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "corton",
+      "issue": 405,
+      "parentFeatureId": "inao-denom-549",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "parcels": 728,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "aloxe-corton": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+        "ladoix": "91bdf98f6339f7201209500e3daa0a03fdf259ac362f1a9fddd2bb3a6c7639a1",
+        "pernand-vergelesses": "d9cf213f41c4da990369ec31c2ba761a5d7b031230d5c3076fc0a1b0a7e47158"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1989-04-12",
+      "latestReachableDfiValidationDate": "2026-06-01",
+      "documentedAncestors": 239,
+      "pre2019Events": 177,
+      "documents": 99,
+      "lots": 138,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21010": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21480": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21606": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-07",
+        "2025-12-22"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 2,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "7796291a21fba9e3bb1ba0b082889405c8ad1089ce7413bd6d1ee22c44172f68",
+      "evidenceSha256": "c2c6d7a978419f8ed3a97f5dce30ec900b340dc4a346e746c5a771c51fda74ce",
+      "evidenceBytes": 772679,
+      "evidenceGzipBytes": 36119,
+      "earliestRawEventSample": {
+        "id": "210:010:000:0000130:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21010",
+        "sectionPrefix": "000",
+        "documentId": "0000130",
+        "analysisLot": "00001",
+        "changeType": "1",
+        "changeLabel": "document d'arpentage",
+        "validationDate": "1989-04-12",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "210100000B0011"
+        ],
+        "daughterIds": [
+          "210100000B0052",
+          "210100000B0053"
+        ],
+        "printedMothers": [
+          " B0011"
+        ],
+        "printedDaughters": [
+          " B0052",
+          " B0053"
+        ],
+        "sourceLines": [
+          5573,
+          5574
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "split-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "corton-charlemagne",
+      "issue": 406,
+      "parentFeatureId": "inao-denom-550",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "parcels": 339,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "aloxe-corton": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+        "ladoix": "91bdf98f6339f7201209500e3daa0a03fdf259ac362f1a9fddd2bb3a6c7639a1",
+        "pernand-vergelesses": "d9cf213f41c4da990369ec31c2ba761a5d7b031230d5c3076fc0a1b0a7e47158"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-01-10",
+      "latestReachableDfiValidationDate": "2026-03-16",
+      "documentedAncestors": 96,
+      "pre2019Events": 65,
+      "documents": 49,
+      "lots": 64,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21010": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21480": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21606": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-07",
+        "2025-12-22"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "2e5f373ccf16ab87a4902ec826ca72bf0801948b4a496a0b5e9636ff0e539c7b",
+      "evidenceSha256": "c9ff41ba6faeefc07bb1cba788bae09ec6bed7d175e1eb2cde9934140a1b9d9f",
+      "evidenceBytes": 390662,
+      "evidenceGzipBytes": 21451,
+      "earliestRawEventSample": {
+        "id": "210:010:000:0000141:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21010",
+        "sectionPrefix": "000",
+        "documentId": "0000141",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1990-01-10",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "210100000A0001",
+          "210100000A0002"
+        ],
+        "daughterIds": [
+          "210100000A0116"
+        ],
+        "printedMothers": [
+          " A0001",
+          " A0002"
+        ],
+        "printedDaughters": [
+          " A0116"
+        ],
+        "sourceLines": [
+          5605,
+          5606
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "merge-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "charlemagne",
+      "issue": 407,
+      "parentFeatureId": "inao-denom-476",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "21010",
+        "21480"
+      ],
+      "parcels": 275,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "aloxe-corton": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+        "ladoix": "91bdf98f6339f7201209500e3daa0a03fdf259ac362f1a9fddd2bb3a6c7639a1",
+        "pernand-vergelesses": "d9cf213f41c4da990369ec31c2ba761a5d7b031230d5c3076fc0a1b0a7e47158"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1990-01-10",
+      "latestReachableDfiValidationDate": "2026-03-16",
+      "documentedAncestors": 93,
+      "pre2019Events": 62,
+      "documents": 42,
+      "lots": 57,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-21-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "21010": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ],
+        "21480": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-02-18",
+        "2025-12-22"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 1,
+      "noticeGaps": {
+        "21": [
+          "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+          "Departmental 2021–2026 publications outside the existing index",
+          "Regional publications before 2019 and any notice outside the indexed corpus"
+        ]
+      },
+      "registerSha256": "6b5beb4e1990562cae53d7e58c4a0b27f19a0d50d8638906a9259c1134c5b2f2",
+      "evidenceSha256": "6f4c3016e2e43d98c81354d14385d92cf72f38488788bcd3cf4b5180f8a82253",
+      "evidenceBytes": 348720,
+      "evidenceGzipBytes": 19459,
+      "earliestRawEventSample": {
+        "id": "210:010:000:0000141:00001",
+        "departmentCode": "210",
+        "department": "21",
+        "commune": "21010",
+        "sectionPrefix": "000",
+        "documentId": "0000141",
+        "analysisLot": "00001",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1990-01-10",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "210100000A0001",
+          "210100000A0002"
+        ],
+        "daughterIds": [
+          "210100000A0116"
+        ],
+        "printedMothers": [
+          " A0001",
+          " A0002"
+        ],
+        "printedDaughters": [
+          " A0116"
+        ],
+        "sourceLines": [
+          5605,
+          5606
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "merge-event-group",
+        "sourceId": "dfi-21-2026-07-01"
+      }
+    },
+    {
+      "cru": "chablis-grand-cru",
+      "issue": 408,
+      "parentFeatureId": "inao-denom-439",
+      "status": "passed-with-explicit-source-gaps",
+      "communes": [
+        "89068"
+      ],
+      "parcels": 417,
+      "currentFarmerConfirmed": 0,
+      "parentSourceSha256ByMap": {
+        "chablis": "1fd3f267b1e6bd3be7711eff180b5ddb7d20816a27cf538304caad0f4fe08aaf"
+      },
+      "rightsImported": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "earliestReachableDfiValidationDate": "1991-03-22",
+      "latestReachableDfiValidationDate": "2024-11-19",
+      "documentedAncestors": 102,
+      "pre2019Events": 83,
+      "documents": 35,
+      "lots": 58,
+      "inferredOnlyParcels": 0,
+      "traversalIssues": 0,
+      "unresolvedEvents": 0,
+      "missingSources": [
+        "notices-89-earlier-pdf"
+      ],
+      "geometryObtained": {
+        "89068": [
+          "2017-07-06",
+          "2026-06-01",
+          35
+        ]
+      },
+      "salesObservedCommuneRange": [
+        "2014-01-08",
+        "2025-12-19"
+      ],
+      "noticeMatches": 0,
+      "unreviewedNoticeCandidates": 0,
+      "noticeGaps": {
+        "89": [
+          "All Yonne departmental notice publication years, including published 2008–2026 records",
+          "Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them",
+          "Before the earliest located 2008 publication; availability unresolved"
+        ]
+      },
+      "registerSha256": "a4aba61d8b49801a147d7a799ea4946f99bd4b4274b686221fd73692673d1a05",
+      "evidenceSha256": "58090288690628d085001346110328466dbb64d8dde0f6e0c6577c034bdeda9c",
+      "evidenceBytes": 315859,
+      "evidenceGzipBytes": 18485,
+      "earliestRawEventSample": {
+        "id": "890:068:000:0001086:00034",
+        "departmentCode": "890",
+        "department": "89",
+        "commune": "89068",
+        "sectionPrefix": "000",
+        "documentId": "0001086",
+        "analysisLot": "00034",
+        "changeType": "2",
+        "changeLabel": "croquis de conservation",
+        "validationDate": "1991-03-22",
+        "dateRole": "dfi-validation",
+        "method": "documented-dfi",
+        "motherIds": [
+          "890680000N0298"
+        ],
+        "daughterIds": [
+          "89068000ZO0127"
+        ],
+        "printedMothers": [
+          " N0298"
+        ],
+        "printedDaughters": [
+          "ZO0127"
+        ],
+        "sourceLines": [
+          65391,
+          65392
+        ],
+        "issues": [],
+        "traceable": true,
+        "scope": "one-to-one-event-group",
+        "sourceId": "dfi-89-2026-07-01"
+      }
+    }
+  ]
+}

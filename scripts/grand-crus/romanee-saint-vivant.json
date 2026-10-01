@@ -1,0 +1,22 @@
+{
+  "slug": "romanee-saint-vivant",
+  "name": "Romanée-Saint-Vivant",
+  "parentFeatureId": "inao-denom-1085",
+  "appellationId": 223,
+  "issue": 380,
+  "tier": 1,
+  "bundle": "vosne-romanee",
+  "villageMaps": [
+    "vosne-romanee"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Romanée-Saint-Vivant (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "romanee-saint-vivant"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

@@ -1,0 +1,5626 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "targetSeason": "2026",
+  "status": "historical-extension-inventory",
+  "scope": "All 44 mapped Chevalier-Montrachet parcels and 16 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "parentFeatureId": "inao-denom-539",
+  "inputs": {
+    "curation": "docs/research/chevalier-montrachet/curation.json",
+    "dataUrl": "/maps/montrachet-parcels.2026-06-01.772994c2e4a4.geojson",
+    "sha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+    "cadastreDate": "2026-06-01",
+    "rightsAsOf": "2025-01-01",
+    "rightsHistory": "docs/research/chevalier-montrachet/rights-history.json",
+    "rightsHistoryYears": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "saleRecords": "docs/research/chevalier-montrachet/sale-records.json",
+    "saleRecordsCoverage": "2014-01-03 to 2025-12-17"
+  },
+  "counts": {
+    "parcels": 44,
+    "recordedHolders": 16,
+    "withRecordedRights": 30,
+    "withoutMatchedRights": 14,
+    "holderLead": 0,
+    "historicalApplication": 0,
+    "historicalAuthorisation": 0,
+    "saleLead": 0,
+    "unresolved": 44,
+    "currentFarmerConfirmed": 0,
+    "withSaleRecord": 1,
+    "withParcelFiling": 0,
+    "withRightsChangeSince2019": 14,
+    "withCadastralPredecessor": 6
+  },
+  "namedAreaCensus": [
+    {
+      "sourceName": null,
+      "name": "Named area unreviewed",
+      "parcels": 44,
+      "areaM2": 75838,
+      "withoutCompanyRecord": 14,
+      "withoutCompanyRecordM2": 24173,
+      "withoutCompanyRecordOrLead": 14,
+      "withoutCompanyRecordOrLeadM2": 24173,
+      "publishedBeyondCompanyRecordsM2": 0,
+      "holdings": []
+    }
+  ],
+  "historyCoverage": {
+    "inventory": "scripts/grand-crus/sources/inventory-2026-10-01.json",
+    "catalogueDate": "2026-10-01",
+    "rightsAvailable": {
+      "21": [
+        "2019-01-01",
+        "2020-01-01",
+        "2021-01-01",
+        "2022-01-01",
+        "2023-01-01",
+        "2024-01-01",
+        "2025-01-01"
+      ]
+    },
+    "rightsImported": [
+      "2019-01-01",
+      "2020-01-01",
+      "2021-01-01",
+      "2022-01-01",
+      "2023-01-01",
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "dfiSources": [
+      {
+        "id": "dfi-21-2026-07-01",
+        "kind": "dfi",
+        "department": "21",
+        "departmentCode": "210",
+        "asOf": "2026-07-01",
+        "sourceReleaseDate": null,
+        "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+        "member": "dfiano-dep210-01072026.txt",
+        "fileName": "dfiano-dep210-01072026.txt",
+        "schemaVersion": "2025-01",
+        "encoding": "ascii",
+        "licence": "Licence Ouverte v2.0 (Etalab)",
+        "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+        "retrievedAt": "2026-10-01T08:51:47Z",
+        "size": 36175805,
+        "sha256": "f24ff17542f2e80921c7cce9e537b060ecdd0bff9280bbdd3e30dd1d3f6ea83e",
+        "status": "obtained"
+      }
+    ],
+    "dfiSchema": [
+      {
+        "id": "dfi-schema-2025-01",
+        "kind": "dfi-schema",
+        "schemaVersion": "2025-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_descriptif_du_fichier_janvier2025_pdf",
+        "fileName": "dfi-schema-2025-01.pdf",
+        "catalogueUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+        "sourceReleaseDate": null,
+        "asOf": null,
+        "licence": "Licence Ouverte v2.0 (Etalab)",
+        "licenceUrl": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+        "retrievedAt": "2026-10-01T08:50:33Z",
+        "sha256": "f17bd818fac3003e1c6d1bad9a236e94cdcdb615dc89b85a82cd8b366ea4d498",
+        "size": 38057,
+        "transportSha256": "6e967a42ab20a7f6940f00fb7758e5c8faa110017f0e5053cc80fd1219beffdf",
+        "transportSize": 35599,
+        "httpContentEncoding": "gzip",
+        "status": "obtained"
+      }
+    ],
+    "dfiCommuneCoverage": [
+      {
+        "commune": "21512",
+        "sourceId": "dfi-21-2026-07-01",
+        "completeDepartmentMemberObtained": true,
+        "earliestValidationDateInCommune": "1989-04-17",
+        "latestValidationDateInCommune": "2026-06-29"
+      }
+    ],
+    "earliestReachableDfiValidationDate": "1989-09-22",
+    "latestReachableDfiValidationDate": "2020-03-16",
+    "geometry": {
+      "21512": {
+        "dates": [
+          "2017-07-06",
+          "2017-10-12",
+          "2018-01-02",
+          "2018-04-03",
+          "2018-06-29",
+          "2018-10-01",
+          "2019-01-01",
+          "2019-04-01",
+          "2019-07-01",
+          "2019-10-01",
+          "2020-01-01",
+          "2020-07-01",
+          "2020-10-01",
+          "2021-02-01",
+          "2021-04-01",
+          "2021-07-01",
+          "2021-10-01",
+          "2022-01-01",
+          "2022-04-01",
+          "2022-07-01",
+          "2022-10-01",
+          "2023-01-01",
+          "2023-04-01",
+          "2023-07-01",
+          "2023-10-01",
+          "2024-01-01",
+          "2024-04-01",
+          "2024-07-01",
+          "2024-10-01",
+          "2025-01-01",
+          "2025-04-01",
+          "2025-09-01",
+          "2025-12-01",
+          "2026-03-01",
+          "2026-06-01"
+        ],
+        "afterPinnedGeometry": [
+          "2026-09-01"
+        ],
+        "pinnedCurrentGeometry": "2026-06-01",
+        "obtainedDates": [
+          "2017-07-06",
+          "2017-10-12",
+          "2018-01-02",
+          "2018-04-03",
+          "2018-06-29",
+          "2018-10-01",
+          "2019-01-01",
+          "2019-04-01",
+          "2019-07-01",
+          "2019-10-01",
+          "2020-01-01",
+          "2020-07-01",
+          "2020-10-01",
+          "2021-02-01",
+          "2021-04-01",
+          "2021-07-01",
+          "2021-10-01",
+          "2022-01-01",
+          "2022-04-01",
+          "2022-07-01",
+          "2022-10-01",
+          "2023-01-01",
+          "2023-04-01",
+          "2023-07-01",
+          "2023-10-01",
+          "2024-01-01",
+          "2024-04-01",
+          "2024-07-01",
+          "2024-10-01",
+          "2025-01-01",
+          "2025-04-01",
+          "2025-09-01",
+          "2025-12-01",
+          "2026-03-01",
+          "2026-06-01"
+        ]
+      }
+    },
+    "currentParcelsWithDocumentedAncestors": 21,
+    "currentParcelsWithPre2019DfiEvents": 19,
+    "distinctDfiDocuments": 13,
+    "distinctDfiAnalysisLots": 13,
+    "inferredOnlyCurrentParcels": 0,
+    "unresolvedEvents": 0,
+    "traversalIssues": [],
+    "terminalReasons": {
+      "source-boundary-or-unrecorded-event": 79
+    },
+    "missingSources": [
+      {
+        "id": "notices-21-earlier-pdf",
+        "kind": "notice-bulletin",
+        "department": "21",
+        "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "fileName": "notices-21-earlier-pdf.pdf",
+        "sourceReleaseDate": null,
+        "asOf": null,
+        "licence": "Official public administrative bulletin; reuse terms not stated on the inaccessible listing",
+        "licenceUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "status": "missing",
+        "attemptedAt": "2026-10-01T10:20:39Z",
+        "reason": "Remote end closed connection without response"
+      }
+    ],
+    "salesAndNotices": "Independent inventories and original-reference matches are published with sale records and notice audits.",
+    "spatialCandidatesAccepted": 6,
+    "spatialCandidatesRejected": 0,
+    "spatialConflicts": [],
+    "sales": {
+      "release": "2026-04",
+      "availableStart": "2014-01-01",
+      "availableRange": {
+        "end": "2025-12-31",
+        "start": "2014-01-01"
+      },
+      "provenance": [
+        {
+          "id": "sales-bfc-2026-1",
+          "kind": "sales",
+          "region": "Bourgogne-Franche-Comté",
+          "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+          "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+          "schemaVersion": "DVF+ open data 2026-1",
+          "sourceReleaseDate": null,
+          "asOf": null,
+          "releaseLabel": "2026-1",
+          "archiveMember": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+          "catalogueUrl": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+          "licence": "Licence Ouverte / Open Licence 2.0",
+          "licenceUrl": "https://www.data.gouv.fr/datasets/dvf-open-data",
+          "resolvedUrl": "https://euw9.boxcloud.com/d/1/a1!LJ4MCXxPN4UVIGIB98At0O_1mmyimSuR9ICNo6hINwpv-6_F9oZwSeLL6_MHgQ-g0XGb2Ds1ttcN5__Nnz9BJlmhx-jKQWpc7Aj3b0dFf_mA5tG5s0a6Yz9SunCWeRKAHETRynQc_K18uEbRZIeJoQ8l6JbkKXuxY_4EUgdK_d9bXrkzMHLNOCmeL8Y8QU5eNNIYaaTKCm6gwDzZVsFK9v_RMcDrzO8cFUamNB4crylqk6kOpjxMrpgBPJPQD1tg9fsIOdXzdq9ySGNMnP3GftjyAYgVp-fO_Gg3BayelaMDpdSB8X-Z4Xf39gmzk_FGanxbTVtsqn-DRP0l52-RzKSiP8r4Py6dHhAPxAb6lGq6vu9eYAzDOVnfNdLTqjdk25FZVciKqm0Ns6NI22fb12aijWXuRRQF4RvXvazaN8aPCRqTwAxOMeTLAAG4hUrB2QUDOqA3grtuulkV0NCyre8KfplBaXiRFK9edaLgQdbl8HblDZonh3lo1byNUgVK3uECXdSEWg9zmKzZoDtL-kSj8V4Vf2Zk2kIoW0oTXydIsjLGTatFKbtFYIx-op3bqQrN1PDZrXiw5T0UzxUcS0Q9OhYNU0HG9JLLJNBXBKIaTKlah6XXwRxCNM5cpvYQxYmysqTuNPVKbBjNNkQK1BjggKXzp5_CCmBqj7NmHDaYBKd6B-PzAjegeGGOg_OhVvDtG4osvPebfwKzTl92lGCA8kKrPsuwZzSRRLECJRdle-Q0pgGT7B0ujNaUvJP3m01skixaiFs9wo_YcPlDriioamUMv-hdtEU4UrRIIgh0puje48gmOSwBhEmVYuHGnil-xy8mRXFY994AlQaTHCkJ-estiPCUMYAxn_aYz01_Xf5gPDgFnQ0vztvCSkl_gGpNFHBb3WNAf_5yNgPwJyGLvSmb4_OMtoD6uRF-BpzKMcOpknpIkjgfBOfAEp2uhM1auy9pET76bF3JCzFzLL0EWrQv5vu7kRX-yDJPmSmt3XDLl6I-31JyZLt1_etyjvgk1AuPwXWxpvSU0ELBHCSgdLXhhjRNsbArJZBeskKRdplNR62ugFWmezYG99-Zt-oxJXLI1ORUoVqO_iA5j9mjvCXHzoCxQP8CjwXuA4ziMgDtMtb5V7fwnx8qEoAOdHQ9i9kpLp9aFepOfNF20OLGSPflMOhG39Z_zRmfkj0_eVjKqnJHTTLz9UyZqF9YrKeVWXHvZt3Pz-V9JJPuYT0Cp1bAOfp4hIdvPhmcWyFudRCxN7-489da4YQQTx7WD4Wn9oplfiF46UqNOiO3m_m_BNaNpokBD5tUFE5tV1nHhbek8886Mm25lp6rJmsXBsEB6Xm0V5bGISvMRA9NprXpiDEC6twxpBV3XpwDe8qk1Ozbdyot_jjdERv3rmvPL1lIK1K-VZRsJVC_lynJ/download",
+          "httpContentEncoding": null,
+          "transportSha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+          "transportSize": 72937314,
+          "status": "obtained",
+          "retrievedAt": "2026-10-01T10:09:26Z",
+          "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+          "size": 72937314
+        }
+      ],
+      "observedDatasetRange": [
+        "2014-01-02",
+        "2025-12-31"
+      ],
+      "observedCommuneRange": [
+        "2014-01-03",
+        "2025-12-17"
+      ],
+      "historicalReferencesQueried": [
+        "215120000H0123",
+        "21512000AH0015",
+        "21512000AH0017",
+        "21512000AH0018",
+        "21512000AH0019",
+        "21512000AH0020",
+        "21512000AH0023",
+        "21512000AH0027",
+        "21512000AH0030",
+        "21512000AH0058",
+        "21512000AH0069",
+        "21512000AH0071",
+        "21512000AH0078",
+        "21512000AH0079",
+        "21512000AH0080",
+        "21512000AH0081",
+        "21512000AH0082",
+        "21512000AH0083",
+        "21512000AH0084",
+        "21512000AH0085",
+        "21512000AH0086",
+        "21512000AH0087",
+        "21512000AH0088",
+        "21512000AH0104",
+        "21512000AH0127",
+        "21512000AH0133",
+        "21512000AH0150",
+        "21512000AH0154"
+      ],
+      "earlierOfficialRecordsAudit": {
+        "catalogue": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-catalogue.json",
+        "catalogueMetadata": {
+          "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+          "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+          "httpContentEncoding": null,
+          "transportSha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+          "transportSize": 8953,
+          "sha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+          "size": 8953,
+          "retrievedAt": "2026-10-01T10:12:31Z",
+          "status": "obtained"
+        },
+        "releaseListing": "scripts/grand-crus/sources/catalogues/2026-10-01/dvf-box.html",
+        "latestReleaseFolderObserved": "avril_2026",
+        "previousReleaseFolderObserved": "versions_anterieures",
+        "earlierThanAvailableStart": "No earlier deed period is declared by this open-data catalogue. Restricted DV3F/DVF records are not treated as public DVF+ coverage.",
+        "coverageMeaning": "Catalogue temporal coverage is separate from observed dates in this region/commune; not a claim of uninterrupted records."
+      },
+      "limitation": "Observed deed ranges are not uninterrupted coverage or creation dates. Sales do not reach back to the oldest DFI event."
+    },
+    "notices": {
+      "indexes": [
+        {
+          "id": "regional-bfc-cote-dor",
+          "department": "21",
+          "publicationYearsIndexed": [
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "summary": {
+            "bulletins": 1277,
+            "notScanned": 0,
+            "downloadFailed": 0,
+            "extractionIncomplete": 0,
+            "fullOcrNoContents": 1,
+            "failedPages": 0,
+            "withCoteDorNotices": 269,
+            "coteDorNotices": 1412,
+            "farmStructureNotices": 1120
+          },
+          "earlierAvailableYearsAudit": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          },
+          "unsearchedIntervals": [
+            "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+            "Departmental 2021–2026 publications outside the existing index",
+            "Regional publications before 2019 and any notice outside the indexed corpus"
+          ]
+        },
+        {
+          "id": "departmental-cote-dor",
+          "department": "21",
+          "publicationYearsIndexed": [
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+          ],
+          "summary": {
+            "documentReferences": 377,
+            "downloadedPDFs": 372,
+            "completePDFs": 372,
+            "indexedPages": 31966,
+            "pendingPages": 0,
+            "failedPages": 0,
+            "candidatePages": 1245,
+            "noticeOccurrences": 1795,
+            "farmStructureOccurrences": 130
+          },
+          "earlierAvailableYearsAudit": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          },
+          "unsearchedIntervals": [
+            "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+            "Departmental 2021–2026 publications outside the existing index",
+            "Regional publications before 2019 and any notice outside the indexed corpus"
+          ]
+        }
+      ],
+      "missingDepartmentIndexes": [],
+      "availabilityAudit": {
+        "path": "scripts/grand-crus/sources/notice-coverage-2026-10-01.json",
+        "sha256": "ae6ad9c539a83ba3ba112f0a8148be4785271d844ae97dae2ee19629e0c4c5ae",
+        "departments": {
+          "21": {
+            "earliestPublishedYearLocated": 2004,
+            "latestPublishedYearLocated": 2026,
+            "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+            "officialAvailabilityUrls": [
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+              "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+              "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+            ],
+            "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+            "obtainedIndexRanges": [
+              {
+                "corpus": "departmental-cote-dor",
+                "publicationYears": [
+                  2016,
+                  2017,
+                  2018,
+                  2019,
+                  2020
+                ]
+              },
+              {
+                "corpus": "regional-bfc-cote-dor",
+                "publicationYears": [
+                  2019,
+                  2020,
+                  2021,
+                  2022,
+                  2023,
+                  2024,
+                  2025,
+                  2026
+                ]
+              }
+            ],
+            "failedAcquisitionMetadata": [
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+              "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+            ],
+            "failedPublishedPdf": {
+              "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+              "status": "missing",
+              "reason": "Remote end closed connection without response",
+              "sourceId": "notices-21-earlier-pdf"
+            },
+            "unsearchedIntervals": [
+              "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+              "Departmental 2021–2026 publications outside the existing index",
+              "Regional publications before 2019 and any notice outside the indexed corpus"
+            ]
+          }
+        }
+      },
+      "reachableReferencesQueried": [
+        "215120000H0123",
+        "21512000AH0001",
+        "21512000AH0004",
+        "21512000AH0005",
+        "21512000AH0006",
+        "21512000AH0007",
+        "21512000AH0008",
+        "21512000AH0009",
+        "21512000AH0010",
+        "21512000AH0011",
+        "21512000AH0012",
+        "21512000AH0013",
+        "21512000AH0014",
+        "21512000AH0015",
+        "21512000AH0016",
+        "21512000AH0017",
+        "21512000AH0018",
+        "21512000AH0019",
+        "21512000AH0020",
+        "21512000AH0023",
+        "21512000AH0025",
+        "21512000AH0027",
+        "21512000AH0030",
+        "21512000AH0032",
+        "21512000AH0058",
+        "21512000AH0060",
+        "21512000AH0066",
+        "21512000AH0068",
+        "21512000AH0069",
+        "21512000AH0070",
+        "21512000AH0071",
+        "21512000AH0077",
+        "21512000AH0078",
+        "21512000AH0079",
+        "21512000AH0080",
+        "21512000AH0081",
+        "21512000AH0082",
+        "21512000AH0083",
+        "21512000AH0084",
+        "21512000AH0085",
+        "21512000AH0086",
+        "21512000AH0087",
+        "21512000AH0088",
+        "21512000AH0092",
+        "21512000AH0093",
+        "21512000AH0104",
+        "21512000AH0122",
+        "21512000AH0123",
+        "21512000AH0126",
+        "21512000AH0127",
+        "21512000AH0130",
+        "21512000AH0131",
+        "21512000AH0132",
+        "21512000AH0133",
+        "21512000AH0140",
+        "21512000AH0141",
+        "21512000AH0147",
+        "21512000AH0148",
+        "21512000AH0149",
+        "21512000AH0150",
+        "21512000AH0151",
+        "21512000AH0154",
+        "21512000AH0155",
+        "21512000AH0169",
+        "21512000AH0170",
+        "21512000AH0171",
+        "21512000AH0178",
+        "21512000AH0179",
+        "21512000AH0182",
+        "21512000AH0183",
+        "21512000AH0184",
+        "21512000AH0185"
+      ],
+      "reviewedMatches": 0,
+      "unreviewedSearchCandidates": 0,
+      "earliestMatchedActDate": null,
+      "latestMatchedActDate": null,
+      "limitation": "Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event."
+    }
+  },
+  "historicalReferenceSales": [],
+  "noticeReviewCandidates": [],
+  "parcels": [
+    {
+      "parcelId": "21512000AH0001",
+      "reference": "AH 0001",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1149.491,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0001",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0001",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0001"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0004",
+      "reference": "AH 0004",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 565.3748,
+      "recordedRights": [
+        {
+          "holderId": "330713074",
+          "siren": "330713074",
+          "name": "SOC CIV AGRIC  DOMAINE DE LA VOUGERAIE",
+          "rightCode": "U",
+          "rightLabel": "Usufruitier",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        },
+        {
+          "holderId": "349583500",
+          "siren": "349583500",
+          "name": "DOMAINE LOUIS VIOLLAND",
+          "rightCode": "N",
+          "rightLabel": "Nu-propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "330713074",
+        "349583500"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0004",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0004",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0004"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0005",
+      "reference": "AH 0005",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1091.7589,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0005",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0005",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0005"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0006",
+      "reference": "AH 0006",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2270.5861,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0006",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0006",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0006"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0007",
+      "reference": "AH 0007",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 927.2207,
+      "recordedRights": [
+        {
+          "holderId": "330713074",
+          "siren": "330713074",
+          "name": "SOC CIV AGRIC  DOMAINE DE LA VOUGERAIE",
+          "rightCode": "U",
+          "rightLabel": "Usufruitier",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        },
+        {
+          "holderId": "349583500",
+          "siren": "349583500",
+          "name": "DOMAINE LOUIS VIOLLAND",
+          "rightCode": "N",
+          "rightLabel": "Nu-propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "330713074",
+        "349583500"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0007",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0007",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0007"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0008",
+      "reference": "AH 0008",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 709.5834,
+      "recordedRights": [
+        {
+          "holderId": "U21845345",
+          "siren": null,
+          "name": "SC DOM JACQUES PRIEUR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U21845345"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM JACQUES PRIEUR"
+          ],
+          "after": [
+            "SC DOM JACQUES PRIEUR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0008",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0008",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0008"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0009",
+      "reference": "AH 0009",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 648.7406,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0009",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0009",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0009"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0010",
+      "reference": "AH 0010",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 452.1932,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0010",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0010",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0010"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0011",
+      "reference": "AH 0011",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 9436.1964,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0011",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0011",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0011"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0012",
+      "reference": "AH 0012",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 776.9517,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0012",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0012",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0012"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0013",
+      "reference": "AH 0013",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 3793.8635,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0013",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0013",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0013"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0014",
+      "reference": "AH 0014",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 3151.7266,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0014",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0014",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0014"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0016",
+      "reference": "AH 0016",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 980.7661,
+      "recordedRights": [
+        {
+          "holderId": "420474645",
+          "siren": "420474645",
+          "name": "DOMAINE HEITZ LOCHARDET",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "420474645"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE HEITZ LOCHARDET"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0016",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0016",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0016"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0025",
+      "reference": "AH 0025",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2282.0819,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0025",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0025",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0025"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0032",
+      "reference": "AH 0032",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 5170.7837,
+      "recordedRights": [
+        {
+          "holderId": "312990021",
+          "siren": "312990021",
+          "name": "SOC CIV DOMAINE HERITIERS LOUIS JADOT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "312990021"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DES HERITIERS LOUIS JADOT"
+          ],
+          "after": [
+            "SOC CIV DOMAINE HERITIERS LOUIS JADOT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0032",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0032",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0032"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0060",
+      "reference": "AH 0060",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 112.824,
+      "recordedRights": [
+        {
+          "holderId": "312990021",
+          "siren": "312990021",
+          "name": "SOC CIV DOMAINE HERITIERS LOUIS JADOT",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "312990021"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DES HERITIERS LOUIS JADOT"
+          ],
+          "after": [
+            "SOC CIV DOMAINE HERITIERS LOUIS JADOT"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0060",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0060",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0060"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0066",
+      "reference": "AH 0066",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 4.5317,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0066",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0066",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0066"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0068",
+      "reference": "AH 0068",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2037.7664,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0068",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0068",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0068"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0070",
+      "reference": "AH 0070",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1586.374,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0070",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0070",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0070"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0077",
+      "reference": "AH 0077",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 5039.9024,
+      "recordedRights": [
+        {
+          "holderId": "778245316",
+          "siren": "778245316",
+          "name": "DOMAINE LEFLAIVE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778245316"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [
+        {
+          "deedId": "253a4ed2c611d808ab9a545a667b8a38",
+          "date": "2016-02-16",
+          "nature": "sale",
+          "dispositions": 1,
+          "sameDeed": [],
+          "otherParcels": 9
+        }
+      ],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0077",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0077",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0077"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0092",
+      "reference": "AH 0092",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2485.87,
+      "recordedRights": [
+        {
+          "holderId": "427468962",
+          "siren": "427468962",
+          "name": "DU DOMAINE BELGRAND LATOUR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "427468962"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA DOM BELGRAND LATOUR"
+          ],
+          "after": [
+            "GFA DOM BELGRAND LATOUR"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA DOM BELGRAND LATOUR"
+          ],
+          "after": [
+            "DU DOMAINE BELGRAND LATOUR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0092",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0092",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0092"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0093",
+      "reference": "AH 0093",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2406.405,
+      "recordedRights": [
+        {
+          "holderId": "427468988",
+          "siren": "427468988",
+          "name": "DOMAINE MARCHAL LATOUR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "427468988"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA DOM MARCHAL LATOUR"
+          ],
+          "after": [
+            "GFA DOM MARCHAL LATOUR"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "GFA DOM MARCHAL LATOUR"
+          ],
+          "after": [
+            "DU DOMAINE BELGRAND LATOUR"
+          ]
+        },
+        {
+          "from": "2021-01-01",
+          "to": "2022-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "DU DOMAINE BELGRAND LATOUR"
+          ],
+          "after": [
+            "DOMAINE MARCHAL LATOUR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0093",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0093",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0093"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0122",
+      "reference": "AH 0122",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 318.7828,
+      "recordedRights": [
+        {
+          "holderId": "515420255",
+          "siren": "515420255",
+          "name": "MAISON BOUCHARD PERE ET FILS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "515420255"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0122",
+        "eventIds": [],
+        "supportedEventIds": [],
+        "ancestorIds": [],
+        "earliestValidationDate": null,
+        "latestValidationDate": null,
+        "paths": [],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0122",
+            "eventPath": [],
+            "referencePath": [
+              "21512000AH0122"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2017-07-06",
+        "dateRole": "first-observed-cadastral-release"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0123",
+      "reference": "AH 0123",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 641.8673,
+      "recordedRights": [
+        {
+          "holderId": "U21845345",
+          "siren": null,
+          "name": "SC DOM JACQUES PRIEUR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6599",
+          "legalFormLabel": "SC"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "U21845345"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM JACQUES PRIEUR"
+          ],
+          "after": [
+            "SC DOM JACQUES PRIEUR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0123",
+        "eventIds": [
+          "210:512:000:0000202:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000202:00001"
+        ],
+        "ancestorIds": [
+          "215120000H0123"
+        ],
+        "earliestValidationDate": "1989-09-22",
+        "latestValidationDate": "1989-09-22",
+        "paths": [
+          {
+            "referenceId": "215120000H0123",
+            "eventPath": [
+              "210:512:000:0000202:00001"
+            ],
+            "referencePath": [
+              "21512000AH0123",
+              "215120000H0123"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "215120000H0123",
+            "eventPath": [
+              "210:512:000:0000202:00001"
+            ],
+            "referencePath": [
+              "21512000AH0123",
+              "215120000H0123"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": []
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1989-09-22",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0126",
+      "reference": "AH 0126",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1620.9689,
+      "recordedRights": [
+        {
+          "holderId": "778252445",
+          "siren": "778252445",
+          "name": "SCE DU DOMAINE D AUVENAY",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778252445"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DAUVENAY"
+          ],
+          "after": [
+            "SC DOM DAUVENAY"
+          ]
+        },
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "SC DOM DAUVENAY"
+          ],
+          "after": [
+            "SCE DU DOMAINE D AUVENAY"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0126",
+        "eventIds": [
+          "210:512:000:0000248:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000248:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0030"
+        ],
+        "earliestValidationDate": "1993-06-21",
+        "latestValidationDate": "1993-06-21",
+        "paths": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0126",
+              "21512000AH0030"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0126",
+              "21512000AH0030"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1993-06-21",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0130",
+      "reference": "AH 0130",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 457.4984,
+      "recordedRights": [
+        {
+          "holderId": "212105126",
+          "siren": "212105126",
+          "name": "COMMUNE DE PULIGNY-MONTRACHET",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "7210",
+          "legalFormLabel": "COM"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "212105126"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "unprovable-identifier-change",
+          "before": [
+            "COMMUNE DE PULIGNY MONTRACHET"
+          ],
+          "after": [
+            "COMMUNE DE PULIGNY-MONTRACHET"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0130",
+        "eventIds": [
+          "210:512:000:0000252:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000252:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0104"
+        ],
+        "earliestValidationDate": "1994-04-27",
+        "latestValidationDate": "1994-04-27",
+        "paths": [
+          {
+            "referenceId": "21512000AH0104",
+            "eventPath": [
+              "210:512:000:0000252:00001"
+            ],
+            "referencePath": [
+              "21512000AH0130",
+              "21512000AH0104"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0104",
+            "eventPath": [
+              "210:512:000:0000252:00001"
+            ],
+            "referencePath": [
+              "21512000AH0130",
+              "21512000AH0104"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1994-04-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0131",
+      "reference": "AH 0131",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 5078.7255,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2024-01-01",
+          "to": "2025-01-01",
+          "kind": "record-disappeared",
+          "before": [
+            "DOMAINE LEFLAIVE"
+          ],
+          "after": []
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0131",
+        "eventIds": [
+          "210:512:000:0000261:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000261:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0017",
+          "21512000AH0018",
+          "21512000AH0019",
+          "21512000AH0020",
+          "21512000AH0084",
+          "21512000AH0088"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "1995-03-27",
+        "paths": [
+          {
+            "referenceId": "21512000AH0017",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0017"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0018",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0018"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0019",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0019"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0020",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0020"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0084",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0084"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0088",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0088"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0017",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0017"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0018",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0018"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0019",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0019"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0020",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0020"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0084",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0084"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0088",
+            "eventPath": [
+              "210:512:000:0000261:00001"
+            ],
+            "referencePath": [
+              "21512000AH0131",
+              "21512000AH0088"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0132",
+      "reference": "AH 0132",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 5086.0914,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0132",
+        "eventIds": [
+          "210:512:000:0000262:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000262:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0023",
+          "21512000AH0027",
+          "21512000AH0079",
+          "21512000AH0080",
+          "21512000AH0082",
+          "21512000AH0085",
+          "21512000AH0087"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "1995-03-27",
+        "paths": [
+          {
+            "referenceId": "21512000AH0023",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0023"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0027",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0027"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0079",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0079"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0080",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0080"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0082",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0082"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0085",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0085"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0087",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0087"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0023",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0023"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0027",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0027"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0079",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0079"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0080",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0080"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0082",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0082"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0085",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0085"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0087",
+            "eventPath": [
+              "210:512:000:0000262:00001"
+            ],
+            "referencePath": [
+              "21512000AH0132",
+              "21512000AH0087"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0140",
+      "reference": "AH 0140",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2730.4358,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0140",
+        "eventIds": [
+          "210:512:000:0000248:00001",
+          "210:512:000:0000294:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000248:00001",
+          "210:512:000:0000294:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0030",
+          "21512000AH0127"
+        ],
+        "earliestValidationDate": "1993-06-21",
+        "latestValidationDate": "1999-03-09",
+        "paths": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000294:00001",
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0140",
+              "21512000AH0127",
+              "21512000AH0030"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0127",
+            "eventPath": [
+              "210:512:000:0000294:00001"
+            ],
+            "referencePath": [
+              "21512000AH0140",
+              "21512000AH0127"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000294:00001",
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0140",
+              "21512000AH0127",
+              "21512000AH0030"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1993-06-21",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0141",
+      "reference": "AH 0141",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 2731.8,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0141",
+        "eventIds": [
+          "210:512:000:0000248:00001",
+          "210:512:000:0000294:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000248:00001",
+          "210:512:000:0000294:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0030",
+          "21512000AH0127"
+        ],
+        "earliestValidationDate": "1993-06-21",
+        "latestValidationDate": "1999-03-09",
+        "paths": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000294:00001",
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0141",
+              "21512000AH0127",
+              "21512000AH0030"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0127",
+            "eventPath": [
+              "210:512:000:0000294:00001"
+            ],
+            "referencePath": [
+              "21512000AH0141",
+              "21512000AH0127"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0030",
+            "eventPath": [
+              "210:512:000:0000294:00001",
+              "210:512:000:0000248:00001"
+            ],
+            "referencePath": [
+              "21512000AH0141",
+              "21512000AH0127",
+              "21512000AH0030"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1993-06-21",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0147",
+      "reference": "AH 0147",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1194.1464,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0147",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2000-02-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0147",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0148",
+      "reference": "AH 0148",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 956.0354,
+      "recordedRights": [
+        {
+          "holderId": "778245316",
+          "siren": "778245316",
+          "name": "DOMAINE LEFLAIVE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "778245316"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0148",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2000-02-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0148",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0149",
+      "reference": "AH 0149",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 906.1887,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0149",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2000-02-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0149",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0151",
+      "reference": "AH 0151",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1062.0963,
+      "recordedRights": [
+        {
+          "holderId": "480400407",
+          "siren": "480400407",
+          "name": "DOMAINE DE LA POUSSE D'OR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "480400407"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE DE LA POUSSE DOR"
+          ]
+        },
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DE LA POUSSE DOR"
+          ],
+          "after": [
+            "DOMAINE DE LA POUSSE D'OR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0151",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2000-02-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0151",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0155",
+      "reference": "AH 0155",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 824.591,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0155",
+        "eventIds": [
+          "210:512:000:0000335:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000335:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0069"
+        ],
+        "earliestValidationDate": "2002-06-10",
+        "latestValidationDate": "2002-06-10",
+        "paths": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0155",
+              "21512000AH0069"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0155",
+              "21512000AH0069"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2002-06-10",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0169",
+      "reference": "AH 0169",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 1560.9307,
+      "recordedRights": [
+        {
+          "holderId": "751811472",
+          "siren": "751811472",
+          "name": "SCI MONTILLE ET PARTNERS",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6540",
+          "legalFormLabel": "SCI"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "751811472"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0169",
+        "eventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0058"
+        ],
+        "earliestValidationDate": "2013-01-28",
+        "latestValidationDate": "2013-01-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0169",
+              "21512000AH0058"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0169",
+              "21512000AH0058"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2013-01-28",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0170",
+      "reference": "AH 0170",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 424.9462,
+      "recordedRights": [
+        {
+          "holderId": "483134516",
+          "siren": "483134516",
+          "name": "DOMAINE DE MONTILLE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "483134516"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "holder-changed",
+          "before": [
+            "SCEA DOMAINE CHATEAU PULIGNY MONTRACHET"
+          ],
+          "after": [
+            "DOMAINE DE MONTILLE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0170",
+        "eventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0058"
+        ],
+        "earliestValidationDate": "2013-01-28",
+        "latestValidationDate": "2013-01-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0170",
+              "21512000AH0058"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0170",
+              "21512000AH0058"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2013-01-28",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0171",
+      "reference": "AH 0171",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 424.4492,
+      "recordedRights": [
+        {
+          "holderId": "752059824",
+          "siren": "752059824",
+          "name": "LE CHEVALIER DE PULIGNY-MONTRACHET",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6534",
+          "legalFormLabel": "GFA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "752059824"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2017-07-06",
+      "predecessorIds": [],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0171",
+        "eventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000411:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0058"
+        ],
+        "earliestValidationDate": "2013-01-28",
+        "latestValidationDate": "2013-01-28",
+        "paths": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0171",
+              "21512000AH0058"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0058",
+            "eventPath": [
+              "210:512:000:0000411:00001"
+            ],
+            "referencePath": [
+              "21512000AH0171",
+              "21512000AH0058"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2013-01-28",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0178",
+      "reference": "AH 0178",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 392.4251,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2018-01-02",
+      "predecessorIds": [
+        "21512000AH0154"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0178",
+        "eventIds": [
+          "210:512:000:0000335:00001",
+          "210:512:000:0000451:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000335:00001",
+          "210:512:000:0000451:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0069",
+          "21512000AH0154"
+        ],
+        "earliestValidationDate": "2002-06-10",
+        "latestValidationDate": "2017-10-18",
+        "paths": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000451:00001",
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0178",
+              "21512000AH0154",
+              "21512000AH0069"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0154",
+            "eventPath": [
+              "210:512:000:0000451:00001"
+            ],
+            "referencePath": [
+              "21512000AH0178",
+              "21512000AH0154"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000451:00001",
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0178",
+              "21512000AH0154",
+              "21512000AH0069"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2002-06-10",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0179",
+      "reference": "AH 0179",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 391.7558,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2018-01-02",
+      "predecessorIds": [
+        "21512000AH0154"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0179",
+        "eventIds": [
+          "210:512:000:0000335:00001",
+          "210:512:000:0000451:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000335:00001",
+          "210:512:000:0000451:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0069",
+          "21512000AH0154"
+        ],
+        "earliestValidationDate": "2002-06-10",
+        "latestValidationDate": "2017-10-18",
+        "paths": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000451:00001",
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0179",
+              "21512000AH0154",
+              "21512000AH0069"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0154",
+            "eventPath": [
+              "210:512:000:0000451:00001"
+            ],
+            "referencePath": [
+              "21512000AH0179",
+              "21512000AH0154"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0069",
+            "eventPath": [
+              "210:512:000:0000451:00001",
+              "210:512:000:0000335:00001"
+            ],
+            "referencePath": [
+              "21512000AH0179",
+              "21512000AH0154",
+              "21512000AH0069"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2002-06-10",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0182",
+      "reference": "AH 0182",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 799.1266,
+      "recordedRights": [
+        {
+          "holderId": "408395309",
+          "siren": "408395309",
+          "name": "SCE DOMAINE OPALE",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "6597",
+          "legalFormLabel": "SCEA"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "408395309"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2019-01-01",
+          "to": "2020-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "EXPLOITATION DOMAINE OPALE"
+          ],
+          "after": [
+            "SCE DOMAINE OPALE"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2019-07-01",
+      "predecessorIds": [
+        "21512000AH0150"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0182",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001",
+          "210:512:000:0000463:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001",
+          "210:512:000:0000463:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133",
+          "21512000AH0150"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2019-03-21",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0150",
+            "eventPath": [
+              "210:512:000:0000463:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0182",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0183",
+      "reference": "AH 0183",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 189.9713,
+      "recordedRights": [
+        {
+          "holderId": "480400407",
+          "siren": "480400407",
+          "name": "DOMAINE DE LA POUSSE D'OR",
+          "rightCode": "P",
+          "rightLabel": "Propriétaire",
+          "legalForm": "5710",
+          "legalFormLabel": "SAS"
+        }
+      ],
+      "recordMatch": "reference-and-area",
+      "holderResearchIds": [
+        "480400407"
+      ],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [
+        {
+          "from": "2020-01-01",
+          "to": "2021-01-01",
+          "kind": "record-appeared",
+          "before": [],
+          "after": [
+            "DOMAINE DE LA POUSSE DOR"
+          ]
+        },
+        {
+          "from": "2023-01-01",
+          "to": "2024-01-01",
+          "kind": "same-holder-renamed",
+          "before": [
+            "DOMAINE DE LA POUSSE DOR"
+          ],
+          "after": [
+            "DOMAINE DE LA POUSSE D'OR"
+          ]
+        }
+      ],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2019-07-01",
+      "predecessorIds": [
+        "21512000AH0150"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0183",
+        "eventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001",
+          "210:512:000:0000463:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000263:00001",
+          "210:512:000:0000310:00001",
+          "210:512:000:0000463:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0071",
+          "21512000AH0078",
+          "21512000AH0081",
+          "21512000AH0083",
+          "21512000AH0086",
+          "21512000AH0133",
+          "21512000AH0150"
+        ],
+        "earliestValidationDate": "1995-03-27",
+        "latestValidationDate": "2019-03-21",
+        "paths": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0133",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          },
+          {
+            "referenceId": "21512000AH0150",
+            "eventPath": [
+              "210:512:000:0000463:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0071",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0071"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0078",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0078"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0081",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0081"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0083",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0083"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          },
+          {
+            "referenceId": "21512000AH0086",
+            "eventPath": [
+              "210:512:000:0000463:00001",
+              "210:512:000:0000310:00001",
+              "210:512:000:0000263:00001"
+            ],
+            "referencePath": [
+              "21512000AH0183",
+              "21512000AH0150",
+              "21512000AH0133",
+              "21512000AH0086"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters",
+              "partial-current-parcel-scope"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "1995-03-27",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "holder-group-triage",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0184",
+      "reference": "AH 0184",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 498.6719,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2020-07-01",
+      "predecessorIds": [
+        "21512000AH0015"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0184",
+        "eventIds": [
+          "210:512:000:0000464:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000464:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0015"
+        ],
+        "earliestValidationDate": "2020-03-16",
+        "latestValidationDate": "2020-03-16",
+        "paths": [
+          {
+            "referenceId": "21512000AH0015",
+            "eventPath": [
+              "210:512:000:0000464:00001"
+            ],
+            "referencePath": [
+              "21512000AH0184",
+              "21512000AH0015"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0015",
+            "eventPath": [
+              "210:512:000:0000464:00001"
+            ],
+            "referencePath": [
+              "21512000AH0184",
+              "21512000AH0015"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2020-03-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    },
+    {
+      "parcelId": "21512000AH0185",
+      "reference": "AH 0185",
+      "commune": "21512",
+      "namedArea": null,
+      "cruOverlapM2": 465.62,
+      "recordedRights": [],
+      "recordMatch": "unknown",
+      "holderResearchIds": [],
+      "candidateLeads": [],
+      "historicalEvents": [],
+      "externalResearchIds": [],
+      "parcelFilingIds": [],
+      "rightsChanges": [],
+      "saleRecords": [],
+      "historicalReferenceSales": [],
+      "reviewedNoticeReferences": [],
+      "cadastreFirstSeen": "2020-07-01",
+      "predecessorIds": [
+        "21512000AH0015"
+      ],
+      "historyFindingIds": [],
+      "documentedAncestry": {
+        "parcelId": "21512000AH0185",
+        "eventIds": [
+          "210:512:000:0000464:00001"
+        ],
+        "supportedEventIds": [
+          "210:512:000:0000464:00001"
+        ],
+        "ancestorIds": [
+          "21512000AH0015"
+        ],
+        "earliestValidationDate": "2020-03-16",
+        "latestValidationDate": "2020-03-16",
+        "paths": [
+          {
+            "referenceId": "21512000AH0015",
+            "eventPath": [
+              "210:512:000:0000464:00001"
+            ],
+            "referencePath": [
+              "21512000AH0185",
+              "21512000AH0015"
+            ],
+            "method": "documented-dfi",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ],
+            "scope": "historical-reference-context"
+          }
+        ],
+        "terminals": [
+          {
+            "referenceId": "21512000AH0015",
+            "eventPath": [
+              "210:512:000:0000464:00001"
+            ],
+            "referencePath": [
+              "21512000AH0185",
+              "21512000AH0015"
+            ],
+            "reason": "source-boundary-or-unrecorded-event",
+            "qualifications": [
+              "former-parcel-includes-other-daughters"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "earliestSupportedEvent": {
+        "date": "2020-03-16",
+        "dateRole": "dfi-validation"
+      },
+      "researchStatus": "unresolved",
+      "researchDepth": "inventory-only",
+      "currentFarmer": null,
+      "verifiedAsOf": null,
+      "operationScope": "unconfirmed",
+      "nextEvidenceNeeded": "Identify operator through a shareable parcel-specific record; do not infer from neighbours."
+    }
+  ]
+}

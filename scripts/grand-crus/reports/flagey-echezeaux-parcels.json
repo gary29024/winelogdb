@@ -57,12 +57,12 @@
     {
       "parcelId": "212670000D0236",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.059256229191228284
+      "overlapM2": 0.059256230589042336
     },
     {
       "parcelId": "212670000D0235",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.004262426446956736
+      "overlapM2": 0.0042624291130247466
     },
     {
       "parcelId": "212670000D0230",
@@ -72,77 +72,77 @@
     {
       "parcelId": "212670000D0229",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.014757824684140837
+      "overlapM2": 0.014757824319879067
     },
     {
       "parcelId": "212670000D0524",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.006189534576493438
+      "overlapM2": 0.006189534144259222
     },
     {
       "parcelId": "212670000D0517",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.04701549879032299
+      "overlapM2": 0.04701549840517594
     },
     {
       "parcelId": "212670000D0228",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.00033218576713456315
+      "overlapM2": 0.00033218554497867745
     },
     {
       "parcelId": "212670000D0218",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.016008441643527174
+      "overlapM2": 0.016008438463367726
     },
     {
       "parcelId": "212670000D0522",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.016359535380907397
+      "overlapM2": 0.016359535454260245
     },
     {
       "parcelId": "212670000D0288",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.0015426730992404247
+      "overlapM2": 0.0015426733045539195
     },
     {
       "parcelId": "212670000D0523",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.0023483557641958094
+      "overlapM2": 0.0023483556141014558
     },
     {
       "parcelId": "212670000D0356",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.07821426153643707
+      "overlapM2": 0.07821426172151769
     },
     {
       "parcelId": "212670000D0289",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.06565834813137944
+      "overlapM2": 0.06565834157326302
     },
     {
       "parcelId": "212670000D0287",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.0015285041639067252
+      "overlapM2": 0.0015285043163501834
     },
     {
       "parcelId": "212670000D0286",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.0012540053021257056
+      "overlapM2": 0.0012540051930608471
     },
     {
       "parcelId": "212670000D0285",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.0005912992544630055
+      "overlapM2": 0.0005912991872782376
     },
     {
       "parcelId": "212670000D0281",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 3.4829030795471426e-06
+      "overlapM2": 3.4829043274032905e-06
     },
     {
       "parcelId": "212670000D0278",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.04752868951127325
+      "overlapM2": 0.047528689498909114
     },
     {
       "parcelId": "212670000D0277",
@@ -152,34 +152,35 @@
     {
       "parcelId": "212670000D0270",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.01889626103533252
+      "overlapM2": 0.018896260998368823
     },
     {
       "parcelId": "212670000D0691",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.010253194712447435
+      "overlapM2": 0.010253194499948331
     },
     {
       "parcelId": "212670000D0847",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.019248694355348935
+      "overlapM2": 0.019248694399069375
     },
     {
       "parcelId": "212670000D0848",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.011490074789872792
+      "overlapM2": 0.011490074865245163
     },
     {
       "parcelId": "212670000D0366",
       "parentFeatureId": "inao-denom-565",
-      "overlapM2": 0.10194199751393285
+      "overlapM2": 0.10194196572447822
     }
   ],
   "communeRecordsWithoutCurrentGeometry": [],
+  "invalidGeometryOutsideCru": [],
   "byCru": {
     "inao-denom-565": {
       "parcels": 276,
-      "areaHa": 38.82478991000003
+      "areaHa": 38.82478991
     },
     "inao-denom-645": {
       "parcels": 32,

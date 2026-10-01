@@ -206,7 +206,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 
 ## Exact-reference administrative events
 
-Farm-structure notices published by the Côte-d'Or DDT name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image.
+Reviewed farm-structure notices name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image.
 
 - **2022-11-24 — Anne Gros.** Application received; previous operator Domaine Gros Frère et Sœur. Parcels: D 0093. Dossier 2022-204, complete at 21/10/2022, 1.5050 ha across Vosne-Romanée and Flagey-Échezeaux, including Grands-Échezeaux D0093; the receipt does not authorise cultivation. [DDT: Anne Gros application receipt, pp. 74–75](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/106030/671617/file/recueil-bfc-2023-055-recueil-des-actes-administratifs-special.pdf#page=74).
 - **2026-04-07 — SCEA Domaine du Comte Liger-Belair (Vosne-Romanée).** Application suspended; previous operator Not stated. Parcels: D 0615, D 0616. The application covers 4.3080 ha in Flagey-Échezeaux, Boncourt-le-Bois, Vosne-Romanée and Vougeot, including Grands-Échezeaux D615 and D616. The region found the enlargement excessive and suspended the instruction, during which anyone may apply for the same land. As of the order, the applicant was not authorised to farm these parcels. [BFC bulletin 2026-067: order 2026-739 (BFC-2026-04-07-00015) suspending the SCEA Domaine du Comte Liger-Belair application](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28).
@@ -237,7 +237,7 @@ Published vineyard research can name cadastral references or describe holdings. 
 
 ## Rights history and parcel lineage
 
-The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2019-01-01 with the 2026-06-01 geometry. 13 of 32 parcels had a recorded-rights change; 1 current references did not exist in the first vintage, and 1 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru grands-echezeaux`.
+The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2017-07-06 with the 2026-06-01 geometry. 13 of 32 parcels had a recorded-rights change; 1 current references were not observed in the first obtained vintage, and 1 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru grands-echezeaux`.
 
 **Reviewed findings**
 
@@ -250,11 +250,11 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 | --- | --- | --- | --- | --- |
 | D 0104, D 0105, D 0535 | 2019 → 2020 | Same SIREN, new name | MONGEARD MUGNERET ET FILS | GFA MONGEARD MUGNERET ET FILS |
 | D 0103 | 2019 → 2020 | Same SIREN, new name | S E P V | SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE |
-| D 0823 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | SC DOM DE LA ROMANEE CONTI |
-| D 0617, D 0618 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SCI DOM VEUVE PAUL MODOT | SCI DOM VEUVE PAUL MODOT |
+| D 0823 | 2019 → 2020 | Company identity continuity unproved | SC DOM DE LA ROMANEE CONTI | SC DOM DE LA ROMANEE CONTI |
+| D 0617, D 0618 | 2019 → 2020 | Company identity continuity unproved | SCI DOM VEUVE PAUL MODOT | SCI DOM VEUVE PAUL MODOT |
 | D 0093 | 2020 → 2021 | First company record on an existing parcel | — | ANNE GROS |
 | D 0615, D 0616 | 2020 → 2021 | First company record on an existing parcel | — | NATHALIE PACAREAU LAMARCHE |
-| D 0823 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | DOMAINE DE LA ROMANEE CONTI |
+| D 0823 | 2020 → 2021 | Company identity continuity unproved | SC DOM DE LA ROMANEE CONTI | DOMAINE DE LA ROMANEE CONTI |
 | D 0681 | 2023 → 2024 | First company record on an existing parcel | — | DOMAINE MONGEARD MUGNERET |
 | D 0111, D 0112 | 2023 → 2024 | Same SIREN, new name | DOMAINE DEUGENIE | DOMAINE D'EUGENIE |
 | D 0103 | 2023 → 2024 | Same SIREN, new name | SOCIETE DEXPLOITATION ET PARTICIPATION VITI-VINICOLE | SOCIETE D'EXPLOITATION ET PARTICIPATION VITI-VINICOLE |
@@ -267,6 +267,62 @@ A successor is accepted when it first appears in the vintage right after the ret
 | --- | --- | --- | --- | --- |
 | D 0097 | 2019-01-01 | D 0823 | — | None |
 
+**Official DFI ancestry and source coverage (#461)**
+
+DFI dates below are validation dates. Event groups preserve all mothers and daughters, including context outside today's cru. They never transfer a right, sale party or farmer. A first observation or tracing stop is not creation, original ownership or uninterrupted continuity.
+
+Pinned source inventory: [2026-10-01](../../../scripts/grand-crus/sources/inventory-2026-10-01.json). 1 current parcels have documented ancestors; 0 reach pre-2019 events. 1 documents / 1 analysis lots. Reachable validation dates: 2019-03-12 to 2019-03-12. 1 source failures, 0 unresolved event groups, 0 traversal conflicts.
+
+| Commune | Geometry available / obtained / missing | Earliest / latest obtained observation |
+| --- | ---: | --- |
+| 21267 | 35 / 35 / 0 | 2017-07-06 / 2026-06-01 |
+
+**Complete documented event groups**
+
+| Validation date | Department / commune / prefix | Document / analysis lot | Change | All mothers | All daughters |
+| --- | --- | --- | --- | --- | --- |
+| 2019-03-12 | 210 / 21267 / 000 | 0000326 / 00001 | document d'arpentage numérique | 212670000D0097 | 212670000D0823 |
+
+**Every current parcel: earliest supported event and tracing stops**
+
+| Current reference | Earliest supported event (date role) | Documented ancestors (context only) | Tracing stops |
+| --- | --- | --- | --- |
+| D 0089 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0089: source-boundary-or-unrecorded-event |
+| D 0090 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0090: source-boundary-or-unrecorded-event |
+| D 0091 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0091: source-boundary-or-unrecorded-event |
+| D 0092 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0092: source-boundary-or-unrecorded-event |
+| D 0093 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0093: source-boundary-or-unrecorded-event |
+| D 0094 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0094: source-boundary-or-unrecorded-event |
+| D 0095 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0095: source-boundary-or-unrecorded-event |
+| D 0096 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0096: source-boundary-or-unrecorded-event |
+| D 0102 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0102: source-boundary-or-unrecorded-event |
+| D 0103 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0103: source-boundary-or-unrecorded-event |
+| D 0104 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0104: source-boundary-or-unrecorded-event |
+| D 0105 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0105: source-boundary-or-unrecorded-event |
+| D 0106 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0106: source-boundary-or-unrecorded-event |
+| D 0107 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0107: source-boundary-or-unrecorded-event |
+| D 0111 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0111: source-boundary-or-unrecorded-event |
+| D 0112 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0112: source-boundary-or-unrecorded-event |
+| D 0500 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0500: source-boundary-or-unrecorded-event |
+| D 0506 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0506: source-boundary-or-unrecorded-event |
+| D 0507 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0507: source-boundary-or-unrecorded-event |
+| D 0535 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0535: source-boundary-or-unrecorded-event |
+| D 0612 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0612: source-boundary-or-unrecorded-event |
+| D 0613 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0613: source-boundary-or-unrecorded-event |
+| D 0614 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0614: source-boundary-or-unrecorded-event |
+| D 0615 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0615: source-boundary-or-unrecorded-event |
+| D 0616 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0616: source-boundary-or-unrecorded-event |
+| D 0617 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0617: source-boundary-or-unrecorded-event |
+| D 0618 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0618: source-boundary-or-unrecorded-event |
+| D 0619 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0619: source-boundary-or-unrecorded-event |
+| D 0681 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0681: source-boundary-or-unrecorded-event |
+| D 0682 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0682: source-boundary-or-unrecorded-event |
+| D 0683 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0683: source-boundary-or-unrecorded-event |
+| D 0823 | 2019-03-12 (dfi-validation) | 212670000D0097 | 212670000D0097: source-boundary-or-unrecorded-event |
+
+Full event paths, original-reference rights, date discrepancies and geometry comparisons are in [the generated history](rights-history.json). Missing earlier DFI correspondence includes the departmental computerisation boundary and rural consolidation gaps; no earlier owner is inferred. Sale and notice coverage is independent and does not extend back to the oldest DFI event.
+
+
 ## Sale and exchange deeds
 
 [DVF+ open-data (Cerema), sale and exchange deeds, Flagey-Échezeaux, 2014–2025](https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data) (2014-01-17 to 2025-11-20) list registered transfers for a fee by deed, without buyer or seller. Prices are not kept. A later annual company record can follow an intervening contribution or another transfer, so it does not identify the deed buyer. A single-disposition co-sale with parcels later recorded to a company is only a lead to investigate those transfers. Exchanges move parcels in both directions and give no lead. Rebuilt by `python scripts/build_grand_cru_sale_records.py --cru grands-echezeaux`.
@@ -276,6 +332,25 @@ A successor is accepted when it first appears in the vintage right after the ret
 | 2015-09-15 | Sold, 1 disposition (128b5dd33f) | D 0094, D 0096, D 0500 | 7 | — |
 | 2023-11-21 | Sold, 1 disposition (9cfb02ce89) | D 0681 | 0 | — |
 | 2025-07-31 | Sold, 1 disposition (c6dfe8e486) | D 0682 | 0 | — |
+
+## Independent sale and notice coverage
+
+DFI validation dates do not extend the coverage of sales or notices. Original dates, references and scope stay with each record. Historical context never transfers rights, sale parties or farming.
+
+Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed regional deeds: ['2014-01-02', '2025-12-31']; observed commune deeds: ['2014-01-17', '2025-11-20']. [Full original-reference sale groups and paths](sale-records.json).
+
+| Deed date | Original references | Context on current references |
+| --- | --- | --- |
+
+Reviewed notice matches: 6; unreviewed search candidates: 0. Matched act dates: 2022-11-24 to 2026-04-07. [Original readings, areas, paths and unresolved references](notice-history.json).
+
+Department 21: published years located as early as 2004 and through 2026. Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}].
+
+- Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed
+- Departmental 2021–2026 publications outside the existing index
+- Regional publications before 2019 and any notice outside the indexed corpus
+
+Failed earlier PDF: [21 official bulletin](https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf). Remote end closed connection without response. These are coverage gaps, not absent notices.
 
 ## Source log
 

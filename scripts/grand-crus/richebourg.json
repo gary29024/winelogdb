@@ -1,0 +1,22 @@
+{
+  "slug": "richebourg",
+  "name": "Richebourg",
+  "parentFeatureId": "inao-denom-1083",
+  "appellationId": 221,
+  "issue": 379,
+  "tier": 1,
+  "bundle": "vosne-romanee",
+  "villageMaps": [
+    "vosne-romanee"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Richebourg (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "richebourg"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

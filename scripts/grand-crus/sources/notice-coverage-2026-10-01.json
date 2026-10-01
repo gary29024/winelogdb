@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-01",
+  "departments": {
+    "21": {
+      "earliestPublishedYearLocated": 2004,
+      "latestPublishedYearLocated": 2026,
+      "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+      "officialAvailabilityUrls": [
+        "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+        "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+        "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+      ],
+      "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+      "obtainedIndexRanges": [
+        {"corpus": "departmental-cote-dor", "publicationYears": [2016, 2017, 2018, 2019, 2020]},
+        {"corpus": "regional-bfc-cote-dor", "publicationYears": [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}
+      ],
+      "failedAcquisitionMetadata": [
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+      ],
+      "failedPublishedPdf": {
+        "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "status": "missing",
+        "reason": "Remote end closed connection without response",
+        "sourceId": "notices-21-earlier-pdf"
+      },
+      "unsearchedIntervals": [
+        "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+        "Departmental 2021–2026 publications outside the existing index",
+        "Regional publications before 2019 and any notice outside the indexed corpus"
+      ]
+    },
+    "89": {
+      "earliestPublishedYearLocated": 2008,
+      "latestPublishedYearLocated": 2026,
+      "availabilityStatus": "Earlier published records located; absolute earliest year unresolved because the archive listing is inaccessible",
+      "officialAvailabilityUrls": [
+        "https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs/RAA-2009",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs/RAA-2026"
+      ],
+      "availabilityEvidence": "The official publisher's 2008 bulletin and 2009 year page are discoverable. The main official listing shows 2017–2026 and its offset-five page shows 2012–2021. Earlier completeness cannot be established from search results.",
+      "obtainedIndexRanges": [],
+      "failedAcquisitionMetadata": [
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-89.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-89-2009.html.metadata.json"
+      ],
+      "failedPublishedPdf": {
+        "url": "https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf",
+        "status": "missing",
+        "reason": "Remote end closed connection without response",
+        "sourceId": "notices-89-earlier-pdf"
+      },
+      "additionalAccessFailures": [
+        {"client": "Windows curl HTTP/1.1", "reason": "Empty reply from server"},
+        {"client": "In-app browser", "reason": "ERR_HTTP2_PROTOCOL_ERROR"}
+      ],
+      "unsearchedIntervals": [
+        "All Yonne departmental notice publication years, including published 2008–2026 records",
+        "Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them",
+        "Before the earliest located 2008 publication; availability unresolved"
+      ]
+    }
+  },
+  "limitation": "Publication-year availability is assessed independently from rights, geometry and DFI validation dates. Access failures and unsearched intervals are unknown coverage, never evidence that no historical notice exists. PDF page-image review is required before a candidate becomes a parcel event."
+}

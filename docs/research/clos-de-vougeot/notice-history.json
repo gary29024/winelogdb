@@ -1,0 +1,1044 @@
+{
+ "schemaVersion": 1,
+ "parentFeatureId": "inao-denom-546",
+ "inputs": {
+  "parcelSnapshotSha256": "7f159994ad5bb0b169ab4a160f69a3787077e3c96bd8a205764719c8b9ebca3b",
+  "history": "docs/research/clos-de-vougeot/rights-history.json",
+  "indexes": [
+   {
+    "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+    "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+   },
+   {
+    "path": "docs/research/bfc-bulletins/notices.json",
+    "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+   },
+   {
+    "path": "docs/research/bfc-bulletins/coverage.json",
+    "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+    "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/index/notices.json",
+    "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+   },
+   {
+    "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+    "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+   },
+   {
+    "path": "docs/research/clos-de-vougeot/curation.json",
+    "sha256": "7bac206f73b3298cb74a55cf38c23a7cc63ef35b546dfef11640923ccb81e44b"
+   }
+  ]
+ },
+ "coverage": {
+  "indexes": [
+   {
+    "id": "regional-bfc-cote-dor",
+    "department": "21",
+    "publicationYearsIndexed": [
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025,
+     2026
+    ],
+    "summary": {
+     "bulletins": 1277,
+     "notScanned": 0,
+     "downloadFailed": 0,
+     "extractionIncomplete": 0,
+     "fullOcrNoContents": 1,
+     "failedPages": 0,
+     "withCoteDorNotices": 269,
+     "coteDorNotices": 1412,
+     "farmStructureNotices": 1120
+    },
+    "earlierAvailableYearsAudit": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    },
+    "unsearchedIntervals": [
+     "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+     "Departmental 2021–2026 publications outside the existing index",
+     "Regional publications before 2019 and any notice outside the indexed corpus"
+    ]
+   },
+   {
+    "id": "departmental-cote-dor",
+    "department": "21",
+    "publicationYearsIndexed": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020
+    ],
+    "summary": {
+     "documentReferences": 377,
+     "downloadedPDFs": 372,
+     "completePDFs": 372,
+     "indexedPages": 31966,
+     "pendingPages": 0,
+     "failedPages": 0,
+     "candidatePages": 1245,
+     "noticeOccurrences": 1795,
+     "farmStructureOccurrences": 130
+    },
+    "earlierAvailableYearsAudit": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    },
+    "unsearchedIntervals": [
+     "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+     "Departmental 2021–2026 publications outside the existing index",
+     "Regional publications before 2019 and any notice outside the indexed corpus"
+    ]
+   }
+  ],
+  "missingDepartmentIndexes": [],
+  "availabilityAudit": {
+   "path": "scripts/grand-crus/sources/notice-coverage-2026-10-01.json",
+   "sha256": "ae6ad9c539a83ba3ba112f0a8148be4785271d844ae97dae2ee19629e0c4c5ae",
+   "departments": {
+    "21": {
+     "earliestPublishedYearLocated": 2004,
+     "latestPublishedYearLocated": 2026,
+     "availabilityStatus": "Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible",
+     "officialAvailabilityUrls": [
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+      "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+      "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+     ],
+     "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+     "obtainedIndexRanges": [
+      {
+       "corpus": "departmental-cote-dor",
+       "publicationYears": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+       ]
+      },
+      {
+       "corpus": "regional-bfc-cote-dor",
+       "publicationYears": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+       ]
+      }
+     ],
+     "failedAcquisitionMetadata": [
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+      "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json"
+     ],
+     "failedPublishedPdf": {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+      "status": "missing",
+      "reason": "Remote end closed connection without response",
+      "sourceId": "notices-21-earlier-pdf"
+     },
+     "unsearchedIntervals": [
+      "Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed",
+      "Departmental 2021–2026 publications outside the existing index",
+      "Regional publications before 2019 and any notice outside the indexed corpus"
+     ]
+    }
+   }
+  },
+  "reachableReferencesQueried": [
+   "217160000A0001",
+   "217160000A0002",
+   "217160000A0003",
+   "217160000A0004",
+   "217160000A0005",
+   "217160000A0006",
+   "217160000A0007",
+   "217160000A0008",
+   "217160000A0009",
+   "217160000A0010",
+   "217160000A0011",
+   "217160000A0012",
+   "217160000A0013",
+   "217160000A0014",
+   "217160000A0015",
+   "217160000A0016",
+   "217160000A0017",
+   "217160000A0018",
+   "217160000A0019",
+   "217160000A0020",
+   "217160000A0021",
+   "217160000A0022",
+   "217160000A0023",
+   "217160000A0024",
+   "217160000A0025",
+   "217160000A0026",
+   "217160000A0029",
+   "217160000A0030",
+   "217160000A0031",
+   "217160000A0032",
+   "217160000A0033",
+   "217160000A0034",
+   "217160000A0035",
+   "217160000A0036",
+   "217160000A0037",
+   "217160000A0038",
+   "217160000A0039",
+   "217160000A0040",
+   "217160000A0041",
+   "217160000A0042",
+   "217160000A0043",
+   "217160000A0045",
+   "217160000A0046",
+   "217160000A0047",
+   "217160000A0048",
+   "217160000A0049",
+   "217160000A0050",
+   "217160000A0051",
+   "217160000A0052",
+   "217160000A0053",
+   "217160000A0054",
+   "217160000A0055",
+   "217160000A0060",
+   "217160000A0061",
+   "217160000A0062",
+   "217160000A0063",
+   "217160000A0064",
+   "217160000A0065",
+   "217160000A0066",
+   "217160000A0067",
+   "217160000A0068",
+   "217160000A0069",
+   "217160000A0070",
+   "217160000A0071",
+   "217160000A0072",
+   "217160000A0073",
+   "217160000A0074",
+   "217160000A0075",
+   "217160000A0076",
+   "217160000A0239",
+   "217160000A0241",
+   "217160000A0242",
+   "217160000A0243",
+   "217160000A0244",
+   "217160000A0246",
+   "217160000A0252",
+   "217160000A0253",
+   "217160000A0254",
+   "217160000A0255",
+   "217160000A0256",
+   "217160000A0257",
+   "217160000A0261",
+   "217160000A0262",
+   "217160000A0264",
+   "217160000A0265",
+   "217160000A0266",
+   "217160000A0268",
+   "217160000A0269",
+   "217160000A0272",
+   "217160000A0273",
+   "217160000A0274",
+   "217160000A0275",
+   "217160000A0280",
+   "217160000A0281",
+   "217160000A0282",
+   "217160000A0320",
+   "217160000A0329",
+   "217160000A0330",
+   "217160000A0350",
+   "217160000A0351",
+   "217160000A0372",
+   "217160000A0373",
+   "217160000A0374",
+   "217160000A0375",
+   "217160000A0376",
+   "217160000A0378",
+   "217160000A0379",
+   "217160000A0380",
+   "217160000A0381",
+   "217160000A0383",
+   "217160000A0384",
+   "217160000A0389",
+   "217160000A0390",
+   "217160000A0391",
+   "217160000A0392",
+   "217160000A0393",
+   "217160000A0400",
+   "217160000A0401",
+   "217160000A0402",
+   "217160000A0403",
+   "217160000A0404",
+   "217160000A0406",
+   "217160000A0407",
+   "217160000A0408",
+   "217160000A0409",
+   "217160000A0410",
+   "217160000A0411",
+   "217160000A0412",
+   "217160000A0413",
+   "217160000A0421",
+   "217160000A0422",
+   "217160000A0423",
+   "217160000A0424",
+   "217160000A0430",
+   "217160000A0431",
+   "217160000A0432",
+   "217160000A0433",
+   "217160000A0434",
+   "217160000A0435",
+   "217160000A0436",
+   "217160000A0437",
+   "217160000A0438",
+   "217160000A0439",
+   "217160000A0440",
+   "217160000A0441",
+   "217160000A0458",
+   "217160000A0459",
+   "217160000A0460",
+   "217160000A0461",
+   "217160000A0462",
+   "217160000A0463",
+   "217160000A0464",
+   "217160000A0465",
+   "217160000A0466",
+   "217160000A0467",
+   "217160000A0468",
+   "217160000A0469",
+   "217160000A0506",
+   "217160000A0507",
+   "217160000A0508",
+   "217160000A0509",
+   "217160000A0510",
+   "217160000A0511",
+   "217160000A0516",
+   "217160000A0517",
+   "217160000A0521",
+   "217160000A0522",
+   "217160000A0523",
+   "217160000A0524",
+   "217160000A0529",
+   "217160000A0530",
+   "217160000A0531",
+   "217160000A0532",
+   "217160000A0533",
+   "217160000A0534",
+   "217160000A0535",
+   "217160000A0536",
+   "217160000A0537",
+   "217160000A0538",
+   "217160000A0539",
+   "217160000A0542",
+   "217160000A0543",
+   "217160000A0548",
+   "217160000A0549",
+   "217160000A0557",
+   "217160000A0558",
+   "217160000A0562",
+   "217160000A0563",
+   "217160000A0564",
+   "217160000A0565",
+   "217160000A0566",
+   "217160000A0567",
+   "217160000A0568",
+   "217160000A0569",
+   "217160000A0570",
+   "217160000A0577",
+   "217160000A0578",
+   "217160000A0579",
+   "217160000A0580",
+   "217160000A0581",
+   "217160000A0582"
+  ],
+  "reviewedMatches": 7,
+  "unreviewedSearchCandidates": 2,
+  "earliestMatchedActDate": "2022-06-30",
+  "latestMatchedActDate": "2026-04-07",
+  "limitation": "Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event."
+ },
+ "reviewedMatches": [
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0523",
+    "printedReference": null,
+    "noticeId": "af-gros-2022",
+    "documentDate": "2022-06-30",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0523",
+      "217160000A0524"
+     ],
+     "sourceId": "af-gros-2022",
+     "kind": "historical-application",
+     "applicant": "SAS Domaine AF Gros",
+     "previousOperator": "Domaine Gros Frère et Sœur",
+     "documentDate": "2022-06-30",
+     "outcome": "unconfirmed",
+     "currentFarmer": null,
+     "summary": "Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed.",
+     "appNote": "Receipt of an application, not permission to cultivate. Completion date is blank; outcome and actual operation remain unconfirmed."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2022-06-30",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0523"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0523"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "af-gros-2022",
+    "title": "AF Gros application receipt, dossier 2022-113",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88",
+    "type": "government-event",
+    "documentDate": "2022-06-30",
+    "reviewedAt": "2026-10-01",
+    "sha256": "c35cf08a3a0aae4a10ef29356b4b599b94ea0d1fb8ddfb9c23d7af88826df392",
+    "reviewedPages": [
+     88
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The page names Vougeot A523 and A524, and Flagey D181 and D775 separately. The receipt does not authorise cultivation; its completion-date field is blank."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0523",
+     "217160000A0524"
+    ],
+    "sourceId": "af-gros-2022",
+    "kind": "historical-application",
+    "applicant": "SAS Domaine AF Gros",
+    "previousOperator": "Domaine Gros Frère et Sœur",
+    "documentDate": "2022-06-30",
+    "outcome": "unconfirmed",
+    "currentFarmer": null,
+    "summary": "Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed.",
+    "appNote": "Receipt of an application, not permission to cultivate. Completion date is blank; outcome and actual operation remain unconfirmed."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0524",
+    "printedReference": null,
+    "noticeId": "af-gros-2022",
+    "documentDate": "2022-06-30",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0523",
+      "217160000A0524"
+     ],
+     "sourceId": "af-gros-2022",
+     "kind": "historical-application",
+     "applicant": "SAS Domaine AF Gros",
+     "previousOperator": "Domaine Gros Frère et Sœur",
+     "documentDate": "2022-06-30",
+     "outcome": "unconfirmed",
+     "currentFarmer": null,
+     "summary": "Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed.",
+     "appNote": "Receipt of an application, not permission to cultivate. Completion date is blank; outcome and actual operation remain unconfirmed."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2022-06-30",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0524"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0524"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "af-gros-2022",
+    "title": "AF Gros application receipt, dossier 2022-113",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88",
+    "type": "government-event",
+    "documentDate": "2022-06-30",
+    "reviewedAt": "2026-10-01",
+    "sha256": "c35cf08a3a0aae4a10ef29356b4b599b94ea0d1fb8ddfb9c23d7af88826df392",
+    "reviewedPages": [
+     88
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The page names Vougeot A523 and A524, and Flagey D181 and D775 separately. The receipt does not authorise cultivation; its completion-date field is blank."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0523",
+     "217160000A0524"
+    ],
+    "sourceId": "af-gros-2022",
+    "kind": "historical-application",
+    "applicant": "SAS Domaine AF Gros",
+    "previousOperator": "Domaine Gros Frère et Sœur",
+    "documentDate": "2022-06-30",
+    "outcome": "unconfirmed",
+    "currentFarmer": null,
+    "summary": "Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed.",
+    "appNote": "Receipt of an application, not permission to cultivate. Completion date is blank; outcome and actual operation remain unconfirmed."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0037",
+    "printedReference": null,
+    "noticeId": "lambrays-2023",
+    "documentDate": "2023-09-08",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0037"
+     ],
+     "sourceId": "lambrays-2023",
+     "kind": "historical-application",
+     "applicant": "Société du Domaine des Lambrays",
+     "previousOperator": "Guyon Jean Pierre",
+     "documentDate": "2023-09-08",
+     "outcome": "unconfirmed",
+     "currentFarmer": null,
+     "summary": "Dossier 2023-157: Vougeot A37, 0.3129 ha; complete 21 August 2023. The receipt expressly does not authorise cultivation.",
+     "appNote": "Application complete 21 August 2023, for Vougeot A0037. Receipt is not an authorisation; actual operation unconfirmed."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2023-09-08",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0037"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0037"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "lambrays-2023",
+    "title": "Lambrays application receipt, dossier 2023-157",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/112806/844449/file/recueil-bfc-2024-008-recueil-des-actes-administratifs-nominatifs.pdf#page=83",
+    "type": "government-event",
+    "documentDate": "2023-09-08",
+    "reviewedAt": "2026-10-01",
+    "sha256": "abdd9c6666807bc0a11b30bdcb34d817aced10ace6f8bff7b8ae86e5b61aab8c",
+    "reviewedPages": [
+     83
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The page names Vougeot A37, 0.3129 ha, and previous operator GUYON Jean Pierre. Application complete 21 August 2023; receipt alone does not authorise cultivation."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0037"
+    ],
+    "sourceId": "lambrays-2023",
+    "kind": "historical-application",
+    "applicant": "Société du Domaine des Lambrays",
+    "previousOperator": "Guyon Jean Pierre",
+    "documentDate": "2023-09-08",
+    "outcome": "unconfirmed",
+    "currentFarmer": null,
+    "summary": "Dossier 2023-157: Vougeot A37, 0.3129 ha; complete 21 August 2023. The receipt expressly does not authorise cultivation.",
+    "appNote": "Application complete 21 August 2023, for Vougeot A0037. Receipt is not an authorisation; actual operation unconfirmed."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0440",
+    "printedReference": null,
+    "noticeId": "eugenie-2024",
+    "documentDate": "2024-11-14",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0440"
+     ],
+     "sourceId": "eugenie-2024",
+     "kind": "historical-application",
+     "applicant": "Domaine Eugénie",
+     "previousOperator": "Maison Bouchard Père et Fils",
+     "documentDate": "2024-11-14",
+     "outcome": "unconfirmed",
+     "currentFarmer": null,
+     "summary": "Dossier 2024-161: 0.2294 ha; complete 25 October 2024; the annex explicitly assigns A440 to Vougeot. No later decision is established.",
+     "appNote": "Application complete 25 October 2024. The annex names Vougeot A0440; outcome and actual operation unconfirmed."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2024-11-14",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0440"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0440"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "eugenie-2024",
+    "title": "Domaine Eugénie application receipt, dossier 2024-161",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/126138/932304/file/recueil-bfc-2025-044-recueil-des-actes-administratifs-nominatifs.pdf#page=22",
+    "type": "government-event",
+    "documentDate": "2024-11-14",
+    "reviewedAt": "2026-10-01",
+    "sha256": "49c8010f9cdd7c2c599c5e519889761502714fe7c1f1c963f29e5934cbce09c6",
+    "reviewedPages": [
+     22,
+     23
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The annex names Vougeot A440. Application complete 25 October 2024 for 0.2294 ha; previous operator MAISON BOUCHARD PERE ET FILS. No later outcome is established."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0440"
+    ],
+    "sourceId": "eugenie-2024",
+    "kind": "historical-application",
+    "applicant": "Domaine Eugénie",
+    "previousOperator": "Maison Bouchard Père et Fils",
+    "documentDate": "2024-11-14",
+    "outcome": "unconfirmed",
+    "currentFarmer": null,
+    "summary": "Dossier 2024-161: 0.2294 ha; complete 25 October 2024; the annex explicitly assigns A440 to Vougeot. No later decision is established.",
+    "appNote": "Application complete 25 October 2024. The annex names Vougeot A0440; outcome and actual operation unconfirmed."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0001",
+    "printedReference": null,
+    "noticeId": "liger-belair-2026",
+    "documentDate": "2026-04-07",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0001",
+      "217160000A0030",
+      "217160000A0031"
+     ],
+     "sourceId": "liger-belair-2026",
+     "kind": "suspended-application",
+     "applicant": "SCEA Domaine du Comte Liger-Belair",
+     "previousOperator": null,
+     "documentDate": "2026-04-07",
+     "outcome": "suspended",
+     "currentFarmer": null,
+     "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+     "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2026-04-07",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0001"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0001"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "liger-belair-2026",
+    "title": "Comte Liger-Belair application suspension, order 2026-739",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+    "type": "government-event",
+    "documentDate": "2026-04-07",
+    "reviewedAt": "2026-10-01",
+    "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+    "reviewedPages": [
+     28,
+     29,
+     30
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0001",
+     "217160000A0030",
+     "217160000A0031"
+    ],
+    "sourceId": "liger-belair-2026",
+    "kind": "suspended-application",
+    "applicant": "SCEA Domaine du Comte Liger-Belair",
+    "previousOperator": null,
+    "documentDate": "2026-04-07",
+    "outcome": "suspended",
+    "currentFarmer": null,
+    "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+    "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0030",
+    "printedReference": null,
+    "noticeId": "liger-belair-2026",
+    "documentDate": "2026-04-07",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0001",
+      "217160000A0030",
+      "217160000A0031"
+     ],
+     "sourceId": "liger-belair-2026",
+     "kind": "suspended-application",
+     "applicant": "SCEA Domaine du Comte Liger-Belair",
+     "previousOperator": null,
+     "documentDate": "2026-04-07",
+     "outcome": "suspended",
+     "currentFarmer": null,
+     "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+     "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2026-04-07",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0030"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0030"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "liger-belair-2026",
+    "title": "Comte Liger-Belair application suspension, order 2026-739",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+    "type": "government-event",
+    "documentDate": "2026-04-07",
+    "reviewedAt": "2026-10-01",
+    "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+    "reviewedPages": [
+     28,
+     29,
+     30
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0001",
+     "217160000A0030",
+     "217160000A0031"
+    ],
+    "sourceId": "liger-belair-2026",
+    "kind": "suspended-application",
+    "applicant": "SCEA Domaine du Comte Liger-Belair",
+    "previousOperator": null,
+    "documentDate": "2026-04-07",
+    "outcome": "suspended",
+    "currentFarmer": null,
+    "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+    "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+   }
+  },
+  {
+   "originalRecord": {
+    "communeCode": "21716",
+    "reference": "A0031",
+    "printedReference": null,
+    "noticeId": "liger-belair-2026",
+    "documentDate": "2026-04-07",
+    "curationEvent": {
+     "parcelIds": [
+      "217160000A0001",
+      "217160000A0030",
+      "217160000A0031"
+     ],
+     "sourceId": "liger-belair-2026",
+     "kind": "suspended-application",
+     "applicant": "SCEA Domaine du Comte Liger-Belair",
+     "previousOperator": null,
+     "documentDate": "2026-04-07",
+     "outcome": "suspended",
+     "currentFarmer": null,
+     "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+     "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+    },
+    "referenceBasis": "curation-exact-reference-reading"
+   },
+   "originalDate": "2026-04-07",
+   "dateRole": "notice-act-date",
+   "originalPrintedReference": null,
+   "matchedReferenceIds": [
+    "217160000A0031"
+   ],
+   "sectionPrefixPrinted": false,
+   "referenceMatch": "unique-reachable-reference",
+   "directCurrentParcelIds": [
+    "217160000A0031"
+   ],
+   "contextPaths": [],
+   "currentFarmer": null,
+   "limitation": "A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.",
+   "indexId": "cru-reviewed-notice-curation",
+   "source": {
+    "id": "liger-belair-2026",
+    "title": "Comte Liger-Belair application suspension, order 2026-739",
+    "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+    "type": "government-event",
+    "documentDate": "2026-04-07",
+    "reviewedAt": "2026-10-01",
+    "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+    "reviewedPages": [
+     28,
+     29,
+     30
+    ],
+    "reviewMethod": "page-image",
+    "access": "read",
+    "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+   },
+   "originalNoticeMetadata": {
+    "parcelIds": [
+     "217160000A0001",
+     "217160000A0030",
+     "217160000A0031"
+    ],
+    "sourceId": "liger-belair-2026",
+    "kind": "suspended-application",
+    "applicant": "SCEA Domaine du Comte Liger-Belair",
+    "previousOperator": null,
+    "documentDate": "2026-04-07",
+    "outcome": "suspended",
+    "currentFarmer": null,
+    "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+    "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+   }
+  }
+ ],
+ "unreviewedCandidates": [
+  {
+   "indexId": "regional-bfc-cote-dor",
+   "noticeId": "bfc-2022-143:p87",
+   "matchedReferenceIds": [
+    "217160000A0523",
+    "217160000A0524"
+   ],
+   "printedOcrHints": [
+    "A523",
+    "A524"
+   ],
+   "notice": {
+    "id": "bfc-2022-143:p87",
+    "bulletin": "bfc-2022-143",
+    "firstPage": 87,
+    "lastPage": 89,
+    "section": "Direction départementale des territoires de la Côte-d'Or / Service Économie Agricole et Environnement des Exploitations",
+    "title": "BFC-2022-06-30-00012 - SAS DOMAINE AF GROS",
+    "actId": "BFC-2022-06-30-00012",
+    "actDate": "2022-06-30",
+    "applicant": "SAS DOMAINE AF GROS",
+    "titleKind": "other",
+    "farmStructures": true,
+    "failedPages": [],
+    "communesMentioned": [
+     "21231",
+     "21492",
+     "21716"
+    ],
+    "referenceHints": [
+     "A523",
+     "A524"
+    ]
+   },
+   "reviewStatus": "unreviewed-search-candidate",
+   "assignment": "unassigned",
+   "limitation": "OCR may contain addresses or misread references. A page-image review is required before any parcel event is published."
+  },
+  {
+   "indexId": "regional-bfc-cote-dor",
+   "noticeId": "bfc-2024-008:p82",
+   "matchedReferenceIds": [
+    "217160000A0037"
+   ],
+   "printedOcrHints": [
+    "A37"
+   ],
+   "notice": {
+    "id": "bfc-2024-008:p82",
+    "bulletin": "bfc-2024-008",
+    "firstPage": 82,
+    "lastPage": 84,
+    "section": "Direction départementale des territoires de la Côte-d'Or / Structures des exploitations agricoles",
+    "title": "BFC-2023-09-08-00002 - ARC SOCIETE DU DOMAINE DES LAMBRAYS",
+    "actId": "BFC-2023-09-08-00002",
+    "actDate": "2023-09-08",
+    "applicant": "SOCIETE DU DOMAINE DES LAMBRAYS",
+    "titleKind": "receipt-complete-application",
+    "farmStructures": true,
+    "failedPages": [],
+    "communesMentioned": [
+     "21231",
+     "21442",
+     "21716"
+    ],
+    "referenceHints": [
+     "A37"
+    ]
+   },
+   "reviewStatus": "unreviewed-search-candidate",
+   "assignment": "unassigned",
+   "limitation": "OCR may contain addresses or misread references. A page-image review is required before any parcel event is published."
+  }
+ ],
+ "unassignedReviewedReferences": []
+}

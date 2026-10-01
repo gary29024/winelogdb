@@ -1,0 +1,173 @@
+"""Query reviewed notices and unreviewed indexes with every reachable reference.
+
+  python scripts/build_grand_cru_notice_history.py --cru echezeaux
+  python scripts/build_grand_cru_notice_history.py --cru echezeaux --check
+
+Reviewed printed references retain their original date, scope and source. OCR
+hints are review candidates, never parcel events or proof of operation. Côte-d'Or
+indexes are not applied to Yonne. Earlier unsearched intervals remain explicit.
+"""
+import argparse
+import json
+import re
+
+from grand_cru import (ROOT, communes, load_cru, read_json, relative, require, research_path,
+                       sha256, write_or_check)
+from grand_cru_filiation import historical_evidence_paths
+
+INDEXES = [
+    {'id': 'regional-bfc-cote-dor', 'department': '21', 'publicationYears': list(range(2019, 2027)),
+     'directory': 'docs/research/bfc-bulletins', 'index': 'notices.json', 'coverage': 'coverage.json'},
+    {'id': 'departmental-cote-dor', 'department': '21', 'publicationYears': list(range(2016, 2021)),
+     'directory': 'docs/research/cote-dor-bulletins', 'index': 'index/notices.json', 'coverage': 'index/coverage.json'},
+]
+
+# Article 2 names four communes collectively, without assigning its individual
+# rows. The earlier index used holder context for section D; preserve that reading
+# as unassigned context rather than treating it as a printed commune assignment.
+AMBIGUOUS_COMMUNE_NOTICES = {'bfc-2022-084:p171', 'bfc-2022-154:p19'}
+
+
+def normalized_reference(value):
+    if not isinstance(value, str):
+        return None
+    match = re.fullmatch(r'\s*([A-Z]{1,2})\s*0*([0-9]{1,4})\s*', value.upper())
+    return match[1].zfill(2) + match[2].zfill(4) if match else None
+
+
+def match_printed_reference(commune, printed, reachable):
+    """A notice does not print a section prefix: retain ambiguity rather than guess 000."""
+    normalized = normalized_reference(printed)
+    if not normalized or not commune:
+        return []
+    return sorted(p for p in reachable if p[:5] == commune and p[-6:] == normalized)
+
+
+def query_reviewed(record, reachable, current_ids, ancestry, events):
+    matched = match_printed_reference(record.get('communeCode'), record['reference'], reachable)
+    if not matched:
+        return None
+    paths = [p for reference in matched for p in historical_evidence_paths(
+        ancestry, events, reference, record['documentDate'])]
+    ambiguous = len(matched) != 1
+    commune_unassigned = record.get('noticeId') in AMBIGUOUS_COMMUNE_NOTICES
+    for path in paths:
+        path['qualifications'] = sorted(set(path['qualifications'] + ['section-prefix-not-printed']))
+        if ambiguous:
+            path['assignment'] = 'unassigned-context'
+            path['qualifications'] = sorted(set(path['qualifications'] + ['section-prefix-not-resolved']))
+        if record.get('areaHa') is not None:
+            path['assignment'] = 'unassigned-context'
+            path['qualifications'] = sorted(set(path['qualifications'] + ['notice-area-scope-not-located-on-current-parcel']))
+        if commune_unassigned:
+            path['assignment'] = 'unassigned-context'
+            path['qualifications'] = sorted(set(path['qualifications'] + ['printed-row-commune-not-assigned']))
+    return {'originalRecord': record, 'originalDate': record['documentDate'], 'dateRole': 'notice-act-date',
+            'originalPrintedReference': record['printedReference'], 'matchedReferenceIds': matched,
+            'sectionPrefixPrinted': False, 'referenceMatch': 'printed-row-commune-not-assigned' if commune_unassigned else
+             'ambiguous-prefix' if ambiguous else 'unique-reachable-reference',
+            'directCurrentParcelIds': sorted(set(matched) & current_ids) if not ambiguous and not commune_unassigned else [],
+            'contextPaths': paths, 'currentFarmer': None,
+            'limitation': 'A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.'}
+
+
+def build(cru, bundle, history):
+    require(history['parentFeatureId'] == cru['parentFeatureId'], 'History belongs to another cru')
+    current = {r['parcelId'] for r in history['parcels']}
+    cru_communes = {p[:5] for p in current}
+    ancestry = [r['documentedAncestry'] for r in history['parcels'] if 'documentedAncestry' in r]
+    reachable = current | {p for row in ancestry for p in row['ancestorIds']}
+    events = history.get('documentedEvents', [])
+    selected = [index for index in INDEXES if any(c.startswith(index['department']) for c in cru_communes)]
+    availability_path = ROOT / 'scripts/grand-crus/sources/notice-coverage-2026-10-01.json'
+    availability = read_json(availability_path)
+    reviewed, candidates, unresolved, inputs, index_coverage = [], [], [], [], []
+    for config in selected:
+        directory = ROOT / config['directory']
+        reviewed_data, notices, coverage = (read_json(directory / 'reviewed-parcels.json'),
+                                           read_json(directory / config['index']), read_json(directory / config['coverage']))
+        by_notice = {n['id']: n for n in notices['notices']}
+        source_metadata = {s['noticeId']: s for s in reviewed_data.get('sources', [])}
+        if 'bulletins' in coverage:
+            bulletins = {b['bulletin']: b for b in coverage['bulletins']}
+        else:
+            bulletins = {}
+        for name in ['reviewed-parcels.json', config['index'], config['coverage']]:
+            data = (directory / name).read_bytes().replace(b'\r\n', b'\n')
+            inputs.append({'path': relative(directory / name), 'sha256': sha256(data)})
+        for record in reviewed_data['parcels']:
+            match = query_reviewed(record, reachable, current, ancestry, events)
+            if match is None:
+                if record.get('communeCode') in cru_communes:
+                    unresolved.append({'originalRecord': record, 'indexId': config['id'],
+                                       'reason': 'unresolved-printed-reference' if normalized_reference(record.get('reference')) is None
+                                                 else 'outside-reachable-reference-set', 'assignment': 'unassigned'})
+                continue
+            notice = by_notice.get(record['noticeId'], {})
+            source = source_metadata.get(record['noticeId'])
+            if source is None and notice.get('bulletin') in bulletins:
+                source = bulletins[notice['bulletin']]
+            reviewed.append({**match, 'indexId': config['id'], 'source': source,
+                             'originalNoticeMetadata': source_metadata.get(record['noticeId'], notice)})
+        for notice in notices['notices']:
+            if not notice.get('farmStructures') or not set(notice['communesMentioned']) & {p[:5] for p in reachable}:
+                continue
+            hints = {normalized_reference(h) for h in notice['referenceHints']} - {None}
+            matched = sorted(p for p in reachable if p[:5] in notice['communesMentioned'] and p[-6:] in hints)
+            if matched:
+                candidates.append({'indexId': config['id'], 'noticeId': notice['id'], 'matchedReferenceIds': matched,
+                                   'printedOcrHints': notice['referenceHints'], 'notice': notice,
+                                   'reviewStatus': 'unreviewed-search-candidate', 'assignment': 'unassigned',
+                                   'limitation': 'OCR may contain addresses or misread references. A page-image review is required before any parcel event is published.'})
+        index_coverage.append({'id': config['id'], 'department': config['department'],
+                               'publicationYearsIndexed': config['publicationYears'], 'summary': coverage['summary'],
+                               'earlierAvailableYearsAudit': availability['departments'][config['department']],
+                               'unsearchedIntervals': availability['departments'][config['department']]['unsearchedIntervals']})
+    missing_departments = sorted({c[:2] for c in cru_communes} - {i['department'] for i in selected})
+    curation_path = research_path(cru, 'curation.json')
+    if curation_path.exists():
+        curation = read_json(curation_path)
+        source_map = {s['id']: s for s in curation['sources']}
+        inputs.append({'path': relative(curation_path), 'sha256': sha256(curation_path.read_bytes().replace(b'\r\n', b'\n'))})
+        for event in curation['exactParcelEvents']:
+            source = source_map[event['sourceId']]
+            if not source['type'].startswith('government'):
+                continue
+            original_references = [*event['parcelIds'], *event.get('predecessorReferences', {})]
+            for reference in original_references:
+                record = {'communeCode': reference[:5], 'reference': reference[-6:].lstrip('0'),
+                          'printedReference': None, 'noticeId': event['sourceId'], 'documentDate': event['documentDate'],
+                          'curationEvent': event, 'referenceBasis': 'curation-exact-reference-reading'}
+                match = query_reviewed(record, reachable, current, ancestry, events)
+                if match:
+                    reviewed.append({**match, 'indexId': 'cru-reviewed-notice-curation', 'source': source,
+                                     'originalNoticeMetadata': event})
+    return {'schemaVersion': 1, 'parentFeatureId': cru['parentFeatureId'],
+            'inputs': {'parcelSnapshotSha256': history['inputs']['parcelSnapshotSha256'],
+                       'history': relative(research_path(cru, 'rights-history.json')), 'indexes': inputs},
+            'coverage': {'indexes': index_coverage, 'missingDepartmentIndexes': missing_departments,
+                         'availabilityAudit': {'path': relative(availability_path),
+                                               'sha256': sha256(availability_path.read_bytes().replace(b'\r\n', b'\n')),
+                                               'departments': {d: availability['departments'][d] for d in sorted({c[:2] for c in cru_communes})}},
+                         'reachableReferencesQueried': sorted(reachable),
+                         'reviewedMatches': len(reviewed), 'unreviewedSearchCandidates': len(candidates),
+                         'earliestMatchedActDate': min((r['originalDate'] for r in reviewed), default=None),
+                         'latestMatchedActDate': max((r['originalDate'] for r in reviewed), default=None),
+                         'limitation': 'Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event.'},
+            'reviewedMatches': reviewed, 'unreviewedCandidates': candidates, 'unassignedReviewedReferences': unresolved}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--cru', required=True)
+    parser.add_argument('--check', action='store_true')
+    args = parser.parse_args()
+    cru, bundle = load_cru(args.cru)
+    history = read_json(research_path(cru, 'rights-history.json'))
+    result = build(cru, bundle, history)
+    write_or_check(research_path(cru, 'notice-history.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+    print(json.dumps({k: result['coverage'][k] for k in ['reviewedMatches', 'unreviewedSearchCandidates', 'missingDepartmentIndexes']}))
+
+
+if __name__ == '__main__':
+    main()
