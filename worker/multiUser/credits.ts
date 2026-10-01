@@ -1,6 +1,6 @@
 import { wineRowResearchTargets,loadWineResearchCache,loadResearchCache,type ResearchScope } from '../../src/lib/research/cache';
 import { readableWine,researchWine,withSourceResearch } from '../../src/lib/research/readableWine';
-import { unresearchedProducers } from '../../src/lib/producers/researchCampaign';
+import { cancelCampaign,unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import { producerSubjectKey,reusableProducer } from '../../src/lib/research/sharedProducer';
 import { sharedSubjectKeys } from '../../src/lib/research/shared';
 import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
@@ -430,6 +430,38 @@ export async function reconcileOperation(db:D1Database,op:CreditOperation){
  }
  if(terminal)await settle(db,op,captured,undefined,successfulUnits>0);
  else if(Date.parse(op.created_at)<Date.now()-48*3600_000)await db.prepare("UPDATE credit_operations SET status='review',updated_at=? WHERE id=? AND status IN ('reserved','running')").bind(stamp(),op.id).run();
+}
+/**
+ * The owner's explicit release of an operation held because its provider
+ * outcome could not be confirmed. It closes the hold as failed, keeps any
+ * research that was saved and charges only for that, and stops a held producer
+ * batch from continuing. Provider receipts are kept for investigation; a late
+ * reply is still recorded but no longer holds anything.
+ */
+export async function releaseHeldOperation(db:D1Database,operationId:string){
+ const op=await db.prepare("SELECT * FROM credit_operations WHERE id=? AND status='review'").bind(operationId).first<CreditOperation>();
+ if(!op)throw new ApiError(409,'This operation is no longer held');
+ const message='Released by the owner after an unconfirmed provider outcome. Any saved research is kept.';
+ const units=JSON.parse(op.units_json) as CreditUnit[];let captured=0,successfulUnits=0;
+ if(op.path.endsWith('/deep-search')){
+  for(const unit of await validatedWineUnits(db,op)){captured+=unit.credits;successfulUnits++}
+  if(op.run_id)await db.batch([
+   db.prepare("UPDATE research_batch_jobs SET status='failed',error=coalesce(error,?),updated_at=? WHERE owner_id=? AND request_id=? AND status='running'").bind(message,stamp(),op.user_id,op.run_id),
+   db.prepare("UPDATE wine_research_runs SET status='failed',stage='failed',message=coalesce(message,'')||?,updated_at=?,completed_at=? WHERE owner_id=? AND request_id=? AND status<>'complete'").bind(` · ${message}`,stamp(),stamp(),op.user_id,op.run_id)
+  ]);
+ }else if(op.path==='/api/producers/research-batch'&&op.run_id){
+  await cancelCampaign(db,op.user_id,op.run_id);
+  await db.prepare("UPDATE producer_research_campaign_items SET status='failed',message=?,updated_at=? WHERE campaign_id=? AND status='running'").bind(message,stamp(),op.run_id).run();
+  const rows=await db.prepare("SELECT producer_id FROM producer_research_campaign_items WHERE campaign_id=? AND status='complete'").bind(op.run_id).all<{producer_id:string}>();
+  const done=new Set(rows.results.map(row=>row.producer_id));
+  for(const unit of units)if(unit.targetId&&done.has(unit.targetId)){captured+=unit.credits;successfulUnits++}
+ }else if(/^\/api\/producers\/[^/]+\/research$/.test(op.path)&&op.run_id){
+  const run=await db.prepare('SELECT status FROM producer_research_runs WHERE owner_id=? AND request_id=?').bind(op.user_id,op.run_id).first<{status:string}>();
+  if(run?.status==='complete'){captured=op.reserved;successfulUnits=1}
+  else await db.prepare("UPDATE producer_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=? WHERE owner_id=? AND request_id=? AND status='running'").bind(message,stamp(),stamp(),op.user_id,op.run_id).run();
+ }
+ await settle(db,op,captured,{body:{status:'failed',outcome:'released',error:message,supportId:op.run_id??op.id},status:409},successfulUnits>0);
+ return {released:true,captured};
 }
 export async function creditRead(request:Request,env:CreditEnv,member:Member):Promise<Response|null>{
  const path=new URL(request.url).pathname;if(request.method!=='GET')return null;

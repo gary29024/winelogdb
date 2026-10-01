@@ -12,7 +12,7 @@ import worker from '../../worker/multiUserEntry';
 import { loadResearchCache,buildResearchTargets } from '../../src/lib/research/cache';
 import { durableProvider,providerNeedsReconciliation } from '../../src/lib/credits/provider';
 import { configureGeminiBatchGateway,clearGeminiBatchGateway,ResearchPersistenceError } from '../../src/lib/research/geminiBatch';
-import { quote,reserve,reconcileOperation,plannedUnits,type CreditOperation } from '../../worker/multiUser/credits';
+import { quote,reserve,reconcileOperation,plannedUnits,releaseHeldOperation,type CreditOperation } from '../../worker/multiUser/credits';
 import { maintainOperation } from '../../worker/multiUser/jobs';
 import { stamp,type Member } from '../../worker/multiUser/common';
 
@@ -222,6 +222,27 @@ describe('independent producer holds in one batch',()=>{
   expect(receipts).toEqual(expect.arrayContaining([{namespace:`queue:producer:${producerId}`,state:'uncertain'},{namespace:`queue:producer:${second}`,state:'saved'}]));
   expect(fetcher).toHaveBeenCalledTimes(3);
   expect(database.sql.prepare('SELECT count(*) AS n FROM research_batch_jobs').get()!.n).toBe(2);
+ });
+ it('lets the owner release a held batch: saved work is charged, the rest stops and can run again',async()=>{
+  const second=(await ensureProducerEntity(database.db,'owner','Other Estate')).id;
+  database.sql.prepare('UPDATE producers SET home_country=? WHERE id=?').run('France',second);
+  const op=await operation(producerRequest('/api/producers/research-batch',{limit:25}));
+  const campaign=await createCampaign(researchEnv(),'owner',await unresearchedProducers(database.db,'owner',25));
+  database.sql.prepare("UPDATE credit_operations SET run_id=?,status='review' WHERE id=?").run(campaign,op.id);
+  database.sql.prepare("UPDATE producer_research_campaign_items SET status=CASE producer_id WHEN ? THEN 'complete' ELSE 'running' END WHERE campaign_id=?").run(second,campaign);
+  await expect(durableProvider({db:database.db,operationId:op.id,namespace:`queue:producer:${producerId}`},'first',async()=>{throw new Error('Connection lost')})).rejects.toThrow();
+  await expect(operation(producerRequest('/api/producers/research-batch',{limit:25}))).rejects.toMatchObject({status:409});
+  const result=await releaseHeldOperation(database.db,op.id);
+  const units=JSON.parse(String(database.sql.prepare('SELECT units_json FROM credit_operations WHERE id=?').get(op.id)!.units_json)) as {targetId:string;credits:number}[];
+  expect(result.captured).toBe(units.filter(unit=>unit.targetId===second).reduce((sum,unit)=>sum+unit.credits,0));
+  expect(database.sql.prepare('SELECT status FROM credit_operations WHERE id=?').get(op.id)!.status).toBe('complete');
+  expect(database.sql.prepare('SELECT status FROM producer_research_campaigns WHERE id=?').get(campaign)!.status).toBe('cancelled');
+  expect(database.sql.prepare('SELECT status FROM producer_research_campaign_items WHERE producer_id=?').get(producerId)!.status).toBe('failed');
+  expect(database.sql.prepare('SELECT count(*) AS n FROM research_work WHERE operation_id=?').get(op.id)!.n).toBe(0);
+  // The receipt stays for investigation, but no longer holds new work.
+  expect(database.sql.prepare("SELECT state FROM provider_operations WHERE operation_id=?").get(op.id)!.state).toBe('uncertain');
+  await expect(operation(producerRequest('/api/producers/research-batch',{limit:25}))).resolves.toMatchObject({status:'reserved'});
+  await expect(releaseHeldOperation(database.db,op.id)).rejects.toMatchObject({status:409});
  });
  it('continues other producers after a timeout, while fencing the uncertain producer',async()=>{
   const second=(await ensureProducerEntity(database.db,'owner','Other Estate')).id;

@@ -109,7 +109,8 @@ export function SharedWinesPage(){
      {heroPhoto
       ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(heroPhoto.url)} aria-label={`Open photo 1 of ${wine.photos!.length}`}><img src={heroPhoto.url} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo" loading="lazy" decoding="async"/></button>
       :<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
-     {(wine.photos?.length??0)>1&&<span className="detail-photo-count">{wine.photos!.length} photos</span>}
+     {/* The day the owner's photo was taken; never the time or place. */}
+     {(Boolean(heroPhoto&&wine.photoDate)||(wine.photos?.length??0)>1)&&<span className="detail-photo-count">{[heroPhoto&&wine.photoDate?`Taken ${formatDate(wine.photoDate)}`:'',(wine.photos?.length??0)>1?`${wine.photos!.length} photos`:''].filter(Boolean).join(' · ')}</span>}
     </div>}
    >
     <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>

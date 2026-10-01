@@ -388,6 +388,11 @@ describe('shared wine experience defaults',()=>{
     await click(button('Add your experience'));
     expect(dateInput()?.value).toBe('2026-08-14');
   });
+  it('shows the day the shared photo was taken beside the photo count',async()=>{
+    await renderShared({photoDate:'2026-08-14',photos:[{id:'a',url:'/a'},{id:'b',url:'/b'}]});
+    const caption=host?.querySelector('.detail-photo-count')?.textContent??'';
+    expect(caption).toMatch(/^Taken .*2026 · 2 photos$/);
+  });
   it('never replaces a date the reader already chose',async()=>{
     await renderShared({photoDate:'2026-08-14',tastingDate:'2026-09-02',rating:92});
     await click(button('Edit your experience'));

@@ -1,4 +1,4 @@
-import { CREDIT_ACTIONS } from './credits';
+import { CREDIT_ACTIONS,releaseHeldOperation } from './credits';
 import { ApiError,body,hash,json,ownerOnly,positive,randomToken,seconds,settings,stamp,textField,type IdentityEnv,type Member,type PilotSettings } from './common';
 import { MEMBER_AI_ACTIONS,memberAccessWeek,memberAiAccessForUsers,memberAiPolicies,type MemberAiAction } from './memberAccess';
 import { marginalCostUsd,monthGroundingUsd,readAiRates,tokenCostUsd,type AiRateEnv } from '../../src/lib/usage/rates';
@@ -52,12 +52,17 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
    env.DB.prepare('SELECT * FROM credit_prices ORDER BY created_at DESC LIMIT 100').all(),
    settings(env.DB).catch(()=>null),deploymentAiCost(env.DB,env),memberAiUsage(env.DB,env),
    env.DB.prepare('SELECT owner_id,byte_size,metered_byte_size FROM storage_totals').all(),env.DB.prepare('SELECT * FROM rollout_state').all(),
-   env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at FROM credit_operations WHERE status='review' LIMIT 50").all(),
+   env.DB.prepare("SELECT id,user_id,path,status,reserved,created_at,updated_at FROM credit_operations WHERE status='review' ORDER BY created_at LIMIT 50").all(),
    memberAiPolicies(env.DB)
   ]);
   const memberRows=members.results as Array<{id:string;role:string}>,memberIds=memberRows.filter(item=>item.role==='member').map(item=>item.id);
   const actionAccess=await memberAiAccessForUsers(env.DB,memberIds);
   return json({members:members.results,prices:prices.results,settings:settingsValue,aiCost,memberUsage,actionPolicies,actionAccess,storage:storage.results,rollout:rollout.results,reviewOperations:reviewOperations.results,actions:CREDIT_ACTIONS});
+ }
+ const release=path.match(/^\/api\/admin\/operations\/([^/]+)\/release$/);
+ if(release&&request.method==='POST'){
+  const b=await body(request);if(b.confirmation!=='RELEASE_HELD_OPERATION')throw new ApiError(400,'Release requires confirmation');
+  return json(await releaseHeldOperation(env.DB,release[1]));
  }
  if(path==='/api/admin/settings'&&request.method==='PUT'){
   const b=await body(request),amount=(key:string)=>{const v=Number(b[key]);if(!Number.isFinite(v)||v<0||v>1e9)throw new ApiError(400,`Invalid ${key}`);return v};
