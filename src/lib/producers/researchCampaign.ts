@@ -3,10 +3,9 @@ import { createQueuedProducerResearchRun,markRunStalled,STALLED_RUN_MS } from '.
 /**
  * Batch producer research.
  *
- * One producer's research is already a queued job that submits a Gemini batch
- * of six grounded requests (a profile plus five catalogue slices) and polls it
- * to completion. What does not scale is doing that one click at a time across
- * a library of hundreds.
+ * Each producer has a queued job for its profile and current wine range. Small
+ * imported LWIN ranges can share one grounded request; wider ranges are asked
+ * separately and split only when an answer cannot finish.
  *
  * A campaign is a list of producers plus a tick. The tick reconciles what has
  * finished, starts enough producers to keep `concurrency` of them in flight,
@@ -15,7 +14,12 @@ import { createQueuedProducerResearchRun,markRunStalled,STALLED_RUN_MS } from '.
  */
 export const CAMPAIGN_CONCURRENCY=2;
 export const CAMPAIGN_TICK_SECONDS=30;
-export const CAMPAIGN_MAX_PRODUCERS=8;
+export const CAMPAIGN_DEFAULT_PRODUCERS=10;
+/** Selection size is independent of the two producers allowed in flight. */
+export function campaignProducerLimit(value:unknown){
+  const n=Number(value);
+  return Number.isFinite(n)&&n>=1?Math.min(Number.MAX_SAFE_INTEGER,Math.floor(n)):CAMPAIGN_DEFAULT_PRODUCERS;
+}
 /**
  * How long a producer may hold a lane without its run saying anything.
  *
@@ -27,13 +31,9 @@ export const CAMPAIGN_MAX_PRODUCERS=8;
  */
 export const CAMPAIGN_STALE_RUN_MS=STALLED_RUN_MS;
 /**
- * A profile request plus one whole-range catalogue request. A range that does
- * not fit one answer is split and re-asked, so this is the floor rather than a
- * promise.
- *
- * A campaign researches producers that have never been researched, and those
- * always need both halves. A producer whose profile is still current sends the
- * range alone, so one is the floor everywhere else.
+ * Conservative planning estimate: a profile plus a whole-range request. A
+ * small LWIN range can combine both, and a saved profile needs only the range.
+ * Retries and unfinished ranges can require additional requests.
  */
 export const GEMINI_REQUESTS_PER_PRODUCER=2;
 /**
@@ -67,18 +67,23 @@ export type CampaignEnv={DB:D1Database;RESEARCH_QUEUE:Queue<unknown>};
 const now=()=>new Date().toISOString();
 const STALLED_ITEM_MESSAGE='The research run stopped reporting, so the batch moved on. Nothing was saved; research this producer again when you want to retry.';
 const emptyCounts=():Record<CampaignItemStatus,number>=>({pending:0,running:0,complete:0,failed:0,skipped:0});
+// A first run can save its profile and still fail its range. That producer must
+// remain eligible; retrying will reuse the saved profile rather than buy it again.
+const UNRESEARCHED=`(researched_at IS NULL OR (
+  EXISTS(SELECT 1 FROM producer_research_runs r WHERE r.owner_id=producers.owner_id AND r.producer_id=producers.id AND r.status='failed')
+  AND NOT EXISTS(SELECT 1 FROM producer_research_runs r WHERE r.owner_id=producers.owner_id AND r.producer_id=producers.id AND r.status='complete'))) `;
 
-/** Producers that have never completed a research run, oldest additions first. */
-export async function unresearchedProducers(db:D1Database,owner:string,limit:number){
-  const capped=Math.max(1,Math.min(CAMPAIGN_MAX_PRODUCERS,Math.floor(limit)||0));
+/** Producers without completed research, ordered by name for stable selection. */
+export async function unresearchedProducers(db:D1Database,owner:string,limit:unknown){
+  const selected=campaignProducerLimit(limit);
   const {results}=await db.prepare(
-    `SELECT id,canonical_name FROM producers WHERE owner_id=? AND researched_at IS NULL ORDER BY canonical_name COLLATE NOCASE LIMIT ?`
-  ).bind(owner,capped).all<{id:string;canonical_name:string}>();
+    `SELECT id,canonical_name FROM producers WHERE owner_id=? AND ${UNRESEARCHED} ORDER BY canonical_name COLLATE NOCASE LIMIT ?`
+  ).bind(owner,selected).all<{id:string;canonical_name:string}>();
   return (results??[]).map(row=>({id:row.id,name:row.canonical_name}));
 }
 
 export async function countUnresearchedProducers(db:D1Database,owner:string){
-  const row=await db.prepare(`SELECT COUNT(*) AS n FROM producers WHERE owner_id=? AND researched_at IS NULL`)
+  const row=await db.prepare(`SELECT COUNT(*) AS n FROM producers WHERE owner_id=? AND ${UNRESEARCHED}`)
     .bind(owner).first<{n:number}>();
   return Number(row?.n??0);
 }
@@ -105,8 +110,10 @@ export async function typicalProducerRunMs(db:D1Database,owner:string){
  */
 export async function measuredSearchesPerRequest(db:D1Database,owner:string){
   const row=await db.prepare(
-    `SELECT SUM(search_queries) AS searches, SUM(json_array_length(keys_json)) AS requests
-     FROM research_batch_jobs WHERE owner_id=? AND search_queries>0 AND created_at>datetime('now','-30 days')`
+    `SELECT SUM(j.search_queries) AS searches,
+      SUM(coalesce(nullif(u.requests,0),json_array_length(j.keys_json))) AS requests
+     FROM research_batch_jobs j LEFT JOIN ai_usage_events u ON u.id='research:'||j.owner_id||':'||j.id
+     WHERE j.owner_id=? AND j.search_queries>0 AND j.created_at>datetime('now','-30 days')`
   ).bind(owner).first<{searches:number|null;requests:number|null}>();
   const searches=Number(row?.searches??0),requests=Number(row?.requests??0);
   return requests>0&&searches>0?searches/requests:null;
@@ -121,14 +128,13 @@ export async function activeCampaignId(db:D1Database,owner:string){
 export async function createCampaign(env:CampaignEnv,owner:string,producers:Array<{id:string;name:string}>){
   if(!producers.length)return null;
   const id=crypto.randomUUID(),stamp=now();
-  await env.DB.prepare(
+  await env.DB.batch([env.DB.prepare(
     `INSERT INTO producer_research_campaigns(id,owner_id,status,requested,concurrency,created_at,updated_at,finished_at,dismissed_at)
      VALUES(?,?,'running',?,?,?,?,NULL,NULL)`
-  ).bind(id,owner,producers.length,CAMPAIGN_CONCURRENCY,stamp,stamp).run();
-  await env.DB.batch(producers.map(producer=>env.DB.prepare(
+  ).bind(id,owner,producers.length,CAMPAIGN_CONCURRENCY,stamp,stamp),env.DB.prepare(
     `INSERT INTO producer_research_campaign_items(campaign_id,producer_id,producer_name,request_id,status,message,updated_at)
-     VALUES(?,?,?,NULL,'pending',NULL,?)`
-  ).bind(id,producer.id,producer.name,stamp)));
+     SELECT ?,json_extract(value,'$.id'),json_extract(value,'$.name'),NULL,'pending',NULL,? FROM json_each(?)`
+  ).bind(id,stamp,JSON.stringify(producers))]);
   return id;
 }
 

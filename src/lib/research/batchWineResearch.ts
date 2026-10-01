@@ -4,7 +4,7 @@ import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorizat
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
 import { parseStructuredJsonText } from '../producers/structuredJson';
-import { adoptFriendResearch,assembleDeepSearch,RESEARCH_EDITION_COLUMNS,researchEditionOfRow,wineRowResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
+import { adoptFriendResearch,assembleDeepSearch,RESEARCH_EDITION_COLUMNS,researchEditionOfRow,wineRowResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopePassesQuality,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
 import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
@@ -90,9 +90,12 @@ async function saveSnapshot(db:D1Database,owner:string,id:string,result:DeepSear
 
 async function seedProducerProfileResearch(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[]){
   if(!wine.producer_id)return;const target=targets.find(x=>x.scope==='producer');if(!target)return;
-  const row=await db.prepare('SELECT profile,winemaking_practices,sources_json,research_model,researched_at FROM producers WHERE owner_id=? AND id=?').bind(owner,wine.producer_id).first<{profile:string;winemaking_practices:string;sources_json:string;research_model:string|null;researched_at:string|null}>();
+  const row=await db.prepare('SELECT profile,winemaking_practices,sources_json,research_model,profile_researched_at,researched_at FROM producers WHERE owner_id=? AND id=?').bind(owner,wine.producer_id).first<{profile:string;winemaking_practices:string;sources_json:string;research_model:string|null;profile_researched_at:string|null;researched_at:string|null}>();
   if(!row?.profile?.trim()||!row.winemaking_practices?.trim())return;
-  await upsertResearchCache(db,owner,{target,payload:{producerDetails:row.profile.trim(),producerWinemakingPractices:row.winemaking_practices.trim()},sources:parseJson(row.sources_json,[]),model:row.research_model||'producer-research',researchedAt:row.researched_at||now()});
+  const entry={target,payload:{producerDetails:row.profile.trim(),producerWinemakingPractices:row.winemaking_practices.trim()},sources:parseJson<ResearchSource[]>(row.sources_json,[]),model:row.research_model||'producer-research',researchedAt:row.profile_researched_at||row.researched_at||now()};
+  // A wine previously copied just the profile text to producers. That row must
+  // never overwrite a sourced cache entry, especially when it has no sources.
+  if(scopePassesQuality('producer',entry.payload,target,entry.sources)&&!(await loadResearchCache(db,owner,[target])).has('producer'))await upsertResearchCache(db,owner,entry);
 }
 
 async function seedFromLegacy(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[],cache:Map<ResearchScope,CachedResearch>){
@@ -120,8 +123,7 @@ async function bridgePriorCaches(db:D1Database,owner:string,wineId:string,stable
   const snapshot=await db.prepare('SELECT deep_search_json FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<ResearchRow>();
   const recovered=await loadWineResearchCache(db,owner,missing,false,snapshot?.deep_search_json);
   if(!recovered.size)return cache;
-  // Materialize recovered keys before refresh deletes selected current scopes.
-  // Later execution reads stay strict, so old rows cannot satisfy a refresh.
+  // Materialize recovered keys so execution uses the same identity as quoting.
   await seedResolvedResearch(db,owner,recovered);
   return loadResearchCache(db,owner,stableTargets);
 }
@@ -146,7 +148,9 @@ async function prepare(env:Env,owner:string,wineId:string,refresh:'none'|'vintag
   const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine);await seedProducerProfileResearch(env.DB,owner,wine,targets);
   let cache=await loadResearchCache(env.DB,owner,targets);cache=await bridgePriorCaches(env.DB,owner,wineId,targets,cache);cache=await seedFromLegacy(env.DB,owner,wine,targets,cache);
   const force=new Set<ResearchScope>(refresh==='all'?targets.map(x=>x.scope):refresh==='vintage'?(['vintage_context','wine_vintage'] as ResearchScope[]):[]);
-  if(force.size){for(const target of targets.filter(x=>force.has(x.scope))){await env.DB.prepare('DELETE FROM research_cache WHERE owner_id=? AND scope=? AND cache_key=?').bind(owner,target.scope,target.cacheKey).run();cache.delete(target.scope)}}
+  // Refresh is a request for replacement, not cache invalidation. Other wines
+  // keep displaying and reusing the last verified scope until a new one passes.
+  for(const scope of force)cache.delete(scope);
   if(env.CREDIT_RESEARCH_SCOPES){const reusable=await loadResearchCache(env.DB,owner,targets,true);for(const target of targets)if(!force.has(target.scope)&&!cache.has(target.scope)&&reusable.has(target.scope))cache.set(target.scope,reusable.get(target.scope)!)}
   // A shared bottle: what the owner already researched is not bought again.
   cache=await withSourceResearch(env.DB,owner,wine,targets,cache,force);
@@ -174,7 +178,13 @@ function buildRequest(wine:WineRow,missing:ResearchScope[],cache:Map<ResearchSco
 
 async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:CachedResearch){
   if(!wine.producer_id||entry.target.scope!=='producer')return;const details=entry.payload.producerDetails?.trim()||'',practices=entry.payload.producerWinemakingPractices?.trim()||'';if(!details&&!practices)return;
-  await db.prepare(`UPDATE producers SET profile=CASE WHEN trim(coalesce(profile,''))='' THEN ? ELSE profile END,winemaking_practices=CASE WHEN trim(coalesce(winemaking_practices,''))='' THEN ? ELSE winemaking_practices END,updated_at=? WHERE owner_id=? AND id=?`).bind(details,practices,now(),owner,wine.producer_id).run();
+  // Copy evidence only with its matching text. A wine's general producer scope
+  // does not certify the full profile's location and contacts as freshly researched.
+  await db.prepare(`UPDATE producers SET profile=CASE WHEN trim(coalesce(profile,''))='' THEN ? ELSE profile END,winemaking_practices=CASE WHEN trim(coalesce(winemaking_practices,''))='' THEN ? ELSE winemaking_practices END,
+    sources_json=CASE WHEN sources_json IS NULL OR sources_json='[]' THEN ? ELSE sources_json END,
+    research_model=coalesce(research_model,?),updated_at=? WHERE owner_id=? AND id=?
+    AND trim(coalesce(profile,'')) IN ('',?) AND trim(coalesce(winemaking_practices,'')) IN ('',?)`)
+    .bind(details,practices,JSON.stringify(entry.sources),entry.model,now(),owner,wine.producer_id,details,practices).run();
 }
 
 async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<WineRow>,targets:ResearchTarget[]){
@@ -195,7 +205,9 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
   const prior=await env.DB.prepare('SELECT id,google_batch_name,model FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt=?')
     .bind(owner,requestId,attempt).first<{id:string;google_batch_name:string;model:string}>();
-  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes)),entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
+  const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes));
+  for(const scope of scopes)cache.delete(scope);
+  const entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
   try{
     googleName??=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-wine-${requestId}-${attempt}`,[entry],env.CREDIT_CONTEXT);
     jobId??=await createResearchBatchJob(env.DB,{owner,requestId,targetKind:'wine',targetId:wineId,googleBatchName:googleName,model,attempt,keys:scopes});

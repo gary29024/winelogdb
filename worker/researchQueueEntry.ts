@@ -10,7 +10,7 @@ import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import type { ChampagneExtractionJob } from './champagneExtraction';
 import { createQueuedProducerResearchRun,getProducerResearchRun,mapRunRow,settleIfStalled } from '../src/lib/producers/research';
 import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,reviveCampaignIfStalled,typicalProducerRunMs,unresearchedProducers,
-  ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,CAMPAIGN_MAX_PRODUCERS,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
+  ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,campaignProducerLimit,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
@@ -71,14 +71,14 @@ router.post('/api/producers/:id/research',async c=>{
 // what that costs in grounded Gemini requests and wall-clock time.
 router.get('/api/producers/research-batch/plan',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const requested=Number(c.req.query('limit')??0);
+  const requested=campaignProducerLimit(c.req.query('limit'));
   const unresearched=await countUnresearchedProducers(c.env.DB,owner);
-  const willRun=Math.max(0,Math.min(unresearched,CAMPAIGN_MAX_PRODUCERS,Number.isFinite(requested)&&requested>0?Math.floor(requested):unresearched));
+  const willRun=Math.min(unresearched,requested);
   const perProducerMs=await typicalProducerRunMs(c.env.DB,owner);
   const searchesPerRequest=await measuredSearchesPerRequest(c.env.DB,owner);
   const geminiRequests=willRun*GEMINI_REQUESTS_PER_PRODUCER;
   return c.json({
-    unresearched,willRun,maxPerRun:CAMPAIGN_MAX_PRODUCERS,concurrency:CAMPAIGN_CONCURRENCY,
+    unresearched,willRun,maxPerRun:unresearched,concurrency:CAMPAIGN_CONCURRENCY,
     geminiRequests,
     // Grounding bills per search, so this is the number that maps to money.
     searchQueries:Math.round(geminiRequests*(searchesPerRequest??ASSUMED_SEARCHES_PER_REQUEST)),
@@ -99,7 +99,7 @@ router.post('/api/producers/research-batch',async c=>{
   const body=await c.req.json().catch(()=>({})) as {confirmation?:string;limit?:number};
   if(body.confirmation!=='RUN_PRODUCER_RESEARCH_BATCH')return c.json({error:'Batch producer research requires explicit confirmation'},400);
   if(await activeCampaignId(c.env.DB,owner))return c.json({error:'A batch producer research run is already in progress'},409);
-  const producers=(await unresearchedProducers(c.env.DB,owner,Number(body.limit)||CAMPAIGN_MAX_PRODUCERS)).filter(producer=>!c.env.CREDIT_PRODUCER_IDS||c.env.CREDIT_PRODUCER_IDS.includes(producer.id));
+  const producers=(await unresearchedProducers(c.env.DB,owner,body.limit)).filter(producer=>!c.env.CREDIT_PRODUCER_IDS||c.env.CREDIT_PRODUCER_IDS.includes(producer.id));
   if(!producers.length)return c.json({error:'Every producer has been researched already'},400);
   const campaignId=await createCampaign(c.env,owner,producers);
   if(!campaignId)return c.json({error:'Could not start the batch'},500);

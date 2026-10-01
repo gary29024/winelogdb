@@ -18,6 +18,8 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
   const [limit,setLimit]=useState<number>(10);
   const [mode,setMode]=useState<Mode>('idle');
   const [error,setError]=useState('');
+  const [planning,setPlanning]=useState(false);
+  const planVersion=useRef(0);
   const poll=useRef<Poller|undefined>(undefined);
   const wasRunning=useRef(false);
 
@@ -39,14 +41,14 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
 
   useEffect(()=>()=>poll.current?.stop(),[]);
 
-  const openConfirm=async()=>{
-    setError('');setMode('confirm');
-    setPlan(await getResearchCampaignPlan(limit).catch(e=>{setError((e as Error).message);return null}));
-  };
   const choose=async(value:number)=>{
-    setLimit(value);
-    setPlan(await getResearchCampaignPlan(value).catch(()=>null));
+    const version=++planVersion.current;
+    setLimit(value);setPlan(null);setPlanning(true);setError('');
+    try{const next=await getResearchCampaignPlan(value);if(version===planVersion.current)setPlan(next)}
+    catch(e){if(version===planVersion.current)setError((e as Error).message)}
+    finally{if(version===planVersion.current)setPlanning(false)}
   };
+  const openConfirm=async()=>{setMode('confirm');await choose(limit)};
   const start=async()=>{
     setMode('busy');setError('');
     try{setCampaign(await startResearchCampaign(limit));wasRunning.current=true;setMode('idle')}
@@ -102,7 +104,7 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
 
   return <section className="research-campaign">
     <div className="research-campaign-head">
-      <strong>{unresearched} producer{unresearched===1?'':'s'} never researched</strong>
+      <strong>{unresearched} producer{unresearched===1?'':'s'} awaiting research</strong>
       {mode==='idle'&&<button type="button" onClick={openConfirm}>Deep Search in batch</button>}
     </div>
     {mode!=='idle'&&<div className="research-campaign-confirm">
@@ -115,13 +117,15 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
       </div>
       <p className="research-campaign-cost">{plan?planSummary(plan):'Working out what this would involve…'}</p>
       <p className="research-campaign-note">
-        Only producers that have never been researched are queued, {plan?.concurrency??2} at a time. Each one runs a grounded
-        profile and one whole-range catalogue request; a range too long for one answer is split and asked again. Grounding is
+        Producers without completed research are queued, {plan?.concurrency??2} at a time. The imported LWIN catalogue
+        supplies known wine identities and classifications. Smaller known ranges share a request with the profile;
+        larger ranges use separate requests and are split when needed. The estimate allows separate profile and range requests;
+        reuse and combined requests can reduce it. Current availability and producer practices are verified from web sources. Grounding is
         billed per search the model runs{plan?.searchesPerRequest?` - yours have averaged ${plan.searchesPerRequest.toFixed(1)} per request`:''}, so this bills real API usage.
       </p>
       {error&&<p className="research-campaign-error" role="alert">{error}</p>}
       <div className="research-campaign-actions">
-        <button type="button" className="primary" disabled={mode==='busy'||!plan?.willRun} onClick={start}>
+        <button type="button" className="primary" disabled={mode==='busy'||planning||!plan?.willRun} onClick={start}>
           {mode==='busy'?'Queueing…':`Research ${plan?.willRun??limit} producer${(plan?.willRun??limit)===1?'':'s'}`}
         </button>
         <button type="button" className="secondary-danger" disabled={mode==='busy'} onClick={()=>{setMode('idle');setError('')}}>Cancel</button>

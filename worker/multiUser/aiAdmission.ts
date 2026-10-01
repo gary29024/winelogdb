@@ -4,6 +4,7 @@ const errors={
  quote_used:[409,'This AI quote was already used. Request a new quote before starting different work.'],
  active_operation:[409,'This request already has AI work in progress. Check its status before retrying.'],
  own_research:[409,'Another research request in your account is working on the same producer, wine or vintage. Wait for it to finish, then retry to reuse its results.'],
+ held_research:[409,'A previous research request for this producer, wine or vintage has an unconfirmed provider outcome. Check the original request’s status before retrying; saved results can be recovered without another paid search.'],
  friend_research:[409,'A friend is researching part of this request. Their result will be reused when it finishes; request a new quote then.'],
  continuation_used:[409,'This sheet continuation was already submitted. Check the existing scan before retrying.'],
  credits:[402,'Insufficient available credits. Review your credit balance before retrying; no work was submitted.'],
@@ -24,8 +25,9 @@ export function aiAdmission(input:{user:string;path:string;quoteId:string;lockKe
   when("EXISTS(SELECT 1 FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review'))",[user,path],'active_operation');
  }
  if(units&&lockKeys.length){
-  when('EXISTS(SELECT 1 FROM research_work WHERE owner_id=? AND subject_key IN (SELECT value FROM json_each(?)))',[user,JSON.stringify(lockKeys)],'own_research');
-  when('EXISTS(SELECT 1 FROM research_work w JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=? WHERE w.subject_key IN (SELECT value FROM json_each(?)))',[user,JSON.stringify(lockKeys)],'friend_research');
+  when("EXISTS(SELECT 1 FROM research_work w JOIN credit_operations o ON o.id=w.operation_id WHERE w.owner_id=? AND o.status='review' AND w.subject_key IN (SELECT value FROM json_each(?)))",[user,JSON.stringify(lockKeys)],'held_research');
+  when("EXISTS(SELECT 1 FROM research_work w JOIN credit_operations o ON o.id=w.operation_id WHERE w.owner_id=? AND o.status IN ('reserved','running') AND w.subject_key IN (SELECT value FROM json_each(?)))",[user,JSON.stringify(lockKeys)],'own_research');
+  when("EXISTS(SELECT 1 FROM research_work w JOIN credit_operations o ON o.id=w.operation_id JOIN friendships f ON f.friend_id=w.owner_id AND f.user_id=? WHERE o.status IN ('reserved','running','review') AND w.subject_key IN (SELECT value FROM json_each(?)))",[user,JSON.stringify(lockKeys)],'friend_research');
  }
  if(parents.length)when('EXISTS(SELECT 1 FROM sheet_continuations WHERE parent_operation_id IN (SELECT value FROM json_each(?)))',[JSON.stringify(parents)],'continuation_used');
  // null config is the authenticated owner's exemption. Keep identity, replay

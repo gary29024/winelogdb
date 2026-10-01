@@ -202,7 +202,13 @@ export default {
     const job=raw as typeof message.body&JobEnvelope;
     const op=job._creditOperationId?await env.DB.prepare('SELECT * FROM credit_operations WHERE id=? AND user_id=?').bind(job._creditOperationId,job.owner!).first<CreditOperation>():null;
     if(!cleanup&&(!op||!['reserved','running','review'].includes(op.status))){acknowledged=true;continue}
-    const scoped={...env,CREDIT_CONTEXT:cleanup?{deny:true as const,reason:'Cleanup jobs cannot invoke AI providers.'}:op?{db:env.DB,operationId:op.id,namespace:'queue'}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
+    let namespace='queue';
+    if(op?.path==='/api/producers/research-batch'&&job.producerId){
+     // In-flight legacy receipts were hashed with 'queue'; keep that identity.
+     const legacy=await env.DB.prepare("SELECT 1 FROM provider_operations WHERE operation_id=? AND namespace='' LIMIT 1").bind(op.id).first();
+     if(!legacy)namespace=`queue:producer:${job.producerId}`;
+    }
+    const scoped={...env,CREDIT_CONTEXT:cleanup?{deny:true as const,reason:'Cleanup jobs cannot invoke AI providers.'}:op?{db:env.DB,operationId:op.id,namespace}:providerAuthorization(member.role,`${job.kind??'This job'} reached the provider without a credit operation.`),CREDIT_RESEARCH_SCOPES:op?JSON.parse(op.units_json).flatMap((u:{scope?:string})=>u.scope?[u.scope]:[]):[],WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,job.owner!,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,op?.id)};
     // An inner consumer only requests acknowledgement. Cloudflare's first
     // ack/retry decision wins, so acknowledging before settlement would make
     // the catch block's retry ineffective if reconciliation failed.

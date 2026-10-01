@@ -1,7 +1,7 @@
 import { PageHeader } from '../../components/PageHeader';
 import { useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listProducers } from './api';
+import { getResearchCampaignPlan } from './api';
 import { ResearchCampaignPanel } from './ResearchCampaignPanel';
 import { ResearchCampaignHistory } from './ResearchCampaignHistory';
 
@@ -13,8 +13,8 @@ import { ResearchCampaignHistory } from './ResearchCampaignHistory';
  */
 export function ResearchCampaignPage(){
   const [unresearched,setUnresearched]=useState(0),[loading,setLoading]=useState(true),[finished,setFinished]=useState(0);
-  const load=()=>listProducers()
-    .then(result=>setUnresearched(result.items.filter(item=>!item.sharedOnly&&!item.researchedAt).length))
+  const load=()=>getResearchCampaignPlan()
+    .then(result=>setUnresearched(result.unresearched))
     .catch(()=>undefined)
     .finally(()=>setLoading(false));
 
