@@ -38,7 +38,7 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByText('Dated notices, ownership, sales, company filings and published research.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
-  expect(within(panel).getByText('Previously farmed by Domaine Daniel Rion et Fils')).toBeTruthy();
+  expect(within(panel).getByText('Previous operator named in notice: Domaine Daniel Rion et Fils')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('recueil-bfc-2022-084');
   const leads=panel.querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
   expect(leads.open).toBe(false);
@@ -50,7 +50,7 @@ describe('Parcel evidence panel',()=>{
   expect(within(panel).getByText('Application suspended')).toBeTruthy();
   expect(within(panel).getByText(/Not an authorisation/)).toBeTruthy();
   expect(within(panel).getByText('1 Jan 2025')).toBeTruthy();  // owner snapshot, not an operating date
-  expect(within(panel).getByText('Recorded owner changed to Bouchon Pourpre')).toBeTruthy();
+  expect(within(panel).getByText('Recorded right holder changed to Bouchon Pourpre')).toBeTruthy();
  });
  it('labels evidence inherited through a divided parcel and keeps directly named references distinct',async()=>{
   render(<ParcelEvidence parcelId={id('826')} parentId="inao-denom-565"/>);

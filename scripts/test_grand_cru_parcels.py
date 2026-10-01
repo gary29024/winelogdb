@@ -11,6 +11,28 @@ def row(holder='123456789', right='P - Propriétaire', area='500'):
 
 
 class RightsJoinTests(unittest.TestCase):
+    def test_evidence_references_keep_the_actual_cadastral_section(self):
+        from build_grand_cru_evidence import short_reference
+        self.assertEqual(short_reference('217160000A0523'), 'A0523')
+        self.assertEqual(short_reference('21714000AB0016'), 'AB0016')
+        self.assertEqual(short_reference('212670000D0665'), 'D0665')
+
+    def test_reviewed_commune_remainder_cannot_follow_changed_sources(self):
+        from build_grand_cru_commune_audit import uncovered_area_limit
+        from grand_cru import load_cru
+        import copy
+        cru, bundle = load_cru('clos-de-vougeot')
+        review = cru['communeAudit']['reviewedUncoveredArea']
+        self.assertEqual(uncovered_area_limit(cru, bundle, review['parentSourceSha256'], 511156.3651), 1084.3)
+        with self.assertRaisesRegex(ValueError, 'changed INAO'):
+            uncovered_area_limit(cru, bundle, 'changed-boundary', 511156.3651)
+        changed = copy.deepcopy(bundle)
+        changed['parcels']['cadastreSha256'] = 'changed-cadastre'
+        with self.assertRaisesRegex(ValueError, 'changed cadastre'):
+            uncovered_area_limit(cru, changed, review['parentSourceSha256'], 511156.3651)
+        unreviewed = {key: value for key, value in cru.items() if key != 'communeAudit'}
+        self.assertAlmostEqual(uncovered_area_limit(unreviewed, bundle, review['parentSourceSha256'], 511156.3651), 511.1563651)
+
     def test_padded_reference(self):
         self.assertEqual(parcel_id(row()), '212670000A0007')
         invalid = row()

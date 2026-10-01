@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-546",
+  "name": "Clos de Vougeot",
+  "inaoCommunes": [
+    "21716"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21716",
+      "name": "Vougeot",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd"
+    }
+  ],
+  "boundaryAreaM2": 511156.4,
+  "coveredByBundleParcelsM2": 510072.1,
+  "notCoveredByBundleParcelsM2": 1084.2,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 2.7,
+    "coveredByNoParcelM2": 1081.5
+  },
+  "neighbours": [
+    {
+      "commune": "21133",
+      "name": "Chambolle-Musigny",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+      "sha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21267",
+      "name": "Flagey-Échezeaux",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+      "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+      "contactAreaM2": 87.3,
+      "contactsOverMinimumOverlap": 3,
+      "maxParcelPercent": 1.432,
+      "contacts": [
+        {
+          "parcelId": "212670000D0096",
+          "overlapM2": 40.25,
+          "parcelPercent": 1.432
+        },
+        {
+          "parcelId": "212670000D0090",
+          "overlapM2": 39.67,
+          "parcelPercent": 0.719
+        },
+        {
+          "parcelId": "212670000D0094",
+          "overlapM2": 6.39,
+          "parcelPercent": 0.85
+        },
+        {
+          "parcelId": "212670000D0089",
+          "overlapM2": 0.8,
+          "parcelPercent": 0.55
+        },
+        {
+          "parcelId": "212670000D0500",
+          "overlapM2": 0.2,
+          "parcelPercent": 0.029
+        }
+      ]
+    },
+    {
+      "commune": "21714",
+      "name": "Vosne-Romanée",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+      "sha256": "2c57f75516a8161b8fd1d16284dad5374bf0da76fb9eaed4d4224454ad877bc1",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 0,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 1084.3,
+    "reviewedAt": "2026-10-01",
+    "parentSourceSha256": "452bfc2ca94f0dd3a18c1058686d0ef4dceaa9339c3728f620e0022ff4a899fb",
+    "cadastreSha256ByCommune": {
+      "21716": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd"
+    },
+    "note": "The measured 1084.218934 m² remainder (0.2121%) was reviewed against both pinned geometries. The largest components are narrow strips along the northern and western boundary, not a missing INAO commune. Neighbouring Flagey parcels account for 2.734058 m² of it; 1081.484876 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+  }
+}

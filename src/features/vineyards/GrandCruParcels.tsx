@@ -242,7 +242,9 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
- const listed=groupByDomaine?domaineOwners:legalOwners;
+ const hasDomaineResearch=Boolean(Object.keys(research?.holderDomains??{}).length);
+ const useDomaineGroups=hasDomaineResearch&&groupByDomaine;
+ const listed=useDomaineGroups?domaineOwners:legalOwners;
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
@@ -305,16 +307,18 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     </div>}
     <div>
      <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
-     <label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>
-     <p className="village-map-note">{groupByDomaine?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     {hasDomaineResearch&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
+     <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
      {groupByDomaine&&withResearch&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
      {groupByDomaine&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
       <span className="village-map-owner-name">{o.name}{(o.domaine||o.lead)&&<small>{o.legalNames.join(' · ')}</small>}{(o.basisLabel||o.lead)&&<span className={`village-map-basis${o.lead?' is-lead':''}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
      </button>{isChosen(o)&&o.sources.length>0&&<div className="village-map-group-sources">{o.sources.map(id=>{const source=research?.sources[id];return source?<a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>:null})}</div>}</li>)}</ul>
-     {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
-     {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${groupByDomaine?'entries':'right holders'}`}</button>}
+     <div className="village-map-link-actions">
+      {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
+      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${useDomaineGroups?'entries':'right holders'}`}</button>}
+     </div>
      </details>
     </div>
     <details className="village-map-parcel-finder"><summary>Find a parcel by cadastral reference</summary>

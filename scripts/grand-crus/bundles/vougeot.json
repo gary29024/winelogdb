@@ -1,0 +1,162 @@
+{
+  "id": "vougeot",
+  "name": "Vougeot",
+  "note": "Commune bundle for Clos de Vougeot Tier 1 (#378). Neighbouring communes are audited only.",
+  "crus": [
+    "clos-de-vougeot"
+  ],
+  "villageMap": "vougeot",
+  "assetName": "vougeot-parcels",
+  "parcels": {
+    "commune": "21716",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+    "cadastreSha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_210.csv",
+    "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+    "rightsMemberCrc32": 3267936763,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-546"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": []
+  },
+  "lieuxDits": {
+    "21716": {
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-lieux_dits.json.gz",
+      "sha256": "02af4c5fa68b99faecd30a3d01c878989a85448e32559e9b6e107ec49403b914"
+    }
+  },
+  "rightsHistory": {
+    "successorInsideShare": 0.95,
+    "rights": [
+      {
+        "asOf": "2019-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+        "member": "PM_19_NB_210.txt",
+        "size": 45858324,
+        "crc32": 2260959999,
+        "sha256": "c6eb0f3a4245dca6ce3df156cd009477f3ae1ebd481f16b89b88a619c74865f6",
+        "encoding": "latin-1"
+      },
+      {
+        "asOf": "2020-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+        "member": "PM_20_NB_210.txt",
+        "size": 47154302,
+        "crc32": 553974903,
+        "sha256": "70d7e9e25850f14b7fcdf7da9a0ee85e167266154b24c7a2d76606f2e26200ff",
+        "encoding": "latin-1"
+      },
+      {
+        "asOf": "2021-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+        "member": "PM_21_NB_210.txt",
+        "size": 48199783,
+        "crc32": 4151604163,
+        "sha256": "4de26600ed99a6cff6e66d6230d8db415f5f2c41fa1f590da4ee3a7470eaa0d3",
+        "encoding": "latin-1"
+      },
+      {
+        "asOf": "2022-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+        "member": "PM_22_NB_210.txt",
+        "size": 48798111,
+        "crc32": 3527223977,
+        "sha256": "ecb09a6501c3b3a0c541e3881307efe42425d859f300af53a51e97c5888dc2f0",
+        "encoding": "latin-1"
+      },
+      {
+        "asOf": "2023-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+        "member": "PM_23_NB_210.txt",
+        "size": 49578137,
+        "crc32": 595096164,
+        "sha256": "661faf904f5ea3cedaad58338812d5ae438af520ff81c4b05bd672dfe6cd6956",
+        "encoding": "latin-1"
+      },
+      {
+        "asOf": "2024-01-01",
+        "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+        "member": "PM_24_NB_210.csv",
+        "size": 41676662,
+        "crc32": 3785820661,
+        "sha256": "2ee57e0bf697c63731e8a62592cf49b0b342d74270434462b845685ba2d936ad",
+        "encoding": "utf-8-sig"
+      }
+    ],
+    "cadastre": [
+      {
+        "date": "2019-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2019-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "9958c293dcd12bb42ae5cac57767062ebf60465985ea27319b7b4a985c087ae9"
+      },
+      {
+        "date": "2020-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2020-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "4c84244289facc9607bc476cab67edaabaa3101e8ab3e101f3f8c29d4c6dcf19"
+      },
+      {
+        "date": "2021-02-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2021-02-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "cca3e43996f30ac99fced1e9880d331928a7c4758d295a3c60996cc17d303378"
+      },
+      {
+        "date": "2022-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2022-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "cca3e43996f30ac99fced1e9880d331928a7c4758d295a3c60996cc17d303378"
+      },
+      {
+        "date": "2023-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2023-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "ef54a57197bbce93676d4da81d20c68ab3a8c887907396e4d530cef004e91cba"
+      },
+      {
+        "date": "2024-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2024-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "0b30e7f2a4a0781a8e826b9be739651c8fcaa1174a3fd2915255a66fd5ae2de7"
+      },
+      {
+        "date": "2025-01-01",
+        "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2025-01-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+        "sha256": "fa8e61087fb73080425d223cc7c95e2ec45a4cd28d52f2b0ef8abfae4ae1803e"
+      }
+    ]
+  },
+  "saleRecords": {
+    "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
+    "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
+    "release": "2026-04",
+    "portal": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+    "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+    "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+    "member": "1_DONNEES_LIVRAISON/dvf_plus.csv",
+    "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  },
+  "auditCommunes": {
+    "21133": {
+      "name": "Chambolle-Musigny",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+      "sha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34"
+    },
+    "21714": {
+      "name": "Vosne-Romanée",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+      "sha256": "2c57f75516a8161b8fd1d16284dad5374bf0da76fb9eaed4d4224454ad877bc1"
+    },
+    "21267": {
+      "name": "Flagey-Échezeaux",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+      "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1"
+    }
+  }
+}

@@ -6,6 +6,7 @@ import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
+import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 
@@ -20,6 +21,32 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals()});
 describe('Cadastral parcel controls',()=>{
+ it('keeps all 69 Vougeot legal holders searchable, both rights and unknown parcels without domaine crosswalks',async()=>{
+  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  fireEvent.click(await screen.findByRole('button',{name:'Show all 69 right holders'}));
+  const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
+  expect(within(holders).getAllByRole('button')).toHaveLength(69);
+  const named=vougeot.features.find(f=>f.properties.recordedRights.length)!.properties.recordedRights[0];
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:named.name}});
+  expect(within(holders).getByRole('button',{name:new RegExp(ownerName(named.name))})).toBeTruthy();
+  const parcel=screen.getByLabelText('Cadastral parcel');
+  fireEvent.change(parcel,{target:{value:'217160000A0001'}});
+  expect(await within(await screen.findByRole('region',{name:'History and evidence'})).findByText('Application suspended')).toBeTruthy();
+  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
+  fireEvent.change(parcel,{target:{value:'217160000A0025'}});
+  const details=screen.getByRole('heading',{name:'Parcel A 0025'}).closest('.village-map-parcel-details')! as HTMLElement;
+  for(const right of vougeot.features.find(f=>f.properties.id==='217160000A0025')!.properties.recordedRights){
+   expect(within(details).getByText(`${ownerName(right.name)} · ${right.rightLabel}`)).toBeTruthy();
+  }
+  const unknown=vougeot.features.find(f=>!f.properties.recordedRights.length)!;
+  fireEvent.change(parcel,{target:{value:unknown.properties.id}});
+  expect(screen.getByText('No matched rights record')).toBeTruthy();
+  expect((parcel as unknown as HTMLSelectElement).options).toHaveLength(165);
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
+ });
  it('shows dated evidence only on its exact parcels without promoting it to a farming link',async()=>{
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
   const onLegend=vi.fn();
@@ -28,7 +55,7 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.change(await screen.findByLabelText('Cadastral parcel'),{target:{value:'212670000D0177'}});
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Application received')).toBeTruthy();
-  expect(within(panel).getByText('Previously farmed by Domaine Gros Frère et Sœur')).toBeTruthy();
+  expect(within(panel).getByText('Previous operator named in notice: Domaine Gros Frère et Sœur')).toBeTruthy();
   expect(screen.getByText('No matched rights record')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('#page=74');
   expect(screen.queryByText('Current farming domaine')).toBeNull();

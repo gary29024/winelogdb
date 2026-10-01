@@ -1,0 +1,48 @@
+{
+  "slug": "clos-de-vougeot",
+  "name": "Clos de Vougeot",
+  "parentFeatureId": "inao-denom-546",
+  "appellationId": 162,
+  "issue": 378,
+  "tier": 1,
+  "bundle": "vougeot",
+  "villageMaps": [
+    "vougeot"
+  ],
+  "rightsHistoryPurpose": "Dated legal-entity rights and cadastral lineage for Clos de Vougeot Tier 1. Recorded rights and rule-based parcel splits never establish farming.",
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/clos-de-vougeot",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-vougeot,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg2Jnw%3D",
+    "nameSourceChecked": "2026-10-01",
+    "coverageNote": "The official wine-board list names Clos de Vougeot as one whole-cru climat. The pinned cadastre records CLOS DE VOUGEOT; historical subdivisions and producer holdings have no reviewed cadastral crosswalk and retain the whole-cru outline.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "clos-de-vougeot",
+        "name": "Clos de Vougeot",
+        "sourceName": "CLOS DE VOUGEOT",
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "nameSourceSha256": "3af2c6d0d2f9e582a3bcc1efd9609b2eccf60ec3d8694668035b8cc3b73bc762"
+  },
+  "evidenceFrom": [
+    "clos-de-vougeot"
+  ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 1084.3,
+      "reviewedAt": "2026-10-01",
+      "parentSourceSha256": "452bfc2ca94f0dd3a18c1058686d0ef4dceaa9339c3728f620e0022ff4a899fb",
+      "cadastreSha256ByCommune": {
+        "21716": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd"
+      },
+      "note": "The measured 1084.218934 m² remainder (0.2121%) was reviewed against both pinned geometries. The largest components are narrow strips along the northern and western boundary, not a missing INAO commune. Neighbouring Flagey parcels account for 2.734058 m² of it; 1081.484876 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
+  "research": {
+    "methodDoc": "docs/research/clos-de-vougeot/README.md",
+    "filingsDoc": "docs/research/clos-de-vougeot/filings.md"
+  }
+}

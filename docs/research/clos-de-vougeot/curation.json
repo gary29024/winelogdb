@@ -1,0 +1,1197 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "parentFeatureId": "inao-denom-546",
+  "targetSeason": "2026",
+  "status": "current-farmer-identification-incomplete",
+  "scope": "All 164 mapped Clos de Vougeot parcels and all 69 recorded right-holder identifiers inventoried at Tier 1. Rights history 2019–2025, cadastral lineage, seven regional notice occurrences (17 page images) and the departmental index screened. Four notices explicitly name seven current parcels. No independent domaine crosswalk or company filing is inferred from legal names; Tier 2 remains deferred. No current farmer is verified.",
+  "rules": [
+    "Recorded right holder, applicant, previous operator, authorised operator, verified operator and bottler are separate roles.",
+    "Only image-reviewed, explicitly assigned commune/reference rows become parcel events. Printed unresolved rows remain verbatim.",
+    "Unknown rights never suppress cadastral geometry. Current operation needs dated parcel-specific evidence under #364.",
+    "Tier 2 company filings and published holdings, and Tier 3 paid records or outreach, remain deferred."
+  ],
+  "sources": [
+    {
+      "id": "dgfip-current",
+      "title": "DGFiP legal-entity parcel rights, 1 January 2025 (Côte-d’Or member)",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+      "type": "registry-dataset",
+      "documentDate": "2025-01-01",
+      "reviewedAt": "2026-10-01",
+      "sha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+      "member": "PM_25_NB_210.csv",
+      "access": "read",
+      "finding": "Exact cadastral-reference rights only. All 69 recorded identifiers are inventoried, with every right code kept. A legal holder is a research contact, not a named operator or domaine."
+    },
+    {
+      "id": "dgfip-history",
+      "title": "DGFiP yearly legal-entity parcel rights, 2019–2025",
+      "url": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "finding": "The bundle pins each departmental member’s hash and snapshot date. Seventy current parcels have a change; continuity requires the same SIREN. Provisional identifiers and names alone do not prove continuity."
+    },
+    {
+      "id": "cadastre-history",
+      "title": "Cadastre Etalab parcel vintages, 2019–2026",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "type": "geometry",
+      "documentDate": "2026-06-01",
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd",
+      "finding": "Full, unsimplified Vougeot polygons and metric cru overlap. Every vintage is hash-pinned in the bundle. Sixteen current references pass the next-vintage and ≥95% containment rule; two later-generation candidates are rejected."
+    },
+    {
+      "id": "dvf-sales",
+      "title": "Cerema DVF+ open-data, Bourgogne-Franche-Comté, April 2026 release",
+      "url": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data",
+      "downloadUrl": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+      "type": "registry-dataset",
+      "documentDate": "2026-04",
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d",
+      "finding": "Twelve deeds name 22 current cru parcels. Commune records range from 26 March 2014 to 29 August 2025. Only dates, deed types and cadastral references/counts are retained; no prices, addresses or parties."
+    },
+    {
+      "id": "cadastral-names",
+      "title": "Cadastre Etalab Vougeot lieux-dits, June 2026",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-lieux_dits.json.gz",
+      "type": "geometry",
+      "documentDate": "2026-06-01",
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "sha256": "02af4c5fa68b99faecd30a3d01c878989a85448e32559e9b6e107ec49403b914",
+      "finding": "CLOS DE VOUGEOT covers at least 99.99% of each selected parcel’s full geometry. Its exact polygon is clipped to INAO for the coverage audit; no historical subdivision or producer holding is converted into a cadastral alias."
+    },
+    {
+      "id": "bivb-names",
+      "title": "Bourgogne wine board: Clos de Vougeot official climat list",
+      "url": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-vougeot,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg2Jnw%3D",
+      "type": "wine-board",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "sha256": "3af2c6d0d2f9e582a3bcc1efd9609b2eccf60ec3d8694668035b8cc3b73bc762",
+      "checkedAt": "2026-10-01T06:30:33.007415+00:00",
+      "finding": "The appellation page lists one Grand Cru climat, Clos de Vougeot, and Vougeot as the producing commune. This corroborates the whole-cru name, not internal historical subdivisions."
+    },
+    {
+      "id": "dgfip-catalogue",
+      "title": "DGFiP release catalogue checked on 1 October 2026",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+      "type": "registry-dataset",
+      "documentDate": null,
+      "reviewedAt": "2026-10-01",
+      "access": "read",
+      "sha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+      "checkedAt": "2026-10-01T06:30:35.354139+00:00",
+      "finding": "The live official catalogue exposes the 2025 parcel attachment and no 2026 parcel attachment. The rights snapshot remains explicitly dated 1 January 2025."
+    },
+    {
+      "id": "rc-2022-first",
+      "title": "Partial authorisation: RC Les Grandes Vignes",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/97177/620257/file/recueil-bfc-2022-084-recueil-des-actes-administratifs-1.pdf#page=172",
+      "type": "government-event",
+      "documentDate": "2022-07-04",
+      "reviewedAt": "2026-10-01",
+      "sha256": "ef1caa62ccef718cdc2df0114fde8a87811cf4402471ca2fc9154eae17d4419b",
+      "reviewedPages": [
+        172,
+        173,
+        174,
+        175
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "Article 2 names four communes collectively. The fifteen rows are not assigned individually to communes; A469 is kept verbatim without a current parcel join. Article 1’s refusals concern Vosne-Romanée, not Vougeot."
+    },
+    {
+      "id": "af-gros-2022",
+      "title": "AF Gros application receipt, dossier 2022-113",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88",
+      "type": "government-event",
+      "documentDate": "2022-06-30",
+      "reviewedAt": "2026-10-01",
+      "sha256": "c35cf08a3a0aae4a10ef29356b4b599b94ea0d1fb8ddfb9c23d7af88826df392",
+      "reviewedPages": [
+        88
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The page names Vougeot A523 and A524, and Flagey D181 and D775 separately. The receipt does not authorise cultivation; its completion-date field is blank."
+    },
+    {
+      "id": "rc-2022-repeat",
+      "title": "Repeated partial authorisation: RC Les Grandes Vignes",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/101362/644533/file/recueil-bfc-2022-154-recueil-des-actes-administratifs-special-1.pdf#page=20",
+      "type": "government-event",
+      "documentDate": "2022-07-04",
+      "reviewedAt": "2026-10-01",
+      "sha256": "e2cc675e7ff53f6d76b6541e4c07c1761b81de4a32352a98045e813cd7534d0e",
+      "reviewedPages": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The same 4 July decision and Article 2 table reappear with a different published act ID. Retained as a second source occurrence, not a second independent parcel event."
+    },
+    {
+      "id": "lambrays-2023",
+      "title": "Lambrays application receipt, dossier 2023-157",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/112806/844449/file/recueil-bfc-2024-008-recueil-des-actes-administratifs-nominatifs.pdf#page=83",
+      "type": "government-event",
+      "documentDate": "2023-09-08",
+      "reviewedAt": "2026-10-01",
+      "sha256": "abdd9c6666807bc0a11b30bdcb34d817aced10ace6f8bff7b8ae86e5b61aab8c",
+      "reviewedPages": [
+        83
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The page names Vougeot A37, 0.3129 ha, and previous operator GUYON Jean Pierre. Application complete 21 August 2023; receipt alone does not authorise cultivation."
+    },
+    {
+      "id": "eugenie-2024",
+      "title": "Domaine Eugénie application receipt, dossier 2024-161",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/126138/932304/file/recueil-bfc-2025-044-recueil-des-actes-administratifs-nominatifs.pdf#page=22",
+      "type": "government-event",
+      "documentDate": "2024-11-14",
+      "reviewedAt": "2026-10-01",
+      "sha256": "49c8010f9cdd7c2c599c5e519889761502714fe7c1f1c963f29e5934cbce09c6",
+      "reviewedPages": [
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The annex names Vougeot A440. Application complete 25 October 2024 for 0.2294 ha; previous operator MAISON BOUCHARD PERE ET FILS. No later outcome is established."
+    },
+    {
+      "id": "rebourseau-2025",
+      "title": "Henri Rebourseau company-control authorisation, OS-016-2025",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/133026/975901/file/recueil-bfc-2025-185-recueil-des-actes-administratifs-special.pdf#page=42",
+      "type": "government-event",
+      "documentDate": "2025-11-18",
+      "reviewedAt": "2026-10-01",
+      "sha256": "056ec53b95d119435f6070f0c295dd68ccdd34a111bda60105b057156be4a21f",
+      "reviewedPages": [
+        42,
+        43
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "Authorises a company-control operation under L.333-3 at constant land perimeter; Vougeot is mentioned, but no cadastral reference is given. Kept as context only, never an exact parcel authorisation."
+    },
+    {
+      "id": "liger-belair-2026",
+      "title": "Comte Liger-Belair application suspension, order 2026-739",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/137449/1004181/file/recueil-bfc-2026-067-recueil-des-actes-administratifs-nominatifs.pdf#page=28",
+      "type": "government-event",
+      "documentDate": "2026-04-07",
+      "reviewedAt": "2026-10-01",
+      "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+      "reviewedPages": [
+        28,
+        29,
+        30
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+    }
+  ],
+  "holders": [
+    {
+      "holderId": "015551450",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "036380046",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "222100018",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "305242687",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "309246015",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "314306747",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "318520137",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "320926439",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "322746777",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "326533213",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "327166898",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "327503413",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "327983458",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "328972344",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "330345414",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "332161249",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "333321446",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "348024928",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "350591319",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "353575103",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "353847510",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "353981475",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "378339089",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "379998115",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "381340041",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "397738634",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "400737938",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "401584503",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "408752061",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "412618001",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "415394055",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "420573669",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "423994045",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "438871279",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "448502708",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "481959260",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "483134516",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "485329171",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "494094675",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "513459719",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "515420255",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "515520229",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "515520385",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "515620193",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "515620466",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "531940583",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "538257932",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "751566688",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "775567928",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "778230359",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "778269498",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "778269928",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "813204823",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "817533847",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "888075678",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "888079175",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U14149307",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18178936",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18178945",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18179935",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18180059",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18180763",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U18180843",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U19860385",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21837853",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U21966062",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U22312052",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U22314167",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    },
+    {
+      "holderId": "U33201044",
+      "candidateNames": [],
+      "basis": "identity-only",
+      "sourceIds": [
+        "dgfip-current"
+      ],
+      "parcelOperationConfirmed": false,
+      "finding": "Recorded legal-entity identifier and rights retained from the exact-reference 1 January 2025 snapshot. No independently sourced domaine or operator crosswalk was researched at Tier 1. Legal identity alone does not establish farming."
+    }
+  ],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "217160000A0523",
+        "217160000A0524"
+      ],
+      "sourceId": "af-gros-2022",
+      "kind": "historical-application",
+      "applicant": "SAS Domaine AF Gros",
+      "previousOperator": "Domaine Gros Frère et Sœur",
+      "documentDate": "2022-06-30",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed.",
+      "appNote": "Receipt of an application, not permission to cultivate. Completion date is blank; outcome and actual operation remain unconfirmed."
+    },
+    {
+      "parcelIds": [
+        "217160000A0037"
+      ],
+      "sourceId": "lambrays-2023",
+      "kind": "historical-application",
+      "applicant": "Société du Domaine des Lambrays",
+      "previousOperator": "Guyon Jean Pierre",
+      "documentDate": "2023-09-08",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2023-157: Vougeot A37, 0.3129 ha; complete 21 August 2023. The receipt expressly does not authorise cultivation.",
+      "appNote": "Application complete 21 August 2023, for Vougeot A0037. Receipt is not an authorisation; actual operation unconfirmed."
+    },
+    {
+      "parcelIds": [
+        "217160000A0440"
+      ],
+      "sourceId": "eugenie-2024",
+      "kind": "historical-application",
+      "applicant": "Domaine Eugénie",
+      "previousOperator": "Maison Bouchard Père et Fils",
+      "documentDate": "2024-11-14",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2024-161: 0.2294 ha; complete 25 October 2024; the annex explicitly assigns A440 to Vougeot. No later decision is established.",
+      "appNote": "Application complete 25 October 2024. The annex names Vougeot A0440; outcome and actual operation unconfirmed."
+    },
+    {
+      "parcelIds": [
+        "217160000A0001",
+        "217160000A0030",
+        "217160000A0031"
+      ],
+      "sourceId": "liger-belair-2026",
+      "kind": "suspended-application",
+      "applicant": "SCEA Domaine du Comte Liger-Belair",
+      "previousOperator": null,
+      "documentDate": "2026-04-07",
+      "outcome": "suspended",
+      "currentFarmer": null,
+      "summary": "Order 2026-739 names Vougeot A1/A30/A31 explicitly within a 4.3080 ha multi-commune application. Instruction suspended for eight months from publication. No later outcome confirmed.",
+      "appNote": "Instruction suspended for eight months from publication. Vougeot A0001/A0030/A0031 are expressly named; this is not an authorisation or proof of current operation."
+    }
+  ],
+  "accessGaps": [
+    "No parcel has verified operation evidence for 2026. Resolve actual operator, scope and continuation under #364; recorded legal identity is not a domaine or farmer link.",
+    "Private individuals and other exclusions are absent from the DGFiP legal-entity dataset. Fifty-eight parcels without matched rights do not mean ownerless land.",
+    "The 2022 RC Les Grandes Vignes Article 2 table lists Flagey-Échezeaux, Vougeot, Comblanchien and Premeaux-Prissey collectively. It does not allocate its rows to communes. A469 is not attached to Vougeot A0469 from its matching number or area.",
+    "No outcome after the AF Gros, Lambrays or Eugénie application receipts is established. The 2026 Liger-Belair suspension is not authorisation or actual operation.",
+    "Regional coverage is 2019–September 2026; departmental coverage is 2016–2020. Five departmental alternate links remain unresolved in the shared archive. Negative screening results are limited to the indexed pages and OCR quality.",
+    "Historical internal names and producer holdings have no reviewed crosswalk to the pinned cadastral subdivisions. The whole-cru map remains the fallback; unresolved named-area/source work belongs to #344.",
+    "INAO and cadastre disagree at the edges. The source-bound 1084.3 m² reviewed cap records the measured remainder without adding a neighbouring commune or changing either geometry.",
+    "DVF dates and references cover exact current parcel IDs; old references are not extended through arbitrary spatial overlap. No parties, addresses or prices are retained.",
+    "Tier 2 company-filing and published-holding research is deferred until requested; Tier 3 SPF copies and outreach remain deferred."
+  ],
+  "historyFindings": [
+    {
+      "id": "lineage-rule",
+      "title": "Sixteen current references with accepted lineage; two later-generation candidates rejected",
+      "parcelIds": [
+        "217160000A0557",
+        "217160000A0558",
+        "217160000A0563",
+        "217160000A0564",
+        "217160000A0565",
+        "217160000A0566",
+        "217160000A0567",
+        "217160000A0568",
+        "217160000A0569",
+        "217160000A0570",
+        "217160000A0577",
+        "217160000A0578",
+        "217160000A0579",
+        "217160000A0580",
+        "217160000A0581",
+        "217160000A0582"
+      ],
+      "sourceIds": [
+        "cadastre-history"
+      ],
+      "currentFarmer": null,
+      "finding": "Seven retired references overlap the cru. Each accepted current successor first appears in the next vintage and lies at least 95% inside its retired predecessor. A0579/A0580 are rejected as direct successors to A0032 because they appear later; their accepted predecessor is A0562. Lineage is rule-based, not a division deed."
+    }
+  ],
+  "externalResearch": [],
+  "producerHoldings": [],
+  "historicalOwnerLists": [],
+  "parcelFilings": [],
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AK34",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AK35",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AM110",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "D665",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "D666",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "A469",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AA11",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AA17",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AB83",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AB84",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AC47",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AL31",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AL32",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AL34",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    },
+    {
+      "sourceId": "rc-2022-first",
+      "printedReference": "AL35",
+      "parcelIds": [],
+      "currentFarmer": null,
+      "limitation": "Article 2 lists four communes collectively and does not assign this row to one commune. Repeated in rc-2022-repeat; no Vougeot parcel or farmer is inferred."
+    }
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "rc-2022-first",
+      "bulletin": "bfc-2022-084",
+      "sha256": "ef1caa62ccef718cdc2df0114fde8a87811cf4402471ca2fc9154eae17d4419b",
+      "pages": [
+        172,
+        173,
+        174,
+        175
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Article 2 names four communes collectively. The fifteen rows are not assigned individually to communes; A469 is kept verbatim without a current parcel join. Article 1’s refusals concern Vosne-Romanée, not Vougeot."
+    },
+    {
+      "sourceId": "af-gros-2022",
+      "bulletin": "bfc-2022-143",
+      "sha256": "c35cf08a3a0aae4a10ef29356b4b599b94ea0d1fb8ddfb9c23d7af88826df392",
+      "pages": [
+        88
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The page names Vougeot A523 and A524, and Flagey D181 and D775 separately. The receipt does not authorise cultivation; its completion-date field is blank."
+    },
+    {
+      "sourceId": "rc-2022-repeat",
+      "bulletin": "bfc-2022-154",
+      "sha256": "e2cc675e7ff53f6d76b6541e4c07c1761b81de4a32352a98045e813cd7534d0e",
+      "pages": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The same 4 July decision and Article 2 table reappear with a different published act ID. Retained as a second source occurrence, not a second independent parcel event."
+    },
+    {
+      "sourceId": "lambrays-2023",
+      "bulletin": "bfc-2024-008",
+      "sha256": "abdd9c6666807bc0a11b30bdcb34d817aced10ace6f8bff7b8ae86e5b61aab8c",
+      "pages": [
+        83
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The page names Vougeot A37, 0.3129 ha, and previous operator GUYON Jean Pierre. Application complete 21 August 2023; receipt alone does not authorise cultivation."
+    },
+    {
+      "sourceId": "eugenie-2024",
+      "bulletin": "bfc-2025-044",
+      "sha256": "49c8010f9cdd7c2c599c5e519889761502714fe7c1f1c963f29e5934cbce09c6",
+      "pages": [
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The annex names Vougeot A440. Application complete 25 October 2024 for 0.2294 ha; previous operator MAISON BOUCHARD PERE ET FILS. No later outcome is established."
+    },
+    {
+      "sourceId": "rebourseau-2025",
+      "bulletin": "bfc-2025-185",
+      "sha256": "056ec53b95d119435f6070f0c295dd68ccdd34a111bda60105b057156be4a21f",
+      "pages": [
+        42,
+        43
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Authorises a company-control operation under L.333-3 at constant land perimeter; Vougeot is mentioned, but no cadastral reference is given. Kept as context only, never an exact parcel authorisation."
+    },
+    {
+      "sourceId": "liger-belair-2026",
+      "bulletin": "bfc-2026-067",
+      "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+      "pages": [
+        28,
+        29,
+        30
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+    }
+  ]
+}

@@ -34,7 +34,7 @@ def main():
     require('namedPlots' in cru, f'{cru["slug"]}: no reviewed named areas configured yet')
     config, cadastre_date = cru['namedPlots'], bundle['parcels']['cadastreDate']
     # A cru that is a single named area keeps its whole-cru outline; a duplicate layer adds nothing.
-    require(config.get('displayLayer', True), f'{cru["slug"]}: no named-area display layer ({config["coverageNote"]})')
+    display_layer = config.get('displayLayer', True)
     directory = source_dir(bundle, args.source_dir)
     inputs, lieux_dits = [], []
     for insee in communes(bundle):
@@ -79,6 +79,21 @@ def main():
         metadata.append(properties)
         diagnostics.append({'id': properties['id'], 'sourceHa': area(original) / 10000, 'clippedHa': area(geometry) / 10000,
                             'parts': len(parts), 'holes': sum(len(p.interiors) for p in parts)})
+    if not display_layer:
+        # Audit the same exact clipped polygons even when a whole-cru named area needs no duplicate app layer.
+        write_json(named_plot_report_path(cru), {
+            'method': f'Exact reviewed cadastral names intersected with the unchanged INAO {cru["name"]} boundary; metric diagnostics in EPSG:2154.',
+            'displayLayer': False, 'coverageNote': config['coverageNote'],
+            'sources': [{'commune': insee, **s, 'date': cadastre_date, 'license': bundle['parcels']['cadastreLicence']}
+                        for insee, s in lieux_dits],
+            'nameSourceUrl': config['nameSourceUrl'], 'nameSourceChecked': config['nameSourceChecked'],
+            'parentSourceSha256': sha256(source_bytes), 'parentSources': catalogue['sources'],
+            'parentHa': area(parent) / 10000, 'mappedHa': area(unary_union(geometries)) / 10000,
+            'unmappedHa': area(parent.difference(unary_union(geometries))) / 10000,
+            'plots': diagnostics, 'unresolved': config['unresolved'],
+        })
+        print(f'{len(features)} named areas audited; whole-cru outline retained ({config["coverageNote"]})')
+        return
     result = {'type': 'FeatureCollection', 'features': features}
     payload = (json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n').encode()
     data_url = f'/maps/{cru["slug"]}-named-plots.{cadastre_date}.{sha256(payload)[:12]}.geojson'

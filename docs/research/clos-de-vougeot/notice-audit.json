@@ -1,0 +1,941 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-01",
+  "commune": "21716",
+  "regionalIndex": "docs/research/bfc-bulletins/notices.json",
+  "regionalIndexSha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06",
+  "regionalTextSha256": "3e14c5a4d5fb4e6ff8e87d49ddbd48c30f49857984aadc9d33387f395f934f86",
+  "search": "Commune-code match and full indexed text matching vouge[o0]t or v[ou]{2}geot; title classification is only a search aid.",
+  "regionalReviewed": [
+    {
+      "sourceId": "rc-2022-first",
+      "bulletin": "bfc-2022-084",
+      "sha256": "ef1caa62ccef718cdc2df0114fde8a87811cf4402471ca2fc9154eae17d4419b",
+      "pages": [
+        172,
+        173,
+        174,
+        175
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Article 2 names four communes collectively. The fifteen rows are not assigned individually to communes; A469 is kept verbatim without a current parcel join. Article 1’s refusals concern Vosne-Romanée, not Vougeot."
+    },
+    {
+      "sourceId": "af-gros-2022",
+      "bulletin": "bfc-2022-143",
+      "sha256": "c35cf08a3a0aae4a10ef29356b4b599b94ea0d1fb8ddfb9c23d7af88826df392",
+      "pages": [
+        88
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The page names Vougeot A523 and A524, and Flagey D181 and D775 separately. The receipt does not authorise cultivation; its completion-date field is blank."
+    },
+    {
+      "sourceId": "rc-2022-repeat",
+      "bulletin": "bfc-2022-154",
+      "sha256": "e2cc675e7ff53f6d76b6541e4c07c1761b81de4a32352a98045e813cd7534d0e",
+      "pages": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The same 4 July decision and Article 2 table reappear with a different published act ID. Retained as a second source occurrence, not a second independent parcel event."
+    },
+    {
+      "sourceId": "lambrays-2023",
+      "bulletin": "bfc-2024-008",
+      "sha256": "abdd9c6666807bc0a11b30bdcb34d817aced10ace6f8bff7b8ae86e5b61aab8c",
+      "pages": [
+        83
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The page names Vougeot A37, 0.3129 ha, and previous operator GUYON Jean Pierre. Application complete 21 August 2023; receipt alone does not authorise cultivation."
+    },
+    {
+      "sourceId": "eugenie-2024",
+      "bulletin": "bfc-2025-044",
+      "sha256": "49c8010f9cdd7c2c599c5e519889761502714fe7c1f1c963f29e5934cbce09c6",
+      "pages": [
+        22,
+        23
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The annex names Vougeot A440. Application complete 25 October 2024 for 0.2294 ha; previous operator MAISON BOUCHARD PERE ET FILS. No later outcome is established."
+    },
+    {
+      "sourceId": "rebourseau-2025",
+      "bulletin": "bfc-2025-185",
+      "sha256": "056ec53b95d119435f6070f0c295dd68ccdd34a111bda60105b057156be4a21f",
+      "pages": [
+        42,
+        43
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Authorises a company-control operation under L.333-3 at constant land perimeter; Vougeot is mentioned, but no cadastral reference is given. Kept as context only, never an exact parcel authorisation."
+    },
+    {
+      "sourceId": "liger-belair-2026",
+      "bulletin": "bfc-2026-067",
+      "sha256": "fb8b47cf9124576e227213be54e4fd958427714d8d50560eb2ca951c2139fde8",
+      "pages": [
+        28,
+        29,
+        30
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The table explicitly assigns A1, A30 and A31 to Vougeot. Instruction is suspended for eight months from publication. Application registered 11 December 2025 and complete 6 January 2026; this is not an authorisation."
+    }
+  ],
+  "exactParcelEvents": 4,
+  "exactCurrentParcels": 7,
+  "departmentalIndex": "docs/research/cote-dor-bulletins/index/notices.json",
+  "departmentalTextSha256": "44b26860900dc387cecfde2e8cc28c04cc580873634e88cfc459e99b2e8459f9",
+  "departmentalTextMatches": 118,
+  "departmentalScreening": "118 full-text Vougeot matches screened. They concern commune lists, government administration, taxes, waterways, archaeology, roads, sewage, museum opening or an address in Barges. No exact-reference farm-structure notice for the cru was identified. One farmStructures machine hint is a wastewater-treatment authorisation, excluded after page-image review.",
+  "departmentalReviewed": [
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11201/98569/file/raa_058_2017.pdf#page=37",
+      "sha256": "4ca39eb8ea667340a69156e105ccbee963b148b3e292fdc68944ceaa8ec3d0b4",
+      "actId": "21-2017-11-16-002",
+      "pages": [
+        37
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Article 1 authorises the wastewater-treatment station. Article 2 lists sewer-service communes including Vougeot, not vineyard parcels. No register event."
+    }
+  ],
+  "departmentalMatchedPages": [
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10405/94589/file/RAA__020_2016.pdf",
+      "sha256": "acd5d63f6ab5badce139c43faa280f1af21be67d96bc8b1641bbe9ade88fcde2",
+      "page": 9,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10422/94674/file/RAA__023_2016.pdf",
+      "sha256": "15c0319a7a51df3db002381851acd04bdd65c3bd93edd4c42681a6b233c1fa6c",
+      "page": 20,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 84,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 85,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10429/94709/file/RAA__024_2016.pdf",
+      "sha256": "0559e0090e26ce97bebc4e3a730d670434392307e32541edb261b459c78ac3ae",
+      "page": 86,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10435/94739/file/RAA__028_2016.pdf",
+      "sha256": "f70f146c2b701f383a6691aee7f3e5aef5e6d80670be78b3a1b08e257d8f1145",
+      "page": 50,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 2,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 45,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 46,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 47,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 48,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 49,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10440/94764/file/RAA__029_2016.pdf",
+      "sha256": "7b004b1e07620dcac271571583b89a830ec1e21eceec79e8d2c661540230e9be",
+      "page": 50,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10450/94814/file/RAA__031_2016.pdf",
+      "sha256": "7e76233f947dc2643f50f05fd4ff02795f1e616b023ae444640a06c77153bc31",
+      "page": 38,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10530/95214/file/RAA__043_2016_special.pdf",
+      "sha256": "440309030fb2d05b308af19a3def88355b38b5ceb90a950e2cbbaeae9c4190cb",
+      "page": 11,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10530/95214/file/RAA__043_2016_special.pdf",
+      "sha256": "440309030fb2d05b308af19a3def88355b38b5ceb90a950e2cbbaeae9c4190cb",
+      "page": 19,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10609/95609/file/RAA_051_2016.pdf",
+      "sha256": "64d1d56a416ccf4dbc42601d5aeb770cb191c481a03cf88236138ca27f7e826e",
+      "page": 47,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10669/95909/file/RAA_055_2016.pdf",
+      "sha256": "d8c481d0e92c769e544693ae65cf6ee4bbf32c5f3fbd72a70439160ee882f37c",
+      "page": 76,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10669/95909/file/RAA_055_2016.pdf",
+      "sha256": "d8c481d0e92c769e544693ae65cf6ee4bbf32c5f3fbd72a70439160ee882f37c",
+      "page": 77,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10698/96054/file/raa_058_2016.pdf",
+      "sha256": "18fb943050e9a1990f8e51c88152ccaff45d9a80dd4c9925f7c3102bd16fa87c",
+      "page": 187,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10709/96109/file/raa_060_2016.pdf",
+      "sha256": "41de6a9bd66515a294385f12f09112f3f25a7371869dc03728f4da00b0606caa",
+      "page": 158,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10709/96109/file/raa_060_2016.pdf",
+      "sha256": "41de6a9bd66515a294385f12f09112f3f25a7371869dc03728f4da00b0606caa",
+      "page": 166,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10709/96109/file/raa_060_2016.pdf",
+      "sha256": "41de6a9bd66515a294385f12f09112f3f25a7371869dc03728f4da00b0606caa",
+      "page": 172,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10709/96109/file/raa_060_2016.pdf",
+      "sha256": "41de6a9bd66515a294385f12f09112f3f25a7371869dc03728f4da00b0606caa",
+      "page": 178,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10719/96159/file/raa_061_2016_special.pdf",
+      "sha256": "5df6865644c16a18683d6a29bb431952d5abb281a60d2674dfd421df2fc0003e",
+      "page": 143,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10719/96159/file/raa_061_2016_special.pdf",
+      "sha256": "5df6865644c16a18683d6a29bb431952d5abb281a60d2674dfd421df2fc0003e",
+      "page": 144,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10719/96159/file/raa_061_2016_special.pdf",
+      "sha256": "5df6865644c16a18683d6a29bb431952d5abb281a60d2674dfd421df2fc0003e",
+      "page": 190,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10772/96424/file/raa_014_2017.pdf",
+      "sha256": "dad7f6010e8d18fcebb97081693769ceeaa0cd4cf5118f4f294f4f9b20431b42",
+      "page": 17,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10804/96584/file/raa_018_2017.pdf",
+      "sha256": "d0b299134b929a914e8f71ec08a295fa9559981a93bde0a2686fe28ae931f16f",
+      "page": 90,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10804/96584/file/raa_018_2017.pdf",
+      "sha256": "d0b299134b929a914e8f71ec08a295fa9559981a93bde0a2686fe28ae931f16f",
+      "page": 115,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10839/96759/file/raa_024_2017.pdf",
+      "sha256": "10ab6492e89e645b01835fc8385a6d90db235fd77f3fa8e75ca292ad8a4c23f8",
+      "page": 150,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10890/97014/file/raa_033_2017.pdf",
+      "sha256": "e153118ea6e541a43ed6831d314e78bbab005f7b730bf8dc650dc710b7f2b154",
+      "page": 36,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10890/97014/file/raa_033_2017.pdf",
+      "sha256": "e153118ea6e541a43ed6831d314e78bbab005f7b730bf8dc650dc710b7f2b154",
+      "page": 199,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/10899/97059/file/raa_035_2017_special.pdf",
+      "sha256": "f339fea60218f1223f61fe3d05f551e0c3d66d5ead98bbb70107a392246155f9",
+      "page": 68,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11119/98159/file/raa_051_2017_special.pdf",
+      "sha256": "9212b45d87264e001303172a4211aea21cf4aded487d0e72b659b616c622856f",
+      "page": 30,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11168/98404/file/raa_055_2017.pdf",
+      "sha256": "bfff999a0e98f6b4a75b7a4717e4a729ebd3b64643d26fe8ff679c4a40f89432",
+      "page": 35,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11201/98569/file/raa_058_2017.pdf",
+      "sha256": "4ca39eb8ea667340a69156e105ccbee963b148b3e292fdc68944ceaa8ec3d0b4",
+      "page": 37,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11201/98569/file/raa_058_2017.pdf",
+      "sha256": "4ca39eb8ea667340a69156e105ccbee963b148b3e292fdc68944ceaa8ec3d0b4",
+      "page": 45,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11210/98614/file/raa_059_2017.pdf",
+      "sha256": "5ea3aa04b15303a2d245743074e98127f2c7346c7143b5274b1bf21ae6acda50",
+      "page": 2,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11210/98614/file/raa_059_2017.pdf",
+      "sha256": "5ea3aa04b15303a2d245743074e98127f2c7346c7143b5274b1bf21ae6acda50",
+      "page": 33,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11210/98614/file/raa_059_2017.pdf",
+      "sha256": "5ea3aa04b15303a2d245743074e98127f2c7346c7143b5274b1bf21ae6acda50",
+      "page": 34,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11210/98614/file/raa_059_2017.pdf",
+      "sha256": "5ea3aa04b15303a2d245743074e98127f2c7346c7143b5274b1bf21ae6acda50",
+      "page": 36,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11210/98614/file/raa_059_2017.pdf",
+      "sha256": "5ea3aa04b15303a2d245743074e98127f2c7346c7143b5274b1bf21ae6acda50",
+      "page": 37,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11297/99049/file/raa_003_2018.pdf",
+      "sha256": "287923b69b6491419d0d08f67e74ed55ba027a77348b6b54c38eee65c4c08792",
+      "page": 46,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11318/99154/file/raa_012_2018.pdf",
+      "sha256": "96a03ebcbdf78be4a4415d4d95de21d472dac6103127a8cbd9041ff0cca2ff4d",
+      "page": 2,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11318/99154/file/raa_012_2018.pdf",
+      "sha256": "96a03ebcbdf78be4a4415d4d95de21d472dac6103127a8cbd9041ff0cca2ff4d",
+      "page": 39,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11318/99154/file/raa_012_2018.pdf",
+      "sha256": "96a03ebcbdf78be4a4415d4d95de21d472dac6103127a8cbd9041ff0cca2ff4d",
+      "page": 40,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11318/99154/file/raa_012_2018.pdf",
+      "sha256": "96a03ebcbdf78be4a4415d4d95de21d472dac6103127a8cbd9041ff0cca2ff4d",
+      "page": 41,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11318/99154/file/raa_012_2018.pdf",
+      "sha256": "96a03ebcbdf78be4a4415d4d95de21d472dac6103127a8cbd9041ff0cca2ff4d",
+      "page": 42,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/11807/101599/file/raa_020_2018.pdf",
+      "sha256": "898d8c985b679e888f9bc9b6986a12b8738f5d94253d86ddc6f30b9d901bfbc3",
+      "page": 137,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12261/103869/file/recueil-21-2018-025-recueil-des-actes-administratifs.pdf",
+      "sha256": "961023a33364aa81005c81a111497e1ce080b33aca7fdc61bf21665f619c4149",
+      "page": 78,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12261/103869/file/recueil-21-2018-025-recueil-des-actes-administratifs.pdf",
+      "sha256": "961023a33364aa81005c81a111497e1ce080b33aca7fdc61bf21665f619c4149",
+      "page": 79,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12532/105224/file/raa_030_2018_special.pdf",
+      "sha256": "906b04b0c0ec675ff09ee1dcc8efc9a77437b36e1221029d7daa092b284b9e41",
+      "page": 39,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12532/105224/file/raa_030_2018_special.pdf",
+      "sha256": "906b04b0c0ec675ff09ee1dcc8efc9a77437b36e1221029d7daa092b284b9e41",
+      "page": 99,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12548/105304/file/raa_035_2018.pdf",
+      "sha256": "5b6d3cc0c6603d6f40ad44e93d094b2ba01b7ba697eed3945605e045f641ddf1",
+      "page": 79,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12611/105619/file/raa_041_2018_special.pdf",
+      "sha256": "37ff625a80c5076364ccaa548039690fea5f2eeae3a3dc761c2a93424929e1d7",
+      "page": 101,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12611/105619/file/raa_041_2018_special.pdf",
+      "sha256": "37ff625a80c5076364ccaa548039690fea5f2eeae3a3dc761c2a93424929e1d7",
+      "page": 124,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12611/105619/file/raa_041_2018_special.pdf",
+      "sha256": "37ff625a80c5076364ccaa548039690fea5f2eeae3a3dc761c2a93424929e1d7",
+      "page": 146,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12876/106944/file/raa-065-2018.pdf",
+      "sha256": "e0653c713943a16dd3dd2978bd9d40dcd737785632debfe04de14266f43c3844",
+      "page": 56,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12876/106944/file/raa-065-2018.pdf",
+      "sha256": "e0653c713943a16dd3dd2978bd9d40dcd737785632debfe04de14266f43c3844",
+      "page": 57,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12895/107039/file/raa-069-2018-special.pdf",
+      "sha256": "3db332aa5677807f4bbab24e0162615cad8e2262c181fb07a11af81a9fe2e6e8",
+      "page": 17,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/12895/107039/file/raa-069-2018-special.pdf",
+      "sha256": "3db332aa5677807f4bbab24e0162615cad8e2262c181fb07a11af81a9fe2e6e8",
+      "page": 18,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13068/107904/file/raa_014_2019_special.pdf",
+      "sha256": "d1e4ef66165ab2b95c9a7f6c9ca29be880082443ef8f1af92b0c96c3b66cbb38",
+      "page": 15,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13068/107904/file/raa_014_2019_special.pdf",
+      "sha256": "d1e4ef66165ab2b95c9a7f6c9ca29be880082443ef8f1af92b0c96c3b66cbb38",
+      "page": 109,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13105/108089/file/raa_021_2019.pdf",
+      "sha256": "2b818955409b3997ebbbfb3766941d536fb22f7f4722975494b719536b9dfd94",
+      "page": 3,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13105/108089/file/raa_021_2019.pdf",
+      "sha256": "2b818955409b3997ebbbfb3766941d536fb22f7f4722975494b719536b9dfd94",
+      "page": 55,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13105/108089/file/raa_021_2019.pdf",
+      "sha256": "2b818955409b3997ebbbfb3766941d536fb22f7f4722975494b719536b9dfd94",
+      "page": 56,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13105/108089/file/raa_021_2019.pdf",
+      "sha256": "2b818955409b3997ebbbfb3766941d536fb22f7f4722975494b719536b9dfd94",
+      "page": 57,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13105/108089/file/raa_021_2019.pdf",
+      "sha256": "2b818955409b3997ebbbfb3766941d536fb22f7f4722975494b719536b9dfd94",
+      "page": 60,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13184/108484/file/raa_029_2019-special.pdf",
+      "sha256": "2845ac6d816c79c724b5a460388eb4137aa9184d6bee79d385b8866e319959b4",
+      "page": 32,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13200/108564/file/raa_030_2019.pdf",
+      "sha256": "d6c0056f88bfde8bd031f029e67e685875692234d729af3efd602488976d1e46",
+      "page": 47,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13200/108564/file/raa_030_2019.pdf",
+      "sha256": "d6c0056f88bfde8bd031f029e67e685875692234d729af3efd602488976d1e46",
+      "page": 74,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13200/108564/file/raa_030_2019.pdf",
+      "sha256": "d6c0056f88bfde8bd031f029e67e685875692234d729af3efd602488976d1e46",
+      "page": 75,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13200/108564/file/raa_030_2019.pdf",
+      "sha256": "d6c0056f88bfde8bd031f029e67e685875692234d729af3efd602488976d1e46",
+      "page": 77,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13274/108934/file/raa_035-2019-special.pdf",
+      "sha256": "29ba57b0c39a587c6e583b6ad117557d513216ae37a0826f61bb40abc32f50be",
+      "page": 19,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13274/108934/file/raa_035-2019-special.pdf",
+      "sha256": "29ba57b0c39a587c6e583b6ad117557d513216ae37a0826f61bb40abc32f50be",
+      "page": 60,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13274/108934/file/raa_035-2019-special.pdf",
+      "sha256": "29ba57b0c39a587c6e583b6ad117557d513216ae37a0826f61bb40abc32f50be",
+      "page": 84,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13449/109809/file/raa_053-2019-special.pdf",
+      "sha256": "a274916295c7836090b358416bf026a5e3ae16271513390940f3dbe4a31fa2cb",
+      "page": 65,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13562/110374/file/raa_066_2019.pdf",
+      "sha256": "fc606144e0906021454cede82a7ca7250fce20a7283ba06511a8e7c7288c76c0",
+      "page": 83,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13562/110374/file/raa_066_2019.pdf",
+      "sha256": "fc606144e0906021454cede82a7ca7250fce20a7283ba06511a8e7c7288c76c0",
+      "page": 84,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13577/110449/file/raa_069-2019-special.pdf",
+      "sha256": "d55819a6d879d4e9884cf5f178353fd59364788f6fb761d6ee0f9f2c14bfa005",
+      "page": 30,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13584/110484/file/raa_070-2019-special-2.pdf",
+      "sha256": "d803acbcaf3bb1bebad57341392189f5483564d8dabf207cb593a551eda1775a",
+      "page": 6,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13584/110484/file/raa_070-2019-special-2.pdf",
+      "sha256": "d803acbcaf3bb1bebad57341392189f5483564d8dabf207cb593a551eda1775a",
+      "page": 7,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13712/111124/file/raa_077_2019-special.pdf",
+      "sha256": "c2331b79148418bca3bfa243446e058542a6d6222174821cc3a3736b3b1923a9",
+      "page": 62,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13712/111124/file/raa_077_2019-special.pdf",
+      "sha256": "c2331b79148418bca3bfa243446e058542a6d6222174821cc3a3736b3b1923a9",
+      "page": 89,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13712/111124/file/raa_077_2019-special.pdf",
+      "sha256": "c2331b79148418bca3bfa243446e058542a6d6222174821cc3a3736b3b1923a9",
+      "page": 122,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13716/111144/file/raa_079_2019-special.pdf",
+      "sha256": "8b4284ad5c2d4f7055b15666a24dd74e850a9311acb9ed54381c356f9fedea1d",
+      "page": 42,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13727/111199/file/raa_080_2019-special.pdf",
+      "sha256": "332ae0858b102410bd38cb17b478ac0f38c0326eec864ff985254b67b5c69f9b",
+      "page": 17,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13740/111264/file/raa_003_special_2020.pdf",
+      "sha256": "20ffa70e5eee646d7becfdf3f06826d496331598187df08fe73223ac8cfdcb69",
+      "page": 5,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 64,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 69,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 76,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 77,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 78,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13760/111364/file/raa_005_2020-special.pdf",
+      "sha256": "27778bc86f4c50b3e34d939d1cb11ba82b5a019d8d7339510175c951c84a28bc",
+      "page": 81,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13768/111404/file/raa_006_2020.pdf",
+      "sha256": "6d14c8a29aba8d45b447fe1dd947eb9c0172353f9a352ddc47fc10aa0c79e4bb",
+      "page": 39,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13768/111404/file/raa_006_2020.pdf",
+      "sha256": "6d14c8a29aba8d45b447fe1dd947eb9c0172353f9a352ddc47fc10aa0c79e4bb",
+      "page": 41,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13768/111404/file/raa_006_2020.pdf",
+      "sha256": "6d14c8a29aba8d45b447fe1dd947eb9c0172353f9a352ddc47fc10aa0c79e4bb",
+      "page": 42,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13768/111404/file/raa_006_2020.pdf",
+      "sha256": "6d14c8a29aba8d45b447fe1dd947eb9c0172353f9a352ddc47fc10aa0c79e4bb",
+      "page": 44,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/13993/112529/file/raa_029_2020-special.pdf",
+      "sha256": "105c5d99dc6dde77f8ae6c4f4c30f9daa623c84d6cc73223f32cc9013acd33bd",
+      "page": 10,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14040/112764/file/raa_034_2020-special.pdf",
+      "sha256": "02b4ae735e5b25292dd784a70ac0215d8926debd41c5c1c371b8e06088d5398c",
+      "page": 2,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14040/112764/file/raa_034_2020-special.pdf",
+      "sha256": "02b4ae735e5b25292dd784a70ac0215d8926debd41c5c1c371b8e06088d5398c",
+      "page": 26,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14040/112764/file/raa_034_2020-special.pdf",
+      "sha256": "02b4ae735e5b25292dd784a70ac0215d8926debd41c5c1c371b8e06088d5398c",
+      "page": 27,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14040/112764/file/raa_034_2020-special.pdf",
+      "sha256": "02b4ae735e5b25292dd784a70ac0215d8926debd41c5c1c371b8e06088d5398c",
+      "page": 28,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14056/112844/file/raa-036-2020-special.pdf",
+      "sha256": "3a53e1f35086e8fabd7a58277b7f67e73c5f018ef2c4e8a26b893ae16aa4e40d",
+      "page": 21,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14077/112949/file/raa_037_2020-special.pdf",
+      "sha256": "f386a438a686ae93699d4f822e00d0b39f15fe3e3e86b98a396ad97d770aecf1",
+      "page": 43,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14077/112949/file/raa_037_2020-special.pdf",
+      "sha256": "f386a438a686ae93699d4f822e00d0b39f15fe3e3e86b98a396ad97d770aecf1",
+      "page": 49,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14181/113469/file/raa_048_2020-special.pdf",
+      "sha256": "523f3c532b81c1353f6c209ab31c970edcd38d3efe4ffa85dd77ce7460620b1e",
+      "page": 77,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14235/113739/file/raa_052_2020.pdf",
+      "sha256": "95bf2230718ac10052cf3c5ad509c85dbc8119d9bdb64e25af181c5c0978db66",
+      "page": 55,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14298/114054/file/raa_063_2020.pdf",
+      "sha256": "4a892905740491d8b00ba7428d6867c085f2b9242764a016f3c7e278c98ab65b",
+      "page": 96,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14309/114109/file/recueil-21-2020-065-recueil-des-actes-administratifs-special.pdf",
+      "sha256": "84965c7384a8af5662d284fffb64ee9b3db77f1af4215f7440f175b3d90e9d55",
+      "page": 13,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14538/115254/file/raa-082-2020-special.pdf",
+      "sha256": "d1170d319d7ab89e675cf71dfddca97882ff4a79b9a3ed2969c5906a1a712e92",
+      "page": 46,
+      "extractionStatus": "text-layer",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14538/115254/file/raa-082-2020-special.pdf",
+      "sha256": "d1170d319d7ab89e675cf71dfddca97882ff4a79b9a3ed2969c5906a1a712e92",
+      "page": 203,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14594/115534/file/raa_088_2020.pdf",
+      "sha256": "138b65fe60406d4c245e79b0909ba36a1688787e730463ee878a736b9a198b03",
+      "page": 50,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14594/115534/file/raa_088_2020.pdf",
+      "sha256": "138b65fe60406d4c245e79b0909ba36a1688787e730463ee878a736b9a198b03",
+      "page": 51,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14635/115739/file/raa_095_2020-special.pdf",
+      "sha256": "464ff12e1eec34eec6a463827556c333555fae47d5748d6e328794dfefbb9735",
+      "page": 32,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14647/115799/file/raa_099_2020.pdf",
+      "sha256": "814363aac44c0c95abb9564a07bfed92f45d6b816f979341c4c1bb8082d0ae4c",
+      "page": 29,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    },
+    {
+      "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/14647/115799/file/raa_099_2020.pdf",
+      "sha256": "814363aac44c0c95abb9564a07bfed92f45d6b816f979341c4c1bb8082d0ae4c",
+      "page": 59,
+      "extractionStatus": "ocr",
+      "reviewMethod": "text-screen"
+    }
+  ],
+  "limitations": [
+    "Only the existing indexed regional 2019–2026 and departmental 2016–2020 corpora were searched.",
+    "OCR can miss names or references; five departmental alternate links are unresolved. A negative screen is not exhaustive proof of absence."
+  ]
+}

@@ -10,6 +10,7 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  echezeaux:()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
+ 'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
 };
 
 const empty=():ParcelEvidenceData=>({sources:{},parcels:{},holderDomains:{}});

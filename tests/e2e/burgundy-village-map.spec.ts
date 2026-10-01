@@ -2,6 +2,8 @@ import { test,expect,type Locator,type Page } from '@playwright/test';
 import {readFileSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
+import {ownerName} from '../../src/lib/places/parcelOwners';
+import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
 const losslessMaps=JSON.parse(readFileSync('src/lib/places/burgundyLosslessMapRegistry.json','utf8')) as Record<string,{brotliJsonUrl:string;gzipJsonUrl:string}>;
@@ -180,24 +182,58 @@ const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
  const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
- const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string};
- const parcels=(read(`public${manifest.dataUrl}`) as {features:{id:string;properties:{overlaps:{parentFeatureId:string}[]}}[]}).features
-  .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId)).map(f=>f.id);
- const evidenced=cru.evidenceFrom.flatMap(source=>Object.keys(read(`src/lib/places/grandCruParcels/${source}.evidence.json`).parcels))
-  .filter(id=>parcels.includes(id)).sort();
+ const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
+ const features=(read(`public${manifest.dataUrl}`) as Parcels).features
+  .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
+ const parcels=features.map(f=>f.properties.id);
+ const research=cru.evidenceFrom.map(source=>read(`src/lib/places/grandCruParcels/${source}.evidence.json`));
+ const evidenced=research.flatMap(source=>Object.keys(source.parcels)).filter(id=>parcels.includes(id)).sort();
+ const hasDomaineLinks=research.some(source=>Object.keys(source.holderDomains).length>0);
+ const holders=new Set(features.flatMap(f=>f.properties.recordedRights.map(r=>r.holderId))).size;
+ const held=features.find(f=>f.properties.recordedRights.length)!;
+ const unknown=features.find(f=>!f.properties.recordedRights.length);
+ const multiple=features.find(f=>f.properties.recordedRights.length>1);
  const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===cru.villageMaps[0])!;
- return {...cru,village:village.name,parcels,evidenced};
+ return {...cru,village:village.name,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,held,unknown,multiple};
 })();
-test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and domaine grouping from its config`,async({page})=>{
- await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru'});
- await page.route('**/api/parcel-producer-links?*',route=>route.fulfill({json:{items:[]}}));
+
+test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped producer links from its config`,async({page},testInfo)=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:390,height:844});
+ const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
+ await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id});
+ await page.route('**/api/producers',route=>route.fulfill({json:{items:[producer,other]}}));
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
+ await page.route('**/api/parcel-producer-links?*',async route=>{
+  const request=route.request(),query=new URL(request.url()).searchParams;
+  expect(query.get('parent')).toBe(parcelCru.parentFeatureId);
+  expect(query.get('snapshot')).toBe(parcelCru.rightsAsOf);
+  if(request.method()==='PUT'){
+   const input=request.postDataJSON(),target=[producer,other].find(p=>p.id===input.producerId)!;
+   links=[{...input,producerName:target.canonicalName,status:'manual',updatedAt:'2026-10-01'}];
+   return route.fulfill({json:links[0]});
+  }
+  return route.fulfill({json:{items:links}});
+ });
+ let downloads=0;
+ await page.route(`**${parcelCru.dataUrl}`,route=>++downloads===1?route.fulfill({status:503}):route.continue());
  await page.goto('/wines/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
- const dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ let dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
- await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ expect(downloads).toBe(0);
+ const toggle=dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`});
+ await toggle.focus();await page.keyboard.press('Space');
+ await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('button',{name:'Retry parcels'}).click();
  await expect(dialog.getByText(`${parcelCru.parcels.length} parcels in ${parcelCru.name}`,{exact:false})).toBeVisible();
- if(parcelCru.evidenceFrom.length)await expect(dialog.getByLabel('Group right holders by')).toHaveValue('domaine');
+ expect(downloads).toBe(2);
+ if(parcelCru.hasDomaineLinks){
+  await expect(dialog.getByLabel('Group right holders by')).toHaveValue('domaine');
+  await dialog.getByLabel('Group right holders by').selectOption('holder');
+ }
  await dialog.getByText('Find a parcel by cadastral reference').click();
  const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
  await expect(parcel.getByRole('option')).toHaveCount(parcelCru.parcels.length+1);
@@ -205,7 +241,52 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and domaine gro
  const details=dialog.locator('.village-map-parcel-details');
  if(parcelCru.evidenced.length)await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
  else await expect(details).toContainText('No dated records were found for this parcel.');
+ if(!parcelCru.hasDomaineLinks)await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
  await expect(details.getByText('Verified operator')).toHaveCount(0);
+ if(parcelCru.unknown){
+  await parcel.selectOption(parcelCru.unknown.properties.id);
+  await expect(details).toContainText('No matched rights record');
+  await expect(details).toContainText('doesn’t mean the parcel has no owner');
+ }
+ if(parcelCru.multiple){
+  await parcel.selectOption(parcelCru.multiple.properties.id);
+  for(const right of parcelCru.multiple.properties.recordedRights)await expect(details.getByText(`${ownerName(right.name)} · ${right.rightLabel}`,{exact:true})).toBeVisible();
+ }
+ const holderSection=dialog.locator('.village-map-owner-section');
+ if(!await holderSection.getByRole('list').isVisible())await holderSection.locator('summary').click();
+ if(parcelCru.holders>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.holders} right holders`,exact:true}).click();
+ const holderList=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
+ await expect(holderList.getByRole('button')).toHaveCount(parcelCru.holders);
+ const holder=parcelCru.held.properties.recordedRights[0];
+ if(parcelCru.holders>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
+ await holderList.getByRole('button').filter({hasText:ownerName(holder.name)}).click();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-holders-mobile.png`)});
+ await dialog.getByRole('button',{name:'Link chosen right holder to an app producer',exact:true}).click();
+ await dialog.getByRole('combobox',{name:'App producer'}).selectOption(producer.id);
+ await dialog.getByRole('button',{name:'Save producer link'}).click();
+ await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ expect(links[0].holderId).toBe(holder.holderId);
+ await page.goto('/shared/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
+ await expect(dialog.getByRole('link',{name:producer.canonicalName,exact:true})).toBeVisible();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await page.setViewportSize({width:1280,height:900});
+ await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
+ await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-linked-shared-desktop.png`)});
+ await dialog.getByRole('button',{name:'Change link'}).click();
+ await dialog.getByRole('combobox',{name:'App producer'}).selectOption(other.id);
+ await dialog.getByRole('button',{name:'Save producer link'}).click();
+ await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ expect(links[0].producerId).toBe(other.id);
+ await expect(dialog.getByRole('link',{name:other.canonicalName,exact:true})).toHaveCount(0);
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('button',{name:'View village map'})).toBeFocused();
 });
 
 test('Échezeaux pilot: a verified producer link and opt-in name matches',async({page},testInfo)=>{

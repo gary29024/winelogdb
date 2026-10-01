@@ -1,0 +1,46 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Clos de Vougeot boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The official wine-board list names Clos de Vougeot as one whole-cru climat. The pinned cadastre records CLOS DE VOUGEOT; historical subdivisions and producer holdings have no reviewed cadastral crosswalk and retain the whole-cru outline.",
+  "sources": [
+    {
+      "commune": "21716",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-lieux_dits.json.gz",
+      "sha256": "02af4c5fa68b99faecd30a3d01c878989a85448e32559e9b6e107ec49403b914",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-vougeot,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg2Jnw%3D",
+  "nameSourceChecked": "2026-10-01",
+  "parentSourceSha256": "452bfc2ca94f0dd3a18c1058686d0ef4dceaa9339c3728f620e0022ff4a899fb",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-communes.json.gz",
+      "sha256": "92c0a23d19635c68e9f484b0e2b4a96bcd500c2fcc59775a3205c2abb6c56e30"
+    }
+  ],
+  "parentHa": 51.1156365141146,
+  "mappedHa": 51.11429427879657,
+  "unmappedHa": 0.0013422353471757408,
+  "plots": [
+    {
+      "id": "clos-de-vougeot-plot-clos-de-vougeot",
+      "sourceHa": 52.31795074540132,
+      "clippedHa": 51.11429427879657,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": []
+}

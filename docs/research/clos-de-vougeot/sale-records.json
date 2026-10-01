@@ -1,0 +1,153 @@
+{
+ "schemaVersion": 2,
+ "dataset": "DVF+ open-data (Cerema / DGALN), mutations table, Bourgogne-Franche-Comté",
+ "licence": "Licence Ouverte 2.0. Reuse must not re-identify the parties; only dates, deed types and parcel references are kept, never prices or addresses.",
+ "release": "2026-04",
+ "parentFeatureId": "inao-denom-546",
+ "coverage": "2014-03-26 to 2025-08-29",
+ "inputs": {
+  "parcelSnapshotSha256": "7f159994ad5bb0b169ab4a160f69a3787077e3c96bd8a205764719c8b9ebca3b",
+  "dvfPlus": {
+   "url": "https://cerema.app.box.com/index.php?rm=box_download_shared_file&shared_name=pgoyov5dddimtnk5j6akbfl79mr4jrep&file_id=f_2192485434888",
+   "fileName": "DVF_PLUS_2026_1_CSV_R027_ED251.zip",
+   "sha256": "1d46bf19900b99eaae8853fbd0f7b9191a55c7a0e12edb405849b0bdd9b46a2d"
+  }
+ },
+ "note": "A deed dates a transfer and groups parcels; it names no party and never establishes farming. Parcel references are those printed at the deed date.",
+ "counts": {
+  "deeds": 12,
+  "parcels": 22
+ },
+ "deeds": [
+  {
+   "deedId": "253f343ad84e01c6c479fdbd3008c790",
+   "date": "2015-12-16",
+   "nature": "sale",
+   "dispositions": 2,
+   "parcelIds": [
+    "217160000A0461",
+    "217160000A0462"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "7bec3ddb09a43e0bf8ba68335bd3fc89",
+   "date": "2016-11-28",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0007",
+    "217160000A0011",
+    "217160000A0024",
+    "217160000A0061",
+    "217160000A0549"
+   ],
+   "otherParcels": 9
+  },
+  {
+   "deedId": "516c337394446a10eec3f7c943e10489",
+   "date": "2018-12-19",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0052",
+    "217160000A0053"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "9307cd0b06f53230689207c7642f2283",
+   "date": "2019-03-01",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0257",
+    "217160000A0431",
+    "217160000A0432"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "933a1288b31e982531ca835beb94bfff",
+   "date": "2021-06-15",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0265",
+    "217160000A0392"
+   ],
+   "otherParcels": 30
+  },
+  {
+   "deedId": "83b5bec915a8b7b34bda6a22a671f741",
+   "date": "2021-11-25",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0070"
+   ],
+   "otherParcels": 1
+  },
+  {
+   "deedId": "67d54a059051767d3d2ca1299898d006",
+   "date": "2023-02-06",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0038"
+   ],
+   "otherParcels": 0
+  },
+  {
+   "deedId": "9e838fd8f8987168ec64d0d88733987c",
+   "date": "2023-05-31",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0016",
+    "217160000A0261"
+   ],
+   "otherParcels": 29
+  },
+  {
+   "deedId": "1676320cea242ea8361eb6746ceb6280",
+   "date": "2024-10-23",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0264"
+   ],
+   "otherParcels": 30
+  },
+  {
+   "deedId": "6a9c55e50c14256b6db138c6b661fc3a",
+   "date": "2025-01-30",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0433"
+   ],
+   "otherParcels": 11
+  },
+  {
+   "deedId": "efbecd4d5aaef2788cb276e968fb9aa4",
+   "date": "2025-04-03",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0075"
+   ],
+   "otherParcels": 12
+  },
+  {
+   "deedId": "63685e6a450e62b102323ee70cab4d84",
+   "date": "2025-06-20",
+   "nature": "sale",
+   "dispositions": 1,
+   "parcelIds": [
+    "217160000A0581"
+   ],
+   "otherParcels": 0
+  }
+ ]
+}
