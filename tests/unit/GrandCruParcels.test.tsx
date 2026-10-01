@@ -9,6 +9,11 @@ import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.mani
 import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
+const evidenceLoad=vi.hoisted(()=>({fail:false}));
+vi.mock('../../src/lib/places/grandCruParcels/evidence',async importOriginal=>{
+ const real=await importOriginal<typeof import('../../src/lib/places/grandCruParcels/evidence')>();
+ return {...real,loadParcelEvidence:(id:string)=>evidenceLoad.fail?Promise.reject(new Error('offline')):real.loadParcelEvidence(id)};
+});
 
 const data=JSON.parse(readFileSync('public'+manifest.dataUrl,'utf8')) as Parcels;
 function mapStub(){
@@ -19,7 +24,7 @@ function mapStub(){
 }
 const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=>o.parentFeatureId==='inao-denom-565');
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
-afterEach(()=>{cleanup();vi.unstubAllGlobals()});
+afterEach(()=>{cleanup();vi.unstubAllGlobals();evidenceLoad.fail=false});
 describe('Cadastral parcel controls',()=>{
  it('keeps all 69 Vougeot legal holders searchable, both rights and unknown parcels without domaine crosswalks',async()=>{
   const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
@@ -46,6 +51,18 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.getByText('No matched rights record')).toBeTruthy();
   expect((parcel as unknown as HTMLSelectElement).options).toHaveLength(165);
   expect(screen.queryByText('Verified parcel links')).toBeNull();
+ });
+ it('never mentions domaine research for a cru that has none, even when its evidence fails to load',async()=>{
+  evidenceLoad.fail=true;
+  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  expect(await screen.findByRole('button',{name:'Show all 69 right holders'})).toBeTruthy();
+  await new Promise(resolve=>setTimeout(resolve,0));  // let the rejected evidence load settle
+  expect(screen.queryByText(/domaine research/i)).toBeNull();
+  expect(screen.queryByRole('button',{name:'Retry domaine research'})).toBeNull();
+  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
  });
  it('shows dated evidence only on its exact parcels without promoting it to a farming link',async()=>{
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));

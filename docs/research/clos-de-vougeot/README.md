@@ -18,17 +18,25 @@ sale or cadastral predecessor never establishes actual farming.
 | Parcels whose rights changed 2019–2025 | 70; 101 recorded changes |
 | Parcels with an authorisation / application or suspension | 7; 4 image-reviewed events; no exact-parcel authorisation |
 | Parcels with sale records (DVF) | 22; 12 deeds |
-| Parcels with holder or research leads | 108 |
-| Parcels with no lead | 56 |
+| Parcels with holder or research leads | 7 (7 notice parcels; no holder leads) |
+| Parcels with no lead | 157 |
 | Verified farming links | 0 |
-| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 20,295 / 2,430 bytes |
+| Official history to earliest records (#461) | Pending: 2019–2025 rights and next-vintage lineage only |
+| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 20,295 / 2,411 bytes |
 
-The lead table counts a recorded legal holder as a contact for further research:
-106 parcels have rights, and two more have a named applicant. It does not identify
-an operating domaine. The [register](register.md) separately counts seven parcels
-with a named applicant and 157 without a named operator candidate. All 69 holder
-identities are inventoried; this Tier 1 review establishes no holder-to-domaine
-crosswalk, so the app shows legal holders without a domaine grouping control.
+A lead is a named candidate in the [register](register.md): a holder lead from
+reviewed research, a parcel named in an official notice, or a co-sale lead. A recorded
+legal holder alone is not a lead. The seven leads are the parcels named in the four
+notices below; the other 157 parcels, including 101 with recorded rights, have no named
+candidate. All 69 holder identities are inventoried, but this Tier 1 review establishes
+no holder-to-domaine crosswalk, so the app shows legal holders without a domaine
+grouping control.
+
+The history above is the original Tier 1 baseline. [#461](https://github.com/gary29024/winelogdb/issues/461)
+extends Tier 1 to official parcel filiation (DFI) and every older record source back to
+its earliest availability. That work is pending for this cru, and #378 stays open until
+it is delivered and reviewed.
+
 Both geometry and evidence load only after switching on Parcel rights.
 
 ## Geometry and named areas

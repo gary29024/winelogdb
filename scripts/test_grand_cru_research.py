@@ -531,6 +531,33 @@ class ParcelEvidenceTests(unittest.TestCase):
         self.assertFalse(any(i['kind'] == 'filing' for i in parcels['212670000D0146']))
 
 
+
+class ResultsTableTests(unittest.TestCase):
+    """Playbook section 5: each cru README's standard table is checked against its register."""
+
+    def table_check(self, edit):
+        from build_grand_cru_research import check_results_table, outputs
+        cru, bundle = load_cru('clos-de-vougeot')
+        context = Context(cru, bundle)
+        files, register = outputs(context)
+        text = edit((ROOT / cru['research']['methodDoc']).read_text(encoding='utf-8'))
+        check_results_table(context, register['counts'], files[context.evidence], text)
+
+    def test_committed_table_matches(self):
+        self.table_check(lambda text: text)
+
+    def test_a_legal_holder_is_not_a_lead(self):
+        with self.assertRaisesRegex(ValueError, 'must start with 7,'):
+            self.table_check(lambda text: text.replace('| Parcels with holder or research leads | 7', '| Parcels with holder or research leads | 108'))
+        with self.assertRaisesRegex(ValueError, 'must start with 157'):
+            self.table_check(lambda text: text.replace('| Parcels with no lead | 157', '| Parcels with no lead | 56'))
+
+    def test_history_row_and_measured_payload_are_required(self):
+        with self.assertRaisesRegex(ValueError, 'Official history to earliest records'):
+            self.table_check(lambda text: '\n'.join(line for line in text.splitlines() if 'Official history' not in line))
+        with self.assertRaisesRegex(ValueError, 'evidence file as 20,295 / 2,411'):
+            self.table_check(lambda text: text.replace('20,295 / 2,411', '20,295 / 2,430'))
+
 if __name__ == '__main__':
     unittest.main()
 

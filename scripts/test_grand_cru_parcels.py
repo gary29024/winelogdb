@@ -16,6 +16,7 @@ class RightsJoinTests(unittest.TestCase):
         self.assertEqual(short_reference('217160000A0523'), 'A0523')
         self.assertEqual(short_reference('21714000AB0016'), 'AB0016')
         self.assertEqual(short_reference('212670000D0665'), 'D0665')
+        self.assertEqual(short_reference('217141050A0012'), '105 A0012')  # absorbed-commune prefix
 
     def test_reviewed_commune_remainder_cannot_follow_changed_sources(self):
         from build_grand_cru_commune_audit import uncovered_area_limit

@@ -242,8 +242,8 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
- const hasDomaineResearch=Boolean(Object.keys(research?.holderDomains??{}).length);
- const useDomaineGroups=hasDomaineResearch&&groupByDomaine;
+ // Known from the registry, so the control and its loading/failure notes appear only for crus with domaine research.
+ const useDomaineGroups=cru.domaineGrouping&&groupByDomaine;
  const listed=useDomaineGroups?domaineOwners:legalOwners;
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
@@ -307,10 +307,10 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     </div>}
     <div>
      <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
-     {hasDomaineResearch&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
+     {cru.domaineGrouping&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
      <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
-     {groupByDomaine&&withResearch&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
-     {groupByDomaine&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
+     {useDomaineGroups&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
+     {useDomaineGroups&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
       <span className="village-map-owner-name">{o.name}{(o.domaine||o.lead)&&<small>{o.legalNames.join(' · ')}</small>}{(o.basisLabel||o.lead)&&<span className={`village-map-basis${o.lead?' is-lead':''}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>

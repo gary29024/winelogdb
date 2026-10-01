@@ -24,6 +24,12 @@ describe('Grand Cru registry',()=>{
   for(const bundle of bundles)expect([...parcelBundles[bundle.id as keyof typeof parcelBundles].parentFeatureIds].sort())
    .toEqual(grandCrus.filter(c=>c.bundle===bundle.id).map(c=>c.parentFeatureId).sort());
  });
+ it('offers domaine grouping exactly where a cru’s research files link holders to domaines',async()=>{
+  for(const cru of grandCrus){
+   const evidence=await loadParcelEvidence(cru.parentFeatureId);
+   expect(cru.domaineGrouping,cru.slug).toBe(Object.keys(evidence.holderDomains??{}).length>0);
+  }
+ });
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();

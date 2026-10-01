@@ -70,7 +70,9 @@ def title_case_owner(name):
 
 
 def short_reference(parcel_id):
-    return f"{parcel_id[8:10].lstrip('0')}{parcel_id[10:]}"
+    """Section and number, e.g. A0523. A non-000 prefix (a former, absorbed commune) is kept so references stay unique."""
+    prefix, section = parcel_id[5:8], parcel_id[8:10].lstrip('0')
+    return f"{'' if prefix == '000' else prefix + ' '}{section}{parcel_id[10:]}"
 
 
 SOURCE_KINDS = {

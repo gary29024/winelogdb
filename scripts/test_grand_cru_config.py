@@ -7,7 +7,8 @@ from unittest import mock
 
 import grand_cru
 from build_grand_cru_research import Context
-from grand_cru import (APP_DIR, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, bundle_ids, bundle_parent_features, bundle_sources,
+from grand_cru import (APP_DIR, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
+                       named_plot_report_path, bundle_ids, bundle_parent_features, bundle_sources,
                        bundle_village_maps, communes, cru_slugs, load_bundle, load_cru, read_json, relative, village_map)
 
 
@@ -123,6 +124,39 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(manifest[key + 'Url'], bundle['parcels'][key + 'Url'])
                 self.assertEqual(report[key], manifest[key])
                 self.assertEqual(report[key + 'Url'], manifest[key + 'Url'])
+
+    def test_committed_commune_audits_match_pinned_sources(self):
+        # CI has no GIS packages or source downloads, so it cannot rerun the audit. It can prove the committed report
+        # was built from today's pins and stays within its limit, and that a reviewed remainder names those pins.
+        for slug in cru_slugs():
+            cru, bundle = load_cru(slug)
+            path = commune_audit_path(cru)
+            self.assertTrue(path.exists(), f'{slug}: commit build_grand_cru_commune_audit.py output')
+            report = read_json(path)
+            pins = {insee: digest for insee, _, digest in cadastre_sources(bundle)}
+            self.assertEqual({c['commune']: c['sha256'] for c in report['bundleCommunes']}, pins, f'{slug}: stale commune audit')
+            review = cru.get('communeAudit', {}).get('reviewedUncoveredArea')
+            self.assertEqual(report.get('reviewedUncoveredArea'), review, f'{slug}: rerun the commune audit after review')
+            if review:
+                _, _, parent_hash = village_map(bundle, cru['parentFeatureId'])
+                self.assertEqual(review['parentSourceSha256'], parent_hash, f'{slug}: INAO boundary changed since review')
+                self.assertEqual(review['cadastreSha256ByCommune'], pins, f'{slug}: cadastre changed since review')
+                self.assertTrue(review['note'].strip() and review['reviewedAt'])
+                limit = review['maximumAreaM2']
+            else:
+                limit = report['boundaryAreaM2'] * 0.001  # MAX_UNCOVERED_SHARE in build_grand_cru_commune_audit.py
+            self.assertLessEqual(report['notCoveredByBundleParcelsM2'], limit, slug)
+
+    def test_named_areas_are_audited_even_without_a_display_layer(self):
+        # Grands-Échezeaux predates the whole-cru audit; regenerate it with the downloaded Flagey lieux-dits.
+        pending = {'grands-echezeaux'}
+        for slug in cru_slugs():
+            cru, _ = load_cru(slug)
+            if 'namedPlots' in cru and slug not in pending:
+                self.assertTrue(named_plot_report_path(cru).exists(), f'{slug}: commit build_grand_cru_named_plots.py output')
+        for slug in pending:
+            if named_plot_report_path(load_cru(slug)[0]).exists():
+                self.fail(f'{slug}: its named-area audit is committed; remove it from pending')
 
     def test_generated_paths_are_repository_relative(self):
         self.assertEqual(relative(ROOT / 'docs/research/echezeaux/curation.json'), 'docs/research/echezeaux/curation.json')

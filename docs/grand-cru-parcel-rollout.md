@@ -62,8 +62,11 @@ cru. Tier 3 stays deferred everywhere.
    original reference, scope and ancestry path. Retain dates and parcel
    references only; no prices, addresses or party names.
 7. App: evidence panel, legal-holder list, domaine grouping only where research
-   links exist, manual links scoped to the wine's producer, pinned map.
-8. Published counts (table in section 5) and limitations.
+   links exist (the registry's `domaineGrouping` flag), manual links scoped to the
+   wine's producer, pinned map.
+8. Published counts (table in section 5) and limitations, in
+   `docs/research/<slug>/README.md`. The research `--check` fails when the table
+   disagrees with the generated register.
 
 ### Historical coverage required by #461
 
@@ -161,8 +164,11 @@ grouping by a hard-coded `parentId!=='inao-denom-565'` check in
    evidence loader. Remove the Échezeaux name/ID checks in `GrandCruParcels.tsx`
    and the fixed JSON import in `ParcelEvidence.tsx`. Rename
    `echezeauxParcelOwners.ts` to a generic module.
-5. **CI**: the `research-data` job loops over every configured cru's `--check`.
-   Browser tests stay one representative journey, parameterised by config, so the
+5. **CI**: the `research-data` job loops over every configured cru's `--check`,
+   runs the config and research tests, and installs the geometry packages to run
+   `test_grand_cru_parcels`. CI downloads no sources, so it cannot rebuild parcels or
+   rerun the commune audit; the config test instead proves each committed commune
+   audit was built from today's pinned hashes and stays within its limit. Browser tests stay one representative journey, parameterised by config, so the
    Chromium matrix does not grow with each cru.
 
 **Done in #417.** Échezeaux retains identical parcel and named-area GeoJSON,
@@ -190,13 +196,19 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    feature can be explored) and `evidenceFrom`. Add
    `appellationId` and `namedPlots` once named areas are reviewed,
    `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
-   once `docs/research/<slug>/curation.json` exists.
+   once `docs/research/<slug>/curation.json` exists. The commune audit allows 0.1% of
+   the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
+   a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
+   explanation, and the exact INAO and cadastre hashes it was reviewed against), as in
+   `clos-de-vougeot.json`; changed sources then fail until reviewed again. Never clip,
+   buffer or fill geometry to pass the audit.
 3. **Build**, from the repository root:
 
    ```sh
    python scripts/download_grand_cru_sources.py --cru <slug>   # once per bundle
    python scripts/build_grand_cru_parcels.py --cru <slug>      # rebuilds the whole bundle
-   python scripts/build_grand_cru_named_plots.py --cru <slug>
+   python scripts/build_grand_cru_commune_audit.py --cru <slug>
+   python scripts/build_grand_cru_named_plots.py --cru <slug>  # audit report even when displayLayer is false
    python scripts/build_grand_cru_parcel_named_areas.py --cru <slug>
    python scripts/build_grand_cru_rights_history.py --cru <slug>
    python scripts/build_grand_cru_sale_records.py --cru <slug>
@@ -210,8 +222,14 @@ Rebuild registers and app evidence together with the history and coverage report
 
 4. **App.** Add the cru (and a new bundle's manifest, holder index and any evidence
    loader) to `src/lib/places/grandCruParcels/registry.ts`, `holders.ts` and
-   `evidence.ts`. List all of its `villageMaps` in the registry. The unit test fails
-   until the registry matches the configs. Components need no change.
+   `evidence.ts`. List all of its `villageMaps` in the registry, and set
+   `domaineGrouping` to true only when its research files contain holder-to-domaine
+   links (`holderDomains`). Otherwise the app shows legal holders with no grouping
+   control and no domaine-research messages. The unit tests fail until the registry
+   matches the configs and research files. Components need no change.
+5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
+   method, sources and limitations. Commit every build report, including the
+   commune audit and the named-area audit.
 
 Outputs by convention: research in `docs/research/<slug>/`; app files in
 `src/lib/places/grandCruParcels/` (`<bundle>.manifest.json`, `<bundle>.holders.json`,
@@ -251,7 +269,27 @@ Outputs by convention: research in `docs/research/<slug>/`; app files in
 | Parcels with holder or research leads | |
 | Parcels with no lead | |
 | Verified farming links | 0 unless the gate is met |
+| Official history to earliest records (#461) | Delivered, or Pending with the baseline actually covered |
 | Raw / gzip payload (parcels, evidence) | |
+
+`build_grand_cru_research.py --check` checks this table in each
+`docs/research/<slug>/README.md` against the generated register (Échezeaux's pilot
+documents predate it). The value cell must **start with** the register's number;
+detail may follow it. Row labels may extend the text shown here (for example with
+the rights date), but must start with it.
+
+- **Leads** count register parcels whose research status is not `unresolved`:
+  holder leads from reviewed research, parcels named in an official notice, and
+  co-sale leads. A recorded legal holder on its own is **not** a lead. **No lead**
+  is the register's `unresolved` count, so the two rows always sum to the parcel count.
+- **Authorisation / application or suspension** counts parcels with an
+  exact-reference notice event, directly or through accepted lineage.
+- **Official history (#461)** stays `Pending` until that cru's #461 backfill is
+  delivered and reviewed; the value states what the baseline covers. The detailed
+  history rows above are filled once it is delivered.
+- **Payload** gives `raw / gzip` bytes for both the parcel file and the evidence
+  file, measured as the build reports do (Python `gzip.compress(data, mtime=0)`),
+  not with the `gzip` command, whose headers vary.
 
 ## 6. Rules that stay the same everywhere
 
