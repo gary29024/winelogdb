@@ -10,7 +10,7 @@ import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import type { ChampagneExtractionJob } from './champagneExtraction';
 import { createQueuedProducerResearchRun,getProducerResearchRun,mapRunRow,settleIfStalled } from '../src/lib/producers/research';
 import { activeCampaignId,advanceCampaign,cancelCampaign,countUnresearchedProducers,createCampaign,dismissCampaign,listCampaigns,measuredSearchesPerRequest,readCampaign,reviveCampaignIfStalled,typicalProducerRunMs,unresearchedProducers,
-  ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,campaignProducerLimit,CAMPAIGN_TICK_SECONDS,GEMINI_REQUESTS_PER_PRODUCER } from '../src/lib/producers/researchCampaign';
+  ASSUMED_SEARCHES_PER_REQUEST,CAMPAIGN_CONCURRENCY,campaignProducerLimit,CAMPAIGN_TICK_SECONDS,plannedGeminiRequests } from '../src/lib/producers/researchCampaign';
 import { createWineResearchRun,getLatestWineResearchRun,getWineResearchRun,updateWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { getResearchBatchJob } from '../src/lib/research/batchJobStore';
 import { pollWineBatchResearch,startWineBatchResearch } from '../src/lib/research/batchWineResearch';
@@ -76,7 +76,7 @@ router.get('/api/producers/research-batch/plan',async c=>{
   const willRun=Math.min(unresearched,requested);
   const perProducerMs=await typicalProducerRunMs(c.env.DB,owner);
   const searchesPerRequest=await measuredSearchesPerRequest(c.env.DB,owner);
-  const geminiRequests=willRun*GEMINI_REQUESTS_PER_PRODUCER;
+  const geminiRequests=await plannedGeminiRequests(c.env.DB,owner,requested);
   return c.json({
     unresearched,willRun,maxPerRun:unresearched,concurrency:CAMPAIGN_CONCURRENCY,
     geminiRequests,

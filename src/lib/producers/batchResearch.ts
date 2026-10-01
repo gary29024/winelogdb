@@ -1,4 +1,4 @@
-import { producerLwinContext,producerLwinReferences } from './lwinRange';
+import { lwinRangeFirst,producerLwinContext,producerLwinReferences } from './lwinRange';
 import { AI_MODELS } from '../ai/policy';
 import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
 import { buildResearchTargets,scopePassesQuality,upsertResearchCache } from '../research/cache';
@@ -366,7 +366,9 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
   const references=await producerLwinReferences(env.DB,owner,producerId,env.REFERENCE_DATA),context=producerLwinContext(references);
   // Small imported ranges share the profile's source discovery. Large or unknown
   // ranges retain independent requests and the existing bounded split recovery.
-  const combined=keys.length===2&&keys.includes('profile')&&keys.includes(FULL_CATALOG_SLICE.key)&&Boolean(env.REFERENCE_DATA)&&references.length>0&&references.length<=COMBINED_LWIN_MAX_WINES;
+  // Only a first attempt combines: a combined answer that failed (often by
+  // running out of room) is retried as separate profile and range requests.
+  const combined=attempt===1&&keys.length===2&&keys.includes('profile')&&keys.includes(FULL_CATALOG_SLICE.key)&&Boolean(env.REFERENCE_DATA)&&references.length>0&&references.length<=COMBINED_LWIN_MAX_WINES;
   const entries=(combined?[COMBINED_PRODUCER_KEY]:keys).map(key=>requestForKey(producer.canonical_name,key,context));let googleName=prior?.google_batch_name,jobId=prior?.id;
   model=prior?.model??model;
   try{
@@ -376,7 +378,7 @@ async function submitBatch(env:Env,owner:string,producerId:string,requestId:stri
     const firstMessage=baseCount?`${asked} ${baseCount} bounded catalogue slice${baseCount===1?'':'s'} submitted to Batch`:'Producer profile, practices and contacts submitted to Batch';
     const message=attempt===1?firstMessage:`Retrying only ${keys.length} failed producer research part${keys.length===1?'':'s'} with ${model}`;
     await setRunState(env.DB,owner,requestId,'running',attempt===1?'searching':'retrying',attempt,message);
-    await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName});return jobId;
+    await env.RESEARCH_QUEUE.send({kind:'producer_batch_poll',owner,producerId,requestId,jobId,pollCount:0},{delaySeconds:researchBatchFirstPollDelay(isEmulatedGeminiBatchName(googleName))});log('log',{requestId,producerId,stage:'batch_submitted',attempt,model,keys,googleName,combined,lwinReferences:references.length});return jobId;
   }catch(e){if(googleName)throw new ResearchPersistenceError(e);throw e}
 }
 export async function startProducerBatchResearch(env:Env,owner:string,producerId:string,requestId:string,refreshProfile=false,rangeOnly=false){
@@ -389,7 +391,10 @@ export async function startProducerBatchResearch(env:Env,owner:string,producerId
     .bind(owner,producerId).first<ProfileFreshness>();
   const rangeAllowed=await producerRangeAllowed(env.DB,owner);
   if(rangeOnly&&!rangeAllowed)return {ok:false as const,error:'Wine range research is not available on this account'};
-  const keys=[...(rangeOnly||(!refreshProfile&&profileIsFresh(known))?[]:['profile']),...(rangeAllowed?catalogDefaultChunkKeys:[])];
+  // A producer whose range is shown from LWIN pays for range research only when
+  // someone asks to verify it (rangeOnly).
+  const rangeKeys=rangeAllowed&&(rangeOnly||!await lwinRangeFirst(env.DB,owner,producerId))?catalogDefaultChunkKeys:[];
+  const keys=[...(rangeOnly||(!refreshProfile&&profileIsFresh(known))?[]:['profile']),...rangeKeys];
   if(!keys.length){await setRunState(env.DB,owner,requestId,'complete','complete',0,'This producer profile is already up to date');return {ok:true as const}}
   try{await persistResearch(()=>prepareProducerCatalogStage(env.DB,owner,producerId,requestId));await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
   catch(e){if(e instanceof ResearchPersistenceError)throw e;const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});
@@ -439,6 +444,9 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   await setRunState(env.DB,owner,requestId,'running','parsing',job.attempt,'Validating producer profile and staging independent catalogue slices');
   const byKey=responsesByKey(fetched.responses),failed:string[]=[],incomplete:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);
   const combined=byKey.get(COMBINED_PRODUCER_KEY);
+  // Evidence for raising COMBINED_LWIN_MAX_WINES: how often a combined answer
+  // overflows, and how many searches it actually ran.
+  if(combined)log('log',{requestId,producerId,stage:'combined_result',attempt:job.attempt,finishReason:inlineFinishReason(combined),searches:countSearchQueries([combined])});
   if(combined)for(const key of ['profile',FULL_CATALOG_SLICE.key])if(job.keys.includes(key)&&!byKey.has(key))byKey.set(key,combined);
   for(const key of job.keys){
     const inline=byKey.get(key);if(!inline?.response){failed.push(key);errors.set(key,`${key}: ${inline?.error?.message||'Gemini returned no result'}`);continue}

@@ -1,11 +1,13 @@
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { realD1 } from './support/realD1';
 import { ensureProducerEntity } from '../../src/lib/producers/entities';
-import { producerLwinReferences } from '../../src/lib/producers/lwinRange';
+import { lwinCatalog,lwinRangeFirst,producerLwinReferences } from '../../src/lib/producers/lwinRange';
+import layered from '../../worker/layered';
+import { createSession } from '../../src/lib/auth/session';
 import { parseLwinReference,type LwinReferenceProduct } from '../../src/lib/wine/lwinImport';
 import { COMBINED_PRODUCER_KEY,pollProducerBatchResearch,startProducerBatchResearch } from '../../src/lib/producers/batchResearch';
 import { createQueuedProducerResearchRun,getProducerResearchRun } from '../../src/lib/producers/research';
-import { advanceCampaign,countUnresearchedProducers,createCampaign,measuredSearchesPerRequest,unresearchedProducers } from '../../src/lib/producers/researchCampaign';
+import { advanceCampaign,countUnresearchedProducers,createCampaign,measuredSearchesPerRequest,plannedGeminiRequests,unresearchedProducers } from '../../src/lib/producers/researchCampaign';
 import worker from '../../worker/multiUserEntry';
 import { loadResearchCache,buildResearchTargets } from '../../src/lib/research/cache';
 import { durableProvider,providerNeedsReconciliation } from '../../src/lib/credits/provider';
@@ -53,6 +55,54 @@ describe('LWIN-guided producer research',()=>{
   database.sql.prepare('DELETE FROM producer_aliases WHERE producer_id=?').run(producerId);
   expect(await producerLwinReferences(database.db,'owner',producerId,bucket([row(),row('1234568','Maison Wine','Maison')]))).toEqual([]);
  });
+ it('shows a linked producer\'s LWIN range first and searches only the profile until asked to verify',async()=>{
+  const reference=bucket([row(),row('1234568','Morey-Saint-Denis')]),[linked]=await producerLwinReferences(database.db,'owner',producerId,reference);
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,lwin7,identity_match_status,lwin_reference_json,created_at,updated_at) VALUES('w1','owner',?,?,'Clos de la Roche',2019,?,'matched',?,'now','now')")
+   .run(producer,producerId,linked.lwin7,JSON.stringify(linked));
+  expect(await lwinRangeFirst(database.db,'owner',producerId)).toBe(true);
+  const response=await layered.fetch(new Request(`https://wine.example/api/producers/${producerId}`,{headers:{Authorization:`Bearer ${await createSession('owner','secret')}`}}),
+   {DB:database.db,REFERENCE_DATA:reference,AUTH_SECRET:'secret'} as never,{waitUntil:()=>undefined,passThroughOnException:()=>undefined} as never);
+  const detail=await response.json() as {catalogSource:string;catalog:{name:string;category:string}[]};
+  expect(detail.catalogSource).toBe('lwin');
+  expect(detail.catalog.map(wine=>wine.name)).toEqual(['Clos de la Roche','Morey-Saint-Denis']);
+  const fetcher=vi.fn<(input:RequestInfo|URL,init?:RequestInit)=>Promise<Response>>(async()=>new Response(JSON.stringify({name:'batches/lwin-first'})));vi.stubGlobal('fetch',fetcher);
+  const keys=(call:number)=>(JSON.parse(String(fetcher.mock.calls[call][1]?.body)).batch.input_config.requests.requests as {metadata:{key:string}}[]).map(request=>request.metadata.key);
+  await createQueuedProducerResearchRun(database.db,'owner',producerId,requestId);
+  await startProducerBatchResearch(researchEnv(vi.fn(),reference),'owner',producerId,requestId);
+  expect(keys(0)).toEqual(['profile']);
+  const verify='22222222-2222-4333-8444-555555555555';
+  await createQueuedProducerResearchRun(database.db,'owner',producerId,verify);
+  await startProducerBatchResearch(researchEnv(vi.fn(),reference),'owner',producerId,verify,false,true);
+  expect(keys(1)).toHaveLength(1);expect(keys(1)[0]).toMatch(/^catalog_slice_/);
+  database.sql.prepare('UPDATE producers SET catalog_json=? WHERE id=?').run(JSON.stringify(complete.range),producerId);
+  expect(await lwinRangeFirst(database.db,'owner',producerId)).toBe(false);
+ });
+ it('plans one request for a producer shown from LWIN and stops picking it once its profile exists',async()=>{
+  const [linked]=await producerLwinReferences(database.db,'owner',producerId,bucket());
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,lwin7,identity_match_status,lwin_reference_json,created_at,updated_at) VALUES('w1','owner',?,?,'Clos de la Roche',2019,?,'matched',?,'now','now')")
+   .run(producer,producerId,linked.lwin7,JSON.stringify(linked));
+  const other=(await ensureProducerEntity(database.db,'owner','Domaine Ponsot')).id;
+  expect((await unresearchedProducers(database.db,'owner',10)).map(p=>p.id).sort()).toEqual([producerId,other].sort());
+  expect(await plannedGeminiRequests(database.db,'owner',10)).toBe(3);
+  database.sql.prepare('UPDATE producers SET profile_researched_at=? WHERE id=?').run('2026-10-01T00:00:00.000Z',producerId);
+  expect((await unresearchedProducers(database.db,'owner',10)).map(p=>p.id)).toEqual([other]);
+  expect(await plannedGeminiRequests(database.db,'owner',10)).toBe(2);
+ });
+ it('still searches the range when the only linked wine is one LWIN records as long ended',async()=>{
+  const [linked]=await producerLwinReferences(database.db,'owner',producerId,bucket());
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,lwin7,identity_match_status,lwin_reference_json,created_at,updated_at) VALUES('w1','owner',?,?,'Clos de la Roche',1990,?,'matched',?,'now','now')")
+   .run(producer,producerId,linked.lwin7,JSON.stringify({...linked,finalVintage:1995}));
+  expect(await lwinRangeFirst(database.db,'owner',producerId)).toBe(false);
+  database.sql.prepare('UPDATE producers SET profile_researched_at=? WHERE id=?').run('2026-10-01T00:00:00.000Z',producerId);
+  expect((await unresearchedProducers(database.db,'owner',10)).map(p=>p.id)).toEqual([producerId]);
+ });
+ it('builds the unverified LWIN range without ended or duplicate wines',async()=>{
+  const references=await producerLwinReferences(database.db,'owner',producerId,bucket([row(),row('1234568','Morey-Saint-Denis'),row('1234569','Gevrey-Chambertin')]));
+  const ended=references.map(reference=>reference.wineName==='Gevrey-Chambertin'?{...reference,finalVintage:2001}:reference);
+  const range=lwinCatalog([...ended,{...ended[0],lwin7:'1234570'}],new Date('2026-10-01'));
+  expect(range.map(wine=>[wine.name,wine.category,wine.appellation])).toEqual([['Clos de la Roche','red','Clos de la Roche'],['Morey-Saint-Denis','red','Morey-Saint-Denis']]);
+  expect(range.every(wine=>wine.lwinReference?.lwin7)).toBe(true);
+ });
  it('can still research when the optional imported catalogue cannot be read',async()=>{
   const unavailable={get:vi.fn(async()=>{throw new Error('R2 temporarily unavailable')})} as unknown as R2Bucket;
   expect(await producerLwinReferences(database.db,'owner',producerId,unavailable)).toEqual([]);
@@ -77,6 +127,21 @@ describe('LWIN-guided producer research',()=>{
   expect(JSON.parse(String(stored.catalog_json))).toMatchObject([{name:'Clos de la Roche'}]);expect(stored.profile).toBe(profile.profile);
   expect((await loadResearchCache(database.db,'owner',buildResearchTargets({producer,producerId}))).get('producer')?.payload.producerWinemakingPractices).toBe(profile.winemakingPractices);
   expect(await measuredSearchesPerRequest(database.db,'owner')).toBe(3);
+ });
+ it('retries a combined answer that ran out of room as separate profile and range requests',async()=>{
+  const send=vi.fn();let batches=0;
+  const fetcher=vi.fn<(input:RequestInfo|URL,init?:RequestInit)=>Promise<Response>>(async input=>{
+   if(String(input).includes(':batchGenerateContent'))return new Response(JSON.stringify({name:`batches/overflow-${++batches}`}));
+   const overflow=grounded(complete);overflow.candidates[0].finishReason='MAX_TOKENS';
+   return new Response(JSON.stringify({state:'JOB_STATE_SUCCEEDED',dest:{inlinedResponses:[{metadata:{key:COMBINED_PRODUCER_KEY},response:overflow}]}}));
+  });
+  vi.stubGlobal('fetch',fetcher);await createQueuedProducerResearchRun(database.db,'owner',producerId,requestId);
+  const env=researchEnv(send);await startProducerBatchResearch(env,'owner',producerId,requestId);
+  await pollProducerBatchResearch(env,'owner',producerId,requestId,send.mock.calls[0][0].jobId,0);
+  const submitted=fetcher.mock.calls.filter(call=>String(call[0]).includes(':batchGenerateContent'))
+   .map(call=>(JSON.parse(String(call[1]?.body)).batch.input_config.requests.requests as {metadata:{key:string}}[]).map(request=>request.metadata.key));
+  expect(submitted[0]).toEqual([COMBINED_PRODUCER_KEY]);
+  expect(submitted[1]).toHaveLength(2);expect(submitted[1]).toContain('profile');expect(submitted[1]).not.toContain(COMBINED_PRODUCER_KEY);
  });
  it.each(['home_country','catalog_json'])('replays the saved result after a %s write fails without buying fallback research',async(field)=>{
   const send=vi.fn(),fetcher=vi.fn<(input:RequestInfo|URL,init?:RequestInit)=>Promise<Response>>(async input=>String(input).includes(':batchGenerateContent')

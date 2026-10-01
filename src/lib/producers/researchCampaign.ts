@@ -1,3 +1,4 @@
+import { LWIN_ENDED_GRACE_YEARS } from './lwinRange';
 import { createQueuedProducerResearchRun,markRunStalled,STALLED_RUN_MS } from './research';
 
 /**
@@ -32,7 +33,8 @@ export function campaignProducerLimit(value:unknown){
 export const CAMPAIGN_STALE_RUN_MS=STALLED_RUN_MS;
 /**
  * Conservative planning estimate: a profile plus a whole-range request. A
- * small LWIN range can combine both, and a saved profile needs only the range.
+ * small LWIN range can combine both, a saved profile needs only the range, and
+ * a range shown from LWIN needs only the profile (see plannedGeminiRequests).
  * Retries and unfinished ranges can require additional requests.
  */
 export const GEMINI_REQUESTS_PER_PRODUCER=2;
@@ -69,9 +71,18 @@ const STALLED_ITEM_MESSAGE='The research run stopped reporting, so the batch mov
 const emptyCounts=():Record<CampaignItemStatus,number>=>({pending:0,running:0,complete:0,failed:0,skipped:0});
 // A first run can save its profile and still fail its range. That producer must
 // remain eligible; retrying will reuse the saved profile rather than buy it again.
-const UNRESEARCHED=`(researched_at IS NULL OR (
+// A producer whose range is shown from LWIN (no researched range, a logged wine
+// linked to LWIN) needs only its profile; once that exists it is done until
+// someone verifies the range. SQL twin of lwinRangeFirst.
+const LWIN_RANGE_FIRST=`(coalesce(catalog_json,'[]') IN ('','[]') AND EXISTS(SELECT 1 FROM wines w WHERE w.owner_id=producers.owner_id
+  AND w.producer_id=producers.id AND w.lwin7 IS NOT NULL AND json_extract(w.lwin_reference_json,'$.lwin7')=w.lwin7
+  AND w.identity_match_status IN ('matched','manual') AND coalesce(json_extract(w.lwin_reference_json,'$.wineName'),'')<>''
+  AND (json_extract(w.lwin_reference_json,'$.finalVintage') IS NULL
+   OR json_extract(w.lwin_reference_json,'$.finalVintage')>=CAST(strftime('%Y','now') AS INTEGER)-${LWIN_ENDED_GRACE_YEARS})))`;
+const UNRESEARCHED=`((researched_at IS NULL OR (
   EXISTS(SELECT 1 FROM producer_research_runs r WHERE r.owner_id=producers.owner_id AND r.producer_id=producers.id AND r.status='failed')
-  AND NOT EXISTS(SELECT 1 FROM producer_research_runs r WHERE r.owner_id=producers.owner_id AND r.producer_id=producers.id AND r.status='complete'))) `;
+  AND NOT EXISTS(SELECT 1 FROM producer_research_runs r WHERE r.owner_id=producers.owner_id AND r.producer_id=producers.id AND r.status='complete')))
+  AND NOT (profile_researched_at IS NOT NULL AND ${LWIN_RANGE_FIRST})) `;
 
 /** Producers without completed research, ordered by name for stable selection. */
 export async function unresearchedProducers(db:D1Database,owner:string,limit:unknown){
@@ -80,6 +91,18 @@ export async function unresearchedProducers(db:D1Database,owner:string,limit:unk
     `SELECT id,canonical_name FROM producers WHERE owner_id=? AND ${UNRESEARCHED} ORDER BY canonical_name COLLATE NOCASE LIMIT ?`
   ).bind(owner,selected).all<{id:string;canonical_name:string}>();
   return (results??[]).map(row=>({id:row.id,name:row.canonical_name}));
+}
+
+/**
+ * Grounded requests a run of this size is expected to need. A producer whose
+ * range is shown from LWIN needs only its profile; every other producer is
+ * planned at GEMINI_REQUESTS_PER_PRODUCER.
+ */
+export async function plannedGeminiRequests(db:D1Database,owner:string,limit:unknown){
+  const row=await db.prepare(`SELECT COUNT(*) AS n,coalesce(SUM(CASE WHEN ${LWIN_RANGE_FIRST} THEN 1 ELSE 0 END),0) AS lwin FROM (
+    SELECT * FROM producers WHERE owner_id=? AND ${UNRESEARCHED} ORDER BY canonical_name COLLATE NOCASE LIMIT ?) AS producers`)
+    .bind(owner,campaignProducerLimit(limit)).first<{n:number;lwin:number}>();
+  return Number(row?.n??0)*GEMINI_REQUESTS_PER_PRODUCER-Number(row?.lwin??0);
 }
 
 export async function countUnresearchedProducers(db:D1Database,owner:string){

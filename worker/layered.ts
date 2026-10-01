@@ -1,4 +1,5 @@
-import { attachLwinRange } from '../src/lib/producers/lwinRange';
+import { attachLwinRange,lwinCatalog,producerLwinReferences } from '../src/lib/producers/lwinRange';
+import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import { reliableLwinReference,type LwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
@@ -232,8 +233,15 @@ app.get('/api/producers/:id',async c=>{
     const entity=mapProducerRow(row),producerNames=[entity.canonicalName,...aliases.results.map(x=>x.display_alias)];
     const references=wines.results.map(reliableLwinReference).filter((reference):reference is LwinReference=>Boolean(reference));
     const correctedCatalog=attachLwinRange(applyCatalogDecisions(entity.catalog,catalogDecisions,producerNames).range,[...new Map(references.map(reference=>[reference.lwin7,reference])).values()],producerNames);
+    // No researched range yet, but a logged wine is linked to LWIN: show the
+    // imported range first, labelled unverified, instead of paying to search for it.
+    let catalog:Array<Record<string,unknown>>=correctedCatalog,catalogSource:'research'|'lwin'='research';
+    if(!entity.catalog.length&&references.length&&await producerRangeAllowed(c.env.DB,owner)){
+      const imported=lwinCatalog(await producerLwinReferences(c.env.DB,owner,requested,c.env.REFERENCE_DATA));
+      if(imported.length){catalog=imported;catalogSource='lwin'}
+    }
     const ownWines=wines.results.map(w=>({id:String(w.id),cuveeId:w.cuvee_id?String(w.cuvee_id):null,wineName:String(w.wine_name),vintage:w.vintage==null?null:Number(w.vintage),vintageKind:w.vintage_kind??(w.vintage==null?'unknown':'vintage'),releaseDesignation:w.release_designation??null,appellation:w.appellation?String(w.appellation):null,region:w.region?String(w.region):null,country:w.country?String(w.country):null,wineStyle:w.wine_style?String(w.wine_style):null,grapes:parseJson<unknown[]>(w.grapes_json,[]).map(String).filter(Boolean),imageId:w.image_id?String(w.image_id):null,imageUrl:null,tastingDate:w.tasting_date?String(w.tasting_date):null,rating:w.rating==null?null:Number(w.rating),shared:false}));
-    return c.json({...entity,sharedOnly:false,catalog:correctedCatalog,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),
+    return c.json({...entity,sharedOnly:false,catalog,catalogSource,catalogDecisions,aliases:aliases.results.map(x=>x.display_alias),
       researchHistoryCount:Number(history?.count)||0,linkedProducers:links.results.map(x=>({mergeId:x.id,producerId:x.source_producer_id,name:x.source_canonical_name,mergedAt:x.merged_at})),
       supplementaryContacts,tastedWines:[...ownWines,...sharedWines.results.map(mapSharedWine)]});
   }catch(e){return c.json({error:(e as Error).message||'Could not load producer'},500)}

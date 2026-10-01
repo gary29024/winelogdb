@@ -77,3 +77,34 @@ for(const viewport of [{width:393,height:852},{width:1280,height:900}]){
   await page.screenshot({path:info.outputPath(`krug-editions-${viewport.width}.png`),fullPage:true});
  });
 }
+
+test('an LWIN-linked producer shows its imported range unverified until asked to verify',async({page},info)=>{
+ await page.setViewportSize({width:393,height:852});
+ const lwin=(wineName:string,category:string,appellation:string,classification:string|null)=>({name:wineName,category,appellation,classification,style:null,notes:null});
+ const producer={
+  id:'dujac',canonicalName:'Domaine Dujac',aliases:['Domaine Dujac'],homeCountry:'France',homeRegion:'Burgundy',homeLocality:'Morey-Saint-Denis',
+  officialWebsiteUrl:null,instagramUrl:null,contactEmail:null,contactPhone:null,contactSources:[],profile:'',winemakingPractices:'',heroImageAvailable:false,
+  catalogSource:'lwin',catalog:[lwin('Clos de la Roche','red','Clos de la Roche','Grand Cru'),lwin('Clos Saint-Denis','red','Clos Saint-Denis','Grand Cru'),
+   lwin('Morey-Saint-Denis','red','Morey-Saint-Denis',null),lwin('Morey-Saint-Denis Blanc','white','Morey-Saint-Denis',null)],
+  catalogCuvees:[],cuveeCatalogLinks:[],linkedProducers:[],supplementaryContacts:[],catalogDecisions:[],researchHistoryCount:0,sources:[],researchedAt:null,tastedWines:[]
+ };
+ const research:string[]=[];
+ await page.route('**/api/**',async route=>{
+  const path=new URL(route.request().url()).pathname;
+  if(path==='/api/me')return route.fulfill({json:{user:{id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'}}});
+  if(path==='/api/producers/dujac')return route.fulfill({json:producer});
+  if(path==='/api/producers/dujac/research'){research.push(route.request().postData()??'');return route.fulfill({status:409,json:{error:'stop here'}})}
+  return route.fulfill({json:{items:[],total:0}});
+ });
+ await page.goto('/producers/dujac');
+ const range=page.locator('.producer-range');
+ await expect(range.locator('.producer-range-source')).toHaveText('From the LWIN catalogue · not yet verified');
+ await expect(range.getByRole('button',{name:'Duplicate?'})).toHaveCount(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await range.scrollIntoViewIfNeeded();
+ await range.screenshot({path:info.outputPath('producer-lwin-range-393.png')});
+ page.once('dialog',dialog=>{expect(dialog.message()).toContain('paid range search');void dialog.accept()});
+ await range.getByRole('button',{name:'Verify range'}).click();
+ await expect.poll(()=>research.length).toBe(1);
+ expect(JSON.parse(research[0])).toMatchObject({rangeOnly:true,refreshProfile:false});
+});
