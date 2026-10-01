@@ -1,0 +1,149 @@
+{
+  "sources": {
+    "commune": "21133",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+    "cadastreSha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_210.csv",
+    "rightsMemberSha256": "30e273045f2bf4ec236aa88b3bb6a69d2cf2684ed91fdeb1f97a02630f440d17",
+    "rightsMemberCrc32": 3267936763,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-973",
+      "inao-denom-361",
+      "inao-denom-545",
+      "inao-denom-547",
+      "inao-denom-548",
+      "inao-denom-544"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": [],
+    "additionalCommunes": [
+      {
+        "commune": "21442",
+        "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-parcelles.json.gz",
+        "cadastreSha256": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      }
+    ]
+  },
+  "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+  "dataUrl": "/maps/chambolle-morey-parcels.2026-06-01.86d6bad8f507.geojson",
+  "sha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-973",
+    "inao-denom-361",
+    "inao-denom-545",
+    "inao-denom-547",
+    "inao-denom-548",
+    "inao-denom-544"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 378,
+    "withRecordedRights": 234,
+    "rightRecords": 239,
+    "unknownRights": 144,
+    "areaMismatches": 0,
+    "multipleRights": 5,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  },
+  "bytes": 346184,
+  "gzipEquivalentBytes": 54353,
+  "matchedFiscalRows": 256,
+  "excludedBoundaryContacts": [
+    {
+      "parcelId": "21133000AB0370",
+      "parentFeatureId": "inao-denom-361",
+      "overlapM2": 0.28824408012555386
+    },
+    {
+      "parcelId": "21133000AB0369",
+      "parentFeatureId": "inao-denom-361",
+      "overlapM2": 0.6993187795700002
+    },
+    {
+      "parcelId": "21133000AN0012",
+      "parentFeatureId": "inao-denom-973",
+      "overlapM2": 0.0014521947004035045
+    },
+    {
+      "parcelId": "21442000AB0345",
+      "parentFeatureId": "inao-denom-544",
+      "overlapM2": 0.03373520837731227
+    },
+    {
+      "parcelId": "21442000AB0172",
+      "parentFeatureId": "inao-denom-544",
+      "overlapM2": 0.768588225759458
+    },
+    {
+      "parcelId": "21442000AP0038",
+      "parentFeatureId": "inao-denom-544",
+      "overlapM2": 0.6280567184752779
+    },
+    {
+      "parcelId": "21442000AR0056",
+      "parentFeatureId": "inao-denom-361",
+      "overlapM2": 0.6344385435931703
+    },
+    {
+      "parcelId": "21442000AR0100",
+      "parentFeatureId": "inao-denom-545",
+      "overlapM2": 0.0594876884366094
+    }
+  ],
+  "communeRecordsWithoutCurrentGeometry": [
+    "21133000AB0199",
+    "21133000AC0027",
+    "21442000AO0145"
+  ],
+  "invalidGeometryOutsideCru": [],
+  "byCru": {
+    "inao-denom-361": {
+      "parcels": 130,
+      "areaHa": 15.03759865
+    },
+    "inao-denom-973": {
+      "parcels": 51,
+      "areaHa": 10.82900264
+    },
+    "inao-denom-544": {
+      "parcels": 112,
+      "areaHa": 16.83134932
+    },
+    "inao-denom-545": {
+      "parcels": 17,
+      "areaHa": 7.4693875499999995
+    },
+    "inao-denom-547": {
+      "parcels": 22,
+      "areaHa": 8.746229399999999
+    },
+    "inao-denom-548": {
+      "parcels": 49,
+      "areaHa": 6.60312213
+    }
+  },
+  "parentSourceSha256ByMap": {
+    "chambolle-musigny": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+    "morey-saint-denis": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325"
+  }
+}

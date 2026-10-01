@@ -1,0 +1,22 @@
+{
+  "slug": "chambertin",
+  "name": "Chambertin",
+  "parentFeatureId": "inao-denom-447",
+  "appellationId": 148,
+  "issue": 391,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Chambertin (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "chambertin"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

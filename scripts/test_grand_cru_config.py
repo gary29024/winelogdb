@@ -7,7 +7,7 @@ from unittest import mock
 
 import grand_cru
 from build_grand_cru_research import Context
-from grand_cru import (APP_DIR, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
+from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
                        named_plot_report_path, bundle_ids, bundle_parent_features, bundle_sources,
                        bundle_village_maps, communes, cru_slugs, load_bundle, load_cru, read_json, relative, village_map)
 
@@ -131,7 +131,15 @@ class ConfigTests(unittest.TestCase):
         for slug in cru_slugs():
             cru, bundle = load_cru(slug)
             path = commune_audit_path(cru)
-            self.assertTrue(path.exists(), f'{slug}: commit build_grand_cru_commune_audit.py output')
+            if not path.exists():
+                # #461 supplies historical evidence before the remaining per-cru Tier 1 reviews. Until its commune-edge
+                # audit is committed, a cru keeps its unreviewed work explicit and stays off the app's maps.
+                self.assertEqual(cru.get('research', {}).get('delivery'), 'historical-extension',
+                                 f'{slug}: commit build_grand_cru_commune_audit.py output')
+                self.assertEqual(cru['research']['namedAreas'], 'unreviewed', slug)
+                self.assertEqual(cru['research']['producerResearch'], 'unreviewed', slug)
+                self.assertNotIn(slug, app_cru_slugs(), f'{slug}: hidden from the app until its commune audit passes')
+                continue
             report = read_json(path)
             pins = {insee: digest for insee, _, digest in cadastre_sources(bundle)}
             self.assertEqual({c['commune']: c['sha256'] for c in report['bundleCommunes']}, pins, f'{slug}: stale commune audit')
@@ -159,6 +167,19 @@ class ConfigTests(unittest.TestCase):
             used = {s['commune']: s['sha256'] for s in report['sources']} if 'sources' in report else {communes(bundle)[0]: report['source']['sha256']}
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
+
+    def test_generated_research_json_has_one_line_per_record(self):
+        from grand_cru import record_json
+        value = {'schemaVersion': 1, 'parcels': [{'id': 'A1', 'é': 1.5}, {'id': 'A2'}], 'byId': {'A1': {'x': [1]}}, 'counts': {'n': 2}}
+        text = record_json(value)
+        self.assertEqual(json.loads(text), value)
+        self.assertIn('\n{"id":"A2"}\n', text)
+        self.assertIn('\n"A1":{"x":[1]}\n', text)
+        # Every committed generated research file stays in this format (builders write it with record_json).
+        for name in ('rights-history', 'register', 'sale-records', 'notice-history', 'parcel-named-areas'):
+            for path in sorted(RESEARCH_DIR.glob(f'*/{name}.json')):
+                content = path.read_text(encoding='utf-8')
+                self.assertEqual(content, record_json(json.loads(content)), relative(path))
 
     def test_generated_paths_are_repository_relative(self):
         self.assertEqual(relative(ROOT / 'docs/research/echezeaux/curation.json'), 'docs/research/echezeaux/curation.json')

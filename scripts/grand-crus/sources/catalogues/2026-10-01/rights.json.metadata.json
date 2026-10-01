@@ -1,0 +1,9 @@
+{
+  "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "retrievedAt": "2026-10-01T08:50:30Z",
+  "sha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+  "size": 14649,
+  "transportSha256": "c2bd5e2325aeb227190d7d51fda82733147f07a9ce148e7b573625a93de308de",
+  "transportSize": 2240,
+  "httpContentEncoding": "gzip"
+}

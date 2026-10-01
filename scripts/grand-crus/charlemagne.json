@@ -1,0 +1,24 @@
+{
+  "slug": "charlemagne",
+  "name": "Charlemagne",
+  "parentFeatureId": "inao-denom-476",
+  "appellationId": 152,
+  "issue": 407,
+  "tier": 1,
+  "bundle": "corton",
+  "villageMaps": [
+    "aloxe-corton",
+    "ladoix",
+    "pernand-vergelesses"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Charlemagne (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "charlemagne"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

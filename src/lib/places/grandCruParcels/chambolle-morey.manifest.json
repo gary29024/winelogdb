@@ -1,0 +1,32 @@
+{
+  "dataUrl": "/maps/chambolle-morey-parcels.2026-06-01.86d6bad8f507.geojson",
+  "sha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-973",
+    "inao-denom-361",
+    "inao-denom-545",
+    "inao-denom-547",
+    "inao-denom-548",
+    "inao-denom-544"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 378,
+    "withRecordedRights": 234,
+    "rightRecords": 239,
+    "unknownRights": 144,
+    "areaMismatches": 0,
+    "multipleRights": 5,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

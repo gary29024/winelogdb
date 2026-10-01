@@ -1,1392 +1,284 @@
 {
- "schemaVersion": 1,
- "parentFeatureId": "inao-denom-565",
- "inputs": {
-  "parcelSnapshotSha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
-  "lieuxDitsUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz",
-  "lieuxDitsSha256": "39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f"
- },
- "note": "Cadastral lieu-dit by largest share of parcel geometry. \"name\" is null where no reviewed crosswalk exists.",
- "parcels": {
-  "212670000D0114": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0117": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0118": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0119": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0120": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0121": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0122": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0123": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0124": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0128": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0129": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0130": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0131": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0132": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0133": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0134": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0135": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0136": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0137": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0138": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0139": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0142": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0144": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0145": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0146": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0147": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0149": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0150": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0151": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0152": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0153": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0154": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0155": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0156": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0157": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0161": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0162": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0163": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0164": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0165": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0166": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0167": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0168": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0169": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0172": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0176": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0177": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0178": {
-   "sourceName": "LES BEAUX-MONTS BAS",
-   "name": "Les Beaux Monts Bas",
-   "share": 1.0
-  },
-  "212670000D0181": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0183": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0184": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0189": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0190": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0191": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0192": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0194": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0195": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0200": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0201": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0202": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0203": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0208": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0293": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0295": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0296": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0297": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0298": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0299": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0301": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0302": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0303": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0304": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0305": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0306": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0307": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0308": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0313": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0316": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0323": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9427
-  },
-  "212670000D0326": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0329": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0331": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9478
-  },
-  "212670000D0332": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0333": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9654
-  },
-  "212670000D0335": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9705
-  },
-  "212670000D0337": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0338": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0339": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0340": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0341": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0342": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0343": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0344": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0345": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0346": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0347": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0348": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0349": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0351": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0352": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0354": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0360": {
-   "sourceName": "LES QUARTIERS DE NUITS",
-   "name": "Les Quartiers de Nuits",
-   "share": 1.0
-  },
-  "212670000D0361": {
-   "sourceName": "LES QUARTIERS DE NUITS",
-   "name": "Les Quartiers de Nuits",
-   "share": 1.0
-  },
-  "212670000D0362": {
-   "sourceName": "LES QUARTIERS DE NUITS",
-   "name": "Les Quartiers de Nuits",
-   "share": 1.0
-  },
-  "212670000D0364": {
-   "sourceName": "LES QUARTIERS DE NUITS",
-   "name": "Les Quartiers de Nuits",
-   "share": 1.0
-  },
-  "212670000D0503": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0504": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0505": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0508": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0509": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0510": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0511": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0512": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0515": {
-   "sourceName": "LES BEAUX-MONTS BAS",
-   "name": "Les Beaux Monts Bas",
-   "share": 1.0
-  },
-  "212670000D0519": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0530": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0536": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0537": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0538": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0539": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0557": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0558": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0563": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0564": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0565": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0566": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0568": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0569": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0579": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0581": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0583": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0584": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0585": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0586": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0587": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0588": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0590": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0591": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0592": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0593": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0595": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0599": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0620": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0621": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0622": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0623": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0625": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0626": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0627": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0628": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0629": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0631": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0632": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0633": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0635": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0636": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0637": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0638": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0645": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0646": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0647": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0649": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0650": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0651": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0652": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0653": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9831
-  },
-  "212670000D0654": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0665": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0666": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0667": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0668": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0669": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0670": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0671": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0672": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0673": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0674": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0675": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0676": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0677": {
-   "sourceName": "LES ROUGES DU BAS",
-   "name": "Les Rouges du Bas",
-   "share": 1.0
-  },
-  "212670000D0678": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0679": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0680": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0700": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0701": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0704": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0705": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0706": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0707": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0709": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0714": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0719": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0723": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0725": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0736": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0737": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0738": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0739": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0740": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0741": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0742": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0743": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0744": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0745": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0746": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0747": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0760": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0764": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0765": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0766": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0767": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0768": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0769": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0770": {
-   "sourceName": "CLOS SAINT-DENIS",
-   "name": "Clos Saint-Denis",
-   "share": 1.0
-  },
-  "212670000D0771": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0773": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0788": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0793": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0795": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0796": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0797": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 0.9922
-  },
-  "212670000D0798": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0799": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0800": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0802": {
-   "sourceName": "LES BEAUX-MONTS BAS",
-   "name": "Les Beaux Monts Bas",
-   "share": 1.0
-  },
-  "212670000D0803": {
-   "sourceName": "LES BEAUX-MONTS BAS",
-   "name": "Les Beaux Monts Bas",
-   "share": 1.0
-  },
-  "212670000D0804": {
-   "sourceName": "LES BEAUX-MONTS BAS",
-   "name": "Les Beaux Monts Bas",
-   "share": 1.0
-  },
-  "212670000D0805": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0806": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0807": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0808": {
-   "sourceName": "LES POULA",
-   "name": null,
-   "share": 1.0
-  },
-  "212670000D0809": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0810": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0811": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0812": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0813": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0814": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0815": {
-   "sourceName": "EN ORVEAUX",
-   "name": "En Orveaux",
-   "share": 1.0
-  },
-  "212670000D0818": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0819": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0820": {
-   "sourceName": "ECHEZEAUX DU DESSUS",
-   "name": "Échezeaux du Dessus",
-   "share": 1.0
-  },
-  "212670000D0821": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0822": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0824": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0825": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0826": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0827": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0828": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0829": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0830": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0831": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0832": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0833": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0834": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0835": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0836": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0841": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0842": {
-   "sourceName": "LES CRUOTS OU VIGNES BLANCHES",
-   "name": "Les Cruots ou Vignes Blanches",
-   "share": 1.0
-  },
-  "212670000D0843": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0844": {
-   "sourceName": "LES CHAMPS TRAVERSINS",
-   "name": "Les Champs Traversins",
-   "share": 1.0
-  },
-  "212670000D0871": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0872": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 0.9999
-  },
-  "212670000D0898": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0899": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0900": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0901": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0902": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0903": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0904": {
-   "sourceName": "LES TREUX",
-   "name": "Les Treux",
-   "share": 1.0
-  },
-  "212670000D0905": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0906": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0907": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0908": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0909": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0910": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  },
-  "212670000D0911": {
-   "sourceName": "LES LOÄCHAUSSES",
-   "name": "Les Loächausses",
-   "share": 1.0
-  }
- }
+"schemaVersion":1,
+"parentFeatureId":"inao-denom-565",
+"inputs":{"parcelSnapshotSha256":"52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040","lieuxDitsUrl":"https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-lieux_dits.json.gz","lieuxDitsSha256":"39872310633312c1e4ee3b886c053932016f3d4443118646f5af0f7f8ef60e0f"},
+"note":"Cadastral lieu-dit by largest share of parcel geometry. \"name\" is null where no reviewed crosswalk exists.",
+"parcels":{
+"212670000D0114":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0117":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0118":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0119":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0120":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0121":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0122":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0123":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0124":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0128":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0129":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0130":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0131":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0132":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0133":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0134":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0135":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0136":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0137":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0138":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0139":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0142":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0144":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0145":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0146":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0147":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0149":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0150":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0151":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0152":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0153":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0154":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0155":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0156":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0157":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0161":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0162":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0163":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0164":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0165":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0166":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0167":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0168":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0169":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0172":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0176":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0177":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0178":{"sourceName":"LES BEAUX-MONTS BAS","name":"Les Beaux Monts Bas","share":1.0},
+"212670000D0181":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0183":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0184":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0189":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0190":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0191":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0192":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0194":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0195":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0200":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0201":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0202":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0203":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0208":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0293":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0295":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0296":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0297":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0298":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0299":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0301":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0302":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0303":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0304":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0305":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0306":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0307":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0308":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0313":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0316":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0323":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9427},
+"212670000D0326":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0329":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0331":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9478},
+"212670000D0332":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0333":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9654},
+"212670000D0335":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9705},
+"212670000D0337":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0338":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0339":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0340":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0341":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0342":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0343":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0344":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0345":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0346":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0347":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0348":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0349":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0351":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0352":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0354":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0360":{"sourceName":"LES QUARTIERS DE NUITS","name":"Les Quartiers de Nuits","share":1.0},
+"212670000D0361":{"sourceName":"LES QUARTIERS DE NUITS","name":"Les Quartiers de Nuits","share":1.0},
+"212670000D0362":{"sourceName":"LES QUARTIERS DE NUITS","name":"Les Quartiers de Nuits","share":1.0},
+"212670000D0364":{"sourceName":"LES QUARTIERS DE NUITS","name":"Les Quartiers de Nuits","share":1.0},
+"212670000D0503":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0504":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0505":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0508":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0509":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0510":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0511":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0512":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0515":{"sourceName":"LES BEAUX-MONTS BAS","name":"Les Beaux Monts Bas","share":1.0},
+"212670000D0519":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0530":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0536":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0537":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0538":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0539":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0557":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0558":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0563":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0564":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0565":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0566":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0568":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0569":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0579":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0581":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0583":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0584":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0585":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0586":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0587":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0588":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0590":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0591":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0592":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0593":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0595":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0599":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0620":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0621":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0622":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0623":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0625":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0626":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0627":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0628":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0629":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0631":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0632":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0633":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0635":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0636":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0637":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0638":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0645":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0646":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0647":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0649":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0650":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0651":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0652":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0653":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9831},
+"212670000D0654":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0665":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0666":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0667":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0668":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0669":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0670":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0671":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0672":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0673":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0674":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0675":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0676":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0677":{"sourceName":"LES ROUGES DU BAS","name":"Les Rouges du Bas","share":1.0},
+"212670000D0678":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0679":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0680":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0700":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0701":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0704":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0705":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0706":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0707":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0709":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0714":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0719":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0723":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0725":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0736":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0737":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0738":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0739":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0740":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0741":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0742":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0743":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0744":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0745":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0746":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0747":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0760":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0764":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0765":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0766":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0767":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0768":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0769":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0770":{"sourceName":"CLOS SAINT-DENIS","name":"Clos Saint-Denis","share":1.0},
+"212670000D0771":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0773":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0788":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0793":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0795":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0796":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0797":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":0.9922},
+"212670000D0798":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0799":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0800":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0802":{"sourceName":"LES BEAUX-MONTS BAS","name":"Les Beaux Monts Bas","share":1.0},
+"212670000D0803":{"sourceName":"LES BEAUX-MONTS BAS","name":"Les Beaux Monts Bas","share":1.0},
+"212670000D0804":{"sourceName":"LES BEAUX-MONTS BAS","name":"Les Beaux Monts Bas","share":1.0},
+"212670000D0805":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0806":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0807":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0808":{"sourceName":"LES POULA","name":null,"share":1.0},
+"212670000D0809":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0810":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0811":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0812":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0813":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0814":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0815":{"sourceName":"EN ORVEAUX","name":"En Orveaux","share":1.0},
+"212670000D0818":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0819":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0820":{"sourceName":"ECHEZEAUX DU DESSUS","name":"Échezeaux du Dessus","share":1.0},
+"212670000D0821":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0822":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0824":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0825":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0826":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0827":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0828":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0829":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0830":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0831":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0832":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0833":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0834":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0835":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0836":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0841":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0842":{"sourceName":"LES CRUOTS OU VIGNES BLANCHES","name":"Les Cruots ou Vignes Blanches","share":1.0},
+"212670000D0843":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0844":{"sourceName":"LES CHAMPS TRAVERSINS","name":"Les Champs Traversins","share":1.0},
+"212670000D0871":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0872":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":0.9999},
+"212670000D0898":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0899":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0900":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0901":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0902":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0903":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0904":{"sourceName":"LES TREUX","name":"Les Treux","share":1.0},
+"212670000D0905":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0906":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0907":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0908":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0909":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0910":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0},
+"212670000D0911":{"sourceName":"LES LOÄCHAUSSES","name":"Les Loächausses","share":1.0}
+}
 }

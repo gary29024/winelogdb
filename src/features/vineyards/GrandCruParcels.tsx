@@ -83,7 +83,8 @@ export function GrandCruParcels(props:Props){
  return <GrandCruParcelsView key={`${props.parentId}:${props.producerId??''}:${props.producer??''}`} {...props} cru={cru}/>;
 }
 function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Props&{cru:GrandCru}){
- const manifest=parcelBundles[cru.bundle],withResearch=hasParcelEvidence(parentId);
+ // The holder list needs research only for domaine headings; the evidence panel loads its own copy when a parcel opens.
+ const manifest=parcelBundles[cru.bundle],withResearch=cru.domaineGrouping&&hasParcelEvidence(parentId);
  const [show,setShow]=useState(false),[data,setData]=useState<Parcels|null>(null),[error,setError]=useState(false),[attempt,setAttempt]=useState(0);
  const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
  const [showPossible,setShowPossible]=useState(false);

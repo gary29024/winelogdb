@@ -813,7 +813,7 @@ All references are in commune 21267 (Flagey-Échezeaux). Full IDs and evidence l
 
 ## Exact-reference administrative events
 
-Farm-structure notices published by the Côte-d'Or DDT name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image. Grands-Échezeaux references (such as D0093) are outside this register.
+Reviewed farm-structure notices name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image. Grands-Échezeaux references (such as D0093) are outside this register.
 
 - **2022-04-04 — SARL Domaine Michel Gros.** Application received; previous operator SCE Gros frère et sœur. Parcels: D 0184, D 0558; via lineage: D 0774 (retired) → D 0830, D 0831. Dossier 2022-053, filed 07/03/2022, complete 28/03/2022; 0.7903 ha across Vosne-Romanée and Flagey-Échezeaux, all three Flagey references in Les Loächausses. The receipt is not an authorisation. D0774 was divided after January 2024. [BFC bulletin 2022-101: receipt BFC-2022-04-04-00033, SARL Domaine Michel Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/97791/623936/file/recueil-bfc-2022-101-recueil-des-actes-administratifs-special.pdf#page=351).
 - **2022-06-30 — SAS Domaine AF Gros (Pommard).** Application received; previous operator Domaine Gros Frère et Sœur. Parcels: D 0181; via lineage: D 0775 (retired) → D 0832, D 0833, D 0834. Dossier 2022-113, filed 23/05/2022, with Vougeot A523/A524; 1.0719 ha in total. Both Flagey references are in Les Loächausses. The receipt states it does not authorise cultivation. D0775 was divided after January 2024. [BFC bulletin 2022-143: receipt BFC-2022-06-30-00012, SAS Domaine AF Gros](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88).
@@ -866,7 +866,7 @@ Published vineyard research can name cadastral references or describe holdings. 
 
 ## Rights history and parcel lineage
 
-The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2019-01-01 with the 2026-06-01 geometry. 76 of 276 parcels had a recorded-rights change; 35 current references did not exist in the first vintage, and 13 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru echezeaux`.
+The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2017-07-06 with the 2026-06-01 geometry. 76 of 276 parcels had a recorded-rights change; 38 current references were not observed in the first obtained vintage, and 14 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru echezeaux`.
 
 **Reviewed findings**
 
@@ -896,16 +896,16 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 | D 0331, D 0335, D 0653 | 2019 → 2020 | Same SIREN, new name | CVVB | CONSORTIUM VITICOLE VINICOLE BOURGOGNE |
 | D 0326, D 0579, D 0581, D 0583, D 0584, D 0587, D 0588 | 2019 → 2020 | Same SIREN, new name | DOMAINE FRANCOIS CAPITAIN ET FILS | GFA DOMAINE FRANCOIS CAPITAIN ET FILS |
 | D 0117, D 0119, D 0120, D 0121, D 0122, D 0123, D 0191, D 0192, D 0332, D 0338, D 0622, D 0623, D 0654 | 2019 → 2020 | Same SIREN, new name | MONGEARD MUGNERET ET FILS | GFA MONGEARD MUGNERET ET FILS |
-| D 0671, D 0673 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | ASSURANCES DU CREDIT MUTUEL VIE | ASSURANCES DU CREDIT MUTUEL VIE |
-| D 0635, D 0714, D 0719 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA HERITIERS COUDRAY | GFA HERITIERS COUDRAY |
-| D 0650, D 0651, D 0652 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFV GRANDS CRUS INVESTISSEMENT | GFV GRANDS CRUS INVESTISSEMENT |
-| D 0194, D 0768, D 0769, D 0770 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | SC DOM DE LA ROMANEE CONTI |
+| D 0671, D 0673 | 2019 → 2020 | Company identity continuity unproved | ASSURANCES DU CREDIT MUTUEL VIE | ASSURANCES DU CREDIT MUTUEL VIE |
+| D 0635, D 0714, D 0719 | 2019 → 2020 | Company identity continuity unproved | GFA HERITIERS COUDRAY | GFA HERITIERS COUDRAY |
+| D 0650, D 0651, D 0652 | 2019 → 2020 | Company identity continuity unproved | GFV GRANDS CRUS INVESTISSEMENT | GFV GRANDS CRUS INVESTISSEMENT |
+| D 0194, D 0768, D 0769, D 0770 | 2019 → 2020 | Company identity continuity unproved | SC DOM DE LA ROMANEE CONTI | SC DOM DE LA ROMANEE CONTI |
 | D 0326, D 0579, D 0581, D 0583, D 0584, D 0587, D 0588 | 2020 → 2021 | Different SIREN | GFA DOMAINE FRANCOIS CAPITAIN ET FILS | SARL CAPITAIN GAGNEROT |
 | D 0183, D 0709 | 2020 → 2021 | First company record on an existing parcel | — | ANNE GROS |
 | D 0773 | 2020 → 2021 | Same SIREN, new name | DOMAINE J PRIEUR | SCEA DOMAINE JACQUES PRIEUR |
 | D 0360, D 0508, D 0821 | 2020 → 2021 | Same SIREN, new name | GERBET SIRUGUE | GFA DOMAINE GERBET SIRUGUE |
-| D 0671, D 0673 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | ASSURANCES DU CREDIT MUTUEL VIE | DOMAINE MONGEARD MUGNERET |
-| D 0194, D 0768, D 0769, D 0770 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | SC DOM DE LA ROMANEE CONTI | DOMAINE DE LA ROMANEE CONTI |
+| D 0671, D 0673 | 2020 → 2021 | Company identity continuity unproved | ASSURANCES DU CREDIT MUTUEL VIE | DOMAINE MONGEARD MUGNERET |
+| D 0194, D 0768, D 0769, D 0770 | 2020 → 2021 | Company identity continuity unproved | SC DOM DE LA ROMANEE CONTI | DOMAINE DE LA ROMANEE CONTI |
 | D 0168, D 0169, D 0519 | 2021 → 2022 | Same SIREN, new name | FONCIER VITI DOM FRANCOIS LAMARCHE | NICOLE LAMARCHE |
 | D 0815 | 2022 → 2023 | Different SIREN | HOR VIGNOBLES | SCI LES CLIMATS |
 | D 0313 | 2022 → 2023 | First company record on an existing parcel | — | ORIGINE |
@@ -917,7 +917,7 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 | D 0295, D 0296, D 0297, D 0298, D 0299 | 2023 → 2024 | First company record on an existing parcel | — | TRAVERSINS |
 | D 0352 | 2023 → 2024 | Same SIREN, new name | DOMAINE DEUGENIE | DOMAINE D'EUGENIE |
 | D 0673 | 2024 → 2025 | Different SIREN | DOMAINE MONGEARD MUGNERET | BOUCHON POURPRE |
-| D 0898, D 0899, D 0900, D 0901, D 0902 | 2024 → 2025 | Record on a newly created parcel reference | — | PROPRIETAIRES DU BND 267 D0143 |
+| D 0898, D 0899, D 0900, D 0901, D 0902 | 2024 → 2025 | Record on a reference absent from the preceding obtained geometry | — | PROPRIETAIRES DU BND 267 D0143 |
 | D 0128, D 0154, D 0156, D 0157 | 2024 → 2025 | First company record on an existing parcel | — | GFA FAMILLE FOREY BJ |
 | D 0316, D 0323, D 0633, D 0636 | 2024 → 2025 | First company record on an existing parcel | — | GROUPEMENT FONCIER VITICOLE DE ORVEAUX |
 | D 0144, D 0145, D 0511, D 0512 | 2024 → 2025 | First company record on an existing parcel | — | LES CRUOTS |
@@ -928,19 +928,366 @@ A successor is accepted when it first appears in the vintage right after the ret
 
 | Retired reference | Last vintage | Accepted successors | Rejected spatial candidates | Company records before retirement |
 | --- | --- | --- | --- | --- |
-| D 0143 | 2024-01-01 | D 0898, D 0899, D 0900, D 0901, D 0902 | — | PROPRIETAIRES DU BND 267 D0143 |
-| D 0160 | 2022-01-01 | D 0841, D 0842 | — | None |
+| D 0143 | 2024-10-01 | D 0898, D 0899, D 0900, D 0901, D 0902 | — | PROPRIETAIRES DU BND 267 D0143 |
+| D 0160 | 2022-10-01 | D 0841, D 0842 | — | None |
+| D 0206 | 2018-06-29 | D 0818, D 0819, D 0820 | — | None |
 | D 0300 | 2019-01-01 | D 0821, D 0822 | — | None |
-| D 0708 | 2024-01-01 | D 0871, D 0872 | D 0905 (991.8 m²), D 0906 (1116.1 m²), D 0907 (1113.9 m²), D 0908 (1114.8 m²), D 0909 (557.3 m²), D 0910 (557.1 m²), D 0911 (544.7 m²) | None |
-| D 0759 | 2022-01-01 | D 0824, D 0825 | — | None |
-| D 0772 | 2023-01-01 | D 0843, D 0844 | — | None |
-| D 0774 | 2024-01-01 | D 0830, D 0831 | — | None |
-| D 0775 | 2024-01-01 | D 0832, D 0833, D 0834 | — | None |
-| D 0776 | 2024-01-01 | D 0835, D 0836 | — | None |
-| D 0787 | 2024-01-01 | D 0903, D 0904 | — | None |
-| D 0792 | 2022-01-01 | D 0826, D 0827 | D 0793 (1.9 m²) | None |
-| D 0794 | 2022-01-01 | D 0828, D 0829 | — | None |
-| D 0873 | 2025-01-01 | D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | — | None |
+| D 0708 | 2024-04-01 | D 0871, D 0872 | D 0905 (991.8 m²), D 0906 (1116.1 m²), D 0907 (1113.9 m²), D 0908 (1114.8 m²), D 0909 (557.3 m²), D 0910 (557.1 m²), D 0911 (544.7 m²) | None |
+| D 0759 | 2022-10-01 | D 0824, D 0825 | — | None |
+| D 0772 | 2023-10-01 | D 0843, D 0844 | — | None |
+| D 0774 | 2024-07-01 | D 0830, D 0831 | — | None |
+| D 0775 | 2024-07-01 | D 0832, D 0833, D 0834 | — | None |
+| D 0776 | 2024-07-01 | D 0835, D 0836 | — | None |
+| D 0787 | 2024-10-01 | D 0903, D 0904 | — | None |
+| D 0792 | 2022-10-01 | D 0826, D 0827 | D 0793 (1.9 m²) | None |
+| D 0794 | 2022-10-01 | D 0828, D 0829 | — | None |
+| D 0873 | 2026-03-01 | D 0905, D 0906, D 0907, D 0908, D 0909, D 0910, D 0911 | — | None |
+
+**Official DFI ancestry and source coverage (#461)**
+
+DFI dates below are validation dates. Event groups preserve all mothers and daughters, including context outside today's cru. They never transfer a right, sale party or farmer. A first observation or tracing stop is not creation, original ownership or uninterrupted continuity.
+
+Pinned source inventory: [2026-10-01](../../../scripts/grand-crus/sources/inventory-2026-10-01.json). 82 current parcels have documented ancestors; 64 reach pre-2019 events. 30 documents / 47 analysis lots. Reachable validation dates: 1991-01-22 to 2026-04-13. 1 source failures, 0 unresolved event groups, 0 traversal conflicts.
+
+| Commune | Geometry available / obtained / missing | Earliest / latest obtained observation |
+| --- | ---: | --- |
+| 21267 | 35 / 35 / 0 | 2017-07-06 / 2026-06-01 |
+
+**Complete documented event groups**
+
+| Validation date | Department / commune / prefix | Document / analysis lot | Change | All mothers | All daughters |
+| --- | --- | --- | --- | --- | --- |
+| 1991-01-22 | 210 / 21267 / 000 | 0000196 / 00001 | document d'arpentage | 212670000D0327 | 212670000D0736, 212670000D0737 |
+| 1991-01-22 | 210 / 21267 / 000 | 0000196 / 00002 | document d'arpentage | 212670000D0328 | 212670000D0738, 212670000D0739 |
+| 1991-01-22 | 210 / 21267 / 000 | 0000196 / 00003 | document d'arpentage | 212670000D0578 | 212670000D0740, 212670000D0741 |
+| 1991-01-22 | 210 / 21267 / 000 | 0000196 / 00004 | document d'arpentage | 212670000D0580 | 212670000D0742, 212670000D0743 |
+| 1991-01-22 | 210 / 21267 / 000 | 0000196 / 00005 | document d'arpentage | 212670000D0582 | 212670000D0744, 212670000D0745, 212670000D0746, 212670000D0747 |
+| 1991-12-16 | 210 / 21267 / 000 | 0000209 / 00001 | document d'arpentage | 212670000D0292 | 212670000D0754, 212670000D0755 |
+| 1991-12-16 | 210 / 21267 / 000 | 0000209 / 00002 | document d'arpentage | 212670000D0294 | 212670000D0756, 212670000D0757, 212670000D0758 |
+| 1992-01-03 | 210 / 21267 / 000 | 0000212 / 00001 | croquis de conservation | 212670000D0754, 212670000D0756, 212670000D0757 | 212670000D0759 |
+| 1992-01-03 | 210 / 21267 / 000 | 0000213 / 00001 | croquis de conservation | 212670000D0755, 212670000D0758 | 212670000D0760 |
+| 1993-08-17 | 210 / 21267 / 000 | 0000220 / 00001 | document d'arpentage | 212670000D0624 | 212670000D0764, 212670000D0765 |
+| 1993-08-17 | 210 / 21267 / 000 | 0000220 / 00002 | document d'arpentage | 212670000D0630 | 212670000D0766, 212670000D0767 |
+| 1994-05-30 | 210 / 21267 / 000 | 0000224 / 00001 | croquis de conservation | 212670000D0158 | 212670000D0768 |
+| 1994-05-30 | 210 / 21267 / 000 | 0000224 / 00002 | croquis de conservation | 212670000D0518 | 212670000D0769 |
+| 1994-05-30 | 210 / 21267 / 000 | 0000224 / 00003 | croquis de conservation | 212670000D0520 | 212670000D0770 |
+| 1995-09-11 | 210 / 21267 / 000 | 0000232 / 00001 | document d'arpentage | 212670000D0513 | 212670000D0771, 212670000D0772, 212670000D0773 |
+| 1995-09-18 | 210 / 21267 / 000 | 0000233 / 00001 | document d'arpentage | 212670000D0559 | 212670000D0774, 212670000D0775, 212670000D0776 |
+| 1997-07-07 | 210 / 21267 / 000 | 0000245 / 00001 | document d'arpentage | 212670000D0140 | 212670000D0781, 212670000D0782 |
+| 1997-07-07 | 210 / 21267 / 000 | 0000245 / 00002 | document d'arpentage | 212670000D0141 | 212670000D0783, 212670000D0784 |
+| 1997-10-21 | 210 / 21267 / 000 | 0000248 / 00001 | croquis de conservation | 212670000D0782, 212670000D0784 | 212670000D0787 |
+| 1997-10-21 | 210 / 21267 / 000 | 0000249 / 00001 | croquis de conservation | 212670000D0594, 212670000D0781, 212670000D0783 | 212670000D0788 |
+| 1998-04-01 | 210 / 21267 / 000 | 0000252 / 00001 | croquis de conservation | 212670000D0174 | 212670000D0792, 212670000D0793 |
+| 1998-04-01 | 210 / 21267 / 000 | 0000252 / 00002 | croquis de conservation | 212670000D0175 | 212670000D0794, 212670000D0795 |
+| 2000-03-30 | 210 / 21267 / 000 | 0000262 / 00001 | croquis de conservation | 212670000D0589 | 212670000D0796, 212670000D0797 |
+| 2002-02-21 | 210 / 21267 / 000 | 0000267 / 00001 | croquis de conservation | 212670000D0501 | 212670000D0798, 212670000D0799, 212670000D0800 |
+| 2003-07-21 | 210 / 21267 / 000 | 0000274 / 00001 | croquis de conservation | 212670000D0180, 212670000D0209, 212670000D0210, 212670000D0211, 212670000D0212, 212670000D0214, 212670000D0215, 212670000D0514, 212670000D0516 | 212670000D0801 |
+| 2003-10-07 | 210 / 21267 / 000 | 0000275 / 00001 | croquis de conservation | 212670000D0801 | 212670000D0802, 212670000D0803, 212670000D0804 |
+| 2004-11-10 | 210 / 21267 / 000 | 0000279 / 00001 | croquis de conservation | 212670000D0310 | 212670000D0805 |
+| 2004-11-10 | 210 / 21267 / 000 | 0000279 / 00002 | croquis de conservation | 212670000D0611 | 212670000D0806 |
+| 2004-11-10 | 210 / 21267 / 000 | 0000279 / 00003 | croquis de conservation | 212670000D0610 | 212670000D0807 |
+| 2004-11-10 | 210 / 21267 / 000 | 0000279 / 00004 | croquis de conservation | 212670000D0567 | 212670000D0808 |
+| 2009-05-04 | 210 / 21267 / 000 | 0000292 / 00001 | document d'arpentage | 212670000D0353 | 212670000D0809, 212670000D0810 |
+| 2015-03-09 | 210 / 21267 / 000 | 0000309 / 00001 | document d'arpentage numérique | 212670000D0350 | 212670000D0811, 212670000D0812 |
+| 2017-05-22 | 210 / 21267 / 000 | 0000317 / 00001 | document d'arpentage numérique | 212670000D0315 | 212670000D0813, 212670000D0814, 212670000D0815 |
+| 2018-08-20 | 210 / 21267 / 000 | 0000320 / 00001 | document d'arpentage numérique | 212670000D0206 | 212670000D0818, 212670000D0819, 212670000D0820 |
+| 2019-02-25 | 210 / 21267 / 000 | 0000322 / 00001 | document d'arpentage numérique | 212670000D0300 | 212670000D0821, 212670000D0822 |
+| 2022-11-14 | 210 / 21267 / 000 | 0000329 / 00002 | document d'arpentage numérique | 212670000D0759 | 212670000D0824, 212670000D0825 |
+| 2022-11-14 | 210 / 21267 / 000 | 0000330 / 00001 | document d'arpentage numérique | 212670000D0792 | 212670000D0826, 212670000D0827 |
+| 2022-11-14 | 210 / 21267 / 000 | 0000330 / 00002 | document d'arpentage numérique | 212670000D0794 | 212670000D0828, 212670000D0829 |
+| 2022-11-28 | 210 / 21267 / 000 | 0000339 / 00001 | document d'arpentage numérique | 212670000D0160 | 212670000D0841, 212670000D0842 |
+| 2023-11-17 | 210 / 21267 / 000 | 0000342 / 00001 | document d'arpentage numérique | 212670000D0772 | 212670000D0843, 212670000D0844 |
+| 2024-05-27 | 210 / 21267 / 000 | 0000348 / 00001 | document d'arpentage numérique | 212670000D0708 | 212670000D0871, 212670000D0872, 212670000D0873 |
+| 2024-08-05 | 210 / 21267 / 000 | 0000336 / 00001 | document d'arpentage numérique | 212670000D0774 | 212670000D0830, 212670000D0831 |
+| 2024-08-05 | 210 / 21267 / 000 | 0000336 / 00002 | document d'arpentage numérique | 212670000D0775 | 212670000D0832, 212670000D0833, 212670000D0834 |
+| 2024-08-05 | 210 / 21267 / 000 | 0000336 / 00003 | document d'arpentage numérique | 212670000D0776 | 212670000D0835, 212670000D0836 |
+| 2024-11-04 | 210 / 21267 / 000 | 0000354 / 00001 | document d'arpentage numérique | 212670000D0143 | 212670000D0898, 212670000D0899, 212670000D0900, 212670000D0901, 212670000D0902 |
+| 2024-11-04 | 210 / 21267 / 000 | 0000354 / 00002 | document d'arpentage numérique | 212670000D0787 | 212670000D0903, 212670000D0904 |
+| 2026-04-13 | 210 / 21267 / 000 | 0000356 / 00001 | document d'arpentage numérique | 212670000D0873 | 212670000D0905, 212670000D0906, 212670000D0907, 212670000D0908, 212670000D0909, 212670000D0910, 212670000D0911 |
+
+**Every current parcel: earliest supported event and tracing stops**
+
+| Current reference | Earliest supported event (date role) | Documented ancestors (context only) | Tracing stops |
+| --- | --- | --- | --- |
+| D 0114 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0114: source-boundary-or-unrecorded-event |
+| D 0117 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0117: source-boundary-or-unrecorded-event |
+| D 0118 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0118: source-boundary-or-unrecorded-event |
+| D 0119 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0119: source-boundary-or-unrecorded-event |
+| D 0120 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0120: source-boundary-or-unrecorded-event |
+| D 0121 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0121: source-boundary-or-unrecorded-event |
+| D 0122 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0122: source-boundary-or-unrecorded-event |
+| D 0123 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0123: source-boundary-or-unrecorded-event |
+| D 0124 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0124: source-boundary-or-unrecorded-event |
+| D 0128 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0128: source-boundary-or-unrecorded-event |
+| D 0129 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0129: source-boundary-or-unrecorded-event |
+| D 0130 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0130: source-boundary-or-unrecorded-event |
+| D 0131 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0131: source-boundary-or-unrecorded-event |
+| D 0132 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0132: source-boundary-or-unrecorded-event |
+| D 0133 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0133: source-boundary-or-unrecorded-event |
+| D 0134 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0134: source-boundary-or-unrecorded-event |
+| D 0135 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0135: source-boundary-or-unrecorded-event |
+| D 0136 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0136: source-boundary-or-unrecorded-event |
+| D 0137 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0137: source-boundary-or-unrecorded-event |
+| D 0138 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0138: source-boundary-or-unrecorded-event |
+| D 0139 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0139: source-boundary-or-unrecorded-event |
+| D 0142 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0142: source-boundary-or-unrecorded-event |
+| D 0144 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0144: source-boundary-or-unrecorded-event |
+| D 0145 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0145: source-boundary-or-unrecorded-event |
+| D 0146 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0146: source-boundary-or-unrecorded-event |
+| D 0147 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0147: source-boundary-or-unrecorded-event |
+| D 0149 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0149: source-boundary-or-unrecorded-event |
+| D 0150 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0150: source-boundary-or-unrecorded-event |
+| D 0151 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0151: source-boundary-or-unrecorded-event |
+| D 0152 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0152: source-boundary-or-unrecorded-event |
+| D 0153 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0153: source-boundary-or-unrecorded-event |
+| D 0154 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0154: source-boundary-or-unrecorded-event |
+| D 0155 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0155: source-boundary-or-unrecorded-event |
+| D 0156 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0156: source-boundary-or-unrecorded-event |
+| D 0157 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0157: source-boundary-or-unrecorded-event |
+| D 0161 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0161: source-boundary-or-unrecorded-event |
+| D 0162 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0162: source-boundary-or-unrecorded-event |
+| D 0163 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0163: source-boundary-or-unrecorded-event |
+| D 0164 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0164: source-boundary-or-unrecorded-event |
+| D 0165 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0165: source-boundary-or-unrecorded-event |
+| D 0166 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0166: source-boundary-or-unrecorded-event |
+| D 0167 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0167: source-boundary-or-unrecorded-event |
+| D 0168 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0168: source-boundary-or-unrecorded-event |
+| D 0169 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0169: source-boundary-or-unrecorded-event |
+| D 0172 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0172: source-boundary-or-unrecorded-event |
+| D 0176 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0176: source-boundary-or-unrecorded-event |
+| D 0177 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0177: source-boundary-or-unrecorded-event |
+| D 0178 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0178: source-boundary-or-unrecorded-event |
+| D 0181 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0181: source-boundary-or-unrecorded-event |
+| D 0183 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0183: source-boundary-or-unrecorded-event |
+| D 0184 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0184: source-boundary-or-unrecorded-event |
+| D 0189 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0189: source-boundary-or-unrecorded-event |
+| D 0190 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0190: source-boundary-or-unrecorded-event |
+| D 0191 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0191: source-boundary-or-unrecorded-event |
+| D 0192 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0192: source-boundary-or-unrecorded-event |
+| D 0194 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0194: source-boundary-or-unrecorded-event |
+| D 0195 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0195: source-boundary-or-unrecorded-event |
+| D 0200 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0200: source-boundary-or-unrecorded-event |
+| D 0201 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0201: source-boundary-or-unrecorded-event |
+| D 0202 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0202: source-boundary-or-unrecorded-event |
+| D 0203 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0203: source-boundary-or-unrecorded-event |
+| D 0208 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0208: source-boundary-or-unrecorded-event |
+| D 0293 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0293: source-boundary-or-unrecorded-event |
+| D 0295 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0295: source-boundary-or-unrecorded-event |
+| D 0296 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0296: source-boundary-or-unrecorded-event |
+| D 0297 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0297: source-boundary-or-unrecorded-event |
+| D 0298 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0298: source-boundary-or-unrecorded-event |
+| D 0299 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0299: source-boundary-or-unrecorded-event |
+| D 0301 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0301: source-boundary-or-unrecorded-event |
+| D 0302 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0302: source-boundary-or-unrecorded-event |
+| D 0303 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0303: source-boundary-or-unrecorded-event |
+| D 0304 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0304: source-boundary-or-unrecorded-event |
+| D 0305 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0305: source-boundary-or-unrecorded-event |
+| D 0306 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0306: source-boundary-or-unrecorded-event |
+| D 0307 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0307: source-boundary-or-unrecorded-event |
+| D 0308 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0308: source-boundary-or-unrecorded-event |
+| D 0313 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0313: source-boundary-or-unrecorded-event |
+| D 0316 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0316: source-boundary-or-unrecorded-event |
+| D 0323 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0323: source-boundary-or-unrecorded-event |
+| D 0326 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0326: source-boundary-or-unrecorded-event |
+| D 0329 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0329: source-boundary-or-unrecorded-event |
+| D 0331 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0331: source-boundary-or-unrecorded-event |
+| D 0332 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0332: source-boundary-or-unrecorded-event |
+| D 0333 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0333: source-boundary-or-unrecorded-event |
+| D 0335 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0335: source-boundary-or-unrecorded-event |
+| D 0337 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0337: source-boundary-or-unrecorded-event |
+| D 0338 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0338: source-boundary-or-unrecorded-event |
+| D 0339 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0339: source-boundary-or-unrecorded-event |
+| D 0340 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0340: source-boundary-or-unrecorded-event |
+| D 0341 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0341: source-boundary-or-unrecorded-event |
+| D 0342 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0342: source-boundary-or-unrecorded-event |
+| D 0343 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0343: source-boundary-or-unrecorded-event |
+| D 0344 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0344: source-boundary-or-unrecorded-event |
+| D 0345 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0345: source-boundary-or-unrecorded-event |
+| D 0346 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0346: source-boundary-or-unrecorded-event |
+| D 0347 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0347: source-boundary-or-unrecorded-event |
+| D 0348 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0348: source-boundary-or-unrecorded-event |
+| D 0349 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0349: source-boundary-or-unrecorded-event |
+| D 0351 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0351: source-boundary-or-unrecorded-event |
+| D 0352 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0352: source-boundary-or-unrecorded-event |
+| D 0354 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0354: source-boundary-or-unrecorded-event |
+| D 0360 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0360: source-boundary-or-unrecorded-event |
+| D 0361 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0361: source-boundary-or-unrecorded-event |
+| D 0362 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0362: source-boundary-or-unrecorded-event |
+| D 0364 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0364: source-boundary-or-unrecorded-event |
+| D 0503 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0503: source-boundary-or-unrecorded-event |
+| D 0504 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0504: source-boundary-or-unrecorded-event |
+| D 0505 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0505: source-boundary-or-unrecorded-event |
+| D 0508 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0508: source-boundary-or-unrecorded-event |
+| D 0509 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0509: source-boundary-or-unrecorded-event |
+| D 0510 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0510: source-boundary-or-unrecorded-event |
+| D 0511 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0511: source-boundary-or-unrecorded-event |
+| D 0512 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0512: source-boundary-or-unrecorded-event |
+| D 0515 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0515: source-boundary-or-unrecorded-event |
+| D 0519 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0519: source-boundary-or-unrecorded-event |
+| D 0530 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0530: source-boundary-or-unrecorded-event |
+| D 0536 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0536: source-boundary-or-unrecorded-event |
+| D 0537 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0537: source-boundary-or-unrecorded-event |
+| D 0538 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0538: source-boundary-or-unrecorded-event |
+| D 0539 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0539: source-boundary-or-unrecorded-event |
+| D 0557 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0557: source-boundary-or-unrecorded-event |
+| D 0558 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0558: source-boundary-or-unrecorded-event |
+| D 0563 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0563: source-boundary-or-unrecorded-event |
+| D 0564 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0564: source-boundary-or-unrecorded-event |
+| D 0565 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0565: source-boundary-or-unrecorded-event |
+| D 0566 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0566: source-boundary-or-unrecorded-event |
+| D 0568 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0568: source-boundary-or-unrecorded-event |
+| D 0569 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0569: source-boundary-or-unrecorded-event |
+| D 0579 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0579: source-boundary-or-unrecorded-event |
+| D 0581 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0581: source-boundary-or-unrecorded-event |
+| D 0583 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0583: source-boundary-or-unrecorded-event |
+| D 0584 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0584: source-boundary-or-unrecorded-event |
+| D 0585 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0585: source-boundary-or-unrecorded-event |
+| D 0586 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0586: source-boundary-or-unrecorded-event |
+| D 0587 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0587: source-boundary-or-unrecorded-event |
+| D 0588 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0588: source-boundary-or-unrecorded-event |
+| D 0590 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0590: source-boundary-or-unrecorded-event |
+| D 0591 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0591: source-boundary-or-unrecorded-event |
+| D 0592 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0592: source-boundary-or-unrecorded-event |
+| D 0593 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0593: source-boundary-or-unrecorded-event |
+| D 0595 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0595: source-boundary-or-unrecorded-event |
+| D 0599 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0599: source-boundary-or-unrecorded-event |
+| D 0620 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0620: source-boundary-or-unrecorded-event |
+| D 0621 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0621: source-boundary-or-unrecorded-event |
+| D 0622 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0622: source-boundary-or-unrecorded-event |
+| D 0623 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0623: source-boundary-or-unrecorded-event |
+| D 0625 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0625: source-boundary-or-unrecorded-event |
+| D 0626 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0626: source-boundary-or-unrecorded-event |
+| D 0627 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0627: source-boundary-or-unrecorded-event |
+| D 0628 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0628: source-boundary-or-unrecorded-event |
+| D 0629 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0629: source-boundary-or-unrecorded-event |
+| D 0631 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0631: source-boundary-or-unrecorded-event |
+| D 0632 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0632: source-boundary-or-unrecorded-event |
+| D 0633 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0633: source-boundary-or-unrecorded-event |
+| D 0635 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0635: source-boundary-or-unrecorded-event |
+| D 0636 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0636: source-boundary-or-unrecorded-event |
+| D 0637 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0637: source-boundary-or-unrecorded-event |
+| D 0638 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0638: source-boundary-or-unrecorded-event |
+| D 0645 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0645: source-boundary-or-unrecorded-event |
+| D 0646 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0646: source-boundary-or-unrecorded-event |
+| D 0647 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0647: source-boundary-or-unrecorded-event |
+| D 0649 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0649: source-boundary-or-unrecorded-event |
+| D 0650 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0650: source-boundary-or-unrecorded-event |
+| D 0651 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0651: source-boundary-or-unrecorded-event |
+| D 0652 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0652: source-boundary-or-unrecorded-event |
+| D 0653 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0653: source-boundary-or-unrecorded-event |
+| D 0654 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0654: source-boundary-or-unrecorded-event |
+| D 0665 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0665: source-boundary-or-unrecorded-event |
+| D 0666 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0666: source-boundary-or-unrecorded-event |
+| D 0667 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0667: source-boundary-or-unrecorded-event |
+| D 0668 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0668: source-boundary-or-unrecorded-event |
+| D 0669 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0669: source-boundary-or-unrecorded-event |
+| D 0670 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0670: source-boundary-or-unrecorded-event |
+| D 0671 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0671: source-boundary-or-unrecorded-event |
+| D 0672 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0672: source-boundary-or-unrecorded-event |
+| D 0673 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0673: source-boundary-or-unrecorded-event |
+| D 0674 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0674: source-boundary-or-unrecorded-event |
+| D 0675 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0675: source-boundary-or-unrecorded-event |
+| D 0676 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0676: source-boundary-or-unrecorded-event |
+| D 0677 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0677: source-boundary-or-unrecorded-event |
+| D 0678 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0678: source-boundary-or-unrecorded-event |
+| D 0679 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0679: source-boundary-or-unrecorded-event |
+| D 0680 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0680: source-boundary-or-unrecorded-event |
+| D 0700 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0700: source-boundary-or-unrecorded-event |
+| D 0701 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0701: source-boundary-or-unrecorded-event |
+| D 0704 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0704: source-boundary-or-unrecorded-event |
+| D 0705 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0705: source-boundary-or-unrecorded-event |
+| D 0706 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0706: source-boundary-or-unrecorded-event |
+| D 0707 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0707: source-boundary-or-unrecorded-event |
+| D 0709 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0709: source-boundary-or-unrecorded-event |
+| D 0714 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0714: source-boundary-or-unrecorded-event |
+| D 0719 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0719: source-boundary-or-unrecorded-event |
+| D 0723 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0723: source-boundary-or-unrecorded-event |
+| D 0725 | 2017-07-06 (first-observed-cadastral-release) | none documented | 212670000D0725: source-boundary-or-unrecorded-event |
+| D 0736 | 1991-01-22 (dfi-validation) | 212670000D0327 | 212670000D0327: source-boundary-or-unrecorded-event |
+| D 0737 | 1991-01-22 (dfi-validation) | 212670000D0327 | 212670000D0327: source-boundary-or-unrecorded-event |
+| D 0738 | 1991-01-22 (dfi-validation) | 212670000D0328 | 212670000D0328: source-boundary-or-unrecorded-event |
+| D 0739 | 1991-01-22 (dfi-validation) | 212670000D0328 | 212670000D0328: source-boundary-or-unrecorded-event |
+| D 0740 | 1991-01-22 (dfi-validation) | 212670000D0578 | 212670000D0578: source-boundary-or-unrecorded-event |
+| D 0741 | 1991-01-22 (dfi-validation) | 212670000D0578 | 212670000D0578: source-boundary-or-unrecorded-event |
+| D 0742 | 1991-01-22 (dfi-validation) | 212670000D0580 | 212670000D0580: source-boundary-or-unrecorded-event |
+| D 0743 | 1991-01-22 (dfi-validation) | 212670000D0580 | 212670000D0580: source-boundary-or-unrecorded-event |
+| D 0744 | 1991-01-22 (dfi-validation) | 212670000D0582 | 212670000D0582: source-boundary-or-unrecorded-event |
+| D 0745 | 1991-01-22 (dfi-validation) | 212670000D0582 | 212670000D0582: source-boundary-or-unrecorded-event |
+| D 0746 | 1991-01-22 (dfi-validation) | 212670000D0582 | 212670000D0582: source-boundary-or-unrecorded-event |
+| D 0747 | 1991-01-22 (dfi-validation) | 212670000D0582 | 212670000D0582: source-boundary-or-unrecorded-event |
+| D 0760 | 1991-12-16 (dfi-validation) | 212670000D0292, 212670000D0294, 212670000D0755, 212670000D0758 | 212670000D0292: source-boundary-or-unrecorded-event; 212670000D0294: source-boundary-or-unrecorded-event |
+| D 0764 | 1993-08-17 (dfi-validation) | 212670000D0624 | 212670000D0624: source-boundary-or-unrecorded-event |
+| D 0765 | 1993-08-17 (dfi-validation) | 212670000D0624 | 212670000D0624: source-boundary-or-unrecorded-event |
+| D 0766 | 1993-08-17 (dfi-validation) | 212670000D0630 | 212670000D0630: source-boundary-or-unrecorded-event |
+| D 0767 | 1993-08-17 (dfi-validation) | 212670000D0630 | 212670000D0630: source-boundary-or-unrecorded-event |
+| D 0768 | 1994-05-30 (dfi-validation) | 212670000D0158 | 212670000D0158: source-boundary-or-unrecorded-event |
+| D 0769 | 1994-05-30 (dfi-validation) | 212670000D0518 | 212670000D0518: source-boundary-or-unrecorded-event |
+| D 0770 | 1994-05-30 (dfi-validation) | 212670000D0520 | 212670000D0520: source-boundary-or-unrecorded-event |
+| D 0771 | 1995-09-11 (dfi-validation) | 212670000D0513 | 212670000D0513: source-boundary-or-unrecorded-event |
+| D 0773 | 1995-09-11 (dfi-validation) | 212670000D0513 | 212670000D0513: source-boundary-or-unrecorded-event |
+| D 0788 | 1997-07-07 (dfi-validation) | 212670000D0140, 212670000D0141, 212670000D0594, 212670000D0781, 212670000D0783 | 212670000D0140: source-boundary-or-unrecorded-event; 212670000D0141: source-boundary-or-unrecorded-event; 212670000D0594: source-boundary-or-unrecorded-event |
+| D 0793 | 1998-04-01 (dfi-validation) | 212670000D0174 | 212670000D0174: source-boundary-or-unrecorded-event |
+| D 0795 | 1998-04-01 (dfi-validation) | 212670000D0175 | 212670000D0175: source-boundary-or-unrecorded-event |
+| D 0796 | 2000-03-30 (dfi-validation) | 212670000D0589 | 212670000D0589: source-boundary-or-unrecorded-event |
+| D 0797 | 2000-03-30 (dfi-validation) | 212670000D0589 | 212670000D0589: source-boundary-or-unrecorded-event |
+| D 0798 | 2002-02-21 (dfi-validation) | 212670000D0501 | 212670000D0501: source-boundary-or-unrecorded-event |
+| D 0799 | 2002-02-21 (dfi-validation) | 212670000D0501 | 212670000D0501: source-boundary-or-unrecorded-event |
+| D 0800 | 2002-02-21 (dfi-validation) | 212670000D0501 | 212670000D0501: source-boundary-or-unrecorded-event |
+| D 0802 | 2003-07-21 (dfi-validation) | 212670000D0180, 212670000D0209, 212670000D0210, 212670000D0211, 212670000D0212, 212670000D0214, 212670000D0215, 212670000D0514, 212670000D0516, 212670000D0801 | 212670000D0180: source-boundary-or-unrecorded-event; 212670000D0209: source-boundary-or-unrecorded-event; 212670000D0210: source-boundary-or-unrecorded-event; 212670000D0211: source-boundary-or-unrecorded-event; 212670000D0212: source-boundary-or-unrecorded-event; 212670000D0214: source-boundary-or-unrecorded-event; 212670000D0215: source-boundary-or-unrecorded-event; 212670000D0514: source-boundary-or-unrecorded-event; 212670000D0516: source-boundary-or-unrecorded-event |
+| D 0803 | 2003-07-21 (dfi-validation) | 212670000D0180, 212670000D0209, 212670000D0210, 212670000D0211, 212670000D0212, 212670000D0214, 212670000D0215, 212670000D0514, 212670000D0516, 212670000D0801 | 212670000D0180: source-boundary-or-unrecorded-event; 212670000D0209: source-boundary-or-unrecorded-event; 212670000D0210: source-boundary-or-unrecorded-event; 212670000D0211: source-boundary-or-unrecorded-event; 212670000D0212: source-boundary-or-unrecorded-event; 212670000D0214: source-boundary-or-unrecorded-event; 212670000D0215: source-boundary-or-unrecorded-event; 212670000D0514: source-boundary-or-unrecorded-event; 212670000D0516: source-boundary-or-unrecorded-event |
+| D 0804 | 2003-07-21 (dfi-validation) | 212670000D0180, 212670000D0209, 212670000D0210, 212670000D0211, 212670000D0212, 212670000D0214, 212670000D0215, 212670000D0514, 212670000D0516, 212670000D0801 | 212670000D0180: source-boundary-or-unrecorded-event; 212670000D0209: source-boundary-or-unrecorded-event; 212670000D0210: source-boundary-or-unrecorded-event; 212670000D0211: source-boundary-or-unrecorded-event; 212670000D0212: source-boundary-or-unrecorded-event; 212670000D0214: source-boundary-or-unrecorded-event; 212670000D0215: source-boundary-or-unrecorded-event; 212670000D0514: source-boundary-or-unrecorded-event; 212670000D0516: source-boundary-or-unrecorded-event |
+| D 0805 | 2004-11-10 (dfi-validation) | 212670000D0310 | 212670000D0310: source-boundary-or-unrecorded-event |
+| D 0806 | 2004-11-10 (dfi-validation) | 212670000D0611 | 212670000D0611: source-boundary-or-unrecorded-event |
+| D 0807 | 2004-11-10 (dfi-validation) | 212670000D0610 | 212670000D0610: source-boundary-or-unrecorded-event |
+| D 0808 | 2004-11-10 (dfi-validation) | 212670000D0567 | 212670000D0567: source-boundary-or-unrecorded-event |
+| D 0809 | 2009-05-04 (dfi-validation) | 212670000D0353 | 212670000D0353: source-boundary-or-unrecorded-event |
+| D 0810 | 2009-05-04 (dfi-validation) | 212670000D0353 | 212670000D0353: source-boundary-or-unrecorded-event |
+| D 0811 | 2015-03-09 (dfi-validation) | 212670000D0350 | 212670000D0350: source-boundary-or-unrecorded-event |
+| D 0812 | 2015-03-09 (dfi-validation) | 212670000D0350 | 212670000D0350: source-boundary-or-unrecorded-event |
+| D 0813 | 2017-05-22 (dfi-validation) | 212670000D0315 | 212670000D0315: source-boundary-or-unrecorded-event |
+| D 0814 | 2017-05-22 (dfi-validation) | 212670000D0315 | 212670000D0315: source-boundary-or-unrecorded-event |
+| D 0815 | 2017-05-22 (dfi-validation) | 212670000D0315 | 212670000D0315: source-boundary-or-unrecorded-event |
+| D 0818 | 2018-08-20 (dfi-validation) | 212670000D0206 | 212670000D0206: source-boundary-or-unrecorded-event |
+| D 0819 | 2018-08-20 (dfi-validation) | 212670000D0206 | 212670000D0206: source-boundary-or-unrecorded-event |
+| D 0820 | 2018-08-20 (dfi-validation) | 212670000D0206 | 212670000D0206: source-boundary-or-unrecorded-event |
+| D 0821 | 2019-02-25 (dfi-validation) | 212670000D0300 | 212670000D0300: source-boundary-or-unrecorded-event |
+| D 0822 | 2019-02-25 (dfi-validation) | 212670000D0300 | 212670000D0300: source-boundary-or-unrecorded-event |
+| D 0824 | 1991-12-16 (dfi-validation) | 212670000D0292, 212670000D0294, 212670000D0754, 212670000D0756, 212670000D0757, 212670000D0759 | 212670000D0292: source-boundary-or-unrecorded-event; 212670000D0294: source-boundary-or-unrecorded-event; 212670000D0294: source-boundary-or-unrecorded-event |
+| D 0825 | 1991-12-16 (dfi-validation) | 212670000D0292, 212670000D0294, 212670000D0754, 212670000D0756, 212670000D0757, 212670000D0759 | 212670000D0292: source-boundary-or-unrecorded-event; 212670000D0294: source-boundary-or-unrecorded-event; 212670000D0294: source-boundary-or-unrecorded-event |
+| D 0826 | 1998-04-01 (dfi-validation) | 212670000D0174, 212670000D0792 | 212670000D0174: source-boundary-or-unrecorded-event |
+| D 0827 | 1998-04-01 (dfi-validation) | 212670000D0174, 212670000D0792 | 212670000D0174: source-boundary-or-unrecorded-event |
+| D 0828 | 1998-04-01 (dfi-validation) | 212670000D0175, 212670000D0794 | 212670000D0175: source-boundary-or-unrecorded-event |
+| D 0829 | 1998-04-01 (dfi-validation) | 212670000D0175, 212670000D0794 | 212670000D0175: source-boundary-or-unrecorded-event |
+| D 0830 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0774 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0831 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0774 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0832 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0775 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0833 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0775 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0834 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0775 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0835 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0776 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0836 | 1995-09-18 (dfi-validation) | 212670000D0559, 212670000D0776 | 212670000D0559: source-boundary-or-unrecorded-event |
+| D 0841 | 2022-11-28 (dfi-validation) | 212670000D0160 | 212670000D0160: source-boundary-or-unrecorded-event |
+| D 0842 | 2022-11-28 (dfi-validation) | 212670000D0160 | 212670000D0160: source-boundary-or-unrecorded-event |
+| D 0843 | 1995-09-11 (dfi-validation) | 212670000D0513, 212670000D0772 | 212670000D0513: source-boundary-or-unrecorded-event |
+| D 0844 | 1995-09-11 (dfi-validation) | 212670000D0513, 212670000D0772 | 212670000D0513: source-boundary-or-unrecorded-event |
+| D 0871 | 2024-05-27 (dfi-validation) | 212670000D0708 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0872 | 2024-05-27 (dfi-validation) | 212670000D0708 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0898 | 2024-11-04 (dfi-validation) | 212670000D0143 | 212670000D0143: source-boundary-or-unrecorded-event |
+| D 0899 | 2024-11-04 (dfi-validation) | 212670000D0143 | 212670000D0143: source-boundary-or-unrecorded-event |
+| D 0900 | 2024-11-04 (dfi-validation) | 212670000D0143 | 212670000D0143: source-boundary-or-unrecorded-event |
+| D 0901 | 2024-11-04 (dfi-validation) | 212670000D0143 | 212670000D0143: source-boundary-or-unrecorded-event |
+| D 0902 | 2024-11-04 (dfi-validation) | 212670000D0143 | 212670000D0143: source-boundary-or-unrecorded-event |
+| D 0903 | 1997-07-07 (dfi-validation) | 212670000D0140, 212670000D0141, 212670000D0782, 212670000D0784, 212670000D0787 | 212670000D0140: source-boundary-or-unrecorded-event; 212670000D0141: source-boundary-or-unrecorded-event |
+| D 0904 | 1997-07-07 (dfi-validation) | 212670000D0140, 212670000D0141, 212670000D0782, 212670000D0784, 212670000D0787 | 212670000D0140: source-boundary-or-unrecorded-event; 212670000D0141: source-boundary-or-unrecorded-event |
+| D 0905 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0906 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0907 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0908 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0909 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0910 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+| D 0911 | 2024-05-27 (dfi-validation) | 212670000D0708, 212670000D0873 | 212670000D0708: source-boundary-or-unrecorded-event |
+
+Full event paths, original-reference rights, date discrepancies and geometry comparisons are in [the generated history](rights-history.json). Missing earlier DFI correspondence includes the departmental computerisation boundary and rural consolidation gaps; no earlier owner is inferred. Sale and notice coverage is independent and does not extend back to the oldest DFI event.
+
 
 ## Sale and exchange deeds
 
@@ -974,6 +1321,25 @@ A successor is accepted when it first appears in the vintage right after the ret
 | 2024-06-28 | Sold, 1 disposition (8076aeee30) | D 0673 | 0 | — |
 | 2024-09-30 | Exchanged, 1 disposition (735b3b891f) | D 0903 | 0 | — |
 | 2025-10-13 | Sold, 1 disposition (163daed486) | D 0155 | 0 | — |
+
+## Independent sale and notice coverage
+
+DFI validation dates do not extend the coverage of sales or notices. Original dates, references and scope stay with each record. Historical context never transfers rights, sale parties or farming.
+
+Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed regional deeds: ['2014-01-02', '2025-12-31']; observed commune deeds: ['2014-01-17', '2025-11-20']. [Full original-reference sale groups and paths](sale-records.json).
+
+| Deed date | Original references | Context on current references |
+| --- | --- | --- |
+
+Reviewed notice matches: 30; unreviewed search candidates: 2. Matched act dates: 2022-04-04 to 2026-04-07. [Original readings, areas, paths and unresolved references](notice-history.json).
+
+Department 21: published years located as early as 2004 and through 2026. Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}].
+
+- Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed
+- Departmental 2021–2026 publications outside the existing index
+- Regional publications before 2019 and any notice outside the indexed corpus
+
+Failed earlier PDF: [21 official bulletin](https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf). Remote end closed connection without response. These are coverage gaps, not absent notices.
 
 ## Source log
 

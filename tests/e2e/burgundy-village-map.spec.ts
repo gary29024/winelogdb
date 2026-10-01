@@ -1,15 +1,70 @@
 import { test,expect,type Locator,type Page } from '@playwright/test';
-import {readFileSync,statSync} from 'node:fs';
+import {existsSync,readFileSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 import {ownerName} from '../../src/lib/places/parcelOwners';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
+import type {ParcelEvidenceData} from '../../src/features/vineyards/ParcelEvidence';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
 const losslessMaps=JSON.parse(readFileSync('src/lib/places/burgundyLosslessMapRegistry.json','utf8')) as Record<string,{brotliJsonUrl:string;gzipJsonUrl:string}>;
 const matrixTest=fullMapMatrix?test:test.skip;
 const allMapRoutes=['/wines/layout-wine','/shared/layout-wine'] as const;
 const matrixRoutes:readonly string[]=fullMapMatrix?allMapRoutes:['/wines/layout-wine'];
+
+// Only crus with a committed commune-edge audit reach the app (scripts/grand_cru.py app_cru_slugs);
+// the others' history files are checked by the unit and Python tests instead.
+const auditedCru=(slug:string)=>existsSync(`scripts/grand-crus/reports/${slug}-commune-audit.json`);
+// White-only crus need a white wine for their village map to open.
+const whiteCru=(slug:string)=>/chablis|montrachet|charlemagne/.test(slug);
+// Cover each app-visible history bundle on a real map.
+for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).entries()){
+ test(`Official history: ${slug} loads its own evidence and preserves dated source roles`,async({page},testInfo)=>{
+  test.setTimeout(60_000); // Allow a cold local Vite/Worker startup before the real map assertions.
+  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
+  const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;villageMaps:string[];evidenceFrom:string[]};
+  const evidence=read(`src/lib/places/grandCruParcels/${slug}.evidence.json`) as ParcelEvidenceData;
+  const [parcelId,trace]=Object.entries(evidence.tracing!).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation')!;
+  const villages=read('src/lib/places/burgundyVillageMapRegistry.json').villages as {id:string;name:string}[];
+  const names=cru.villageMaps.map(id=>villages.find(v=>v.id===id)!.name);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.setViewportSize({width:slug==='chablis-grand-cru'?320:390,height:900});
+  await setup(page,{appellation:cru.name,wineName:cru.name,classification:'grand_cru',
+   ...(whiteCru(slug)?{colour:'White',wineStyle:'white'}:{})});
+  const loaded=new Set<string>();
+  page.on('request',request=>{
+   const match=request.url().match(/grandCruParcels\/([^/?]+)\.evidence\.json/);
+   if(match)loaded.add(match[1]);
+  });
+  await page.goto(allMapRoutes[index%2],{waitUntil:'domcontentloaded'});
+  await page.getByRole('button',{name:'View village map'}).click();
+  const dialog=page.getByRole('dialog');
+  await expect(dialog).toHaveAccessibleName(new RegExp(`^(${names.join('|')})$`));
+  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(cru.parentFeatureId);
+  expect([...loaded]).toEqual([]);
+  await dialog.getByRole('switch',{name:`Parcel rights · ${cru.name}`}).check();
+  await dialog.getByText('Find a parcel by cadastral reference').click();
+  await dialog.getByLabel('Cadastral parcel').selectOption(parcelId);
+  const panel=dialog.getByRole('region',{name:'History and evidence'});
+  await expect(panel).toBeVisible();
+  const history=panel.locator('details.parcel-evidence-history');
+  if(!await history.evaluate((el:HTMLDetailsElement)=>el.open))await history.locator('summary').click();
+  await expect(history.getByText('DFI validation date',{exact:true}).first()).toBeVisible();
+  await expect(history.locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`).first()).toBeVisible();
+  await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
+  expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
+  await panel.getByText('Source coverage and tracing',{exact:true}).click();
+  await expect(panel.getByText(`Earliest supported event: ${trace.earliestSupportedEvent.date}`,{exact:false})).toBeVisible();
+  if(slug==='chablis-grand-cru'){
+   await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
+   await expect(panel.getByText(/All Yonne departmental notice publication years/)).toBeVisible();
+  }
+  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
+  await page.screenshot({path:testInfo.outputPath(`${slug}-official-history-mobile.png`)});
+ });
+}
 
 test('Échezeaux: manually link a possible producer and retain it in owner and shared views',async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
@@ -82,11 +137,12 @@ for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Éc
  await page.route('**/api/producers',route=>route.fulfill({json:{items:[]}}));
  await page.route('**/api/parcel-producer-links?*',route=>route.fulfill({json:{items:[]}}));
  await page.setViewportSize(viewport);
- await page.goto('/wines/layout-wine');await page.getByRole('button',{name:'View village map'}).click();
+ await page.goto('/wines/layout-wine',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:'View village map'}).click();
  const dialog=page.getByRole('dialog',{name:'Vosne-Romanée',exact:true});
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();
  const canvas=dialog.locator('.village-map-canvas'),owners=dialog.locator('ul.village-map-owners');
+ await expect(owners.locator('li').last()).toBeVisible();
  // Scroll down to the owner list: the map must still be on screen, under the header.
  await owners.locator('li').last().scrollIntoViewIfNeeded();
  await expect(canvas).toBeInViewport({ratio:0.95});
@@ -180,8 +236,9 @@ for(const route of allMapRoutes){
 // matrix does not grow with each cru. WINELOG_E2E_CRU picks another configured cru.
 const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
+ if(!auditedCru(slug))throw new Error(`${slug} is hidden from the app until its commune-edge audit is committed`);
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
  const features=(read(`public${manifest.dataUrl}`) as Parcels).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
@@ -201,7 +258,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.setViewportSize({width:390,height:844});
  const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
- await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id});
+ await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id,
+  ...(whiteCru(parcelCru.slug)?{colour:'White',wineStyle:'white'}:{})});
  await page.route('**/api/producers',route=>route.fulfill({json:{items:[producer,other]}}));
  let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
  await page.route('**/api/parcel-producer-links?*',async route=>{

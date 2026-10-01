@@ -1,0 +1,23 @@
+{
+  "slug": "bonnes-mares",
+  "name": "Bonnes-Mares",
+  "parentFeatureId": "inao-denom-361",
+  "appellationId": 137,
+  "issue": 386,
+  "tier": 1,
+  "bundle": "chambolle-morey",
+  "villageMaps": [
+    "chambolle-musigny",
+    "morey-saint-denis"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Bonnes-Mares (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "bonnes-mares"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

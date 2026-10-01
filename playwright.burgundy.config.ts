@@ -3,7 +3,7 @@ import {defineConfig,devices} from '@playwright/test';
 // Reproducible focused validation on both engines without the unrelated flows.
 // WINELOG_E2E_EXHAUSTIVE_MAPS=1 covers every registered lossless map/format.
 export default defineConfig({
- testDir:'tests/e2e',testMatch:'burgundy-village-map.spec.ts',grep:/Lossless detailed|Échezeaux pilot|Grand Cru parcels/,
+ testDir:'tests/e2e',testMatch:'burgundy-village-map.spec.ts',grep:/Lossless detailed|Échezeaux pilot|Grand Cru parcels|Official history/,
  fullyParallel:true,workers:2,forbidOnly:!!process.env.CI,retries:0,
  reporter:[['list'],['json',{outputFile:'.cache/test-reports/burgundy-browser.json'}]],
  use:{baseURL:'http://127.0.0.1:5179',trace:'retain-on-failure'},

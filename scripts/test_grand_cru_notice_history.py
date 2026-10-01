@@ -1,0 +1,43 @@
+"""A printed notice reference needs a unique commune/prefix match and dated scope."""
+import unittest
+
+from build_grand_cru_notice_history import match_printed_reference, normalized_reference, query_reviewed
+from grand_cru_filiation import parse_dfi, trace_ancestry
+from test_grand_cru_filiation import pair
+
+
+class NoticeHistoryTests(unittest.TestCase):
+    def test_normalization_preserves_section_identity_and_rejects_other_text(self):
+        self.assertEqual(normalized_reference(' D 327'), '0D0327')
+        self.assertEqual(normalized_reference('AB0001'), 'AB0001')
+        self.assertIsNone(normalized_reference('Article D 327'))
+
+    def test_prefix_and_commune_are_not_guessed(self):
+        reachable = {'212670000D0327', '212670010D0327', '217160000D0327'}
+        self.assertEqual(match_printed_reference('21267', 'D327', reachable), ['212670000D0327', '212670010D0327'])
+        self.assertEqual(match_printed_reference(None, 'D327', reachable), [])
+
+    def test_old_notice_keeps_date_reference_and_full_ancestor_path(self):
+        parsed = parse_dfi(pair(196, [' D0327'], [' D0736', ' D0737'], '19910122'), department_code='210', insee_department='21')
+        ancestry = trace_ancestry(['212670000D0736'], parsed['events'], geometry_as_of='2026-06-01')
+        record = {'communeCode': '21267', 'reference': 'D0327', 'printedReference': 'D 327',
+                  'documentDate': '1990-03-01', 'areaHa': 0.01, 'status': 'application-received'}
+        result = query_reviewed(record, {'212670000D0327', '212670000D0736'}, {'212670000D0736'}, ancestry, parsed['events'])
+        self.assertEqual(result['originalDate'], '1990-03-01')
+        self.assertEqual(result['originalPrintedReference'], 'D 327')
+        self.assertEqual(result['originalRecord']['areaHa'], 0.01)
+        self.assertEqual(result['directCurrentParcelIds'], [])
+        self.assertEqual(result['contextPaths'][0]['referencePath'], ['212670000D0736', '212670000D0327'])
+        self.assertIsNone(result['currentFarmer'])
+        self.assertEqual(result['contextPaths'][0]['assignment'], 'unassigned-context')
+
+    def test_collective_commune_table_does_not_assign_a_current_parcel(self):
+        record = {'communeCode': '21267', 'reference': 'D0665', 'printedReference': 'D665',
+                  'documentDate': '2022-07-04', 'noticeId': 'bfc-2022-084:p171'}
+        result = query_reviewed(record, {'212670000D0665'}, {'212670000D0665'}, [], [])
+        self.assertEqual(result['directCurrentParcelIds'], [])
+        self.assertEqual(result['referenceMatch'], 'printed-row-commune-not-assigned')
+
+
+if __name__ == '__main__':
+    unittest.main()

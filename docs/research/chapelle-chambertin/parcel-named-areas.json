@@ -1,0 +1,32 @@
+{
+"schemaVersion":1,
+"parentFeatureId":"inao-denom-475",
+"inputs":{"parcelSnapshotSha256":"ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056"},
+"reviewStatus":"named-area-crosswalk-unreviewed",
+"limitation":"The label below is a review status only. It does not assign a cadastral lieu-dit, official climat, vineyard subdivision or producer holding.",
+"parcels":{
+"21295000BP0011":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0015":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0016":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0019":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0020":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0021":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0022":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0023":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0024":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0025":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0229":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0230":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0243":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0260":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0298":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0299":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0300":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0335":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0336":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0353":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0354":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0355":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"},
+"21295000BP0356":{"sourceName":null,"name":"Named area unreviewed","basis":"review-status-only"}
+}
+}

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
+  "initialStaticModules": [
+    "dist/client/assets/index-B_NwecUu.js"
+  ],
+  "evidenceInInitialStaticModules": 0,
+  "mapStaticModules": [
+    "dist/client/assets/FriendTagDialog-CuM7mlf5.js",
+    "dist/client/assets/SectionLabel-B5c2mcMd.js",
+    "dist/client/assets/SparklingDetailsCard-BOuz7-Hd.js",
+    "dist/client/assets/VillageMap-BjtEWwKn.js",
+    "dist/client/assets/api-DE4hbsyY.js",
+    "dist/client/assets/burgundyAtlas-BEAsDEzf.js",
+    "dist/client/assets/index-B_NwecUu.js",
+    "dist/client/assets/index-Be3v_EyQ.js",
+    "dist/client/assets/resolve-C1JJtoeP.js",
+    "dist/client/assets/schemas-r6ZUzAXA.js",
+    "dist/client/assets/sparklingDetails-CctvmUtd.js",
+    "dist/client/assets/useModalFocus-CraNEuWm.js",
+    "dist/client/assets/wineDetailCompact-d6VNAMqb.js"
+  ],
+  "evidenceInMapStaticModules": 0,
+  "evidenceChunkCount": 3,
+  "evidenceBytesTotal": 669466,
+  "evidenceGzipBytesTotal": 62715,
+  "parcelBundleBytesTotal": 386740,
+  "parcelBundleGzipBytesTotal": 58961,
+  "evidenceChunks": [
+    {
+      "cru": "clos-de-vougeot",
+      "file": "dist/client/assets/clos-de-vougeot.evidence-Bc0DCtW2.js",
+      "sha256": "dacad8f640bc5ad9d2fb78be7f0bbf85e57fb35efff6187bff611dcb56585c7c",
+      "bytes": 187425,
+      "gzipBytes": 14483
+    },
+    {
+      "cru": "echezeaux",
+      "file": "dist/client/assets/echezeaux.evidence-CfkEXvgK.js",
+      "sha256": "86f2d8fd442ff99425661ee53d509829e574ca3600d9c43eac74d24dcdcf4e97",
+      "bytes": 426169,
+      "gzipBytes": 36937
+    },
+    {
+      "cru": "grands-echezeaux",
+      "file": "dist/client/assets/grands-echezeaux.evidence-urPuz0ty.js",
+      "sha256": "5df6d754f6af4d6392788c63f64b0c4612fa7a01d6ad6aa83c16a90456e5dd22",
+      "bytes": 55872,
+      "gzipBytes": 11295
+    }
+  ],
+  "parcelBundles": [
+    {
+      "bundle": "flagey-echezeaux",
+      "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
+      "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
+      "bytes": 239882,
+      "gzipBytes": 35324
+    },
+    {
+      "bundle": "vougeot",
+      "dataUrl": "/maps/vougeot-parcels.2026-06-01.7f159994ad5b.geojson",
+      "sha256": "7f159994ad5bb0b169ab4a160f69a3787077e3c96bd8a205764719c8b9ebca3b",
+      "bytes": 146858,
+      "gzipBytes": 23637
+    }
+  ]
+}

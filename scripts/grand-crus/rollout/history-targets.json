@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "objectiveIssue": 461,
+  "issueBodiesVerifiedAt": "2026-10-01T09:36:25Z",
+  "note": "History deliveries are tracked independently of earlier Tier 1 issue closure. INAO feature copies were checked across every stated village map. No pending history extension is marked complete.",
+  "targets": [
+    {
+      "issue": 376,
+      "title": "Grand Cru 01/33: Échezeaux parcels and named areas",
+      "issueStateAtAudit": "closed",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/376",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-565",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21267"
+      ],
+      "name": "Échezeaux",
+      "appellationId": 179,
+      "status": "historical-extension-in-progress"
+    },
+    {
+      "issue": 377,
+      "title": "Grand Cru 02/33: Grands-Échezeaux parcels and named areas",
+      "issueStateAtAudit": "closed",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/377",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-645",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21267"
+      ],
+      "name": "Grands-Échezeaux",
+      "appellationId": 184,
+      "status": "historical-extension-in-progress"
+    },
+    {
+      "issue": 378,
+      "title": "Grand Cru 03/33: Clos de Vougeot parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/378",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-546",
+      "villageMaps": [
+        "vougeot"
+      ],
+      "communeCodes": [
+        "21716"
+      ],
+      "name": "Clos de Vougeot",
+      "appellationId": 162,
+      "status": "historical-extension-in-progress"
+    },
+    {
+      "issue": 379,
+      "title": "Grand Cru 04/33: Richebourg parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/379",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-1083",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "Richebourg",
+      "appellationId": 221,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 380,
+      "title": "Grand Cru 05/33: Romanée-Saint-Vivant parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/380",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-1085",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "Romanée-Saint-Vivant",
+      "appellationId": 223,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 381,
+      "title": "Grand Cru 06/33: Romanée-Conti parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/381",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-1084",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "Romanée-Conti",
+      "appellationId": 222,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 382,
+      "title": "Grand Cru 07/33: La Romanée parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/382",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-655",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "La Romanée",
+      "appellationId": 190,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 383,
+      "title": "Grand Cru 08/33: La Tâche parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/383",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-656",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "La Tâche",
+      "appellationId": 191,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 384,
+      "title": "Grand Cru 09/33: La Grande Rue parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/384",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-654",
+      "villageMaps": [
+        "vosne-romanee"
+      ],
+      "communeCodes": [
+        "21714"
+      ],
+      "name": "La Grande Rue",
+      "appellationId": 189,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 385,
+      "title": "Grand Cru 10/33: Musigny parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/385",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-973",
+      "villageMaps": [
+        "chambolle-musigny"
+      ],
+      "communeCodes": [
+        "21133"
+      ],
+      "name": "Musigny",
+      "appellationId": 211,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 386,
+      "title": "Grand Cru 11/33: Bonnes-Mares parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/386",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-361",
+      "villageMaps": [
+        "chambolle-musigny",
+        "morey-saint-denis"
+      ],
+      "communeCodes": [
+        "21133",
+        "21442"
+      ],
+      "name": "Bonnes-Mares",
+      "appellationId": 137,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 387,
+      "title": "Grand Cru 12/33: Clos de Tart parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/387",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-545",
+      "villageMaps": [
+        "morey-saint-denis"
+      ],
+      "communeCodes": [
+        "21442"
+      ],
+      "name": "Clos de Tart",
+      "appellationId": 161,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 388,
+      "title": "Grand Cru 13/33: Clos des Lambrays parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/388",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-547",
+      "villageMaps": [
+        "morey-saint-denis"
+      ],
+      "communeCodes": [
+        "21442"
+      ],
+      "name": "Clos des Lambrays",
+      "appellationId": 163,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 389,
+      "title": "Grand Cru 14/33: Clos Saint-Denis parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/389",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-548",
+      "villageMaps": [
+        "morey-saint-denis"
+      ],
+      "communeCodes": [
+        "21442"
+      ],
+      "name": "Clos Saint-Denis",
+      "appellationId": 164,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 390,
+      "title": "Grand Cru 15/33: Clos de la Roche parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/390",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-544",
+      "villageMaps": [
+        "morey-saint-denis"
+      ],
+      "communeCodes": [
+        "21442"
+      ],
+      "name": "Clos de la Roche",
+      "appellationId": 160,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 391,
+      "title": "Grand Cru 16/33: Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/391",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-447",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Chambertin",
+      "appellationId": 148,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 392,
+      "title": "Grand Cru 17/33: Chambertin-Clos de Bèze parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/392",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-448",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Chambertin-Clos de Bèze",
+      "appellationId": 149,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 393,
+      "title": "Grand Cru 18/33: Chapelle-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/393",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-475",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Chapelle-Chambertin",
+      "appellationId": 151,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 394,
+      "title": "Grand Cru 19/33: Griotte-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/394",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-646",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Griotte-Chambertin",
+      "appellationId": 185,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 395,
+      "title": "Grand Cru 20/33: Charmes-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/395",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-477",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Charmes-Chambertin",
+      "appellationId": 153,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 396,
+      "title": "Grand Cru 21/33: Mazoyères-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/396",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-809",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Mazoyères-Chambertin",
+      "appellationId": 202,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 397,
+      "title": "Grand Cru 22/33: Latricières-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/397",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-666",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Latricières-Chambertin",
+      "appellationId": 193,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 398,
+      "title": "Grand Cru 23/33: Mazis-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/398",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-808",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Mazis-Chambertin",
+      "appellationId": 201,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 399,
+      "title": "Grand Cru 24/33: Ruchottes-Chambertin parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/399",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-1086",
+      "villageMaps": [
+        "gevrey-chambertin"
+      ],
+      "communeCodes": [
+        "21295"
+      ],
+      "name": "Ruchottes-Chambertin",
+      "appellationId": 224,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 400,
+      "title": "Grand Cru 25/33: Montrachet parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/400",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-927",
+      "villageMaps": [
+        "chassagne-montrachet",
+        "puligny-montrachet"
+      ],
+      "communeCodes": [
+        "21150",
+        "21512"
+      ],
+      "name": "Montrachet",
+      "appellationId": 207,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 401,
+      "title": "Grand Cru 26/33: Chevalier-Montrachet parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/401",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-539",
+      "villageMaps": [
+        "puligny-montrachet"
+      ],
+      "communeCodes": [
+        "21512"
+      ],
+      "name": "Chevalier-Montrachet",
+      "appellationId": 157,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 402,
+      "title": "Grand Cru 27/33: Bâtard-Montrachet parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/402",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-273",
+      "villageMaps": [
+        "chassagne-montrachet",
+        "puligny-montrachet"
+      ],
+      "communeCodes": [
+        "21150",
+        "21512"
+      ],
+      "name": "Bâtard-Montrachet",
+      "appellationId": 130,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 403,
+      "title": "Grand Cru 28/33: Bienvenues-Bâtard-Montrachet parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/403",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-351",
+      "villageMaps": [
+        "puligny-montrachet"
+      ],
+      "communeCodes": [
+        "21512"
+      ],
+      "name": "Bienvenues-Bâtard-Montrachet",
+      "appellationId": 135,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 404,
+      "title": "Grand Cru 29/33: Criots-Bâtard-Montrachet parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/404",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-564",
+      "villageMaps": [
+        "chassagne-montrachet"
+      ],
+      "communeCodes": [
+        "21150"
+      ],
+      "name": "Criots-Bâtard-Montrachet",
+      "appellationId": 178,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 405,
+      "title": "Grand Cru 30/33: Corton parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/405",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-549",
+      "villageMaps": [
+        "aloxe-corton",
+        "ladoix",
+        "pernand-vergelesses"
+      ],
+      "communeCodes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "name": "Corton",
+      "appellationId": 165,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 406,
+      "title": "Grand Cru 31/33: Corton-Charlemagne parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/406",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-550",
+      "villageMaps": [
+        "aloxe-corton",
+        "ladoix",
+        "pernand-vergelesses"
+      ],
+      "communeCodes": [
+        "21010",
+        "21480",
+        "21606"
+      ],
+      "name": "Corton-Charlemagne",
+      "appellationId": 166,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 407,
+      "title": "Grand Cru 32/33: Charlemagne parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/407",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-476",
+      "villageMaps": [
+        "aloxe-corton",
+        "ladoix",
+        "pernand-vergelesses"
+      ],
+      "communeCodes": [
+        "21010",
+        "21480"
+      ],
+      "name": "Charlemagne",
+      "appellationId": 152,
+      "status": "historical-extension-pending"
+    },
+    {
+      "issue": 408,
+      "title": "Grand Cru 33/33: Chablis Grand Cru parcels and named areas",
+      "issueStateAtAudit": "open",
+      "issueUrl": "https://github.com/gary29024/winelogdb/issues/408",
+      "historyRequirementVerified": true,
+      "parentFeatureId": "inao-denom-439",
+      "villageMaps": [
+        "chablis"
+      ],
+      "communeCodes": [
+        "89068"
+      ],
+      "name": "Chablis Grand Cru",
+      "appellationId": 147,
+      "status": "historical-extension-pending"
+    }
+  ]
+}

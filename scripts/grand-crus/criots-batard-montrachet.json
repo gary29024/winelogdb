@@ -1,0 +1,22 @@
+{
+  "slug": "criots-batard-montrachet",
+  "name": "Criots-Bâtard-Montrachet",
+  "parentFeatureId": "inao-denom-564",
+  "appellationId": 178,
+  "issue": 404,
+  "tier": 1,
+  "bundle": "montrachet",
+  "villageMaps": [
+    "chassagne-montrachet"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Criots-Bâtard-Montrachet (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "criots-batard-montrachet"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

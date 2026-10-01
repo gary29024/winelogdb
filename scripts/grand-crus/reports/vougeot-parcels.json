@@ -55,6 +55,7 @@
   "communeRecordsWithoutCurrentGeometry": [
     "217160000A0069"
   ],
+  "invalidGeometryOutsideCru": [],
   "byCru": {
     "inao-denom-546": {
       "parcels": 164,

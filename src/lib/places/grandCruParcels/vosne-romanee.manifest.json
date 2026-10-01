@@ -1,0 +1,32 @@
+{
+  "dataUrl": "/maps/vosne-romanee-parcels.2026-06-01.ef82eec2364d.geojson",
+  "sha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-1083",
+    "inao-denom-1085",
+    "inao-denom-1084",
+    "inao-denom-655",
+    "inao-denom-656",
+    "inao-denom-654"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 83,
+    "withRecordedRights": 50,
+    "rightRecords": 53,
+    "unknownRights": 33,
+    "areaMismatches": 0,
+    "multipleRights": 3,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

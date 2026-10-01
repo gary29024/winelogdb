@@ -1,0 +1,22 @@
+{
+  "slug": "chablis-grand-cru",
+  "name": "Chablis Grand Cru",
+  "parentFeatureId": "inao-denom-439",
+  "appellationId": 147,
+  "issue": 408,
+  "tier": 1,
+  "bundle": "chablis",
+  "villageMaps": [
+    "chablis"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Chablis Grand Cru (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "chablis-grand-cru"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

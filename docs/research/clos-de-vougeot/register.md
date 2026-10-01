@@ -1032,7 +1032,7 @@ All references are in commune 21716 (Vougeot). Full IDs and evidence links are i
 
 ## Exact-reference administrative events
 
-Farm-structure notices published by the Côte-d'Or DDT name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image.
+Reviewed farm-structure notices name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image.
 
 - **2022-06-30 — SAS Domaine AF Gros.** Application received; previous operator Domaine Gros Frère et Sœur. Parcels: A 0523, A 0524. Dossier 2022-113: Vougeot A523/A524 are explicitly distinguished from Flagey D181/D775; 1.0719 ha across both communes. Completion date is blank. No outcome or actual operation confirmed. [AF Gros application receipt, dossier 2022-113](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/100728/641113/file/recueil-bfc-2022-143-recueil-des-actes-administratifs-special.pdf#page=88).
 - **2023-09-08 — Société du Domaine des Lambrays.** Application received; previous operator Guyon Jean Pierre. Parcels: A 0037. Dossier 2023-157: Vougeot A37, 0.3129 ha; complete 21 August 2023. The receipt expressly does not authorise cultivation. [Lambrays application receipt, dossier 2023-157](https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/112806/844449/file/recueil-bfc-2024-008-recueil-des-actes-administratifs-nominatifs.pdf#page=83).
@@ -1051,7 +1051,7 @@ No published vineyard research naming parcels has been reviewed for this cru (Ti
 
 ## Rights history and parcel lineage
 
-The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2019-01-01 with the 2026-06-01 geometry. 70 of 164 parcels had a recorded-rights change; 16 current references did not exist in the first vintage, and 7 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru clos-de-vougeot`.
+The legal-entity rights files for 1 January 2019–2025 were compared with the pinned 2025-01-01 snapshot, and Etalab cadastre vintages from 2017-07-06 with the 2026-06-01 geometry. 70 of 164 parcels had a recorded-rights change; 19 current references were not observed in the first obtained vintage, and 9 retired references overlapped the cru. Only company-type holders appear: a first record can be a purchase, a transfer from private owners into a family company, or a new reference after a split. Continuity is proved only by an unchanged SIREN. None of this is farming evidence. [Full yearly records and lineage](rights-history.json), rebuilt by `python scripts/build_grand_cru_rights_history.py --cru clos-de-vougeot`.
 
 **Reviewed findings**
 
@@ -1070,43 +1070,43 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 | A 0423 | 2019 → 2020 | Same SIREN, new name | SOCIETE DEXPLOITATION AGRO VITICOLE | SCEA DOMAINE REMOISSENET |
 | A 0517 | 2019 → 2020 | Same SIREN, new name | VITICOLE SAINT VINCENT CLOS VOUGEOT | GFV SAINT VINCENT DU CLOS DE VOUGEOT |
 | A 0075 | 2019 → 2020 | Same SIREN, new name | XAVIER LIGER BELAIR | GFA DOMAINE XAVIER LIGER BELAIR |
-| A 0025, A 0026 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT |
-| A 0003 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | FAMILLE JEAN DUFOULEUR | FAMILLE JEAN DUFOULEUR |
-| A 0435 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA BACHUS 21 | GFA BACHUS 21 |
-| A 0464 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA BARRIERE | GFA BARRIERE |
-| A 0033 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA DOM LAMARCHE | GFA DOM LAMARCHE |
-| A 0266 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA DOM MICHEL NOELLAT | GFA DOM MICHEL NOELLAT |
-| A 0280 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA DOM TORTOCHOT | GFA DOM TORTOCHOT |
-| A 0511 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFA DU CLOS DE(S) V | GFA DU CLOS DE S  V |
-| A 0074 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GFV DOMAINE CHANTAL ROPITEAU | GFV DOMAINE CHANTAL ROPITEAU |
-| A 0436, A 0441 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE |
-| A 0042, A 0043, A 0048, A 0050, A 0051, A 0330 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR |
-| A 0009 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | MAISON LEJAY-LAGOUTTE | MAISON LEJAY-LAGOUTTE |
-| A 0256 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | PROPRIETAIRES DU BND 716 A0256 | PROPRIETAIRES DU BND 716 A0256 |
-| A 0465 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SA ASB | SA ASB |
-| A 0054, A 0066 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC  DU DOMAINE MISSET | SC  DU DOMAINE MISSET |
-| A 0036 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC DES GRANDES APPELLATIONS DORIGINE | SC DES GRANDES APPELLATIONS DORIGINE |
-| A 0052, A 0053 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SC POUR LEXPLOIT DOM HENRI REBOURSEAU | DOMAINE HENRI REBOURSEAU |
-| A 0379, A 0381 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SCI DOM LEROY | SCI DOM LEROY |
-| A 0045, A 0384 | 2019 → 2020 | Identifier changed; earlier record had no SIREN | SCP DOM JACQUES PRIEUR | SCP DOM JACQUES PRIEUR |
+| A 0025, A 0026 | 2019 → 2020 | Company identity continuity unproved | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT |
+| A 0003 | 2019 → 2020 | Company identity continuity unproved | FAMILLE JEAN DUFOULEUR | FAMILLE JEAN DUFOULEUR |
+| A 0435 | 2019 → 2020 | Company identity continuity unproved | GFA BACHUS 21 | GFA BACHUS 21 |
+| A 0464 | 2019 → 2020 | Company identity continuity unproved | GFA BARRIERE | GFA BARRIERE |
+| A 0033 | 2019 → 2020 | Company identity continuity unproved | GFA DOM LAMARCHE | GFA DOM LAMARCHE |
+| A 0266 | 2019 → 2020 | Company identity continuity unproved | GFA DOM MICHEL NOELLAT | GFA DOM MICHEL NOELLAT |
+| A 0280 | 2019 → 2020 | Company identity continuity unproved | GFA DOM TORTOCHOT | GFA DOM TORTOCHOT |
+| A 0511 | 2019 → 2020 | Company identity continuity unproved | GFA DU CLOS DE(S) V | GFA DU CLOS DE S  V |
+| A 0074 | 2019 → 2020 | Company identity continuity unproved | GFV DOMAINE CHANTAL ROPITEAU | GFV DOMAINE CHANTAL ROPITEAU |
+| A 0436, A 0441 | 2019 → 2020 | Company identity continuity unproved | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE |
+| A 0042, A 0043, A 0048, A 0050, A 0051, A 0330 | 2019 → 2020 | Company identity continuity unproved | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR |
+| A 0009 | 2019 → 2020 | Company identity continuity unproved | MAISON LEJAY-LAGOUTTE | MAISON LEJAY-LAGOUTTE |
+| A 0256 | 2019 → 2020 | Company identity continuity unproved | PROPRIETAIRES DU BND 716 A0256 | PROPRIETAIRES DU BND 716 A0256 |
+| A 0465 | 2019 → 2020 | Company identity continuity unproved | SA ASB | SA ASB |
+| A 0054, A 0066 | 2019 → 2020 | Company identity continuity unproved | SC  DU DOMAINE MISSET | SC  DU DOMAINE MISSET |
+| A 0036 | 2019 → 2020 | Company identity continuity unproved | SC DES GRANDES APPELLATIONS DORIGINE | SC DES GRANDES APPELLATIONS DORIGINE |
+| A 0052, A 0053 | 2019 → 2020 | Company identity continuity unproved | SC POUR LEXPLOIT DOM HENRI REBOURSEAU | DOMAINE HENRI REBOURSEAU |
+| A 0379, A 0381 | 2019 → 2020 | Company identity continuity unproved | SCI DOM LEROY | SCI DOM LEROY |
+| A 0045, A 0384 | 2019 → 2020 | Company identity continuity unproved | SCP DOM JACQUES PRIEUR | SCP DOM JACQUES PRIEUR |
 | A 0005, A 0536 | 2020 → 2021 | First company record on an existing parcel | — | ANNE GROS |
 | A 0001, A 0030, A 0031 | 2020 → 2021 | First company record on an existing parcel | — | NATHALIE PACAREAU LAMARCHE |
 | A 0424 | 2020 → 2021 | Same SIREN, new name | DES COTEAUX DORES | SCEA DES COTEAUX DORES |
-| A 0025, A 0026 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGE |
-| A 0003 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | FAMILLE JEAN DUFOULEUR | FAMILLE JEAN DUFOULEUR |
-| A 0266 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | GFA DOM MICHEL NOELLAT | GFA DU DOMAINE MICHEL NOELLAT |
-| A 0280 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | GFA DOM TORTOCHOT | DU DOMAINE TORTOCHOT |
-| A 0436, A 0441 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE | DROUHIN-LAROZE |
-| A 0042, A 0043, A 0048, A 0050, A 0051, A 0330 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR | CHATEAU DE LA TOUR |
-| A 0036 | 2020 → 2021 | Identifier changed; earlier record had no SIREN | SC DES GRANDES APPELLATIONS DORIGINE | DES GRANDES APPELLATIONS DORIGINE |
+| A 0025, A 0026 | 2020 → 2021 | Company identity continuity unproved | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGEOT | ASS LA CONFRERIE DES CHEVALIERS DU TASTEVIN / LES AMIS DU CHATEAU DU CLOS DE VOUGE |
+| A 0003 | 2020 → 2021 | Company identity continuity unproved | FAMILLE JEAN DUFOULEUR | FAMILLE JEAN DUFOULEUR |
+| A 0266 | 2020 → 2021 | Company identity continuity unproved | GFA DOM MICHEL NOELLAT | GFA DU DOMAINE MICHEL NOELLAT |
+| A 0280 | 2020 → 2021 | Company identity continuity unproved | GFA DOM TORTOCHOT | DU DOMAINE TORTOCHOT |
+| A 0436, A 0441 | 2020 → 2021 | Company identity continuity unproved | GROUPEMENT FONCIER AGRICOLE DROUHIN LAROZE | DROUHIN-LAROZE |
+| A 0042, A 0043, A 0048, A 0050, A 0051, A 0330 | 2020 → 2021 | Company identity continuity unproved | GROUPEMENT FONCIER VITICOLE CHATEAU DE LA TOUR | CHATEAU DE LA TOUR |
+| A 0036 | 2020 → 2021 | Company identity continuity unproved | SC DES GRANDES APPELLATIONS DORIGINE | DES GRANDES APPELLATIONS DORIGINE |
 | A 0265, A 0392 | 2021 → 2022 | First company record on an existing parcel | — | DOMAINE CHRISTIAN CONFURON ET FILS |
 | A 0042, A 0043, A 0048, A 0050, A 0051, A 0330 | 2021 → 2022 | Same SIREN, new name | CHATEAU DE LA TOUR | GFV CHATEAU DE LA TOUR |
 | A 0242 | 2021 → 2022 | Same SIREN, new name | DU DOMAINE GUILLON J M  ET FILS | GFA DU DOMAINE GUILLON J M  ET FILS |
 | A 0067 | 2021 → 2022 | Same SIREN, new name | FONCIER VITI DOM FRANCOIS LAMARCHE | NICOLE LAMARCHE |
 | A 0408, A 0410 | 2021 → 2022 | Same SIREN, new name | HUDELOT NOELLAT | GFV HUDELOT NOELLAT |
-| A 0066 | 2021 → 2022 | Identifier changed; earlier record had no SIREN | SC  DU DOMAINE MISSET | GFA MISSET CHERON |
-| A 0054 | 2021 → 2022 | Identifier changed; earlier record had no SIREN | SC  DU DOMAINE MISSET | GFA SAINT MARTIN |
-| A 0567, A 0568, A 0569, A 0570 | 2022 → 2023 | Record on a newly created parcel reference | — | GFV HUDELOT NOELLAT |
+| A 0066 | 2021 → 2022 | Company identity continuity unproved | SC  DU DOMAINE MISSET | GFA MISSET CHERON |
+| A 0054 | 2021 → 2022 | Company identity continuity unproved | SC  DU DOMAINE MISSET | GFA SAINT MARTIN |
+| A 0567, A 0568, A 0569, A 0570 | 2022 → 2023 | Record on a reference absent from the preceding obtained geometry | — | GFV HUDELOT NOELLAT |
 | A 0070 | 2022 → 2023 | First company record on an existing parcel | — | CONSORTIUM VITICOLE VINICOLE BOURGOGNE |
 | A 0265, A 0392 | 2022 → 2023 | Same SIREN, new name | DOMAINE CHRISTIAN CONFURON ET FILS | DOMAINE EVENSTAD |
 | A 0280 | 2022 → 2023 | Same SIREN, new name | DU DOMAINE TORTOCHOT | GFA DU DOMAINE TORTOCHOT |
@@ -1122,7 +1122,7 @@ The legal-entity rights files for 1 January 2019–2025 were compared with the p
 | A 0393, A 0406 | 2024 → 2025 | First company record on an existing parcel | — | GFV LES HERITIERS CONFURON |
 | A 0049 | 2024 → 2025 | Same holder, different right | SOCIETE CIVILE DOMAINE JEAN GRIVOT | SOCIETE CIVILE DOMAINE JEAN GRIVOT |
 | A 0463 | 2024 → 2025 | Same SIREN, new name | DU GRAND ECHANSON | GFA DU GRAND ECHANSON |
-| A 0054 | 2024 → 2025 | Identifier changed; earlier record had no SIREN | GFA SAINT MARTIN | GFA SAINT MARTIN |
+| A 0054 | 2024 → 2025 | Company identity continuity unproved | GFA SAINT MARTIN | GFA SAINT MARTIN |
 
 **Retired references and their current successors**
 
@@ -1130,13 +1130,238 @@ A successor is accepted when it first appears in the vintage right after the ret
 
 | Retired reference | Last vintage | Accepted successors | Rejected spatial candidates | Company records before retirement |
 | --- | --- | --- | --- | --- |
-| A 0032 | 2020-01-01 | A 0563, A 0564, A 0565, A 0566 | A 0579 (291.1 m²), A 0580 (289.7 m²) | None |
-| A 0046 | 2020-01-01 | A 0557, A 0558 | — | None |
-| A 0069 | 2025-01-01 | A 0581, A 0582 | — | CONSORTIUM VITICOLE VINICOLE BOURGOGNE |
-| A 0407 | 2022-01-01 | A 0569, A 0570 | — | None |
-| A 0409 | 2022-01-01 | A 0567, A 0568 | — | GFV HUDELOT NOELLAT / HUDELOT NOELLAT |
-| A 0543 | 2023-01-01 | A 0577, A 0578 | — | None |
+| A 0032 | 2020-10-01 | A 0563, A 0564, A 0565, A 0566 | A 0579 (291.1 m²), A 0580 (289.7 m²) | None |
+| A 0046 | 2020-07-01 | A 0557, A 0558 | — | None |
+| A 0069 | 2025-04-01 | A 0581, A 0582 | — | CONSORTIUM VITICOLE VINICOLE BOURGOGNE |
+| A 0400 | 2017-07-06 | A 0542 | A 0577 (790.8 m²), A 0578 (789.8 m²) | None |
+| A 0407 | 2022-04-01 | A 0569, A 0570 | — | None |
+| A 0409 | 2022-04-01 | A 0567, A 0568 | — | GFV HUDELOT NOELLAT / HUDELOT NOELLAT |
+| A 0538 | 2017-07-06 | A 0548, A 0549 | — | None |
+| A 0543 | 2023-07-01 | A 0577, A 0578 | — | None |
 | A 0562 | 2025-01-01 | A 0579, A 0580 | — | None |
+
+**Official DFI ancestry and source coverage (#461)**
+
+DFI dates below are validation dates. Event groups preserve all mothers and daughters, including context outside today's cru. They never transfer a right, sale party or farmer. A first observation or tracing stop is not creation, original ownership or uninterrupted continuity.
+
+Pinned source inventory: [2026-10-01](../../../scripts/grand-crus/sources/inventory-2026-10-01.json). 68 current parcels have documented ancestors; 58 reach pre-2019 events. 34 documents / 36 analysis lots. Reachable validation dates: 1989-04-20 to 2025-05-12. 1 source failures, 0 unresolved event groups, 0 traversal conflicts.
+
+| Commune | Geometry available / obtained / missing | Earliest / latest obtained observation |
+| --- | ---: | --- |
+| 21716 | 35 / 35 / 0 | 2017-07-06 / 2026-06-01 |
+
+**Complete documented event groups**
+
+| Validation date | Department / commune / prefix | Document / analysis lot | Change | All mothers | All daughters |
+| --- | --- | --- | --- | --- | --- |
+| 1989-04-20 | 210 / 21716 / 000 | 0000052 / 00001 | document d'arpentage | 217160000A0022 | 217160000A0408, 217160000A0409, 217160000A0410 |
+| 1989-05-05 | 210 / 21716 / 000 | 0000045 / 00001 | document d'arpentage | 217160000A0020 | 217160000A0392, 217160000A0393 |
+| 1991-02-13 | 210 / 21716 / 000 | 0000058 / 00001 | document d'arpentage | 217160000A0281 | 217160000A0421, 217160000A0422 |
+| 1991-10-21 | 210 / 21716 / 000 | 0000059 / 00001 | document d'arpentage | 217160000A0241 | 217160000A0423, 217160000A0424 |
+| 1994-08-29 | 210 / 21716 / 000 | 0000063 / 00001 | croquis de conservation | 217160000A0064, 217160000A0065 | 217160000A0430 |
+| 1994-12-01 | 210 / 21716 / 000 | 0000065 / 00001 | croquis de conservation | 217160000A0063 | 217160000A0433, 217160000A0434 |
+| 1994-12-05 | 210 / 21716 / 000 | 0000064 / 00001 | document d'arpentage | 217160000A0430 | 217160000A0431, 217160000A0432 |
+| 1995-09-18 | 210 / 21716 / 000 | 0000067 / 00001 | document d'arpentage | 217160000A0320 | 217160000A0437, 217160000A0438, 217160000A0439 |
+| 1995-11-06 | 210 / 21716 / 000 | 0000066 / 00001 | document d'arpentage | 217160000A0019 | 217160000A0435, 217160000A0436 |
+| 1995-11-27 | 210 / 21716 / 000 | 0000068 / 00001 | document d'arpentage | 217160000A0329 | 217160000A0440, 217160000A0441 |
+| 1996-11-12 | 210 / 21716 / 000 | 0000071 / 00001 | document d'arpentage | 217160000A0060 | 217160000A0458, 217160000A0459 |
+| 1998-02-09 | 210 / 21716 / 000 | 0000072 / 00001 | document d'arpentage | 217160000A0458 | 217160000A0460, 217160000A0461, 217160000A0462, 217160000A0463 |
+| 1998-02-19 | 210 / 21716 / 000 | 0000073 / 00001 | croquis de conservation | 217160000A0380 | 217160000A0464, 217160000A0465, 217160000A0466 |
+| 1998-11-09 | 210 / 21716 / 000 | 0000074 / 00001 | document d'arpentage | 217160000A0002 | 217160000A0467, 217160000A0468, 217160000A0469 |
+| 2001-08-23 | 210 / 21716 / 000 | 0000079 / 00001 | croquis de conservation | 217160000A0072 | 217160000A0506, 217160000A0507 |
+| 2002-02-21 | 210 / 21716 / 000 | 0000080 / 00001 | croquis de conservation | 217160000A0239 | 217160000A0508, 217160000A0509 |
+| 2002-03-18 | 210 / 21716 / 000 | 0000081 / 00001 | croquis de conservation | 217160000A0506 | 217160000A0510 |
+| 2002-03-18 | 210 / 21716 / 000 | 0000081 / 00002 | croquis de conservation | 217160000A0507 | 217160000A0511 |
+| 2004-12-21 | 210 / 21716 / 000 | 0000084 / 00001 | document d'arpentage | 217160000A0039 | 217160000A0516, 217160000A0517 |
+| 2009-05-04 | 210 / 21716 / 000 | 0000086 / 00001 | document d'arpentage | 217160000A0023 | 217160000A0521, 217160000A0522 |
+| 2009-09-14 | 210 / 21716 / 000 | 0000087 / 00001 | document d'arpentage | 217160000A0439 | 217160000A0523, 217160000A0524 |
+| 2010-08-23 | 210 / 21716 / 000 | 0000051 / 00001 | document d'arpentage | 217160000A0378 | 217160000A0406, 217160000A0407 |
+| 2013-01-21 | 210 / 21716 / 000 | 0000089 / 00001 | document d'arpentage numérique | 217160000A0508 | 217160000A0529, 217160000A0530 |
+| 2013-01-21 | 210 / 21716 / 000 | 0000090 / 00001 | document d'arpentage numérique | 217160000A0402 | 217160000A0531, 217160000A0532 |
+| 2013-01-21 | 210 / 21716 / 000 | 0000090 / 00002 | document d'arpentage numérique | 217160000A0403 | 217160000A0533, 217160000A0534 |
+| 2013-04-22 | 210 / 21716 / 000 | 0000092 / 00001 | document d'arpentage numérique | 217160000A0004 | 217160000A0535, 217160000A0536, 217160000A0537 |
+| 2013-07-08 | 210 / 21716 / 000 | 0000093 / 00001 | document d'arpentage numérique | 217160000A0035 | 217160000A0538, 217160000A0539 |
+| 2017-07-17 | 210 / 21716 / 000 | 0000097 / 00001 | document d'arpentage numérique | 217160000A0538 | 217160000A0548, 217160000A0549 |
+| 2017-08-21 | 210 / 21716 / 000 | 0000095 / 00001 | document d'arpentage numérique | 217160000A0400 | 217160000A0542, 217160000A0543 |
+| 2020-10-26 | 210 / 21716 / 000 | 0000100 / 00001 | document d'arpentage numérique | 217160000A0046 | 217160000A0557, 217160000A0558 |
+| 2020-12-28 | 210 / 21716 / 000 | 0000102 / 00001 | document d'arpentage numérique | 217160000A0032 | 217160000A0562, 217160000A0563, 217160000A0564, 217160000A0565, 217160000A0566 |
+| 2022-05-16 | 210 / 21716 / 000 | 0000103 / 00001 | document d'arpentage numérique | 217160000A0409 | 217160000A0567, 217160000A0568 |
+| 2022-05-16 | 210 / 21716 / 000 | 0000104 / 00001 | document d'arpentage numérique | 217160000A0407 | 217160000A0569, 217160000A0570 |
+| 2023-09-25 | 210 / 21716 / 000 | 0000106 / 00001 | document d'arpentage numérique | 217160000A0543 | 217160000A0577, 217160000A0578 |
+| 2025-01-20 | 210 / 21716 / 000 | 0000107 / 00001 | document d'arpentage numérique | 217160000A0562 | 217160000A0579, 217160000A0580 |
+| 2025-05-12 | 210 / 21716 / 000 | 0000108 / 00001 | document d'arpentage numérique | 217160000A0069 | 217160000A0581, 217160000A0582 |
+
+**Every current parcel: earliest supported event and tracing stops**
+
+| Current reference | Earliest supported event (date role) | Documented ancestors (context only) | Tracing stops |
+| --- | --- | --- | --- |
+| A 0001 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0001: source-boundary-or-unrecorded-event |
+| A 0003 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0003: source-boundary-or-unrecorded-event |
+| A 0005 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0005: source-boundary-or-unrecorded-event |
+| A 0006 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0006: source-boundary-or-unrecorded-event |
+| A 0007 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0007: source-boundary-or-unrecorded-event |
+| A 0008 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0008: source-boundary-or-unrecorded-event |
+| A 0009 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0009: source-boundary-or-unrecorded-event |
+| A 0010 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0010: source-boundary-or-unrecorded-event |
+| A 0011 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0011: source-boundary-or-unrecorded-event |
+| A 0012 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0012: source-boundary-or-unrecorded-event |
+| A 0013 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0013: source-boundary-or-unrecorded-event |
+| A 0014 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0014: source-boundary-or-unrecorded-event |
+| A 0015 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0015: source-boundary-or-unrecorded-event |
+| A 0016 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0016: source-boundary-or-unrecorded-event |
+| A 0017 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0017: source-boundary-or-unrecorded-event |
+| A 0018 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0018: source-boundary-or-unrecorded-event |
+| A 0021 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0021: source-boundary-or-unrecorded-event |
+| A 0024 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0024: source-boundary-or-unrecorded-event |
+| A 0025 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0025: source-boundary-or-unrecorded-event |
+| A 0026 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0026: source-boundary-or-unrecorded-event |
+| A 0029 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0029: source-boundary-or-unrecorded-event |
+| A 0030 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0030: source-boundary-or-unrecorded-event |
+| A 0031 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0031: source-boundary-or-unrecorded-event |
+| A 0033 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0033: source-boundary-or-unrecorded-event |
+| A 0034 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0034: source-boundary-or-unrecorded-event |
+| A 0036 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0036: source-boundary-or-unrecorded-event |
+| A 0037 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0037: source-boundary-or-unrecorded-event |
+| A 0038 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0038: source-boundary-or-unrecorded-event |
+| A 0040 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0040: source-boundary-or-unrecorded-event |
+| A 0041 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0041: source-boundary-or-unrecorded-event |
+| A 0042 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0042: source-boundary-or-unrecorded-event |
+| A 0043 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0043: source-boundary-or-unrecorded-event |
+| A 0045 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0045: source-boundary-or-unrecorded-event |
+| A 0047 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0047: source-boundary-or-unrecorded-event |
+| A 0048 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0048: source-boundary-or-unrecorded-event |
+| A 0049 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0049: source-boundary-or-unrecorded-event |
+| A 0050 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0050: source-boundary-or-unrecorded-event |
+| A 0051 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0051: source-boundary-or-unrecorded-event |
+| A 0052 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0052: source-boundary-or-unrecorded-event |
+| A 0053 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0053: source-boundary-or-unrecorded-event |
+| A 0054 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0054: source-boundary-or-unrecorded-event |
+| A 0055 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0055: source-boundary-or-unrecorded-event |
+| A 0061 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0061: source-boundary-or-unrecorded-event |
+| A 0062 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0062: source-boundary-or-unrecorded-event |
+| A 0066 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0066: source-boundary-or-unrecorded-event |
+| A 0067 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0067: source-boundary-or-unrecorded-event |
+| A 0068 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0068: source-boundary-or-unrecorded-event |
+| A 0070 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0070: source-boundary-or-unrecorded-event |
+| A 0071 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0071: source-boundary-or-unrecorded-event |
+| A 0073 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0073: source-boundary-or-unrecorded-event |
+| A 0074 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0074: source-boundary-or-unrecorded-event |
+| A 0075 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0075: source-boundary-or-unrecorded-event |
+| A 0076 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0076: source-boundary-or-unrecorded-event |
+| A 0242 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0242: source-boundary-or-unrecorded-event |
+| A 0243 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0243: source-boundary-or-unrecorded-event |
+| A 0244 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0244: source-boundary-or-unrecorded-event |
+| A 0246 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0246: source-boundary-or-unrecorded-event |
+| A 0252 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0252: source-boundary-or-unrecorded-event |
+| A 0253 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0253: source-boundary-or-unrecorded-event |
+| A 0254 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0254: source-boundary-or-unrecorded-event |
+| A 0255 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0255: source-boundary-or-unrecorded-event |
+| A 0256 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0256: source-boundary-or-unrecorded-event |
+| A 0257 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0257: source-boundary-or-unrecorded-event |
+| A 0261 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0261: source-boundary-or-unrecorded-event |
+| A 0262 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0262: source-boundary-or-unrecorded-event |
+| A 0264 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0264: source-boundary-or-unrecorded-event |
+| A 0265 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0265: source-boundary-or-unrecorded-event |
+| A 0266 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0266: source-boundary-or-unrecorded-event |
+| A 0268 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0268: source-boundary-or-unrecorded-event |
+| A 0269 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0269: source-boundary-or-unrecorded-event |
+| A 0272 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0272: source-boundary-or-unrecorded-event |
+| A 0273 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0273: source-boundary-or-unrecorded-event |
+| A 0274 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0274: source-boundary-or-unrecorded-event |
+| A 0275 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0275: source-boundary-or-unrecorded-event |
+| A 0280 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0280: source-boundary-or-unrecorded-event |
+| A 0282 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0282: source-boundary-or-unrecorded-event |
+| A 0330 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0330: source-boundary-or-unrecorded-event |
+| A 0350 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0350: source-boundary-or-unrecorded-event |
+| A 0351 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0351: source-boundary-or-unrecorded-event |
+| A 0372 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0372: source-boundary-or-unrecorded-event |
+| A 0373 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0373: source-boundary-or-unrecorded-event |
+| A 0374 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0374: source-boundary-or-unrecorded-event |
+| A 0375 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0375: source-boundary-or-unrecorded-event |
+| A 0376 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0376: source-boundary-or-unrecorded-event |
+| A 0379 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0379: source-boundary-or-unrecorded-event |
+| A 0381 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0381: source-boundary-or-unrecorded-event |
+| A 0383 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0383: source-boundary-or-unrecorded-event |
+| A 0384 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0384: source-boundary-or-unrecorded-event |
+| A 0389 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0389: source-boundary-or-unrecorded-event |
+| A 0390 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0390: source-boundary-or-unrecorded-event |
+| A 0391 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0391: source-boundary-or-unrecorded-event |
+| A 0392 | 1989-05-05 (dfi-validation) | 217160000A0020 | 217160000A0020: source-boundary-or-unrecorded-event |
+| A 0393 | 1989-05-05 (dfi-validation) | 217160000A0020 | 217160000A0020: source-boundary-or-unrecorded-event |
+| A 0401 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0401: source-boundary-or-unrecorded-event |
+| A 0404 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0404: source-boundary-or-unrecorded-event |
+| A 0406 | 2010-08-23 (dfi-validation) | 217160000A0378 | 217160000A0378: source-boundary-or-unrecorded-event |
+| A 0408 | 1989-04-20 (dfi-validation) | 217160000A0022 | 217160000A0022: source-boundary-or-unrecorded-event |
+| A 0410 | 1989-04-20 (dfi-validation) | 217160000A0022 | 217160000A0022: source-boundary-or-unrecorded-event |
+| A 0411 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0411: source-boundary-or-unrecorded-event |
+| A 0412 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0412: source-boundary-or-unrecorded-event |
+| A 0413 | 2017-07-06 (first-observed-cadastral-release) | none documented | 217160000A0413: source-boundary-or-unrecorded-event |
+| A 0421 | 1991-02-13 (dfi-validation) | 217160000A0281 | 217160000A0281: source-boundary-or-unrecorded-event |
+| A 0422 | 1991-02-13 (dfi-validation) | 217160000A0281 | 217160000A0281: source-boundary-or-unrecorded-event |
+| A 0423 | 1991-10-21 (dfi-validation) | 217160000A0241 | 217160000A0241: source-boundary-or-unrecorded-event |
+| A 0424 | 1991-10-21 (dfi-validation) | 217160000A0241 | 217160000A0241: source-boundary-or-unrecorded-event |
+| A 0431 | 1994-08-29 (dfi-validation) | 217160000A0064, 217160000A0065, 217160000A0430 | 217160000A0064: source-boundary-or-unrecorded-event; 217160000A0065: source-boundary-or-unrecorded-event |
+| A 0432 | 1994-08-29 (dfi-validation) | 217160000A0064, 217160000A0065, 217160000A0430 | 217160000A0064: source-boundary-or-unrecorded-event; 217160000A0065: source-boundary-or-unrecorded-event |
+| A 0433 | 1994-12-01 (dfi-validation) | 217160000A0063 | 217160000A0063: source-boundary-or-unrecorded-event |
+| A 0434 | 1994-12-01 (dfi-validation) | 217160000A0063 | 217160000A0063: source-boundary-or-unrecorded-event |
+| A 0435 | 1995-11-06 (dfi-validation) | 217160000A0019 | 217160000A0019: source-boundary-or-unrecorded-event |
+| A 0436 | 1995-11-06 (dfi-validation) | 217160000A0019 | 217160000A0019: source-boundary-or-unrecorded-event |
+| A 0437 | 1995-09-18 (dfi-validation) | 217160000A0320 | 217160000A0320: source-boundary-or-unrecorded-event |
+| A 0438 | 1995-09-18 (dfi-validation) | 217160000A0320 | 217160000A0320: source-boundary-or-unrecorded-event |
+| A 0440 | 1995-11-27 (dfi-validation) | 217160000A0329 | 217160000A0329: source-boundary-or-unrecorded-event |
+| A 0441 | 1995-11-27 (dfi-validation) | 217160000A0329 | 217160000A0329: source-boundary-or-unrecorded-event |
+| A 0459 | 1996-11-12 (dfi-validation) | 217160000A0060 | 217160000A0060: source-boundary-or-unrecorded-event |
+| A 0460 | 1996-11-12 (dfi-validation) | 217160000A0060, 217160000A0458 | 217160000A0060: source-boundary-or-unrecorded-event |
+| A 0461 | 1996-11-12 (dfi-validation) | 217160000A0060, 217160000A0458 | 217160000A0060: source-boundary-or-unrecorded-event |
+| A 0462 | 1996-11-12 (dfi-validation) | 217160000A0060, 217160000A0458 | 217160000A0060: source-boundary-or-unrecorded-event |
+| A 0463 | 1996-11-12 (dfi-validation) | 217160000A0060, 217160000A0458 | 217160000A0060: source-boundary-or-unrecorded-event |
+| A 0464 | 1998-02-19 (dfi-validation) | 217160000A0380 | 217160000A0380: source-boundary-or-unrecorded-event |
+| A 0465 | 1998-02-19 (dfi-validation) | 217160000A0380 | 217160000A0380: source-boundary-or-unrecorded-event |
+| A 0466 | 1998-02-19 (dfi-validation) | 217160000A0380 | 217160000A0380: source-boundary-or-unrecorded-event |
+| A 0467 | 1998-11-09 (dfi-validation) | 217160000A0002 | 217160000A0002: source-boundary-or-unrecorded-event |
+| A 0468 | 1998-11-09 (dfi-validation) | 217160000A0002 | 217160000A0002: source-boundary-or-unrecorded-event |
+| A 0469 | 1998-11-09 (dfi-validation) | 217160000A0002 | 217160000A0002: source-boundary-or-unrecorded-event |
+| A 0509 | 2002-02-21 (dfi-validation) | 217160000A0239 | 217160000A0239: source-boundary-or-unrecorded-event |
+| A 0510 | 2001-08-23 (dfi-validation) | 217160000A0072, 217160000A0506 | 217160000A0072: source-boundary-or-unrecorded-event |
+| A 0511 | 2001-08-23 (dfi-validation) | 217160000A0072, 217160000A0507 | 217160000A0072: source-boundary-or-unrecorded-event |
+| A 0516 | 2004-12-21 (dfi-validation) | 217160000A0039 | 217160000A0039: source-boundary-or-unrecorded-event |
+| A 0517 | 2004-12-21 (dfi-validation) | 217160000A0039 | 217160000A0039: source-boundary-or-unrecorded-event |
+| A 0521 | 2009-05-04 (dfi-validation) | 217160000A0023 | 217160000A0023: source-boundary-or-unrecorded-event |
+| A 0522 | 2009-05-04 (dfi-validation) | 217160000A0023 | 217160000A0023: source-boundary-or-unrecorded-event |
+| A 0523 | 1995-09-18 (dfi-validation) | 217160000A0320, 217160000A0439 | 217160000A0320: source-boundary-or-unrecorded-event |
+| A 0524 | 1995-09-18 (dfi-validation) | 217160000A0320, 217160000A0439 | 217160000A0320: source-boundary-or-unrecorded-event |
+| A 0529 | 2002-02-21 (dfi-validation) | 217160000A0239, 217160000A0508 | 217160000A0239: source-boundary-or-unrecorded-event |
+| A 0530 | 2002-02-21 (dfi-validation) | 217160000A0239, 217160000A0508 | 217160000A0239: source-boundary-or-unrecorded-event |
+| A 0531 | 2013-01-21 (dfi-validation) | 217160000A0402 | 217160000A0402: source-boundary-or-unrecorded-event |
+| A 0532 | 2013-01-21 (dfi-validation) | 217160000A0402 | 217160000A0402: source-boundary-or-unrecorded-event |
+| A 0533 | 2013-01-21 (dfi-validation) | 217160000A0403 | 217160000A0403: source-boundary-or-unrecorded-event |
+| A 0534 | 2013-01-21 (dfi-validation) | 217160000A0403 | 217160000A0403: source-boundary-or-unrecorded-event |
+| A 0535 | 2013-04-22 (dfi-validation) | 217160000A0004 | 217160000A0004: source-boundary-or-unrecorded-event |
+| A 0536 | 2013-04-22 (dfi-validation) | 217160000A0004 | 217160000A0004: source-boundary-or-unrecorded-event |
+| A 0537 | 2013-04-22 (dfi-validation) | 217160000A0004 | 217160000A0004: source-boundary-or-unrecorded-event |
+| A 0539 | 2013-07-08 (dfi-validation) | 217160000A0035 | 217160000A0035: source-boundary-or-unrecorded-event |
+| A 0542 | 2017-08-21 (dfi-validation) | 217160000A0400 | 217160000A0400: source-boundary-or-unrecorded-event |
+| A 0548 | 2013-07-08 (dfi-validation) | 217160000A0035, 217160000A0538 | 217160000A0035: source-boundary-or-unrecorded-event |
+| A 0549 | 2013-07-08 (dfi-validation) | 217160000A0035, 217160000A0538 | 217160000A0035: source-boundary-or-unrecorded-event |
+| A 0557 | 2020-10-26 (dfi-validation) | 217160000A0046 | 217160000A0046: source-boundary-or-unrecorded-event |
+| A 0558 | 2020-10-26 (dfi-validation) | 217160000A0046 | 217160000A0046: source-boundary-or-unrecorded-event |
+| A 0563 | 2020-12-28 (dfi-validation) | 217160000A0032 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0564 | 2020-12-28 (dfi-validation) | 217160000A0032 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0565 | 2020-12-28 (dfi-validation) | 217160000A0032 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0566 | 2020-12-28 (dfi-validation) | 217160000A0032 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0567 | 1989-04-20 (dfi-validation) | 217160000A0022, 217160000A0409 | 217160000A0022: source-boundary-or-unrecorded-event |
+| A 0568 | 1989-04-20 (dfi-validation) | 217160000A0022, 217160000A0409 | 217160000A0022: source-boundary-or-unrecorded-event |
+| A 0569 | 2010-08-23 (dfi-validation) | 217160000A0378, 217160000A0407 | 217160000A0378: source-boundary-or-unrecorded-event |
+| A 0570 | 2010-08-23 (dfi-validation) | 217160000A0378, 217160000A0407 | 217160000A0378: source-boundary-or-unrecorded-event |
+| A 0577 | 2017-08-21 (dfi-validation) | 217160000A0400, 217160000A0543 | 217160000A0400: source-boundary-or-unrecorded-event |
+| A 0578 | 2017-08-21 (dfi-validation) | 217160000A0400, 217160000A0543 | 217160000A0400: source-boundary-or-unrecorded-event |
+| A 0579 | 2020-12-28 (dfi-validation) | 217160000A0032, 217160000A0562 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0580 | 2020-12-28 (dfi-validation) | 217160000A0032, 217160000A0562 | 217160000A0032: source-boundary-or-unrecorded-event |
+| A 0581 | 2025-05-12 (dfi-validation) | 217160000A0069 | 217160000A0069: source-boundary-or-unrecorded-event |
+| A 0582 | 2025-05-12 (dfi-validation) | 217160000A0069 | 217160000A0069: source-boundary-or-unrecorded-event |
+
+Full event paths, original-reference rights, date discrepancies and geometry comparisons are in [the generated history](rights-history.json). Missing earlier DFI correspondence includes the departmental computerisation boundary and rural consolidation gaps; no earlier owner is inferred. Sale and notice coverage is independent and does not extend back to the oldest DFI event.
+
 
 ## Sale and exchange deeds
 
@@ -1156,6 +1381,26 @@ A successor is accepted when it first appears in the vintage right after the ret
 | 2025-01-30 | Sold, 1 disposition (6a9c55e50c) | A 0433 | 11 | — |
 | 2025-04-03 | Sold, 1 disposition (efbecd4d5a) | A 0075 | 12 | — |
 | 2025-06-20 | Sold, 1 disposition (63685e6a45) | A 0581 | 0 | — |
+
+## Independent sale and notice coverage
+
+DFI validation dates do not extend the coverage of sales or notices. Original dates, references and scope stay with each record. Historical context never transfers rights, sale parties or farming.
+
+Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed regional deeds: ['2014-01-02', '2025-12-31']; observed commune deeds: ['2014-03-26', '2025-08-29']. [Full original-reference sale groups and paths](sale-records.json).
+
+| Deed date | Original references | Context on current references |
+| --- | --- | --- |
+| 2021-11-25 | 217160000A0069, 217160000A0070 | 217160000A0581 → 217160000A0069 (historical-context; former-parcel-includes-other-daughters); 217160000A0582 → 217160000A0069 (historical-context; former-parcel-includes-other-daughters) |
+
+Reviewed notice matches: 7; unreviewed search candidates: 2. Matched act dates: 2022-06-30 to 2026-04-07. [Original readings, areas, paths and unresolved references](notice-history.json).
+
+Department 21: published years located as early as 2004 and through 2026. Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}].
+
+- Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed
+- Departmental 2021–2026 publications outside the existing index
+- Regional publications before 2019 and any notice outside the indexed corpus
+
+Failed earlier PDF: [21 official bulletin](https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf). Remote end closed connection without response. These are coverage gaps, not absent notices.
 
 ## Source log
 

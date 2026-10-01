@@ -1,0 +1,31 @@
+{
+  "dataUrl": "/maps/montrachet-parcels.2026-06-01.772994c2e4a4.geojson",
+  "sha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-927",
+    "inao-denom-539",
+    "inao-denom-273",
+    "inao-denom-351",
+    "inao-denom-564"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 201,
+    "withRecordedRights": 103,
+    "rightRecords": 107,
+    "unknownRights": 98,
+    "areaMismatches": 0,
+    "multipleRights": 4,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  }
+}

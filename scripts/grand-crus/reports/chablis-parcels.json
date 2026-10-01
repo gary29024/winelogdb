@@ -1,0 +1,170 @@
+{
+  "sources": {
+    "commune": "89068",
+    "cadastreDate": "2026-06-01",
+    "cadastreUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+    "cadastreSha256": "7b34d5adab14ee4ff813c75809f96fe7873adbb7fe332c12d9bb68811e203f5b",
+    "cadastreLicence": "Licence Ouverte / Open Licence",
+    "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+    "rightsAsOf": "2025-01-01",
+    "rightsReleaseChecked": "2026-10-01",
+    "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
+    "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+    "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+    "rightsMember": "PM_25_NB_890.csv",
+    "rightsMemberSha256": "7901c21a017867994fc1e1ee09ab84b9f01b201bd164ea7654ffba1ab6332379",
+    "rightsMemberCrc32": 2840461715,
+    "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+    "schemaSha256": "0debcb321d92807b4d0919ff6857510b88353b0cc52b330fe4c001a3d932a9fd",
+    "parentFeatureIds": [
+      "inao-denom-439"
+    ],
+    "minimumOverlapM2": 1,
+    "domaineLinks": [],
+    "additionalCommunes": []
+  },
+  "parentSourceSha256": "1fd3f267b1e6bd3be7711eff180b5ddb7d20816a27cf538304caad0f4fe08aaf",
+  "dataUrl": "/maps/chablis-parcels.2026-06-01.56b25a5e7459.geojson",
+  "sha256": "56b25a5e7459cc0a0fc18fc56c179520902c53b4c3e4bf4619995f7d1c49b9d2",
+  "cadastreDate": "2026-06-01",
+  "rightsAsOf": "2025-01-01",
+  "sourceUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89068/cadastre-89068-parcelles.json.gz",
+  "rightsUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
+  "schemaUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_des_personnes_morales_descriptif_2025_odt",
+  "cadastreLicence": "Licence Ouverte / Open Licence",
+  "cadastreLicenceUrl": "https://www.data.gouv.fr/datasets/cadastre",
+  "rightsLicence": "Licence Ouverte / Open Licence version 2.0",
+  "rightsLicenceUrl": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "parentFeatureIds": [
+    "inao-denom-439"
+  ],
+  "minimumOverlapM2": 1,
+  "counts": {
+    "parcels": 417,
+    "withRecordedRights": 296,
+    "rightRecords": 297,
+    "unknownRights": 121,
+    "areaMismatches": 0,
+    "multipleRights": 1,
+    "verifiedDomaineLinks": 0,
+    "proposedDomaineLinks": 0
+  },
+  "bytes": 366499,
+  "gzipEquivalentBytes": 53055,
+  "matchedFiscalRows": 314,
+  "excludedBoundaryContacts": [
+    {
+      "parcelId": "890680000A0725",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.6820027772556914
+    },
+    {
+      "parcelId": "890680000A0805",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.04232236714194224
+    },
+    {
+      "parcelId": "890680000A0804",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.01453775681968446
+    },
+    {
+      "parcelId": "890680000A0807",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.024643225621334496
+    },
+    {
+      "parcelId": "890680000A0806",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 7.5322287182816e-06
+    },
+    {
+      "parcelId": "890680000A0134",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.01537290526278292
+    },
+    {
+      "parcelId": "890680000A0136",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.19743983425908104
+    },
+    {
+      "parcelId": "890680000A0135",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.023267263911336152
+    },
+    {
+      "parcelId": "890680000A0075",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.13202028839512814
+    },
+    {
+      "parcelId": "890680000N0693",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.01714542398878087
+    },
+    {
+      "parcelId": "890680000R0526",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.10318715727098687
+    },
+    {
+      "parcelId": "890680000R0477",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.0003296180810164833
+    },
+    {
+      "parcelId": "890680000R1023",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.017608968320743403
+    },
+    {
+      "parcelId": "890680000R0549",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.003813641089543761
+    },
+    {
+      "parcelId": "89068000AD0001",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.22713179694225583
+    },
+    {
+      "parcelId": "89068000YB0001",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.5920054804576169
+    },
+    {
+      "parcelId": "89068000YB0161",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.7127011208084651
+    },
+    {
+      "parcelId": "89068000YB0096",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.10671724409995344
+    },
+    {
+      "parcelId": "89068000YB0112",
+      "parentFeatureId": "inao-denom-439",
+      "overlapM2": 0.22172769102532783
+    }
+  ],
+  "communeRecordsWithoutCurrentGeometry": [
+    "890680000F0811",
+    "890680000F0813",
+    "890680000F0814",
+    "890680000F1481",
+    "890680000P0093",
+    "890680000P1004",
+    "890680000P1013",
+    "89068000AO0165",
+    "89068000AO0166"
+  ],
+  "invalidGeometryOutsideCru": [],
+  "byCru": {
+    "inao-denom-439": {
+      "parcels": 417,
+      "areaHa": 106.65102465999999
+    }
+  }
+}

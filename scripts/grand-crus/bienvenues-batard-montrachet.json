@@ -1,0 +1,22 @@
+{
+  "slug": "bienvenues-batard-montrachet",
+  "name": "Bienvenues-Bâtard-Montrachet",
+  "parentFeatureId": "inao-denom-351",
+  "appellationId": 135,
+  "issue": 403,
+  "tier": 1,
+  "bundle": "montrachet",
+  "villageMaps": [
+    "puligny-montrachet"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Bienvenues-Bâtard-Montrachet (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "bienvenues-batard-montrachet"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}

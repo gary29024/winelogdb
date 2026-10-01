@@ -1,0 +1,11 @@
+{
+  "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+  "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+  "httpContentEncoding": null,
+  "transportSha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+  "transportSize": 8953,
+  "sha256": "e0933898595dee06304afa9f04f0637d5509ac4760c2f17fac4109f63263c8d6",
+  "size": 8953,
+  "retrievedAt": "2026-10-01T10:12:31Z",
+  "status": "obtained"
+}

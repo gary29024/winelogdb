@@ -1,0 +1,9 @@
+{
+  "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+  "retrievedAt": "2026-10-01T08:50:29Z",
+  "sha256": "35434a9022c067b5fd4af8ccd67a2a621dc1b72b2f605656d76d09bd7e0fc08a",
+  "size": 13071,
+  "transportSha256": "35434a9022c067b5fd4af8ccd67a2a621dc1b72b2f605656d76d09bd7e0fc08a",
+  "transportSize": 13071,
+  "httpContentEncoding": null
+}

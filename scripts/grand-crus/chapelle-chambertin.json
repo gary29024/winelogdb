@@ -1,0 +1,22 @@
+{
+  "slug": "chapelle-chambertin",
+  "name": "Chapelle-Chambertin",
+  "parentFeatureId": "inao-denom-475",
+  "appellationId": 151,
+  "issue": 393,
+  "tier": 1,
+  "bundle": "gevrey-chambertin",
+  "villageMaps": [
+    "gevrey-chambertin"
+  ],
+  "rightsHistoryPurpose": "Official filiation, dated legal-entity rights and original-reference evidence for Chapelle-Chambertin (#461). None establishes current farming.",
+  "evidenceFrom": [
+    "chapelle-chambertin"
+  ],
+  "research": {
+    "delivery": "historical-extension",
+    "methodDoc": "docs/research/grand-cru-history.md",
+    "namedAreas": "unreviewed",
+    "producerResearch": "unreviewed"
+  }
+}
