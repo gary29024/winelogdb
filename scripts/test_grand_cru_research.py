@@ -544,6 +544,7 @@ class GrandsEchezeauxTests(unittest.TestCase):
         cls.context = Context(*load_cru('grands-echezeaux'))
         cls.files, cls.register = outputs(cls.context)
         cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = json.loads(cls.context.curation.read_text(encoding='utf-8'))
 
     def test_pinned_population_and_no_invented_farmers(self):
         counts = self.register['counts']
@@ -563,8 +564,56 @@ class GrandsEchezeauxTests(unittest.TestCase):
             self.assertTrue(path == self.context.evidence or path.parent.name == 'grands-echezeaux', path)
         self.assertTrue(self.register['inputs']['curation'].startswith('docs/research/grands-echezeaux/'))
 
-    def test_weak_leads_never_become_domaine_headings(self):
+    def test_strengthened_leads_keep_their_evidence_limits(self):
         drouhin = self.evidence['holderDomains']['393095955']
-        self.assertEqual(drouhin['basis'], 'management-only-lead')
-        self.assertNotIn('538257932', self.evidence['holderDomains'])  # unresolved Lamarche SCEA
-        self.assertNotIn('U18178008', self.evidence['holderDomains'])  # no SIREN, no source
+        self.assertEqual(drouhin['basis'], 'management-and-estate-context')
+        self.assertIn('sepv-apports-1994', drouhin['sources'])
+        lamarche = self.evidence['holderDomains']['538257932']
+        self.assertEqual(lamarche['basis'], 'reported-operator-relationship')
+        self.assertIn('raa-2026-067', lamarche['sources'])  # reported tenancy does not erase suspension
+        modot = next(h for h in self.curation['holders'] if h['holderId'] == 'U18178008')
+        self.assertEqual(modot['legalIdentityCrosswalk']['companySiren'], '778173500')
+        self.assertFalse(modot['parcelOperationConfirmed'])
+        self.assertNotIn('778173500', self.evidence['holderDomains'])  # do not rewrite the provisional rights ID
+
+    def test_filings_keep_deed_dates_and_unmatched_printed_references(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        expected = {f'212670000D{n:04}' for n in [93, 103, 104, 105, 535, 615, 616]}
+        self.assertEqual({p for f in filings.values() for p in f['parcelAreasM2']}, expected)
+        self.assertEqual(self.register['counts']['withParcelFiling'], 7)
+        sepv = filings['sepv-robert-contribution']
+        self.assertEqual((sepv['documentDate'], sepv['filingDate']), ('1994-12-30', '1995-02-13'))
+        self.assertEqual(sepv['parcelAreasM2']['212670000D0103'], 4740)
+        printed = self.curation['unmatchedPrintedReferences'][0]
+        self.assertEqual((printed['printedReference'], printed['parcelIds']), ('D11', []))
+        self.assertNotIn('212670000D0111', expected)
+        self.assertFalse(any(i['kind'] == 'filing' for i in self.evidence['parcels']['212670000D0111']))
+
+    def test_crosswalk_and_printed_references_are_validated(self):
+        from build_grand_cru_research import load_inputs
+        inputs = load_inputs(self.context)
+
+        def build(curation):
+            return build_cru_register(inputs['manifest'], inputs['asset'], curation, inputs['history'],
+                                      inputs['sales'], inputs['named_areas'], self.context)
+        curation = copy.deepcopy(self.curation)
+        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['companySiren'] = '77817350'
+        with self.assertRaisesRegex(ValueError, 'invalid identity crosswalk'):
+            build(curation)
+        curation = copy.deepcopy(self.curation)
+        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['sourceIds'] = ['nonexistent']
+        with self.assertRaisesRegex(ValueError, 'Unknown crosswalk source'):
+            build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['unmatchedPrintedReferences'][0]['parcelIds'] = ['212670000D0111']
+        with self.assertRaisesRegex(ValueError, 'cannot name current parcels'):
+            build(curation)
+
+    def test_reported_metayage_and_old_holdings_do_not_double_count(self):
+        census = {h['holdingId']: h for h in self.register['namedAreaCensus'][0]['holdings']}
+        self.assertEqual(census['liger-ge']['relation'], 'metayer')
+        self.assertIsNone(census['liger-ge']['beyondCompanyRecordsM2'])
+        for hid in ['kohut-ge', 'gros-frere-historical-ge']:
+            self.assertIsNone(census[hid]['publishedAreaHa'])
+            self.assertIsNone(census[hid]['beyondCompanyRecordsM2'])
+            self.assertIsNone(census[hid]['endedSeason'])  # an intended lease end is not an actual last harvest

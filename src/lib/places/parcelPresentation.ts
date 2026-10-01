@@ -13,6 +13,7 @@ export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[
 // Tenancy, lease and operator relationships are never shown in this list.
 const headingLabels:Record<string,string>={
  'estate-context':'Estate source','secondary-estate-context':'Estate source','management-and-estate-context':'Estate source',
+ 'group-and-estate-context':'Estate source via group',
  'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only'};
 const leadLabels:Record<string,string>={
  'registered-office-match':'office address only','management-only-lead':'shared management only',

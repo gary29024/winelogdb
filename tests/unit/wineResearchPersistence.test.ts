@@ -37,6 +37,8 @@ const env=()=>({DB:database.db,CF_AI_GATEWAY_TOKEN:'test',AI_GATEWAY_ACCOUNT_ID:
 beforeEach(()=>{
  vi.useFakeTimers();vi.setSystemTime(new Date('2026-09-25T04:00:00.000Z'));
  database=realD1();
+ // SQLite migrations use wall-clock time; align the seeded budget with this test's clock.
+ database.sql.prepare("UPDATE pilot_settings SET value_json=json_set(value_json,'$.cloudflareObservedMonth',?) WHERE id=1").run(new Date().toISOString().slice(0,7));
  database.sql.exec("INSERT INTO app_users(id,email,display_name,role) VALUES('alice','alice@example.com','Alice','member'); INSERT INTO credit_wallets(user_id) VALUES('alice'); INSERT INTO wines(id,owner_id,producer,wine_name,country,region,wine_style,created_at,updated_at) VALUES('krug','alice','Krug','Grande Cuvée 173ème Édition','France','Champagne','sparkling','now','now')");
  configureGeminiBatchGateway(undefined,env());
  vi.spyOn(console,'log').mockImplementation(()=>{});vi.spyOn(console,'warn').mockImplementation(()=>{});
