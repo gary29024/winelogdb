@@ -350,15 +350,11 @@ export async function cancelEmulatedGeminiBatch(apiKey:string|undefined,name:str
   return {name,ok:true as const,status:200};
 }
 /**
- * Google Search grounding and controlled generation cannot be used together.
- * A request that declares the search tool *and* sets responseMimeType with a
- * responseSchema is asking for two things the API will not do at once, and what
- * comes back is a well-formed JSON answer with the grounding silently dropped -
- * which the research gate then rejects, having no sources to verify against.
- *
- * Grounded requests therefore ask for JSON in the prompt instead. The schema
- * stays the single definition of the contract and is rendered into the prompt
- * from here, so the two cannot drift apart.
+ * Keep output-format controls out of the grounded transport. Support for tools
+ * with controlled output varies by API and serving mode; setting an output
+ * schema is not evidence that Search returned citations. Wine and producer
+ * research request named prose sections and extract their fields locally.
+ * Legacy JSON consumers may still describe their contract in prompt text.
  */
 export function groundedGenerationConfig(maxOutputTokens:number,thinkingLevel?:GeminiThinkingLevel){
   return thinkingLevel?{maxOutputTokens,thinkingConfig:{thinkingLevel}}:{maxOutputTokens};

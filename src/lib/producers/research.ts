@@ -43,7 +43,11 @@ function safeHttpsUrl(value:unknown,base?:string){
 }
 
 function jsonFieldRange(text:string,field:ContactField){
-  const key=`"${field}"`,start=text.indexOf(key);if(start<0)return null;
+  const key=`"${field}"`,start=text.indexOf(key);if(start<0){
+    const heading=new RegExp(`^##[ \\t]+${field}[ \\t]*\\r?$`,'m').exec(text);if(!heading)return null;
+    const valueStart=heading.index+heading[0].length,next=/^##[ \t]+[A-Za-z][A-Za-z0-9]*[ \t]*\r?$/m.exec(text.slice(valueStart));
+    return {start:heading.index,end:next?valueStart+next.index:text.length};
+  }
   const colon=text.indexOf(':',start+key.length);if(colon<0)return null;
   let end=colon+1;while(end<text.length&&/\s/.test(text[end]))end++;
   if(text[end]==='"'){
@@ -62,6 +66,9 @@ function jsonFieldRange(text:string,field:ContactField){
 
 function jsonFieldStringValue(text:string,field:ContactField){
   const range=jsonFieldRange(text,field);if(!range)return null;
+  if(text.slice(range.start).startsWith('##')){
+    const value=text.slice(range.start,range.end).replace(/^##[^\n]*\n/,'').trim();return value&&value!=='null'?value:null;
+  }
   const fragment=text.slice(range.start,range.end),colon=fragment.indexOf(':');if(colon<0)return null;
   const raw=fragment.slice(colon+1).trim();if(!raw.startsWith('"'))return null;
   try{const value=JSON.parse(raw);return typeof value==='string'?value:null}catch{return null}

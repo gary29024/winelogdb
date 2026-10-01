@@ -97,7 +97,7 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
       </>:<>
         <div className="ai-spend-run-summary">
           <article><small>Marginal cost</small><strong>{money(currency,selected.cost)}</strong></article>
-          <article><small>Grounded searches</small><strong>{count(selected.searchQueries)}</strong></article>
+          <article><small>Google searches</small><strong>{count(selected.searchQueries)}</strong></article>
           <article><small>Requests</small><strong>{count(selected.requests)}</strong></article>
           <article><small>Total tokens</small><strong>{count(selected.promptTokens+selected.outputTokens)}</strong></article>
         </div>

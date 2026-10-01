@@ -101,16 +101,29 @@ export async function recordGroundingObservation(db:D1Database,owner:string,mode
  * not recently answered without grounding - which, most of the time, is all of
  * them.
  */
-export async function orderModelsByGrounding(db:D1Database,owner:string,candidates:readonly string[]){
-  if(candidates.length<2)return [...candidates];
+async function groundingRows(db:D1Database,owner:string,candidates:readonly string[]){
   let rows:ModelGroundingRow[]=[];
   try{
     const placeholders=candidates.map(()=>'?').join(',');
     const result=await db.prepare(`SELECT model,grounding_ok_at,grounding_failed_at FROM research_model_health WHERE owner_id=? AND model IN (${placeholders})`)
       .bind(owner,...candidates).all<ModelGroundingRow>();
     rows=result.results;
-  }catch{return [...candidates]}
-  const byModel=new Map(rows.map(row=>[row.model,row]));
+  }catch{return []}
+  return rows;
+}
+
+export async function orderModelsByGrounding(db:D1Database,owner:string,candidates:readonly string[]){
+  const byModel=new Map((await groundingRows(db,owner,candidates)).map(row=>[row.model,row]));
   return candidates.map((model,index)=>({model,index,rank:rankGroundingState(byModel.get(model))}))
     .sort((a,b)=>a.rank-b.rank||a.index-b.index).map(item=>item.model);
+}
+
+export class GroundingUnavailableError extends Error{
+  constructor(){super('Web research is temporarily unavailable because the configured models returned no source evidence. Research stopped to avoid further charges; saved research is kept. Try again after the grounding service recovers.');this.name='GroundingUnavailableError'}
+}
+
+/** A cooldown must exclude a broken model, including when every model is cooling off. */
+export async function availableGroundingModels(db:D1Database,owner:string,candidates:readonly string[]){
+  const byModel=new Map((await groundingRows(db,owner,candidates)).map(row=>[row.model,row]));
+  return candidates.filter(model=>rankGroundingState(byModel.get(model))===0);
 }

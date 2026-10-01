@@ -1,14 +1,17 @@
 import { lwinRangeFirst,producerLwinContext,producerLwinReferences } from './lwinRange';
 import { AI_MODELS } from '../ai/policy';
 import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
-import { buildResearchTargets,scopePassesQuality,upsertResearchCache } from '../research/cache';
+import { buildResearchTargets,scopePassesQuality,scopeQualityWarnings,scopeRetryFeedback,upsertResearchCache } from '../research/cache';
+import { availableGroundingModels,GroundingUnavailableError,recordGroundingObservation } from '../research/modelHealth';
+import { assertResearchRetryBudget,PRODUCER_RESEARCH_SEARCH_LIMIT } from '../research/retryBudget';
+import { describeGroundedResponse,parseGroundedResponseText } from '../research/groundedResponse';
 import { publishProducerResearch } from '../research/sharedProducer';
 import { createObjectKey } from '../r2/keys';
 import { ensureCuveeEntity,reconcileProducerCuvees } from '../cuvees/entities';
 import { createResearchBatchJob,finishResearchBatchJob,getResearchBatchJob,recordResearchSearchQueries,touchResearchBatchJob,type ResearchBatchJob } from '../research/batchJobStore';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 import { cancelGeminiBatch } from '../research/cancelResearch';
-import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
+import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from '../research/geminiBatch';
 import { RESEARCH_STALE_DAYS } from '../research/freshness';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from '../research/batchRetryPolicy';
 import { clearProducerCatalogSliceStage,discardProducerCatalogStage,listProducerCatalogStage,prepareProducerCatalogStage,stageProducerCatalogParts } from './catalogResearchStage';
@@ -18,7 +21,6 @@ import { assertCatalogTextQuality,extractOfficialContactCandidates,mergeCatalogR
 import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { producerRangeAllowed } from './rangeAccess';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
-import { parseStructuredJsonText } from './structuredJson';
 
 type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA?:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
@@ -133,10 +135,17 @@ function catalogSliceContains(slice:CatalogSlice,name:string,producerNames:strin
   const initial=catalogNameInitial(name,producerNames);if(!initial)return slice.includeOther&&!slice.start;
   if(!slice.start||!slice.end)return false;return initial>=slice.start&&initial<=slice.end;
 }
-function deterministicCatalogError(error:string){return /MAX_TOKENS|Invalid structured JSON|embedded record fragment|invalid catalogue fields|slice returned no usable|Catalogue quality check failed/i.test(error)}
+function deterministicCatalogError(error:string){return /MAX_TOKENS|Invalid structured JSON|Invalid grounded catalogue table|embedded record fragment|invalid catalogue fields|slice returned no usable|Catalogue quality check failed/i.test(error)}
 
 async function setRunState(db:D1Database,owner:string,requestId:string,status:'running'|'complete'|'failed',stage:string,attempt:number,message:string){
   const row=await db.prepare('SELECT started_at FROM producer_research_runs WHERE owner_id=? AND request_id=?').bind(owner,requestId).first<{started_at:string}>();
+  if(status==='failed'&&row){
+    const saved=await db.prepare(`SELECT p.profile_researched_at,p.researched_at,p.research_model FROM producers p
+      JOIN producer_research_runs r ON r.owner_id=p.owner_id AND r.producer_id=p.id WHERE r.owner_id=? AND r.request_id=?`)
+      .bind(owner,requestId).first<{profile_researched_at:string|null;researched_at:string|null;research_model:string|null}>();
+    if(saved?.profile_researched_at&&Date.parse(saved.profile_researched_at)>=Date.parse(row.started_at))message=`Producer profile and practices saved. ${message}`;
+    else if(saved?.research_model?.includes('atomic bounded catalog')&&saved.researched_at&&Date.parse(saved.researched_at)>=Date.parse(row.started_at))message=`Wine range saved. ${message}`;
+  }
   const stamp=now(),done=status==='running'?null:stamp,duration=done&&row?.started_at?Math.max(0,Date.parse(done)-Date.parse(row.started_at)):null;
   await db.prepare('UPDATE producer_research_runs SET status=?,stage=?,attempt=?,message=?,updated_at=?,completed_at=?,duration_ms=? WHERE owner_id=? AND request_id=?')
     .bind(status,stage,attempt,message,stamp,done,duration,owner,requestId).run();
@@ -272,19 +281,20 @@ export function researchPromptFor(name:string,key:string){
   return slicePrompt(name,slice);
 }
 /** Exposed so the output room each key is given can be asserted. */
-export function requestForKey(name:string,key:string,referenceContext=''):GeminiBatchRequest{
+export function requestForKey(name:string,key:string,referenceContext='',feedback=''):GeminiBatchRequest{
+  const correction=feedback?`\n\nThe previous attempt failed validation. Correct these problems using retrieved evidence; state uncertainty where the facts are not documented:\n${feedback}\n`:'';
   if(key===COMBINED_PRODUCER_KEY){
     const profile=profilePrompt(name).replace(SEARCH_BUDGET(3),'').replace(/Return JSON only with [^\n]+\./,''),catalog=slicePrompt(name,FULL_CATALOG_SLICE).replace(SEARCH_BUDGET(8),'').replace('Return JSON only as {"range":[...]}.','');
     const schema={...profileSchema,properties:{...profileSchema.properties,...catalogSchema.properties},required:[...profileSchema.required,...catalogSchema.required]};
-    const prompt=`Research this producer's profile and current wine range together. Reuse one set of retrieved official pages for both scopes.\n\n${profile}\n\n${catalog}\n\n${referenceContext}\n\nReturn one flat JSON object containing all profile fields plus range and rangeComplete. The imported LWIN records provide identities and taxonomy, not proof that a wine is currently produced. Verify availability from retrieved sources and include any additional documented wines.\n\n${SEARCH_BUDGET(5)}\n\n${describeResponseSchema(schema)}`;
+    const prompt=`Research this producer's profile and current wine range together. Reuse one set of retrieved official pages for both scopes.\n\n${profile}\n\n${catalog}\n\n${referenceContext}\n\nReturn all profile sections plus range and rangeComplete. The imported LWIN records provide identities and taxonomy, not proof that a wine is currently produced. Verify availability from retrieved sources and include any additional documented wines.\n\n${SEARCH_BUDGET(5)}${correction}\n\n${describeGroundedResponse(schema)}`;
     return {key,request:{contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(FULL_RANGE_OUTPUT_TOKENS,'low')}};
   }
-  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name)}\n\n${describeResponseSchema(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS,'low')}};
+  if(key==='profile')return {key,request:{contents:[{role:'user',parts:[{text:`${profilePrompt(name).replace('Return JSON only with','Use text sections for')}\n\n${referenceContext}${correction}\n\n${describeGroundedResponse(profileSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(PROFILE_OUTPUT_TOKENS,'low')}};
   const slice=parseSliceKey(key);if(!slice)throw new Error(`Unknown producer research key ${key}`);
   // The whole range gets the most room, because it is the one answer that has
   // to hold every wine and the only one whose overflow starts the ladder.
   const room=key===FULL_CATALOG_SLICE.key?FULL_RANGE_OUTPUT_TOKENS:SLICE_OUTPUT_TOKENS;
-  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice)}\n\n${referenceContext}\n\n${describeResponseSchema(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(room)}};
+  return {key,request:{contents:[{role:'user',parts:[{text:`${slicePrompt(name,slice).replace('Return JSON only as {"range":[...]}.','Return the range as a cited Markdown table.')}\n\n${referenceContext}${correction}\n\n${describeGroundedResponse(catalogSchema)}`}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(room,'low')}};
 }
 
 async function producerNames(db:D1Database,owner:string,producerId:string){
@@ -298,7 +308,7 @@ async function saveProfile(env:Env,owner:string,producerId:string,requestId:stri
   const row=await persistResearch(()=>env.DB.prepare('SELECT * FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<Record<string,unknown>>());if(!row)throw new ResearchPersistenceError('Producer not found');
   await persistResearch(()=>assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',row));
   const target=buildResearchTargets({producer:row.canonical_name,producerId})[0],payload={producerDetails:profile.profile.trim(),producerWinemakingPractices:profile.winemakingPractices.trim()},profileSources=sourcesFrom(metadata);
-  if(!scopePassesQuality('producer',payload,target,profileSources))throw new Error('Producer profile failed the grounded research quality gate');
+  if(!scopePassesQuality('producer',payload,target,profileSources))throw new Error(`Producer profile failed the grounded research quality gate: ${scopeQualityWarnings('producer',payload,target,profileSources).join(', ')}. ${scopeRetryFeedback('producer',payload,target,profileSources).join('; ')}`);
   const contactGrounding=extractContactGrounding(text,metadata),grounded=new Set(contactGrounding.fields),parsedOfficial=safeHttpsUrl(profile.officialWebsiteUrl)?.toString()??null,parsedInstagram=safeInstagramUrl(profile.instagramUrl),parsedEmail=normalizeProducerEmail(profile.contactEmail),parsedPhone=normalizeProducerPhone(profile.contactPhone);
   const priorOfficial=row.official_website_url?String(row.official_website_url):null;
   const websiteVerified=Boolean(parsedOfficial&&(grounded.has('officialWebsiteUrl')||metadataGroundsUrl(parsedOfficial,metadata)));
@@ -360,16 +370,29 @@ async function finalizeCatalogStage(env:Env,owner:string,producerId:string,reque
 }
 
 async function submitBatch(env:Env,owner:string,producerId:string,requestId:string,attempt:number,model:string,keys:string[]){
-  const producer=await persistResearch(()=>env.DB.prepare('SELECT canonical_name FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string}>());if(!producer)throw new ResearchPersistenceError('Producer not found');
+  const producer=await persistResearch(()=>env.DB.prepare('SELECT canonical_name,home_country,home_region,home_locality FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string;home_country:string|null;home_region:string|null;home_locality:string|null}>());if(!producer)throw new ResearchPersistenceError('Producer not found');
   await persistResearch(()=>assertResearchInput(env.CREDIT_CONTEXT,owner,producerId,'producer',producer));
   const prior=await persistResearch(()=>env.DB.prepare('SELECT id,google_batch_name,model FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt=?').bind(owner,requestId,attempt).first<{id:string;google_batch_name:string;model:string}>());
-  const references=await producerLwinReferences(env.DB,owner,producerId,env.REFERENCE_DATA),context=producerLwinContext(references);
+  const history=await persistResearch(()=>env.DB.prepare('SELECT model,error FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt<? ORDER BY attempt DESC').bind(owner,requestId,attempt).all<{model:string;error:string|null}>());
+  if(!prior){
+    if(attempt>1)await assertResearchRetryBudget(env.DB,owner,requestId,PRODUCER_RESEARCH_SEARCH_LIMIT);
+    const available=await availableGroundingModels(env.DB,owner,[model,...[PRIMARY_MODEL,FALLBACK_MODEL].filter(candidate=>candidate!==model)]);
+    // Only grounded catalogue subdivision may reuse a model. Profile fallback
+    // gets one different model and cannot spin on the same answer indefinitely.
+    const chosen=available.find(candidate=>attempt>2||!history.results.some(job=>job.model===candidate));
+    if(!chosen)throw new GroundingUnavailableError();model=chosen;
+  }
+  const references=await producerLwinReferences(env.DB,owner,producerId,env.REFERENCE_DATA),context=[
+    `Identity hints for this producer: ${[producer.canonical_name,producer.home_country,producer.home_region,producer.home_locality].filter(Boolean).join(' | ')}. Use these to disambiguate similarly named producers; verify them from sources. If identity remains ambiguous, say it could not be verified instead of combining different estates.`,
+    producerLwinContext(references)
+  ].filter(Boolean).join('\n\n');
   // Small imported ranges share the profile's source discovery. Large or unknown
   // ranges retain independent requests and the existing bounded split recovery.
   // Only a first attempt combines: a combined answer that failed (often by
   // running out of room) is retried as separate profile and range requests.
   const combined=attempt===1&&keys.length===2&&keys.includes('profile')&&keys.includes(FULL_CATALOG_SLICE.key)&&Boolean(env.REFERENCE_DATA)&&references.length>0&&references.length<=COMBINED_LWIN_MAX_WINES;
-  const entries=(combined?[COMBINED_PRODUCER_KEY]:keys).map(key=>requestForKey(producer.canonical_name,key,context));let googleName=prior?.google_batch_name,jobId=prior?.id;
+  const feedback=history.results[0]?.error?.slice(0,3000)??'';
+  const entries=(combined?[COMBINED_PRODUCER_KEY]:keys).map(key=>requestForKey(producer.canonical_name,key,context,feedback));let googleName=prior?.google_batch_name,jobId=prior?.id;
   model=prior?.model??model;
   try{
     googleName??=await createGeminiBatch(env.GEMINI_API_KEY,model,`winelog-producer-${requestId}-${attempt}`,entries,env.CREDIT_CONTEXT);
@@ -397,7 +420,9 @@ export async function startProducerBatchResearch(env:Env,owner:string,producerId
   const keys=[...(rangeOnly||(!refreshProfile&&profileIsFresh(known))?[]:['profile']),...rangeKeys];
   if(!keys.length){await setRunState(env.DB,owner,requestId,'complete','complete',0,'This producer profile is already up to date');return {ok:true as const}}
   try{await persistResearch(()=>prepareProducerCatalogStage(env.DB,owner,producerId,requestId));await submitBatch(env,owner,producerId,requestId,1,PRIMARY_MODEL,keys);return {ok:true as const}}
-  catch(e){if(e instanceof ResearchPersistenceError)throw e;const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});
+  catch(e){if(e instanceof ResearchPersistenceError)throw e;
+    if(e instanceof GroundingUnavailableError){await setRunState(env.DB,owner,requestId,'failed','failed',0,e.message);return {ok:false as const,error:e.message}}
+    const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,producerId,stage:'primary_submit_failed',error:primaryError});
     if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){const error=`Provider completion needs reconciliation. Any saved research is kept. ${primaryError}`;await setRunState(env.DB,owner,requestId,'failed','failed',1,error);return {ok:false as const,error}}
     try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,keys);return {ok:true as const}}catch(fallback){if(fallback instanceof ResearchPersistenceError)throw fallback;const error=`${PRIMARY_MODEL} submission failed (${primaryError}); ${FALLBACK_MODEL} fallback also failed: ${(fallback as Error).message||'unknown error'}`;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',2,error).catch(()=>undefined);return {ok:false as const,error}}}
 }
@@ -441,6 +466,9 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
   await recordAiUsage(env,owner,{kind:'producer_research',runId:requestId,targetId:producerId,model:job.model,tier:isEmulatedGeminiBatchName(job.googleBatchName)?'flex':'batch',eventId:`research:${owner}:${job.id}`,
     requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
+  const grounded=fetched.responses.some(response=>sourcesFrom(inlineGroundingMetadata(response)).length>0);
+  // Empty/truncated/error responses say nothing about grounding availability.
+  if(grounded||fetched.responses.some(response=>inlineFinishReason(response)==='STOP'))await recordGroundingObservation(env.DB,owner,job.model,grounded);
   await setRunState(env.DB,owner,requestId,'running','parsing',job.attempt,'Validating producer profile and staging independent catalogue slices');
   const byKey=responsesByKey(fetched.responses),failed:string[]=[],incomplete:string[]=[],errors=new Map<string,string>(),parts:ParsedCatalogPart[]=[],names=await producerNames(env.DB,owner,producerId);
   const combined=byKey.get(COMBINED_PRODUCER_KEY);
@@ -452,20 +480,26 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
     const inline=byKey.get(key);if(!inline?.response){failed.push(key);errors.set(key,`${key}: ${inline?.error?.message||'Gemini returned no result'}`);continue}
     const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);if(finishReason==='MAX_TOKENS'){failed.push(key);errors.set(key,`${key}: output reached MAX_TOKENS`);continue}
     try{
-      const parsed=parseStructuredJsonText(text);
+      const metadata=inlineGroundingMetadata(inline),sources=sourcesFrom(metadata);
+      log('log',{requestId,producerId,stage:'grounding_result',key,attempt:job.attempt,model:job.model,sources:sources.length,supports:metadata?.groundingSupports?.length??0,searches:countSearchQueries([inline])});
+      if(!sources.length)throw new Error(`Response contained no grounded web sources after ${countSearchQueries([inline])} Google searches; no claims from this part were saved`);
+      const parsed=parseGroundedResponseText(text,key==='profile'?profileSchema:catalogSchema);
       if(key==='profile')await saveProfile(env,owner,producerId,requestId,parsed as ProfileResult,text,inlineGroundingMetadata(inline),job.model);
       else{
         const slice=parseSliceKey(key);if(!slice)throw new Error('Unknown catalogue slice');
         const catalog=parsed as CatalogResult;if(!catalog||!Array.isArray(catalog.range))throw new Error('invalid catalogue fields');
-        if(!sourcesFrom(inlineGroundingMetadata(inline)).length)throw new Error('Catalogue response contained no grounded web sources');
-        parts.push({range:normalizeCatalogRange(catalog,slice,names),slice,metadata:inlineGroundingMetadata(inline)});
+        const range=normalizeCatalogRange(catalog,slice,names);
         // The whole-range request can say it ran out of room. Keeping what it
         // did return and asking for the halves is the same ladder MAX_TOKENS
         // takes, entered before anything is lost.
         if(catalog.rangeComplete===false)incomplete.push(key);
+        else parts.push({range,slice,metadata});
       }
     }catch(e){if(e instanceof ResearchPersistenceError)throw e;failed.push(key);errors.set(key,`${key}: ${(e as Error).message}${finishReason?` (${finishReason})`:''}`);log('warn',{requestId,producerId,stage:'result_failed',key,attempt:job.attempt,finishReason,error:(e as Error).message,textLength:text.length,textPreview:text.slice(0,300)})}
   }
+  // A partial parent is not completed A-Z coverage. Also clear one left by an
+  // older deployment before replaying its receipt and requesting children.
+  if(incomplete.length)await persistResearch(()=>env.DB.prepare('DELETE FROM producer_catalog_research_stage WHERE owner_id=? AND request_id=? AND slice_key IN (SELECT value FROM json_each(?))').bind(owner,requestId,JSON.stringify(incomplete)).run());
   if(parts.length){await setRunState(env.DB,owner,requestId,'running','saving',job.attempt,`Staging ${parts.length} validated catalogue slice${parts.length===1?'':'s'}; the visible range remains unchanged until coverage is complete`);await stageCatalogParts(env,owner,producerId,requestId,parts,job.model)}
   // Preserve staged successes for a late receipt replay. Never submit a model
   // fallback against an unresolved send in this producer's namespace.
@@ -473,6 +507,9 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
     const error=`Provider completion needs reconciliation. Any saved research is kept. ${[...errors.values()].join('; ')}`;
     await finishResearchBatchJob(env.DB,owner,job.id,'failed',error);
     await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,error);return;
+  }
+  if(incomplete.length&&failed.includes('profile')&&job.attempt>=2){
+    await failRun(env,owner,producerId,requestId,job,`Profile research failed after its bounded fallback: ${errors.get('profile')}. The range is also incomplete, so the previous wine range was kept unchanged.`);return;
   }
 
   // A slice that reported itself unfinished is asked again in halves, before
@@ -495,10 +532,11 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
       try{
         await setRunState(env.DB,owner,requestId,'running','retrying',job.attempt,`The range did not fit one answer; asking for ${halves.length} narrower slices`);
         await finishResearchBatchJob(env.DB,owner,job.id,'complete').catch(()=>undefined);
-        await submitBatch(env,owner,producerId,requestId,job.attempt+1,job.model,halves);
+        await submitBatch(env,owner,producerId,requestId,job.attempt+1,job.model,[...new Set([...failed,...halves])]);
         return;
-      }catch(e){if(e instanceof ResearchPersistenceError)throw e;log('warn',{requestId,producerId,stage:'incomplete_split_failed',error:(e as Error).message})}
+      }catch(e){if(e instanceof ResearchPersistenceError)throw e;await failRun(env,owner,producerId,requestId,job,`The wine range is incomplete and its narrower retry was stopped: ${(e as Error).message}. The previous wine range was kept unchanged.`);return}
     }
+    await failRun(env,owner,producerId,requestId,job,'The wine range is incomplete and cannot be split further. The previous wine range was kept unchanged.');return;
   }
 
   // Members research the profile alone, so a run with no catalogue slice in it
@@ -522,10 +560,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   }
 
   if(job.attempt===1){try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,uniqueFailed);return}catch(e){if(e instanceof ResearchPersistenceError)throw e;await failRun(env,owner,producerId,requestId,job,`Could not submit focused fallback for ${uniqueFailed.join(', ')}: ${(e as Error).message}`);return}}
-  if(uniqueFailed.includes('profile')&&catalogSummary){
-    try{await submitBatch(env,owner,producerId,requestId,job.attempt+1,FALLBACK_MODEL,['profile']);return}catch(e){if(e instanceof ResearchPersistenceError)throw e;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt+1,`Catalogue refresh was committed, but profile retry could not be submitted: ${(e as Error).message}`);return}
-  }
-  if(uniqueFailed.includes('profile')){await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,`The previous visible catalogue was kept unchanged, and profile research failed after fallback: ${errors.get('profile')}`);return}
+  if(uniqueFailed.includes('profile')){await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,`${catalogSummary?'The refreshed wine range was saved':'The previous wine range was kept unchanged'}; profile research failed after its bounded fallback: ${errors.get('profile')}`);return}
   const retryKeys:string[]=[];let retryable=true;
   for(const key of uniqueFailed){const error=errors.get(key)??'',slice=parseSliceKey(key);if(!slice||!deterministicCatalogError(error)){retryable=false;break}const children=splitSlice(slice);if(!children.length){retryable=false;break}retryKeys.push(...children.map(child=>child.key))}
   if(retryable&&retryKeys.length&&job.attempt<MAX_CATALOG_ATTEMPT){try{await submitBatch(env,owner,producerId,requestId,job.attempt+1,FALLBACK_MODEL,[...new Set(retryKeys)]);return}catch(e){if(e instanceof ResearchPersistenceError)throw e;await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt+1,`The previous visible catalogue was kept unchanged; smaller-slice retry could not be submitted: ${(e as Error).message}`);return}}

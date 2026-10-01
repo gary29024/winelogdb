@@ -4,12 +4,13 @@ import { AI_MODELS } from '../ai/policy';
 import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
 import { ensureProducerEntity } from '../producers/entities';
-import { parseStructuredJsonText } from '../producers/structuredJson';
+import { describeGroundedResponse,parseGroundedResponseText } from './groundedResponse';
 import { adoptFriendResearch,assembleDeepSearch,RESEARCH_EDITION_COLUMNS,researchEditionOfRow,wineRowResearchTargets,fieldsForScope,loadResearchCache,loadWineResearchCache,scopeIsComplete,scopePassesQuality,scopeQualityWarnings,scopeRetryFeedback,seedResearchCache,seedResolvedResearch,splitDeepSearchResult,upsertResearchCache,type CachedResearch,type ResearchScope,type ResearchSource,type ResearchTarget } from './cache';
-import { orderModelsByGrounding,recordGroundingObservation } from './modelHealth';
+import { availableGroundingModels,GroundingUnavailableError,recordGroundingObservation } from './modelHealth';
+import { assertResearchRetryBudget,WINE_RESEARCH_SEARCH_LIMIT } from './retryBudget';
 import { createResearchBatchJob,finishResearchBatchJob,recordResearchSearchQueries,getResearchBatchJob,touchResearchBatchJob } from './batchJobStore';
 import { cancelGeminiBatch } from './cancelResearch';
-import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,describeResponseSchema,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
+import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
 import { buildDeepSearchProvenance } from './provenance';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
@@ -24,7 +25,8 @@ type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
 const FALLBACK_MODEL=AI_MODELS.groundedResearchFallback;
 const RESEARCH_MODELS=[PRIMARY_MODEL,FALLBACK_MODEL] as const;
-const MAX_ATTEMPTS=3;
+const MAX_ATTEMPTS=2;
+const WINE_RESPONSE_SCHEMA={properties:Object.fromEntries(['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow'].map(field=>[field,{type:'STRING'}]))};
 // Eight grounded fields now share this answer. The cap is headroom, not a spend
 // target: billing follows generated tokens, while extra room avoids paying for
 // a second batch merely because thinking plus JSON hit the former 12,288 cap.
@@ -38,13 +40,13 @@ const DEEP_SEARCH_OUTPUT_TOKENS=16384;
  * mode, so hardcoding an answer would be wrong the moment the provider changed
  * — and wrong in the expensive direction, since an ungrounded answer cannot
  * satisfy the research gate however well it is written. Models seen to ground
- * are tried first, models seen to answer ungrounded are routed around while
- * their cooldown lasts, and a model already used in this run is skipped unless
- * there is nothing else left.
+ * are tried first; models seen to answer ungrounded are excluded while their
+ * cooldown lasts. A failed run does not buy the same model's answer again.
  */
 export async function chooseResearchModel(db:D1Database,owner:string,attempted:readonly string[]){
-  const ordered=await orderModelsByGrounding(db,owner,RESEARCH_MODELS);
-  const chosen=ordered.find(model=>!attempted.includes(model))??ordered[0]??PRIMARY_MODEL;
+  const ordered=await availableGroundingModels(db,owner,RESEARCH_MODELS);
+  const chosen=ordered.find(model=>!attempted.includes(model));
+  if(!chosen)throw new GroundingUnavailableError();
   // Logged because the last time this did something surprising - a model
   // upgrade that never took effect for wine research - the only way to see it
   // was to read this function. The configured order and the chosen model
@@ -170,11 +172,8 @@ function buildRequest(wine:WineRow,missing:ResearchScope[],cache:Map<ResearchSco
   const rejected=missing.flatMap(scope=>{const notes=feedback[scope]??[];return notes.length?[`${scopeNames[scope]}:\n${notes.map(note=>`  - ${note}`).join('\n')}`]:[]});
   const correction=rejected.length?`\n\nA previous attempt at these scopes did not complete successfully. Fix each stated problem rather than repeating the earlier answer:\n${rejected.join('\n')}\n`:'';
   const prompt=`You must use the Google Search tool before answering, and every factual claim must come from a page you actually retrieved in this request. Do not answer from prior knowledge, and do not reconstruct a plausible answer for something you did not find. If the search tool is unavailable or returns nothing usable, say exactly that in the affected fields rather than writing an ungrounded answer: WineLog rejects an ungrounded response outright, so an honest "could not be verified" is worth more than confident prose.\n\nResearch only the missing reusable scopes for this wine using reliable public web sources. Wine: ${identity}. Grapes: ${grapes.join(', ')||'unknown'}. Known blend: ${blend.map(x=>`${x.grape}${x.percentage!=null?` ${x.percentage}%`:''}`).join(', ')||'unknown'}.\n\n${lwinResearchContext(wine)}${releaseResearchContext(wine)?`\n\n${releaseResearchContext(wine)}`:''}\n\nMissing scopes: ${requested}.${correction}\n\nScope boundaries are strict:\n- producer profile and general practices: producerDetails covers stable history, ownership, philosophy and producer-wide facts. producerWinemakingPractices covers only general domaine-wide viticulture/cellar practices and philosophy. Explicitly note when practices vary by cuvee or vintage. Do not present a vintage-specific percentage or technique here.\n- wine/cru terroir: stable facts about this exact wine, cru, vineyard or site such as classification, parcel/site identity, soils, exposition and enduring terroir. Do not include vintage weather.\n- appellation/region vintage context: for the stated vintage only, research growing-season weather, harvest conditions and quality at the most specific reliable appellation/region level. Do not include producer history.\n- exact wine + vintage: summary, expectedProfile, winemakingTechniques and drinkingWindow belong to this producer + cuvee + vintage combination. expectedProfile answers "what should I expect in the glass?": synthesize exact-vintage evidence about aromas, palate and texture, acidity/tannin/body where applicable, fruit-versus-savoury character, finish and present-stage evolution. Prefer tasting commentary for this exact producer + cuvee + vintage from the producer and credible specialist/critic sources. Do not invent a plausible profile from grape, appellation or producer style alone; if exact-vintage sensory commentary cannot be verified, say so clearly. Reuse pages already retrieved for this exact-wine scope before issuing additional searches for expectedProfile, and search again only when the retrieved evidence is insufficient. winemakingTechniques must contain only techniques verified for this exact wine/vintage. Do not copy a general producer habit into this field as though it were verified for this vintage. If exact-vintage technique cannot be verified, say that clearly and refer to the separate producer-wide practices only as context.\n\nFor precise exact-wine technical facts, compare credible sources instead of silently choosing one figure. If reliable sources disagree on the same percentage, dosage, fermentation/maceration/elevage duration, temperature, yield, density, bottling/disgorgement date or other exact technical value, keep each source-specific value as a separate atomic sentence or bullet and then explicitly state that the sources conflict or differ. If the discrepancy may reflect different lots, bottlings, releases or disgorgements, say so rather than treating either value as universally correct. Never average conflicting figures or hide the disagreement.\n\nAlready cached facts must be reused as context rather than researched again:\n${existing}\n\nReturn JSON only with exactly these eight string fields: summary, expectedProfile, vintageQuality, producerDetails, producerWinemakingPractices, winemakingTechniques, terroir, drinkingWindow. For fields belonging to scopes that are NOT listed as missing, return an empty string. For a requested field where a precise claim cannot be verified, state the uncertainty rather than substituting another vintage.\n\nMake each non-empty field readable in the WineLog detail page without losing research depth. Preserve important names, dates, classifications, site details, weather context, sensory descriptors, technical winemaking terms, drinking-window assumptions and uncertainty. Keep independently supportable factual claims atomic: use one factual proposition per sentence or bullet instead of combining unrelated facts. Use short paragraphs separated by blank lines. When several discrete facts are clearer as a list, put each item on its own line prefixed with "- ". Do not add Markdown headings inside the field because the application already supplies section headings.`;
-  const responseSchema={type:'OBJECT',properties:{summary:{type:'STRING'},expectedProfile:{type:'STRING'},vintageQuality:{type:'STRING'},producerDetails:{type:'STRING'},producerWinemakingPractices:{type:'STRING'},winemakingTechniques:{type:'STRING'},terroir:{type:'STRING'},drinkingWindow:{type:'STRING'}},required:['summary','expectedProfile','vintageQuality','producerDetails','producerWinemakingPractices','winemakingTechniques','terroir','drinkingWindow']};
-  // No responseSchema here on purpose: it would cancel the grounding. See
-  // groundedGenerationConfig.
-  const grounded=`${prompt}\n\n${describeResponseSchema(responseSchema)}`;
-  return {key:BATCH_KEY,request:{contents:[{role:'user',parts:[{text:grounded}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(DEEP_SEARCH_OUTPUT_TOKENS)}};
+  const grounded=`${prompt.replace('Return JSON only with exactly these eight string fields:','Use exactly these eight text sections:')}\n\nSearch efficiently: use at most 8 Google searches in this request. Start with official producer and appellation pages, then a credible importer or specialist. Reuse retrieved pages across sections; do not search separately for each field. If exact-vintage information is unavailable within this budget, say it could not be verified.\n\n${describeGroundedResponse(WINE_RESPONSE_SCHEMA)}`;
+  return {key:BATCH_KEY,request:{contents:[{role:'user',parts:[{text:grounded}]}],tools:[{google_search:{}}],generationConfig:groundedGenerationConfig(DEEP_SEARCH_OUTPUT_TOKENS,'low')}};
 }
 
 async function syncProducerScope(db:D1Database,owner:string,wine:WineRow,entry:CachedResearch){
@@ -206,6 +205,7 @@ async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt
 async function submitAttempt(env:Env,owner:string,wineId:string,requestId:string,attempt:number,scopes:ResearchScope[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
   const prior=await env.DB.prepare('SELECT id,google_batch_name,model FROM research_batch_jobs WHERE owner_id=? AND request_id=? AND attempt=?')
     .bind(owner,requestId,attempt).first<{id:string;google_batch_name:string;model:string}>();
+  if(!prior&&attempt>1)await assertResearchRetryBudget(env.DB,owner,requestId,WINE_RESEARCH_SEARCH_LIMIT);
   const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine),cache=await withSourceResearch(env.DB,owner,wine,targets,await loadResearchCache(env.DB,owner,targets),new Set(scopes));
   for(const scope of scopes)cache.delete(scope);
   const entry=buildRequest(wine,scopes,cache,feedback),model=prior?.model??await chooseResearchModel(env.DB,owner,attempted);let googleName=prior?.google_batch_name,jobId=prior?.id;
@@ -239,6 +239,7 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
   try{await submitAttempt(env,owner,wineId,requestId,1,prepared.missing);return {ok:true as const,cached:false}}
   catch(e){
     if(e instanceof ResearchPersistenceError)throw e;
+    if(e instanceof GroundingUnavailableError){await updateWineResearchRun(env.DB,owner,requestId,'failed',e.message,'failed',0);return {ok:false as const,error:e.message}}
     const primaryError=(e as Error).message||`${PRIMARY_MODEL} Batch submission failed`;log('warn',{requestId,wineId,stage:'primary_submit_failed',attempt:1,error:primaryError});
     if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){
       const error=`Provider completion needs reconciliation: ${primaryError}`;
@@ -253,24 +254,19 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
 /**
  * Decide whether a failed attempt is worth another call.
  *
- * A quality failure gets the availability fallback once, as before. An answer
- * that came back with no grounding at all is not a quality failure: the model
- * did not search, so nothing it wrote could ever pass. That earns one more
- * attempt on the primary model, which is the one observed to ground - but never
- * on the model that just failed to, which would only repeat itself.
+ * Both quality failures and missing source evidence get at most one fallback.
+ * Running searches without citations must not earn an extra paid attempt.
  */
-export function nextResearchAttempt(attempt:number,ungrounded:boolean){
-  if(attempt>=MAX_ATTEMPTS)return null;
-  if(attempt===1)return 2;
-  return ungrounded?attempt+1:null;
+export function nextResearchAttempt(attempt:number){
+  return attempt<MAX_ATTEMPTS?attempt+1:null;
 }
 
-async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[],feedback:ScopeFeedback={},ungrounded=false,attempted:readonly string[]=[]){
+async function retryOrFail(env:Env,owner:string,wineId:string,requestId:string,attempt:number,failed:ResearchScope[],errors:string[],feedback:ScopeFeedback={},attempted:readonly string[]=[]){
   if(await providerNeedsReconciliation(env.CREDIT_CONTEXT)){
     await updateWineResearchRun(env.DB,owner,requestId,'failed',`Provider completion needs reconciliation. Any saved research is kept. ${errors.join('; ')}`,'failed',attempt);
     return;
   }
-  const next=failed.length?nextResearchAttempt(attempt,ungrounded):null;
+  const next=failed.length?nextResearchAttempt(attempt):null;
   if(next){
     try{await submitAttempt(env,owner,wineId,requestId,next,failed,feedback,attempted);return}
     catch(e){
@@ -322,9 +318,9 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
       const error=`${job.model} Batch status remained unavailable after ${pollCount+1} checks: ${fetched.error}`;
       await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,wineId,job.attempt,job.googleBatchName,'status endpoint repeatedly unavailable');
       log('warn',{requestId,wineId,stage:action==='fallback'?'primary_status_failover':'fallback_status_failed',attempt:job.attempt,model:job.model,pollCount,error});
-      await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return;
+      await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},[job.model]);return;
     }
-    await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[fetched.error],{},false,[job.model]);return;
+    await finishResearchBatchJob(env.DB,owner,jobId,'failed',fetched.error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[fetched.error],{},[job.model]);return;
   }
   if(!isTerminalBatchState(fetched.state)){
     // Emulation has an executor lease, not a remote Batch processing window.
@@ -335,14 +331,14 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
     const error=`${job.model} Batch did not complete within WineLog's ${job.attempt===1?'primary failover':'fallback'} window (last state ${fetched.state||'unknown'})`;
     await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await cancelAttemptBatch(env,requestId,wineId,job.attempt,job.googleBatchName,'batch exceeded failover window');
     log('warn',{requestId,wineId,stage:action==='fallback'?'primary_stall_failover':'fallback_stall_failed',attempt:job.attempt,model:job.model,pollCount,state:fetched.state,error});
-    await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return;
+    await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},[job.model]);return;
   }
-  if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
+  if(fetched.state!=='JOB_STATE_SUCCEEDED'){const error=String((fetched.payload.error as {message?:unknown}|undefined)?.message||`Gemini batch ended with ${fetched.state}`);await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},[job.model]);return}
   await updateWineResearchRun(env.DB,owner,requestId,'saving','Saving completed Gemini Batch Deep Search scopes','running',job.attempt);
   await recordResearchSearchQueries(env.DB,owner,job.id,countSearchQueries(fetched.responses)).catch(()=>undefined);
   await recordAiUsage(env,owner,{kind:'wine_research',runId:requestId,targetId:wineId,model:job.model,tier:isEmulatedGeminiBatchName(job.googleBatchName)?'flex':'batch',eventId:`research:${owner}:${job.id}`,
     requests:fetched.responses.length,searchQueries:countSearchQueries(fetched.responses),...countUsageTokens(fetched.responses)});
-  const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},false,[job.model]);return}
+  const inline=responsesByKey(fetched.responses).get(BATCH_KEY)??fetched.responses[0];if(!inline?.response){const error=inline?.error?.message||'Gemini returned no wine research result';await finishResearchBatchJob(env.DB,owner,jobId,'failed',error);await retryOrFail(env,owner,wineId,requestId,job.attempt,scopes,[error],{},[job.model]);return}
   const text=inlineResponseText(inline),finishReason=inlineFinishReason(inline);let failed=[...scopes],errors:string[]=[],feedback:ScopeFeedback={},ungrounded=false;
   // Recorded whatever happens next: when a run fails because nothing was
   // grounded, these two counts are the difference between a diagnosable report
@@ -352,10 +348,12 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
   log('log',{requestId,wineId,stage:'batch_result',attempt:job.attempt,model:job.model,scopes,finishReason,textLength:text.length,...grounding});
   // Routing learns from this: a model that grounds clears its own cooldown, one
   // that does not is stepped over on the next attempt and the next run.
-  await recordGroundingObservation(env.DB,owner,job.model,grounding.chunks>0).catch(()=>undefined);
+  if(grounding.chunks>0||finishReason==='STOP')await recordGroundingObservation(env.DB,owner,job.model,grounding.chunks>0);
   let applying=false;
   try{
-    const metadata=groundingMetadata,raw=parseStructuredJsonText(text) as Record<string,unknown>,parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
+    const metadata=groundingMetadata;
+    if(!sourcesFrom(metadata).length){ungrounded=true;throw new Error(`${job.model} returned no grounded web sources after ${countSearchQueries([inline])} Google searches. No claims from this answer were saved.`)}
+    const raw=parseGroundedResponseText(text,WINE_RESPONSE_SCHEMA),parsed=deepSearchSchema.safeParse({...raw,sources:sourcesFrom(metadata),model:`${job.model} (batch)`,researchedAt:now()});if(!parsed.success)throw new Error(`Deep Search returned invalid fields: ${parsed.error.issues.map(x=>x.path.join('.')||x.message).join(', ')}`);
     const rawProvenance=buildDeepSearchProvenance(parsed.data,metadata);
     applying=true;
     const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');const targets=researchTargets(wine);
@@ -402,7 +400,7 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
     }
     log('warn',{requestId,wineId,stage:'batch_result_failed',attempt:job.attempt,model:job.model,finishReason,textLength:text.length,textPreview:text.slice(0,500),truncated:cut,error:underlying});
   }
-  if(failed.length){await finishResearchBatchJob(env.DB,owner,jobId,'failed',errors.join('; '));await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback,ungrounded,[job.model]);return}
+  if(failed.length){await finishResearchBatchJob(env.DB,owner,jobId,'failed',errors.join('; '));await retryOrFail(env,owner,wineId,requestId,job.attempt,failed,errors,feedback,[job.model]);return}
   const completedAt=now();
   // Neither the run nor the job can become terminal without the other. The
   // operation/allowance settlement is independently replayable by maintenance.
