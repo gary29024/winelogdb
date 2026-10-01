@@ -148,15 +148,10 @@ class ConfigTests(unittest.TestCase):
             self.assertLessEqual(report['notCoveredByBundleParcelsM2'], limit, slug)
 
     def test_named_areas_are_audited_even_without_a_display_layer(self):
-        # Grands-Échezeaux predates the whole-cru audit; regenerate it with the downloaded Flagey lieux-dits.
-        pending = {'grands-echezeaux'}
         for slug in cru_slugs():
             cru, _ = load_cru(slug)
-            if 'namedPlots' in cru and slug not in pending:
+            if 'namedPlots' in cru:
                 self.assertTrue(named_plot_report_path(cru).exists(), f'{slug}: commit build_grand_cru_named_plots.py output')
-        for slug in pending:
-            if named_plot_report_path(load_cru(slug)[0]).exists():
-                self.fail(f'{slug}: its named-area audit is committed; remove it from pending')
 
     def test_generated_paths_are_repository_relative(self):
         self.assertEqual(relative(ROOT / 'docs/research/echezeaux/curation.json'), 'docs/research/echezeaux/curation.json')
