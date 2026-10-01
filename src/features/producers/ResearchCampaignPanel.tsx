@@ -96,7 +96,7 @@ export function ResearchCampaignPanel({unresearchedHint,onFinished}:{unresearche
       <summary>{outcome.counts.complete} researched{outcome.counts.skipped?` · ${outcome.counts.skipped} skipped`:''}</summary>
       <CampaignItemList items={outcome.items.filter(item=>item.status!=='failed')}/>
     </details>}
-    {outcome.failures.length>0&&<p className="research-campaign-note">Failed producers stay unresearched, so the next batch picks them up again.</p>}
+    {outcome.failures.length>0&&<p className="research-campaign-note">Incomplete producers remain eligible for the next batch. Saved profiles and practices are reused; research pauses when source evidence is unavailable.</p>}
     <button type="button" onClick={clear}>Dismiss</button>
   </section>;
 

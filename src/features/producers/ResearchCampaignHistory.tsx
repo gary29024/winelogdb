@@ -23,7 +23,7 @@ export function CampaignItemList({items}:{items:ResearchCampaignItem[]}){
           back link goes - otherwise checking one failure loses the list of the
           others. */}
       <Link to={`/producers/${item.producerId}`} state={linkFrom(BATCH_RESEARCH_BACK)}>{item.producerName}</Link>
-      <span>{item.status==='complete'?'Researched':item.status==='failed'?'Failed':item.status==='skipped'?'Skipped':item.status==='running'?'Researching…':'Waiting'}</span>
+      <span>{item.status==='complete'?'Researched':item.status==='failed'?/^(?:Producer profile and practices|Wine range) saved\./.test(item.message??'')?'Partly saved':'Failed':item.status==='skipped'?'Skipped':item.status==='running'?'Researching…':'Waiting'}</span>
       {item.message&&item.status!=='complete'&&<small>{item.message}</small>}
     </li>)}</ul>;
 }
