@@ -149,9 +149,16 @@ class ConfigTests(unittest.TestCase):
 
     def test_named_areas_are_audited_even_without_a_display_layer(self):
         for slug in cru_slugs():
-            cru, _ = load_cru(slug)
-            if 'namedPlots' in cru:
-                self.assertTrue(named_plot_report_path(cru).exists(), f'{slug}: commit build_grand_cru_named_plots.py output')
+            cru, bundle = load_cru(slug)
+            if 'namedPlots' not in cru:
+                continue
+            path = named_plot_report_path(cru)
+            self.assertTrue(path.exists(), f'{slug}: commit build_grand_cru_named_plots.py output')
+            report = read_json(path)
+            # A display-layer report names one snapshot as `source`; multi-commune and audit-only reports list `sources`.
+            used = {s['commune']: s['sha256'] for s in report['sources']} if 'sources' in report else {communes(bundle)[0]: report['source']['sha256']}
+            self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
+            self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
 
     def test_generated_paths_are_repository_relative(self):
         self.assertEqual(relative(ROOT / 'docs/research/echezeaux/curation.json'), 'docs/research/echezeaux/curation.json')
