@@ -104,7 +104,10 @@ test('an LWIN-linked producer shows its imported range unverified until asked to
  await range.scrollIntoViewIfNeeded();
  await range.screenshot({path:info.outputPath('producer-lwin-range-393.png')});
  page.once('dialog',dialog=>{expect(dialog.message()).toContain('paid range search');void dialog.accept()});
- await range.getByRole('button',{name:'Verify range'}).click();
+ const actions=page.locator('.producer-section-title').filter({hasText:'Producer research'});
+ await expect(actions.getByRole('button')).toHaveText(['Research producer','Verify wine range']);
+ await actions.screenshot({path:info.outputPath('producer-lwin-actions-393.png')});
+ await actions.getByRole('button',{name:'Verify wine range'}).click();
  await expect.poll(()=>research.length).toBe(1);
  expect(JSON.parse(research[0])).toMatchObject({rangeOnly:true,refreshProfile:false});
 });
