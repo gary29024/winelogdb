@@ -285,6 +285,26 @@ def bundle_commune_names(bundle):
     return names
 
 
+def record_json(value):
+    """Generated research JSON with one compact line per record, so a changed parcel is a one-line diff.
+
+    Top-level keys each take a line. A list puts each item on its own line; a mapping of records (e.g. parcels by
+    reference) puts each entry on its own line. Everything else stays compact. Parses to exactly the same value.
+    """
+    def compact(item):
+        return json.dumps(item, ensure_ascii=False, separators=(',', ':'))
+
+    def field(item):
+        if isinstance(item, list) and item:
+            return '[\n' + ',\n'.join(compact(x) for x in item) + '\n]'
+        if isinstance(item, dict) and item and all(isinstance(x, (dict, list)) for x in item.values()):
+            return '{\n' + ',\n'.join(f'{compact(k)}:{compact(v)}' for k, v in item.items()) + '\n}'
+        return compact(item)
+    if not isinstance(value, dict):
+        return compact(value) + '\n'
+    return '{\n' + ',\n'.join(f'{compact(k)}:{field(v)}' for k, v in value.items()) + '\n}\n'
+
+
 def write_or_check(path, content, check):
     path = Path(path)
     if check:

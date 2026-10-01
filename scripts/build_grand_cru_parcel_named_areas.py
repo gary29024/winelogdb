@@ -16,7 +16,7 @@ import json
 
 from shapely.geometry import shape
 
-from grand_cru import (communes, in_cru, lieux_dits_file, load_cru, load_manifest, parcel_asset, pinned, require,
+from grand_cru import (record_json, communes, in_cru, lieux_dits_file, load_cru, load_manifest, parcel_asset, pinned, require,
                        research_path, source_dir, write_or_check)
 
 MINIMUM_SHARE = 0.9
@@ -62,7 +62,7 @@ def main():
     cru, bundle = load_cru(args.cru)
     require('namedPlots' in cru, f'{cru["slug"]}: no reviewed named areas configured yet')
     result = build(cru, bundle, load_manifest(bundle), source_dir(bundle, args.source_dir))
-    write_or_check(research_path(cru, 'parcel-named-areas.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+    write_or_check(research_path(cru, 'parcel-named-areas.json'), record_json(result), args.check)
     print(json.dumps({'parcels': len(result['parcels'])}))
 
 

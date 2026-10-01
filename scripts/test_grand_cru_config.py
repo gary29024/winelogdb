@@ -168,6 +168,19 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
 
+    def test_generated_research_json_has_one_line_per_record(self):
+        from grand_cru import record_json
+        value = {'schemaVersion': 1, 'parcels': [{'id': 'A1', 'é': 1.5}, {'id': 'A2'}], 'byId': {'A1': {'x': [1]}}, 'counts': {'n': 2}}
+        text = record_json(value)
+        self.assertEqual(json.loads(text), value)
+        self.assertIn('\n{"id":"A2"}\n', text)
+        self.assertIn('\n"A1":{"x":[1]}\n', text)
+        # Every committed generated research file stays in this format (builders write it with record_json).
+        for name in ('rights-history', 'register', 'sale-records', 'notice-history', 'parcel-named-areas'):
+            for path in sorted(RESEARCH_DIR.glob(f'*/{name}.json')):
+                content = path.read_text(encoding='utf-8')
+                self.assertEqual(content, record_json(json.loads(content)), relative(path))
+
     def test_generated_paths_are_repository_relative(self):
         self.assertEqual(relative(ROOT / 'docs/research/echezeaux/curation.json'), 'docs/research/echezeaux/curation.json')
 

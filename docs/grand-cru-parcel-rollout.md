@@ -242,6 +242,9 @@ evidence together with the history and coverage report.
    commune audit and the named-area audit. Historical-extension deliveries use
    the shared method doc until these remaining per-cru Tier 1 reviews are completed.
 
+Generated research JSON uses one compact line per record (`record_json` in `grand_cru.py`), so a changed parcel
+shows as a one-line diff.
+
 Outputs by convention: research in `docs/research/<slug>/`; app files in
 `src/lib/places/grandCruParcels/` (`<bundle>.manifest.json`, `<bundle>.holders.json`,
 `<slug>.evidence.json`, `<slug>.named-plots.json`); build reports in

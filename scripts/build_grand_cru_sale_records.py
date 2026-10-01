@@ -19,7 +19,7 @@ import sys
 import zipfile
 from functools import lru_cache
 
-from grand_cru import (SOURCE_ROOT, in_cru, load_cru, load_manifest, official_inventory, official_sources, parcel_asset, pinned, require, research_path,
+from grand_cru import (record_json, SOURCE_ROOT, in_cru, load_cru, load_manifest, official_inventory, official_sources, parcel_asset, pinned, require, research_path,
                        read_json, source_dir, write_or_check)
 from grand_cru_filiation import historical_evidence_paths
 
@@ -120,7 +120,7 @@ def main():
     cru, bundle = load_cru(args.cru)
     require('saleRecords' in bundle, f'{bundle["id"]}: DVF+ archive not pinned yet')
     result = build(cru, bundle, load_manifest(bundle), source_dir(bundle, args.source_dir))
-    write_or_check(research_path(cru, 'sale-records.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+    write_or_check(research_path(cru, 'sale-records.json'), record_json(result), args.check)
     print(json.dumps(result['counts']))
 
 

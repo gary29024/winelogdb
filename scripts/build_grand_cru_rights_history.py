@@ -17,7 +17,7 @@ import io
 import json
 from functools import lru_cache
 
-from grand_cru import (cadastre_sources, communes, in_cru, load_bundle, load_cru, load_manifest, parcel_asset, parcels_file, pinned,
+from grand_cru import (record_json, cadastre_sources, communes, in_cru, load_bundle, load_cru, load_manifest, parcel_asset, parcels_file, pinned,
                        official_inventory, official_sources, require, research_path, source_dir,
                        vintage_file, village_map, write_or_check)
 from grand_cru_filiation import historical_evidence_paths, parse_dfi, trace_ancestry
@@ -377,7 +377,7 @@ def main():
     cru, bundle = load_cru(args.cru)
     require('rightsHistoryPurpose' in cru and 'rightsHistory' in bundle, f'{cru["slug"]}: rights history not configured yet')
     result = build(cru, bundle, load_manifest(bundle), source_dir(bundle, args.source_dir))
-    write_or_check(research_path(cru, 'rights-history.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+    write_or_check(research_path(cru, 'rights-history.json'), record_json(result), args.check)
     print(json.dumps(result['counts']))
 
 

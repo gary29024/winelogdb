@@ -1,832 +1,172 @@
 {
- "schemaVersion": 1,
- "parentFeatureId": "inao-denom-546",
- "inputs": {
-  "parcelSnapshotSha256": "7f159994ad5bb0b169ab4a160f69a3787077e3c96bd8a205764719c8b9ebca3b",
-  "lieuxDitsUrl": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-lieux_dits.json.gz",
-  "lieuxDitsSha256": "02af4c5fa68b99faecd30a3d01c878989a85448e32559e9b6e107ec49403b914"
- },
- "note": "Cadastral lieu-dit by largest share of parcel geometry. \"name\" is null where no reviewed crosswalk exists.",
- "parcels": {
-  "217160000A0001": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0003": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0005": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0006": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0007": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0008": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0009": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0010": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0011": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0012": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0013": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0014": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0015": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0016": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0017": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0018": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0021": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0024": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0025": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0026": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0029": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0030": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0031": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0033": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0034": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0036": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0037": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0038": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0040": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0041": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0042": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0043": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0045": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0047": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0048": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0049": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0050": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0051": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0052": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0053": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0054": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0055": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0061": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0062": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0066": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0067": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0068": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0070": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0071": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0073": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0074": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0075": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0076": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0242": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0243": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0244": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0246": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0252": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0253": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0254": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0255": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0256": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0257": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0261": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0262": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0264": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0265": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0266": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0268": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0269": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0272": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0273": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0274": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0275": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0280": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0282": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0330": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0350": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0351": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0372": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0373": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0374": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0375": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0376": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0379": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0381": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0383": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0384": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0389": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0390": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0391": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0392": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0393": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0401": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0404": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0406": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0408": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0410": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0411": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0412": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0413": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0421": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0422": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0423": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0424": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0431": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0432": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0433": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0434": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0435": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0436": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0437": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0438": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0440": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0441": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0459": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0460": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0461": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0462": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0463": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0464": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0465": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0466": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0467": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0468": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0469": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0509": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0510": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0511": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0516": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0517": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0521": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 0.9999
-  },
-  "217160000A0522": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0523": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0524": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0529": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0530": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0531": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0532": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0533": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0534": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0535": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0536": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0537": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0539": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0542": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0548": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0549": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0557": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0558": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0563": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0564": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0565": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0566": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0567": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0568": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0569": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0570": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0577": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0578": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0579": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0580": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0581": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  },
-  "217160000A0582": {
-   "sourceName": "CLOS DE VOUGEOT",
-   "name": "Clos de Vougeot",
-   "share": 1.0
-  }
- }
+"schemaVersion":1,
+"parentFeatureId":"inao-denom-546",
+"inputs":{"parcelSnapshotSha256":"7f159994ad5bb0b169ab4a160f69a3787077e3c96bd8a205764719c8b9ebca3b","lieuxDitsUrl":"https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-lieux_dits.json.gz","lieuxDitsSha256":"02af4c5fa68b99faecd30a3d01c878989a85448e32559e9b6e107ec49403b914"},
+"note":"Cadastral lieu-dit by largest share of parcel geometry. \"name\" is null where no reviewed crosswalk exists.",
+"parcels":{
+"217160000A0001":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0003":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0005":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0006":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0007":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0008":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0009":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0010":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0011":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0012":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0013":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0014":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0015":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0016":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0017":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0018":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0021":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0024":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0025":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0026":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0029":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0030":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0031":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0033":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0034":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0036":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0037":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0038":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0040":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0041":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0042":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0043":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0045":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0047":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0048":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0049":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0050":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0051":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0052":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0053":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0054":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0055":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0061":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0062":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0066":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0067":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0068":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0070":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0071":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0073":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0074":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0075":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0076":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0242":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0243":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0244":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0246":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0252":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0253":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0254":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0255":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0256":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0257":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0261":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0262":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0264":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0265":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0266":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0268":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0269":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0272":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0273":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0274":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0275":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0280":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0282":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0330":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0350":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0351":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0372":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0373":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0374":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0375":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0376":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0379":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0381":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0383":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0384":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0389":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0390":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0391":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0392":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0393":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0401":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0404":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0406":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0408":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0410":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0411":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0412":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0413":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0421":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0422":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0423":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0424":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0431":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0432":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0433":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0434":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0435":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0436":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0437":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0438":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0440":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0441":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0459":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0460":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0461":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0462":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0463":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0464":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0465":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0466":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0467":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0468":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0469":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0509":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0510":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0511":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0516":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0517":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0521":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":0.9999},
+"217160000A0522":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0523":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0524":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0529":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0530":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0531":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0532":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0533":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0534":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0535":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0536":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0537":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0539":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0542":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0548":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0549":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0557":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0558":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0563":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0564":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0565":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0566":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0567":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0568":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0569":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0570":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0577":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0578":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0579":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0580":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0581":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0},
+"217160000A0582":{"sourceName":"CLOS DE VOUGEOT","name":"Clos de Vougeot","share":1.0}
+}
 }

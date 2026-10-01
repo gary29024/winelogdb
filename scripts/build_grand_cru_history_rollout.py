@@ -15,7 +15,7 @@ from build_grand_cru_notice_history import build as notices
 from build_grand_cru_research import run as register
 from build_grand_cru_rights_history import build as history
 from build_grand_cru_sale_records import build as sales
-from grand_cru import (bundle_ids, load_bundle, load_cru, load_manifest, research_path, source_dir, write_or_check)
+from grand_cru import (record_json, bundle_ids, load_bundle, load_cru, load_manifest, research_path, source_dir, write_or_check)
 
 
 def main():
@@ -33,15 +33,15 @@ def main():
         for slug in bundle['crus']:
             cru, _ = load_cru(slug)
             result = history(cru, bundle, manifest, directory)
-            write_or_check(research_path(cru, 'rights-history.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+            write_or_check(research_path(cru, 'rights-history.json'), record_json(result), args.check)
             print(json.dumps({'cru': slug, 'history': result['counts'],
                               'earliestDfi': result['coverage']['earliestReachableDfiValidationDate']}), flush=True)
             if args.history_only:
                 continue
             sale_records = sales(cru, bundle, manifest, directory)
-            write_or_check(research_path(cru, 'sale-records.json'), json.dumps(sale_records, ensure_ascii=False, indent=1) + '\n', args.check)
+            write_or_check(research_path(cru, 'sale-records.json'), record_json(sale_records), args.check)
             notice_records = notices(cru, bundle, result)
-            write_or_check(research_path(cru, 'notice-history.json'), json.dumps(notice_records, ensure_ascii=False, indent=1) + '\n', args.check)
+            write_or_check(research_path(cru, 'notice-history.json'), record_json(notice_records), args.check)
             register(slug, args.check)
     if not args.bundle and not args.history_only:
         for script in ('build_grand_cru_app_registry.py', 'audit_grand_cru_history_rollout.py'):

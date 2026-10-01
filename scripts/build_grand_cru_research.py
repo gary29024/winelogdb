@@ -18,7 +18,7 @@ import re
 from collections import Counter
 
 from build_grand_cru_evidence import build_evidence
-from grand_cru import (bundle_commune_names, command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset,
+from grand_cru import (record_json, bundle_commune_names, command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset,
                        read_json, relative, require, research_path, sha256, ROOT)
 
 
@@ -709,7 +709,7 @@ def outputs(context):
     context.commune_names = bundle_commune_names(context.bundle)
     register = build_register(inputs['manifest'], inputs['asset'], inputs['curation'], inputs['history'],
                               inputs['sales'], inputs['named_areas'], context, inputs['notice_records'])
-    return {context.output: json.dumps(register, ensure_ascii=False, indent=2) + '\n',
+    return {context.output: record_json(register),
             context.report: render_report(register, inputs['curation'], inputs['history'], context),
             # Compact per-parcel evidence the app loads on demand; never read by the register itself.
             context.evidence: json.dumps(build_evidence(register, inputs['curation'], inputs['history'], features),

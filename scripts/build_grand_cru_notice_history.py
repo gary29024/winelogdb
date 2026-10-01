@@ -11,7 +11,7 @@ import argparse
 import json
 import re
 
-from grand_cru import (ROOT, communes, load_cru, read_json, relative, require, research_path,
+from grand_cru import (record_json, ROOT, communes, load_cru, read_json, relative, require, research_path,
                        sha256, write_or_check)
 from grand_cru_filiation import historical_evidence_paths
 
@@ -165,7 +165,7 @@ def main():
     cru, bundle = load_cru(args.cru)
     history = read_json(research_path(cru, 'rights-history.json'))
     result = build(cru, bundle, history)
-    write_or_check(research_path(cru, 'notice-history.json'), json.dumps(result, ensure_ascii=False, indent=1) + '\n', args.check)
+    write_or_check(research_path(cru, 'notice-history.json'), record_json(result), args.check)
     print(json.dumps({k: result['coverage'][k] for k in ['reviewedMatches', 'unreviewedSearchCandidates', 'missingDepartmentIndexes']}))
 
 
