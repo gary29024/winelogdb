@@ -25,9 +25,22 @@ from grand_cru import (audit_file, bundle_commune_names, cadastre_sources, commu
 MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would leave far more
 
 
+def uncovered_area_limit(cru, bundle, parent_hash, boundary_area):
+    """A larger reviewed remainder is bounded in m² and tied to these exact source geometries."""
+    review = cru.get('communeAudit', {}).get('reviewedUncoveredArea')
+    if not review:
+        return boundary_area * MAX_UNCOVERED_SHARE
+    require(review['parentSourceSha256'] == parent_hash, 'Review changed INAO boundary before accepting a cadastral remainder')
+    require(review['cadastreSha256ByCommune'] == {c: digest for c, _, digest in cadastre_sources(bundle)},
+            'Review changed cadastre before accepting a cadastral remainder')
+    require(review['maximumAreaM2'] > 0 and review['note'].strip() and review['reviewedAt'],
+            'A reviewed cadastral remainder needs a positive limit, date and explanation')
+    return review['maximumAreaM2']
+
+
 def build(cru, bundle, directory):
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
-    _, canonical, _ = village_map(bundle, cru['parentFeatureId'])
+    _, canonical, parent_hash = village_map(bundle, cru['parentFeatureId'])
     feature = next(f for f in json.loads(canonical)['features'] if f['id'] == cru['parentFeatureId'])
     boundary = transform(project, shape(feature['geometry']))
     names = bundle_commune_names(bundle)
@@ -43,9 +56,10 @@ def build(cru, bundle, directory):
     covered = own_cover.intersection(boundary).area
     uncovered = boundary.area - covered
     outside_bundle = boundary.difference(own_cover)
-    require(uncovered / boundary.area <= MAX_UNCOVERED_SHARE, f'{cru["slug"]}: bundle communes leave {uncovered:.1f} m² uncovered')
     inao = feature['properties']['communes']
     require(set(inao) <= set(communes(bundle)), f'{cru["slug"]}: INAO commune missing from the bundle: {sorted(set(inao) - set(communes(bundle)))}')
+    limit = uncovered_area_limit(cru, bundle, parent_hash, boundary.area)
+    require(uncovered <= limit, f'{cru["slug"]}: bundle communes leave {uncovered:.1f} m² uncovered (limit {limit:.1f} m²)')
     neighbours, neighbour_parcels = [], []
     for insee, source in sorted(bundle.get('auditCommunes', {}).items()):
         require(insee not in inao, f'{cru["slug"]}: INAO lists {insee}; import it in the bundle instead of auditing it')
@@ -68,7 +82,7 @@ def build(cru, bundle, directory):
     by_neighbours = unary_union(neighbour_parcels).intersection(outside_bundle).area if neighbour_parcels else 0.0
     report = read_json(parcel_report_path(bundle))
     contacts = [c for c in report['excludedBoundaryContacts'] if c['parentFeatureId'] == cru['parentFeatureId']]
-    return {
+    result = {
         'schemaVersion': 1, 'parentFeatureId': cru['parentFeatureId'], 'name': cru['name'],
         'inaoCommunes': inao,
         'bundleCommunes': [{'commune': insee, 'name': names.get(insee), 'url': url, 'sha256': digest}
@@ -84,6 +98,9 @@ def build(cru, bundle, directory):
                  'their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the '
                  'part no parcel covers (gaps between parcels, roads and paths).'),
     }
+    if review := cru.get('communeAudit', {}).get('reviewedUncoveredArea'):
+        result['reviewedUncoveredArea'] = review
+    return result
 
 
 def main():

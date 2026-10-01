@@ -35,22 +35,22 @@ describe('Parcel evidence panel',()=>{
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getByText('Dated notices, ownership, sales, company filings and published research.')).toBeTruthy();
+  expect(within(panel).getByText('Dated notices, recorded rights, sales, company filings and published research.')).toBeTruthy();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
-  expect(within(panel).getByText('Previously farmed by Domaine Daniel Rion et Fils')).toBeTruthy();
+  expect(within(panel).getByText('Previous operator named in notice: Domaine Daniel Rion et Fils')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('recueil-bfc-2022-084');
   const leads=panel.querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
   expect(leads.open).toBe(false);
-  expect(within(leads).getByText('Names and ownership context only.')).toBeTruthy();
+  expect(within(leads).getByText('Names and recorded rights context only.')).toBeTruthy();
  });
  it('shows a suspended application as procedural and keeps it off any farming claim',async()=>{
   render(<ParcelEvidence parcelId={id('673')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Application suspended')).toBeTruthy();
   expect(within(panel).getByText(/Not an authorisation/)).toBeTruthy();
-  expect(within(panel).getByText('1 Jan 2025')).toBeTruthy();  // owner snapshot, not an operating date
-  expect(within(panel).getByText('Recorded owner changed to Bouchon Pourpre')).toBeTruthy();
+  expect(within(panel).getByText('1 Jan 2025')).toBeTruthy();  // rights snapshot, not an operating date
+  expect(within(panel).getByText('Recorded right holder changed to Bouchon Pourpre')).toBeTruthy();
  });
  it('labels evidence inherited through a divided parcel and keeps directly named references distinct',async()=>{
   render(<ParcelEvidence parcelId={id('826')} parentId="inao-denom-565"/>);
@@ -102,6 +102,15 @@ describe('Parcel evidence panel',()=>{
  it('covers a Grands-Échezeaux parcel named in a notice, through the cru registry',async()=>{
   render(<ParcelEvidence parcelId={id('93')} parentId="inao-denom-645"/>);
   expect(within(await screen.findByRole('region',{name:'History and evidence'})).getByText('Application received')).toBeTruthy();
+ });
+ it('labels the Vougeot bare-ownership snapshot as recorded rights and does not identify a farmer',async()=>{
+  render(<ParcelEvidence parcelId="217160000A0005" parentId="inao-denom-546"/>);
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(within(panel).getByText('Rights record')).toBeTruthy();
+  expect(within(panel).getByText('First legal-entity right on record: Anne Gros')).toBeTruthy();
+  expect(within(panel).getByText(/Rights and sales/)).toBeTruthy();
+  expect(within(panel).queryByText('Ownership record')).toBeNull();
+  expect(within(panel).queryByText('Verified operator')).toBeNull();
  });
  it('says only that no dated records were found',async()=>{
   expect(evidence.parcels).not.toHaveProperty(id('1'));

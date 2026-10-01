@@ -12,7 +12,9 @@ Run from any directory; --check verifies committed outputs without writing.
 Only the standard library is required. No network access or source-asset edits.
 """
 import argparse
+import gzip
 import json
+import re
 from collections import Counter
 
 from build_grand_cru_evidence import build_evidence
@@ -620,6 +622,60 @@ def outputs(context):
                                          ensure_ascii=False, separators=(',', ':'), sort_keys=True) + '\n'}, register
 
 
+# Playbook section 5: the standard results table every docs/research/<slug>/README.md publishes.
+# Each label maps to the register count its leading number must equal; None means the row must exist.
+RESULT_ROWS = (
+    ('Cadastral parcels', lambda c: c['parcels']),
+    ('Parcels with recorded legal-entity rights', lambda c: c['withRecordedRights']),
+    ('Parcels without matched rights', lambda c: c['withoutMatchedRights']),
+    ('Parcels whose rights changed', lambda c: c['withRightsChangeSince2019']),
+    ('Parcels with an authorisation / application or suspension',
+     lambda c: c['historicalApplication'] + c['historicalAuthorisation']),
+    ('Parcels with sale records', lambda c: c['withSaleRecord']),
+    # A lead is a named candidate in the register (holder, notice or co-sale), never a bare legal holder.
+    ('Parcels with holder or research leads', lambda c: c['parcels'] - c['unresolved']),
+    ('Parcels with no lead', lambda c: c['unresolved']),
+    ('Verified farming links', lambda c: c['currentFarmerConfirmed']),
+    ('Official history to earliest records', None),
+    ('Raw / gzip payload', None),
+)
+
+
+def number(text):
+    return f'{text:,}'
+
+
+def payload(raw):
+    """Raw and gzip-equivalent bytes, measured as the build reports measure them."""
+    return number(len(raw)), number(len(gzip.compress(raw, mtime=0)))
+
+
+def check_results_table(context, counts, evidence, text=None):
+    """The cru README's standard results table agrees with the register it summarises."""
+    doc = ROOT / context.cru['research']['methodDoc']
+    if doc != research_path(context.cru, 'README.md'):
+        return  # The Échezeaux pilot predates the standard table; its counts live in the generated register.
+    rows = {}
+    for line in (text if text is not None else doc.read_text(encoding='utf-8')).splitlines():
+        cells = [c.strip() for c in line.strip().strip('|').split('|')]
+        if len(cells) == 2:
+            rows.setdefault(cells[0], cells[1])
+    name = relative(doc)
+    for label, expected in RESULT_ROWS:
+        found = [(key, value) for key, value in rows.items() if key.startswith(label)]
+        require(len(found) == 1, f'{name}: the results table needs one "{label}" row (playbook section 5)')
+        if expected:
+            value = re.match(r'(\d[\d,]*)', found[0][1])
+            require(value and int(value[1].replace(',', '')) == expected(counts),
+                    f'{name}: "{label}" must start with {expected(counts)}, as the register counts it')
+    sizes = rows[next(k for k in rows if k.startswith('Raw / gzip payload'))]
+    parcels = parcel_asset(load_manifest(context.bundle))
+    for kind, raw in (('parcel', parcels), ('evidence', evidence.encode())):
+        raw_bytes, gzip_bytes = payload(raw)
+        require(f'{raw_bytes} / {gzip_bytes}' in sizes,
+                f'{name}: the payload row must give the {kind} file as {raw_bytes} / {gzip_bytes} bytes (raw / gzip)')
+
+
 def run(slug, check):
     cru, bundle = load_cru(slug)
     if 'research' not in cru:
@@ -634,6 +690,7 @@ def run(slug, check):
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content, encoding='utf-8', newline='\n')
+    check_results_table(context, register['counts'], files[context.evidence])
     print(json.dumps({'cru': slug, **register['counts']}))
 
 

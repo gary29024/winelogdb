@@ -7,19 +7,19 @@ const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 function when(item:EvidenceItem){
  const date=item.date;
  if(!date)return null;
- // Ownership records are the 1 January snapshot of that year.
+ // Legal-entity rights use the 1 January snapshot of that year.
  if(item.kind==='ownership')return {text:`1 Jan ${date}`,iso:`${date}-01-01`};
  if(date.length===4)return {text:date,iso:date};
  const [y,m,d]=date.split('-').map(Number);
  return {text:`${d} ${months[m-1]} ${y}`,iso:date};
 }
 const badges:Record<Kind,string>={authorisation:'Authorisation decision',suspended:'Application suspended',application:'Application received',
- filing:'Company filing',research:'Published research',ownership:'Ownership record',sale:'Sale record',lineage:'Parcel history',lead:'Weak lead'};
+ filing:'Company filing',research:'Published research',ownership:'Rights record',sale:'Sale record',lineage:'Parcel history',lead:'Weak lead'};
 const groups:{id:string;heading:string;kinds:Kind[]}[]=[
  {id:'notices',heading:'Official notices',kinds:['authorisation','suspended','application']},
  {id:'filings',heading:'Company filings',kinds:['filing']},
  {id:'research',heading:'Published research',kinds:['research']},
- {id:'ownership',heading:'Ownership and sales',kinds:['ownership','sale','lineage']},
+ {id:'ownership',heading:'Rights and sales',kinds:['ownership','sale','lineage']},
  {id:'leads',heading:'Weak leads',kinds:['lead']},
 ];
 
@@ -71,10 +71,10 @@ export function ParcelEvidence({parcelId,parentId}:{parcelId:string;parentId:str
  const firstId=shown[0]?.id;
  return <section className="parcel-evidence" aria-label="History and evidence">
   <h5>History and evidence</h5>
-  <p className="village-map-note">Dated notices, ownership, sales, company filings and published research.</p>
+  <p className="village-map-note">Dated notices, recorded rights, sales, company filings and published research.</p>
   {shown.map(group=><details key={group.id} className={`parcel-evidence-group parcel-evidence-${group.id}`} open={choices.get(group.id)??group.id===firstId}>
    <summary onClick={event=>{event.preventDefault();choices.set(group.id,!(choices.get(group.id)??group.id===firstId));bump()}}>{group.heading} <span>{group.list.length}</span></summary>
-   {group.id==='leads'&&<p className="village-map-note">Names and ownership context only.</p>}
+   {group.id==='leads'&&<p className="village-map-note">Names and recorded rights context only.</p>}
    <ul>{group.list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
   </details>)}
  </section>;

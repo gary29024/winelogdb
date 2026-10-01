@@ -24,6 +24,12 @@ describe('Grand Cru registry',()=>{
   for(const bundle of bundles)expect([...parcelBundles[bundle.id as keyof typeof parcelBundles].parentFeatureIds].sort())
    .toEqual(grandCrus.filter(c=>c.bundle===bundle.id).map(c=>c.parentFeatureId).sort());
  });
+ it('offers domaine grouping exactly where a cru’s research files link holders to domaines',async()=>{
+  for(const cru of grandCrus){
+   const evidence=await loadParcelEvidence(cru.parentFeatureId);
+   expect(cru.domaineGrouping,cru.slug).toBe(Object.keys(evidence.holderDomains??{}).length>0);
+  }
+ });
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
@@ -43,6 +49,18 @@ describe('Grand Cru registry',()=>{
   const evidence=await loadParcelEvidence('inao-denom-645');
   expect(evidence.parcels['212670000D0093']?.map(i=>i.kind)).toContain('application');
   expect(await loadParcelEvidence('inao-denom-655')).toEqual({sources:{},parcels:{},holderDomains:{}});
+ });
+ it('loads Vougeot’s 69 holders and dated notices without inventing domaine research',async()=>{
+  expect(grandCruFor('inao-denom-546','vougeot')?.slug).toBe('clos-de-vougeot');
+  expect(grandCruFor('inao-denom-546','vosne-romanee')).toBeUndefined();
+  const snapshot=parcelRightsSnapshot('inao-denom-546')!;
+  expect(snapshot.rightsAsOf).toBe('2025-01-01');
+  expect(snapshot.holderIds).toHaveLength(69);
+  const evidence=await loadParcelEvidence('inao-denom-546');
+  expect(evidence.parcels['217160000A0001'].map(i=>i.kind)).toContain('suspended');
+  expect(evidence.parcels['217160000A0523'].map(i=>i.kind)).toContain('application');
+  expect(evidence.holderDomains).toEqual({});
+  expect(Object.keys(evidence.parcels).every(id=>id.startsWith('21716'))).toBe(true);
  });
  it('merges several research files without dropping records or overriding the first domaine heading',()=>{
   const item=(title:string)=>({kind:'lead' as const,date:null,title,sources:[]});

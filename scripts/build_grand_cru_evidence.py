@@ -70,7 +70,9 @@ def title_case_owner(name):
 
 
 def short_reference(parcel_id):
-    return f"D{parcel_id[-4:]}"
+    """Section and number, e.g. A0523. A non-000 prefix (a former, absorbed commune) is kept so references stay unique."""
+    prefix, section = parcel_id[5:8], parcel_id[8:10].lstrip('0')
+    return f"{'' if prefix == '000' else prefix + ' '}{section}{parcel_id[10:]}"
 
 
 SOURCE_KINDS = {
@@ -91,7 +93,7 @@ def event_item(event, via=None):
             'sources': [event['sourceId']]}
     previous = event.get('previousOperator')
     if previous and previous != 'Not stated':
-        item['detail'] = f'Previously farmed by {previous}'
+        item['detail'] = f'Previous operator named in notice: {previous}'
     if via:
         item['via'] = short_reference(via)
     return item
@@ -115,13 +117,13 @@ def ownership_items(row):
         after = ' / '.join(title_case_owner(n) for n in change['after'])
         if change['kind'] == 'holder-changed':
             before = ' / '.join(title_case_owner(n) for n in change['before'])
-            title = f'Recorded owner changed to {after}'
+            title = f'Recorded right holder changed to {after}'
             detail = f'Previously {before}'
         else:
-            title = f'First company owner on record: {after}'
-            detail = f'No company owner was recorded on 1 January {year(change["from"])}'
+            title = f'First legal-entity right on record: {after}'
+            detail = f'No legal-entity right was recorded on 1 January {year(change["from"])}'
         items.append({'kind': 'ownership', 'date': year(change['to']), 'title': title, 'detail': detail,
-                      'note': 'Company owners only. A change can be a sale, or a transfer into a company.',
+                      'note': 'Legal-entity rights only. A change can be a sale, a transfer into a company or another recorded right.',
                       'sources': ['dgfip-history']})
     if row['predecessorIds']:
         refs = ', '.join(short_reference(p) for p in row['predecessorIds'])

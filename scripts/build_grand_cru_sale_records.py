@@ -33,7 +33,8 @@ def build(cru, bundle, manifest, directory):
     ids = {f['properties']['id'] for f in json.loads(parcel_asset(manifest))['features'] if in_cru(f, parent)}
     allowed = set(communes(bundle))
     data = pinned(directory, config['fileName'], config['sha256'])
-    csv.field_size_limit(sys.maxsize)  # a few deeds list thousands of parcels
+    # Python <3.13 uses a 32-bit C long on Windows; large deed lists still fit this portable limit.
+    csv.field_size_limit(min(sys.maxsize, 2**31 - 1))
     with zipfile.ZipFile(io.BytesIO(data)) as archive:
         rows = list(csv.DictReader(io.TextIOWrapper(archive.open(config['member']), encoding='utf-8'), delimiter='|'))
     deeds, seen = [], set()

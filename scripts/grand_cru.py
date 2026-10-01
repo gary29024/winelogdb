@@ -159,7 +159,7 @@ def research_dir(cru):
 
 
 def research_path(cru, name):
-    """name is one of curation.json, register.json, register.md, rights-history.json, sale-records.json, parcel-named-areas.json."""
+    """name is one of README.md, curation.json, register.json, register.md, rights-history.json, sale-records.json, parcel-named-areas.json."""
     return research_dir(cru) / name
 
 
