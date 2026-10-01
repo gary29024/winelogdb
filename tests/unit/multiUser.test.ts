@@ -295,8 +295,14 @@ describe('shared wines as recipient journal history',()=>{
    VALUES('shared-facts','alice','prod-alice','Domaine Shared','Full Facts','Burgundy','Volnay','Bourgogne','Volnay 1er','["Pinot Noir"]',?,?,'now','now')`)
    .run('[{"grape":"Pinot Noir","percentage":100}]',JSON.stringify(deep));
   database.sql.exec("INSERT INTO wine_shares(wine_id,owner_id,recipient_id) VALUES('shared-facts','alice','bob')");
+  database.sql.exec(`INSERT INTO wine_images(id,owner_id,wine_id,object_key,content_type,byte_size,width,height,upload_status,recognition_status,captured_at,latitude,longitude,location_name,created_at)
+   VALUES('photo-undated','alice','shared-facts','k1','image/jpeg',1,1,1,'uploaded','complete',NULL,NULL,NULL,NULL,'now'),
+         ('photo-dated','alice','shared-facts','k2','image/jpeg',1,1,1,'uploaded','complete','2026-08-14T19:30:00.000Z',47.0,4.8,'Private address','now')`);
   const e={...env(),WINE_IMAGES:{} as R2Bucket};
   const detail=await (await socialRoute(new Request('https://wine.example/api/shared/wines/shared-facts'),e,member('bob')))!.json() as Record<string,unknown>;
+  // Only the day crosses, as a default for bob's own date; position and place stay with alice.
+  expect(detail.photoDate).toBe('2026-08-14');expect(detail.tastingDate).toBeNull();
+  expect(JSON.stringify(detail)).not.toMatch(/Private address|47\.0|captured/);
   expect(detail).toMatchObject({
    recognizedRegion:'Bourgogne',recognizedAppellation:'Volnay 1er',
    grapeBlend:[{grape:'Pinot Noir',percentage:100}]
