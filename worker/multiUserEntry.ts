@@ -158,7 +158,20 @@ export default {
     return json({...run,message,outcome,retryBlocked:Boolean(held),recoveryDeadline});
    }
    const producerMatch=path.match(/^\/api\/producers\/([^/]+)$/);
-   if(response.ok&&request.method==='GET'&&producerMatch){const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);if(shared)return json({...await response.json() as object,...shared})}
+   if(response.ok&&request.method==='GET'&&producerMatch){
+    const shared=await reusableProducer(env.DB,member.id,producerMatch[1]);
+    if(shared){
+     const body=await response.json() as Record<string,unknown>,detail:Record<string,unknown>={...body,...shared};
+     // A reusable profile can have no researched range. Keep the imported range
+     // already assembled by the owner-authorized producer route in that case.
+     if(body.catalogSource==='lwin'){
+      const range='catalog' in shared?shared.catalog:undefined;
+      if(Array.isArray(range)&&range.length)detail.catalogSource='research';
+      else detail.catalog=body.catalog;
+     }
+     return json(detail);
+    }
+   }
    if(response.ok&&request.method==='GET'&&path==='/api/maturity/vintage'){
     const params=Object.fromEntries(new URL(request.url).searchParams),subject={...params,vintage:Number(params.vintage)};
     const window=await readVintageWindow(env.DB,member.id,subject,true);return json({window});

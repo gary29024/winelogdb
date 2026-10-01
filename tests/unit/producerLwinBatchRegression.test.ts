@@ -14,7 +14,7 @@ import { durableProvider,providerNeedsReconciliation } from '../../src/lib/credi
 import { configureGeminiBatchGateway,clearGeminiBatchGateway,ResearchPersistenceError } from '../../src/lib/research/geminiBatch';
 import { quote,reserve,reconcileOperation,plannedUnits,releaseHeldOperation,type CreditOperation } from '../../worker/multiUser/credits';
 import { maintainOperation } from '../../worker/multiUser/jobs';
-import { stamp,type Member } from '../../worker/multiUser/common';
+import { hash,seconds,stamp,type Member } from '../../worker/multiUser/common';
 
 let database:ReturnType<typeof realD1>,producerId:string;
 const member:Member={id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'};
@@ -76,6 +76,47 @@ describe('LWIN-guided producer research',()=>{
   expect(keys(1)).toHaveLength(1);expect(keys(1)[0]).toMatch(/^catalog_slice_/);
   database.sql.prepare('UPDATE producers SET catalog_json=? WHERE id=?').run(JSON.stringify(complete.range),producerId);
   expect(await lwinRangeFirst(database.db,'owner',producerId)).toBe(false);
+ });
+ it('keeps the imported range when the production entrypoint reuses a saved profile',async()=>{
+  const reference=bucket([row(),row('1234568','Morey-Saint-Denis')]),[linked]=await producerLwinReferences(database.db,'owner',producerId,reference);
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,lwin7,identity_match_status,lwin_reference_json,created_at,updated_at) VALUES('w1','owner',?,?,'Clos de la Roche',2019,?,'manual',?,'now','now')")
+   .run(producer,producerId,linked.lwin7,JSON.stringify(linked));
+  database.sql.prepare('UPDATE producers SET profile=?,winemaking_practices=?,sources_json=?,researched_at=?,profile_researched_at=? WHERE id=?')
+   .run(profile.profile,profile.winemakingPractices,JSON.stringify([{title:'Estate',url:'https://dujac.example/'}]),stamp(),stamp(),producerId);
+  const token='lwin-saved-profile';
+  database.sql.prepare("INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES(?,'owner',?)").run(await hash(token),seconds()+3600);
+  const provider=vi.fn(async()=>{throw new Error('This read must not call a provider')});vi.stubGlobal('fetch',provider);
+  const response=await worker.fetch(new Request(`https://wine.example/api/producers/${producerId}`,{headers:{Cookie:`__Host-winelog=${token}`}}),
+   {...researchEnv(vi.fn(),reference),AUTH_SECRET:'secret',APP_URL:'https://wine.example'} as never,{waitUntil:()=>undefined,passThroughOnException:()=>undefined} as never);
+  expect(response.status).toBe(200);
+  const detail=await response.json() as {profile:string;catalogSource:string;catalog:{name:string}[];researchContributorId:string};
+  expect(detail).toMatchObject({profile:profile.profile,researchContributorId:'owner',catalogSource:'lwin'});
+  expect(detail.catalog.map(wine=>wine.name)).toEqual(['Clos de la Roche','Morey-Saint-Denis']);
+  expect(database.sql.prepare('SELECT catalog_json FROM producers WHERE id=?').get(producerId)!.catalog_json).toBe('[]');
+  expect(provider).not.toHaveBeenCalled();
+ });
+ it.each([
+  {scope:'profile only',catalog:[],catalogSource:'lwin',names:['Clos de la Roche','Morey-Saint-Denis']},
+  {scope:'profile and range',catalog:complete.range,catalogSource:'research',names:['Clos de la Roche']}
+ ])('merges a borrowed $scope with the imported range through the production entrypoint',async({catalog,catalogSource,names})=>{
+  const reference=bucket([row(),row('1234568','Morey-Saint-Denis')]),[linked]=await producerLwinReferences(database.db,'owner',producerId,reference);
+  database.sql.prepare("INSERT INTO wines(id,owner_id,producer,producer_id,wine_name,vintage,lwin7,identity_match_status,lwin_reference_json,created_at,updated_at) VALUES('w1','owner',?,?,'Clos de la Roche',2019,?,'matched',?,'now','now')")
+   .run(producer,producerId,linked.lwin7,JSON.stringify(linked));
+  database.sql.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES('friend','friend@example.com','Friend','member')").run();
+  database.sql.prepare("INSERT INTO friendships(user_id,friend_id) VALUES('owner','friend')").run();
+  database.sql.prepare("INSERT INTO reusable_research(contributor_id,subject_key,scope,entry_json,quality_version,researched_at) VALUES('friend',?,'producer_catalog',?,1,?)")
+   .run(JSON.stringify(['domaine dujac','france']),JSON.stringify({...profile,catalog,sources:[{title:'Estate',url:'https://dujac.example/'}],researchedAt:stamp()}),stamp());
+  const token='lwin-borrowed-profile';
+  database.sql.prepare("INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES(?,'owner',?)").run(await hash(token),seconds()+3600);
+  const provider=vi.fn(async()=>{throw new Error('This read must not call a provider')});vi.stubGlobal('fetch',provider);
+  const response=await worker.fetch(new Request(`https://wine.example/api/producers/${producerId}`,{headers:{Cookie:`__Host-winelog=${token}`}}),
+   {...researchEnv(vi.fn(),reference),AUTH_SECRET:'secret',APP_URL:'https://wine.example'} as never,{waitUntil:()=>undefined,passThroughOnException:()=>undefined} as never);
+  expect(response.status).toBe(200);
+  const detail=await response.json() as {profile:string;catalogSource:string;catalog:{name:string}[];researchContributorId:string};
+  expect(detail).toMatchObject({profile:profile.profile,researchContributorId:'friend',catalogSource});
+  expect(detail.catalog.map(wine=>wine.name)).toEqual(names);
+  expect(database.sql.prepare('SELECT catalog_json FROM producers WHERE id=?').get(producerId)!.catalog_json).toBe('[]');
+  expect(provider).not.toHaveBeenCalled();
  });
  it('plans one request for a producer shown from LWIN and stops picking it once its profile exists',async()=>{
   const [linked]=await producerLwinReferences(database.db,'owner',producerId,bucket());
