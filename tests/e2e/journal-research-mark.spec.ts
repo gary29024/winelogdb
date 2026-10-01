@@ -6,7 +6,7 @@ test('Journal marks complete Deep Search quietly and filters researched and not 
  const items=[
   {...wine,id:'done',wineName:'Clos de la Roche',vintage:2019,researchComplete:true},
   {...wine,id:'partial',wineName:'Morey-Saint-Denis',vintage:2020,researchComplete:false},
-  {...wine,id:'none',wineName:'Bourgogne Rouge',vintage:2021}
+  {...wine,id:'none',wineName:'Bourgogne Rouge',vintage:2021,researchComplete:false}
  ];
  const research:string[]=[];
  await page.route('**/api/**',async route=>{
