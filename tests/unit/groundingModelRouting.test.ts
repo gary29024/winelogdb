@@ -97,13 +97,11 @@ describe('the grounding instruction',()=>{
 
 import { describeResponseSchema,groundedGenerationConfig } from '../../src/lib/research/geminiBatch';
 
-describe('grounding and controlled generation cannot share a request',()=>{
+describe('grounded research keeps output-format controls out of the transport',()=>{
   const research=['src/lib/research/batchWineResearch.ts','src/lib/producers/batchResearch.ts'].map(path=>readFileSync(path,'utf8'));
 
   it('sends no responseSchema on a request that declares the search tool',()=>{
-    // The API will not do both. A request asking for each returns well-formed
-    // JSON with the grounding quietly dropped, which the gate then rejects for
-    // having no sources - the failure that started this.
+    // Output shape alone never proves that Search attached source evidence.
     for(const source of research){
       expect(source).toMatch(/google_search/);
       expect(source).not.toMatch(/responseMimeType/);

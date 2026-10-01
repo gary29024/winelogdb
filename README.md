@@ -81,6 +81,25 @@ rather than served. These rules keep that gate honest.
   the only wine and producer researchers. Three earlier generations sat behind
   shadowed routes where they could neither run nor be noticed; a test now pins
   route ownership so a duplicate cannot creep back.
+- **Searches are not citations.** A completed request can report paid Google
+  searches while returning no usable grounding sources. Fresh wine and producer
+  answers with no sources are rejected before parsing, including answers that
+  only claim nothing was found. Both research flows share the model grounding
+  cooldown; when both models are cooling off, new research stops without buying
+  another answer. Cached research remains available.
+- **Cited prose is extracted locally.** Wine fields and producer profiles use
+  named Markdown sections; catalogue entries use a table. Local parsing keeps
+  claim text and provider grounding metadata together without an extra model
+  request. JSON answers from earlier deployments remain replayable. This format
+  is intended to improve citation attachment; live provider quality still needs
+  checking after deployment.
+- **Retries have limits.** Wine research and producer profile research get at
+  most one model fallback. Additional requests stop once recorded searches in
+  the run reach 12 for wine research or 16 for producer research. These are
+  checks between requests, not caps on Google's searches inside a request.
+  Prompts also request efficient search and low thinking. A range failure keeps
+  a saved profile and practices, and its outcome says so. An unfinished parent
+  range never counts as completed coverage when narrower slices fail.
 
 The result's quality status, score and any warnings are shown on the wine page,
 so a rejection is diagnosable rather than an opaque failure.

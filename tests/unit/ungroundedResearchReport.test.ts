@@ -57,23 +57,20 @@ import { nextResearchAttempt } from '../../src/lib/research/batchWineResearch';
 
 describe('whether a failed attempt is retried at all',()=>{
   it('gives a quality failure a second opinion',()=>{
-    expect(nextResearchAttempt(1,false)).toBe(2);
+    expect(nextResearchAttempt(1)).toBe(2);
   });
 
   it('stops after that when the answer was grounded but poor',()=>{
     // Failing twice on real evidence is a research limit, not an
     // infrastructure one, so a third call would just spend tokens.
-    expect(nextResearchAttempt(2,false)).toBeNull();
+    expect(nextResearchAttempt(2)).toBeNull();
   });
 
-  it('gives an ungrounded answer one more attempt',()=>{
-    // The observed failure: three scopes saved from a grounded answer, the
-    // exact-wine scope retried on a model that returned zero grounding - which
-    // no gate can accept, so that retry could never have succeeded.
-    expect(nextResearchAttempt(2,true)).toBe(3);
+  it('stops after two attempts even when the fallback did not ground',()=>{
+    expect(nextResearchAttempt(2)).toBeNull();
   });
 
   it('does not retry forever on repeated ungrounded answers',()=>{
-    expect(nextResearchAttempt(3,true)).toBeNull();
+    expect(nextResearchAttempt(3)).toBeNull();
   });
 });

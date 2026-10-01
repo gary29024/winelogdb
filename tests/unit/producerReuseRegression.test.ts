@@ -91,11 +91,12 @@ describe('producer research reused by another wine',()=>{
   const env={DB:database.db,GEMINI_API_KEY:'key',RESEARCH_QUEUE:{send} as unknown as Queue<unknown>};
   await startWineBatchResearch(env,'owner','first','failed-refresh-1','all');
   expect((await loadResearchCache(database.db,'owner',targets())).size).toBe(4);
-  for(let i=0;i<3;i++){
+  for(let i=0;i<2;i++){
    const job=send.mock.calls[i][0] as {jobId:string};
    await pollWineBatchResearch(env,'owner','first','failed-refresh-1',job.jobId,0);
   }
   expect(await getWineResearchRun(database.db,'owner','first','failed-refresh-1')).toMatchObject({status:'failed'});
+  expect(creates).toBe(2);
   expect(assembleDeepSearch(await loadResearchCache(database.db,'owner',targets()),targets())).toEqual(original);
  });
 });

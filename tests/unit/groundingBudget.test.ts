@@ -99,9 +99,9 @@ describe('the room an answer is given, which decides whether the ladder is climb
       expect(roomFor(key),`${key} needs room for its thinking as well as its answer`).toBeGreaterThan(8192);
   });
 
-  it('uses low thinking for the retrieval-heavy profile only',()=>{
+  it('uses low thinking for source retrieval and catalogue transcription',()=>{
     expect(configFor('profile').thinkingConfig).toEqual({thinkingLevel:'low'});
-    expect(configFor('catalog_slice_a_z_other').thinkingConfig).toBeUndefined();
+    expect(configFor('catalog_slice_a_z_other').thinkingConfig).toEqual({thinkingLevel:'low'});
   });
 
   it('keeps grounding switched on for every one of them',()=>{

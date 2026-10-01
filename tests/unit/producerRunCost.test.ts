@@ -41,7 +41,7 @@ describe('the request a run actually submits',()=>{
       // timestamp, the row would look unknown, and the profile would be asked
       // for - so the test below would pass on the very bug it exists to catch.
       if(/SELECT profile,home_country,\w+ FROM producers/.test(sql))return {first:row};
-      if(/SELECT canonical_name FROM producers/.test(sql))return {first:{canonical_name:'Chateau Cheval Blanc'}};
+      if(/SELECT canonical_name(?:,\w+)* FROM producers/.test(sql))return {first:{canonical_name:'Chateau Cheval Blanc',home_country:'France',home_region:'Bordeaux',home_locality:'Saint-Emilion'}};
       return undefined;
     });
     const batches:Array<{model:string;entries:Array<{key:string}>}>=[];
