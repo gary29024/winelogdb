@@ -589,6 +589,26 @@ class GrandsEchezeauxTests(unittest.TestCase):
         self.assertNotIn('212670000D0111', expected)
         self.assertFalse(any(i['kind'] == 'filing' for i in self.evidence['parcels']['212670000D0111']))
 
+    def test_crosswalk_and_printed_references_are_validated(self):
+        from build_grand_cru_research import load_inputs
+        inputs = load_inputs(self.context)
+
+        def build(curation):
+            return build_cru_register(inputs['manifest'], inputs['asset'], curation, inputs['history'],
+                                      inputs['sales'], inputs['named_areas'], self.context)
+        curation = copy.deepcopy(self.curation)
+        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['companySiren'] = '77817350'
+        with self.assertRaisesRegex(ValueError, 'invalid identity crosswalk'):
+            build(curation)
+        curation = copy.deepcopy(self.curation)
+        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['sourceIds'] = ['nonexistent']
+        with self.assertRaisesRegex(ValueError, 'Unknown crosswalk source'):
+            build(curation)
+        curation = copy.deepcopy(self.curation)
+        curation['unmatchedPrintedReferences'][0]['parcelIds'] = ['212670000D0111']
+        with self.assertRaisesRegex(ValueError, 'cannot name current parcels'):
+            build(curation)
+
     def test_reported_metayage_and_old_holdings_do_not_double_count(self):
         census = {h['holdingId']: h for h in self.register['namedAreaCensus'][0]['holdings']}
         self.assertEqual(census['liger-ge']['relation'], 'metayer')

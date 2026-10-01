@@ -72,6 +72,13 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(h['parcelOperationConfirmed'] is False, 'Lead register cannot publish confirmed operation')
         require(set(h['sourceIds']) <= sources.keys(), 'Unknown holder source')
         require(not h['candidateNames'] or h['sourceIds'], 'Candidate requires a cited research source')
+        # A company-identity crosswalk annotates the provisional rights ID; it never replaces it.
+        crosswalk = h.get('legalIdentityCrosswalk')
+        if crosswalk:
+            siren = crosswalk['companySiren']
+            require(len(siren) == 9 and siren.isdigit() and siren not in holders, f"{h['holderId']}: invalid identity crosswalk")
+            require(crosswalk['sourceIds'] and set(crosswalk['sourceIds']) <= sources.keys(), 'Unknown crosswalk source')
+            require(crosswalk.get('limitation'), 'Identity crosswalk needs its limitation')
     require(history['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and history['parentFeatureId'] == parent,
             'Rights history built from another snapshot')
     lineage = {r['parcelId']: r for r in history['parcels']}
@@ -176,6 +183,11 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(entry['sourceId'] in sources and entry['owners'], 'Historical owner list needs a source and names')
         # Printed climat names are kept as printed; only reviewed cadastral names join the census.
         require(entry['namedArea'] is None or entry['namedArea'] in area_names, f"Unknown named area: {entry['namedArea']}")
+    # A printed reference stays as printed until reviewed lineage links it to a current parcel.
+    for printed in curation.get('unmatchedPrintedReferences', []):
+        require(printed['sourceId'] in sources and printed['printedReference'], 'Printed reference needs a source')
+        require(not printed['parcelIds'], 'Unmatched printed reference cannot name current parcels')
+        require(printed['limitation'] and printed.get('currentFarmer') is None, 'Printed reference needs its limitation')
 
     rows = []
     for p in parcels:
