@@ -1,4 +1,5 @@
 import { lwinResearchContext } from '../wine/lwinMetadata';
+import { isDeepSearchComplete } from './completeness';
 import { AI_MODELS } from '../ai/policy';
 import { assertResearchInput,providerNeedsReconciliation,type ProviderAuthorization } from '../credits/provider';
 import { deepSearchSchema,type DeepSearchResult } from '../db/schema';
@@ -86,7 +87,7 @@ export function releaseResearchContext(wine:Pick<WineRow,'vintage'|'release_desi
   if(baseVintage!=null)lines.push(`- appellation/region vintage context: research the ${baseVintage} growing season as the base year of this release. Say it is the base year of a non-vintage blend. Keep reserve-wine years out of this section; they belong with the blend composition.`);
   return lines.join('\n');
 }
-async function saveSnapshot(db:D1Database,owner:string,id:string,result:DeepSearchResult){const stamp=now();await db.prepare('UPDATE wines SET deep_search_json=?,deep_search_model=?,deep_search_updated_at=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(result),result.model,stamp,stamp,id,owner).run()}
+async function saveSnapshot(db:D1Database,owner:string,id:string,result:DeepSearchResult,vintage:number|null){const stamp=now();await db.prepare('UPDATE wines SET deep_search_json=?,deep_search_model=?,deep_search_updated_at=?,research_complete=?,updated_at=? WHERE id=? AND owner_id=?').bind(JSON.stringify(result),result.model,stamp,isDeepSearchComplete(result,vintage)?1:0,stamp,id,owner).run()}
 
 async function seedProducerProfileResearch(db:D1Database,owner:string,wine:WineRow,targets:ResearchTarget[]){
   if(!wine.producer_id)return;const target=targets.find(x=>x.scope==='producer');if(!target)return;
@@ -194,7 +195,7 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   await adoptFriendResearch(env.DB,owner,cache,true).catch(error=>{throw new ResearchPersistenceError(error)});
   await offerToSourceOwner(env.DB,owner,wine,cache);
   const result={...assembleDeepSearch(cache,targets),release:researchEditionOfRow(wine)};
-  await saveSnapshot(env.DB,owner,wineId,result).catch(error=>{throw new ResearchPersistenceError(error)});return result;
+  await saveSnapshot(env.DB,owner,wineId,result,typeof wine.vintage==='number'?wine.vintage:null).catch(error=>{throw new ResearchPersistenceError(error)});return result;
 }
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){

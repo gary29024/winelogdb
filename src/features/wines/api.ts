@@ -30,6 +30,8 @@ export type JournalWine={
   shared?:boolean;
   sharedBy?:string|null;
   createdAt:string;
+  /** Complete Deep Search (partial research is false). */
+  researchComplete?:boolean;
 };
 export type GroupSourcePhoto={sessionId:string;createdAt:string;capturedAt:string|null};
 export type WineDetail=WineRecord&{favorite:boolean;producerId:string|null;tastingStructure:TastingStructure|null;sparklingDetails:SparklingDetails|null;groupSourcePhotos:GroupSourcePhoto[];friendTagCount:number};

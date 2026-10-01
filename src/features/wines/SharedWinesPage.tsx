@@ -33,11 +33,8 @@ import '../../sharedWine.css';
 
 const wineSearcherUrl=(producer:string,wineName:string,vintage:number|null)=>`https://www.wine-searcher.com/find/${encodeURIComponent([producer,wineName,vintage??''].filter(Boolean).join(' ')).replace(/%20/g,'+')}`;
 type Draft={tastingDate:string;rating:string;tastingName:string;venue:string;locationName:string;currency:string;price:string;tastingNotes:string;structure:TastingStructure};
-// Until the reader saves an experience of their own, the drinking date starts as
-// the day the shared photo was taken. Nothing is saved unless they save it.
-const noExperience=(wine:SharedWine)=>!wine.tastingDate&&!wine.tastingName&&!wine.venue&&!wine.locationName&&wine.price==null&&wine.rating==null&&!wine.tastingNotes&&!Object.keys(wine.structure??{}).length;
 const draftFromWine=(wine:SharedWine):Draft=>({
- tastingDate:wine.tastingDate??(noExperience(wine)?wine.photoDate??'':''),rating:wine.rating==null?'':String(wine.rating),tastingName:wine.tastingName??'',
+ tastingDate:wine.tastingDate??'',rating:wine.rating==null?'':String(wine.rating),tastingName:wine.tastingName??'',
  venue:wine.venue??'',locationName:wine.locationName??'',currency:wine.currency??'',price:wine.price==null?'':String(wine.price),tastingNotes:wine.tastingNotes,
  structure:{...wine.structure}
 });
@@ -109,8 +106,7 @@ export function SharedWinesPage(){
      {heroPhoto
       ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(heroPhoto.url)} aria-label={`Open photo 1 of ${wine.photos!.length}`}><img src={heroPhoto.url} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo" loading="lazy" decoding="async"/></button>
       :<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
-     {/* The day the owner's photo was taken; never the time or place. */}
-     {(Boolean(heroPhoto&&wine.photoDate)||(wine.photos?.length??0)>1)&&<span className="detail-photo-count">{[heroPhoto&&wine.photoDate?`Taken ${formatDate(wine.photoDate)}`:'',(wine.photos?.length??0)>1?`${wine.photos!.length} photos`:''].filter(Boolean).join(' · ')}</span>}
+     {(wine.photos?.length??0)>1&&<span className="detail-photo-count">{wine.photos!.length} photos</span>}
     </div>}
    >
     <h2 className="detail-producer">{wine.producerId?<Link className="detail-producer-link" to={`/producers/${wine.producerId}`}>{wine.producer}</Link>:wine.producer}</h2>

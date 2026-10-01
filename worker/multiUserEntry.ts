@@ -15,6 +15,7 @@ import type { AiRateEnv } from '../src/lib/usage/rates';
 import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } from './multiUser/rollout';
 import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
+import { isDeepSearchComplete } from '../src/lib/research/completeness';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { getWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { WINE_RESEARCH_RECOVERY_MS } from '../src/lib/research/recoveryPolicy';
@@ -166,12 +167,17 @@ export default {
    if(response.ok&&request.method==='GET'&&wineMatch){
     // Only the columns that build a cache key. SELECT * pulled deep_search_json
     // - a multi-kilobyte snapshot - on every wine view, to read nine fields.
-    const row=await env.DB.prepare(`SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.owner_id=? AND w.id=?`).bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
+    const row=await env.DB.prepare(`SELECT producer,producer_id,cuvee_id,wine_name,vintage,country,region,appellation,wine_style,research_complete,${RESEARCH_EDITION_COLUMNS} FROM wines w WHERE w.owner_id=? AND w.id=?`).bind(member.id,wineMatch[1]).first<Record<string,unknown>>();
     if(row){const data=await response.json() as Record<string,unknown>,targets=wineTargets(row),cache=await loadWineResearchCache(env.DB,member.id,targets,true,data.deepSearch);
      // Showing a friend's research is what makes it the reader's own, so the
      // next view is an indexed lookup and unfriending cannot take it back.
      ctx.waitUntil(adoptFriendResearch(env.DB,member.id,cache));
-     return json({...data,deepSearch:cache.size?assembleDeepSearch(cache,targets):null})}
+     const deepSearch=cache.size?assembleDeepSearch(cache,targets):null;
+     // Research shared by other wines or friends can complete this one without a
+     // new run; keep the journal's Deep Search mark in step with what is shown.
+     const complete=isDeepSearchComplete(deepSearch,typeof row.vintage==='number'?row.vintage:null)?1:0;
+     if(complete!==Number(row.research_complete))ctx.waitUntil(env.DB.prepare('UPDATE wines SET research_complete=? WHERE owner_id=? AND id=? AND research_complete<>?').bind(complete,member.id,wineMatch[1],complete).run().catch(()=>undefined));
+     return json({...data,deepSearch})}
    }
    // A Champagne status read may safely revive polling of an existing native
    // batch. Dispatch that outbox message too, without reserving another action.
