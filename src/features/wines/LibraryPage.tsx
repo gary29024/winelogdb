@@ -45,14 +45,15 @@ const forgetJournalFilters=()=>{try{window.sessionStorage.removeItem(accountStor
  * is a display preference rather than a filter, and offset only exists because
  * a filter put you on a later page, so it goes with them.
  */
-const FILTER_KEYS=['query','month','tasting','country','style','rating','sort','favorite','offset'] as const;
+const FILTER_KEYS=['query','month','tasting','country','style','rating','research','sort','favorite','offset'] as const;
 /**
  * The controls that actually narrow the list, which is not the same set as the
  * things a reset clears: sort, favourite and offset change what you are looking
  * at without cutting anything out, so counting them would put a badge on a
  * journal nobody has filtered.
  */
-const NARROWING_KEYS=['month','tasting','country','style','rating'] as const;
+const NARROWING_KEYS=['month','tasting','country','style','rating','research'] as const;
+const RESEARCH_LABELS:Record<string,string>={complete:'Researched',incomplete:'Not researched'};
 
 const initialView=():ViewMode=>{
   if(typeof window==='undefined')return 'grid';
@@ -77,7 +78,9 @@ function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBu
   // by another visible attribution badge. Keep provenance available to screen
   // readers through the card's accessible label; the visible sharer stays on
   // the detail page, immediately before Wine details.
-  const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
+  // One quiet glyph, not a badge: complete Deep Search only, so partial research reads as not yet done.
+  const researchMark=w.researchComplete?<span className="journal-research-mark" role="img" aria-label="Deep Search complete" title="Deep Search complete">✦</span>:null;
+  const content=view==='grid'?<>{selectionMark}<div className="journal-grid-media">{image}<strong className="journal-grid-vintage">{w.vintage??'NV'}{researchMark}</strong>{w.rating!=null&&<span className="journal-grid-score">{w.rating}</span>}</div><div className="wine-card-body"><h2 title={w.wineName}>{w.wineName}</h2><p className="producer" title={w.producer}>{w.producer}</p></div></>:<>{selectionMark}{image}<div className="wine-card-body"><div className="wine-card-top"><h2>{w.wineName}</h2><strong>{w.vintage??'NV'}{researchMark}</strong></div><p className="producer">{w.producer}</p><span className="journal-meta">{[[w.appellation,w.region,w.country].filter(Boolean).join(' · '),w.grapes.join(' · ')].filter(Boolean).join(' · ')}</span>{w.tastingName&&<span className="tasting-chip">{w.tastingName}</span>}{w.venue&&<span className="journal-venue">{w.venue}</span>}{w.rating!=null&&<span className="score-chip">{w.rating}</span>}</div></>;
   const label=`${w.producer} ${w.wineName}${w.shared?`, shared by ${w.sharedBy||'a friend'}`:''}`;
   return <div className={`journal-card-shell ${view==='grid'?'grid':'list'}${selecting?' selecting':''}`}>
     <div className={className}>{content}</div>
@@ -335,13 +338,13 @@ export function LibraryPage(){
       <button type="button" className="journal-filter-toggle" aria-expanded={filtersOpen} aria-controls="journal-filter-fields" onClick={()=>setFiltersOpen(open=>!open)}>
        Filters{narrowingCount>0&&<b>{narrowingCount}</b>}<span className="journal-filter-chevron" aria-hidden="true"/>
       </button>
-      {NARROWING_KEYS.filter(key=>Boolean(params.get(key))).map(key=><button type="button" className="quiet journal-filter-chip" key={key} aria-label={`Remove ${key} filter: ${params.get(key)}`} onClick={()=>update(key,'')}>{key==='rating'?'Score: ':key==='month'?'Month: ':''}{params.get(key)} <span aria-hidden="true">×</span></button>)}
+      {NARROWING_KEYS.filter(key=>Boolean(params.get(key))).map(key=><button type="button" className="quiet journal-filter-chip" key={key} aria-label={`Remove ${key} filter: ${params.get(key)}`} onClick={()=>update(key,'')}>{key==='rating'?'Score: ':key==='month'?'Month: ':''}{key==='research'?RESEARCH_LABELS[params.get(key)??'']??params.get(key):params.get(key)} <span aria-hidden="true">×</span></button>)}
       {filtersApplied&&<button type="button" className="journal-filter-reset" onClick={resetFilters}>Reset filters</button>}
       {/* The count reads against the controls that change it, so it sits on
           their row rather than on a line of its own above the wines. */}
       <span className="journal-result-count" aria-live="polite">{loading&&data.length?'Updating results…':!loading&&(filtersApplied||total>0)?resultLabel:''}</span>
      </div>
-     <div className="filter-pills" id="journal-filter-fields" hidden={!filtersOpen}><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
+     <div className="filter-pills" id="journal-filter-fields" hidden={!filtersOpen}><label className="filter-month">Month<input type="month" aria-label="Drinking month" value={params.get('month')??''} onChange={e=>update('month',e.target.value)}/></label><label>Tasting<input value={params.get('tasting')??''} onChange={e=>update('tasting',e.target.value)} placeholder="Tasting / event"/></label><label>Country<input value={params.get('country')??''} onChange={e=>update('country',e.target.value)} placeholder="Country"/></label><label>Style<select value={params.get('style')??''} onChange={e=>update('style',e.target.value)}><option value="">Style</option>{['red','white','rose','sparkling','dessert','fortified','orange'].map(x=><option key={x}>{x}</option>)}</select></label><label>Score<input type="number" min="0" max="100" value={params.get('rating')??''} onChange={e=>update('rating',e.target.value)} placeholder="Score"/></label><label>Deep Search<select value={params.get('research')??''} onChange={e=>update('research',e.target.value)}><option value="">Any</option><option value="complete">Researched</option><option value="incomplete">Not researched</option></select></label><label>Sort<select value={sort} onChange={e=>update('sort',e.target.value)}><option value="newest">Newest drinking date</option><option value="oldest">Oldest drinking date</option><option value="rating">Rating</option><option value="producer">Producer</option><option value="vintage">Vintage</option></select></label></div></form>
     {attachTo&&<p className="journal-attach-banner" role="status">Pick the wines that were poured at <strong>{attachName||'this tasting'}</strong>, then tap Add. Filters and search still work, and the wines themselves are not changed — only which evening they belong to.</p>}
     {batchNotice&&<p className="journal-batch-notice" role="status">{batchNotice}</p>}
     {batchError&&!batchOpen&&<p className="journal-page-error" role="alert">{batchError}</p>}

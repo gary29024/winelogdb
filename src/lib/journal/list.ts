@@ -24,6 +24,7 @@ type JournalRow={
   is_shared:number;
   shared_by:string|null;
   shared_tasting_name:string|null;
+  research_complete:number|null;
 };
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
@@ -47,6 +48,10 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   // for membership and (when applicable) default ranking.
   const semanticJson=JSON.stringify(semanticMatches);
   const args:unknown[]=[owner];let where='w.owner_id=?';
+  // A shared bottle carries its source wine's flag; the shared view has no column for it.
+  const researchComplete=includeShared
+    ?'coalesce((SELECT rw.research_complete FROM wines rw WHERE rw.owner_id=w.source_owner_id AND rw.id=w.id),0)'
+    :'w.research_complete';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
   const rawQuery=(q.query??'').trim();
   const vintageSearch=!q.vintage&&/^\d{4}$/.test(rawQuery)?rawQuery:null;
@@ -55,6 +60,10 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     if(value){where+=` AND ${col}=?`;args.push(value)}
   }
   if(favoriteOnlyQuery(q.favorite))where+=' AND w.favorite=1';
+  // "Not researched" includes partial research, such as a report assembled from
+  // other wines' cached scopes: only complete Deep Search counts as researched.
+  if(q.research==='complete')where+=` AND ${researchComplete}=1`;
+  else if(q.research==='incomplete')where+=` AND ${researchComplete}=0`;
   if(q.month){where+=" AND substr(coalesce(nullif(w.tasting_date,''),w.created_at),1,7)=?";args.push(q.month)}
   if(q.rating){where+=' AND w.rating>=?';args.push(Number(q.rating))}
   // Every name the grape answers to, because that is what is stored: the label
@@ -142,7 +151,7 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   const pageStatement=db.prepare(`SELECT w.id,w.producer,w.wine_name,w.vintage,w.country,w.region,w.appellation,w.grapes_json,w.wine_style,w.rating,w.venue,w.favorite,
     coalesce(w.tasting_date,w.created_at) AS journal_date,
     coalesce(w.photo_sort_at,w.created_at) AS photo_sort_at,
-    w.created_at,${visibilityColumns},
+    w.created_at,${visibilityColumns},${researchComplete} AS research_complete,
     ${tastingName} AS tasting_name,
     ${imageId} AS image_id
     FROM ${wineSource} w WHERE ${where} ORDER BY ${order} LIMIT ? OFFSET ?`).bind(...args,...orderArgs,limit,offset);
@@ -168,7 +177,8 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
     imageUrl:row.image_id&&row.is_shared?`/api/shared/wines/${row.id}/photos/${row.image_id}?variant=thumbnail`:null,
     shared:Boolean(row.is_shared),
     sharedBy:row.shared_by??null,
-    createdAt:row.created_at
+    createdAt:row.created_at,
+    researchComplete:Boolean(row.research_complete)
   }));
   return {items,nextOffset:offset+limit<total?offset+limit:null,total};
 }

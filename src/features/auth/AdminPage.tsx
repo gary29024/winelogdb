@@ -11,7 +11,7 @@ type MemberUsage={userId:string;requests:number;searchQueries:number;promptToken
 type ActionPolicy={action:string;label:string;accessMode:'included'|'allowance';weeklyLimit:number};
 type ActionAllowance={action:string;label:string;accessMode:'included'|'allowance';baseLimit:number;granted:number;limit:number;used:number;pending:number;remaining:number|null;weekStart:string;resetsAt:string};
 type MemberActionAccess={userId:string;actions:ActionAllowance[]};
-type Overview={members:Member[];actions:string[];settings:Record<string,unknown>|null;prices:Array<{id:string;action:string;credits:number}>;aiCost:{month:string;usd:number;searches:number};memberUsage:{month:string;items:MemberUsage[]};actionPolicies:ActionPolicy[];actionAccess:MemberActionAccess[];storage:Array<{owner_id:string;byte_size:number;metered_byte_size:number}>;reviewOperations:Array<{id:string;user_id:string;path:string}>};
+type Overview={members:Member[];actions:string[];settings:Record<string,unknown>|null;prices:Array<{id:string;action:string;credits:number}>;aiCost:{month:string;usd:number;searches:number};memberUsage:{month:string;items:MemberUsage[]};actionPolicies:ActionPolicy[];actionAccess:MemberActionAccess[];storage:Array<{owner_id:string;byte_size:number;metered_byte_size:number}>;reviewOperations:Array<{id:string;user_id:string;path:string;created_at:string}>};
 type RolloutState='not_started'|'paused'|'running'|'complete';
 type RolloutStatus={lwinCurrent?:{total:number;automatic:number;manual:number;identityConflicts:number;fieldUpdates:number;needsReview:number;withoutLwin:number;optedOut:number};storage:{state:RolloutState;objects:number;error:string|null};research:{state:RolloutState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};lwin:{state:RolloutState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null};lwinValidation:{state:RolloutState;processed:number;total:number;verified:number;review:number;error:string|null;reviewListUnavailable?:boolean;reviewItems:Array<{id:string;producer:string;wineName:string;lwin7:string;candidates:string[]}>};lwinAi:{state:RolloutState;processed:number;total:number;matched:number;deterministic:number;ai:number;review:number;error:string|null}};
 type RolloutAction='storage'|'research'|'lwin'|'lwin-validate'|'lwin-ai';
@@ -23,6 +23,13 @@ const labelKind=(kind:string)=>kind.replaceAll('_',' ').replace(/\b\w/g,c=>c.toU
 const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running in background':'Complete';
 const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
 const sections=[{id:'members',label:'Members'},{id:'usage',label:'Usage'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
+function heldOperationLabel(path:string){
+ if(path.endsWith('/deep-search'))return 'Wine Deep Search';
+ if(path==='/api/producers/research-batch')return 'Producer batch';
+ if(/^\/api\/producers\/[^/]+\/research$/.test(path))return 'Producer research';
+ if(path==='/api/recognition')return 'Photo recognition';
+ return path;
+}
 export function AdminPage(){
  const [section,selectSection]=usePageSection(sections,'members',{hash:'#member-usage',section:'usage'});
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
@@ -147,6 +154,6 @@ export function AdminPage(){
   </div>}
 
  </fieldset>
- {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Reconcile provider status before allowing a duplicate run.</p><ul>{data.reviewOperations.map(op=><li key={op.id}>{op.id} — {op.path}</li>)}</ul></>}
+ {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Releasing one keeps any saved research, charges only for that, and lets the work run again.</p><ul className="admin-held-operations">{data.reviewOperations.map(op=><li key={op.id}><div><strong>{heldOperationLabel(op.path)}</strong><small>Started {new Date(op.created_at).toLocaleString()} · {op.id}</small></div><button type="button" disabled={busy} onClick={()=>{if(confirm(`Release this held ${heldOperationLabel(op.path).toLowerCase()}?\n\nOnly release it if it is no longer running. Any saved research is kept and only that is charged. If the provider did finish, running it again may pay for the same search twice.`))void run(async()=>{await apiJson(`/api/admin/operations/${op.id}/release`,'POST',{confirmation:'RELEASE_HELD_OPERATION'});return 'Operation released.'})}}>Release</button></li>)}</ul></>}
  </section></div></div></div></section>;
 }

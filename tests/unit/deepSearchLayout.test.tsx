@@ -380,17 +380,13 @@ describe('Deep Search a recipient runs on a shared wine',()=>{
   });
 });
 
-describe('shared wine experience defaults',()=>{
-  const dateInput=()=>host?.querySelector('input[type="date"]') as HTMLInputElement|null;
-  const button=(label:string)=>[...(host?.querySelectorAll('button')??[])].find(item=>item.textContent===label) as HTMLButtonElement;
-  it('starts a first experience on the day the shared photo was taken',async()=>{
-    await renderShared({photoDate:'2026-08-14',tastingDate:null,rating:null,tastingName:null,venue:null,locationName:null,price:null,tastingNotes:'',structure:{}});
-    await click(button('Add your experience'));
-    expect(dateInput()?.value).toBe('2026-08-14');
-  });
-  it('never replaces a date the reader already chose',async()=>{
-    await renderShared({photoDate:'2026-08-14',tastingDate:'2026-09-02',rating:92});
-    await click(button('Edit your experience'));
-    expect(dateInput()?.value).toBe('2026-09-02');
+describe('shared wine drinking date',()=>{
+  it('shows the photo-day drinking date the way the owner sees theirs, and edits it as the reader\'s own',async()=>{
+    await renderShared({tastingDate:'2026-08-14',rating:null,tastingName:null,venue:null,locationName:null,price:null,tastingNotes:'',structure:{}});
+    const panel=host?.querySelector('.experience-panel');
+    expect(panel?.textContent).toContain('Drinking date');
+    const edit=[...(panel?.querySelectorAll('button')??[])].find(item=>item.textContent==='Edit your experience') as HTMLButtonElement;
+    await click(edit);
+    expect((host?.querySelector('input[type="date"]') as HTMLInputElement).value).toBe('2026-08-14');
   });
 });

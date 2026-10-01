@@ -1,4 +1,5 @@
 import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
+import { isDeepSearchComplete } from '../../src/lib/research/completeness';
 import {realD1} from './support/realD1';
 import {quote,reserve,reconcileOperation,saveOperationResponse,settle,type CreditOperation} from '../../worker/multiUser/credits';
 import {memberAiActionAccess,reserveMemberAiAllowance} from '../../worker/multiUser/memberAccess';
@@ -64,6 +65,9 @@ async function assertComplete(operation:CreditOperation){
  expect(await getWineResearchRun(database.db,owner,wineId,requestId)).toMatchObject({status:'complete',stage:'complete',attempt:1});
  expect((await loadResearchCache(database.db,owner,buildResearchTargets(wine))).size).toBe(3);
  expect(database.sql.prepare('SELECT deep_search_json FROM wines WHERE id=?').get(wineId)!.deep_search_json).toEqual(expect.any(String));
+ // The journal's Deep Search mark follows the saved report.
+ const saved=database.sql.prepare('SELECT deep_search_json,vintage,research_complete FROM wines WHERE id=?').get(wineId)!;
+ expect(saved.research_complete).toBe(isDeepSearchComplete(JSON.parse(String(saved.deep_search_json)),saved.vintage==null?null:Number(saved.vintage))?1:0);
  expect(database.sql.prepare("SELECT count(*) AS n FROM research_batch_jobs").get()!.n).toBe(1);
  const current=await database.db.prepare('SELECT * FROM credit_operations WHERE id=?').bind(operation.id).first<CreditOperation>();
  await reconcileOperation(database.db,current!);

@@ -44,7 +44,10 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
   alcoholPercentage:number(row.alcohol_percentage),deepSearch,
   favorite:Boolean(Number(row.viewer_favorite)||0),
   tastingNotes:text(row.viewer_tasting_notes),rating:number(row.viewer_rating),
-  tastingDate:text(row.viewer_tasting_date)||null,tastingName:text(row.viewer_tasting_name)||null,
+  // The reader's own drinking date once they log one, otherwise the date the
+  // wine carries - the same rule the journal view applies (migration 0077), so
+  // the page and the journal agree. Notes, score, venue and price stay private.
+  tastingDate:text(row.viewer_tasting_date)||text(row.tasting_date)||null,tastingName:text(row.viewer_tasting_name)||null,
   venue:text(row.viewer_venue)||null,locationName:text(row.viewer_location_name)||null,
   price:number(row.viewer_price),currency:text(row.viewer_currency)||null,
   structure:viewerStructure(row.viewer_structure_json),
@@ -369,12 +372,9 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
   }
   const wine=await canReadShared(env.DB,member.id,shared[1]);if(!wine)throw new ApiError(404,'Shared wine not found');
   const owner=String(wine.owner_id);
-  const photos=(await env.DB.prepare('SELECT id,captured_at FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
-   .bind(shared[1],owner).all<{id:string;captured_at:string|null}>()).results;
-  // The day the first dated photo was taken, only to prefill the reader's own
-  // drinking date. Photo position and place names stay with the owner.
-  const photoDate=photos.map(photo=>photo.captured_at).find(value=>value&&!Number.isNaN(Date.parse(value)))?.slice(0,10)??null;
-  return json({...sharedWine(wine),photoDate,deepSearch:await sharedWineResearch(env.DB,member.id,wine,ctx),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
+  const photos=(await env.DB.prepare('SELECT id FROM wine_images WHERE wine_id=? AND owner_id=? ORDER BY rowid')
+   .bind(shared[1],owner).all<{id:string}>()).results;
+  return json({...sharedWine(wine),deepSearch:await sharedWineResearch(env.DB,member.id,wine,ctx),photos:photos.map(photo=>({id:photo.id,url:`/api/shared/wines/${shared[1]}/photos/${photo.id}`}))});
  }
  return null;
 }

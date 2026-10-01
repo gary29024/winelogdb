@@ -21,3 +21,7 @@ html,body,#root{width:100%;max-width:100%;overflow-x:hidden}body{overscroll-beha
    so nothing here is the only way to know a bottle is shared. */
 .wine-grid.journal-list.journal-gallery .journal-grid-card.shared{background:var(--shared-wash);border-color:var(--shared-line)}
 .journal-list-view .journal-card.shared{background:var(--shared-wash);box-shadow:inset 3px 0 0 var(--shared-line)}
+
+/* Complete Deep Search: one quiet glyph after the vintage, inheriting the vintage colour. */
+.wine-card .journal-research-mark{display:inline;color:inherit;margin-left:.25em;font-size:.72em;font-weight:400;opacity:.65;vertical-align:.12em}
+.wine-card-top>strong,.journal-grid-vintage{white-space:nowrap}
