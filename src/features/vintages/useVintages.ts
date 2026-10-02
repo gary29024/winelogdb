@@ -35,18 +35,13 @@ const STORAGE_KEY='winelog.vintages.village';
 export function rememberedVillage(){try{return window.localStorage.getItem(STORAGE_KEY)}catch{return null}}
 export function rememberVillage(id:string){try{window.localStorage.setItem(STORAGE_KEY,id)}catch{/* private mode: the URL still carries it */}}
 
-const BASELINE_KEY='winelog.vintages.baseline';
-
-/** Which normal the page compares with: in the URL so a link keeps it, remembered for next time. */
+/** Which normal the page compares with. 1991–2020 unless this visit chose otherwise: the
+ * choice lives in the URL, so a shared link keeps it, but a new visit starts on the standard. */
 export function useBaseline():[Baseline,(next:Baseline)=>void]{
   const [params,setParams]=useSearchParams();
-  let remembered:string|null=null;
-  try{remembered=window.localStorage.getItem(BASELINE_KEY)}catch{/* private mode */}
-  const value:Baseline=(params.get('baseline')??remembered)==='era'?'era':'standard';
+  const value:Baseline=params.get('baseline')==='era'?'era':'standard';
   const set=(next:Baseline)=>{
-    try{window.localStorage.setItem(BASELINE_KEY,next)}catch{/* private mode */}
     setParams(current=>{const copy=new URLSearchParams(current);if(next==='era')copy.set('baseline','era');else copy.delete('baseline');return copy},{replace:true});
   };
   return [value,set];
 }
-

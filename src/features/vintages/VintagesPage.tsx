@@ -36,6 +36,7 @@ export function VintagesPage(){
   const {index,village:data,error}=useVintageData(region,villageId);
   const [showAll,setShowAll]=useState(false);
   const [baseline,setBaseline]=useBaseline();
+  const eraQuery=baseline==='era'?'?baseline=era':'';
 
   const readings=useMemo<SeasonReading[]>(()=>{
     if(!index||!data)return [];
@@ -92,7 +93,7 @@ export function VintagesPage(){
           {Array.from({length:10},(_,digit)=>{
             const item=byYear.get(decade+digit);
             if(!item)return <span className="vintage-strip-tile is-empty" key={digit} aria-hidden="true"/>;
-            return <Link key={item.year} to={`/vintages/${villageId}/${item.year}`}
+            return <Link key={item.year} to={`/vintages/${villageId}/${item.year}${eraQuery}`}
               className={`vintage-strip-tile tone-${shiftTone(item.harvest?.shiftDays??0)}`}
               aria-label={`${item.year}: harvest ${item.harvest?shiftLabel(item.harvest.shiftDays):'date unknown'}`}>
               {String(item.year).slice(3)}
@@ -125,7 +126,7 @@ export function VintagesPage(){
           const count=winesByYear.get(item.year)??0;
           const shift=item.harvest?.shiftDays??0;
           return <li key={item.year}>
-            <Link className="vintage-year-card" to={`/vintages/${villageId}/${item.year}`}>
+            <Link className="vintage-year-card" to={`/vintages/${villageId}/${item.year}${eraQuery}`}>
               <span className={`vintage-year-tile tone-${shiftTone(shift)}`}><strong>{item.year}</strong><small>{item.harvest?shiftLabel(shift,'short'):'—'}</small></span>
               <div className="vintage-year-body">
                 <div className="vintage-year-row">

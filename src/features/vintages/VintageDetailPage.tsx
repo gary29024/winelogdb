@@ -60,7 +60,7 @@ export function VintageDetailPage(){
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
-  const back=<Link className="vintage-back" to={`/vintages?village=${village.id}`}><span aria-hidden="true">‹</span> Vintages</Link>;
+  const back=<Link className="vintage-back" to={`/vintages?village=${village.id}${baseline==='era'?'&baseline=era':''}`}><span aria-hidden="true">‹</span> Vintages</Link>;
   if(error)return <section className="vintages-page">{back}<p role="alert" className="vintage-error">{error}</p></section>;
   if(!index||!data)return <section className="vintages-page">{back}<p className="vintage-loading" aria-live="polite">Reading the season…</p></section>;
   if(!season||!reading)return <section className="vintages-page">{back}<p className="vintage-error">No weather for {village.name} in {year} yet.</p></section>;
