@@ -1,0 +1,18 @@
+name: Playwright browser
+description: Restore the Playwright browser download between runs, then install it (and its system packages)
+inputs:
+  browser:
+    description: chromium or webkit
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        # browsers.json names the exact browser builds the installed Playwright expects.
+        key: ${{ runner.os }}-playwright-${{ inputs.browser }}-${{ hashFiles('node_modules/playwright-core/browsers.json') }}
+    # Skips the download when the cached build matches; still installs system packages.
+    - name: Install ${{ inputs.browser }}
+      shell: bash
+      run: npx playwright install --with-deps ${{ inputs.browser }}
