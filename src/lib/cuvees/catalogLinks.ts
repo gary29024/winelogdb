@@ -113,13 +113,16 @@ async function loadCatalogRows(db:D1Database,owner:string,producerId:string){
     WHERE owner_id=? AND producer_id=? AND catalog_backed=1 ORDER BY canonical_name COLLATE NOCASE`).bind(owner,producerId).all<CuveeRow>();
 }
 
-async function loadCatalogDefinition(db:D1Database,owner:string,producerId:string,knownAliases?:string[]){
+async function loadCatalogDefinition(db:D1Database,owner:string,producerId:string,knownAliases?:string[],displayCatalog:CatalogWine[]=[]){
   const [producer,aliases]=await Promise.all([
     db.prepare('SELECT canonical_name,catalog_json FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{canonical_name:string;catalog_json:string}>(),
     knownAliases?Promise.resolve({results:knownAliases.map(display_alias=>({display_alias}))}):db.prepare('SELECT display_alias FROM producer_aliases WHERE owner_id=? AND producer_id=?').bind(owner,producerId).all<{display_alias:string}>()
   ]);
   const producerNames=[producer?.canonical_name??'',...aliases.results.map(x=>x.display_alias)].filter(Boolean);
-  const catalog=canonicalCatalogEntries(parseJson<CatalogWine[]>(producer?.catalog_json,[]),producerNames);
+  // The page can show a range this account never saved: the imported LWIN range,
+  // or a friend's researched range. Those entries need identities too, or every
+  // one of them is listed as "needs identity repair" and nothing can be linked.
+  const catalog=canonicalCatalogEntries([...parseJson<CatalogWine[]>(producer?.catalog_json,[]),...displayCatalog],producerNames);
   return {catalog,producerNames};
 }
 
@@ -163,10 +166,11 @@ async function markRecoveredCatalogIndexingRun(db:D1Database,owner:string,produc
   return Boolean(result.meta.changes);
 }
 
-export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string,known?:{aliases:string[];wines:WineCuveeRow[]}){
+export async function getProducerCuveeCatalogState(db:D1Database,owner:string,producerId:string,known?:{aliases:string[];wines:WineCuveeRow[];displayCatalog?:CatalogWine[]}){
   // Only the authenticated producer route supplies this request-local snapshot.
-  // Read the raw catalog as before; its display overlay is not a repair input.
-  const definition=await loadCatalogDefinition(db,owner,producerId,known?.aliases);
+  // Read the raw catalog as before; the display overlay of corrections is not a
+  // repair input. A range shown in place of a missing one (displayCatalog) is.
+  const definition=await loadCatalogDefinition(db,owner,producerId,known?.aliases,known?.displayCatalog);
   let catalogRows=await loadCatalogRows(db,owner,producerId),repairIssues=new Map<string,string>();
   if(missingCatalogEntries(definition.catalog,definition.producerNames,catalogRows.results).length){
     repairIssues=await repairCatalogEntries(db,owner,producerId,definition.catalog,definition.producerNames,catalogRows.results);

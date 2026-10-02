@@ -15,6 +15,8 @@ import type { AiRateEnv } from '../src/lib/usage/rates';
 import { processRolloutJob,recoverRollouts,rolloutRoute,type RolloutQueueJob } from './multiUser/rollout';
 import { LWIN_AI_LEASE_SECONDS } from './multiUser/lwinRepair';
 import { reusableProducer } from '../src/lib/research/sharedProducer';
+import { getProducerCuveeCatalogState } from '../src/lib/cuvees/catalogLinks';
+import type { CatalogPresentationLike } from '../src/lib/cuvees/catalogPresentation';
 import { isDeepSearchComplete } from '../src/lib/research/completeness';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { getWineResearchRun } from '../src/lib/research/backgroundJobs';
@@ -168,6 +170,17 @@ export default {
       const range='catalog' in shared?shared.catalog:undefined;
       if(Array.isArray(range)&&range.length)detail.catalogSource='research';
       else detail.catalog=body.catalog;
+     }
+     // A friend's range replaced the one the inner route built link targets
+     // from. Rebuild them from the range now on the page, or none of its wines
+     // has an identity to link a tasting to.
+     if(Array.isArray(detail.catalog)&&detail.catalog.length&&detail.catalog!==body.catalog&&!body.sharedOnly&&Array.isArray(body.tastedWines)&&Array.isArray(body.aliases)){
+      try{
+       const tasted=body.tastedWines as Array<{id:string;cuveeId:string|null;vintage:number|null;shared?:boolean}>;
+       const state=await getProducerCuveeCatalogState(env.DB,member.id,producerMatch[1],{aliases:body.aliases as string[],wines:tasted.filter(wine=>!wine.shared).map(wine=>({id:wine.id,cuvee_id:wine.cuveeId,vintage:wine.vintage})),displayCatalog:detail.catalog as CatalogPresentationLike[]});
+       detail.catalogCuvees=state.catalogCuvees;detail.cuveeCatalogLinks=state.cuveeCatalogLinks;
+       detail.tastedWines=tasted.map(wine=>wine.shared?wine:{...wine,catalogCuveeId:state.wineCatalogTargets[wine.id]??null});
+      }catch(e){console.error(JSON.stringify({event:'producer-shared-range-identities-failed',producerId:producerMatch[1],error:(e as Error).message}))}
      }
      return json(detail);
     }

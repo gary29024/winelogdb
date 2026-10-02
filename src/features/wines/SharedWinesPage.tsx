@@ -157,9 +157,10 @@ export function SharedWinesPage(){
     </section>})}
    </div>}
    <DeepSources sources={wine.deepSearch.sources}/>
-   {/* Not this reader's research: it came with the bottle, so the line says so
-       without naming the sharer, who is one press away on the tag button. */}
-   <small>Shared research · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
+   {/* Research the reader ran is theirs. Anything else came with the bottle,
+       so the line says so without naming the sharer, who is one press away on
+       the tag button. */}
+   <small>{wine.deepSearch.origin==='yours'?'Your research':wine.deepSearch.origin==='mixed'?'Your research with shared sections':'Shared research'} · updated {formatDate(wine.deepSearch.researchedAt.slice(0,10))}</small>
    </>:<p>Enrich this wine with grounded research. WineLog reuses research your friend and you already have whenever the scope matches.</p>}
    <SharedDeepSearchControls wineId={wine.id} complete={wine.deepSearch?.complete!==false&&Boolean(wine.deepSearch)} onChange={reloadResearch}/>
   </section>

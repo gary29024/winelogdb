@@ -15,7 +15,9 @@ export type SharedDeepSearch=Pick<DeepSearchResult,
  |'winemakingTechniques'|'terroir'|'drinkingWindow'|'sources'|'researchedAt'>
  &{expectedProfile?:string;oldestResearchedAt?:string;
   /** False when only some research scopes exist yet, as on the owner's page. */
-  complete?:boolean};
+  complete?:boolean;
+  /** Who paid for the sections shown: the reader, partly the reader, or friends only. */
+  origin?:'yours'|'mixed'|'shared'};
 
 export type SharedWineExperience={
  tastingNotes:string;

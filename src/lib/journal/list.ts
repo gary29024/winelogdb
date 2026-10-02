@@ -48,9 +48,11 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   // for membership and (when applicable) default ranking.
   const semanticJson=JSON.stringify(semanticMatches);
   const args:unknown[]=[owner];let where='w.owner_id=?';
-  // A shared bottle carries its source wine's flag; the shared view has no column for it.
+  // A shared bottle carries its source wine's flag, or the reader's own when
+  // they completed its Deep Search themselves; the shared view has no column for it.
   const researchComplete=includeShared
-    ?'coalesce((SELECT rw.research_complete FROM wines rw WHERE rw.owner_id=w.source_owner_id AND rw.id=w.id),0)'
+    ?`(coalesce((SELECT rw.research_complete FROM wines rw WHERE rw.owner_id=w.source_owner_id AND rw.id=w.id),0)=1
+      OR (w.is_shared=1 AND coalesce((SELECT p.research_complete FROM shared_wine_preferences p WHERE p.recipient_id=w.owner_id AND p.owner_id=w.source_owner_id AND p.wine_id=w.id),0)=1))`
     :'w.research_complete';
   const filters:[string,string][]=[['vintage','w.vintage'],['country','w.country'],['region','w.region'],['style','w.wine_style'],['tastingDate','w.tasting_date']];
   const rawQuery=(q.query??'').trim();

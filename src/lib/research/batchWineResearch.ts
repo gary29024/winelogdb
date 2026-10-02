@@ -16,7 +16,7 @@ import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPo
 import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { discloseTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { getWineResearchRun,updateWineResearchRun } from './backgroundJobs';
-import { offerToSourceOwner,readableWine,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
+import { offerToSourceOwner,readableWine,recordSharedResearchComplete,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
 
 type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
@@ -194,7 +194,11 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   await adoptFriendResearch(env.DB,owner,cache,true).catch(error=>{throw new ResearchPersistenceError(error)});
   await offerToSourceOwner(env.DB,owner,wine,cache);
   const result={...assembleDeepSearch(cache,targets),release:researchEditionOfRow(wine)};
-  await saveSnapshot(env.DB,owner,wineId,result,typeof wine.vintage==='number'?wine.vintage:null).catch(error=>{throw new ResearchPersistenceError(error)});return result;
+  await saveSnapshot(env.DB,owner,wineId,result,typeof wine.vintage==='number'?wine.vintage:null).catch(error=>{throw new ResearchPersistenceError(error)});
+  // saveSnapshot matches no row for a friend's wine, so the reader's journal
+  // mark is recorded on their side of the share instead.
+  if(wine.source_owner_id!==owner)await recordSharedResearchComplete(env.DB,owner,wine.source_owner_id,wineId,isDeepSearchComplete(result,typeof wine.vintage==='number'?wine.vintage:null)).catch(error=>console.error(JSON.stringify({event:'shared_research_flag_failed',wineId,error:(error as Error).message})));
+  return result;
 }
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
