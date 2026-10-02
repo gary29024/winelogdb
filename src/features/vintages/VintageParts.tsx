@@ -1,6 +1,14 @@
-import { addDays,dayReaching,daysBetween,formatDay,PICKING_DAYS,seasonDay,sugarOn,type HarvestReading,type SeasonScore } from './model';
+import { addDays,dayReaching,daysBetween,formatDay,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
 import type { SugarCurve,VintageIndex } from './types';
 import { VintageIcon } from './VintageIcons';
+
+export function BaselineToggle({value,onChange,standardLabel}:{value:Baseline;onChange:(next:Baseline)=>void;standardLabel:string}){
+  return <div className="vintage-baseline" role="group" aria-label="Compare with">
+    <span>Compare with</span>
+    <button type="button" className={value==='standard'?'active':undefined} aria-pressed={value==='standard'} onClick={()=>onChange('standard')}>{standardLabel}</button>
+    <button type="button" className={value==='era'?'active':undefined} aria-pressed={value==='era'} onClick={()=>onChange('era')}>Its own era</button>
+  </div>;
+}
 
 export function SampleBadge(){
   return <span className="vintage-sample-badge" title="These figures are invented to show the layout. Real weather replaces them once the data pipeline has run.">Sample data</span>;

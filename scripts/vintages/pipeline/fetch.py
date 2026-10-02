@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SAFRAN_FROM, RAIN_FROM = 1991, 1997
+SAFRAN_FROM, RAIN_FROM = 1958, 1997
 
 
 def run(args: list[str]) -> None:

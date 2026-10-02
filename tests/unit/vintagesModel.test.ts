@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { villageForWine } from '../../src/features/vintages/data';
-import { closestToTypical,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,shiftLabel,shiftTone,sugarAtPicking,sugarOn } from '../../src/features/vintages/model';
+import { closestToTypical,eraNormal,eraWindow,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,shiftLabel,shiftTone,sugarAtPicking,sugarOn } from '../../src/features/vintages/model';
 import { BURGUNDY } from '../../src/features/vintages/regions';
 import type { RipeningWeather,SeasonWeather,SugarCurve,VillageData,VintageIndex } from '../../src/features/vintages/types';
 
@@ -156,5 +156,23 @@ describe('matching a wine to its village',()=>{
   it('leaves a regional wine unplaced rather than guessing',()=>{
     expect(match('Bourgogne')).toBeNull();
     expect(match('Bourgogne Hautes-Côtes de Nuits')).toBe('hautes-cotes-de-nuits');
+  });
+});
+
+describe('reading an old vintage against its own era',()=>{
+  it('takes the 30 seasons around a year, shifted inward at the ends of the record',()=>{
+    expect(eraWindow(1980,1958,2025)).toEqual({from:1965,to:1994});
+    expect(eraWindow(1960,1958,2025)).toEqual({from:1958,to:1987});
+    expect(eraWindow(2024,1958,2025)).toEqual({from:1996,to:2025});
+  });
+
+  it('averages the village and the area harvest over that window',()=>{
+    const season=(year:number)=>({gdd:1000+year-1958,rainAprSep:400,augNights:14,frostDays:1,heatDays:10,sepRain:50,grapes:{}});
+    const years=Object.fromEntries(Array.from({length:68},(_,i)=>[String(1958+i),season(1958+i)]));
+    const harvest={typical:'09-10',years:Object.fromEntries(Array.from({length:68},(_,i)=>[String(1958+i),{date:`${1958+i}-09-${i<34?'30':'01'}`,source:'estimated' as const}]))};
+    const era=eraNormal(years,harvest,1970);
+    expect([era.from,era.to]).toEqual([1958,1987]);
+    expect(era.normal.gdd).toBe(Math.round(1000+14.5));
+    expect(era.harvest.typical).toBe('09-30');
   });
 });

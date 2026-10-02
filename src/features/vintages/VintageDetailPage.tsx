@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { eraNormal,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
-import { useRegionWines,useVintageData } from './useVintages';
+import { useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
-import { HowWeEstimate,SampleBadge,ScoreMeter,SugarChart } from './VintageParts';
+import { BaselineToggle,HowWeEstimate,SampleBadge,ScoreMeter,SugarChart } from './VintageParts';
 import '../../vintages.css';
 
 const EFFECT_MARK:Record<Effect,string>={helps:'↑',hurts:'↓',neutral:'–'};
@@ -37,12 +37,23 @@ export function VintageDetailPage(){
   const wines=useRegionWines(region);
 
   const season=data?.years[String(year)];
-  const reading=useMemo(()=>index&&data&&season&&village?readSeason(year,season,data.normal,index.harvest[village.area]):null,[index,data,season,village,year]);
+  const [baseline,setBaseline]=useBaseline();
+  // The normal this page compares with: the standard 30 years, or the 30 seasons around this one.
+  const reference=useMemo(()=>{
+    if(!index||!data||!village)return null;
+    const harvest=index.harvest[village.area];
+    if(baseline==='era'&&data.years[String(year)]){
+      const era=eraNormal(data.years,harvest,year);
+      return {normal:era.normal,harvest:era.harvest,label:`${era.from}–${era.to}`,short:`’${String(era.from).slice(2)}–’${String(era.to).slice(2)}`};
+    }
+    return {normal:data.normal,harvest,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
+  },[index,data,village,baseline,year]);
+  const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest):null,[reference,season,year]);
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
-    return readGrape(grapeId,year,grapeSeason,data.normal.grapes[grapeId],reading.harvest,grape.ripeSugar);
-  },[reading,season,data,grapeId,year,grape.ripeSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar);
+  },[reading,season,data,reference,grapeId,year,grape.ripeSugar]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -52,7 +63,7 @@ export function VintageDetailPage(){
   if(!season||!reading)return <section className="vintages-page">{back}<p className="vintage-error">No weather for {village.name} in {year} yet.</p></section>;
 
   const {levels,harvest}=reading;
-  const normal=data.normal;
+  const normal=reference!.normal;
   const shift=harvest?.shiftDays??0;
   const story=seasonStory(season,normal,levels,shift);
   const normalGrape=normal.grapes[grapeId];
@@ -64,6 +75,7 @@ export function VintageDetailPage(){
 
   return <section className="vintages-page vintage-detail">
     <div className="vintage-detail-top">{back}{index.sample&&<SampleBadge/>}</div>
+    <BaselineToggle value={baseline} onChange={setBaseline} standardLabel={`${index.baseline.from}–${index.baseline.to}`}/>
 
     <header className="vintage-card vintage-hero">
       <div className="vintage-hero-head">
@@ -98,7 +110,7 @@ export function VintageDetailPage(){
           <small>≈ {grapeReading.picking.alcoholLow.toFixed(1)}–{grapeReading.picking.alcoholHigh.toFixed(1)}% alc.</small>
         </div>
         <div>
-          <span>Typical</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.typicalStart,harvest.typicalStart+14*86_400_000)}</small>
+          <span>Typical {reference!.short}</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.typicalStart,harvest.typicalStart+14*86_400_000)}</small>
           <p><strong>{grapeReading.normalPicking.low}–{grapeReading.normalPicking.high}</strong> g/L</p>
           <small>≈ {grapeReading.normalPicking.alcoholLow.toFixed(1)}–{grapeReading.normalPicking.alcoholHigh.toFixed(1)}% alc.</small>
         </div>
@@ -126,7 +138,8 @@ export function VintageDetailPage(){
     </section>}
 
     <section className="vintage-card" aria-labelledby="vintage-season-title">
-      <h2 id="vintage-season-title">The season</h2>
+      <div className="vintage-card-head"><h2 id="vintage-season-title">The season</h2><span>vs {reference!.label}</span></div>
+      {season.rainSource==='8km'&&<p className="vintage-muted vintage-rain-note">Rain before 1997 comes from Météo-France’s 8 km record, scaled to the village’s 1 km radar rain.</p>}
       <div className="vintage-season-rows">
         <div><span className="vintage-season-icon is-warmth"><VintageIcon kind="sun" size={17}/></span><div>
           <p><strong>Warmth</strong><span>{season.gdd.toLocaleString('en-GB')} °D <b className="is-warmth">{signed(Math.round(gddPct*100))}%</b></span></p>
@@ -159,6 +172,6 @@ export function VintageDetailPage(){
     </section>
 
     <HowWeEstimate index={index}/>
-    <p className="vintage-area-note">Normal: {index.baseline.from}–{index.baseline.to} · typical harvest {harvest?formatDay(seasonDay(year,index.harvest[village.area].typical)):'—'}</p>
+    <p className="vintage-area-note">Compared with {reference!.label}{baseline==='era'?' (its own era)':''} · typical harvest {formatDay(seasonDay(year,reference!.harvest.typical))}</p>
   </section>;
 }

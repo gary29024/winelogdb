@@ -45,9 +45,20 @@
 .vintage-controls label{display:grid;gap:5px;min-width:0;flex:1;max-width:320px;color:var(--ink-6);font-size:.72rem;font-weight:700}
 .vintage-controls select{min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:600 .95rem 'DM Sans',sans-serif}
 
-/* 30-year strip */
-.vintage-strip{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
-.vintage-strip-tile{display:grid;place-items:center;min-height:34px;border-radius:7px;font-size:.7rem;font-weight:700;text-decoration:none;font-variant-numeric:tabular-nums}
+/* Which normal to compare with */
+.vintage-baseline{display:flex;align-items:center;gap:4px;margin-top:12px;padding:4px;border-radius:12px;background:var(--sunken)}
+.vintage-baseline>span{padding:0 8px;color:var(--ink-6);font-size:.72rem;font-weight:700;white-space:nowrap}
+.vintage-baseline button{flex:1;min-height:40px;border:0;border-radius:9px;background:0 0;color:var(--ink-5);font:600 .82rem 'DM Sans',sans-serif;white-space:nowrap}
+.vintage-baseline button:hover:not(:disabled){background:0 0;color:var(--ink)}
+.vintage-baseline button.active,.vintage-baseline button.active:hover:not(:disabled){border:0;background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 3px #10182d1f}
+.vintage-era-note{color:var(--ink-6);font-size:.74rem;white-space:normal}
+
+/* Strip, one row per decade */
+.vintage-strip{display:grid;gap:4px}
+.vintage-strip-row{display:grid;grid-template-columns:38px repeat(10,minmax(0,1fr));align-items:center;gap:4px}
+.vintage-strip-decade{color:var(--ink-6);font-size:.66rem;font-weight:700;font-variant-numeric:tabular-nums}
+.vintage-strip-tile.is-empty{background:0 0}
+.vintage-strip-tile{display:grid;place-items:center;min-height:28px;border-radius:7px;font-size:.7rem;font-weight:700;text-decoration:none;font-variant-numeric:tabular-nums}
 .vintage-strip-tile:focus-visible{outline-offset:1px}
 .vintage-strip-legend{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--ink-5);font-size:.68rem;font-weight:600;white-space:nowrap}
 .vintage-strip-scale{display:flex;flex:1;height:8px;overflow:hidden;border-radius:4px}

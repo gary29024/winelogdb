@@ -49,6 +49,8 @@ export type SeasonWeather={
   heatDays:number;
   /** Rain in September, mm. */
   sepRain:number;
+  /** 1 km radar rain (from 1997), or the 8 km record scaled to it (earlier years). Absent on normals. */
+  rainSource?:'1km'|'8km';
 };
 
 /** What the season did after colour change, read up to the middle of the picking window. */

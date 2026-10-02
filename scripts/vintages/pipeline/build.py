@@ -52,7 +52,7 @@ OUT = ROOT / 'public/data/vintages/burgundy'
 
 BASELINE = (1991, 2020)
 RAIN_FROM = 1997            # COMÉPHORE starts in 1997
-FIRST_SEASON = 1997
+FIRST_SEASON = 1958        # SAFRAN starts in 1958
 LAPSE = 0.0065              # °C per metre
 GRAPES = {
     'pinot-noir': {'sugar200': 2840.0, 'veraison': 1014.0},
@@ -104,13 +104,24 @@ def load_weather(cache: Path, points: list[dict]):
     return weather, rain
 
 
-def rain_on(village: str, date: dt.date, weather, rain) -> float | None:
-    """COMÉPHORE where the day is (nearly) complete; SAFRAN's rain where it is not yet published."""
+# Per village: COMÉPHORE ÷ SAFRAN rain over the years both cover. SAFRAN's 8 km
+# rain is multiplied by it before 1997 (and for days COMÉPHORE has not yet
+# published), so the vineyard's 1 km rain and its long record share one scale.
+RAIN_SCALE: dict[str, float] = {}
+
+
+def radar_rain(village: str, date: dt.date, rain) -> float | None:
     value = rain[village].get(date)
-    if value and value[1] >= 20:
-        return value[0] * 24 / value[1]
+    return value[0] * 24 / value[1] if value and value[1] >= 20 else None
+
+
+def rain_on(village: str, date: dt.date, weather, rain) -> float | None:
+    """COMÉPHORE where the day is (nearly) complete; scaled SAFRAN rain otherwise."""
+    radar = radar_rain(village, date, rain)
+    if radar is not None:
+        return radar
     day = weather[village].get(date)
-    return day['rain_safran'] if day else None
+    return day['rain_safran'] * RAIN_SCALE.get(village, 1.0) if day else None
 
 
 def sugar_from_heat(heat: float, f200: float) -> float:
@@ -142,6 +153,8 @@ def season_weather(village: str, year: int, weather, rain) -> dict | None:
     return {
         'gdd': round(sum(max(0.0, d['t'] - 10) for d in growing)),
         'rainAprSep': round(sum(r for r in rains if r is not None)),
+        # Which record the season's rain mostly came from.
+        'rainSource': '1km' if sum(1 for d in days(year, (4, 1), (9, 30)) if radar_rain(village, d, rain) is None) <= 10 else '8km',
         'augNights': round(mean(series[d]['tmin'] for d in days(year, (8, 1), (8, 31))), 1),
         'frostDays': sum(1 for d in days(year, (4, 1), (5, 15)) if series[d]['tmin'] <= 0),
         'heatDays': sum(1 for d in growing if d['tmax'] >= 30),
@@ -193,8 +206,19 @@ def main() -> None:
     points = json.loads((DATA / 'points.json').read_text())
     weather, rain = load_weather(ROOT / args.cache, points)
     area_of = {v['id']: v['area'] for v in villages}
+    for point in points:
+        village = point['id']
+        radar_total = grid_total = 0.0
+        for date, value in weather[village].items():
+            if 4 <= date.month <= 9 and date.year >= RAIN_FROM:
+                radar = radar_rain(village, date, rain)
+                if radar is not None:
+                    radar_total += radar
+                    grid_total += value['rain_safran']
+        RAIN_SCALE[village] = radar_total / grid_total if grid_total else 1.0
+    print('Rain scale (1 km ÷ 8 km), range', f"{min(RAIN_SCALE.values()):.2f}–{max(RAIN_SCALE.values()):.2f}")
     last_year = max(d.year for series in weather.values() for d in series)
-    years = [y for y in range(BASELINE[0], last_year + 1)
+    years = [y for y in range(FIRST_SEASON, last_year + 1)
              if all(dt.date(y, 9, 30) in weather[p['id']] for p in points)]
 
     # Normal daily temperature per village, to fill days not yet in the record.
@@ -232,7 +256,7 @@ def main() -> None:
 
     # Fallback: the sugar level at which Beaune's 1991-2018 mean estimated start
     # equals its recorded 1988-2018 mean (Labbé et al. 2019).
-    calibration_years = [y for y in years if y <= 2018]
+    calibration_years = [y for y in years if BASELINE[0] <= y <= 2018]
     low, high = 170.0, 230.0
     for _ in range(30):
         middle = (low + high) / 2

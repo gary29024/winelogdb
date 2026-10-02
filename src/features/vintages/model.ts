@@ -287,3 +287,62 @@ export function shiftTone(days:number){
 }
 
 export { signed };
+
+/* ---------- "Same era" comparison ---------- */
+
+export type Baseline='standard'|'era';
+export const ERA_YEARS=30;
+
+/** The 30 seasons around `year`, shifted inward at either end of the record. */
+export function eraWindow(year:number,first:number,last:number){
+  let from=year-15,to=year+14;
+  if(from<first){to+=first-from;from=first}
+  if(to>last){from-=to-last;to=last}
+  return {from:Math.max(first,from),to};
+}
+
+const avg=(values:number[])=>values.reduce((total,value)=>total+value,0)/Math.max(1,values.length);
+const quantile=(values:number[],q:number)=>{
+  const sorted=[...values].sort((a,b)=>a-b);
+  const k=(sorted.length-1)*q,low=Math.floor(k),high=Math.ceil(k);
+  return sorted[low]+(sorted[high]-sorted[low])*(k-low);
+};
+const dayOfYear=(iso:string)=>daysBetween(Date.UTC(Number(iso.slice(0,4)),0,1),isoDay(iso))+1;
+const monthDayOf=(doy:number)=>{const d=new Date(Date.UTC(2001,0,Math.round(doy)));return `${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`};
+
+/**
+ * A village's normal over the 30 seasons around `year`, built from its own
+ * record, with the area's typical harvest start over the same seasons. Lets an
+ * old vintage be read against its own time, not against today's warmer normal.
+ */
+export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest,year:number){
+  const all=Object.keys(years).map(Number).sort((a,b)=>a-b);
+  const {from,to}=eraWindow(year,all[0],all[all.length-1]);
+  const seasons=all.filter(y=>y>=from&&y<=to).map(y=>years[String(y)]);
+  const field=(read:(season:VillageSeason)=>number)=>avg(seasons.map(read));
+  const grapes:VillageNormal['grapes']={};
+  for(const grape of ['pinot-noir','chardonnay'] as const){
+    const own=seasons.map(season=>season.grapes[grape]).filter((item):item is GrapeSeason=>!!item);
+    if(!own.length)continue;
+    const columns=own[0].sugar.values.map((_,i)=>own.map(item=>item.sugar.values[i]));
+    grapes[grape]={
+      veraison:monthDayOf(avg(own.map(item=>dayOfYear(item.veraison)))),
+      sugar:{...own[0].sugar,values:columns.map(column=>Math.round(avg(column)*10)/10)},
+      sugarLow:columns.map(column=>quantile(column,.1)),
+      sugarHigh:columns.map(column=>quantile(column,.9)),
+      ripening:{
+        meanTemp:avg(own.map(item=>item.ripening.meanTemp)),
+        coolNights:avg(own.map(item=>item.ripening.coolNights)),
+        heatStressDays:avg(own.map(item=>item.ripening.heatStressDays)),
+        rain:avg(own.map(item=>item.ripening.rain)),
+        radiation:avg(own.map(item=>item.ripening.radiation))
+      }
+    };
+  }
+  const normal:VillageNormal={
+    gdd:Math.round(field(s=>s.gdd)),rainAprSep:Math.round(field(s=>s.rainAprSep)),augNights:Math.round(field(s=>s.augNights)*10)/10,
+    frostDays:Math.round(field(s=>s.frostDays)*10)/10,heatDays:Math.round(field(s=>s.heatDays)),sepRain:Math.round(field(s=>s.sepRain)),grapes
+  };
+  const starts=Object.entries(harvest.years).filter(([y])=>Number(y)>=from&&Number(y)<=to).map(([,entry])=>dayOfYear(entry.date));
+  return {normal,harvest:{...harvest,typical:starts.length?monthDayOf(avg(starts)):harvest.typical},from,to};
+}
