@@ -25,6 +25,9 @@ function Diverging({share,kind}:{share:number;kind:'warmth'|'rain'|'nights'}){
   </span>;
 }
 
+/** "191" rather than "191–191" when sugar stalls over the picking fortnight. */
+const span=(low:number|string,high:number|string)=>String(low)===String(high)?String(low):`${low}–${high}`;
+
 export function VintageDetailPage(){
   const region=BURGUNDY;
   const {village:villageParam='',year:yearParam=''}=useParams();
@@ -106,13 +109,13 @@ export function VintageDetailPage(){
       {grapeReading.picking&&grapeReading.normalPicking&&harvest&&<div className="vintage-harvest-boxes">
         <div className="is-year">
           <span>{year}</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.start,harvest.end)}</small>
-          <p><strong>{grapeReading.picking.low}–{grapeReading.picking.high}</strong> g/L</p>
-          <small>≈ {grapeReading.picking.alcoholLow.toFixed(1)}–{grapeReading.picking.alcoholHigh.toFixed(1)}% alc.</small>
+          <p><strong>{span(grapeReading.picking.low,grapeReading.picking.high)}</strong> g/L</p>
+          <small>≈ {span(grapeReading.picking.alcoholLow.toFixed(1),grapeReading.picking.alcoholHigh.toFixed(1))}% alc.</small>
         </div>
         <div>
           <span>Typical {reference!.short}</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.typicalStart,harvest.typicalStart+14*86_400_000)}</small>
-          <p><strong>{grapeReading.normalPicking.low}–{grapeReading.normalPicking.high}</strong> g/L</p>
-          <small>≈ {grapeReading.normalPicking.alcoholLow.toFixed(1)}–{grapeReading.normalPicking.alcoholHigh.toFixed(1)}% alc.</small>
+          <p><strong>{span(grapeReading.normalPicking.low,grapeReading.normalPicking.high)}</strong> g/L</p>
+          <small>≈ {span(grapeReading.normalPicking.alcoholLow.toFixed(1),grapeReading.normalPicking.alcoholHigh.toFixed(1))}% alc.</small>
         </div>
       </div>}
       <SugarChart year={year} curve={grapeSeason.sugar} normal={normalGrape.sugar} low={normalGrape.sugarLow} high={normalGrape.sugarHigh}
@@ -126,6 +129,7 @@ export function VintageDetailPage(){
       {harvest?.source==='estimated'&&<p className="vintage-callout">The harvest date here is <strong>estimated from the weather</strong>, so picking is assumed at the usual ripeness. Once the official start date is added, this shows how much earlier or later growers really picked.</p>}
       {harvest&&harvest.source!=='estimated'&&grapeReading.pickGap!=null&&grapeReading.normalPickGap!=null&&<p className="vintage-callout">Picking began <strong>{pickGapText(grapeReading.pickGap)}</strong> full ripeness — usually {pickGapText(grapeReading.normalPickGap)}.{' '}
         {grapeReading.pickGap-grapeReading.normalPickGap>=2?'Grapes came in a little less ripe than normal.':grapeReading.normalPickGap-grapeReading.pickGap>=2?'Grapes came in riper than normal.':'About as ripe as a normal year.'}</p>}
+      {grapeReading.ripe==null&&<p className="vintage-callout">In {year} the grapes <strong>never reached {grape.ripeSugar} g/L</strong> before the end of October: the season was too cool to ripen them fully.</p>}
     </section>}
 
     {grapeReading?.conditions&&<section className="vintage-card" aria-labelledby="vintage-conditions-title">

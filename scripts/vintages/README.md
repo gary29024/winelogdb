@@ -12,7 +12,7 @@ The files hold **measurements only** (degree days, millimetres, dates, sugar cur
 | Measure | Source | Resolution |
 | --- | --- | --- |
 | Rain | Météo-France COMÉPHORE radar–gauge reanalysis, read at 25 points across each village's vineyard | 1 km, hourly, from 1997 |
-| Temperature, sunshine | Météo-France SAFRAN (SIM2) daily reanalysis, four nearest cells, corrected to the vineyard's IGN elevation at 0.65 °C / 100 m | 8 km, daily, from 1958 |
+| Temperature, sunshine | Météo-France SAFRAN (SIM2) daily reanalysis, four nearest cells, corrected to the vineyard's IGN elevation at 0.65 °C / 100 m | 8 km, daily, from August 1958 (whole seasons from 1959) |
 | Sugar | Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) / 2890 (Chardonnay) | per village |
 | Véraison | Heat sum above 10 °C from 1 January of 1014 (Pinot Noir) / 1068 (Chardonnay) | per village |
 | Harvest start | `data/harvest_dates.csv` where an official date is recorded; otherwise estimated and marked so | per area |
@@ -33,6 +33,8 @@ The **Vintage data** GitHub Action runs `fetch.py` and `build.py` on the 6th of 
 ## Official harvest dates
 
 Add a row to `data/harvest_dates.csv` for each area and year with the source that states the date. That year then shows as official, and the page can say how much earlier or later than full ripeness picking began.
+
+The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labbé et al. (2019), one consistent record for the whole period. Years without a row are estimated: either from the sugar level the area usually picks at, or from that year's Côte de Beaune date plus the gap the weather predicts between the two areas. `build.py` uses whichever was closer to the area's own recorded dates, and prints the comparison.
 
 ## Village list
 

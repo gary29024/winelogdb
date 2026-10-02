@@ -52,7 +52,7 @@ OUT = ROOT / 'public/data/vintages/burgundy'
 
 BASELINE = (1991, 2020)
 RAIN_FROM = 1997            # COMÉPHORE starts in 1997
-FIRST_SEASON = 1958        # SAFRAN starts in 1958
+FIRST_SEASON = 1959        # SAFRAN starts on 1 August 1958, so 1959 is the first whole season
 LAPSE = 0.0065              # °C per metre
 GRAPES = {
     'pinot-noir': {'sugar200': 2840.0, 'veraison': 1014.0},
@@ -246,9 +246,11 @@ def main() -> None:
     def pinot_heat(village: str, year: int):
         return heat_sum(weather[village], year, (4, 1), 0.0, dt.date(year, 10, 31), normal_t[village])
 
-    def pinot_day(village: str, year: int, sugar: float) -> dt.date | None:
+    def pinot_day(village: str, year: int, sugar: float) -> dt.date:
         target = GRAPES['pinot-noir']['sugar200'] + (sugar - 200) / SUGAR_SLOPE
-        return first_day(pinot_heat(village, year), target)
+        # In the coldest seasons (Chablis 1972) the target is never reached: picking
+        # still happened, so the estimate stops at the end of October.
+        return first_day(pinot_heat(village, year), target) or dt.date(year, 10, 31)
 
     def pinot_sugar_on(village: str, year: int, date: dt.date) -> float:
         heat = dict(pinot_heat(village, year))
@@ -281,18 +283,58 @@ def main() -> None:
     for area in AREAS:
         print(f'{area}: {len(picked_at[area])} recorded starts; estimates use {harvest_sugar[area]:.1f} g/L')
 
+    def area_doy(area: str, year: int, sugar: float) -> int:
+        members = [p['id'] for p in points if area_of[p['id']] == area]
+        doys = sorted(pinot_day(v, year, sugar).timetuple().tm_yday for v in members)
+        return doys[len(doys) // 2]
+
+    def doy(date: dt.date) -> int:
+        return date.timetuple().tm_yday
+
+    # A second estimate for years when the Côte de Beaune start is recorded: that
+    # date, plus the gap the weather predicts between the two areas at the same
+    # sugar, plus the area's usual extra gap. In cold autumns sugar barely moves,
+    # so a small difference in picking sugar turns into weeks; this avoids that.
+    # Each area keeps whichever estimate was closer to its own recorded starts.
+    anchor_area, anchor_sugar = 'cote-de-beaune', harvest_sugar['cote-de-beaune']
+
+    def model_gap(area: str, year: int) -> int:
+        return area_doy(area, year, anchor_sugar) - area_doy(anchor_area, year, anchor_sugar)
+
+    anchor_bias: dict[str, float] = {}
+    for area in AREAS:
+        if area == anchor_area:
+            continue
+        both = [y for y in years if (area, y) in recorded and (anchor_area, y) in recorded]
+        residual = {y: doy(recorded[(area, y)][0]) - doy(recorded[(anchor_area, y)][0]) - model_gap(area, y) for y in both}
+        if not both:
+            continue
+        own_error, anchored_error = [], []
+        for y in both:
+            others = [value for other, value in residual.items() if other != y]
+            actual = doy(recorded[(area, y)][0])
+            own_error.append(abs(actual - area_doy(area, y, harvest_sugar[area])))
+            anchored_error.append(abs(actual - (doy(recorded[(anchor_area, y)][0]) + model_gap(area, y) + (median(others) if others else 0))))
+        method = 'own sugar'
+        if len(both) < 3 or mean(anchored_error) <= mean(own_error):
+            anchor_bias[area] = median(list(residual.values()))
+            method = 'Côte de Beaune date'
+        print(f'{area}: estimates from {method} (mean error {mean(own_error):.1f} own sugar, {mean(anchored_error):.1f} anchored, {len(both)} years)')
+
     harvest: dict[str, dict] = {}
     starts: dict[tuple[str, int], dt.date] = {}
     for area in AREAS:
-        members = [p['id'] for p in points if area_of[p['id']] == area]
         entry_years = {}
         for year in years:
             if (area, year) in recorded:
                 date, kind = recorded[(area, year)]
                 entry_years[str(year)] = {'date': date.isoformat(), 'source': kind}
             else:
-                doys = sorted(pinot_day(v, year, harvest_sugar[area]).timetuple().tm_yday for v in members)
-                date = dt.date(year, 1, 1) + dt.timedelta(days=doys[len(doys) // 2] - 1)
+                if area in anchor_bias and (anchor_area, year) in recorded:
+                    day = doy(recorded[(anchor_area, year)][0]) + model_gap(area, year) + round(anchor_bias[area])
+                else:
+                    day = area_doy(area, year, harvest_sugar[area])
+                date = dt.date(year, 1, 1) + dt.timedelta(days=day - 1)
                 entry_years[str(year)] = {'date': date.isoformat(), 'source': 'estimated'}
             starts[(area, year)] = dt.date.fromisoformat(entry_years[str(year)]['date'])
         typical = mean(starts[(area, y)].timetuple().tm_yday for y in years if BASELINE[0] <= y <= BASELINE[1])
