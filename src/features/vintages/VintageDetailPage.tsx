@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { eraNormal,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
@@ -55,8 +55,8 @@ export function VintageDetailPage(){
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar);
-  },[reading,season,data,reference,grapeId,year,grape.ripeSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,grape.minSugar);
+  },[reading,season,data,reference,grapeId,year,grape.ripeSugar,grape.minSugar]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -68,7 +68,8 @@ export function VintageDetailPage(){
   const {levels,harvest}=reading;
   const normal=reference!.normal;
   const shift=harvest?.shiftDays??0;
-  const story=seasonStory(season,normal,levels,shift);
+  const events=index.events?.[village.area]?.[String(year)]??[];
+  const story=seasonStory(season,normal,levels,shift,events);
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
@@ -91,6 +92,7 @@ export function VintageDetailPage(){
       </div>
       {harvest&&<p className="vintage-hero-harvest"><VintageIcon kind="calendar"/><span>Harvest {harvest.source==='estimated'?'estimated to begin':'began'} <strong>{formatDay(harvest.start)}</strong>{harvest.source==='official'?' (official)':harvest.source==='reported'?' (reported)':''} — <strong className={shift<0?'is-early':shift>0?'is-late':undefined}>{shiftLabel(shift)}</strong>{shift?` than usual (${formatDay(harvest.typicalStart)})`:''}</span></p>}
       <p className="vintage-hero-story">{story.happened} <strong>{story.expect}</strong></p>
+      {events.length>0&&<p className="vintage-hero-events">Recorded: {events.map((event,i)=><span key={`${event.type}-${event.date}`}>{i>0&&' · '}<a href={event.source} target="_blank" rel="noopener noreferrer">{event.type==='hail'?'hail':'spring frost'}, {eventDay(event.date)}</a></span>)}</p>}
       <div className="vintage-hero-measures">
         <span className={`is-warmth${levels.warmth===0?' is-typical':''}`}><VintageIcon kind="sun" size={20}/><strong>{WARMTH_WORD[levels.warmth]}</strong><small>warmth {signed(Math.round(gddPct*100))}%</small></span>
         <span className={`is-rain${levels.rain===0?' is-typical':''}`}><VintageIcon kind="drop" size={20}/><strong>{RAIN_WORD[levels.rain]}</strong><small>rain {signed(Math.round(rainPct*100))}%</small></span>
@@ -159,7 +161,9 @@ export function VintageDetailPage(){
       <div className="vintage-season-tiles">
         <div><span>Frost days</span><strong>{season.frostDays}</strong><small>usual {normal.frostDays}</small></div>
         <div><span>Days ≥ 30 °C</span><strong>{season.heatDays}</strong><small>usual {normal.heatDays}</small></div>
-        <div><span>Sept rain</span><strong>{season.sepRain} mm</strong><small>usual {normal.sepRain}</small></div>
+        {season.harvestRain!=null&&normal.harvestRain!=null
+          ?<div><span>Harvest rain</span><strong>{season.harvestRain} mm</strong><small>usual {normal.harvestRain}</small></div>
+          :<div><span>Sept rain</span><strong>{season.sepRain} mm</strong><small>usual {normal.sepRain}</small></div>}
       </div>
     </section>
 

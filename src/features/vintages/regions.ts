@@ -20,8 +20,8 @@ export const BURGUNDY:VintageRegionConfig={
   ],
   villages:BURGUNDY_VILLAGES,
   grapes:[
-    {id:'pinot-noir',name:'Pinot Noir',ripeSugar:200},
-    {id:'chardonnay',name:'Chardonnay',ripeSugar:200}
+    {id:'pinot-noir',name:'Pinot Noir',ripeSugar:200,minSugar:180},
+    {id:'chardonnay',name:'Chardonnay',ripeSugar:200,minSugar:178}
   ],
   dataDir:'/data/vintages/burgundy'
 };

@@ -143,13 +143,17 @@ def first_day(cumulative: list[tuple[dt.date, float]], target: float) -> dt.date
     return next((day for day, value in cumulative if value >= target), None)
 
 
-def season_weather(village: str, year: int, weather, rain) -> dict | None:
+def season_weather(village: str, year: int, weather, rain, harvest_start: dt.date | None = None) -> dict | None:
     series = weather[village]
     growing = [series.get(d) for d in days(year, (4, 1), (9, 30))]
     if any(day is None for day in growing):
         return None
     rains = [rain_on(village, d, weather, rain) for d in days(year, (4, 1), (9, 30))]
     sep = [rain_on(village, d, weather, rain) for d in days(year, (9, 1), (9, 30))]
+    # Rain that swells berries and spreads rot at harvest: the week before the area's
+    # harvest start and the picking fortnight from it.
+    picking = [harvest_start + dt.timedelta(days=i) for i in range(-7, 14)] if harvest_start else []
+    picking_rain = [rain_on(village, d, weather, rain) for d in picking if d in series]
     return {
         'gdd': round(sum(max(0.0, d['t'] - 10) for d in growing)),
         'rainAprSep': round(sum(r for r in rains if r is not None)),
@@ -159,6 +163,7 @@ def season_weather(village: str, year: int, weather, rain) -> dict | None:
         'frostDays': sum(1 for d in days(year, (4, 1), (5, 15)) if series[d]['tmin'] <= 0),
         'heatDays': sum(1 for d in growing if d['tmax'] >= 30),
         'sepRain': round(sum(r for r in sep if r is not None)),
+        **({'harvestRain': round(sum(r for r in picking_rain if r is not None))} if len(picking_rain) == len(picking) and picking else {}),
     }
 
 
@@ -185,6 +190,21 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'radiation': round(sum(series[d]['ssi'] for d in span) * .01),
         },
     }
+
+
+def vineyard_events() -> dict:
+    """Frost and hail a source dates (data/vineyard_events.csv): an 8 km grid cannot see either."""
+    events: dict[str, dict[str, list]] = {}
+    path = DATA / 'vineyard_events.csv'
+    if not path.exists():
+        return events
+    with open(path) as source:
+        for row in csv.DictReader(line for line in source if not line.startswith('#')):
+            entry = {'date': row['date'], 'type': row['type'], 'source': row['source']}
+            if row.get('villages'):
+                entry['villages'] = row['villages']
+            events.setdefault(row['area'], {}).setdefault(row['year'], []).append(entry)
+    return events
 
 
 def doy_to_mmdd(doy: float, year: int = 2001) -> str:
@@ -347,7 +367,7 @@ def main() -> None:
         village, area = point['id'], area_of[point['id']]
         seasons, grapes_by_year = {}, {}
         for year in years:
-            weather_year = season_weather(village, year, weather, rain)
+            weather_year = season_weather(village, year, weather, rain, starts.get((area, year)))
             if weather_year is None:
                 continue
             seasons[year] = weather_year
@@ -361,6 +381,7 @@ def main() -> None:
             'frostDays': round(mean(seasons[y]['frostDays'] for y in base), 1),
             'heatDays': round(mean(seasons[y]['heatDays'] for y in base)),
             'sepRain': round(mean(seasons[y]['sepRain'] for y in base_rain)),
+            'harvestRain': round(mean(seasons[y]['harvestRain'] for y in base_rain if 'harvestRain' in seasons[y])),
             'grapes': {},
         }
         for grape in GRAPES:
@@ -398,6 +419,7 @@ def main() -> None:
             {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one (each cited in scripts/vintages/data/harvest_dates.csv). Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
         ],
         'harvest': harvest,
+        'events': vineyard_events(),
         'villages': written,
     }
     (OUT / 'index.json').write_text(json.dumps(index, separators=(',', ':')))

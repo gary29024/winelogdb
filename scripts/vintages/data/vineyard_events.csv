@@ -1,0 +1,4 @@
+# Frost and hail that a source dates to at least the month. An 8 km weather grid cannot see
+# frost settling in the lowest rows or a hail cell, so these are kept by hand.
+# type: spring-frost | hail. date: YYYY-MM-DD, or YYYY-MM when the day is not stated.
+area,year,date,type,villages,source

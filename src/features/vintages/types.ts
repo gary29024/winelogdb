@@ -20,6 +20,8 @@ export type VintageGrape={
   name:string;
   /** Sugar, in g/L, the region treats as normal ripeness for its still wines. */
   ripeSugar:number;
+  /** The appellation's minimum sugar at harvest for village wines (g/L of must). */
+  minSugar:number;
 };
 
 export type VintageRegionConfig={
@@ -49,6 +51,8 @@ export type SeasonWeather={
   heatDays:number;
   /** Rain in September, mm. */
   sepRain:number;
+  /** Rain from a week before the area's harvest start to the end of the picking fortnight (absent while a harvest is under way). */
+  harvestRain?:number;
   /** 1 km radar rain (from 1997), or the 8 km record scaled to it (earlier years). Absent on normals. */
   rainSource?:'1km'|'8km';
 };
@@ -106,6 +110,9 @@ export type AreaHarvest={
 };
 
 /** <dataDir>/index.json - what every village of a region shares. */
+/** A dated frost or hail a source records: weather grids miss both, so they are kept by hand. */
+export type VineyardEvent={date:string;type:'spring-frost'|'hail';villages?:string;source:string};
+
 export type VintageIndex={
   region:string;
   generatedAt:string;
@@ -116,6 +123,8 @@ export type VintageIndex={
     rainFrom?:number};
   sources:{label:string;detail:string}[];
   harvest:Record<string,AreaHarvest>;
+  /** Frost and hail a source records, by area then year (scripts/vintages/data/vineyard_events.csv). */
+  events?:Record<string,Record<string,VineyardEvent[]>>;
   /** Villages that have a data file. */
   villages:string[];
 };

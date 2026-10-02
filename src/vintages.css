@@ -136,6 +136,8 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-hero-harvest .is-late{color:var(--vt-year)}
 .vintage-hero-harvest .is-early{color:var(--vt-warmth)}
 .vintage-hero-story{margin:0;font-size:.9rem;line-height:1.5}
+.vintage-hero-events{margin:0;font-size:.8rem;color:var(--ink-5)}
+.vintage-hero-events a{color:inherit}
 .vintage-hero-measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .vintage-hero-measures>span{display:flex;flex-direction:column;gap:4px;min-width:0;padding:10px;border-radius:var(--r-md)}
 .vintage-hero-measures strong{color:var(--ink);font-size:.9rem}

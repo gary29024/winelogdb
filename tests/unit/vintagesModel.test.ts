@@ -92,8 +92,18 @@ describe('ripening conditions',()=>{
     const reading=ripeningConditions('chardonnay',{...base,meanTemp:17.4,coolNights:.6,heatStressDays:0,rain:180},base,40,43);
     const byId=Object.fromEntries(reading.conditions.map(item=>[item.id,item.effect]));
     expect(reading.title).toBe('Freshness & acidity');
-    expect(byId).toMatchObject({acidity:'helps',warmth:'helps',nights:'helps',heat:'helps',hang:'neutral',rain:'hurts'});
+    expect(byId).toMatchObject({acidity:'helps',ripeness:'neutral',nights:'helps',heat:'helps',hang:'neutral',rain:'hurts'});
     expect(reading.verdict).toBe('Favourable');
+  });
+
+  it('counts warmth once and marks grapes picked below the legal minimum as unripe',()=>{
+    const cold={...base,meanTemp:13,coolNights:.9,heatStressDays:0,rain:40};
+    const ripe=ripeningConditions('chardonnay',cold,base,44,44,195,178);
+    const unripe=ripeningConditions('chardonnay',cold,base,44,44,165,178);
+    expect(ripe.conditions.filter(item=>item.effect==='helps'&&/warmth|acidity/i.test(item.label)).length).toBe(1);
+    expect(unripe.conditions.find(item=>item.id==='ripeness')!.effect).toBe('hurts');
+    const pinot=ripeningConditions('pinot-noir',cold,base,44,44,165,180).conditions.find(item=>item.id==='balance')!;
+    expect([pinot.value,pinot.effect]).toEqual(['Short of ripe','hurts']);
   });
 
   it('flags sugar running ahead of tannin in a short, hot Pinot finish',()=>{
