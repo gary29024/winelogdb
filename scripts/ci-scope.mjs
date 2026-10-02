@@ -29,15 +29,33 @@ const libraryBrowserSpecs = {
   places: ['wine-detail-layout', 'burgundy-village-map'],
 };
 
-const full = reason => ({ reason, quality: true, platform: true, unit: 'full', sourceReaders: false, chromium: 'full', webkit: true, specs: [] });
+const full = (reason, webkit = true) => ({ reason, research: true, quality: true, platform: true, unit: 'full', sourceReaders: false, chromium: 'full', webkit, specs: [] });
+const nothing = (reason, research = true) => ({ reason, research, quality: false, platform: false, unit: 'none', sourceReaders: false, chromium: 'none', webkit: false, specs: [] });
 
-export function chooseScope(paths, checkpoint = false) {
+// iPhone WebKit runs only where layout can differ between browsers.
+const touchesLayout = path => /\.css$/.test(path) || path.startsWith('src/components/') || path.startsWith('src/lib/ui/') ||
+  path === 'index.html' || path.startsWith('public/') || /^src\/(App|main)\./.test(path) ||
+  path.endsWith('iphone-layout.spec.ts') || path.endsWith('lwin-edit.spec.ts') || path.startsWith('tests/e2e/fixtures/') ||
+  /^playwright(\.iphone)?\.config\.ts$/.test(path) || path === 'package.json' || path.startsWith('.github/');
+
+/**
+ * `draft`: a draft PR runs lint, build and unit tests only; browser flows and the
+ * platform gate run once it is marked ready for review.
+ * `mergedPr`: a push to main that merges a PR already checked on that PR.
+ */
+export function chooseScope(paths, checkpoint = false, { draft = false, mergedPr = false } = {}) {
   if (checkpoint) return full('main, manual, or scheduled checkpoint');
+  if (mergedPr) return nothing('merge of a PR already checked; the weekly checkpoint runs everything', false);
+  const scope = choosePaths(paths);
+  if (!draft || !scope.quality) return scope;
+  return { ...scope, reason: `${scope.reason}; draft PR, browsers wait for ready for review`, platform: false, chromium: 'none', webkit: false, specs: [] };
+}
+
+function choosePaths(paths) {
   if (!paths.length) return full('empty or unreadable PR diff');
   const files = [...new Set(paths.map(path => path.replaceAll('\\', '/')).filter(Boolean))];
-  if (files.every(path => path.startsWith('docs/') || path.endsWith('.md'))) {
-    return { reason: 'documentation only', quality: false, platform: false, unit: 'none', sourceReaders: false, chromium: 'none', webkit: false, specs: [] };
-  }
+  if (files.every(path => path.startsWith('docs/') || path.endsWith('.md'))) return nothing('documentation only');
+  const layout = files.some(touchesLayout);
 
   // An import graph cannot describe changes to tooling, migrations, assets,
   // global configuration, or shared authentication and ownership boundaries.
@@ -49,7 +67,7 @@ export function chooseScope(paths, checkpoint = false) {
     /^worker\/(entry|index|multiUserEntry)\.ts$/.test(path) ||
     /^(package(-lock)?\.json|vitest\.config\.ts|playwright(\.iphone)?\.config\.ts|vite\.config\.ts|wrangler\.jsonc|tsconfig.*\.json|eslint\.config\.js)$/.test(path) ||
     path === 'scripts/ci-scope.mjs' || path === 'scripts/source-text-tests.mjs'
-  )) return full('wide or cross-cutting change');
+  )) return full('wide or cross-cutting change', layout);
 
   let unit = 'none';
   let chromium = 'none';
@@ -92,21 +110,21 @@ export function chooseScope(paths, checkpoint = false) {
       path === 'index.html' || path.startsWith('public/') || /^src\/(App|main)\./.test(path)) webkit = true;
     if (path === 'scripts/worker-runtime-smoke.mjs') platform = true;
     if (!/^(src|worker|tests|scripts|public)\//.test(path) && path !== 'index.html') {
-      return full(`unclassified file: ${path}`);
+      return full(`unclassified file: ${path}`, layout);
     }
     if (path.startsWith('scripts/') && path !== 'scripts/worker-runtime-smoke.mjs' && path !== 'scripts/test-suite-report.mjs') {
-      return full(`unclassified script: ${path}`);
+      return full(`unclassified script: ${path}`, layout);
     }
-    if (path.startsWith('tests/')) return full(`unclassified test support: ${path}`);
+    if (path.startsWith('tests/')) return full(`unclassified test support: ${path}`, layout);
   }
-  return { reason: 'affected PR paths', quality: true, platform, unit, sourceReaders, chromium, webkit, specs: [...specs].sort() };
+  return { reason: 'affected PR paths', research: true, quality: true, platform, unit, sourceReaders, chromium, webkit, specs: [...specs].sort() };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const checkpoint = process.argv.includes('--checkpoint');
   const index = process.argv.indexOf('--changed-file');
   const paths = index < 0 ? [] : readFileSync(process.argv[index + 1], 'utf8').split('\0').filter(Boolean);
-  const result = chooseScope(paths, checkpoint);
+  const result = chooseScope(paths, checkpoint, { draft: process.argv.includes('--draft'), mergedPr: process.argv.includes('--merged-pr') });
   process.stdout.write(`${JSON.stringify(result)}\n`);
   if (process.env.GITHUB_OUTPUT) {
     for (const [key, value] of Object.entries(result)) {

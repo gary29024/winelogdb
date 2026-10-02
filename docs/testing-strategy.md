@@ -1,6 +1,6 @@
 # Test strategy
 
-PR checks follow the changed paths. Pushes to `main` run the complete normal Vitest and browser suites, both iPhone WebKit projects, the production build, all local migrations, the Worker runtime smoke, and the local browser-to-Worker sharing journey. The normal Chromium suite uses representative Burgundy map journeys instead of replaying every catalogue permutation. Manual runs and the Monday 03:17 UTC checkpoint additionally set `WINELOG_E2E_EXHAUSTIVE_MAPS=1`, restoring the full Burgundy browser matrix.
+PR checks follow the changed paths. A push to `main` that merges a PR runs nothing more: that PR was already checked, and the weekly checkpoint below runs everything against `main`. Any other push to `main` (a direct push) runs the complete normal Vitest and browser suites, both iPhone WebKit projects, the production build, all local migrations, the Worker runtime smoke, and the local browser-to-Worker sharing journey. The normal Chromium suite uses representative Burgundy map journeys instead of replaying every catalogue permutation. Manual runs and the Monday 03:17 UTC checkpoint additionally set `WINELOG_E2E_EXHAUSTIVE_MAPS=1`, restoring the full Burgundy browser matrix.
 
 | PR impact | Vitest | Browser | Platform gate |
 | --- | --- | --- | --- |
@@ -8,7 +8,13 @@ PR checks follow the changed paths. Pushes to `main` run the complete normal Vit
 | Unit test only | Changed tests | None | None |
 | Ordinary application or Worker code | Import-affected tests plus source-reading contracts | Relevant Chromium flows for frontend features | Worker and Journal-library changes run migrations, runtime smoke and sharing journey |
 | CSS or shared layout | Import-affected tests plus source-reading contracts | Relevant or all Chromium flows, plus both iPhone projects | Only if another changed path requires it |
-| Shared configuration, database, authorization, credits, test support, or broad changes | Full suite | All Chromium and both iPhone projects | Full |
+| Shared configuration, database, authorization, credits, test support, or broad changes | Full suite | All Chromium; iPhone projects only if layout, Playwright config, `package.json` or CI files changed | Full |
+| Draft PR (any of the above) | As above | None until the PR is marked ready for review | None until ready |
+| Merge to `main` of a checked PR | None | None | None |
+
+Draft PRs run lint, build, research data checks and the selected unit tests on every push; browser flows and the platform gate run once, when the PR is marked ready for review, and on each push after that. Open a PR as a draft while still iterating to save runner time.
+
+Runner minutes are billed per job and rounded up, so small checks share a job: the grand cru research data checks run inside **Lint and build**. Playwright's browser download is cached between runs (`.github/actions/playwright`); its system packages are still installed each time.
 
 The exact rules and the feature-to-browser-spec mapping live in [`scripts/ci-scope.mjs`](../scripts/ci-scope.mjs), with [policy tests](../scripts/ci-scope.test.mjs). A PR with more than 40 changed files, an unclassified path, or an unreadable/empty diff uses full coverage. New frontend feature directories without a browser mapping use all Chromium flows. A new high-risk path should be added to the full-coverage rules; a new browser flow should be added to the feature mapping when it covers a distinct journey.
 

@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [main]
+    # ready_for_review: a draft skips browser flows, so they run once it is marked ready.
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
@@ -15,6 +17,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   scope:
@@ -24,6 +27,7 @@ jobs:
       quality: ${{ steps.select.outputs.quality }}
       platform: ${{ steps.select.outputs.platform }}
       unit: ${{ steps.select.outputs.unit }}
+      research: ${{ steps.select.outputs.research }}
       sourceReaders: ${{ steps.select.outputs.sourceReaders }}
       chromium: ${{ steps.select.outputs.chromium }}
       webkit: ${{ steps.select.outputs.webkit }}
@@ -40,12 +44,25 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           EVENT_NAME: ${{ github.event_name }}
+          DRAFT: ${{ github.event.pull_request.draft }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
           if [ "$EVENT_NAME" = pull_request ]; then
             if ! git diff --no-renames --name-only -z "$BASE_SHA" HEAD > "$RUNNER_TEMP/changed-files"; then
               : > "$RUNNER_TEMP/changed-files"
             fi
-            node scripts/ci-scope.mjs --changed-file "$RUNNER_TEMP/changed-files"
+            flags=()
+            if [ "$DRAFT" = true ]; then flags+=(--draft); fi
+            node scripts/ci-scope.mjs --changed-file "$RUNNER_TEMP/changed-files" "${flags[@]}"
+          elif [ "$EVENT_NAME" = push ]; then
+            # A merge of a PR was already checked on that PR; a direct push gets the full checkpoint.
+            merged=$(gh api "repos/$REPO/commits/$GITHUB_SHA/pulls" --jq '[.[] | select(.merged_at != null)] | length' || echo 0)
+            if [ "${merged:-0}" -gt 0 ]; then
+              node scripts/ci-scope.mjs --merged-pr
+            else
+              node scripts/ci-scope.mjs --checkpoint
+            fi
           else
             node scripts/ci-scope.mjs --checkpoint
           fi
@@ -54,10 +71,29 @@ jobs:
     name: Lint and build
     needs: scope
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        if: needs.scope.outputs.quality == 'true'
+        if: needs.scope.outputs.quality == 'true' || needs.scope.outputs.research == 'true'
+      # Grand cru research checks share this job: a separate job bills its own minute and setup.
+      - uses: actions/setup-python@v5
+        if: needs.scope.outputs.research == 'true'
+        with:
+          python-version: '3.12'
+      # Loops over every scripts/grand-crus/<slug>.json; a cru without research yet has its config validated.
+      - name: Committed research outputs match every cru's curation
+        if: needs.scope.outputs.research == 'true'
+        run: python scripts/build_grand_cru_research.py --all --check
+      - name: App registry matches every cru config
+        if: needs.scope.outputs.research == 'true'
+        run: python scripts/build_grand_cru_app_registry.py --check
+      - name: Install geometry packages
+        if: needs.scope.outputs.research == 'true'
+        run: python -m pip install -r scripts/burgundy-map-requirements.txt
+      - name: Historical evidence and cru config regressions
+        if: needs.scope.outputs.research == 'true'
+        working-directory: scripts
+        run: python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout
       - uses: ./.github/actions/test-setup
         if: needs.scope.outputs.quality == 'true'
       - name: Lint
@@ -74,9 +110,11 @@ jobs:
       - name: Worker runtime smoke
         if: needs.scope.outputs.platform == 'true'
         run: node scripts/worker-runtime-smoke.mjs
-      - name: Install Chromium for real-stack sharing
+      - name: Chromium for real-stack sharing
         if: needs.scope.outputs.platform == 'true'
-        run: npx playwright install --with-deps chromium
+        uses: ./.github/actions/playwright
+        with:
+          browser: chromium
       - name: Local browser-to-Worker sharing journey
         if: needs.scope.outputs.platform == 'true'
         run: npm run test:stack
@@ -157,8 +195,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - uses: ./.github/actions/playwright
+        with:
+          browser: chromium
       - name: Chromium flows
         if: needs.scope.outputs.chromium == 'full' && github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
@@ -208,8 +247,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
-      - name: Install WebKit
-        run: npx playwright install --with-deps webkit
+      - uses: ./.github/actions/playwright
+        with:
+          browser: webkit
       - name: Both iPhone projects
         run: npm run test:e2e:full -- --project="iPhone*"
       - name: Upload browser reports
@@ -222,30 +262,10 @@ jobs:
             playwright-report/
           retention-days: 7
 
-  research-data:
-    name: Research data in sync
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      # Loops over every scripts/grand-crus/<slug>.json; a cru without research yet has its config validated.
-      - name: Committed research outputs match every cru's curation
-        run: python scripts/build_grand_cru_research.py --all --check
-      - name: App registry matches every cru config
-        run: python scripts/build_grand_cru_app_registry.py --check
-      - name: Install geometry packages
-        run: python -m pip install -r scripts/burgundy-map-requirements.txt
-      - name: Historical evidence and cru config regressions
-        working-directory: scripts
-        run: python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout
-
   regression:
     name: Regression and browser tests
     if: always()
-    needs: [scope, quality, unit, browser, webkit, research-data]
+    needs: [scope, quality, unit, browser, webkit]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
@@ -259,11 +279,9 @@ jobs:
           CHROMIUM_RESULT: ${{ needs.browser.result }}
           WEBKIT_MODE: ${{ needs.scope.outputs.webkit }}
           WEBKIT_RESULT: ${{ needs.webkit.result }}
-          RESEARCH_RESULT: ${{ needs.research-data.result }}
         run: |
           test "$SCOPE_RESULT" = success
           test "$QUALITY_RESULT" = success
-          test "$RESEARCH_RESULT" = success
           if [ "$UNIT_MODE" != none ]; then test "$UNIT_RESULT" = success; fi
           if [ "$CHROMIUM_MODE" != none ]; then test "$CHROMIUM_RESULT" = success; fi
           if [ "$WEBKIT_MODE" = true ]; then test "$WEBKIT_RESULT" = success; fi

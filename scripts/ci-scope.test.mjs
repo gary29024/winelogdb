@@ -54,8 +54,34 @@ test('shared risk boundaries and unknown files get full coverage', () => {
     const scope = chooseScope([path]);
     assert.equal(scope.unit, 'full', path);
     assert.equal(scope.chromium, 'full', path);
-    assert.equal(scope.webkit, true, path);
+    // WebKit follows layout: a database or auth change does not change rendering.
+    assert.equal(scope.webkit, false, path);
   }
+  for (const path of ['package.json', 'playwright.iphone.config.ts', '.github/workflows/ci.yml']) {
+    assert.equal(chooseScope([path]).webkit, true, path);
+  }
+  assert.equal(chooseScope(['src/lib/db/x.ts', 'src/app.css']).webkit, true);
+});
+
+test('draft PRs defer browser flows and the platform gate until ready for review', () => {
+  const scope = chooseScope(['src/features/vintages/VintagesPage.tsx', 'src/vintages.css', 'worker/x.ts'], false, { draft: true });
+  assert.equal(scope.quality, true);
+  assert.equal(scope.unit, 'changed');
+  assert.equal(scope.chromium, 'none');
+  assert.equal(scope.webkit, false);
+  assert.equal(scope.platform, false);
+  assert.equal(chooseScope(['src/lib/db/x.ts'], false, { draft: true }).unit, 'full');
+  assert.equal(chooseScope(['README.md'], false, { draft: true }).quality, false);
+});
+
+test('a push merging an already-checked PR runs nothing; checkpoints still run everything', () => {
+  const merged = chooseScope(['src/app.css'], false, { mergedPr: true });
+  assert.equal(merged.quality, false);
+  assert.equal(merged.unit, 'none');
+  assert.equal(merged.chromium, 'none');
+  assert.equal(merged.research, false);
+  assert.equal(chooseScope(['README.md']).research, true);
+  assert.equal(chooseScope([], true, { mergedPr: true }).webkit, true);
 });
 
 test('worker edits retain local runtime smoke without browser-only API mocks', () => {
