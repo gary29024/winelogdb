@@ -91,9 +91,10 @@ export type VillageNormal=SeasonWeather&{grapes:Partial<Record<GrapeId,{
 }>>};
 
 export type HarvestStart={
-  /** ISO date picking officially began, or the modelled date where none is published. */
+  /** ISO date picking began, or the modelled date where no source records one. */
   date:string;
-  source:'official'|'estimated';
+  /** official: a ban des vendanges or declared opening; reported: a start a source records; estimated: modelled. */
+  source:'official'|'reported'|'estimated';
 };
 
 export type AreaHarvest={

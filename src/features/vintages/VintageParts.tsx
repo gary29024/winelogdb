@@ -16,7 +16,7 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
   return <details className="vintage-how">
     <summary><VintageIcon kind="info" size={16}/>How we estimate</summary>
     <div>
-      <p><strong>Harvest dates</strong> are the official start of picking for each area where one is published, and a modelled date marked “estimated” where not. Picking is read as that date plus two weeks.</p>
+      <p><strong>Harvest dates</strong> are the start of picking a source records for each area — an official ban des vendanges or opening, or a reported start — and a modelled date marked “estimated” where none is found. Picking is read as that date plus two weeks.</p>
       <p><strong>Sugar</strong> is estimated from daily temperature with a published grape-ripening model (Parker et al., 2020) calibrated on French vineyards. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
       <p><strong>Ripening conditions</strong> compare the weather after véraison with the same village’s normal. They show whether the season helped or hindered colour, tannin or freshness; rain, crop size, disease and each grower’s choices change the real result.</p>
       <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night — like April 2016 — may not show.</p>

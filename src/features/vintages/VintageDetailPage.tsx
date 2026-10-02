@@ -74,7 +74,7 @@ export function VintageDetailPage(){
           <span className="vintage-hero-score"><ScoreMeter score={reading.score}/>{SCORE_LABELS[reading.score]}</span>
         </div>
       </div>
-      {harvest&&<p className="vintage-hero-harvest"><VintageIcon kind="calendar"/><span>Harvest {harvest.source==='estimated'?'estimated to begin':'began'} <strong>{formatDay(harvest.start)}</strong> — <strong className={shift<0?'is-early':shift>0?'is-late':undefined}>{shiftLabel(shift)}</strong>{shift?` than usual (${formatDay(harvest.typicalStart)})`:''}</span></p>}
+      {harvest&&<p className="vintage-hero-harvest"><VintageIcon kind="calendar"/><span>Harvest {harvest.source==='estimated'?'estimated to begin':'began'} <strong>{formatDay(harvest.start)}</strong>{harvest.source==='official'?' (official)':harvest.source==='reported'?' (reported)':''} — <strong className={shift<0?'is-early':shift>0?'is-late':undefined}>{shiftLabel(shift)}</strong>{shift?` than usual (${formatDay(harvest.typicalStart)})`:''}</span></p>}
       <p className="vintage-hero-story">{story.happened} <strong>{story.expect}</strong></p>
       <div className="vintage-hero-measures">
         <span className={`is-warmth${levels.warmth===0?' is-typical':''}`}><VintageIcon kind="sun" size={20}/><strong>{WARMTH_WORD[levels.warmth]}</strong><small>warmth {signed(Math.round(gddPct*100))}%</small></span>
@@ -112,7 +112,7 @@ export function VintageDetailPage(){
         <li><span className="is-ripe" aria-hidden="true"/>Ripe at {grape.ripeSugar} g/L (≈ {(grape.ripeSugar/16.83).toFixed(0)}% alc.) · ○ typical · ● {year}</li>
       </ul>
       {harvest?.source==='estimated'&&<p className="vintage-callout">The harvest date here is <strong>estimated from the weather</strong>, so picking is assumed at the usual ripeness. Once the official start date is added, this shows how much earlier or later growers really picked.</p>}
-      {harvest?.source==='official'&&grapeReading.pickGap!=null&&grapeReading.normalPickGap!=null&&<p className="vintage-callout">Picking began <strong>{pickGapText(grapeReading.pickGap)}</strong> full ripeness — usually {pickGapText(grapeReading.normalPickGap)}.{' '}
+      {harvest&&harvest.source!=='estimated'&&grapeReading.pickGap!=null&&grapeReading.normalPickGap!=null&&<p className="vintage-callout">Picking began <strong>{pickGapText(grapeReading.pickGap)}</strong> full ripeness — usually {pickGapText(grapeReading.normalPickGap)}.{' '}
         {grapeReading.pickGap-grapeReading.normalPickGap>=2?'Grapes came in a little less ripe than normal.':grapeReading.normalPickGap-grapeReading.pickGap>=2?'Grapes came in riper than normal.':'About as ripe as a normal year.'}</p>}
     </section>}
 

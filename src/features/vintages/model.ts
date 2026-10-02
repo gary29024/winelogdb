@@ -1,4 +1,4 @@
-import type { AreaHarvest,GrapeId,GrapeSeason,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason } from './types';
+import type { AreaHarvest,HarvestStart,GrapeId,GrapeSeason,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason } from './types';
 
 /**
  * Everything the Vintages screens say about a season, derived from the
@@ -28,7 +28,7 @@ export const formatLongDay=(time:number)=>{const d=new Date(time);return `${d.ge
 
 /* ---------- Harvest timing ---------- */
 
-export type HarvestReading={start:number;end:number;source:'official'|'estimated';typicalStart:number;shiftDays:number};
+export type HarvestReading={start:number;end:number;source:HarvestStart['source'];typicalStart:number;shiftDays:number};
 
 /** Picking is read as the start date plus two weeks, the span a village usually takes. */
 export const PICKING_DAYS=14;

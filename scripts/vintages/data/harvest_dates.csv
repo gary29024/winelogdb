@@ -1,6 +1,6 @@
 # Official harvest start dates (ban des vendanges or the first day picking
 # opened) for each area. One row per area and year, with the source that states
-# the date. Rows here replace the estimated start for that area and year; years
+# the date. type is official-ban, official-opening or reported-start. Rows replace the estimated start for that area and year; years
 # without a row stay "estimated" on the page. Areas: chablis-auxerrois,
 # cote-de-nuits, hautes-cotes, cote-de-beaune, cote-chalonnaise, maconnais.
-area,year,date,source
+area,year,date,type,source

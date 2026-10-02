@@ -51,7 +51,7 @@ export function VintagesPage(){
   const chooseVillage=(id:string)=>{rememberVillage(id);setParams(current=>{const next=new URLSearchParams(current);next.set('village',id);return next},{replace:true})};
   const typicalHarvest=index?.harvest[village.area]?.typical;
   // When every year in the area is estimated, one note says so instead of a badge on every card.
-  const allEstimated=readings.length>0&&readings.every(item=>item.harvest?.source!=='official');
+  const allEstimated=readings.length>0&&readings.every(item=>item.harvest?.source==='estimated');
   const strip=[...readings].reverse().slice(-30);
   const shown=showAll?readings:readings.slice(0,INITIAL_YEARS);
 

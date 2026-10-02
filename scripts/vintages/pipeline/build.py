@@ -26,10 +26,12 @@ Véraison: heat sum above 10 °C from 1 January (Duchêne/van Leeuwen et al.
 2008, Heat requirements for grapevine varieties, VIIth Int. Terroir Congress):
 Pinot noir 1014, Chardonnay 1068.
 
-Harvest: the official start date where harvest_dates.csv has one; otherwise an
-estimate - the day Pinot noir reaches the sugar level whose 1991–2018 mean date
-at Beaune equals the observed 1988–2018 mean start, 15 September (Labbé et al.
-2019, Clim. Past 15:1485) - marked "estimated".
+Harvest: the recorded start where harvest_dates.csv has one (official ban or
+opening, or a reported start); otherwise an estimate - the day Pinot noir
+reaches the sugar level the area's recorded starts were picked at (median), or,
+with too few records, the level whose 1991–2018 mean date at Beaune equals the
+observed 1988–2018 mean start of 15 September (Labbé et al. 2019, Clim. Past
+15:1485). Estimates are marked "estimated".
 
     python scripts/vintages/pipeline/build.py [--cache scripts/vintages/cache]
 """
@@ -205,27 +207,55 @@ def main() -> None:
         climatology[village] = {key: mean(v) for key, v in sums.items()}
     normal_t = {v: (lambda day, c=climatology[v]: c.get((day.month, day.day), c.get((day.month, min(day.day, 28)), 10.0))) for v in weather}
 
-    # --- Harvest: official where known, estimated from Pinot noir sugar otherwise.
-    official: dict[tuple[str, int], tuple[dt.date, str]] = {}
+    # --- Harvest: recorded where known, estimated from Pinot noir sugar otherwise.
+    # harvest_dates.csv rows: area,year,date,type,source. "official-ban" and
+    # "official-opening" are official; "reported-start" is a recorded start a
+    # source reports without an official ban behind it.
+    recorded: dict[tuple[str, int], tuple[dt.date, str]] = {}
     harvest_file = DATA / 'harvest_dates.csv'
     if harvest_file.exists():
         with open(harvest_file) as source:
             for row in csv.DictReader(row for row in source if not row.startswith('#')):
-                official[(row['area'], int(row['year']))] = (dt.date.fromisoformat(row['date']), row.get('source', ''))
+                kind = 'reported' if row.get('type') == 'reported-start' else 'official'
+                recorded[(row['area'], int(row['year']))] = (dt.date.fromisoformat(row['date']), kind)
+
+    def pinot_heat(village: str, year: int):
+        return heat_sum(weather[village], year, (4, 1), 0.0, dt.date(year, 10, 31), normal_t[village])
 
     def pinot_day(village: str, year: int, sugar: float) -> dt.date | None:
-        heat = heat_sum(weather[village], year, (4, 1), 0.0, dt.date(year, 10, 31), normal_t[village])
         target = GRAPES['pinot-noir']['sugar200'] + (sugar - 200) / SUGAR_SLOPE
-        return first_day(heat, target)
+        return first_day(pinot_heat(village, year), target)
 
+    def pinot_sugar_on(village: str, year: int, date: dt.date) -> float:
+        heat = dict(pinot_heat(village, year))
+        return 200 + SUGAR_SLOPE * (heat[date] - GRAPES['pinot-noir']['sugar200'])
+
+    # Fallback: the sugar level at which Beaune's 1991-2018 mean estimated start
+    # equals its recorded 1988-2018 mean (Labbé et al. 2019).
     calibration_years = [y for y in years if y <= 2018]
     low, high = 170.0, 230.0
     for _ in range(30):
         middle = (low + high) / 2
         doys = [pinot_day('beaune', y, middle).timetuple().tm_yday for y in calibration_years]
         low, high = (middle, high) if mean(doys) < BEAUNE_MEAN_HARVEST_DOY else (low, middle)
-    harvest_sugar = (low + high) / 2
-    print(f'Estimated harvest starts when Pinot noir reaches {harvest_sugar:.1f} g/L (calibrated on Beaune {calibration_years[0]}–{calibration_years[-1]})')
+    beaune_sugar = (low + high) / 2
+
+    # Better, where dates are recorded: the sugar each area actually picked at,
+    # read from its own recorded starts (median, so one odd year cannot move it).
+    def median(values: list[float]) -> float:
+        ordered = sorted(values)
+        return ordered[len(ordered) // 2] if len(ordered) % 2 else (ordered[len(ordered) // 2 - 1] + ordered[len(ordered) // 2]) / 2
+
+    picked_at: dict[str, list[float]] = defaultdict(list)
+    for (area, year), (date, _) in recorded.items():
+        members = [p['id'] for p in points if area_of[p['id']] == area]
+        if year in years and members:
+            picked_at[area].append(median([pinot_sugar_on(v, year, date) for v in members]))
+    everywhere = [value for values in picked_at.values() for value in values]
+    harvest_sugar = {area: median(picked_at[area]) if len(picked_at[area]) >= 3
+                     else median(everywhere) if len(everywhere) >= 5 else beaune_sugar for area in AREAS}
+    for area in AREAS:
+        print(f'{area}: {len(picked_at[area])} recorded starts; estimates use {harvest_sugar[area]:.1f} g/L')
 
     harvest: dict[str, dict] = {}
     starts: dict[tuple[str, int], dt.date] = {}
@@ -233,11 +263,11 @@ def main() -> None:
         members = [p['id'] for p in points if area_of[p['id']] == area]
         entry_years = {}
         for year in years:
-            if (area, year) in official:
-                date, _ = official[(area, year)]
-                entry_years[str(year)] = {'date': date.isoformat(), 'source': 'official'}
+            if (area, year) in recorded:
+                date, kind = recorded[(area, year)]
+                entry_years[str(year)] = {'date': date.isoformat(), 'source': kind}
             else:
-                doys = sorted(pinot_day(v, year, harvest_sugar).timetuple().tm_yday for v in members)
+                doys = sorted(pinot_day(v, year, harvest_sugar[area]).timetuple().tm_yday for v in members)
                 date = dt.date(year, 1, 1) + dt.timedelta(days=doys[len(doys) // 2] - 1)
                 entry_years[str(year)] = {'date': date.isoformat(), 'source': 'estimated'}
             starts[(area, year)] = dt.date.fromisoformat(entry_years[str(year)]['date'])
@@ -299,7 +329,7 @@ def main() -> None:
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay).'},
             {'label': 'Véraison', 'detail': 'Heat sum above 10 °C from 1 January of 1014 (Pinot Noir) and 1068 (Chardonnay), after van Leeuwen et al. (2008).'},
-            {'label': 'Harvest', 'detail': f'Official start where published; otherwise estimated as the day Pinot Noir reaches {harvest_sugar:.0f} g/L, calibrated on Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
+            {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one (each cited in scripts/vintages/data/harvest_dates.csv). Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
         ],
         'harvest': harvest,
         'villages': written,
