@@ -93,7 +93,8 @@ describe('ripening conditions',()=>{
     const byId=Object.fromEntries(reading.conditions.map(item=>[item.id,item.effect]));
     expect(reading.title).toBe('Freshness & acidity');
     expect(byId).toMatchObject({acidity:'helps',ripeness:'neutral',nights:'helps',heat:'neutral',hang:'neutral',rain:'hurts'});
-    expect(reading.verdict).toBe('Favourable');
+    // Fresh but wet: no heat stress is the normal state and scores nothing, so the rot risk holds it to Mixed.
+    expect(reading.verdict).toBe('Mixed');
   });
 
   it('counts warmth once and marks grapes picked below the legal minimum as unripe',()=>{
