@@ -197,6 +197,8 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'coolNights': round(sum(1 for d in span if series[d]['tmin'] < 13) / len(span), 2) if span else 0,
             'heatStressDays': sum(1 for d in span if series[d]['tmax'] >= 35),
             'rain': round(sum(r for r in rains if r is not None)),
+            # Days grey rot can spread: at least 2 mm of rain on a day averaging 12 °C or more.
+            'wetDays': sum(1 for d, r in zip(span, rains) if r is not None and r >= 2 and series[d]['t'] >= 12),
             'radiation': round(sum(series[d]['ssi'] for d in span) * .01),
         },
     }
@@ -409,6 +411,7 @@ def main() -> None:
                     'coolNights': round(mean(r['coolNights'] for r in ripening), 2),
                     'heatStressDays': round(mean(r['heatStressDays'] for r in ripening), 1),
                     'rain': round(mean(ripening_rain)),
+                    'wetDays': round(mean(grapes_by_year[y][grape]['ripening']['wetDays'] for y in base_rain), 1),
                     'radiation': round(mean(r['radiation'] for r in ripening)),
                 },
             }

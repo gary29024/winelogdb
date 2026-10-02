@@ -92,7 +92,7 @@ describe('ripening conditions',()=>{
     const reading=ripeningConditions('chardonnay',{...base,meanTemp:17.4,coolNights:.6,heatStressDays:0,rain:180},base,40,43);
     const byId=Object.fromEntries(reading.conditions.map(item=>[item.id,item.effect]));
     expect(reading.title).toBe('Freshness & acidity');
-    expect(byId).toMatchObject({acidity:'helps',ripeness:'neutral',nights:'helps',heat:'helps',hang:'neutral',rain:'hurts'});
+    expect(byId).toMatchObject({acidity:'helps',ripeness:'neutral',nights:'helps',heat:'neutral',hang:'neutral',rain:'hurts'});
     expect(reading.verdict).toBe('Favourable');
   });
 

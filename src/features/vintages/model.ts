@@ -202,10 +202,19 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
   const nights:Condition={id:'nights',icon:'moon',label:'Cool nights',value:`${Math.round(year.coolNights*100)}%`,usual:`usual ${Math.round(normal.coolNights*100)}%`,
     effect:nightsDiff>=.05?'helps':nightsDiff<=-.05?'hurts':'neutral'};
   const heat:Condition={id:'heat',icon:'flame',label:'Heat stress',value:`${year.heatStressDays} day${year.heatStressDays===1?'':'s'}`,usual:`usual ${Math.round(normal.heatStressDays)}`,
-    effect:year.heatStressDays>normal.heatStressDays+1?'hurts':year.heatStressDays<=normal.heatStressDays?'helps':'neutral'};
+    // Missing heat stress is the normal state, not a gain: it can only hurt.
+    effect:year.heatStressDays>normal.heatStressDays+1?'hurts':'neutral'};
   const hangTile:Condition={id:'hang',icon:'clock',label:'Hang time',value:`${hang} days`,usual:`usual ${normalHang}`,effect:hangEffect};
   const rainPct=pct(year.rain,normal.rain);
   const tempDiff=year.meanTemp-normal.meanTemp;
+  // Rot follows runs of wet, mild days; a single storm raises the total but rarely the rot.
+  // One tile covers both, so rain is not counted twice.
+  const wet=year.wetDays,normalWet=normal.wetDays;
+  const wetHigh=wet!=null&&normalWet!=null&&wet>=normalWet*1.5&&wet>=normalWet+2;
+  const wetLow=wet!=null&&normalWet!=null&&wet<=normalWet*.5&&wet<=normalWet-2;
+  const rot:Condition={id:'rain',icon:'drop',label:'Rot risk',value:wetHigh||rainPct>=.3?'High':wetLow&&rainPct<=-.3?'Low':'Usual',
+    usual:wet!=null&&normalWet!=null?`${wet} wet days, usual ${Math.round(normalWet)}`:`${Math.round(year.rain)} mm, usual ${Math.round(normal.rain)}`,
+    effect:wetHigh||rainPct>=.3?'hurts':wetLow&&rainPct<=-.3?'helps':'neutral'};
 
   let conditions:Condition[];let title:string;
   if(grape==='chardonnay'){
@@ -216,7 +225,7 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
       {id:'acidity',icon:'spark',label:'Acidity',value:acidity==='helps'?'Higher':acidity==='hurts'?'Lower':'Usual',usual:`${year.meanTemp.toFixed(1)} vs ${normal.meanTemp.toFixed(1)} °C`,effect:acidity},
       {id:'ripeness',icon:'therm',label:'Ripeness',value:pickSugar==null?'—':`${Math.round(pickSugar)} g/L`,usual:`min ${minSugar}`,effect:short?'hurts':'neutral'},
       nights,heat,hangTile,
-      {id:'rain',icon:'drop',label:'Late rain',value:`${Math.round(year.rain)} mm`,usual:`usual ${Math.round(normal.rain)}`,effect:rainPct>=.3?'hurts':'neutral'}
+      rot
     ];
   }else{
     title='Colour & tannin';
@@ -224,10 +233,11 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
     const rushed=tempDiff>=1.2&&hangDiff<=-3;
     const sunPct=pct(year.radiation,normal.radiation);
     conditions=[
-      {id:'balance',icon:'scale',label:'Balance',value:short?'Short of ripe':rushed?'Sugar ahead':'In step',usual:short?`below ${minSugar} g/L`:rushed?'of tannin':'with sugar',effect:short||rushed?'hurts':'helps'},
+      // Sugar in step with the skins is the expected state, so it scores nothing.
+      {id:'balance',icon:'scale',label:'Balance',value:short?'Short of ripe':rushed?'Sugar ahead':'In step',usual:short?`below ${minSugar} g/L`:rushed?'of tannin':'with sugar',effect:short||rushed?'hurts':'neutral'},
       nights,heat,hangTile,
       {id:'sun',icon:'sun',label:'Sunshine',value:`${signed(Math.round(sunPct*100))}%`,usual:'vs usual',effect:sunPct>=.08?'helps':sunPct<=-.08?'hurts':'neutral'},
-      {id:'rain',icon:'drop',label:'Late rain',value:`${Math.round(year.rain)} mm`,usual:`usual ${Math.round(normal.rain)}`,effect:rainPct>=.3?'hurts':rainPct<=-.3?'helps':'neutral'}
+      rot
     ];
   }
   const score=conditions.reduce((total,item)=>total+(item.effect==='helps'?1:item.effect==='hurts'?-1:0),0);
@@ -352,6 +362,7 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
         coolNights:avg(own.map(item=>item.ripening.coolNights)),
         heatStressDays:avg(own.map(item=>item.ripening.heatStressDays)),
         rain:avg(own.map(item=>item.ripening.rain)),
+        wetDays:own.every(item=>item.ripening.wetDays!=null)?Math.round(avg(own.map(item=>item.ripening.wetDays!))*10)/10:undefined,
         radiation:avg(own.map(item=>item.ripening.radiation))
       }
     };
