@@ -16,48 +16,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Find the datasets
+      - name: Comephore resources
         run: |
-          for q in "comephore" "SAFRAN" "donnees climatologiques de base quotidiennes" "lame d'eau"; do
-            echo "=== search: $q"
-            curl -sS --retry 3 "https://www.data.gouv.fr/api/1/datasets/?q=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$q")&page_size=8" \
-              | python3 -c "
+          curl -sS --retry 3 "https://www.data.gouv.fr/api/1/datasets/669e23a7ce052a9e8521b75e/" | python3 -c "
           import json,sys
           d=json.load(sys.stdin)
-          for x in d['data']:
-              print('-',x['id'],'|',x['title'],'|',x['organization']['name'] if x.get('organization') else '','|',len(x.get('resources',[])),'resources')
+          print(d['title']);print(d['description'][:3000])
+          rs=d['resources'];print(len(rs),'resources')
+          for r in rs[:25]+rs[-25:]: print('  ',r.get('format'),r.get('filesize'),r['title'],r['url'])
           "
-          done
-      - name: List resources of the Meteo-France datasets
+      - name: Head of one Comephore file
         run: |
-          curl -sS --retry 3 "https://www.data.gouv.fr/api/1/organizations/meteo-france/datasets/?page_size=60" \
-            | python3 -c "
+          url=$(curl -sS "https://www.data.gouv.fr/api/1/datasets/669e23a7ce052a9e8521b75e/" | python3 -c "
           import json,sys
-          d=json.load(sys.stdin)
-          for x in d['data']:
-              t=x['title'].lower()
-              print('##',x['id'],'|',x['title'],'|',x.get('slug'))
-              if any(k in t for k in ['comephore','safran','quotidien','lame','pluvio','précipitation','precipitation','climatologiques de base']):
-                  for r in x.get('resources',[])[:400]:
-                      title=r['title']
-                      if any(k in title.lower() for k in ['21','89','71','safran','comephore','2024','1997','quot','lisez','descriptif','readme','champs']):
-                          print('   ',r.get('format'),r.get('filesize'),title,r['url'])
-          "
-      - name: Peek at Cote-d'Or daily station data
-        run: |
-          url=$(curl -sS "https://www.data.gouv.fr/api/1/datasets/donnees-climatologiques-de-base-quotidiennes/" | python3 -c "
-          import json,sys
-          d=json.load(sys.stdin)
-          for r in d['resources']:
-              if 'departement_21' in r['url'] and 'RR-T-Vent' in r['url'] and '1950-2023' in r['url']: print(r['url']);break
+          rs=json.load(sys.stdin)['resources']
+          c=[r['url'] for r in rs if '2024' in r['url'] and r.get('format') not in ('pdf',)]
+          print(c[0] if c else rs[0]['url'])
           ")
           echo "URL: $url"
-          [ -n "$url" ] && curl -sSL "$url" | gunzip | head -3 || true
-      - name: Peek at SAFRAN
+          curl -sSIL "$url" | grep -iE "^HTTP|content-length|content-type|location"
+      - name: Daily station files for Cote-d'Or, Yonne, Saone-et-Loire
         run: |
-          curl -sS "https://www.data.gouv.fr/api/1/datasets/?q=safran%20quotidien&page_size=5" | python3 -c "
+          curl -sS "https://www.data.gouv.fr/api/1/datasets/6569b51ae64326786e4e8e1a/" | python3 -c "
           import json,sys
-          for x in json.load(sys.stdin)['data']:
-              print('##',x['title'])
-              for r in x['resources'][:20]: print('   ',r.get('format'),r.get('filesize'),r['title'],r['url'])
+          for r in json.load(sys.stdin)['resources']:
+              if any(f'_{d}_' in r['url'] or f'departement_{d}' in r['url'] for d in ('21','89','71')) or 'descriptif' in r['title'].lower():
+                  print('  ',r.get('format'),r.get('filesize'),r['title'],r['url'])
           "
