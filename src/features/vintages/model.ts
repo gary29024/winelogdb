@@ -1,4 +1,4 @@
-import type { AreaHarvest,HarvestStart,GrapeId,GrapeSeason,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason } from './types';
+import type { AreaHarvest,HarvestStart,GrapeId,GrapeSeason,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason,VineyardEvent } from './types';
 
 /**
  * Everything the Vintages screens say about a season, derived from the
@@ -100,15 +100,27 @@ export function seasonHeadline(levels:SeasonLevels,shiftDays:number){
   return `${article} ${words.join(', ')} vintage`;
 }
 
+/** "27 Apr", or "April" when a source dates an event only to the month. */
+/** "on 27 Apr", or "in April" when only the month is known. */
+export const eventWhen=(date:string)=>`${date.length>7?'on':'in'} ${eventDay(date)}`;
+
+export function eventDay(date:string){
+  const [y,m,d]=date.split('-').map(Number);
+  return d?formatDay(Date.UTC(y,m-1,d)):new Date(Date.UTC(y,m-1,1)).toLocaleString('en-GB',{month:'long',timeZone:'UTC'});
+}
+
 /**
  * Two or three plain sentences: what happened, and what it usually means in
  * the glass. Every clause comes from a measured departure, so a typical year
  * says little - which is the honest reading of a typical year.
  */
-export function seasonStory(season:SeasonWeather,normal:SeasonWeather,levels:SeasonLevels,shiftDays:number){
+export function seasonStory(season:SeasonWeather,normal:SeasonWeather,levels:SeasonLevels,shiftDays:number,events:VineyardEvent[]=[]){
   const happened:string[]=[];
   const late=shiftDays>=4,early=shiftDays<=-4;
-  if(season.frostDays>=normal.frostDays+2)happened.push('Spring frost hit the young shoots and likely cut the crop.');
+  const frost=events.find(event=>event.type==='spring-frost'),hail=events.find(event=>event.type==='hail');
+  if(frost)happened.push(`Frost ${eventWhen(frost.date)} hit the young shoots${frost.villages?` in ${frost.villages}`:''} and cut the crop.`);
+  else if(season.frostDays>=normal.frostDays+2)happened.push('Spring frost hit the young shoots and likely cut the crop.');
+  if(hail)happened.push(`Hail ${eventWhen(hail.date)} struck${hail.villages?` ${hail.villages}`:' parts of the area'}.`);
   if(levels.rain>=1&&late)happened.push(`Steady rain${levels.rain>1?' well above normal':''} slowed ripening and kept disease pressure high.`);
   else if(levels.rain>=1)happened.push(`Rain ran ${levels.rain>1?'well ':''}above normal and kept disease pressure high.`);
   else if(levels.rain<=-1&&levels.warmth>=1)happened.push('A hot, dry summer pushed ripening ahead.');
@@ -181,27 +193,39 @@ export function hangTime(veraison:number,harvest:HarvestReading){
  * thresholds compare the year to its own village's normal, so the same rules
  * hold in a warm village and a cool one.
  */
-export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number):ConditionsReading{
+export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number,pickSugar:number|null=null,minSugar=0):ConditionsReading{
+  // Grapes picked below the appellation's legal minimum sugar were not ripe, whatever the weather did for freshness.
+  const short=pickSugar!=null&&pickSugar<minSugar;
   const hangDiff=hang-normalHang;
   const hangEffect:Effect=hangDiff>=4?'helps':hangDiff<=-4?'hurts':'neutral';
   const nightsDiff=year.coolNights-normal.coolNights;
   const nights:Condition={id:'nights',icon:'moon',label:'Cool nights',value:`${Math.round(year.coolNights*100)}%`,usual:`usual ${Math.round(normal.coolNights*100)}%`,
     effect:nightsDiff>=.05?'helps':nightsDiff<=-.05?'hurts':'neutral'};
   const heat:Condition={id:'heat',icon:'flame',label:'Heat stress',value:`${year.heatStressDays} day${year.heatStressDays===1?'':'s'}`,usual:`usual ${Math.round(normal.heatStressDays)}`,
-    effect:year.heatStressDays>normal.heatStressDays+1?'hurts':year.heatStressDays<=normal.heatStressDays?'helps':'neutral'};
+    // Missing heat stress is the normal state, not a gain: it can only hurt.
+    effect:year.heatStressDays>normal.heatStressDays+1?'hurts':'neutral'};
   const hangTile:Condition={id:'hang',icon:'clock',label:'Hang time',value:`${hang} days`,usual:`usual ${normalHang}`,effect:hangEffect};
   const rainPct=pct(year.rain,normal.rain);
   const tempDiff=year.meanTemp-normal.meanTemp;
+  // Rot follows runs of wet, mild days; a single storm raises the total but rarely the rot.
+  // One tile covers both, so rain is not counted twice.
+  const wet=year.wetDays,normalWet=normal.wetDays;
+  const wetHigh=wet!=null&&normalWet!=null&&wet>=normalWet*1.5&&wet>=normalWet+2;
+  const wetLow=wet!=null&&normalWet!=null&&wet<=normalWet*.5&&wet<=normalWet-2;
+  const rot:Condition={id:'rain',icon:'drop',label:'Rot risk',value:wetHigh||rainPct>=.3?'High':wetLow&&rainPct<=-.3?'Low':'Usual',
+    usual:wet!=null&&normalWet!=null?`${wet} wet days, usual ${Math.round(normalWet)}`:`${Math.round(year.rain)} mm, usual ${Math.round(normal.rain)}`,
+    effect:wetHigh||rainPct>=.3?'hurts':wetLow&&rainPct<=-.3?'helps':'neutral'};
 
   let conditions:Condition[];let title:string;
   if(grape==='chardonnay'){
     title='Freshness & acidity';
     const acidity:Effect=tempDiff<=-.6?'helps':tempDiff>=.6?'hurts':'neutral';
     conditions=[
-      {id:'acidity',icon:'spark',label:'Acidity',value:acidity==='helps'?'Higher':acidity==='hurts'?'Lower':'Usual',usual:'vs usual',effect:acidity},
-      {id:'warmth',icon:'therm',label:'Avg warmth',value:`${year.meanTemp.toFixed(1)} °C`,usual:`usual ${normal.meanTemp.toFixed(1)}`,effect:tempDiff<=-.6?'helps':tempDiff>=.6?'hurts':'neutral'},
+      // Acidity follows warmth during ripening: one reading, counted once.
+      {id:'acidity',icon:'spark',label:'Acidity',value:acidity==='helps'?'Higher':acidity==='hurts'?'Lower':'Usual',usual:`${year.meanTemp.toFixed(1)} vs ${normal.meanTemp.toFixed(1)} °C`,effect:acidity},
+      {id:'ripeness',icon:'therm',label:'Ripeness',value:pickSugar==null?'—':`${Math.round(pickSugar)} g/L`,usual:`min ${minSugar}`,effect:short?'hurts':'neutral'},
       nights,heat,hangTile,
-      {id:'rain',icon:'drop',label:'Late rain',value:`${Math.round(year.rain)} mm`,usual:`usual ${Math.round(normal.rain)}`,effect:rainPct>=.3?'hurts':'neutral'}
+      rot
     ];
   }else{
     title='Colour & tannin';
@@ -209,10 +233,11 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
     const rushed=tempDiff>=1.2&&hangDiff<=-3;
     const sunPct=pct(year.radiation,normal.radiation);
     conditions=[
-      {id:'balance',icon:'scale',label:'Balance',value:rushed?'Sugar ahead':'In step',usual:rushed?'of tannin':'with sugar',effect:rushed?'hurts':'helps'},
+      // Sugar in step with the skins is the expected state, so it scores nothing.
+      {id:'balance',icon:'scale',label:'Balance',value:short?'Short of ripe':rushed?'Sugar ahead':'In step',usual:short?`below ${minSugar} g/L`:rushed?'of tannin':'with sugar',effect:short||rushed?'hurts':'neutral'},
       nights,heat,hangTile,
       {id:'sun',icon:'sun',label:'Sunshine',value:`${signed(Math.round(sunPct*100))}%`,usual:'vs usual',effect:sunPct>=.08?'helps':sunPct<=-.08?'hurts':'neutral'},
-      {id:'rain',icon:'drop',label:'Late rain',value:`${Math.round(year.rain)} mm`,usual:`usual ${Math.round(normal.rain)}`,effect:rainPct>=.3?'hurts':rainPct<=-.3?'helps':'neutral'}
+      rot
     ];
   }
   const score=conditions.reduce((total,item)=>total+(item.effect==='helps'?1:item.effect==='hurts'?-1:0),0);
@@ -234,7 +259,7 @@ export type GrapeReading={
   conditions:ConditionsReading|null;
 };
 
-export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number):GrapeReading{
+export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number,minSugar=0):GrapeReading{
   const veraison=isoDay(season.veraison);
   const ripe=dayReaching(season.sugar,year,ripeSugar);
   const normalRipe=normal?dayReaching(normal.sugar,year,ripeSugar):null;
@@ -243,7 +268,8 @@ export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:Vi
   let conditions:ConditionsReading|null=null;
   if(harvest&&normal){
     const normalHarvest={...harvest,start:harvest.typicalStart,end:addDays(harvest.typicalStart,PICKING_DAYS)};
-    conditions=ripeningConditions(grape,season.ripening,normal.ripening,hangTime(veraison,harvest),hangTime(seasonDay(year,normal.veraison),normalHarvest));
+    conditions=ripeningConditions(grape,season.ripening,normal.ripening,hangTime(veraison,harvest),hangTime(seasonDay(year,normal.veraison),normalHarvest),
+      picking?(picking.low+picking.high)/2:null,minSugar);
   }
   return {
     grape,ripe,normalRipe,veraison,picking,normalPicking,
@@ -320,6 +346,7 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
   const {from,to}=eraWindow(year,all[0],all[all.length-1]);
   const seasons=all.filter(y=>y>=from&&y<=to).map(y=>years[String(y)]);
   const field=(read:(season:VillageSeason)=>number)=>avg(seasons.map(read));
+  const withHarvestRain=seasons.flatMap(s=>s.harvestRain==null?[]:[s.harvestRain]);
   const grapes:VillageNormal['grapes']={};
   for(const grape of ['pinot-noir','chardonnay'] as const){
     const own=seasons.map(season=>season.grapes[grape]).filter((item):item is GrapeSeason=>!!item);
@@ -335,13 +362,14 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
         coolNights:avg(own.map(item=>item.ripening.coolNights)),
         heatStressDays:avg(own.map(item=>item.ripening.heatStressDays)),
         rain:avg(own.map(item=>item.ripening.rain)),
+        wetDays:own.every(item=>item.ripening.wetDays!=null)?Math.round(avg(own.map(item=>item.ripening.wetDays!))*10)/10:undefined,
         radiation:avg(own.map(item=>item.ripening.radiation))
       }
     };
   }
   const normal:VillageNormal={
     gdd:Math.round(field(s=>s.gdd)),rainAprSep:Math.round(field(s=>s.rainAprSep)),augNights:Math.round(field(s=>s.augNights)*10)/10,
-    frostDays:Math.round(field(s=>s.frostDays)*10)/10,heatDays:Math.round(field(s=>s.heatDays)),sepRain:Math.round(field(s=>s.sepRain)),grapes
+    frostDays:Math.round(field(s=>s.frostDays)*10)/10,heatDays:Math.round(field(s=>s.heatDays)),sepRain:Math.round(field(s=>s.sepRain)),harvestRain:withHarvestRain.length?Math.round(avg(withHarvestRain)):undefined,grapes
   };
   const starts=Object.entries(harvest.years).filter(([y])=>Number(y)>=from&&Number(y)<=to).map(([,entry])=>dayOfYear(entry.date));
   return {normal,harvest:{...harvest,typical:starts.length?monthDayOf(avg(starts)):harvest.typical},from,to};

@@ -22,9 +22,18 @@ published values. Other sugar levels are extrapolated at 0.118 g/L per °C·day,
 the rate implied by that paper's own harvest offsets (+5 days ≈ +10 g/L,
 +15 days ≈ +30 g/L at ~17 °C), flattening above 215 g/L.
 
-Véraison: heat sum above 10 °C from 1 January (Duchêne/van Leeuwen et al.
-2008, Heat requirements for grapevine varieties, VIIth Int. Terroir Congress):
-Pinot noir 1014, Chardonnay 1068.
+Véraison: Grapevine Flowering Véraison model (Parker et al. 2013, Agric. For.
+Meteorol. 180:249, Table 2): daily mean temperature above 0 °C from 1 March,
+Pinot noir 2511, Chardonnay 2547.
+
+Véraison temperature: the vineyard-elevation SAFRAN temperatures run cooler
+than the weather stations the GFV model was fitted on. PHENOLOGY_OFFSET is
+added to the daily mean in the véraison heat sum only. It was fitted on BIVB
+mid-flowering dates only (Côte d'Or, 66 observations 1997-2025: bias 0, mean
+error 3.9 days) and checked on BIVB mid-véraison dates it never saw (20
+observations 2016-2025: bias -0.2 days, mean error 4.3 days; without it +7.8).
+The sugar model gets no offset: against BIVB reference-plot samples taken
+around 5 September (1991-2025), it is closest without one.
 
 Harvest: the recorded start where harvest_dates.csv has one (official ban or
 opening, or a reported start); otherwise an estimate - the day Pinot noir
@@ -55,9 +64,10 @@ RAIN_FROM = 1997            # COMÉPHORE starts in 1997
 FIRST_SEASON = 1959        # SAFRAN starts on 1 August 1958, so 1959 is the first whole season
 LAPSE = 0.0065              # °C per metre
 GRAPES = {
-    'pinot-noir': {'sugar200': 2840.0, 'veraison': 1014.0},
-    'chardonnay': {'sugar200': 2890.0, 'veraison': 1068.0},
+    'pinot-noir': {'sugar200': 2840.0, 'veraison': 2511.0},
+    'chardonnay': {'sugar200': 2890.0, 'veraison': 2547.0},
 }
+PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
 CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 15
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
@@ -129,12 +139,12 @@ def sugar_from_heat(heat: float, f200: float) -> float:
     return linear if linear <= 215 else 215 + 30 * (1 - math.exp(-(linear - 215) / 30))
 
 
-def heat_sum(series, year: int, start: tuple[int, int], base: float, until: dt.date, normal_t) -> list[tuple[dt.date, float]]:
+def heat_sum(series, year: int, start: tuple[int, int], base: float, until: dt.date, normal_t, offset: float = 0.0) -> list[tuple[dt.date, float]]:
     """Cumulative degree days from `start`; days not yet in the record use the village's normal temperature."""
     total, out = 0.0, []
     for day in days(year, start, (until.month, until.day)):
         t = series[day]['t'] if day in series else normal_t(day)
-        total += max(0.0, t - base)
+        total += max(0.0, t + offset - base)
         out.append((day, total))
     return out
 
@@ -143,13 +153,17 @@ def first_day(cumulative: list[tuple[dt.date, float]], target: float) -> dt.date
     return next((day for day, value in cumulative if value >= target), None)
 
 
-def season_weather(village: str, year: int, weather, rain) -> dict | None:
+def season_weather(village: str, year: int, weather, rain, harvest_start: dt.date | None = None) -> dict | None:
     series = weather[village]
     growing = [series.get(d) for d in days(year, (4, 1), (9, 30))]
     if any(day is None for day in growing):
         return None
     rains = [rain_on(village, d, weather, rain) for d in days(year, (4, 1), (9, 30))]
     sep = [rain_on(village, d, weather, rain) for d in days(year, (9, 1), (9, 30))]
+    # Rain that swells berries and spreads rot at harvest: the week before the area's
+    # harvest start and the picking fortnight from it.
+    picking = [harvest_start + dt.timedelta(days=i) for i in range(-7, 14)] if harvest_start else []
+    picking_rain = [rain_on(village, d, weather, rain) for d in picking if d in series]
     return {
         'gdd': round(sum(max(0.0, d['t'] - 10) for d in growing)),
         'rainAprSep': round(sum(r for r in rains if r is not None)),
@@ -159,6 +173,7 @@ def season_weather(village: str, year: int, weather, rain) -> dict | None:
         'frostDays': sum(1 for d in days(year, (4, 1), (5, 15)) if series[d]['tmin'] <= 0),
         'heatDays': sum(1 for d in growing if d['tmax'] >= 30),
         'sepRain': round(sum(r for r in sep if r is not None)),
+        **({'harvestRain': round(sum(r for r in picking_rain if r is not None))} if len(picking_rain) == len(picking) and picking else {}),
     }
 
 
@@ -166,7 +181,7 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
     series = weather[village]
     params = GRAPES[grape]
     curve_end = dt.date(year, *CURVE_START) + dt.timedelta(days=CURVE_STEP * (CURVE_POINTS - 1))
-    veraison_heat = heat_sum(series, year, (1, 1), 10.0, dt.date(year, 10, 31), normal_t)
+    veraison_heat = heat_sum(series, year, (3, 1), 0.0, dt.date(year, 10, 31), normal_t, PHENOLOGY_OFFSET)
     veraison = first_day(veraison_heat, params['veraison']) or dt.date(year, 8, 31)
     sugar_heat = dict(heat_sum(series, year, (4, 1), 0.0, curve_end, normal_t))
     values = [round(sugar_from_heat(sugar_heat[dt.date(year, *CURVE_START) + dt.timedelta(days=CURVE_STEP * i)], params['sugar200']), 1)
@@ -182,9 +197,26 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'coolNights': round(sum(1 for d in span if series[d]['tmin'] < 13) / len(span), 2) if span else 0,
             'heatStressDays': sum(1 for d in span if series[d]['tmax'] >= 35),
             'rain': round(sum(r for r in rains if r is not None)),
+            # Days grey rot can spread: at least 2 mm of rain on a day averaging 12 °C or more.
+            'wetDays': sum(1 for d, r in zip(span, rains) if r is not None and r >= 2 and series[d]['t'] >= 12),
             'radiation': round(sum(series[d]['ssi'] for d in span) * .01),
         },
     }
+
+
+def vineyard_events() -> dict:
+    """Frost and hail a source dates (data/vineyard_events.csv): an 8 km grid cannot see either."""
+    events: dict[str, dict[str, list]] = {}
+    path = DATA / 'vineyard_events.csv'
+    if not path.exists():
+        return events
+    with open(path) as source:
+        for row in csv.DictReader(line for line in source if not line.startswith('#')):
+            entry = {'date': row['date'], 'type': row['type'], 'source': row['source']}
+            if row.get('villages'):
+                entry['villages'] = row['villages']
+            events.setdefault(row['area'], {}).setdefault(row['year'], []).append(entry)
+    return events
 
 
 def doy_to_mmdd(doy: float, year: int = 2001) -> str:
@@ -347,7 +379,7 @@ def main() -> None:
         village, area = point['id'], area_of[point['id']]
         seasons, grapes_by_year = {}, {}
         for year in years:
-            weather_year = season_weather(village, year, weather, rain)
+            weather_year = season_weather(village, year, weather, rain, starts.get((area, year)))
             if weather_year is None:
                 continue
             seasons[year] = weather_year
@@ -361,6 +393,7 @@ def main() -> None:
             'frostDays': round(mean(seasons[y]['frostDays'] for y in base), 1),
             'heatDays': round(mean(seasons[y]['heatDays'] for y in base)),
             'sepRain': round(mean(seasons[y]['sepRain'] for y in base_rain)),
+            'harvestRain': round(mean(seasons[y]['harvestRain'] for y in base_rain if 'harvestRain' in seasons[y])),
             'grapes': {},
         }
         for grape in GRAPES:
@@ -378,6 +411,7 @@ def main() -> None:
                     'coolNights': round(mean(r['coolNights'] for r in ripening), 2),
                     'heatStressDays': round(mean(r['heatStressDays'] for r in ripening), 1),
                     'rain': round(mean(ripening_rain)),
+                    'wetDays': round(mean(grapes_by_year[y][grape]['ripening']['wetDays'] for y in base_rain), 1),
                     'radiation': round(mean(r['radiation'] for r in ripening)),
                 },
             }
@@ -394,10 +428,11 @@ def main() -> None:
             {'label': 'Rain', 'detail': 'Météo-France COMÉPHORE radar–gauge reanalysis, 1 km, hourly (Licence Ouverte Etalab 2.0). Days not yet published use SAFRAN.'},
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay).'},
-            {'label': 'Véraison', 'detail': 'Heat sum above 10 °C from 1 January of 1014 (Pinot Noir) and 1068 (Chardonnay), after van Leeuwen et al. (2008).'},
+            {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C for this model to match the stations it was fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
             {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one (each cited in scripts/vintages/data/harvest_dates.csv). Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
         ],
         'harvest': harvest,
+        'events': vineyard_events(),
         'villages': written,
     }
     (OUT / 'index.json').write_text(json.dumps(index, separators=(',', ':')))
