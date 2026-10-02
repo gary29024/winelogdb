@@ -1,6 +1,90 @@
-# Official harvest start dates (ban des vendanges or the first day picking
-# opened) for each area. One row per area and year, with the source that states
-# the date. type is official-ban, official-opening or reported-start. Rows replace the estimated start for that area and year; years
-# without a row stay "estimated" on the page. Areas: chablis-auxerrois,
-# cote-de-nuits, hautes-cotes, cote-de-beaune, cote-chalonnaise, maconnais.
+# Recorded harvest start dates: the day still-wine picking generally began in
+# each area. One row per area and year, with the source that states the date.
+#
+# type: official-ban     the ban des vendanges (Côte-d'Or set its last one in
+#                        2007; Saône-et-Loire kept one in 2008)
+#       official-opening an official opening stated by a source
+#       reported-start   a start a source reports for the area: interprofession
+#                        (BIVB, Chablis Commission), growers' bodies (ODG),
+#                        press and trade overviews (Decanter, Jasper Morris),
+#                        or the Hospices de Beaune / de Nuits as benchmark estates
+#
+# Left out on purpose: Crémant-only starts (they run weeks ahead of still wines),
+# planned or announced dates, single non-benchmark domaines, "first picker"
+# dates where a source gives when most growers began, and the symbolic
+# 13 August 2007 Côte-d'Or ban (picking began 29 August). Years without a row
+# stay "estimated" on the page.
+#
+# Areas: chablis-auxerrois, cote-de-nuits, hautes-cotes, cote-de-beaune,
+# cote-chalonnaise, maconnais. Researched 2 October 2026.
 area,year,date,type,source
+cote-de-beaune,1997,1997-09-11,reported-start,https://www.decanter.com/learn/vintage-guides/burgundy-vintage-guide/1997-vintage-guide-for-red-burgundy-115838/
+cote-de-beaune,1999,1999-09-15,official-ban,https://insideburgundy.com/overview/1999-vintage-overview/
+maconnais,1999,1999-09-06,reported-start,https://www.decanter.com/learn/vintage-guides/burgundy-vintage-guide/1999-vintage-guide-for-white-burgundy-115656/
+cote-de-beaune,2000,2000-09-10,reported-start,https://www.decanter.com/magazine/vintage-2000-249611/
+maconnais,2000,2000-09-06,reported-start,https://www.decanter.com/wine/wine-regions/burgundy-wine/2000-vintage-guide-for-white-burgundy-115528/
+chablis-auxerrois,2000,2000-09-23,reported-start,https://www.decanter.com/wine/wine-regions/burgundy-wine/2000-vintage-guide-for-white-burgundy-115528/
+cote-de-beaune,2001,2001-09-17,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+cote-de-nuits,2001,2001-09-20,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+hautes-cotes,2001,2001-09-25,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+maconnais,2001,2001-09-10,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+cote-chalonnaise,2001,2001-09-14,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+chablis-auxerrois,2001,2001-10-01,official-ban,https://www.vitisphere.com/actualite-46475-tous-les-bans-des-vendanges-en-bourgogne.html
+cote-de-beaune,2002,2002-09-16,official-ban,https://insideburgundy.com/overview/2002-vintage-overview/
+cote-de-beaune,2003,2003-08-19,official-ban,https://insideburgundy.com/overview/2003-vintage-overview/
+cote-de-nuits,2003,2003-08-19,official-ban,http://comblanchien.free.fr/vendanges_comblanchien_2003.htm
+chablis-auxerrois,2003,2003-08-25,official-ban,https://chablis-wine.blogspot.com/2004/05/2003-chablis-vintage-report.html
+cote-de-beaune,2004,2004-09-20,official-ban,https://insideburgundy.com/overview/2004-vintage-overview/
+maconnais,2004,2004-09-13,reported-start,https://tastingbook.com/vintage/2004?language=en
+cote-chalonnaise,2004,2004-09-13,reported-start,https://tastingbook.com/vintage/2004?language=en
+cote-de-beaune,2005,2005-09-12,official-ban,https://www.burgundy-report.com/2005/09/a-harvest-report-for-2005/
+cote-de-nuits,2005,2005-09-15,official-ban,https://insideburgundy.com/overview/2005-vintage-overview/
+hautes-cotes,2005,2005-09-17,official-ban,https://www.burgundy-report.com/2005/09/a-harvest-report-for-2005/
+chablis-auxerrois,2005,2005-09-17,official-opening,https://www.drouhin.com/en_US/the-vintages
+cote-de-beaune,2006,2006-09-18,official-ban,https://insideburgundy.com/overview/2006-vintage-overview/
+cote-de-nuits,2006,2006-09-18,official-ban,https://insideburgundy.com/overview/2006-vintage-overview/
+chablis-auxerrois,2006,2006-09-16,official-ban,https://insideburgundy.com/overview/2006-vintage-overview/
+cote-de-beaune,2007,2007-08-29,reported-start,https://www.burgundy-report.com/2020/08/harvest-trivia-the-historical-august-harvests-in-beaune/
+chablis-auxerrois,2007,2007-09-01,official-ban,https://www.bourgogne-panorama.com/accueil/mill%C3%A9simes-1/vendanges-2007/
+cote-chalonnaise,2008,2008-09-03,official-ban,https://www.vitisphere.com/actualite-70485-d233j224-du-pass233-dans-certains-vignobles.html
+maconnais,2008,2008-09-03,official-ban,https://www.vitisphere.com/actualite-70485-d233j224-du-pass233-dans-certains-vignobles.html
+cote-de-beaune,2008,2008-09-25,reported-start,https://insideburgundy.com/overview/2008-vintage-overview/
+cote-de-nuits,2008,2008-09-25,reported-start,https://insideburgundy.com/overview/2008-vintage-overview/
+cote-de-beaune,2009,2009-09-05,reported-start,https://insideburgundy.com/overview/2009-vintage-overview/
+maconnais,2009,2009-09-02,reported-start,https://insideburgundy.com/overview/2009-vintage-overview/
+cote-de-beaune,2011,2011-08-25,reported-start,https://www.burgundy-report.com/burgundy-report-extra/10-2011/a-vintage-viewpoint-2011-2010-2009/
+cote-de-nuits,2011,2011-09-01,reported-start,https://www.burgundy-report.com/burgundy-report-extra/10-2011/a-vintage-viewpoint-2011-2010-2009/
+cote-de-beaune,2012,2012-09-14,reported-start,https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-beaune,2013,2013-09-26,reported-start,https://insideburgundy.com/overview/2013-vintage-overview/
+maconnais,2014,2014-09-08,reported-start,https://www.burgundy-report.com/burgundy-report-extra/09-2014/the-2014-burgundy-harvest/
+cote-chalonnaise,2014,2014-09-08,reported-start,https://www.burgundy-report.com/burgundy-report-extra/09-2014/the-2014-burgundy-harvest/
+cote-de-beaune,2015,2015-08-31,reported-start,https://insideburgundy.com/overview/2015-vintage-overview/
+maconnais,2015,2015-08-24,reported-start,https://www.vitisphere.com/actualite-73605-bourgogne-coup-denvoi-des-vendanges-2015-.html
+cote-de-beaune,2016,2016-09-14,reported-start,https://insideburgundy.com/overview/2016-vintage-overview/
+cote-de-nuits,2016,2016-09-27,reported-start,https://insideburgundy.com/overview/2016-vintage-overview/
+chablis-auxerrois,2016,2016-09-27,reported-start,https://insideburgundy.com/overview/2016-vintage-overview/
+cote-de-beaune,2017,2017-08-28,reported-start,https://insideburgundy.com/overview/2017-vintage-overview/
+chablis-auxerrois,2017,2017-09-04,reported-start,https://www.ici.fr/infos/agriculture-peche/les-vendanges-ont-debute-dans-le-chablisien-1504539364
+cote-de-beaune,2018,2018-08-27,reported-start,https://www.bbr.com/articles/wine/burgundy-2018-vintage-report
+cote-de-beaune,2019,2019-09-09,reported-start,https://hospices-beaune.com/en/wines/vintage-2019
+cote-de-nuits,2019,2019-09-13,reported-start,https://www.vins-bourgogne.fr/presse/n-226,2309,14419.html
+chablis-auxerrois,2019,2019-09-13,reported-start,https://www.vins-bourgogne.fr/presse/n-226,2309,14419.html
+cote-de-beaune,2020,2020-08-16,reported-start,https://france3-regions.franceinfo.fr/bourgogne-franche-comte/cote-d-or/beaune/pour-la-premiere-fois-le-domaine-des-hospices-de-beaune-debute-ses-vendanges-au-15-aout-un-record-3401602.html
+chablis-auxerrois,2020,2020-08-24,reported-start,https://www.chablis-wines.com/header/press-area/releases/chablis-2020-an-early-yet-classic-vintage,3185,14336.html
+cote-de-beaune,2021,2021-09-17,reported-start,https://hospices-beaune.com/en/wines/vintage-2021
+chablis-auxerrois,2021,2021-09-20,reported-start,https://www.chablis-wines.com/gallery_files/site/27531/28816/69396.pdf
+cote-de-beaune,2022,2022-08-20,reported-start,https://www.lesbuvologues.com/2022/09/29/vendanges-2022-premier-etat-de-la-recolte-en-bourgogne/
+cote-de-nuits,2022,2022-08-31,reported-start,https://hospices-beaune.com/vente-encheres-nuits-saint-georges-millesime-2022/
+cote-de-nuits,2023,2023-09-13,reported-start,https://www.info-beaune.com/articles/2023/10/04/4103/hospices-de-nuits-saint-georges-la-promesse-d-un-magnifique-millesime-2023/
+chablis-auxerrois,2023,2023-09-10,reported-start,https://www.chablis.fr/explorez/la-vie-du-vin/l-effet-millesime/les-millesimes-depuis-2010/les-millesimes-depuis-2010,3221,15088.html
+cote-de-beaune,2024,2024-09-12,reported-start,https://nuiton-beaunoy.fr/entre-vignes-et-defis-climatiques-retour-sur-les-vendanges-2024/
+cote-de-nuits,2024,2024-09-19,reported-start,https://hospices-beaune.com/en/hospices-de-nuits-saint-georges-vintage-2024-burgundian-at-heart
+chablis-auxerrois,2024,2024-09-23,reported-start,https://www.chablis.fr/gallery_files/site/25717/28812/78343.pdf
+maconnais,2024,2024-09-11,reported-start,https://hospices-beaune.com/en/wines/vintage-2024
+cote-de-beaune,2025,2025-08-22,reported-start,https://hospices-beaune.com/en/wines/vintage-2025
+cote-de-nuits,2025,2025-09-03,reported-start,https://hospices-beaune.com/presentation-du-millesime-2025-au-domaine-des-hospices-de-nuits-saint-georges
+chablis-auxerrois,2025,2025-08-18,reported-start,https://www.chablis-wines.com/gallery_files/site/27531/28816/81951.pdf
+cote-chalonnaise,2025,2025-08-23,reported-start,https://www.info-beaune.com/articles/2025/08/22/12109/premiers-coups-de-secateurs-en-bourgogne-des-vendanges-2025-qui-s-annoncent-sereines-et-prometteuses/
+maconnais,2025,2025-08-25,reported-start,https://www.info-beaune.com/articles/2025/08/22/12109/premiers-coups-de-secateurs-en-bourgogne-des-vendanges-2025-qui-s-annoncent-sereines-et-prometteuses/
+cote-de-beaune,2026,2026-08-15,reported-start,https://france3-regions.franceinfo.fr/bourgogne-franche-comte/cote-d-or/beaune/pour-la-premiere-fois-le-domaine-des-hospices-de-beaune-debute-ses-vendanges-au-15-aout-un-record-3401602.html
+chablis-auxerrois,2026,2026-08-24,reported-start,https://www.ici.fr/emissions/l-info-d-ici-7h30-ici-auxerre/en-direct-des-vignes-de-chablis-pour-les-vendanges-5422714
