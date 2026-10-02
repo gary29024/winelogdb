@@ -100,7 +100,7 @@ test('Journal grid stays succinct and filters are removable',async({page},info)=
 });
 test('page families fit and render without client errors',async({page},info)=>{
  test.setTimeout(90000);await mock(page);const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
- const paths=['/','/insights','/achievements','/achievements/example','/achievements/new','/achievements/example/edit','/account?section=usage','/journal?scope=cellar','/producers','/tastings','/tastings/evening','/upload','/group-scan','/batch-scan','/wines/new','/producers/research-batch','/admin/lwin-review','/login','/about','/privacy','/terms'];
+ const paths=['/','/vintages','/vintages/meursault/2024','/achievements','/achievements/example','/achievements/new','/achievements/example/edit','/account?section=usage','/journal?scope=cellar','/producers','/tastings','/tastings/evening','/upload','/group-scan','/batch-scan','/wines/new','/producers/research-batch','/admin/lwin-review','/login','/about','/privacy','/terms'];
  for(const [index,path] of paths.entries()){
   await page.goto(path);await expect(page.locator('h1').first()).toBeVisible();await page.waitForLoadState('networkidle');await fits(page);
   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:info.outputPath(`family-${index}.png`),fullPage:true});

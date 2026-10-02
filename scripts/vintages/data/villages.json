@@ -1,0 +1,314 @@
+[
+ {
+  "id": "chablis",
+  "name": "Chablis",
+  "area": "chablis-auxerrois",
+  "lat": 47.8128,
+  "lon": 3.7983,
+  "map": "public/maps/chablis.2026-09-21.geojson"
+ },
+ {
+  "id": "irancy",
+  "name": "Irancy",
+  "area": "chablis-auxerrois",
+  "lat": 47.7106,
+  "lon": 3.6661,
+  "map": "public/maps/irancy.2026-09-21.geojson"
+ },
+ {
+  "id": "saint-bris",
+  "name": "Saint-Bris",
+  "area": "chablis-auxerrois",
+  "lat": 47.7421,
+  "lon": 3.6524,
+  "map": "public/maps/saint-bris.2026-09-21.geojson"
+ },
+ {
+  "id": "marsannay",
+  "name": "Marsannay",
+  "area": "cote-de-nuits",
+  "lat": 47.2711,
+  "lon": 4.9864,
+  "map": "public/maps/marsannay.2026-09-21.geojson"
+ },
+ {
+  "id": "fixin",
+  "name": "Fixin",
+  "area": "cote-de-nuits",
+  "lat": 47.246,
+  "lon": 4.9743,
+  "map": "public/maps/fixin.2026-09-21.geojson"
+ },
+ {
+  "id": "gevrey-chambertin",
+  "name": "Gevrey-Chambertin",
+  "area": "cote-de-nuits",
+  "lat": 47.2231,
+  "lon": 4.9729,
+  "map": "public/maps/gevrey-chambertin.2026-09-21.geojson"
+ },
+ {
+  "id": "morey-saint-denis",
+  "name": "Morey-Saint-Denis",
+  "area": "cote-de-nuits",
+  "lat": 47.1994,
+  "lon": 4.964,
+  "map": "public/maps/morey-saint-denis.2026-09-21.geojson"
+ },
+ {
+  "id": "chambolle-musigny",
+  "name": "Chambolle-Musigny",
+  "area": "cote-de-nuits",
+  "lat": 47.1853,
+  "lon": 4.9583,
+  "map": "public/maps/chambolle-musigny.2026-09-21.geojson"
+ },
+ {
+  "id": "vougeot",
+  "name": "Vougeot",
+  "area": "cote-de-nuits",
+  "lat": 47.1735,
+  "lon": 4.9589,
+  "map": "public/maps/vougeot.2026-09-21.geojson"
+ },
+ {
+  "id": "vosne-romanee",
+  "name": "Vosne-Romanée",
+  "area": "cote-de-nuits",
+  "lat": 47.1633,
+  "lon": 4.9522,
+  "map": "public/maps/vosne-romanee.2026-09-21.geojson"
+ },
+ {
+  "id": "nuits-saint-georges",
+  "name": "Nuits-Saint-Georges",
+  "area": "cote-de-nuits",
+  "lat": 47.1353,
+  "lon": 4.9421,
+  "map": "public/maps/nuits-saint-georges.2026-09-21.geojson"
+ },
+ {
+  "id": "hautes-cotes-de-nuits",
+  "name": "Hautes-Côtes de Nuits",
+  "area": "hautes-cotes",
+  "lat": 47.1412,
+  "lon": 4.8837,
+  "map": "public/maps/bourgogne-hautes-cotes-de-nuits.2026-09-21.geojson"
+ },
+ {
+  "id": "hautes-cotes-de-beaune",
+  "name": "Hautes-Côtes de Beaune",
+  "area": "hautes-cotes",
+  "lat": 47.0049,
+  "lon": 4.7338,
+  "map": "public/maps/bourgogne-hautes-cotes-de-beaune.2026-09-21.geojson"
+ },
+ {
+  "id": "ladoix",
+  "name": "Ladoix",
+  "area": "cote-de-beaune",
+  "lat": 47.0814,
+  "lon": 4.8808,
+  "map": "public/maps/ladoix.2026-09-21.geojson"
+ },
+ {
+  "id": "aloxe-corton",
+  "name": "Aloxe-Corton",
+  "area": "cote-de-beaune",
+  "lat": 47.0697,
+  "lon": 4.8624,
+  "map": "public/maps/aloxe-corton.2026-09-21.geojson"
+ },
+ {
+  "id": "pernand-vergelesses",
+  "name": "Pernand-Vergelesses",
+  "area": "cote-de-beaune",
+  "lat": 47.0779,
+  "lon": 4.8506,
+  "map": "public/maps/pernand-vergelesses.2026-09-21.geojson"
+ },
+ {
+  "id": "savigny-les-beaune",
+  "name": "Savigny-lès-Beaune",
+  "area": "cote-de-beaune",
+  "lat": 47.0591,
+  "lon": 4.8341,
+  "map": "public/maps/savigny-les-beaune.2026-09-21.geojson"
+ },
+ {
+  "id": "chorey-les-beaune",
+  "name": "Chorey-lès-Beaune",
+  "area": "cote-de-beaune",
+  "lat": 47.0526,
+  "lon": 4.8589,
+  "map": "public/maps/chorey-les-beaune.2026-09-21.geojson"
+ },
+ {
+  "id": "beaune",
+  "name": "Beaune",
+  "area": "cote-de-beaune",
+  "lat": 47.0295,
+  "lon": 4.8189,
+  "map": "public/maps/beaune.2026-09-21.geojson"
+ },
+ {
+  "id": "pommard",
+  "name": "Pommard",
+  "area": "cote-de-beaune",
+  "lat": 47.0118,
+  "lon": 4.7943,
+  "map": "public/maps/pommard.2026-09-21.geojson"
+ },
+ {
+  "id": "volnay",
+  "name": "Volnay",
+  "area": "cote-de-beaune",
+  "lat": 46.9966,
+  "lon": 4.7841,
+  "map": "public/maps/volnay.2026-09-21.geojson"
+ },
+ {
+  "id": "monthelie",
+  "name": "Monthélie",
+  "area": "cote-de-beaune",
+  "lat": 46.9952,
+  "lon": 4.7651,
+  "map": "public/maps/monthelie.2026-09-21.geojson"
+ },
+ {
+  "id": "auxey-duresses",
+  "name": "Auxey-Duresses",
+  "area": "cote-de-beaune",
+  "lat": 46.9866,
+  "lon": 4.7386,
+  "map": "public/maps/auxey-duresses.2026-09-21.geojson"
+ },
+ {
+  "id": "saint-romain",
+  "name": "Saint-Romain",
+  "area": "cote-de-beaune",
+  "lat": 46.9967,
+  "lon": 4.7188,
+  "map": "public/maps/saint-romain.2026-09-21.geojson"
+ },
+ {
+  "id": "meursault",
+  "name": "Meursault",
+  "area": "cote-de-beaune",
+  "lat": 46.9741,
+  "lon": 4.7625,
+  "map": "public/maps/meursault.2026-09-21.geojson"
+ },
+ {
+  "id": "blagny",
+  "name": "Blagny",
+  "area": "cote-de-beaune",
+  "lat": 46.9594,
+  "lon": 4.7398,
+  "map": "public/maps/blagny.2026-09-21.geojson"
+ },
+ {
+  "id": "puligny-montrachet",
+  "name": "Puligny-Montrachet",
+  "area": "cote-de-beaune",
+  "lat": 46.9512,
+  "lon": 4.7456,
+  "map": "public/maps/puligny-montrachet.2026-09-21.geojson"
+ },
+ {
+  "id": "chassagne-montrachet",
+  "name": "Chassagne-Montrachet",
+  "area": "cote-de-beaune",
+  "lat": 46.9329,
+  "lon": 4.729,
+  "map": "public/maps/chassagne-montrachet.2026-09-21.geojson"
+ },
+ {
+  "id": "saint-aubin",
+  "name": "Saint-Aubin",
+  "area": "cote-de-beaune",
+  "lat": 46.9512,
+  "lon": 4.7169,
+  "map": "public/maps/saint-aubin.2026-09-21.geojson"
+ },
+ {
+  "id": "santenay",
+  "name": "Santenay",
+  "area": "cote-de-beaune",
+  "lat": 46.9158,
+  "lon": 4.6946,
+  "map": "public/maps/santenay.2026-09-21.geojson"
+ },
+ {
+  "id": "maranges",
+  "name": "Maranges",
+  "area": "cote-de-beaune",
+  "lat": 46.9067,
+  "lon": 4.6657,
+  "map": "public/maps/maranges.2026-09-21.geojson"
+ },
+ {
+  "id": "bouzeron",
+  "name": "Bouzeron",
+  "area": "cote-chalonnaise",
+  "lat": 46.8911,
+  "lon": 4.7279,
+  "map": "public/maps/bouzeron.2026-09-21.geojson"
+ },
+ {
+  "id": "rully",
+  "name": "Rully",
+  "area": "cote-chalonnaise",
+  "lat": 46.8702,
+  "lon": 4.7311,
+  "map": "public/maps/rully.2026-09-21.geojson"
+ },
+ {
+  "id": "mercurey",
+  "name": "Mercurey",
+  "area": "cote-chalonnaise",
+  "lat": 46.8357,
+  "lon": 4.7207,
+  "map": "public/maps/mercurey.2026-09-21.geojson"
+ },
+ {
+  "id": "givry",
+  "name": "Givry",
+  "area": "cote-chalonnaise",
+  "lat": 46.7799,
+  "lon": 4.7308,
+  "map": "public/maps/givry.2026-09-21.geojson"
+ },
+ {
+  "id": "montagny",
+  "name": "Montagny",
+  "area": "cote-chalonnaise",
+  "lat": 46.7006,
+  "lon": 4.6802,
+  "map": "public/maps/montagny.2026-09-21.geojson"
+ },
+ {
+  "id": "vire-clesse",
+  "name": "Viré-Clessé",
+  "area": "maconnais",
+  "lat": 46.4366,
+  "lon": 4.8323,
+  "map": "public/maps/vire-clesse.2026-09-21.geojson"
+ },
+ {
+  "id": "pouilly-fuisse",
+  "name": "Pouilly-Fuissé",
+  "area": "maconnais",
+  "lat": 46.2892,
+  "lon": 4.7376,
+  "map": "public/maps/pouilly-fuisse.2026-09-21.geojson"
+ },
+ {
+  "id": "saint-veran",
+  "name": "Saint-Véran",
+  "area": "maconnais",
+  "lat": 46.3027,
+  "lon": 4.7399,
+  "map": "public/maps/saint-veran.2026-09-21.geojson"
+ }
+]

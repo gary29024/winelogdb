@@ -1,4 +1,5 @@
 import { SectionNavigation } from '../../components/SectionNavigation';
+import { AiSpendCard } from '../journey/AiSpendCard';
 import { usePageSection } from '../../components/usePageSection';
 import { PageHeader } from '../../components/PageHeader';
 import '../../settingsLayout.css';
@@ -22,7 +23,7 @@ const formatBytes=(bytes:number)=>{if(!Number.isFinite(bytes)||bytes<=0)return '
 const labelKind=(kind:string)=>kind.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running in background':'Complete';
 const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
-const sections=[{id:'members',label:'Members'},{id:'usage',label:'Usage'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
+const sections=[{id:'members',label:'Members'},{id:'usage',label:'Usage'},{id:'spend',label:'AI spend'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
 function heldOperationLabel(path:string){
  if(path.endsWith('/deep-search'))return 'Wine Deep Search';
  if(path==='/api/producers/research-batch')return 'Producer batch';
@@ -91,6 +92,9 @@ export function AdminPage(){
   </article>})}</div>
   <p className="usage-note">Cached or friend-reused results do not consume a run. Retries remain attached to the same operation. Allowance weeks reset Monday 00:00 UTC and do not roll over.</p>
  </section>}
+ </section><section hidden={section!=='spend'} aria-label="AI spend">
+  {/* Mounted only when opened: the card reads the spend ledger, which no other section needs. */}
+  {section==='spend'&&<AiSpendCard/>}
  </section><section hidden={section!=='access'} aria-label="Access and budgets">
  <fieldset disabled={busy}><legend>Pilot limits & budgets</legend><p>AI cost and capacity limits apply when members start work. Owner AI has no app-imposed credit, concurrency, daily or budget limits, including the monthly usage check. Provider usage is still recorded. Member entitlements are configured separately below.</p>{budgetKeys.map(key=>{const value=config[key];return <label key={key}>{budgetLabels[key]??key}{typeof value==='boolean'?<input type="checkbox" checked={value} onChange={e=>setConfig({...config,[key]:e.target.checked})}/>:<input type={typeof value==='number'?'number':'text'} value={String(value??'')} onChange={e=>setConfig({...config,[key]:typeof value==='number'?Number(e.target.value):e.target.value})}/>}</label>})}<button onClick={()=>void run(()=>apiJson('/api/admin/settings','PUT',config))}>Save limits & budgets</button></fieldset>
  <fieldset disabled={busy}><legend>Member AI access</legend>

@@ -35,7 +35,7 @@ afterEach(()=>{
 describe('mobile shell',()=>{
   it('labels every tab and draws it with an icon instead of a text glyph',()=>{
     const nav=renderShell().querySelector('.mobile-nav')!;
-    const tabs=['Passport','Journal','Scan Wine','Producers','Insights'];
+    const tabs=['Passport','Journal','Scan Wine','Producers','Vintages'];
     for(const label of tabs)expect(labelled(nav,label)?.querySelector('svg.app-icon')).toBeTruthy();
     expect(nav.textContent).toBe(tabs.join(''));
   });

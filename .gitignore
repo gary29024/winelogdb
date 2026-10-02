@@ -19,3 +19,6 @@ bun.lock
 # Python map-builder caches
 __pycache__/
 *.py[cod]
+
+# Vintages pipeline downloads (rebuilt by the pipeline, never committed)
+scripts/vintages/cache/

@@ -89,7 +89,7 @@ describe('the AI spend card',()=>{
     expect(lines).toHaveLength(3);
     expect(lines[0].textContent).toBe('4,200 grounded searches · 800 free left');
     expect(lines.every(line=>line.tagName==='SPAN')).toBe(true);
-    const css=(await import('node:fs')).readFileSync('src/insights.css','utf8');
+    const css=(await import('node:fs')).readFileSync('src/aiSpend.css','utf8');
     expect(css).toMatch(/\.ai-spend-month span\{[^}]*white-space:nowrap/);
     expect(css).toMatch(/\.ai-spend-month span\{[^}]*grid-column:1\/-1/);
   });

@@ -1,0 +1,49 @@
+name: Vintage data
+
+# Rebuilds public/data/vintages from Météo-France open data (COMÉPHORE 1 km
+# rain, SAFRAN 8 km temperature) and commits the result. Monthly through the
+# season so a new vintage fills in as its months are published; past years are
+# cached and never downloaded twice.
+on:
+  schedule:
+    - cron: '23 4 6 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vintage-data-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Fetch and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/vintages/pipeline/requirements.txt
+      - run: pip install -r scripts/vintages/pipeline/requirements.txt
+      - name: Restore downloaded history
+        uses: actions/cache@v4
+        with:
+          path: scripts/vintages/cache
+          key: vintage-weather-${{ github.run_id }}
+          restore-keys: vintage-weather-
+      - name: Fetch new and missing years
+        run: python scripts/vintages/pipeline/fetch.py
+      - name: Build the page data
+        run: python scripts/vintages/pipeline/build.py
+      - name: Commit if anything changed
+        run: |
+          git add public/data/vintages
+          if git diff --cached --quiet; then echo "No change."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh vintage weather data from Météo-France"
+          git push
