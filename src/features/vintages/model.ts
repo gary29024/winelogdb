@@ -288,10 +288,48 @@ export type SeasonReading={
   character:string;
 };
 
-export function readSeason(year:number,season:VillageSeason,normal:VillageNormal,harvest:AreaHarvest|undefined):SeasonReading{
+/**
+ * How far each measure normally strays in this village, from its own 1991–2020
+ * seasons. "Warmer" then means outside the middle third of those seasons and
+ * "much warmer" the outer tenth, as weather services grade a season; the
+ * unusual-score cuts put 30% of baseline seasons at Typical, 30% Fairly
+ * typical, 25% Unusual, 10% Very unusual and 5% Exceptional.
+ */
+export type Calibration={warmth:number[];rain:number[];nights:number[];shift:number[];cuts:number[]};
+
+const anomalies=(season:SeasonWeather,normal:SeasonWeather)=>({
+  warmth:pct(season.gdd,normal.gdd),rain:pct(season.rainAprSep,normal.rainAprSep),nights:season.augNights-normal.augNights
+});
+const bandBy=(value:number,[q10,q33,q67,q90]:number[]):Level=>value<=q10?-2:value<=q33?-1:value<q67?0:value<q90?1:2;
+const quantiles=(values:number[])=>[.1,1/3,2/3,.9].map(q=>quantile(values,q));
+
+function calibratedLevels(season:SeasonWeather,normal:SeasonWeather,c:Calibration):SeasonLevels{
+  const a=anomalies(season,normal);
+  return {warmth:bandBy(a.warmth,c.warmth),rain:bandBy(a.rain,c.rain),nights:bandBy(a.nights,c.nights)};
+}
+const calibratedDistance=(levels:SeasonLevels,shiftDays:number,c:Calibration)=>
+  Math.abs(levels.warmth)+Math.abs(levels.rain)+Math.abs(levels.nights)+Math.abs(bandBy(shiftDays,c.shift));
+
+export function calibrate(years:Record<string,VillageSeason>,normal:VillageNormal,harvest:AreaHarvest|undefined,from:number,to:number):Calibration{
+  const base=Object.keys(years).map(Number).filter(y=>y>=from&&y<=to);
+  const a=base.map(y=>anomalies(years[String(y)],normal));
+  const shifts=base.map(y=>harvestFor(harvest,y)?.shiftDays??0);
+  const c:Calibration={warmth:quantiles(a.map(x=>x.warmth)),rain:quantiles(a.map(x=>x.rain)),nights:quantiles(a.map(x=>x.nights)),shift:quantiles(shifts),cuts:[]};
+  const distances=base.map((y,i)=>calibratedDistance(calibratedLevels(years[String(y)],normal,c),shifts[i],c));
+  c.cuts=[.3,.6,.85,.95].map(q=>quantile(distances,q));
+  return c;
+}
+
+export function readSeason(year:number,season:VillageSeason,normal:VillageNormal,harvest:AreaHarvest|undefined,calibration?:Calibration):SeasonReading{
   const reading=harvestFor(harvest,year);
-  const levels=seasonLevels(season,normal);
   const shift=reading?.shiftDays??0;
+  if(calibration){
+    const levels=calibratedLevels(season,normal,calibration);
+    const distance=calibratedDistance(levels,shift,calibration);
+    const score=(1+calibration.cuts.filter(cut=>distance>cut).length) as SeasonScore;
+    return {year,harvest:reading,levels,distance,score,character:seasonCharacter(levels,shift)};
+  }
+  const levels=seasonLevels(season,normal);
   const distance=seasonDistance(levels,shift);
   return {year,harvest:reading,levels,distance,score:seasonScore(distance),character:seasonCharacter(levels,shift)};
 }

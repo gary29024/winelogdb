@@ -69,7 +69,7 @@ export type RipeningWeather={
   rain:number;
   /** Days with at least 2 mm of rain and a mean of 12 °C or more, when grey rot spreads (absent in older files). */
   wetDays?:number;
-  /** Solar radiation, MJ/m². */
+  /** Solar radiation, daily mean over the ripening weeks, MJ/m². */
   radiation:number;
 };
 

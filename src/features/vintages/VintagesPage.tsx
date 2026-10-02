@@ -2,7 +2,7 @@ import { useMemo,useState } from 'react';
 import { Link,useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader';
 import { favouriteVillage } from './data';
-import { SCORE_LABELS,closestToTypical,eraNormal,formatDay,readSeason,seasonDay,shiftLabel,shiftTone,type Level,type SeasonReading } from './model';
+import { SCORE_LABELS,calibrate,closestToTypical,eraNormal,formatDay,readSeason,seasonDay,shiftLabel,shiftTone,type Level,type SeasonReading } from './model';
 import { BURGUNDY,DEFAULT_VILLAGE } from './regions';
 import { rememberVillage,rememberedVillage,useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
@@ -41,12 +41,13 @@ export function VintagesPage(){
   const readings=useMemo<SeasonReading[]>(()=>{
     if(!index||!data)return [];
     const harvest=index.harvest[village.area];
+    const calibration=calibrate(data.years,data.normal,harvest,index.baseline.from,index.baseline.to);
     return Object.keys(data.years).map(Number).sort((a,b)=>b-a).map(year=>{
       if(baseline==='era'){
         const era=eraNormal(data.years,harvest,year);
-        return readSeason(year,data.years[String(year)],era.normal,era.harvest);
+        return readSeason(year,data.years[String(year)],era.normal,era.harvest,calibration);
       }
-      return readSeason(year,data.years[String(year)],data.normal,harvest);
+      return readSeason(year,data.years[String(year)],data.normal,harvest,calibration);
     });
   },[index,data,village.area,baseline]);
   const closest=useMemo(()=>closestToTypical(readings),[readings]);

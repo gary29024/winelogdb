@@ -75,7 +75,9 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   const picked:[number,number][]=[];
   if(harvest)for(let day=0;day<=PICKING_DAYS;day++){const time=addDays(harvest.start,day);picked.push([x(time),y(sugarOn(curve,year,time))])}
   const ticks=[1,2,3].map(offset=>Date.UTC(new Date(start).getUTCFullYear(),new Date(start).getUTCMonth()+offset-1,1)).filter(time=>daysBetween(start,time)<=span);
-  const ripeY=y(ripeSugar),verX=x(veraison);
+  const ripeY=y(ripeSugar);
+  // In hot years véraison comes before the chart's first day: pin it to the edge and say when.
+  const early=veraison<start,verX=early?LEFT:x(veraison);
   // Two date labels a few days apart would print over each other; push them
   // to either side of their dots instead.
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
@@ -87,7 +89,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
       <text x={(x(harvest.start)+x(harvest.end))/2} y={TOP+14} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>
     </>}
     <line x1={verX} y1={TOP} x2={verX} y2={BOTTOM} className="chart-veraison"/>
-    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
+    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>{early?`‹ Véraison ${formatDay(veraison)}`:'Véraison'}</text>
     {levels.map(level=><g key={level}>
       <line x1={LEFT} y1={y(level)} x2={RIGHT} y2={y(level)} className="chart-grid"/>
       {level!==ripeSugar&&<text x={LEFT-6} y={y(level)+3} textAnchor="end" className="chart-axis" style={text}>{level}</text>}

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { calibrate,eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
@@ -51,7 +51,9 @@ export function VintageDetailPage(){
     }
     return {normal:data.normal,harvest,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
   },[index,data,village,baseline,year]);
-  const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest):null,[reference,season,year]);
+  // How far seasons normally stray here, from the standard 30 years whichever normal is shown.
+  const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[village.area],index.baseline.from,index.baseline.to):undefined,[index,data,village]);
+  const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest,calibration):null,[reference,season,year,calibration]);
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
