@@ -1,5 +1,6 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun,type UsageSummary } from './api';
+import '../../journey.css';
 import '../../aiSpend.css';
 
 /**

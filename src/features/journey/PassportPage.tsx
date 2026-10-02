@@ -10,6 +10,7 @@ import { getJourneyData,type JourneyData,type RecentTasting } from './api';
 import { journeyLadder,nextMilestones,stampTotals } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
+import { TasteSection } from './TasteSection';
 import '../../journey.css';
 import '../../achievementPassport.css';
 import { linkFrom } from '../wines/backTarget';
@@ -130,7 +131,7 @@ export function PassportPage(){
           <span className="passport-region-flag" aria-hidden="true">{flags[item.country??'']??'•'}</span>
           <div><strong>{item.region}</strong><small>{item.country||'Region'}</small></div><b>{item.wines}</b>
         </Link>)}</div>:<p className="passport-empty-mini">Regions appear as your journal grows.</p>}
-        <Link className="passport-card-link" to="/insights">View all regions <span>›</span></Link>
+        <a className="passport-card-link" href="#passport-taste">More about your taste <span>›</span></a>
       </section>
 
       <section className="passport-mini-card">
@@ -142,6 +143,8 @@ export function PassportPage(){
         <Link className="passport-card-link" to="/journal">View all grapes <span>›</span></Link>
       </section>
     </div>
+
+    <TasteSection data={data}/>
 
     <div className="passport-pair-grid passport-secondary-grid">
 

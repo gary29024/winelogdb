@@ -158,7 +158,7 @@ describe('finding the tastings you have logged',()=>{
     // A sixth tab does not fit at 390px, so the phone route in is the journal's
     // own link rather than another tab.
     await renderShell(null);
-    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersInsights');
+    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersVintages');
   });
 });
 

@@ -1,0 +1,251 @@
+/* Vintages: one colour per measure (warmth amber, rain teal, nights violet),
+   one warm-early ↔ cool-late scale for timing, and green/rose/grey for helps,
+   hurts and neutral. Colour only where it carries meaning; the rest is paper. */
+:root{
+  --vt-warmth:#a35a00;--vt-warmth-wash:#fdf1e1;
+  --vt-rain:#16697f;--vt-rain-wash:#e3f2f6;
+  --vt-nights:#6a3fa0;--vt-nights-wash:#f1eaf9;
+  --vt-early-3:#e3a283;--vt-early-2:#efc0a8;--vt-early-1:#f7dccd;--vt-typical:#efebe3;
+  --vt-late-1:#d9e5f2;--vt-late-2:#b6cde6;--vt-late-3:#94b4d8;
+  --vt-early-ink:#4a1d08;--vt-late-ink:#12304f;
+  --vt-helps:#e3f3e9;--vt-helps-line:#9fcdb0;--vt-helps-ink:#1f5a39;
+  --vt-hurts:#fbe9ec;--vt-hurts-line:#e4a9b5;--vt-hurts-ink:#7f2a3a;
+  --vt-neutral:#f1f3f7;--vt-neutral-line:#d3d9e3;
+  --vt-ripe:#b08a22;--vt-ripe-ink:#6e5512;
+  --vt-year:#1d5183;--vt-picked:var(--wine-ink);--vt-harvest:#9b1c31;--vt-picking:#f7eaee;--vt-veraison:#76508f;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --vt-warmth:#f0b45e;--vt-warmth-wash:#3a2a14;
+    --vt-rain:#6cc3d8;--vt-rain-wash:#14313a;
+    --vt-nights:#c3a2ec;--vt-nights-wash:#2d2340;
+    --vt-early-3:#8c4a2c;--vt-early-2:#6e3d27;--vt-early-1:#4c3024;--vt-typical:#2f3442;
+    --vt-late-1:#25344a;--vt-late-2:#2c4566;--vt-late-3:#36598a;
+    --vt-early-ink:#fbe2d4;--vt-late-ink:#dce9f8;
+    --vt-helps:#183427;--vt-helps-line:#2f6a4c;--vt-helps-ink:#8fdcb4;
+    --vt-hurts:#3a1a22;--vt-hurts-line:#7a3446;--vt-hurts-ink:#f3a9b8;
+    --vt-neutral:#222b3b;--vt-neutral-line:#3a4559;
+    --vt-ripe:#dcb86a;--vt-ripe-ink:#e9cf8f;
+    --vt-year:#8fbde8;--vt-picking:#3a1d27;--vt-harvest:#8a1f37;--vt-veraison:#c3a2ec;
+  }
+}
+
+.vintages-page{max-width:760px;margin:0 auto}
+.vintage-card{margin-top:12px;padding:16px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper)}
+.vintage-card h2{margin:0;font-size:1.3rem}
+.vintage-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.vintage-card-head>span:not([class]){color:var(--ink-7);font-size:.72rem}
+.vintage-muted,.vintage-loading{margin:8px 0 0;color:var(--ink-6);font-size:.85rem}
+.vintage-error{margin-top:12px;color:var(--bad-ink)}
+.vintage-area-note{margin:14px 2px 0;color:var(--ink-7);font-size:.72rem;text-align:center}
+.vintage-sample-badge{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border:1px solid var(--warn-line);border-radius:var(--r-pill);background:var(--warn-wash);color:var(--warn);font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+
+/* Overview controls */
+.vintage-controls{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:4px}
+.vintage-controls label{display:grid;gap:5px;min-width:0;flex:1;max-width:320px;color:var(--ink-6);font-size:.72rem;font-weight:700}
+.vintage-controls select{min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font:600 .95rem 'DM Sans',sans-serif}
+
+/* 30-year strip */
+.vintage-strip{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.vintage-strip-tile{display:grid;place-items:center;min-height:34px;border-radius:7px;font-size:.7rem;font-weight:700;text-decoration:none;font-variant-numeric:tabular-nums}
+.vintage-strip-tile:focus-visible{outline-offset:1px}
+.vintage-strip-legend{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--ink-5);font-size:.68rem;font-weight:600;white-space:nowrap}
+.vintage-strip-scale{display:flex;flex:1;height:8px;overflow:hidden;border-radius:4px}
+.vintage-strip-scale>span{flex:1}
+.tone-early-3{background:var(--vt-early-3);color:var(--vt-early-ink)}
+.tone-early-2{background:var(--vt-early-2);color:var(--vt-early-ink)}
+.tone-early-1{background:var(--vt-early-1);color:var(--vt-early-ink)}
+.tone-typical{background:var(--vt-typical);color:var(--ink-3)}
+.tone-late-1{background:var(--vt-late-1);color:var(--vt-late-ink)}
+.tone-late-2{background:var(--vt-late-2);color:var(--vt-late-ink)}
+.tone-late-3{background:var(--vt-late-3);color:var(--vt-late-ink)}
+
+/* Key above the year list */
+.vintage-key{display:flex;align-items:center;gap:14px;margin:14px 2px 8px;color:var(--ink-5);font-size:.72rem}
+.vintage-key>span{display:flex;align-items:center;gap:4px}
+.vintage-key .is-warmth svg{color:var(--vt-warmth)}
+.vintage-key .is-rain svg{color:var(--vt-rain)}
+.vintage-key .is-nights svg{color:var(--vt-nights)}
+.vintage-key-score{margin-left:auto}
+
+/* Season score */
+.vintage-score{display:inline-flex;gap:2px;flex-shrink:0}
+.vintage-score>span{width:8px;height:14px;border-radius:3px;background:var(--line)}
+.vintage-score>span.is-on{background:var(--ink-3)}
+.vintage-score.is-small>span{width:7px;height:5px}
+
+/* Year cards */
+.vintage-year-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.vintage-year-card{display:flex;align-items:stretch;gap:12px;padding:10px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper);color:var(--ink);text-decoration:none}
+.vintage-year-card.is-reference{background:var(--sunken)}
+a.vintage-year-card:hover{border-color:var(--line-strong)}
+.vintage-year-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0;width:66px;min-height:76px;border-radius:12px;text-align:center}
+.vintage-year-tile strong{font-family:'Playfair Display',serif;font-size:1.3rem;line-height:1}
+.vintage-year-tile small{font-size:.64rem;font-weight:700}
+.vintage-year-tile.is-reference{border:1.5px dashed var(--ink-7);background:var(--paper);color:var(--ink-3)}
+.vintage-year-tile.is-reference small{text-transform:uppercase;letter-spacing:.04em}
+.vintage-year-body{display:flex;flex-direction:column;justify-content:center;gap:7px;flex:1;min-width:0}
+.vintage-year-row{display:flex;align-items:center;gap:6px;min-width:0;min-height:20px}
+.vintage-year-character{flex:1;min-width:0;overflow:hidden;font-size:.95rem;text-overflow:ellipsis;white-space:nowrap}
+.vintage-year-meta{font-size:.8rem;white-space:nowrap}
+.vintage-year-row>.vintage-score{margin-left:auto}
+.vintage-wine-count{display:inline-flex;align-items:center;gap:3px;flex-shrink:0;padding:2px 8px;border-radius:var(--r-pill);background:var(--bad-wash);color:var(--wine-ink);font-size:.72rem;font-weight:700}
+.vintage-indicator{display:inline-flex;align-items:center;gap:2px;height:28px;padding:0 8px;border-radius:var(--r-pill);font-size:.72rem}
+.vintage-indicator b{font-weight:800}
+.vintage-indicator-warmth{background:var(--vt-warmth-wash);color:var(--vt-warmth)}
+.vintage-indicator-rain{background:var(--vt-rain-wash);color:var(--vt-rain)}
+.vintage-indicator-nights{background:var(--vt-nights-wash);color:var(--vt-nights)}
+.vintage-indicator-typical{background:var(--sunken);color:var(--ink-7)}
+.vintage-closest{margin-left:auto;padding:1px 7px;border:1px solid var(--vt-helps-line);border-radius:var(--r-pill);background:var(--vt-helps);color:var(--vt-helps-ink);font-size:.68rem;font-weight:700}
+.vintage-estimated{padding:1px 6px;border-radius:var(--r-pill);background:var(--sunken);color:var(--ink-6);font-size:.64rem;font-weight:700}
+.vintage-show-all{width:100%;min-height:44px;margin-top:10px}
+
+/* How we estimate */
+.vintage-how{margin-top:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.vintage-how summary{display:flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;color:var(--ink-5);font-size:.84rem;font-weight:600;cursor:pointer}
+.vintage-how>div{padding:0 14px 12px;color:var(--ink-5);font-size:.8rem;line-height:1.5}
+.vintage-how p{margin:0 0 8px}
+.vintage-how ul{margin:0;padding-left:18px}
+
+/* Detail: hero */
+.vintage-detail-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.vintage-back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;text-decoration:none}
+.vintage-back span{font-size:1.4rem;line-height:1}
+.vintage-hero{display:grid;gap:12px}
+.vintage-hero-head{display:flex;align-items:center;gap:14px}
+.vintage-year-tile.is-large{width:92px;min-height:92px;border-radius:18px}
+.vintage-year-tile.is-large strong{font-size:1.85rem}
+.vintage-year-tile.is-large small{font-size:.68rem;line-height:1.2}
+.vintage-kicker{margin:0;color:var(--ink-6);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.vintage-hero h1{margin:4px 0 6px;font-size:1.4rem;line-height:1.15}
+.vintage-hero-score{display:inline-flex;align-items:center;gap:6px;color:var(--ink-3);font-size:.76rem;font-weight:700}
+.vintage-hero-harvest{display:flex;align-items:center;gap:8px;margin:0;padding:8px 12px;border-radius:var(--r-sm);background:var(--sunken);font-size:.88rem}
+.vintage-hero-harvest svg{flex-shrink:0;color:var(--ink-5)}
+.vintage-hero-harvest .is-late{color:var(--vt-year)}
+.vintage-hero-harvest .is-early{color:var(--vt-warmth)}
+.vintage-hero-story{margin:0;font-size:.9rem;line-height:1.5}
+.vintage-hero-measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.vintage-hero-measures>span{display:flex;flex-direction:column;gap:4px;min-width:0;padding:10px;border-radius:var(--r-md)}
+.vintage-hero-measures strong{color:var(--ink);font-size:.9rem}
+.vintage-hero-measures small{color:var(--ink-6);font-size:.68rem;white-space:nowrap}
+.vintage-hero-measures .is-warmth{background:var(--vt-warmth-wash);color:var(--vt-warmth)}
+.vintage-hero-measures .is-rain{background:var(--vt-rain-wash);color:var(--vt-rain)}
+.vintage-hero-measures .is-nights{background:var(--vt-nights-wash);color:var(--vt-nights)}
+.vintage-hero-measures .is-typical{background:var(--sunken);color:var(--ink-6)}
+
+/* Grape toggle */
+.vintage-grape-toggle{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:12px;padding:4px;border-radius:12px;background:var(--sunken)}
+.vintage-grape-toggle button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border:0;border-radius:9px;background:0 0;color:var(--ink-5);font:600 .9rem 'DM Sans',sans-serif}
+.vintage-grape-toggle button:hover:not(:disabled){background:0 0;color:var(--ink)}
+/* The chosen grape names the pointer too, or the hover rule above would blank it. */
+.vintage-grape-toggle button.active,.vintage-grape-toggle button.active:hover:not(:disabled){border:0;background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 3px #10182d1f}
+.vintage-grape-dot{width:9px;height:9px;border-radius:50%}
+.vintage-grape-dot.is-pinot-noir{background:var(--style-red)}
+.vintage-grape-dot.is-chardonnay{background:var(--style-white)}
+
+/* At harvest */
+.vintage-harvest-boxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 6px}
+.vintage-harvest-boxes>div{display:grid;grid-template-rows:16px 18px 32px 18px;row-gap:2px;min-width:0;padding:12px;border-radius:var(--r-md);background:var(--sunken);color:var(--ink-3);white-space:nowrap}
+.vintage-harvest-boxes>div>span{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.vintage-harvest-boxes small{overflow:hidden;font-size:.78rem;text-overflow:ellipsis}
+.vintage-harvest-boxes p{margin:0;font-size:.8rem;font-weight:600}
+.vintage-harvest-boxes p strong{font-size:1.5rem;line-height:32px;font-variant-numeric:tabular-nums}
+.vintage-harvest-boxes>.is-year{background:var(--vt-harvest);color:#fff}
+.vintage-harvest-boxes>.is-year>span,.vintage-harvest-boxes>.is-year small:first-of-type{color:#f5d3dc}
+.vintage-sugar-chart{display:block;width:100%;height:auto;margin-top:6px}
+.chart-picking{fill:var(--vt-picking)}
+.chart-picking-label{fill:var(--wine-ink);font-size:11px;font-weight:700}
+.chart-veraison{stroke:var(--vt-veraison);stroke-width:1.4;stroke-dasharray:3 3}
+.chart-veraison-label{fill:var(--vt-veraison);font-size:11px;font-weight:700}
+.chart-grid{stroke:var(--sunken);stroke-width:1}
+.chart-axis{fill:var(--ink-6);font-size:10px}
+.chart-axis.is-month{font-size:11px}
+.chart-axis-line{stroke:var(--line-strong);stroke-width:1}
+.chart-band{fill:var(--line);fill-opacity:.7}
+.chart-normal{fill:none;stroke:var(--ink-6);stroke-width:1.6;stroke-dasharray:5 4}
+.chart-year{fill:none;stroke:var(--vt-year);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.chart-picked{fill:none;stroke:var(--vt-picked);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.chart-ripe{stroke:var(--vt-ripe);stroke-width:1.4;stroke-dasharray:4 3}
+.chart-ripe-label{fill:var(--vt-ripe-ink);font-size:10px;font-weight:800}
+.chart-ripe-label.is-small{font-size:9px;font-weight:700}
+.chart-drop{stroke:var(--vt-year);stroke-width:1.2;stroke-dasharray:2 3}
+.chart-drop.is-normal{stroke:var(--ink-6);stroke-width:1}
+.chart-dot{fill:var(--vt-year);stroke:var(--paper);stroke-width:1.5}
+.chart-dot.is-normal{fill:var(--paper);stroke:var(--ink-5);stroke-width:2}
+.chart-dot-label{fill:var(--vt-year);font-size:10px;font-weight:700}
+.chart-dot-label.is-normal{fill:var(--ink-5)}
+.vintage-chart-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 0 0;padding:0;list-style:none;color:var(--ink-5);font-size:.74rem}
+.vintage-chart-legend li{display:flex;align-items:center;gap:6px}
+.vintage-chart-legend li>span{display:inline-block;width:18px}
+.vintage-chart-legend .is-year{height:3px;border-radius:2px;background:var(--vt-year)}
+.vintage-chart-legend .is-normal{border-top:2px dashed var(--ink-6)}
+.vintage-chart-legend .is-picked{height:5px;border-radius:3px;background:var(--vt-picked)}
+.vintage-chart-legend .is-ripe{border-top:2px dashed var(--vt-ripe)}
+.vintage-callout{margin:12px 0 0;padding:10px 12px;border-radius:var(--r-sm);background:var(--sunken);font-size:.84rem;line-height:1.45}
+
+/* Ripening conditions */
+.vintage-verdict{flex-shrink:0;padding:4px 10px;border:1px solid;border-radius:var(--r-pill);font-size:.74rem;font-weight:800}
+.vintage-verdict.is-favourable{border-color:var(--vt-helps-line);background:var(--vt-helps);color:var(--vt-helps-ink)}
+.vintage-verdict.is-mixed{border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
+.vintage-verdict.is-challenging{border-color:var(--vt-hurts-line);background:var(--vt-hurts);color:var(--vt-hurts-ink)}
+.vintage-conditions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.vintage-condition{display:grid;grid-template-rows:20px 24px;row-gap:2px;min-width:0;padding:8px;border:1px solid;border-radius:12px}
+.vintage-condition-helps{border-color:var(--vt-helps-line);background:var(--vt-helps);--ink-effect:var(--vt-helps-ink)}
+.vintage-condition-hurts{border-color:var(--vt-hurts-line);background:var(--vt-hurts);--ink-effect:var(--vt-hurts-ink)}
+.vintage-condition-neutral{border-color:var(--vt-neutral-line);background:var(--vt-neutral);--ink-effect:var(--ink-5)}
+.vintage-condition-head{display:flex;align-items:center;gap:6px;min-width:0}
+.vintage-condition-head svg{flex-shrink:0;color:var(--ink-effect)}
+.vintage-condition-head>span{flex:1;min-width:0;overflow:hidden;color:var(--ink-3);font-size:.76rem;font-weight:600;text-overflow:ellipsis;white-space:nowrap}
+.vintage-condition-head b{display:grid;place-items:center;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--paper);color:var(--ink-effect);font-size:.8rem}
+.vintage-condition-value{display:flex;align-items:baseline;gap:6px;min-width:0;white-space:nowrap}
+.vintage-condition-value strong{font-size:1.05rem;line-height:24px;font-variant-numeric:tabular-nums}
+.vintage-condition-value small{overflow:hidden;color:var(--ink-5);font-size:.7rem;text-overflow:ellipsis}
+.vintage-effect-key{display:flex;gap:14px;margin:10px 0 0;padding:0;list-style:none;font-size:.7rem;font-weight:600;color:var(--ink-5)}
+.vintage-effect-key li{display:flex;align-items:center;gap:5px}
+.vintage-effect-key li:before{content:"";width:12px;height:12px;border:1px solid;border-radius:4px}
+.vintage-effect-key .vintage-effect-helps:before{border-color:var(--vt-helps-line);background:var(--vt-helps)}
+.vintage-effect-key .vintage-effect-hurts:before{border-color:var(--vt-hurts-line);background:var(--vt-hurts)}
+.vintage-effect-key .vintage-effect-neutral:before{border-color:var(--vt-neutral-line);background:var(--vt-neutral)}
+
+/* The season */
+.vintage-season-rows{display:grid;gap:14px;margin-top:12px}
+.vintage-season-rows>div{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:10px}
+.vintage-season-rows>div>div{display:grid;gap:5px}
+.vintage-season-rows p{display:flex;justify-content:space-between;gap:10px;margin:0;font-size:.84rem}
+.vintage-season-rows p span{font-variant-numeric:tabular-nums}
+.vintage-season-rows b.is-warmth{color:var(--vt-warmth)}
+.vintage-season-rows b.is-rain{color:var(--vt-rain)}
+.vintage-season-rows b.is-nights{color:var(--vt-nights)}
+.vintage-season-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:50%}
+.vintage-season-icon.is-warmth{background:var(--vt-warmth-wash);color:var(--vt-warmth)}
+.vintage-season-icon.is-rain{background:var(--vt-rain-wash);color:var(--vt-rain)}
+.vintage-season-icon.is-nights{background:var(--vt-nights-wash);color:var(--vt-nights)}
+.vintage-diverging{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));height:10px;overflow:hidden;border-radius:5px;background:var(--sunken)}
+.vintage-diverging>span:first-child{display:flex;justify-content:flex-end}
+.vintage-diverging>span:last-child{border-left:2px solid var(--ink-7)}
+.vintage-diverging>span>span{display:block;height:10px}
+.vintage-diverging .is-warmth{background:var(--vt-warmth)}
+.vintage-diverging .is-rain{background:var(--vt-rain)}
+.vintage-diverging .is-nights{background:var(--vt-nights)}
+.vintage-season-scale{display:flex;justify-content:space-between;margin:0;padding-left:44px;color:var(--ink-7);font-size:.68rem}
+.vintage-season-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.vintage-season-tiles>div{display:grid;grid-template-rows:16px 28px 16px;row-gap:3px;min-width:0;padding:10px 12px;border-radius:12px;background:var(--sunken)}
+.vintage-season-tiles span,.vintage-season-tiles small{overflow:hidden;color:var(--ink-6);font-size:.72rem;text-overflow:ellipsis;white-space:nowrap}
+.vintage-season-tiles strong{font-size:1.35rem;line-height:28px;white-space:nowrap}
+
+/* Your wines */
+.vintage-wines{display:grid;margin:0;padding:0;list-style:none}
+.vintage-wines a{display:flex;align-items:center;gap:10px;min-height:52px;border-top:1px solid var(--sunken);color:var(--ink);text-decoration:none}
+.vintage-wines li:first-child a{border-top:0}
+.vintage-wines a>span:last-child{display:grid;min-width:0}
+.vintage-wines strong{overflow:hidden;font-size:.9rem;text-overflow:ellipsis;white-space:nowrap}
+.vintage-wines small{color:var(--ink-6);font-size:.76rem}
+.vintage-wine-dot{flex-shrink:0;width:10px;height:10px;border-radius:50%;background:var(--style-white)}
+.vintage-wine-dot.is-red{background:var(--style-red)}
+
+@media(max-width:420px){
+  .vintage-card{padding:14px}
+  .vintage-year-tile{width:62px}
+  .vintage-hero h1{font-size:1.25rem}
+  .vintage-key{gap:10px}
+}

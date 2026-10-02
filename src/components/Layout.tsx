@@ -17,7 +17,7 @@ const preloadWineForm=()=>void import('../features/wines/WineForm');
 const preloadJournal=()=>void import('../features/wines/LibraryPage');
 const preloadProducers=()=>void import('../features/producers/ProducersPage');
 const preloadPassport=()=>void import('../features/journey/PassportPage');
-const preloadInsights=()=>void import('../features/journey/InsightsPage');
+const preloadVintages=()=>void import('../features/vintages/VintagesPage');
 const preloadTastings=()=>void import('../features/tastings/TastingDetailPage');
 const preloadTastingList=()=>void import('../features/tastings/TastingsPage');
 
@@ -103,7 +103,7 @@ export function Layout(){
         nobody visits daily in the middle of the ones they do. */}
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/insights" onPointerEnter={preloadInsights} onFocus={preloadInsights}>Insights</NavLink></nav>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/vintages" onPointerEnter={preloadVintages} onFocus={preloadVintages}>Vintages</NavLink></nav>
       <div className="topbar-end"><NavLink className="account-link" to="/account">Account &amp; friends</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
     <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/>
@@ -114,7 +114,7 @@ export function Layout(){
       <NavLink to="/journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon"><AppIcon kind="journal"/></span><span className="nav-label">Journal</span></NavLink>
       <button ref={scanTrigger} type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog" aria-expanded={scanSheetOpen}><span className="scan-plus"><AppIcon kind="scan"/></span><span className="nav-label">Scan Wine</span></button>
       <NavLink to="/producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon"><AppIcon kind="producers"/></span><span className="nav-label">Producers</span></NavLink>
-      <NavLink to="/insights" onPointerDown={preloadInsights} onFocus={preloadInsights}><span className="nav-icon"><AppIcon kind="insights"/></span><span className="nav-label">Insights</span></NavLink>
+      <NavLink to="/vintages" onPointerDown={preloadVintages} onFocus={preloadVintages}><span className="nav-icon"><AppIcon kind="vintages"/></span><span className="nav-label">Vintages</span></NavLink>
     </nav>
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>

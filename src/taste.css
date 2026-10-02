@@ -1,0 +1,79 @@
+/* "Your taste" - the former Insights page, folded into the Passport as small tiles. */
+.taste-section{margin-top:22px}
+.taste-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 2px 10px}
+.taste-heading h2{margin:0;font-size:1.45rem}
+.taste-heading span{color:var(--ink-7);font-size:.72rem}
+
+.taste-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.taste-tile{display:flex;flex-direction:column;gap:6px;min-width:0;padding:12px 13px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.taste-tile-label{margin:0;color:var(--ink-7);font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.taste-rank{display:grid;gap:2px;margin:0;padding:0;list-style:none}
+.taste-rank a{display:flex;align-items:baseline;justify-content:space-between;gap:8px;min-height:26px;text-decoration:none}
+.taste-rank strong{min-width:0;overflow:hidden;font-size:.82rem;text-overflow:ellipsis;white-space:nowrap}
+.taste-rank b{flex-shrink:0;color:var(--ink-6);font-size:.76rem;font-variant-numeric:tabular-nums}
+.taste-rank b.taste-heart{color:var(--wine-ink)}
+.taste-big{font-family:'Playfair Display',serif;font-size:1.5rem;line-height:1.1}
+.taste-note{margin:0;color:var(--ink-6);font-size:.74rem;line-height:1.4}
+.taste-note strong{color:var(--ink)}
+.taste-empty{margin:0;color:var(--ink-7);font-size:.74rem;line-height:1.4}
+
+.taste-card{display:grid;gap:14px;margin-top:10px;padding:13px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.taste-bar-group{display:grid;gap:6px}
+.taste-bar-group+.taste-bar-group{padding-top:12px;border-top:1px solid var(--sunken)}
+.taste-bar-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:.82rem}
+.taste-bar-head span{color:var(--ink-7);font-size:.7rem}
+.taste-bar{display:flex;height:10px;overflow:hidden;border-radius:var(--r-pill);background:var(--sunken)}
+.taste-bar>span{min-width:2px;height:100%;background:var(--ink-7)}
+.taste-legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin:0;padding:0;list-style:none;color:var(--ink-5);font-size:.7rem}
+.taste-legend li{display:flex;align-items:center;gap:5px}
+.taste-legend b{color:var(--ink-6);font-weight:600;font-variant-numeric:tabular-nums}
+.taste-swatch{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--ink-7)}
+.taste-cru-grand_cru{background:var(--cru-grand)!important}
+.taste-cru-premier_cru{background:var(--cru-premier)!important}
+.taste-cru-village{background:var(--cru-village)!important}
+.taste-cru-regional{background:var(--cru-regional)!important}
+.mix-style-red{background:var(--style-red)!important}
+.mix-style-white{background:var(--style-white)!important}
+.mix-style-sparkling{background:var(--style-sparkling)!important}
+.mix-style-dessert{background:var(--style-dessert)!important}
+.mix-style-rose{background:var(--style-rose)!important}
+.mix-style-orange{background:var(--style-orange)!important}
+.mix-style-fortified{background:var(--style-fortified)!important}
+.mix-style-other{background:var(--style-other)!important}
+
+.taste-charts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.taste-charts>div{display:grid;gap:6px;min-width:0}
+.taste-charts strong{font-size:.82rem}
+.taste-charts small{overflow:hidden;color:var(--ink-7);font-size:.68rem;text-overflow:ellipsis;white-space:nowrap}
+.taste-mini-chart{display:flex;align-items:flex-end;gap:3px;height:48px}
+.taste-mini-chart>span{flex:1;min-width:0;border-radius:var(--r-xs) var(--r-xs) 2px 2px;background:var(--line-strong)}
+.taste-mini-chart>span.is-latest{background:var(--wine)}
+
+.taste-more{margin-top:10px;overflow:hidden;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
+.taste-more-title{margin:0;padding:11px 14px 6px;font-size:.82rem;font-weight:700}
+.taste-more details{border-top:1px solid var(--sunken)}
+.taste-more summary{display:flex;align-items:center;justify-content:space-between;min-height:46px;padding:0 14px;font-size:.84rem;font-weight:600;cursor:pointer;list-style:none}
+.taste-more summary::-webkit-details-marker{display:none}
+.taste-more summary:after{content:"+";color:var(--ink-6);font-size:1.1rem;font-weight:400}
+.taste-more details[open] summary:after{content:"–"}
+.taste-more details>:not(summary){margin:0 14px 14px}
+.taste-list{display:grid;gap:6px;padding:0;list-style:none}
+.taste-list li{display:flex;justify-content:space-between;gap:10px;font-size:.8rem}
+.taste-list span{color:var(--ink-6)}
+.taste-age-bands{display:flex;align-items:flex-end;gap:5px;margin-top:10px!important}
+.taste-age-bands>div{display:grid;justify-items:center;gap:3px;flex:1;min-width:0}
+.taste-age-bands>div>span{display:flex;align-items:flex-end;width:100%;height:56px}
+.taste-age-bands>div>span>span{display:block;width:100%;min-height:2px;border-radius:3px 3px 1px 1px;background:var(--cru-village)}
+.taste-age-bands small{overflow:hidden;color:var(--ink-7);font-size:.55rem;white-space:nowrap}
+.taste-age-bands b{font-size:.68rem;font-variant-numeric:tabular-nums}
+
+.taste-gate-note{margin:10px 2px 0;color:var(--ink-7);font-size:.7rem;text-align:center}
+
+@media(max-width:760px){
+  .taste-section{margin-top:16px}
+  .taste-heading h2{font-size:1.2rem}
+  .taste-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .taste-tile{padding:10px 11px}
+  .taste-big{font-size:1.25rem}
+  .taste-card{padding:11px 12px}
+}

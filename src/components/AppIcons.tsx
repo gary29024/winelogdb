@@ -1,5 +1,5 @@
 export type AppIconKey=
-  |'passport'|'journal'|'producers'|'insights'
+  |'passport'|'journal'|'producers'|'vintages'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
   |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled'
   |'sparkle'|'chevron-right'|'person-tag';
@@ -11,7 +11,8 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   if(kind==='passport')return <svg {...frame} className="app-icon"><path d="M5 4.25A1.75 1.75 0 0 1 6.75 2.5h11.5a1.25 1.25 0 0 1 1.25 1.25v15.5a1.25 1.25 0 0 1-1.25 1.25H6.75A1.75 1.75 0 0 1 5 18.75Z"/><path d="M5 18.75A1.75 1.75 0 0 1 6.75 17h12.75"/><circle cx="12.3" cy="8.6" r="2.6"/><path d="M9.8 13.4h5"/></svg>;
   if(kind==='journal')return <svg {...frame} className="app-icon"><path d="M4 5.25A2.25 2.25 0 0 1 6.25 3H19a1 1 0 0 1 1 1v14.5a1 1 0 0 1-1 1H6.25A2.25 2.25 0 0 0 4 21.75Z"/><path d="M4 5.25v16.5"/><path d="M8.5 7.75h7.5M8.5 11h7.5M8.5 14.25h4.5"/></svg>;
   if(kind==='producers')return <svg {...frame} className="app-icon"><path d="M2.75 20.75h18.5"/><path d="M5 20.75V9.9L12 4.5l7 5.4v10.85"/><path d="M9.6 20.75V15.4h4.8v5.35"/><path d="M8.4 11.6h7.2"/></svg>;
-  if(kind==='insights')return <svg {...frame} className="app-icon"><path d="M3.5 3.5v16a1 1 0 0 0 1 1h16"/><path d="M8 17v-4M12.4 17v-7.5M16.8 17v-3"/><path d="M7 8.6 11.4 5l3.4 2.6L20 3.4"/></svg>;
+  // Vintages: a grape bunch on its stem - the season's crop, not a chart.
+  if(kind==='vintages')return <svg {...frame} className="app-icon"><path d="M12 3.2v3.1"/><path d="M12 5.4c1.5-1.7 3.8-2.2 5.6-1.6-.5 2-2.2 3.4-4.4 3.5"/><circle cx="8.6" cy="9.4" r="2"/><circle cx="12" cy="9.4" r="2"/><circle cx="15.4" cy="9.4" r="2"/><circle cx="10.3" cy="12.9" r="2"/><circle cx="13.7" cy="12.9" r="2"/><circle cx="12" cy="16.4" r="2"/><circle cx="12" cy="19.6" r="1.4"/></svg>;
   // Scan: viewfinder corners around the app's own wine-glass mark.
   if(kind==='scan')return <svg {...frame} className="app-icon"><path d="M3 8.4V5.9A2.9 2.9 0 0 1 5.9 3h2.5M15.6 3h2.5A2.9 2.9 0 0 1 21 5.9v2.5M21 15.6v2.5a2.9 2.9 0 0 1-2.9 2.9h-2.5M8.4 21H5.9A2.9 2.9 0 0 1 3 18.1v-2.5"/><path d="M9.15 8.5h5.7l-.5 2.85a2.6 2.6 0 0 1-5.13 0Z"/><path d="M12 14.1v2.35M10.15 16.45h3.7"/></svg>;
   if(kind==='single-wine')return <svg {...frame} className="app-icon"><path d="M9.6 2.75h4.8v4.16c0 1.1.34 1.72 1.2 2.62 1.06 1.12 1.5 2.1 1.5 3.55v7.42a.75.75 0 0 1-.75.75H7.65a.75.75 0 0 1-.75-.75v-7.42c0-1.45.44-2.43 1.5-3.55.86-.9 1.2-1.52 1.2-2.62Z"/><path d="M6.9 13.4h10.2M6.9 17.5h10.2"/></svg>;
