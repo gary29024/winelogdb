@@ -1,0 +1,63 @@
+name: Vintage data probe
+
+# Temporary: reads the shape of the Meteo-France open data from GitHub's
+# network so the real pipeline can be written against it. Removed once the
+# pipeline lands.
+on:
+  push:
+    branches: [claude/vintage-analysis-insights-ajd0tc]
+    paths: [.github/workflows/vintage-data-probe.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Find the datasets
+        run: |
+          for q in "comephore" "SAFRAN" "donnees climatologiques de base quotidiennes" "lame d'eau"; do
+            echo "=== search: $q"
+            curl -sS --retry 3 "https://www.data.gouv.fr/api/1/datasets/?q=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$q")&page_size=8" \
+              | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)
+          for x in d['data']:
+              print('-',x['id'],'|',x['title'],'|',x['organization']['name'] if x.get('organization') else '','|',len(x.get('resources',[])),'resources')
+          "
+          done
+      - name: List resources of the Meteo-France datasets
+        run: |
+          curl -sS --retry 3 "https://www.data.gouv.fr/api/1/organizations/meteo-france/datasets/?page_size=60" \
+            | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)
+          for x in d['data']:
+              t=x['title'].lower()
+              print('##',x['id'],'|',x['title'],'|',x.get('slug'))
+              if any(k in t for k in ['comephore','safran','quotidien','lame','pluvio','précipitation','precipitation','climatologiques de base']):
+                  for r in x.get('resources',[])[:400]:
+                      title=r['title']
+                      if any(k in title.lower() for k in ['21','89','71','safran','comephore','2024','1997','quot','lisez','descriptif','readme','champs']):
+                          print('   ',r.get('format'),r.get('filesize'),title,r['url'])
+          "
+      - name: Peek at Cote-d'Or daily station data
+        run: |
+          url=$(curl -sS "https://www.data.gouv.fr/api/1/datasets/donnees-climatologiques-de-base-quotidiennes/" | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)
+          for r in d['resources']:
+              if 'departement_21' in r['url'] and 'RR-T-Vent' in r['url'] and '1950-2023' in r['url']: print(r['url']);break
+          ")
+          echo "URL: $url"
+          [ -n "$url" ] && curl -sSL "$url" | gunzip | head -3 || true
+      - name: Peek at SAFRAN
+        run: |
+          curl -sS "https://www.data.gouv.fr/api/1/datasets/?q=safran%20quotidien&page_size=5" | python3 -c "
+          import json,sys
+          for x in json.load(sys.stdin)['data']:
+              print('##',x['title'])
+              for r in x['resources'][:20]: print('   ',r.get('format'),r.get('filesize'),r['title'],r['url'])
+          "
