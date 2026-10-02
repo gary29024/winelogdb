@@ -50,6 +50,8 @@ export function VintagesPage(){
 
   const chooseVillage=(id:string)=>{rememberVillage(id);setParams(current=>{const next=new URLSearchParams(current);next.set('village',id);return next},{replace:true})};
   const typicalHarvest=index?.harvest[village.area]?.typical;
+  // When every year in the area is estimated, one note says so instead of a badge on every card.
+  const allEstimated=readings.length>0&&readings.every(item=>item.harvest?.source!=='official');
   const strip=[...readings].reverse().slice(-30);
   const shown=showAll?readings:readings.slice(0,INITIAL_YEARS);
 
@@ -89,6 +91,7 @@ export function VintagesPage(){
         <span className="vintage-key-score"><ScoreMeter score={2} small/>How unusual</span>
       </div>
 
+      {allEstimated&&<p className="vintage-estimate-note">Harvest dates for {area?.name??'this area'} are estimated from the weather until official start dates are added.</p>}
       <ol className="vintage-year-list">
         <li className="vintage-year-card is-reference">
           <span className="vintage-year-tile is-reference"><strong>{index?`${String(index.baseline.from).slice(2)}–${String(index.baseline.to).slice(2)}`:'—'}</strong><small>average</small></span>
@@ -115,7 +118,7 @@ export function VintagesPage(){
                 </div>
                 <div className="vintage-year-row vintage-year-meta">
                   <strong>{item.harvest?`Harvest ${formatDay(item.harvest.start)}`:'Harvest date unknown'}</strong>
-                  {item.harvest?.source==='estimated'&&<span className="vintage-estimated">estimated</span>}
+                  {!allEstimated&&item.harvest?.source==='estimated'&&<span className="vintage-estimated">estimated</span>}
                   {closest===item.year&&<span className="vintage-closest">Closest to typical</span>}
                 </div>
               </div>

@@ -98,6 +98,7 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-indicator-typical{background:var(--sunken);color:var(--ink-7)}
 .vintage-closest{margin-left:auto;padding:1px 7px;border:1px solid var(--vt-helps-line);border-radius:var(--r-pill);background:var(--vt-helps);color:var(--vt-helps-ink);font-size:.68rem;font-weight:700}
 .vintage-estimated{padding:1px 6px;border-radius:var(--r-pill);background:var(--sunken);color:var(--ink-6);font-size:.64rem;font-weight:700}
+.vintage-estimate-note{margin:0 2px 8px;color:var(--ink-6);font-size:.74rem;line-height:1.4}
 .vintage-show-all{width:100%;min-height:44px;margin-top:10px}
 
 /* How we estimate */

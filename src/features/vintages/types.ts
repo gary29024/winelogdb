@@ -37,7 +37,7 @@ export type VintageRegionConfig={
 
 /** One season's weather at one village, Apr–Oct unless named otherwise. */
 export type SeasonWeather={
-  /** Growing degree days above 10 °C, 1 Apr – 31 Oct. */
+  /** Growing degree days above 10 °C, 1 Apr – 30 Sep. */
   gdd:number;
   /** Rain 1 Apr – 30 Sep, mm. */
   rainAprSep:number;
@@ -45,7 +45,7 @@ export type SeasonWeather={
   augNights:number;
   /** Days with a minimum at or below 0 °C, 1 Apr – 15 May. */
   frostDays:number;
-  /** Days with a maximum at or above 30 °C. */
+  /** Days with a maximum at or above 30 °C, 1 Apr – 30 Sep. */
   heatDays:number;
   /** Rain in September, mm. */
   sepRain:number;

@@ -8,7 +8,7 @@
  *
  *   npx vite-node scripts/vintages/build_village_points.ts
  */
-import { readFileSync,writeFileSync } from 'node:fs';
+import { mkdirSync,readFileSync,writeFileSync } from 'node:fs';
 
 type Ring=[number,number][];
 type Geometry={type:'Polygon';coordinates:Ring[]}|{type:'MultiPolygon';coordinates:Ring[][]};
@@ -82,11 +82,13 @@ function centroid(geometry:Geometry){
   return {lon:x/total,lat:y/total};
 }
 
+const points:{id:string;name:string;area:string;lat:number;lon:number;map:string}[]=[];
 const rows=VILLAGES.map(([id,name,file,area])=>{
   const geo=JSON.parse(readFileSync(`public/maps/${file}.${MAP_VERSION}.geojson`,'utf8')) as {features:Feature[]};
   const feature=geo.features.find(item=>item.properties.tier==='village')??geo.features.find(item=>item.properties.tier==='regional');
   if(!feature)throw new Error(`${file}: no village or regional boundary`);
   const {lat,lon}=centroid(feature.geometry);
+  points.push({id,name,area,lat:Number(lat.toFixed(4)),lon:Number(lon.toFixed(4)),map:`public/maps/${file}.${MAP_VERSION}.geojson`});
   return `  {id:'${id}',name:'${name.replace(/'/g,"\\'")}',area:'${area}',lat:${lat.toFixed(4)},lon:${lon.toFixed(4)}}`;
 });
 
@@ -98,4 +100,7 @@ export const BURGUNDY_VILLAGES:readonly VintageVillage[]=[
 ${rows.join(',\n')}
 ];
 `);
+// The weather pipeline (Python) reads the same list, with each village's map file.
+mkdirSync('scripts/vintages/data',{recursive:true});
+writeFileSync('scripts/vintages/data/villages.json',JSON.stringify(points,null,1)+'\n');
 console.log(`Wrote ${rows.length} villages`);

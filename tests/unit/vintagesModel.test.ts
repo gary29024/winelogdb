@@ -109,22 +109,29 @@ describe('ripening conditions',()=>{
   });
 });
 
-describe('the sample dataset the page ships with',()=>{
+describe('the dataset the page ships with',()=>{
   const index=JSON.parse(readFileSync('public/data/vintages/burgundy/index.json','utf8')) as VintageIndex;
 
-  it('says it is a sample, and covers every village in the picker',()=>{
-    expect(index.sample).toBe(true);
+  it('covers every village in the picker and every area',()=>{
+    expect(typeof index.sample).toBe('boolean');
     expect(new Set(index.villages)).toEqual(new Set(BURGUNDY.villages.map(village=>village.id)));
     for(const area of BURGUNDY.areas)expect(index.harvest[area.id]).toBeTruthy();
+    expect(index.sources.length).toBeGreaterThan(0);
   });
 
-  it('reads end to end for a village and a year',()=>{
+  it('reads end to end for every season of a village',()=>{
     const data=JSON.parse(readFileSync('public/data/vintages/burgundy/meursault.json','utf8')) as VillageData;
-    const season=readSeason(2024,data.years['2024'],data.normal,index.harvest['cote-de-beaune']);
-    expect(season.harvest!.shiftDays).toBe(6);
-    const grape=readGrape('chardonnay',2024,data.years['2024'].grapes.chardonnay!,data.normal.grapes.chardonnay,season.harvest,200);
-    expect(grape.pickGap).toBeGreaterThan(grape.normalPickGap!);
-    expect(grape.picking!.low).toBeLessThan(grape.picking!.high);
+    const years=Object.keys(data.years).map(Number);
+    expect(years.length).toBeGreaterThanOrEqual(25);
+    for(const year of years){
+      const season=readSeason(year,data.years[String(year)],data.normal,index.harvest['cote-de-beaune']);
+      expect(season.harvest,`${year} harvest`).not.toBeNull();
+      for(const grape of ['pinot-noir','chardonnay'] as const){
+        const reading=readGrape(grape,year,data.years[String(year)].grapes[grape]!,data.normal.grapes[grape],season.harvest,200);
+        expect(reading.picking!.low,`${year} ${grape}`).toBeLessThanOrEqual(reading.picking!.high);
+        expect(reading.ripe,`${year} ${grape} reaches ripeness`).not.toBeNull();
+      }
+    }
   });
 });
 
