@@ -26,12 +26,14 @@ Véraison: Grapevine Flowering Véraison model (Parker et al. 2013, Agric. For.
 Meteorol. 180:249, Table 2): daily mean temperature above 0 °C from 1 March,
 Pinot noir 2511, Chardonnay 2547.
 
-Model temperature: the vineyard-elevation SAFRAN temperatures run cooler than
-the weather stations Parker's models were fitted on. One offset, MODEL_OFFSET,
-is added to the daily mean inside every model heat sum. It was fitted on BIVB
+Véraison temperature: the vineyard-elevation SAFRAN temperatures run cooler
+than the weather stations the GFV model was fitted on. PHENOLOGY_OFFSET is
+added to the daily mean in the véraison heat sum only. It was fitted on BIVB
 mid-flowering dates only (Côte d'Or, 66 observations 1997-2025: bias 0, mean
 error 3.9 days) and checked on BIVB mid-véraison dates it never saw (20
 observations 2016-2025: bias -0.2 days, mean error 4.3 days; without it +7.8).
+The sugar model gets no offset: against BIVB reference-plot samples taken
+around 5 September (1991-2025), it is closest without one.
 
 Harvest: the recorded start where harvest_dates.csv has one (official ban or
 opening, or a reported start); otherwise an estimate - the day Pinot noir
@@ -65,7 +67,7 @@ GRAPES = {
     'pinot-noir': {'sugar200': 2840.0, 'veraison': 2511.0},
     'chardonnay': {'sugar200': 2890.0, 'veraison': 2547.0},
 }
-MODEL_OFFSET = 1.1          # °C added to daily means in model heat sums; see the docstring
+PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
 CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 15
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
@@ -137,12 +139,12 @@ def sugar_from_heat(heat: float, f200: float) -> float:
     return linear if linear <= 215 else 215 + 30 * (1 - math.exp(-(linear - 215) / 30))
 
 
-def heat_sum(series, year: int, start: tuple[int, int], base: float, until: dt.date, normal_t) -> list[tuple[dt.date, float]]:
+def heat_sum(series, year: int, start: tuple[int, int], base: float, until: dt.date, normal_t, offset: float = 0.0) -> list[tuple[dt.date, float]]:
     """Cumulative degree days from `start`; days not yet in the record use the village's normal temperature."""
     total, out = 0.0, []
     for day in days(year, start, (until.month, until.day)):
         t = series[day]['t'] if day in series else normal_t(day)
-        total += max(0.0, t + MODEL_OFFSET - base)
+        total += max(0.0, t + offset - base)
         out.append((day, total))
     return out
 
@@ -179,7 +181,7 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
     series = weather[village]
     params = GRAPES[grape]
     curve_end = dt.date(year, *CURVE_START) + dt.timedelta(days=CURVE_STEP * (CURVE_POINTS - 1))
-    veraison_heat = heat_sum(series, year, (3, 1), 0.0, dt.date(year, 10, 31), normal_t)
+    veraison_heat = heat_sum(series, year, (3, 1), 0.0, dt.date(year, 10, 31), normal_t, PHENOLOGY_OFFSET)
     veraison = first_day(veraison_heat, params['veraison']) or dt.date(year, 8, 31)
     sugar_heat = dict(heat_sum(series, year, (4, 1), 0.0, curve_end, normal_t))
     values = [round(sugar_from_heat(sugar_heat[dt.date(year, *CURVE_START) + dt.timedelta(days=CURVE_STEP * i)], params['sugar200']), 1)
@@ -423,7 +425,7 @@ def main() -> None:
             {'label': 'Rain', 'detail': 'Météo-France COMÉPHORE radar–gauge reanalysis, 1 km, hourly (Licence Ouverte Etalab 2.0). Days not yet published use SAFRAN.'},
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay).'},
-            {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C in every model to match the stations the models were fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
+            {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C for this model to match the stations it was fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
             {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one (each cited in scripts/vintages/data/harvest_dates.csv). Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
         ],
         'harvest': harvest,
