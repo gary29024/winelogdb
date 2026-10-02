@@ -21,6 +21,7 @@ import datetime as dt
 import json
 import tarfile
 import time
+import urllib.error
 import urllib.request
 from collections import defaultdict
 from pathlib import Path
@@ -76,7 +77,8 @@ def month(year: int, number: int, points: list[dict], totals: dict, hours: dict)
                             hours[(village, day)] += 1
             return
         except Exception as error:  # noqa: BLE001 - network: retried, then raised
-            if attempt == 4:
+            # An unpublished month is an answer, not a dropped connection.
+            if attempt == 4 or (isinstance(error, urllib.error.HTTPError) and error.code == 404):
                 raise
             print(f'{year}-{number:02d}: retrying after {error}')
             # A half-read month must not be counted twice.

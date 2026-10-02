@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { formatDay,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useRegionWines,useVintageData } from './useVintages';
@@ -93,12 +93,12 @@ export function VintageDetailPage(){
       <h2 id="vintage-harvest-title">At harvest</h2>
       {grapeReading.picking&&grapeReading.normalPicking&&harvest&&<div className="vintage-harvest-boxes">
         <div className="is-year">
-          <span>{year}</span><small>{harvest.source==='estimated'?'Est. picking':'Picked'} {formatDay(harvest.start)}–{formatDay(harvest.end)}</small>
+          <span>{year}</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.start,harvest.end)}</small>
           <p><strong>{grapeReading.picking.low}–{grapeReading.picking.high}</strong> g/L</p>
           <small>≈ {grapeReading.picking.alcoholLow.toFixed(1)}–{grapeReading.picking.alcoholHigh.toFixed(1)}% alc.</small>
         </div>
         <div>
-          <span>Typical</span><small>Picked {formatDay(harvest.typicalStart)}–{formatDay(harvest.typicalStart+14*86_400_000)}</small>
+          <span>Typical</span><small>{harvest.source==='estimated'?'Est.':'Picked'} {formatRange(harvest.typicalStart,harvest.typicalStart+14*86_400_000)}</small>
           <p><strong>{grapeReading.normalPicking.low}–{grapeReading.normalPicking.high}</strong> g/L</p>
           <small>≈ {grapeReading.normalPicking.alcoholLow.toFixed(1)}–{grapeReading.normalPicking.alcoholHigh.toFixed(1)}% alc.</small>
         </div>

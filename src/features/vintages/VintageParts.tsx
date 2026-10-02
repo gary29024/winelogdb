@@ -19,7 +19,7 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
       <p><strong>Harvest dates</strong> are the official start of picking for each area where one is published, and a modelled date marked “estimated” where not. Picking is read as that date plus two weeks.</p>
       <p><strong>Sugar</strong> is estimated from daily temperature with a published grape-ripening model (Parker et al., 2020) calibrated on French vineyards. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
       <p><strong>Ripening conditions</strong> compare the weather after véraison with the same village’s normal. They show whether the season helped or hindered colour, tannin or freshness; rain, crop size, disease and each grower’s choices change the real result.</p>
-      <p><strong>Weather</strong> is read for each village’s vineyards. Neighbouring villages share very similar figures; the clearest differences run along the slope and between areas.</p>
+      <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night — like April 2016 — may not show.</p>
       {index&&<p><strong>Typical</strong> means the {index.baseline.from}–{index.baseline.to} average{index.baseline.rainFrom?` (rain from ${index.baseline.rainFrom}, when the 1 km radar record begins)`:''}.</p>}
       {index&&<ul>{index.sources.map(source=><li key={source.label}><strong>{source.label}</strong> — {source.detail}</li>)}</ul>}
     </div>
@@ -29,8 +29,16 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
 /* ---------- The sugar chart ---------- */
 
 const W=342,LEFT=30,RIGHT=338,TOP=22,BOTTOM=194;
-const SUGAR_MIN=150,SUGAR_MAX=230;
-const y=(sugar:number)=>BOTTOM-2-(Math.min(SUGAR_MAX,Math.max(SUGAR_MIN,sugar))-SUGAR_MIN)*((BOTTOM-2-TOP-10)/(SUGAR_MAX-SUGAR_MIN));
+const SUGAR_MAX=230;
+/** The axis starts low enough for the whole season: real early-August sugar sits well under 150 g/L. */
+function sugarScale(...series:number[][]){
+  const lowest=Math.min(...series.flat());
+  const min=Math.max(80,Math.min(150,Math.floor(lowest/20)*20));
+  const y=(sugar:number)=>BOTTOM-2-(Math.min(SUGAR_MAX,Math.max(min,sugar))-min)*((BOTTOM-2-TOP-10)/(SUGAR_MAX-min));
+  const ticks:number[]=[];
+  for(let level=Math.ceil((min+1)/20)*20;level<=220;level+=20)ticks.push(level);
+  return {y,ticks};
+}
 
 function chartScale(curve:SugarCurve,year:number){
   const start=seasonDay(year,curve.start),span=(curve.values.length-1)*curve.step;
@@ -50,6 +58,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   harvest:HarvestReading|null;veraison:number;ripeSugar:number;
 }){
   const {start,span,x}=chartScale(curve,year);
+  const {y,ticks:levels}=sugarScale(curve.values,normal.values,low);
   const at=(values:number[],i:number):[number,number]=>[LEFT+i*curve.step*(RIGHT-LEFT)/span,y(values[i])];
   const yearLine=path(curve.values.map((_,i)=>at(curve.values,i)));
   const normalLine=path(normal.values.map((_,i)=>at(normal.values,i)));
@@ -71,7 +80,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
     </>}
     <line x1={verX} y1={TOP} x2={verX} y2={BOTTOM} className="chart-veraison"/>
     <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
-    {[160,180,200,220].map(level=><g key={level}>
+    {levels.map(level=><g key={level}>
       <line x1={LEFT} y1={y(level)} x2={RIGHT} y2={y(level)} className="chart-grid"/>
       {level!==ripeSugar&&<text x={LEFT-6} y={y(level)+3} textAnchor="end" className="chart-axis" style={text}>{level}</text>}
     </g>)}
@@ -81,7 +90,6 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
     {picked.length>1&&<path d={path(picked)} className="chart-picked"/>}
     <line x1={LEFT} y1={ripeY} x2={RIGHT} y2={ripeY} className="chart-ripe"/>
     <text x={LEFT-6} y={ripeY+3} textAnchor="end" className="chart-ripe-label" style={text}>{ripeSugar}</text>
-    <text x={LEFT-6} y={ripeY+14} textAnchor="end" className="chart-ripe-label is-small" style={text}>ripe</text>
     {normalRipe!=null&&<>
       <line x1={x(normalRipe)} y1={ripeY} x2={x(normalRipe)} y2={BOTTOM-18} className="chart-drop is-normal"/>
       <circle cx={x(normalRipe)} cy={ripeY} r={4.5} className="chart-dot is-normal"/>

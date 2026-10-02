@@ -19,6 +19,11 @@ export const addDays=(time:number,days:number)=>time+days*DAY;
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const LONG_MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 export const formatDay=(time:number)=>{const d=new Date(time);return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`};
+/** "12–26 Sep", or "28 Aug–11 Sep" across a month end. */
+export const formatRange=(from:number,to:number)=>{
+  const a=new Date(from),b=new Date(to);
+  return a.getUTCMonth()===b.getUTCMonth()?`${a.getUTCDate()}–${formatDay(to)}`:`${formatDay(from)}–${formatDay(to)}`;
+};
 export const formatLongDay=(time:number)=>{const d=new Date(time);return `${d.getUTCDate()} ${LONG_MONTHS[d.getUTCMonth()]}`};
 
 /* ---------- Harvest timing ---------- */
@@ -102,9 +107,10 @@ export function seasonHeadline(levels:SeasonLevels,shiftDays:number){
  */
 export function seasonStory(season:SeasonWeather,normal:SeasonWeather,levels:SeasonLevels,shiftDays:number){
   const happened:string[]=[];
+  const late=shiftDays>=4,early=shiftDays<=-4;
   if(season.frostDays>=normal.frostDays+2)happened.push('Spring frost hit the young shoots and likely cut the crop.');
-  if(levels.rain>=1&&levels.warmth<=0)happened.push(`Steady rain${levels.rain>1?' well above normal':''} slowed ripening and kept disease pressure high.`);
-  else if(levels.rain>=1)happened.push('A wet season kept disease pressure high.');
+  if(levels.rain>=1&&late)happened.push(`Steady rain${levels.rain>1?' well above normal':''} slowed ripening and kept disease pressure high.`);
+  else if(levels.rain>=1)happened.push(`Rain ran ${levels.rain>1?'well ':''}above normal and kept disease pressure high.`);
   else if(levels.rain<=-1&&levels.warmth>=1)happened.push('A hot, dry summer pushed ripening ahead.');
   else if(levels.rain<=-1)happened.push('A dry season kept the grapes clean and small.');
   else if(levels.warmth>=1)happened.push('Warmth ran ahead of normal through the summer.');
@@ -113,8 +119,9 @@ export function seasonStory(season:SeasonWeather,normal:SeasonWeather,levels:Sea
   if(levels.nights>=1&&levels.warmth>=1)happened.push('Warm nights gave acidity little chance to rest.');
 
   let expect='Expect a classic, balanced style.';
-  if(shiftDays>=4||levels.warmth<=-1)expect=levels.rain>=1?'Expect lighter, fresher wines — careful sorting made the difference.':'Expect fresh, taut wines with bright acidity.';
-  else if(shiftDays<=-4||levels.warmth>=1)expect=levels.rain<=-1?'Expect riper, fuller wines; the best kept their freshness.':'Expect generous, ripe wines with softer acidity.';
+  if(late||levels.warmth<=-1)expect=levels.rain>=1?'Expect lighter, fresher wines — careful sorting made the difference.':'Expect fresh, taut wines with bright acidity.';
+  else if(early||levels.warmth>=1)expect=levels.rain<=-1?'Expect riper, fuller wines; the best kept their freshness.':'Expect generous, ripe wines with softer acidity.';
+  else if(levels.rain>=2)expect='Expect uneven quality — the growers who sorted hardest made the best wines.';
   return {happened:happened.length?happened.join(' '):'Weather stayed close to normal through the season.',expect};
 }
 
