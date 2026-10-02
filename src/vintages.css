@@ -197,10 +197,6 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-callout{margin:12px 0 0;padding:10px 12px;border-radius:var(--r-sm);background:var(--sunken);font-size:.84rem;line-height:1.45}
 
 /* Ripening conditions */
-.vintage-verdict{flex-shrink:0;padding:4px 10px;border:1px solid;border-radius:var(--r-pill);font-size:.74rem;font-weight:800}
-.vintage-verdict.is-favourable{border-color:var(--vt-helps-line);background:var(--vt-helps);color:var(--vt-helps-ink)}
-.vintage-verdict.is-mixed{border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
-.vintage-verdict.is-challenging{border-color:var(--vt-hurts-line);background:var(--vt-hurts);color:var(--vt-hurts-ink)}
 .vintage-conditions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .vintage-condition{display:grid;grid-template-rows:20px 24px;row-gap:2px;min-width:0;padding:8px;border:1px solid;border-radius:12px}
 .vintage-condition-helps{border-color:var(--vt-helps-line);background:var(--vt-helps);--ink-effect:var(--vt-helps-ink)}
@@ -262,3 +258,23 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
   .vintage-hero h1{font-size:1.25rem}
   .vintage-key{gap:10px}
 }
+
+/* Quality outlook: the weather's reading on the critics' five-step scale. */
+.vintage-outlook-main{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0}
+.vintage-outlook-main strong{font-family:'Playfair Display',serif;font-size:1.6rem;line-height:1.1}
+.vintage-outlook-main small{color:var(--ink-5);font-size:.85rem}
+.vintage-outlook-scale{position:relative;height:12px;margin-top:4px;border-radius:var(--r-pill);background:var(--vt-neutral)}
+.vintage-outlook-range{position:absolute;top:0;bottom:0;border-radius:var(--r-pill);background:var(--vt-ripe);opacity:.45}
+.vintage-outlook-mark,.vintage-outlook-critics-mark{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%)}
+.vintage-outlook-mark{background:var(--vt-ripe-ink);border:2px solid var(--paper)}
+.vintage-outlook-critics-mark{background:var(--paper);border:2px solid var(--ink-5)}
+.vintage-outlook-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;padding:0;list-style:none;color:var(--ink-5);font-size:.68rem;text-align:center}
+.vintage-outlook-steps li:first-child{text-align:left}
+.vintage-outlook-steps li:last-child{text-align:right}
+.vintage-outlook-reasons{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.vintage-outlook-reasons li{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid;border-radius:var(--r-pill);font-size:.78rem;font-weight:700}
+.vintage-outlook-reason-helps{border-color:var(--vt-helps-line);background:var(--vt-helps);color:var(--vt-helps-ink)}
+.vintage-outlook-reason-hurts{border-color:var(--vt-hurts-line);background:var(--vt-hurts);color:var(--vt-hurts-ink)}
+.vintage-outlook-critics{display:flex;align-items:center;gap:6px;margin:0;font-size:.85rem}
+.vintage-outlook-key{width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--ink-5);flex-shrink:0}
+.vintage-outlook-note{margin:0;color:var(--ink-5);font-size:.78rem;line-height:1.45}

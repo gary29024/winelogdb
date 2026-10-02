@@ -26,6 +26,7 @@ pip install -r scripts/vintages/pipeline/requirements.txt
 python scripts/vintages/pipeline/points.py    # once, or when villages change: sample points, elevations, SAFRAN cells
 python scripts/vintages/pipeline/fetch.py     # downloads only what is missing (~40 min the first time)
 python scripts/vintages/pipeline/build.py     # writes public/data/vintages/burgundy/
+python scripts/vintages/pipeline/quality.py   # adds each season's quality outlook
 ```
 
 The **Vintage data** GitHub Action runs `fetch.py` and `build.py` on the 6th of each month, keeps the downloaded history in the Actions cache, and commits any change. It can also be started by hand from the Actions tab.
@@ -41,3 +42,12 @@ The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labb�
 `build_village_points.ts` writes both the app's village list (`src/features/vintages/burgundyVillages.ts`) and `data/villages.json` from the INAO boundaries in `public/maps`. Run it with `bun`, then re-run `points.py`.
 
 `build_sample_dataset.ts` writes invented data in the same shape, for working on the screens without the pipeline.
+
+## Quality outlook
+
+`quality.py` turns each season's measurements into what they point to on the critics' 1–5 scale (Poor to Excellent). The measurements are ripeness over the appellation minimum, season warmth, heat stress, wet ripening days, harvest rain, hail and, for Chardonnay, ripening warmth for acidity.
+- Agronomy fixes which way each measurement may push quality. The critics' consensus only sets how much.
+- Every reported figure comes from a fit that left that year out.
+- From 1991 the weather's swing is scaled towards the modern average, because growers now soften what the weather does.
+
+The consensus (`data/critic_consensus.csv`) comes from `consensus.py`. It averages several critics' published vintage ratings, each critic on its own scale and weighted by how well it agrees with the others. The individual ratings are not kept in the repository. To refresh it, run `consensus.py` on a new ratings table, then `quality.py`.

@@ -15,6 +15,9 @@ How the model stays honest:
     comes out the wrong way round is dropped, never flipped.
   - 'practice' stands for better vineyard and cellar work (sorting, picking
     dates): 0 before 1975 rising to 1 by 2000. It may only raise quality.
+  - From 1991 the weather's swing is scaled towards the modern average by the
+    factor modern years support (fitted inside each held-out fit, so the test
+    stays fair): growers now soften what the weather does.
   - Every year's outlook is reported from a fit that left that year out, and
     the error of those held-out predictions sets the range shown, separately
     for seasons before 1991 and from 1991.
@@ -104,10 +107,14 @@ def main() -> None:
     villages = json.loads((DATA / 'villages.json').read_text())
     area_of = {v['id']: v['area'] for v in villages}
     consensus: dict[tuple[str, int], float] = {}
+    counts: dict[tuple[str, int], int] = {}
     sources: set[str] = set()
     with open(DATA / 'critic_consensus.csv') as source:
         for row in csv.DictReader(line for line in source if not line.startswith('#')):
+            if int(row['n_sources']) < 2:
+                continue   # one critic is not a consensus
             consensus[(row['colour'], int(row['year']))] = float(row['rating'])
+            counts[(row['colour'], int(row['year']))] = int(row['n_sources'])
             sources.update(s for s in row['sources'].split('|') if s)
 
     files = {v: json.loads((OUT / f'{v}.json').read_text()) for v in index['villages']}
@@ -118,7 +125,9 @@ def main() -> None:
         events = index.get('events', {}).get(area, {}).get(year, [])
         return inputs(files[village], year, grape, start, events, GRAPES[grape][1])
 
-    quality: dict = {'labels': LABELS, 'modernFrom': MODERN, 'sources': sorted(sources), 'grapes': {}}
+    quality: dict = {'labels': LABELS, 'modernFrom': MODERN, 'sources': sorted(sources), 'grapes': {},
+                     # The consensus itself, shown beside the outlook: rating and how many critics.
+                     'consensus': {c: {str(y): [round(r, 2), counts[(c, y)]] for (cc, y), r in consensus.items() if cc == c} for c in ('red', 'white')}}
     for grape, (colour, _, names) in GRAPES.items():
         fit_villages = [v for v in files if area_of[v] in FIT_AREAS]
         years = sorted(int(y) for y in files[fit_villages[0]]['years'] if (colour, int(y)) in consensus)
@@ -126,14 +135,29 @@ def main() -> None:
         rows = [{k: st.mean(season_inputs(v, str(y), grape)[k] for v in fit_villages) for k in names} for y in years]
         target = [consensus[(colour, y)] for y in years]
 
+        def modern_scale(model: dict, sel: list[int]) -> tuple[float, float, float]:
+            """Weather moves modern ratings less than it moved older ones: shrink its swing
+            towards the modern average by the factor those years support (0-1)."""
+            preds = [predict(model, rows[j]) for j in sel]
+            mean_t, mean_p = st.mean(target[j] for j in sel), st.mean(preds)
+            spread_p = sum((p - mean_p) ** 2 for p in preds)
+            k = sum((p - mean_p) * (target[j] - mean_t) for p, j in zip(preds, sel)) / spread_p if spread_p else 0.0
+            return mean_t, mean_p, min(max(k, 0.0), 1.0)
+
         held_out = []
         for i in range(len(years)):
-            model = fit(rows[:i] + rows[i + 1:], target[:i] + target[i + 1:], names)
-            held_out.append(predict(model, rows[i]))
+            train = [j for j in range(len(years)) if j != i]
+            model = fit([rows[j] for j in train], [target[j] for j in train], names)
+            p = predict(model, rows[i])
+            if years[i] >= MODERN:
+                mean_t, mean_p, k = modern_scale(model, [j for j in train if years[j] >= MODERN])
+                p = mean_t + k * (p - mean_p)
+            held_out.append(p)
 
         def stats(sel: list[int]) -> dict:
             p, t = [held_out[i] for i in sel], [target[i] for i in sel]
-            guess = [abs(st.mean(target[j] for j in range(len(years)) if j != i) - target[i]) for i in sel]
+            # The fair comparison: guess the average of the same period's other years.
+            guess = [abs(st.mean(target[j] for j in sel if j != i) - target[i]) for i in sel]
             errors = [abs(a - b) for a, b in zip(p, t)]
             return {
                 'years': len(sel),
@@ -147,8 +171,10 @@ def main() -> None:
         old = [i for i, y in enumerate(years) if y < MODERN]
         new = [i for i, y in enumerate(years) if y >= MODERN]
         model = fit(rows, target, names)
+        modern = modern_scale(model, new)
         validation = {'before': stats(old), 'since': stats(new), 'all': stats(list(range(len(years))))}
-        quality['grapes'][grape] = {'colour': colour, 'weights': {k: round(w, 3) for k, w in model.items()}, 'validation': validation}
+        quality['grapes'][grape] = {'colour': colour, 'weights': {k: round(w, 3) for k, w in model.items()},
+                                    'modernScale': round(modern[2], 2), 'validation': validation}
         print(f"{grape}: weights {quality['grapes'][grape]['weights']}")
         for label, s in validation.items():
             print(f"  {label}: {s}")
@@ -162,15 +188,18 @@ def main() -> None:
                 y = int(year)
                 row = season_inputs(village, year, grape)
                 # Fitted years use their held-out prediction plus this village's difference from the Côte d'Or.
+                k = modern[2] if y >= MODERN else 1.0
                 if y in held and area_of[village] in FIT_AREAS:
-                    cote = {k: st.mean(season_inputs(v, year, grape)[k] for v in fit_villages) for k in names}
-                    score = held[y] + predict(model, row) - predict(model, cote)
+                    cote = {k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names}
+                    score = held[y] + k * (predict(model, row) - predict(model, cote))
+                elif y >= MODERN:
+                    score = modern[0] + k * (predict(model, row) - modern[1])
                 else:
                     score = predict(model, row)
                 width = spread['since' if y >= MODERN else 'before']
-                contributions = sorted(((model[k] * (row[k] - typical[k]), k) for k in model if k not in ('intercept', 'practice')),
+                contributions = sorted(((k * model[name] * (row[name] - typical[name]), name) for name in model if name not in ('intercept', 'practice')),
                                        key=lambda c: -abs(c[0]))
-                drivers = [{'id': k, 'effect': 'helps' if c > 0 else 'hurts'} for c, k in contributions[:3] if abs(c) >= 0.15]
+                drivers = [{'id': name, 'effect': 'helps' if c > 0 else 'hurts'} for c, name in contributions[:3] if abs(c) >= 0.15]
                 season['grapes'][grape]['outlook'] = {
                     'score': round(clamp(score), 2),
                     'low': round(clamp(score - width), 2),
