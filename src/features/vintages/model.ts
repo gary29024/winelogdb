@@ -101,6 +101,9 @@ export function seasonHeadline(levels:SeasonLevels,shiftDays:number){
 }
 
 /** "27 Apr", or "April" when a source dates an event only to the month. */
+/** "on 27 Apr", or "in April" when only the month is known. */
+export const eventWhen=(date:string)=>`${date.length>7?'on':'in'} ${eventDay(date)}`;
+
 export function eventDay(date:string){
   const [y,m,d]=date.split('-').map(Number);
   return d?formatDay(Date.UTC(y,m-1,d)):new Date(Date.UTC(y,m-1,1)).toLocaleString('en-GB',{month:'long',timeZone:'UTC'});
@@ -115,9 +118,9 @@ export function seasonStory(season:SeasonWeather,normal:SeasonWeather,levels:Sea
   const happened:string[]=[];
   const late=shiftDays>=4,early=shiftDays<=-4;
   const frost=events.find(event=>event.type==='spring-frost'),hail=events.find(event=>event.type==='hail');
-  if(frost)happened.push(`Frost on ${eventDay(frost.date)} hit the young shoots and cut the crop.`);
+  if(frost)happened.push(`Frost ${eventWhen(frost.date)} hit the young shoots${frost.villages?` in ${frost.villages}`:''} and cut the crop.`);
   else if(season.frostDays>=normal.frostDays+2)happened.push('Spring frost hit the young shoots and likely cut the crop.');
-  if(hail)happened.push(`Hail on ${eventDay(hail.date)} struck${hail.villages?` ${hail.villages}`:' parts of the area'}.`);
+  if(hail)happened.push(`Hail ${eventWhen(hail.date)} struck${hail.villages?` ${hail.villages}`:' parts of the area'}.`);
   if(levels.rain>=1&&late)happened.push(`Steady rain${levels.rain>1?' well above normal':''} slowed ripening and kept disease pressure high.`);
   else if(levels.rain>=1)happened.push(`Rain ran ${levels.rain>1?'well ':''}above normal and kept disease pressure high.`);
   else if(levels.rain<=-1&&levels.warmth>=1)happened.push('A hot, dry summer pushed ripening ahead.');

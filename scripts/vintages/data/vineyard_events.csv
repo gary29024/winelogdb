@@ -1,4 +1,98 @@
 # Frost and hail that a source dates to at least the month. An 8 km weather grid cannot see
 # frost settling in the lowest rows or a hail cell, so these are kept by hand.
 # type: spring-frost | hail. date: YYYY-MM-DD, or YYYY-MM when the day is not stated.
+# Notes that a Côte d'Or-focused guide (Decanter, Inside Burgundy) gives for "Burgundy" without
+# naming a sub-area are listed under cote-de-nuits and cote-de-beaune.
 area,year,date,type,villages,source
+cote-de-beaune,1967,1967-05,spring-frost,,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,1967,1967-05,spring-frost,,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-beaune,1971,1971-08,hail,,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-nuits,1971,1971-08,hail,,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-beaune,1975,1975-08,hail,,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,1975,1975-08,hail,,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,1979,1979-07,hail,"Nuits-Saint-Georges, Vosne-Romanée, Chambolle-Musigny",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+chablis-auxerrois,1981,1981-05,spring-frost,Chablis,https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-nuits,1981,1981-08,hail,,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,1983,1983-05,hail,"Vosne-Romanée, Chambolle-Musigny",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-beaune,1985,1985-08,hail,Aloxe-Corton,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-beaune,1991,1991-04-22,spring-frost,,https://insideburgundy.com/overview/1991-vintage-overview/
+cote-de-nuits,1991,1991-04-22,spring-frost,,https://insideburgundy.com/overview/1991-vintage-overview/
+cote-de-nuits,1991,1991-06-22,hail,Gevrey-Chambertin,https://insideburgundy.com/overview/1991-vintage-overview/
+cote-de-nuits,1991,1991-08-22,hail,Chambolle-Musigny,https://insideburgundy.com/overview/1991-vintage-overview/
+cote-de-beaune,1993,1993-05,hail,"Meursault, Puligny",https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-nuits,1993,1993-07,hail,Nuits-Saint-Georges,https://tastingbook.com/vintage/1993
+chablis-auxerrois,1994,1994-04,spring-frost,Chablis,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-beaune,1994,1994-06-20,hail,"Puligny-Montrachet, Meursault",https://insideburgundy.com/overview/1994-vintage-overview/
+cote-de-beaune,1994,1994-07-18,hail,,https://tastingbook.com/vintage/1994
+cote-de-beaune,1998,1998-04-13,spring-frost,,https://insideburgundy.com/overview/1998-vintage-overview/
+cote-de-nuits,1998,1998-04-13,spring-frost,,https://insideburgundy.com/overview/1998-vintage-overview/
+cote-chalonnaise,2000,2000-09-12,hail,,https://insideburgundy.com/overview/2000-vintage-overview/
+cote-de-beaune,2000,2000-09-12,hail,southern Côte de Beaune,https://insideburgundy.com/overview/2000-vintage-overview/
+cote-de-beaune,2001,2001-08-02,hail,Volnay,https://insideburgundy.com/overview/2001-vintage-overview/
+cote-de-nuits,2002,2002-09-19,hail,"Gevrey-Chambertin, Marsannay",https://insideburgundy.com/overview/2002-vintage-overview/
+chablis-auxerrois,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
+cote-de-beaune,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
+maconnais,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
+cote-de-beaune,2004,2004-07-19,hail,almost every village in the Côte,https://insideburgundy.com/overview/2004-vintage-overview/
+cote-de-nuits,2004,2004-07-19,hail,almost every village except Nuits-St-Georges,https://insideburgundy.com/overview/2004-vintage-overview/
+cote-de-beaune,2004,2004-08-23,hail,"Volnay, Pommard, Beaune, Savigny",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,2004,2004-08-23,hail,almost every village except Nuits-St-Georges,https://insideburgundy.com/overview/2004-vintage-overview/
+cote-de-nuits,2006,2006-07-27,hail,"Chambolle-Musigny, Gevrey-Chambertin",https://insideburgundy.com/overview/2006-vintage-overview/
+cote-de-beaune,2007,2007-04-27,hail,St-Aubin,https://insideburgundy.com/overview/2007-vintage-overview/
+cote-de-beaune,2007,2007-06-10,hail,Beaune,https://insideburgundy.com/overview/2007-vintage-overview/
+chablis-auxerrois,2007,2007-07,hail,"Chablis, Epineuil",https://insideburgundy.com/overview/2007-vintage-overview/
+cote-de-beaune,2008,2008-07-26,hail,"Volnay, Pommard, Meursault, Beaune, Savigny",https://insideburgundy.com/overview/2008-vintage-overview/
+cote-de-nuits,2008,2008-07-26,hail,Marsannay,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+maconnais,2008,2008-08-07,hail,Pouilly-Fuissé,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,2009,2009-05-21,hail,"Morey-Saint-Denis, Gevrey-Chambertin",https://insideburgundy.com/overview/2009-vintage-overview/
+maconnais,2010,2010-07-10,hail,"Vinzelles, Pouilly-Fuissé",https://insideburgundy.com/overview/2010-vintage-overview/
+cote-de-beaune,2010,2010-09-12,hail,"Santenay, Chassagne-Montrachet, St-Aubin",https://insideburgundy.com/overview/2010-vintage-overview/
+cote-de-beaune,2011,2011-05-20,hail,Corton-Charlemagne,https://insideburgundy.com/overview/2011-vintage-overview/
+cote-chalonnaise,2011,2011-07-12,hail,Rully,https://insideburgundy.com/overview/2011-vintage-overview/
+cote-de-beaune,2011,2011-07-12,hail,southern Côte de Beaune,https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-nuits,2011,2011-07-23,hail,Gevrey-Chambertin,https://insideburgundy.com/overview/2011-vintage-overview/
+chablis-auxerrois,2012,2012-04-17,spring-frost,Chablis,https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-beaune,2012,2012-04-17,spring-frost,Santenay,https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-beaune,2012,2012-05-17,spring-frost,"Chassagne-Montrachet, Santenay",https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-beaune,2012,2012-06-06,hail,"St-Aubin, Beaune, Chassagne",https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-beaune,2012,2012-08-01,hail,"Volnay, Pommard, Savigny, Beaune, Aloxe-Corton",https://insideburgundy.com/overview/2012-vintage-overview/
+cote-de-beaune,2013,2013-07-23,hail,"Meursault to Corton, Pommard, Beaune",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-beaune,2014,2014-06-28,hail,"Volnay, Pommard, Meursault, Beaune",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
+cote-de-beaune,2015,2015-05-20,hail,Puligny-Montrachet,https://insideburgundy.com/overview/2015-vintage-overview/
+chablis-auxerrois,2015,2015-09-01,hail,"Irancy, St-Bris, Bourgogne Chitry",https://insideburgundy.com/overview/2015-vintage-overview/
+maconnais,2016,2016-04-13,hail,"Pouilly-Fuissé, St-Véran, Davayé, Solutré",https://insideburgundy.com/overview/2016-vintage-overview/
+chablis-auxerrois,2016,2016-04-27,spring-frost,Chablis,https://insideburgundy.com/overview/2016-vintage-overview/
+cote-chalonnaise,2016,2016-04-27,spring-frost,Rully,https://insideburgundy.com/overview/2016-vintage-overview/
+cote-de-beaune,2016,2016-04-27,spring-frost,"Chorey, Ladoix, Pernand-Vergelesses, Savigny",https://insideburgundy.com/overview/2016-vintage-overview/
+cote-de-nuits,2016,2016-04-27,spring-frost,Marsannay,https://insideburgundy.com/overview/2016-vintage-overview/
+chablis-auxerrois,2016,2016-05-13,hail,"Maligny, Lignorelles, Fleys, Fontenay, some premiers crus",https://insideburgundy.com/overview/2016-vintage-overview/
+chablis-auxerrois,2016,2016-05-27,hail,"Préhy, Chitry, St-Bris",https://insideburgundy.com/overview/2016-vintage-overview/
+chablis-auxerrois,2017,2017-04,spring-frost,"Villy, Maligny, Lignorelles, Poinchy, Fourchaumes, right-bank Grands Crus",https://insideburgundy.com/overview/2017-vintage-overview/
+cote-de-nuits,2017,2017-05-19,hail,Nuits-Saint-Georges,https://insideburgundy.com/overview/2017-vintage-overview/
+maconnais,2017,2017-07-10,hail,,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-nuits,2018,2018-07,hail,"southern Nuits-St-Georges, Comblanchien, Corgoloin",https://insideburgundy.com/overview/2018-vintage-overview/
+chablis-auxerrois,2019,2019-04-04,spring-frost,Chablis,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-beaune,2019,2019-04-04,spring-frost,Pernand-Vergelesses,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
+cote-de-nuits,2020,2020-08-01,hail,Nuits-Saint-Georges,https://www.franceinfo.fr/economie/emploi/metiers/agriculture/nuits-saint-georges-le-vignoble-frappe-par-la-grele_4064433.html
+chablis-auxerrois,2021,2021-04-06,spring-frost,Chablis,https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+cote-chalonnaise,2021,2021-04-06,spring-frost,"Rully, Mercurey",https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+cote-de-beaune,2021,2021-04-06,spring-frost,,https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+cote-de-nuits,2021,2021-04-06,spring-frost,,https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+hautes-cotes,2021,2021-04-06,spring-frost,Hautes Côtes de Beaune,https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+maconnais,2021,2021-04-06,spring-frost,"north Mâconnais, Verzé to Cruzille",https://www.vitisphere.com/actualite-93883-en-bourgogne-un-episode-de-gel-jamais-vu-depuis-30-ans-.html
+maconnais,2021,2021-06-21,hail,Pouilly-Fuissé,https://www.franceinfo.fr/economie/emploi/metiers/agriculture/intemperies-les-vignes-du-maconnais-frappees-par-la-grele_4674213.html
+chablis-auxerrois,2022,2022-04-04,spring-frost,Préhy,https://www.francebleu.fr/infos/agriculture-peche/a-chablis-apres-le-gel-inspecte-les-degats-1649089315
+cote-de-beaune,2022,2022-04-04,spring-frost,,https://france3-regions.franceinfo.fr/bourgogne-franche-comte/yonne/gel-quelle-est-l-ampleur-des-degats-dans-les-vignes-de-bourgogne-2519184.html
+cote-de-beaune,2022,2022-06,hail,"Beaune, Chorey-lès-Beaune",https://www.vitisphere.com/actualite-97088-dans-les-vignes-de-bourgogne-apres-le-deluge-la-grele-et-des-mini-tornades.html
+cote-de-nuits,2022,2022-06,hail,"Marsannay, Gevrey-Chambertin, Couchey, Fixin, Nuits-Saint-Georges, Prémeaux-Prissey",https://www.vitisphere.com/actualite-97088-dans-les-vignes-de-bourgogne-apres-le-deluge-la-grele-et-des-mini-tornades.html
+hautes-cotes,2022,2022-06,hail,"Chevannes, Chaux",https://www.vitisphere.com/actualite-97088-dans-les-vignes-de-bourgogne-apres-le-deluge-la-grele-et-des-mini-tornades.html
+maconnais,2022,2022-06,hail,"Igé, Vergisson",https://www.vitisphere.com/actualite-97088-dans-les-vignes-de-bourgogne-apres-le-deluge-la-grele-et-des-mini-tornades.html
+cote-de-nuits,2023,2023-06-19,hail,"Chambolle-Musigny, Clos de Vougeot, Echezeaux",https://insideburgundy.com/overview/2023-vintage-overview/
+cote-chalonnaise,2023,2023-07-11,hail,"Mercurey, Givry",https://www.vitisphere.com/actualite-99836-les-vignes-de-meursault-et-mercurey-victimes-de-la-grele.html
+cote-de-beaune,2023,2023-07-11,hail,"Meursault, Volnay, Beaune",https://www.vitisphere.com/actualite-99836-les-vignes-de-meursault-et-mercurey-victimes-de-la-grele.html
+chablis-auxerrois,2024,2024-04,spring-frost,Chablis,https://insideburgundy.com/overview/2024-growing-season/
+cote-de-beaune,2024,2024-04,spring-frost,"Maranges, Monthelie",https://insideburgundy.com/overview/2024-growing-season/
+hautes-cotes,2024,2024-04,spring-frost,Hautes Côtes,https://insideburgundy.com/overview/2024-growing-season/
+chablis-auxerrois,2024,2024-05-01,hail,"Chablis, Fontenay-près-Chablis, Maligny, Lignorelles, Tonnerre",https://france3-regions.franceinfo.fr/bourgogne-franche-comte/yonne/un-orage-supercellulaire-ravage-les-vignes-de-chablis-ca-nous-a-arrache-les-larmes-les-viticulteurs-constatent-les-degats-2963711.html
+chablis-auxerrois,2024,2024-08,hail,Chablis,https://insideburgundy.com/overview/2024-growing-season/
+cote-de-beaune,2024,2024-08-01,hail,St-Aubin,https://insideburgundy.com/overview/2024-growing-season/

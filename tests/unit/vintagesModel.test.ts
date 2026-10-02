@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { villageForWine } from '../../src/features/vintages/data';
-import { closestToTypical,eraNormal,eraWindow,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,shiftLabel,shiftTone,sugarAtPicking,sugarOn } from '../../src/features/vintages/model';
+import { closestToTypical,eraNormal,eraWindow,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,seasonStory,shiftLabel,shiftTone,sugarAtPicking,sugarOn } from '../../src/features/vintages/model';
 import { BURGUNDY } from '../../src/features/vintages/regions';
 import type { RipeningWeather,SeasonWeather,SugarCurve,VillageData,VintageIndex } from '../../src/features/vintages/types';
 
@@ -187,3 +187,14 @@ describe('reading an old vintage against its own era',()=>{
     expect(era.harvest.typical).toBe('09-30');
   });
 });
+
+describe('recorded frost and hail',()=>{
+  it('names the dated event and where it struck, ahead of the weather reading',()=>{
+    const season={gdd:1300,rainAprSep:400,augNights:14,frostDays:0,heatDays:10,sepRain:50};
+    const story=seasonStory(season,season,{warmth:0,rain:0,nights:0},0,[
+      {date:'2016-04-27',type:'spring-frost',villages:'Chorey, Ladoix',source:'https://example.org/a'},
+      {date:'2013-07',type:'hail',source:'https://example.org/b'}]);
+    expect(story.happened).toBe('Frost on 27 Apr hit the young shoots in Chorey, Ladoix and cut the crop. Hail in July struck parts of the area.');
+  });
+});
+
