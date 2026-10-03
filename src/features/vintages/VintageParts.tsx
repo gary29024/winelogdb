@@ -135,6 +135,9 @@ const OUTLOOK_REASONS:Record<OutlookDriver['id'],[string,string]>={
   acidity:['Fresher acidity','Softer acidity'],
   hail:['Less hail','Hail']
 };
+const BEYOND_WORDS:Record<OutlookDriver['id'],string>={
+  ripeness:'ripeness',warmth:'season heat',heat:'heat stress',wet:'wet ripening days',harvestRain:'harvest rain',acidity:'ripening warmth',hail:'hail'
+};
 const outlookLabel=(labels:string[],score:number)=>labels[Math.min(labels.length,Math.max(1,Math.round(score)))-1];
 const scalePosition=(score:number)=>`${(Math.min(5,Math.max(1,score))-1)/4*100}%`;
 
@@ -162,6 +165,7 @@ export function QualityOutlookCard({year,grapeName,outlook,model,check,consensus
       <b aria-hidden="true">{driver.effect==='helps'?'↑':'↓'}</b>{OUTLOOK_REASONS[driver.id][driver.effect==='helps'?0:1]}
     </li>)}</ul>}
     {consensus&&<p className="vintage-outlook-critics"><span className="vintage-outlook-key" aria-hidden="true"/>Critics’ consensus: <strong>{outlookLabel(labels,consensus[0])}</strong> ({consensus[1]} critics)</p>}
+    {outlook.beyondTested&&outlook.beyondTested.length>0&&<p className="vintage-callout">This season’s <strong>{outlook.beyondTested.map(id=>BEYOND_WORDS[id]).join(' and ')}</strong> went well past every vintage the outlook was tested on, so it is read as the most extreme of those. Treat it with extra caution.</p>}
     <p className="vintage-outlook-note">{modern
       ?`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons since ${model.modernFrom}. Growers now soften what the weather does, so it ranks modern vintages only loosely.`
       :`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons before ${model.modernFrom}, when it decided more of the outcome.`}</p>

@@ -89,7 +89,9 @@ export type GrapeSeason={
 };
 
 export type OutlookDriver={id:'ripeness'|'warmth'|'heat'|'wet'|'harvestRain'|'acidity'|'hail';effect:'helps'|'hurts'};
-export type QualityOutlook={score:number;low:number;high:number;drivers:OutlookDriver[]};
+export type QualityOutlook={score:number;low:number;high:number;drivers:OutlookDriver[];
+  /** Inputs that went well past every season the outlook was tested on; read at the edge of that range. */
+  beyondTested?:OutlookDriver['id'][]};
 export type OutlookCheck={years:number;correlation:number|null;error:number;errorIfAverage:number;withinOneStep:number;spread:number};
 export type QualityModel={
   labels:string[];modernFrom:number;sources:string[];

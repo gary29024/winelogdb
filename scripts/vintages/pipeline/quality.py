@@ -183,14 +183,31 @@ def main() -> None:
         typical = {k: st.mean(row[k] for row in rows) for k in names}
         spread = {'before': validation['before']['spread'], 'since': validation['since']['spread']}
         held = dict(zip(years, held_out))
+        # The outlook is only tested inside the range of seasons it was fitted on. A season
+        # beyond it (2026: 44% more heat than normal) is read at the edge of that range and
+        # flagged, rather than extrapolated along a straight line.
+        tested = {name: (min(vals), max(vals)) for name in names
+                  for vals in [[season_inputs(v, str(y), grape)[name] for v in fit_villages for y in years]]}
+
+        def bounded(row: dict[str, float]) -> tuple[dict[str, float], list[str]]:
+            out, beyond = dict(row), []
+            for name, (lo, hi) in tested.items():
+                if name == 'practice':
+                    continue
+                out[name] = min(max(row[name], lo), hi)
+                # Flagged only when more than one input step past the range (10% more heat,
+                # 20 g/L, 3 wet days, 30 mm...); a hair past the edge is not a new kind of season.
+                if row[name] > hi + 1 or row[name] < lo - 1:
+                    beyond.append(name)
+            return out, beyond
         for village, data in files.items():
             for year, season in data['years'].items():
                 y = int(year)
-                row = season_inputs(village, year, grape)
+                row, beyond = bounded(season_inputs(village, year, grape))
                 # Fitted years use their held-out prediction plus this village's difference from the Côte d'Or.
                 k = modern[2] if y >= MODERN else 1.0
                 if y in held and area_of[village] in FIT_AREAS:
-                    cote = {k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names}
+                    cote = bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0]
                     score = held[y] + k * (predict(model, row) - predict(model, cote))
                 elif y >= MODERN:
                     score = modern[0] + k * (predict(model, row) - modern[1])
@@ -205,6 +222,7 @@ def main() -> None:
                     'low': round(clamp(score - width), 2),
                     'high': round(clamp(score + width), 2),
                     'drivers': drivers,
+                    **({'beyondTested': beyond} if beyond else {}),
                 }
 
     for village, data in files.items():
