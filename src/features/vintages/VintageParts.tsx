@@ -48,10 +48,20 @@ function sugarScale(...series:number[][]){
   return {y,ticks};
 }
 
-function chartScale(curve:SugarCurve,year:number){
-  const start=seasonDay(year,curve.start),span=(curve.values.length-1)*curve.step;
+/** Days of axis kept before véraison so its line never sits on the y-axis. */
+const VERAISON_LEAD=8;
+
+/**
+ * The date axis runs from the sugar curve's first day, or earlier when véraison
+ * comes first: the axis then opens into July and the curve starts where its data does.
+ */
+function chartScale(curve:SugarCurve,year:number,veraison:number,harvest:HarvestReading|null){
+  const curveStart=seasonDay(year,curve.start),curveEnd=addDays(curveStart,(curve.values.length-1)*curve.step);
+  // Likewise to the right when picking ran past the curve's last day (1965: from 11 October).
+  const end=Math.max(curveEnd,harvest?addDays(harvest.end,3):curveEnd);
+  const start=Math.min(curveStart,addDays(veraison,-VERAISON_LEAD)),span=daysBetween(start,end);
   const x=(time:number)=>LEFT+Math.min(span,Math.max(0,daysBetween(start,time)))*(RIGHT-LEFT)/span;
-  return {start,span,x};
+  return {start,curveStart,span,x};
 }
 
 const path=(points:[number,number][])=>points.map(([px,py],i)=>`${i?'L':'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' ');
@@ -65,31 +75,30 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   year:number;curve:SugarCurve;normal:SugarCurve;low:number[];high:number[];
   harvest:HarvestReading|null;veraison:number;ripeSugar:number;
 }){
-  const {start,span,x}=chartScale(curve,year);
+  const {start,curveStart,span,x}=chartScale(curve,year,veraison,harvest);
   const {y,ticks:levels}=sugarScale(curve.values,normal.values,low);
-  const at=(values:number[],i:number):[number,number]=>[LEFT+i*curve.step*(RIGHT-LEFT)/span,y(values[i])];
+  const at=(values:number[],i:number):[number,number]=>[x(addDays(curveStart,i*curve.step)),y(values[i])];
   const yearLine=path(curve.values.map((_,i)=>at(curve.values,i)));
   const normalLine=path(normal.values.map((_,i)=>at(normal.values,i)));
   const bandPath=`${path(high.map((_,i)=>at(high,i)))} ${path(low.map((_,i)=>at(low,i)).reverse()).replace(/^M/,'L')} Z`;
   const ripe=dayReaching(curve,year,ripeSugar),normalRipe=dayReaching(normal,year,ripeSugar);
   const picked:[number,number][]=[];
   if(harvest)for(let day=0;day<=PICKING_DAYS;day++){const time=addDays(harvest.start,day);picked.push([x(time),y(sugarOn(curve,year,time))])}
-  const ticks=[1,2,3].map(offset=>Date.UTC(new Date(start).getUTCFullYear(),new Date(start).getUTCMonth()+offset-1,1)).filter(time=>daysBetween(start,time)<=span);
+  const ticks=[0,1,2,3].map(offset=>Date.UTC(new Date(start).getUTCFullYear(),new Date(start).getUTCMonth()+offset,1)).filter(time=>daysBetween(start,time)>=0&&daysBetween(start,time)<=span);
   const ripeY=y(ripeSugar);
-  // In hot years véraison comes before the chart's first day: pin it to the edge and say when.
-  const early=veraison<start,verX=early?LEFT:x(veraison);
+  const verX=x(veraison);
   // Two date labels a few days apart would print over each other; push them
   // to either side of their dots instead.
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
   const anchor=(own:number,other:number|null)=>!crowded||other==null?'middle':own<=other?'end':'start';
   const text={fontFamily:'DM Sans, sans-serif'};
-  return <svg className="vintage-sugar-chart" viewBox={`0 0 ${W} 222`} role="img" aria-label={`Estimated sugar in the grapes from ${formatDay(start)}: ${year} against a typical year${harvest?`, picked from ${formatDay(harvest.start)}`:''}${ripe?`, ripe around ${formatDay(ripe)}`:''}.`}>
+  return <svg className="vintage-sugar-chart" viewBox={`0 0 ${W} 222`} role="img" aria-label={`Estimated sugar in the grapes from ${formatDay(curveStart)}, véraison ${formatDay(veraison)}: ${year} against a typical year${harvest?`, picked from ${formatDay(harvest.start)}`:''}${ripe?`, ripe around ${formatDay(ripe)}`:''}.`}>
     {harvest&&<>
       <rect x={x(harvest.start)} y={TOP} width={Math.max(2,x(harvest.end)-x(harvest.start))} height={BOTTOM-TOP} className="chart-picking"/>
       <text x={(x(harvest.start)+x(harvest.end))/2} y={TOP+14} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>
     </>}
     <line x1={verX} y1={TOP} x2={verX} y2={BOTTOM} className="chart-veraison"/>
-    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>{early?`‹ Véraison ${formatDay(veraison)}`:'Véraison'}</text>
+    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
     {levels.map(level=><g key={level}>
       <line x1={LEFT} y1={y(level)} x2={RIGHT} y2={y(level)} className="chart-grid"/>
       {level!==ripeSugar&&<text x={LEFT-6} y={y(level)+3} textAnchor="end" className="chart-axis" style={text}>{level}</text>}
@@ -111,7 +120,8 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
       <text x={x(ripe)} y={BOTTOM-6} textAnchor={anchor(ripe,normalRipe)} className="chart-dot-label" style={text}>{formatDay(ripe)}</text>
     </>}
     <line x1={LEFT} y1={BOTTOM} x2={RIGHT} y2={BOTTOM} className="chart-axis-line"/>
-    <text x={LEFT} y={212} className="chart-axis is-month" style={text}>{formatDay(start)}</text>
+    {/* The start date only when no month label sits close enough to collide with it. */}
+    {!ticks.some(time=>time>start&&daysBetween(start,time)<14)&&<text x={LEFT} y={212} className="chart-axis is-month" style={text}>{formatDay(start)}</text>}
     {ticks.filter(time=>time>start).map(time=><text key={time} x={x(time)} y={212} textAnchor="middle" className="chart-axis is-month" style={text}>{formatDay(time)}</text>)}
   </svg>;
 }
