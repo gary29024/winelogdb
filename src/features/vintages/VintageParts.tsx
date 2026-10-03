@@ -41,7 +41,8 @@ const SUGAR_MAX=230;
 /** The axis starts low enough for the whole season: real early-August sugar sits well under 150 g/L. */
 function sugarScale(...series:number[][]){
   const lowest=Math.min(...series.flat());
-  const min=Math.max(80,Math.min(150,Math.floor(lowest/20)*20));
+  // Cold years start low (1965: 70 g/L on 1 August), so the axis can open at 60 rather than clip them.
+  const min=Math.max(60,Math.min(150,Math.floor(lowest/20)*20));
   const y=(sugar:number)=>BOTTOM-2-(Math.min(SUGAR_MAX,Math.max(min,sugar))-min)*((BOTTOM-2-TOP-10)/(SUGAR_MAX-min));
   const ticks:number[]=[];
   for(let level=Math.ceil((min+1)/20)*20;level<=220;level+=20)ticks.push(level);
