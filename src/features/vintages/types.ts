@@ -67,9 +67,9 @@ export type RipeningWeather={
   heatStressDays:number;
   /** Rain, mm. */
   rain:number;
-  /** Days with at least 2 mm of rain and a mean of 12 °C or more, when grey rot spreads (absent in older files). */
+  /** Days with at least 2 mm of rain and a mean of 10 °C or more, when grey rot spreads (absent in older files). */
   wetDays?:number;
-  /** Solar radiation, MJ/m². */
+  /** Solar radiation, daily mean over the ripening weeks, MJ/m². */
   radiation:number;
 };
 
@@ -84,6 +84,20 @@ export type GrapeSeason={
   veraison:string;
   sugar:SugarCurve;
   ripening:RipeningWeather;
+  /** What the season's weather points to on the critics' 1-5 scale (scripts/vintages/pipeline/quality.py). */
+  outlook?:QualityOutlook;
+};
+
+export type OutlookDriver={id:'ripeness'|'warmth'|'heat'|'wet'|'harvestRain'|'acidity'|'hail';effect:'helps'|'hurts'};
+export type QualityOutlook={score:number;low:number;high:number;drivers:OutlookDriver[];
+  /** Inputs that went well past every season the outlook was tested on; read at the edge of that range. */
+  beyondTested?:OutlookDriver['id'][]};
+export type OutlookCheck={years:number;correlation:number|null;error:number;errorIfAverage:number;withinOneStep:number;spread:number};
+export type QualityModel={
+  labels:string[];modernFrom:number;sources:string[];
+  grapes:Partial<Record<GrapeId,{colour:'red'|'white';modernScale:number;validation:{before:OutlookCheck;since:OutlookCheck;all:OutlookCheck}}>>;
+  /** Critics' consensus by colour then year: [rating 1-5, number of critics]. */
+  consensus:Record<'red'|'white',Record<string,[number,number]>>;
 };
 
 export type VillageSeason=SeasonWeather&{grapes:Partial<Record<GrapeId,GrapeSeason>>};
@@ -127,6 +141,7 @@ export type VintageIndex={
   harvest:Record<string,AreaHarvest>;
   /** Frost and hail a source records, by area then year (scripts/vintages/data/vineyard_events.csv). */
   events?:Record<string,Record<string,VineyardEvent[]>>;
+  quality?:QualityModel;
   /** Villages that have a data file. */
   villages:string[];
 };

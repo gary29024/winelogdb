@@ -1,5 +1,5 @@
 import { addDays,dayReaching,daysBetween,formatDay,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
-import type { SugarCurve,VintageIndex } from './types';
+import type { OutlookCheck,OutlookDriver,QualityModel,QualityOutlook,SugarCurve,VintageIndex } from './types';
 import { VintageIcon } from './VintageIcons';
 
 export function BaselineToggle({value,onChange,standardLabel}:{value:Baseline;onChange:(next:Baseline)=>void;standardLabel:string}){
@@ -41,17 +41,30 @@ const SUGAR_MAX=230;
 /** The axis starts low enough for the whole season: real early-August sugar sits well under 150 g/L. */
 function sugarScale(...series:number[][]){
   const lowest=Math.min(...series.flat());
-  const min=Math.max(80,Math.min(150,Math.floor(lowest/20)*20));
+  // Cold years start low (1965: 70 g/L on 1 August), so the axis can open at 60 rather than clip them.
+  const min=Math.max(60,Math.min(150,Math.floor(lowest/20)*20));
   const y=(sugar:number)=>BOTTOM-2-(Math.min(SUGAR_MAX,Math.max(min,sugar))-min)*((BOTTOM-2-TOP-10)/(SUGAR_MAX-min));
   const ticks:number[]=[];
   for(let level=Math.ceil((min+1)/20)*20;level<=220;level+=20)ticks.push(level);
   return {y,ticks};
 }
 
-function chartScale(curve:SugarCurve,year:number){
-  const start=seasonDay(year,curve.start),span=(curve.values.length-1)*curve.step;
+/** Days of axis kept before véraison so its line never sits on the y-axis. */
+const VERAISON_LEAD=8;
+
+/**
+ * The date axis runs from the sugar curve's first day, or earlier when véraison
+ * comes first: the axis then opens into July and the curve starts where its data does.
+ */
+function chartScale(curve:SugarCurve,year:number,veraison:number,harvest:HarvestReading|null){
+  const curveStart=seasonDay(year,curve.start),curveEnd=addDays(curveStart,(curve.values.length-1)*curve.step);
+  // The axis normally ends on 10 October; the data runs to the end of October so a late
+  // harvest (1965: to 25 October) can extend it and still sit on the curve.
+  const usualEnd=Math.min(curveEnd,seasonDay(year,'10-10'));
+  const end=Math.min(curveEnd,Math.max(usualEnd,harvest?addDays(harvest.end,3):usualEnd));
+  const start=Math.min(curveStart,addDays(veraison,-VERAISON_LEAD)),span=daysBetween(start,end);
   const x=(time:number)=>LEFT+Math.min(span,Math.max(0,daysBetween(start,time)))*(RIGHT-LEFT)/span;
-  return {start,span,x};
+  return {start,curveStart,end,span,x};
 }
 
 const path=(points:[number,number][])=>points.map(([px,py],i)=>`${i?'L':'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' ');
@@ -65,29 +78,34 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   year:number;curve:SugarCurve;normal:SugarCurve;low:number[];high:number[];
   harvest:HarvestReading|null;veraison:number;ripeSugar:number;
 }){
-  const {start,span,x}=chartScale(curve,year);
+  const {start,curveStart,end,span,x}=chartScale(curve,year,veraison,harvest);
   const {y,ticks:levels}=sugarScale(curve.values,normal.values,low);
-  const at=(values:number[],i:number):[number,number]=>[LEFT+i*curve.step*(RIGHT-LEFT)/span,y(values[i])];
-  const yearLine=path(curve.values.map((_,i)=>at(curve.values,i)));
-  const normalLine=path(normal.values.map((_,i)=>at(normal.values,i)));
-  const bandPath=`${path(high.map((_,i)=>at(high,i)))} ${path(low.map((_,i)=>at(low,i)).reverse()).replace(/^M/,'L')} Z`;
+  // Each line runs to the axis end: modelled points up to it, then one point read off at the end itself.
+  const line=(values:number[]):[number,number][]=>{
+    const series={...curve,values};
+    const points=values.map((_,i)=>addDays(curveStart,i*curve.step)).filter(time=>time<end).map(time=>[x(time),y(sugarOn(series,year,time))] as [number,number]);
+    return [...points,[x(end),y(sugarOn(series,year,end))]];
+  };
+  const yearLine=path(line(curve.values));
+  const normalLine=path(line(normal.values));
+  const bandPath=`${path(line(high))} ${path(line(low).reverse()).replace(/^M/,'L')} Z`;
   const ripe=dayReaching(curve,year,ripeSugar),normalRipe=dayReaching(normal,year,ripeSugar);
   const picked:[number,number][]=[];
   if(harvest)for(let day=0;day<=PICKING_DAYS;day++){const time=addDays(harvest.start,day);picked.push([x(time),y(sugarOn(curve,year,time))])}
-  const ticks=[1,2,3].map(offset=>Date.UTC(new Date(start).getUTCFullYear(),new Date(start).getUTCMonth()+offset-1,1)).filter(time=>daysBetween(start,time)<=span);
-  const ripeY=y(ripeSugar),verX=x(veraison);
+  const ticks=[0,1,2,3].map(offset=>Date.UTC(new Date(start).getUTCFullYear(),new Date(start).getUTCMonth()+offset,1)).filter(time=>daysBetween(start,time)>=0&&daysBetween(start,time)<=span);
+  const ripeY=y(ripeSugar);
+  const verX=x(veraison);
   // Two date labels a few days apart would print over each other; push them
   // to either side of their dots instead.
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
   const anchor=(own:number,other:number|null)=>!crowded||other==null?'middle':own<=other?'end':'start';
   const text={fontFamily:'DM Sans, sans-serif'};
-  return <svg className="vintage-sugar-chart" viewBox={`0 0 ${W} 222`} role="img" aria-label={`Estimated sugar in the grapes from ${formatDay(start)}: ${year} against a typical year${harvest?`, picked from ${formatDay(harvest.start)}`:''}${ripe?`, ripe around ${formatDay(ripe)}`:''}.`}>
-    {harvest&&<>
-      <rect x={x(harvest.start)} y={TOP} width={Math.max(2,x(harvest.end)-x(harvest.start))} height={BOTTOM-TOP} className="chart-picking"/>
-      <text x={(x(harvest.start)+x(harvest.end))/2} y={TOP+14} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>
-    </>}
+  // "Picked" sits at the top of its band unless a curve runs through there; then at the foot.
+  const pickMid=harvest?addDays(harvest.start,PICKING_DAYS/2):0;
+  const pickedLabelY=harvest&&Math.min(y(sugarOn(curve,year,pickMid)),y(sugarOn(normal,year,pickMid)))<TOP+30?BOTTOM-26:TOP+14;
+  return <svg className="vintage-sugar-chart" viewBox={`0 0 ${W} 222`} role="img" aria-label={`Estimated sugar in the grapes from ${formatDay(curveStart)}, véraison ${formatDay(veraison)}: ${year} against a typical year${harvest?`, picked from ${formatDay(harvest.start)}`:''}${ripe?`, ripe around ${formatDay(ripe)}`:''}.`}>
+    {harvest&&<rect x={x(harvest.start)} y={TOP} width={Math.max(2,x(harvest.end)-x(harvest.start))} height={BOTTOM-TOP} className="chart-picking"/>}
     <line x1={verX} y1={TOP} x2={verX} y2={BOTTOM} className="chart-veraison"/>
-    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
     {levels.map(level=><g key={level}>
       <line x1={LEFT} y1={y(level)} x2={RIGHT} y2={y(level)} className="chart-grid"/>
       {level!==ripeSugar&&<text x={LEFT-6} y={y(level)+3} textAnchor="end" className="chart-axis" style={text}>{level}</text>}
@@ -109,7 +127,61 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
       <text x={x(ripe)} y={BOTTOM-6} textAnchor={anchor(ripe,normalRipe)} className="chart-dot-label" style={text}>{formatDay(ripe)}</text>
     </>}
     <line x1={LEFT} y1={BOTTOM} x2={RIGHT} y2={BOTTOM} className="chart-axis-line"/>
-    <text x={LEFT} y={212} className="chart-axis is-month" style={text}>{formatDay(start)}</text>
+    {/* The start date only when no month label sits close enough to collide with it. */}
+    {!ticks.some(time=>time>start&&daysBetween(start,time)<14)&&<text x={LEFT} y={212} className="chart-axis is-month" style={text}>{formatDay(start)}</text>}
     {ticks.filter(time=>time>start).map(time=><text key={time} x={x(time)} y={212} textAnchor="middle" className="chart-axis is-month" style={text}>{formatDay(time)}</text>)}
+    {/* Labels last, outlined in the card colour, so a curve running high never hides them. */}
+    {harvest&&<text x={(x(harvest.start)+x(harvest.end))/2} y={pickedLabelY} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>}
+    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
   </svg>;
+}
+
+// Short enough for three to share one row on a phone; the full phrase is the chip's title.
+const OUTLOOK_REASONS:Record<OutlookDriver['id'],[string,string,string,string]>={
+  ripeness:['Riper','Less ripe','Riper grapes','Less ripe grapes'],
+  warmth:['Warmer','Cooler','Warmer season','Cooler season'],
+  heat:['Less heat','Heat stress','Less heat stress','More heat stress'],
+  wet:['Less rot','More rot','Fewer rot days','More rot days'],
+  harvestRain:['Dry harvest','Wet harvest','Drier harvest','Wetter harvest'],
+  acidity:['Fresher','Softer acid','Fresher acidity','Softer acidity'],
+  hail:['Less hail','Hail','Less hail','Hail']
+};
+const BEYOND_WORDS:Record<OutlookDriver['id'],string>={
+  ripeness:'ripeness',warmth:'season heat',heat:'heat stress',wet:'wet ripening days',harvestRain:'harvest rain',acidity:'ripening warmth',hail:'hail'
+};
+const outlookLabel=(labels:string[],score:number)=>labels[Math.min(labels.length,Math.max(1,Math.round(score)))-1];
+const scalePosition=(score:number)=>`${(Math.min(5,Math.max(1,score))-1)/4*100}%`;
+
+/**
+ * What the season's weather points to on the critics' scale, with the range
+ * its past errors allow, the reasons, and how well it has done before. The
+ * critics' own consensus sits beside it when there is one.
+ */
+export function QualityOutlookCard({year,grapeName,outlook,model,check,consensus}:{
+  year:number;grapeName:string;outlook:QualityOutlook;model:QualityModel;
+  check:OutlookCheck;consensus:[number,number]|null;
+}){
+  const {labels}=model,modern=year>=model.modernFrom;
+  const label=outlookLabel(labels,outlook.score),low=outlookLabel(labels,outlook.low),high=outlookLabel(labels,outlook.high);
+  return <section className="vintage-card vintage-outlook" aria-labelledby="vintage-outlook-title">
+    <div className="vintage-card-head"><h2 id="vintage-outlook-title">Quality outlook</h2><span>{grapeName} · from the weather</span></div>
+    <p className="vintage-outlook-main"><strong>{label}</strong><small>{low===high?`likely ${low.toLowerCase()}`:`likely ${low.toLowerCase()} to ${high.toLowerCase()}`}</small></p>
+    <div className="vintage-outlook-scale" role="img" aria-label={`Weather points to ${label.toLowerCase()}, range ${low.toLowerCase()} to ${high.toLowerCase()}${consensus?`; critics' consensus ${outlookLabel(labels,consensus[0]).toLowerCase()}`:''}.`}>
+      <span className="vintage-outlook-range" style={{left:scalePosition(outlook.low),right:`calc(100% - ${scalePosition(outlook.high)})`}}/>
+      <span className="vintage-outlook-mark" style={{left:scalePosition(outlook.score)}}/>
+      {consensus&&<span className="vintage-outlook-critics-mark" style={{left:scalePosition(consensus[0])}}/>}
+    </div>
+    <ol className="vintage-outlook-steps" aria-hidden="true">{labels.map(item=><li key={item}>{item}</li>)}</ol>
+    {outlook.drivers.length>0&&<ul className="vintage-outlook-reasons" style={{gridTemplateColumns:`repeat(${outlook.drivers.length},minmax(0,1fr))`}}>{outlook.drivers.map(driver=>{
+      const [short,full]=driver.effect==='helps'?[OUTLOOK_REASONS[driver.id][0],OUTLOOK_REASONS[driver.id][2]]:[OUTLOOK_REASONS[driver.id][1],OUTLOOK_REASONS[driver.id][3]];
+      return <li key={driver.id} className={`vintage-outlook-reason-${driver.effect}`} title={full}>
+        <b aria-hidden="true">{driver.effect==='helps'?'↑':'↓'}</b><span aria-hidden="true">{short}</span><span className="visually-hidden">{full}</span>
+      </li>;
+    })}</ul>}
+    {consensus&&<p className="vintage-outlook-critics"><span className="vintage-outlook-key" aria-hidden="true"/>Critics’ consensus: <strong>{outlookLabel(labels,consensus[0])}</strong> ({consensus[1]} critics)</p>}
+    {outlook.beyondTested&&outlook.beyondTested.length>0&&<p className="vintage-callout">This season’s <strong>{outlook.beyondTested.map(id=>BEYOND_WORDS[id]).join(' and ')}</strong> went well past every vintage the outlook was tested on, so it is read as the most extreme of those. Treat it with extra caution.</p>}
+    <p className="vintage-outlook-note">{modern
+      ?`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons since ${model.modernFrom}. Growers now soften what the weather does, so it ranks modern vintages only loosely.`
+      :`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons before ${model.modernFrom}, when it decided more of the outcome.`}</p>
+  </section>;
 }

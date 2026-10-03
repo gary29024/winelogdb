@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { calibrate,eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
-import { BaselineToggle,HowWeEstimate,SampleBadge,ScoreMeter,SugarChart } from './VintageParts';
+import { BaselineToggle,HowWeEstimate,QualityOutlookCard,SampleBadge,ScoreMeter,SugarChart } from './VintageParts';
 import '../../vintages.css';
 
 const EFFECT_MARK:Record<Effect,string>={helps:'↑',hurts:'↓',neutral:'–'};
@@ -51,7 +51,9 @@ export function VintageDetailPage(){
     }
     return {normal:data.normal,harvest,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
   },[index,data,village,baseline,year]);
-  const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest):null,[reference,season,year]);
+  // How far seasons normally stray here, from the standard 30 years whichever normal is shown.
+  const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[village.area],index.baseline.from,index.baseline.to):undefined,[index,data,village]);
+  const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest,calibration):null,[reference,season,year,calibration]);
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
@@ -72,6 +74,11 @@ export function VintageDetailPage(){
   const story=seasonStory(season,normal,levels,shift,events);
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
+  // The quality outlook answers "how good": the conditions card below only explains why.
+  const outlook=grapeSeason?.outlook;
+  const qualityModel=index.quality?.grapes[grapeId];
+  const colour=qualityModel?.colour??(grapeId==='pinot-noir'?'red':'white');
+  const qualityCheck=qualityModel?(year>=index.quality!.modernFrom?qualityModel.validation.since:qualityModel.validation.before):null;
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
   const gddPct=(season.gdd-normal.gdd)/normal.gdd,rainPct=(season.rainAprSep-normal.rainAprSep)/normal.rainAprSep,nightDiff=season.augNights-normal.augNights;
   const pickGapText=(gap:number)=>gap>0?`${gap} day${gap===1?'':'s'} before`:gap<0?`${-gap} day${gap===-1?'':'s'} after`:'right at';
@@ -106,6 +113,9 @@ export function VintageDetailPage(){
       </button>)}
     </div>
 
+    {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={grape.name} outlook={outlook} model={index.quality} check={qualityCheck}
+      consensus={index.quality.consensus[colour]?.[String(year)]??null}/>}
+
     {grapeReading&&grapeSeason&&normalGrape&&<section className="vintage-card" aria-labelledby="vintage-harvest-title">
       <h2 id="vintage-harvest-title">At harvest</h2>
       {grapeReading.picking&&grapeReading.normalPicking&&harvest&&<div className="vintage-harvest-boxes">
@@ -135,7 +145,7 @@ export function VintageDetailPage(){
     </section>}
 
     {grapeReading?.conditions&&<section className="vintage-card" aria-labelledby="vintage-conditions-title">
-      <div className="vintage-card-head"><h2 id="vintage-conditions-title">{grapeReading.conditions.title}</h2><span className={`vintage-verdict is-${grapeReading.conditions.verdict.toLowerCase()}`}>{grapeReading.conditions.verdict}</span></div>
+      <div className="vintage-card-head"><h2 id="vintage-conditions-title">{grapeReading.conditions.title}</h2></div>
       <div className="vintage-conditions">{grapeReading.conditions.conditions.map(item=><div className={`vintage-condition vintage-condition-${item.effect}`} key={item.id} aria-label={`${item.label}: ${item.value}, ${item.usual} — ${EFFECT_WORD[item.effect]}`}>
         <span className="vintage-condition-head"><VintageIcon kind={item.icon} size={16}/><span>{item.label}</span><b aria-hidden="true">{EFFECT_MARK[item.effect]}</b></span>
         <span className="vintage-condition-value"><strong>{item.value}</strong><small>{item.usual}</small></span>

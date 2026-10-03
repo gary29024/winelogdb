@@ -1,0 +1,138 @@
+# Critics' consensus quality per vintage (Côte d'Or where rated, else Burgundy), from
+# scripts/vintages/pipeline/consensus.py. rating: Decanter-star equivalents, 1 poor ... 5 excellent.
+# sources: the critics averaged that year, each weighted by its agreement with the others.
+year,colour,rating,n_sources,sources
+1959,red,5.0,2,Guide Hachette des Vins|iDealwine
+1960,red,2.16,2,Guide Hachette des Vins|iDealwine
+1961,red,4.28,3,Decanter|Guide Hachette des Vins|iDealwine
+1962,red,4.21,3,Decanter|Guide Hachette des Vins|iDealwine
+1963,red,1.39,2,Decanter|iDealwine
+1964,red,3.88,3,Decanter|Guide Hachette des Vins|iDealwine
+1965,red,1.39,2,Decanter|iDealwine
+1966,red,4.79,3,Decanter|Guide Hachette des Vins|iDealwine
+1967,red,3.04,3,Decanter|Guide Hachette des Vins|iDealwine
+1968,red,1.0,2,Decanter|iDealwine
+1969,red,5.0,3,Decanter|Guide Hachette des Vins|iDealwine
+1970,red,3.27,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1971,red,4.36,3,Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1972,red,1.99,3,Decanter|Guide Hachette des Vins|iDealwine
+1973,red,2.06,3,Decanter|Guide Hachette des Vins|iDealwine
+1974,red,1.81,3,Decanter|Guide Hachette des Vins|iDealwine
+1975,red,1.0,3,Decanter|Robert Parker Wine Advocate|iDealwine
+1976,red,4.29,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1977,red,1.48,3,Decanter|Guide Hachette des Vins|iDealwine
+1978,red,4.41,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1979,red,3.04,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1980,red,2.66,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1981,red,2.24,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1982,red,2.62,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1983,red,3.02,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1984,red,2.03,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1985,red,4.23,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1986,red,2.39,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1987,red,2.68,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1988,red,3.79,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1989,red,4.0,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1990,red,4.71,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1991,red,3.26,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1992,red,2.83,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1993,red,3.66,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1994,red,2.49,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1995,red,3.46,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1996,red,4.18,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1997,red,3.32,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1998,red,3.47,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1999,red,3.87,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+2000,red,3.2,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2001,red,3.64,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2002,red,4.3,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2003,red,3.69,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2004,red,3.1,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2005,red,4.75,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2006,red,3.72,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2007,red,3.36,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2008,red,3.57,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2009,red,4.43,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2010,red,4.36,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2011,red,3.55,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2012,red,4.11,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2013,red,3.76,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2014,red,3.91,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2015,red,4.63,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2016,red,4.32,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2017,red,3.95,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2018,red,4.11,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2019,red,4.44,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2020,red,4.43,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2021,red,3.79,9,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2022,red,4.61,9,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2023,red,3.95,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2024,red,3.33,5,Berry Bros & Rudd|Decanter|Robert Parker Wine Advocate|The Wine Society|Wine Scholar Guild (Andrew Jefford)
+2025,red,4.38,1,Berry Bros & Rudd
+1959,white,4.53,2,Guide Hachette des Vins|iDealwine
+1960,white,1.04,2,Guide Hachette des Vins|iDealwine
+1961,white,3.94,3,Decanter|Guide Hachette des Vins|iDealwine
+1962,white,4.47,3,Decanter|Guide Hachette des Vins|iDealwine
+1963,white,1.46,3,Decanter|Guide Hachette des Vins|iDealwine
+1964,white,3.86,3,Decanter|Guide Hachette des Vins|iDealwine
+1965,white,1.16,2,Decanter|iDealwine
+1966,white,4.57,3,Decanter|Guide Hachette des Vins|iDealwine
+1967,white,3.53,3,Decanter|Guide Hachette des Vins|iDealwine
+1968,white,1.0,2,Decanter|iDealwine
+1969,white,4.78,3,Decanter|Guide Hachette des Vins|iDealwine
+1970,white,2.99,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1971,white,4.4,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1972,white,2.75,3,Decanter|Guide Hachette des Vins|iDealwine
+1973,white,3.31,3,Decanter|Guide Hachette des Vins|iDealwine
+1974,white,2.16,3,Decanter|Guide Hachette des Vins|iDealwine
+1975,white,1.49,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1976,white,3.6,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1977,white,1.61,3,Decanter|Guide Hachette des Vins|iDealwine
+1978,white,3.98,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1979,white,3.51,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1980,white,2.25,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1981,white,2.9,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1982,white,3.59,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1983,white,3.44,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1984,white,2.03,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1985,white,4.1,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1986,white,3.63,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1987,white,2.38,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1988,white,2.98,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1989,white,4.1,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1990,white,3.89,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1991,white,2.64,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1992,white,3.65,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1993,white,2.5,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1994,white,3.07,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1995,white,4.11,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1996,white,4.19,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1997,white,3.45,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1998,white,3.27,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1999,white,3.37,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+2000,white,3.69,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2001,white,3.54,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2002,white,4.29,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2003,white,3.01,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2004,white,3.73,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2005,white,4.15,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2006,white,3.67,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2007,white,3.75,9,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2008,white,4.02,8,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2009,white,3.83,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2010,white,4.29,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2011,white,3.86,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2012,white,4.06,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2013,white,3.84,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2014,white,4.46,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2015,white,3.99,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2016,white,3.91,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2017,white,4.21,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2018,white,4.0,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2019,white,4.16,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2020,white,4.3,10,Berry Bros & Rudd|Burgundy Report (Bill Nanson)|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2021,white,4.03,9,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2022,white,4.41,9,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2023,white,4.08,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2024,white,3.93,6,Berry Bros & Rudd|Decanter|Robert Parker Wine Advocate|The Wine Society|Wine Scholar Guild (Andrew Jefford)|Wine Spectator
+2025,white,4.01,1,Berry Bros & Rudd

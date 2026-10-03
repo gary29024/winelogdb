@@ -69,7 +69,7 @@ GRAPES = {
 }
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
-CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 15
+CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 19   # 1 August to 30 October: late harvests (1965: to 25 October) stay on the curve
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
 AREAS = ['chablis-auxerrois', 'cote-de-nuits', 'hautes-cotes', 'cote-de-beaune', 'cote-chalonnaise', 'maconnais']
 
@@ -197,9 +197,11 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'coolNights': round(sum(1 for d in span if series[d]['tmin'] < 13) / len(span), 2) if span else 0,
             'heatStressDays': sum(1 for d in span if series[d]['tmax'] >= 35),
             'rain': round(sum(r for r in rains if r is not None)),
-            # Days grey rot can spread: at least 2 mm of rain on a day averaging 12 °C or more.
-            'wetDays': sum(1 for d, r in zip(span, rains) if r is not None and r >= 2 and series[d]['t'] >= 12),
-            'radiation': round(sum(series[d]['ssi'] for d in span) * .01),
+            # Days grey rot can spread: at least 2 mm of rain on a day averaging 10 °C or more
+            # (Botrytis infects from about 10 °C; a 12 °C cut missed half of cold, rotten 1965's rain days).
+            'wetDays': sum(1 for d, r in zip(span, rains) if r is not None and r >= 2 and series[d]['t'] >= 10),
+            # Daily mean, so a short ripening is not read as a dull one.
+            'radiation': round(mean(series[d]['ssi'] for d in span) * .01, 1) if span else 0,
         },
     }
 
@@ -412,7 +414,7 @@ def main() -> None:
                     'heatStressDays': round(mean(r['heatStressDays'] for r in ripening), 1),
                     'rain': round(mean(ripening_rain)),
                     'wetDays': round(mean(grapes_by_year[y][grape]['ripening']['wetDays'] for y in base_rain), 1),
-                    'radiation': round(mean(r['radiation'] for r in ripening)),
+                    'radiation': round(mean(r['radiation'] for r in ripening), 1),
                 },
             }
         data = {'normal': normal, 'years': {str(y): {**seasons[y], 'grapes': grapes_by_year[y]} for y in seasons if y >= FIRST_SEASON}}
