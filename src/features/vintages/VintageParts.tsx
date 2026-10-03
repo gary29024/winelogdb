@@ -58,11 +58,13 @@ const VERAISON_LEAD=8;
  */
 function chartScale(curve:SugarCurve,year:number,veraison:number,harvest:HarvestReading|null){
   const curveStart=seasonDay(year,curve.start),curveEnd=addDays(curveStart,(curve.values.length-1)*curve.step);
-  // Likewise to the right when picking ran past the curve's last day (1965: from 11 October).
-  const end=Math.max(curveEnd,harvest?addDays(harvest.end,3):curveEnd);
+  // The axis normally ends on 10 October; the data runs to the end of October so a late
+  // harvest (1965: to 25 October) can extend it and still sit on the curve.
+  const usualEnd=Math.min(curveEnd,seasonDay(year,'10-10'));
+  const end=Math.min(curveEnd,Math.max(usualEnd,harvest?addDays(harvest.end,3):usualEnd));
   const start=Math.min(curveStart,addDays(veraison,-VERAISON_LEAD)),span=daysBetween(start,end);
   const x=(time:number)=>LEFT+Math.min(span,Math.max(0,daysBetween(start,time)))*(RIGHT-LEFT)/span;
-  return {start,curveStart,span,x};
+  return {start,curveStart,end,span,x};
 }
 
 const path=(points:[number,number][])=>points.map(([px,py],i)=>`${i?'L':'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' ');
@@ -76,12 +78,17 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   year:number;curve:SugarCurve;normal:SugarCurve;low:number[];high:number[];
   harvest:HarvestReading|null;veraison:number;ripeSugar:number;
 }){
-  const {start,curveStart,span,x}=chartScale(curve,year,veraison,harvest);
+  const {start,curveStart,end,span,x}=chartScale(curve,year,veraison,harvest);
   const {y,ticks:levels}=sugarScale(curve.values,normal.values,low);
-  const at=(values:number[],i:number):[number,number]=>[x(addDays(curveStart,i*curve.step)),y(values[i])];
-  const yearLine=path(curve.values.map((_,i)=>at(curve.values,i)));
-  const normalLine=path(normal.values.map((_,i)=>at(normal.values,i)));
-  const bandPath=`${path(high.map((_,i)=>at(high,i)))} ${path(low.map((_,i)=>at(low,i)).reverse()).replace(/^M/,'L')} Z`;
+  // Each line runs to the axis end: modelled points up to it, then one point read off at the end itself.
+  const line=(values:number[]):[number,number][]=>{
+    const series={...curve,values};
+    const points=values.map((_,i)=>addDays(curveStart,i*curve.step)).filter(time=>time<end).map(time=>[x(time),y(sugarOn(series,year,time))] as [number,number]);
+    return [...points,[x(end),y(sugarOn(series,year,end))]];
+  };
+  const yearLine=path(line(curve.values));
+  const normalLine=path(line(normal.values));
+  const bandPath=`${path(line(high))} ${path(line(low).reverse()).replace(/^M/,'L')} Z`;
   const ripe=dayReaching(curve,year,ripeSugar),normalRipe=dayReaching(normal,year,ripeSugar);
   const picked:[number,number][]=[];
   if(harvest)for(let day=0;day<=PICKING_DAYS;day++){const time=addDays(harvest.start,day);picked.push([x(time),y(sugarOn(curve,year,time))])}

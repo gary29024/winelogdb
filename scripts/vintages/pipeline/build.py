@@ -69,7 +69,7 @@ GRAPES = {
 }
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
-CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 15
+CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 19   # 1 August to 30 October: late harvests (1965: to 25 October) stay on the curve
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
 AREAS = ['chablis-auxerrois', 'cote-de-nuits', 'hautes-cotes', 'cote-de-beaune', 'cote-chalonnaise', 'maconnais']
 
