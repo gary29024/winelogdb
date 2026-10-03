@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { calibrate,eraNormal,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { calibrate,eraNormal,grapeExpect,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
@@ -74,6 +74,8 @@ export function VintageDetailPage(){
   const shift=harvest?.shiftDays??0;
   const events=index.events?.[village.area]?.[String(year)]??[];
   const story=seasonStory(season,normal,levels,shift,events);
+  // The weather is shared; what it means in the glass depends on the grape shown.
+  const expect=grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect);
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   // The quality outlook answers "how good": the conditions card below only explains why.
@@ -100,7 +102,7 @@ export function VintageDetailPage(){
         </div>
       </div>
       {harvest&&<p className="vintage-hero-harvest"><VintageIcon kind="calendar"/><span>Harvest {harvest.source==='estimated'?'estimated to begin':'began'} <strong>{formatDay(harvest.start)}</strong>{harvest.source==='official'?' (official)':harvest.source==='reported'?' (reported)':''} — <strong className={shift<0?'is-early':shift>0?'is-late':undefined}>{shiftLabel(shift)}</strong>{shift?` than usual (${formatDay(harvest.typicalStart)})`:''}</span></p>}
-      <p className="vintage-hero-story">{story.happened} <strong>{story.expect}</strong></p>
+      <p className="vintage-hero-story">{story.happened} <strong>{expect}</strong></p>
       {events.length>0&&<p className="vintage-hero-events">Recorded: {events.map((event,i)=><span key={`${event.type}-${event.date}`}>{i>0&&' · '}<a href={event.source} target="_blank" rel="noopener noreferrer">{event.type==='hail'?'hail':'spring frost'}, {eventDay(event.date)}</a></span>)}</p>}
       <div className="vintage-hero-measures">
         <span className={`is-warmth${levels.warmth===0?' is-typical':''}`}><VintageIcon kind="sun" size={20}/><strong>{WARMTH_WORD[levels.warmth]}</strong><small>warmth {signed(Math.round(gddPct*100))}%</small></span>

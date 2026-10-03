@@ -501,3 +501,40 @@ export function outlookNote(check:OutlookCheck,modern:boolean,modernFrom:number)
   if(check.error>check.errorIfAverage*0.9)return `${tested} — little better than guessing that era’s average (${check.errorIfAverage.toFixed(2)}). Growers now soften what the weather does, so treat it as a loose guide.`;
   return `${tested}, against ${check.errorIfAverage.toFixed(2)} for guessing that era’s average.${modern?' Growers now soften what the weather does, so it ranks modern vintages only loosely.':''}`;
 }
+
+const EXPECT={
+  'pinot-noir':{short:'Expect light, pale reds; many will feel lean.',earlyPick:'Expect fresher reds than the heat suggests: picking began before the grapes were fully ripe.',
+    warmWet:'Expect ripe reds, but rain late in the season made careful sorting essential.',hotHeat:'Expect dark, ripe, full reds; in places heat shows as jammy fruit or high alcohol.',
+    warm:'Expect deeply coloured, ripe reds with supple tannins.',coolWet:'Expect light, fresh reds — careful sorting made the difference.',
+    cool:'Expect pale, fragrant reds with crisp acidity.',wet:'Expect uneven reds — the growers who sorted hardest made the best wines.',
+    riper:'Expect ripe, well-coloured reds.',lessRipe:'Expect fresh, lighter reds.',usual:'Expect classic, balanced reds.'},
+  chardonnay:{short:'Expect lean, sharp whites.',earlyPick:'Expect fresher whites than the heat suggests: picking began before the grapes were fully ripe.',
+    warmWet:'Expect ripe whites, but rain late in the season made careful sorting essential.',hotHeat:'Expect rich, broad whites with low acidity; in places heat makes them heavy.',
+    warm:'Expect rich, ripe whites with softer acidity; the best kept their freshness.',coolWet:'Expect lean, fresh whites — careful sorting made the difference.',
+    cool:'Expect taut whites with bright acidity.',wet:'Expect uneven whites — the growers who sorted hardest made the best wines.',
+    riper:'Expect ripe, generous whites.',lessRipe:'Expect crisp, lighter whites.',usual:'Expect classic, balanced whites.'}
+} satisfies Record<GrapeId,Record<string,string>>;
+
+/**
+ * The season story's closing line for one grape. The same weather pushes the two grapes
+ * different ways (warmth gives Pinot Noir colour but costs Chardonnay freshness), so the
+ * line reads the grape's own ripening drivers, and the season's warmth and timing where
+ * the drivers sit at usual. Without the four drivers it keeps the season's shared line.
+ */
+export function grapeExpect(grape:GrapeId,conditions:ConditionsReading|null,levels:SeasonLevels,shiftDays:number,fallback:string){
+  const value=(id:string)=>conditions?.conditions.find(item=>item.id===id)?.value;
+  const warmth=value('warmth');
+  if(!conditions||warmth==null)return fallback;
+  const words=EXPECT[grape];
+  const warm=warmth==='Warmer'||(warmth==='Usual'&&(levels.warmth>=1||shiftDays<=-4));
+  const cool=warmth==='Cooler'||(warmth==='Usual'&&(levels.warmth<=-1||shiftDays>=4));
+  // Ripening-time rot, or a season wet enough for disease even before véraison.
+  const wet=value('rain')==='High'||levels.rain>=2||(cool&&levels.rain>=1),heat=conditions.conditions.some(item=>item.id==='heat'&&item.effect==='hurts');
+  const ripeness=value('ripeness');
+  // In a warm year, sugar short of the minimum at the start of picking means picked early, not unripe.
+  if(ripeness==='Short of ripe')return warm?words.earlyPick:words.short;
+  if(warm)return heat?words.hotHeat:wet?words.warmWet:words.warm;
+  if(cool)return wet?words.coolWet:words.cool;
+  if(wet)return words.wet;
+  return ripeness==='Riper'?words.riper:ripeness==='Less ripe'?words.lessRipe:words.usual;
+}
