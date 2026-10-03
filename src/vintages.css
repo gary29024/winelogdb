@@ -198,7 +198,7 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 
 /* Ripening conditions */
 .vintage-conditions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.vintage-condition{display:grid;grid-template-rows:20px 24px;row-gap:2px;min-width:0;padding:8px;border:1px solid;border-radius:12px}
+.vintage-condition{display:grid;grid-template-rows:20px auto;row-gap:2px;min-width:0;padding:8px;border:1px solid;border-radius:12px}
 .vintage-condition-helps{border-color:var(--vt-helps-line);background:var(--vt-helps);--ink-effect:var(--vt-helps-ink)}
 .vintage-condition-hurts{border-color:var(--vt-hurts-line);background:var(--vt-hurts);--ink-effect:var(--vt-hurts-ink)}
 .vintage-condition-neutral{border-color:var(--vt-neutral-line);background:var(--vt-neutral);--ink-effect:var(--ink-5)}
@@ -206,9 +206,9 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-condition-head svg{flex-shrink:0;color:var(--ink-effect)}
 .vintage-condition-head>span{flex:1;min-width:0;overflow:hidden;color:var(--ink-3);font-size:.76rem;font-weight:600;text-overflow:ellipsis;white-space:nowrap}
 .vintage-condition-head b{display:grid;place-items:center;flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--paper);color:var(--ink-effect);font-size:.8rem}
-.vintage-condition-value{display:flex;align-items:baseline;gap:6px;min-width:0;white-space:nowrap}
+.vintage-condition-value{display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:0}
 .vintage-condition-value strong{font-size:1.05rem;line-height:24px;font-variant-numeric:tabular-nums}
-.vintage-condition-value small{overflow:hidden;color:var(--ink-5);font-size:.7rem;text-overflow:ellipsis}
+.vintage-condition-value small{color:var(--ink-5);font-size:.7rem;line-height:1.35}
 .vintage-effect-key{display:flex;gap:14px;margin:10px 0 0;padding:0;list-style:none;font-size:.7rem;font-weight:600;color:var(--ink-5)}
 .vintage-effect-key li{display:flex;align-items:center;gap:5px}
 .vintage-effect-key li:before{content:"";width:12px;height:12px;border:1px solid;border-radius:4px}

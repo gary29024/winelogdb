@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { calibrate,eraNormal,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { calibrate,eraNormal,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
 import { BURGUNDY } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
@@ -47,9 +47,9 @@ export function VintageDetailPage(){
     const harvest=index.harvest[village.area];
     if(baseline==='era'&&data.years[String(year)]){
       const era=eraNormal(data.years,harvest,year);
-      return {normal:era.normal,harvest:era.harvest,label:`${era.from}–${era.to}`,short:`’${String(era.from).slice(2)}–’${String(era.to).slice(2)}`};
+      return {normal:era.normal,harvest:era.harvest,from:era.from,to:era.to,label:`${era.from}–${era.to}`,short:`’${String(era.from).slice(2)}–’${String(era.to).slice(2)}`};
     }
-    return {normal:data.normal,harvest,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
+    return {normal:data.normal,harvest,from:index.baseline.from,to:index.baseline.to,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
   },[index,data,village,baseline,year]);
   // How far seasons normally stray here, from the standard 30 years whichever normal is shown.
   const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[village.area],index.baseline.from,index.baseline.to):undefined,[index,data,village]);
@@ -57,7 +57,9 @@ export function VintageDetailPage(){
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,grape.minSugar);
+    // The four ripening drivers are graded against the same reference seasons as everything else.
+    const spread=ripeningSpread(data.years,reference!.harvest,grapeId,reference!.from,reference!.to);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,grape.minSugar,spread);
   },[reading,season,data,reference,grapeId,year,grape.ripeSugar,grape.minSugar]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
