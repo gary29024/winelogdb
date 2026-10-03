@@ -53,8 +53,8 @@ function sugarScale(...series:number[][]){
 const VERAISON_LEAD=8;
 
 /**
- * The date axis runs from the sugar curve's first day, or earlier when véraison
- * comes first: the axis then opens into July and the curve starts where its data does.
+ * The date axis normally runs 1 August to 10 October. It opens into July when véraison
+ * comes earlier, and runs on into October when picking does; the curves cover both.
  */
 function chartScale(curve:SugarCurve,year:number,veraison:number,harvest:HarvestReading|null){
   const curveStart=seasonDay(year,curve.start),curveEnd=addDays(curveStart,(curve.values.length-1)*curve.step);
@@ -62,7 +62,8 @@ function chartScale(curve:SugarCurve,year:number,veraison:number,harvest:Harvest
   // harvest (1965: to 25 October) can extend it and still sit on the curve.
   const usualEnd=Math.min(curveEnd,seasonDay(year,'10-10'));
   const end=Math.min(curveEnd,Math.max(usualEnd,harvest?addDays(harvest.end,3):usualEnd));
-  const start=Math.min(curveStart,addDays(veraison,-VERAISON_LEAD)),span=daysBetween(start,end);
+  const usualStart=Math.max(curveStart,seasonDay(year,'08-01'));
+  const start=Math.max(curveStart,Math.min(usualStart,addDays(veraison,-VERAISON_LEAD))),span=daysBetween(start,end);
   const x=(time:number)=>LEFT+Math.min(span,Math.max(0,daysBetween(start,time)))*(RIGHT-LEFT)/span;
   return {start,curveStart,end,span,x};
 }
@@ -79,12 +80,14 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   harvest:HarvestReading|null;veraison:number;ripeSugar:number;
 }){
   const {start,curveStart,end,span,x}=chartScale(curve,year,veraison,harvest);
-  const {y,ticks:levels}=sugarScale(curve.values,normal.values,low);
+  // Only what is on screen sets the sugar axis: July values below it would stretch it for nothing.
+  const visible=(values:number[])=>values.filter((_,i)=>{const time=addDays(curveStart,i*curve.step);return time>=start&&time<=end});
+  const {y,ticks:levels}=sugarScale(visible(curve.values),visible(normal.values),visible(low));
   // Each line runs to the axis end: modelled points up to it, then one point read off at the end itself.
   const line=(values:number[]):[number,number][]=>{
     const series={...curve,values};
-    const points=values.map((_,i)=>addDays(curveStart,i*curve.step)).filter(time=>time<end).map(time=>[x(time),y(sugarOn(series,year,time))] as [number,number]);
-    return [...points,[x(end),y(sugarOn(series,year,end))]];
+    const points=values.map((_,i)=>addDays(curveStart,i*curve.step)).filter(time=>time>start&&time<end).map(time=>[x(time),y(sugarOn(series,year,time))] as [number,number]);
+    return [[x(start),y(sugarOn(series,year,start))],...points,[x(end),y(sugarOn(series,year,end))]];
   };
   const yearLine=path(line(curve.values));
   const normalLine=path(line(normal.values));
