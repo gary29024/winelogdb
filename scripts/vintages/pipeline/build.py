@@ -69,7 +69,7 @@ GRAPES = {
 }
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
-CURVE_START, CURVE_STEP, CURVE_POINTS = (8, 1), 5, 19   # 1 August to 30 October: late harvests (1965: to 25 October) stay on the curve
+CURVE_START, CURVE_STEP, CURVE_POINTS = (7, 15), 5, 22  # 15 July to 28 October: early véraison and late harvests (1965: to 25 October) stay on the curve
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
 AREAS = ['chablis-auxerrois', 'cote-de-nuits', 'hautes-cotes', 'cote-de-beaune', 'cote-chalonnaise', 'maconnais']
 
@@ -431,7 +431,8 @@ def main() -> None:
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay).'},
             {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C for this model to match the stations it was fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
-            {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one (each cited in scripts/vintages/data/harvest_dates.csv). Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
+            {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one — an official ban, the Hospices de Beaune, the BIVB or the wine press. Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
+            {'label': 'Frost and hail', 'detail': 'Spring frosts and hailstorms a grower body or the wine press dates to at least the month, kept by hand because an 8 km grid cannot see them; each links to its source.'},
         ],
         'harvest': harvest,
         'events': vineyard_events(),

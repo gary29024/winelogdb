@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe,expect,it } from 'vitest';
 import { villageForWine } from '../../src/features/vintages/data';
-import { closestToTypical,eraNormal,eraWindow,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,seasonStory,shiftLabel,shiftTone,sugarAtPicking,sugarOn } from '../../src/features/vintages/model';
+import { closestToTypical,eraNormal,eraWindow,dayReaching,formatDay,harvestFor,readGrape,readSeason,ripeningConditions,seasonCharacter,seasonDay,seasonHeadline,seasonLevels,seasonScore,seasonStory,shiftLabel,shiftTone,sugarAtPicking,sugarOn,type RipeningSpread } from '../../src/features/vintages/model';
 import { BURGUNDY } from '../../src/features/vintages/regions';
 import type { RipeningWeather,SeasonWeather,SugarCurve,VillageData,VintageIndex } from '../../src/features/vintages/types';
 
@@ -199,3 +199,35 @@ describe('recorded frost and hail',()=>{
   });
 });
 
+
+describe('four independent ripening drivers',()=>{
+  const r=(median:number,spread:number)=>({median,spread});
+  const spread:RipeningSpread={
+    meanTemp:r(18,1.5),coolNights:r(.36,.15),radiation:r(15.5,2),hang:r(46,8),pickSugar:r(205,12),
+    heatStressDays:[0,0,0],wetDays:[7,10,13],rain:[60,90,120],warmth:[-.5,0,.5],ripeness:[-.5,0,.5]
+  };
+  const year=(over:Partial<RipeningWeather>):RipeningWeather=>({meanTemp:18,coolNights:.36,heatStressDays:0,rain:90,wetDays:10,radiation:15.5,...over});
+  it('scores one vote per driver, however many measures move together',()=>{
+    const warm=year({meanTemp:21,coolNights:.05,radiation:19});   // three warm measures, one driver
+    const red=ripeningConditions('pinot-noir',warm,warm,46,46,205,180,spread);
+    expect(red.conditions.map(c=>c.id)).toEqual(['warmth','heat','rain','ripeness']);
+    expect(red.conditions.filter(c=>c.effect!=='neutral')).toHaveLength(1);
+    expect(red.verdict).toBe('Mixed');
+  });
+  it('reads warmth as good for Pinot colour and bad for Chardonnay freshness',()=>{
+    const warm=year({meanTemp:21,coolNights:.05,radiation:19});
+    expect(ripeningConditions('pinot-noir',warm,warm,46,46,205,180,spread).conditions[0].effect).toBe('helps');
+    expect(ripeningConditions('chardonnay',warm,warm,46,46,205,178,spread).conditions[0].effect).toBe('hurts');
+  });
+  it('lets heat stress only hurt, and marks picking below the legal minimum as unripe',()=>{
+    const hot=year({heatStressDays:4});
+    expect(ripeningConditions('pinot-noir',hot,hot,46,46,205,180,spread).conditions[1].effect).toBe('hurts');
+    expect(ripeningConditions('pinot-noir',year({}),year({}),46,46,205,180,spread).conditions[1].effect).toBe('neutral');
+    const unripe=ripeningConditions('pinot-noir',year({}),year({}),46,46,170,180,spread).conditions[3];
+    expect([unripe.value,unripe.effect]).toEqual(['Short of ripe','hurts']);
+  });
+  it('is Favourable when two drivers help and none hurts',()=>{
+    const good=year({meanTemp:21,coolNights:.05,radiation:19,wetDays:4,rain:40});
+    expect(ripeningConditions('pinot-noir',good,good,46,46,205,180,spread).verdict).toBe('Favourable');
+  });
+});
