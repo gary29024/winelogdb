@@ -18,6 +18,10 @@ How the model stays honest:
   - From 1991 the weather's swing is scaled towards the modern average by the
     factor modern years support (fitted inside each held-out fit, so the test
     stays fair): growers now soften what the weather does.
+  - Warmth helps only up to a cap: past it, a hotter season earns no more
+    (vines stop gaining, and the hottest years were not rated better). The cap
+    is picked from WARMTH_CAPS by held-out error, and picked again inside every
+    held-out fit, so the test never sees the year it predicts.
   - Every year's outlook is reported from a fit that left that year out, and
     the error of those held-out predictions sets the range shown, separately
     for seasons before 1991 and from 1991.
@@ -48,6 +52,8 @@ SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, '
 # The critics' ratings these villages answer to: they rate the Côte d'Or as a whole.
 FIT_AREAS = {'cote-de-nuits', 'cote-de-beaune'}
 MODERN = 1991
+# Candidate warmth caps, in the warmth input's steps of 10% more heat than normal; None = no cap.
+WARMTH_CAPS = [None, 0.5, 1.0, 1.5]
 LABELS = ['Poor', 'Mixed', 'Good', 'Very good', 'Excellent']   # 1-5 on the consensus scale
 
 
@@ -98,6 +104,10 @@ def predict(model: dict[str, float], row: dict[str, float]) -> float:
     return model['intercept'] + sum(w * row[k] for k, w in model.items() if k != 'intercept')
 
 
+def capped(row: dict[str, float], cap: float | None) -> dict[str, float]:
+    return row if cap is None else {**row, 'warmth': min(row['warmth'], cap)}
+
+
 def clamp(score: float) -> float:
     return min(max(score, 1.0), 5.0)
 
@@ -135,24 +145,33 @@ def main() -> None:
         rows = [{k: st.mean(season_inputs(v, str(y), grape)[k] for v in fit_villages) for k in names} for y in years]
         target = [consensus[(colour, y)] for y in years]
 
-        def modern_scale(model: dict, sel: list[int]) -> tuple[float, float, float]:
+        def modern_scale(model: dict, sel: list[int], cap: float | None) -> tuple[float, float, float]:
             """Weather moves modern ratings less than it moved older ones: shrink its swing
             towards the modern average by the factor those years support (0-1)."""
-            preds = [predict(model, rows[j]) for j in sel]
+            preds = [predict(model, capped(rows[j], cap)) for j in sel]
             mean_t, mean_p = st.mean(target[j] for j in sel), st.mean(preds)
             spread_p = sum((p - mean_p) ** 2 for p in preds)
             k = sum((p - mean_p) * (target[j] - mean_t) for p, j in zip(preds, sel)) / spread_p if spread_p else 0.0
             return mean_t, mean_p, min(max(k, 0.0), 1.0)
 
+        def predict_held_out(cap: float | None, i: int, train: list[int]) -> float:
+            model = fit([capped(rows[j], cap) for j in train], [target[j] for j in train], names)
+            p = predict(model, capped(rows[i], cap))
+            if years[i] >= MODERN:
+                mean_t, mean_p, k = modern_scale(model, [j for j in train if years[j] >= MODERN], cap)
+                p = mean_t + k * (p - mean_p)
+            return p
+
+        def choose_cap(sel: list[int]) -> float | None:
+            """The warmth cap with the lowest held-out error over these years; no cap on a tie."""
+            def error(cap: float | None) -> float:
+                return st.mean(abs(predict_held_out(cap, i, [j for j in sel if j != i]) - target[i]) for i in sel)
+            return min(WARMTH_CAPS, key=lambda cap: (round(error(cap), 6), cap is not None))
+
         held_out = []
         for i in range(len(years)):
             train = [j for j in range(len(years)) if j != i]
-            model = fit([rows[j] for j in train], [target[j] for j in train], names)
-            p = predict(model, rows[i])
-            if years[i] >= MODERN:
-                mean_t, mean_p, k = modern_scale(model, [j for j in train if years[j] >= MODERN])
-                p = mean_t + k * (p - mean_p)
-            held_out.append(p)
+            held_out.append(predict_held_out(choose_cap(train), i, train))
 
         def stats(sel: list[int]) -> dict:
             p, t = [held_out[i] for i in sel], [target[i] for i in sel]
@@ -170,17 +189,18 @@ def main() -> None:
 
         old = [i for i, y in enumerate(years) if y < MODERN]
         new = [i for i, y in enumerate(years) if y >= MODERN]
-        model = fit(rows, target, names)
-        modern = modern_scale(model, new)
+        cap = choose_cap(list(range(len(years))))
+        model = fit([capped(r, cap) for r in rows], target, names)
+        modern = modern_scale(model, new, cap)
         validation = {'before': stats(old), 'since': stats(new), 'all': stats(list(range(len(years))))}
         quality['grapes'][grape] = {'colour': colour, 'weights': {k: round(w, 3) for k, w in model.items()},
-                                    'modernScale': round(modern[2], 2), 'validation': validation}
-        print(f"{grape}: weights {quality['grapes'][grape]['weights']}")
+                                    'modernScale': round(modern[2], 2), 'warmthCap': cap, 'validation': validation}
+        print(f"{grape}: warmth cap {cap}, weights {quality['grapes'][grape]['weights']}")
         for label, s in validation.items():
             print(f"  {label}: {s}")
 
         # Reasons are measured from the average fitted season, so they say how this year differed.
-        typical = {k: st.mean(row[k] for row in rows) for k in names}
+        typical = {k: st.mean(capped(row, cap)[k] for row in rows) for k in names}
         spread = {'before': validation['before']['spread'], 'since': validation['since']['spread']}
         held = dict(zip(years, held_out))
         # The outlook is only tested inside the range of seasons it was fitted on. A season
@@ -204,10 +224,11 @@ def main() -> None:
             for year, season in data['years'].items():
                 y = int(year)
                 row, beyond = bounded(season_inputs(village, year, grape))
+                row = capped(row, cap)
                 # Fitted years use their held-out prediction plus this village's difference from the Côte d'Or.
                 k = modern[2] if y >= MODERN else 1.0
                 if y in held and area_of[village] in FIT_AREAS:
-                    cote = bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0]
+                    cote = capped(bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0], cap)
                     score = held[y] + k * (predict(model, row) - predict(model, cote))
                 elif y >= MODERN:
                     score = modern[0] + k * (predict(model, row) - modern[1])

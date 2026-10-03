@@ -95,7 +95,7 @@ export type QualityOutlook={score:number;low:number;high:number;drivers:OutlookD
 export type OutlookCheck={years:number;correlation:number|null;error:number;errorIfAverage:number;withinOneStep:number;spread:number};
 export type QualityModel={
   labels:string[];modernFrom:number;sources:string[];
-  grapes:Partial<Record<GrapeId,{colour:'red'|'white';modernScale:number;validation:{before:OutlookCheck;since:OutlookCheck;all:OutlookCheck}}>>;
+  grapes:Partial<Record<GrapeId,{colour:'red'|'white';modernScale:number;warmthCap?:number|null;validation:{before:OutlookCheck;since:OutlookCheck;all:OutlookCheck}}>>;
   /** Critics' consensus by colour then year: [rating 1-5, number of critics]. */
   consensus:Record<'red'|'white',Record<string,[number,number]>>;
 };

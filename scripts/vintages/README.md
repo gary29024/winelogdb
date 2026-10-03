@@ -47,6 +47,7 @@ The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labb�
 
 `quality.py` turns each season's measurements into what they point to on the critics' 1–5 scale (Poor to Excellent). The measurements are ripeness over the appellation minimum, season warmth, heat stress, wet ripening days, harvest rain, hail and, for Chardonnay, ripening warmth for acidity.
 - Agronomy fixes which way each measurement may push quality. The critics' consensus only sets how much.
+- Warmth helps only up to a cap (Pinot Noir +5%, Chardonnay +10% more heat than normal at the last run). A hotter season earns no more. The cap is chosen by held-out error, and chosen again inside each held-out fit.
 - Every reported figure comes from a fit that left that year out.
 - From 1991 the weather's swing is scaled towards the modern average, because growers now soften what the weather does.
 
