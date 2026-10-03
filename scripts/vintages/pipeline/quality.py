@@ -13,14 +13,23 @@ How the model stays honest:
     rain at harvest, recorded hail). Which way each one may push quality is
     fixed here by agronomy (SIGNS); the critics only set how much. A weight that
     comes out the wrong way round is dropped, never flipped.
-  - 'practice' stands for better vineyard and cellar work (sorting, picking
-    dates): 0 before 1975 rising to 1 by 2000. It may only raise quality.
-  - From 1991 the weather's swing is scaled towards the modern average by the
-    factor modern years support (fitted inside each held-out fit, so the test
-    stays fair): growers now soften what the weather does.
+  - Better vineyard and cellar work is not given an assumed shape. From 1991
+    each outlook is centred on the modern seasons' own average rating, and the
+    weather's swing is scaled by the factor modern years support (fitted inside
+    each held-out fit, so the test stays fair): growers now soften what the
+    weather does. (An assumed 1975-2000 'practice' ramp was dropped: it made
+    held-out predictions before 1991 worse.)
+  - Warmth helps only up to a cap: past it, a hotter season earns no more
+    (vines stop gaining, and the hottest years were not rated better). The cap
+    is picked from WARMTH_CAPS by held-out error, and picked again inside every
+    held-out fit, so the test never sees the year it predicts.
   - Every year's outlook is reported from a fit that left that year out, and
     the error of those held-out predictions sets the range shown, separately
     for seasons before 1991 and from 1991.
+  - Once a season is complete (1 November) and before critics have rated it,
+    its Côte d'Or outlook is written to data/outlook_record.csv and never
+    changed, so it can be checked against the critics later: the only test
+    that no choice made here has seen.
 
     python scripts/vintages/pipeline/quality.py
 """
@@ -37,17 +46,20 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 DATA = ROOT / 'scripts/vintages/data'
+RECORD = DATA / 'outlook_record.csv'
 OUT = ROOT / 'public/data/vintages/burgundy'
 
 GRAPES = {
     # grape: (critics' colour, appellation minimum sugar g/L, inputs)
-    'pinot-noir': ('red', 180, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail', 'practice']),
-    'chardonnay': ('white', 178, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity', 'hail', 'practice']),
+    'pinot-noir': ('red', 180, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail']),
+    'chardonnay': ('white', 178, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity', 'hail']),
 }
-SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, 'acidity': 1, 'hail': -1, 'practice': 1}
+SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, 'acidity': 1, 'hail': -1}
 # The critics' ratings these villages answer to: they rate the Côte d'Or as a whole.
 FIT_AREAS = {'cote-de-nuits', 'cote-de-beaune'}
 MODERN = 1991
+# Candidate warmth caps, in the warmth input's steps of 10% more heat than normal; None = no cap.
+WARMTH_CAPS = [None, 0.5, 1.0, 1.5]
 LABELS = ['Poor', 'Mixed', 'Good', 'Very good', 'Excellent']   # 1-5 on the consensus scale
 
 
@@ -78,7 +90,6 @@ def inputs(village: dict, year: str, grape: str, harvest_start: dt.date, events:
         'harvestRain': ((season.get('harvestRain') or 0) - (normal.get('harvestRain') or 0)) / 30,  # per 30 mm at harvest
         'acidity': -(ripening['meanTemp'] - normal_ripening['meanTemp']),               # per °C cooler while ripening
         'hail': 1.0 if any(e['type'] == 'hail' for e in events) else 0.0,
-        'practice': min(max((y - 1975) / 25, 0.0), 1.0),
     }
 
 
@@ -96,6 +107,10 @@ def fit(rows: list[dict], target: list[float], names: list[str]) -> dict[str, fl
 
 def predict(model: dict[str, float], row: dict[str, float]) -> float:
     return model['intercept'] + sum(w * row[k] for k, w in model.items() if k != 'intercept')
+
+
+def capped(row: dict[str, float], cap: float | None) -> dict[str, float]:
+    return row if cap is None else {**row, 'warmth': min(row['warmth'], cap)}
 
 
 def clamp(score: float) -> float:
@@ -117,6 +132,13 @@ def main() -> None:
             counts[(row['colour'], int(row['year']))] = int(row['n_sources'])
             sources.update(s for s in row['sources'].split('|') if s)
 
+    recorded: dict[tuple[str, int], dict] = {}
+    if RECORD.exists():
+        with open(RECORD) as source:
+            for row in csv.DictReader(line for line in source if not line.startswith('#')):
+                recorded[(row['colour'], int(row['year']))] = {**row, 'year': int(row['year']),
+                                                                **{k: float(row[k]) for k in ('score', 'low', 'high')}}
+
     files = {v: json.loads((OUT / f'{v}.json').read_text()) for v in index['villages']}
 
     def season_inputs(village: str, year: str, grape: str) -> dict[str, float]:
@@ -135,24 +157,33 @@ def main() -> None:
         rows = [{k: st.mean(season_inputs(v, str(y), grape)[k] for v in fit_villages) for k in names} for y in years]
         target = [consensus[(colour, y)] for y in years]
 
-        def modern_scale(model: dict, sel: list[int]) -> tuple[float, float, float]:
+        def modern_scale(model: dict, sel: list[int], cap: float | None) -> tuple[float, float, float]:
             """Weather moves modern ratings less than it moved older ones: shrink its swing
             towards the modern average by the factor those years support (0-1)."""
-            preds = [predict(model, rows[j]) for j in sel]
+            preds = [predict(model, capped(rows[j], cap)) for j in sel]
             mean_t, mean_p = st.mean(target[j] for j in sel), st.mean(preds)
             spread_p = sum((p - mean_p) ** 2 for p in preds)
             k = sum((p - mean_p) * (target[j] - mean_t) for p, j in zip(preds, sel)) / spread_p if spread_p else 0.0
             return mean_t, mean_p, min(max(k, 0.0), 1.0)
 
+        def predict_held_out(cap: float | None, i: int, train: list[int]) -> float:
+            model = fit([capped(rows[j], cap) for j in train], [target[j] for j in train], names)
+            p = predict(model, capped(rows[i], cap))
+            if years[i] >= MODERN:
+                mean_t, mean_p, k = modern_scale(model, [j for j in train if years[j] >= MODERN], cap)
+                p = mean_t + k * (p - mean_p)
+            return p
+
+        def choose_cap(sel: list[int]) -> float | None:
+            """The warmth cap with the lowest held-out error over these years; no cap on a tie."""
+            def error(cap: float | None) -> float:
+                return st.mean(abs(predict_held_out(cap, i, [j for j in sel if j != i]) - target[i]) for i in sel)
+            return min(WARMTH_CAPS, key=lambda cap: (round(error(cap), 6), cap is not None))
+
         held_out = []
         for i in range(len(years)):
             train = [j for j in range(len(years)) if j != i]
-            model = fit([rows[j] for j in train], [target[j] for j in train], names)
-            p = predict(model, rows[i])
-            if years[i] >= MODERN:
-                mean_t, mean_p, k = modern_scale(model, [j for j in train if years[j] >= MODERN])
-                p = mean_t + k * (p - mean_p)
-            held_out.append(p)
+            held_out.append(predict_held_out(choose_cap(train), i, train))
 
         def stats(sel: list[int]) -> dict:
             p, t = [held_out[i] for i in sel], [target[i] for i in sel]
@@ -170,17 +201,18 @@ def main() -> None:
 
         old = [i for i, y in enumerate(years) if y < MODERN]
         new = [i for i, y in enumerate(years) if y >= MODERN]
-        model = fit(rows, target, names)
-        modern = modern_scale(model, new)
+        cap = choose_cap(list(range(len(years))))
+        model = fit([capped(r, cap) for r in rows], target, names)
+        modern = modern_scale(model, new, cap)
         validation = {'before': stats(old), 'since': stats(new), 'all': stats(list(range(len(years))))}
         quality['grapes'][grape] = {'colour': colour, 'weights': {k: round(w, 3) for k, w in model.items()},
-                                    'modernScale': round(modern[2], 2), 'validation': validation}
-        print(f"{grape}: weights {quality['grapes'][grape]['weights']}")
+                                    'modernScale': round(modern[2], 2), 'warmthCap': cap, 'validation': validation}
+        print(f"{grape}: warmth cap {cap}, weights {quality['grapes'][grape]['weights']}")
         for label, s in validation.items():
             print(f"  {label}: {s}")
 
         # Reasons are measured from the average fitted season, so they say how this year differed.
-        typical = {k: st.mean(row[k] for row in rows) for k in names}
+        typical = {k: st.mean(capped(row, cap)[k] for row in rows) for k in names}
         spread = {'before': validation['before']['spread'], 'since': validation['since']['spread']}
         held = dict(zip(years, held_out))
         # The outlook is only tested inside the range of seasons it was fitted on. A season
@@ -192,8 +224,6 @@ def main() -> None:
         def bounded(row: dict[str, float]) -> tuple[dict[str, float], list[str]]:
             out, beyond = dict(row), []
             for name, (lo, hi) in tested.items():
-                if name == 'practice':
-                    continue
                 out[name] = min(max(row[name], lo), hi)
                 # Flagged only when more than one input step past the range (10% more heat,
                 # 20 g/L, 3 wet days, 30 mm...); a hair past the edge is not a new kind of season.
@@ -204,17 +234,18 @@ def main() -> None:
             for year, season in data['years'].items():
                 y = int(year)
                 row, beyond = bounded(season_inputs(village, year, grape))
+                row = capped(row, cap)
                 # Fitted years use their held-out prediction plus this village's difference from the Côte d'Or.
                 k = modern[2] if y >= MODERN else 1.0
                 if y in held and area_of[village] in FIT_AREAS:
-                    cote = bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0]
+                    cote = capped(bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0], cap)
                     score = held[y] + k * (predict(model, row) - predict(model, cote))
                 elif y >= MODERN:
                     score = modern[0] + k * (predict(model, row) - modern[1])
                 else:
                     score = predict(model, row)
                 width = spread['since' if y >= MODERN else 'before']
-                contributions = sorted(((k * model[name] * (row[name] - typical[name]), name) for name in model if name not in ('intercept', 'practice')),
+                contributions = sorted(((k * model[name] * (row[name] - typical[name]), name) for name in model if name != 'intercept'),
                                        key=lambda c: -abs(c[0]))
                 drivers = [{'id': name, 'effect': 'helps' if c > 0 else 'hurts'} for c, name in contributions[:3] if abs(c) >= 0.15]
                 season['grapes'][grape]['outlook'] = {
@@ -224,6 +255,32 @@ def main() -> None:
                     'drivers': drivers,
                     **({'beyondTested': beyond} if beyond else {}),
                 }
+
+        # Record complete, not-yet-rated seasons once; earlier records are never rewritten.
+        today = dt.date.today()
+        for y in sorted(int(y) for y in files[fit_villages[0]]['years']):
+            if y < MODERN or (colour, y) in consensus or today < dt.date(y, 11, 1) or (colour, y) in recorded:
+                continue
+            cote = capped(bounded({n: st.mean(season_inputs(v, str(y), grape)[n] for v in fit_villages) for n in names})[0], cap)
+            score = modern[0] + modern[2] * (predict(model, cote) - modern[1])
+            recorded[(colour, y)] = {'year': y, 'colour': colour, 'score': round(clamp(score), 2),
+                                     'low': round(clamp(score - spread['since']), 2), 'high': round(clamp(score + spread['since']), 2),
+                                     'recorded': today.isoformat()}
+            print(f'  recorded {y} {colour}: {recorded[(colour, y)]}')
+        checked = [(r, consensus[(colour, y)]) for (c, y), r in recorded.items() if c == colour and (colour, y) in consensus]
+        for r, rating in checked:
+            print(f"  recorded {r['year']} {colour} outlook {r['score']} vs critics {rating:.2f}")
+        quality['grapes'][grape]['recorded'] = [{**{k: r[k] for k in ('year', 'score', 'low', 'high', 'recorded')},
+                                                 **({'critics': round(consensus[(colour, r['year'])], 2)} if (colour, r['year']) in consensus else {})}
+                                                for (c, _), r in sorted(recorded.items()) if c == colour]
+
+    with open(RECORD, 'w', newline='') as out:
+        out.write('# Quality outlooks recorded for the Côte d\'Or once each season was complete, before\n'
+                  '# critics had rated it (quality.py). Rows are added, never changed: compare them with\n'
+                  '# critic_consensus.csv as ratings appear.\n')
+        writer = csv.DictWriter(out, fieldnames=['year', 'colour', 'score', 'low', 'high', 'recorded'])
+        writer.writeheader()
+        writer.writerows(r for _, r in sorted(recorded.items(), key=lambda item: (item[0][1], item[0][0])))
 
     for village, data in files.items():
         (OUT / f'{village}.json').write_text(json.dumps(data, separators=(',', ':')))

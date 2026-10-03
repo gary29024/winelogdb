@@ -43,7 +43,7 @@ jobs:
         run: python scripts/vintages/pipeline/quality.py
       - name: Commit if anything changed
         run: |
-          git add public/data/vintages
+          git add public/data/vintages scripts/vintages/data/outlook_record.csv
           if git diff --cached --quiet; then echo "No change."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

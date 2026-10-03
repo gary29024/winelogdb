@@ -1,4 +1,4 @@
-import { addDays,dayReaching,daysBetween,formatDay,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
+import { addDays,dayReaching,daysBetween,formatDay,outlookNote,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
 import type { OutlookCheck,OutlookDriver,QualityModel,QualityOutlook,SugarCurve,VintageIndex } from './types';
 import { VintageIcon } from './VintageIcons';
 
@@ -27,7 +27,7 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
       <p><strong>Harvest dates</strong> are the start of picking a source records for each area — an official ban des vendanges or opening, or a reported start — and a modelled date marked “estimated” where none is found. Picking is read as that date plus two weeks.</p>
       <p><strong>Sugar</strong> is estimated from daily temperature with a published grape-ripening model (Parker et al., 2020) calibrated on French vineyards. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
       <p><strong>Ripening conditions</strong> weigh four separate things — warmth after véraison, heat stress, rot risk from warm wet days, and how ripe the grapes were at picking — against the same village’s seasons in the comparison years. Each counts only when the season sits in the top or bottom quarter of those years, so no part of the weather is counted twice. They describe how the grapes ripened, not how good the wine is; crop size, disease and each grower’s choices change the real result.</p>
-      <p><strong>Quality outlook</strong> reads the same weather against what critics later said of past vintages{index?.quality?` (${index.quality.sources.join(', ')})`:''}. Each factor may only push the way growers know it does, and the range shows how far the reading missed on vintages it was not fitted on.</p>
+      <p><strong>Quality outlook</strong> reads the same weather against what critics later said of past vintages{index?.quality?` (${index.quality.sources.join(', ')})`:''}. Each factor may only push the way growers know it does; warmth stops counting past a level beyond which the hottest past years were rated no better. The range shows how far the reading missed on vintages it was not fitted on.</p>
       <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night — like April 2016 — may not show.</p>
       {index&&<p><strong>Typical</strong> means the {index.baseline.from}–{index.baseline.to} average{index.baseline.rainFrom?` (rain from ${index.baseline.rainFrom}, when the 1 km radar record begins)`:''}.</p>}
       {index&&<ul>{index.sources.map(source=><li key={source.label}><strong>{source.label}</strong> — {source.detail}</li>)}</ul>}
@@ -184,8 +184,6 @@ export function QualityOutlookCard({year,grapeName,outlook,model,check,consensus
     })}</ul>}
     {consensus&&<p className="vintage-outlook-critics"><span className="vintage-outlook-key" aria-hidden="true"/>Critics’ consensus: <strong>{outlookLabel(labels,consensus[0])}</strong> ({consensus[1]} critics)</p>}
     {outlook.beyondTested&&outlook.beyondTested.length>0&&<p className="vintage-callout">This season’s <strong>{outlook.beyondTested.map(id=>BEYOND_WORDS[id]).join(' and ')}</strong> went well past every vintage the outlook was tested on, so it is read as the most extreme of those. Treat it with extra caution.</p>}
-    <p className="vintage-outlook-note">{modern
-      ?`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons since ${model.modernFrom}. Growers now soften what the weather does, so it ranks modern vintages only loosely.`
-      :`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons before ${model.modernFrom}, when it decided more of the outcome.`}</p>
+    <p className="vintage-outlook-note">{outlookNote(check,modern,model.modernFrom)}</p>
   </section>;
 }
