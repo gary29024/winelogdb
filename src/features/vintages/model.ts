@@ -193,9 +193,37 @@ export function hangTime(veraison:number,harvest:HarvestReading){
  * thresholds compare the year to its own village's normal, so the same rules
  * hold in a warm village and a cool one.
  */
-export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number,pickSugar:number|null=null,minSugar=0):ConditionsReading{
+/**
+ * How each ripening measure spreads across the reference seasons: lower quartile,
+ * median and upper quartile. The median is what "usual" means (one 2003 cannot drag
+ * it), and a tile only helps or hurts in the top or bottom quarter of those seasons,
+ * so every tile is equally hard to trigger.
+ */
+export type Quartiles=[number,number,number];
+export type RipeningSpread={meanTemp:Quartiles;coolNights:Quartiles;heatStressDays:Quartiles;wetDays:Quartiles|null;radiation:Quartiles;rain:Quartiles;hang:Quartiles};
+
+export function ripeningSpread(years:Record<string,VillageSeason>,harvest:AreaHarvest|undefined,grape:GrapeId,from:number,to:number):RipeningSpread|null{
+  const seasons=Object.keys(years).map(Number).filter(y=>y>=from&&y<=to).flatMap(y=>{
+    const g=years[String(y)].grapes[grape],h=harvestFor(harvest,y);
+    return g&&h?[{r:g.ripening,hang:hangTime(isoDay(g.veraison),h)}]:[];
+  });
+  if(seasons.length<5)return null;
+  const q=(values:number[]):Quartiles=>[quantile(values,.25),quantile(values,.5),quantile(values,.75)];
+  const wet=seasons.flatMap(s=>s.r.wetDays==null?[]:[s.r.wetDays]);
+  return {
+    meanTemp:q(seasons.map(s=>s.r.meanTemp)),coolNights:q(seasons.map(s=>s.r.coolNights)),heatStressDays:q(seasons.map(s=>s.r.heatStressDays)),
+    wetDays:wet.length===seasons.length?q(wet):null,radiation:q(seasons.map(s=>s.r.radiation)),rain:q(seasons.map(s=>s.r.rain)),hang:q(seasons.map(s=>s.hang))
+  };
+}
+
+/** +1 in the top quarter, -1 in the bottom quarter, 0 between; a quartile equal to the median never fires. */
+const quarter=(value:number,[q25,q50,q75]:Quartiles)=>value>=q75&&value>q50?1:value<=q25&&value<q50?-1:0;
+const effectOf=(side:number,higherIsBetter:boolean):Effect=>side===0?'neutral':(side>0)===higherIsBetter?'helps':'hurts';
+
+export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number,pickSugar:number|null=null,minSugar=0,spread:RipeningSpread|null=null):ConditionsReading{
   // Grapes picked below the appellation's legal minimum sugar were not ripe, whatever the weather did for freshness.
   const short=pickSugar!=null&&pickSugar<minSugar;
+  if(spread)return spreadConditions(grape,year,hang,short,pickSugar,minSugar,spread);
   const hangDiff=hang-normalHang;
   const hangEffect:Effect=hangDiff>=4?'helps':hangDiff<=-4?'hurts':'neutral';
   const nightsDiff=year.coolNights-normal.coolNights;
@@ -244,6 +272,51 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
   return {title,verdict:score>=2?'Favourable':score<=-2?'Challenging':'Mixed',conditions};
 }
 
+function spreadConditions(grape:GrapeId,year:RipeningWeather,hang:number,short:boolean,pickSugar:number|null,minSugar:number,s:RipeningSpread):ConditionsReading{
+  const pctOf=(value:number)=>`${Math.round(value*100)}%`;
+  const nights:Condition={id:'nights',icon:'moon',label:'Cool nights',value:pctOf(year.coolNights),usual:`usual ${pctOf(s.coolNights[1])}`,
+    effect:effectOf(quarter(year.coolNights,s.coolNights),true)};
+  // Heat stress can only hurt: none is the usual state. It hurts above the usual top quarter.
+  const heatHurts=year.heatStressDays>s.heatStressDays[2]&&year.heatStressDays>s.heatStressDays[1];
+  const heat:Condition={id:'heat',icon:'flame',label:'Heat stress',value:`${year.heatStressDays} day${year.heatStressDays===1?'':'s'}`,usual:`usual ${Math.round(s.heatStressDays[1])}`,
+    effect:heatHurts?'hurts':'neutral'};
+  const hangSide=quarter(hang,s.hang);
+  const hangTile:Condition={id:'hang',icon:'clock',label:'Hang time',value:`${hang} days`,usual:`usual ${Math.round(s.hang[1])}`,effect:effectOf(hangSide,true)};
+  // Rot follows runs of wet, mild days; without a wet-day count, ripening rain stands in.
+  const rotSide=year.wetDays!=null&&s.wetDays?quarter(year.wetDays,s.wetDays):quarter(year.rain,s.rain);
+  const rot:Condition={id:'rain',icon:'drop',label:'Rot risk',value:rotSide>0?'High':rotSide<0?'Low':'Usual',
+    usual:year.wetDays!=null&&s.wetDays?`${year.wetDays} wet days, usual ${Math.round(s.wetDays[1])}`:`${Math.round(year.rain)} mm, usual ${Math.round(s.rain[1])}`,
+    effect:effectOf(rotSide,false)};
+  const tempSide=quarter(year.meanTemp,s.meanTemp);
+
+  let conditions:Condition[];let title:string;
+  if(grape==='chardonnay'){
+    title='Freshness & acidity';
+    // Acidity follows warmth during ripening: one reading, counted once.
+    const acidity=effectOf(tempSide,false);
+    conditions=[
+      {id:'acidity',icon:'spark',label:'Acidity',value:acidity==='helps'?'Higher':acidity==='hurts'?'Lower':'Usual',usual:`${year.meanTemp.toFixed(1)} vs ${s.meanTemp[1].toFixed(1)} °C`,effect:acidity},
+      {id:'ripeness',icon:'therm',label:'Ripeness',value:pickSugar==null?'—':`${Math.round(pickSugar)} g/L`,usual:`min ${minSugar}`,effect:short?'hurts':'neutral'},
+      nights,heat,hangTile,rot
+    ];
+  }else{
+    title='Colour & tannin';
+    // Sugar runs ahead of skins and seeds when a hot finish is also a short one.
+    const rushed=tempSide>0&&hangSide<0;
+    // Strong sun builds colour, but not in a heatwave, when it scorches the bunches instead.
+    const sunSide=heatHurts&&quarter(year.radiation,s.radiation)>0?0:quarter(year.radiation,s.radiation);
+    const sunPct=pct(year.radiation,s.radiation[1]);
+    conditions=[
+      {id:'balance',icon:'scale',label:'Balance',value:short?'Short of ripe':rushed?'Sugar ahead':'In step',usual:short?`below ${minSugar} g/L`:rushed?'of tannin':'with sugar',effect:short||rushed?'hurts':'neutral'},
+      nights,heat,hangTile,
+      {id:'sun',icon:'sun',label:'Sunshine',value:`${signed(Math.round(sunPct*100))}%`,usual:heatHurts&&sunSide===0&&sunPct>0?'in a heatwave':'vs usual',effect:effectOf(sunSide,true)},
+      rot
+    ];
+  }
+  const score=conditions.reduce((total,item)=>total+(item.effect==='helps'?1:item.effect==='hurts'?-1:0),0);
+  return {title,verdict:score>=2?'Favourable':score<=-2?'Challenging':'Mixed',conditions};
+}
+
 /* ---------- One village, one year: everything the detail page shows ---------- */
 
 export type GrapeReading={
@@ -259,7 +332,7 @@ export type GrapeReading={
   conditions:ConditionsReading|null;
 };
 
-export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number,minSugar=0):GrapeReading{
+export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number,minSugar=0,spread:RipeningSpread|null=null):GrapeReading{
   const veraison=isoDay(season.veraison);
   const ripe=dayReaching(season.sugar,year,ripeSugar);
   const normalRipe=normal?dayReaching(normal.sugar,year,ripeSugar):null;
@@ -269,7 +342,7 @@ export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:Vi
   if(harvest&&normal){
     const normalHarvest={...harvest,start:harvest.typicalStart,end:addDays(harvest.typicalStart,PICKING_DAYS)};
     conditions=ripeningConditions(grape,season.ripening,normal.ripening,hangTime(veraison,harvest),hangTime(seasonDay(year,normal.veraison),normalHarvest),
-      picking?(picking.low+picking.high)/2:null,minSugar);
+      picking?(picking.low+picking.high)/2:null,minSugar,spread);
   }
   return {
     grape,ripe,normalRipe,veraison,picking,normalPicking,
