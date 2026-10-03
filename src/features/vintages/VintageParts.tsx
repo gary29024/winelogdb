@@ -100,13 +100,12 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
   const anchor=(own:number,other:number|null)=>!crowded||other==null?'middle':own<=other?'end':'start';
   const text={fontFamily:'DM Sans, sans-serif'};
+  // "Picked" sits at the top of its band unless a curve runs through there; then at the foot.
+  const pickMid=harvest?addDays(harvest.start,PICKING_DAYS/2):0;
+  const pickedLabelY=harvest&&Math.min(y(sugarOn(curve,year,pickMid)),y(sugarOn(normal,year,pickMid)))<TOP+30?BOTTOM-26:TOP+14;
   return <svg className="vintage-sugar-chart" viewBox={`0 0 ${W} 222`} role="img" aria-label={`Estimated sugar in the grapes from ${formatDay(curveStart)}, véraison ${formatDay(veraison)}: ${year} against a typical year${harvest?`, picked from ${formatDay(harvest.start)}`:''}${ripe?`, ripe around ${formatDay(ripe)}`:''}.`}>
-    {harvest&&<>
-      <rect x={x(harvest.start)} y={TOP} width={Math.max(2,x(harvest.end)-x(harvest.start))} height={BOTTOM-TOP} className="chart-picking"/>
-      <text x={(x(harvest.start)+x(harvest.end))/2} y={TOP+14} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>
-    </>}
+    {harvest&&<rect x={x(harvest.start)} y={TOP} width={Math.max(2,x(harvest.end)-x(harvest.start))} height={BOTTOM-TOP} className="chart-picking"/>}
     <line x1={verX} y1={TOP} x2={verX} y2={BOTTOM} className="chart-veraison"/>
-    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
     {levels.map(level=><g key={level}>
       <line x1={LEFT} y1={y(level)} x2={RIGHT} y2={y(level)} className="chart-grid"/>
       {level!==ripeSugar&&<text x={LEFT-6} y={y(level)+3} textAnchor="end" className="chart-axis" style={text}>{level}</text>}
@@ -131,6 +130,9 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
     {/* The start date only when no month label sits close enough to collide with it. */}
     {!ticks.some(time=>time>start&&daysBetween(start,time)<14)&&<text x={LEFT} y={212} className="chart-axis is-month" style={text}>{formatDay(start)}</text>}
     {ticks.filter(time=>time>start).map(time=><text key={time} x={x(time)} y={212} textAnchor="middle" className="chart-axis is-month" style={text}>{formatDay(time)}</text>)}
+    {/* Labels last, outlined in the card colour, so a curve running high never hides them. */}
+    {harvest&&<text x={(x(harvest.start)+x(harvest.end))/2} y={pickedLabelY} textAnchor="middle" className="chart-picking-label" style={text}>Picked</text>}
+    <text x={verX+5} y={TOP+14} className="chart-veraison-label" style={text}>Véraison</text>
   </svg>;
 }
 
