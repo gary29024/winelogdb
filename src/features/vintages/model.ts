@@ -1,4 +1,4 @@
-import type { AreaHarvest,HarvestStart,GrapeId,GrapeSeason,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason,VineyardEvent } from './types';
+import type { AreaHarvest,HarvestStart,GrapeId,GrapeSeason,OutlookCheck,RipeningWeather,SeasonWeather,SugarCurve,VillageNormal,VillageSeason,VineyardEvent } from './types';
 
 /**
  * Everything the Vintages screens say about a season, derived from the
@@ -489,4 +489,15 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
   };
   const starts=Object.entries(harvest.years).filter(([y])=>Number(y)>=from&&Number(y)<=to).map(([,entry])=>dayOfYear(entry.date));
   return {normal,harvest:{...harvest,typical:starts.length?monthDayOf(avg(starts)):harvest.typical},from,to};
+}
+
+/**
+ * How the outlook did on past vintages, beside the fair yardstick: guessing that era's
+ * average rating. Where it barely beats that guess, the note says so.
+ */
+export function outlookNote(check:OutlookCheck,modern:boolean,modernFrom:number){
+  const era=modern?`since ${modernFrom}`:`before ${modernFrom}`;
+  const tested=`Tested on past vintages ${era}, the weather alone missed the critics by ${check.error.toFixed(2)} of a step on average`;
+  if(check.error>check.errorIfAverage*0.9)return `${tested} — little better than guessing that era’s average (${check.errorIfAverage.toFixed(2)}). Growers now soften what the weather does, so treat it as a loose guide.`;
+  return `${tested}, against ${check.errorIfAverage.toFixed(2)} for guessing that era’s average.${modern?' Growers now soften what the weather does, so it ranks modern vintages only loosely.':''}`;
 }

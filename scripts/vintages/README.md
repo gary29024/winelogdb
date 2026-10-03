@@ -45,10 +45,12 @@ The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labb�
 
 ## Quality outlook
 
-`quality.py` turns each season's measurements into what they point to on the critics' 1–5 scale (Poor to Excellent). The measurements are ripeness over the appellation minimum, season warmth, heat stress, wet ripening days, harvest rain, hail and, for Chardonnay, ripening warmth for acidity.
+`quality.py` turns each season's measurements into what they point to on the critics' 1–5 scale (Poor to Excellent). The measurements are ripeness over the appellation minimum, season warmth, heat stress, wet ripening days, harvest rain, recorded hail and, for Chardonnay, ripening warmth for acidity.
 - Agronomy fixes which way each measurement may push quality. The critics' consensus only sets how much.
-- Warmth helps only up to a cap (Pinot Noir +5%, Chardonnay +10% more heat than normal at the last run). A hotter season earns no more. The cap is chosen by held-out error, and chosen again inside each held-out fit.
+- Warmth helps only up to a cap (Pinot Noir +5%, Chardonnay +15% more heat than normal at the last run). A hotter season earns no more. The cap is chosen by held-out error, and chosen again inside each held-out fit.
 - Every reported figure comes from a fit that left that year out.
-- From 1991 the weather's swing is scaled towards the modern average, because growers now soften what the weather does.
+- From 1991 each outlook is centred on the modern seasons' own average rating, and the weather's swing is scaled by what those years support, because growers now soften what the weather does. Better farming is measured this way rather than given an assumed shape (a 1975–2000 ramp was tried and made held-out results worse).
+- The app reports the held-out error beside the error of simply guessing that era's average. Since 1991 the weather beats that guess only narrowly, and the page says so.
+- Once a season is complete (1 November) and not yet rated, its Côte d'Or outlook is written to `data/outlook_record.csv` and never changed afterwards. Compared with critics' ratings as they appear, these rows are the one test no modelling choice has seen. The 2025 rows were recorded on 3 October 2026; the model has not used any 2025 ratings.
 
 The consensus (`data/critic_consensus.csv`) comes from `consensus.py`. It averages several critics' published vintage ratings, each critic on its own scale and weighted by how well it agrees with the others. The individual ratings are not kept in the repository. To refresh it, run `consensus.py` on a new ratings table, then `quality.py`.

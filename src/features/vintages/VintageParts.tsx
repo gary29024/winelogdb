@@ -1,4 +1,4 @@
-import { addDays,dayReaching,daysBetween,formatDay,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
+import { addDays,dayReaching,daysBetween,formatDay,outlookNote,PICKING_DAYS,seasonDay,sugarOn,type Baseline,type HarvestReading,type SeasonScore } from './model';
 import type { OutlookCheck,OutlookDriver,QualityModel,QualityOutlook,SugarCurve,VintageIndex } from './types';
 import { VintageIcon } from './VintageIcons';
 
@@ -184,8 +184,6 @@ export function QualityOutlookCard({year,grapeName,outlook,model,check,consensus
     })}</ul>}
     {consensus&&<p className="vintage-outlook-critics"><span className="vintage-outlook-key" aria-hidden="true"/>Critics’ consensus: <strong>{outlookLabel(labels,consensus[0])}</strong> ({consensus[1]} critics)</p>}
     {outlook.beyondTested&&outlook.beyondTested.length>0&&<p className="vintage-callout">This season’s <strong>{outlook.beyondTested.map(id=>BEYOND_WORDS[id]).join(' and ')}</strong> went well past every vintage the outlook was tested on, so it is read as the most extreme of those. Treat it with extra caution.</p>}
-    <p className="vintage-outlook-note">{modern
-      ?`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons since ${model.modernFrom}. Growers now soften what the weather does, so it ranks modern vintages only loosely.`
-      :`Tested on past vintages, the weather alone landed within one step of the critics in ${Math.round(check.withinOneStep*100)}% of seasons before ${model.modernFrom}, when it decided more of the outcome.`}</p>
+    <p className="vintage-outlook-note">{outlookNote(check,modern,model.modernFrom)}</p>
   </section>;
 }
