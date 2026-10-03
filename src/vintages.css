@@ -259,6 +259,12 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
   .vintage-key{gap:10px}
 }
 
+/* Ripening-conditions verdict: how the season treated the grapes, not how good the wine is. */
+.vintage-verdict{flex-shrink:0;padding:4px 10px;border:1px solid;border-radius:var(--r-pill);font-size:.74rem;font-weight:800}
+.vintage-verdict.is-favourable{border-color:var(--vt-helps-line);background:var(--vt-helps);color:var(--vt-helps-ink)}
+.vintage-verdict.is-mixed{border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
+.vintage-verdict.is-challenging{border-color:var(--vt-hurts-line);background:var(--vt-hurts);color:var(--vt-hurts-ink)}
+
 /* Quality outlook: the weather's reading on the critics' five-step scale. */
 .vintage-outlook-main{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0}
 .vintage-outlook-main strong{font-family:'Playfair Display',serif;font-size:1.6rem;line-height:1.1}

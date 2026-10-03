@@ -145,7 +145,7 @@ export function VintageDetailPage(){
     </section>}
 
     {grapeReading?.conditions&&<section className="vintage-card" aria-labelledby="vintage-conditions-title">
-      <div className="vintage-card-head"><h2 id="vintage-conditions-title">{grapeReading.conditions.title}</h2></div>
+      <div className="vintage-card-head"><h2 id="vintage-conditions-title">{grapeReading.conditions.title}</h2><span className={`vintage-verdict is-${grapeReading.conditions.verdict.toLowerCase()}`}>{grapeReading.conditions.verdict}</span></div>
       <div className="vintage-conditions">{grapeReading.conditions.conditions.map(item=><div className={`vintage-condition vintage-condition-${item.effect}`} key={item.id} aria-label={`${item.label}: ${item.value}, ${item.usual} — ${EFFECT_WORD[item.effect]}`}>
         <span className="vintage-condition-head"><VintageIcon kind={item.icon} size={16}/><span>{item.label}</span><b aria-hidden="true">{EFFECT_MARK[item.effect]}</b></span>
         <span className="vintage-condition-value"><strong>{item.value}</strong><small>{item.usual}</small></span>
