@@ -29,14 +29,18 @@ cote-de-nuits,1998,1998-04-13,spring-frost,,https://insideburgundy.com/overview/
 cote-chalonnaise,2000,2000-09-12,hail,,https://insideburgundy.com/overview/2000-vintage-overview/
 cote-de-beaune,2000,2000-09-12,hail,southern Côte de Beaune,https://insideburgundy.com/overview/2000-vintage-overview/
 cote-de-beaune,2001,2001-08-02,hail,Volnay,https://insideburgundy.com/overview/2001-vintage-overview/
+cote-chalonnaise,2001,2001-08-02,hail,Bouzeron,https://www.decanter.com/learn/vintage-guides/white-burgundy-117857/
 cote-de-nuits,2002,2002-09-19,hail,"Gevrey-Chambertin, Marsannay",https://insideburgundy.com/overview/2002-vintage-overview/
 chablis-auxerrois,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
 cote-de-beaune,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
 maconnais,2003,2003-04-11,spring-frost,,https://insideburgundy.com/overview/2003-vintage-overview/
+chablis-auxerrois,2003,2003-05,hail,Chablis,https://chablis-wine.blogspot.com/2004/05/2003-chablis-vintage-report.html
 cote-de-beaune,2004,2004-07-19,hail,almost every village in the Côte,https://insideburgundy.com/overview/2004-vintage-overview/
 cote-de-nuits,2004,2004-07-19,hail,almost every village except Nuits-St-Georges,https://insideburgundy.com/overview/2004-vintage-overview/
 cote-de-beaune,2004,2004-08-23,hail,"Volnay, Pommard, Beaune, Savigny",https://www.decanter.com/learn/vintage-guides/red-burgundy-117871/
 cote-de-nuits,2004,2004-08-23,hail,almost every village except Nuits-St-Georges,https://insideburgundy.com/overview/2004-vintage-overview/
+maconnais,2004,2004-06,hail,La Roche-Vineuse,https://www.decanter.com/features/in-focus-maconnais-247345/
+cote-de-beaune,2005,2005-07-17,hail,"Santenay, Chassagne-Montrachet",https://insideburgundy.com/tasting_reports/2005-vintage-overview
 cote-de-nuits,2006,2006-07-27,hail,"Chambolle-Musigny, Gevrey-Chambertin",https://insideburgundy.com/overview/2006-vintage-overview/
 cote-de-beaune,2007,2007-04-27,hail,St-Aubin,https://insideburgundy.com/overview/2007-vintage-overview/
 cote-de-beaune,2007,2007-06-10,hail,Beaune,https://insideburgundy.com/overview/2007-vintage-overview/
@@ -96,3 +100,11 @@ hautes-cotes,2024,2024-04,spring-frost,Hautes Côtes,https://insideburgundy.com/
 chablis-auxerrois,2024,2024-05-01,hail,"Chablis, Fontenay-près-Chablis, Maligny, Lignorelles, Tonnerre",https://france3-regions.franceinfo.fr/bourgogne-franche-comte/yonne/un-orage-supercellulaire-ravage-les-vignes-de-chablis-ca-nous-a-arrache-les-larmes-les-viticulteurs-constatent-les-degats-2963711.html
 chablis-auxerrois,2024,2024-08,hail,Chablis,https://insideburgundy.com/overview/2024-growing-season/
 cote-de-beaune,2024,2024-08-01,hail,St-Aubin,https://insideburgundy.com/overview/2024-growing-season/
+maconnais,2025,2025-06-01,hail,Sud Mâconnais,"https://www.vins-bourgogne.fr/presse/detail-d-un-communique-de-presse,2309,9200.html?args=Y29tcF9pZD0xMzkwJmFjdGlvbj12aWV3RGV0YWlsQ29tbXVuaXF1ZSZpZD0yNzUyJnw%3D"
+cote-chalonnaise,2025,2025-07-20,hail,"Saint-Boil, Chenôves, Saules, Culles-les-Roches",https://www.resto-today.com/www.resto-today.com/w/pdf/81674okok.pdf?VersionId=1763024435.191229
+maconnais,2025,2025-07-25,hail,"Azé, Saint-Gengoux-de-Scissé",https://www.resto-today.com/www.resto-today.com/w/pdf/81674okok.pdf?VersionId=1763024435.191229
+chablis-auxerrois,2025,2025-07-23,hail,"Saint-Bris-le-Vineux, Coulanges-la-Vineuse, Migé, Escolives-Sainte-Camille",https://www.ici.fr/emissions/l-info-d-ici-de-7h30-ici-auxerre/de-la-grele-de-la-pluie-et-du-vent-les-degats-dans-les-vignes-de-l-yonne-4680735
+chablis-auxerrois,2026,2026-03-27,spring-frost,Chablis,https://www.vitisphere.com/actualite-106319-apres-le-gel-on-nose-pas-aller-voir-les-vignes-a-chablis-il-y-aura-de-la-casse-dans-le-jura-ca-passerait-en-loire-alsace-savoie.html
+hautes-cotes,2026,2026-03-27,spring-frost,"Hautes Côtes, Nolay",https://www.vitisphere.com/actualite-106349-pas-de-chasse-aux-oeufs-mais-aux-degats-de-gel-pour-les-vignerons-de-cote-dor-.html
+cote-de-beaune,2026,2026-06-10,hail,"Chassagne-Montrachet, Pommard, Beaune, Savigny-lès-Beaune, Aloxe-Corton, Pernand-Vergelesses",https://www.vitisphere.com/actualite-106806-la-grele-douche-les-espoirs-du-vignoble-de-la-cote-de-beaune-les-raisins-etaient-magnifiques-.html
+cote-de-nuits,2026,2026-07-15,hail,"Marsannay, Couchey, northern Gevrey-Chambertin",https://www.vitisphere.com/actualite-107100-grele-sur-les-premiers-crus-de-marsannay-ca-pese-sur-le-moral-ca-fait-mal-au-ventre.html
