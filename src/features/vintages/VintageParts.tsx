@@ -136,14 +136,15 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   </svg>;
 }
 
-const OUTLOOK_REASONS:Record<OutlookDriver['id'],[string,string]>={
-  ripeness:['Riper grapes','Less ripe grapes'],
-  warmth:['Warmer season','Cooler season'],
-  heat:['Less heat stress','More heat stress'],
-  wet:['Fewer rot days','More rot days'],
-  harvestRain:['Drier harvest','Wetter harvest'],
-  acidity:['Fresher acidity','Softer acidity'],
-  hail:['Less hail','Hail']
+// Short enough for three to share one row on a phone; the full phrase is the chip's title.
+const OUTLOOK_REASONS:Record<OutlookDriver['id'],[string,string,string,string]>={
+  ripeness:['Riper','Less ripe','Riper grapes','Less ripe grapes'],
+  warmth:['Warmer','Cooler','Warmer season','Cooler season'],
+  heat:['Less heat','Heat stress','Less heat stress','More heat stress'],
+  wet:['Less rot','More rot','Fewer rot days','More rot days'],
+  harvestRain:['Dry harvest','Wet harvest','Drier harvest','Wetter harvest'],
+  acidity:['Fresher','Softer acid','Fresher acidity','Softer acidity'],
+  hail:['Less hail','Hail','Less hail','Hail']
 };
 const BEYOND_WORDS:Record<OutlookDriver['id'],string>={
   ripeness:'ripeness',warmth:'season heat',heat:'heat stress',wet:'wet ripening days',harvestRain:'harvest rain',acidity:'ripening warmth',hail:'hail'
@@ -171,9 +172,12 @@ export function QualityOutlookCard({year,grapeName,outlook,model,check,consensus
       {consensus&&<span className="vintage-outlook-critics-mark" style={{left:scalePosition(consensus[0])}}/>}
     </div>
     <ol className="vintage-outlook-steps" aria-hidden="true">{labels.map(item=><li key={item}>{item}</li>)}</ol>
-    {outlook.drivers.length>0&&<ul className="vintage-outlook-reasons">{outlook.drivers.map(driver=><li key={driver.id} className={`vintage-outlook-reason-${driver.effect}`}>
-      <b aria-hidden="true">{driver.effect==='helps'?'↑':'↓'}</b>{OUTLOOK_REASONS[driver.id][driver.effect==='helps'?0:1]}
-    </li>)}</ul>}
+    {outlook.drivers.length>0&&<ul className="vintage-outlook-reasons" style={{gridTemplateColumns:`repeat(${outlook.drivers.length},minmax(0,1fr))`}}>{outlook.drivers.map(driver=>{
+      const [short,full]=driver.effect==='helps'?[OUTLOOK_REASONS[driver.id][0],OUTLOOK_REASONS[driver.id][2]]:[OUTLOOK_REASONS[driver.id][1],OUTLOOK_REASONS[driver.id][3]];
+      return <li key={driver.id} className={`vintage-outlook-reason-${driver.effect}`} title={full}>
+        <b aria-hidden="true">{driver.effect==='helps'?'↑':'↓'}</b><span aria-hidden="true">{short}</span><span className="visually-hidden">{full}</span>
+      </li>;
+    })}</ul>}
     {consensus&&<p className="vintage-outlook-critics"><span className="vintage-outlook-key" aria-hidden="true"/>Critics’ consensus: <strong>{outlookLabel(labels,consensus[0])}</strong> ({consensus[1]} critics)</p>}
     {outlook.beyondTested&&outlook.beyondTested.length>0&&<p className="vintage-callout">This season’s <strong>{outlook.beyondTested.map(id=>BEYOND_WORDS[id]).join(' and ')}</strong> went well past every vintage the outlook was tested on, so it is read as the most extreme of those. Treat it with extra caution.</p>}
     <p className="vintage-outlook-note">{modern

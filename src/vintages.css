@@ -271,8 +271,9 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-outlook-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;padding:0;list-style:none;color:var(--ink-5);font-size:.68rem;text-align:center}
 .vintage-outlook-steps li:first-child{text-align:left}
 .vintage-outlook-steps li:last-child{text-align:right}
-.vintage-outlook-reasons{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
-.vintage-outlook-reasons li{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid;border-radius:var(--r-pill);font-size:.78rem;font-weight:700}
+.vintage-outlook-reasons{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.vintage-outlook-reasons li{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:4px 6px;border:1px solid;border-radius:var(--r-pill);font-size:.74rem;font-weight:700;white-space:nowrap}
+.vintage-outlook-reasons li>span{overflow:hidden;text-overflow:ellipsis}
 .vintage-outlook-reason-helps{border-color:var(--vt-helps-line);background:var(--vt-helps);color:var(--vt-helps-ink)}
 .vintage-outlook-reason-hurts{border-color:var(--vt-hurts-line);background:var(--vt-hurts);color:var(--vt-hurts-ink)}
 .vintage-outlook-critics{display:flex;align-items:center;gap:6px;margin:0;font-size:.85rem}
