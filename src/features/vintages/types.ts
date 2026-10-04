@@ -83,6 +83,8 @@ export type GrapeSeason={
   /** Modelled véraison, ISO date. */
   veraison:string;
   sugar:SugarCurve;
+  /** 'measured': the curve is shifted to the sugar BIVB sampled in this area that year; 'weather': the shift is estimated from the season. */
+  sugarSource?:'measured'|'weather';
   ripening:RipeningWeather;
   /** What the season's weather points to on the critics' 1-5 scale (scripts/vintages/pipeline/quality.py). */
   outlook?:QualityOutlook;

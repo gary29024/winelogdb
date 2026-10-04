@@ -25,7 +25,7 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
     <summary><VintageIcon kind="info" size={16}/>How we estimate</summary>
     <div>
       <p><strong>Harvest dates</strong> are the start of picking a source records for each area — an official ban des vendanges or opening, or a reported start — and a modelled date marked “estimated” where none is found. Picking is read as that date plus two weeks.</p>
-      <p><strong>Sugar</strong> is estimated from daily temperature with a published grape-ripening model (Parker et al., 2020) calibrated on French vineyards. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
+      <p><strong>Sugar</strong> starts from a published grape-ripening model driven by daily temperature (Parker et al., 2020). Temperature alone misses grapes concentrating in drought, so each season’s curve is then matched to the sugar the BIVB measured in that area’s vineyards (from 1988 in the Côte d’Or, about 1990 elsewhere). Earlier years get a correction estimated from the season’s warmth and rain. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
       <p><strong>Ripening conditions</strong> weigh four separate things — warmth after véraison, heat stress, rot risk from warm wet days, and how ripe the grapes were at picking — against the same village’s seasons in the comparison years. Each counts only when the season sits in the top or bottom quarter of those years, so no part of the weather is counted twice. They describe how the grapes ripened, not how good the wine is; crop size, disease and each grower’s choices change the real result.</p>
       <p><strong>Quality outlook</strong> reads the same weather against what critics later said of past vintages{index?.quality?` (${index.quality.sources.join(', ')})`:''}. Each factor may only push the way growers know it does; warmth stops counting past a level beyond which the hottest past years were rated no better. The range shows how far the reading missed on vintages it was not fitted on.</p>
       <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night — like April 2016 — may not show.</p>
@@ -38,15 +38,17 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
 /* ---------- The sugar chart ---------- */
 
 const W=342,LEFT=30,RIGHT=338,TOP=22,BOTTOM=194;
-const SUGAR_MAX=230;
+/** The axis normally tops out at 230 g/L; measured hot years (2020: about 260) raise it so the curve is not clipped. */
+const SUGAR_TOP=230,SUGAR_TOP_LIMIT=290;
 /** The axis starts low enough for the whole season: real early-August sugar sits well under 150 g/L. */
 function sugarScale(...series:number[][]){
-  const lowest=Math.min(...series.flat());
+  const lowest=Math.min(...series.flat()),highest=Math.max(...series.flat());
   // Cold years start low (1965: 70 g/L on 1 August), so the axis can open at 60 rather than clip them.
   const min=Math.max(60,Math.min(150,Math.floor(lowest/20)*20));
-  const y=(sugar:number)=>BOTTOM-2-(Math.min(SUGAR_MAX,Math.max(min,sugar))-min)*((BOTTOM-2-TOP-10)/(SUGAR_MAX-min));
+  const max=Math.min(SUGAR_TOP_LIMIT,Math.max(SUGAR_TOP,Math.ceil((highest+5)/10)*10));
+  const y=(sugar:number)=>BOTTOM-2-(Math.min(max,Math.max(min,sugar))-min)*((BOTTOM-2-TOP-10)/(max-min));
   const ticks:number[]=[];
-  for(let level=Math.ceil((min+1)/20)*20;level<=220;level+=20)ticks.push(level);
+  for(let level=Math.ceil((min+1)/20)*20;level<=max-10;level+=20)ticks.push(level);
   return {y,ticks};
 }
 
@@ -83,7 +85,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   const {start,curveStart,end,span,x}=chartScale(curve,year,veraison,harvest);
   // Only what is on screen sets the sugar axis: July values below it would stretch it for nothing.
   const visible=(values:number[])=>values.filter((_,i)=>{const time=addDays(curveStart,i*curve.step);return time>=start&&time<=end});
-  const {y,ticks:levels}=sugarScale(visible(curve.values),visible(normal.values),visible(low));
+  const {y,ticks:levels}=sugarScale(visible(curve.values),visible(normal.values),visible(low),visible(high));
   // Each line runs to the axis end: modelled points up to it, then one point read off at the end itself.
   const line=(values:number[]):[number,number][]=>{
     const series={...curve,values};

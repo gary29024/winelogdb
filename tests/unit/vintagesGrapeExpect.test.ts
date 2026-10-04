@@ -15,8 +15,7 @@ describe('grape-specific expectation',()=>{
     expect(grapeExpect('pinot-noir',hot,typical,-20,'shared')).toMatch(/dark, ripe, full reds/);
     expect(grapeExpect('chardonnay',hot,typical,-20,'shared')).toMatch(/whites with low acidity/);
   });
-  it('treats short-of-ripe sugar in a warm year as early picking, not unripe wine',()=>{
-    expect(grapeExpect('chardonnay',reading('Warmer','Usual','Short of ripe'),typical,-20,'shared')).toMatch(/picking began before/);
+  it('reads sugar short of the minimum as unripe',()=>{
     expect(grapeExpect('pinot-noir',reading('Cooler','Usual','Short of ripe'),typical,10,'shared')).toMatch(/lean/);
   });
   it('keeps the wet-season warning when rain came before véraison',()=>{
