@@ -37,6 +37,14 @@ Add a row to `data/harvest_dates.csv` for each area and year with the source tha
 
 The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labbé et al. (2019), one consistent record for the whole period. Years without a row are estimated: either from the sugar level the area usually picks at, or from that year's Côte de Beaune date plus the gap the weather predicts between the two areas. `build.py` uses whichever was closer to the area's own recorded dates, and prints the comparison.
 
+## Measured sugar
+
+`data/bivb_sugar.csv` holds the must sugar the BIVB maturity network measured (maturite.bivb.com, reference and ODG plots): one row per area, grape and sampling date, averaged over the plots sampled that day. It covers the Côte de Nuits, Côte de Beaune and Hautes-Côtes from 1988.
+
+`build.py` shifts each season's modelled sugar curve to these samples. The temperature-only model is close on average but reads low in hot, dry years (2020 Côte de Nuits Pinot noir: about 50 g/L), because it cannot see berries concentrating in drought. Seasons without samples (other areas, years before 1988) get a shift estimated from the season's warmth, rain and year. That estimate is fitted on the measured seasons, and the year is held at 1988 for earlier seasons. Its held-out error is about 10 g/L, against 14 for the model alone. Each grape season records `sugarSource: measured | weather`.
+
+The file is not refreshed by the monthly Action. Add the new season's samples by hand after harvest, then re-run `build.py` and `quality.py`.
+
 ## Village list
 
 `build_village_points.ts` writes both the app's village list (`src/features/vintages/burgundyVillages.ts`) and `data/villages.json` from the INAO boundaries in `public/maps`. Run it with `bun`, then re-run `points.py`.

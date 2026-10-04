@@ -32,8 +32,11 @@ added to the daily mean in the véraison heat sum only. It was fitted on BIVB
 mid-flowering dates only (Côte d'Or, 66 observations 1997-2025: bias 0, mean
 error 3.9 days) and checked on BIVB mid-véraison dates it never saw (20
 observations 2016-2025: bias -0.2 days, mean error 4.3 days; without it +7.8).
-The sugar model gets no offset: against BIVB reference-plot samples taken
-around 5 September (1991-2025), it is closest without one.
+The sugar model gets no fixed offset. Instead anchor_sugar_curves() shifts each
+season's curve to the sugar the BIVB measured (data/bivb_sugar.csv): on average
+the model is close, but it reads low in hot, dry years (2020 Côte de Nuits
+Pinot noir: about 50 g/L) because temperature alone misses berries
+concentrating in drought.
 
 Harvest: the recorded start where harvest_dates.csv has one (official ban or
 opening, or a reported start); otherwise an estimate - the day Pinot noir
@@ -55,6 +58,8 @@ from collections import defaultdict
 from pathlib import Path
 from statistics import mean
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[3]
 DATA = ROOT / 'scripts/vintages/data'
 OUT = ROOT / 'public/data/vintages/burgundy'
@@ -69,6 +74,9 @@ GRAPES = {
 }
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
+# The measured-sugar shift builds up over this many days after véraison.
+SUGAR_RAMP_DAYS = 20
+SUGAR_GAP_FIT: dict[str, list[float]] = {}
 CURVE_START, CURVE_STEP, CURVE_POINTS = (7, 15), 5, 22  # 15 July to 28 October: early véraison and late harvests (1965: to 25 October) stay on the curve
 BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
 AREAS = ['chablis-auxerrois', 'cote-de-nuits', 'hautes-cotes', 'cote-de-beaune', 'cote-chalonnaise', 'maconnais']
@@ -204,6 +212,111 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'radiation': round(mean(series[d]['ssi'] for d in span) * .01, 1) if span else 0,
         },
     }
+
+
+def sugar_ceiling(sugar: float) -> float:
+    """Musts seldom pass 260 g/L (fewer than 1 in 1,000 BIVB Côte d'Or samples), so shifted curves level off."""
+    return sugar if sugar <= 235 else 235 + 40 * (1 - math.exp(-(sugar - 235) / 40))
+
+
+def curve_day(year: int, i: int) -> dt.date:
+    return dt.date(year, *CURVE_START) + dt.timedelta(days=CURVE_STEP * i)
+
+
+def curve_sugar(values: list[float], year: int, day: dt.date) -> float:
+    position = (day - curve_day(year, 0)).days / CURVE_STEP
+    i = min(max(int(position), 0), len(values) - 2)
+    return values[i] + (values[i + 1] - values[i]) * min(max(position - i, 0.0), 1.0)
+
+
+def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, str]) -> None:
+    """Shift each season's modelled sugar curve to the sugar the BIVB measured.
+
+    The temperature-only sugar model misses berries concentrating in drought: in
+    2020 Côte de Nuits Pinot noir measured about 50 g/L above it. Where
+    data/bivb_sugar.csv has samples for an area, grape and year taken at least
+    SUGAR_RAMP_DAYS after véraison, the curve is shifted by their mean gap (the
+    shift grows from nothing at véraison to the full gap SUGAR_RAMP_DAYS later).
+    Elsewhere (other areas, years before 1988) the gap is estimated from the
+    season's warmth and rain and the year (held at 1988 for earlier seasons),
+    fitted on the measured seasons and tested on each one left out.
+    """
+    samples: dict[tuple[str, str, int], list[tuple[dt.date, float, int]]] = defaultdict(list)
+    with open(DATA / 'bivb_sugar.csv') as source:
+        for row in csv.DictReader(line for line in source if not line.startswith('#')):
+            samples[(row['area'], row['grape'], int(row['year']))].append(
+                (dt.date.fromisoformat(row['date']), float(row['sugar']), int(row['plots'])))
+    members: dict[str, list[str]] = defaultdict(list)
+    for village in built:
+        members[area_of[village]].append(village)
+
+    def season_mean(area: str, year: int, key: str) -> float | None:
+        values = [built[v][0][year][key] for v in members[area] if year in built[v][0]]
+        return mean(values) if values else None
+
+    first_measured = min(year for _, _, year in samples)
+
+    def climate(area: str, year: int) -> tuple[float, float, float] | None:
+        base = [y for y in range(BASELINE[0], BASELINE[1] + 1) if season_mean(area, y, 'gdd') is not None]
+        gdd, rain_total = season_mean(area, year, 'gdd'), season_mean(area, year, 'rainAprSep')
+        if gdd is None or not base:
+            return None
+        normal_gdd = mean(season_mean(area, y, 'gdd') for y in base)
+        normal_rain = mean(season_mean(area, y, 'rainAprSep') for y in base)
+        # The gap also drifts upward with time (plant material, picking choices); before the
+        # first measured year it is held at that year's level rather than extrapolated.
+        return ((gdd - normal_gdd) / normal_gdd * 100, (rain_total - normal_rain) / normal_rain * 100,
+                (max(year, first_measured) - 2000) / 10)
+
+    measured: dict[tuple[str, str, int], float] = {}
+    for (area, grape, year), rows in samples.items():
+        villages = [v for v in members[area] if year in built[v][1]]
+        if not villages:
+            continue
+        veraison = mean(dt.date.fromisoformat(built[v][1][year][grape]['veraison']).toordinal() for v in villages)
+        gaps, weights = [], []
+        for day, sugar, plots in rows:
+            if day.toordinal() < veraison + SUGAR_RAMP_DAYS:
+                continue
+            model = mean(curve_sugar(built[v][1][year][grape]['sugar']['values'], year, day) for v in villages)
+            gaps.append((sugar - model) * plots)
+            weights.append(plots)
+        if sum(weights) >= 3:
+            measured[(area, grape, year)] = sum(gaps) / sum(weights)
+
+    for grape in GRAPES:
+        fit_rows = [(climate(a, y), gap) for (a, g, y), gap in measured.items() if g == grape and climate(a, y)]
+        x = np.array([[1.0, *features] for features, _ in fit_rows])
+        target = np.array([gap for _, gap in fit_rows])
+        coef, *_ = np.linalg.lstsq(x, target, rcond=None)
+        held = []
+        for i in range(len(target)):
+            keep = np.arange(len(target)) != i
+            c, *_ = np.linalg.lstsq(x[keep], target[keep], rcond=None)
+            held.append(abs(target[i] - x[i] @ c))
+        SUGAR_GAP_FIT[grape] = [float(c) for c in coef]
+        # A gap the weather does not explain that drifts with time would bias the years before 1988.
+        years_fit = [y for (a, g, y), _ in measured.items() if g == grape and climate(a, y)]
+        drift = np.corrcoef(years_fit, target - x @ coef)[0, 1]
+        print(f'{grape} sugar: {sum(1 for k in measured if k[1] == grape)} measured seasons; '
+              f'mean gap {mean(target):+.1f} g/L; model alone misses by {mean(abs(target)):.1f}, '
+              f'weather estimate by {mean(held):.1f} (held out); left-over gap vs year r={drift:.2f}')
+
+        for village, (_, grapes_by_year) in built.items():
+            area = area_of[village]
+            for year, grapes in grapes_by_year.items():
+                gap = measured.get((area, grape, year))
+                source = 'measured'
+                if gap is None:
+                    features = climate(area, year)
+                    gap = float(coef @ [1.0, *features]) if features else 0.0
+                    source = 'weather'
+                season = grapes[grape]
+                veraison = dt.date.fromisoformat(season['veraison'])
+                season['sugar']['values'] = [
+                    round(sugar_ceiling(value + gap * min(max((curve_day(year, i) - veraison).days / SUGAR_RAMP_DAYS, 0.0), 1.0)), 1)
+                    for i, value in enumerate(season['sugar']['values'])]
+                season['sugarSource'] = source
 
 
 def vineyard_events() -> dict:
@@ -374,9 +487,10 @@ def main() -> None:
         typical = mean(starts[(area, y)].timetuple().tm_yday for y in years if BASELINE[0] <= y <= BASELINE[1])
         harvest[area] = {'typical': doy_to_mmdd(typical), 'years': {y: e for y, e in entry_years.items() if int(y) >= FIRST_SEASON}}
 
-    # --- Villages.
+    # --- Villages: the modelled seasons first, then the sugar curves anchored on measurements.
     OUT.mkdir(parents=True, exist_ok=True)
     written = []
+    built: dict[str, tuple[dict, dict]] = {}
     for point in points:
         village, area = point['id'], area_of[point['id']]
         seasons, grapes_by_year = {}, {}
@@ -386,6 +500,12 @@ def main() -> None:
                 continue
             seasons[year] = weather_year
             grapes_by_year[year] = {g: grape_season(village, year, g, weather, rain, starts.get((area, year)), normal_t[village]) for g in GRAPES}
+        built[village] = (seasons, grapes_by_year)
+    anchor_sugar_curves(built, area_of)
+
+    for point in points:
+        village = point['id']
+        seasons, grapes_by_year = built[village]
         base = [y for y in seasons if BASELINE[0] <= y <= BASELINE[1]]
         base_rain = [y for y in base if y >= RAIN_FROM]
         normal = {
@@ -429,7 +549,7 @@ def main() -> None:
         'sources': [
             {'label': 'Rain', 'detail': 'Météo-France COMÉPHORE radar–gauge reanalysis, 1 km, hourly (Licence Ouverte Etalab 2.0). Days not yet published use SAFRAN.'},
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
-            {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay).'},
+            {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay), then matched to the must sugar measured by the BIVB maturity network (maturite.bivb.com) in the Côte de Nuits, Côte de Beaune and Hautes-Côtes from 1988. Other areas and years use a correction from the season’s warmth, rain and year, fitted on those measurements (held-out error about 10 g/L, against 14 for the model alone).'},
             {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C for this model to match the stations it was fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
             {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one — an official ban, the Hospices de Beaune, the BIVB or the wine press. Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
             {'label': 'Frost and hail', 'detail': 'Spring frosts and hailstorms a grower body or the wine press dates to at least the month, kept by hand because an 8 km grid cannot see them; each links to its source.'},
