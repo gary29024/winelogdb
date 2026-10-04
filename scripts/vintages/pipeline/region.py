@@ -36,6 +36,14 @@ REGIONS: dict[str, dict] = {
         # Beaune, 15 September: Labbé et al. 2019, 1988-2018.
         'calibration': ('beaune', 258),
         'blends': {},
+        # Quality outlook: per grape, the critics' group it is fitted on (Burgundy: by colour,
+        # rated for the Côte d'Or as a whole), the areas that group covers, and its inputs.
+        'quality': {
+            'pinot-noir': {'groups': {'red': ['cote-de-nuits', 'cote-de-beaune']}, 'min_sugar': 180,
+                           'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail']},
+            'chardonnay': {'groups': {'white': ['cote-de-nuits', 'cote-de-beaune']}, 'min_sugar': 178,
+                           'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity', 'hail']},
+        },
         # Method notes shown under "How we estimate", after the shared weather sources.
         'sources': [
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay), then matched to the must sugar measured by the BIVB maturity network (maturite.bivb.com) in every area of the page from about 1990 (1988 in the Côte d’Or). Earlier years use a correction from the season’s warmth, rain and year, fitted on those measurements (held-out error about 10 g/L, against 14 for the model alone).'},
@@ -63,6 +71,15 @@ REGIONS: dict[str, dict] = {
         'anchor_area': 'left-bank',
         'calibration': None,
         'blends': {},
+        # Critics rate Bordeaux by bank: the blend is fitted on both banks' ratings together.
+        # Minimum sugar: each appellation's cahier des charges (INAO), Merlot / other grapes.
+        'quality': {
+            'blend': {'groups': {'left-bank': ['left-bank'], 'right-bank': ['right-bank']},
+                      'min_sugar': {'merlot': 189, 'cabernet-sauvignon': 180, 'cabernet-franc': 180,
+                                    'saint-emilion': {'merlot': 194, 'cabernet-sauvignon': 189, 'cabernet-franc': 189},
+                                    'pomerol': {'merlot': 194}},
+                      'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail']},
+        },
         'sources': [
             {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2856 (Merlot), 3030 (Cabernet Sauvignon) and 2909 (Cabernet Franc), read from van Leeuwen et al. 2019, Fig. 3. No measured sugar is matched in for Bordeaux yet, so hot, dry years may read low.'},
             {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2636 (Merlot), 2689 (Cabernet Sauvignon) and 2692 (Cabernet Franc). The 1.1 °C vineyard-to-station offset was fitted on Burgundy’s BIVB dates and is used unchanged here.'},

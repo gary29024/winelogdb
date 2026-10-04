@@ -86,9 +86,11 @@ export function VintageDetailPage(){
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   // The quality outlook answers "how good": the conditions card below only explains why.
-  const outlook=grapeSeason?.outlook;
-  const qualityModel=index.quality?.grapes[grapeId];
-  const colour=qualityModel?.colour??grape.colour;
+  // A single grape in a blended region reads the blend's outlook: critics rate the wine, not the grape.
+  const outlookGrape:GrapeId=grapeSeason?.outlook?grapeId:season.grapes.blend?.outlook?'blend':grapeId;
+  const outlook=season.grapes[outlookGrape]?.outlook;
+  const qualityModel=index.quality?.grapes[outlookGrape];
+  const consensusGroup=Object.entries(qualityModel?.groups??{}).find(([,areas])=>areas.includes(village.area))?.[0]??qualityModel?.colour??grape.colour;
   const qualityCheck=qualityModel?(year>=index.quality!.modernFrom?qualityModel.validation.since:qualityModel.validation.before):null;
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
   const gddPct=(season.gdd-normal.gdd)/normal.gdd,rainPct=(season.rainAprSep-normal.rainAprSep)/normal.rainAprSep,nightDiff=season.augNights-normal.augNights;
@@ -127,8 +129,8 @@ export function VintageDetailPage(){
     </div>
     {grape.blend&&blendMix&&<p className="vintage-blend-note">Read as {village.name}’s planted mix: {blendMix}.</p>}
 
-    {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={grape.name} outlook={outlook} model={index.quality} check={qualityCheck}
-      consensus={index.quality.consensus[colour]?.[String(year)]??null}/>}
+    {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={region.grapes.find(item=>item.id===outlookGrape)?.name??grape.name} outlook={outlook} model={index.quality} check={qualityCheck}
+      consensus={index.quality.consensus[consensusGroup]?.[String(year)]??null}/>}
 
     {grapeReading&&grapeSeason&&normalGrape&&<section className="vintage-card" aria-labelledby="vintage-harvest-title">
       <h2 id="vintage-harvest-title">At harvest</h2>
