@@ -1,7 +1,7 @@
 # Must sugar measured by the BIVB's maturity-monitoring network (reference and ODG plots),
 # published at maturite.bivb.com: one row per area, grape and sampling date, the mean over the
 # plots sampled that day. build.py anchors each season's modelled sugar curve on these.
-# sugar: g/L. plots: how many plots the mean covers.
+# Refreshed by bivb.py in the monthly Vintage data Action. sugar: g/L. plots: how many plots the mean covers.
 area,grape,year,date,sugar,plots
 cote-de-beaune,chardonnay,1988,1988-08-25,61.0,1
 cote-de-beaune,chardonnay,1988,1988-08-29,103.0,1

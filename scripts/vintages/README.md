@@ -25,11 +25,12 @@ All Météo-France data is published under the Licence Ouverte (Etalab 2.0).
 pip install -r scripts/vintages/pipeline/requirements.txt
 python scripts/vintages/pipeline/points.py    # once, or when villages change: sample points, elevations, SAFRAN cells
 python scripts/vintages/pipeline/fetch.py     # downloads only what is missing (~40 min the first time)
+python scripts/vintages/pipeline/bivb.py      # measured must sugar for this year and last
 python scripts/vintages/pipeline/build.py     # writes public/data/vintages/burgundy/
 python scripts/vintages/pipeline/quality.py   # adds each season's quality outlook
 ```
 
-The **Vintage data** GitHub Action runs `fetch.py` and `build.py` on the 6th of each month, keeps the downloaded history in the Actions cache, and commits any change. It can also be started by hand from the Actions tab.
+The **Vintage data** GitHub Action runs `fetch.py`, `bivb.py`, `build.py` and `quality.py` on the 6th of each month, keeps the downloaded history in the Actions cache, and commits any change. It can also be started by hand from the Actions tab.
 
 ## Official harvest dates
 
@@ -43,7 +44,7 @@ The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labb�
 
 `build.py` shifts each season's modelled sugar curve to these samples. The temperature-only model is close on average but reads low in hot, dry years (2020 Côte de Nuits Pinot noir: about 50 g/L), because it cannot see berries concentrating in drought. Seasons without samples (other areas, years before 1988) get a shift estimated from the season's warmth, rain and year. That estimate is fitted on the measured seasons, and the year is held at 1988 for earlier seasons. Its held-out error is about 10 g/L, against 14 for the model alone. Each grape season records `sugarSource: measured | weather`.
 
-The file is not refreshed by the monthly Action. Add the new season's samples by hand after harvest, then re-run `build.py` and `quality.py`.
+`bivb.py` refreshes the file in the monthly Action, before `build.py`: it downloads every Côte d'Or plot's samples for the current and previous year and replaces those years' rows. If the BIVB site is down, the file is left as it was. To rebuild older years, run `python scripts/vintages/pipeline/bivb.py --years 1988 1989 …`.
 
 ## Village list
 
