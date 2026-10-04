@@ -65,12 +65,25 @@ REGIONS: dict[str, dict] = {
             'cabernet-franc': {'sugar200': 2909.0, 'veraison': 2692.0},
         },
         'harvest_grape': 'merlot',
+        # Measured must sugar: Bordeaux Raisins (bordeaux_raisins.py), Merlot and Cabernet
+        # Sauvignon from 2013. Cabernet Franc is not sampled and takes the mean of their shifts;
+        # fourteen seasons are too few to fit a drift over time.
+        'measured_sugar': 'measured_sugar.csv',
+        'sugar_stand_in': {'cabernet-franc': ['merlot', 'cabernet-sauvignon']},
+        'sugar_gap_drift': False,
         # Growers pick riper than they did: estimates read the sugar recorded starts were picked
         # at within 10 years of the season (since 2000 this cuts a 4-day early bias to under 1).
         'harvest_sugar_window': 10,
         'anchor_area': 'left-bank',
         'calibration': None,
         'blends': {},
+        # The chart areas that rate each bank (0: the bank, or communes in it; 1: Bordeaux as a whole).
+        'consensus_groups': {
+            'left-bank': {'left-bank': 0, 'medoc-graves': 0, 'medoc': 0, 'graves': 0, 'margaux': 0,
+                          'pauillac-saint-julien-saint-estephe': 0, 'graves-pessac-leognan': 0, 'bordeaux': 1},
+            'right-bank': {'right-bank': 0, 'saint-emilion-pomerol': 0, 'pomerol-saint-emilion': 0,
+                           'pomerol': 0, 'saint-emilion': 0, 'bordeaux': 1},
+        },
         # Critics rate Bordeaux by bank: the blend is fitted on both banks' ratings together.
         # Minimum sugar: each appellation's cahier des charges (INAO), Merlot / other grapes.
         'quality': {
@@ -81,7 +94,7 @@ REGIONS: dict[str, dict] = {
                       'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail']},
         },
         'sources': [
-            {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2856 (Merlot), 3030 (Cabernet Sauvignon) and 2909 (Cabernet Franc), read from van Leeuwen et al. 2019, Fig. 3. No measured sugar is matched in for Bordeaux yet, so hot, dry years may read low.'},
+            {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2856 (Merlot), 3030 (Cabernet Sauvignon) and 2909 (Cabernet Franc), read from van Leeuwen et al. 2019, Fig. 3, then matched from 2013 to the must sugar the Bordeaux Raisins maturity network (ISVV / Université de Bordeaux with the CIVB, bordeauxraisins.fr) measured on its Médoc and Graves plots (left bank) and Libournais plots (right bank). Cabernet Franc is not sampled and takes the mean of the other two grapes’ correction; earlier years use a correction from the season’s warmth and rain, fitted on those measurements.'},
             {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2636 (Merlot), 2689 (Cabernet Sauvignon) and 2692 (Cabernet Franc). The 1.1 °C vineyard-to-station offset was fitted on Burgundy’s BIVB dates and is used unchanged here.'},
             {'label': 'Harvest', 'detail': 'Recorded red harvest starts: the left bank 1959–1998 from Jane Anson’s vintage notes, built on the Tastet-Lawton brokerage records for the Médoc, plus Decanter vintage guides and harvest reports for both banks. Other years are estimated as the day Merlot reaches the sugar level that bank’s recorded starts were picked at, or from the left-bank date where that was closer.'},
             {'label': 'Planted mix', 'detail': 'The blend weighs Merlot, Cabernet Sauvignon and Cabernet Franc by each appellation’s planted share: the Bordeaux wine council (CIVB) for Saint-Estèphe and Pomerol, the Maison du Vin de Margaux via Decanter for Margaux, and the Wine Folly Bordeaux guide for Pauillac, Saint-Julien, Pessac-Léognan and Saint-Émilion, where no official breakdown was found.'},

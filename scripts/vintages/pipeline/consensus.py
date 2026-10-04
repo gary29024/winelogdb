@@ -31,7 +31,9 @@ OUT = region.config()['data'] / 'critic_consensus.csv'
 # none: its groups are the two colours, rated for the Côte d'Or where a chart separates it.
 GROUPS: dict[str, dict[str, int]] = region.config().get('consensus_groups', {})
 # Two Decanter tables rate the same vintages: count Decanter once, preferring the vintage guide.
-MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter'}
+MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter',
+         # iDealwine rates Bordeaux as a whole on its chart and by bank in its blog vintage notes.
+         'iDealwine (blog vintage notes)': 'iDealwine'}
 PREFER = ['Decanter (vintage guide)', 'Decanter (en primeur report table)']
 # A single grower's blog, with some scores shared between colours: not a critic's chart.
 EXCLUDE = {'Patrick Essa (degustateurs.pro)'}
@@ -58,7 +60,8 @@ def load(path: str) -> dict[str, dict[tuple[str, int], float]]:
         best = min(rank_of(r) for r in rs)
         value = st.mean(float(r['score']) for r in rs if rank_of(r) == best)
         critic = MERGE.get(source, source)
-        rank = PREFER.index(source) if source in PREFER else 0
+        # A merged critic keeps its most specific rating (bank before whole region), then the preferred table.
+        rank = (best, PREFER.index(source) if source in PREFER else 0)
         key = (critic, colour, year)
         if key not in picked or rank < picked[key][0]:
             picked[key] = (rank, value)

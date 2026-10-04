@@ -34,7 +34,12 @@ VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/build.py
 - **Grapes:** Merlot, Cabernet Sauvignon and Cabernet Franc are modelled separately.
 - **Blend:** a `blend` grape weighs them by each appellation's planted mix (`blends.csv`, with each row's source and whether it is official).
 - **Harvest dates:** `harvest_dates.csv` holds recorded red starts by bank.
-- **Not yet in Bordeaux:** measured sugar and the quality outlook.
+- **Measured sugar:** `measured_sugar.csv` comes from the Bordeaux Raisins maturity network (bordeauxraisins.fr, ISVV / Université de Bordeaux with the CIVB).
+  - **Coverage:** Merlot and Cabernet Sauvignon per bank, from 2013.
+  - **Banks:** the Médoc and Graves plots count as left bank, the Libournais plots as right bank.
+  - **Refresh:** `bordeaux_raisins.py` refreshes it in the monthly Action.
+  - **Cabernet Franc:** it is not sampled, so it takes the mean of the other two grapes' correction.
+- **Quality outlook:** `critic_consensus.csv` holds the critics' consensus by bank. `consensus.py` builds it from bank or commune ratings, falling back to whole-Bordeaux ratings. `quality.py` fits the blend on both banks together and scores each commune with its own weather and planted mix.
 
 ## Running it
 

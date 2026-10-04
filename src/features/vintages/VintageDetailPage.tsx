@@ -149,7 +149,7 @@ export function VintageDetailPage(){
       <SugarChart year={year} curve={grapeSeason.sugar} normal={normalGrape.sugar} low={normalGrape.sugarLow} high={normalGrape.sugarHigh}
         harvest={harvest} veraison={grapeReading.veraison} ripeSugar={grape.ripeSugar}/>
       <ul className="vintage-chart-legend">
-        <li><span className="is-year" aria-hidden="true"/>{year} sugar{grapeSeason.sugarSource==='measured'?' (matched to BIVB samples)':grapeSeason.sugarSource==='weather'?' (estimated)':''}</li>
+        <li><span className="is-year" aria-hidden="true"/>{year} sugar{grapeSeason.sugarSource==='measured'?` (matched to ${region.id==='burgundy'?'BIVB':'measured'} samples)`:grapeSeason.sugarSource==='weather'?' (estimated)':''}</li>
         <li><span className="is-normal" aria-hidden="true"/>Typical</li>
         <li><span className="is-picked" aria-hidden="true"/>At picking</li>
         <li><span className="is-ripe" aria-hidden="true"/>Ripe at {grape.ripeSugar} g/L (≈ {(grape.ripeSugar/16.83).toFixed(0)}% alc.) · ○ typical · ● {year}</li>
