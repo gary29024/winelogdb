@@ -19,6 +19,10 @@
 # sauternes: the first pass picking overripe or botrytised Sémillon (a cleaning pass that removes
 # rotten grapes does not count), where a source names the day: Decanter's Sauternes & Barsac
 # vintage guide and the ISVV reports. Single estates and "around" wording are left out.
+# right-bank, further years: Gavin Quinney's 2006 report ("many estates in Pomerol began harvesting"
+# on 11 September), and the estate consensus from rightbank_estate_starts.csv (the median start of
+# the estates that began within 7 days of the year's median, where at least two did). A date a
+# source gives for the right bank as a whole wins over the consensus.
 area,year,date,type,source
 left-bank,1959,1959-09-20,reported-start,https://janeanson.com/the-vintages-1855-onwards
 left-bank,1960,1960-09-15,reported-start,https://janeanson.com/the-vintages-1855-onwards
@@ -89,3 +93,40 @@ sauternes,1990,1990-09-11,reported-start,https://www.decanter.com/learn/vintage-
 sauternes,2004,2004-09-15,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/sauternes-and-barsac/vintage-guide-2-117815/
 sauternes,2011,2011-09-05,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2011.pdf
 sauternes,2019,2019-10-10,reported-start,https://www.bordeauxraisins.fr/images/millesimes/Millesime_2019_ISVV.pdf
+right-bank,2006,2006-09-11,reported-start,https://gavinquinney.com/2007/04/24/bordeaux-2006-report-and-100-top-reds/
+right-bank,1964,1964-09-25,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1970,1970-09-24,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1983,1983-09-27,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1988,1988-10-01,reported-start,rightbank_estate_starts.csv (3 of 3 estates)
+right-bank,1989,1989-09-06,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1990,1990-09-12,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1991,1991-10-01,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1992,1992-09-27,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1993,1993-09-20,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1994,1994-09-17,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,1995,1995-09-15,reported-start,rightbank_estate_starts.csv (3 of 3 estates)
+right-bank,1996,1996-09-24,reported-start,rightbank_estate_starts.csv (3 of 3 estates)
+right-bank,1998,1998-09-26,reported-start,rightbank_estate_starts.csv (3 of 3 estates)
+right-bank,1999,1999-09-10,reported-start,rightbank_estate_starts.csv (2 of 2 estates)
+right-bank,2003,2003-09-09,reported-start,rightbank_estate_starts.csv (2 of 3 estates)
+right-bank,2004,2004-10-02,reported-start,rightbank_estate_starts.csv (4 of 5 estates)
+right-bank,2005,2005-09-16,reported-start,rightbank_estate_starts.csv (3 of 4 estates)
+right-bank,2007,2007-09-27,reported-start,rightbank_estate_starts.csv (3 of 5 estates)
+right-bank,2008,2008-10-03,reported-start,rightbank_estate_starts.csv (5 of 8 estates)
+right-bank,2009,2009-09-15,reported-start,rightbank_estate_starts.csv (5 of 7 estates)
+right-bank,2010,2010-09-27,reported-start,rightbank_estate_starts.csv (6 of 9 estates)
+right-bank,2011,2011-09-16,reported-start,rightbank_estate_starts.csv (5 of 8 estates)
+right-bank,2012,2012-10-08,reported-start,rightbank_estate_starts.csv (3 of 8 estates)
+right-bank,2013,2013-10-01,reported-start,rightbank_estate_starts.csv (10 of 10 estates)
+right-bank,2014,2014-10-03,reported-start,rightbank_estate_starts.csv (9 of 13 estates)
+right-bank,2015,2015-09-21,reported-start,rightbank_estate_starts.csv (6 of 10 estates)
+right-bank,2016,2016-09-23,reported-start,rightbank_estate_starts.csv (7 of 10 estates)
+right-bank,2017,2017-09-12,reported-start,rightbank_estate_starts.csv (11 of 14 estates)
+right-bank,2018,2018-09-19,reported-start,rightbank_estate_starts.csv (16 of 19 estates)
+right-bank,2019,2019-09-18,reported-start,rightbank_estate_starts.csv (12 of 14 estates)
+right-bank,2020,2020-09-04,reported-start,rightbank_estate_starts.csv (9 of 12 estates)
+right-bank,2021,2021-09-27,reported-start,rightbank_estate_starts.csv (19 of 21 estates)
+right-bank,2022,2022-09-03,reported-start,rightbank_estate_starts.csv (17 of 19 estates)
+right-bank,2023,2023-09-07,reported-start,rightbank_estate_starts.csv (15 of 19 estates)
+right-bank,2024,2024-09-20,reported-start,rightbank_estate_starts.csv (24 of 28 estates)
+right-bank,2025,2025-09-02,reported-start,rightbank_estate_starts.csv (20 of 26 estates)
