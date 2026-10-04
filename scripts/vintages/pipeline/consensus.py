@@ -12,7 +12,7 @@ weights each critic by how closely it agrees with the others, so no one
 critic sets the answer. The result is expressed in Decanter-star equivalents
 (1 poor ... 5 excellent), only to give the numbers a familiar scale.
 
-    python scripts/vintages/pipeline/consensus.py <ratings.csv>
+    python scripts/vintages/pipeline/consensus.py <ratings.csv> [more ratings.csv ...]
 """
 from __future__ import annotations
 
@@ -30,6 +30,8 @@ OUT = region.config()['data'] / 'critic_consensus.csv'
 # first (rank 0: the group itself or a commune in it; rank 1: the whole region). Burgundy has
 # none: its groups are the two colours, rated for the Côte d'Or where a chart separates it.
 GROUPS: dict[str, dict[str, int]] = region.config().get('consensus_groups', {})
+# The wine colour each group rates (red unless set): Bordeaux 'dry-white' white, 'sauternes' sweet.
+GROUP_COLOUR: dict[str, str] = region.config().get('consensus_colours', {})
 # Two Decanter tables rate the same vintages: count Decanter once, preferring the vintage guide.
 MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter',
          # iDealwine rates Bordeaux as a whole on its chart and by bank in its blog vintage notes.
@@ -40,17 +42,27 @@ EXCLUDE = {'Patrick Essa (degustateurs.pro)'}
 # Côte d'Or rows where a source has them; whole-Burgundy rows otherwise.
 AREA_RANK = {'cote-d-or': 0, 'cote-de-nuits': 0, 'cote-de-beaune': 0, 'burgundy': 1}
 SCALE_SOURCE = 'Decanter'
+# Fewer Decanter years than this and its scale is too loose to set a group's stars (Bordeaux dry
+# whites: 5 years). The group is then put on Decanter's scale through a bridge critic that rates
+# it and the first group on one scale (iDealwine's 0-20 for both colours).
+MIN_SCALE_YEARS = 20
 
 
-def load(path: str) -> dict[str, dict[tuple[str, int], float]]:
+def score(text: str) -> float:
+    """A published score; a range ('89-92', a barrel score) reads as its midpoint."""
+    low, _, high = text.partition('-')
+    return (float(low) + float(high)) / 2 if high else float(low)
+
+
+def load(*paths: str) -> dict[str, dict[tuple[str, int], float]]:
     rows = defaultdict(list)
-    for r in csv.DictReader(open(path)):
+    for r in (row for path in paths for row in csv.DictReader(open(path))):
         if r['source'] in EXCLUDE or not r['score']:
             continue
         if GROUPS:
             # One row can rate several groups: a whole-Bordeaux rating stands in for either bank.
             for group, ranks in GROUPS.items():
-                if r['area'] in ranks:
+                if r['area'] in ranks and r['colour'] == GROUP_COLOUR.get(group, 'red'):
                     rows[(r['source'], group, int(r['year']))].append({**r, 'rank': ranks[r['area']]})
             continue
         rows[(r['source'], r['colour'], int(r['year']))].append(r)
@@ -58,7 +70,7 @@ def load(path: str) -> dict[str, dict[tuple[str, int], float]]:
     for (source, colour, year), rs in rows.items():
         rank_of = (lambda r: r['rank']) if GROUPS else (lambda r: AREA_RANK.get(r['area'], 2))
         best = min(rank_of(r) for r in rs)
-        value = st.mean(float(r['score']) for r in rs if rank_of(r) == best)
+        value = st.mean(score(r['score']) for r in rs if rank_of(r) == best)
         critic = MERGE.get(source, source)
         # A merged critic keeps its most specific rating (bank before whole region), then the preferred table.
         rank = (best, PREFER.index(source) if source in PREFER else 0)
@@ -71,7 +83,7 @@ def load(path: str) -> dict[str, dict[tuple[str, int], float]]:
     return out
 
 
-def consensus(scores: dict[tuple[str, int], float]):
+def consensus(scores: dict[tuple[str, int], float], bridge: tuple[str, tuple[float, float], tuple[float, float]] | None = None):
     critics = sorted({c for c, _ in scores})
     years = sorted({y for _, y in scores})
     # Start: each critic's scores standardised, averaged per year.
@@ -105,28 +117,42 @@ def consensus(scores: dict[tuple[str, int], float]):
             q = new
             break
         q = new
-    a, b = scale[SCALE_SOURCE]
-    rating = {y: min(max(a + b * q[y], 1.0), 5.0) for y in years}
+    to_stars = lambda x: scale[SCALE_SOURCE][0] + scale[SCALE_SOURCE][1] * x
+    if sum(1 for c, _ in scores if c == SCALE_SOURCE) < MIN_SCALE_YEARS and bridge:
+        # This group's quality in the bridge critic's own units, then that critic's score read on
+        # the reference group's Decanter scale.
+        critic, (ra, rb), (da, db) = bridge
+        to_stars = lambda x: da + db * (scale[critic][0] + scale[critic][1] * x - ra) / rb
+    rating = {y: min(max(to_stars(q[y]), 1.0), 5.0) for y in years}
     members = {y: sorted(c for (c, yy) in scores if yy == y) for y in years}
     agreement = {}
     for c in critics:
         pts = [(v, q[y]) for (cc, y), v in scores.items() if cc == c]
         agreement[c] = (round(st.correlation([p[0] for p in pts], [p[1] for p in pts]), 2) if len(pts) > 2 else None, len(pts))
-    return rating, members, agreement, weight
+    return rating, members, agreement, weight, scale
 
 
 def main() -> None:
-    by_colour = load(sys.argv[1])
+    by_colour = load(*sys.argv[1:])
     with open(OUT, 'w', newline='') as sink:
-        scope = 'by bank, from bank or commune ratings where given, else Bordeaux as a whole' if GROUPS \
+        scope = ('by group: the reds by bank, dry whites, Sauternes; each from the most specific rating '
+                 'a critic gives, else its whole-Bordeaux row for that colour') if GROUPS \
             else 'Côte d\'Or where rated, else Burgundy'
         sink.write(f'# Critics\' consensus quality per vintage ({scope}), from\n'
                    '# scripts/vintages/pipeline/consensus.py. rating: Decanter-star equivalents, 1 poor ... 5 excellent.\n'
                    '# sources: the critics averaged that year, each weighted by its agreement with the others.\n')
         w = csv.writer(sink, lineterminator='\n')
         w.writerow(['year', 'colour', 'rating', 'n_sources', 'sources'])
+        reference_scale = None
         for colour in (list(GROUPS) or ['red', 'white']):
-            rating, members, agreement, weight = consensus(by_colour[colour])
+            bridge = None
+            if reference_scale and sum(1 for c, _ in by_colour[colour] if c == SCALE_SOURCE) < MIN_SCALE_YEARS:
+                shared = [c for c in reference_scale if c != SCALE_SOURCE and any(cc == c for cc, _ in by_colour[colour])]
+                critic = max(shared, key=lambda c: sum(1 for cc, _ in by_colour[colour] if cc == c))
+                bridge = (critic, reference_scale[critic], reference_scale[SCALE_SOURCE])
+                print(f'{colour}: put on the Decanter scale through {critic}')
+            rating, members, agreement, weight, scale = consensus(by_colour[colour], bridge)
+            reference_scale = reference_scale or scale
             total = sum(weight.values())
             print(colour, 'critics (correlation with consensus, years, share of weight):')
             for c, (r, n) in sorted(agreement.items(), key=lambda kv: -(kv[1][0] or 0)):

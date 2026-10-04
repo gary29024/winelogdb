@@ -29,17 +29,18 @@ VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/fetch.py
 VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/build.py
 ```
 
-**Bordeaux** (`data/bordeaux/`) covers the red communes Saint-Estèphe, Pauillac, Saint-Julien, Margaux and Pessac-Léognan (left bank), and Saint-Émilion (grand cru area) and Pomerol (right bank).
-- **Vineyard outlines:** `maps/` holds outlines from the INAO parcel delimitation (data.gouv.fr, 2026-09-28).
-- **Grapes:** Merlot, Cabernet Sauvignon and Cabernet Franc are modelled separately.
-- **Blend:** a `blend` grape weighs them by each appellation's planted mix (`blends.csv`, with each row's source and whether it is official).
-- **Harvest dates:** `harvest_dates.csv` holds recorded red starts by bank.
+**Bordeaux** (`data/bordeaux/`) covers the red communes Saint-Estèphe, Pauillac, Saint-Julien, Margaux and Pessac-Léognan (left bank), and Saint-Émilion (grand cru area) and Pomerol (right bank); Pessac-Léognan's dry whites; and the sweet wines of Sauternes and Barsac.
+- **Vineyard outlines:** `maps/` holds outlines from the INAO parcel delimitation (data.gouv.fr, 2026-09-28). Sauternes is read outside the Barsac commune, which has its own page.
+- **Grapes:** Merlot, Cabernet Sauvignon, Cabernet Franc, Sémillon and Sauvignon Blanc are modelled separately. Each place is read only for the grapes in its blends.
+- **Blends:** `blends.csv` gives each appellation's planted mix per blend (`blend` red, `blend-white` dry white, `blend-sweet` Sauternes), with each row's source and basis.
+- **Harvest dates:** `harvest_dates.csv` holds recorded red starts by bank, Pessac-Léognan's white starts (`dry-white`, followed by any white grape in a left-bank village; region.py `colour_areas`) and the first Sauternes passes (`sauternes`). Each area is estimated from its own grape's sugar (region.py `harvest_grape`).
 - **Measured sugar:** `measured_sugar.csv` comes from the Bordeaux Raisins maturity network (bordeauxraisins.fr, ISVV / Université de Bordeaux with the CIVB).
-  - **Coverage:** Merlot and Cabernet Sauvignon per bank, from 2013.
+  - **Coverage:** Merlot and Cabernet Sauvignon per bank, from 2013. The white grapes are not sampled and stay as modelled.
   - **Banks:** the Médoc and Graves plots count as left bank, the Libournais plots as right bank.
   - **Refresh:** `bordeaux_raisins.py` refreshes it in the monthly Action.
   - **Cabernet Franc:** it is not sampled, so it takes the mean of the other two grapes' correction.
-- **Quality outlook:** `critic_consensus.csv` holds the critics' consensus by bank. `consensus.py` builds it from bank or commune ratings, falling back to whole-Bordeaux ratings. `quality.py` fits the blend on both banks together and scores each commune with its own weather and planted mix.
+- **Noble rot:** Bordeaux also reads SAFRAN humidity (region.py `humidity`), and `build.py` counts noble-rot, grey-rot and Botrytis-favourable days over the Sauternes picking season (`noble_rot`). The thresholds were set before testing.
+- **Quality outlook:** `critic_consensus.csv` holds the critics' consensus for four groups: the reds by bank, dry whites and Sauternes. `consensus.py` reads them from the most specific rating each critic gives, falling back to its whole-Bordeaux row for that colour. Dry whites are put on Decanter's star scale through iDealwine, since Decanter rates too few of them. `quality.py` fits each blend on its group and scores each place with its own weather and planted mix.
 
 ## Running it
 

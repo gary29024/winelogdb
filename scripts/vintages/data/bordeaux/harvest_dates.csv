@@ -12,6 +12,13 @@
 # "Bordeaux" without naming the Médoc; read as the left-bank start like its earlier years.
 # Only entries that give the red or Merlot start: 1999 and 2005 (possibly white), 2018 and 2022
 # (earliest plots only) are left out.
+# dry-white (Pessac-Léognan's white grapes): the first Sauvignon picked in the Graves, from the
+# tables of the Bordeaux faculty of oenology's annual vintage report (ISVV, "Le millésime") for
+# 2010-2016. From 2017 those tables give the Sauternais, days ahead of the Graves, and earlier
+# reports give only "early September"-style wording, so both are left out.
+# sauternes: the first pass picking overripe or botrytised Sémillon (a cleaning pass that removes
+# rotten grapes does not count), where a source names the day: Decanter's Sauternes & Barsac
+# vintage guide and the ISVV reports. Single estates and "around" wording are left out.
 area,year,date,type,source
 left-bank,1959,1959-09-20,reported-start,https://janeanson.com/the-vintages-1855-onwards
 left-bank,1960,1960-09-15,reported-start,https://janeanson.com/the-vintages-1855-onwards
@@ -69,3 +76,16 @@ right-bank,1997,1997-09-03,reported-start,https://www.decanter.com/learn/vintage
 right-bank,2000,2000-09-14,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
 right-bank,2001,2001-09-20,reported-start,https://www.decanter.com/learn/vintage-guides/harvest-reports-2001-51197/
 right-bank,2002,2002-09-19,reported-start,https://www.decanter.com/learn/vintage-guides/harvest-reports-2003-51182/
+dry-white,2010,2010-09-02,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2013.pdf
+dry-white,2011,2011-08-22,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2013.pdf
+dry-white,2012,2012-09-03,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2013.pdf
+dry-white,2013,2013-09-10,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2013.pdf
+dry-white,2014,2014-09-06,reported-start,https://www.bordeauxraisins.fr/images/millesimes/2025/Millesime_2025_%C3%A0_Bordeaux-Rapport_de_lISVV_.pdf
+dry-white,2015,2015-08-28,reported-start,https://www.bordeauxraisins.fr/images/millesimes/2025/Millesime_2025_%C3%A0_Bordeaux-Rapport_de_lISVV_.pdf
+dry-white,2016,2016-09-02,reported-start,https://www.bordeauxraisins.fr/images/millesimes/2025/Millesime_2025_%C3%A0_Bordeaux-Rapport_de_lISVV_.pdf
+sauternes,1963,1963-10-03,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/sauternes-and-barsac/vintage-guide-2-117815/
+sauternes,1976,1976-09-21,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/sauternes-and-barsac/vintage-guide-2-117815/
+sauternes,1990,1990-09-11,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/sauternes-and-barsac/vintage-guide-2-117815/
+sauternes,2004,2004-09-15,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/sauternes-and-barsac/vintage-guide-2-117815/
+sauternes,2011,2011-09-05,reported-start,https://www.bordeauxraisins.fr/images/millesimes/millesime-2011.pdf
+sauternes,2019,2019-10-10,reported-start,https://www.bordeauxraisins.fr/images/millesimes/Millesime_2019_ISVV.pdf

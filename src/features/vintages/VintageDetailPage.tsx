@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
-import { calibrate,eraNormal,grapeExpect,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
-import { BURGUNDY,regionOfVillage } from './regions';
+import { calibrate,eraNormal,grapeExpect,readNobleRot,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
+import { BURGUNDY,harvestArea,pickGrape,regionOfVillage,villageGrapes } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
@@ -34,9 +34,13 @@ export function VintageDetailPage(){
   const [params,setParams]=useSearchParams();
   const village=region.villages.find(item=>item.id===villageParam);
   const year=Number(yearParam);
-  const grapeId:GrapeId=region.grapes.find(item=>item.id===params.get('grape'))?.id??region.defaultGrape;
-  const grape=region.grapes.find(item=>item.id===grapeId)!;
   const {index,village:data,error}=useVintageData(region,village?.id??'meursault');
+  // Only the grapes this place grows (Pauillac: no Sémillon); a grape it does not grow falls back to its blend.
+  const grapes=villageGrapes(region,data?Object.keys(data.normal.grapes):null);
+  const grapeId:GrapeId=pickGrape(grapes,params.get('grape'),region.defaultGrape);
+  const grape=region.grapes.find(item=>item.id===grapeId)!;
+  // A white grape in a red commune keeps its own, earlier harvest dates.
+  const areaId=village?harvestArea(index,village,grape):'';
   const wines=useRegionWines(region);
 
   const season=data?.years[String(year)];
@@ -44,20 +48,20 @@ export function VintageDetailPage(){
   // The normal this page compares with: the standard 30 years, or the 30 seasons around this one.
   const reference=useMemo(()=>{
     if(!index||!data||!village)return null;
-    const harvest=index.harvest[village.area];
+    const harvest=index.harvest[areaId];
     if(baseline==='era'&&data.years[String(year)]){
       const era=eraNormal(data.years,harvest,year);
       return {normal:era.normal,harvest:era.harvest,from:era.from,to:era.to,label:`${era.from}–${era.to}`,short:`’${String(era.from).slice(2)}–’${String(era.to).slice(2)}`};
     }
     return {normal:data.normal,harvest,from:index.baseline.from,to:index.baseline.to,label:`${index.baseline.from}–${index.baseline.to}`,short:`’${String(index.baseline.from).slice(2)}–’${String(index.baseline.to).slice(2)}`};
-  },[index,data,village,baseline,year]);
+  },[index,data,village,areaId,baseline,year]);
   // How far seasons normally stray here, from the standard 30 years whichever normal is shown.
-  const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[village.area],index.baseline.from,index.baseline.to):undefined,[index,data,village]);
+  const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[areaId],index.baseline.from,index.baseline.to):undefined,[index,data,village,areaId]);
   const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest,calibration):null,[reference,season,year,calibration]);
   // The appellation's legal minimum for this grape here; a blend takes its planted mix of them.
   const minSugar=useMemo(()=>{
     const at=(id:GrapeId)=>{const item=region.grapes.find(g=>g.id===id);return item?(item.minSugarAt?.[village?.id??'']??item.minSugar):0};
-    const mix=grape.blend&&village?index?.blends?.[village.id]:undefined;
+    const mix=grape.blend&&village?index?.blends?.[village.id]?.[grapeId]:undefined;
     if(!mix)return at(grapeId);
     return Math.round(Object.entries(mix).reduce((sum,[id,share])=>sum+(share??0)*at(id as GrapeId),0));
   },[region,grape,grapeId,village,index]);
@@ -82,21 +86,30 @@ export function VintageDetailPage(){
   const events=index.events?.[village.area]?.[String(year)]??[];
   const story=seasonStory(season,normal,levels,shift,events);
   // The weather is shared; what it means in the glass depends on the grape shown.
-  const expect=grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect);
+  // In Sauternes and Barsac the vintage turns on noble rot, whichever grape is shown.
+  const nobleRot=grapes.some(item=>item.sweet)?readNobleRot(season,normal):null;
+  const expect=nobleRot?.expect??grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect);
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   // The quality outlook answers "how good": the conditions card below only explains why.
   // A single grape in a blended region reads the blend's outlook: critics rate the wine, not the grape.
-  const outlookGrape:GrapeId=grapeSeason?.outlook?grapeId:season.grapes.blend?.outlook?'blend':grapeId;
+  const outlookGrape:GrapeId=grapeSeason?.outlook?grapeId:grapes.find(item=>item.blend&&item.colour===grape.colour&&season.grapes[item.id]?.outlook)?.id??grapeId;
   const outlook=season.grapes[outlookGrape]?.outlook;
   const qualityModel=index.quality?.grapes[outlookGrape];
-  const consensusGroup=Object.entries(qualityModel?.groups??{}).find(([,areas])=>areas.includes(village.area))?.[0]??qualityModel?.colour??grape.colour;
+  const outlookArea=harvestArea(index,village,region.grapes.find(item=>item.id===outlookGrape)??grape);
+  const consensusGroup=Object.entries(qualityModel?.groups??{}).find(([,areas])=>areas.includes(outlookArea))?.[0]??qualityModel?.colour??grape.colour;
   const qualityCheck=qualityModel?(year>=index.quality!.modernFrom?qualityModel.validation.since:qualityModel.validation.before):null;
+  // Rain over this grape's own picking (Pessac-Léognan's whites come in weeks before its reds).
+  const ownHarvestRain=grapeSeason?.ripening.harvestRain!=null&&normalGrape?.ripening.harvestRain!=null;
+  const harvestRain=ownHarvestRain?grapeSeason!.ripening.harvestRain:season.harvestRain;
+  const normalHarvestRain=ownHarvestRain?Math.round(normalGrape!.ripening.harvestRain!):normal.harvestRain;
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
   const gddPct=(season.gdd-normal.gdd)/normal.gdd,rainPct=(season.rainAprSep-normal.rainAprSep)/normal.rainAprSep,nightDiff=season.augNights-normal.augNights;
   const pickGapText=(gap:number)=>gap>0?`${gap} day${gap===1?'':'s'} before`:gap<0?`${-gap} day${gap===-1?'':'s'} after`:'right at';
-  const blendMix=Object.entries(index.blends?.[village.id]??{}).sort((a,b)=>(b[1]??0)-(a[1]??0))
+  const blendMix=Object.entries(index.blends?.[village.id]?.[grapeId]??{}).sort((a,b)=>(b[1]??0)-(a[1]??0))
     .map(([id,share])=>`${Math.round((share??0)*100)}% ${region.grapes.find(item=>item.id===id)?.name??id}`).join(', ');
+  // Where a place makes both colours, its red blend says so.
+  const grapeName=(item:typeof grape)=>item.id==='blend'&&grapes.some(other=>other.blend&&other.colour==='white')?'Red blend':item.name;
   const setGrape=(id:GrapeId)=>setParams(current=>{const next=new URLSearchParams(current);next.set('grape',id);return next},{replace:true});
 
   return <section className="vintages-page vintage-detail">
@@ -122,15 +135,25 @@ export function VintageDetailPage(){
       </div>
     </header>
 
-    <div className="vintage-grape-toggle" role="group" aria-label="Grape" style={{gridTemplateColumns:`repeat(${region.grapes.length>3?2:region.grapes.length},minmax(0,1fr))`}}>
-      {region.grapes.map(item=><button type="button" key={item.id} className={item.id===grapeId?'active':undefined} aria-pressed={item.id===grapeId} onClick={()=>setGrape(item.id)}>
-        <span className={`vintage-grape-dot is-${item.colour}`} aria-hidden="true"/>{item.name}
+    <div className="vintage-grape-toggle" role="group" aria-label="Grape" style={{gridTemplateColumns:`repeat(${grapes.length>3?2:grapes.length},minmax(0,1fr))`}}>
+      {grapes.map(item=><button type="button" key={item.id} className={item.id===grapeId?'active':undefined} aria-pressed={item.id===grapeId} onClick={()=>setGrape(item.id)}>
+        <span className={`vintage-grape-dot is-${item.colour}`} aria-hidden="true"/>{grapeName(item)}
       </button>)}
     </div>
     {grape.blend&&blendMix&&<p className="vintage-blend-note">Read as {village.name}’s planted mix: {blendMix}.</p>}
 
-    {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={region.grapes.find(item=>item.id===outlookGrape)?.name??grape.name} outlook={outlook} model={index.quality} check={qualityCheck}
+    {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={grapeName(region.grapes.find(item=>item.id===outlookGrape)??grape)} outlook={outlook} model={index.quality} check={qualityCheck}
       consensus={index.quality.consensus[consensusGroup]?.[String(year)]??null}/>}
+
+    {nobleRot&&<section className="vintage-card" aria-labelledby="vintage-noble-title">
+      <h2 id="vintage-noble-title">Noble rot season</h2>
+      <p className="vintage-card-note">From the harvest start to 31 October. Botrytis needs humid spells to set in, then dry days for the berries to shrivel.</p>
+      <div className="vintage-noble-rot">
+        <span className={nobleRot.noble>0?'is-helps':nobleRot.noble<0?'is-hurts':undefined}><strong>{season.nobleRotDays}</strong>noble-rot days<small>usual {Math.round(normal.nobleRotDays??0)}</small></span>
+        <span className={nobleRot.grey>0?'is-hurts':nobleRot.grey<0?'is-helps':undefined}><strong>{season.greyRotDays}</strong>grey-rot days<small>usual {Math.round(normal.greyRotDays??0)}</small></span>
+        <span><strong>{season.botrytisDays}</strong>days Botrytis could spread<small>usual {Math.round(normal.botrytisDays??0)}</small></span>
+      </div>
+    </section>}
 
     {grapeReading&&grapeSeason&&normalGrape&&<section className="vintage-card" aria-labelledby="vintage-harvest-title">
       <h2 id="vintage-harvest-title">At harvest</h2>
@@ -187,8 +210,8 @@ export function VintageDetailPage(){
       <div className="vintage-season-tiles">
         <div><span>Frost days</span><strong>{season.frostDays}</strong><small>usual {normal.frostDays}</small></div>
         <div><span>Days ≥ 30 °C</span><strong>{season.heatDays}</strong><small>usual {normal.heatDays}</small></div>
-        {season.harvestRain!=null&&normal.harvestRain!=null
-          ?<div><span>Harvest rain</span><strong>{season.harvestRain} mm</strong><small>usual {normal.harvestRain}</small></div>
+        {harvestRain!=null&&normalHarvestRain!=null
+          ?<div><span>Harvest rain</span><strong>{harvestRain} mm</strong><small>usual {normalHarvestRain}</small></div>
           :<div><span>Sept rain</span><strong>{season.sepRain} mm</strong><small>usual {normal.sepRain}</small></div>}
       </div>
     </section>

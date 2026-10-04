@@ -1,4 +1,4 @@
-# Critics' consensus quality per vintage (by bank, from bank or commune ratings where given, else Bordeaux as a whole), from
+# Critics' consensus quality per vintage (by group: the reds by bank, dry whites, Sauternes; each from the most specific rating a critic gives, else its whole-Bordeaux row for that colour), from
 # scripts/vintages/pipeline/consensus.py. rating: Decanter-star equivalents, 1 poor ... 5 excellent.
 # sources: the critics averaged that year, each weighted by its agreement with the others.
 year,colour,rating,n_sources,sources
@@ -136,3 +136,136 @@ year,colour,rating,n_sources,sources
 2023,right-bank,3.89,9,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
 2024,right-bank,3.41,5,Berry Bros & Rudd|Decanter|Robert Parker Wine Advocate|The Wine Society|Wine Scholar Guild (Andrew Jefford)
 2025,right-bank,4.51,3,Berry Bros & Rudd|Decanter|Robert Parker Wine Advocate
+1959,dry-white,4.97,2,Guide Hachette des Vins|iDealwine
+1960,dry-white,1.0,2,Guide Hachette des Vins|iDealwine
+1961,dry-white,4.14,2,Guide Hachette des Vins|iDealwine
+1962,dry-white,3.79,2,Guide Hachette des Vins|iDealwine
+1963,dry-white,1.0,1,iDealwine
+1964,dry-white,2.9,2,Guide Hachette des Vins|iDealwine
+1965,dry-white,1.78,2,Guide Hachette des Vins|iDealwine
+1966,dry-white,3.79,2,Guide Hachette des Vins|iDealwine
+1967,dry-white,2.74,2,Guide Hachette des Vins|iDealwine
+1968,dry-white,1.0,1,iDealwine
+1969,dry-white,1.43,2,Guide Hachette des Vins|iDealwine
+1970,dry-white,3.92,2,Guide Hachette des Vins|iDealwine
+1971,dry-white,5.0,2,Guide Hachette des Vins|iDealwine
+1972,dry-white,1.0,2,Guide Hachette des Vins|iDealwine
+1973,dry-white,1.43,1,iDealwine
+1974,dry-white,1.83,1,iDealwine
+1975,dry-white,4.27,2,Guide Hachette des Vins|iDealwine
+1976,dry-white,3.79,2,Guide Hachette des Vins|iDealwine
+1977,dry-white,2.26,2,Guide Hachette des Vins|iDealwine
+1978,dry-white,3.38,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1979,dry-white,3.56,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1980,dry-white,3.52,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1981,dry-white,3.79,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1982,dry-white,4.1,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1983,dry-white,3.85,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1984,dry-white,2.12,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1985,dry-white,3.32,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1986,dry-white,4.23,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1987,dry-white,1.7,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1988,dry-white,4.35,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1989,dry-white,4.64,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1990,dry-white,4.62,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1991,dry-white,1.81,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1992,dry-white,2.2,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1993,dry-white,2.52,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1994,dry-white,3.46,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1995,dry-white,4.58,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1996,dry-white,4.06,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+1997,dry-white,2.71,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+1998,dry-white,2.97,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+1999,dry-white,2.66,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2000,dry-white,4.12,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2001,dry-white,3.75,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2002,dry-white,3.3,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2003,dry-white,2.83,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2004,dry-white,3.47,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2005,dry-white,3.96,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2006,dry-white,3.3,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2007,dry-white,3.85,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2008,dry-white,3.06,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2009,dry-white,4.16,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2010,dry-white,4.61,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2011,dry-white,3.81,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2012,dry-white,3.46,4,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|iDealwine
+2013,dry-white,3.24,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2014,dry-white,4.33,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2015,dry-white,4.16,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2016,dry-white,3.86,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2017,dry-white,3.86,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2018,dry-white,3.67,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2019,dry-white,4.58,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2020,dry-white,4.14,5,Berry Bros & Rudd|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2021,dry-white,4.22,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2022,dry-white,4.13,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2023,dry-white,4.63,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2024,dry-white,3.39,3,Berry Bros & Rudd|Decanter|Wine Scholar Guild (Andrew Jefford)
+2025,dry-white,4.89,1,Berry Bros & Rudd
+1959,sauternes,4.8,3,Guide Hachette des Vins|Wine Spectator|iDealwine
+1960,sauternes,1.0,2,Guide Hachette des Vins|iDealwine
+1961,sauternes,3.4,3,Decanter|Guide Hachette des Vins|iDealwine
+1962,sauternes,3.9,3,Decanter|Guide Hachette des Vins|iDealwine
+1963,sauternes,1.0,2,Decanter|iDealwine
+1964,sauternes,1.35,3,Decanter|Guide Hachette des Vins|iDealwine
+1965,sauternes,1.0,2,Decanter|iDealwine
+1966,sauternes,2.82,3,Decanter|Guide Hachette des Vins|iDealwine
+1967,sauternes,4.57,4,Decanter|Guide Hachette des Vins|Wine Spectator|iDealwine
+1968,sauternes,1.0,2,Decanter|iDealwine
+1969,sauternes,2.2,3,Decanter|Guide Hachette des Vins|iDealwine
+1970,sauternes,3.58,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1971,sauternes,3.73,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1972,sauternes,1.0,2,Decanter|iDealwine
+1973,sauternes,1.89,3,Decanter|Guide Hachette des Vins|iDealwine
+1974,sauternes,1.94,3,Decanter|Guide Hachette des Vins|iDealwine
+1975,sauternes,4.07,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1976,sauternes,3.97,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1977,sauternes,1.0,3,Decanter|Guide Hachette des Vins|iDealwine
+1978,sauternes,2.55,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1979,sauternes,2.98,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1980,sauternes,3.2,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1981,sauternes,3.07,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1982,sauternes,2.45,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1983,sauternes,4.09,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1984,sauternes,1.77,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1985,sauternes,3.06,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1986,sauternes,4.11,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1987,sauternes,2.14,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1988,sauternes,4.51,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1989,sauternes,4.46,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1990,sauternes,4.71,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1991,sauternes,1.95,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1992,sauternes,1.53,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1993,sauternes,1.47,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1994,sauternes,2.59,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1995,sauternes,3.7,5,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1996,sauternes,3.62,6,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1997,sauternes,3.99,6,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1998,sauternes,3.54,6,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1999,sauternes,3.83,6,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+2000,sauternes,3.18,7,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2001,sauternes,4.4,7,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2002,sauternes,3.45,7,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2003,sauternes,4.05,7,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2004,sauternes,3.26,7,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2005,sauternes,4.16,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2006,sauternes,3.81,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2007,sauternes,4.1,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2008,sauternes,3.48,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2009,sauternes,4.48,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2010,sauternes,4.1,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2011,sauternes,4.35,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2012,sauternes,3.31,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2013,sauternes,4.07,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2014,sauternes,4.18,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2015,sauternes,4.37,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2016,sauternes,4.08,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2017,sauternes,4.1,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2018,sauternes,3.92,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2019,sauternes,4.0,7,Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2020,sauternes,3.65,6,Guide Hachette des Vins|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2021,sauternes,4.11,6,Guide Hachette des Vins|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2022,sauternes,4.27,6,Guide Hachette des Vins|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2023,sauternes,4.35,8,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|The Wine Society|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2024,sauternes,3.89,2,The Wine Society|Wine Scholar Guild (Andrew Jefford)

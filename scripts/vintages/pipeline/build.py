@@ -72,7 +72,6 @@ RAIN_FROM = 1997            # COMÉPHORE starts in 1997
 FIRST_SEASON = 1959        # SAFRAN starts on 1 August 1958, so 1959 is the first whole season
 LAPSE = 0.0065              # °C per metre
 GRAPES = REGION['grapes']
-HARVEST_GRAPE = REGION['harvest_grape']
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
 # The measured-sugar shift builds up over this many days after véraison.
@@ -80,6 +79,8 @@ SUGAR_RAMP_DAYS = 20
 SUGAR_GAP_FIT: dict[str, list[float]] = {}
 CURVE_START, CURVE_STEP, CURVE_POINTS = (7, 15), 5, 22  # 15 July to 28 October: early véraison and late harvests (1965: to 25 October) stay on the curve
 AREAS = REGION['areas']
+# Villages read for noble rot (Sauternes and Barsac): those in the region's noble_rot_areas.
+NOBLE_ROT_VILLAGES: set[str] = set()
 
 
 def days(year: int, start: tuple[int, int], end: tuple[int, int]):
@@ -91,7 +92,8 @@ def days(year: int, start: tuple[int, int], end: tuple[int, int]):
 
 
 def load_weather(cache: Path, points: list[dict]):
-    """Per village: {date: {t, tmin, tmax, ssi, rain_safran}} at vineyard elevation, and COMÉPHORE rain."""
+    """Per village: {date: {t, tmin, tmax, ssi, rain_safran, hu}} at vineyard elevation, and COMÉPHORE rain.
+    hu (mean relative humidity, %) is NaN where a cached year predates it."""
     cells = {(c['x'], c['y']) for p in points for c in p['cells']}
     raw: dict[tuple[int, int], dict[dt.date, list[float]]] = {cell: {} for cell in cells}
     for path in sorted(cache.glob('safran_*.csv')):
@@ -100,19 +102,20 @@ def load_weather(cache: Path, points: list[dict]):
                 key = (int(row['x']), int(row['y']))
                 if key in raw:
                     date = dt.datetime.strptime(row['date'], '%Y%m%d').date()
-                    raw[key][date] = [float(row['t']), float(row['tmin']), float(row['tmax']), float(row['ssi']), float(row['rain'])]
+                    raw[key][date] = [float(row['t']), float(row['tmin']), float(row['tmax']), float(row['ssi']), float(row['rain']),
+                                      float(row.get('hu') or 'nan')]
     weather: dict[str, dict[dt.date, dict[str, float]]] = {}
     for point in points:
         dates = set.intersection(*(set(raw[(c['x'], c['y'])]) for c in point['cells']))
         series = {}
         for date in dates:
-            values = [0.0] * 5
+            values = [0.0] * 6
             for cell in point['cells']:
                 shift = LAPSE * (cell['elevation'] - point['vineyardElevation'])
                 v = raw[(cell['x'], cell['y'])][date]
-                for i, value in enumerate([v[0] + shift, v[1] + shift, v[2] + shift, v[3], v[4]]):
+                for i, value in enumerate([v[0] + shift, v[1] + shift, v[2] + shift, v[3], v[4], v[5]]):
                     values[i] += value * cell['weight']
-            series[date] = dict(zip(['t', 'tmin', 'tmax', 'ssi', 'rain_safran'], values))
+            series[date] = dict(zip(['t', 'tmin', 'tmax', 'ssi', 'rain_safran', 'hu'], values))
         weather[point['id']] = series
     rain: dict[str, dict[dt.date, tuple[float, int]]] = defaultdict(dict)
     for path in sorted(cache.glob('rain_*.csv')):
@@ -161,6 +164,36 @@ def first_day(cumulative: list[tuple[dt.date, float]], target: float) -> dt.date
     return next((day for day, value in cumulative if value >= target), None)
 
 
+def botrytis_infection(t: float, hu: float) -> float:
+    """How favourable one day is for Botrytis to spread from berry to berry (0-1): the daily term
+    of González-Domínguez et al. 2015 (PLoS ONE 10:e0140444, eq. 10) for fully susceptible ripe
+    berries, from the day's mean temperature (°C) and mean relative humidity (%)."""
+    teq = min(max(t / 30, 0.0), 1.0)
+    warmth = (7.75 * teq ** 2.14 * (1 - teq)) ** 0.469 if 0 < teq < 1 else 0.0
+    return min(warmth, 1.0) / (1 + math.exp(35.36 - 40.26 * hu / 100))
+
+
+def noble_rot(village: str, year: int, weather, rain, harvest_start: dt.date) -> dict | None:
+    """Sauternes' picking season, from the area's harvest start to 31 October, read for the
+    alternation noble rot needs (Fournier et al. 2013; the Sauternes cahier des charges:
+    "alternance d'humidité nocturne et de ventilation diurne"):
+      nobleRotDays - dry days (under 1 mm, mean humidity under 80 %) that follow, within 5 days,
+                     a day favourable to Botrytis (botrytis_infection 0.5 or more): the fungus has
+                     set in and the berries then dry and concentrate;
+      greyRotDays  - rain days (2 mm or more at a mean of 10 °C or more), when grey rot spreads.
+    The thresholds were set before the outlook was tested and not tuned on it."""
+    series = weather[village]
+    span = [d for d in days(year, (harvest_start.month, harvest_start.day), (10, 31)) if d in series]
+    if not span or any(math.isnan(series[d]['hu']) for d in span):
+        return None
+    rains = {d: rain_on(village, d, weather, rain) or 0.0 for d in span}
+    favourable = [d for d in span if botrytis_infection(series[d]['t'], series[d]['hu']) >= 0.5]
+    noble = sum(1 for d in span if rains[d] < 1 and series[d]['hu'] < 80
+                and any(0 < (d - f).days <= 5 for f in favourable))
+    grey = sum(1 for d in span if rains[d] >= 2 and series[d]['t'] >= 10)
+    return {'nobleRotDays': noble, 'greyRotDays': grey, 'botrytisDays': len(favourable)}
+
+
 def season_weather(village: str, year: int, weather, rain, harvest_start: dt.date | None = None) -> dict | None:
     series = weather[village]
     growing = [series.get(d) for d in days(year, (4, 1), (9, 30))]
@@ -182,6 +215,7 @@ def season_weather(village: str, year: int, weather, rain, harvest_start: dt.dat
         'heatDays': sum(1 for d in growing if d['tmax'] >= 30),
         'sepRain': round(sum(r for r in sep if r is not None)),
         **({'harvestRain': round(sum(r for r in picking_rain if r is not None))} if len(picking_rain) == len(picking) and picking else {}),
+        **((noble_rot(village, year, weather, rain, harvest_start) or {}) if harvest_start and village in NOBLE_ROT_VILLAGES else {}),
     }
 
 
@@ -197,6 +231,9 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
     end = (harvest_start + dt.timedelta(days=7)) if harvest_start else veraison + dt.timedelta(days=45)
     span = [d for d in days(year, (veraison.month, veraison.day), (end.month, end.day)) if d in series]
     rains = [rain_on(village, d, weather, rain) for d in span]
+    # Rain over this grape's own picking: the week before its harvest start and the fortnight from it.
+    picking = [harvest_start + dt.timedelta(days=i) for i in range(-7, 14)] if harvest_start else []
+    picking_rain = [rain_on(village, d, weather, rain) for d in picking if d in series]
     return {
         'veraison': veraison.isoformat(),
         'sugar': {'start': f'{CURVE_START[0]:02d}-{CURVE_START[1]:02d}', 'step': CURVE_STEP, 'values': values},
@@ -210,6 +247,7 @@ def grape_season(village: str, year: int, grape: str, weather, rain, harvest_sta
             'wetDays': sum(1 for d, r in zip(span, rains) if r is not None and r >= 2 and series[d]['t'] >= 10),
             # Daily mean, so a short ripening is not read as a dull one.
             'radiation': round(mean(series[d]['ssi'] for d in span) * .01, 1) if span else 0,
+            **({'harvestRain': round(sum(r for r in picking_rain if r is not None))} if picking and len(picking_rain) == len(picking) else {}),
         },
     }
 
@@ -301,8 +339,8 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
         season['sugarSource'] = source
 
     for grape in GRAPES:
-        if grape in stand_in:
-            continue
+        if grape in stand_in or not any(g == grape for _, g, _ in measured):
+            continue   # not sampled (Bordeaux whites): the curve stays as modelled
         fit_rows = [(climate(a, y), gap) for (a, g, y), gap in measured.items() if g == grape and climate(a, y)]
         x = np.array([[1.0, *features] for features, _ in fit_rows])
         target = np.array([gap for _, gap in fit_rows])
@@ -323,6 +361,8 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
         for village, (_, grapes_by_year) in built.items():
             area = area_of[village]
             for year, grapes in grapes_by_year.items():
+                if grape not in grapes:
+                    continue
                 gap = measured.get((area, grape, year))
                 source = 'measured'
                 if gap is None:
@@ -337,7 +377,9 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
     for grape, others in stand_in.items():
         for village, (_, grapes_by_year) in built.items():
             area = area_of[village]
-            for year in grapes_by_year:
+            for year, grapes in grapes_by_year.items():
+                if grape not in grapes:
+                    continue
                 parts = [applied[(area, o, year)] for o in others]
                 shift(grape, village, year, mean(g for g, _ in parts),
                       'measured' if all(src == 'measured' for _, src in parts) else 'weather')
@@ -350,9 +392,11 @@ def blend_season(parts: list[tuple[float, dict]]) -> dict:
     veraison_day = weighted(lambda s: dt.date.fromisoformat(s['veraison']).toordinal())
     first = parts[0][1]
     ripening = {key: round(weighted(lambda s, k=key: s['ripening'][k]), 2 if key == 'coolNights' else 1)
-                for key in first['ripening']}
+                for key in first['ripening'] if all(key in s['ripening'] for _, s in parts)}
     ripening['heatStressDays'] = round(ripening['heatStressDays'])
     ripening['rain'] = round(ripening['rain'])
+    if 'harvestRain' in ripening:
+        ripening['harvestRain'] = round(ripening['harvestRain'])
     blend = {
         'veraison': dt.date.fromordinal(round(veraison_day)).isoformat(),
         'sugar': {**first['sugar'], 'values': [round(sum(w * s['sugar']['values'][i] for w, s in parts), 1)
@@ -366,14 +410,13 @@ def blend_season(parts: list[tuple[float, dict]]) -> dict:
 
 
 def add_blends(built: dict[str, tuple[dict, dict]]) -> None:
-    """Add a 'blend' grape where the region gives a place's planted mix (region.py blends)."""
+    """Add each blend a place has a planted mix for (region.py blends: red 'blend', 'blend-white', 'blend-sweet')."""
     for village, (_, grapes_by_year) in built.items():
-        shares = {g: w for g, w in REGION['blends'].get(village, {}).items() if g in GRAPES and w > 0}
-        total = sum(shares.values())
-        if not total:
-            continue
-        for grapes in grapes_by_year.values():
-            grapes['blend'] = blend_season([(w / total, grapes[g]) for g, w in shares.items()])
+        for blend, mix in REGION['blends'].get(village, {}).items():
+            shares = {g: w for g, w in mix.items() if g in GRAPES and w > 0}
+            total = sum(shares.values())
+            for grapes in grapes_by_year.values():
+                grapes[blend] = blend_season([(w / total, grapes[g]) for g, w in shares.items()])
 
 
 def vineyard_events() -> dict:
@@ -410,6 +453,7 @@ def main() -> None:
     points = json.loads((DATA / 'points.json').read_text())
     weather, rain = load_weather(ROOT / args.cache, points)
     area_of = {v['id']: v['area'] for v in villages}
+    NOBLE_ROT_VILLAGES.update(v for v, a in area_of.items() if a in REGION.get('noble_rot_areas', ()))
     for point in points:
         village = point['id']
         radar_total = grid_total = 0.0
@@ -447,18 +491,24 @@ def main() -> None:
                 kind = 'reported' if row.get('type') == 'reported-start' else 'official'
                 recorded[(row['area'], int(row['year']))] = (dt.date.fromisoformat(row['date']), kind)
 
+    # Each area's harvest is read from its own grape (region.py harvest_grape), over the
+    # villages that grow it on that area's dates.
+    def area_members(area: str) -> list[str]:
+        grape = region.harvest_grape(area)
+        return [p['id'] for p in points if grape in region.village_grapes(p['id']) and region.grape_area(area_of[p['id']], grape) == area]
+
     def pinot_heat(village: str, year: int):
         return heat_sum(weather[village], year, (4, 1), 0.0, dt.date(year, 10, 31), normal_t[village])
 
-    def pinot_day(village: str, year: int, sugar: float) -> dt.date:
-        target = GRAPES[HARVEST_GRAPE]['sugar200'] + (sugar - 200) / SUGAR_SLOPE
+    def pinot_day(village: str, year: int, sugar: float, area: str) -> dt.date:
+        target = GRAPES[region.harvest_grape(area)]['sugar200'] + (sugar - 200) / SUGAR_SLOPE
         # In the coldest seasons (Chablis 1972) the target is never reached: picking
         # still happened, so the estimate stops at the end of October.
         return first_day(pinot_heat(village, year), target) or dt.date(year, 10, 31)
 
-    def pinot_sugar_on(village: str, year: int, date: dt.date) -> float:
+    def pinot_sugar_on(village: str, year: int, date: dt.date, area: str) -> float:
         heat = dict(pinot_heat(village, year))
-        return 200 + SUGAR_SLOPE * (heat[date] - GRAPES[HARVEST_GRAPE]['sugar200'])
+        return 200 + SUGAR_SLOPE * (heat[date] - GRAPES[region.harvest_grape(area)]['sugar200'])
 
     # Fallback: the sugar level at which the calibration village's 1991-2018 mean
     # estimated start equals its recorded long-run mean (Burgundy: Beaune, Labbé et al. 2019).
@@ -469,7 +519,7 @@ def main() -> None:
         low, high = 170.0, 230.0
         for _ in range(30):
             middle = (low + high) / 2
-            doys = [pinot_day(calibration_village, y, middle).timetuple().tm_yday for y in calibration_years]
+            doys = [pinot_day(calibration_village, y, middle, area_of[calibration_village]).timetuple().tm_yday for y in calibration_years]
             low, high = (middle, high) if mean(doys) < calibration_doy else (low, middle)
         beaune_sugar = (low + high) / 2
 
@@ -482,9 +532,9 @@ def main() -> None:
     picked_at: dict[str, list[float]] = defaultdict(list)
     picked_by_year: dict[str, dict[int, float]] = defaultdict(dict)
     for (area, year), (date, _) in recorded.items():
-        members = [p['id'] for p in points if area_of[p['id']] == area]
+        members = area_members(area)
         if year in years and members:
-            picked_by_year[area][year] = median([pinot_sugar_on(v, year, date) for v in members])
+            picked_by_year[area][year] = median([pinot_sugar_on(v, year, date, area) for v in members])
             picked_at[area].append(picked_by_year[area][year])
     everywhere = [value for values in picked_at.values() for value in values]
     harvest_sugar = {area: median(picked_at[area]) if len(picked_at[area]) >= 3
@@ -510,8 +560,7 @@ def main() -> None:
 
 
     def area_doy(area: str, year: int, sugar: float) -> int:
-        members = [p['id'] for p in points if area_of[p['id']] == area]
-        doys = sorted(pinot_day(v, year, sugar).timetuple().tm_yday for v in members)
+        doys = sorted(pinot_day(v, year, sugar, area).timetuple().tm_yday for v in area_members(area))
         return doys[len(doys) // 2]
 
     def doy(date: dt.date) -> int:
@@ -534,7 +583,8 @@ def main() -> None:
 
     anchor_bias: dict[str, float] = {}
     for area in AREAS:
-        if area == anchor_area:
+        # Anchoring compares two areas at the same sugar, which only means the same thing for the same grape.
+        if area == anchor_area or region.harvest_grape(area) != region.harvest_grape(anchor_area):
             continue
         both = [y for y in years if (area, y) in recorded and (anchor_area, y) in recorded]
         residual = {y: doy(recorded[(area, y)][0]) - doy(recorded[(anchor_area, y)][0]) - model_gap(area, y) for y in both}
@@ -583,7 +633,8 @@ def main() -> None:
             if weather_year is None:
                 continue
             seasons[year] = weather_year
-            grapes_by_year[year] = {g: grape_season(village, year, g, weather, rain, starts.get((area, year)), normal_t[village]) for g in GRAPES}
+            grapes_by_year[year] = {g: grape_season(village, year, g, weather, rain, starts.get((region.grape_area(area, g), year)), normal_t[village])
+                                    for g in region.village_grapes(village) if g in GRAPES}
         built[village] = (seasons, grapes_by_year)
     anchor_sugar_curves(built, area_of)
     add_blends(built)
@@ -601,6 +652,8 @@ def main() -> None:
             'heatDays': round(mean(seasons[y]['heatDays'] for y in base)),
             'sepRain': round(mean(seasons[y]['sepRain'] for y in base_rain)),
             'harvestRain': round(mean(seasons[y]['harvestRain'] for y in base_rain if 'harvestRain' in seasons[y])),
+            **{key: round(mean(seasons[y][key] for y in base if key in seasons[y]), 1)
+               for key in ('nobleRotDays', 'greyRotDays', 'botrytisDays') if any(key in seasons[y] for y in base)},
             'grapes': {},
         }
         for grape in grapes_by_year[base[0]]:
@@ -620,6 +673,8 @@ def main() -> None:
                     'rain': round(mean(ripening_rain)),
                     'wetDays': round(mean(grapes_by_year[y][grape]['ripening']['wetDays'] for y in base_rain), 1),
                     'radiation': round(mean(r['radiation'] for r in ripening), 1),
+                    'harvestRain': round(mean([grapes_by_year[y][grape]['ripening']['harvestRain'] for y in base_rain
+                                               if 'harvestRain' in grapes_by_year[y][grape]['ripening']] or [0])),
                 },
             }
         data = {'normal': normal, 'years': {str(y): {**seasons[y], 'grapes': grapes_by_year[y]} for y in seasons if y >= FIRST_SEASON}}
@@ -639,6 +694,8 @@ def main() -> None:
         'harvest': harvest,
         'events': vineyard_events(),
         **({'blends': REGION['blends']} if REGION['blends'] else {}),
+        # Where a colour keeps its own harvest dates (Pessac-Léognan whites: 'dry-white').
+        **({'colourAreas': REGION['colour_areas']} if REGION.get('colour_areas') else {}),
         'villages': written,
     }
     (OUT / 'index.json').write_text(json.dumps(index, separators=(',', ':')))

@@ -1,4 +1,4 @@
-"""Daily SAFRAN temperature, sunshine and rain for the cells around each village.
+"""Daily SAFRAN temperature, sunshine, rain and humidity for the cells around each village.
 
 Streams one year of Météo-France's SIM2 daily reanalysis (8 km, all of France,
 ~140 MB compressed) and keeps only the cells listed in points.json, so nothing
@@ -7,7 +7,7 @@ large is ever written to disk.
     python scripts/vintages/pipeline/safran.py 2024 [--out cache]
 
 Writes <out>/safran_<year>.csv: cell x, cell y, date, rain (mm), mean, min and
-max temperature (°C), visible radiation (J/cm²).
+max temperature (°C), visible radiation (J/cm²), mean relative humidity (%).
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ import region
 
 ROOT = Path(__file__).resolve().parents[3]
 URL = 'https://meteofrance.s3.sbg.io.cloud.ovh.net/data/REF_CC/SIM/QUOT_SIM2_{year}.csv.gz'
-FIELDS = ['PRELIQ', 'T', 'TINF_H', 'TSUP_H', 'SSI']
+FIELDS = ['PRELIQ', 'T', 'TINF_H', 'TSUP_H', 'SSI', 'HU']
 
 
 def wanted_cells() -> set[tuple[str, str]]:
@@ -50,7 +50,7 @@ def main() -> None:
                 header = next(reader)
                 index = {name: header.index(name) for name in ['LAMBX', 'LAMBY', 'DATE', *FIELDS]}
                 writer = csv.writer(sink)
-                writer.writerow(['x', 'y', 'date', 'rain', 't', 'tmin', 'tmax', 'ssi'])
+                writer.writerow(['x', 'y', 'date', 'rain', 't', 'tmin', 'tmax', 'ssi', 'hu'])
                 for row in reader:
                     if (row[index['LAMBX']], row[index['LAMBY']]) in cells:
                         writer.writerow([row[index['LAMBX']], row[index['LAMBY']], row[index['DATE']],

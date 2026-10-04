@@ -1,6 +1,6 @@
 import { BORDEAUX_VILLAGES } from './bordeauxVillages';
 import { BURGUNDY_VILLAGES } from './burgundyVillages';
-import type { VintageRegionConfig } from './types';
+import type { GrapeId,VintageGrape,VintageIndex,VintageRegionConfig,VintageVillage } from './types';
 
 /**
  * Every region the Vintages page can show. Adding one is a config entry plus a
@@ -29,7 +29,10 @@ export const BURGUNDY:VintageRegionConfig={
   defaultGrape:'chardonnay'
 };
 
-/** The red communes. Each blends its grapes; the page reads the blend unless a grape is chosen. */
+/**
+ * The red communes, Pessac-Léognan's dry whites, and Sauternes and Barsac. Each place blends
+ * its grapes; the page reads the blend unless a grape is chosen.
+ */
 export const BORDEAUX:VintageRegionConfig={
   id:'bordeaux',
   name:'Bordeaux',
@@ -37,21 +40,44 @@ export const BORDEAUX:VintageRegionConfig={
   hemisphere:'north',
   areas:[
     {id:'left-bank',name:'Left bank'},
-    {id:'right-bank',name:'Right bank'}
+    {id:'right-bank',name:'Right bank'},
+    {id:'sauternes',name:'Sauternes & Barsac'},
+    // Pessac-Léognan's white grapes, picked on their own dates; no village sits in it.
+    {id:'dry-white',name:'Dry whites'}
   ],
   villages:BORDEAUX_VILLAGES,
   grapes:[
     // Minimum sugar from each appellation's cahier des charges (INAO): Merlot 189 g/L, other
-    // grapes 180; Saint-Émilion grand cru 194 / 189; Pomerol 194 / 180. A blend takes its mix.
+    // grapes 180; Saint-Émilion grand cru 194 / 189; Pomerol 194 / 180. Pessac-Léognan white:
+    // Sauvignon 187, Sémillon 178. Sauternes and Barsac: 221 for every grape. A blend takes its mix.
     {id:'blend',name:'Blend',ripeSugar:200,minSugar:189,colour:'red',blend:true},
+    {id:'blend-white',name:'White blend',ripeSugar:200,minSugar:183,colour:'white',blend:true},
+    {id:'blend-sweet',name:'Blend',ripeSugar:200,minSugar:221,colour:'white',blend:true,sweet:true},
     {id:'merlot',name:'Merlot',ripeSugar:200,minSugar:189,minSugarAt:{'saint-emilion':194,pomerol:194},colour:'red'},
     {id:'cabernet-sauvignon',name:'Cabernet Sauvignon',ripeSugar:200,minSugar:180,minSugarAt:{'saint-emilion':189},colour:'red'},
-    {id:'cabernet-franc',name:'Cabernet Franc',ripeSugar:200,minSugar:180,minSugarAt:{'saint-emilion':189},colour:'red'}
+    {id:'cabernet-franc',name:'Cabernet Franc',ripeSugar:200,minSugar:180,minSugarAt:{'saint-emilion':189},colour:'red'},
+    {id:'semillon',name:'Sémillon',ripeSugar:200,minSugar:178,minSugarAt:{sauternes:221,barsac:221},colour:'white'},
+    {id:'sauvignon-blanc',name:'Sauvignon Blanc',ripeSugar:200,minSugar:187,minSugarAt:{sauternes:221,barsac:221},colour:'white'}
   ],
   dataDir:'/data/vintages/bordeaux',
   defaultVillage:'pauillac',
   defaultGrape:'blend'
 };
+
+/** The grapes a village is read for: those its data file carries, in the region's order. */
+export function villageGrapes(region:VintageRegionConfig,available:readonly string[]|null):readonly VintageGrape[]{
+  return available?region.grapes.filter(grape=>available.includes(grape.id)):region.grapes;
+}
+
+/** The grape a village opens on: the one asked for if it grows there, else its first blend, else its first grape. */
+export function pickGrape(grapes:readonly VintageGrape[],asked:string|null,fallback:GrapeId):GrapeId{
+  return grapes.find(grape=>grape.id===asked)?.id??grapes.find(grape=>grape.id===fallback)?.id??grapes.find(grape=>grape.blend)?.id??grapes[0]?.id??fallback;
+}
+
+/** Whose harvest dates a grape follows here: its colour's own area where the index sets one. */
+export function harvestArea(index:Pick<VintageIndex,'colourAreas'>|null|undefined,village:VintageVillage,grape:Pick<VintageGrape,'colour'>){
+  return index?.colourAreas?.[grape.colour]?.[village.area]??village.area;
+}
 
 export const VINTAGE_REGIONS:readonly VintageRegionConfig[]=[BURGUNDY,BORDEAUX];
 

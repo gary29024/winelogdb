@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { villageForWine } from '../../src/features/vintages/data';
-import { grapeExpect,isRed,type ConditionsReading } from '../../src/features/vintages/model';
-import { BORDEAUX,BURGUNDY,VINTAGE_REGIONS,regionById,regionOfVillage } from '../../src/features/vintages/regions';
+import { grapeExpect,isRed,readNobleRot,type ConditionsReading } from '../../src/features/vintages/model';
+import { BORDEAUX,BURGUNDY,VINTAGE_REGIONS,harvestArea,pickGrape,regionById,regionOfVillage,villageGrapes } from '../../src/features/vintages/regions';
 
 describe('vintage regions',()=>{
   it('keeps village ids unique across regions, so a village names its region',()=>{
@@ -42,13 +42,48 @@ describe('red and white readings',()=>{
     {id:'rain',icon:'drop',label:'Rot risk',value:'Usual',usual:'',effect:'neutral'},
     {id:'ripeness',icon:'clock',label:'Ripeness',value:'Riper',usual:'',effect:'helps'}
   ]};
-  it('treats the Bordeaux grapes and the blend as reds',()=>{
-    for(const grape of BORDEAUX.grapes)expect(isRed(grape.id)).toBe(true);
+  it('treats the Bordeaux red grapes and the red blend as reds',()=>{
+    for(const grape of BORDEAUX.grapes)expect(isRed(grape.id)).toBe(grape.colour==='red');
     expect(isRed('chardonnay')).toBe(false);
   });
   it('words a hot Bordeaux season for structured reds, not Pinot',()=>{
     const levels={warmth:2,rain:0,nights:0} as const;
     expect(grapeExpect('blend',hot,levels,-15,'shared')).toMatch(/powerful reds/);
     expect(grapeExpect('pinot-noir',hot,levels,-15,'shared')).toMatch(/full reds/);
+  });
+});
+
+describe('Bordeaux whites and Sauternes',()=>{
+  const village=(id:string)=>BORDEAUX.villages.find(item=>item.id===id)!;
+  const grape=(id:string)=>BORDEAUX.grapes.find(item=>item.id===id)!;
+  it('reads only the grapes a place grows, opening on its blend',()=>{
+    const sauternes=villageGrapes(BORDEAUX,['semillon','sauvignon-blanc','blend-sweet']);
+    expect(sauternes.map(item=>item.id)).toEqual(['blend-sweet','semillon','sauvignon-blanc']);
+    expect(pickGrape(sauternes,'merlot',BORDEAUX.defaultGrape)).toBe('blend-sweet');
+    expect(pickGrape(sauternes,'semillon',BORDEAUX.defaultGrape)).toBe('semillon');
+    expect(villageGrapes(BORDEAUX,null)).toBe(BORDEAUX.grapes);
+  });
+  it('keeps the white grapes of a red commune on their own harvest dates',()=>{
+    const index={colourAreas:{white:{'left-bank':'dry-white'}}};
+    expect(harvestArea(index,village('pessac-leognan'),grape('semillon'))).toBe('dry-white');
+    expect(harvestArea(index,village('pessac-leognan'),grape('blend'))).toBe('left-bank');
+    expect(harvestArea(index,village('sauternes'),grape('semillon'))).toBe('sauternes');
+    expect(harvestArea(null,village('pauillac'),grape('merlot'))).toBe('left-bank');
+  });
+  it('places Sauternes and Barsac wines',()=>{
+    const match=(appellation:string)=>villageForWine({appellation,wineName:''},BORDEAUX.villages);
+    expect(match('Sauternes')).toBe('sauternes');
+    expect(match('Barsac')).toBe('barsac');
+  });
+  it('reads the noble-rot season against usual',()=>{
+    const base={gdd:0,rainAprSep:0,augNights:0,frostDays:0,heatDays:0,sepRain:0};
+    const normal={...base,nobleRotDays:6,greyRotDays:11};
+    expect(readNobleRot({...base,nobleRotDays:13,greyRotDays:5},normal)?.expect).toMatch(/concentrated/);
+    expect(readNobleRot({...base,nobleRotDays:1,greyRotDays:18},normal)?.expect).toMatch(/grey rot/);
+    expect(readNobleRot({...base,nobleRotDays:0,greyRotDays:9},normal)?.noble).toBe(-1);
+    expect(readNobleRot(base,normal)).toBeNull();
+  });
+  it('reads the white grapes as whites',()=>{
+    for(const id of ['semillon','sauvignon-blanc','blend-white','blend-sweet'] as const)expect(isRed(id)).toBe(false);
   });
 });
