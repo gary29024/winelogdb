@@ -8,15 +8,17 @@ export type VintageState={index:VintageIndex|null;village:VillageData|null;error
 
 /** The region index and one village's file. The village file reloads when the village changes. */
 export function useVintageData(region:VintageRegionConfig,villageId:string):VintageState{
-  const [index,setIndex]=useState<VintageIndex|null>(null);
+  const [loadedIndex,setIndex]=useState<{region:string;index:VintageIndex}|null>(null);
   const [loaded,setLoaded]=useState<{id:string;data:VillageData}|null>(null);
   const [error,setError]=useState('');
-  useEffect(()=>{let active=true;loadVintageIndex(region).then(result=>{if(active)setIndex(result)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[region]);
+  useEffect(()=>{let active=true;loadVintageIndex(region).then(result=>{if(active)setIndex({region:region.id,index:result})}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[region]);
   useEffect(()=>{
     let active=true;
     loadVillageData(region,villageId).then(data=>{if(active){setLoaded({id:villageId,data});setError('')}}).catch(e=>{if(active)setError((e as Error).message)});
     return()=>{active=false};
   },[region,villageId]);
+  // Switching region must never pair the old region's index with the new region's village.
+  const index=loadedIndex?.region===region.id?loadedIndex.index:null;
   return {index,village:loaded?.id===villageId?loaded.data:null,error};
 }
 
@@ -31,9 +33,15 @@ export function useRegionWines(region:VintageRegionConfig){
   return wines;
 }
 
-const STORAGE_KEY='winelog.vintages.village';
-export function rememberedVillage(){try{return window.localStorage.getItem(STORAGE_KEY)}catch{return null}}
-export function rememberVillage(id:string){try{window.localStorage.setItem(STORAGE_KEY,id)}catch{/* private mode: the URL still carries it */}}
+// Burgundy keeps the original key, so a returning reader still opens on their village.
+const villageKey=(region:string)=>region==='burgundy'?'winelog.vintages.village':`winelog.vintages.village.${region}`;
+const REGION_KEY='winelog.vintages.region';
+export function rememberedVillage(region='burgundy'){try{return window.localStorage.getItem(villageKey(region))}catch{return null}}
+export function rememberRegion(region:string){try{window.localStorage.setItem(REGION_KEY,region)}catch{/* the URL still carries it */}}
+export function rememberedRegion(){try{return window.localStorage.getItem(REGION_KEY)}catch{return null}}
+export function rememberVillage(id:string,region='burgundy'){
+  try{window.localStorage.setItem(villageKey(region),id);window.localStorage.setItem(REGION_KEY,region)}catch{/* private mode: the URL still carries it */}
+}
 
 /** Which normal the page compares with. 1991–2020 unless this visit chose otherwise: the
  * choice lives in the URL, so a shared link keeps it, but a new visit starts on the standard. */

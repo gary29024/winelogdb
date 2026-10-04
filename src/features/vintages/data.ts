@@ -44,9 +44,16 @@ const CRU_VILLAGE:[string,string][]=[
   ['maranges','maranges'],['petit chablis','chablis']
 ];
 
+/**
+ * Neighbouring appellations whose names contain a covered one: a Lalande-de-Pomerol is
+ * not a Pomerol, and a Lussac-Saint-Émilion grows outside the Saint-Émilion vineyard.
+ */
+const SATELLITES=['lalande de pomerol','lussac saint emilion','montagne saint emilion','puisseguin saint emilion','saint georges saint emilion'];
+
 /** Which village's weather a wine belongs to, from its appellation and name; null when it cannot tell. */
 export function villageForWine(wine:Pick<JournalWine,'appellation'|'wineName'>,villages:readonly VintageVillage[]):string|null{
-  const texts=[wine.appellation,wine.wineName].filter((value):value is string=>!!value).map(plain);
+  const texts=[wine.appellation,wine.wineName].filter((value):value is string=>!!value)
+    .map(value=>SATELLITES.reduce((text,name)=>text.replace(name,' '),plain(value)));
   for(const text of texts){
     // Longest village name first, so "Chorey-lès-Beaune" is not read as Beaune.
     const byLength=[...villages].sort((a,b)=>b.name.length-a.name.length);
@@ -62,7 +69,7 @@ export function villageForWine(wine:Pick<JournalWine,'appellation'|'wineName'>,v
 
 export type VintageWine=Pick<JournalWine,'id'|'producer'|'wineName'|'vintage'|'appellation'|'wineStyle'>&{village:string};
 
-/** The reader's Burgundy wines that name a vintage and a village we cover. Read once per visit. */
+/** The reader's wines in this region that name a vintage and a village we cover. Read once per visit. */
 export async function loadRegionWines(region:VintageRegionConfig,signal?:AbortSignal):Promise<VintageWine[]>{
   const wines:VintageWine[]=[];
   const params=new URLSearchParams({region:region.name});

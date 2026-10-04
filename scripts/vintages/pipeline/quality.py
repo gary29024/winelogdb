@@ -44,10 +44,12 @@ from pathlib import Path
 
 import numpy as np
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
-DATA = ROOT / 'scripts/vintages/data'
+DATA = region.config()['data']
 RECORD = DATA / 'outlook_record.csv'
-OUT = ROOT / 'public/data/vintages/burgundy'
+OUT = region.config()['out']
 
 GRAPES = {
     # grape: (critics' colour, appellation minimum sugar g/L, inputs)
@@ -118,6 +120,9 @@ def clamp(score: float) -> float:
 
 
 def main() -> None:
+    if not (DATA / 'critic_consensus.csv').exists():
+        print(f'No critics\' consensus for {region.name()} yet; quality outlook skipped.')
+        return
     index = json.loads((OUT / 'index.json').read_text())
     villages = json.loads((DATA / 'villages.json').read_text())
     area_of = {v['id']: v['area'] for v in villages}

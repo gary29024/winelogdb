@@ -1,0 +1,13 @@
+# Planted mix of the red vineyard, % of area, per appellation. The blend reading weights each
+# grape by these shares (Merlot, Cabernet Sauvignon, Cabernet Franc; "other" - mostly Petit
+# Verdot - is not modelled and the three are rescaled to 100).
+# basis: official = the CIVB (bordeaux.com); appellation = the appellation's own body, as quoted;
+# trade = a trade guide, used where no official breakdown was found. Researched 4 October 2026.
+village,merlot,cabernet-sauvignon,cabernet-franc,other,year,basis,source
+saint-estephe,40,50,7,3,,official,https://www.bordeaux.com/fr/appellations/medoc/saint-estephe/
+pauillac,32,62,4,2,,trade,https://bordeaux.guides.winefolly.com/regions/pauillac/
+saint-julien,28,65,4,3,,trade,https://bordeaux.guides.winefolly.com/regions/saint-julien/
+margaux,35,58,2.5,4.5,2021,appellation,https://www.decanter.com/premium/regional-profile-margaux-482622/
+pessac-leognan,53.4,43.8,2.7,0,,trade,https://bordeaux.guides.winefolly.com/regions/pessac-leognan/
+saint-emilion,79,6,15,0,,trade,https://bordeaux.guides.winefolly.com/regions/saint-emilion/
+pomerol,80,5,15,0,,official,https://www.bordeaux.com/fr/appellations/libournais/pomerol/

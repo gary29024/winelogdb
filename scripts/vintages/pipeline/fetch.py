@@ -15,6 +15,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import region
+
 HERE = Path(__file__).resolve().parent
 SAFRAN_FROM, RAIN_FROM = 1958, 1997
 
@@ -25,7 +27,7 @@ def run(args: list[str]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cache', default='scripts/vintages/cache')
+    parser.add_argument('--cache', default=str(region.config()['cache']))
     args = parser.parse_args()
     cache = Path(args.cache)
     cache.mkdir(parents=True, exist_ok=True)

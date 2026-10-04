@@ -19,13 +19,15 @@ import time
 import urllib.request
 from pathlib import Path
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
 URL = 'https://meteofrance.s3.sbg.io.cloud.ovh.net/data/REF_CC/SIM/QUOT_SIM2_{year}.csv.gz'
 FIELDS = ['PRELIQ', 'T', 'TINF_H', 'TSUP_H', 'SSI']
 
 
 def wanted_cells() -> set[tuple[str, str]]:
-    points = json.loads((ROOT / 'scripts/vintages/data/points.json').read_text())
+    points = json.loads((region.config()['data'] / 'points.json').read_text())
     return {(str(c['x']), str(c['y'])) for p in points for c in p['cells']}
 
 

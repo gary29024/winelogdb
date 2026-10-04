@@ -154,8 +154,10 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 /* The chosen grape names the pointer too, or the hover rule above would blank it. */
 .vintage-grape-toggle button.active,.vintage-grape-toggle button.active:hover:not(:disabled){border:0;background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 3px #10182d1f}
 .vintage-grape-dot{width:9px;height:9px;border-radius:50%}
-.vintage-grape-dot.is-pinot-noir{background:var(--style-red)}
-.vintage-grape-dot.is-chardonnay{background:var(--style-white)}
+.vintage-grape-dot.is-red{background:var(--style-red)}
+.vintage-grape-dot.is-white{background:var(--style-white)}
+.vintage-blend-note{margin:8px 4px 0;color:var(--ink-5);font-size:.8rem;line-height:1.4}
+.vintage-region{margin-top:0;margin-bottom:12px}
 
 /* At harvest */
 .vintage-harvest-boxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 6px}

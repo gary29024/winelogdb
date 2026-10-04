@@ -1,0 +1,57 @@
+# Recorded red-wine harvest starts in Bordeaux: the day red (usually Merlot) picking generally
+# began on each bank. One row per area and year, with the source that states the date.
+#
+# left-bank 1959-1998: Jane Anson, "The Vintages - 1855 onwards", built from the Tastet-Lawton
+# brokerage records ("primarily focused on Médoc wines"). One method for the span, so it wins
+# where a vintage guide gives a different day (1962, 1963, 1997).
+# Left out: dry white and Sauternes starts, single châteaux, "around"/"mid-September" wording,
+# the Saint-Émilion Jurade's ceremonial ban (it no longer signals picking), the Daux et al. 2012
+# Bordeaux composite (an adjusted index, not dates), and starts covering only the earliest plots
+# (right bank 2003). Researched 4 October 2026.
+area,year,date,type,source
+left-bank,1959,1959-09-20,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1960,1960-09-15,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1961,1961-09-17,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1962,1962-10-01,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1963,1963-10-01,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1964,1964-09-21,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1965,1965-09-30,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1966,1966-09-20,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1967,1967-09-25,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1969,1969-09-23,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1970,1970-09-24,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1971,1971-09-27,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1972,1972-10-09,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1974,1974-09-24,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1975,1975-09-22,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1976,1976-09-13,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1977,1977-10-04,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1979,1979-10-01,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1980,1980-10-10,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1981,1981-09-28,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1982,1982-09-13,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1983,1983-09-26,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1984,1984-10-01,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1985,1985-09-25,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1986,1986-09-26,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1987,1987-10-01,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1988,1988-09-28,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1990,1990-09-10,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1991,1991-09-27,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1992,1992-09-24,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1993,1993-09-20,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1994,1994-09-13,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1995,1995-09-13,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1996,1996-09-18,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1997,1997-09-07,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,1998,1998-09-23,reported-start,https://janeanson.com/the-vintages-1855-onwards
+left-bank,2001,2001-09-20,reported-start,https://www.decanter.com/learn/vintage-guides/harvest-reports-2001-51197/
+left-bank,2003,2003-09-08,official-opening,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/medoc-and-graves/vintage-guide-3-117905/
+left-bank,2009,2009-09-22,reported-start,https://www.decanter.com/learn/vintage-guides/2009-vintage-guide-for-bordeaux-260665/
+right-bank,1962,1962-10-09,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
+right-bank,1963,1963-10-10,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
+right-bank,1971,1971-09-16,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
+right-bank,1997,1997-09-03,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
+right-bank,2000,2000-09-14,reported-start,https://www.decanter.com/learn/vintage-guides/bordeaux-vintage-guide/saint-emilion-and-pomerol/vintage-guide-117922/
+right-bank,2001,2001-09-20,reported-start,https://www.decanter.com/learn/vintage-guides/harvest-reports-2001-51197/
+right-bank,2002,2002-09-19,reported-start,https://www.decanter.com/learn/vintage-guides/harvest-reports-2003-51182/

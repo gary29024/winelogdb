@@ -3,8 +3,8 @@ import { Link,useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader';
 import { favouriteVillage } from './data';
 import { SCORE_LABELS,calibrate,closestToTypical,eraNormal,formatDay,readSeason,seasonDay,shiftLabel,shiftTone,type Level,type SeasonReading } from './model';
-import { BURGUNDY,DEFAULT_VILLAGE } from './regions';
-import { rememberVillage,rememberedVillage,useBaseline,useRegionWines,useVintageData } from './useVintages';
+import { BURGUNDY,VINTAGE_REGIONS,regionById,regionOfVillage } from './regions';
+import { rememberRegion,rememberVillage,rememberedRegion,rememberedVillage,useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
 import { BaselineToggle,HowWeEstimate,SampleBadge,ScoreMeter } from './VintageParts';
 import '../../vintages.css';
@@ -26,11 +26,12 @@ function Indicator({kind,level}:{kind:'warmth'|'rain'|'nights';level:Level}){
 const INITIAL_YEARS=12;
 
 export function VintagesPage(){
-  const region=BURGUNDY;
   const [params,setParams]=useSearchParams();
+  // A village in the link names its region; otherwise the region asked for, then the last one used.
+  const region=regionOfVillage(params.get('village'))??regionById(params.get('region'))??regionById(rememberedRegion())??BURGUNDY;
   const wines=useRegionWines(region);
   const known=(id:string|null)=>id&&region.villages.some(village=>village.id===id)?id:null;
-  const villageId=known(params.get('village'))??known(rememberedVillage())??(wines?known(favouriteVillage(wines)):null)??DEFAULT_VILLAGE;
+  const villageId=known(params.get('village'))??known(rememberedVillage(region.id))??(wines?known(favouriteVillage(wines)):null)??region.defaultVillage;
   const village=region.villages.find(item=>item.id===villageId)!;
   const area=region.areas.find(item=>item.id===village.area);
   const {index,village:data,error}=useVintageData(region,villageId);
@@ -57,7 +58,8 @@ export function VintagesPage(){
     return counts;
   },[wines,villageId]);
 
-  const chooseVillage=(id:string)=>{rememberVillage(id);setParams(current=>{const next=new URLSearchParams(current);next.set('village',id);return next},{replace:true})};
+  const chooseVillage=(id:string)=>{rememberVillage(id,region.id);setParams(current=>{const next=new URLSearchParams(current);next.set('village',id);next.delete('region');return next},{replace:true})};
+  const chooseRegion=(id:string)=>{rememberRegion(id);setParams(current=>{const next=new URLSearchParams(current);next.set('region',id);next.delete('village');return next},{replace:true})};
   const typicalHarvest=index?.harvest[village.area]?.typical;
   // When every year in the area is estimated, one note says so instead of a badge on every card.
   const allEstimated=readings.length>0&&readings.every(item=>item.harvest?.source==='estimated');
@@ -70,6 +72,10 @@ export function VintagesPage(){
   return <section className="vintages-page">
     <PageHeader title="Vintages" subtitle={baseline==='era'?'How each season shaped the wine, village by village, against the 30 seasons around it.':`How each season shaped the wine, village by village, against ${baselineLabel}.`}/>
 
+    {VINTAGE_REGIONS.length>1&&<div className="vintage-baseline vintage-region" role="group" aria-label="Region">
+      <span>Region</span>
+      {VINTAGE_REGIONS.map(item=><button type="button" key={item.id} className={item.id===region.id?'active':undefined} aria-pressed={item.id===region.id} onClick={()=>chooseRegion(item.id)}>{item.name}</button>)}
+    </div>}
     <div className="vintage-controls">
       <label>
         <span>Village</span>

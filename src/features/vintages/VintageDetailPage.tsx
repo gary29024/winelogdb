@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link,Navigate,useParams,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';
 import { calibrate,eraNormal,grapeExpect,ripeningSpread,eventDay,formatDay,formatRange,readGrape,readSeason,SCORE_LABELS,seasonDay,seasonHeadline,seasonStory,shiftLabel,shiftTone,signed,type Effect,type Level } from './model';
-import { BURGUNDY } from './regions';
+import { BURGUNDY,regionOfVillage } from './regions';
 import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
@@ -29,12 +29,12 @@ function Diverging({share,kind}:{share:number;kind:'warmth'|'rain'|'nights'}){
 const span=(low:number|string,high:number|string)=>String(low)===String(high)?String(low):`${low}–${high}`;
 
 export function VintageDetailPage(){
-  const region=BURGUNDY;
   const {village:villageParam='',year:yearParam=''}=useParams();
+  const region=regionOfVillage(villageParam)??BURGUNDY;
   const [params,setParams]=useSearchParams();
   const village=region.villages.find(item=>item.id===villageParam);
   const year=Number(yearParam);
-  const grapeId:GrapeId=params.get('grape')==='pinot-noir'?'pinot-noir':'chardonnay';
+  const grapeId:GrapeId=region.grapes.find(item=>item.id===params.get('grape'))?.id??region.defaultGrape;
   const grape=region.grapes.find(item=>item.id===grapeId)!;
   const {index,village:data,error}=useVintageData(region,village?.id??'meursault');
   const wines=useRegionWines(region);
@@ -54,13 +54,20 @@ export function VintageDetailPage(){
   // How far seasons normally stray here, from the standard 30 years whichever normal is shown.
   const calibration=useMemo(()=>index&&data&&village?calibrate(data.years,data.normal,index.harvest[village.area],index.baseline.from,index.baseline.to):undefined,[index,data,village]);
   const reading=useMemo(()=>reference&&season?readSeason(year,season,reference.normal,reference.harvest,calibration):null,[reference,season,year,calibration]);
+  // The appellation's legal minimum for this grape here; a blend takes its planted mix of them.
+  const minSugar=useMemo(()=>{
+    const at=(id:GrapeId)=>{const item=region.grapes.find(g=>g.id===id);return item?(item.minSugarAt?.[village?.id??'']??item.minSugar):0};
+    const mix=grape.blend&&village?index?.blends?.[village.id]:undefined;
+    if(!mix)return at(grapeId);
+    return Math.round(Object.entries(mix).reduce((sum,[id,share])=>sum+(share??0)*at(id as GrapeId),0));
+  },[region,grape,grapeId,village,index]);
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
     // The four ripening drivers are graded against the same reference seasons as everything else.
     const spread=ripeningSpread(data.years,reference!.harvest,grapeId,reference!.from,reference!.to);
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,grape.minSugar,spread);
-  },[reading,season,data,reference,grapeId,year,grape.ripeSugar,grape.minSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,minSugar,spread);
+  },[reading,season,data,reference,grapeId,year,grape.ripeSugar,minSugar]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -81,11 +88,13 @@ export function VintageDetailPage(){
   // The quality outlook answers "how good": the conditions card below only explains why.
   const outlook=grapeSeason?.outlook;
   const qualityModel=index.quality?.grapes[grapeId];
-  const colour=qualityModel?.colour??(grapeId==='pinot-noir'?'red':'white');
+  const colour=qualityModel?.colour??grape.colour;
   const qualityCheck=qualityModel?(year>=index.quality!.modernFrom?qualityModel.validation.since:qualityModel.validation.before):null;
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
   const gddPct=(season.gdd-normal.gdd)/normal.gdd,rainPct=(season.rainAprSep-normal.rainAprSep)/normal.rainAprSep,nightDiff=season.augNights-normal.augNights;
   const pickGapText=(gap:number)=>gap>0?`${gap} day${gap===1?'':'s'} before`:gap<0?`${-gap} day${gap===-1?'':'s'} after`:'right at';
+  const blendMix=Object.entries(index.blends?.[village.id]??{}).sort((a,b)=>(b[1]??0)-(a[1]??0))
+    .map(([id,share])=>`${Math.round((share??0)*100)}% ${region.grapes.find(item=>item.id===id)?.name??id}`).join(', ');
   const setGrape=(id:GrapeId)=>setParams(current=>{const next=new URLSearchParams(current);next.set('grape',id);return next},{replace:true});
 
   return <section className="vintages-page vintage-detail">
@@ -111,11 +120,12 @@ export function VintageDetailPage(){
       </div>
     </header>
 
-    <div className="vintage-grape-toggle" role="group" aria-label="Grape">
+    <div className="vintage-grape-toggle" role="group" aria-label="Grape" style={{gridTemplateColumns:`repeat(${region.grapes.length>3?2:region.grapes.length},minmax(0,1fr))`}}>
       {region.grapes.map(item=><button type="button" key={item.id} className={item.id===grapeId?'active':undefined} aria-pressed={item.id===grapeId} onClick={()=>setGrape(item.id)}>
-        <span className={`vintage-grape-dot is-${item.id}`} aria-hidden="true"/>{item.name}
+        <span className={`vintage-grape-dot is-${item.colour}`} aria-hidden="true"/>{item.name}
       </button>)}
     </div>
+    {grape.blend&&blendMix&&<p className="vintage-blend-note">Read as {village.name}’s planted mix: {blendMix}.</p>}
 
     {outlook&&index.quality&&qualityCheck&&<QualityOutlookCard year={year} grapeName={grape.name} outlook={outlook} model={index.quality} check={qualityCheck}
       consensus={index.quality.consensus[colour]?.[String(year)]??null}/>}
