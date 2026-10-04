@@ -41,6 +41,8 @@ COTE_DE_BEAUNE = {'Auxey Duresses', 'Chassagne Montrachet', 'Meursault', 'Pernan
                   'Saint Romain', 'Santenay', 'Savigny les Beaune', 'Beaune', 'Volnay', 'Aloxe Corton'}
 HAUTES_COTES = {'HCB', 'HCN', 'MAG1', 'NAN', 'N-CHC1'}
 OUTLYING = {'CRM', 'NOL', 'MAS', 'BLI'}
+# Crémant plots are grown for sparkling wine and picked early at low sugar.
+CREMANT = {'CRM', 'CRMS'}
 # Yonne: the Chablisien and Auxerrois; Tonnerre ripens apart.
 CHABLIS_AUXERROIS = {'Beines', 'Chablis', 'Chitry', 'Jussy', 'Maligny', 'Préhy', 'St Bris le Vineux', 'St Cyr les Colons'}
 # Saône-et-Loire: Couches (Couchois) and the Beaujolais plots are left out.
@@ -51,6 +53,8 @@ MACONNAIS = {'Bissy la Maconnaise', 'Blanot', 'Burgy', 'Chaintre', 'Chardonnay',
 
 def area_of(plot: dict) -> str | None:
     commune = plot['c_COMMUNE']
+    if plot['syN_CODE'] in CREMANT:
+        return None
     if plot['deP_LIB'] == 'Yonne':
         return 'chablis-auxerrois' if commune in CHABLIS_AUXERROIS else None
     if plot['deP_LIB'] == 'Saône et Loire':

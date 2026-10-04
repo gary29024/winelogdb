@@ -40,11 +40,11 @@ The Côte de Beaune rows for 1958–2018 are the observed Beaune series of Labb�
 
 ## Measured sugar
 
-`data/bivb_sugar.csv` holds the must sugar the BIVB maturity network measured (maturite.bivb.com, reference and ODG plots): one row per area, grape and sampling date, averaged over the plots sampled that day. It covers the Côte de Nuits, Côte de Beaune and Hautes-Côtes from 1988.
+`data/bivb_sugar.csv` holds the must sugar the BIVB maturity network measured (maturite.bivb.com, reference and ODG plots): one row per area, grape and sampling date, averaged over the plots sampled that day. It covers the Côte de Nuits, Côte de Beaune and Hautes-Côtes from 1988, and Chablis-Auxerrois, the Côte Chalonnaise and the Mâconnais from about 1990. Crémant plots (picked early for sparkling wine), Tonnerre, the Couchois and the Beaujolais plots are left out.
 
 `build.py` shifts each season's modelled sugar curve to these samples. The temperature-only model is close on average but reads low in hot, dry years (2020 Côte de Nuits Pinot noir: about 50 g/L), because it cannot see berries concentrating in drought. Seasons without samples (other areas, years before 1988) get a shift estimated from the season's warmth, rain and year. That estimate is fitted on the measured seasons, and the year is held at 1988 for earlier seasons. Its held-out error is about 10 g/L, against 14 for the model alone. Each grape season records `sugarSource: measured | weather`.
 
-`bivb.py` refreshes the file in the monthly Action, before `build.py`: it downloads every Côte d'Or plot's samples for the current and previous year and replaces those years' rows. If the BIVB site is down, the file is left as it was. To rebuild older years, run `python scripts/vintages/pipeline/bivb.py --years 1988 1989 …`.
+`bivb.py` refreshes the file in the monthly Action, before `build.py`: it downloads every plot's samples for the current and previous year and replaces those years' rows. If the BIVB site is down, the file is left as it was. To rebuild older years, run `python scripts/vintages/pipeline/bivb.py --years 1988 1989 …`.
 
 ## Village list
 
