@@ -2,5 +2,3 @@
 # Bordeaux: by bank) once each season was complete, before critics had rated it
 # (quality.py). Rows are added, never changed: compare them with critic_consensus.csv.
 year,colour,score,low,high,recorded
-2025,red,3.7,3.2,4.2,2026-10-03
-2025,white,3.52,3.08,3.96,2026-10-03

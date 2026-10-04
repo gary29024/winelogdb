@@ -51,14 +51,9 @@ DATA = region.config()['data']
 RECORD = DATA / 'outlook_record.csv'
 OUT = region.config()['out']
 
-GRAPES = {
-    # grape: (critics' colour, appellation minimum sugar g/L, inputs)
-    'pinot-noir': ('red', 180, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'hail']),
-    'chardonnay': ('white', 178, ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity', 'hail']),
-}
+# Per grape: the critics' groups it is fitted on, their areas, the minimum sugar and the inputs (region.py).
+QUALITY = region.config().get('quality', {})
 SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, 'acidity': 1, 'hail': -1}
-# The critics' ratings these villages answer to: they rate the Côte d'Or as a whole.
-FIT_AREAS = {'cote-de-nuits', 'cote-de-beaune'}
 MODERN = 1991
 # Candidate warmth caps, in the warmth input's steps of 10% more heat than normal; None = no cap.
 WARMTH_CAPS = [None, 0.5, 1.0, 1.5]
@@ -119,8 +114,21 @@ def clamp(score: float) -> float:
     return min(max(score, 1.0), 5.0)
 
 
+def min_sugar_for(spec: dict, grape: str, village: str) -> float:
+    """The appellation minimum: a number, or per-grape values with per-village overrides.
+    A blend takes its planted mix of them."""
+    rule = spec['min_sugar']
+    if not isinstance(rule, dict):
+        return float(rule)
+
+    def at(g: str) -> float:
+        return float(rule.get(village, {}).get(g, rule[g]))
+    mix = region.config()['blends'].get(village) if grape == 'blend' else None
+    return sum(share * at(g) for g, share in mix.items()) if mix else at(grape)
+
+
 def main() -> None:
-    if not (DATA / 'critic_consensus.csv').exists():
+    if not (DATA / 'critic_consensus.csv').exists() or not QUALITY:
         print(f'No critics\' consensus for {region.name()} yet; quality outlook skipped.')
         return
     index = json.loads((OUT / 'index.json').read_text())
@@ -150,17 +158,30 @@ def main() -> None:
         area = area_of[village]
         start = dt.date.fromisoformat(index['harvest'][area]['years'][year]['date'])
         events = index.get('events', {}).get(area, {}).get(year, [])
-        return inputs(files[village], year, grape, start, events, GRAPES[grape][1])
+        return inputs(files[village], year, grape, start, events, min_sugar_for(QUALITY[grape], grape, village))
 
+    groups_all = sorted({g for spec in QUALITY.values() for g in spec['groups']})
     quality: dict = {'labels': LABELS, 'modernFrom': MODERN, 'sources': sorted(sources), 'grapes': {},
                      # The consensus itself, shown beside the outlook: rating and how many critics.
-                     'consensus': {c: {str(y): [round(r, 2), counts[(c, y)]] for (cc, y), r in consensus.items() if cc == c} for c in ('red', 'white')}}
-    for grape, (colour, _, names) in GRAPES.items():
-        fit_villages = [v for v in files if area_of[v] in FIT_AREAS]
-        years = sorted(int(y) for y in files[fit_villages[0]]['years'] if (colour, int(y)) in consensus)
-        # The Côte d'Or season: each input averaged over its villages.
-        rows = [{k: st.mean(season_inputs(v, str(y), grape)[k] for v in fit_villages) for k in names} for y in years]
-        target = [consensus[(colour, y)] for y in years]
+                     'consensus': {c: {str(y): [round(r, 2), counts[(c, y)]] for (cc, y), r in consensus.items() if cc == c} for c in groups_all}}
+    for grape, spec in QUALITY.items():
+        groups: dict[str, list[str]] = spec['groups']
+        colour = 'white' if grape == 'chardonnay' else 'red'
+        members = {g: [v for v in files if area_of[v] in areas] for g, areas in groups.items()}
+        group_of = {v: g for g, vs in members.items() for v in vs}
+        fit_villages = [v for vs in members.values() for v in vs]
+        first = fit_villages[0]
+
+        def mean_inputs(vs: list[str], year: str) -> dict[str, float]:
+            return {k: st.mean(season_inputs(v, year, grape)[k] for v in vs) for k in spec['inputs']}
+        # One fitting row per group and rated year: the group's season, each input averaged over its villages.
+        keys = [(g, int(y)) for g in groups for y in files[first]['years'] if (g, int(y)) in consensus]
+        keys.sort(key=lambda k: (k[1], k[0]))
+        rows = [mean_inputs(members[g], str(y)) for g, y in keys]
+        target = [consensus[k] for k in keys]
+        years = [y for _, y in keys]
+        # An input that never varies (no hail on record) carries nothing to fit.
+        names = [n for n in spec['inputs'] if len({round(r[n], 9) for r in rows}) > 1]
 
         def modern_scale(model: dict, sel: list[int], cap: float | None) -> tuple[float, float, float]:
             """Weather moves modern ratings less than it moved older ones: shrink its swing
@@ -179,21 +200,25 @@ def main() -> None:
                 p = mean_t + k * (p - mean_p)
             return p
 
+        def without_year(sel: list[int], i: int) -> list[int]:
+            # Leave the whole year out, every group's row of it, so no bank tests on its own vintage.
+            return [j for j in sel if years[j] != years[i]]
+
         def choose_cap(sel: list[int]) -> float | None:
-            """The warmth cap with the lowest held-out error over these years; no cap on a tie."""
+            """The warmth cap with the lowest held-out error over these rows; no cap on a tie."""
             def error(cap: float | None) -> float:
-                return st.mean(abs(predict_held_out(cap, i, [j for j in sel if j != i]) - target[i]) for i in sel)
+                return st.mean(abs(predict_held_out(cap, i, without_year(sel, i)) - target[i]) for i in sel)
             return min(WARMTH_CAPS, key=lambda cap: (round(error(cap), 6), cap is not None))
 
         held_out = []
-        for i in range(len(years)):
-            train = [j for j in range(len(years)) if j != i]
+        for i in range(len(keys)):
+            train = without_year(list(range(len(keys))), i)
             held_out.append(predict_held_out(choose_cap(train), i, train))
 
         def stats(sel: list[int]) -> dict:
             p, t = [held_out[i] for i in sel], [target[i] for i in sel]
             # The fair comparison: guess the average of the same period's other years.
-            guess = [abs(st.mean(target[j] for j in sel if j != i) - target[i]) for i in sel]
+            guess = [abs(st.mean(target[j] for j in without_year(sel, i)) - target[i]) for i in sel]
             errors = [abs(a - b) for a, b in zip(p, t)]
             return {
                 'years': len(sel),
@@ -206,11 +231,11 @@ def main() -> None:
 
         old = [i for i, y in enumerate(years) if y < MODERN]
         new = [i for i, y in enumerate(years) if y >= MODERN]
-        cap = choose_cap(list(range(len(years))))
+        cap = choose_cap(list(range(len(keys))))
         model = fit([capped(r, cap) for r in rows], target, names)
         modern = modern_scale(model, new, cap)
-        validation = {'before': stats(old), 'since': stats(new), 'all': stats(list(range(len(years))))}
-        quality['grapes'][grape] = {'colour': colour, 'weights': {k: round(w, 3) for k, w in model.items()},
+        validation = {'before': stats(old), 'since': stats(new), 'all': stats(list(range(len(keys))))}
+        quality['grapes'][grape] = {'colour': colour, 'groups': groups, 'weights': {k: round(w, 3) for k, w in model.items()},
                                     'modernScale': round(modern[2], 2), 'warmthCap': cap, 'validation': validation}
         print(f"{grape}: warmth cap {cap}, weights {quality['grapes'][grape]['weights']}")
         for label, s in validation.items():
@@ -219,12 +244,12 @@ def main() -> None:
         # Reasons are measured from the average fitted season, so they say how this year differed.
         typical = {k: st.mean(capped(row, cap)[k] for row in rows) for k in names}
         spread = {'before': validation['before']['spread'], 'since': validation['since']['spread']}
-        held = dict(zip(years, held_out))
+        held = dict(zip(keys, held_out))
         # The outlook is only tested inside the range of seasons it was fitted on. A season
         # beyond it (2026: 44% more heat than normal) is read at the edge of that range and
         # flagged, rather than extrapolated along a straight line.
         tested = {name: (min(vals), max(vals)) for name in names
-                  for vals in [[season_inputs(v, str(y), grape)[name] for v in fit_villages for y in years]]}
+                  for vals in [[season_inputs(v, str(y), grape)[name] for v in fit_villages for y in sorted(set(years))]]}
 
         def bounded(row: dict[str, float]) -> tuple[dict[str, float], list[str]]:
             out, beyond = dict(row), []
@@ -236,15 +261,16 @@ def main() -> None:
                     beyond.append(name)
             return out, beyond
         for village, data in files.items():
+            group = group_of.get(village)
             for year, season in data['years'].items():
                 y = int(year)
                 row, beyond = bounded(season_inputs(village, year, grape))
                 row = capped(row, cap)
-                # Fitted years use their held-out prediction plus this village's difference from the Côte d'Or.
+                # Fitted years use their held-out prediction plus this village's difference from its group.
                 k = modern[2] if y >= MODERN else 1.0
-                if y in held and area_of[village] in FIT_AREAS:
-                    cote = capped(bounded({k_: st.mean(season_inputs(v, year, grape)[k_] for v in fit_villages) for k_ in names})[0], cap)
-                    score = held[y] + k * (predict(model, row) - predict(model, cote))
+                if group and (group, y) in held:
+                    mean_row = capped(bounded(mean_inputs(members[group], year))[0], cap)
+                    score = held[(group, y)] + k * (predict(model, row) - predict(model, mean_row))
                 elif y >= MODERN:
                     score = modern[0] + k * (predict(model, row) - modern[1])
                 else:
@@ -261,28 +287,30 @@ def main() -> None:
                     **({'beyondTested': beyond} if beyond else {}),
                 }
 
-        # Record complete, not-yet-rated seasons once; earlier records are never rewritten.
+        # Record complete, not-yet-rated seasons once per group; earlier records are never rewritten.
         today = dt.date.today()
-        for y in sorted(int(y) for y in files[fit_villages[0]]['years']):
-            if y < MODERN or (colour, y) in consensus or today < dt.date(y, 11, 1) or (colour, y) in recorded:
-                continue
-            cote = capped(bounded({n: st.mean(season_inputs(v, str(y), grape)[n] for v in fit_villages) for n in names})[0], cap)
-            score = modern[0] + modern[2] * (predict(model, cote) - modern[1])
-            recorded[(colour, y)] = {'year': y, 'colour': colour, 'score': round(clamp(score), 2),
-                                     'low': round(clamp(score - spread['since']), 2), 'high': round(clamp(score + spread['since']), 2),
-                                     'recorded': today.isoformat()}
-            print(f'  recorded {y} {colour}: {recorded[(colour, y)]}')
-        checked = [(r, consensus[(colour, y)]) for (c, y), r in recorded.items() if c == colour and (colour, y) in consensus]
-        for r, rating in checked:
-            print(f"  recorded {r['year']} {colour} outlook {r['score']} vs critics {rating:.2f}")
+        for group in groups:
+            for y in sorted(int(y) for y in files[first]['years']):
+                if y < MODERN or (group, y) in consensus or today < dt.date(y, 11, 1) or (group, y) in recorded:
+                    continue
+                mean_row = capped(bounded(mean_inputs(members[group], str(y)))[0], cap)
+                score = modern[0] + modern[2] * (predict(model, mean_row) - modern[1])
+                recorded[(group, y)] = {'year': y, 'colour': group, 'score': round(clamp(score), 2),
+                                        'low': round(clamp(score - spread['since']), 2), 'high': round(clamp(score + spread['since']), 2),
+                                        'recorded': today.isoformat()}
+                print(f'  recorded {y} {group}: {recorded[(group, y)]}')
+        for (group, y), r in sorted(recorded.items()):
+            if group in groups and (group, y) in consensus:
+                print(f"  recorded {y} {group} outlook {r['score']} vs critics {consensus[(group, y)]:.2f}")
         quality['grapes'][grape]['recorded'] = [{**{k: r[k] for k in ('year', 'score', 'low', 'high', 'recorded')},
-                                                 **({'critics': round(consensus[(colour, r['year'])], 2)} if (colour, r['year']) in consensus else {})}
-                                                for (c, _), r in sorted(recorded.items()) if c == colour]
+                                                 **({'critics': round(consensus[(g, r['year'])], 2)} if (g, r['year']) in consensus else {}),
+                                                 **({'group': g} if len(groups) > 1 else {})}
+                                                for (g, _), r in sorted(recorded.items()) if g in groups]
 
     with open(RECORD, 'w', newline='') as out:
-        out.write('# Quality outlooks recorded for the Côte d\'Or once each season was complete, before\n'
-                  '# critics had rated it (quality.py). Rows are added, never changed: compare them with\n'
-                  '# critic_consensus.csv as ratings appear.\n')
+        out.write('# Quality outlooks recorded for each critics\' group (Burgundy: the Côte d\'Or, by colour;\n'
+                  '# Bordeaux: by bank) once each season was complete, before critics had rated it\n'
+                  '# (quality.py). Rows are added, never changed: compare them with critic_consensus.csv.\n')
         writer = csv.DictWriter(out, fieldnames=['year', 'colour', 'score', 'low', 'high', 'recorded'])
         writer.writeheader()
         writer.writerows(r for _, r in sorted(recorded.items(), key=lambda item: (item[0][1], item[0][0])))

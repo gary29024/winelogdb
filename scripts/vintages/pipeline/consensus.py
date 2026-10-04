@@ -22,10 +22,18 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
-OUT = ROOT / 'scripts/vintages/data/critic_consensus.csv'
+OUT = region.config()['data'] / 'critic_consensus.csv'
+# Groups a region's consensus is built for, and for each the chart areas that rate it, best
+# first (rank 0: the group itself or a commune in it; rank 1: the whole region). Burgundy has
+# none: its groups are the two colours, rated for the Côte d'Or where a chart separates it.
+GROUPS: dict[str, dict[str, int]] = region.config().get('consensus_groups', {})
 # Two Decanter tables rate the same vintages: count Decanter once, preferring the vintage guide.
-MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter'}
+MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter',
+         # iDealwine rates Bordeaux as a whole on its chart and by bank in its blog vintage notes.
+         'iDealwine (blog vintage notes)': 'iDealwine'}
 PREFER = ['Decanter (vintage guide)', 'Decanter (en primeur report table)']
 # A single grower's blog, with some scores shared between colours: not a critic's chart.
 EXCLUDE = {'Patrick Essa (degustateurs.pro)'}
@@ -39,13 +47,21 @@ def load(path: str) -> dict[str, dict[tuple[str, int], float]]:
     for r in csv.DictReader(open(path)):
         if r['source'] in EXCLUDE or not r['score']:
             continue
+        if GROUPS:
+            # One row can rate several groups: a whole-Bordeaux rating stands in for either bank.
+            for group, ranks in GROUPS.items():
+                if r['area'] in ranks:
+                    rows[(r['source'], group, int(r['year']))].append({**r, 'rank': ranks[r['area']]})
+            continue
         rows[(r['source'], r['colour'], int(r['year']))].append(r)
     picked: dict[tuple[str, str, int], tuple[int, float]] = {}
     for (source, colour, year), rs in rows.items():
-        best = min(AREA_RANK.get(r['area'], 2) for r in rs)
-        value = st.mean(float(r['score']) for r in rs if AREA_RANK.get(r['area'], 2) == best)
+        rank_of = (lambda r: r['rank']) if GROUPS else (lambda r: AREA_RANK.get(r['area'], 2))
+        best = min(rank_of(r) for r in rs)
+        value = st.mean(float(r['score']) for r in rs if rank_of(r) == best)
         critic = MERGE.get(source, source)
-        rank = PREFER.index(source) if source in PREFER else 0
+        # A merged critic keeps its most specific rating (bank before whole region), then the preferred table.
+        rank = (best, PREFER.index(source) if source in PREFER else 0)
         key = (critic, colour, year)
         if key not in picked or rank < picked[key][0]:
             picked[key] = (rank, value)
@@ -102,12 +118,14 @@ def consensus(scores: dict[tuple[str, int], float]):
 def main() -> None:
     by_colour = load(sys.argv[1])
     with open(OUT, 'w', newline='') as sink:
-        sink.write('# Critics\' consensus quality per vintage (Côte d\'Or where rated, else Burgundy), from\n'
+        scope = 'by bank, from bank or commune ratings where given, else Bordeaux as a whole' if GROUPS \
+            else 'Côte d\'Or where rated, else Burgundy'
+        sink.write(f'# Critics\' consensus quality per vintage ({scope}), from\n'
                    '# scripts/vintages/pipeline/consensus.py. rating: Decanter-star equivalents, 1 poor ... 5 excellent.\n'
                    '# sources: the critics averaged that year, each weighted by its agreement with the others.\n')
         w = csv.writer(sink, lineterminator='\n')
         w.writerow(['year', 'colour', 'rating', 'n_sources', 'sources'])
-        for colour in ('red', 'white'):
+        for colour in (list(GROUPS) or ['red', 'white']):
             rating, members, agreement, weight = consensus(by_colour[colour])
             total = sum(weight.values())
             print(colour, 'critics (correlation with consensus, years, share of weight):')

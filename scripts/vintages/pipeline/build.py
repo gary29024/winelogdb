@@ -242,9 +242,10 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
     fitted on the measured seasons and tested on each one left out.
     """
     samples: dict[tuple[str, str, int], list[tuple[dt.date, float, int]]] = defaultdict(list)
-    if not (DATA / 'bivb_sugar.csv').exists():
+    sugar_file = DATA / REGION.get('measured_sugar', 'bivb_sugar.csv')
+    if not sugar_file.exists():
         return   # no measured sugar for this region yet: the curves stay as modelled
-    with open(DATA / 'bivb_sugar.csv') as source:
+    with open(sugar_file) as source:
         for row in csv.DictReader(line for line in source if not line.startswith('#')):
             samples[(row['area'], row['grape'], int(row['year']))].append(
                 (dt.date.fromisoformat(row['date']), float(row['sugar']), int(row['plots'])))
@@ -267,8 +268,10 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
         normal_rain = mean(season_mean(area, y, 'rainAprSep') for y in base)
         # The gap also drifts upward with time (plant material, picking choices); before the
         # first measured year it is held at that year's level rather than extrapolated.
-        return ((gdd - normal_gdd) / normal_gdd * 100, (rain_total - normal_rain) / normal_rain * 100,
-                (max(year, first_measured) - 2000) / 10)
+        weather = ((gdd - normal_gdd) / normal_gdd * 100, (rain_total - normal_rain) / normal_rain * 100)
+        if not REGION.get('sugar_gap_drift', True):
+            return weather   # too short a measured record to tell a drift from chance
+        return (*weather, (max(year, first_measured) - 2000) / 10)
 
     measured: dict[tuple[str, str, int], float] = {}
     for (area, grape, year), rows in samples.items():
@@ -286,7 +289,20 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
         if sum(weights) >= 3:
             measured[(area, grape, year)] = sum(gaps) / sum(weights)
 
+    stand_in: dict[str, list[str]] = REGION.get('sugar_stand_in', {})
+    applied: dict[tuple[str, str, int], tuple[float, str]] = {}
+
+    def shift(grape: str, village: str, year: int, gap: float, source: str) -> None:
+        season = built[village][1][year][grape]
+        veraison = dt.date.fromisoformat(season['veraison'])
+        season['sugar']['values'] = [
+            round(sugar_ceiling(value + gap * min(max((curve_day(year, i) - veraison).days / SUGAR_RAMP_DAYS, 0.0), 1.0)), 1)
+            for i, value in enumerate(season['sugar']['values'])]
+        season['sugarSource'] = source
+
     for grape in GRAPES:
+        if grape in stand_in:
+            continue
         fit_rows = [(climate(a, y), gap) for (a, g, y), gap in measured.items() if g == grape and climate(a, y)]
         x = np.array([[1.0, *features] for features, _ in fit_rows])
         target = np.array([gap for _, gap in fit_rows])
@@ -313,12 +329,18 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
                     features = climate(area, year)
                     gap = float(coef @ [1.0, *features]) if features else 0.0
                     source = 'weather'
-                season = grapes[grape]
-                veraison = dt.date.fromisoformat(season['veraison'])
-                season['sugar']['values'] = [
-                    round(sugar_ceiling(value + gap * min(max((curve_day(year, i) - veraison).days / SUGAR_RAMP_DAYS, 0.0), 1.0)), 1)
-                    for i, value in enumerate(season['sugar']['values'])]
-                season['sugarSource'] = source
+                applied[(area, grape, year)] = (gap, source)
+                shift(grape, village, year, gap, source)
+
+    # A grape the network does not sample (Bordeaux: Cabernet Franc) takes the mean shift of the
+    # grapes it ripens between; measured only when both of theirs were.
+    for grape, others in stand_in.items():
+        for village, (_, grapes_by_year) in built.items():
+            area = area_of[village]
+            for year in grapes_by_year:
+                parts = [applied[(area, o, year)] for o in others]
+                shift(grape, village, year, mean(g for g, _ in parts),
+                      'measured' if all(src == 'measured' for _, src in parts) else 'weather')
 
 
 def blend_season(parts: list[tuple[float, dict]]) -> dict:
