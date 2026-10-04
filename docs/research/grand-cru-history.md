@@ -29,21 +29,68 @@ release dates remain null.
 | Etalab commune cadastre | All 35 published vintages from 2017-07-06 through the pinned 2026-06-01 geometry, for all 12 INAO communes | Observations of references and geometry, not creation dates |
 | Lieux-dits and rights schema | Twelve current commune resources and the 2025 rights schema | Cadastral context; no automatic crosswalk to named vineyard areas |
 | Regional DVF+ | Complete BFC 2026-1 archive, covering both departments; official open-data catalogue interval 2014-01-01–2025-12-31 | Original deed date; observed dataset/commune dates are reported separately |
-| Administrative notices | Obtained Côte-d'Or departmental 2016–2020 and regional 2019–2026 indexes; page-image-reviewed references only become evidence | Act dates stay separate from bulletin publication years |
+| Administrative notices | Obtained Côte-d'Or departmental 2016–2020 and regional 2019–2026 indexes, plus partial Internet Archive indexes for Côte-d'Or 2004–2015 and Yonne 2008–2026; page-image-reviewed references only become evidence | Act dates stay separate from bulletin publication years; impossible printed dates stay unresolved |
 
 September 2026 cadastre is listed as after the pinned map date. It is not silently
 substituted into the current map. No annual rights release before 2019 or after
 2025 is listed in the pinned catalogue. The inventory discovers dated releases
 rather than imposing those years as permanent bounds.
 
-The [independent notice availability audit](../../scripts/grand-crus/sources/notice-coverage-2026-10-01.json)
+The [independent notice availability audit](../../scripts/grand-crus/sources/notice-coverage-2026-10-04.json)
 locates earlier official publications (Côte-d'Or 2004 and Yonne 2008), records
-failed endpoints and lists unsearched intervals. Neither department's absolute
-earliest notice year is established. All Yonne departmental publication years
-remain unsearched because its archive endpoints could not be obtained; the
-Côte-d'Or regional index is never applied to Yonne. Access failures and unsearched
-years do not establish absence of a record. Search results locate publications;
-they do not stand in for an obtained or reviewed PDF.
+failed endpoints, the archived captures actually obtained, and the remaining
+unsearched intervals. Neither department's absolute earliest notice year is
+established. The Côte-d'Or regional index is never applied to Yonne. Access
+failures, missing captures and unsearched years do not establish absence of a
+record. Search results locate publications; they do not stand in for an obtained
+or reviewed PDF.
+
+The [2 October acquisition retry](../../scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json)
+queued Côte-d'Or 2004–2015 and Yonne 2008–2026 independently in the shared archive.
+One annual listing and one located PDF were requested per department; all four
+connections closed without a response. The remaining 29 annual paths were deferred
+by the persistent host cooldown and remain unattempted discovery targets. No new
+listing, PDF, extracted page or image-reviewed notice was obtained. HTTP/1.1,
+alternate official URL forms, web fetch and the in-app browser also failed.
+The 1 October inventory and availability audit remain unchanged.
+
+The same day, the earlier bulletins were obtained instead from [Internet Archive
+captures](earlier-bulletins/README.md) of the official prefecture URLs. The live
+hosts refused every connection, including from a French exit. The raw captured bytes are stored
+under their original official URLs, with the exact capture recorded. Coverage is
+partial and uneven: Côte-d'Or yielded 105 PDFs (5,929 pages) across 2004–2006, 2008,
+2010, 2011, 2013 and 2015, with nothing for 2007, 2009, 2012 or 2014. Yonne yielded
+1,202 PDF source URLs (36,183 pages) for every year 2008–2026, but 1,286 queued URLs
+remained missing or unusable. Every page was text-extracted or OCRed and searched for each Grand Cru
+commune, its climats and reachable references. The pages that print a candidate
+parcel were then read as page images:
+
+- Côte-d'Or: eight farm-structure decisions dated 2009–2013 print parcel references in
+  Grand Cru communes (58 rows). Before 2009 the decisions name communes and areas
+  only; twelve of these are kept as commune-level context, never parcel evidence.
+  Two decisions print impossible dates ("15 février 203"; "3 décembre 2013" in a
+  bulletin of 31 January 2013). Their act date stays null, and their direct and
+  ancestor matches are withheld as `notice-act-date-unresolved` rather than corrected.
+- Yonne: no farm-structure decision prints a Chablis parcel reference. Two aerial-spraying
+  derogations for Soufflet Vigne (DDT/SEEP/2012/0018 and 2013/0011) list Chablis
+  Grand Cru parcels by section, number, lieu-dit and surface. Their annex rows are
+  parsed from the text layer and must reproduce the image-read printed totals. A
+  derogation is a treatment authorisation: it never establishes ownership, a lease
+  or who farmed a parcel.
+
+All 33 notice histories, registers and lazy evidence files were regenerated with
+these indexes and the dated archive-acquisition audit, retaining every earlier reviewed
+record and coverage gap.
+
+The [4 October retry and rebuild](earlier-bulletins/retry-report-2026-10-04.json)
+rechecked 1,406 missing URLs and recovered 55 source URLs representing 37 new
+distinct PDFs. Exact capture timestamps and original URL spellings recovered files
+whose nearest-capture requests had failed. The rebuilt earlier indexes now contain
+111 Côte-d'Or and 1,251 Yonne PDF source URLs, with 44,752 fully extracted pages
+and no pending or failed OCR pages. Byte-identical aliases retain separate source
+citations. There are still 1,351 unresolved URLs. The updated coverage audit and
+all 33 notice histories retain the existing image-reviewed parcel readings; new
+search candidates are not automatically promoted to reviewed evidence.
 
 ## Correspondence and evidence rules
 
@@ -108,6 +155,29 @@ identities fail visibly rather than rewriting provenance. On a fresh cache the
 URLs are fetched again and new retrieval times must be reviewed; reproducing
 historical retrieval times requires preserving the original cache metadata.
 
+Resume the earlier departmental queue without resetting its cooldowns:
+
+```sh
+python scripts/pull_grand_cru_notice_bulletins.py --limit 10
+```
+
+Use `--departments 21` or `--departments 89` for one department. The default mutable
+report is `.tmp/bulletin-archive/manifests/grand-cru-earlier-notices.json`; preserve a
+new dated snapshot after reviewing any successful acquisition. Saved annual HTML
+supplies linked PDFs, but child listings, missing publications and the meaning of
+each year still require review. Only new indexes and source-page image readings
+can expand obtained notice coverage. Do not apply the existing Côte-d'Or indexes
+to Yonne, or overwrite either pinned catalogue date when resuming this queue.
+
+While the live hosts stay unreachable, the archived captures are the reproducible
+route. See the [earlier-bulletin README](earlier-bulletins/README.md) for each step:
+
+```sh
+python scripts/pull_wayback_bulletins.py pull --sources docs/research/earlier-bulletins/sources.json
+python scripts/build_earlier_bulletin_reviews.py --department cote-dor --check
+python scripts/build_earlier_bulletin_reviews.py --department yonne --check
+```
+
 The rollout command uses local pinned inputs only. It checks current parcel
 assets once per bundle, then each cru's rights, sales, notice history, register
 and app evidence. Finally it checks the generated app registry and independently
@@ -122,7 +192,7 @@ The register and app evidence can be checked in CI without raw downloads:
 python scripts/build_grand_cru_research.py --all --check
 python scripts/build_grand_cru_app_registry.py --check
 cd scripts
-python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout
+python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins
 ```
 
 For a new catalogue date, run the source inventory with a fresh `--stamp`, review

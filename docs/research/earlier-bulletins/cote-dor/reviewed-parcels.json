@@ -1,0 +1,1618 @@
+{
+ "schemaVersion": 2,
+ "purpose": "Image-reviewed historical parcel evidence from Internet Archive captures of earlier departmental bulletins. Never proof of actual or current farming. Sources hold decision-level area and scope; parcels hold one row per decision and printed reference.",
+ "normalization": "Shared sections carry forward within a printed commune group; numbers are padded to four digits. Lettered sub-parcels and slash pairs keep reference null. Textual normalization only, not a verified crosswalk to current cadastral geometry.",
+ "dateRoles": {
+  "documentDate": "Signature date as printed; null when the printed date is impossible or incomplete.",
+  "printedDate": "Exactly as printed.",
+  "publicationDate": "Bulletin date."
+ },
+ "sources": [
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_005.pdf",
+   "sha256": "41a12c123830845f2b371244999b2f6f8c40632e621ccb0e3a93ee16a5db8e4b",
+   "bulletin": "RAA n° 5, 28 janvier 2010",
+   "publicationDate": "2010-01-28",
+   "noticePages": [
+    82
+   ],
+   "evidencePages": [
+    82
+   ],
+   "printedDate": "16 décembre 2009",
+   "documentDate": "2009-12-16",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "status": "authorised",
+   "printedNoticeArea": "1 ha 65 a 18 ca",
+   "totalNoticeAreaHa": 1.6518,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21512",
+     "printedCommune": "PULIGNY MOONTRACHET",
+     "printedReferences": "AB 137, 138"
+    },
+    {
+     "communeCode": "21541",
+     "printedCommune": "SAINT AUBIN",
+     "printedReferences": "A 248, 1365/1366, 1819/1820; D 246/247, 291/292, 1509, 1952"
+    }
+   ],
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named.",
+   "title": "RAA n° 5, 28 janvier 2010: SCEA DOMAINE BOHRMANN (16 décembre 2009, Internet Archive capture)",
+   "parcelCount": 9,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:eugenie",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_005.pdf",
+   "sha256": "41a12c123830845f2b371244999b2f6f8c40632e621ccb0e3a93ee16a5db8e4b",
+   "bulletin": "RAA n° 5, 28 janvier 2010",
+   "publicationDate": "2010-01-28",
+   "noticePages": [
+    82
+   ],
+   "evidencePages": [
+    82
+   ],
+   "printedDate": "24 décembre 2009",
+   "documentDate": "2009-12-24",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+   "status": "authorised",
+   "printedNoticeArea": "0 ha 18 a 80 ca",
+   "totalNoticeAreaHa": 0.188,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21088",
+     "printedCommune": "BONCOURT LE BOIS",
+     "printedReferences": "A 212"
+    },
+    {
+     "communeCode": "21714",
+     "printedCommune": "VOSNE ROMANEE",
+     "printedReferences": "AB 100"
+    }
+   ],
+   "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100.",
+   "title": "RAA n° 5, 28 janvier 2010: SCEA DOMAINE EUGENIE (24 décembre 2009, Internet Archive capture)",
+   "parcelCount": 2,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+   "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+   "bulletin": "RAA n° 22, 1er juin 2010",
+   "publicationDate": "2010-06-01",
+   "noticePages": [
+    49
+   ],
+   "evidencePages": [
+    49
+   ],
+   "printedDate": "23 avril 2010",
+   "documentDate": "2010-04-23",
+   "applicant": "HOSPICES DE BEAUNE",
+   "previousOperator": null,
+   "operatorInPlace": "EARL CONFURON-COTETIDOT à VOSNE-ROMANEE",
+   "status": "refused",
+   "printedNoticeArea": "39 a 30 ca",
+   "totalNoticeAreaHa": 0.393,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21295",
+     "printedCommune": "GEVREY-CHAMBERTIN",
+     "printedReferences": "BN 40, 75",
+     "printedAs": "BN 40-75"
+    }
+   ],
+   "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator.",
+   "title": "RAA n° 22, 1er juin 2010: HOSPICES DE BEAUNE (23 avril 2010, Internet Archive capture)",
+   "parcelCount": 2,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+   "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+   "bulletin": "RAA n° 22, 1er juin 2010",
+   "publicationDate": "2010-06-01",
+   "noticePages": [
+    49,
+    50
+   ],
+   "evidencePages": [
+    49,
+    50
+   ],
+   "printedDate": "23 avril 2010",
+   "documentDate": "2010-04-23",
+   "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+   "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+   "status": "authorised",
+   "printedNoticeArea": "28 a 13 ca",
+   "totalNoticeAreaHa": 0.2813,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21295",
+     "printedCommune": "GEVREY-CHAMBERTIN",
+     "printedReferences": "BP 255, 258",
+     "printedAs": "BP 255-258"
+    }
+   ],
+   "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50.",
+   "title": "RAA n° 22, 1er juin 2010: HOSPICES DE NUITS SAINT GEORGES (23 avril 2010, Internet Archive capture)",
+   "parcelCount": 2,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p50:bachelet",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+   "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+   "bulletin": "RAA n° 22, 1er juin 2010",
+   "publicationDate": "2010-06-01",
+   "noticePages": [
+    50,
+    51
+   ],
+   "evidencePages": [
+    50,
+    51
+   ],
+   "printedDate": "28 avril 2010",
+   "documentDate": "2010-04-28",
+   "applicant": "EARL BACHELET Vincent",
+   "previousOperator": "DOMAINE René TARDY & Fils à NUITS-SAINT-GEORGES",
+   "status": "authorised",
+   "printedNoticeArea": "38,86 ares",
+   "totalNoticeAreaHa": 0.3886,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21512",
+     "printedCommune": "PULIGNY-MONTRACHET",
+     "printedReferences": "AP 145"
+    }
+   ],
+   "note": "Heading on page 50, Article 1 on page 51. Single printed reference.",
+   "title": "RAA n° 22, 1er juin 2010: EARL BACHELET Vincent (28 avril 2010, Internet Archive capture)",
+   "parcelCount": 1,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011.pdf",
+   "sha256": "a8dd9b630ca489a518a69e70700ef65c06bbc487b501b3b137bae333c1ce6bb7",
+   "bulletin": "RAA n° 11, 31 mars 2011",
+   "publicationDate": "2011-03-31",
+   "noticePages": [
+    55
+   ],
+   "evidencePages": [
+    55
+   ],
+   "printedDate": "21 février 2011",
+   "documentDate": "2011-02-21",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "status": "authorised",
+   "printedNoticeArea": "5ha 93a",
+   "totalNoticeAreaHa": 5.93,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21110",
+     "printedCommune": "BROCHON",
+     "printedReferences": "AC 1, 2; AD 14, 34j, 38; AL 43, 116, 129, 153, 161; AM 39, 42, 80, 157, 160"
+    },
+    {
+     "communeCode": "21133",
+     "printedCommune": "CHAMBOLLE MUSIGNY",
+     "printedReferences": "AH 19, 241, 243"
+    },
+    {
+     "communeCode": "21295",
+     "printedCommune": "GEVREY CHAMBERTIN",
+     "printedReferences": "AD 8, 61, 62, 63, 107, 116, 121, 138; AK 106; BI 146; BR 134, 135, 152; AL 162"
+    }
+   ],
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes.",
+   "title": "RAA n° 11, 31 mars 2011: SARL CLUNY Hervé (21 février 2011, Internet Archive capture)",
+   "parcelCount": 32,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011-2.pdf",
+   "sha256": "73fc0216cd5921b63ff73091eac966474caa9ec831a67e7382083f69f352a14a",
+   "bulletin": "RAA n° 11, 2 avril 2013",
+   "publicationDate": "2013-04-02",
+   "noticePages": [
+    43
+   ],
+   "evidencePages": [
+    43
+   ],
+   "printedDate": "15 février 203",
+   "documentDate": null,
+   "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+   "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+   "status": "authorised",
+   "printedNoticeArea": "16ha 42a 90ca",
+   "totalNoticeAreaHa": 16.429,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21480",
+     "printedCommune": "PERNAND VERGELESSES",
+     "printedReferences": "C 8, 16"
+    },
+    {
+     "communeCode": "21590",
+     "printedCommune": "SAVIGNY LES BEAUNE",
+     "printedReferences": "D 41, 147"
+    }
+   ],
+   "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references.",
+   "title": "RAA n° 11, 2 avril 2013: SCEA DOMAINE DE LA VIGNE AU ROY (15 février 203, Internet Archive capture)",
+   "parcelCount": 4,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_004-2.pdf",
+   "sha256": "2764d2ef68c50dd4fe2e3179aff5e17066245a3692c57cf684e4e85858128622",
+   "bulletin": "RAA n° 4, 31 janvier 2013",
+   "publicationDate": "2013-01-31",
+   "noticePages": [
+    60
+   ],
+   "evidencePages": [
+    60
+   ],
+   "printedDate": "3 décembre 2013",
+   "documentDate": null,
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "status": "authorised",
+   "printedNoticeArea": "0ha 40a 56ca",
+   "totalNoticeAreaHa": 0.4056,
+   "landScope": "vineyard",
+   "operation": "takeover",
+   "parcelGroups": [
+    {
+     "communeCode": "21150",
+     "printedCommune": "CHASSAGNE MONTRACHET",
+     "printedReferences": "AE 135, 172; AH 217, 218"
+    },
+    {
+     "communeCode": "21412",
+     "printedCommune": "MEURSAULT",
+     "printedReferences": "BN 5, 6"
+    }
+   ],
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes.",
+   "title": "RAA n° 4, 31 janvier 2013: SCEA DOMAINE EUGENIE (3 décembre 2013, Internet Archive capture)",
+   "parcelCount": 6,
+   "currentFarmerVerified": false,
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "areaScope": "Whole decision across all listed parcels; not a per-parcel or cadastral area."
+  }
+ ],
+ "parcels": [
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21512",
+   "printedCommune": "PULIGNY MOONTRACHET",
+   "printedReference": "AB 137",
+   "reference": "AB0137",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21512",
+   "printedCommune": "PULIGNY MOONTRACHET",
+   "printedReference": "AB 138",
+   "reference": "AB0138",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "A 248",
+   "reference": "A0248",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "A 1365/1366",
+   "reference": null,
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "A 1819/1820",
+   "reference": null,
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "D 246/247",
+   "reference": null,
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "D 291/292",
+   "reference": null,
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "D 1509",
+   "reference": "D1509",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:bohrmann",
+   "actId": null,
+   "documentDate": "2009-12-16",
+   "printedDate": "16 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE BOHRMANN",
+   "previousOperator": null,
+   "communeCode": "21541",
+   "printedCommune": "SAINT AUBIN",
+   "printedReference": "D 1952",
+   "reference": "D1952",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:eugenie",
+   "actId": null,
+   "documentDate": "2009-12-24",
+   "printedDate": "24 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+   "communeCode": "21088",
+   "printedCommune": "BONCOURT LE BOIS",
+   "printedReference": "A 212",
+   "reference": "A0212",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100."
+  },
+  {
+   "noticeId": "cote-dor-2010-005:p82:eugenie",
+   "actId": null,
+   "documentDate": "2009-12-24",
+   "printedDate": "24 décembre 2009",
+   "publicationDate": "2010-01-28",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+   "communeCode": "21714",
+   "printedCommune": "VOSNE ROMANEE",
+   "printedReference": "AB 100",
+   "reference": "AB0100",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    82
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+   "actId": null,
+   "documentDate": "2010-04-23",
+   "printedDate": "23 avril 2010",
+   "publicationDate": "2010-06-01",
+   "applicant": "HOSPICES DE BEAUNE",
+   "previousOperator": null,
+   "communeCode": "21295",
+   "printedCommune": "GEVREY-CHAMBERTIN",
+   "printedReference": "BN 40",
+   "reference": "BN0040",
+   "status": "refused",
+   "areaHa": null,
+   "sourcePages": [
+    49
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+   "actId": null,
+   "documentDate": "2010-04-23",
+   "printedDate": "23 avril 2010",
+   "publicationDate": "2010-06-01",
+   "applicant": "HOSPICES DE BEAUNE",
+   "previousOperator": null,
+   "communeCode": "21295",
+   "printedCommune": "GEVREY-CHAMBERTIN",
+   "printedReference": "BN 75",
+   "reference": "BN0075",
+   "status": "refused",
+   "areaHa": null,
+   "sourcePages": [
+    49
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+   "actId": null,
+   "documentDate": "2010-04-23",
+   "printedDate": "23 avril 2010",
+   "publicationDate": "2010-06-01",
+   "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+   "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY-CHAMBERTIN",
+   "printedReference": "BP 255",
+   "reference": "BP0255",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    49,
+    50
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+   "actId": null,
+   "documentDate": "2010-04-23",
+   "printedDate": "23 avril 2010",
+   "publicationDate": "2010-06-01",
+   "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+   "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY-CHAMBERTIN",
+   "printedReference": "BP 258",
+   "reference": "BP0258",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    49,
+    50
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50."
+  },
+  {
+   "noticeId": "cote-dor-2010-022:p50:bachelet",
+   "actId": null,
+   "documentDate": "2010-04-28",
+   "printedDate": "28 avril 2010",
+   "publicationDate": "2010-06-01",
+   "applicant": "EARL BACHELET Vincent",
+   "previousOperator": "DOMAINE René TARDY & Fils à NUITS-SAINT-GEORGES",
+   "communeCode": "21512",
+   "printedCommune": "PULIGNY-MONTRACHET",
+   "printedReference": "AP 145",
+   "reference": "AP0145",
+   "status": "authorised",
+   "areaHa": 0.3886,
+   "sourcePages": [
+    50,
+    51
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Heading on page 50, Article 1 on page 51. Single printed reference."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AC 1",
+   "reference": "AC0001",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AC 2",
+   "reference": "AC0002",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AD 14",
+   "reference": "AD0014",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AD 34j",
+   "reference": null,
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AD 38",
+   "reference": "AD0038",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AL 43",
+   "reference": "AL0043",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AL 116",
+   "reference": "AL0116",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AL 129",
+   "reference": "AL0129",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AL 153",
+   "reference": "AL0153",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AL 161",
+   "reference": "AL0161",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AM 39",
+   "reference": "AM0039",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AM 42",
+   "reference": "AM0042",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AM 80",
+   "reference": "AM0080",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AM 157",
+   "reference": "AM0157",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21110",
+   "printedCommune": "BROCHON",
+   "printedReference": "AM 160",
+   "reference": "AM0160",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21133",
+   "printedCommune": "CHAMBOLLE MUSIGNY",
+   "printedReference": "AH 19",
+   "reference": "AH0019",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21133",
+   "printedCommune": "CHAMBOLLE MUSIGNY",
+   "printedReference": "AH 241",
+   "reference": "AH0241",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21133",
+   "printedCommune": "CHAMBOLLE MUSIGNY",
+   "printedReference": "AH 243",
+   "reference": "AH0243",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 8",
+   "reference": "AD0008",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 61",
+   "reference": "AD0061",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 62",
+   "reference": "AD0062",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 63",
+   "reference": "AD0063",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 107",
+   "reference": "AD0107",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 116",
+   "reference": "AD0116",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 121",
+   "reference": "AD0121",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AD 138",
+   "reference": "AD0138",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AK 106",
+   "reference": "AK0106",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "BI 146",
+   "reference": "BI0146",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "BR 134",
+   "reference": "BR0134",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "BR 135",
+   "reference": "BR0135",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "BR 152",
+   "reference": "BR0152",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2011-011:p55:cluny",
+   "actId": null,
+   "documentDate": "2011-02-21",
+   "printedDate": "21 février 2011",
+   "publicationDate": "2011-03-31",
+   "applicant": "SARL CLUNY Hervé",
+   "previousOperator": "M. CLUNY Hervé à BROCHON",
+   "communeCode": "21295",
+   "printedCommune": "GEVREY CHAMBERTIN",
+   "printedReference": "AL 162",
+   "reference": "AL0162",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    55
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "15 février 203",
+   "publicationDate": "2013-04-02",
+   "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+   "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+   "communeCode": "21480",
+   "printedCommune": "PERNAND VERGELESSES",
+   "printedReference": "C 8",
+   "reference": "C0008",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    43
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references."
+  },
+  {
+   "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "15 février 203",
+   "publicationDate": "2013-04-02",
+   "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+   "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+   "communeCode": "21480",
+   "printedCommune": "PERNAND VERGELESSES",
+   "printedReference": "C 16",
+   "reference": "C0016",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    43
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references."
+  },
+  {
+   "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "15 février 203",
+   "publicationDate": "2013-04-02",
+   "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+   "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+   "communeCode": "21590",
+   "printedCommune": "SAVIGNY LES BEAUNE",
+   "printedReference": "D 41",
+   "reference": "D0041",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    43
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references."
+  },
+  {
+   "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "15 février 203",
+   "publicationDate": "2013-04-02",
+   "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+   "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+   "communeCode": "21590",
+   "printedCommune": "SAVIGNY LES BEAUNE",
+   "printedReference": "D 147",
+   "reference": "D0147",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    43
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21150",
+   "printedCommune": "CHASSAGNE MONTRACHET",
+   "printedReference": "AE 135",
+   "reference": "AE0135",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21150",
+   "printedCommune": "CHASSAGNE MONTRACHET",
+   "printedReference": "AE 172",
+   "reference": "AE0172",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21150",
+   "printedCommune": "CHASSAGNE MONTRACHET",
+   "printedReference": "AH 217",
+   "reference": "AH0217",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21150",
+   "printedCommune": "CHASSAGNE MONTRACHET",
+   "printedReference": "AH 218",
+   "reference": "AH0218",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21412",
+   "printedCommune": "MEURSAULT",
+   "printedReference": "BN 5",
+   "reference": "BN0005",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  },
+  {
+   "noticeId": "cote-dor-2013-004:p60:eugenie",
+   "actId": null,
+   "documentDate": null,
+   "printedDate": "3 décembre 2013",
+   "publicationDate": "2013-01-31",
+   "applicant": "SCEA DOMAINE EUGENIE",
+   "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+   "communeCode": "21412",
+   "printedCommune": "MEURSAULT",
+   "printedReference": "BN 6",
+   "reference": "BN0006",
+   "status": "authorised",
+   "areaHa": null,
+   "sourcePages": [
+    60
+   ],
+   "reviewedAt": "2026-10-02",
+   "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+   "currentFarmerVerified": false,
+   "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+  }
+ ]
+}

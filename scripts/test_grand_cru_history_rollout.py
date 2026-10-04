@@ -42,10 +42,15 @@ class HistoryRolloutTests(unittest.TestCase):
         self.assertEqual([s['departmentCode'] for s in coverage['dfiSources']], ['890'])
         self.assertEqual(set(coverage['rightsAvailable']), {'89'})
         self.assertEqual(set(coverage['geometry']), {'89068'})
-        self.assertEqual(coverage['notices']['missingDepartmentIndexes'], ['89'])
+        # Only Yonne's own (archived, partial) index applies; Côte-d'Or indexes never do.
+        self.assertEqual(coverage['notices']['missingDepartmentIndexes'], [])
         self.assertEqual(set(coverage['notices']['availabilityAudit']['departments']), {'89'})
-        self.assertEqual(coverage['notices']['indexes'], [])
+        self.assertEqual([i['id'] for i in coverage['notices']['indexes']], ['departmental-yonne-archive'])
         self.assertTrue(coverage['notices']['availabilityAudit']['departments']['89']['unsearchedIntervals'])
+        notices = read_json(research_path(cru, 'notice-history.json'))
+        self.assertEqual({m['indexId'] for m in notices['reviewedMatches']}, {'departmental-yonne-archive'})
+        self.assertEqual({m['originalRecord']['status'] for m in notices['reviewedMatches']}, {'derogation-granted'})
+        self.assertTrue(all(m['currentFarmer'] is None for m in notices['reviewedMatches']))
         self.assertEqual(coverage['earliestReachableDfiValidationDate'], '1991-03-22')
 
     def test_sources_have_exact_raw_provenance_and_preserve_failed_urls(self):

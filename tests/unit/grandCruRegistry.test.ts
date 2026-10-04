@@ -68,7 +68,10 @@ describe('Grand Cru registry',()=>{
   }
   const chablis=read<ParcelEvidenceData>('src/lib/places/grandCruParcels/chablis-grand-cru.evidence.json');
   expect(chablis.coverage?.['inao-denom-439'].dfiSources.map(s=>s.department)).toEqual(['89']);
-  expect(chablis.coverage?.['inao-denom-439'].notices?.missingDepartmentIndexes).toEqual(['89']);
+  // Chablis is searched only with Yonne's own (archived, partial) bulletin index.
+  const notices=chablis.coverage?.['inao-denom-439'].notices as {missingDepartmentIndexes:string[];indexes:{id:string;department:string}[]}|undefined;
+  expect(notices?.missingDepartmentIndexes).toEqual([]);
+  expect(notices?.indexes.map(i=>[i.id,i.department])).toEqual([['departmental-yonne-archive','89']]);
   expect(Object.keys(chablis.tracing??{}).every(id=>id.startsWith('89068'))).toBe(true);
  });
  it('loads Vougeot’s 69 holders and dated notices without inventing domaine research',async()=>{

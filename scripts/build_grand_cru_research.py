@@ -687,8 +687,21 @@ def render_evidence_coverage(register, context):
                       f"{audit['latestPublishedYearLocated']}. {audit['availabilityStatus']}. "
                       'Obtained index ranges: ' + cell(audit['obtainedIndexRanges']) + '.', '']
             lines += ['- ' + interval for interval in audit['unsearchedIntervals']]
-            lines += ['', f"Failed earlier PDF: [{department} official bulletin]({audit['failedPublishedPdf']['url']}). "
-                      + audit['failedPublishedPdf']['reason'] + '. These are coverage gaps, not absent notices.', '']
+            located = audit['failedPublishedPdf']
+            label = 'Earlier located PDF recovered' if located['status'] == 'obtained' else 'Failed earlier PDF'
+            lines += ['', f"{label}: [{department} official bulletin]({located['url']}). "
+                      + located['reason'] + '. Remaining coverage gaps do not establish absent notices.', '']
+            if retry := audit.get('acquisitionRetry'):
+                years = retry['publicationYearsRequested']
+                lines += [f"Acquisition retry {retry['checkedAt']} for publication years {years[0]}–{years[-1]}: "
+                          f"{retry['savedAnnualListings']} annual listings saved; {retry['downloadedPDFs']} PDFs obtained; "
+                          f"{retry['imageReviewedPages']} new pages image-reviewed. "
+                          f"[Dated acquisition report]({context.link(ROOT / retry['report'])}). "
+                          'Unattempted annual paths remain discovery targets, not confirmed publications.', '']
+            if retry := audit.get('archiveRetry'):
+                lines += [f"Archive retry {retry['checkedAt']}: {retry['missingURLsRechecked']} missing URLs rechecked; "
+                          f"{retry['recoveredURLs']} URLs recovered ({retry['newDistinctPDFs']} new distinct PDFs). "
+                          f"[Dated retry and index report]({context.link(ROOT / retry['report'])}).", '']
     return lines
 
 

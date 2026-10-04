@@ -22,7 +22,7 @@ sale or cadastral predecessor never establishes actual farming.
 | Parcels with no lead | 157 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Official DFI validates reachable references from 1989-04-20; all 35 geometry vintages (2017–2026) and 2019–2025 rights imported; notice archive gaps remain explicit |
-| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 187,322 / 14,301 bytes |
+| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 209,444 / 15,921 bytes |
 
 A lead is a named candidate in the [register](register.md): a holder lead from
 reviewed research, a parcel named in an official notice, or a co-sale lead. A recorded

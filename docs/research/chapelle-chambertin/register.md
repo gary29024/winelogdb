@@ -210,13 +210,19 @@ Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed re
 
 Reviewed notice matches: 0; unreviewed search candidates: 0. Matched act dates: none matched to none matched. [Original readings, areas, paths and unresolved references](notice-history.json).
 
-Department 21: published years located as early as 2004 and through 2026. Earlier published years located; absolute earliest year unresolved because the archive listing is inaccessible. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}].
+Department 21: published years located as early as 2004 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}, {'corpus': 'departmental-cote-dor-earlier-archive', 'publicationYears': [2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
-- Before 2016 departmental publication years, including located 2004–2015 bulletins; acquisition failed
+- Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)
+- Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)
 - Departmental 2021–2026 publications outside the existing index
 - Regional publications before 2019 and any notice outside the indexed corpus
+- Before 2004: not searched
 
-Failed earlier PDF: [21 official bulletin](https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf). Remote end closed connection without response. These are coverage gaps, not absent notices.
+Failed earlier PDF: [21 official bulletin](https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf). Remote end closed connection without response. Remaining coverage gaps do not establish absent notices.
+
+Acquisition retry 2026-10-02 for publication years 2004–2015: 0 annual listings saved; 0 PDFs obtained; 0 new pages image-reviewed. [Dated acquisition report](../../../scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json). Unattempted annual paths remain discovery targets, not confirmed publications.
+
+Archive retry 2026-10-04: 118 missing URLs rechecked; 6 URLs recovered (6 new distinct PDFs). [Dated retry and index report](../earlier-bulletins/retry-report-2026-10-04.json).
 
 ## Source log
 

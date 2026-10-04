@@ -21,11 +21,18 @@ from build_bfc_bulletin_index import KINDS, gzip_bytes, hints, plain
 
 VERSION = 'poppler-layout-tesseract-fra-200dpi-psm3-v1'
 OK = {'text-layer', 'ocr'}
-ACT = re.compile(r'\b(?:21|BFC)-(\d{4})-(\d{2})-(\d{2})-\d{3,5}\b')
+ACT = re.compile(r'\b(?:21|89|BFC)-(\d{4})-(\d{2})-(\d{2})-\d{3,5}\b')
 FARM = re.compile(r'CONTROLE\s+DES\s+STRUCTURES|AUTORISATION\s+D[\W_]*EXPLOITER|'
                   r'AUTORISER.{0,100}EXPLOITER|REPRISE.{0,100}(?:PARCELLE|EXPLOITATION)|'
                   r'PRENEUR\s+EN\s+PLACE|ANCIEN\s+EXPLOITANT|\bSDREA\b', re.I)
 _progress_lock = threading.Lock()
+# SQL LIKE patterns and the commune dictionary used for hints; set from the command line.
+CORPORA = ('cote-dor-%',)
+COMMUNES = ROOT / 'docs/research/bfc-bulletins/cote-dor-communes.json'
+
+
+def corpus_filter(column='corpus'):
+    return '(' + ' OR '.join(f'{column} LIKE ?' for _ in CORPORA) + ')', list(CORPORA)
 ENTRY_END = re.compile(r'\((\d+)\s*pages?\)\s*Page\s*(\d+)\s*$', re.I)
 
 
@@ -100,10 +107,11 @@ def save_record(archive, record):
 
 def progress(root, phase, **extra):
     with _progress_lock, Archive(root) as archive:
-        counts = dict(archive.db.execute("""SELECT p.status,count(*) FROM pages p JOIN documents d ON d.url=p.url
-             WHERE d.corpus LIKE 'cote-dor-%' GROUP BY p.status"""))
-        documents = archive.db.execute("""SELECT count(DISTINCT p.url) FROM pages p JOIN documents d ON d.url=p.url
-             WHERE d.corpus LIKE 'cote-dor-%'""").fetchone()[0]
+        where, params = corpus_filter('d.corpus')
+        counts = dict(archive.db.execute(f"""SELECT p.status,count(*) FROM pages p JOIN documents d ON d.url=p.url
+             WHERE {where} GROUP BY p.status""", params))
+        documents = archive.db.execute(f"""SELECT count(DISTINCT p.url) FROM pages p JOIN documents d ON d.url=p.url
+             WHERE {where}""", params).fetchone()[0]
         state = {'pid': os.getpid(), 'phase': phase, 'updatedAt': time.time(), 'indexedPDFs': documents,
                  'indexedPages': sum(counts.values()), 'pageStatuses': counts, **extra}
         atomic_json(root / 'extraction-status.json', state)
@@ -216,10 +224,12 @@ def notice_entries(record, communes):
 
 def export_index(root, output):
     output.mkdir(parents=True, exist_ok=True)
-    communes = json.loads((ROOT / 'docs/research/bfc-bulletins/cote-dor-communes.json').read_text(encoding='utf-8'))['communes']
+    dictionary = json.loads(COMMUNES.read_text(encoding='utf-8'))
+    communes = dictionary['communes']
     coverage, candidates, pages, notices = [], [], [], []
     with Archive(root) as archive:
-        rows = [dict(r) for r in archive.db.execute("SELECT * FROM documents WHERE corpus LIKE 'cote-dor-%' ORDER BY corpus,url")]
+        where, params = corpus_filter()
+        rows = [dict(r) for r in archive.db.execute(f'SELECT * FROM documents WHERE {where} ORDER BY corpus,url', params)]
         for row in rows:
             item = {'url': row['url'], 'corpus': row['corpus'], 'sha256': row['sha256'], 'downloadStatus': row['state']}
             record = load_record(root, row)
@@ -255,8 +265,14 @@ def export_index(root, output):
     temporary = target.with_suffix('.gz.new')
     temporary.write_bytes(gzip_bytes(pages))
     temporary.replace(target)
-    atomic_json(output / 'catalog.json', {'geography': 'All communes of Cote-d\'Or; no vineyard or producer filter',
-                'departmentalYears': list(range(2016, 2021)), 'regionalIndex': 'docs/research/bfc-bulletins',
+    default = CORPORA == ('cote-dor-%',)
+    years = sorted({int(r['corpus'][-4:]) for r in rows if r['corpus'][-4:].isdigit()})
+    extra = {} if default else {'corpora': list(CORPORA), 'communeDictionary': dictionary['source'],
+                                'undatedCorpora': sorted({r['corpus'] for r in rows if not r['corpus'][-4:].isdigit()})}
+    atomic_json(output / 'catalog.json', {'geography': ('All communes of Cote-d\'Or' if default else
+                                                       'All communes in ' + dictionary['source']) + '; no vineyard or producer filter',
+                'departmentalYears': list(range(2016, 2021)) if default else years, **extra,
+                'regionalIndex': 'docs/research/bfc-bulletins',
                 'departmentalCoverage': 'coverage.json', 'departmentalText': 'page-text.jsonl.gz',
                 'departmentalCandidates': 'candidate-pages.json', 'departmentalNotices': 'notices.json',
                 'sharedSearch': 'bulletin_archive.py search QUERY',
@@ -276,12 +292,16 @@ def preflight(stage):
 
 
 def main():
+    global CORPORA, COMMUNES
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--archive-dir', type=Path, default=DEFAULT_ARCHIVE)
     parser.add_argument('--stage', choices=('text', 'ocr', 'all', 'export'), default='all')
     parser.add_argument('--jobs', type=int, default=4)
     parser.add_argument('--output', type=Path, help='export directory; defaults to archive/departmental-index')
+    parser.add_argument('--corpus', nargs='+', default=list(CORPORA), help='SQL LIKE corpus patterns (default cote-dor-%%)')
+    parser.add_argument('--communes', type=Path, default=COMMUNES, help='commune dictionary used for hints')
     args = parser.parse_args()
+    CORPORA, COMMUNES = tuple(args.corpus), args.communes.resolve()
     if args.jobs < 1:
         parser.error('--jobs must be positive')
     root = args.archive_dir.resolve()
@@ -291,7 +311,8 @@ def main():
         if args.stage != 'export':
             preflight(args.stage)
             with Archive(root) as archive:
-                rows = [dict(r) for r in archive.db.execute("SELECT * FROM documents WHERE corpus LIKE 'cote-dor-%' AND state='downloaded' ORDER BY corpus,url")]
+                where, params = corpus_filter()
+                rows = [dict(r) for r in archive.db.execute(f"SELECT * FROM documents WHERE {where} AND state='downloaded' ORDER BY corpus,url", params)]
             for stage in (['text', 'ocr'] if args.stage == 'all' else [args.stage]):
                 progress(root, stage, targetPDFs=len(rows))
                 with ThreadPoolExecutor(args.jobs) as pool:

@@ -264,7 +264,10 @@ def build_evidence(register, curation, history, features):
                                   'type': 'government-notice', 'documentDate': notice['originalDate']}
             add(parcel_id, {'kind': 'notice', 'date': notice['originalDate'], 'dateRole': notice['dateRole'],
                             'title': 'Reviewed notice reference: ' + (notice['originalPrintedReference'] or ', '.join(notice['matchedReferenceIds'])),
-                            'detail': 'Applicant: ' + (notice['originalRecord'].get('applicant') or 'not identified in this reading') +
+                            # A treatment derogation's requester is not a farm applicant or operator.
+                            'detail': ('Aerial-spraying derogation requested by ' if notice['originalRecord'].get('status') == 'derogation-granted'
+                                       else 'Applicant: ') +
+                                      (notice['originalRecord'].get('applicant') or 'not identified in this reading') +
                                       '; printed area: ' + str(notice['originalRecord'].get('areaHa', 'not recorded')) + ' ha',
                             'originalNoticeRecord': notice['originalRecord'],
                             'originalReferenceIds': notice['matchedReferenceIds'], 'originalScope': 'printed-notice-reference-and-area',
