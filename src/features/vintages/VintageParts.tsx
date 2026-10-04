@@ -107,7 +107,9 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   // Two date labels a few days apart would print over each other; push them
   // to either side of their dots instead.
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
-  const anchor=(own:number,other:number|null)=>!crowded||other==null?'middle':own<=other?'end':'start';
+  // On the same day one label serves both dots.
+  const sameDay=ripe!=null&&normalRipe!=null&&daysBetween(normalRipe,ripe)===0;
+  const anchor=(own:number,other:number|null)=>!crowded||sameDay||other==null?'middle':own<=other?'end':'start';
   const text={fontFamily:'DM Sans, sans-serif'};
   // "Picked" sits at the top of its band unless a curve runs through there; then at the foot.
   const pickMid=harvest?addDays(harvest.start,PICKING_DAYS/2):0;
@@ -128,7 +130,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
     {normalRipe!=null&&<>
       <line x1={x(normalRipe)} y1={ripeY} x2={x(normalRipe)} y2={BOTTOM-18} className="chart-drop is-normal"/>
       <circle cx={x(normalRipe)} cy={ripeY} r={4.5} className="chart-dot is-normal"/>
-      <text x={x(normalRipe)} y={BOTTOM-6} textAnchor={anchor(normalRipe,ripe)} className="chart-dot-label is-normal" style={text}>{formatDay(normalRipe)}</text>
+      {!sameDay&&<text x={x(normalRipe)} y={BOTTOM-6} textAnchor={anchor(normalRipe,ripe)} className="chart-dot-label is-normal" style={text}>{formatDay(normalRipe)}</text>}
     </>}
     {ripe!=null&&<>
       <line x1={x(ripe)} y1={ripeY} x2={x(ripe)} y2={BOTTOM-18} className="chart-drop"/>

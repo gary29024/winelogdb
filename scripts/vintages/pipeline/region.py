@@ -57,6 +57,9 @@ REGIONS: dict[str, dict] = {
             'cabernet-franc': {'sugar200': 2909.0, 'veraison': 2692.0},
         },
         'harvest_grape': 'merlot',
+        # Growers pick riper than they did: estimates read the sugar recorded starts were picked
+        # at within 10 years of the season (since 2000 this cuts a 4-day early bias to under 1).
+        'harvest_sugar_window': 10,
         'anchor_area': 'left-bank',
         'calibration': None,
         'blends': {},

@@ -535,7 +535,8 @@ export function grapeExpect(grape:GrapeId,conditions:ConditionsReading|null,leve
   if(!conditions||warmth==null)return fallback;
   const words=EXPECT[STYLE[grape]];
   const warm=warmth==='Warmer'||(warmth==='Usual'&&(levels.warmth>=1||shiftDays<=-4));
-  const cool=warmth==='Cooler'||(warmth==='Usual'&&(levels.warmth<=-1||shiftDays>=4));
+  // A late start reads as cool only when the season was not also dry: drought can hold ripening back.
+  const cool=warmth==='Cooler'||(warmth==='Usual'&&(levels.warmth<=-1||(shiftDays>=4&&levels.rain>=0)));
   // Ripening-time rot, or a season wet enough for disease even before véraison.
   const wet=value('rain')==='High'||levels.rain>=2||(cool&&levels.rain>=1),heat=conditions.conditions.some(item=>item.id==='heat'&&item.effect==='hurts');
   const ripeness=value('ripeness');

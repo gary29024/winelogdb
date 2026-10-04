@@ -458,15 +458,34 @@ def main() -> None:
         return ordered[len(ordered) // 2] if len(ordered) % 2 else (ordered[len(ordered) // 2 - 1] + ordered[len(ordered) // 2]) / 2
 
     picked_at: dict[str, list[float]] = defaultdict(list)
+    picked_by_year: dict[str, dict[int, float]] = defaultdict(dict)
     for (area, year), (date, _) in recorded.items():
         members = [p['id'] for p in points if area_of[p['id']] == area]
         if year in years and members:
-            picked_at[area].append(median([pinot_sugar_on(v, year, date) for v in members]))
+            picked_by_year[area][year] = median([pinot_sugar_on(v, year, date) for v in members])
+            picked_at[area].append(picked_by_year[area][year])
     everywhere = [value for values in picked_at.values() for value in values]
     harvest_sugar = {area: median(picked_at[area]) if len(picked_at[area]) >= 3
                      else median(everywhere) if len(everywhere) >= 5 else beaune_sugar for area in AREAS}
     for area in AREAS:
         print(f'{area}: {len(picked_at[area])} recorded starts; estimates use {harvest_sugar[area]:.1f} g/L')
+
+    # Where growers have come to pick riper (Bordeaux: about 211 g/L of modelled Merlot sugar at
+    # recorded starts before 2000, 220 since), an estimate reads the level recorded within
+    # REGION['harvest_sugar_window'] years of its season, when at least five such starts exist.
+    window = REGION.get('harvest_sugar_window')
+
+    def sugar_for(area: str, year: int, leave_out: int | None = None) -> float:
+        if window:
+            near = [v for y, v in picked_by_year[area].items() if abs(y - year) <= window and y != leave_out]
+            if len(near) >= 5:
+                return median(near)
+        if leave_out is not None and leave_out in picked_by_year[area]:
+            rest = [v for y, v in picked_by_year[area].items() if y != leave_out]
+            if len(rest) >= 3:
+                return median(rest)
+        return harvest_sugar[area]
+
 
     def area_doy(area: str, year: int, sugar: float) -> int:
         members = [p['id'] for p in points if area_of[p['id']] == area]
@@ -481,6 +500,10 @@ def main() -> None:
     # sugar, plus the area's usual extra gap. In cold autumns sugar barely moves,
     # so a small difference in picking sugar turns into weeks; this avoids that.
     # Each area keeps whichever estimate was closer to its own recorded starts.
+    for area in AREAS:
+        held = [abs(doy(recorded[(area, y)][0]) - area_doy(area, y, sugar_for(area, y, leave_out=y if window else None))) for y in picked_by_year[area]]
+        if held:
+            print(f'{area}: estimates miss recorded starts by {mean(held):.1f} days ({"each year left out" if window else "in sample"})')
     anchor_area = REGION['anchor_area']
     anchor_sugar = harvest_sugar[anchor_area]
 
@@ -499,12 +522,12 @@ def main() -> None:
         for y in both:
             others = [value for other, value in residual.items() if other != y]
             actual = doy(recorded[(area, y)][0])
-            own_error.append(abs(actual - area_doy(area, y, harvest_sugar[area])))
+            own_error.append(abs(actual - area_doy(area, y, sugar_for(area, y, leave_out=y if window else None))))
             anchored_error.append(abs(actual - (doy(recorded[(anchor_area, y)][0]) + model_gap(area, y) + (median(others) if others else 0))))
         method = 'own sugar'
         if len(both) < 3 or mean(anchored_error) <= mean(own_error):
             anchor_bias[area] = median(list(residual.values()))
-            method = 'Côte de Beaune date'
+            method = f'{anchor_area} date'
         print(f'{area}: estimates from {method} (mean error {mean(own_error):.1f} own sugar, {mean(anchored_error):.1f} anchored, {len(both)} years)')
 
     harvest: dict[str, dict] = {}
@@ -519,7 +542,7 @@ def main() -> None:
                 if area in anchor_bias and (anchor_area, year) in recorded:
                     day = doy(recorded[(anchor_area, year)][0]) + model_gap(area, year) + round(anchor_bias[area])
                 else:
-                    day = area_doy(area, year, harvest_sugar[area])
+                    day = area_doy(area, year, sugar_for(area, year))
                 date = dt.date(year, 1, 1) + dt.timedelta(days=day - 1)
                 entry_years[str(year)] = {'date': date.isoformat(), 'source': 'estimated'}
             starts[(area, year)] = dt.date.fromisoformat(entry_years[str(year)]['date'])
