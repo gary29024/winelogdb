@@ -67,6 +67,8 @@ REGIONS: dict[str, dict] = {
         # SAFRAN relative humidity, for Sauternes' noble-rot days.
         'humidity': True,
         'noble_rot_areas': ['sauternes'],
+        # Sauternes is picked once noble rot has set in, never below the legal 221 g/L (INAO).
+        'pick_sugar': {'sauternes': {'sugar': 221, 'basis': 'legal minimum'}},
         # GFV véraison: Parker 2012 thesis Table 3-2 (= AFM 2013). GSR 200 g/L: read from Fig. 3 of
         # van Leeuwen et al. 2019 (Agronomy 9:514), as for Pinot noir and Chardonnay (±5 °C·d).
         'grapes': {

@@ -146,6 +146,10 @@ export type HarvestStart={
 export type AreaHarvest={
   /** Usual start over the baseline, MM-DD. */
   typical:string;
+  /** Sugar (g/L) the area starts picking at, read off the drawn curves on its recorded starts; or a level the region sets (Sauternes: the legal minimum). */
+  pickSugar?:number;
+  /** Where pickSugar comes from, e.g. "20 recorded starts, 1991–2020" or "legal minimum". */
+  pickSugarBasis?:string;
   years:Record<string,HarvestStart>;
 };
 

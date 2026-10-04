@@ -639,6 +639,28 @@ def main() -> None:
     anchor_sugar_curves(built, area_of)
     add_blends(built)
 
+    # The sugar each area starts picking at, read off the curves the page draws (the area's own
+    # grape, matched to measured sugar where it was sampled) on its recorded starts in the
+    # baseline years, or all recorded years where the baseline has fewer than three. The chart
+    # draws it as the line grapes are picked at. A region can set an area's level instead
+    # (Sauternes: the legal minimum, since noble rot, not the curve, decides picking there).
+    for area in AREAS:
+        fixed = REGION.get('pick_sugar', {}).get(area)
+        if fixed:
+            harvest[area]['pickSugar'] = fixed['sugar']
+            harvest[area]['pickSugarBasis'] = fixed['basis']
+            continue
+        grape = region.harvest_grape(area)
+        recorded_years = [y for (a, y) in recorded if a == area and y in years]
+        chosen = [y for y in recorded_years if BASELINE[0] <= y <= BASELINE[1]]
+        chosen = chosen if len(chosen) >= 3 else recorded_years
+        levels = [median([curve_sugar(built[v][1][y][grape]['sugar']['values'], y, recorded[(area, y)][0])
+                          for v in area_members(area) if y in built[v][1]]) for y in chosen]
+        if len(levels) >= 3:
+            harvest[area]['pickSugar'] = round(median(levels))
+            harvest[area]['pickSugarBasis'] = f'{len(levels)} recorded starts' + (f', {BASELINE[0]}–{BASELINE[1]}' if chosen != recorded_years else '')
+        print(f"{area}: picked at {harvest[area].get('pickSugar')} g/L ({harvest[area].get('pickSugarBasis', 'too few recorded starts')})")
+
     for point in points:
         village = point['id']
         seasons, grapes_by_year = built[village]

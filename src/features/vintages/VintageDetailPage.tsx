@@ -65,13 +65,17 @@ export function VintageDetailPage(){
     if(!mix)return at(grapeId);
     return Math.round(Object.entries(mix).reduce((sum,[id,share])=>sum+(share??0)*at(id as GrapeId),0));
   },[region,grape,grapeId,village,index]);
+  // The line grapes are picked at here: the sugar this area's recorded harvests began at, or the
+  // legal minimum where noble rot decides (Sauternes); the model's 200 g/L where neither is known.
+  const areaHarvest=index?.harvest[areaId];
+  const pickSugar=areaHarvest?.pickSugar??grape.ripeSugar;
   const grapeReading=useMemo(()=>{
     const grapeSeason=season?.grapes[grapeId];
     if(!reading||!grapeSeason||!data)return null;
     // The four ripening drivers are graded against the same reference seasons as everything else.
     const spread=ripeningSpread(data.years,reference!.harvest,grapeId,reference!.from,reference!.to);
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,grape.ripeSugar,minSugar,spread);
-  },[reading,season,data,reference,grapeId,year,grape.ripeSugar,minSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,pickSugar,minSugar,spread);
+  },[reading,season,data,reference,grapeId,year,pickSugar,minSugar]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -103,6 +107,9 @@ export function VintageDetailPage(){
   const ownHarvestRain=grapeSeason?.ripening.harvestRain!=null&&normalGrape?.ripening.harvestRain!=null;
   const harvestRain=ownHarvestRain?grapeSeason!.ripening.harvestRain:season.harvestRain;
   const normalHarvestRain=ownHarvestRain?Math.round(normalGrape!.ripening.harvestRain!):normal.harvestRain;
+  const alcohol=`≈ ${(pickSugar/16.83).toFixed(0)}% alc.`;
+  const ripeLineLabel=areaHarvest?.pickSugarBasis==='legal minimum'?`Noble rot can start: ${pickSugar} g/L, the legal minimum (${alcohol})`
+    :areaHarvest?.pickSugar!=null?`Usually picked at ${pickSugar} g/L (${alcohol})`:`Ripe at ${pickSugar} g/L (${alcohol})`;
   const myWines=(wines??[]).filter(wine=>wine.village===village.id&&wine.vintage===year);
   const gddPct=(season.gdd-normal.gdd)/normal.gdd,rainPct=(season.rainAprSep-normal.rainAprSep)/normal.rainAprSep,nightDiff=season.augNights-normal.augNights;
   const pickGapText=(gap:number)=>gap>0?`${gap} day${gap===1?'':'s'} before`:gap<0?`${-gap} day${gap===-1?'':'s'} after`:'right at';
@@ -170,17 +177,17 @@ export function VintageDetailPage(){
         </div>
       </div>}
       <SugarChart year={year} curve={grapeSeason.sugar} normal={normalGrape.sugar} low={normalGrape.sugarLow} high={normalGrape.sugarHigh}
-        harvest={harvest} veraison={grapeReading.veraison} ripeSugar={grape.ripeSugar}/>
+        harvest={harvest} veraison={grapeReading.veraison} ripeSugar={pickSugar}/>
       <ul className="vintage-chart-legend">
         <li><span className="is-year" aria-hidden="true"/>{year} sugar{grapeSeason.sugarSource==='measured'?` (matched to ${region.id==='burgundy'?'BIVB':'measured'} samples)`:grapeSeason.sugarSource==='weather'?' (estimated)':''}</li>
         <li><span className="is-normal" aria-hidden="true"/>Typical</li>
         <li><span className="is-picked" aria-hidden="true"/>At picking</li>
-        <li><span className="is-ripe" aria-hidden="true"/>Ripe at {grape.ripeSugar} g/L (≈ {(grape.ripeSugar/16.83).toFixed(0)}% alc.) · ○ typical · ● {year}</li>
+        <li><span className="is-ripe" aria-hidden="true"/>{ripeLineLabel} · ○ typical · ● {year}</li>
       </ul>
       {harvest?.source==='estimated'&&<p className="vintage-callout">The harvest date here is <strong>estimated from the weather</strong>, so picking is assumed at the usual ripeness. Once the official start date is added, this shows how much earlier or later growers really picked.</p>}
-      {harvest&&harvest.source!=='estimated'&&grapeReading.pickGap!=null&&grapeReading.normalPickGap!=null&&<p className="vintage-callout">Picking began <strong>{pickGapText(grapeReading.pickGap)}</strong> full ripeness — usually {pickGapText(grapeReading.normalPickGap)}.{' '}
+      {harvest&&harvest.source!=='estimated'&&grapeReading.pickGap!=null&&grapeReading.normalPickGap!=null&&<p className="vintage-callout">Picking began <strong>{pickGapText(grapeReading.pickGap)}</strong> the grapes reached {pickSugar} g/L — usually {pickGapText(grapeReading.normalPickGap)}.{' '}
         {grapeReading.pickGap-grapeReading.normalPickGap>=2?'Grapes came in a little less ripe than normal.':grapeReading.normalPickGap-grapeReading.pickGap>=2?'Grapes came in riper than normal.':'About as ripe as a normal year.'}</p>}
-      {grapeReading.ripe==null&&<p className="vintage-callout">In {year} the grapes <strong>never reached {grape.ripeSugar} g/L</strong> before the end of October: the season was too cool to ripen them fully.</p>}
+      {grapeReading.ripe==null&&<p className="vintage-callout">In {year} the grapes <strong>never reached {pickSugar} g/L</strong> before the end of October: the season was too cool to ripen them fully.</p>}
     </section>}
 
     {grapeReading?.conditions&&<section className="vintage-card" aria-labelledby="vintage-conditions-title">
