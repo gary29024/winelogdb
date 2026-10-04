@@ -1,9 +1,10 @@
 """Refresh data/bivb_sugar.csv from the BIVB maturity network (maturite.bivb.com).
 
 Runs before build.py in the monthly Vintage data Action, so measured must sugar
-arrives without a manual step. It downloads every Côte d'Or plot's samples for
-the current and previous year (or the years given), averages them per area,
-grape and day, and replaces those years' rows. Other years are kept as they are.
+arrives without a manual step. It downloads the samples of every plot in the
+page's areas (Côte d'Or, Yonne and Saône-et-Loire) for the current and previous
+year (or the years given), averages them per area, grape and day, and replaces
+those years' rows. Other years are kept as they are.
 If the site cannot be reached the file is left unchanged.
 
     python scripts/vintages/pipeline/bivb.py [--years 2025 2026]
@@ -40,9 +41,22 @@ COTE_DE_BEAUNE = {'Auxey Duresses', 'Chassagne Montrachet', 'Meursault', 'Pernan
                   'Saint Romain', 'Santenay', 'Savigny les Beaune', 'Beaune', 'Volnay', 'Aloxe Corton'}
 HAUTES_COTES = {'HCB', 'HCN', 'MAG1', 'NAN', 'N-CHC1'}
 OUTLYING = {'CRM', 'NOL', 'MAS', 'BLI'}
+# Yonne: the Chablisien and Auxerrois; Tonnerre ripens apart.
+CHABLIS_AUXERROIS = {'Beines', 'Chablis', 'Chitry', 'Jussy', 'Maligny', 'Préhy', 'St Bris le Vineux', 'St Cyr les Colons'}
+# Saône-et-Loire: Couches (Couchois) and the Beaujolais plots are left out.
+COTE_CHALONNAISE = {'Givry', 'Mercurey', 'Montagny les Buxy', 'Rully', 'St Denis de Vaux', 'St Martin sous Montaigu', 'Bissey sous Cruchaud'}
+MACONNAIS = {'Bissy la Maconnaise', 'Blanot', 'Burgy', 'Chaintre', 'Chardonnay', 'Cortambert', 'Cruzille', 'Fuissé', 'Grévilly', 'Ige',
+             'Lugny', 'Mancey', 'Martailly', 'Montbellet', 'Ozenay', 'Péronne', 'St Gengoux de Scissé', 'Uchizy', 'Vergisson', 'Viré'}
 
 
 def area_of(plot: dict) -> str | None:
+    commune = plot['c_COMMUNE']
+    if plot['deP_LIB'] == 'Yonne':
+        return 'chablis-auxerrois' if commune in CHABLIS_AUXERROIS else None
+    if plot['deP_LIB'] == 'Saône et Loire':
+        return 'cote-chalonnaise' if commune in COTE_CHALONNAISE else 'maconnais' if commune in MACONNAIS else None
+    if plot['deP_LIB'] != "Côte d'Or":
+        return None
     if plot['syN_CODE'] in HAUTES_COTES:
         return 'hautes-cotes'
     if plot['syN_CODE'] in OUTLYING:
@@ -56,17 +70,22 @@ def area_of(plot: dict) -> str | None:
 
 def fetch(path: str, form: dict | None = None):
     data = urllib.parse.urlencode(form).encode() if form else None
-    for attempt in range(5):
+    for attempt in range(7):
         try:
             with urllib.request.urlopen(urllib.request.Request(SITE + path, data=data), timeout=60) as response:
                 return json.load(response)
         except (OSError, ValueError):
-            time.sleep(2 ** attempt)
+            time.sleep(min(2 ** attempt, 30))
     raise RuntimeError(f'{SITE}{path} did not answer')
 
 
-def samples(plot: dict, year: int) -> list[tuple[str, str, int, str, float]]:
+def samples(plot: dict, years: list[int]) -> list[tuple[str, str, int, str, float]]:
     area, grape = area_of(plot), GRAPES.get(plot['ceP_CODE'])
+    sampled = {int(item['value']) for item in fetch(f"/Analyse/Read_AnneesAnalyses_Combo?codeParcelle={urllib.parse.quote(plot['paR_CODE'])}")}
+    return [row for year in years if year in sampled for row in year_samples(plot, area, grape, year)]
+
+
+def year_samples(plot: dict, area: str, grape: str, year: int) -> list[tuple[str, str, int, str, float]]:
     rows = fetch('/Analyse/Read_Historique_Chart', {'codeParcelle': plot['paR_CODE'], 'annee': year})
     out = []
     for row in rows:
@@ -84,10 +103,9 @@ def main() -> None:
     parser.add_argument('--years', type=int, nargs='+', default=[this_year - 1, this_year])
     years = parser.parse_args().years
     try:
-        plots = [p for p in fetch('/Parcelle/GetParcelles')
-                 if p['deP_LIB'] == "Côte d'Or" and area_of(p) and p['ceP_CODE'] in GRAPES]
-        with cf.ThreadPoolExecutor(8) as pool:
-            fetched = [s for batch in pool.map(lambda job: samples(*job), [(p, y) for p in plots for y in years]) for s in batch]
+        plots = [p for p in fetch('/Parcelle/GetParcelles') if area_of(p) and p['ceP_CODE'] in GRAPES]
+        with cf.ThreadPoolExecutor(4) as pool:
+            fetched = [s for batch in pool.map(lambda plot: samples(plot, years), plots) for s in batch]
     except RuntimeError as error:
         print(f'BIVB maturity site unavailable ({error}); bivb_sugar.csv left unchanged.', file=sys.stderr)
         return
