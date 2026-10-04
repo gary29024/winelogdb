@@ -13,11 +13,28 @@ The files hold **measurements only** (degree days, millimetres, dates, sugar cur
 | --- | --- | --- |
 | Rain | Météo-France COMÉPHORE radar–gauge reanalysis, read at 25 points across each village's vineyard | 1 km, hourly, from 1997 |
 | Temperature, sunshine | Météo-France SAFRAN (SIM2) daily reanalysis, four nearest cells, corrected to the vineyard's IGN elevation at 0.65 °C / 100 m | 8 km, daily, from August 1958 (whole seasons from 1959) |
-| Sugar | Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) / 2890 (Chardonnay) | per village |
-| Véraison | Heat sum above 10 °C from 1 January of 1014 (Pinot Noir) / 1068 (Chardonnay) | per village |
+| Sugar | Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April; per-grape values in `pipeline/region.py`. Burgundy curves are then matched to BIVB measurements | per village |
+| Véraison | Grapevine Flowering Véraison model (Parker et al., 2013): heat sum above 0 °C from 1 March, with a 1.1 °C vineyard-to-station offset (see `build.py`) | per village |
 | Harvest start | `data/harvest_dates.csv` where an official date is recorded; otherwise estimated and marked so | per area |
 
 All Météo-France data is published under the Licence Ouverte (Etalab 2.0).
+
+## Regions
+
+`pipeline/region.py` holds what differs between regions: data, output and cache folders, areas, grapes and their model parameters, the grape and area that set estimated harvest dates, and the method notes. Every script builds the region named by `VINTAGE_REGION` (default `burgundy`):
+
+```sh
+VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/points.py
+VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/fetch.py
+VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/build.py
+```
+
+**Bordeaux** (`data/bordeaux/`) covers the red communes Saint-Estèphe, Pauillac, Saint-Julien, Margaux and Pessac-Léognan (left bank), and Saint-Émilion (grand cru area) and Pomerol (right bank).
+- **Vineyard outlines:** `maps/` holds outlines from the INAO parcel delimitation (data.gouv.fr, 2026-09-28).
+- **Grapes:** Merlot, Cabernet Sauvignon and Cabernet Franc are modelled separately.
+- **Blend:** a `blend` grape weighs them by each appellation's planted mix (`blends.csv`, with each row's source and whether it is official).
+- **Harvest dates:** `harvest_dates.csv` holds recorded red starts by bank.
+- **Not yet in Bordeaux:** measured sugar and the quality outlook.
 
 ## Running it
 

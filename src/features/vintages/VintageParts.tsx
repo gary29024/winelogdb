@@ -25,10 +25,13 @@ export function HowWeEstimate({index}:{index:VintageIndex|null}){
     <summary><VintageIcon kind="info" size={16}/>How we estimate</summary>
     <div>
       <p><strong>Harvest dates</strong> are the start of picking a source records for each area — an official ban des vendanges or opening, or a reported start — and a modelled date marked “estimated” where none is found. Picking is read as that date plus two weeks.</p>
-      <p><strong>Sugar</strong> starts from a published grape-ripening model driven by daily temperature (Parker et al., 2020). Temperature alone misses grapes concentrating in drought, so each season’s curve is then matched to the sugar the BIVB measured in that area’s vineyards (from 1988 in the Côte d’Or, about 1990 elsewhere). Earlier years get a correction estimated from the season’s warmth and rain. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
+      {index?.region==='burgundy'
+        ?<p><strong>Sugar</strong> starts from a published grape-ripening model driven by daily temperature (Parker et al., 2020). Temperature alone misses grapes concentrating in drought, so each season’s curve is then matched to the sugar the BIVB measured in that area’s vineyards (from 1988 in the Côte d’Or, about 1990 elsewhere). Earlier years get a correction estimated from the season’s warmth and rain. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>
+        :<p><strong>Sugar</strong> comes from a published grape-ripening model driven by daily temperature (Parker et al., 2020). No measured sugar is matched in here yet, and temperature alone misses grapes concentrating in drought, so hot, dry years may read low. It shows what grapes picked in that window would typically carry — not a measurement of any bottle.</p>}
+      {index?.blends&&<p><strong>Blend</strong> weighs each grape’s reading by the place’s planted mix of Merlot, Cabernet Sauvignon and Cabernet Franc (Petit Verdot and others are left out). Each grape ripens on its own clock: Merlot one to two weeks before Cabernet Sauvignon, so a cool or wet autumn hurts Cabernet-led places most.</p>}
       <p><strong>Ripening conditions</strong> weigh four separate things — warmth after véraison, heat stress, rot risk from warm wet days, and how ripe the grapes were at picking — against the same village’s seasons in the comparison years. Each counts only when the season sits in the top or bottom quarter of those years, so no part of the weather is counted twice. They describe how the grapes ripened, not how good the wine is; crop size, disease and each grower’s choices change the real result.</p>
-      <p><strong>Quality outlook</strong> reads the same weather against what critics later said of past vintages{index?.quality?` (${index.quality.sources.join(', ')})`:''}. Each factor may only push the way growers know it does; warmth stops counting past a level beyond which the hottest past years were rated no better. The range shows how far the reading missed on vintages it was not fitted on.</p>
-      <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night — like April 2016 — may not show.</p>
+      {index?.quality&&<p><strong>Quality outlook</strong> reads the same weather against what critics later said of past vintages{index?.quality?` (${index.quality.sources.join(', ')})`:''}. Each factor may only push the way growers know it does; warmth stops counting past a level beyond which the hottest past years were rated no better. The range shows how far the reading missed on vintages it was not fitted on.</p>}
+      <p><strong>Weather</strong> is read for each village’s vineyards: rain on a 1 km grid, temperature on an 8 km grid corrected to the vines’ elevation. Neighbouring villages share very similar temperatures; rain differs more. Frost days count air frosts in that grid, so a frost that settles only in the lowest vines on a clear night{index?.region==='burgundy'?' — like April 2016 —':''} may not show.</p>
       {index&&<p><strong>Typical</strong> means the {index.baseline.from}–{index.baseline.to} average{index.baseline.rainFrom?` (rain from ${index.baseline.rainFrom}, when the 1 km radar record begins)`:''}.</p>}
       {index&&<ul>{index.sources.map(source=><li key={source.label}><strong>{source.label}</strong> — {source.detail}</li>)}</ul>}
     </div>
@@ -104,7 +107,9 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
   // Two date labels a few days apart would print over each other; push them
   // to either side of their dots instead.
   const crowded=ripe!=null&&normalRipe!=null&&Math.abs(daysBetween(normalRipe,ripe))<9;
-  const anchor=(own:number,other:number|null)=>!crowded||other==null?'middle':own<=other?'end':'start';
+  // On the same day one label serves both dots.
+  const sameDay=ripe!=null&&normalRipe!=null&&daysBetween(normalRipe,ripe)===0;
+  const anchor=(own:number,other:number|null)=>!crowded||sameDay||other==null?'middle':own<=other?'end':'start';
   const text={fontFamily:'DM Sans, sans-serif'};
   // "Picked" sits at the top of its band unless a curve runs through there; then at the foot.
   const pickMid=harvest?addDays(harvest.start,PICKING_DAYS/2):0;
@@ -125,7 +130,7 @@ export function SugarChart({year,curve,normal,low,high,harvest,veraison,ripeSuga
     {normalRipe!=null&&<>
       <line x1={x(normalRipe)} y1={ripeY} x2={x(normalRipe)} y2={BOTTOM-18} className="chart-drop is-normal"/>
       <circle cx={x(normalRipe)} cy={ripeY} r={4.5} className="chart-dot is-normal"/>
-      <text x={x(normalRipe)} y={BOTTOM-6} textAnchor={anchor(normalRipe,ripe)} className="chart-dot-label is-normal" style={text}>{formatDay(normalRipe)}</text>
+      {!sameDay&&<text x={x(normalRipe)} y={BOTTOM-6} textAnchor={anchor(normalRipe,ripe)} className="chart-dot-label is-normal" style={text}>{formatDay(normalRipe)}</text>}
     </>}
     {ripe!=null&&<>
       <line x1={x(ripe)} y1={ripeY} x2={x(ripe)} y2={BOTTOM-18} className="chart-drop"/>

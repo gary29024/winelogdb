@@ -1,6 +1,6 @@
 name: Vintage data
 
-# Rebuilds public/data/vintages from Météo-France open data (COMÉPHORE 1 km
+# Rebuilds public/data/vintages (Burgundy, then Bordeaux) from Météo-France open data (COMÉPHORE 1 km
 # rain, SAFRAN 8 km temperature) and commits the result. Monthly through the
 # season so a new vintage fills in as its months are published; past years are
 # cached and never downloaded twice.
@@ -43,6 +43,12 @@ jobs:
         run: python scripts/vintages/pipeline/build.py
       - name: Quality outlook from the critics' consensus
         run: python scripts/vintages/pipeline/quality.py
+      - name: Bordeaux - fetch, build
+        env:
+          VINTAGE_REGION: bordeaux
+        run: |
+          python scripts/vintages/pipeline/fetch.py
+          python scripts/vintages/pipeline/build.py
       - name: Commit if anything changed
         run: |
           git add public/data/vintages scripts/vintages/data/outlook_record.csv scripts/vintages/data/bivb_sugar.csv

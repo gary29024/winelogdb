@@ -28,8 +28,10 @@ from pathlib import Path
 from shapely.geometry import Point, shape
 from shapely.ops import unary_union
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
-DATA = ROOT / 'scripts/vintages/data'
+DATA = region.config()['data']
 SAFRAN_GRID = 'https://meteofrance.s3.sbg.io.cloud.ovh.net/data/REF_CC/SIM/coordonnees_grille_safran_lambert-2-etendu.csv'
 IGN = 'https://data.geopf.fr/altimetrie/1.0/calcul/alti/rest/elevation.json'
 SAMPLES = 25

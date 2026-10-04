@@ -60,26 +60,26 @@ from statistics import mean
 
 import numpy as np
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
-DATA = ROOT / 'scripts/vintages/data'
-OUT = ROOT / 'public/data/vintages/burgundy'
+REGION = region.config()
+DATA = REGION['data']
+OUT = REGION['out']
 
 BASELINE = (1991, 2020)
 RAIN_FROM = 1997            # COMÉPHORE starts in 1997
 FIRST_SEASON = 1959        # SAFRAN starts on 1 August 1958, so 1959 is the first whole season
 LAPSE = 0.0065              # °C per metre
-GRAPES = {
-    'pinot-noir': {'sugar200': 2840.0, 'veraison': 2511.0},
-    'chardonnay': {'sugar200': 2890.0, 'veraison': 2547.0},
-}
+GRAPES = REGION['grapes']
+HARVEST_GRAPE = REGION['harvest_grape']
 PHENOLOGY_OFFSET = 1.1      # °C added to daily means in the véraison heat sum; see the docstring
 SUGAR_SLOPE = 0.118         # g/L per °C·day near ripeness
 # The measured-sugar shift builds up over this many days after véraison.
 SUGAR_RAMP_DAYS = 20
 SUGAR_GAP_FIT: dict[str, list[float]] = {}
 CURVE_START, CURVE_STEP, CURVE_POINTS = (7, 15), 5, 22  # 15 July to 28 October: early véraison and late harvests (1965: to 25 October) stay on the curve
-BEAUNE_MEAN_HARVEST_DOY = 258   # 15 September, Labbé et al. 2019, 1988–2018
-AREAS = ['chablis-auxerrois', 'cote-de-nuits', 'hautes-cotes', 'cote-de-beaune', 'cote-chalonnaise', 'maconnais']
+AREAS = REGION['areas']
 
 
 def days(year: int, start: tuple[int, int], end: tuple[int, int]):
@@ -242,6 +242,8 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
     fitted on the measured seasons and tested on each one left out.
     """
     samples: dict[tuple[str, str, int], list[tuple[dt.date, float, int]]] = defaultdict(list)
+    if not (DATA / 'bivb_sugar.csv').exists():
+        return   # no measured sugar for this region yet: the curves stay as modelled
     with open(DATA / 'bivb_sugar.csv') as source:
         for row in csv.DictReader(line for line in source if not line.startswith('#')):
             samples[(row['area'], row['grape'], int(row['year']))].append(
@@ -319,6 +321,39 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
                 season['sugarSource'] = source
 
 
+def blend_season(parts: list[tuple[float, dict]]) -> dict:
+    """One season of a blend: each grape's reading weighted by its share of the planting."""
+    def weighted(read) -> float:
+        return sum(w * read(season) for w, season in parts)
+    veraison_day = weighted(lambda s: dt.date.fromisoformat(s['veraison']).toordinal())
+    first = parts[0][1]
+    ripening = {key: round(weighted(lambda s, k=key: s['ripening'][k]), 2 if key == 'coolNights' else 1)
+                for key in first['ripening']}
+    ripening['heatStressDays'] = round(ripening['heatStressDays'])
+    ripening['rain'] = round(ripening['rain'])
+    blend = {
+        'veraison': dt.date.fromordinal(round(veraison_day)).isoformat(),
+        'sugar': {**first['sugar'], 'values': [round(sum(w * s['sugar']['values'][i] for w, s in parts), 1)
+                                               for i in range(len(first['sugar']['values']))]},
+        'ripening': ripening,
+    }
+    sources = {s.get('sugarSource') for _, s in parts}
+    if len(sources) == 1 and None not in sources:
+        blend['sugarSource'] = sources.pop()
+    return blend
+
+
+def add_blends(built: dict[str, tuple[dict, dict]]) -> None:
+    """Add a 'blend' grape where the region gives a place's planted mix (region.py blends)."""
+    for village, (_, grapes_by_year) in built.items():
+        shares = {g: w for g, w in REGION['blends'].get(village, {}).items() if g in GRAPES and w > 0}
+        total = sum(shares.values())
+        if not total:
+            continue
+        for grapes in grapes_by_year.values():
+            grapes['blend'] = blend_season([(w / total, grapes[g]) for g, w in shares.items()])
+
+
 def vineyard_events() -> dict:
     """Frost and hail a source dates (data/vineyard_events.csv): an 8 km grid cannot see either."""
     events: dict[str, dict[str, list]] = {}
@@ -347,7 +382,7 @@ def percentile(values: list[float], q: float) -> float:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cache', default='scripts/vintages/cache')
+    parser.add_argument('--cache', default=str(REGION['cache']))
     args = parser.parse_args()
     villages = json.loads((DATA / 'villages.json').read_text())
     points = json.loads((DATA / 'points.json').read_text())
@@ -394,24 +429,27 @@ def main() -> None:
         return heat_sum(weather[village], year, (4, 1), 0.0, dt.date(year, 10, 31), normal_t[village])
 
     def pinot_day(village: str, year: int, sugar: float) -> dt.date:
-        target = GRAPES['pinot-noir']['sugar200'] + (sugar - 200) / SUGAR_SLOPE
+        target = GRAPES[HARVEST_GRAPE]['sugar200'] + (sugar - 200) / SUGAR_SLOPE
         # In the coldest seasons (Chablis 1972) the target is never reached: picking
         # still happened, so the estimate stops at the end of October.
         return first_day(pinot_heat(village, year), target) or dt.date(year, 10, 31)
 
     def pinot_sugar_on(village: str, year: int, date: dt.date) -> float:
         heat = dict(pinot_heat(village, year))
-        return 200 + SUGAR_SLOPE * (heat[date] - GRAPES['pinot-noir']['sugar200'])
+        return 200 + SUGAR_SLOPE * (heat[date] - GRAPES[HARVEST_GRAPE]['sugar200'])
 
-    # Fallback: the sugar level at which Beaune's 1991-2018 mean estimated start
-    # equals its recorded 1988-2018 mean (Labbé et al. 2019).
-    calibration_years = [y for y in years if BASELINE[0] <= y <= 2018]
-    low, high = 170.0, 230.0
-    for _ in range(30):
-        middle = (low + high) / 2
-        doys = [pinot_day('beaune', y, middle).timetuple().tm_yday for y in calibration_years]
-        low, high = (middle, high) if mean(doys) < BEAUNE_MEAN_HARVEST_DOY else (low, middle)
-    beaune_sugar = (low + high) / 2
+    # Fallback: the sugar level at which the calibration village's 1991-2018 mean
+    # estimated start equals its recorded long-run mean (Burgundy: Beaune, Labbé et al. 2019).
+    beaune_sugar = 200.0
+    if REGION['calibration']:
+        calibration_village, calibration_doy = REGION['calibration']
+        calibration_years = [y for y in years if BASELINE[0] <= y <= 2018]
+        low, high = 170.0, 230.0
+        for _ in range(30):
+            middle = (low + high) / 2
+            doys = [pinot_day(calibration_village, y, middle).timetuple().tm_yday for y in calibration_years]
+            low, high = (middle, high) if mean(doys) < calibration_doy else (low, middle)
+        beaune_sugar = (low + high) / 2
 
     # Better, where dates are recorded: the sugar each area actually picked at,
     # read from its own recorded starts (median, so one odd year cannot move it).
@@ -420,15 +458,34 @@ def main() -> None:
         return ordered[len(ordered) // 2] if len(ordered) % 2 else (ordered[len(ordered) // 2 - 1] + ordered[len(ordered) // 2]) / 2
 
     picked_at: dict[str, list[float]] = defaultdict(list)
+    picked_by_year: dict[str, dict[int, float]] = defaultdict(dict)
     for (area, year), (date, _) in recorded.items():
         members = [p['id'] for p in points if area_of[p['id']] == area]
         if year in years and members:
-            picked_at[area].append(median([pinot_sugar_on(v, year, date) for v in members]))
+            picked_by_year[area][year] = median([pinot_sugar_on(v, year, date) for v in members])
+            picked_at[area].append(picked_by_year[area][year])
     everywhere = [value for values in picked_at.values() for value in values]
     harvest_sugar = {area: median(picked_at[area]) if len(picked_at[area]) >= 3
                      else median(everywhere) if len(everywhere) >= 5 else beaune_sugar for area in AREAS}
     for area in AREAS:
         print(f'{area}: {len(picked_at[area])} recorded starts; estimates use {harvest_sugar[area]:.1f} g/L')
+
+    # Where growers have come to pick riper (Bordeaux: about 211 g/L of modelled Merlot sugar at
+    # recorded starts before 2000, 220 since), an estimate reads the level recorded within
+    # REGION['harvest_sugar_window'] years of its season, when at least five such starts exist.
+    window = REGION.get('harvest_sugar_window')
+
+    def sugar_for(area: str, year: int, leave_out: int | None = None) -> float:
+        if window:
+            near = [v for y, v in picked_by_year[area].items() if abs(y - year) <= window and y != leave_out]
+            if len(near) >= 5:
+                return median(near)
+        if leave_out is not None and leave_out in picked_by_year[area]:
+            rest = [v for y, v in picked_by_year[area].items() if y != leave_out]
+            if len(rest) >= 3:
+                return median(rest)
+        return harvest_sugar[area]
+
 
     def area_doy(area: str, year: int, sugar: float) -> int:
         members = [p['id'] for p in points if area_of[p['id']] == area]
@@ -443,7 +500,12 @@ def main() -> None:
     # sugar, plus the area's usual extra gap. In cold autumns sugar barely moves,
     # so a small difference in picking sugar turns into weeks; this avoids that.
     # Each area keeps whichever estimate was closer to its own recorded starts.
-    anchor_area, anchor_sugar = 'cote-de-beaune', harvest_sugar['cote-de-beaune']
+    for area in AREAS:
+        held = [abs(doy(recorded[(area, y)][0]) - area_doy(area, y, sugar_for(area, y, leave_out=y if window else None))) for y in picked_by_year[area]]
+        if held:
+            print(f'{area}: estimates miss recorded starts by {mean(held):.1f} days ({"each year left out" if window else "in sample"})')
+    anchor_area = REGION['anchor_area']
+    anchor_sugar = harvest_sugar[anchor_area]
 
     def model_gap(area: str, year: int) -> int:
         return area_doy(area, year, anchor_sugar) - area_doy(anchor_area, year, anchor_sugar)
@@ -460,12 +522,12 @@ def main() -> None:
         for y in both:
             others = [value for other, value in residual.items() if other != y]
             actual = doy(recorded[(area, y)][0])
-            own_error.append(abs(actual - area_doy(area, y, harvest_sugar[area])))
+            own_error.append(abs(actual - area_doy(area, y, sugar_for(area, y, leave_out=y if window else None))))
             anchored_error.append(abs(actual - (doy(recorded[(anchor_area, y)][0]) + model_gap(area, y) + (median(others) if others else 0))))
         method = 'own sugar'
         if len(both) < 3 or mean(anchored_error) <= mean(own_error):
             anchor_bias[area] = median(list(residual.values()))
-            method = 'Côte de Beaune date'
+            method = f'{anchor_area} date'
         print(f'{area}: estimates from {method} (mean error {mean(own_error):.1f} own sugar, {mean(anchored_error):.1f} anchored, {len(both)} years)')
 
     harvest: dict[str, dict] = {}
@@ -480,7 +542,7 @@ def main() -> None:
                 if area in anchor_bias and (anchor_area, year) in recorded:
                     day = doy(recorded[(anchor_area, year)][0]) + model_gap(area, year) + round(anchor_bias[area])
                 else:
-                    day = area_doy(area, year, harvest_sugar[area])
+                    day = area_doy(area, year, sugar_for(area, year))
                 date = dt.date(year, 1, 1) + dt.timedelta(days=day - 1)
                 entry_years[str(year)] = {'date': date.isoformat(), 'source': 'estimated'}
             starts[(area, year)] = dt.date.fromisoformat(entry_years[str(year)]['date'])
@@ -502,6 +564,7 @@ def main() -> None:
             grapes_by_year[year] = {g: grape_season(village, year, g, weather, rain, starts.get((area, year)), normal_t[village]) for g in GRAPES}
         built[village] = (seasons, grapes_by_year)
     anchor_sugar_curves(built, area_of)
+    add_blends(built)
 
     for point in points:
         village = point['id']
@@ -518,7 +581,7 @@ def main() -> None:
             'harvestRain': round(mean(seasons[y]['harvestRain'] for y in base_rain if 'harvestRain' in seasons[y])),
             'grapes': {},
         }
-        for grape in GRAPES:
+        for grape in grapes_by_year[base[0]]:
             curves = [grapes_by_year[y][grape]['sugar']['values'] for y in base]
             columns = list(zip(*curves))
             ripening = [grapes_by_year[y][grape]['ripening'] for y in base]
@@ -542,20 +605,18 @@ def main() -> None:
         written.append(village)
 
     index = {
-        'region': 'burgundy',
+        'region': region.name(),
         'generatedAt': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
         'sample': False,
         'baseline': {'from': BASELINE[0], 'to': BASELINE[1], 'rainFrom': RAIN_FROM},
         'sources': [
             {'label': 'Rain', 'detail': 'Météo-France COMÉPHORE radar–gauge reanalysis, 1 km, hourly (Licence Ouverte Etalab 2.0). Days not yet published use SAFRAN.'},
             {'label': 'Temperature and sunshine', 'detail': 'Météo-France SAFRAN (SIM2) daily reanalysis, 8 km, corrected to each village’s vineyard elevation from IGN RGE ALTI.'},
-            {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay), then matched to the must sugar measured by the BIVB maturity network (maturite.bivb.com) in every area of the page from about 1990 (1988 in the Côte d’Or). Earlier years use a correction from the season’s warmth, rain and year, fitted on those measurements (held-out error about 10 g/L, against 14 for the model alone).'},
-            {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir) and 2547 (Chardonnay). Vineyard temperatures are raised 1.1 °C for this model to match the stations it was fitted on; that offset was fitted on BIVB flowering dates and lands véraison within 4.3 days of BIVB’s observed 2016–2025 dates on average.'},
-            {'label': 'Harvest', 'detail': 'Official or reported start dates where a source records one — an official ban, the Hospices de Beaune, the BIVB or the wine press. Other years are estimated as the day Pinot Noir reaches the sugar level that area’s recorded starts were picked at, or, without enough records, the level that matches Beaune’s recorded 1988–2018 average start of 15 September (Labbé et al., 2019).'},
-            {'label': 'Frost and hail', 'detail': 'Spring frosts and hailstorms a grower body or the wine press dates to at least the month, kept by hand because an 8 km grid cannot see them; each links to its source.'},
+            *REGION['sources'],
         ],
         'harvest': harvest,
         'events': vineyard_events(),
+        **({'blends': REGION['blends']} if REGION['blends'] else {}),
         'villages': written,
     }
     (OUT / 'index.json').write_text(json.dumps(index, separators=(',', ':')))

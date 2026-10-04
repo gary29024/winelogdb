@@ -1,0 +1,58 @@
+[
+ {
+  "id": "saint-estephe",
+  "name": "Saint-Estèphe",
+  "area": "left-bank",
+  "lat": 45.2481,
+  "lon": -0.7766,
+  "map": "scripts/vintages/data/bordeaux/maps/saint-estephe.geojson"
+ },
+ {
+  "id": "pauillac",
+  "name": "Pauillac",
+  "area": "left-bank",
+  "lat": 45.2134,
+  "lon": -0.7756,
+  "map": "scripts/vintages/data/bordeaux/maps/pauillac.geojson"
+ },
+ {
+  "id": "saint-julien",
+  "name": "Saint-Julien",
+  "area": "left-bank",
+  "lat": 45.1578,
+  "lon": -0.772,
+  "map": "scripts/vintages/data/bordeaux/maps/saint-julien.geojson"
+ },
+ {
+  "id": "margaux",
+  "name": "Margaux",
+  "area": "left-bank",
+  "lat": 45.0269,
+  "lon": -0.6666,
+  "map": "scripts/vintages/data/bordeaux/maps/margaux.geojson"
+ },
+ {
+  "id": "pessac-leognan",
+  "name": "Pessac-Léognan",
+  "area": "left-bank",
+  "lat": 44.7195,
+  "lon": -0.6245,
+  "map": "scripts/vintages/data/bordeaux/maps/pessac-leognan.geojson"
+ },
+ {
+  "id": "saint-emilion",
+  "name": "Saint-Émilion",
+  "area": "right-bank",
+  "lat": 44.8843,
+  "lon": -0.0995,
+  "map": "scripts/vintages/data/bordeaux/maps/saint-emilion.geojson"
+ },
+ {
+  "id": "pomerol",
+  "name": "Pomerol",
+  "area": "right-bank",
+  "lat": 44.9303,
+  "lon": -0.1967,
+  "map": "scripts/vintages/data/bordeaux/maps/pomerol.geojson"
+ }
+]

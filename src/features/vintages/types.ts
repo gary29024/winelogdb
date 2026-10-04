@@ -8,7 +8,7 @@
  * same file shape serves any region: Burgundy is the first, not a special case.
  */
 
-export type GrapeId='pinot-noir'|'chardonnay';
+export type GrapeId='pinot-noir'|'chardonnay'|'merlot'|'cabernet-sauvignon'|'cabernet-franc'|'blend';
 
 /** Where a sampled place sits; one weather series is read per village. */
 export type VintageVillage={id:string;name:string;area:string;lat:number;lon:number};
@@ -22,6 +22,11 @@ export type VintageGrape={
   ripeSugar:number;
   /** The appellation's minimum sugar at harvest for village wines (g/L of must). */
   minSugar:number;
+  /** Places whose appellation sets a different minimum for this grape. */
+  minSugarAt?:Readonly<Record<string,number>>;
+  colour:'red'|'white';
+  /** A blend reads each place's planted mix of the region's grapes (index.json blends). */
+  blend?:boolean;
 };
 
 export type VintageRegionConfig={
@@ -35,6 +40,8 @@ export type VintageRegionConfig={
   grapes:readonly VintageGrape[];
   /** Static folder the page loads from: index.json plus one <village>.json each. */
   dataDir:string;
+  defaultVillage:string;
+  defaultGrape:GrapeId;
 };
 
 /** One season's weather at one village, Apr–Oct unless named otherwise. */
@@ -145,6 +152,8 @@ export type VintageIndex={
   harvest:Record<string,AreaHarvest>;
   /** Frost and hail a source records, by area then year (scripts/vintages/data/vineyard_events.csv). */
   events?:Record<string,Record<string,VineyardEvent[]>>;
+  /** Each place's planted mix (share of red vineyard, 0-1), where the region reads a blend. */
+  blends?:Record<string,Partial<Record<GrapeId,number>>>;
   quality?:QualityModel;
   /** Villages that have a data file. */
   villages:string[];

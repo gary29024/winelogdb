@@ -31,6 +31,8 @@ import rasterio
 from pyproj import CRS, Transformer
 from rasterio.io import MemoryFile
 
+import region
+
 ROOT = Path(__file__).resolve().parents[3]
 URL = 'https://meteofrance.s3.sbg.io.cloud.ovh.net/data/synchro_ftp/REANALYSES/COMEPHORE/H_COMEPHORE_{year}{month:02d}.tar'
 MISSING = 65535
@@ -95,7 +97,7 @@ def main() -> None:
     parser.add_argument('--out', default='scripts/vintages/cache')
     args = parser.parse_args()
     first, last = (int(part) for part in args.months.split('-'))
-    points = json.loads((ROOT / 'scripts/vintages/data/points.json').read_text())
+    points = json.loads((region.config()['data'] / 'points.json').read_text())
     totals: dict = defaultdict(float)
     hours: dict = defaultdict(int)
     today = dt.date.today()
