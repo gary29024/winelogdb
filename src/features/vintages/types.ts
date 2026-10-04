@@ -8,7 +8,7 @@
  * same file shape serves any region: Burgundy is the first, not a special case.
  */
 
-export type GrapeId='pinot-noir'|'chardonnay'|'merlot'|'cabernet-sauvignon'|'cabernet-franc'|'blend';
+export type GrapeId='pinot-noir'|'chardonnay'|'merlot'|'cabernet-sauvignon'|'cabernet-franc'|'sauvignon-blanc'|'semillon'|'blend'|'blend-white'|'blend-sweet';
 
 /** Where a sampled place sits; one weather series is read per village. */
 export type VintageVillage={id:string;name:string;area:string;lat:number;lon:number};
@@ -27,6 +27,8 @@ export type VintageGrape={
   colour:'red'|'white';
   /** A blend reads each place's planted mix of the region's grapes (index.json blends). */
   blend?:boolean;
+  /** Its wines are sweet (Sauternes): noble rot, not ripeness alone, makes the vintage. */
+  sweet?:boolean;
 };
 
 export type VintageRegionConfig={
@@ -58,6 +60,11 @@ export type SeasonWeather={
   heatDays:number;
   /** Rain in September, mm. */
   sepRain:number;
+  /** Sauternes and Barsac, from the area's harvest start to 31 October (build.py noble_rot): dry days
+   *  within five days of one favourable to Botrytis, mild rain days, and the Botrytis-favourable days. */
+  nobleRotDays?:number;
+  greyRotDays?:number;
+  botrytisDays?:number;
   /** Rain from a week before the area's harvest start to the end of the picking fortnight (absent while a harvest is under way). */
   harvestRain?:number;
   /** 1 km radar rain (from 1997), or the 8 km record scaled to it (earlier years). Absent on normals. */
@@ -78,6 +85,8 @@ export type RipeningWeather={
   wetDays?:number;
   /** Solar radiation, daily mean over the ripening weeks, MJ/m². */
   radiation:number;
+  /** Rain over this grape's own picking (the week before its harvest start and the fortnight from it), mm. */
+  harvestRain?:number;
 };
 
 /**
@@ -97,7 +106,7 @@ export type GrapeSeason={
   outlook?:QualityOutlook;
 };
 
-export type OutlookDriver={id:'ripeness'|'warmth'|'heat'|'wet'|'harvestRain'|'acidity'|'hail';effect:'helps'|'hurts'};
+export type OutlookDriver={id:'ripeness'|'warmth'|'heat'|'wet'|'harvestRain'|'acidity'|'hail'|'nobleRot'|'greyRot';effect:'helps'|'hurts'};
 export type QualityOutlook={score:number;low:number;high:number;drivers:OutlookDriver[];
   /** Inputs that went well past every season the outlook was tested on; read at the edge of that range. */
   beyondTested?:OutlookDriver['id'][]};
@@ -137,6 +146,10 @@ export type HarvestStart={
 export type AreaHarvest={
   /** Usual start over the baseline, MM-DD. */
   typical:string;
+  /** Sugar (g/L) the area starts picking at, read off the drawn curves on its recorded starts; or a level the region sets (Sauternes: the legal minimum). */
+  pickSugar?:number;
+  /** Where pickSugar comes from, e.g. "20 recorded starts, 1991–2020" or "legal minimum". */
+  pickSugarBasis?:string;
   years:Record<string,HarvestStart>;
 };
 
@@ -156,8 +169,10 @@ export type VintageIndex={
   harvest:Record<string,AreaHarvest>;
   /** Frost and hail a source records, by area then year (scripts/vintages/data/vineyard_events.csv). */
   events?:Record<string,Record<string,VineyardEvent[]>>;
-  /** Each place's planted mix (share of red vineyard, 0-1), where the region reads a blend. */
-  blends?:Record<string,Partial<Record<GrapeId,number>>>;
+  /** Each place's blends and their planted mix (share of that colour's vineyard, 0-1): village, then blend, then grape. */
+  blends?:Record<string,Partial<Record<GrapeId,Partial<Record<GrapeId,number>>>>>;
+  /** A colour that keeps its own harvest dates in an area (Bordeaux: Pessac-Léognan whites on 'dry-white'). */
+  colourAreas?:Partial<Record<'red'|'white',Record<string,string>>>;
   quality?:QualityModel;
   /** Villages that have a data file. */
   villages:string[];

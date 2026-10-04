@@ -183,7 +183,8 @@ export type Verdict='Favourable'|'Mixed'|'Challenging';
 export type ConditionsReading={title:string;verdict:Verdict;conditions:Condition[]};
 
 /** Warmth while ripening helps a red's colour and tannin but costs a white its freshness. */
-export const isRed=(grape:GrapeId)=>grape!=='chardonnay';
+const WHITE_GRAPES:ReadonlySet<GrapeId>=new Set(['chardonnay','sauvignon-blanc','semillon','blend-white','blend-sweet']);
+export const isRed=(grape:GrapeId)=>!WHITE_GRAPES.has(grape);
 
 const signed=(value:number,digits=0)=>`${value>0?'+':value<0?'−':''}${Math.abs(value).toFixed(digits)}`;
 
@@ -482,7 +483,8 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
         heatStressDays:avg(own.map(item=>item.ripening.heatStressDays)),
         rain:avg(own.map(item=>item.ripening.rain)),
         wetDays:own.every(item=>item.ripening.wetDays!=null)?Math.round(avg(own.map(item=>item.ripening.wetDays!))*10)/10:undefined,
-        radiation:avg(own.map(item=>item.ripening.radiation))
+        radiation:avg(own.map(item=>item.ripening.radiation)),
+        harvestRain:own.every(item=>item.ripening.harvestRain!=null)?Math.round(avg(own.map(item=>item.ripening.harvestRain!))):undefined
       }
     };
   }
@@ -490,6 +492,10 @@ export function eraNormal(years:Record<string,VillageSeason>,harvest:AreaHarvest
     gdd:Math.round(field(s=>s.gdd)),rainAprSep:Math.round(field(s=>s.rainAprSep)),augNights:Math.round(field(s=>s.augNights)*10)/10,
     frostDays:Math.round(field(s=>s.frostDays)*10)/10,heatDays:Math.round(field(s=>s.heatDays)),sepRain:Math.round(field(s=>s.sepRain)),harvestRain:withHarvestRain.length?Math.round(avg(withHarvestRain)):undefined,grapes
   };
+  for(const key of ['nobleRotDays','greyRotDays','botrytisDays'] as const){
+    const values=seasons.flatMap(season=>season[key]==null?[]:[season[key]!]);
+    if(values.length)normal[key]=Math.round(avg(values)*10)/10;
+  }
   const starts=Object.entries(harvest.years).filter(([y])=>Number(y)>=from&&Number(y)<=to).map(([,entry])=>dayOfYear(entry.date));
   return {normal,harvest:{...harvest,typical:starts.length?monthDayOf(avg(starts)):harvest.typical},from,to};
 }
@@ -520,8 +526,26 @@ const EXPECT={
     riper:'Expect ripe, generous whites.',lessRipe:'Expect crisp, lighter whites.',usual:'Expect classic, balanced whites.'}
 } satisfies Record<string,Record<string,string>>;
 
+/** Sauternes: how the noble-rot season compared with usual, and what it means in the glass. */
+export type NobleRotReading={noble:-1|0|1;grey:-1|0|1;expect:string};
+
+/** A count reads as more or fewer only when it is half again (or half) the usual and two days apart. */
+const countSide=(value:number,usual:number):-1|0|1=>value>=usual*1.5&&value>=usual+2?1:value<=usual*.5&&value<=usual-2?-1:0;
+
+export function readNobleRot(season:SeasonWeather,normal:SeasonWeather):NobleRotReading|null{
+  if(season.nobleRotDays==null||season.greyRotDays==null||normal.nobleRotDays==null||normal.greyRotDays==null)return null;
+  const noble=countSide(season.nobleRotDays,normal.nobleRotDays),grey=countSide(season.greyRotDays,normal.greyRotDays);
+  const expect=noble>0?grey>0?'Expect fine sweet wines where growers made many passes — noble rot came, but so did rain.'
+      :'Expect rich, concentrated sweet wines — noble rot set in and the berries dried cleanly.'
+    :grey>0?'Expect lighter, uneven sweet wines — rain brought grey rot more than noble rot.'
+    :noble<0?'Expect fresher, less botrytised sweet wines — the autumn gave noble rot little to work with.'
+    :'Expect classic sweet wines; the quality rests on each estate’s passes through the vines.';
+  return {noble,grey,expect};
+}
+
 /** Which set of wine-style words a grape's wines take. */
-const STYLE:Record<GrapeId,keyof typeof EXPECT>={'pinot-noir':'pinot',chardonnay:'white',merlot:'claret','cabernet-sauvignon':'claret','cabernet-franc':'claret',blend:'claret'};
+const STYLE:Record<GrapeId,keyof typeof EXPECT>={'pinot-noir':'pinot',chardonnay:'white',merlot:'claret','cabernet-sauvignon':'claret','cabernet-franc':'claret',blend:'claret',
+  'sauvignon-blanc':'white',semillon:'white','blend-white':'white','blend-sweet':'white'};
 
 /**
  * The season story's closing line for one grape. The same weather pushes the two grapes

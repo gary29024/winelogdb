@@ -80,7 +80,7 @@ export function VintagesPage(){
       <label>
         <span>Village</span>
         <select value={villageId} onChange={event=>chooseVillage(event.target.value)}>
-          {region.areas.map(group=><optgroup label={group.name} key={group.id}>
+          {region.areas.filter(group=>region.villages.some(item=>item.area===group.id)).map(group=><optgroup label={group.name} key={group.id}>
             {region.villages.filter(item=>item.area===group.id).map(item=><option value={item.id} key={item.id}>{item.name}</option>)}
           </optgroup>)}
         </select>

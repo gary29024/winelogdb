@@ -53,7 +53,8 @@ OUT = region.config()['out']
 
 # Per grape: the critics' groups it is fitted on, their areas, the minimum sugar and the inputs (region.py).
 QUALITY = region.config().get('quality', {})
-SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, 'acidity': 1, 'hail': -1}
+SIGNS = {'ripeness': 1, 'warmth': 1, 'heat': -1, 'wet': -1, 'harvestRain': -1, 'acidity': 1, 'hail': -1,
+         'nobleRot': 1, 'greyRot': -1}
 MODERN = 1991
 # Candidate warmth caps, in the warmth input's steps of 10% more heat than normal; None = no cap.
 WARMTH_CAPS = [None, 0.5, 1.0, 1.5]
@@ -84,9 +85,15 @@ def inputs(village: dict, year: str, grape: str, harvest_start: dt.date, events:
         'warmth': (season['gdd'] - normal['gdd']) / normal['gdd'] * 10,                 # per 10% more heat over the season
         'heat': ripening['heatStressDays'] - normal_ripening['heatStressDays'],         # per extra day at 35 °C or more
         'wet': (ripening.get('wetDays', 0) - normal_ripening.get('wetDays', 0)) / 3,    # per 3 extra wet ripening days
-        'harvestRain': ((season.get('harvestRain') or 0) - (normal.get('harvestRain') or 0)) / 30,  # per 30 mm at harvest
+        # per 30 mm at harvest: over this grape's own picking where the season records it
+        'harvestRain': ((ripening['harvestRain'] if 'harvestRain' in ripening else season.get('harvestRain') or 0)
+                        - (normal_ripening['harvestRain'] if 'harvestRain' in ripening else normal.get('harvestRain') or 0)) / 30,
         'acidity': -(ripening['meanTemp'] - normal_ripening['meanTemp']),               # per °C cooler while ripening
         'hail': 1.0 if any(e['type'] == 'hail' for e in events) else 0.0,
+        # Sauternes: per 5 more noble-rot days (dry days after Botrytis set in), and per 3 more
+        # grey-rot (rain) days, over the picking season (build.py noble_rot).
+        'nobleRot': (season.get('nobleRotDays', 0) - normal.get('nobleRotDays', 0)) / 5,
+        'greyRot': (season.get('greyRotDays', 0) - normal.get('greyRotDays', 0)) / 3,
     }
 
 
@@ -123,7 +130,7 @@ def min_sugar_for(spec: dict, grape: str, village: str) -> float:
 
     def at(g: str) -> float:
         return float(rule.get(village, {}).get(g, rule[g]))
-    mix = region.config()['blends'].get(village) if grape == 'blend' else None
+    mix = region.config()['blends'].get(village, {}).get(grape)
     return sum(share * at(g) for g, share in mix.items()) if mix else at(grape)
 
 
@@ -155,7 +162,7 @@ def main() -> None:
     files = {v: json.loads((OUT / f'{v}.json').read_text()) for v in index['villages']}
 
     def season_inputs(village: str, year: str, grape: str) -> dict[str, float]:
-        area = area_of[village]
+        area = region.grape_area(area_of[village], grape)
         start = dt.date.fromisoformat(index['harvest'][area]['years'][year]['date'])
         events = index.get('events', {}).get(area, {}).get(year, [])
         return inputs(files[village], year, grape, start, events, min_sugar_for(QUALITY[grape], grape, village))
@@ -166,8 +173,10 @@ def main() -> None:
                      'consensus': {c: {str(y): [round(r, 2), counts[(c, y)]] for (cc, y), r in consensus.items() if cc == c} for c in groups_all}}
     for grape, spec in QUALITY.items():
         groups: dict[str, list[str]] = spec['groups']
-        colour = 'white' if grape == 'chardonnay' else 'red'
-        members = {g: [v for v in files if area_of[v] in areas] for g, areas in groups.items()}
+        colour = region.colour_of(grape)
+        # A group's villages: those growing this grape, harvested in one of the group's areas.
+        members = {g: [v for v in files if grape in files[v]['normal']['grapes'] and region.grape_area(area_of[v], grape) in areas]
+                   for g, areas in groups.items()}
         group_of = {v: g for g, vs in members.items() for v in vs}
         fit_villages = [v for vs in members.values() for v in vs]
         first = fit_villages[0]
@@ -261,6 +270,8 @@ def main() -> None:
                     beyond.append(name)
             return out, beyond
         for village, data in files.items():
+            if grape not in data['normal']['grapes']:
+                continue
             group = group_of.get(village)
             for year, season in data['years'].items():
                 y = int(year)
@@ -309,7 +320,7 @@ def main() -> None:
 
     with open(RECORD, 'w', newline='') as out:
         out.write('# Quality outlooks recorded for each critics\' group (Burgundy: the Côte d\'Or, by colour;\n'
-                  '# Bordeaux: by bank) once each season was complete, before critics had rated it\n'
+                  '# Bordeaux: the reds by bank, dry whites, Sauternes) once each season was complete, before critics had rated it\n'
                   '# (quality.py). Rows are added, never changed: compare them with critic_consensus.csv.\n')
         writer = csv.DictWriter(out, fieldnames=['year', 'colour', 'score', 'low', 'high', 'recorded'])
         writer.writeheader()

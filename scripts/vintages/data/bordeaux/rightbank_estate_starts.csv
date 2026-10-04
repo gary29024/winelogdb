@@ -1,0 +1,357 @@
+# Right-bank (Saint-Émilion and Pomerol) estates' first day of red picking, as each source states it:
+# estate technical sheets and vintage pages, merchants' product pages quoting them, and harvest
+# reports. One row per estate and year (the earliest the sources give). harvest_dates.csv takes
+# a right-bank start from these where at least two estates began within 7 days of the year's
+# median start: the median of those estates. Researched 4 October 2026.
+year,estate,date,grape,source_url
+1959,Château Cheval Blanc,1959-09-28,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1960,Château Cheval Blanc,1960-10-02,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1961,Château Cheval Blanc,1961-09-18,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1962,Château Cheval Blanc,1962-09-26,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1963,Château Cheval Blanc,1963-10-01,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1964,Château Cheval Blanc,1964-09-22,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1964,Château Figeac,1964-09-28,reds,https://www.chateau-figeac.com/millesime/millesime-1964/
+1965,Château Cheval Blanc,1965-10-04,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1966,Château Cheval Blanc,1966-09-22,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1967,Château Cheval Blanc,1967-09-27,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1968,Château Cheval Blanc,1968-10-01,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1969,Château Cheval Blanc,1969-09-29,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1970,Château Canon,1970-09-24,reds,https://www.millesima-usa.com/chateau-canon-1970.html
+1970,Château Cheval Blanc,1970-09-24,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1971,Château Cheval Blanc,1971-09-30,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1971,Château Figeac,1971-10-04,reds,https://www.chateau-figeac.com/millesime/millesime-1971/
+1972,Château Cheval Blanc,1972-10-12,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1973,Château Cheval Blanc,1973-09-27,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1974,Château Cheval Blanc,1974-09-30,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1975,Château Cheval Blanc,1975-09-28,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1976,Château Cheval Blanc,1976-09-16,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1977,Château Cheval Blanc,1977-10-10,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1978,Château Cheval Blanc,1978-10-09,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1979,Château Cheval Blanc,1979-10-08,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1980,Château Cheval Blanc,1980-10-13,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1981,Château Cheval Blanc,1981-10-01,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1982,Château Cheval Blanc,1982-09-20,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1983,Château Cheval Blanc,1983-09-29,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1983,Château Tertre Roteboeuf,1983-09-26,reds,https://www.millesima-usa.com/chateau-tertre-roteboeuf-1983.html
+1984,Château Cheval Blanc,1984-10-02,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1985,Château Cheval Blanc,1985-10-01,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1986,Château Cheval Blanc,1986-10-01,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1987,Château Cheval Blanc,1987-10-02,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1988,Château Angélus,1988-10-01,reds,https://www.angelus.com/download.php?file=millesimes/1/filename_en/angelus---fm---1988---en.pdf
+1988,Château Canon,1988-10-01,reds,https://www.millesima-usa.com/chateau-canon-1988.html
+1988,Château Cheval Blanc,1988-10-01,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1989,Château Angélus,1989-09-05,reds,https://www.angelus.com/download.php?file=millesimes/2/filename_en/angelus---fm---1989---en.pdf
+1989,Château Cheval Blanc,1989-09-07,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1990,Château Angélus,1990-09-13,reds,https://www.angelus.com/download.php?file=millesimes/3/filename_en/angelus---fm---1990---en.pdf
+1990,Château Cheval Blanc,1990-09-11,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1991,Château Angélus,1991-10-02,reds,https://www.angelus.com/download.php?file=millesimes/4/filename_en/angelus---fm---1991---en.pdf
+1991,Château Cheval Blanc,1991-09-30,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1992,Château Angélus,1992-09-30,reds,https://www.angelus.com/download.php?file=millesimes/5/filename_en/angelus---fm---1992---en.pdf
+1992,Château Cheval Blanc,1992-09-24,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1993,Château Angélus,1993-09-21,reds,https://www.angelus.com/download.php?file=millesimes/6/filename_en/angelus---fm---1993---en.pdf
+1993,Château Cheval Blanc,1993-09-20,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1994,Château Angélus,1994-09-19,reds,https://www.angelus.com/download.php?file=millesimes/7/filename_en/angelus---fm---1994---en.pdf
+1994,Château Cheval Blanc,1994-09-16,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1995,Château Angélus,1995-09-15,reds,https://www.angelus.com/en/all-vintages.html
+1995,Château Cheval Blanc,1995-09-15,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1995,Château Figeac,1995-09-18,reds,https://www.chateau-figeac.com/millesime/millesime-1995/
+1996,Château Angélus,1996-09-24,reds,https://www.angelus.com/en/all-vintages.html
+1996,Château Canon,1996-09-24,merlot,https://www.millesima-usa.com/chateau-canon-1996.html
+1996,Château Cheval Blanc,1996-09-23,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1997,Château Angélus,1997-09-15,reds,https://www.angelus.com/en/all-vintages.html
+1997,Château Cheval Blanc,1997-09-03,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1998,Château Angélus,1998-09-28,reds,https://www.angelus.com/en/all-vintages.html
+1998,Château Canon,1998-09-26,merlot,https://www.millesima-usa.com/chateau-canon-1998.html
+1998,Château Cheval Blanc,1998-09-21,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+1999,Château Angélus,1999-09-06,reds,https://www.angelus.com/en/all-vintages.html
+1999,Château Cheval Blanc,1999-09-14,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2000,Château Angélus,2000-09-14,reds,https://www.angelus.com/en/all-vintages.html
+2000,Château Cheval Blanc,2000-09-14,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2000,Château Nénin,2000-09-18,reds,https://www.millesima-usa.com/chateau-nenin-2000.html
+2000,Clos Fourtet,2000-09-20,reds,http://www.closfourtet.com/assets/technical-sheets/2000.pdf
+2000,Pétrus,2000-09-18,reds,https://www.millesima-usa.com/petrus-2000.html
+2001,Château Angélus,2001-09-21,reds,https://www.angelus.com/en/all-vintages.html
+2001,Château Canon,2001-10-02,merlot,https://www.millesima-usa.com/chateau-canon-2001.html
+2001,Château Cheval Blanc,2001-09-24,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2001,Clos Fourtet,2001-10-02,reds,http://www.closfourtet.com/assets/technical-sheets/2001.pdf
+2001,Pétrus,2001-09-27,reds,https://www.decanter.com/learn/vintage-guides/harvest-reports-2001-51197/
+2002,Château Angélus,2002-09-20,reds,https://www.angelus.com/en/all-vintages.html
+2002,Château Canon,2002-09-24,merlot,https://www.millesima-usa.com/chateau-canon-2002.html
+2002,Château Cheval Blanc,2002-09-20,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2002,Clos Fourtet,2002-10-02,reds,http://www.closfourtet.com/assets/technical-sheets/2002.pdf
+2003,Château Angélus,2003-09-09,reds,https://www.angelus.com/en/all-vintages.html
+2003,Château Cheval Blanc,2003-09-01,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2003,Clos Fourtet,2003-09-10,reds,http://www.closfourtet.com/assets/technical-sheets/2003.pdf
+2004,Château Angélus,2004-09-30,reds,https://www.angelus.com/en/all-vintages.html
+2004,Château Canon,2004-09-30,reds,https://www.millesima-usa.com/chateau-canon-2004.html
+2004,Château Cheval Blanc,2004-09-22,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2004,Château Troplong Mondot,2004-10-04,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2004.html
+2004,Clos Fourtet,2004-10-04,reds,http://www.closfourtet.com/assets/technical-sheets/2004.pdf
+2005,Château Angélus,2005-09-16,reds,https://www.angelus.com/en/all-vintages.html
+2005,Château Canon,2005-09-20,reds,https://www.millesima-usa.com/chateau-canon-2005.html
+2005,Château Cheval Blanc,2005-09-12,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2005,Clos Fourtet,2005-09-26,reds,http://www.closfourtet.com/assets/technical-sheets/2005.pdf
+2006,Château Angélus,2006-09-19,reds,https://www.angelus.com/en/all-vintages.html
+2006,Château Cheval Blanc,2006-09-15,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2006,Château Nénin,2006-09-12,reds,https://www.millesima-usa.com/chateau-nenin-2006.html
+2006,Clos Fourtet,2006-09-23,reds,http://www.closfourtet.com/assets/technical-sheets/2006.pdf
+2007,Château Angélus,2007-09-25,reds,https://www.angelus.com/en/all-vintages.html
+2007,Château Canon,2007-09-27,merlot,https://www.millesima-usa.com/chateau-canon-2007.html
+2007,Château Cheval Blanc,2007-09-19,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2007,Château Fleur Cardinale,2007-10-10,reds,https://www.decanter.com/features/ch-recommendations-wine-the-september-sun-saviour-247186/
+2007,Clos Fourtet,2007-10-03,reds,http://www.closfourtet.com/assets/technical-sheets/2007.pdf
+2008,Château Angélus,2008-10-03,reds,https://www.angelus.com/en/all-vintages.html
+2008,Château Ausone,2008-10-17,reds,https://www.millesima-usa.com/chateau-ausone-2008.html
+2008,Château Canon,2008-10-04,merlot,https://www.millesima-usa.com/chateau-canon-2008.html
+2008,Château Cheval Blanc,2008-09-30,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2008,Château Nénin,2008-09-25,reds,https://www.millesima-usa.com/chateau-nenin-2008.html
+2008,Clos Fourtet,2008-10-09,reds,http://www.closfourtet.com/assets/technical-sheets/2008.pdf
+2008,J-P Moueix properties (Pomerol),2008-09-29,reds,https://www.decanter.com/features/bordeaux-2008-a-tough-call-246703/
+2008,J-P Moueix properties (Saint-Émilion),2008-10-14,reds,https://www.decanter.com/features/bordeaux-2008-a-tough-call-246703/
+2009,Château Angélus,2009-09-25,reds,https://www.angelus.com/en/all-vintages.html
+2009,Château Cheval Blanc,2009-09-15,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2009,Château Figeac,2009-09-22,reds,https://www.millesima-usa.com/chateau-figeac-2009.html
+2009,Château L'Église-Clinet,2009-09-14,reds,https://www.millesima-usa.com/chateau-l-eglise-clinet-2009.html
+2009,Château La Conseillante,2009-09-14,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2009.pdf
+2009,Clos Fourtet,2009-09-28,reds,http://www.closfourtet.com/assets/technical-sheets/2009.pdf
+2009,Pétrus,2009-09-17,reds,https://www.millesima-usa.com/petrus-2009.html
+2010,Château Angélus,2010-09-28,reds,https://www.angelus.com/en/all-vintages.html
+2010,Château Beauregard,2010-09-29,reds,https://www.bordeaux-tradition.com/wp-content/uploads/2011/06/Beauregard-2010-FR1.pdf
+2010,Château Cheval Blanc,2010-09-20,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2010,Château Figeac,2010-09-27,reds,https://www.millesima-usa.com/chateau-figeac-2010.html
+2010,Château La Conseillante,2010-09-16,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2010.pdf
+2010,Château Nénin,2010-09-16,reds,https://www.millesima-usa.com/chateau-nenin-2010.html
+2010,Château Pavie Macquin,2010-10-15,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/fiche-pavie-macquin-2010-fr.pdf
+2010,Clos Fourtet,2010-09-30,reds,http://www.closfourtet.com/assets/technical-sheets/2010.pdf
+2010,Pétrus,2010-09-27,reds,https://www.millesima-usa.com/petrus-2010.html
+2011,Château Angélus,2011-09-19,reds,https://www.angelus.com/en/all-vintages.html
+2011,Château Beauséjour (Héritiers Duffau-Lagarrosse),2011-09-22,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Beausejour-2011-FR.pdf
+2011,Château Canon,2011-09-13,merlot,https://www.millesima-usa.com/chateau-canon-2011.html
+2011,Château Cheval Blanc,2011-09-06,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2011,Château La Conseillante,2011-09-08,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2011.pdf
+2011,Château Nénin,2011-09-05,reds,https://www.millesima-usa.com/chateau-nenin-2011.html
+2011,Château Pavie Macquin,2011-09-20,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2011-FR.pdf
+2011,Clos Fourtet,2011-09-16,reds,http://www.closfourtet.com/assets/technical-sheets/2011.pdf
+2012,Château Angélus,2012-10-08,reds,https://www.angelus.com/en/all-vintages.html
+2012,Château Beauséjour (Héritiers Duffau-Lagarrosse),2012-10-13,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Beausejour-2012-FR.pdf
+2012,Château Canon,2012-10-03,merlot,https://www.millesima-usa.com/chateau-canon-2012.html
+2012,Château Cheval Blanc,2012-09-27,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2012,Château La Conseillante,2012-09-18,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2012.pdf
+2012,Château Nénin,2012-09-21,reds,https://www.millesima-usa.com/chateau-nenin-2012.html
+2012,Château Pavie Macquin,2012-10-13,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2012-FR.pdf
+2012,Clos Fourtet,2012-10-09,reds,http://www.closfourtet.com/assets/technical-sheets/2012.pdf
+2013,Château Angélus,2013-09-28,reds,https://www.angelus.com/en/all-vintages.html
+2013,Château Beauséjour (Héritiers Duffau-Lagarrosse),2013-10-02,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Beausejour-2013-FR.pdf
+2013,Château Canon,2013-10-01,merlot,https://www.millesima-usa.com/chateau-canon-2013.html
+2013,Château Cheval Blanc,2013-09-30,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2013,Château Figeac,2013-10-01,reds,https://www.chateau-figeac.com/millesime/2013/
+2013,Château La Conseillante,2013-09-27,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2013.pdf
+2013,Château La Dominique,2013-10-03,reds,https://www.bordeaux-tradition.com/wp-content/uploads/2013/12/Dominique-2013-PM-FR-61.pdf
+2013,Château Nénin,2013-10-01,reds,https://www.millesima-usa.com/chateau-nenin-2013.html
+2013,Château Pavie Macquin,2013-10-04,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2013-FR.pdf
+2013,Clos Fourtet,2013-09-30,reds,http://www.closfourtet.com/assets/technical-sheets/2013.pdf
+2014,Château Angélus,2014-10-02,reds,https://www.angelus.com/en/all-vintages.html
+2014,Château Beauséjour (Héritiers Duffau-Lagarrosse),2014-10-06,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Beausejour-2014-FR.pdf
+2014,Château Canon,2014-09-29,merlot,https://www.millesima-usa.com/chateau-canon-2014.html
+2014,Château Cheval Blanc,2014-09-19,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2014,Château Figeac,2014-09-29,reds,https://www.bordeaux-tradition.com/wp-content/uploads/2014/11/FIGEAC-2014-PREMIERES-IMPRESSIONS-NOVEMBRE-2014.pdf
+2014,Château Fleur Cardinale,2014-10-09,reds,https://www.bordeaux-tradition.com/wp-content/uploads/2014/11/NEWSLETTER_nov_2014_-Fleur-Cardinale.pdf
+2014,Château L'Évangile,2014-09-22,reds,https://www.millesima-usa.com/chateau-l-evangile-2014.html
+2014,Château La Conseillante,2014-09-23,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2014.pdf
+2014,Château Nénin,2014-09-26,reds,https://www.millesima-usa.com/chateau-nenin-2014.html
+2014,Château Pavie Macquin,2014-10-06,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2014-FT-GB-389.pdf
+2014,Château Tertre Roteboeuf,2014-10-15,reds,https://www.millesima-usa.com/chateau-tertre-roteboeuf-2014.html
+2014,Château Troplong Mondot,2014-10-03,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2014.html
+2014,Clos Fourtet,2014-10-03,reds,http://www.closfourtet.com/assets/technical-sheets/2014.pdf
+2015,Château Angélus,2015-09-22,merlot,https://www.angelus.com/en/all-vintages.html
+2015,Château Beauséjour (Héritiers Duffau-Lagarrosse),2015-09-25,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Beausejour-2015-RP-FR.pdf
+2015,Château Cheval Blanc,2015-09-03,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2015,Château Figeac,2015-09-21,reds,https://www.chateau-figeac.com/millesime/2015/
+2015,Château Gazin,2015-09-10,merlot,https://www.millesima-usa.com/chateau-gazin-2015.html
+2015,Château La Conseillante,2015-09-21,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2015.pdf
+2015,Château Larcis Ducasse,2015-09-28,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/03/Larcis-Ducasse-2015-RP-GB-110.pdf
+2015,Château Pavie Macquin,2015-09-29,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2015-RP-FR-389.pdf
+2015,Château Troplong Mondot,2015-09-30,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2015.html
+2015,Pétrus,2015-09-14,reds,https://www.millesima-usa.com/petrus-2015.html
+2016,Château Angélus,2016-10-04,reds,https://www.angelus.com/en/all-vintages.html
+2016,Château Cheval Blanc,2016-09-20,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2016,Château Clinet,2016-09-22,reds,https://www.millesima-usa.com/chateau-clinet-2016.html
+2016,Château Figeac,2016-09-23,reds,https://www.millesima-usa.com/chateau-figeac-2016.html
+2016,Château La Conseillante,2016-09-22,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2016.pdf
+2016,Château La Dominique,2016-09-26,reds,https://www.millesima-usa.com/chateau-la-dominique-2016.html
+2016,Château Le Gay,2016-09-27,reds,https://www.millesima-usa.com/chateau-le-gay-2016.html
+2016,Château Nénin,2016-09-23,reds,https://www.millesima-usa.com/chateau-nenin-2016.html
+2016,Château Pavie Macquin,2016-10-07,merlot,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pavie-Macquin-2016-RP-FR-389-2.pdf
+2016,Château Troplong Mondot,2016-10-03,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2016.html
+2017,Château Angélus,2017-09-13,reds,https://www.angelus.com/en/all-vintages.html
+2017,Château Ausone,2017-09-23,reds,https://www.millesima-usa.com/chateau-ausone-2017.html
+2017,Château Canon,2017-09-04,merlot,https://www.millesima-usa.com/chateau-canon-2017.html
+2017,Château Cheval Blanc,2017-09-06,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2017,Château Gazin,2017-09-05,merlot,https://www.millesima-usa.com/chateau-gazin-2017.html
+2017,Château L'Église-Clinet,2017-09-12,merlot,https://www.millesima-usa.com/chateau-l-eglise-clinet-2017.html
+2017,Château La Conseillante,2017-09-05,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2017.pdf
+2017,Château La Dominique,2017-09-15,reds,https://www.millesima-usa.com/chateau-la-dominique-2017.html
+2017,Château Nénin,2017-09-12,reds,https://www.millesima-usa.com/chateau-nenin-2017.html
+2017,Château Pavie,2017-09-25,reds,https://thewineindependent.com/articles/bordeaux-2017-retrospective/
+2017,Château Troplong Mondot,2017-09-18,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2017.html
+2017,Le Pin,2017-09-18,reds,https://www.millesima-usa.com/chateau-le-pin-2017.html
+2017,Pétrus,2017-09-08,reds,https://www.millesima-usa.com/petrus-2017.html
+2017,Vieux Château Certan,2017-09-12,reds,https://www.millesima-usa.com/vieux-chateau-certan-2017.html
+2018,Château Angélus,2018-09-24,reds,https://www.angelus.com/en/all-vintages.html
+2018,Château Ausone,2018-09-25,reds,https://www.millesima-usa.com/chateau-ausone-2018.html
+2018,Château Canon,2018-09-07,merlot,https://www.millesima-usa.com/chateau-canon-2018.html
+2018,Château Canon-la-Gaffelière,2018-09-19,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2018.html
+2018,Château Cheval Blanc,2018-09-10,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2018,Château Figeac,2018-09-17,reds,https://www.chateau-figeac.com/millesime/2018/
+2018,Château L'Église-Clinet,2018-09-18,merlot,https://www.millesima-usa.com/chateau-l-eglise-clinet-2018.html
+2018,Château L'Évangile,2018-09-19,merlot,https://www.millesima-usa.com/chateau-l-evangile-2018.html
+2018,Château La Conseillante,2018-09-19,merlot,https://www.la-conseillante.com/wp-content/uploads/2020/11/Fiche-technique-La-Conseillante-2018.pdf
+2018,Château La Gaffelière,2018-09-10,merlot,https://www.millesima-usa.com/chateau-la-gaffeliere-2018.html
+2018,Château La Pointe,2018-09-17,reds,https://www.millesima-usa.com/chateau-la-pointe-2018.html
+2018,Château Nénin,2018-09-13,reds,https://www.millesima-usa.com/chateau-nenin-2018.html
+2018,Château Pavie,2018-09-26,reds,https://www.millesima-usa.com/chateau-pavie-2018.html
+2018,Château Petit-Village,2018-09-19,reds,https://www.millesima-usa.com/chateau-petit-village-2018.html
+2018,Château Soutard,2018-09-20,reds,https://www.millesima-usa.com/chateau-soutard-2018.html
+2018,Château Trotanoy,2018-09-14,reds,https://www.millesima-usa.com/chateau-trotanoy-2018.html
+2018,Clos Fourtet,2018-09-25,reds,https://www.millesima-usa.com/clos-fourtet-2018.html
+2018,Pétrus,2018-09-13,reds,https://www.millesima-usa.com/petrus-2018.html
+2018,Vieux Château Certan,2018-09-19,reds,https://www.millesima-usa.com/vieux-chateau-certan-2018.html
+2019,Château Angélus,2019-09-18,reds,https://www.angelus.com/en/all-vintages.html
+2019,Château Bélair-Monange,2019-09-19,reds,https://www.millesima-usa.com/chateau-belair-monange-2019.html
+2019,Château Canon,2019-09-11,reds,https://www.millesima-usa.com/chateau-canon-2019.html
+2019,Château Canon-la-Gaffelière,2019-09-19,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2019.html
+2019,Château Cheval Blanc,2019-09-10,merlot,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2019,Château Clinet,2019-10-02,reds,https://www.millesima-usa.com/chateau-clinet-2019.html
+2019,Château Figeac,2019-09-13,reds,https://www.chateau-figeac.com/millesime/2019/
+2019,Château Grand Mayne,2019-09-23,reds,https://www.millesima-usa.com/chateau-grand-mayne-2019.html
+2019,Château L'Évangile,2019-09-13,merlot,https://www.millesima-usa.com/chateau-l-evangile-2019.html
+2019,Château La Conseillante,2019-09-17,merlot,https://www.la-conseillante.com/wp-content/uploads/2024/04/Fiche-technique-La-Conseillante-2019.pdf
+2019,Château La Pointe,2019-09-16,reds,https://www.millesima-usa.com/chateau-la-pointe-2019.html
+2019,Château Larcis Ducasse,2019-09-21,reds,https://www.millesima-usa.com/chateau-larcis-ducasse-2019.html
+2019,Château Trotanoy,2019-09-21,merlot,https://www.millesima-usa.com/chateau-trotanoy-2019.html
+2019,Clos Fourtet,2019-09-24,reds,https://www.millesima-usa.com/clos-fourtet-2019.html
+2020,Château Angélus,2020-09-15,reds,https://www.angelus.com/en/all-vintages.html
+2020,Château Canon,2020-09-04,reds,https://www.millesima-usa.com/chateau-canon-2020.html
+2020,Château Canon-la-Gaffelière,2020-09-17,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2020.html
+2020,Château Cheval Blanc,2020-09-03,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2020,Château Figeac,2020-09-04,reds,https://www.chateau-figeac.com/millesime/millesime-2020/
+2020,Château Grand Mayne,2020-09-10,reds,https://www.millesima-usa.com/chateau-grand-mayne-2020.html
+2020,Château L'Église-Clinet,2020-09-09,reds,https://www.millesima-usa.com/chateau-l-eglise-clinet-2020.html
+2020,Château L'Évangile,2020-09-02,reds,https://thewineindependent.com/articles/bordeaux-2020-in-bottle/
+2020,Château La Conseillante,2020-09-04,merlot,https://www.la-conseillante.com/wp-content/uploads/2024/04/Fiche-technique-La-Conseillante-2020.pdf
+2020,Château Quintus,2020-09-11,merlot,https://www.millesima-usa.com/chateau-quintus-2020.html
+2020,Château Trotanoy,2020-09-15,reds,https://www.millesima-usa.com/chateau-trotanoy-2020.html
+2020,Pétrus,2020-09-05,reds,https://www.millesima-usa.com/petrus-2020.html
+2021,Château Angélus,2021-09-21,reds,https://www.angelus.com/en/all-vintages.html
+2021,Château Bélair-Monange,2021-09-28,reds,https://www.millesima-usa.com/chateau-belair-monange-2021.html
+2021,Château Canon,2021-09-16,reds,https://www.millesima-usa.com/chateau-canon-2021.html
+2021,Château Canon-la-Gaffelière,2021-09-28,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2021.html
+2021,Château Cheval Blanc,2021-09-22,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2021,Château Figeac,2021-09-21,merlot,https://www.chateau-figeac.com/millesime/millesime-2021/
+2021,Château Gazin,2021-09-21,merlot,https://www.millesima-usa.com/chateau-gazin-2021.html
+2021,Château Grand Mayne,2021-09-30,reds,https://www.millesima-usa.com/chateau-grand-mayne-2021.html
+2021,Château L'Église-Clinet,2021-09-27,reds,https://www.millesima-usa.com/chateau-l-eglise-clinet-2021.html
+2021,Château L'Évangile,2021-09-21,reds,https://www.millesima-usa.com/chateau-l-evangile-2021.html
+2021,Château La Conseillante,2021-09-28,merlot,https://www.la-conseillante.com/wp-content/uploads/2024/04/Fiche-technique-La-Conseillante-2021.pdf
+2021,Château La Fleur-Pétrus,2021-09-23,reds,https://www.millesima-usa.com/chateau-la-fleur-petrus-2021.html
+2021,Château La Pointe,2021-09-27,merlot,https://www.millesima-usa.com/chateau-la-pointe-2021.html
+2021,Château Larcis Ducasse,2021-09-29,merlot,https://www.millesima-usa.com/chateau-larcis-ducasse-2021.html
+2021,Château Pavie,2021-09-28,reds,https://www.millesima-usa.com/chateau-pavie-2021.html
+2021,Château Pavie Macquin,2021-10-04,reds,https://www.millesima-usa.com/chateau-pavie-macquin-2021.html
+2021,Château Tertre Roteboeuf,2021-10-05,reds,https://www.millesima-usa.com/chateau-tertre-roteboeuf-2021.html
+2021,Château Trotanoy,2021-09-27,reds,https://www.millesima-usa.com/chateau-trotanoy-2021.html
+2021,Le Pin,2021-09-25,reds,https://www.millesima-usa.com/chateau-le-pin-2021.html
+2021,Pétrus,2021-09-30,reds,https://www.millesima-usa.com/petrus-2021.html
+2021,Vieux Château Certan,2021-09-24,reds,https://www.millesima-usa.com/vieux-chateau-certan-2021.html
+2022,Château Angélus,2022-09-06,reds,https://www.angelus.com/en/all-vintages.html
+2022,Château Ausone,2022-09-05,reds,https://www.millesima-usa.com/chateau-ausone-2022.html
+2022,Château Canon,2022-08-30,reds,https://thewineindependent.com/articles/2022-primeurs/
+2022,Château Canon-la-Gaffelière,2022-09-06,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2022.html
+2022,Château Cheval Blanc,2022-08-29,reds,https://www.chateau-cheval-blanc.com/vin/chateau-cheval-blanc/
+2022,Château Figeac,2022-09-01,reds,https://www.chateau-figeac.com/millesime/millesime-2022/
+2022,Château Gazin,2022-09-02,merlot,https://www.millesima-usa.com/chateau-gazin-2022.html
+2022,Château Grand Mayne,2022-09-08,reds,https://www.millesima-usa.com/chateau-grand-mayne-2022.html
+2022,Château L'Église-Clinet,2022-09-03,merlot,https://www.millesima-usa.com/chateau-l-eglise-clinet-2022.html
+2022,Château L'Évangile,2022-08-29,reds,https://www.millesima-usa.com/chateau-l-evangile-2022.html
+2022,Château La Conseillante,2022-09-05,merlot,https://www.la-conseillante.com/wp-content/uploads/2024/04/Fiche-technique-La-Conseillante-2022.pdf
+2022,Château La Fleur-Pétrus,2022-09-01,reds,https://www.millesima-usa.com/chateau-la-fleur-petrus-2022.html
+2022,Château La Gaffelière,2022-09-07,merlot,https://www.millesima-usa.com/chateau-la-gaffeliere-2022.html
+2022,Château Nénin,2022-09-01,reds,https://www.millesima-usa.com/chateau-nenin-2022.html
+2022,Château Tertre Roteboeuf,2022-10-01,reds,https://thewineindependent.com/articles/2022-primeurs/
+2022,Château Troplong Mondot,2022-08-29,reds,https://thewineindependent.com/articles/2022-primeurs/
+2022,Château Valandraud,2022-09-15,reds,https://www.millesima-usa.com/chateau-valandraud-2022.html
+2022,Clos Fourtet,2022-09-09,reds,https://www.lanigan-edwards.com/stemilion/c_closfourtet22.pdf
+2022,Le Pin,2022-09-06,reds,https://www.millesima-usa.com/chateau-le-pin-2022.html
+2023,Château Angélus,2023-09-14,merlot,https://www.angelus.com/en/all-vintages.html
+2023,Château Canon,2023-09-06,reds,https://www.millesima-usa.com/chateau-canon-2023.html
+2023,Château Cheval Blanc,2023-09-06,reds,https://www.idealwine.net/primeurs-2023-la-rive-droite-analyse-du-millesime-et-coups-de-coeur-a-saint-emilion-pomerol/
+2023,Château Figeac,2023-09-06,reds,https://www.chateau-figeac.com/millesime/millesime-2023/
+2023,Château Grand Mayne,2023-09-11,reds,https://www.millesima-usa.com/chateau-grand-mayne-2023.html
+2023,Château L'Église-Clinet,2023-09-10,merlot,https://thewineindependent.com/articles/bordeaux-2023-vintage-report-and-reviews-from-barrel/
+2023,Château L'Évangile,2023-09-04,reds,https://www.millesima-usa.com/chateau-l-evangile-2023.html
+2023,Château La Conseillante,2023-09-07,merlot,https://www.la-conseillante.com/wp-content/uploads/2024/06/Fiche-technique-La-Conseillante-2023.pdf
+2023,Château La Dominique,2023-09-06,merlot,https://www.millesima-usa.com/chateau-la-dominique-2023.html
+2023,Château La Gaffelière,2023-09-07,reds,https://www.millesima-usa.com/chateau-la-gaffeliere-2023.html
+2023,Château La Pointe,2023-09-04,reds,https://www.millesima-usa.com/chateau-la-pointe-2023.html
+2023,Château La Violette,2023-09-11,reds,https://www.millesima-usa.com/chateau-la-violette-2023.html
+2023,Château Pavie,2023-09-18,reds,https://www.chateaupavie.com/fr_FR/winepdf/chateau-pavie-saint-emilion-1er-grand-cru-classe-a/2023
+2023,Château Soutard,2023-09-05,reds,https://www.millesima-usa.com/chateau-soutard-2023.html
+2023,Château Tertre Roteboeuf,2023-09-26,reds,https://www.millesima-usa.com/chateau-tertre-roteboeuf-2023.html
+2023,Château Valandraud,2023-09-21,reds,https://www.millesima-usa.com/chateau-valandraud-2023.html
+2023,Clos Fourtet,2023-09-14,reds,https://www.bacchus-vinothek.de/media/db/64/57/1716367906/clous-fourtet-tech-sheet-2023.pdf
+2023,Pétrus,2023-09-11,reds,https://www.millesima-usa.com/petrus-2023.html
+2023,Vieux Château Certan,2023-09-18,reds,https://www.millesima-usa.com/vieux-chateau-certan-2023.html
+2024,Château Angélus,2024-09-11,reds,https://www.angelus.com/en/all-vintages.html
+2024,Château Ausone,2024-09-30,reds,https://www.millesima-usa.com/chateau-ausone-2024.html
+2024,Château Bélair-Monange,2024-09-23,reds,https://www.millesima-usa.com/chateau-belair-monange-2024.html
+2024,Château Canon,2024-09-19,merlot,https://www.millesima-usa.com/chateau-canon-2024.html
+2024,Château Canon-la-Gaffelière,2024-09-25,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2024.html
+2024,Château Cheval Blanc,2024-09-18,merlot,https://www.millesima-usa.com/chateau-cheval-blanc-2024.html
+2024,Château Clinet,2024-09-23,reds,https://www.millesima-usa.com/chateau-clinet-2024.html
+2024,Château Gazin,2024-09-20,merlot,https://www.millesima-usa.com/chateau-gazin-2024.html
+2024,Château Grand Mayne,2024-09-25,reds,https://www.millesima-usa.com/chateau-grand-mayne-2024.html
+2024,Château L'Église-Clinet,2024-09-21,reds,https://www.millesima-usa.com/chateau-l-eglise-clinet-2024.html
+2024,Château L'Évangile,2024-09-18,reds,https://www.millesima-usa.com/chateau-l-evangile-2024.html
+2024,Château La Conseillante,2024-09-20,reds,https://www.millesima-usa.com/chateau-la-conseillante-2024.html
+2024,Château La Dominique,2024-09-18,reds,https://www.millesima-usa.com/chateau-la-dominique-2024.html
+2024,Château La Fleur-Pétrus,2024-09-17,reds,https://www.millesima-usa.com/chateau-la-fleur-petrus-2024.html
+2024,Château La Gaffelière,2024-09-25,reds,https://www.millesima-usa.com/chateau-la-gaffeliere-2024.html
+2024,Château La Pointe,2024-09-23,reds,https://www.millesima-usa.com/chateau-la-pointe-2024.html
+2024,Château La Violette,2024-09-09,reds,https://www.millesima-usa.com/chateau-la-violette-2024.html
+2024,Château Larcis Ducasse,2024-09-24,reds,https://www.millesima-usa.com/chateau-larcis-ducasse-2024.html
+2024,Château Le Gay,2024-09-19,reds,https://www.millesima-usa.com/chateau-le-gay-2024.html
+2024,Château Moncets (Lalande-de-Pomerol),2024-09-20,merlot,https://janeanson.com/2024-harvest-begins-late-vintage-small-crop
+2024,Château Nénin,2024-09-18,reds,https://www.millesima-usa.com/chateau-nenin-2024.html
+2024,Château Pavie,2024-09-27,reds,https://www.millesima-usa.com/chateau-pavie-2024.html
+2024,Château Pavie Macquin,2024-10-03,reds,https://www.millesima-usa.com/chateau-pavie-macquin-2024.html
+2024,Château Troplong Mondot,2024-09-20,reds,https://www.millesima-usa.com/chateau-troplong-mondot-2024.html
+2024,Château Trotanoy,2024-09-17,reds,https://www.millesima-usa.com/chateau-trotanoy-2024.html
+2024,Château Valandraud,2024-09-26,reds,https://www.millesima-usa.com/chateau-valandraud-2024.html
+2024,Clos Fourtet,2024-09-25,reds,https://www.millesima-usa.com/clos-fourtet-2024.html
+2024,Vieux Château Certan,2024-09-20,reds,https://www.millesima-usa.com/vieux-chateau-certan-2024.html
+2025,Château Angélus,2025-09-10,reds,https://www.angelus.com/en/all-vintages.html
+2025,Château Ausone,2025-09-02,merlot,https://www.millesima-usa.com/chateau-ausone-2025.html
+2025,Château Bélair-Monange,2025-09-04,reds,https://www.millesima-usa.com/chateau-belair-monange-2025.html
+2025,Château Canon,2025-08-28,merlot,https://www.millesima-usa.com/chateau-canon-2025.html
+2025,Château Canon-la-Gaffelière,2025-09-16,reds,https://www.millesima-usa.com/chateau-canon-la-gaffeliere-2025.html
+2025,Château Cheval Blanc,2025-09-01,reds,https://www.millesima-usa.com/chateau-cheval-blanc-2025.html
+2025,Château Clinet,2025-09-04,reds,https://www.millesima-usa.com/chateau-clinet-2025.html
+2025,Château Figeac,2025-09-01,reds,https://www.millesima-usa.com/chateau-figeac-2025.html
+2025,Château Grand Mayne,2025-09-04,reds,https://www.millesima-usa.com/chateau-grand-mayne-2025.html
+2025,Château L'Église-Clinet,2025-08-27,reds,https://www.decanter.com/learn/bordeaux-vintage-guide/bordeaux-2025-quiet-successes-amid-a-challenging-vintage-in-pomerol/
+2025,Château L'Évangile,2025-08-26,merlot,https://www.millesima-usa.com/chateau-l-evangile-2025.html
+2025,Château La Conseillante,2025-08-28,reds,https://www.millesima-usa.com/chateau-la-conseillante-2025.html
+2025,Château La Dominique,2025-09-08,reds,https://www.millesima-usa.com/chateau-la-dominique-2025.html
+2025,Château La Fleur-Pétrus,2025-09-01,reds,https://www.millesima-usa.com/chateau-la-fleur-petrus-2025.html
+2025,Château La Pointe,2025-09-04,reds,https://www.millesima-usa.com/chateau-la-pointe-2025.html
+2025,Château Lafleur,2025-08-26,reds,https://www.decanter.com/learn/bordeaux-vintage-guide/bordeaux-2025-quiet-successes-amid-a-challenging-vintage-in-pomerol/
+2025,Château Larcis Ducasse,2025-09-10,reds,https://www.millesima-usa.com/chateau-larcis-ducasse-2025.html
+2025,Château Le Gay,2025-09-02,reds,https://www.millesima-usa.com/chateau-le-gay-2025.html
+2025,Château Nénin,2025-09-02,reds,https://www.millesima-usa.com/chateau-nenin-2025.html
+2025,Château Pavie,2025-09-15,reds,https://www.millesima-usa.com/chateau-pavie-2025.html
+2025,Château Pavie Macquin,2025-09-12,reds,https://www.millesima-usa.com/chateau-pavie-macquin-2025.html
+2025,Château Tertre Roteboeuf,2025-09-19,reds,https://www.millesima-usa.com/chateau-tertre-roteboeuf-2025.html
+2025,Château Troplong Mondot,2025-08-28,reds,https://www.decanter.com/wine-news/classified-st-emilion-estate-begins-earliest-ever-harvest-today-563848/
+2025,Château Trotanoy,2025-09-01,reds,https://www.millesima-usa.com/chateau-trotanoy-2025.html
+2025,Clos Fourtet,2025-09-09,reds,https://www.millesima-usa.com/clos-fourtet-2025.html
+2025,Vieux Château Certan,2025-09-08,reds,https://www.millesima-usa.com/vieux-chateau-certan-2025.html

@@ -54,5 +54,21 @@
   "lat": 44.9303,
   "lon": -0.1967,
   "map": "scripts/vintages/data/bordeaux/maps/pomerol.geojson"
+ },
+ {
+  "id": "sauternes",
+  "name": "Sauternes",
+  "area": "sauternes",
+  "lat": 44.5305,
+  "lon": -0.2994,
+  "map": "scripts/vintages/data/bordeaux/maps/sauternes.geojson"
+ },
+ {
+  "id": "barsac",
+  "name": "Barsac",
+  "area": "sauternes",
+  "lat": 44.5965,
+  "lon": -0.3397,
+  "map": "scripts/vintages/data/bordeaux/maps/barsac.geojson"
  }
 ]
