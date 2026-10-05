@@ -168,6 +168,13 @@ wine, including Blanc de Blancs and Blanc de Noirs, as a combined source
 overview. Porte des Pierres Dorées uses current code 69114 while retaining
 both source records under historical code 69159. This finishes the regional
 source inventory, not the missing parcel or colour-specific boundaries below.
+
+The wine page does not offer the six region-wide maps (Bourgogne, Bourgogne
+Aligoté, Bourgogne Passe-tout-grains, Bourgogne Mousseux, Coteaux Bourguignons
+and Crémant de Bourgogne): highlighting most of Burgundy does not locate a wine.
+Their data and matching remain built and tested, and
+`src/lib/places/unlistedRegionalMaps.ts` lists them. Mâcon and Mâcon-Villages
+cover only the Mâconnais and keep their maps.
 The [Yonne source review](burgundy-regional-maps.md#yonne-source-review)
 explains the five-commune Côtes d’Auxerre list and its difference from some
 seven-name promotional lists. It does not add boundaries from those lists.
