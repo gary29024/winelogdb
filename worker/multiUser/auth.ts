@@ -95,7 +95,12 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
  if(url.pathname==='/api/auth/logout'&&request.method==='POST'){
   verifyOrigin(request,env);await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash=?').bind(await hash(cookie(request,SESSION))).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)});
  }
- if(url.pathname==='/api/me'&&request.method==='GET'){const member=await authenticate(request,env);return json({user:member})}
+ if(url.pathname==='/api/me'&&request.method==='GET'){
+  const member=await authenticate(request,env);
+  // Waiting friend requests ride along so the top bar can show its dot without a request of its own.
+  const waiting=await env.DB.prepare("SELECT count(*) AS n FROM friend_requests r JOIN app_users u ON u.id=r.sender_id AND u.status='active' WHERE r.recipient_id=? AND r.status='pending'").bind(member.id).first<{n:number}>();
+  return json({user:member,friendRequests:Number(waiting?.n)||0});
+ }
  if(url.pathname==='/api/me/handle-check'&&request.method==='GET'){
   const member=await authenticate(request,env),handle=normalizeHandle(url.searchParams.get('handle')),problem=handleProblem(handle);
   if(problem)return json({handle,available:false,problem});

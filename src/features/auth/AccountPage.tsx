@@ -5,7 +5,7 @@ import { usePageSection } from '../../components/usePageSection';
 import { PageHeader } from '../../components/PageHeader';
 import '../../settingsLayout.css';
 import '../../settingsCards.css';
-import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
+import { bootstrapAccount,getAccount,logout,setFriendRequestCount } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 import { setDefaultFriendShare,shareAllExistingWines } from '../wines/friendTags';
 
@@ -38,7 +38,7 @@ export function AccountPage(){
   const jobs=[
    {key:'friends',group:'friends',fetch:()=>apiJson<{items:Friend[]}>('/api/friends').then(value=>setFriends(value.items))},
    {key:'code',group:'friends',fetch:()=>apiJson<{code:string}>('/api/friends/code').then(value=>setOwnCode(value.code))},
-   {key:'requests',group:'friends',fetch:()=>apiJson<Requests>('/api/friends/requests').then(setRequests)},
+   {key:'requests',group:'friends',fetch:()=>apiJson<Requests>('/api/friends/requests').then(value=>{setRequests(value);setFriendRequestCount(value.incoming.length)})},
    {key:'access',group:'usage',fetch:()=>apiJson<AccessSummary>('/api/credits').then(setAccess)},
    {key:'usage',group:'usage',fetch:()=>apiJson<UsageSummary>('/api/usage/spend').then(setUsage)}
   ].filter(job=>!target||job.group===target);
@@ -115,7 +115,7 @@ export function AccountPage(){
        <p className="settings-hint">{account?.handle?<>Friends can also find you as <strong>@{account.handle}</strong>.</>:'Your code stays the same. Share it so friends can add you.'}</p></div>
       <form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/friends/requests','POST',{code});setCode('')},'Friend request sent. You’ll become friends when they accept.')}}>
        <div className="settings-field"><label htmlFor="friend-code" className="settings-label">Add a friend</label>
-       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code or user ID" value={code} onChange={e=>setCode(e.target.value)} placeholder="@userid or friend code" autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
+       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code or user ID" value={code} onChange={e=>setCode(e.target.value)} placeholder="@userid or code" autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
        <p className="settings-hint">Type a user ID or a friend code. You become friends once they accept.</p></form>
      </div>
      <div className="settings-card">

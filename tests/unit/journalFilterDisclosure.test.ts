@@ -45,7 +45,9 @@ describe('the top bar',()=>{
   it('reads brand, then navigation, then account and the one action',()=>{
     const bar=layout.slice(layout.indexOf('<header className="topbar">'),layout.indexOf('</header>'));
     expect(bar.indexOf('className="brand"')).toBeLessThan(bar.indexOf('className="desktop-nav"'));
-    expect(bar.indexOf('className="desktop-nav"')).toBeLessThan(bar.indexOf('className="account-link"'));
+    // The account link is the AccountChip component, which renders .account-link.
+    expect(bar.indexOf('className="desktop-nav"')).toBeLessThan(bar.indexOf('<AccountChip'));
+    expect(bar.indexOf('<AccountChip')).toBeGreaterThan(-1);
   });
 
   it('keeps the scan action off a phone, where the tab bar already carries it',()=>{
