@@ -113,7 +113,7 @@ function fieldIsMissing(field:string,payload:Record<string,string>){
 }
 export function scopeIsComplete(scope:ResearchScope,payload:Record<string,string>){return fieldsForScope(scope).every(field=>!fieldIsMissing(field,payload));}
 export function scopePassesQuality(scope:ResearchScope,payload:Record<string,string>,target:ResearchTarget,sources:ResearchSource[],provenance?:DeepSearchProvenance){
-  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&highRiskTechnicalScopePasses(scope,payload,provenance)&&technicalContradictionScopePasses(scope,payload,provenance);
+  return scopeIsComplete(scope,payload)&&assessResearchScope(scope,payload,target.subject,sources).pass&&technicalContradictionScopePasses(scope,payload,provenance);
 }
 const RETRY_INSTRUCTIONS:Record<string,string>={
   'missing-field':'a required field was empty — return substantive text for every field of this scope, or an explicit statement that the fact could not be verified',

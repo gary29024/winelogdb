@@ -13,7 +13,6 @@ import { cancelGeminiBatch } from './cancelResearch';
 import { ResearchPersistenceError,countSearchQueries,countUsageTokens,createGeminiBatch,fetchGeminiBatch,groundedGenerationConfig,inlineFinishReason,inlineGroundingMetadata,inlineResponseText,isEmulatedGeminiBatchName,isTerminalBatchState,responsesByKey,type GeminiBatchRequest,type GroundingMetadata } from './geminiBatch';
 import { buildDeepSearchProvenance } from './provenance';
 import { researchBatchErrorPollDelay,researchBatchFirstPollDelay,researchBatchPollDelay,researchBatchStallAction,researchBatchTransientAction } from './batchRetryPolicy';
-import { highRiskTechnicalFailureMessage } from './technicalClaimGate';
 import { discloseTechnicalContradictions,technicalContradictionFailureMessage } from './technicalContradictions';
 import { getWineResearchRun,updateWineResearchRun } from './backgroundJobs';
 import { offerToSourceOwner,readableWine,recordSharedResearchComplete,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
@@ -387,10 +386,10 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
       // the exact-wine technical gate there names a symptom of one scope as the
       // cause of all four, which is what an owner reads and cannot act on.
       ungrounded=warningsByScope.length>0&&warningsByScope.every(list=>list.includes('no-grounding-source'));
-      const exactPayload=payloadFor('wine_vintage'),conflictError=failed.includes('wine_vintage')?technicalContradictionFailureMessage(exactPayload,rawProvenance):null,technicalError=failed.includes('wine_vintage')?highRiskTechnicalFailureMessage(exactPayload,provenance):null;
+      const exactPayload=payloadFor('wine_vintage'),conflictError=failed.includes('wine_vintage')?technicalContradictionFailureMessage(exactPayload,rawProvenance):null;
       errors=[ungrounded
         ?`${job.model} answered without grounding: the response carried ${grounding.chunks} web source${grounding.chunks===1?'':'s'} and ${grounding.supports} grounding segment${grounding.supports===1?'':'s'}, so no scope could be verified and nothing was saved. Google Search grounding was requested; this is a search or provider failure rather than a problem with the wine.`
-        :conflictError??technicalError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')} (${[...new Set(warningsByScope.flat())].join(', ')||'no reason recorded'})`];
+        :conflictError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')} (${[...new Set(warningsByScope.flat())].join(', ')||'no reason recorded'})`];
     }else await finalize(env,owner,wineId,wine,targets);
   }catch(e){
     // Validation can legitimately choose a model fallback. Failure while

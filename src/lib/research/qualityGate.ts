@@ -1,4 +1,5 @@
 import type { DeepSearchProvenance } from '../db/schema';
+import { isUnverifiedPreciseFigure } from './preciseFigures';
 
 export type ResearchScopeQualityName='producer'|'terroir'|'vintage_context'|'wine_vintage';
 export type DeepResearchField='summary'|'expectedProfile'|'vintageQuality'|'producerDetails'|'producerWinemakingPractices'|'winemakingTechniques'|'terroir'|'drinkingWindow';
@@ -9,6 +10,8 @@ export type ResearchSubjectLike=Record<string,string|number|null>;
 export type ResearchFieldQuality={status:ResearchFieldStatus;sourceTier:ResearchSourceTier;score:number;warnings:string[]};
 export type DeepResearchQuality={status:'verified'|'mixed'|'limited';score:number;sourceTier:ResearchSourceTier;warnings:string[];scoreNote?:string;fields:Partial<Record<DeepResearchField,ResearchFieldQuality>>};
 
+// Same ceiling as a field that honestly says a fact could not be verified.
+const UNCITED_FIGURE_SCORE=78;
 function explicitStatusScore(status:Exclude<ResearchFieldStatus,'verified'>,tier:ResearchSourceTier){
   const base=status==='not_applicable'?92:status==='not_found'?78:68;
   return Math.min(100,base+(tier==='authoritative'?4:tier==='specialist'?2:0));
@@ -102,6 +105,9 @@ export function explicitResearchStatus(value:string):Exclude<ResearchFieldStatus
   const text=firstText(value);if(!text)return null;
   if(/\bnot applicable\b|\bdoes not apply\b/.test(text))return 'not_applicable';
   if(/\bconflicting\b|\bsources? (?:disagree|conflict)\b|\bcannot reconcile\b|\binconsistent sources?\b/.test(text))return 'conflicting';
+  // "The reserve-wine proportion is not stated in the technical sheet" is the
+  // model declining to guess, not a precise claim.
+  if(/\b(?:is|are|was|were|has|have)(?: been)? not (?:publicly |explicitly |officially |separately )?(?:stated|specified|disclosed|documented|published|listed|reported|given)\b|\bnot (?:publicly |explicitly |officially )?(?:stated|specified|disclosed)\b/.test(text))return 'not_found';
   if(/\bcould not (?:be )?verified\b|\bcannot be verified\b|\bunable to verify\b|\bcannot be confirmed\b|\bnot publicly (?:available|documented)\b|\bno reliable (?:public )?(?:source|evidence|information)\b|\bnot found in reliable\b|\bunverified\b/.test(text))return 'not_found';
   return null;
 }
@@ -190,6 +196,10 @@ export function buildDeepResearchQuality(entries:Array<{scope:ResearchScopeQuali
       // where the disclosure appears or whether the field has room for it.
       const disputed=quality.status==='conflicting'||entry.provenance?.fields[field]?.claims.some(claim=>claim.supportStatus==='conflicting');
       fields[field]=disputed?{...quality,status:'conflicting',score:Math.min(quality.score,explicitStatusScore('conflicting',quality.sourceTier)),warnings:[...new Set([...quality.warnings,'cross-source-technical-conflict'])]}:quality;
+      // A precise figure without a direct citation stays in the report but is
+      // labelled on its claim and holds the field below the verified band.
+      const uncitedFigure=entry.provenance?.fields[field]?.claims.some(isUnverifiedPreciseFigure);
+      if(uncitedFigure){const current=fields[field]!;fields[field]={...current,score:Math.min(current.score,UNCITED_FIGURE_SCORE),warnings:[...new Set([...current.warnings,'uncited-precise-figure'])]}}
       warnings.push(...fields[field]!.warnings);
     }
     const entryTier=bestResearchSourceTier(entry.sources);if(TIER_RANK[entryTier]>TIER_RANK[tier])tier=entryTier;

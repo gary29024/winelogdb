@@ -16,7 +16,7 @@ import { hasTastingStructure,structureValueLabel,toggleStructure,type TastingStr
 import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { SharedDeepSearchControls } from './SharedDeepSearchControls';
-import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
+import { readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
 import '../../favorites.css';
 import '../../wineDetailCompact.css';
 // The structure grid and the research panel are wine-detail markup whose rules
@@ -148,12 +148,12 @@ export function SharedWinesPage(){
    {/* The owner's page shows research while scopes are still missing, so this
        page does too, and says so the same way. */}
    {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
-   <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
+   <div className="deep-summary"><ResearchText text={wine.deepSearch.summary} flagged={uncitedFigures(wine.deepSearch,'summary')}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
     {sections.map(([label,field,value])=>{const open=openDeepFields.has(field),panelId=`shared-deep-section-${field}`;return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
      <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
-     <div className="deep-section-body" id={panelId} hidden={!open}><ResearchText text={value}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</div>
+     <div className="deep-section-body" id={panelId} hidden={!open}><ResearchText text={value} flagged={uncitedFigures(wine.deepSearch,field)}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</div>
     </section>})}
    </div>}
    <DeepSources sources={wine.deepSearch.sources}/>
