@@ -7,7 +7,7 @@ The wines, producers and the user "Sophie" are made up.
 | File | Use | Size |
 |---|---|---|
 | `winelog-promo.mp4` | Instagram Reel / Story (silent, 32 s) | 1080×1920 |
-| `winelog-profile.png` | Instagram profile picture (fits the circle crop) | 2160×2160 |
+| `winelog-profile.jpg` / `.png` | Instagram profile picture (fits the circle crop) | 2160×2160 |
 | `winelog-post-1.jpg` … `winelog-post-5.jpg` | Launch carousel, in order | 2160×2700 (4:5, double resolution; Instagram scales it down) |
 
 The video has no sound on purpose. Add a track from Instagram's own music
