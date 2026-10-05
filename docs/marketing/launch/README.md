@@ -14,8 +14,21 @@ The video has no sound on purpose. Add a track from Instagram's own music
 library when you post it, because licensed in-app audio is safer and helps
 the Reel reach more people.
 
-The `@winelog.app` handle and "Link in bio" text are placeholders. Change
-them before posting if your handle is different.
+The Instagram account is **@winelog.app**.
+
+## Profile
+
+- **Name field** (shows up in search): `WineLog · Wine Journal App`
+- **Category:** App page
+- **Bio** (under Instagram's 150-character limit):
+
+  > Your private wine journal 🍷
+  > 📸 Snap a label, AI fills in the rest
+  > 🗺️ Vineyards, vintages & your wine passport
+  > 👇 Start your journal
+
+- **Link:** the app's web address
+- **Story highlights:** Scan · Journal · Vineyards · Passport · FAQ
 
 ## Video storyboard
 
@@ -28,23 +41,45 @@ them before posting if your handle is different.
 7. **Passport**: stamps, regions and collections.
 8. Outro: "Now available".
 
-## Suggested carousel caption
+## Carousel caption
 
 > Every bottle, remembered. 🍷
 >
 > Meet WineLog, a private wine journal that reads the label for you.
 >
-> 📸 Snap the label, front, back or neck
-> 🤖 AI fills in the producer, vintage, appellation and grapes
+> 📸 Snap the label: front, back or neck
+> 🤖 AI fills in the producer, vintage, appellation and grapes. You check it before saving.
 > 📖 Keep your ratings, notes, places and people in one place
 > 🗺️ See the exact vineyard plot your wine came from
 > 🛂 Collect passport stamps as you explore new regions
 >
+> Swipe to see how it works 👉
 > Now available. Link in bio.
+
+## Reel caption
+
+> That bottle you loved last month… what was it again? 🤔🍷
 >
-> #WineLog #WineLover #WineJournal #WineTasting #Burgundy #Sommelier #WineCollector #WineApp #Vino #WineNotes
+> Snap the label and WineLog remembers it for you: producer, vintage, vineyard, your rating and who you drank it with.
+>
+> Now available. Link in bio.
 
-## Suggested Reel caption
+## Hashtags (post as the first comment)
 
-> Snap the label. AI does the rest. 🍷 WineLog is now available. Link in bio.
-> #WineLog #WineTok #WineLover #WineApp
+#WineLog #WineLover #WineJournal #WineTasting #WineNotes #WineApp
+#Burgundy #Bourgogne #Champagne #WineCollector #Sommelier #Vino
+#WineTime #WineOfTheDay #WineCellar
+
+## Alt text (Advanced settings → Accessibility)
+
+1. WineLog launch slide: "Every bottle, remembered." beside a phone showing a journal of wine bottles with ratings.
+2. A photo of a wine bottle beside a phone where WineLog has filled in the producer, wine name and vintage from the label.
+3. A phone showing a wine's tasting notes and research, with a drinking window of 2026–2038 and a rating of 95/100.
+4. A phone showing a vineyard map with the Les Cazetiers plot in Gevrey-Chambertin highlighted.
+5. A phone showing the WineLog passport with wines tasted, regions and stamps, next to the WineLog logo and "Now available".
+
+## Launch-day Stories
+
+1. Share the Reel to your Story with a 🍷 sticker and "We're live!"
+2. A poll sticker: "Do you remember every wine you've loved?" Yes / I wish
+3. A link sticker to the app: "Start your wine journal"
