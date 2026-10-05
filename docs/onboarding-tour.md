@@ -1,6 +1,6 @@
 # Onboarding tour for invited members
 
-Status: phases 1 and 2 built; phases 3 and 4 outstanding.
+Status: all four phases built.
 Reviewed against `main` at `74350b8` (v1.3.0, 2026-10-05).
 
 ## 1. Why this is needed now
@@ -173,36 +173,52 @@ cannot tell the two copies apart.
 
 ### Optional chapters
 
-Offered from Account & friends, and each one short:
+Offered from Account & friends, three of them, three steps each. A chapter
+**navigates to the page it is about** before talking; the first-run tour never
+does, because the chrome it describes is on every screen already. Each is about
+somewhere a phone cannot reach from the tab bar, which is the whole reason they
+exist.
 
-- **Adding wine** (4 steps) — walks the open scan sheet and names the four
-  modes with when to use each.
-- **Tastings** (3 steps) — that an evening is a container, that logged wines
-  join the open one automatically, and where the live strip appears. Worth its
-  own chapter precisely because Tastings has no mobile nav slot.
-- **Sharing and friends** (3 steps, member-visible) — friend codes, per-wine
-  sharing, and that "Shared with me" at `/shared` is where friends' wines
-  arrive.
-- **Progress** (3 steps) — Passport stamps, Insights, Achievements and
-  collections. Also nav-less on mobile.
+- **Tastings** — takes you to `/tastings`, then points at Scan Wine for how to
+  start one, then explains that logged wines join the open evening by
+  themselves.
+- **Friends and sharing** — takes you to `/account`, then friend codes, then
+  that sharing is per wine and separate from friendship.
+- **Stamps and collections** — the Passport's counters, then across to
+  `/achievements` to ring the collections section, then stamps.
+
+Seen chapters are **ticked rather than hidden**: they are worth re-reading, and
+a list that empties itself as you use it stops being somewhere to look things
+up.
+
+**There is deliberately no "adding wine" chapter.** The scan sheet already
+explains its four modes in its own copy, every time it is opened. A chapter
+would have had to prise that sheet open and then fight it for the layer it sits
+on, to repeat a good explanation worse.
+
+One consequence of navigating: a chapter crosses to a lazily loaded route, so
+the anchor the next step wants does not exist at the moment the step asks for
+it. The engine therefore waits for an anchor — watching for DOM changes, with a
+1.2s grace period — before concluding it is missing. Declaring absence on the
+first look would have skipped every step that follows a route change.
 
 ### Credits (members only, shown in context)
 
-Not a chapter. A one-time explanatory panel inside the existing
-`CreditConfirmation` modal, the first time a member is asked to confirm a
-priced AI action:
+Not a chapter. A one-time panel inside the existing `CreditConfirmation`
+dialog, the first time a member is asked to confirm a priced AI action:
 
-> AI actions like label recognition and vintage research cost credits. This
-> confirmation shows the price before anything is spent, and nothing is
-> charged if you cancel. Your balance is on Account & friends.
+> Credits pay for the AI work behind scanning labels and researching producers
+> and vintages. You are shown the price before anything is spent, nothing is
+> charged if you cancel, and your balance is on **Account & friends**.
 
-The owner never sees it — `roles:['member']`. This is a better teaching moment
-than day one, because the member is looking at a real price for a real action
-they just asked for.
+The owner never sees it — owner AI is billed direct and costs no credits, so
+the panel would be a lie. A cancel counts as having been told, since they read
+it either way. Recorded as `credits-intro` in the same `tour_state`, because it
+is the same kind of "already told you".
 
 ## 6. Files
 
-Built (phases 1–2):
+Built:
 
 | File | Purpose |
 |------|---------|
@@ -215,7 +231,9 @@ Built (phases 1–2):
 | `worker/multiUser/auth.ts` | `PATCH /api/me/tour` and its validator |
 | `worker/multiUser/common.ts`, `src/lib/auth/client.ts` | `tour_state` on the member/account types |
 | `src/components/Layout.tsx` | `data-tour` anchors; mounts `<TourOverlay/>` beside `<CreditConfirmation/>` |
-| `src/features/auth/AccountPage.tsx` | "Replay the tour" under Getting around |
+| `src/features/auth/AccountPage.tsx` | The tour list under Getting around |
+| `src/features/auth/CreditConfirmation.tsx` | The one-time credits panel |
+| `src/features/achievements/AchievementsPage.tsx` | The `collections` anchor |
 
 Two deviations from the original plan, both deliberate:
 
@@ -225,8 +243,10 @@ Two deviations from the original plan, both deliberate:
 - **Replay shipped in phase 2, not phase 3.** The closing step's copy promises
   it is there, so shipping the copy without the entry would have been a lie.
 
-Outstanding (phases 3–4): the optional chapters and the one-time credits panel
-in `CreditConfirmation.tsx`.
+Added for phases 3–4: `chapters` in `steps.ts`, route handling and the anchor
+grace period in `useTour.ts`, the chapter list in `AccountPage.tsx`, the
+`collections` anchor on `AchievementsPage.tsx`, and the one-time panel in
+`CreditConfirmation.tsx`.
 
 The overlay follows the modal conventions already in `Layout.tsx` — Escape to
 close, focus handed to the panel — with one deliberate departure: it is **not**
@@ -237,17 +257,19 @@ taps a nav item mid-tour simply navigates and the next step is still on screen.
 
 ## 7. Build order
 
-1. ~~**Column and endpoint.**~~ Done: migration 0091, `PATCH /api/me/tour`,
-   `tour_state` on the account types.
-2. ~~**Engine and first-run tour.**~~ Done: overlay, hook, steps, anchors,
-   mounted in `Layout`, plus the replay entry.
-3. **Chapters.** Adding wine, Tastings, Sharing, Progress — offered from
-   Account & friends.
-4. **Credits panel.** The one-time member explanation in `CreditConfirmation`.
+All four phases are built:
+
+1. **Column and endpoint** — migration 0091, `PATCH /api/me/tour`, `tour_state`
+   on the account types.
+2. **Engine and first-run tour** — overlay, hook, steps, anchors, mounted in
+   `Layout`, plus the replay entry.
+3. **Chapters** — route-aware steps, the three chapters, the list on Account &
+   friends with seen ticks.
+4. **Credits panel** — the one-time member explanation in `CreditConfirmation`.
 
 ## 8. Testing
 
-All green: 5559 unit tests across 336 files, plus 5 new e2e tests.
+All green: 5575 unit tests across 337 files, plus 8 e2e tests.
 
 Unit:
 
@@ -255,26 +277,35 @@ Unit:
   rejects a body that is not the expected shape, keeps only step ids the app
   could have issued, caps the list, and enforces the same-origin and session
   checks.
-- `tests/unit/tourAnchors.test.ts` (8) — **every anchor in `steps.ts` exists in
-  the rendered app**, both navs still carry the shared anchors, and the
-  role/viewport filter returns what it should. Verified by mutation: deleting a
-  `data-tour` attribute fails it immediately.
-- `tests/unit/tourOverlay.test.tsx` (10) — opens for a new member, stays away
+- `tests/unit/tourAnchors.test.ts` (13) — two guards against silent rot, both
+  verified by mutation: **every anchor in a step exists in the rendered app**
+  (deleting a `data-tour` fails it), and **every route a chapter navigates to is
+  a route `App.tsx` actually has** (renaming one fails it). Plus both navs still
+  carrying the shared anchors, the role/viewport filter, and distinct tour ids.
+- `tests/unit/tourOverlay.test.tsx` (15) — opens for a new member, stays away
   from one who finished or skipped, walks forward and back, writes exactly once
-  and only at the end, Escape counts as a skip, replay reopens it, and a step
-  whose anchor is absent is passed over.
+  and only at the end, Escape counts as a skip, replay reopens it, a step whose
+  anchor is absent is passed over *after* waiting, chapters name themselves, an
+  unknown tour id is ignored, and closing a chapter part-way records nothing.
+- `tests/unit/creditsIntro.test.tsx` (6) — the panel appears for a member's
+  first priced action and not the second, never for the owner, a cancel still
+  counts as told, and the action genuinely waits on the decision.
 
-E2E (`tests/e2e/onboarding-tour.spec.ts`, 5 tests, chromium at two viewports) —
-the part jsdom cannot do: that the spotlight comes to rest around the nav item
-that is **actually on screen**, top bar at 1280px and tab bar at 390px, that the
-phone gets 6 steps and the desktop 7, and that the bubble stays inside the
-viewport at every step.
+E2E (`tests/e2e/onboarding-tour.spec.ts`, 8 tests, chromium at two viewports) —
+what jsdom cannot do. That the spotlight comes to rest around the nav item
+**actually on screen**, top bar at 1280px and tab bar at 390px; that the phone
+gets 6 steps and the desktop 7; that the bubble stays inside the viewport at
+every step; and that a chapter started from Account navigates, waits for the
+lazily loaded page, and rings a section of it.
 
-One bug this found, worth recording because the test suite would not have: the
-step-skipping logic treated "not measured yet" and "measured and absent" as the
-same thing, so **step one of every tour was skipped** — the tour opened on step
-2. The fix reports the measured anchor back alongside its box, so a missing
-anchor is only ever concluded about an anchor that was actually looked for.
+Two bugs these found, both of which would otherwise have shipped:
+
+- The step-skipping logic treated "not measured yet" and "measured and absent"
+  as the same `null`, so **step one of every tour was skipped** — the tour
+  opened on step 2.
+- Concluding absence on the first look **skipped every chapter step that
+  follows a route change**, because a lazily loaded page has not rendered yet
+  when the step asks for its anchor.
 
 ## 9. Things worth your decision
 

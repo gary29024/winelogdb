@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
+import { MemoryRouter } from 'react-router-dom';
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { bootstrapAccount,clearSession } from '../../src/lib/auth/client';
 import { TourOverlay } from '../../src/features/onboarding/TourOverlay';
@@ -34,7 +35,8 @@ async function mount(tour_state:string|undefined){
  await bootstrapAccount();
  renderChrome();
  host=document.createElement('div');document.body.appendChild(host);root=createRoot(host);
- await act(async()=>{root.render(<TourOverlay/>)});
+ // The tour navigates for chapter steps, so it needs a router around it.
+ await act(async()=>{root.render(<MemoryRouter initialEntries={['/']}><TourOverlay/></MemoryRouter>)});
 }
 const bubble=()=>host.querySelector('[role=dialog]');
 const text=()=>bubble()?.textContent??'';
@@ -43,6 +45,13 @@ const click=async(label:string)=>{
  if(!button)throw new Error(`No ${label} button. Bubble reads: ${text()}`);
  await act(async()=>{button.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
 };
+
+/** Waits for something the grace period decides, rather than guessing at a delay. */
+async function settle(done:()=>boolean,within=2500){
+ const deadline=Date.now()+within;
+ while(!done()&&Date.now()<deadline)await act(async()=>{await new Promise(resolve=>setTimeout(resolve,50))});
+ if(!done())throw new Error(`Still not settled after ${within}ms. Bubble reads: ${text()}`);
+}
 
 beforeEach(()=>{document.body.innerHTML=''});
 afterEach(async()=>{await act(async()=>root?.unmount());clearSession();vi.unstubAllGlobals();document.body.innerHTML=''});
@@ -114,12 +123,56 @@ describe('the first-run tour',()=>{
   expect(text()).toContain('Step 1 of 7');
  });
 
- it('passes over a step whose anchor is not on the page',async()=>{
+ it('passes over a step whose anchor is not on the page, once it has waited for it',async()=>{
   await mount('{}');
   // Journal removed from the chrome: the step that points at it cannot be shown.
   document.querySelector('[data-tour=nav-journal]')?.remove();
   await click('Next');
-  expect(text()).not.toContain('Every wine you log');
+  // Not immediately, though: a chapter navigates to a lazily loaded page, so an
+  // anchor that is not there yet is waited for before it is called missing.
+  expect(text()).toContain('Every wine you log');
+  await settle(()=>!text().includes('Every wine you log'));
   expect(text()).toContain('One button, four ways in');
+ });
+});
+
+describe('the optional chapters',()=>{
+ it('is not offered on its own - only the first run opens by itself',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  expect(bubble()).toBeNull();
+ });
+
+ it('names the chapter beside the step count, so it is clear which one is running',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  await act(async()=>{requestTour('chapter-tastings')});
+  expect(text()).toContain('Tastings · Step 1 of 3');
+ });
+
+ /**
+  * The distinction that matters: closing the first run means "stop offering me
+  * this", while closing a chapter someone deliberately opened means only that
+  * they are done reading. Recording the second as a refusal would suppress
+  * every future tour because they glanced at one chapter.
+  */
+ it('records nothing when a chapter is closed part-way',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  await act(async()=>{requestTour('chapter-sharing')});
+  await click('Skip tour');
+  expect(bubble()).toBeNull();
+  expect(saved).toEqual([]);
+ });
+
+ it('records the chapter, and only the chapter, when it is finished',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  await act(async()=>{requestTour('chapter-progress')});
+  await click('Next');await click('Next');
+  await click('Done');
+  expect(saved).toEqual([{completed:['first-run','chapter-progress'],skipped:false}]);
+ });
+
+ it('ignores a tour id it does not know',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  await act(async()=>{requestTour('chapter-does-not-exist')});
+  expect(bubble()).toBeNull();
  });
 });

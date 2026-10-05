@@ -8,6 +8,8 @@ import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 import { setDefaultFriendShare,shareAllExistingWines } from '../wines/friendTags';
 import { requestTour } from '../onboarding/useTour';
+import { chapters,firstRun } from '../onboarding/steps';
+import { currentTourState } from '../onboarding/api';
 
 type Friend={id:string;display_name:string;defaultShare?:boolean};
 type Requests={incoming:Friend[];outgoing:Friend[]};
@@ -18,6 +20,7 @@ type AccessSummary={balance:number;reserved:number;available:number;sponsoredAi:
 const sections=[{id:'profile',label:'Profile'},{id:'friends',label:'Friends'},{id:'usage',label:'AI usage'}];
 export function AccountPage(){
  const [section,selectSection]=usePageSection(sections,'profile');
+ const seenTours=currentTourState().completed;
  const [friends,setFriends]=useState<Friend[]>([]),[access,setAccess]=useState<AccessSummary>({balance:0,reserved:0,available:0,sponsoredAi:true,actionAccess:null});
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
@@ -85,9 +88,19 @@ export function AccountPage(){
    </fieldset>
   </form>
   {/* The closing step of the first-run tour promises this is here, so it has to
-      be. The overlay is mounted by Layout, which wraps this page, so starting
-      the tour from here spotlights the chrome around it. */}
-  <section className="settings-session"><h2>Getting around</h2><button type="button" onClick={requestTour}>Replay the tour</button><small>A short walkthrough of where everything lives.</small></section>
+      be. The overlay is mounted by Layout, which wraps this page, so starting a
+      tour from here spotlights the chrome around it - and a chapter navigates
+      away to the page it is about. Seen chapters are ticked rather than hidden:
+      they are worth re-reading, and a list that empties itself as you use it
+      stops being somewhere to look things up. */}
+  <section className="settings-session"><h2>Getting around</h2>
+   <ul className="tour-chapters">
+    {[firstRun,...chapters].map(item=><li key={item.id}>
+     <button type="button" onClick={()=>requestTour(item.id)}><strong>{item.label}</strong><small>{item.blurb}</small></button>
+     {seenTours.includes(item.id)&&<span className="tour-chapter-seen" aria-label="Already seen">Seen</span>}
+    </li>)}
+   </ul>
+  </section>
   <section className="settings-session"><h2>Session</h2><button type="button" onClick={()=>void logout()}>Sign out</button></section>
     </section>
     <section hidden={section!=='friends'} aria-label="Friends settings">

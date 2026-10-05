@@ -1,5 +1,6 @@
 import { useEffect,useRef } from 'react';
 import { useTour } from './useTour';
+import { FIRST_RUN } from './steps';
 import '../../onboarding.css';
 
 /** The bubble's intended width; the stylesheet narrows it on a small screen. */
@@ -20,7 +21,7 @@ const BUBBLE=340;
  * bubble only has to carry the words and stay on screen.
  */
 export function TourOverlay(){
- const {open,step,rect,first,last,stepNumber,total,next,back,finish,skip}=useTour();
+ const {open,tour,step,rect,first,last,stepNumber,total,next,back,finish,skip}=useTour();
  const bubble=useRef<HTMLElement>(null);
 
  // Focus moves to the bubble on every step so a screen reader reads the new
@@ -47,13 +48,18 @@ export function TourOverlay(){
  }:undefined;
 
  return <>
-  {rect&&<div className="tour-spotlight" style={{top:rect.top-6,left:rect.left-6,width:rect.width+12,height:rect.height+12}} aria-hidden="true"/>}
+  {/* The dim is the spotlight's own box-shadow, so a step that points at nothing
+      needs a plain one of its own or its card would float over an undimmed,
+      fully legible page and lose the reader to it. */}
+  {rect
+   ?<div className="tour-spotlight" style={{top:rect.top-6,left:rect.left-6,width:rect.width+12,height:rect.height+12}} aria-hidden="true"/>
+   :<div className="tour-scrim" aria-hidden="true"/>}
   <section
    ref={bubble} tabIndex={-1}
    className={`tour-bubble${rect?'':' tour-bubble-centred'}`} style={placement}
    role="dialog" aria-labelledby="tour-step-title"
   >
-   <p className="tour-progress">Step {stepNumber} of {total}</p>
+   <p className="tour-progress">{tour.id===FIRST_RUN?'':`${tour.label} · `}Step {stepNumber} of {total}</p>
    <h2 id="tour-step-title">{step.title}</h2>
    <p className="tour-body">{step.body}</p>
    <div className="tour-actions">

@@ -26,7 +26,11 @@ async function signedIn(page:Page,tourState='{}'){
   const data=path==='/api/me'?{user:{id:'reader',email:'reader@example.com',display_name:'Reader',role:'member',status:'active',tour_state:tourState}}
    :path==='/api/journey'?emptyJourney
    :path==='/api/achievements'?[]
-   :path==='/api/credits'?{available:20,reserved:0,balance:20}
+   // Account & friends, where the chapters are started from.
+   :path==='/api/friends/requests'?{incoming:[],outgoing:[]}
+   :path==='/api/friends/code'?{code:'ABCD-EFGH'}
+   :path==='/api/usage/spend'?{days:30,kinds:[],empty:true}
+   :path==='/api/credits'?{balance:20,reserved:0,available:20,sponsoredAi:true,actionAccess:[]}
    :{items:[],holdings:[],total:0};
   await route.fulfill({json:data});
  });
@@ -138,5 +142,62 @@ test.describe('the first-run tour on a phone',()=>{
   await page.getByRole('button',{name:'Skip tour'}).click();
   await expect(bubble(page)).toHaveCount(0);
   expect(saved).toEqual([{completed:[],skipped:true}]);
+ });
+});
+
+/**
+ * A chapter is the only part of the tour that navigates, and route changes are
+ * the one thing jsdom genuinely cannot stand in for: the page arrives as a
+ * lazily loaded chunk, so the anchor the next step wants does not exist at the
+ * moment the step asks for it.
+ */
+test.describe('an optional chapter',()=>{
+ test.use({viewport:{width:390,height:844}});
+
+ test('is started from Account & friends and takes you to the page it is about',async({page})=>{
+  saved.length=0;
+  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await expect(bubble(page)).toHaveCount(0);
+
+  await page.getByRole('button',{name:/Tastings/}).click();
+  await expect(bubble(page)).toContainText('Tastings · Step 1 of 3');
+  // The chapter navigated: this page has no tab of its own on a phone.
+  await expect(page).toHaveURL(/\/tastings$/);
+  await expect(page.getByRole('heading',{name:'Tastings'})).toBeVisible();
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await expect(bubble(page)).toContainText('Scan Wine, then Start Tasting');
+  await rings(page,'scan-trigger');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await page.getByRole('button',{name:'Done'}).click();
+  expect(saved).toEqual([{completed:['first-run','chapter-tastings'],skipped:false}]);
+ });
+
+ test('waits for a lazily loaded page before pointing at something on it',async({page})=>{
+  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await page.getByRole('button',{name:/Stamps and collections/}).click();
+  await expect(bubble(page)).toContainText('What the Passport counts');
+  await rings(page,'nav-passport');
+
+  // Step two crosses to /achievements and rings a section of that page, which
+  // does not exist until the route's chunk has loaded and rendered.
+  await page.getByRole('button',{name:'Next'}).click();
+  await expect(page).toHaveURL(/\/achievements$/);
+  await expect(bubble(page)).toContainText('Collections');
+  await rings(page,'collections');
+ });
+
+ test('leaves no mark when it is closed part-way',async({page})=>{
+  saved.length=0;
+  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await page.getByRole('button',{name:/Friends and sharing/}).click();
+  await expect(bubble(page)).toContainText('Friends live here');
+  await page.getByRole('button',{name:'Skip tour'}).click();
+  await expect(bubble(page)).toHaveCount(0);
+  expect(saved,'closing a chapter is not a refusal of every tour').toEqual([]);
  });
 });

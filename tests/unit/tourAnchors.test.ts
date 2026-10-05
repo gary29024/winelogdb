@@ -1,7 +1,7 @@
 import { readFileSync,readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe,expect,it } from 'vitest';
-import { firstRunSteps,stepsFor } from '../../src/features/onboarding/steps';
+import { allTours,chapters,firstRunSteps,stepsFor } from '../../src/features/onboarding/steps';
 
 const src=join(process.cwd(),'src');
 const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
@@ -9,7 +9,11 @@ const walk=(dir:string):string[]=>readdirSync(dir,{withFileTypes:true}).flatMap(
  return entry.isDirectory()?walk(path):[path];
 });
 const markup=walk(src).filter(path=>path.endsWith('.tsx')).map(path=>readFileSync(path,'utf8')).join('\n');
+/** Every path App.tsx routes, as an absolute path. */
+const routed=new Set([...readFileSync(join(src,'App.tsx'),'utf8').matchAll(/path="([^"]+)"/g)]
+ .map(match=>match[1].startsWith('/')?match[1]:`/${match[1]}`).concat('/'));
 const rendered=new Set([...markup.matchAll(/data-tour="([^"]+)"/g)].map(match=>match[1]));
+const everyStep=allTours.flatMap(tour=>tour.steps);
 
 /**
  * The tour points at elements by name, from a separate file. Nothing in the
@@ -20,8 +24,40 @@ const rendered=new Set([...markup.matchAll(/data-tour="([^"]+)"/g)].map(match=>m
  */
 describe('tour anchors',()=>{
  it('every step points at an element the app actually renders',()=>{
-  const missing=firstRunSteps.filter(step=>step.anchor&&!rendered.has(step.anchor)).map(step=>`${step.id} -> ${step.anchor}`);
+  const missing=everyStep.filter(step=>step.anchor&&!rendered.has(step.anchor)).map(step=>`${step.id} -> ${step.anchor}`);
   expect(missing).toEqual([]);
+ });
+
+ /**
+  * The same trap one level up: a chapter takes you to a page by path, and a
+  * route renamed in App.tsx would leave the chapter navigating to a blank
+  * screen with no error anywhere.
+  */
+ it('every step that navigates names a route the app actually has',()=>{
+  const unrouted=everyStep.filter(step=>step.route&&!routed.has(step.route)).map(step=>`${step.id} -> ${step.route}`);
+  expect(unrouted).toEqual([]);
+ });
+
+ it('has routes to check, so that guard is not passing on an empty set',()=>{
+  expect(everyStep.filter(step=>step.route).length).toBeGreaterThan(3);
+ });
+
+ /** The first run describes the chrome, which is on every page already. */
+ it('never navigates during the first run',()=>{
+  expect(firstRunSteps.filter(step=>step.route)).toEqual([]);
+ });
+
+ it('gives every chapter a label and a blurb for the Account list',()=>{
+  for(const chapter of chapters){
+   expect(chapter.label,`${chapter.id} needs a label`).toBeTruthy();
+   expect(chapter.blurb,`${chapter.id} needs a blurb`).toBeTruthy();
+   expect(chapter.steps.length,`${chapter.id} needs steps`).toBeGreaterThan(0);
+  }
+ });
+
+ it('keeps every tour id distinct, since progress is recorded against it',()=>{
+  const ids=allTours.map(tour=>tour.id);
+  expect(new Set(ids).size).toBe(ids.length);
  });
 
  it('has anchors to check, so the guard is not passing on an empty set',()=>{
