@@ -2,9 +2,11 @@ import { test,expect,type Page } from '@playwright/test';
 import { wine } from './fixtures/layoutWine';
 const user={id:'alice',email:'alice@example.com',display_name:'Alice',role:'member',status:'active'};
 async function signedIn(page:Page){await page.route('**/api/**',async route=>{const path=new URL(route.request().url()).pathname;const data=path==='/api/me'?{user}:path==='/api/credits'?{available:20,reserved:0,balance:20,sponsoredAi:true,actionAccess:[]}:path==='/api/usage/spend'?{days:30,kinds:[],empty:true}:path==='/api/shared/wines/w'?{...wine,id:'w',ownerName:'Bob',tastingNotes:'Bright cherry'}:path==='/api/journal'?{items:[{...wine,id:'w',shared:true,sharedBy:'Bob'}],total:1,nextOffset:null}:path==='/api/friends/code'?{code:'A1B2-C3D4-E5F6'}:path==='/api/friends/requests'?{incoming:[],outgoing:[]}:path==='/api/friends'?{items:[{id:'bob',display_name:'Bob'}]}:path==='/api/shared/wines'?{items:[{id:'w',ownerName:'Bob',producer:'Domaine Dujac',wineName:'Clos de la Roche',vintage:2020,tastingNotes:'Bright cherry',rating:4,tastingDate:'2026-09-01'}],nextOffset:null}:{items:[],total:0,nextOffset:null};await route.fulfill({json:data})})}
-test('Google invitation login has no legacy password form',async({page})=>{
- await page.route('**/api/me',route=>route.fulfill({status:401,json:{error:'Sign in required'}}));await page.goto('/login?invitation=single-use');
- await expect(page.getByRole('link',{name:/Google/})).toHaveAttribute('href','/api/auth/google/start?invitation=single-use');await expect(page.locator('input[type=password]')).toHaveCount(0);
+test('Google sign-in needs no invitation and explains a full WineLog',async({page})=>{
+ await page.route('**/api/me',route=>route.fulfill({status:401,json:{error:'Sign in required'}}));await page.goto('/login');
+ await expect(page.getByRole('link',{name:/Google/})).toHaveAttribute('href','/api/auth/google/start');await expect(page.locator('input[type=password]')).toHaveCount(0);
+ await expect(page.getByRole('alert')).toHaveCount(0);
+ await page.goto('/login?error=full');await expect(page.getByRole('alert')).toContainText('WineLog is full');
 });
 test('friend codes send pending requests and only acceptance adds a friend',async({page})=>{
  await page.setViewportSize({width:390,height:844});await signedIn(page);

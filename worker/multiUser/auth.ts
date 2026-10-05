@@ -42,27 +42,37 @@ async function ownerClaim(env:IdentityEnv,claims:{sub:string;email:string}){
  return !bound;
 }
 
-export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email:string;name:string},invitationHash:string|null){
+/** Thrown when sign-up is refused, with a short code the login page turns into a message. */
+export class SignInRefused extends ApiError{constructor(status:number,message:string,public code:'full'|'suspended'){super(status,message)}}
+/**
+ * Signs a Google account in, creating it on first sign-in. Anyone with a
+ * verified Google account can join as a member while the member limit has
+ * room; invitations are no longer needed. The limit is checked inside the
+ * INSERT itself, so two people signing up for the last place cannot both get it.
+ */
+export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email:string;name:string}){
  const existing=await env.DB.prepare('SELECT u.* FROM auth_identities i JOIN app_users u ON u.id=i.user_id WHERE i.provider=? AND i.subject=?').bind('google',claims.sub).first<Member>();
- if(existing){if(existing.status!=='active')throw new ApiError(403,'Account suspended');return existing}
+ if(existing){if(existing.status!=='active')throw new SignInRefused(403,'Account suspended','suspended');return existing}
  const isOwner=await ownerClaim(env,claims);
  const id=isOwner?'owner':crypto.randomUUID();
+ const full=()=>new SignInRefused(403,'WineLog is full right now. Please try again later.','full');
  if(!isOwner){
   const config=await settings(env.DB);
   const count=await env.DB.prepare("SELECT count(*) AS n FROM app_users WHERE role='member'").first<{n:number}>();
-  if((count?.n??0)>=config.memberLimit)throw new ApiError(403,'Pilot membership is full');
-  if(!invitationHash)throw new ApiError(403,'An owner invitation is required');
+  if((count?.n??0)>=config.memberLimit)throw full();
  }
- // A conditional INSERT plus the identity FK makes consumption and membership atomic.
- const invitation=isOwner?null:await env.DB.prepare('SELECT token_hash FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>?').bind(invitationHash,claims.email.toLowerCase(),seconds()).first();
- if(!isOwner&&!invitation)throw new ApiError(403,'Invitation is invalid, expired, or for a different email');
- await env.DB.batch([
-  isOwner?env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,'owner') ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role='owner',status='active'").bind(id,claims.email,claims.name):
-   env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) SELECT ?,?,?,'member' FROM member_invitations WHERE token_hash=? AND email=? AND used_by IS NULL AND expires_at>? AND (SELECT count(*) FROM app_users WHERE role='member')<json_extract((SELECT value_json FROM pilot_settings WHERE id=1),'$.memberLimit')").bind(id,claims.email,claims.name,invitationHash,claims.email.toLowerCase(),seconds()),
-  env.DB.prepare('INSERT INTO auth_identities(provider,subject,user_id) VALUES(?,?,?)').bind('google',claims.sub,id),
-  env.DB.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').bind(id),
-  ...(isOwner?[]:[env.DB.prepare('UPDATE member_invitations SET used_by=? WHERE token_hash=? AND used_by IS NULL').bind(id,invitationHash)])
- ]);
+ try{
+  await env.DB.batch([
+   isOwner?env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) VALUES(?,?,?,'owner') ON CONFLICT(id) DO UPDATE SET email=excluded.email,display_name=excluded.display_name,role='owner',status='active'").bind(id,claims.email,claims.name):
+    env.DB.prepare("INSERT INTO app_users(id,email,display_name,role) SELECT ?,?,?,'member' WHERE (SELECT count(*) FROM app_users WHERE role='member')<json_extract((SELECT value_json FROM pilot_settings WHERE id=1),'$.memberLimit')").bind(id,claims.email,claims.name),
+   // When the conditional INSERT above adds nothing, this foreign key fails and the whole batch rolls back.
+   env.DB.prepare('INSERT INTO auth_identities(provider,subject,user_id) VALUES(?,?,?)').bind('google',claims.sub,id),
+   env.DB.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').bind(id)
+  ]);
+ }catch(error){
+  if(!isOwner&&!await env.DB.prepare('SELECT 1 FROM app_users WHERE id=?').bind(id).first())throw full();
+  throw error;
+ }
  const handle=await assignHandle(env.DB,id,claims.name);
  return {id,email:claims.email,display_name:claims.name,handle,role:isOwner?'owner':'member',status:'active'} as Member;
 }
@@ -73,8 +83,8 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
  if(url.pathname==='/api/auth/google/start'&&request.method==='GET'){
   if(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET||!(env.OWNER_GOOGLE_SUB||env.OWNER_EMAIL))throw new ApiError(503,'Google sign-in has not been configured');
   if(!env.AUTH_SECRET||env.AUTH_SECRET.length<32)throw new ApiError(503,'AUTH_SECRET must be at least 32 characters');
-  const origin=appOrigin(env),state=randomToken(),nonce=randomToken(),verifier=randomToken(),invite=url.searchParams.get('invitation');
-  await env.DB.prepare('INSERT INTO auth_flows(state_hash,nonce,verifier,invitation_hash,expires_at) VALUES(?,?,?,?,?)').bind(await hash(state),nonce,verifier,invite?await hash(invite):null,seconds()+600).run();
+  const origin=appOrigin(env),state=randomToken(),nonce=randomToken(),verifier=randomToken();
+  await env.DB.prepare('INSERT INTO auth_flows(state_hash,nonce,verifier,invitation_hash,expires_at) VALUES(?,?,?,?,?)').bind(await hash(state),nonce,verifier,null,seconds()+600).run();
   const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier)));
   const challenge=btoa(String.fromCharCode(...digest)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const target=new URL('https://accounts.google.com/o/oauth2/v2/auth');target.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:`${origin}/api/auth/google/callback`,response_type:'code',scope:'openid email profile',state,nonce,code_challenge:challenge,code_challenge_method:'S256'}).toString();
@@ -88,7 +98,13 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   const tokens=await reply.json() as {id_token?:string};if(!reply.ok||!tokens.id_token)throw new ApiError(401,'Google sign-in failed');
   const {payload}=await jwtVerify(tokens.id_token,keys,{issuer:['https://accounts.google.com','accounts.google.com'],audience:env.GOOGLE_CLIENT_ID,algorithms:['RS256'],requiredClaims:['sub','exp','iat','nonce','email']});
   if(payload.nonce!==flow.nonce||!payload.sub||payload.email_verified!==true||typeof payload.email!=='string')throw new ApiError(401,'Google identity could not be verified');
-  const member=await bindGoogleAccount(env,{sub:payload.sub,email:payload.email,name:typeof payload.name==='string'?payload.name:payload.email},flow.invitation_hash);
+  let member:Member;
+  try{member=await bindGoogleAccount(env,{sub:payload.sub,email:payload.email,name:typeof payload.name==='string'?payload.name:payload.email})}
+  catch(error){
+   // Send people back to the sign-in page with a reason instead of a bare JSON error.
+   if(error instanceof SignInRefused){const headers=new Headers({Location:`${origin}/login?error=${error.code}`,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(FLOW,'',0));return new Response(null,{status:302,headers})}
+   throw error;
+  }
   const token=randomToken();await env.DB.prepare('INSERT INTO auth_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').bind(await hash(token),member.id,seconds()+sessionAge).run();
   const headers=new Headers({Location:`${origin}/`,'Cache-Control':'no-store'});headers.append('Set-Cookie',setCookie(SESSION,token,sessionAge));headers.append('Set-Cookie',setCookie(FLOW,'',0));return new Response(null,{status:302,headers});
  }

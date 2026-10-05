@@ -166,7 +166,6 @@
 .settings-breakdown li span:last-child{text-align:right;color:var(--ink-4);font-variant-numeric:tabular-nums}
 .settings-card-foot{padding-top:10px;border-top:1px solid var(--line)}
 .settings-card-link{font-size:.82rem;font-weight:600;color:var(--wine-ink)}
-.settings-invite{display:grid;gap:6px}
 
 /* Grant form: four fields in one compact grid. */
 .settings-page .settings-content fieldset.settings-grant{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0;padding:0;border:0;background:transparent}

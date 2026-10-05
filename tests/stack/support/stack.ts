@@ -108,14 +108,8 @@ export async function startStack() {
       const context = await browser.newContext();
       await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort('blockedbyclient'));
       const page = await context.newPage();
-      let invitation = '';
-      if (name !== 'owner') {
-        invitation = randomUUID();
-        const tokenHash = createHash('sha256').update(invitation).digest('hex');
-        await db.prepare('INSERT INTO member_invitations(token_hash,email,created_by,expires_at) VALUES(?,?,?,?)')
-          .bind(tokenHash, `${name}@example.test`, 'owner', Math.floor(Date.now() / 1000) + 3600).run();
-      }
-      await page.goto(`${origin}/login${invitation ? `?invitation=${invitation}` : ''}`);
+      // Sign-up is open: a new Google account joins as a member while the limit has room.
+      await page.goto(`${origin}/login`);
       const startPath = await page.getByRole('link', { name: /Google/ }).getAttribute('href');
       if (!startPath?.startsWith('/api/auth/google/start')) throw new Error('Missing OAuth login link');
       // Stop the real HTTP start response at Google's authorization boundary.

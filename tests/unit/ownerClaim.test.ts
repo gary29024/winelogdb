@@ -35,7 +35,7 @@ describe('claiming the owner account',()=>{
   it('accepts a verified email when no subject is configured',async()=>{
     const {sql,db,close}=realD1();
     try{
-      const user=await bindGoogleAccount({...base(db),OWNER_EMAIL:'Me@Example.com'},claims('sub-1','me@example.com'),null);
+      const user=await bindGoogleAccount({...base(db),OWNER_EMAIL:'Me@Example.com'},claims('sub-1','me@example.com'));
       expect(user.id).toBe('owner');
       expect(sql.prepare("SELECT email FROM app_users WHERE id='owner'").get()!.email).toBe('me@example.com');
     }finally{close()}
@@ -45,9 +45,10 @@ describe('claiming the owner account',()=>{
   it('stops honouring the email once the owner has an identity',async()=>{
     const {db,close}=realD1();
     try{
-      await bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-1','me@example.com'),null);
-      await expect(bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-2','me@example.com'),null))
-        .rejects.toMatchObject({status:403});
+      await bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-1','me@example.com'));
+      // Open sign-up makes the second account an ordinary member, never the owner.
+      await expect(bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-2','me@example.com')))
+        .resolves.toMatchObject({role:'member',id:expect.not.stringMatching(/^owner$/)});
     }finally{close()}
   });
 
@@ -55,16 +56,16 @@ describe('claiming the owner account',()=>{
     const {db,close}=realD1();
     try{
       const env={...base(db),OWNER_GOOGLE_SUB:'exact-sub',OWNER_EMAIL:'me@example.com'};
-      await expect(bindGoogleAccount(env,claims('sub-1','me@example.com'),null)).rejects.toMatchObject({status:403});
-      expect((await bindGoogleAccount(env,claims('exact-sub','me@example.com'),null)).id).toBe('owner');
+      await expect(bindGoogleAccount(env,claims('sub-1','me@example.com'))).resolves.toMatchObject({role:'member',id:expect.not.stringMatching(/^owner$/)});
+      expect((await bindGoogleAccount(env,claims('exact-sub','me@example.com'))).id).toBe('owner');
     }finally{close()}
   });
 
   it('never lets a stranger claim it',async()=>{
     const {db,close}=realD1();
     try{
-      await expect(bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-9','someone@else.com'),null))
-        .rejects.toMatchObject({status:403});
+      await expect(bindGoogleAccount({...base(db),OWNER_EMAIL:'me@example.com'},claims('sub-9','someone@else.com')))
+        .resolves.toMatchObject({role:'member',id:expect.not.stringMatching(/^owner$/)});
     }finally{close()}
   });
 });

@@ -44,7 +44,7 @@ describe('account boundary',()=>{
  it('binds only the configured Google subject while preserving legacy owner data',async()=>{
   database.close();database=realD1();
   database.sql.exec("DELETE FROM credit_prices WHERE created_by='owner'; DELETE FROM member_ai_action_policies WHERE updated_by='owner'; DELETE FROM credit_wallets WHERE user_id='owner'; DELETE FROM app_users WHERE id='owner'; INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('legacy','owner','Legacy','Bottle','now','now')");
-  const account=await bindGoogleAccount(env(),{sub:'explicit-owner-sub',email:'me@example.com',name:'Owner'},null);expect(account.id).toBe('owner');expect(database.sql.prepare("SELECT owner_id FROM wines WHERE id='legacy'").get()!.owner_id).toBe('owner');
+  const account=await bindGoogleAccount(env(),{sub:'explicit-owner-sub',email:'me@example.com',name:'Owner'});expect(account.id).toBe('owner');expect(database.sql.prepare("SELECT owner_id FROM wines WHERE id='legacy'").get()!.owner_id).toBe('owner');
  });
  it('verifies signed Google callbacks, nonce, one-use state, and cookie flags',async()=>{
   const keys=await generateKeyPair('RS256'),jwk={...await exportJWK(keys.publicKey),kid:'test',alg:'RS256',use:'sig'};
@@ -70,15 +70,30 @@ describe('account boundary',()=>{
  });
  it('rejects cross-origin mutations',()=>{expect(()=>verifyOrigin(request('{}',{Origin:'https://attacker.example'}),env())).toThrow('origin')});
  it('does not bind an email match or an arbitrary signup to existing owner data',async()=>{
-  await expect(bindGoogleAccount(env(),{sub:'not-owner',email:'owner@example.com',name:'Pretender'},null)).rejects.toMatchObject({status:403});
-  expect(database.sql.prepare('SELECT count(*) AS n FROM auth_identities').get()!.n).toBe(0);
+  // Anyone can sign up now, but a stranger using the owner's email becomes a new member, never the owner.
+  const user=await bindGoogleAccount(env(),{sub:'not-owner',email:'owner@example.com',name:'Pretender'});
+  expect(user).toMatchObject({role:'member'});expect(user.id).not.toBe('owner');
+  expect(database.sql.prepare("SELECT user_id FROM auth_identities WHERE subject='not-owner'").get()!.user_id).toBe(user.id);
+  expect(database.sql.prepare("SELECT count(*) AS n FROM auth_identities WHERE user_id='owner'").get()!.n).toBe(0);
  });
- it('consumes an email-bound invitation once and creates a zero-credit member',async()=>{
-  database.sql.prepare('INSERT INTO member_invitations(token_hash,email,created_by,expires_at) VALUES(?,?,?,?)').run('invite','new@example.com','owner',seconds()+60);
-  await expect(bindGoogleAccount(env(),{sub:'bad',email:'other@example.com',name:'Other'},'invite')).rejects.toMatchObject({status:403});
-  const user=await bindGoogleAccount(env(),{sub:'new',email:'new@example.com',name:'New'},'invite');
+ it('lets anyone with Google join as a zero-credit member while the member limit has room',async()=>{
+  const user=await bindGoogleAccount(env(),{sub:'new',email:'new@example.com',name:'New Person'});
+  expect(user).toMatchObject({role:'member',status:'active',handle:'newperson'});
   expect(database.sql.prepare('SELECT balance FROM credit_wallets WHERE user_id=?').get(user.id)!.balance).toBe(0);
-  await expect(bindGoogleAccount(env(),{sub:'second',email:'new@example.com',name:'Second'},'invite')).rejects.toMatchObject({status:403});
+  // Signing in again returns the same account rather than creating another.
+  expect((await bindGoogleAccount(env(),{sub:'new',email:'new@example.com',name:'New Person'})).id).toBe(user.id);
+ });
+ it('says WineLog is full once the member limit is reached, and creates nothing',async()=>{
+  const members=Number(database.sql.prepare("SELECT count(*) AS n FROM app_users WHERE role='member'").get()!.n);
+  database.sql.prepare('UPDATE pilot_settings SET value_json=json_set(value_json,\'$.memberLimit\',?) WHERE id=1').run(members);
+  await expect(bindGoogleAccount(env(),{sub:'late',email:'late@example.com',name:'Late'})).rejects.toMatchObject({status:403,code:'full'});
+  expect(database.sql.prepare("SELECT count(*) AS n FROM auth_identities WHERE subject='late'").get()!.n).toBe(0);
+  expect(Number(database.sql.prepare("SELECT count(*) AS n FROM app_users WHERE role='member'").get()!.n)).toBe(members);
+ });
+ it('refuses a suspended account with its own reason',async()=>{
+  const user=await bindGoogleAccount(env(),{sub:'gone',email:'gone@example.com',name:'Gone'});
+  database.sql.prepare("UPDATE app_users SET status='suspended' WHERE id=?").run(user.id);
+  await expect(bindGoogleAccount(env(),{sub:'gone',email:'gone@example.com',name:'Gone'})).rejects.toMatchObject({status:403,code:'suspended'});
  });
 });
 describe('credit transactions',()=>{
