@@ -11,9 +11,11 @@ from 1987). This reads that sheet and writes:
                                      sub-region: only Champagne-wide means are published.
   data/champagne/umc_harvest.csv     the harvest start per year and grape, as published (before
                                      1989 the sheet repeats the Champagne-wide start for Chardonnay).
-  data/champagne/harvest_dates.csv   each sub-region's start: that of its leading grape (Pinot
-                                     Noir, Meunier, Chardonnay; region.py harvest_grape), or the
-                                     Champagne-wide start before 1989.
+  data/champagne/harvest_dates.csv   each sub-region's start: its official opening where
+                                     data/champagne/ban_dates.csv has one (kept by hand), else the
+                                     UMC start of its leading grape (Pinot Noir, Meunier,
+                                     Chardonnay; region.py harvest_grape), or the Champagne-wide
+                                     start before 1989.
 
 It runs before build.py in the monthly Vintage data Action. If the sheet cannot be read the
 files are left unchanged.
@@ -139,13 +141,20 @@ def main() -> None:
     def start_of(grape: str, year: int) -> dt.date | None:
         return (starts.get((grape, year)) if year >= FIRST_BY_GRAPE else None) or starts.get(('all', year))
     with open(DATA / 'harvest_dates.csv', 'w', newline='') as out:
-        out.write('# Harvest start per sub-region (champagne_must.py): the Union des Maisons de Champagne\'s start\n'
-                  '# for the sub-region\'s leading grape from 1989, the Champagne-wide start before.\n')
+        out.write('# Harvest start per sub-region (champagne_must.py): the official opening from ban_dates.csv where\n'
+                  '# kept, else the Union des Maisons de Champagne\'s start for the sub-region\'s leading grape from\n'
+                  '# 1989, the Champagne-wide start before.\n')
         writer = csv.writer(out, lineterminator='\n')
         writer.writerow(['area', 'year', 'date', 'type', 'source'])
-        for year in sorted({y for _, y in starts}):
+        bans = {}
+        if (DATA / 'ban_dates.csv').exists():
+            with open(DATA / 'ban_dates.csv') as source:
+                bans = {(r['area'], int(r['year'])): r for r in csv.DictReader(l for l in source if not l.startswith('#'))}
+        for year in sorted({y for _, y in starts} | {y for _, y in bans}):
             for area in AREAS:
-                if (day := start_of(LEADING[area], year)):
+                if (ban := bans.get((area, year))):
+                    writer.writerow([area, year, ban['date'], 'official-ban', ban['source']])
+                elif (day := start_of(LEADING[area], year)):
                     writer.writerow([area, year, day.isoformat(), 'reported-start', PAGE])
     rows = []
     for (grape, year), value in sorted(alcohol.items(), key=lambda kv: (kv[0][1], kv[0][0])):
