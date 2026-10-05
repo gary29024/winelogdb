@@ -1,6 +1,6 @@
 export { ApiError,boundedBytes,hash,seconds,stamp } from '../../src/lib/credits/primitives';
 import { ApiError } from '../../src/lib/credits/primitives';
-export type Member={id:string;email:string;display_name:string;role:'owner'|'member';status:'active'|'suspended'};
+export type Member={id:string;email:string;display_name:string;role:'owner'|'member';status:'active'|'suspended';tour_state?:string};
 export type IdentityEnv={DB:D1Database;AUTH_SECRET:string;APP_URL:string;SUPPORT_EMAIL?:string;GOOGLE_CLIENT_ID?:string;GOOGLE_CLIENT_SECRET?:string;OWNER_GOOGLE_SUB?:string;OWNER_EMAIL?:string};
 export const json=(body:unknown,status=200,headers:HeadersInit={})=>Response.json(body,{status,headers:{'Cache-Control':'no-store',...headers}});
 export const randomToken=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');

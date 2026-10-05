@@ -7,6 +7,7 @@ import '../../settingsLayout.css';
 import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 import { setDefaultFriendShare,shareAllExistingWines } from '../wines/friendTags';
+import { requestTour } from '../onboarding/useTour';
 
 type Friend={id:string;display_name:string;defaultShare?:boolean};
 type Requests={incoming:Friend[];outgoing:Friend[]};
@@ -83,6 +84,10 @@ export function AccountPage(){
     <small>This is the name your friends and other WineLog members will see.</small>
    </fieldset>
   </form>
+  {/* The closing step of the first-run tour promises this is here, so it has to
+      be. The overlay is mounted by Layout, which wraps this page, so starting
+      the tour from here spotlights the chrome around it. */}
+  <section className="settings-session"><h2>Getting around</h2><button type="button" onClick={requestTour}>Replay the tour</button><small>A short walkthrough of where everything lives.</small></section>
   <section className="settings-session"><h2>Session</h2><button type="button" onClick={()=>void logout()}>Sign out</button></section>
     </section>
     <section hidden={section!=='friends'} aria-label="Friends settings">

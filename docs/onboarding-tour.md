@@ -1,6 +1,6 @@
 # Onboarding tour for invited members
 
-Status: proposed plan, nothing implemented yet.
+Status: phases 1 and 2 built; phases 3 and 4 outstanding.
 Reviewed against `main` at `74350b8` (v1.3.0, 2026-10-05).
 
 ## 1. Why this is needed now
@@ -29,8 +29,9 @@ come from reading `src/components/Layout.tsx` and `src/App.tsx` as they stand.
 
 **The mobile bottom bar has five slots, and four major features are not in
 them.** The slots are Passport, Journal, Scan Wine, Producers, Vintages.
-Which means **Tastings**, **Insights**, **Achievements**, **Shared with me**
-and **Account & friends** have no mobile nav entry at all. They are reachable
+Which means **Tastings**, **Achievements**, **Shared with me** and
+**Account & friends** have no mobile nav entry at all. (Insights is no longer a
+page: `/insights` redirects to `/vintages`.) They are reachable
 only through the scan sheet, links on the Passport, or the top bar. On a phone,
 a new member will simply never discover them.
 
@@ -141,22 +142,34 @@ better failure than six writes on every first run.
 
 ## 5. The content
 
-### First-run tour (6 steps, everyone)
+### First-run tour (7 steps on a desktop, 6 on a phone)
 
 Triggered on the first load of `/` when `tour_state` has no `first-run` entry.
 
 | # | Points at | Says, roughly |
 |---|-----------|---------------|
-| 1 | Passport nav item | "This is your Passport — the map, stamps and progress of everything you have drunk. It fills in as you log wines." |
-| 2 | Journal nav item | "Every wine you log lives here. **Your cellar is in here too** — bottles you own but have not opened yet are a tab at the top of this page, not a separate section." |
-| 3 | Scan Wine button | "One button, four ways to add a bottle. Open it and the sheet explains each one — the short version is: one bottle, a lineup photo, a big batch, or an evening with friends." |
-| 4 | Producers / Vintages | "Background on who made the wine and how a year turned out. These fill themselves in from your journal." |
-| 5 | Account & friends (top bar) | "Your account, your friends, and what you share with them. Sharing a wine is separate from being friends — you choose per wine." |
-| 6 | Nothing (closing card) | "That is the tour. Add your first bottle whenever you like, and you can replay this from Account & friends." |
+| 1 | Passport nav item | "The map, stamps and progress of everything you have drunk. It fills in as you log wines." |
+| 2 | Journal nav item | "Every wine you log lives here. **Your cellar is in here too** — bottles you own but have not opened are under the Cellar tab, not a separate section." |
+| 3 | Scan Wine button | "One button, four ways in — one bottle, a lineup photo, a big batch, or an evening with friends. You can always add by hand." |
+| 4 | Tastings nav item | *Desktop only.* "An evening is a container: every wine you log while it is running joins it." |
+| 5 | Producers nav item | "Producers and Vintages — background that builds itself from your Journal." |
+| 6 | Account & friends | "Sharing is per wine and separate from being friends: adding a friend does not hand over your Journal." |
+| 7 | Nothing (closing card) | "That is the tour. You can run it again from Account & friends." |
 
 Step 2 is the single most valuable step, which is why the cellar sentence is
-bold. Step 5 earns its place because sharing-vs-friendship is a genuinely
+bold. Step 6 earns its place because sharing-vs-friendship is a genuinely
 non-obvious distinction in this app's model.
+
+Only step 4 is viewport-specific, for a real reason: the top bar carries a
+Tastings link and the five-slot tab bar has no room for one, so on a phone the
+subject is covered by Start Tasting inside the scan sheet instead.
+
+**Anchors are shared between the two navs.** Passport, Journal and Producers
+each appear twice in the markup under one anchor name, and the engine
+spotlights whichever copy has a real box — a `display:none` element measures
+0×0. That is what keeps the wording written once instead of twice, and it is
+what the e2e spec checks at both widths, since jsdom lays nothing out and
+cannot tell the two copies apart.
 
 ### Optional chapters
 
@@ -189,58 +202,79 @@ they just asked for.
 
 ## 6. Files
 
-New:
+Built (phases 1–2):
 
 | File | Purpose |
 |------|---------|
-| `src/features/onboarding/steps.ts` | Step and chapter content as data |
-| `src/features/onboarding/TourOverlay.tsx` | The spotlight + bubble, keyboard and focus handling |
-| `src/features/onboarding/useTour.ts` | Which tour is active, step index, filtering by role/viewport |
-| `src/features/onboarding/api.ts` | `PATCH /api/me/tour` |
-| `src/onboarding.css` | Overlay styling, matching the existing per-feature CSS convention |
 | `src/lib/db/migrations/0091_tour_state.sql` | The column |
+| `src/features/onboarding/steps.ts` | Step content as data, and the role/viewport filter |
+| `src/features/onboarding/useTour.ts` | Active step, anchor measurement, replay hook |
+| `src/features/onboarding/TourOverlay.tsx` | Spotlight, bubble, keyboard and focus |
+| `src/features/onboarding/api.ts` | Reads `tour_state`, writes it through `PATCH /api/me/tour` |
+| `src/onboarding.css` | Overlay styling |
+| `worker/multiUser/auth.ts` | `PATCH /api/me/tour` and its validator |
+| `worker/multiUser/common.ts`, `src/lib/auth/client.ts` | `tour_state` on the member/account types |
+| `src/components/Layout.tsx` | `data-tour` anchors; mounts `<TourOverlay/>` beside `<CreditConfirmation/>` |
+| `src/features/auth/AccountPage.tsx` | "Replay the tour" under Getting around |
 
-Changed:
+Two deviations from the original plan, both deliberate:
 
-| File | Change |
-|------|--------|
-| `src/components/Layout.tsx` | `data-tour` attributes on nav items and the scan trigger; mount `<TourOverlay/>` beside the existing `<CreditConfirmation/>` |
-| `worker/multiUser/auth.ts` | `PATCH /api/me/tour` |
-| `src/features/auth/AccountPage.tsx` | "Replay tutorial" + chapter list |
-| `src/features/auth/CreditConfirmation.tsx` | The one-time credits panel |
-| `src/lib/db/schema.ts` | `tour_state` on the user type |
+- **No `src/lib/db/schema.ts` change.** That file has no app-user type; the
+  account shape lives in `worker/multiUser/common.ts` and
+  `src/lib/auth/client.ts`, and those are what changed.
+- **Replay shipped in phase 2, not phase 3.** The closing step's copy promises
+  it is there, so shipping the copy without the entry would have been a lie.
 
-The overlay follows the modal conventions already in `Layout.tsx`: `role="dialog"`,
-`aria-modal`, Escape to close, `body` overflow locked while open, focus handed
-to the bubble and returned to the opener on close. Those patterns are already
-written in this codebase and should be reused rather than reinvented.
+Outstanding (phases 3–4): the optional chapters and the one-time credits panel
+in `CreditConfirmation.tsx`.
+
+The overlay follows the modal conventions already in `Layout.tsx` — Escape to
+close, focus handed to the panel — with one deliberate departure: it is **not**
+modal. The dim layer takes no pointer events and nothing locks the page, so
+`aria-modal` is omitted rather than claiming a trap the overlay does not set.
+Every anchor sits in the chrome that persists across routes, so someone who
+taps a nav item mid-tour simply navigates and the next step is still on screen.
 
 ## 7. Build order
 
-Each phase is independently shippable and useful on its own.
-
-1. **Column and endpoint.** Migration 0091, `PATCH /api/me/tour`, `tour_state`
-   on the client account type. Nothing visible yet; verifiable by test.
-2. **Engine and first-run tour.** Overlay, hook, the 6 steps, `data-tour`
-   attributes, mount in `Layout`. This is the phase that solves the actual
-   problem — ship it and stop if nothing else gets done.
-3. **Replay and chapters.** Account page entry, the four optional chapters.
+1. ~~**Column and endpoint.**~~ Done: migration 0091, `PATCH /api/me/tour`,
+   `tour_state` on the account types.
+2. ~~**Engine and first-run tour.**~~ Done: overlay, hook, steps, anchors,
+   mounted in `Layout`, plus the replay entry.
+3. **Chapters.** Adding wine, Tastings, Sharing, Progress — offered from
+   Account & friends.
 4. **Credits panel.** The one-time member explanation in `CreditConfirmation`.
 
 ## 8. Testing
 
-Unit (`tests/unit`, which has 335 files of precedent):
+All green: 5559 unit tests across 336 files, plus 5 new e2e tests.
 
-- Step filtering: a member does not get owner steps, an owner does not get the
-  credits panel, mobile and desktop get their own nav steps.
-- Persistence: finishing writes `completed`, skipping writes `skipped`, and a
-  returning member with a populated `tour_state` gets no tour.
-- Anchor integrity: **every `anchor` in `steps.ts` has a matching `data-tour`
-  in the rendered app.** This is the test that stops the tour rotting silently
-  when someone restyles the nav.
+Unit:
 
-E2E: a first-run walkthrough on `playwright.iphone.config.ts`, since the
-mobile bottom bar is where the discoverability problem actually lives.
+- `tests/unit/tourState.test.ts` (8) — the endpoint. Stores a finish and a skip,
+  rejects a body that is not the expected shape, keeps only step ids the app
+  could have issued, caps the list, and enforces the same-origin and session
+  checks.
+- `tests/unit/tourAnchors.test.ts` (8) — **every anchor in `steps.ts` exists in
+  the rendered app**, both navs still carry the shared anchors, and the
+  role/viewport filter returns what it should. Verified by mutation: deleting a
+  `data-tour` attribute fails it immediately.
+- `tests/unit/tourOverlay.test.tsx` (10) — opens for a new member, stays away
+  from one who finished or skipped, walks forward and back, writes exactly once
+  and only at the end, Escape counts as a skip, replay reopens it, and a step
+  whose anchor is absent is passed over.
+
+E2E (`tests/e2e/onboarding-tour.spec.ts`, 5 tests, chromium at two viewports) —
+the part jsdom cannot do: that the spotlight comes to rest around the nav item
+that is **actually on screen**, top bar at 1280px and tab bar at 390px, that the
+phone gets 6 steps and the desktop 7, and that the bubble stays inside the
+viewport at every step.
+
+One bug this found, worth recording because the test suite would not have: the
+step-skipping logic treated "not measured yet" and "measured and absent" as the
+same thing, so **step one of every tour was skipped** — the tour opened on step
+2. The fix reports the measured anchor back alongside its box, so a missing
+anchor is only ever concluded about an anchor that was actually looked for.
 
 ## 9. Things worth your decision
 
@@ -253,6 +287,10 @@ mobile bottom bar is where the discoverability problem actually lives.
   Passport that links out to all of them. Worth planning separately —
   `docs/app-layout-improvements.md` and `docs/remaining-layout-redesign.md`
   look like where that conversation already lives.
-- **Copy.** The table above is my first draft of the wording, not finished
-  text. You know how you want this app to sound; the content sits in one data
-  file precisely so you can rewrite it without touching any logic.
+- **Copy.** The wording that shipped is a first draft, not finished text. You
+  know how you want this app to sound; it all sits in `steps.ts` precisely so
+  you can rewrite it without touching any logic. The anchor test will tell you
+  if you break a pointer while editing.
+- **Whether a phone needs its own Tastings step.** Right now the subject rides
+  inside the scan step on a phone. If pilot members still miss Tastings, that is
+  the first thing to add.

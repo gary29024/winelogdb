@@ -1,6 +1,6 @@
 import { requiresAiReservation as isAi } from '../ai/reservedRoutes';
 
-export type Account={id:string;email:string;display_name:string;role:'owner'|'member';status:string};
+export type Account={id:string;email:string;display_name:string;role:'owner'|'member';status:string;tour_state?:string};
 let account:Account|null=null;
 let generation=0;
 // Browser-only in-flight JSON reads. No settled response survives navigation:
