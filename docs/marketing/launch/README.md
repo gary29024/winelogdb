@@ -1,6 +1,6 @@
 # WineLog public launch kit
 
-Promotional assets for a public WineLog launch. The phone screens are real
+Promotional assets for WineLog's open beta launch. The phone screens are real
 WineLog screens, captured from the app running locally with sample data.
 The wines, producers and the user "Sophie" are made up.
 
@@ -18,14 +18,14 @@ The Instagram account is **@winelog.app**.
 
 ## Profile
 
-- **Name field** (shows up in search): `WineLog · Wine Journal App`
+- **Name field** (shows up in search): `WineLog (Beta) · Wine Journal App`
 - **Category:** App page
 - **Bio** (under Instagram's 150-character limit):
 
   > Your private wine journal 🍷
   > 📸 Snap a label, AI fills in the rest
   > 🗺️ Vineyards, vintages & your wine passport
-  > 👇 Start your journal
+  > 🧪 Now in open beta. Join below 👇
 
 - **Link:** the app's web address
 - **Story highlights:** Scan · Journal · Vineyards · Passport · FAQ
@@ -39,7 +39,7 @@ The Instagram account is **@winelog.app**.
 5. **Discover**: Deep Search research and a drinking window.
 6. **Explore**: zoom into the exact vineyard plot on the village map.
 7. **Passport**: stamps, regions and collections.
-8. Outro: "Now available".
+8. Outro: WineLog with a BETA badge and "Join the open beta".
 
 ## Carousel caption
 
@@ -54,7 +54,8 @@ The Instagram account is **@winelog.app**.
 > 🛂 Collect passport stamps as you explore new regions
 >
 > Swipe to see how it works 👉
-> Now available. Link in bio.
+> WineLog is now in open beta, so anyone can join. It's early days: you might spot the odd rough edge, and your feedback shapes what we build next. 💬
+> Link in bio.
 
 ## Reel caption
 
@@ -62,7 +63,8 @@ The Instagram account is **@winelog.app**.
 >
 > Snap the label and WineLog remembers it for you: producer, vintage, vineyard, your rating and who you drank it with.
 >
-> Now available. Link in bio.
+> WineLog is now in open beta, so anyone can join. It's early days: you might spot the odd rough edge, and your feedback shapes what we build next. 💬
+> Link in bio.
 
 ## Hashtags (post as the first comment)
 
@@ -76,10 +78,11 @@ The Instagram account is **@winelog.app**.
 2. A photo of a wine bottle beside a phone where WineLog has filled in the producer, wine name and vintage from the label.
 3. A phone showing a wine's tasting notes and research, with a drinking window of 2026–2038 and a rating of 95/100.
 4. A phone showing a vineyard map with the Les Cazetiers plot in Gevrey-Chambertin highlighted.
-5. A phone showing the WineLog passport with wines tasted, regions and stamps, next to the WineLog logo and "Now available".
+5. A phone showing the WineLog passport with wines tasted, regions and stamps, next to the WineLog logo, a BETA badge and "Join the open beta".
 
 ## Launch-day Stories
 
-1. Share the Reel to your Story with a 🍷 sticker and "We're live!"
+1. Share the Reel to your Story with a 🍷 sticker and "Our open beta is live!"
 2. A poll sticker: "Do you remember every wine you've loved?" Yes / I wish
-3. A link sticker to the app: "Start your wine journal"
+3. A link sticker to the app: "Join the open beta"
+4. A question sticker: "Beta testers, what should we build next?"
