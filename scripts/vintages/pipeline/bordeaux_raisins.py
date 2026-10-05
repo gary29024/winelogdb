@@ -10,8 +10,9 @@ grape and day:
   Plot 4 (Entre-Deux-Mers) and plot 7 (Blaye-Bourg) lie outside the communes the page covers.
 
 It runs before build.py in the monthly Vintage data Action (current and previous year), and
-replaces only the years it read. Years whose plot tables are not published as a sheet (2015,
-2025) are left as they are. If the site cannot be read the file is left unchanged.
+replaces only the years it read. 2017 and 2025 have no per-plot sheet on the site (its 2017
+section lists the 2018 articles; the 2025 page now carries 2026), so those years stay without
+measurements. If the site cannot be read the file is left unchanged.
 
     python scripts/vintages/pipeline/bordeaux_raisins.py [--years 2025 2026]
 """
@@ -62,13 +63,17 @@ def fetch(url: str) -> str:
 
 
 def workbooks(year: int) -> set[str]:
-    """The published sheet(s) behind a year's per-plot articles."""
-    listing = fetch(f'{SITE}/suivi-par-parcelles-{year}.html')
-    pages = {''} | set(re.findall(rf'href="/suivi-par-parcelles-{year}\.html(\?start=\d+)"', listing))
+    """The published sheet(s) behind a year's per-plot articles. Most years list them under
+    suivi-par-parcelles-<year>; 2015 sits in the undated suivi-par-parcelles section, and 2018's
+    articles live at the site root (indice-de-maturite-par-parcelle-semaine-du-DD-MM-2018)."""
     articles = set()
-    for page in pages:
-        text = listing if not page else fetch(f'{SITE}/suivi-par-parcelles-{year}.html{page}')
-        articles |= set(re.findall(rf'href="(/suivi-par-parcelles-{year}/[^"]+\.html)"', text))
+    for section in (f'suivi-par-parcelles-{year}', 'suivi-par-parcelles'):
+        listing = fetch(f'{SITE}/{section}.html')
+        pages = {''} | set(re.findall(rf'href="/{section}\.html(\?start=\d+)"', listing))
+        for page in pages:
+            text = listing if not page else fetch(f'{SITE}/{section}.html{page}')
+            articles |= {a for a in re.findall(r'href="(/[^"#]*indice-de-maturite[^"#]*\.html)"', text)
+                         if a.startswith(f'/suivi-par-parcelles-{year}/') or a.endswith(f'-{year}.html')}
     books = set()
     for article in sorted(articles):
         for url in re.findall(r'(https://docs\.google\.com/spreadsheets/d/[^"\s]+)', fetch(SITE + article)):
@@ -97,6 +102,10 @@ def plot_rows(text: str) -> list[tuple[int, str, float]]:
     if header is None:
         return []
     column = next(i for i, c in enumerate(header) if 'sucre' in c.lower())
+    # The potential-alcohol column printed beside the sugar (TAP, at 17.5 or 16.83 g/L per % vol)
+    # catches a mistyped sugar: 2015's 308.3 g/L sits beside 11.9 % (about 208 g/L).
+    tap = next(((i, float(m.group(1).replace(',', '.'))) for i, c in enumerate(header)
+                if 'tap' in c.lower() and (m := re.search(r'(1[67][,.]\d+)', c))), None)
     out, grape = [], None
     for row in rows:
         label = ' '.join(row[:2])
@@ -111,6 +120,12 @@ def plot_rows(text: str) -> list[tuple[int, str, float]]:
                 sugar = float(value)
             except ValueError:
                 continue
+            if tap and len(row) > tap[0]:
+                try:
+                    if abs(sugar / tap[1] - float(row[tap[0]].strip().replace(',', '.'))) > 1:
+                        continue
+                except ValueError:
+                    pass
             if 100 <= sugar <= 330:
                 out.append((int(plot.group(1)), heading or grape, sugar))
     return [r for r in out if r[1]]
