@@ -1,0 +1,70 @@
+# Critics' consensus quality per vintage (by group: the reds by bank, dry whites, Sauternes; each from the most specific rating a critic gives, else its whole-Bordeaux row for that colour), from
+# scripts/vintages/pipeline/consensus.py. rating: Decanter-star equivalents, 1 poor ... 5 excellent.
+# sources: the critics averaged that year, each weighted by its agreement with the others.
+year,colour,rating,n_sources,sources
+1959,champagne,4.77,2,Guide Hachette des Vins|iDealwine
+1960,champagne,2.83,2,Guide Hachette des Vins|iDealwine
+1961,champagne,4.12,2,Guide Hachette des Vins|iDealwine
+1962,champagne,4.77,2,Guide Hachette des Vins|iDealwine
+1963,champagne,1.0,1,iDealwine
+1964,champagne,5.0,2,Guide Hachette des Vins|iDealwine
+1965,champagne,1.0,1,iDealwine
+1966,champagne,4.77,2,Guide Hachette des Vins|iDealwine
+1967,champagne,1.0,1,iDealwine
+1968,champagne,1.0,1,iDealwine
+1969,champagne,4.12,2,Guide Hachette des Vins|iDealwine
+1970,champagne,3.99,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1971,champagne,4.45,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1972,champagne,1.0,1,iDealwine
+1973,champagne,4.07,3,Decanter|Guide Hachette des Vins|iDealwine
+1974,champagne,1.0,2,Guide Hachette des Vins|iDealwine
+1975,champagne,5.0,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1976,champagne,4.25,4,Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1977,champagne,1.0,2,Guide Hachette des Vins|iDealwine
+1978,champagne,2.54,4,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|iDealwine
+1979,champagne,4.21,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1980,champagne,1.0,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1981,champagne,2.03,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1982,champagne,4.78,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1983,champagne,3.66,4,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|iDealwine
+1984,champagne,1.0,2,Guide Hachette des Vins|iDealwine
+1985,champagne,4.9,4,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1986,champagne,2.91,4,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|iDealwine
+1987,champagne,1.0,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1988,champagne,4.6,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1989,champagne,4.61,5,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1990,champagne,5.0,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1991,champagne,1.0,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1992,champagne,2.7,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1993,champagne,2.05,4,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|iDealwine
+1994,champagne,1.58,3,Berry Bros & Rudd|Guide Hachette des Vins|iDealwine
+1995,champagne,4.44,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Spectator|iDealwine
+1996,champagne,5.0,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1997,champagne,3.11,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1998,champagne,3.7,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+1999,champagne,3.44,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Spectator|iDealwine
+2000,champagne,3.48,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2001,champagne,2.2,6,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2002,champagne,4.84,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2003,champagne,2.99,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2004,champagne,4.16,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2005,champagne,3.65,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2006,champagne,3.42,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2007,champagne,3.03,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2008,champagne,5.0,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2009,champagne,4.01,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2010,champagne,2.9,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2011,champagne,2.45,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2012,champagne,4.96,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2013,champagne,4.1,7,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2014,champagne,3.77,7,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2015,champagne,4.36,7,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2016,champagne,4.16,7,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2017,champagne,2.79,6,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator
+2018,champagne,4.73,8,Berry Bros & Rudd|Decanter|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2019,champagne,4.82,7,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|Wine Spectator|iDealwine
+2020,champagne,4.86,6,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2021,champagne,3.19,6,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2022,champagne,4.77,6,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2023,champagne,3.79,6,Berry Bros & Rudd|Guide Hachette des Vins|Robert Parker Wine Advocate|Wine Enthusiast|Wine Scholar Guild (Andrew Jefford)|iDealwine
+2024,champagne,3.94,1,Wine Scholar Guild (Andrew Jefford)

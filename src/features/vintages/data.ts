@@ -45,6 +45,12 @@ const CRU_VILLAGE:[string,string][]=[
 ];
 
 /**
+ * Champagne's grand and premier cru villages and the sub-region whose weather they share. A
+ * Champagne names its village, never its sub-region; matched as whole words (Aÿ is "ay").
+ */
+const CHAMPAGNE_CRUS:[string,string][]=[['ambonnay','montagne-de-reims'],['avenay val d or','vallee-de-la-marne'],['avize','cote-des-blancs'],['ay','vallee-de-la-marne'],['beaumont sur vesle','montagne-de-reims'],['bergeres les vertus','cote-des-blancs'],['bezannes','montagne-de-reims'],['billy le grand','montagne-de-reims'],['bisseuil','vallee-de-la-marne'],['bouzy','montagne-de-reims'],['chamery','montagne-de-reims'],['champillon','vallee-de-la-marne'],['chigny les roses','montagne-de-reims'],['chouilly','cote-des-blancs'],['coligny val des marais','cote-des-blancs'],['cormontreuil','montagne-de-reims'],['coulommes la montagne','montagne-de-reims'],['cramant','cote-des-blancs'],['cuis','cote-des-blancs'],['cumieres','vallee-de-la-marne'],['dizy','vallee-de-la-marne'],['ecueil','montagne-de-reims'],['etrechy','cote-des-blancs'],['grauves','cote-des-blancs'],['hautvillers','vallee-de-la-marne'],['jouy les reims','montagne-de-reims'],['le mesnil sur oger','cote-des-blancs'],['les mesneux','montagne-de-reims'],['louvois','montagne-de-reims'],['ludes','montagne-de-reims'],['mailly champagne','montagne-de-reims'],['mareuil sur ay','vallee-de-la-marne'],['montbre','montagne-de-reims'],['mutigny','vallee-de-la-marne'],['oger','cote-des-blancs'],['oiry','cote-des-blancs'],['pargny les reims','montagne-de-reims'],['pierry','cote-des-blancs'],['puisieulx','montagne-de-reims'],['rilly la montagne','montagne-de-reims'],['sacy','montagne-de-reims'],['sermiers','montagne-de-reims'],['sillery','montagne-de-reims'],['taissy','montagne-de-reims'],['tauxieres mutry val de livre','vallee-de-la-marne'],['tours sur marne','vallee-de-la-marne'],['trepail','montagne-de-reims'],['trois puits','montagne-de-reims'],['vaudemanges','montagne-de-reims'],['vertus blancs coteaux','cote-des-blancs'],['verzenay','montagne-de-reims'],['verzy','montagne-de-reims'],['villedommange ville dommange','montagne-de-reims'],['villeneuve renneville chevigny','cote-des-blancs'],['villers allerand','montagne-de-reims'],['villers aux nuds','montagne-de-reims'],['villers marmery','montagne-de-reims'],['voipreux blancs coteaux','cote-des-blancs'],['vrigny','montagne-de-reims']];
+
+/**
  * Neighbouring appellations whose names contain a covered one: a Lalande-de-Pomerol is
  * not a Pomerol, and a Lussac-Saint-Émilion grows outside the Saint-Émilion vineyard.
  */
@@ -54,14 +60,17 @@ const SATELLITES=['lalande de pomerol','lussac saint emilion','montagne saint em
 export function villageForWine(wine:Pick<JournalWine,'appellation'|'wineName'>,villages:readonly VintageVillage[]):string|null{
   const texts=[wine.appellation,wine.wineName].filter((value):value is string=>!!value)
     .map(value=>SATELLITES.reduce((text,name)=>text.replace(name,' '),plain(value)));
+  const known=(id:string)=>villages.some(item=>item.id===id);
   for(const text of texts){
+    const champagne=CHAMPAGNE_CRUS.find(([name,area])=>known(area)&&new RegExp(`(^| )${name}( |$)`).test(text));
+    if(champagne)return champagne[1];
     // Longest village name first, so "Chorey-lès-Beaune" is not read as Beaune.
     const byLength=[...villages].sort((a,b)=>b.name.length-a.name.length);
     const village=byLength.find(item=>text.includes(plain(item.name))&&!item.id.startsWith('hautes-cotes'));
     const cru=[...CRU_VILLAGE].sort((a,b)=>b[0].length-a[0].length).find(([name])=>text.includes(name));
     // A cru named outright beats a village name the cru happens to contain
     // (Chevalier-Montrachet sits in Puligny, not in a "Montrachet" village).
-    if(cru&&(!village||cru[0].length>=plain(village.name).length))return cru[1];
+    if(cru&&known(cru[1])&&(!village||cru[0].length>=plain(village.name).length))return cru[1];
     if(village)return village.id;
   }
   return null;

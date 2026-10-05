@@ -33,7 +33,7 @@ GROUPS: dict[str, dict[str, int]] = region.config().get('consensus_groups', {})
 # The wine colour each group rates (red unless set): Bordeaux 'dry-white' white, 'sauternes' sweet.
 GROUP_COLOUR: dict[str, str] = region.config().get('consensus_colours', {})
 # Two Decanter tables rate the same vintages: count Decanter once, preferring the vintage guide.
-MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter',
+MERGE = {'Decanter (vintage guide)': 'Decanter', 'Decanter (en primeur report table)': 'Decanter', 'Decanter (vintage reports)': 'Decanter',
          # iDealwine rates Bordeaux as a whole on its chart and by bank in its blog vintage notes.
          'iDealwine (blog vintage notes)': 'iDealwine'}
 PREFER = ['Decanter (vintage guide)', 'Decanter (en primeur report table)']

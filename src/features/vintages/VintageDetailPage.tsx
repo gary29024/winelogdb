@@ -74,8 +74,8 @@ export function VintageDetailPage(){
     if(!reading||!grapeSeason||!data)return null;
     // The four ripening drivers are graded against the same reference seasons as everything else.
     const spread=ripeningSpread(data.years,reference!.harvest,grapeId,reference!.from,reference!.to);
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,pickSugar,minSugar,spread);
-  },[reading,season,data,reference,grapeId,year,pickSugar,minSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,pickSugar,minSugar,spread,grape.colour==='red'&&!region.sparkling);
+  },[reading,season,data,reference,grapeId,year,pickSugar,minSugar,grape.colour,region.sparkling]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -92,7 +92,8 @@ export function VintageDetailPage(){
   // The weather is shared; what it means in the glass depends on the grape shown.
   // In Sauternes and Barsac the vintage turns on noble rot, whichever grape is shown.
   const nobleRot=grapes.some(item=>item.sweet)?readNobleRot(season,normal):null;
-  const expect=nobleRot?.expect??grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect);
+  const expect=nobleRot?.expect??(region.sparkling?grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect,'sparkling')
+    :grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect));
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   // The quality outlook answers "how good": the conditions card below only explains why.
