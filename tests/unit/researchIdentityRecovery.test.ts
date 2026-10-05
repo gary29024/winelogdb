@@ -20,6 +20,15 @@ function seed(database:ReturnType<typeof realD1>,targets:ResearchTarget[],owner=
 }
 
 describe('research survives promotion from names to entity IDs',()=>{
+  it('does not reuse a vintage report saved under the old style-blind key',async()=>{
+    const database=realD1(),targets=buildResearchTargets(wine),current=targets.find(target=>target.scope==='vintage_context')!;
+    const oldKey=JSON.stringify(['france','burgundy','chablis grand cru','2020']);
+    seed(database,[{...current,cacheKey:oldKey,subject:{country:'France',region:'Burgundy',appellation:'Chablis Grand Cru',vintage:2020}}]);
+    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(false);
+    seed(database,[current]);
+    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(true);
+  });
+
   it.each([false,true])('recovers the reported Moutonne report before another run (producer already linked: %s)',async linked=>{
     const database=realD1(),targets=buildResearchTargets(wine);
     seed(database,buildResearchTargets({...wine,producerId:linked?wine.producerId:null,cuveeId:null}));

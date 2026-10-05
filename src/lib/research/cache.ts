@@ -62,12 +62,17 @@ function researchTargetsWith(wine:ResearchWine,key:(...parts:unknown[])=>string)
     {scope:'producer',cacheKey:key(producerIdentity),subject:{producer,producerId:producerId||null},identity},
     {scope:'terroir',cacheKey:key(producerIdentity,wineIdentity,appellation,region,country),subject:{producer,producerId:producerId||null,cuveeId:cuveeId||null,wineName,appellation:appellation||null,region:region||null,country:country||null},identity}
   ];
-  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,vintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage},identity});
+  // A season reads differently by colour and style: a warm year that suits
+  // Pinot Noir can be hard on Riesling. Without a recorded style the report
+  // stays with this wine rather than being lent to an unknown other style.
+  const vintageScope=(year:number)=>wineStyle?key(country,region,appellation,'style',wineStyle,year):key(country,region,appellation,'wine',producerIdentity,wineIdentity,year);
+  const vintageSubject=(year:number)=>({country:country||null,region:region||null,appellation:appellation||null,wineStyle:wineStyle||null,vintage:year});
+  if(vintage!=null)targets.push({scope:'vintage_context',cacheKey:vintageScope(vintage),subject:vintageSubject(vintage),identity});
   // A non-vintage release with a known base year: that year's growing season
   // shaped the blend, so its regional vintage context is researched too. It is
-  // the same key and subject as that year's vintage context, so research already
-  // held for the year is reused rather than bought again.
-  else if(edition?.baseVintage!=null)targets.push({scope:'vintage_context',cacheKey:key(country,region,appellation,edition.baseVintage),subject:{country:country||null,region:region||null,appellation:appellation||null,vintage:edition.baseVintage},identity:{...identity,vintage:edition.baseVintage}});
+  // the same key and subject as that year's vintage context for the same style,
+  // so research already held for the year is reused rather than bought again.
+  else if(edition?.baseVintage!=null)targets.push({scope:'vintage_context',cacheKey:vintageScope(edition.baseVintage),subject:vintageSubject(edition.baseVintage),identity:{...identity,vintage:edition.baseVintage}});
   const exactKey=edition
     ?key(producerIdentity,wineIdentity,'NV',appellation,region,country,edition.releaseDesignation,edition.baseVintage,edition.disgorgement)
     :key(producerIdentity,wineIdentity,vintage??'NV',appellation,region,country);
