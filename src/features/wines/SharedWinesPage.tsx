@@ -115,7 +115,7 @@ export function SharedWinesPage(){
   </section>
   <div className="wine-actions">
    <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-label={wine.favorite?'Favorite':'Add to favorites'} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span><span className="detail-favorite-label">{wine.favorite?'Favorite':'Add to favorites'}</span></button>
-   <WineSharing key={wine.id} ownerName={wine.ownerName}/>
+   <WineSharing key={wine.id} ownerName={wine.ownerHandle?`${wine.ownerName} (@${wine.ownerHandle})`:wine.ownerName}/>
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
    {favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}
   </div>

@@ -9,7 +9,8 @@ import { bootstrapAccount,getAccount,logout } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 import { setDefaultFriendShare,shareAllExistingWines } from '../wines/friendTags';
 
-type Friend={id:string;display_name:string;defaultShare?:boolean;since?:string};
+type Friend={id:string;display_name:string;handle?:string|null;defaultShare?:boolean;since?:string};
+type HandleCheck={state:'idle'|'checking'|'available'|'unavailable';message?:string};
 type Requests={incoming:Friend[];outgoing:Friend[]};
 type UsageKind={kind:string;label:string;runs:number;requests:number;units:number;unit:'run'|'wine'};
 type UsageSummary={days:number;kinds:UsageKind[];empty:boolean};
@@ -24,6 +25,7 @@ export function AccountPage(){
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
  const [ownCode,setOwnCode]=useState(''),[code,setCode]=useState('');
  const [name,setName]=useState(()=>getAccount()?.display_name??'');
+ const [handle,setHandle]=useState(()=>getAccount()?.handle??''),[handleCheck,setHandleCheck]=useState<HandleCheck>({state:'idle'});
  const [busySections,setBusySections]=useState<Record<string,boolean>>({});
  const busy=Boolean(busySections[section]);
  const [feedback,setFeedback]=useState<Record<string,{error?:string;notice?:string}>>({});
@@ -45,6 +47,14 @@ export function AccountPage(){
    catch(error){setLoadErrors(previous=>({...previous,[job.key]:(error as Error).message}))}
   }));
  },[]);
+ // Ask whether a new handle is free once typing pauses; a stale answer is ignored.
+ useEffect(()=>{
+  const wanted=handle.trim().replace(/^@/,'').toLowerCase(),current=getAccount()?.handle??'';
+  if(!wanted||wanted===current){setHandleCheck({state:'idle'});return}
+  setHandleCheck({state:'checking'});let live=true;
+  const timer=window.setTimeout(()=>{void apiJson<{available:boolean;problem:string|null}>(`/api/me/handle-check?handle=${encodeURIComponent(wanted)}`).then(result=>{if(live)setHandleCheck(result.available?{state:'available'}:{state:'unavailable',message:result.problem??'That handle is taken'})}).catch(()=>{if(live)setHandleCheck({state:'idle'})})},350);
+  return()=>{live=false;window.clearTimeout(timer)};
+ },[handle]);
  useEffect(()=>{
   const refresh=()=>void load();refresh();
   window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh);
@@ -79,18 +89,22 @@ export function AccountPage(){
      {feedback[item.id]?.notice&&<p role="status">{feedback[item.id].notice}</p>}
     </div>)}
     <section hidden={section!=='profile'} aria-label="Profile settings">
-     <form className="settings-card" onSubmit={e=>{e.preventDefault();void run(async()=>{const saved=await apiJson<{user:{display_name:string}}>('/api/me','PATCH',{displayName:name});setName(saved.user.display_name);await bootstrapAccount()},'Name updated.')}}>
-      <div className="settings-identity"><span className="settings-avatar large" aria-hidden="true">{(account?.display_name??name).trim().charAt(0)||'?'}</span><div><strong>{account?.display_name??name}</strong><span className="settings-chips"><span className={`settings-chip${isOwner?' accent':''}`}>{isOwner?'Owner':'Member'}</span>{loaded.friends&&<span className="settings-chip">{friends.length} friend{friends.length===1?'':'s'}</span>}</span></div></div>
+     <form className="settings-card" onSubmit={e=>{e.preventDefault();void run(async()=>{const saved=await apiJson<{user:{display_name:string;handle?:string|null}}>('/api/me','PATCH',{displayName:name,handle});setName(saved.user.display_name);setHandle(saved.user.handle??'');await bootstrapAccount()},'Profile saved.')}}>
+      <div className="settings-identity"><span className="settings-avatar is-large" aria-hidden="true">{(account?.display_name??name).trim().charAt(0)||'?'}</span><div><strong>{account?.display_name??name}{account?.handle&&<span className="settings-handle"> @{account.handle}</span>}</strong><span className="settings-chips"><span className={`settings-chip${isOwner?' is-accent':''}`}>{isOwner?'Owner':'Member'}</span>{loaded.friends&&<span className="settings-chip">{friends.length} friend{friends.length===1?'':'s'}</span>}</span></div></div>
       <div className="settings-field"><label htmlFor="display-name" className="settings-label">Name</label>
-       <div className="settings-row"><input className="settings-grow" id="display-name" value={name} onChange={e=>setName(e.target.value)} maxLength={60} autoComplete="name" required/><button type="submit" className="settings-primary" disabled={busy||!name.trim()}>Save name</button></div></div>
-      <p className="settings-hint">Your friends and other WineLog members see this name.</p>
+       <input id="display-name" value={name} onChange={e=>setName(e.target.value)} maxLength={60} autoComplete="name" required/></div>
+      <div className="settings-field"><label htmlFor="handle" className="settings-label">Handle</label>
+       <div className="settings-row"><span className="settings-at settings-grow"><span aria-hidden="true">@</span><input id="handle" value={handle} onChange={e=>setHandle(e.target.value.replace(/^@/,'').toLowerCase())} maxLength={20} autoCapitalize="none" autoComplete="username" spellCheck={false} aria-describedby="handle-status handle-hint" required/></span>
+        <span id="handle-status" role="status" className={`settings-chip${handleCheck.state==='available'?' is-good':handleCheck.state==='unavailable'?' is-warn':''}`} hidden={handleCheck.state==='idle'}>{handleCheck.state==='checking'?'Checking…':handleCheck.state==='available'?'✓ Available':handleCheck.message}</span></div></div>
+      <p className="settings-hint" id="handle-hint">Your name can be anything. Your handle is unique, so friends can tell two people with the same name apart and find you by typing @{handle||'handle'}. 3–20 characters: lowercase letters, numbers, dots and underscores.</p>
+      <div><button type="submit" className="settings-primary" disabled={busy||!name.trim()||!handle.trim()||handleCheck.state==='unavailable'||handleCheck.state==='checking'}>Save profile</button></div>
      </form>
      <div className="settings-card settings-split"><div><strong>Signed in</strong><span className="settings-hint">{account?.email}</span></div><button type="button" onClick={()=>void logout()}>Sign out</button></div>
     </section>
     <section hidden={section!=='friends'} aria-label="Friends settings">
      {resourceStatus(['friends','requests','code'])}
      {requests.incoming.map(item=><article className="settings-request" key={item.id} aria-label={`Friend request from ${item.display_name}`}>
-      <span className="settings-avatar" aria-hidden="true">{item.display_name.charAt(0)}</span><p><strong>{item.display_name}</strong> wants to be your friend.</p><div className="friend-actions">
+      <span className="settings-avatar" aria-hidden="true">{item.display_name.charAt(0)}</span><p><strong>{item.display_name}</strong>{item.handle&&<span className="settings-handle"> @{item.handle}</span>} wants to be your friend.</p><div className="friend-actions">
        <button className="settings-primary" disabled={busy} aria-label={`Accept ${item.display_name}`} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}/accept`,'POST',{}),`You and ${item.display_name} are now friends.`)}>Accept</button>
        <button className="settings-quiet" disabled={busy} aria-label={`Decline ${item.display_name}`} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request declined.')}>Decline</button>
       </div>
@@ -98,18 +112,18 @@ export function AccountPage(){
      <div className="settings-card settings-connect">
       <div><span className="settings-label" id="own-code-label">Your friend code</span>
        <div className="settings-row"><span className="settings-code settings-grow" aria-labelledby="own-code-label">{ownCode||'…'}</span><button type="button" disabled={!ownCode} onClick={()=>{void navigator.clipboard.writeText(ownCode).then(()=>setNotice('Friend code copied.')).catch(()=>setError('Select your friend code and copy it.'))}} aria-label="Copy friend code">Copy</button></div>
-       <p className="settings-hint">Your code stays the same. Share it so friends can add you.</p></div>
+       <p className="settings-hint">{account?.handle?<>Friends can also find you as <strong>@{account.handle}</strong>.</>:'Your code stays the same. Share it so friends can add you.'}</p></div>
       <form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/friends/requests','POST',{code});setCode('')},'Friend request sent. You’ll become friends when they accept.')}}>
        <div className="settings-field"><label htmlFor="friend-code" className="settings-label">Add a friend</label>
-       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code" value={code} onChange={e=>setCode(e.target.value)} placeholder="A1B2-C3D4-E5F6" autoCapitalize="characters" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
-       <p className="settings-hint">You become friends once they accept.</p></form>
+       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code or handle" value={code} onChange={e=>setCode(e.target.value)} placeholder="@handle or friend code" autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
+       <p className="settings-hint">Type a handle or a friend code. You become friends once they accept.</p></form>
      </div>
      <div className="settings-card">
       <div className="settings-card-head"><h2>Your friends</h2><small>Friends can reuse each other’s research. Wines are shared separately.</small></div>
-      {loaded.friends&&!friends.length&&<p className="settings-hint">No friends yet. Send a request with a friend code above.</p>}
+      {loaded.friends&&!friends.length&&<p className="settings-hint">No friends yet. Add someone above with their handle or friend code.</p>}
       {!!friends.length&&<ul className="settings-people">{friends.map(friend=><li key={friend.id}>
        <span className="settings-avatar" aria-hidden="true">{friend.display_name.charAt(0)}</span>
-       <span className="settings-person"><strong>{friend.display_name}</strong><span>{sinceLabel(friend.since)}</span></span>
+       <span className="settings-person"><strong>{friend.display_name}{friend.handle&&<span className="settings-handle"> @{friend.handle}</span>}</strong><span>{sinceLabel(friend.since)}</span></span>
        <label className="settings-switch"><input type="checkbox" role="switch" aria-label={`Share new wines with ${friend.display_name} by default`} checked={Boolean(friend.defaultShare)} disabled={busy} onChange={event=>void run(()=>setDefaultFriendShare(friend.id,event.target.checked),event.target.checked?`New wines will be tagged with ${friend.display_name} by default.`:`Default tagging for ${friend.display_name} is off.`)}/><span className="settings-switch-long">Share new wines</span><span className="settings-switch-short" aria-hidden="true">Share</span></label>
        <details className="settings-menu"><summary aria-label={`More options for ${friend.display_name}`}>⋯</summary><div>
         {isOwner&&<button disabled={busy} aria-label={`Share all existing wines with ${friend.display_name}`} onClick={()=>{if(confirm(`Share every wine already in your Journal with ${friend.display_name}?\n\nThis does not change default tagging for future wines. There is currently no bulk undo; reversing this requires untagging this friend from wines individually.`))void shareExisting(friend)}}>Share all existing wines…</button>}
@@ -119,19 +133,19 @@ export function AccountPage(){
       </li>)}</ul>}
       <details className="settings-fold"><summary>Sent requests {!!requests.outgoing.length&&<span className="settings-chip">{requests.outgoing.length} pending</span>}</summary>
        {loaded.requests&&!requests.outgoing.length&&<p className="settings-hint">No pending sent requests.</p>}
-       {!!requests.outgoing.length&&<ul className="settings-people">{requests.outgoing.map(item=><li key={item.id}><span className="settings-avatar" aria-hidden="true">{item.display_name.charAt(0)}</span><span className="settings-person"><strong>{item.display_name}</strong><span>Awaiting acceptance</span></span><button className="settings-quiet" disabled={busy} aria-label={`Cancel request to ${item.display_name}`} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request cancelled.')}>Cancel</button></li>)}</ul>}
+       {!!requests.outgoing.length&&<ul className="settings-people">{requests.outgoing.map(item=><li key={item.id}><span className="settings-avatar" aria-hidden="true">{item.display_name.charAt(0)}</span><span className="settings-person"><strong>{item.display_name}{item.handle&&<span className="settings-handle"> @{item.handle}</span>}</strong><span>Awaiting acceptance</span></span><button className="settings-quiet" disabled={busy} aria-label={`Cancel request to ${item.display_name}`} onClick={()=>void run(()=>apiJson(`/api/friends/requests/${item.id}`,'DELETE'),'Friend request cancelled.')}>Cancel</button></li>)}</ul>}
       </details>
      </div>
     </section>
     <section hidden={section!=='usage'} aria-label="AI usage settings">
      {resourceStatus(['access','usage'])}
      {loaded.access&&<section className="settings-card" aria-label="AI access">
-      <div className="settings-card-head"><h2>{isOwner?'Your AI access':'This week’s AI allowance'}</h2>{isOwner?<span className="settings-chip accent">Owner · no allowance limits</span>:resetsAt&&<span className="settings-chip">Resets {formatReset(resetsAt)}</span>}</div>
+      <div className="settings-card-head"><h2>{isOwner?'Your AI access':'This week’s AI allowance'}</h2>{isOwner?<span className="settings-chip is-accent">Owner · no allowance limits</span>:resetsAt&&<span className="settings-chip">Resets {formatReset(resetsAt)}</span>}</div>
       {isOwner?<p className="settings-hint">Your usage and provider cost are tracked, but member allowances do not apply to you.</p>:<>
        <div className="settings-tiles">{actions.map(item=>{const remaining=item.remaining??0,share=item.limit?remaining/item.limit:0;return <article key={item.action}><strong>{item.label}</strong>
-        {item.accessMode==='included'?<><b><span className="settings-chip good">Included</span></b><span className="settings-tile-note">No weekly limit</span></>:<><b aria-label={`${remaining} of ${item.limit} runs left`}>{remaining} <small>of {item.limit} left</small></b><div className={`settings-meter${share<=.34?' low':''}`} aria-hidden="true"><span style={{width:`${Math.round(Math.min(1,share)*100)}%`}}/></div>{(item.granted>0||item.pending>0)&&<span className="settings-tile-note">{[item.granted?`${item.granted} extra granted`:'',item.pending?`${item.pending} in progress`:''].filter(Boolean).join(' · ')}</span>}</>}
+        {item.accessMode==='included'?<><b><span className="settings-chip is-good">Included</span></b><span className="settings-tile-note">No weekly limit</span></>:<><b aria-label={`${remaining} of ${item.limit} runs left`}>{remaining} <small>of {item.limit} left</small></b><div className={`settings-meter${share<=.34?' is-low':''}`} aria-hidden="true"><span style={{width:`${Math.round(Math.min(1,share)*100)}%`}}/></div>{(item.granted>0||item.pending>0)&&<span className="settings-tile-note">{[item.granted?`${item.granted} extra granted`:'',item.pending?`${item.pending} in progress`:''].filter(Boolean).join(' · ')}</span>}</>}
        </article>})}
-        <article><strong>Smart Search</strong><b><span className="settings-chip good">Included</span></b><span className="settings-tile-note">Daily limit applies</span></article></div>
+        <article><strong>Smart Search</strong><b><span className="settings-chip is-good">Included</span></b><span className="settings-tile-note">Daily limit applies</span></article></div>
        <p className="settings-hint">Only successful new work uses a run. Failed runs, cached results and research reused from friends are free.</p></>}
      </section>}
      {loaded.usage&&<section className="settings-card" aria-labelledby="your-usage-title">

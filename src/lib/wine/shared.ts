@@ -37,6 +37,7 @@ export type SharedWineExperience={
 export type SharedWine = SharedWineExperience&{
  id:string;
  ownerName:string;
+ ownerHandle?:string|null;
  producer:string;
  /**
   * The viewer's own producer row when one exists for the same match_key;

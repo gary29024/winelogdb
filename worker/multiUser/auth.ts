@@ -1,5 +1,6 @@
 import { createRemoteJWKSet,jwtVerify } from 'jose';
 import { ApiError,appOrigin,body,cookie,hash,json,randomToken,seconds,setCookie,settings,type IdentityEnv,type Member } from './common';
+import { assignHandle,backfillHandles,handleProblem,handleTaken,normalizeHandle,validHandle } from './handles';
 
 const keys=createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 const SESSION='__Host-winelog';
@@ -8,7 +9,11 @@ const sessionAge=7*86400;
 export async function authenticate(request:Request,env:IdentityEnv):Promise<Member>{
  const token=cookie(request,SESSION);if(!token)throw new ApiError(401,'Sign in required');
  const user=await env.DB.prepare("SELECT u.* FROM auth_sessions s JOIN app_users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND u.status='active'").bind(await hash(token),seconds()).first<Member>();
- if(!user)throw new ApiError(401,'Session expired');return user;
+ if(!user)throw new ApiError(401,'Session expired');
+ // Accounts made before handles existed get one the first time they are seen,
+ // and so does everyone else still without one, so friends lists fill in too.
+ if(!user.handle){await backfillHandles(env.DB);user.handle=(await env.DB.prepare('SELECT handle FROM app_users WHERE id=?').bind(user.id).first<{handle:string|null}>())?.handle??null}
+ return user;
 }
 export function verifyOrigin(request:Request,env:IdentityEnv){
  if(!['GET','HEAD','OPTIONS'].includes(request.method)&&request.headers.get('Origin')!==appOrigin(env))throw new ApiError(403,'Invalid request origin');
@@ -58,7 +63,8 @@ export async function bindGoogleAccount(env:IdentityEnv,claims:{sub:string;email
   env.DB.prepare('INSERT OR IGNORE INTO credit_wallets(user_id) VALUES(?)').bind(id),
   ...(isOwner?[]:[env.DB.prepare('UPDATE member_invitations SET used_by=? WHERE token_hash=? AND used_by IS NULL').bind(id,invitationHash)])
  ]);
- return {id,email:claims.email,display_name:claims.name,role:isOwner?'owner':'member',status:'active'} as Member;
+ const handle=await assignHandle(env.DB,id,claims.name);
+ return {id,email:claims.email,display_name:claims.name,handle,role:isOwner?'owner':'member',status:'active'} as Member;
 }
 export async function authRoute(request:Request,env:IdentityEnv):Promise<Response|null>{
  const url=new URL(request.url);
@@ -90,9 +96,23 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   verifyOrigin(request,env);await env.DB.prepare('DELETE FROM auth_sessions WHERE token_hash=?').bind(await hash(cookie(request,SESSION))).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)});
  }
  if(url.pathname==='/api/me'&&request.method==='GET'){const member=await authenticate(request,env);return json({user:member})}
+ if(url.pathname==='/api/me/handle-check'&&request.method==='GET'){
+  const member=await authenticate(request,env),handle=normalizeHandle(url.searchParams.get('handle')),problem=handleProblem(handle);
+  if(problem)return json({handle,available:false,problem});
+  const available=handle===member.handle||!await handleTaken(env.DB,handle,member.id);
+  return json({handle,available,problem:available?null:'That handle is taken'});
+ }
  if(url.pathname==='/api/me'&&request.method==='PATCH'){
-  verifyOrigin(request,env);const member=await authenticate(request,env),data=await body(request),display_name=profileName(data.displayName);
-  await env.DB.prepare('UPDATE app_users SET display_name=? WHERE id=?').bind(display_name,member.id).run();return json({user:{...member,display_name}});
+  verifyOrigin(request,env);const member=await authenticate(request,env),data=await body(request);
+  if(data.displayName===undefined&&data.handle===undefined)throw new ApiError(400,'Nothing to update');
+  const display_name=data.displayName===undefined?member.display_name:profileName(data.displayName);
+  const handle=data.handle===undefined?member.handle??null:validHandle(data.handle);
+  if(handle&&handle!==member.handle&&await handleTaken(env.DB,handle,member.id))throw new ApiError(409,'That handle is taken');
+  // Shares, friendships and tastings point at the account id, so a new handle
+  // or name changes only how the person is shown.
+  try{await env.DB.prepare('UPDATE app_users SET display_name=?,handle=? WHERE id=?').bind(display_name,handle,member.id).run()}
+  catch(error){if(/UNIQUE/i.test(String((error as Error).message)))throw new ApiError(409,'That handle is taken');throw error}
+  return json({user:{...member,display_name,handle}});
  }
  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){verifyOrigin(request,env);const member=await authenticate(request,env);await body(request);await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id=?').bind(member.id).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)})}
  if(url.pathname.startsWith('/api/auth/'))return json({error:'Unknown authentication endpoint'},404);

@@ -51,7 +51,7 @@ for(const role of ['owner','member'] as const){
   await expect(page.getByText('Usage temporarily unavailable')).not.toBeVisible();
   await page.getByRole('button',{name:'Accept Alex'}).click();
   await expect(page.getByText('You and Alex are now friends.')).toBeVisible();
-  await page.getByLabel('Friend code',{exact:true}).fill('TEST-CODE');
+  await page.getByLabel('Friend code or handle',{exact:true}).fill('TEST-CODE');
   await fits(page);await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:info.outputPath(`${role}-friends.png`),fullPage:true});
   await page.getByRole('button',{name:'AI usage',exact:true}).click();
   await expect(page.getByText('Usage temporarily unavailable')).toBeVisible();
@@ -59,7 +59,7 @@ for(const role of ['owner','member'] as const){
   await page.getByRole('button',{name:'Profile',exact:true}).click();
   await expect(page.getByLabel('Name',{exact:true})).toHaveValue('Unsaved name');
   await page.getByRole('button',{name:'Friends',exact:true}).click();
-  await expect(page.getByLabel('Friend code',{exact:true})).toHaveValue('TEST-CODE');
+  await expect(page.getByLabel('Friend code or handle',{exact:true})).toHaveValue('TEST-CODE');
   await expect(page.getByRole('link',{name:'Owner tools →'})).toHaveCount(role==='owner'?1:0);
   await page.getByLabel('More options for Jamie',{exact:true}).click();
   await expect(page.getByRole('button',{name:'Remove friend'})).toBeVisible();
