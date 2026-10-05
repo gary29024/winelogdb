@@ -20,7 +20,7 @@
 .settings-row>.settings-grow{flex:1 1 120px;min-width:0}
 .settings-page .settings-content .settings-card input:not([type=checkbox]){min-height:40px;padding:8px 10px;font-size:.9rem}
 .settings-page .settings-content .settings-card label{display:grid;gap:5px;flex-direction:initial;justify-content:initial}
-.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-card .button{min-height:40px;padding:0 14px;font-size:.84rem;white-space:nowrap}
+.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-page .settings-content .settings-savebar button,.settings-card .button{min-height:40px;padding:0 14px;font-size:.84rem;white-space:nowrap}
 .settings-page .settings-content button.settings-primary{background:var(--wine-fill);border-color:var(--wine-fill);color:var(--on-accent)}
 .settings-page .settings-content button.settings-primary:hover:not(:disabled){filter:brightness(.94);background:var(--wine-fill)}
 .settings-page .settings-content button.settings-quiet{border-color:transparent;background:transparent;color:var(--ink-6)}
@@ -106,7 +106,7 @@
 .settings-stats dd small{color:var(--ink-6);font-size:.72rem;font-weight:500}
 
 @media(max-width:700px){
- .settings-page .settings-content .settings-card input:not([type=checkbox]),.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-card .button{min-height:44px}
+ .settings-page .settings-content .settings-card input:not([type=checkbox]),.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-page .settings-content .settings-savebar button,.settings-card .button{min-height:44px}
  .settings-page .settings-content details.settings-menu>summary{width:44px;min-height:44px}
  .settings-connect{grid-template-columns:minmax(0,1fr)}
  .settings-connect>:first-child{padding:0 0 12px;border-right:0;border-bottom:1px solid var(--line)}
@@ -121,3 +121,108 @@
 .settings-at{display:flex;align-items:center;max-width:340px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper)}
 .settings-at>span{padding-left:10px;color:var(--ink-6);font-weight:600}
 .settings-page .settings-content .settings-card .settings-at>input{flex:1 1 auto;min-width:0;border:0;padding-left:3px;background:transparent}
+
+/* ---------- Owner controls ---------- */
+.settings-page .settings-content.settings-cards.is-wide{max-width:none}
+.settings-page .settings-cards .settings-sections{display:grid;gap:var(--s3)}
+.settings-page .settings-cards .settings-sections[hidden]{display:none}
+.settings-page .settings-cards .settings-sections>section{display:grid;gap:var(--s3)}
+.settings-page .settings-cards .settings-sections>section[hidden]{display:none}
+
+/* Warnings: one line and a button that goes to the fix. */
+.settings-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;border:1px solid var(--warn-line);border-radius:var(--r-sm);background:var(--warn-wash);font-size:.86rem}
+.settings-banner.is-quiet{border-color:var(--line);background:var(--paper)}
+.settings-page .settings-content .settings-banner p{flex:1 1 240px;min-width:0;margin:0;color:var(--ink-3)}
+.settings-page .settings-content .settings-banner button{min-height:36px;padding:0 12px;font-size:.82rem}
+
+.settings-page .settings-content dl.settings-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0}
+.settings-kpis>div{display:grid;gap:1px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);min-width:0}
+.settings-kpis>div.is-attention{border-color:var(--warn-line);background:var(--warn-wash)}
+.settings-kpis dt{color:var(--ink-6);font-size:.72rem;overflow-wrap:anywhere}
+.settings-kpis dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.settings-kpis dd small{color:var(--ink-6);font-size:.72rem;font-weight:500}
+
+.settings-table-scroll{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.settings-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.settings-table th{padding:4px 8px;border-bottom:1px solid var(--line);color:var(--ink-6);font-size:.7rem;font-weight:600;text-align:left;white-space:nowrap}
+.settings-table td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.settings-table tbody tr:last-child td{border-bottom:0}
+.settings-table .is-number{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.settings-table th:first-child,.settings-table td:first-child{padding-left:0}
+.settings-table th:last-child,.settings-table td:last-child{padding-right:0}
+.settings-table-person{display:flex;align-items:center;gap:8px;min-width:180px}
+.settings-table-person>div{display:grid;gap:1px;min-width:0}
+.settings-table-person strong{font-size:.88rem}
+.settings-table-person span{color:var(--ink-6);font-size:.72rem;overflow-wrap:anywhere}
+.settings-table-details>td{background:var(--ground)}
+.settings-table-details>td{padding:10px 12px}
+.settings-table-details .settings-stats{background:var(--paper);margin-bottom:8px}
+.settings-page .settings-content .settings-breakdown{display:grid;gap:4px;margin:8px 0 0;padding:0;list-style:none;font-size:.8rem}
+.settings-breakdown li{display:flex;justify-content:space-between;gap:12px}
+.settings-breakdown li span:last-child{text-align:right;color:var(--ink-4);font-variant-numeric:tabular-nums}
+.settings-card-foot{padding-top:10px;border-top:1px solid var(--line)}
+.settings-card-link{font-size:.82rem;font-weight:600;color:var(--wine-ink)}
+.settings-invite{display:grid;gap:6px}
+
+/* Grant form: four fields in one compact grid. */
+.settings-page .settings-content fieldset.settings-grant{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0;padding:0;border:0;background:transparent}
+.settings-page .settings-content .settings-grant label{grid-template-columns:minmax(0,1fr);align-content:start;font-size:.78rem;font-weight:600;color:var(--ink-4)}
+.settings-page .settings-content .settings-grant select,.settings-page .settings-content .settings-grant input:not([type=number]){width:100%;max-width:100%;min-height:40px;padding:8px 10px;font-size:.88rem;font-weight:400}
+
+/* Number fields: label on the left, input on the right. */
+.settings-page .settings-content .settings-card label.settings-num{display:grid;grid-template-columns:minmax(0,1fr) 104px;align-items:center;gap:10px;font-size:.82rem;color:var(--ink-3)}
+.settings-page .settings-content .settings-card label.settings-num input{width:104px;min-height:34px;padding:5px 8px;text-align:right;font-size:.86rem}
+.settings-page .settings-content .settings-card label.settings-num.is-compact{grid-template-columns:auto;justify-content:end}
+.settings-page .settings-content .settings-grant input.settings-grant-runs{width:110px;min-height:40px;font-weight:400}
+.settings-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;align-items:start}
+.settings-page .settings-content .settings-groups fieldset{display:grid;gap:8px;margin:0;padding:10px 12px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);min-width:0}
+.settings-page .settings-content .settings-groups fieldset.is-wide{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));column-gap:24px}
+.settings-page .settings-content .settings-groups legend{padding:0 4px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-6)}
+.settings-page .settings-content label.settings-group-switch{white-space:normal;font-size:.82rem;color:var(--ink-3)}
+
+.settings-savebar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);font-size:.84rem;color:var(--ink-6)}
+.settings-savebar.is-dirty{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.settings-page .settings-content .settings-savebar.is-dirty button.settings-quiet{color:var(--paper)}
+.settings-page .settings-content .settings-savebar.is-dirty button.settings-quiet:hover:not(:disabled){background:transparent;border-color:var(--paper)}
+
+/* Background jobs: one row each. */
+.settings-job{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.settings-card-head+.settings-job{border-top:0;padding-top:0}
+.settings-job-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.settings-job-name strong{font-size:.88rem}
+.settings-job-actions{grid-column:2;grid-row:1/3;display:flex;gap:6px}
+.settings-job-meta{grid-column:1;color:var(--ink-6);font-size:.76rem;overflow-wrap:anywhere}
+.settings-job progress{grid-column:1/-1;width:100%;height:6px;accent-color:var(--good)}
+.settings-page .settings-content .settings-job-error{grid-column:1/-1;margin:0;font-size:.76rem}
+.settings-page .settings-content details.settings-job-about{margin:0}
+.settings-page .settings-content details.settings-job-about[open]{flex-basis:100%}
+.settings-page .settings-content details.settings-job-about>summary{display:inline-flex;min-height:24px;padding:0 4px;font-size:.82rem;font-weight:500;color:var(--ink-6)}
+.settings-page .settings-content details.settings-job-about>summary::after{content:none}
+.settings-page .settings-content details.settings-job-about p{margin:2px 0 4px}
+
+@media(max-width:700px){
+ .settings-page .settings-content dl.settings-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .settings-job{grid-template-columns:minmax(0,1fr)}
+ .settings-job-actions{grid-column:1;grid-row:auto}
+ .settings-page .settings-content .settings-banner button,.settings-page .settings-content details.settings-job-about>summary{min-height:44px}
+ .settings-page .settings-content .settings-grant select,.settings-page .settings-content .settings-card label.settings-num input{min-height:44px}
+}
+
+.settings-table-details .settings-label{display:block;margin-top:8px}
+
+/* On a phone each member becomes a small card: who and the menu on top, status and figures below. */
+@media(max-width:700px){
+ .settings-table.is-members thead{display:none}
+ .settings-table.is-members,.settings-table.is-members tbody{display:block}
+ .settings-table.is-members tbody>tr:not(.settings-table-details){display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr)) auto;align-items:center;gap:6px 8px;padding:10px 0;border-bottom:1px solid var(--line)}
+ .settings-table.is-members tbody>tr:last-child{border-bottom:0}
+ .settings-table.is-members tbody>tr>td{padding:0;border:0}
+ .settings-table.is-members tbody>tr>td:first-child{grid-column:1/5}
+ .settings-table.is-members tbody>tr>td:last-child{grid-column:5;grid-row:1}
+ .settings-table.is-members tbody>tr>td:nth-child(2){grid-column:1}
+ .settings-table.is-members td.is-number{display:grid;text-align:left;font-size:.8rem}
+ .settings-table.is-members td.is-number::before{content:attr(data-label);color:var(--ink-6);font-size:.66rem}
+ .settings-table.is-members .settings-table-person{min-width:0}
+ .settings-table.is-members tr.settings-table-details{display:block;border-bottom:1px solid var(--line)}
+ .settings-table.is-members tr.settings-table-details>td{display:block}
+}
