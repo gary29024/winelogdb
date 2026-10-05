@@ -63,7 +63,7 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     await page.goto(`${stack.origin}/wines/${wineId}`);
 
     await page.getByRole('button', { name: /^Tag friends,/ }).click();
-    await page.getByRole('dialog').getByRole('button', { name: 'member', exact: true }).click();
+    await page.getByRole('dialog').getByRole('button', { name: /^member( @\S+)?$/ }).click();
     await page.getByRole('button', { name: 'Confirm tags', exact: true }).click();
     await expect(page.getByRole('status')).toContainText('Tagged with 1 friend');
     expect(await stack.db.prepare('SELECT recipient_id FROM wine_shares WHERE wine_id=?').bind(wineId).first('recipient_id')).toBe(member.user.id);
