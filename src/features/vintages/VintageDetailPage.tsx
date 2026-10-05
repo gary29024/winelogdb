@@ -117,7 +117,7 @@ export function VintageDetailPage(){
   const blendMix=Object.entries(index.blends?.[village.id]?.[grapeId]??{}).sort((a,b)=>(b[1]??0)-(a[1]??0))
     .map(([id,share])=>`${Math.round((share??0)*100)}% ${region.grapes.find(item=>item.id===id)?.name??id}`).join(', ');
   // Where a place makes both colours, its red blend says so.
-  const grapeName=(item:typeof grape)=>item.id==='blend'&&grapes.some(other=>other.blend&&other.colour==='white')?'Red blend':item.name;
+  const grapeName=(item:typeof grape)=>item.id==='blend'&&grapes.some(other=>other.blend&&other.id!==item.id&&other.colour==='white')?'Red blend':item.name;
   const setGrape=(id:GrapeId)=>setParams(current=>{const next=new URLSearchParams(current);next.set('grape',id);return next},{replace:true});
 
   return <section className="vintages-page vintage-detail">
@@ -128,7 +128,7 @@ export function VintageDetailPage(){
       <div className="vintage-hero-head">
         <span className={`vintage-year-tile is-large tone-${shiftTone(shift)}`}><strong>{year}</strong><small>{harvest?<>harvest<br/>{shiftLabel(shift,'short')}</>:'harvest date unknown'}</small></span>
         <div>
-          <p className="vintage-kicker">{village.name} · {area?.name}</p>
+          <p className="vintage-kicker">{village.name}{area&&area.name!==village.name?` · ${area.name}`:''}</p>
           <h1>{seasonHeadline(levels,shift)}</h1>
           <span className="vintage-hero-score"><ScoreMeter score={reading.score}/>{SCORE_LABELS[reading.score]}</span>
         </div>
