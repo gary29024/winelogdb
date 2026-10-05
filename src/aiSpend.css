@@ -23,7 +23,10 @@
 @media(max-width:700px){.ai-spend-card .ai-spend-grid{grid-template-columns:1fr}}
 
 /* The run-history dialog. These rules were lost when the card moved out of
-   Insights, which left "View runs" opening an unstyled dialog. */
+   Insights, which left "View runs" opening an unstyled dialog. The article
+   rules carry the dialog's class so the Owner page's generic article rule
+   (padding:1rem 0, a bottom border) cannot strip their padding. */
+.ai-spend-dialog-eyebrow{margin:0;color:var(--ink-6);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .ai-spend-dialog{width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);margin:auto;padding:0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper);color:var(--ink);overflow-y:auto;overscroll-behavior:contain;box-shadow:0 20px 60px #10182d2b}
 .ai-spend-dialog::backdrop{background:#10182d70}
 .ai-spend-dialog-body{padding:var(--s4)}
@@ -47,18 +50,18 @@
 .ai-spend-run-chevron{grid-column:3;grid-row:1/3;color:var(--ink-6);font-size:1.3rem;line-height:1}
 
 .ai-spend-run-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.ai-spend-run-summary article{display:grid;gap:3px;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground)}
-.ai-spend-run-summary small{color:var(--ink-6);font-size:.63rem}
-.ai-spend-run-summary strong{font:700 1rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+.ai-spend-dialog .ai-spend-run-summary article{display:grid;gap:3px;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--ground)}
+.ai-spend-dialog .ai-spend-run-summary small{color:var(--ink-6);font-size:.63rem}
+.ai-spend-dialog .ai-spend-run-summary strong{font:700 1rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
 .ai-spend-run-token-split{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 2px 16px;color:var(--ink-6);font-size:.68rem}
 .ai-spend-run-parts{display:grid;gap:8px}
 .ai-spend-run-parts h3{margin:0 0 2px;font:700 .76rem 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-6)}
-.ai-spend-run-parts article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm)}
-.ai-spend-run-parts article>div{display:grid;gap:1px;min-width:0}
-.ai-spend-run-parts article strong{overflow-wrap:anywhere;font-size:.78rem}
-.ai-spend-run-parts article small{color:var(--ink-6);font-size:.64rem}
-.ai-spend-run-parts article>b{font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
-.ai-spend-run-parts article>p{grid-column:1/-1;margin:3px 0 0;color:var(--ink-6);font-size:.67rem;line-height:1.45}
+.ai-spend-dialog .ai-spend-run-parts article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm)}
+.ai-spend-dialog .ai-spend-run-parts article>div{display:grid;gap:1px;min-width:0}
+.ai-spend-dialog .ai-spend-run-parts article strong{overflow-wrap:anywhere;font-size:.78rem}
+.ai-spend-dialog .ai-spend-run-parts article small{color:var(--ink-6);font-size:.64rem}
+.ai-spend-dialog .ai-spend-run-parts article>b{font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ai-spend-dialog .ai-spend-run-parts article>p{grid-column:1/-1;margin:3px 0 0;color:var(--ink-6);font-size:.67rem;line-height:1.45}
 .ai-spend-run-id{margin:12px 0;color:var(--ink-6);font-size:.68rem}
 .ai-spend-run-id summary{cursor:pointer;font-weight:700}
 .ai-spend-run-id code{display:block;margin-top:5px;padding:7px 8px;overflow:auto;border-radius:var(--r-xs);background:var(--ground);font-size:.63rem;white-space:nowrap}

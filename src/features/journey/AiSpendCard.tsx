@@ -72,7 +72,7 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
       <div className="ai-spend-dialog-head">
         <div>
           {selected&&<button type="button" className="ai-spend-back" onClick={()=>setSelectedId(null)}>← All runs</button>}
-          <p className="section-label">AI spend</p>
+          <p className="ai-spend-dialog-eyebrow">AI spend</p>
           <h2 id={titleId}>{selected?runTitle(selected,label):label}</h2>
           <p>{selected?when(selected.createdAt):`Individual runs · last ${days} days`}</p>
         </div>
