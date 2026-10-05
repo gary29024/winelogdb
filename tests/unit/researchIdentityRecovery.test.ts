@@ -20,6 +20,15 @@ function seed(database:ReturnType<typeof realD1>,targets:ResearchTarget[],owner=
 }
 
 describe('research survives promotion from names to entity IDs',()=>{
+  it('does not reuse a vintage report saved under the old style-blind key',async()=>{
+    const database=realD1(),targets=buildResearchTargets(wine),current=targets.find(target=>target.scope==='vintage_context')!;
+    const oldKey=JSON.stringify(['france','burgundy','chablis grand cru','2020']);
+    seed(database,[{...current,cacheKey:oldKey,subject:{country:'France',region:'Burgundy',appellation:'Chablis Grand Cru',vintage:2020}}]);
+    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(false);
+    seed(database,[current]);
+    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(true);
+  });
+
   it.each([false,true])('recovers the reported Moutonne report before another run (producer already linked: %s)',async linked=>{
     const database=realD1(),targets=buildResearchTargets(wine);
     seed(database,buildResearchTargets({...wine,producerId:linked?wine.producerId:null,cuveeId:null}));
@@ -96,13 +105,14 @@ describe('research survives promotion from names to entity IDs',()=>{
     expect([...other.keys()]).toEqual(['vintage_context']);
   });
 
-  it('restores lost evidence from matching snapshot text while retaining the quality gate',async()=>{
+  it('restores lost evidence only from matching snapshot text',async()=>{
     const database=realD1(),targets=buildResearchTargets(wine),payload={...payloads.wine_vintage,winemakingTechniques:technicalClaim};
     seed(database,buildResearchTargets({...wine,cuveeId:null}));
     database.sql.prepare("UPDATE research_cache SET result_json=? WHERE scope='wine_vintage'").run(JSON.stringify(payload));
     const snapshot={...payload,...payloads.producer,...payloads.terroir,...payloads.vintage_context,sources:[{title:'Estate',url:'https://example.com/wine'}],provenance:technicalProvenance,model:'original-model',researchedAt};
-    expect((await loadWineResearchCache(database.db,'owner',targets)).has('wine_vintage')).toBe(false);
-    expect((await loadWineResearchCache(database.db,'owner',targets,false,{...snapshot,summary:'A different wine report.'})).has('wine_vintage')).toBe(false);
+    // An uncited figure no longer hides the research; it loads without evidence.
+    expect((await loadWineResearchCache(database.db,'owner',targets)).get('wine_vintage')?.provenance).toBeUndefined();
+    expect((await loadWineResearchCache(database.db,'owner',targets,false,{...snapshot,summary:'A different wine report.'})).get('wine_vintage')?.provenance).toBeUndefined();
     const recovered=await loadWineResearchCache(database.db,'owner',targets,false,JSON.stringify(snapshot));
     expect(recovered.get('wine_vintage')).toMatchObject({payload,provenance:technicalProvenance});
     // Also repairs an existing current-key row whose merge lost its evidence.
