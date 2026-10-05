@@ -82,3 +82,8 @@ export function sourceLinkLabel(source:{title:string;url:string},host:string){
  }catch{/* fall through to host */}
  return host||title||source.url;
 }
+
+/** The English of every research section, summary included, keyed for translation. */
+export function deepResearchText(deep:(ResearchProse&{summary:string})|null|undefined):Record<DeepField,string>{
+ return Object.fromEntries(DEEP_FIELDS.map(field=>[field,deep?.[field]??''])) as Record<DeepField,string>;
+}

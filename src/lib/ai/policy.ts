@@ -6,6 +6,7 @@ export const AI_MODELS={
   groundedResearchFallback:'gemini-3.7-flash',
   vintagePrimary:'gemini-3.1-flash-lite',
   vintageEscalation:'gemini-3.8-flash',
+  researchTranslation:'gemini-3.8-flash',
   semanticWorkers:'@cf/qwen/qwen3-embedding-0.6b',
   semanticGemini:'gemini-embedding-001',
   producerRangeZai:'glm-4.7-flash',

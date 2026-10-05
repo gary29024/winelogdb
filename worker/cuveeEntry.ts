@@ -29,6 +29,8 @@ import { sheetRecognitionSpec } from './sheetRecognitionHandler';
 import { runVisionRecognition } from './visionRecognition';
 import { measureBottleFrame } from './bottleFrameHandler';
 import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
+import { translationRequestSchema } from '../src/lib/research/translation';
+import { readResearchTranslation,translateResearch } from './researchTranslation';
 
 type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
@@ -714,6 +716,26 @@ app.delete('/api/tastings/:id',async c=>{
     if(keys.length)await Promise.allSettled(keys.map(key=>c.env.WINE_IMAGES.delete(key)));
     return c.body(null,204);
   }catch(e){console.error(JSON.stringify({event:'tasting-delete-failed',error:(e as Error).message}));return c.json({error:'Could not delete the tasting'},500)}
+});
+
+/**
+ * Research in Traditional Chinese. The browser sends the English it is showing;
+ * the translation is filed under that text, so a reader only ever gets the
+ * translation of research they can already see. Looking one up is free; making
+ * one is a model call, owner-only until translation has a member price.
+ */
+app.post('/api/research/translation/lookup',async c=>{
+  cors(c);try{await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=translationRequestSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:parsed.error.issues[0]?.message??'Invalid translation request'},400);
+  return c.json({translation:await readResearchTranslation(c.env.DB,parsed.data)});
+});
+
+app.post('/api/research/translation',async c=>{
+  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
+  const parsed=translationRequestSchema.safeParse(await c.req.json().catch(()=>null));
+  if(!parsed.success)return c.json({error:parsed.error.issues[0]?.message??'Invalid translation request'},400);
+  return c.json({translation:await translateResearch(c.env,owner,parsed.data)});
 });
 
 app.all('*',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));

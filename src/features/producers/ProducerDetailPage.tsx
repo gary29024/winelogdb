@@ -24,6 +24,8 @@ import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCERS_BACK } from '../wines/backTarget';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 import { sourceDisplayHost } from '../wines/researchSections';
+import { ResearchLanguageToggle } from '../wines/ResearchLanguage';
+import { useResearchTranslation } from '../wines/researchTranslation';
 
 const stageLabel:Record<ProducerResearchRun['stage'],string>={preparing:'Queued for research',searching:'Researching in the background',retrying:'Retrying research',parsing:'Checking research result',saving:'Saving producer research',image:'Finding a domaine image',complete:'Research complete',failed:'Research failed'};
 
@@ -405,6 +407,7 @@ export function ProducerDetailPage(){
   if(handed){rememberBackTarget(id,handed,'producer');return handed}
   return readBackTarget(id,'producer')??PRODUCERS_BACK;
  },[navState,id]);
+ const research=useResearchTranslation({profile:producer?.profile??'',winemakingPractices:producer?.winemakingPractices??''});
  if(loading)return <p>Loading producer…</p>;
  // A producer that could not be fetched is worth asking for again: without this
  // the message stayed until the app was restarted.
@@ -438,8 +441,9 @@ export function ProducerDetailPage(){
    :<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':'Research producer'}</button><button type="button" disabled={researching} onClick={()=>void runResearch(false,true)}>Verify wine range</button></>)
    :<><button type="button" className="primary" disabled={researching} onClick={()=>void runResearch()}>{researching?'Research running…':rangeAllowed&&producer.researchedAt?'Refresh wine range':'Research producer'}</button>{hasProducerResearch&&<button type="button" disabled={researching} onClick={()=>void runResearch(true)}>{rangeAllowed?'Refresh profile & range':'Refresh profile'}</button>}</>)}</div>
    {researchRun&&(!memberView||researchRun.status!=='complete')&&<div className={`producer-research-status ${researchRun.status}`} role="status" aria-live="polite"><div><strong>{stageLabel[researchRun.stage]}</strong>{technicalView&&<span>{researchRun.message}</span>}</div><div><strong>{researching?<ElapsedSeconds startedAt={researchRun.startedAt}/>:researchRun.durationMs!=null?`${(researchRun.durationMs/1000).toFixed(1)}s`:''}</strong><small>{technicalView?'Request':'Support ID'} {researchRun.requestId}</small></div>{researching&&<><p>This is a background job. You can leave this page or close WineLog; the saved result will appear automatically when you return.</p><button type="button" className="secondary-danger" disabled={researchCancelling} onClick={cancelResearch}>{researchCancelling?'Cancelling…':'Cancel Deep Search'}</button></>}</div>}
-   {producer.profile?<p className="producer-profile">{producer.profile}</p>:<p>{producer.sharedOnly?'No shared producer profile is available yet.':rangeAllowed?'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.':'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices and header image.'}</p>}
-   {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">General winemaking practices</p><p className="producer-profile">{producer.winemakingPractices}</p>{!memberView&&<small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small>}</div>}
+   <ResearchLanguageToggle state={research}/>
+   {producer.profile?<p className="producer-profile" lang={research.lang==='zh'?'zh-Hant-HK':undefined}>{research.text('profile',producer.profile)}</p>:<p>{producer.sharedOnly?'No shared producer profile is available yet.':rangeAllowed?'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices, header image and a sourced current/recent wine range.':'Research this producer to establish its physical base, broad region and commune, public contact details, official website, general producer-wide practices and header image.'}</p>}
+   {producer.winemakingPractices&&<div className="producer-practices"><p className="section-label">{research.lang==='zh'?'酒莊整體釀酒方式':'General winemaking practices'}</p><p className="producer-profile" lang={research.lang==='zh'?'zh-Hant-HK':undefined}>{research.text('winemakingPractices',producer.winemakingPractices)}</p>{!memberView&&<small>Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.</small>}</div>}
    <ProducerContacts producer={producer} onChanged={reload} readOnly={producer.sharedOnly}/>
    {rangeAllowed&&catalogGroups.length>0&&<div className="producer-range">
     <div className="producer-range-head">
