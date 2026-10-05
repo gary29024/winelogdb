@@ -52,7 +52,7 @@ export function AccountPage(){
   const wanted=handle.trim().replace(/^@/,'').toLowerCase(),current=getAccount()?.handle??'';
   if(!wanted||wanted===current){setHandleCheck({state:'idle'});return}
   setHandleCheck({state:'checking'});let live=true;
-  const timer=window.setTimeout(()=>{void apiJson<{available:boolean;problem:string|null}>(`/api/me/handle-check?handle=${encodeURIComponent(wanted)}`).then(result=>{if(live)setHandleCheck(result.available?{state:'available'}:{state:'unavailable',message:result.problem??'That handle is taken'})}).catch(()=>{if(live)setHandleCheck({state:'idle'})})},350);
+  const timer=window.setTimeout(()=>{void apiJson<{available:boolean;problem:string|null}>(`/api/me/handle-check?handle=${encodeURIComponent(wanted)}`).then(result=>{if(live)setHandleCheck(result.available?{state:'available'}:{state:'unavailable',message:result.problem??'That user ID is taken'})}).catch(()=>{if(live)setHandleCheck({state:'idle'})})},350);
   return()=>{live=false;window.clearTimeout(timer)};
  },[handle]);
  useEffect(()=>{
@@ -93,10 +93,10 @@ export function AccountPage(){
       <div className="settings-identity"><span className="settings-avatar is-large" aria-hidden="true">{(account?.display_name??name).trim().charAt(0)||'?'}</span><div><strong>{account?.display_name??name}{account?.handle&&<span className="settings-handle"> @{account.handle}</span>}</strong><span className="settings-chips"><span className={`settings-chip${isOwner?' is-accent':''}`}>{isOwner?'Owner':'Member'}</span>{loaded.friends&&<span className="settings-chip">{friends.length} friend{friends.length===1?'':'s'}</span>}</span></div></div>
       <div className="settings-field"><label htmlFor="display-name" className="settings-label">Name</label>
        <input id="display-name" value={name} onChange={e=>setName(e.target.value)} maxLength={60} autoComplete="name" required/></div>
-      <div className="settings-field"><label htmlFor="handle" className="settings-label">Handle</label>
+      <div className="settings-field"><label htmlFor="handle" className="settings-label">User ID</label>
        <div className="settings-row"><span className="settings-at settings-grow"><span aria-hidden="true">@</span><input id="handle" value={handle} onChange={e=>setHandle(e.target.value.replace(/^@/,'').toLowerCase())} maxLength={20} autoCapitalize="none" autoComplete="username" spellCheck={false} aria-describedby="handle-status handle-hint" required/></span>
         <span id="handle-status" role="status" className={`settings-chip${handleCheck.state==='available'?' is-good':handleCheck.state==='unavailable'?' is-warn':''}`} hidden={handleCheck.state==='idle'}>{handleCheck.state==='checking'?'Checking…':handleCheck.state==='available'?'✓ Available':handleCheck.message}</span></div></div>
-      <p className="settings-hint" id="handle-hint">Your name can be anything. Your handle is unique, so friends can tell two people with the same name apart and find you by typing @{handle||'handle'}. 3–20 characters: lowercase letters, numbers, dots and underscores.</p>
+      <p className="settings-hint" id="handle-hint">Your name can be anything. Your user ID is unique, so friends can tell two people with the same name apart and find you by typing @{handle||'userid'}. 3–20 characters: lowercase letters, numbers, dots and underscores.</p>
       <div><button type="submit" className="settings-primary" disabled={busy||!name.trim()||!handle.trim()||handleCheck.state==='unavailable'||handleCheck.state==='checking'}>Save profile</button></div>
      </form>
      <div className="settings-card settings-split"><div><strong>Signed in</strong><span className="settings-hint">{account?.email}</span></div><button type="button" onClick={()=>void logout()}>Sign out</button></div>
@@ -115,12 +115,12 @@ export function AccountPage(){
        <p className="settings-hint">{account?.handle?<>Friends can also find you as <strong>@{account.handle}</strong>.</>:'Your code stays the same. Share it so friends can add you.'}</p></div>
       <form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/friends/requests','POST',{code});setCode('')},'Friend request sent. You’ll become friends when they accept.')}}>
        <div className="settings-field"><label htmlFor="friend-code" className="settings-label">Add a friend</label>
-       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code or handle" value={code} onChange={e=>setCode(e.target.value)} placeholder="@handle or friend code" autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
-       <p className="settings-hint">Type a handle or a friend code. You become friends once they accept.</p></form>
+       <div className="settings-row"><input className="settings-grow" id="friend-code" aria-label="Friend code or user ID" value={code} onChange={e=>setCode(e.target.value)} placeholder="@userid or friend code" autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={20} required/><button type="submit" className="settings-primary" disabled={busy||!code.trim()}>Send request</button></div></div>
+       <p className="settings-hint">Type a user ID or a friend code. You become friends once they accept.</p></form>
      </div>
      <div className="settings-card">
       <div className="settings-card-head"><h2>Your friends</h2><small>Friends can reuse each other’s research. Wines are shared separately.</small></div>
-      {loaded.friends&&!friends.length&&<p className="settings-hint">No friends yet. Add someone above with their handle or friend code.</p>}
+      {loaded.friends&&!friends.length&&<p className="settings-hint">No friends yet. Add someone above with their user ID or friend code.</p>}
       {!!friends.length&&<ul className="settings-people">{friends.map(friend=><li key={friend.id}>
        <span className="settings-avatar" aria-hidden="true">{friend.display_name.charAt(0)}</span>
        <span className="settings-person"><strong>{friend.display_name}{friend.handle&&<span className="settings-handle"> @{friend.handle}</span>}</strong><span>{sinceLabel(friend.since)}</span></span>

@@ -10,10 +10,10 @@ export function normalizeHandle(value:unknown){
 }
 /** Why a handle cannot be used, or null when it can. Uniqueness is checked separately. */
 export function handleProblem(handle:string){
- if(handle.length<3||handle.length>20)return 'Handles are 3 to 20 characters';
+ if(handle.length<3||handle.length>20)return 'User IDs are 3 to 20 characters';
  if(!HANDLE.test(handle))return 'Use lowercase letters, numbers, dots or underscores, starting and ending with a letter or number';
  if(/[._]{2}/.test(handle))return 'Dots and underscores cannot sit next to each other';
- if(RESERVED.has(handle))return 'That handle is reserved';
+ if(RESERVED.has(handle))return 'That user ID is reserved';
  return null;
 }
 export function validHandle(value:unknown){
@@ -45,7 +45,7 @@ export async function assignHandle(db:D1Database,userId:string,displayName:strin
   const current=await db.prepare('SELECT handle FROM app_users WHERE id=?').bind(userId).first<{handle:string|null}>();
   if(current?.handle)return current.handle;
  }
- throw new ApiError(503,'Could not create a handle for this account');
+ throw new ApiError(503,'Could not create a user ID for this account');
 }
 /** Fills in handles for every account still without one (a one-off per account). */
 export async function backfillHandles(db:D1Database){

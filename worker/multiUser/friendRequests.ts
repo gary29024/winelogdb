@@ -25,11 +25,11 @@ export async function friendRequestRoute(request:Request,env:IdentityEnv,member:
   // otherwise a 12-hex code is tried first, then the same text as a handle.
   const data=await body(request),raw=typeof data.code==='string'?data.code.trim():'';
   const code=raw.startsWith('@')?'':raw.replace(/[\s-]/g,'').toUpperCase(),handle=normalizeHandle(raw),isCode=/^[0-9A-F]{12}$/.test(code),isHandle=!handleProblem(handle);
-  if(!isCode&&!isHandle)throw new ApiError(400,raw.startsWith('@')?'Enter a valid handle, such as @meilin':'Enter a friend code such as A1B2-C3D4-E5F6, or a handle such as @meilin');
+  if(!isCode&&!isHandle)throw new ApiError(400,raw.startsWith('@')?'Enter a valid user ID, such as @meilin':'Enter a friend code such as A1B2-C3D4-E5F6, or a user ID such as @meilin');
   const byCode=isCode?await db.prepare("SELECT u.id FROM friend_codes c JOIN app_users u ON u.id=c.user_id AND u.status='active' WHERE c.code=?").bind(code).first<{id:string}>():null;
   const target=byCode??(isHandle?await db.prepare("SELECT id FROM app_users WHERE handle=? AND status='active'").bind(handle).first<{id:string}>():null);
-  if(!target)throw new ApiError(404,isCode&&!isHandle?'No member found with that friend code':isCode?'No member found with that friend code or handle':`No member found with the handle @${handle}`);
-  if(target.id===member.id)throw new ApiError(400,byCode?'That is your own friend code':'That is your own handle');
+  if(!target)throw new ApiError(404,isCode&&!isHandle?'No member found with that friend code':isCode?'No member found with that friend code or user ID':`No member found with the user ID @${handle}`);
+  if(target.id===member.id)throw new ApiError(400,byCode?'That is your own friend code':'That is your own user ID');
   if(await db.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,target.id).first())throw new ApiError(409,'You are already friends');
   const existing=await db.prepare("SELECT * FROM friend_requests WHERE status='pending' AND ((sender_id=? AND recipient_id=?) OR (sender_id=? AND recipient_id=?))").bind(member.id,target.id,target.id,member.id).first<FriendRequest>();
   if(existing){if(existing.sender_id!==member.id)throw new ApiError(409,'This member has already sent you a request. Accept it in Friend requests.');return json({id:existing.id,status:'pending'})}

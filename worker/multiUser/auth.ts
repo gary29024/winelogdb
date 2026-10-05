@@ -100,18 +100,18 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   const member=await authenticate(request,env),handle=normalizeHandle(url.searchParams.get('handle')),problem=handleProblem(handle);
   if(problem)return json({handle,available:false,problem});
   const available=handle===member.handle||!await handleTaken(env.DB,handle,member.id);
-  return json({handle,available,problem:available?null:'That handle is taken'});
+  return json({handle,available,problem:available?null:'That user ID is taken'});
  }
  if(url.pathname==='/api/me'&&request.method==='PATCH'){
   verifyOrigin(request,env);const member=await authenticate(request,env),data=await body(request);
   if(data.displayName===undefined&&data.handle===undefined)throw new ApiError(400,'Nothing to update');
   const display_name=data.displayName===undefined?member.display_name:profileName(data.displayName);
   const handle=data.handle===undefined?member.handle??null:validHandle(data.handle);
-  if(handle&&handle!==member.handle&&await handleTaken(env.DB,handle,member.id))throw new ApiError(409,'That handle is taken');
+  if(handle&&handle!==member.handle&&await handleTaken(env.DB,handle,member.id))throw new ApiError(409,'That user ID is taken');
   // Shares, friendships and tastings point at the account id, so a new handle
   // or name changes only how the person is shown.
   try{await env.DB.prepare('UPDATE app_users SET display_name=?,handle=? WHERE id=?').bind(display_name,handle,member.id).run()}
-  catch(error){if(/UNIQUE/i.test(String((error as Error).message)))throw new ApiError(409,'That handle is taken');throw error}
+  catch(error){if(/UNIQUE/i.test(String((error as Error).message)))throw new ApiError(409,'That user ID is taken');throw error}
   return json({user:{...member,display_name,handle}});
  }
  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){verifyOrigin(request,env);const member=await authenticate(request,env);await body(request);await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id=?').bind(member.id).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)})}

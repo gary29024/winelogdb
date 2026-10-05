@@ -62,7 +62,7 @@ describe('user handles',()=>{
   // The old handle is free again for someone else.
   expect(await status(patchMe('zoe',{handle:'alicewine'}))).toBe(200);
   const check=await authRoute(new Request('https://wine.example/api/me/handle-check?handle=alice.m',{headers:await signIn('tom1')}),env());
-  expect(await check!.json()).toMatchObject({available:false,problem:'That handle is taken'});
+  expect(await check!.json()).toMatchObject({available:false,problem:'That user ID is taken'});
  });
 
  it('sends a friend request to a handle as well as a friend code',async()=>{
