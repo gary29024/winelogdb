@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AppIcon } from './AppIcons';
+import { AccountChip } from './AccountChip';
 import { LiveTastingStrip } from '../features/tastings/LiveTastingStrip';
 import { StartTastingSheet } from '../features/tastings/StartTastingSheet';
 import { useActiveTasting } from '../features/tastings/useActiveTasting';
@@ -104,7 +105,7 @@ export function Layout(){
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
       <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/vintages" onPointerEnter={preloadVintages} onFocus={preloadVintages}>Vintages</NavLink></nav>
-      <div className="topbar-end"><NavLink className="account-link" to="/account">Account &amp; friends</NavLink><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
+      <div className="topbar-end"><AccountChip/><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
     <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/>
     <footer>Your private tasting notebook</footer>

@@ -3,10 +3,11 @@ import { AiSpendCard } from '../journey/AiSpendCard';
 import { usePageSection } from '../../components/usePageSection';
 import { PageHeader } from '../../components/PageHeader';
 import '../../settingsLayout.css';
+import '../../settingsCards.css';
 import { Link } from 'react-router-dom';
-import { useEffect,useState } from 'react';
+import { useEffect,useState,type ReactNode } from 'react';
 import { apiJson } from '../../lib/auth/api';
-type Member={id:string;display_name:string;email:string;role:string;status:string;balance:number;reserved:number};
+type Member={id:string;display_name:string;handle?:string|null;email:string;role:string;status:string;balance:number;reserved:number};
 type MemberUsageKind={kind:string;requests:number;searchQueries:number;units:number;estimatedMarginalUsd:number};
 type MemberUsage={userId:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;smartSearchRequests:number;smartSearchUnits:number;estimatedMarginalUsd:number;kinds:MemberUsageKind[]};
 type ActionPolicy={action:string;label:string;accessMode:'included'|'allowance';weeklyLimit:number};
@@ -21,9 +22,20 @@ const budgetKeys=Object.keys(defaults);
 const budgetLabels:Record<string,string>={memberLimit:'Member limit (owner excluded)',memberStorageBytes:'Storage per member (bytes; 0 = unlimited)',totalStorageBytes:'Total storage (bytes; 0 = unlimited)',aiConcurrency:'Simultaneous AI actions',aiDailyOperations:'Global AI units per day',aiDailyEmbeddingRequests:'Smart Search embeddings per account per day',aiMonthlyBudgetUsd:'Monthly AI budget (US$)',aiUnitBudgetUsd:'Estimated hold per unit, including retries (US$)',cloudflareWarningUsd:'Cloudflare warning amount (US$)',cloudflareStopUsd:'Cloudflare stop amount (US$)',cloudflareObservedUsd:'Measured Cloudflare cost this month (US$)',cloudflareObservedMonth:'Measurement month (YYYY-MM)',allowOverages:'Allow paid Cloudflare usage below the hard stop'};
 const formatBytes=(bytes:number)=>{if(!Number.isFinite(bytes)||bytes<=0)return '0 B';const units=['B','KB','MB','GB','TB'];let value=bytes,index=0;while(value>=1024&&index<units.length-1){value/=1024;index++}return `${value<10&&index>0?value.toFixed(1):Math.round(value)} ${units[index]}`};
 const labelKind=(kind:string)=>kind.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
-const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running in background':'Complete';
+const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running':'Complete';
+const stateTone=(state:RolloutState)=>state==='complete'?' is-good':state==='running'?' is-accent':state==='paused'?' is-warn':'';
 const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
-const sections=[{id:'members',label:'Members'},{id:'usage',label:'Usage'},{id:'spend',label:'AI spend'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
+const sections=[{id:'members',label:'Members & usage'},{id:'spend',label:'AI spend'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
+const MB=1024*1024,GB=1024*MB;
+// Settings grouped as the owner thinks about them. Storage is entered in MB or
+// GB and saved in bytes; the long original wording stays as each field's tooltip.
+type BudgetField={key:string;label:string;scale?:number};
+const budgetGroups:Array<{title:string;fields:BudgetField[]}>=[
+ {title:'Members & storage',fields:[{key:'memberLimit',label:'Member limit'},{key:'memberStorageBytes',label:'Storage per member (MB)',scale:MB},{key:'totalStorageBytes',label:'Total storage (GB)',scale:GB}]},
+ {title:'AI capacity',fields:[{key:'aiConcurrency',label:'AI actions at once'},{key:'aiDailyOperations',label:'AI units per day'},{key:'aiDailyEmbeddingRequests',label:'Smart Search per person per day'}]},
+ {title:'Money',fields:[{key:'aiMonthlyBudgetUsd',label:'Monthly AI budget (US$)'},{key:'aiUnitBudgetUsd',label:'Hold per AI unit (US$)'},{key:'cloudflareWarningUsd',label:'Cloudflare warn at (US$)'},{key:'cloudflareStopUsd',label:'Cloudflare stop at (US$)'},{key:'cloudflareObservedUsd',label:'Cloudflare cost so far (US$)'},{key:'cloudflareObservedMonth',label:'Measured month'},{key:'allowOverages',label:'Allow paid usage below the stop'}]}
+];
+const initial=(name:string)=>name.trim().charAt(0)||'?';
 function heldOperationLabel(path:string){
  if(path.endsWith('/deep-search'))return 'Wine Deep Search';
  if(path==='/api/producers/research-batch')return 'Producer batch';
@@ -32,18 +44,18 @@ function heldOperationLabel(path:string){
  return path;
 }
 export function AdminPage(){
- const [section,selectSection]=usePageSection(sections,'members',{hash:'#member-usage',section:'usage'});
- const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
+ const [section,selectSection]=usePageSection(sections,'members',{hash:'#member-usage',section:'members'});
+ const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[savedConfig,setSavedConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[savedPolicies,setSavedPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
  const [loadError,setLoadError]=useState('');
- const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState('');
+ const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState(''),[expanded,setExpanded]=useState('');
  const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running'||rolloutStatus?.lwin.state==='running'||rolloutStatus?.lwinValidation.state==='running'||rolloutStatus?.lwinAi.state==='running';
  async function load(initial=false){
   setLoadError('');
-  const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status').catch(()=>null)]);setData(next);setRolloutStatus(rollout);if(initial)setPolicies(next.actionPolicies);
-  if(initial&&next.settings){const clean:Record<string,unknown>={...defaults};for(const key of budgetKeys)if(next.settings[key]!==undefined)clean[key]=next.settings[key];setConfig(clean)}
+  const [next,rollout]=await Promise.all([apiJson<Overview>('/api/admin/overview'),apiJson<RolloutStatus>('/api/admin/rollout/status').catch(()=>null)]);setData(next);setRolloutStatus(rollout);if(initial){setPolicies(next.actionPolicies);setSavedPolicies(next.actionPolicies)}
+  if(initial&&next.settings){const clean:Record<string,unknown>={...defaults};for(const key of budgetKeys)if(next.settings[key]!==undefined)clean[key]=next.settings[key];setConfig(clean);setSavedConfig(clean)}
  }
  useEffect(()=>{void load(true).catch(e=>setLoadError(e.message))},[]);
- useEffect(()=>{if(!data||section!=='usage'||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data,section]);
+ useEffect(()=>{if(!data||section!=='members'||window.location.hash!=='#member-usage')return;const frame=window.requestAnimationFrame(()=>document.getElementById('member-usage')?.scrollIntoView({block:'start'}));return()=>window.cancelAnimationFrame(frame)},[data,section]);
  useEffect(()=>{const refresh=()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)};window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh)},[]);
 
  useEffect(()=>{if(!rolloutRunning)return;const timer=window.setInterval(()=>{void apiJson<RolloutStatus>('/api/admin/rollout/status').then(setRolloutStatus).catch(()=>undefined)},5000);return()=>window.clearInterval(timer)},[rolloutRunning]);
@@ -64,100 +76,138 @@ export function AdminPage(){
  const members=data?.members.filter(item=>item.role==='member')??[],allowancePolicies=policies.filter(item=>item.accessMode==='allowance');
  const budgetWindow=utcBudgetWindow(),observedMonth=String(config.cloudflareObservedMonth??'');
  const researchProcessed=(rolloutStatus?.research.wines.processed??0)+(rolloutStatus?.research.producers.processed??0),researchTotal=(rolloutStatus?.research.wines.total??0)+(rolloutStatus?.research.producers.total??0);
+ const storageUsed=[...storageByUser.values()].reduce((sum,value)=>sum+value,0),totalStorage=Number(savedConfig.totalStorageBytes)||0,memberLimit=Number(savedConfig.memberLimit)||0,needsReview=rolloutStatus?.lwinCurrent?.needsReview??0;
+ const configDirty=JSON.stringify(config)!==JSON.stringify(savedConfig),policiesDirty=JSON.stringify(policies)!==JSON.stringify(savedPolicies);
  function changePolicy(action:string,patch:Partial<ActionPolicy>){setPolicies(current=>current.map(item=>item.action===action?{...item,...patch}:item))}
+ function goToField(target:string,field:string){selectSection(target);window.setTimeout(()=>document.getElementById(field)?.focus(),60)}
+ function saveAccess(){void run(async()=>{
+  if(configDirty){await apiJson('/api/admin/settings','PUT',config);setSavedConfig(config)}
+  if(policiesDirty){await apiJson('/api/admin/action-policies','PUT',{policies:policies.map(({action,accessMode,weeklyLimit})=>({action,accessMode,weeklyLimit}))});setSavedPolicies(policies)}
+  return 'Access & budgets saved.';
+ })}
+ // One background job: name and state, a line of figures, a bar while it has a total, its last error, and one action.
+ function job({name,state,meta,processed,total,error,action,actionLabel,disabled,kind,about}:{name:string;state:RolloutState;meta:ReactNode;processed?:number;total?:number;error:string|null|undefined;action:()=>Promise<string>;actionLabel:string;disabled?:boolean;kind:RolloutAction;about:string}){
+  const visible=state==='paused'?'Resume':state==='complete'?(kind==='storage'?'Done':'Refresh'):'Start';
+  return <div className="settings-job" key={kind}>
+   <div className="settings-job-name"><strong>{name}</strong><span className={`settings-chip${stateTone(state)}`}>{stateLabel(state)}</span><details className="settings-job-about"><summary aria-label={`About ${name.toLowerCase()}`} title="About this job">ⓘ</summary><p className="settings-hint">{about}</p></details></div>
+   <div className="settings-job-actions">{state==='running'?<button type="button" disabled={busy} onClick={()=>void run(()=>pauseRollout(kind))} aria-label={`Pause ${name.toLowerCase()}`}>Pause</button>:<button type="button" disabled={busy||disabled} aria-label={actionLabel} onClick={()=>void run(action)}>{visible}</button>}</div>
+   <span className="settings-job-meta">{meta}</span>
+   {!!total&&(state==='running'||state==='paused')&&<progress max={total} value={Math.min(processed??0,total)} aria-label={`${name} progress`}/>}
+   {error&&<p role="alert" className="settings-job-error">Last error: {error}</p>}
+  </div>;
+ }
  return <section className="account-page settings-page">
  <PageHeader title="Owner controls" subtitle="Members, AI access and operations."/>
  <div className="settings-layout">
-  <aside><SectionNavigation label="Owner sections" items={sections.map(item=>({...item,count:item.id==='maintenance'?rolloutStatus?.lwinCurrent?.needsReview:undefined}))} selected={section} onSelect={selectSection}/></aside>
-  <div className="settings-content">
+  <aside><SectionNavigation label="Owner sections" items={sections.map(item=>({...item,count:item.id==='maintenance'?rolloutStatus?.lwinCurrent?.needsReview:undefined}))} selected={section} onSelect={selectSection}/><Link className="settings-owner-link" to="/account">← Account & friends</Link></aside>
+  <div className="settings-content settings-cards is-wide">
  {message&&<p role="status">{message}</p>}
  {loadError&&<p role="alert">{loadError} <button type="button" onClick={()=>void load(true).catch(e=>setLoadError(e.message))}>Retry owner controls</button></p>}
  {!data&&!loadError&&<p role="status">Loading owner controls…</p>}
- {!!data?.reviewOperations.length&&<p role="alert">{data.reviewOperations.length} operations need reconciliation. <button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></p>}
-
- {observedMonth!==budgetWindow.current&&<p role="alert"><strong>Member AI is paused for the new month.</strong> Owner AI remains available. In Pilot limits & budgets, set Measurement month to <strong>{budgetWindow.current}</strong>, enter this month’s measured Cloudflare cost (usually 0 at the start of a month), then press Save limits & budgets.</p>}
- {observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<p role="status"><strong>Monthly AI budget check due soon.</strong> At 00:00 UTC on {budgetWindow.next}-01, WineLog will pause member AI until Measurement month is changed to <strong>{budgetWindow.next}</strong> and the new month’s measured Cloudflare cost is saved. Owner AI remains available.</p>}
- {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<p role='alert'>Cloudflare spending has reached your warning amount. Review current usage before more AI work.</p>}
- <div hidden={!data}>
- <section hidden={section!=='usage'} aria-label="Usage">
- {data&&<p>Estimated provider AI cost: US${data.aiCost.usd.toFixed(2)} · {data.aiCost.searches} searches. Estimates can lag provider billing.</p>}
- {data&&<section id="member-usage" className="member-usage" aria-labelledby="member-usage-title">
-  <h2 id="member-usage-title">Member usage · {data.memberUsage.month}</h2>
-  <p>Included actions are free to members within the deployment safeguards. Allowance actions count only successful user-facing runs; failed work releases the slot. Smart Search remains separately controlled by its per-account daily embedding limit.</p>
-  <div className="member-usage-grid">{data.members.map(member=>{const usage=usageByUser.get(member.id),storage=storageByUser.get(member.id)??0,access=accessByUser.get(member.id);return <article className="member-usage-card" key={member.id}>
-   <header><strong>{member.display_name}</strong><small>{member.email} · {member.role} · {member.status}</small></header>
-   <dl><div><dt>AI requests</dt><dd>{usage?.requests??0}</dd></div><div><dt>Grounding searches</dt><dd>{usage?.searchQueries??0}</dd></div><div><dt>Smart Search</dt><dd>{usage?.smartSearchRequests??0} requests</dd></div><div><dt>Wines embedded</dt><dd>{usage?.smartSearchUnits??0}</dd></div><div><dt>Est. marginal AI</dt><dd>US${(usage?.estimatedMarginalUsd??0).toFixed(3)}</dd></div><div><dt>Storage allowance usage</dt><dd>{formatBytes(storage)}</dd></div></dl>
-   {access&&<details><summary>Pilot action access</summary><ul>{access.map(item=><li key={item.action}><span>{item.label}</span><span>{item.accessMode==='included'?'Included for all':`${item.used}/${item.limit} successful${item.granted?` · +${item.granted} extra`:''}${item.pending?` · ${item.pending} pending`:''} · ${item.remaining} available`}</span></li>)}</ul></details>}
-   {!!usage?.kinds.length&&<details><summary>Feature breakdown</summary><ul>{usage.kinds.map(kind=><li key={kind.kind}><span>{labelKind(kind.kind)}</span><span>{kind.requests} req · {kind.searchQueries} searches · US${kind.estimatedMarginalUsd.toFixed(3)}</span></li>)}</ul></details>}
-  </article>})}</div>
-  <p className="usage-note">Cached or friend-reused results do not consume a run. Retries remain attached to the same operation. Allowance weeks reset Monday 00:00 UTC and do not roll over.</p>
+ {!!data?.reviewOperations.length&&<div className="settings-banner" role="alert"><p><strong>{data.reviewOperations.length} operations need reconciliation.</strong></p><button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></div>}
+ {data&&observedMonth!==budgetWindow.current&&<div className="settings-banner" role="alert"><p><strong>Member AI is paused for {budgetWindow.current}.</strong> Set the measured month to {budgetWindow.current} and enter this month’s Cloudflare cost (usually 0 at the start of a month). Your own AI still works.</p><button type="button" onClick={()=>goToField('access','budget-cloudflareObservedMonth')}>Go to budgets</button></div>}
+ {data&&observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<div className="settings-banner is-quiet" role="status"><p><strong>Monthly budget check on {budgetWindow.next}-01.</strong> Member AI pauses then until you set the measured month to {budgetWindow.next} and save that month’s Cloudflare cost.</p></div>}
+ {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<div className="settings-banner" role="alert"><p><strong>Cloudflare spending has reached your warning amount.</strong> Review current usage before more AI work.</p></div>}
+ {data&&<dl className="settings-kpis">
+  <div><dt>Members</dt><dd>{members.length}{memberLimit>0&&<small> of {memberLimit}</small>}</dd></div>
+  <div><dt>AI cost · {data.aiCost.month??data.memberUsage.month}</dt><dd>US${data.aiCost.usd.toFixed(2)} <small>{data.aiCost.searches} searches</small></dd></div>
+  <div><dt>Storage</dt><dd>{formatBytes(storageUsed)}{totalStorage>0&&<small> of {formatBytes(totalStorage)}</small>}</dd></div>
+  <div className={needsReview?'is-attention':''}><dt>Needs review</dt><dd>{needsReview} <small>LWIN</small></dd></div>
+ </dl>}
+ <div hidden={!data} className="settings-sections">
+ <section hidden={section!=='members'} aria-label="Members and usage">
+ {data&&<section id="member-usage" className="settings-card" aria-labelledby="member-usage-title">
+  <div className="settings-card-head"><h2 id="member-usage-title">Members · {data.memberUsage.month}</h2><small>Estimates can lag provider billing</small></div>
+  <div className="settings-table-scroll"><table className="settings-table is-members">
+   <thead><tr><th scope="col">Member</th><th scope="col">Status</th><th scope="col" className="is-number">AI requests</th><th scope="col" className="is-number">Est. cost</th><th scope="col" className="is-number">Storage</th><th scope="col"><span className="visually-hidden">Actions</span></th></tr></thead>
+   <tbody>{data.members.map(member=>{const usage=usageByUser.get(member.id),storage=storageByUser.get(member.id)??0,access=accessByUser.get(member.id),isMember=member.role==='member',open=expanded===member.id;return [
+    <tr key={member.id}>
+     <td><div className="settings-table-person"><span className="settings-avatar" aria-hidden="true">{initial(member.display_name)}</span><div><strong>{member.display_name}</strong><span>{[member.handle?`@${member.handle}`:'',member.email].filter(Boolean).join(' · ')}</span></div></div></td>
+     <td><span className={`settings-chip${member.role==='owner'?' is-accent':member.status==='active'?' is-good':' is-warn'}`}>{member.role==='owner'?'Owner':member.status==='active'?'Active':'Suspended'}</span></td>
+     <td className="is-number" data-label="AI requests">{usage?.requests??0}</td>
+     <td className="is-number" data-label="Est. cost">US${(usage?.estimatedMarginalUsd??0).toFixed(3)}</td>
+     <td className="is-number" data-label="Storage">{formatBytes(storage)}</td>
+     <td><details className="settings-menu"><summary aria-label={`More options for ${member.display_name}`}>⋯</summary><div>
+      <button type="button" onClick={e=>{setExpanded(open?'':member.id);e.currentTarget.closest('details')?.removeAttribute('open')}}>{open?'Hide details':'Show details'}</button>
+      {isMember&&!!allowancePolicies.length&&<button type="button" onClick={e=>{setGrantMemberId(member.id);e.currentTarget.closest('details')?.removeAttribute('open');window.setTimeout(()=>document.getElementById('grant-runs')?.focus(),30)}}>Grant extra runs…</button>}
+      {isMember&&<button type="button" className={member.status==='active'?'settings-danger':''} disabled={busy} onClick={()=>void run(()=>apiJson(`/api/admin/members/${member.id}`,'PATCH',{status:member.status==='active'?'suspended':'active'}))}>{member.status==='active'?'Suspend':'Restore'}</button>}
+     </div></details></td>
+    </tr>,
+    open&&<tr key={`${member.id}-details`} className="settings-table-details"><td colSpan={6}>
+     <dl className="settings-stats"><div><dt>Grounding searches</dt><dd>{usage?.searchQueries??0}</dd></div><div><dt>Smart Search</dt><dd>{usage?.smartSearchRequests??0}</dd></div><div><dt>Wines embedded</dt><dd>{usage?.smartSearchUnits??0}</dd></div></dl>
+     {access&&<><span className="settings-label">This week’s allowance</span><ul className="settings-breakdown" aria-label={`AI access for ${member.display_name}`}>{access.map(item=><li key={item.action}><span>{item.label}</span><span>{item.accessMode==='included'?'Included for all':`${item.used}/${item.limit} used${item.granted?` · +${item.granted} extra`:''}${item.pending?` · ${item.pending} pending`:''} · ${item.remaining} left`}</span></li>)}</ul></>}
+     {!!usage?.kinds.length&&<><span className="settings-label">This month by feature</span><ul className="settings-breakdown" aria-label={`Feature breakdown for ${member.display_name}`}>{usage.kinds.map(kind=><li key={kind.kind}><span>{labelKind(kind.kind)}</span><span>{kind.requests} req · {kind.searchQueries} searches · US${kind.estimatedMarginalUsd.toFixed(3)}</span></li>)}</ul></>}
+    </td></tr>
+   ]})}</tbody>
+  </table></div>
+  {!members.length&&<p className="settings-hint">No invited members yet.</p>}
+  <form className="settings-row settings-card-foot" onSubmit={e=>{e.preventDefault();void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}}>
+   <label htmlFor="invite-email" className="visually-hidden">Invite email</label>
+   <input id="invite-email" className="settings-grow" type="email" placeholder="name@example.com" value={email} required onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/>
+   <button type="submit" className="settings-primary" disabled={busy||!email.trim()}>Create member invitation</button>
+  </form>
+  {inviteUrl&&<div className="settings-invite"><span className="settings-label">Invitation link</span><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="settings-row"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}
+  <p className="settings-hint">Cached or friend-reused results do not use a run, and failed work gives the run back. Allowance weeks reset Monday 00:00 UTC and do not roll over.</p>
  </section>}
+ {!!members.length&&!!allowancePolicies.length&&<form className="settings-card" onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/admin/action-grants','POST',{userId:grantMemberId,action:grantAction,runs:grantRuns,reason:grantReason,idempotencyKey:crypto.randomUUID()});setGrantRuns(1);setGrantReason('');return 'Additional free allocation granted for this week.'})}}>
+  <div className="settings-card-head"><h2>Grant extra runs</h2><small>This week only</small></div>
+  <fieldset className="settings-grant" disabled={busy}><legend className="visually-hidden">Grant additional free allocation</legend>
+   <label>Member<select value={grantMemberId} onChange={e=>setGrantMemberId(e.target.value)}>{members.map(item=><option key={item.id} value={item.id}>{item.display_name}{item.handle?` (@${item.handle})`:` · ${item.email}`}</option>)}</select></label>
+   <label>Feature<select value={grantAction} onChange={e=>setGrantAction(e.target.value)}>{allowancePolicies.map(item=><option key={item.action} value={item.action}>{item.label}</option>)}</select></label>
+   <label>Extra successful runs this week<input id="grant-runs" className="settings-grant-runs" type="number" min="1" max="1000" step="1" value={grantRuns} onChange={e=>setGrantRuns(Math.max(1,Math.floor(Number(e.target.value)||1)))}/></label>
+   <label>Reason (optional)<input value={grantReason} maxLength={300} onChange={e=>setGrantReason(e.target.value)}/></label>
+  </fieldset>
+  <div><button type="submit" className="settings-primary" disabled={busy||!grantMemberId||!grantAction}>Grant extra runs</button></div>
+ </form>}
  </section><section hidden={section!=='spend'} aria-label="AI spend">
   {/* Mounted only when opened: the card reads the spend ledger, which no other section needs. */}
   {section==='spend'&&<AiSpendCard/>}
  </section><section hidden={section!=='access'} aria-label="Access and budgets">
- <fieldset disabled={busy}><legend>Pilot limits & budgets</legend><p>AI cost and capacity limits apply when members start work. Owner AI has no app-imposed credit, concurrency, daily or budget limits, including the monthly usage check. Provider usage is still recorded. Member entitlements are configured separately below.</p>{budgetKeys.map(key=>{const value=config[key];return <label key={key}>{budgetLabels[key]??key}{typeof value==='boolean'?<input type="checkbox" checked={value} onChange={e=>setConfig({...config,[key]:e.target.checked})}/>:<input type={typeof value==='number'?'number':'text'} value={String(value??'')} onChange={e=>setConfig({...config,[key]:typeof value==='number'?Number(e.target.value):e.target.value})}/>}</label>})}<button onClick={()=>void run(()=>apiJson('/api/admin/settings','PUT',config))}>Save limits & budgets</button></fieldset>
- <fieldset disabled={busy}><legend>Member AI access</legend>
-  <p>Choose which user-facing AI actions are included for every member. For actions that would normally require credits, keep them on allowance mode during the pilot and set the free successful runs available to each account per week.</p>
-  {policies.map(policy=><article key={policy.action} className="member-usage-card"><strong>{policy.label}</strong>
-   <label><input type="checkbox" checked={policy.accessMode==='included'} onChange={e=>changePolicy(policy.action,{accessMode:e.target.checked?'included':'allowance'})}/> Included free for all members</label>
-   <label>Free successful runs / member / week <input type="number" min="0" max="10000" step="1" disabled={policy.accessMode==='included'} value={policy.weeklyLimit} onChange={e=>changePolicy(policy.action,{weeklyLimit:Math.max(0,Math.floor(Number(e.target.value)||0))})}/></label>
-   <small>{policy.accessMode==='included'?'No per-account run allowance is consumed; deployment limits still apply.':'Only successful new provider work consumes a run. Cached/reused results and failures do not.'}</small>
-  </article>)}
-  <button disabled={!policies.length} onClick={()=>void run(()=>apiJson('/api/admin/action-policies','PUT',{policies:policies.map(({action,accessMode,weeklyLimit})=>({action,accessMode,weeklyLimit}))}))}>Save member AI access</button>
-  <p><small>Smart Search remains free to members and is governed by “Smart Search embeddings per account per day” above rather than this successful-run allowance.</small></p>
- </fieldset>
- </section><section hidden={section!=='members'} aria-label="Members">
- <fieldset disabled={busy}><legend>Members</legend>
-  <ul>{members.map(m=><li key={m.id}>{m.display_name} · {m.email} — {m.status} <button onClick={()=>void run(()=>apiJson(`/api/admin/members/${m.id}`,'PATCH',{status:m.status==='active'?'suspended':'active'}))}>{m.status==='active'?'Suspend':'Restore'}</button></li>)}</ul>{!members.length&&<p>No invited members yet.</p>}
-  {!!members.length&&!!allowancePolicies.length&&<form onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/admin/action-grants','POST',{userId:grantMemberId,action:grantAction,runs:grantRuns,reason:grantReason,idempotencyKey:crypto.randomUUID()});setGrantRuns(1);setGrantReason('');return 'Additional free allocation granted for this week.'})}}>
-   <fieldset><legend>Grant additional free allocation</legend>
-    <label>Member<select value={grantMemberId} onChange={e=>setGrantMemberId(e.target.value)}>{members.map(item=><option key={item.id} value={item.id}>{item.display_name} · {item.email}</option>)}</select></label>
-    <label>Action<select value={grantAction} onChange={e=>setGrantAction(e.target.value)}>{allowancePolicies.map(item=><option key={item.action} value={item.action}>{item.label}</option>)}</select></label>
-    <label>Extra successful runs this week<input type="number" min="1" max="1000" step="1" value={grantRuns} onChange={e=>setGrantRuns(Math.max(1,Math.floor(Number(e.target.value)||1)))}/></label>
-    <label>Reason (optional)<input value={grantReason} maxLength={300} onChange={e=>setGrantReason(e.target.value)}/></label>
-    <button type="submit" disabled={!grantMemberId||!grantAction}>Grant extra runs</button>
-   </fieldset>
-  </form>}
- </fieldset>
- <fieldset disabled={busy}><legend>Create invitation</legend>  <label>Invite email<input type="email" value={email} onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/></label><button onClick={()=>void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}>Create member invitation</button>
-  {inviteUrl&&<div className="invitation-result"><strong>Invitation link</strong><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="friend-actions"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}</fieldset>
+ <div className="settings-card">
+  <div className="settings-card-head"><h2>Limits & budgets</h2><small>Members only. Your own AI is never limited; its usage is still recorded.</small></div>
+  <div className="settings-groups">{budgetGroups.map(group=><fieldset key={group.title} disabled={busy} className={group.fields.length>4?'is-wide':undefined}><legend>{group.title}</legend>{group.fields.map(({key,label,scale})=>{const value=config[key],id=`budget-${key}`;
+   if(typeof value==='boolean')return <label key={key} className="settings-switch settings-group-switch" title={budgetLabels[key]}><input id={id} type="checkbox" role="switch" checked={value} onChange={e=>setConfig({...config,[key]:e.target.checked})}/>{label}</label>;
+   if(typeof value==='number')return <label key={key} className="settings-num" title={budgetLabels[key]}>{label}<input id={id} type="number" min="0" step="any" value={scale?Number((value/scale).toFixed(scale===GB?2:1)):value} onChange={e=>setConfig({...config,[key]:scale?Math.round(Number(e.target.value)*scale):Number(e.target.value)})}/></label>;
+   return <label key={key} className="settings-num" title={budgetLabels[key]}>{label}<input id={id} value={String(value??'')} placeholder="YYYY-MM" onChange={e=>setConfig({...config,[key]:e.target.value})}/></label>;
+  })}</fieldset>)}</div>
+  <p className="settings-hint">0 means unlimited for storage. Hover a field for its full description.</p>
+ </div>
+ <div className="settings-card">
+  <div className="settings-card-head"><h2>Member AI access</h2><small>Free successful runs per member per week</small></div>
+  {policies.length?<div className="settings-table-scroll"><table className="settings-table">
+   <thead><tr><th scope="col">Feature</th><th scope="col">Free for all</th><th scope="col" className="is-number">Runs per week</th></tr></thead>
+   <tbody>{policies.map(policy=><tr key={policy.action}>
+    <td><strong>{policy.label}</strong></td>
+    <td><label className="settings-switch"><input type="checkbox" role="switch" aria-label={`${policy.label} included free for all members`} disabled={busy} checked={policy.accessMode==='included'} onChange={e=>changePolicy(policy.action,{accessMode:e.target.checked?'included':'allowance'})}/></label></td>
+    <td className="is-number">{policy.accessMode==='included'?<span className="settings-hint">No limit</span>:<label className="settings-num is-compact"><span className="visually-hidden">{policy.label} free successful runs per member per week</span><input type="number" min="0" max="10000" step="1" disabled={busy} value={policy.weeklyLimit} onChange={e=>changePolicy(policy.action,{weeklyLimit:Math.max(0,Math.floor(Number(e.target.value)||0))})}/></label>}</td>
+   </tr>)}</tbody>
+  </table></div>:<p className="settings-hint">No member AI features are configured.</p>}
+  <p className="settings-hint">Only successful new provider work uses a run. Smart Search stays free and is limited by “Smart Search per person per day” above.</p>
+ </div>
+ <div className={`settings-savebar${configDirty||policiesDirty?' is-dirty':''}`} role="group" aria-label="Save access and budgets">
+  <span>{configDirty||policiesDirty?'You have unsaved changes':'All changes saved'}</span>
+  <div className="settings-row"><button type="button" className="settings-quiet" disabled={busy||!(configDirty||policiesDirty)} onClick={()=>{setConfig(savedConfig);setPolicies(savedPolicies)}}>Discard</button><button type="button" className="settings-primary" disabled={busy||!(configDirty||policiesDirty)} onClick={saveAccess}>Save changes</button></div>
+ </div>
  </section><section hidden={section!=='maintenance'} aria-label="Maintenance">
- <p><Link className="button" to="/admin/lwin-review">LWIN needs review{rolloutStatus?.lwinCurrent?` (${rolloutStatus.lwinCurrent.needsReview})`:''}</Link></p>
- <fieldset disabled={busy}><legend>Background maintenance</legend>{!rolloutStatus&&<p role="alert">Maintenance status is unavailable. <button type="button" onClick={()=>void run(()=>load())}>Retry</button></p>}
-  <p>R2 inventory, research indexing and LWIN backfill run in the background. It is safe to leave this page. The first LWIN pass uses only local D1 + R2 data. The optional second pass uses the low-cost recognition model through the normal AI Gateway Vertex path on Flex, only for unresolved wines after local candidate narrowing. Neither pass calls Liv-ex or changes tasting notes, photos or research.</p>
-  {rolloutStatus&&<div>
-   <p><strong>R2 storage:</strong> {stateLabel(rolloutStatus.storage.state)} · {rolloutStatus.storage.objects} objects tracked.</p>
-   {rolloutStatus.storage.error&&<p role="alert">Last storage inventory error: {rolloutStatus.storage.error}</p>}
-   <div className="friend-actions"><button disabled={rolloutStatus.storage.state==='complete'||rolloutStatus.storage.state==='running'} onClick={()=>void run(()=>startRollout('storage'))}>{rolloutStatus.storage.state==='complete'?'R2 inventory complete':rolloutStatus.storage.state==='paused'?'Resume R2 inventory':'Inventory R2 storage'}</button>{rolloutStatus.storage.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('storage'))}>Pause</button>}</div>
-   <p><strong>Existing research:</strong> {stateLabel(rolloutStatus.research.state)} · wines {rolloutStatus.research.wines.processed}/{rolloutStatus.research.wines.total} · producers {rolloutStatus.research.producers.processed}/{rolloutStatus.research.producers.total}.</p>
-   {researchTotal>0&&<progress max={researchTotal} value={Math.min(researchProcessed,researchTotal)} aria-label="Research indexing progress"/>}
-   {rolloutStatus.research.error&&<p role="alert">Last research indexing error: {rolloutStatus.research.error}</p>}
-   <div className="friend-actions"><button disabled={rolloutStatus.research.state==='running'} onClick={()=>void run(()=>startRollout('research',rolloutStatus.research.state==='complete'))}>{rolloutStatus.research.state==='running'?'Research indexing…':rolloutStatus.research.state==='complete'?'Refresh research index':rolloutStatus.research.state==='paused'?'Resume research indexing':'Index existing research'}</button>{rolloutStatus.research.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('research'))}>Pause</button>}</div>
-   {rolloutStatus.lwinCurrent&&<section aria-label="Current LWIN status">
-    <strong>Your wines — current LWIN status</strong>
-    <p>{rolloutStatus.lwinCurrent.total} wines · {rolloutStatus.lwinCurrent.automatic} automatically linked · {rolloutStatus.lwinCurrent.manual} manually confirmed links.</p>
-    <p><Link to="/admin/lwin-review">Needs review now: {rolloutStatus.lwinCurrent.needsReview}</Link>: Identity conflicts: {rolloutStatus.lwinCurrent.identityConflicts} · Field suggestions only: {rolloutStatus.lwinCurrent.fieldUpdates}.</p>
-    <p>{rolloutStatus.lwinCurrent.withoutLwin} without LWIN, including {rolloutStatus.lwinCurrent.optedOut} deliberately kept without a link.</p>
-    <p><small>Field suggestions do not mean the linked identity is wrong. Completed name decisions are retained during refresh. Confirming a stored LWIN protects that identity; other field suggestions still need individual decisions.</small></p>
-   </section>}
-   <p><small>Run results below cover all accounts and describe the last or current run. They are not the number of wines needing review now.</small></p>
-   <p><strong>LWIN refresh run:</strong> {stateLabel(rolloutStatus.lwin.state)} · {rolloutStatus.lwin.processed}/{rolloutStatus.lwin.total} checked · {rolloutStatus.lwin.matched} links matched or retained · {rolloutStatus.lwin.ambiguous} ambiguous · {rolloutStatus.lwin.unmatched} unmatched{rolloutStatus.lwin.conflict?` · ${rolloutStatus.lwin.conflict} conflicts`:''}.</p>
-   {rolloutStatus.lwin.total>0&&<progress max={rolloutStatus.lwin.total} value={Math.min(rolloutStatus.lwin.processed,rolloutStatus.lwin.total)} aria-label="LWIN backfill progress"/>}
-   {rolloutStatus.lwin.error&&<p role="alert">Last LWIN backfill error: {rolloutStatus.lwin.error}</p>}
-   <div className="friend-actions"><button disabled={rolloutStatus.lwin.state==='running'} onClick={()=>void run(()=>startRollout('lwin',rolloutStatus.lwin.state==='complete'))}>{rolloutStatus.lwin.state==='running'?'Matching existing wines…':rolloutStatus.lwin.state==='complete'?'Refresh LWIN matches and enrichment':rolloutStatus.lwin.state==='paused'?'Resume LWIN backfill':'Match existing wines to LWIN'}</button>{rolloutStatus.lwin.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('lwin'))}>Pause</button>}</div>
-   <p><strong>Automatic-link validation run:</strong> {stateLabel(rolloutStatus.lwinValidation.state)} · {rolloutStatus.lwinValidation.processed}/{rolloutStatus.lwinValidation.total} checked · {rolloutStatus.lwinValidation.verified} verified · {rolloutStatus.lwinValidation.review} flagged during this run.</p>
-   <p><small>This rechecks automatic LWIN matches with the current resolver. It never deletes or replaces a stored LWIN automatically; a disagreement is kept and flagged for review.</small></p>
-   {rolloutStatus.lwinValidation.total>0&&<progress max={rolloutStatus.lwinValidation.total} value={Math.min(rolloutStatus.lwinValidation.processed,rolloutStatus.lwinValidation.total)} aria-label="Stored LWIN validation progress"/>}
-   {rolloutStatus.lwinValidation.error&&<p role="alert">Last stored LWIN validation error: {rolloutStatus.lwinValidation.error}</p>}
-   <div className="friend-actions"><button disabled={rolloutStatus.lwinValidation.state==='running'||rolloutStatus.lwin.state!=='complete'} onClick={()=>void run(()=>startRollout('lwin-validate',rolloutStatus.lwinValidation.state==='complete'))}>{rolloutStatus.lwinValidation.state==='running'?'Validating stored LWINs…':rolloutStatus.lwinValidation.state==='complete'?'Revalidate stored LWINs':rolloutStatus.lwinValidation.state==='paused'?'Resume stored LWIN validation':'Validate stored LWINs'}</button>{rolloutStatus.lwinValidation.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('lwin-validate'))}>Pause</button>}</div>
-   <p><strong>AI resolution run:</strong> {stateLabel(rolloutStatus.lwinAi.state)} · {rolloutStatus.lwinAi.processed}/{rolloutStatus.lwinAi.total} unresolved wines checked · {rolloutStatus.lwinAi.matched} matched ({rolloutStatus.lwinAi.deterministic} local · {rolloutStatus.lwinAi.ai} AI) · {rolloutStatus.lwinAi.review} unresolved at the end of this run.</p>
-   {rolloutStatus.lwinAi.total>0&&<progress max={rolloutStatus.lwinAi.total} value={Math.min(rolloutStatus.lwinAi.processed,rolloutStatus.lwinAi.total)} aria-label="AI LWIN resolution progress"/>}
-   {rolloutStatus.lwinAi.error&&<p role="alert">Last AI LWIN resolution error: {rolloutStatus.lwinAi.error}</p>}
-   <div className="friend-actions"><button disabled={rolloutStatus.lwinAi.state==='running'||rolloutStatus.lwin.state!=='complete'} onClick={()=>void run(()=>startRollout('lwin-ai',rolloutStatus.lwinAi.state==='complete'))}>{rolloutStatus.lwinAi.state==='running'?'Resolving unmatched wines…':rolloutStatus.lwinAi.state==='complete'?'Recheck unresolved with AI':rolloutStatus.lwinAi.state==='paused'?'Resume AI-assisted LWIN resolution':'Resolve unmatched LWIN wines'}</button>{rolloutStatus.lwinAi.state==='running'&&<button type="button" onClick={()=>void run(()=>pauseRollout('lwin-ai'))}>Pause</button>}</div>
-  </div>}
-
- </fieldset>
- {!!data?.reviewOperations.length&&<><h2>Operations needing reconciliation</h2><p>These AI operations remain held because completion is uncertain. Releasing one keeps any saved research, charges only for that, and lets the work run again.</p><ul className="admin-held-operations">{data.reviewOperations.map(op=><li key={op.id}><div><strong>{heldOperationLabel(op.path)}</strong><small>Started {new Date(op.created_at).toLocaleString()} · {op.id}</small></div><button type="button" disabled={busy} onClick={()=>{if(confirm(`Release this held ${heldOperationLabel(op.path).toLowerCase()}?\n\nOnly release it if it is no longer running. Any saved research is kept and only that is charged. If the provider did finish, running it again may pay for the same search twice.`))void run(async()=>{await apiJson(`/api/admin/operations/${op.id}/release`,'POST',{confirmation:'RELEASE_HELD_OPERATION'});return 'Operation released.'})}}>Release</button></li>)}</ul></>}
+ {!!data?.reviewOperations.length&&<div className="settings-card"><div className="settings-card-head"><h2>Operations needing reconciliation</h2></div><p className="settings-hint">These AI operations remain held because completion is uncertain. Releasing one keeps any saved research, charges only for that, and lets the work run again.</p><ul className="admin-held-operations">{data.reviewOperations.map(op=><li key={op.id}><div><strong>{heldOperationLabel(op.path)}</strong><small>Started {new Date(op.created_at).toLocaleString()} · {op.id}</small></div><button type="button" disabled={busy} onClick={()=>{if(confirm(`Release this held ${heldOperationLabel(op.path).toLowerCase()}?\n\nOnly release it if it is no longer running. Any saved research is kept and only that is charged. If the provider did finish, running it again may pay for the same search twice.`))void run(async()=>{await apiJson(`/api/admin/operations/${op.id}/release`,'POST',{confirmation:'RELEASE_HELD_OPERATION'});return 'Operation released.'})}}>Release</button></li>)}</ul></div>}
+ {!rolloutStatus&&<p role="alert">Maintenance status is unavailable. <button type="button" onClick={()=>void run(()=>load())}>Retry</button></p>}
+ {rolloutStatus?.lwinCurrent&&<section className="settings-card" aria-label="Current LWIN status">
+  <div className="settings-card-head"><h2>Your wines’ LWIN links</h2><Link className="settings-card-link" to="/admin/lwin-review">Needs review now: {rolloutStatus.lwinCurrent.needsReview} →</Link></div>
+  <dl className="settings-stats">
+   <div><dt>Wines</dt><dd>{rolloutStatus.lwinCurrent.total}</dd></div>
+   <div><dt>Linked automatically</dt><dd>{rolloutStatus.lwinCurrent.automatic}</dd></div>
+   <div><dt>Confirmed by you</dt><dd>{rolloutStatus.lwinCurrent.manual}</dd></div>
+   <div><dt>Without LWIN</dt><dd>{rolloutStatus.lwinCurrent.withoutLwin}{rolloutStatus.lwinCurrent.optedOut>0&&<small> {rolloutStatus.lwinCurrent.optedOut} on purpose</small>}</dd></div>
+  </dl>
+  <p className="settings-hint">Identity conflicts: {rolloutStatus.lwinCurrent.identityConflicts} · Field suggestions only: {rolloutStatus.lwinCurrent.fieldUpdates}. A field suggestion does not mean the link is wrong, and confirming a link protects it.</p>
+ </section>}
+ {rolloutStatus&&<section className="settings-card" aria-label="Background jobs">
+  <div className="settings-card-head"><h2>Background jobs</h2><small>Safe to leave this page. Results cover all accounts.</small></div>
+  {job({name:'Storage inventory',kind:'storage',state:rolloutStatus.storage.state,meta:`${rolloutStatus.storage.objects} files tracked`,error:rolloutStatus.storage.error,disabled:rolloutStatus.storage.state==='complete',actionLabel:rolloutStatus.storage.state==='complete'?'R2 inventory complete':rolloutStatus.storage.state==='paused'?'Resume R2 inventory':'Inventory R2 storage',action:()=>startRollout('storage'),about:'Counts the photos and files already in R2 storage so each account’s storage allowance is accurate.'})}
+  {job({name:'Research index',kind:'research',state:rolloutStatus.research.state,meta:`Wines ${rolloutStatus.research.wines.processed}/${rolloutStatus.research.wines.total} · producers ${rolloutStatus.research.producers.processed}/${rolloutStatus.research.producers.total}`,processed:researchProcessed,total:researchTotal,error:rolloutStatus.research.error,actionLabel:rolloutStatus.research.state==='complete'?'Refresh research index':rolloutStatus.research.state==='paused'?'Resume research indexing':'Index existing research',action:()=>startRollout('research',rolloutStatus.research.state==='complete'),about:'Indexes research that already exists so friends can reuse it instead of paying for it again.'})}
+  {job({name:'LWIN matching',kind:'lwin',state:rolloutStatus.lwin.state,meta:<>{rolloutStatus.lwin.processed}/{rolloutStatus.lwin.total} checked · {rolloutStatus.lwin.matched} matched · {rolloutStatus.lwin.ambiguous} unclear · {rolloutStatus.lwin.unmatched} no match{rolloutStatus.lwin.conflict?` · ${rolloutStatus.lwin.conflict} conflicts`:''}</>,processed:rolloutStatus.lwin.processed,total:rolloutStatus.lwin.total,error:rolloutStatus.lwin.error,actionLabel:rolloutStatus.lwin.state==='complete'?'Refresh LWIN matches and enrichment':rolloutStatus.lwin.state==='paused'?'Resume LWIN backfill':'Match existing wines to LWIN',action:()=>startRollout('lwin',rolloutStatus.lwin.state==='complete'),about:'Matches existing wines to LWIN using only local D1 and R2 data. It does not call Liv-ex or change tasting notes, photos or research.'})}
+  {job({name:'Check automatic links',kind:'lwin-validate',state:rolloutStatus.lwinValidation.state,meta:rolloutStatus.lwin.state!=='complete'?'Runs after LWIN matching':`${rolloutStatus.lwinValidation.processed}/${rolloutStatus.lwinValidation.total} checked · ${rolloutStatus.lwinValidation.verified} verified · ${rolloutStatus.lwinValidation.review} flagged during this run`,processed:rolloutStatus.lwinValidation.processed,total:rolloutStatus.lwinValidation.total,error:rolloutStatus.lwinValidation.error,disabled:rolloutStatus.lwin.state!=='complete',actionLabel:rolloutStatus.lwinValidation.state==='complete'?'Revalidate stored LWINs':rolloutStatus.lwinValidation.state==='paused'?'Resume stored LWIN validation':'Validate stored LWINs',action:()=>startRollout('lwin-validate',rolloutStatus.lwinValidation.state==='complete'),about:'Rechecks automatic LWIN matches with the current resolver. It never deletes or replaces a stored LWIN; a disagreement is kept and flagged for review.'})}
+  {job({name:'AI match for the rest',kind:'lwin-ai',state:rolloutStatus.lwinAi.state,meta:rolloutStatus.lwin.state!=='complete'?'Runs after LWIN matching':`${rolloutStatus.lwinAi.processed}/${rolloutStatus.lwinAi.total} checked · ${rolloutStatus.lwinAi.matched} matched (${rolloutStatus.lwinAi.deterministic} local · ${rolloutStatus.lwinAi.ai} AI) · ${rolloutStatus.lwinAi.review} still unresolved`,processed:rolloutStatus.lwinAi.processed,total:rolloutStatus.lwinAi.total,error:rolloutStatus.lwinAi.error,disabled:rolloutStatus.lwin.state!=='complete',actionLabel:rolloutStatus.lwinAi.state==='complete'?'Recheck unresolved with AI':rolloutStatus.lwinAi.state==='paused'?'Resume AI-assisted LWIN resolution':'Resolve unmatched LWIN wines',action:()=>startRollout('lwin-ai',rolloutStatus.lwinAi.state==='complete'),about:'For wines still unmatched, narrows the candidates locally, then asks the low-cost recognition model through the normal AI Gateway Vertex path on Flex.'})}
+ </section>}
  </section></div></div></div></section>;
 }

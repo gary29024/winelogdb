@@ -1,6 +1,6 @@
 import { requiresAiReservation as isAi } from '../ai/reservedRoutes';
 
-export type Account={id:string;email:string;display_name:string;role:'owner'|'member';status:string};
+export type Account={id:string;email:string;display_name:string;handle?:string|null;role:'owner'|'member';status:string};
 let account:Account|null=null;
 let generation=0;
 // Browser-only in-flight JSON reads. No settled response survives navigation:
@@ -8,6 +8,12 @@ let generation=0;
 const pendingReads=new Map<string,Promise<Response>>();
 const shareableRead=(path:string)=>path==='/api/journal'||path==='/api/producers'||/^\/api\/(?:producers|shared\/wines)\/[^/]+$/.test(path);
 export const getAccount=()=>account;
+let friendRequests=0;
+/** Incoming friend requests at the last /api/me read, kept current by the Account page. */
+export const getFriendRequestCount=()=>friendRequests;
+export function setFriendRequestCount(count:number){friendRequests=count;window.dispatchEvent(new Event(FRIEND_REQUESTS_UPDATED))}
+/** Window events the top bar listens for: the account was reloaded, or the Account page counted friend requests. */
+export const ACCOUNT_UPDATED='winelog:account-updated',FRIEND_REQUESTS_UPDATED='winelog:friend-requests';
 /** An account/cache identity only; authentication credentials never enter JavaScript. */
 export const getSession=()=>account?.id??null;
 export const hasSession=()=>account!==null;
@@ -16,10 +22,11 @@ export const authHeaders=(json=false):Record<string,string>=>({...account?{'X-Wi
 export function clearSession(){account=null;generation++;pendingReads.clear();localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
 export async function bootstrapAccount(){
  const response=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
- const next=response.ok?(await response.json() as {user:Account}).user:null;
+ const body=response.ok?await response.json() as {user:Account;friendRequests?:number}:null,next=body?.user??null;
+ friendRequests=Number(body?.friendRequests)||0;
  const previous=sessionStorage.getItem('winelog-account');
  if(previous!==next?.id){generation++;for(const key of Object.keys(sessionStorage))if(key.startsWith('winelog'))sessionStorage.removeItem(key)}
- account=next;localStorage.removeItem('session');if(next)sessionStorage.setItem('winelog-account',next.id);localStorage.setItem('winelog-account-id',next?.id??'');return next;
+ account=next;localStorage.removeItem('session');if(next)sessionStorage.setItem('winelog-account',next.id);localStorage.setItem('winelog-account-id',next?.id??'');window.dispatchEvent(new Event(ACCOUNT_UPDATED));return next;
 }
 export async function logout(){await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'});clearSession();localStorage.setItem('winelog-account-event',crypto.randomUUID());location.assign('/login')}
 export function login(){location.assign('/api/auth/google/start')}

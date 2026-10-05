@@ -13,7 +13,8 @@ test('owner LWIN panel separates live review counts from run history',async({pag
  });
  await page.goto('/admin?section=maintenance');
  const summary=page.getByRole('region',{name:'Current LWIN status'});
- await expect(summary).toContainText('3 manually confirmed links');
+ await expect(summary.getByRole('definition').nth(2)).toHaveText('3');
+ await expect(summary).toContainText('Confirmed by you');
  await expect(summary.getByRole('link',{name:'Needs review now: 2'})).toBeVisible();
  await expect(summary).toContainText('Identity conflicts: 1 · Field suggestions only: 1');
  await expect(page.getByText(/17 flagged during this run/)).toBeVisible();

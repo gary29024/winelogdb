@@ -33,7 +33,7 @@ export function sharedWine(row:Record<string,unknown>):SharedWine{
  const lwinReference=reliableLwinReference(row);
  const deepSearch=publishedDeepSearch(row.deep_search_json,number(row.vintage));
  return {
-  id:text(row.id),ownerName:text(row.display_name),
+  id:text(row.id),ownerName:text(row.display_name),ownerHandle:text(row.owner_handle)||null,
   producer:text(row.producer),producerId:text(row.viewer_producer_id)||(text(row.producer_id)&&text(row.owner_id)?sharedProducerId(text(row.owner_id),text(row.producer_id)):null),
   wineName:text(row.wine_name),vintage:number(row.vintage),vintageKind:(['vintage','non_vintage','multi_vintage','unknown'].includes(text(row.vintage_kind))?text(row.vintage_kind):null) as SharedWine['vintageKind'],releaseDesignation:text(row.release_designation)||null,
   lwinReference:lwinReference?publicLwinTaxonomy(lwinReference):null,lwin7:text(row.lwin7)||null,lwin11:text(row.lwin11)||null,elid:text(row.elid)||null,referenceSite:text(row.reference_site)||null,referenceParcel:text(row.reference_parcel)||null,colour:text(row.colour)||null,productType:text(row.product_type)||null,productSubtype:text(row.product_subtype)||null,
@@ -140,7 +140,7 @@ const VIEWER_PRODUCER_SQL=`(SELECT vp.id FROM producers op JOIN producers vp ON 
   WHERE op.owner_id=w.owner_id AND op.id=w.producer_id) AS viewer_producer_id`;
 
 export async function canReadShared(db:D1Database,viewer:string,wineId:string){
- return db.prepare(`SELECT w.*,u.display_name,
+ return db.prepare(`SELECT w.*,u.display_name,u.handle AS owner_handle,
    coalesce(pref.favorite,0) AS viewer_favorite,
    coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
    pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
@@ -194,13 +194,13 @@ export const SHARED_WINES_LIST_SQL=`WITH accessible(wine_id,owner_id,shared_at) 
  SELECT wine_id,owner_id,max(shared_at) AS shared_at
  FROM accessible GROUP BY wine_id,owner_id
 ), page AS MATERIALIZED (
- SELECT a.wine_id,a.owner_id,a.shared_at,u.display_name
+ SELECT a.wine_id,a.owner_id,a.shared_at,u.display_name,u.handle AS owner_handle
  FROM latest a
  JOIN friendships f ON f.user_id=? AND f.friend_id=a.owner_id
  JOIN app_users u ON u.id=a.owner_id AND u.status='active'
  ORDER BY a.shared_at DESC,a.wine_id LIMIT 25 OFFSET ?
 )
-SELECT w.*,p.display_name,p.shared_at,
+SELECT w.*,p.display_name,p.owner_handle,p.shared_at,
   coalesce(pref.favorite,0) AS viewer_favorite,
   coalesce(pref.tasting_notes,'') AS viewer_tasting_notes,
   pref.rating AS viewer_rating,pref.tasting_date AS viewer_tasting_date,pref.tasting_name AS viewer_tasting_name,
@@ -237,7 +237,7 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
    return json({ok:true,name});
   }
  }
- if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare(`SELECT u.id,u.display_name,
+ if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare(`SELECT u.id,u.display_name,u.handle,f.created_at AS since,
    CASE WHEN d.recipient_id IS NULL THEN 0 ELSE 1 END AS defaultShare
    FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active'
    LEFT JOIN member_share_defaults d ON d.owner_id=f.user_id AND d.recipient_id=f.friend_id

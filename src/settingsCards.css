@@ -1,0 +1,228 @@
+/* Compact cards for Account & friends and Owner controls.
+   The measurements follow the old Insights AI spend cards (12-14px padding,
+   10px gaps, small grey labels). Every rule is scoped under .settings-page and
+   the content column so it outranks the generic settings form rules, which
+   stretch inputs full width and stack labels above them. */
+.settings-page .settings-content.settings-cards{display:grid;gap:var(--s3);max-width:760px;align-content:start}
+.settings-page .settings-cards>section{display:grid;gap:var(--s3)}
+.settings-page .settings-cards>section[hidden]{display:none}
+.settings-page .settings-cards>p{margin:0}
+
+.settings-card{display:grid;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper);min-width:0}
+.settings-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px 10px;flex-wrap:wrap}
+.settings-page .settings-content .settings-card-head h2{margin:0;font:600 .92rem 'DM Sans',sans-serif;color:var(--ink)}
+.settings-card-head>small,.settings-hint{color:var(--ink-6);font-size:.76rem;line-height:1.45}
+.settings-page .settings-content .settings-hint{margin:0}
+.settings-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-6)}
+
+/* An input and its button share one row; the input keeps a sensible width. */
+.settings-row{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.settings-row>.settings-grow{flex:1 1 120px;min-width:0}
+.settings-page .settings-content .settings-card input:not([type=checkbox]){min-height:40px;padding:8px 10px;font-size:.9rem}
+.settings-page .settings-content .settings-card label{display:grid;gap:5px;flex-direction:initial;justify-content:initial}
+.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-page .settings-content .settings-savebar button,.settings-card .button{min-height:40px;padding:0 14px;font-size:.84rem;white-space:nowrap}
+.settings-page .settings-content button.settings-primary{background:var(--wine-fill);border-color:var(--wine-fill);color:var(--on-accent)}
+.settings-page .settings-content button.settings-primary:hover:not(:disabled){filter:brightness(.94);background:var(--wine-fill)}
+.settings-page .settings-content button.settings-quiet{border-color:transparent;background:transparent;color:var(--ink-6)}
+.settings-page .settings-content button.settings-quiet:hover:not(:disabled){background:var(--ground);border-color:var(--line)}
+
+.settings-identity{display:flex;align-items:center;gap:var(--s3);min-width:0}
+.settings-identity>div{display:grid;gap:3px;min-width:0}
+.settings-identity strong{font-size:1rem;overflow-wrap:anywhere}
+.settings-avatar{flex:0 0 auto;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--wine-line);background:var(--bad-wash);color:var(--wine-ink);font:700 .8rem 'Playfair Display',serif;text-transform:uppercase}
+.settings-avatar.is-large{width:40px;height:40px;font-size:1rem}
+.settings-chips{display:flex;flex-wrap:wrap;gap:4px}
+.settings-chip{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border:1px solid var(--line-strong);border-radius:var(--r-pill);background:var(--sunken);color:var(--ink-4);font-size:.7rem;font-weight:600;white-space:nowrap}
+.settings-chip.is-good{border-color:var(--good-line);background:var(--good-wash);color:var(--good-ink)}
+.settings-chip.is-warn{border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
+.settings-chip.is-accent{border-color:var(--wine-line);background:var(--bad-wash);color:var(--wine-ink)}
+.settings-split{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+.settings-split>div{display:grid;gap:2px;min-width:0}
+.settings-split strong{font-size:.9rem}
+
+/* Friend requests: one highlighted row each, only when there are any. */
+.settings-page .settings-content .settings-request{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;border:1px solid var(--wine-line);border-radius:var(--r-sm);background:var(--bad-wash)}
+.settings-page .settings-content .settings-request p{flex:1 1 160px;min-width:0;margin:0;font-size:.88rem;overflow-wrap:anywhere}
+.settings-request>div{display:flex;gap:6px}
+
+/* Your code / add a friend: two halves of one card. */
+.settings-connect{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.settings-connect>*{display:grid;gap:7px;align-content:start;min-width:0;padding:2px 14px}
+.settings-connect>:first-child{padding-left:0;border-right:1px solid var(--line)}
+.settings-connect>:last-child{padding-right:0}
+.settings-code{padding:7px 10px;border:1px dashed var(--line-strong);border-radius:var(--r-sm);background:var(--sunken);font:600 .95rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;white-space:nowrap;user-select:all}
+.settings-row>.settings-code{flex:1 1 auto}
+
+/* One row per person. */
+.settings-page .settings-content .settings-people{display:grid;margin:0;padding:0;list-style:none}
+.settings-people>li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);min-width:0}
+.settings-people>li:first-child{border-top:0;padding-top:0}
+.settings-person{display:grid;gap:1px;flex:1 1 auto;min-width:0}
+.settings-person strong{font-size:.9rem;overflow-wrap:anywhere}
+.settings-person span{font-size:.74rem;color:var(--ink-6);overflow-wrap:anywhere}
+
+/* A checkbox drawn as a switch; it stays a real checkbox for assistive tech. */
+.settings-page .settings-content label.settings-switch{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;font-size:.76rem;color:var(--ink-4);cursor:pointer;white-space:nowrap}
+.settings-page .settings-content .settings-switch input[type=checkbox]{appearance:none;-webkit-appearance:none;position:relative;width:34px;height:20px;margin:0;border-radius:var(--r-pill);background:var(--line-strong);cursor:pointer;transition:background .15s}
+.settings-switch input::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--paper);transition:transform .15s}
+.settings-page .settings-content .settings-switch input[type=checkbox]:checked{background:var(--good)}
+.settings-switch input:checked::after{transform:translateX(14px)}
+.settings-switch-short{display:none}
+@media(max-width:700px){.settings-switch-short{display:inline}}
+.settings-switch input:disabled{opacity:.55;cursor:default}
+
+/* The ⋯ menu: a details element so it works without script and with a keyboard. */
+.settings-page .settings-content details.settings-menu{position:relative;margin:0;flex:0 0 auto}
+.settings-page .settings-content details.settings-menu>summary{display:grid;place-items:center;width:36px;min-height:36px;padding:0;border-radius:var(--r-sm);color:var(--ink-6);font-size:1.15rem;line-height:1;list-style:none}
+.settings-page .settings-content details.settings-menu>summary::-webkit-details-marker{display:none}
+.settings-page .settings-content details.settings-menu>summary::after{content:none}
+.settings-page .settings-content details.settings-menu>summary:hover,.settings-menu[open]>summary{background:var(--ground)}
+.settings-menu>div{position:absolute;right:0;top:calc(100% + 4px);z-index:5;display:grid;min-width:210px;padding:4px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper);box-shadow:0 8px 22px #10182d1f}
+.settings-page .settings-content .settings-menu>div button{justify-content:flex-start;width:100%;border:0;background:transparent;text-align:left;font-weight:500}
+.settings-page .settings-content .settings-menu>div button:hover:not(:disabled){background:var(--ground)}
+.settings-page .settings-content .settings-menu>div button.settings-danger{color:var(--danger)}
+.settings-menu small{display:block;padding:4px 14px 6px;color:var(--good-ink);font-size:.74rem}
+
+.settings-page .settings-content details.settings-fold{margin:0;border-top:1px solid var(--line);padding-top:4px}
+.settings-page .settings-content details.settings-fold>summary{min-height:36px;font-size:.82rem}
+
+/* Allowance tiles, after the Insights AI spend grid. */
+.settings-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.settings-page .settings-content .settings-tiles>article{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:3px 12px;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper)}
+.settings-tiles strong{font-size:.86rem;overflow-wrap:anywhere}
+.settings-tiles b{font-size:1.02rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.settings-tiles b small{color:var(--ink-6);font-size:.72rem;font-weight:500}
+.settings-tile-note{grid-column:1/-1;color:var(--ink-6);font-size:.72rem}
+.settings-meter{grid-column:1/-1;height:5px;margin-top:4px;border-radius:var(--r-pill);background:var(--sunken);overflow:hidden}
+.settings-meter>span{display:block;height:100%;border-radius:inherit;background:var(--good)}
+.settings-meter.is-low>span{background:var(--warn)}
+
+/* A strip of figures. */
+.settings-page .settings-content dl.settings-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin:0;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.settings-page .settings-content .settings-stats>div{display:grid;gap:1px;padding:9px 12px;border:0;border-left:1px solid var(--line);border-radius:0;min-width:0}
+.settings-page .settings-content .settings-stats>div:first-child{border-left:0}
+.settings-stats dt{color:var(--ink-6);font-size:.72rem}
+.settings-stats dd{margin:0;font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums}
+.settings-stats dd small{color:var(--ink-6);font-size:.72rem;font-weight:500}
+
+@media(max-width:700px){
+ .settings-page .settings-content .settings-card input:not([type=checkbox]),.settings-page .settings-content .settings-card button,.settings-page .settings-content .settings-request button,.settings-page .settings-content .settings-savebar button,.settings-card .button{min-height:44px}
+ .settings-page .settings-content details.settings-menu>summary{width:44px;min-height:44px}
+ .settings-connect{grid-template-columns:minmax(0,1fr)}
+ .settings-connect>:first-child{padding:0 0 12px;border-right:0;border-bottom:1px solid var(--line)}
+ .settings-connect>:last-child{padding:12px 0 0}
+ .settings-switch-long{display:none}
+}
+@media(prefers-reduced-motion:reduce){.settings-switch input,.settings-switch input::after{transition:none}}
+.settings-field{display:grid;gap:5px;min-width:0}
+.settings-field>.settings-row{max-width:460px}
+.settings-handle{color:var(--ink-6);font-size:.82em;font-weight:500}
+.settings-field>input{max-width:340px}
+.settings-at{display:flex;align-items:center;max-width:340px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--paper)}
+.settings-at>span{padding-left:10px;color:var(--ink-6);font-weight:600}
+.settings-page .settings-content .settings-card .settings-at>input{flex:1 1 auto;min-width:0;border:0;padding-left:3px;background:transparent}
+
+/* ---------- Owner controls ---------- */
+.settings-page .settings-content.settings-cards.is-wide{max-width:none}
+.settings-page .settings-cards .settings-sections{display:grid;gap:var(--s3)}
+.settings-page .settings-cards .settings-sections[hidden]{display:none}
+.settings-page .settings-cards .settings-sections>section{display:grid;gap:var(--s3)}
+.settings-page .settings-cards .settings-sections>section[hidden]{display:none}
+
+/* Warnings: one line and a button that goes to the fix. */
+.settings-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;border:1px solid var(--warn-line);border-radius:var(--r-sm);background:var(--warn-wash);font-size:.86rem}
+.settings-banner.is-quiet{border-color:var(--line);background:var(--paper)}
+.settings-page .settings-content .settings-banner p{flex:1 1 240px;min-width:0;margin:0;color:var(--ink-3)}
+.settings-page .settings-content .settings-banner button{min-height:36px;padding:0 12px;font-size:.82rem}
+
+.settings-page .settings-content dl.settings-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0}
+.settings-kpis>div{display:grid;gap:1px;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);min-width:0}
+.settings-kpis>div.is-attention{border-color:var(--warn-line);background:var(--warn-wash)}
+.settings-kpis dt{color:var(--ink-6);font-size:.72rem;overflow-wrap:anywhere}
+.settings-kpis dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.settings-kpis dd small{color:var(--ink-6);font-size:.72rem;font-weight:500}
+
+.settings-table-scroll{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.settings-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.settings-table th{padding:4px 8px;border-bottom:1px solid var(--line);color:var(--ink-6);font-size:.7rem;font-weight:600;text-align:left;white-space:nowrap}
+.settings-table td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.settings-table tbody tr:last-child td{border-bottom:0}
+.settings-table .is-number{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.settings-table th:first-child,.settings-table td:first-child{padding-left:0}
+.settings-table th:last-child,.settings-table td:last-child{padding-right:0}
+.settings-table-person{display:flex;align-items:center;gap:8px;min-width:180px}
+.settings-table-person>div{display:grid;gap:1px;min-width:0}
+.settings-table-person strong{font-size:.88rem}
+.settings-table-person span{color:var(--ink-6);font-size:.72rem;overflow-wrap:anywhere}
+.settings-table-details>td{background:var(--ground)}
+.settings-table-details>td{padding:10px 12px}
+.settings-table-details .settings-stats{background:var(--paper);margin-bottom:8px}
+.settings-page .settings-content .settings-breakdown{display:grid;gap:4px;margin:8px 0 0;padding:0;list-style:none;font-size:.8rem}
+.settings-breakdown li{display:flex;justify-content:space-between;gap:12px}
+.settings-breakdown li span:last-child{text-align:right;color:var(--ink-4);font-variant-numeric:tabular-nums}
+.settings-card-foot{padding-top:10px;border-top:1px solid var(--line)}
+.settings-card-link{font-size:.82rem;font-weight:600;color:var(--wine-ink)}
+.settings-invite{display:grid;gap:6px}
+
+/* Grant form: four fields in one compact grid. */
+.settings-page .settings-content fieldset.settings-grant{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0;padding:0;border:0;background:transparent}
+.settings-page .settings-content .settings-grant label{grid-template-columns:minmax(0,1fr);align-content:start;font-size:.78rem;font-weight:600;color:var(--ink-4)}
+.settings-page .settings-content .settings-grant select,.settings-page .settings-content .settings-grant input:not([type=number]){width:100%;max-width:100%;min-height:40px;padding:8px 10px;font-size:.88rem;font-weight:400}
+
+/* Number fields: label on the left, input on the right. */
+.settings-page .settings-content .settings-card label.settings-num{display:grid;grid-template-columns:minmax(0,1fr) 104px;align-items:center;gap:10px;font-size:.82rem;color:var(--ink-3)}
+.settings-page .settings-content .settings-card label.settings-num input{width:104px;min-height:34px;padding:5px 8px;text-align:right;font-size:.86rem}
+.settings-page .settings-content .settings-card label.settings-num.is-compact{grid-template-columns:auto;justify-content:end}
+.settings-page .settings-content .settings-grant input.settings-grant-runs{width:110px;min-height:40px;font-weight:400}
+.settings-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;align-items:start}
+.settings-page .settings-content .settings-groups fieldset{display:grid;gap:8px;margin:0;padding:10px 12px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);min-width:0}
+.settings-page .settings-content .settings-groups fieldset.is-wide{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));column-gap:24px}
+.settings-page .settings-content .settings-groups legend{padding:0 4px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-6)}
+.settings-page .settings-content label.settings-group-switch{white-space:normal;font-size:.82rem;color:var(--ink-3)}
+
+.settings-savebar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);font-size:.84rem;color:var(--ink-6)}
+.settings-savebar.is-dirty{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.settings-page .settings-content .settings-savebar.is-dirty button.settings-quiet{color:var(--paper)}
+.settings-page .settings-content .settings-savebar.is-dirty button.settings-quiet:hover:not(:disabled){background:transparent;border-color:var(--paper)}
+
+/* Background jobs: one row each. */
+.settings-job{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.settings-card-head+.settings-job{border-top:0;padding-top:0}
+.settings-job-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.settings-job-name strong{font-size:.88rem}
+.settings-job-actions{grid-column:2;grid-row:1/3;display:flex;gap:6px}
+.settings-job-meta{grid-column:1;color:var(--ink-6);font-size:.76rem;overflow-wrap:anywhere}
+.settings-job progress{grid-column:1/-1;width:100%;height:6px;accent-color:var(--good)}
+.settings-page .settings-content .settings-job-error{grid-column:1/-1;margin:0;font-size:.76rem}
+.settings-page .settings-content details.settings-job-about{margin:0}
+.settings-page .settings-content details.settings-job-about[open]{flex-basis:100%}
+.settings-page .settings-content details.settings-job-about>summary{display:inline-flex;min-height:24px;padding:0 4px;font-size:.82rem;font-weight:500;color:var(--ink-6)}
+.settings-page .settings-content details.settings-job-about>summary::after{content:none}
+.settings-page .settings-content details.settings-job-about p{margin:2px 0 4px}
+
+@media(max-width:700px){
+ .settings-page .settings-content dl.settings-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .settings-job{grid-template-columns:minmax(0,1fr)}
+ .settings-job-actions{grid-column:1;grid-row:auto}
+ .settings-page .settings-content .settings-banner button,.settings-page .settings-content details.settings-job-about>summary{min-height:44px}
+ .settings-page .settings-content .settings-grant select,.settings-page .settings-content .settings-card label.settings-num input{min-height:44px}
+}
+
+.settings-table-details .settings-label{display:block;margin-top:8px}
+
+/* On a phone each member becomes a small card: who and the menu on top, status and figures below. */
+@media(max-width:700px){
+ .settings-table.is-members thead{display:none}
+ .settings-table.is-members,.settings-table.is-members tbody{display:block}
+ .settings-table.is-members tbody>tr:not(.settings-table-details){display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr)) auto;align-items:center;gap:6px 8px;padding:10px 0;border-bottom:1px solid var(--line)}
+ .settings-table.is-members tbody>tr:last-child{border-bottom:0}
+ .settings-table.is-members tbody>tr>td{padding:0;border:0}
+ .settings-table.is-members tbody>tr>td:first-child{grid-column:1/5}
+ .settings-table.is-members tbody>tr>td:last-child{grid-column:5;grid-row:1}
+ .settings-table.is-members tbody>tr>td:nth-child(2){grid-column:1}
+ .settings-table.is-members td.is-number{display:grid;text-align:left;font-size:.8rem}
+ .settings-table.is-members td.is-number::before{content:attr(data-label);color:var(--ink-6);font-size:.66rem}
+ .settings-table.is-members .settings-table-person{min-width:0}
+ .settings-table.is-members tr.settings-table-details{display:block;border-bottom:1px solid var(--line)}
+ .settings-table.is-members tr.settings-table-details>td{display:block}
+}

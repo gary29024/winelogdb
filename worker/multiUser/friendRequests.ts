@@ -1,4 +1,5 @@
 import { ApiError,body,json,type IdentityEnv,type Member } from './common';
+import { handleProblem,normalizeHandle } from './handles';
 
 type FriendRequest={id:string;sender_id:string;recipient_id:string;status:string};
 const formatCode=(code:string)=>code.match(/.{4}/g)!.join('-');
@@ -12,19 +13,23 @@ export async function friendRequestRoute(request:Request,env:IdentityEnv,member:
   return json({code:formatCode(row.code)});
  }
  if(path==='/api/friends/requests'&&request.method==='GET'){
-  const rows=await db.prepare(`SELECT r.id,r.sender_id,r.recipient_id,u.display_name FROM friend_requests r
+  const rows=await db.prepare(`SELECT r.id,r.sender_id,r.recipient_id,u.display_name,u.handle FROM friend_requests r
    JOIN app_users u ON u.id=CASE WHEN r.sender_id=? THEN r.recipient_id ELSE r.sender_id END AND u.status='active'
    WHERE r.status='pending' AND (r.sender_id=? OR r.recipient_id=?) ORDER BY r.created_at,r.id LIMIT 48`)
-   .bind(member.id,member.id,member.id).all<FriendRequest&{display_name:string}>();
-  const item=(row:FriendRequest&{display_name:string})=>({id:row.id,display_name:row.display_name});
+   .bind(member.id,member.id,member.id).all<FriendRequest&{display_name:string;handle:string|null}>();
+  const item=(row:FriendRequest&{display_name:string;handle:string|null})=>({id:row.id,display_name:row.display_name,handle:row.handle});
   return json({incoming:rows.results.filter(row=>row.recipient_id===member.id).map(item),outgoing:rows.results.filter(row=>row.sender_id===member.id).map(item)});
  }
  if(path==='/api/friends/requests'&&request.method==='POST'){
-  const data=await body(request),code=typeof data.code==='string'?data.code.replace(/[\s-]/g,'').toUpperCase():'';
-  if(!/^[0-9A-F]{12}$/.test(code))throw new ApiError(400,'Enter a valid friend code, such as A1B2-C3D4-E5F6');
-  const target=await db.prepare("SELECT u.id FROM friend_codes c JOIN app_users u ON u.id=c.user_id AND u.status='active' WHERE c.code=?").bind(code).first<{id:string}>();
-  if(!target)throw new ApiError(404,'No member found with that friend code');
-  if(target.id===member.id)throw new ApiError(400,'That is your own friend code');
+  // One box takes either a friend code or an @handle. "@" always means a handle;
+  // otherwise a 12-hex code is tried first, then the same text as a handle.
+  const data=await body(request),raw=typeof data.code==='string'?data.code.trim():'';
+  const code=raw.startsWith('@')?'':raw.replace(/[\s-]/g,'').toUpperCase(),handle=normalizeHandle(raw),isCode=/^[0-9A-F]{12}$/.test(code),isHandle=!handleProblem(handle);
+  if(!isCode&&!isHandle)throw new ApiError(400,raw.startsWith('@')?'Enter a valid user ID, such as @meilin':'Enter a friend code such as A1B2-C3D4-E5F6, or a user ID such as @meilin');
+  const byCode=isCode?await db.prepare("SELECT u.id FROM friend_codes c JOIN app_users u ON u.id=c.user_id AND u.status='active' WHERE c.code=?").bind(code).first<{id:string}>():null;
+  const target=byCode??(isHandle?await db.prepare("SELECT id FROM app_users WHERE handle=? AND status='active'").bind(handle).first<{id:string}>():null);
+  if(!target)throw new ApiError(404,isCode&&!isHandle?'No member found with that friend code':isCode?'No member found with that friend code or user ID':`No member found with the user ID @${handle}`);
+  if(target.id===member.id)throw new ApiError(400,byCode?'That is your own friend code':'That is your own user ID');
   if(await db.prepare('SELECT 1 FROM friendships WHERE user_id=? AND friend_id=?').bind(member.id,target.id).first())throw new ApiError(409,'You are already friends');
   const existing=await db.prepare("SELECT * FROM friend_requests WHERE status='pending' AND ((sender_id=? AND recipient_id=?) OR (sender_id=? AND recipient_id=?))").bind(member.id,target.id,target.id,member.id).first<FriendRequest>();
   if(existing){if(existing.sender_id!==member.id)throw new ApiError(409,'This member has already sent you a request. Accept it in Friend requests.');return json({id:existing.id,status:'pending'})}

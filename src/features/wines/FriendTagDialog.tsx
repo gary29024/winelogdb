@@ -68,7 +68,7 @@ export function FriendTagDialog({
       {friends.length?<div className="friend-tag-grid" role="group" aria-label="Friends">
         {friends.map(friend=>{const active=selected.includes(friend.id),atLimit=selected.length>=maxSelected&&!active;return <button type="button" key={friend.id} className={`friend-tag-chip${active?' selected':''}`} aria-pressed={active} disabled={busy||confirmDisabled||atLimit} onClick={()=>toggle(friend.id)}>
           <span className="friend-tag-check" aria-hidden="true">{active?'✓':''}</span>
-          <span>{friend.display_name}</span>
+          <span>{friend.display_name}{friend.handle&&<small className="friend-tag-handle"> @{friend.handle}</small>}</span>
           {friend.defaultShare&&<small>Default</small>}
         </button>})}
       </div>:loading?<p className="friend-tag-empty" role="status">Loading friends…</p>:!confirmDisabled&&<p className="friend-tag-empty">Add a friend from Account & friends first.</p>}
