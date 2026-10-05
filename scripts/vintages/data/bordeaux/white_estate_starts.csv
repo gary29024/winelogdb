@@ -1,0 +1,357 @@
+# Pessac-Léognan dry-white and Sauternes / Barsac estates' first day of picking, as each source states
+# it: estate technical sheets and vintage pages, merchants' pages quoting them, and harvest reports.
+# One row per area, estate and year (the earliest the sources give). Sauternes rows are the first
+# pass of overripe or botrytised grapes; cleaning and trial passes are left out. harvest_dates.csv
+# takes a start from these where at least two estates began within 7 days of the year's median
+# start: the median of those estates. Researched 5 October 2026.
+area,year,estate,date,kind,source_url
+dry-white,1990,Château Haut-Brion (blanc),1990-09-04,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1990/
+dry-white,1992,Château Haut-Brion (blanc),1992-09-15,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1992/
+dry-white,1993,Château Haut-Brion (blanc),1993-09-07,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1993/
+dry-white,1994,Château Haut-Brion (blanc),1994-08-30,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1994/
+dry-white,1995,Château Haut-Brion (blanc),1995-09-04,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1995/
+dry-white,1996,Château Haut-Brion (blanc),1996-09-06,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1996/
+dry-white,1997,Château Haut-Brion (blanc),1997-08-18,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1997/
+dry-white,1998,Château Haut-Brion (blanc),1998-09-07,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1998/
+dry-white,1998,Château Larrivet Haut-Brion (blanc),1998-09-08,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-1998.pdf
+dry-white,1999,Château Haut-Brion (blanc),1999-08-30,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-1999/
+dry-white,1999,Château Larrivet Haut-Brion (blanc),1999-09-06,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-1999.pdf
+dry-white,2000,Château Haut-Brion (blanc),2000-08-29,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2000/
+dry-white,2000,Château Latour-Martillac (blanc),2000-08-31,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2000/
+dry-white,2000,Château Malartic-Lagravière (blanc),2000-08-30,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2000-1.pdf
+dry-white,2001,Château Haut-Brion (blanc),2001-09-03,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2001/
+dry-white,2001,Château Latour-Martillac (blanc),2001-09-03,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2001/
+dry-white,2001,Château Malartic-Lagravière (blanc),2001-09-04,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2001-1.pdf
+dry-white,2002,Château Haut-Brion (blanc),2002-09-09,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2002/
+dry-white,2002,Château Larrivet Haut-Brion (blanc),2002-09-11,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2002.pdf
+dry-white,2002,Château Latour-Martillac (blanc),2002-09-04,white harvest start,https://www.latourmartillac.com/millesimes/1013/
+dry-white,2002,Château Malartic-Lagravière (blanc),2002-09-05,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2002-1.pdf
+dry-white,2003,Château Haut-Brion (blanc),2003-08-13,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2003/
+dry-white,2003,Château Latour-Martillac (blanc),2003-08-18,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2003/
+dry-white,2003,Château Malartic-Lagravière (blanc),2003-08-19,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2003-1.pdf
+dry-white,2003,Vignobles André Lurton (Couhins-Lurton / La Louvière),2003-08-18,white harvest start,https://www.decanter.com/wine-news/bordeaux-2020-white-wine-harvest-starts-early-443009/
+dry-white,2004,Château Haut-Brion (blanc),2004-09-06,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2004/
+dry-white,2004,Château Larrivet Haut-Brion (blanc),2004-09-13,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2004.pdf
+dry-white,2004,Château Latour-Martillac (blanc),2004-09-06,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2004/
+dry-white,2004,Château Malartic-Lagravière (blanc),2004-09-06,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2004-1.pdf
+dry-white,2005,Château Haut-Brion (blanc),2005-08-24,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2005/
+dry-white,2005,Château Larrivet Haut-Brion (blanc),2005-09-05,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2005.pdf
+dry-white,2005,Château Latour-Martillac (blanc),2005-08-28,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2005/
+dry-white,2005,Château Malartic-Lagravière (blanc),2005-08-25,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2005-1.pdf
+dry-white,2006,Château Haut-Brion (blanc),2006-08-29,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2006/
+dry-white,2006,Château Larrivet Haut-Brion (blanc),2006-09-05,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2006.pdf
+dry-white,2006,Château Latour-Martillac (blanc),2006-08-30,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2006/
+dry-white,2006,Château Malartic-Lagravière (blanc),2006-08-30,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2006-1.pdf
+dry-white,2007,Château Haut-Brion (blanc),2007-08-28,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2007/
+dry-white,2007,Château Larrivet Haut-Brion (blanc),2007-08-31,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2007.pdf
+dry-white,2007,Château Latour-Martillac (blanc),2007-08-27,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2007/
+dry-white,2007,Château Malartic-Lagravière (blanc),2007-09-06,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2007-1.pdf
+dry-white,2007,Domaine de Chevalier (blanc),2007-09-06,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2007-Domaine-de-Chevalier-blanc-fr.pdf
+dry-white,2008,Château Haut-Brion (blanc),2008-09-08,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2008/
+dry-white,2008,Château Larrivet Haut-Brion (blanc),2008-09-10,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2008.pdf
+dry-white,2008,Château Latour-Martillac (blanc),2008-09-08,white harvest start,https://www.latourmartillac.com/millesimes/1019/
+dry-white,2008,Château Malartic-Lagravière (blanc),2008-09-18,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2008-1.pdf
+dry-white,2008,Domaine de Chevalier (blanc),2008-09-19,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2008-Domaine-de-Chevalier-Blanc-fr.pdf
+dry-white,2009,Château Haut-Brion (blanc),2009-08-31,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2009/
+dry-white,2009,Château La Mission Haut-Brion (blanc),2009-08-31,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2009/
+dry-white,2009,Château Larrivet Haut-Brion (blanc),2009-09-02,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2009.pdf
+dry-white,2009,Château Latour-Martillac (blanc),2009-08-31,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2009/
+dry-white,2009,Château Malartic-Lagravière (blanc),2009-09-07,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2009-1.pdf
+dry-white,2009,Château Smith Haut Lafitte (blanc),2009-09-07,first sauvignon,https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2009-Fiche-technique.pdf
+dry-white,2009,Domaine de Chevalier (blanc),2009-09-02,"harvest start (dry whites first, whites+reds range)",https://www.domainedechevalier.com/wp-content/uploads/2023/05/2009-Domaine-de-Chevalier-blanc-fr.pdf
+dry-white,2010,Château Haut-Brion (blanc),2010-09-01,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2010/
+dry-white,2010,Château La Mission Haut-Brion (blanc),2010-09-02,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2010/
+dry-white,2010,Château Larrivet Haut-Brion (blanc),2010-09-03,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2010.pdf
+dry-white,2010,Château Latour-Martillac (blanc),2010-09-02,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2010/
+dry-white,2010,Château Malartic-Lagravière (blanc),2010-09-07,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2010-1.pdf
+dry-white,2010,Château Olivier (blanc),2010-09-08,white harvest start,https://www.bordeaux-tradition.com/wp-content/uploads/2011/05/ChateauOlivier_Blanc_2010fr1.pdf
+dry-white,2010,Château Smith Haut Lafitte (blanc),2010-09-02,first sauvignon,https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2010-Fiche-technique.pdf
+dry-white,2010,Domaine de Chevalier (blanc),2010-09-09,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2010-Domaine-de-Chevalier-Blanc-fr.pdf
+dry-white,2011,Château Haut-Brion (blanc),2011-08-18,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2011/
+dry-white,2011,Château La Mission Haut-Brion (blanc),2011-08-18,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2011/
+dry-white,2011,Château Larrivet Haut-Brion (blanc),2011-08-24,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2011.pdf
+dry-white,2011,Château Latour-Martillac (blanc),2011-08-18,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2011/
+dry-white,2011,Château Malartic-Lagravière (blanc),2011-08-23,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2011-1.pdf
+dry-white,2011,Château Smith Haut Lafitte (blanc),2011-08-18,white harvest start,https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2011-Fiche-technique.pdf
+dry-white,2011,Domaine de Chevalier (blanc),2011-08-23,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2011-Domaine-de-Chevalier-Blanc-fr.pdf
+dry-white,2012,Château Haut-Brion (blanc),2012-09-05,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2012/
+dry-white,2012,Château La Mission Haut-Brion (blanc),2012-09-04,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2012/
+dry-white,2012,Château Larrivet Haut-Brion (blanc),2012-09-10,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2012.pdf
+dry-white,2012,Château Latour-Martillac (blanc),2012-09-03,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2012/
+dry-white,2012,Château Malartic-Lagravière (blanc),2012-09-06,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2012-1.pdf
+dry-white,2012,Château Smith Haut Lafitte (blanc),2012-09-04,first picks young vines (main start after 13 Sep),https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2012-Fiche-technique-neutre.pdf
+dry-white,2012,Château de Fieuzal (blanc),2012-09-06,first sauvignon,https://www.bordeaux-tradition.com/wp-content/uploads/2012/09/news-fieuzal-2012.pdf
+dry-white,2012,Domaine de Chevalier (blanc),2012-09-12,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2012-Domaine-de-Chevalier-Blanc-2021-fr.pdf
+dry-white,2013,Château Haut-Brion (blanc),2013-09-17,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2013/
+dry-white,2013,Château La Mission Haut-Brion (blanc),2013-09-19,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2013/
+dry-white,2013,Château Larrivet Haut-Brion (blanc),2013-09-19,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2013.pdf
+dry-white,2013,Château Latour-Martillac (blanc),2013-09-17,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2013/
+dry-white,2013,Château Malartic-Lagravière (blanc),2013-09-26,white harvest start,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-white-2013-1.pdf
+dry-white,2013,Château Smith Haut Lafitte (blanc),2013-09-18,first sauvignon (young vines),https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2013-Fiche-technique-neutre.pdf
+dry-white,2013,Domaine de Chevalier (blanc),2013-09-23,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2013-Domaine-de-Chevalier-Blanc-fr.pdf
+dry-white,2014,Château Haut-Brion (blanc),2014-09-03,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2014/
+dry-white,2014,Château La Mission Haut-Brion (blanc),2014-09-05,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2014/
+dry-white,2014,Château Larrivet Haut-Brion (blanc),2014-09-09,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2014.pdf
+dry-white,2014,Château Latour-Martillac (blanc),2014-09-08,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2014/
+dry-white,2014,Château Malartic-Lagravière (blanc),2014-09-10,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2014-2.pdf
+dry-white,2014,Château Pape Clément (blanc),2014-09-08,white harvest start,https://www.bordeaux-tradition.com/wp-content/uploads/2014/12/Pape-Clement.pdf
+dry-white,2014,Château Smith Haut Lafitte (blanc),2014-09-04,white harvest start (young vines),https://www.smith-haut-lafitte.com/wp-content/uploads/2024/10/Chateau-Smith-Haut-Lafitte-blanc-2014-Fiche-technique-neutre.pdf
+dry-white,2014,Domaine de Chevalier (blanc),2014-09-10,first sauvignon,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2014-DOMAINE-de-CHEVALIER-_-Blanc-Francais.pdf
+dry-white,2015,Château Carbonnieux (blanc),2015-08-27,first sauvignon,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Carbonnieux-2015-FT-FR-39.pdf
+dry-white,2015,Château Couhins-Lurton (blanc),2015-09-02,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2015/
+dry-white,2015,Château Haut-Brion (blanc),2015-08-28,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2015/
+dry-white,2015,Château La Mission Haut-Brion (blanc),2015-08-28,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2015/
+dry-white,2015,Château Larrivet Haut-Brion (blanc),2015-09-01,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2015.pdf
+dry-white,2015,Château Latour-Martillac (blanc),2015-08-31,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2015-1/
+dry-white,2015,Château Malartic-Lagravière (blanc),2015-09-08,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2015-2.pdf
+dry-white,2015,Château Smith Haut Lafitte (blanc),2015-08-31,first sauvignon (young vines),https://www.smith-haut-lafitte.com/wp-content/uploads/2023/01/Chateau-Smith-Haut-Lafitte-blanc-2015-Fiche-technique.pdf
+dry-white,2015,Domaine de Chevalier (blanc),2015-09-07,first sauvignon,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2015-blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2016,Château Bouscaut (blanc),2016-09-05,first sauvignon,https://france3-regions.blog.franceinfo.fr/cote-chateaux/2016/09/05/vendanges-en-pessac-leognan-des-blancs-prometteurs-mais-sans-doute-une-plus-petite-recolte-en-volume.html
+dry-white,2016,Château Couhins-Lurton (blanc),2016-09-05,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2016/
+dry-white,2016,Château Haut-Brion (blanc),2016-09-01,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2016/
+dry-white,2016,Château La Mission Haut-Brion (blanc),2016-09-05,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2016/
+dry-white,2016,Château Larrivet Haut-Brion (blanc),2016-09-12,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2016.pdf
+dry-white,2016,Château Latour-Martillac (blanc),2016-09-06,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2016/
+dry-white,2016,Château Malartic-Lagravière (blanc),2016-09-19,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2016-2.pdf
+dry-white,2016,Château Olivier (blanc),2016-09-08,white harvest start,https://www.millesima.fr/chateau-olivier-2016-1.html
+dry-white,2016,Domaine de Chevalier (blanc),2016-09-10,first sauvignon,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2016-blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2017,Château Couhins-Lurton (blanc),2017-08-28,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2017/
+dry-white,2017,Château Haut-Brion (blanc),2017-08-22,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2017/
+dry-white,2017,Château La Mission Haut-Brion (blanc),2017-08-22,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2017/
+dry-white,2017,Château Larrivet Haut-Brion (blanc),2017-08-31,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2017.pdf
+dry-white,2017,Château Latour-Martillac (blanc),2017-08-21,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2017/
+dry-white,2017,Château Malartic-Lagravière (blanc),2017-09-05,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2017-2.pdf
+dry-white,2017,Domaine de Chevalier (blanc),2017-08-31,first sauvignon,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2017-Blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2018,Château Couhins-Lurton (blanc),2018-08-27,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2018/
+dry-white,2018,Château Haut-Brion (blanc),2018-08-27,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2018/
+dry-white,2018,Château Larrivet Haut-Brion (blanc),2018-09-03,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2018.pdf
+dry-white,2018,Château Latour-Martillac (blanc),2018-08-28,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2018/
+dry-white,2018,Château Malartic-Lagravière (blanc),2018-09-10,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2018-2.pdf
+dry-white,2018,Château Olivier (blanc),2018-08-28,white harvest start,https://www.millesima.fr/chateau-olivier-2018-1.html
+dry-white,2018,Château Pape Clément (blanc),2018-08-31,white harvest start,https://www.millesima.fr/chateau-pape-clement-2018-1.html
+dry-white,2018,Château de Fieuzal (blanc),2018-09-04,white harvest start,https://newsletter.fieuzal.com/post/178505834479/il-a-tout-dun-grand-donnez-moi-le-meilleur
+dry-white,2018,Domaine de Chevalier (blanc),2018-09-05,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2018-Blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2019,Château Carbonnieux (blanc),2019-08-29,first sauvignon,https://www.bordeaux-tradition.com/wp-content/uploads/2018/01/Fiche-Technique-Carbonnieux-2019-ENG.pdf
+dry-white,2019,Château Couhins-Lurton (blanc),2019-09-03,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2019/
+dry-white,2019,Château Haut-Brion (blanc),2019-08-29,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2019/
+dry-white,2019,Château La Mission Haut-Brion (blanc),2019-08-30,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2019/
+dry-white,2019,Château Larrivet Haut-Brion (blanc),2019-09-04,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2019.pdf
+dry-white,2019,Château Latour-Martillac (blanc),2019-09-03,first sauvignon,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2019/
+dry-white,2019,Château Malartic-Lagravière (blanc),2019-09-04,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2023/01/malartic-lagraviere-blanc-2019-2.pdf
+dry-white,2019,Château Olivier (blanc),2019-08-29,white harvest start,https://www.decanter.com/wine-news/bordeaux-2019-white-wine-harvest-starts-423674/
+dry-white,2019,Château Pape Clément (blanc),2019-08-30,white harvest start,https://www.millesima.fr/chateau-pape-clement-2019-1.html
+dry-white,2019,Château Smith Haut Lafitte (blanc),2019-08-27,first sauvignon,https://www.decanter.com/wine-news/bordeaux-2019-white-wine-harvest-starts-423674/
+dry-white,2019,Château de Fieuzal (blanc),2019-09-04,first sauvignon,https://newsletter.fieuzal.com/post/187484466694/bonjour-%C3%A0-toutes-et-%C3%A0-tous-le-temps-des-vendanges
+dry-white,2019,Domaine de Chevalier (blanc),2019-09-03,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2019-Blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2020,Château Carbonnieux (blanc),2020-08-19,first sauvignon,https://carbonnieux.com/wp-content/uploads/2026/04/Fiche-technique-Carbonnieux-blanc-2020-FRA.pdf
+dry-white,2020,Château Couhins-Lurton (blanc),2020-08-17,white harvest start,https://www.millesima.fr/chateau-couhins-lurton-2020-1.html
+dry-white,2020,Château Haut-Brion (blanc),2020-08-20,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2020/
+dry-white,2020,Château La Mission Haut-Brion (blanc),2020-08-19,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2020/
+dry-white,2020,Château Larrivet Haut-Brion (blanc),2020-08-21,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2020.pdf
+dry-white,2020,Château Latour-Martillac (blanc),2020-08-24,first sauvignon,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2020/
+dry-white,2020,Château Malartic-Lagravière (blanc),2020-08-25,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2024/04/chateau-malartic-lagraviere-blanc-2020.pdf
+dry-white,2020,Château Pape Clément (blanc),2020-08-25,white harvest start,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Pape-Clement-Blanc-2020-FT-EN.pdf
+dry-white,2020,Château Smith Haut Lafitte (blanc),2020-08-20,white harvest start,https://www.millesima.fr/chateau-smith-haut-lafitte-2020-1.html
+dry-white,2020,Château de Fieuzal (blanc),2020-08-19,first sauvignon,https://newsletter.fieuzal.com/post/629872812600983553/tout-va-trop-vite-bonjour-%C3%A0-toutes-et-%C3%A0-tous-ce
+dry-white,2020,Domaine de Chevalier (blanc),2020-08-25,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/05/2020-Blanc-DOMAINE-de-CHEVALIER-Francais.pdf
+dry-white,2020,Vignobles André Lurton (Couhins-Lurton / La Louvière),2020-08-19,white harvest start,https://www.decanter.com/wine-news/bordeaux-2020-white-wine-harvest-starts-early-443009/
+dry-white,2021,Château Carbonnieux (blanc),2021-08-16,white harvest start (CONFLICTS with estate sheet: Sauvignon from 02/09/2021),https://www.millesima.fr/chateau-carbonnieux-2021-1.html
+dry-white,2021,Château Couhins-Lurton (blanc),2021-09-09,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2021/
+dry-white,2021,Château Haut-Brion (blanc),2021-09-03,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2021/
+dry-white,2021,Château La Mission Haut-Brion (blanc),2021-09-03,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2021/
+dry-white,2021,Château Larrivet Haut-Brion (blanc),2021-09-09,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2021.pdf
+dry-white,2021,Château Latour-Martillac (blanc),2021-09-09,first sauvignon,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2021/
+dry-white,2021,Château Malartic-Lagravière (blanc),2021-09-15,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2024/08/malartic-lagraviere-blanc-2021.pdf
+dry-white,2021,Château Olivier (blanc),2021-09-08,white harvest start,https://www.millesima.fr/chateau-olivier-2021-1.html
+dry-white,2021,Château Smith Haut Lafitte (blanc),2021-09-02,white harvest start,https://www.millesima.fr/chateau-smith-haut-lafitte-2021-1.html
+dry-white,2021,Château de Fieuzal (blanc),2021-09-01,first sauvignon,https://www.millesima.fr/chateau-de-fieuzal-2021-1.html
+dry-white,2021,Domaine de Chevalier (blanc),2021-09-13,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2023/07/Fiche-Domaine-de-Chevalier-Blanc-Primeur-2021-Francais.pdf
+dry-white,2022,Château Carbonnieux (blanc),2022-08-16,first sauvignon,https://carbonnieux.com/wp-content/uploads/2026/04/Fiche-technique-Carbonnieux-blanc-2022-FRA.pdf
+dry-white,2022,Château Couhins-Lurton (blanc),2022-08-25,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2022/
+dry-white,2022,Château Haut-Brion (blanc),2022-08-17,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2022/
+dry-white,2022,Château La Mission Haut-Brion (blanc),2022-08-16,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2022/
+dry-white,2022,Château Larrivet Haut-Brion (blanc),2022-08-22,white harvest start,https://www.larrivethautbrion.fr/wp-content/uploads/2026/06/fiche-technique-chateau-larrivet-haut-brion-blanc-2022.pdf
+dry-white,2022,Château Latour-Martillac (blanc),2022-08-18,first sauvignon,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2022/
+dry-white,2022,Château Malartic-Lagravière (blanc),2022-08-24,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2024/08/malartic-lagraviere-blanc-2022.pdf
+dry-white,2022,Château Pape Clément (blanc),2022-08-28,white harvest start,https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Fiche-Technique-Chateau-Pape-Clement-Blanc-2022-AN.pdf
+dry-white,2022,Domaine de Chevalier (blanc),2022-08-22,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2026/06/2022-domaine-de-chevalier-blanc-francais.pdf
+dry-white,2023,Château Carbonnieux (blanc),2023-08-24,first sauvignon,https://carbonnieux.com/wp-content/uploads/2026/04/Fiche-technique-Carbonnieux-blanc-2023-FRA.pdf
+dry-white,2023,Château Couhins-Lurton (blanc),2023-08-25,white harvest start (100% sauvignon),https://www.andrelurton.com/en/vin/chateau-couhins-lurton-white-2023/
+dry-white,2023,Château Haut-Brion (blanc),2023-08-21,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2023/
+dry-white,2023,Château La Mission Haut-Brion (blanc),2023-08-24,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2023/
+dry-white,2023,Château Latour-Martillac (blanc),2023-08-28,first sauvignon,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2023/
+dry-white,2023,Château Malartic-Lagravière (blanc),2023-08-28,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2026/01/malartic-lagraviere-blanc-2023.pdf
+dry-white,2023,Domaine de Chevalier (blanc),2023-08-28,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2026/06/2023-domaine-de-chevalier-blanc-livrable-francais-c.pdf
+dry-white,2024,Château Carbonnieux (blanc),2024-09-02,first sauvignon,https://carbonnieux.com/wp-content/uploads/2026/04/Fiche-technique-Carbonnieux-blanc-2024-FRA.pdf
+dry-white,2024,Château Haut-Brion (blanc),2024-09-02,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2024/
+dry-white,2024,Château La Mission Haut-Brion (blanc),2024-09-03,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2024/
+dry-white,2024,Château Latour-Martillac (blanc),2024-09-04,white harvest start,https://www.latourmartillac.com/millesimes/chateau-latour-martillac-blanc-2024/
+dry-white,2024,Château Malartic-Lagravière (blanc),2024-09-09,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2026/03/malartic-lagraviere-blanc-2024.pdf
+dry-white,2024,Domaine de Chevalier (blanc),2024-09-04,white harvest start,https://www.domainedechevalier.com/wp-content/uploads/2026/06/fiche-2024-domaine-de-chevalier-blanc-primeur-francais-2.pdf
+dry-white,2025,Château Carbonnieux (blanc),2025-08-19,white harvest start,https://carbonnieux.com/wp-content/uploads/2026/04/Fiche-technique-primeurs-2025-FRA.pdf
+dry-white,2025,Château Haut-Brion (blanc),2025-08-14,white harvest start (estate harvest dates),https://www.haut-brion.com/en/the-wines/chateau-haut-brion-blanc/chateau-haut-brion-blanc-2025/
+dry-white,2025,Château La Mission Haut-Brion (blanc),2025-08-14,white harvest start (estate harvest dates),https://www.mission-haut-brion.com/en/the-wines/chateau-la-mission-haut-brion-blanc/chateau-la-mission-haut-brion-blanc-2025/
+dry-white,2025,Château Malartic-Lagravière (blanc),2025-08-26,first sauvignon,https://www.malartic-lagraviere.com/wp-content/uploads/2026/03/malartic-lagraviere-blanc-2025.pdf
+dry-white,2025,Domaine de Chevalier (blanc),2025-08-25,white harvest start (sauvignon first),https://www.domainedechevalier.com/wp-content/uploads/2026/06/domaine-de-chevalier-blanc-2025-primeur-francais.pdf
+sauternes,1985,Château de Fargues (Fargues),1985-10-24,first trie (botrytis slow),https://www.chateaudefargues.com/en/millesime/the-1985-vintage/
+sauternes,1986,Château d'Yquem,1986-10-06,first trie (type not stated),https://www.millesima.fr/chateau-d-yquem-1986.html
+sauternes,1988,Château La Tour Blanche (Bommes),1988-09-28,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1988.pdf
+sauternes,1988,Château d'Yquem,1988-09-29,first trie (type not stated),https://www.millesima.fr/chateau-d-yquem-1988.html
+sauternes,1989,Château La Tour Blanche (Bommes),1989-09-18,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1989.pdf
+sauternes,1989,Château de Fargues (Fargues),1989-09-27,first trie botrytised,https://www.chateaudefargues.com/en/millesime/the-1989-vintage/
+sauternes,1990,Château La Tour Blanche (Bommes),1990-09-11,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1990.pdf
+sauternes,1990,Château de Fargues (Fargues),1990-09-18,first trie botrytised,https://www.chateaudefargues.com/en/millesime/vintage-1990/
+sauternes,1991,Château La Tour Blanche (Bommes),1991-09-24,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1991.pdf
+sauternes,1994,Château La Tour Blanche (Bommes),1994-09-20,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1994.pdf
+sauternes,1994,Château de Fargues (Fargues),1994-10-06,first trie botrytised,https://www.chateaudefargues.com/en/millesime/the-1994-vintage/
+sauternes,1995,Château La Tour Blanche (Bommes),1995-09-09,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1995.pdf
+sauternes,1995,Château de Fargues (Fargues),1995-09-27,first trie (type not stated),https://www.chateaudefargues.com/en/millesime/vintage-1995/
+sauternes,1996,Château Climens (Barsac),1996-09-24,first trie botrytised (2 tries),https://www.millesima.fr/chateau-climens-1996.html
+sauternes,1996,Château La Tour Blanche (Bommes),1996-09-23,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1996.pdf
+sauternes,1996,Château d'Yquem,1996-09-16,first trie (type not stated),https://www.millesima.fr/chateau-d-yquem-1996.html
+sauternes,1996,Château de Fargues (Fargues),1996-09-30,first trie (after botrytis onset),https://www.chateaudefargues.com/en/millesime/vintage-1996/
+sauternes,1997,Château La Tour Blanche (Bommes),1997-09-11,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1997.pdf
+sauternes,1997,Château de Fargues (Fargues),1997-09-15,first trie (type not stated),https://www.chateaudefargues.com/en/millesime/vintage-1997/
+sauternes,1998,Château d'Yquem,1998-09-22,first trie (type not stated),https://www.millesima.fr/chateau-d-yquem-1998.html
+sauternes,1998,Château de Fargues (Fargues),1998-09-22,first trie (botrytis spread mid-Sept),https://www.chateaudefargues.com/en/millesime/the-1998-vintage/
+sauternes,1999,Château Guiraud (Sauternes),1999-09-07,harvest start (Xavier Planty quote),https://www.millesima.fr/chateau-guiraud-1999.html
+sauternes,1999,Château La Tour Blanche (Bommes),1999-09-16,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB1999.pdf
+sauternes,1999,Château de Fargues (Fargues),1999-09-24,first trie botrytised,https://www.chateaudefargues.com/en/millesime/the-1999-vintage/
+sauternes,2000,Château d'Yquem,2000-09-12,harvest start (page also says 18 Sep),https://www.millesima.fr/chateau-d-yquem-2000.html
+sauternes,2000,Château de Fargues (Fargues),2000-09-26,first trie botrytised (mainly Sauvignon),https://www.chateaudefargues.com/en/millesime/the-2000-vintage/
+sauternes,2001,Château La Tour Blanche (Bommes),2001-09-20,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2001.pdf
+sauternes,2001,Château Sigalas Rabaud (Bommes),2001-10-12,first trie (type not stated; botrytis arrived 20-21 Oct),https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2001/
+sauternes,2001,Château de Fargues (Fargues),2001-09-29,first trie (moderately concentrated),https://www.chateaudefargues.com/en/millesime/the-2001-vintage/
+sauternes,2002,Château Guiraud (Sauternes),2002-09-11,first trie (type not stated),https://www.lanigan-edwards.com/sauternes/c_guiraud02.pdf
+sauternes,2002,Château La Tour Blanche (Bommes),2002-09-12,first trie passerillé,https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2002.pdf
+sauternes,2002,Château Suduiraut (Preignac),2002-09-17,first trie (type not stated),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2002
+sauternes,2002,Château de Fargues (Fargues),2002-09-16,first trie (type not stated),https://www.chateaudefargues.com/en/millesime/vintage-2002/
+sauternes,2003,Château La Tour Blanche (Bommes),2003-09-15,first trie botrytised,https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2003.pdf
+sauternes,2003,Château Rieussec (Fargues),2003-09-17,harvest start (type not stated),https://www.millesima.fr/chateau-rieussec-2003.html
+sauternes,2003,Château Sigalas Rabaud (Bommes),2003-09-06,single trie botrytised,https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2003/
+sauternes,2003,Château Suduiraut (Preignac),2003-09-17,first trie botrytised/overripe,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2003
+sauternes,2003,Château d'Yquem,2003-09-17,single trie (Neal Martin quote),https://www.millesima.fr/chateau-d-yquem-2003.html
+sauternes,2003,Château de Fargues (Fargues),2003-09-14,single pass (Jane Anson quote; estate says 19 Sep),https://www.millesima.fr/chateau-de-fargues-2003.html
+sauternes,2004,Château La Tour Blanche (Bommes),2004-10-04,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2004.pdf
+sauternes,2004,Château Suduiraut (Preignac),2004-09-29,first trie (type not stated),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2004
+sauternes,2004,Château de Fargues (Fargues),2004-09-28,first trie (type not stated),https://www.chateaudefargues.com/en/millesime/vintage-2004/
+sauternes,2005,Château Climens (Barsac),2005-09-26,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2005.pdf
+sauternes,2005,Château La Tour Blanche (Bommes),2005-09-19,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2005.pdf
+sauternes,2005,Château Nairac (Barsac),2005-09-30,first trie (type not stated),https://www.millesima.fr/chateau-nairac-2005.html
+sauternes,2005,Château Sigalas Rabaud (Bommes),2005-09-18,first trie (type not stated),https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2005/
+sauternes,2005,Château Suduiraut (Preignac),2005-09-26,first trie passerillé,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2005
+sauternes,2005,Château d'Yquem,2005-09-19,harvest start (type not stated),https://www.millesima.fr/chateau-d-yquem-2005.html
+sauternes,2005,Château de Fargues (Fargues),2005-09-27,first trie (type not stated),https://www.chateaudefargues.com/en/millesime/vintage-2005/
+sauternes,2006,Château Climens (Barsac),2006-09-13,harvest start (type not stated),https://www.millesima.fr/chateau-climens-2006.html
+sauternes,2006,Château La Tour Blanche (Bommes),2006-09-12,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2006.pdf
+sauternes,2006,Château Suduiraut (Preignac),2006-09-11,first trie passerillé (shrivelled),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2006
+sauternes,2006,Château de Fargues (Fargues),2006-09-08,first trie (concentrated grapes; sour-rot bunches discarded),https://www.chateaudefargues.com/en/millesime/vintage-2006/
+sauternes,2007,Château Climens (Barsac),2007-09-12,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2007.pdf
+sauternes,2007,Château La Tour Blanche (Bommes),2007-09-12,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2007.pdf
+sauternes,2007,Château Nairac (Barsac),2007-09-17,harvest start (type not stated),https://www.millesima.fr/chateau-nairac-2007.html
+sauternes,2007,Château Rieussec (Fargues),2007-09-13,harvest start (type not stated),https://www.millesima.fr/chateau-rieussec-2007.html
+sauternes,2007,Château de Fargues (Fargues),2007-09-11,first trie (before main botrytis),https://www.chateaudefargues.com/en/millesime/2007-vintage/
+sauternes,2008,Château Climens (Barsac),2008-09-30,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2008.pdf
+sauternes,2008,Château Coutet (Barsac),2008-09-29,first trie (type not stated),https://www.lanigan-edwards.com/sauternes/c_coutet08.pdf
+sauternes,2008,Château La Tour Blanche (Bommes),2008-09-25,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2008.pdf
+sauternes,2008,Château Rieussec (Fargues),2008-09-29,first trie (type not stated),https://www.millesima.fr/chateau-rieussec-2008.html
+sauternes,2008,Château Suduiraut (Preignac),2008-09-26,first trie (type not stated),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2008
+sauternes,2008,Château de Fargues (Fargues),2008-09-25,first trie (type not stated),https://www.millesima.fr/chateau-de-fargues-2008.html
+sauternes,2009,Château Climens (Barsac),2009-09-28,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2009.pdf
+sauternes,2009,Château La Tour Blanche (Bommes),2009-09-15,first trie botrytised,https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2009.pdf
+sauternes,2009,Château Rieussec (Fargues),2009-09-17,harvest start (type not stated),https://www.lanigan-edwards.com/sauternes/c_rieussec09.pdf
+sauternes,2009,Château Sigalas Rabaud (Bommes),2009-09-10,first trie (type not stated),https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2009/
+sauternes,2009,Château Suduiraut (Preignac),2009-09-17,harvest start (before botrytis set in),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2009
+sauternes,2009,Château de Fargues (Fargues),2009-09-28,first trie botrytised,https://www.chateaudefargues.com/en/millesime/2009-vintage/
+sauternes,2010,Château Climens (Barsac),2010-09-28,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2010.pdf
+sauternes,2010,Château Coutet (Barsac),2010-09-13,first trie (type not stated),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2010_Chateau_Coutet_CCEN210708.pdf
+sauternes,2010,Château La Tour Blanche (Bommes),2010-09-30,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2010.pdf
+sauternes,2010,Château Rieussec (Fargues),2010-09-15,first trie (type not stated),https://www.lanigan-edwards.com/sauternes/c_rieussec10.pdf
+sauternes,2010,Château Suduiraut (Preignac),2010-09-22,first trie (type not stated),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2010
+sauternes,2010,Château de Fargues (Fargues),2010-09-27,first trie (concentrated),https://www.chateaudefargues.com/en/millesime/2010-vintage/
+sauternes,2010,Château de Rayne Vigneau (Bommes),2010-09-29,first trie (Sauvignon; Sémillon from 1 Oct),https://www.bordeaux-tradition.com/wp-content/uploads/2011/05/Rayne-Vigneau-2010-technicalsheet2.pdf
+sauternes,2011,Château Climens (Barsac),2011-09-08,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2011.pdf
+sauternes,2011,Château La Tour Blanche (Bommes),2011-09-15,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2011.pdf
+sauternes,2011,Château Sigalas Rabaud (Bommes),2011-09-13,first trie (type not stated),https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2011/
+sauternes,2011,Château Suduiraut (Preignac),2011-09-12,first trie (botrytis early),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2011
+sauternes,2011,Château d'Yquem,2011-09-06,first trie (Neal Martin quote; Y dry white from 17 Aug),https://www.millesima.fr/chateau-d-yquem-2011.html
+sauternes,2012,Château Climens (Barsac),2012-10-15,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2012.pdf
+sauternes,2012,Château La Tour Blanche (Bommes),2012-10-13,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2012.pdf
+sauternes,2012,Château Sigalas Rabaud (Bommes),2012-10-01,first trie (type not stated),https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2012/
+sauternes,2013,Château Coutet (Barsac),2013-09-26,first trie botrytised/concentrated (22% potential),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2013_Chateau_Coutet_CCEN210708.pdf
+sauternes,2013,Château La Tour Blanche (Bommes),2013-10-03,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2013.pdf
+sauternes,2013,Château Rieussec (Fargues),2013-09-26,first trie (type not stated),https://www.millesima.fr/chateau-rieussec-2013.html
+sauternes,2013,Château Sigalas Rabaud (Bommes),2013-09-25,first trie botrytised,https://www.chateau-sigalas-rabaud.com/nos-vins/chateau-sigalas-rabaud-2013/
+sauternes,2013,Château de Fargues (Fargues),2013-09-26,first trie (noble rot onset),https://www.chateaudefargues.com/en/millesime/2013-vintage/
+sauternes,2014,Château Climens (Barsac),2014-09-22,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2014.pdf
+sauternes,2014,Château Coutet (Barsac),2014-09-24,first trie (26% potential),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2014_Chateau_Coutet_CCEN210708.pdf
+sauternes,2014,Château Guiraud (Sauternes),2014-09-17,first trie (type not stated),https://www.millesima.fr/chateau-guiraud-2014.html
+sauternes,2014,Château La Tour Blanche (Bommes),2014-09-23,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2014.pdf
+sauternes,2014,Château Suduiraut (Preignac),2014-09-12,first trie passerillé,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2014
+sauternes,2014,Château d'Yquem,2014-09-05,"first trie (early wave, ¼ of crop)",https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Yquem-2014-GB.pdf
+sauternes,2014,Château de Rayne Vigneau (Bommes),2014-09-16,first trie (type not stated),https://www.millesima.fr/chateau-de-rayne-vigneau-2014.html
+sauternes,2014,Clos Haut-Peyraguey (Bommes),2014-09-16,first trie passerillé,https://www.bordeaux-tradition.com/wp-content/uploads/2014/12/CLOS-HAUT-PEYRAGUEY.pdf
+sauternes,2015,Château Climens (Barsac),2015-09-08,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2015.pdf
+sauternes,2015,Château Coutet (Barsac),2015-09-15,first trie (type not stated),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2015_Chateau_Coutet_CCEN210708.pdf
+sauternes,2015,Château Guiraud (Sauternes),2015-09-07,harvest start (type not stated),https://www.millesima.fr/chateau-guiraud-2015.html
+sauternes,2015,Château La Tour Blanche (Bommes),2015-09-14,first trie (botrytis slow),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2015.pdf
+sauternes,2015,Château Suduiraut (Preignac),2015-09-04,first trie (passerillé + botrytis),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2015
+sauternes,2015,Château d'Yquem,2015-09-03,first trie (type not stated),https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Yquem-2015-FT-GB.pdf
+sauternes,2016,Château Climens (Barsac),2016-09-28,harvest start = first trie (type not stated),https://chateau-climens.com/wp-content/uploads/2024/02/Fiche-Technique-Climens-2016.pdf
+sauternes,2016,Château Coutet (Barsac),2016-09-30,first trie (type not stated),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2016_Château_Coutet_CCEN210708.pdf
+sauternes,2016,Château La Tour Blanche (Bommes),2016-09-26,first trie botrytised (after rain),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2016.pdf
+sauternes,2016,Château Lafaurie-Peyraguey (Bommes),2016-09-29,first trie (type not stated),https://www.millesima.fr/chateau-lafaurie-peyraguey-2016.html
+sauternes,2016,Château Suduiraut (Preignac),2016-09-22,first trie botrytised,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2016
+sauternes,2016,Château d'Yquem,2016-09-27,first trie grand vin (Y dry from 4 Sep),https://www.millesima.fr/chateau-d-yquem-2016.html
+sauternes,2016,Château de Fargues (Fargues),2016-10-04,first trie botrytised,https://www.chateaudefargues.com/en/millesime/2016-vintage/
+sauternes,2016,Clos Haut-Peyraguey (Bommes),2016-09-29,first trie (type not stated),https://www.millesima.fr/clos-haut-peyraguey-2016.html
+sauternes,2017,Château Coutet (Barsac),2017-09-21,first trie (~22% potential),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2017_Chateau_Coutet_CCEN210708.pdf
+sauternes,2017,Château Doisy-Védrines (Barsac),2017-09-21,harvest start (type not stated),https://www.millesima.fr/chateau-doisy-vedrines-2017.html
+sauternes,2017,Château Guiraud (Sauternes),2017-09-05,harvest start (type not stated),https://www.millesima.fr/chateau-guiraud-2017.html
+sauternes,2017,Château La Tour Blanche (Bommes),2017-09-22,first trie (type not stated),https://www.tour-blanche.com/wp-content/uploads/2021/03/LTB2017.pdf
+sauternes,2017,Château Suduiraut (Preignac),2017-09-26,first trie (botrytis present),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2017
+sauternes,2017,Château de Fargues (Fargues),2017-09-26,first trie botrytised + elimination of acid rot,https://www.chateaudefargues.com/en/millesime/2017-vintage/
+sauternes,2018,Château Coutet (Barsac),2018-10-05,first trie (few botrytised grapes),https://www.chateaucoutet.com/wp-content/uploads/2021/07/2018_Chateau_Coutet_CCEN210708.pdf
+sauternes,2018,Château Doisy-Védrines (Barsac),2018-10-02,first trie (late botrytis),https://www.millesima.fr/chateau-doisy-vedrines-2018.html
+sauternes,2018,Château Lafaurie-Peyraguey (Bommes),2018-09-25,first trie botrytised,https://www.millesima.fr/chateau-lafaurie-peyraguey-2018.html
+sauternes,2018,Château Rieussec (Fargues),2018-10-10,first trie (botrytis late Oct),https://www.lanigan-edwards.com/sauternes/c_rieussec18.pdf
+sauternes,2018,Château Suduiraut (Preignac),2018-10-10,first trie botrytised,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2018
+sauternes,2018,Château d'Yquem,2018-10-17,first trie botrytised,https://www.millesima.fr/chateau-d-yquem-2018.html
+sauternes,2018,Château de Fargues (Fargues),2018-09-27,first picking (little progress; type not stated),https://www.chateaudefargues.com/en/millesime/vintage-2018/
+sauternes,2019,Château Doisy-Védrines (Barsac),2019-09-24,first trie (type not stated),https://www.millesima.fr/chateau-doisy-vedrines-2019.html
+sauternes,2019,Château Guiraud (Sauternes),2019-09-08,first trie botrytised (importer sheet says 9 Sep),https://www.millesima.fr/chateau-guiraud-2019.html
+sauternes,2019,Château La Tour Blanche (Bommes),2019-09-18,first trie (type not stated),https://www.millesima.fr/chateau-la-tour-blanche-2019.html
+sauternes,2019,Château Rieussec (Fargues),2019-10-08,first trie (type not stated),https://www.millesima.fr/chateau-rieussec-2019.html
+sauternes,2019,Château d'Yquem,2019-10-07,first picking (few Sauvignon plots; page also says 10 Oct),https://www.millesima.fr/chateau-d-yquem-2019.html
+sauternes,2020,Château Coutet (Barsac),2020-09-16,first trie botrytised,https://www.chateaucoutet.com/wp-content/uploads/2021/07/2020_Chateau_Coutet_CCEN210708-1.pdf
+sauternes,2020,Château Guiraud (Sauternes),2020-09-08,first trie botrytised,https://www.lanigan-edwards.com/sauternes/c_guiraud20.pdf
+sauternes,2020,Château d'Yquem,2020-09-14,first trie (page also quotes 30 Sep start),https://www.millesima.fr/chateau-d-yquem-2020.html
+sauternes,2021,Château Coutet (Barsac),2021-09-30,harvest start (type not stated),https://www.chateaucoutet.com/wp-content/uploads/2026/03/2021_Chateau_Coutet_CCEN220330.pdf
+sauternes,2021,Château La Tour Blanche (Bommes),2021-09-29,first trie (type not stated),https://www.millesima.fr/chateau-la-tour-blanche-2021.html
+sauternes,2021,Château Lafaurie-Peyraguey (Bommes),2021-10-02,first trie (type not stated),https://www.millesima.fr/chateau-lafaurie-peyraguey-2021.html
+sauternes,2021,Château Suduiraut (Preignac),2021-10-01,first trie (type not stated),https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2021
+sauternes,2021,Château d'Yquem,2021-09-12,first trie (type not stated),https://www.millesima.fr/chateau-d-yquem-2021.html
+sauternes,2022,Château Climens (Barsac),2022-10-06,first trie (grapes still little botrytised),https://www.bordeaux-tradition.com/wp-content/uploads/2018/02/Fiche_technique_Chateau_CLIMENS_BAR_BL_2022_Francais.pdf
+sauternes,2022,Château Doisy-Védrines (Barsac),2022-10-02,first trie (type not stated),https://www.millesima.fr/chateau-doisy-vedrines-2022.html
+sauternes,2022,Château Guiraud (Sauternes),2022-09-15,first trie passerillé,https://www.chateauguiraud.com/media/original/64c7c305b18b4/ft-chateau-guiraud-1er-cru-2022-fr.pdf
+sauternes,2022,Château La Tour Blanche (Bommes),2022-10-24,harvest (Jane Anson quote; may omit early pass),https://www.millesima.fr/chateau-la-tour-blanche-2022.html
+sauternes,2022,Château Lafaurie-Peyraguey (Bommes),2022-10-17,harvest (may omit early pass),https://www.millesima.fr/chateau-lafaurie-peyraguey-2022.html
+sauternes,2022,Château Suduiraut (Preignac),2022-09-20,first trie passerillé,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2022
+sauternes,2023,Château Climens (Barsac),2023-09-26,first day of harvest (botrytis spreading),https://chateau-climens.com/chateau-climens-2023-millesime-barsac/
+sauternes,2023,Château Coutet (Barsac),2023-09-20,first trie passerillé + some botrytis,https://www.chateaucoutet.com/wp-content/uploads/2026/03/2023_Chateau_Coutet_CCEN240411-1.pdf
+sauternes,2023,Château Guiraud (Sauternes),2023-09-27,first trie (type not stated),https://www.millesima.fr/chateau-guiraud-2023.html
+sauternes,2023,Château Suduiraut (Preignac),2023-09-18,first trie mainly passerillé,https://www.suduiraut.com/en/vin/1/chateau-suduiraut/2023
+sauternes,2024,Château Coutet (Barsac),2024-09-19,"first trie (22% potential, in final blend)",https://www.chateaucoutet.com/wp-content/uploads/2025/04/2024_Chateau_Coutet_CCFR250328.pdf
+sauternes,2024,Château Guiraud (Sauternes),2024-09-19,first trie (in final blend),https://www.millesima.fr/chateau-guiraud-2024.html
+sauternes,2024,Château La Tour Blanche (Bommes),2024-09-20,first trie botrytised,https://www.millesima.fr/chateau-la-tour-blanche-2024.html
+sauternes,2024,Château Suduiraut (Preignac),2024-09-19,first trie (type not stated),https://www.millesima.fr/chateau-suduiraut-2024.html
+sauternes,2024,Château de Rayne Vigneau (Bommes),2024-10-12,first trie botrytised,https://www.millesima.fr/chateau-de-rayne-vigneau-2024.html
+sauternes,2024,Clos Haut-Peyraguey (Bommes),2024-09-19,first trie (type not stated),https://www.millesima.fr/clos-haut-peyraguey-2024.html
+sauternes,2025,Château Coutet (Barsac),2025-09-17,first trie passerillé + botrytised,https://www.chateaucoutet.com/wp-content/uploads/2026/04/2025_Chateau_Coutet_CCEN2603.pdf
+sauternes,2025,Château Doisy-Védrines (Barsac),2025-09-17,first trie (type not stated),https://www.millesima.fr/chateau-doisy-vedrines-2025.html
+sauternes,2025,Château Guiraud (Sauternes),2025-09-15,first trie botrytised,https://www.millesima.fr/chateau-guiraud-2025.html
+sauternes,2025,Château La Tour Blanche (Bommes),2025-09-18,first trie (type not stated),https://www.millesima.fr/chateau-la-tour-blanche-2025.html
+sauternes,2025,Château Lafaurie-Peyraguey (Bommes),2025-09-16,first trie (type not stated),https://www.millesima.fr/chateau-lafaurie-peyraguey-2025.html
+sauternes,2025,Château Suduiraut (Preignac),2025-09-03,first trie passerillé,https://www.millesima.fr/chateau-suduiraut-2025.html
+sauternes,2025,Château de Rayne Vigneau (Bommes),2025-09-16,first trie (type not stated),https://www.millesima.fr/chateau-de-rayne-vigneau-2025.html
+sauternes,2025,Clos Haut-Peyraguey (Bommes),2025-09-19,first trie (type not stated),https://www.millesima.fr/clos-haut-peyraguey-2025.html
