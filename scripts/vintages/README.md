@@ -42,6 +42,12 @@ VINTAGE_REGION=bordeaux python scripts/vintages/pipeline/build.py
 - **Noble rot:** Bordeaux also reads SAFRAN humidity (region.py `humidity`), and `build.py` counts noble-rot, grey-rot and Botrytis-favourable days over the Sauternes picking season (`noble_rot`). The thresholds were set before testing.
 - **Quality outlook:** `critic_consensus.csv` holds the critics' consensus for four groups: the reds by bank, dry whites and Sauternes. `consensus.py` reads them from the most specific rating each critic gives, falling back to its whole-Bordeaux row for that colour. Dry whites are put on Decanter's star scale through iDealwine, since Decanter rates too few of them. `quality.py` fits each blend on its group and scores each place with its own weather and planted mix.
 
+**Champagne** (`data/champagne/`) covers the Comité Champagne's four sub-regions: Montagne de Reims, Vallée de la Marne, Côte des Blancs and Côte des Bar.
+- **Vineyard outlines:** `maps/` holds the vine parcels (IGN Registre parcellaire graphique) of each sub-region's grand cru, premier cru and main villages; the appellation has no parcel delimitation.
+- **Grapes:** Pinot Noir, Meunier and Chardonnay, and a `blend` by each sub-region's planted mix (`blends.csv`, Union des Maisons de Champagne). All are read as the base for a white sparkling wine (`sparkling` in the page's region config).
+- **Measured must and harvest starts:** `champagne_must.py` reads the Union des Maisons de Champagne's yearly sheet (mean potential alcohol per grape at harvest from 1959; harvest start from 1951, per grape from 1989) and writes `measured_sugar.csv`, `umc_harvest.csv` and `harvest_dates.csv`. Only Champagne-wide means are published, so every sub-region is matched to the same must.
+- **Quality outlook:** critics rate Champagne as a whole; `critic_consensus.csv` holds that one rating, and each sub-region's blend is scored with its own weather.
+
 ## Running it
 
 ```sh

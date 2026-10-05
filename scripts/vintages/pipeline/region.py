@@ -186,7 +186,14 @@ REGIONS['champagne'] = {
                   'min_sugar': {'pinot-noir': 143, 'meunier': 143, 'chardonnay': 143},
                   'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity']},
     },
-    'sources': [],
+    'sources': [
+        {'label': 'Places', 'detail': 'The Comité Champagne’s four sub-regions, each read over the vine parcels (IGN Registre parcellaire graphique) of its grand cru, premier cru and main villages. The cahier des charges names the crus; where no official list puts a village in a sub-region it is placed by geography.'},
+        {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay); Meunier, with no published value, takes Pinot Noir’s. Each grape’s curve is then matched to the Union des Maisons de Champagne’s mean must at harvest for that grape, every year from 1959 (potential alcohol × 16.83 g/L), dated to the middle of the picking fortnight. Only Champagne-wide means are published, so every sub-region is matched to the same value and differs by its own weather.'},
+        {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir), 2379 (Meunier, from one site, so less certain) and 2547 (Chardonnay).'},
+        {'label': 'Harvest', 'detail': 'The Union des Maisons de Champagne’s harvest start: for Champagne as a whole from 1951, and per grape from 1989, when each sub-region takes its leading grape’s (Pinot Noir in the Montagne de Reims and the Côte des Bar, Meunier in the Vallée de la Marne, Chardonnay in the Côte des Blancs).'},
+        {'label': 'Planted mix', 'detail': 'Pinot Noir, Meunier and Chardonnay by each sub-region’s planted share (Union des Maisons de Champagne, about 2022).'},
+        {'label': 'Critics', 'detail': 'Critics rate Champagne as a whole, so every sub-region’s outlook is fitted on that one rating; its own weather and mix make the difference between them. The minimum ripeness is 143 g/L (9 % vol), set in 2010.'},
+    ],
 }
 
 REGIONS['bordeaux']['blends'] = planted_mix(REGIONS['bordeaux']['data'] / 'blends.csv', REGIONS['bordeaux']['grapes'])

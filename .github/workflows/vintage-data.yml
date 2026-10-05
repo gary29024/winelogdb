@@ -1,6 +1,6 @@
 name: Vintage data
 
-# Rebuilds public/data/vintages (Burgundy, then Bordeaux) from Météo-France open data (COMÉPHORE 1 km
+# Rebuilds public/data/vintages (Burgundy, Bordeaux, then Champagne) from Météo-France open data (COMÉPHORE 1 km
 # rain, SAFRAN 8 km temperature) and commits the result. Monthly through the
 # season so a new vintage fills in as its months are published; past years are
 # cached and never downloaded twice.
@@ -51,11 +51,19 @@ jobs:
           python scripts/vintages/pipeline/bordeaux_raisins.py
           python scripts/vintages/pipeline/build.py
           python scripts/vintages/pipeline/quality.py
+      - name: Champagne - fetch, measured must and harvest starts, build, quality outlook
+        env:
+          VINTAGE_REGION: champagne
+        run: |
+          python scripts/vintages/pipeline/fetch.py
+          python scripts/vintages/pipeline/champagne_must.py
+          python scripts/vintages/pipeline/build.py
+          python scripts/vintages/pipeline/quality.py
       - name: Commit if anything changed
         run: |
-          git add public/data/vintages scripts/vintages/data/outlook_record.csv scripts/vintages/data/bivb_sugar.csv scripts/vintages/data/bordeaux/measured_sugar.csv scripts/vintages/data/bordeaux/outlook_record.csv
+          git add public/data/vintages scripts/vintages/data/outlook_record.csv scripts/vintages/data/bivb_sugar.csv scripts/vintages/data/bordeaux/measured_sugar.csv scripts/vintages/data/bordeaux/outlook_record.csv scripts/vintages/data/champagne/measured_sugar.csv scripts/vintages/data/champagne/umc_harvest.csv scripts/vintages/data/champagne/harvest_dates.csv scripts/vintages/data/champagne/outlook_record.csv
           if git diff --cached --quiet; then echo "No change."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Refresh vintage data from Météo-France, the BIVB and Bordeaux Raisins"
+          git commit -m "Refresh vintage data from Météo-France, the BIVB, Bordeaux Raisins and the UMC"
           git push
