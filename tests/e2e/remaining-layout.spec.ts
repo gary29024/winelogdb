@@ -73,7 +73,7 @@ test('owner section links, drafts and maintenance',async({page},info)=>{
  await page.getByRole('button',{name:'Access & budgets',exact:true}).click();
  await page.getByLabel('Member limit',{exact:true}).fill('42');
  await page.getByRole('button',{name:'Members & usage',exact:true}).click();
- await expect(page.getByRole('button',{name:'Create member invitation'})).toBeVisible();
+ await expect(page.getByText(/Sign-up is open/)).toBeVisible();
  await page.getByRole('button',{name:'Access & budgets',exact:true}).click();
  await expect(page.getByLabel('Member limit',{exact:true})).toHaveValue('42');
  await page.getByRole('button',{name:'Maintenance',exact:true}).click();
@@ -113,9 +113,9 @@ test('owner controls recover from an initial load failure',async({page})=>{
  await mock(page);let fail=true;
  await page.route('**/api/admin/overview',async route=>{if(fail)await route.fulfill({status:503,json:{error:'Owner data unavailable'}});else await route.fallback()});
  await page.goto('/admin');await expect(page.getByRole('alert')).toContainText('Owner data unavailable');
- await expect(page.getByRole('button',{name:'Create member invitation'})).not.toBeVisible();
+ await expect(page.getByText(/Sign-up is open/)).not.toBeVisible();
  fail=false;await page.getByRole('button',{name:'Retry owner controls'}).click();
- await expect(page.getByRole('button',{name:'Create member invitation'})).toBeVisible();
+ await expect(page.getByText(/Sign-up is open/)).toBeVisible();
 });
 
 test('owner budgets and review-count navigation stay contained',async({page})=>{

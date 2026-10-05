@@ -47,7 +47,7 @@ export function AdminPage(){
  const [section,selectSection]=usePageSection(sections,'members',{hash:'#member-usage',section:'members'});
  const [data,setData]=useState<Overview|null>(null),[config,setConfig]=useState<Record<string,unknown>>(defaults),[savedConfig,setSavedConfig]=useState<Record<string,unknown>>(defaults),[policies,setPolicies]=useState<ActionPolicy[]>([]),[savedPolicies,setSavedPolicies]=useState<ActionPolicy[]>([]),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[rolloutStatus,setRolloutStatus]=useState<RolloutStatus|null>(null);
  const [loadError,setLoadError]=useState('');
- const [email,setEmail]=useState(''),[inviteUrl,setInviteUrl]=useState(''),[grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState(''),[expanded,setExpanded]=useState('');
+ const [grantMemberId,setGrantMemberId]=useState(''),[grantAction,setGrantAction]=useState(''),[grantRuns,setGrantRuns]=useState(1),[grantReason,setGrantReason]=useState(''),[expanded,setExpanded]=useState('');
  const rolloutRunning=rolloutStatus?.storage.state==='running'||rolloutStatus?.research.state==='running'||rolloutStatus?.lwin.state==='running'||rolloutStatus?.lwinValidation.state==='running'||rolloutStatus?.lwinAi.state==='running';
  async function load(initial=false){
   setLoadError('');
@@ -143,13 +143,8 @@ export function AdminPage(){
     </td></tr>
    ]})}</tbody>
   </table></div>
-  {!members.length&&<p className="settings-hint">No invited members yet.</p>}
-  <form className="settings-row settings-card-foot" onSubmit={e=>{e.preventDefault();void run(async()=>{const result=await apiJson<{url:string}>('/api/admin/invitations','POST',{email});setInviteUrl(result.url);return 'Invitation created.'})}}>
-   <label htmlFor="invite-email" className="visually-hidden">Invite email</label>
-   <input id="invite-email" className="settings-grow" type="email" placeholder="name@example.com" value={email} required onChange={e=>{setEmail(e.target.value);setInviteUrl('')}}/>
-   <button type="submit" className="settings-primary" disabled={busy||!email.trim()}>Create member invitation</button>
-  </form>
-  {inviteUrl&&<div className="settings-invite"><span className="settings-label">Invitation link</span><input aria-label="Invitation link" readOnly value={inviteUrl} onFocus={e=>e.currentTarget.select()}/><div className="settings-row"><button type="button" onClick={()=>void navigator.clipboard.writeText(inviteUrl).then(()=>setMessage('Invitation link copied.')).catch(()=>setMessage('Could not copy automatically. Press and hold the link to copy it.'))}>Copy link</button><a className="button" href={inviteUrl} target="_blank" rel="noreferrer">Open link</a></div></div>}
+  {!members.length&&<p className="settings-hint">No members yet.</p>}
+  <p className="settings-hint settings-card-foot">{memberLimit>0&&members.length>=memberLimit?<><strong>WineLog is full.</strong> New people who sign in see a “full” message. Raise the member limit in Access & budgets to let more in.</>:<>Sign-up is open: anyone who signs in with Google joins as a member{memberLimit>0?`, up to your limit of ${memberLimit}`:''}.</>}</p>
   <p className="settings-hint">Cached or friend-reused results do not use a run, and failed work gives the run back. Allowance weeks reset Monday 00:00 UTC and do not roll over.</p>
  </section>}
  {!!members.length&&!!allowancePolicies.length&&<form className="settings-card" onSubmit={e=>{e.preventDefault();void run(async()=>{await apiJson('/api/admin/action-grants','POST',{userId:grantMemberId,action:grantAction,runs:grantRuns,reason:grantReason,idempotencyKey:crypto.randomUUID()});setGrantRuns(1);setGrantReason('');return 'Additional free allocation granted for this week.'})}}>
