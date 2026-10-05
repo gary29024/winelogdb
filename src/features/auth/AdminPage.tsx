@@ -13,7 +13,7 @@ type MemberUsage={userId:string;requests:number;searchQueries:number;promptToken
 type ActionPolicy={action:string;label:string;accessMode:'included'|'allowance';weeklyLimit:number};
 type ActionAllowance={action:string;label:string;accessMode:'included'|'allowance';baseLimit:number;granted:number;limit:number;used:number;pending:number;remaining:number|null;weekStart:string;resetsAt:string};
 type MemberActionAccess={userId:string;actions:ActionAllowance[]};
-type Overview={members:Member[];actions:string[];settings:Record<string,unknown>|null;prices:Array<{id:string;action:string;credits:number}>;aiCost:{month:string;usd:number;searches:number};memberUsage:{month:string;items:MemberUsage[]};actionPolicies:ActionPolicy[];actionAccess:MemberActionAccess[];storage:Array<{owner_id:string;byte_size:number;metered_byte_size:number}>;reviewOperations:Array<{id:string;user_id:string;path:string;created_at:string}>};
+type Overview={members:Member[];actions:string[];settings:Record<string,unknown>|null;prices:Array<{id:string;action:string;credits:number}>;aiCost:{month:string;usd:number;searches:number;freeRemaining?:number};memberUsage:{month:string;items:MemberUsage[]};actionPolicies:ActionPolicy[];actionAccess:MemberActionAccess[];storage:Array<{owner_id:string;byte_size:number;metered_byte_size:number}>;reviewOperations:Array<{id:string;user_id:string;path:string;created_at:string}>};
 type RolloutState='not_started'|'paused'|'running'|'complete';
 type RolloutStatus={lwinCurrent?:{total:number;automatic:number;manual:number;identityConflicts:number;fieldUpdates:number;needsReview:number;withoutLwin:number;optedOut:number};storage:{state:RolloutState;objects:number;error:string|null};research:{state:RolloutState;wines:{processed:number;total:number};producers:{processed:number;total:number};error:string|null};lwin:{state:RolloutState;processed:number;total:number;matched:number;ambiguous:number;unmatched:number;conflict:number;error:string|null};lwinValidation:{state:RolloutState;processed:number;total:number;verified:number;review:number;error:string|null;reviewListUnavailable?:boolean;reviewItems:Array<{id:string;producer:string;wineName:string;lwin7:string;candidates:string[]}>};lwinAi:{state:RolloutState;processed:number;total:number;matched:number;deterministic:number;ai:number;review:number;error:string|null}};
 type RolloutAction='storage'|'research'|'lwin'|'lwin-validate'|'lwin-ai';
@@ -76,7 +76,8 @@ export function AdminPage(){
  const members=data?.members.filter(item=>item.role==='member')??[],allowancePolicies=policies.filter(item=>item.accessMode==='allowance');
  const budgetWindow=utcBudgetWindow(),observedMonth=String(config.cloudflareObservedMonth??'');
  const researchProcessed=(rolloutStatus?.research.wines.processed??0)+(rolloutStatus?.research.producers.processed??0),researchTotal=(rolloutStatus?.research.wines.total??0)+(rolloutStatus?.research.producers.total??0);
- const storageUsed=[...storageByUser.values()].reduce((sum,value)=>sum+value,0),totalStorage=Number(savedConfig.totalStorageBytes)||0,memberLimit=Number(savedConfig.memberLimit)||0,needsReview=rolloutStatus?.lwinCurrent?.needsReview??0;
+ // storage_totals keeps a '*' row with the deployment total beside each owner's row; summing every row counted it twice.
+ const storageUsed=storageByUser.get('*')??[...storageByUser].filter(([owner])=>owner!=='*').reduce((sum,[,value])=>sum+value,0),totalStorage=Number(savedConfig.totalStorageBytes)||0,memberLimit=Number(savedConfig.memberLimit)||0,needsReview=rolloutStatus?.lwinCurrent?.needsReview??0;
  const configDirty=JSON.stringify(config)!==JSON.stringify(savedConfig),policiesDirty=JSON.stringify(policies)!==JSON.stringify(savedPolicies);
  function changePolicy(action:string,patch:Partial<ActionPolicy>){setPolicies(current=>current.map(item=>item.action===action?{...item,...patch}:item))}
  function goToField(target:string,field:string){selectSection(target);window.setTimeout(()=>document.getElementById(field)?.focus(),60)}
@@ -86,12 +87,14 @@ export function AdminPage(){
   return 'Access & budgets saved.';
  })}
  // One background job: name and state, a line of figures, a bar while it has a total, its last error, and one action.
+ const [aboutOpen,setAboutOpen]=useState('');
  function job({name,state,meta,processed,total,error,action,actionLabel,disabled,kind,about}:{name:string;state:RolloutState;meta:ReactNode;processed?:number;total?:number;error:string|null|undefined;action:()=>Promise<string>;actionLabel:string;disabled?:boolean;kind:RolloutAction;about:string}){
   const visible=state==='paused'?'Resume':state==='complete'?(kind==='storage'?'Done':'Refresh'):'Start';
   return <div className="settings-job" key={kind}>
-   <div className="settings-job-name"><strong>{name}</strong><span className={`settings-chip${stateTone(state)}`}>{stateLabel(state)}</span><details className="settings-job-about"><summary aria-label={`About ${name.toLowerCase()}`} title="About this job">ⓘ</summary><p className="settings-hint">{about}</p></details></div>
-   <div className="settings-job-actions">{state==='running'?<button type="button" disabled={busy} onClick={()=>void run(()=>pauseRollout(kind))} aria-label={`Pause ${name.toLowerCase()}`}>Pause</button>:<button type="button" disabled={busy||disabled} aria-label={actionLabel} onClick={()=>void run(action)}>{visible}</button>}</div>
+   <div className="settings-job-name"><strong>{name}</strong><span className={`settings-chip${stateTone(state)}`}>{stateLabel(state)}</span><button type="button" className="settings-job-about" aria-expanded={aboutOpen===kind} aria-controls={`about-${kind}`} aria-label={`About ${name.toLowerCase()}`} title="About this job" onClick={()=>setAboutOpen(aboutOpen===kind?'':kind)}>ⓘ</button></div>
    <span className="settings-job-meta">{meta}</span>
+   {aboutOpen===kind&&<p className="settings-hint settings-job-explain" id={`about-${kind}`}>{about}</p>}
+   <div className="settings-job-actions">{state==='running'?<button type="button" disabled={busy} onClick={()=>void run(()=>pauseRollout(kind))} aria-label={`Pause ${name.toLowerCase()}`}>Pause</button>:<button type="button" disabled={busy||disabled} aria-label={actionLabel} onClick={()=>void run(action)}>{visible}</button>}</div>
    {!!total&&(state==='running'||state==='paused')&&<progress max={total} value={Math.min(processed??0,total)} aria-label={`${name} progress`}/>}
    {error&&<p role="alert" className="settings-job-error">Last error: {error}</p>}
   </div>;
@@ -104,28 +107,28 @@ export function AdminPage(){
  {message&&<p role="status">{message}</p>}
  {loadError&&<p role="alert">{loadError} <button type="button" onClick={()=>void load(true).catch(e=>setLoadError(e.message))}>Retry owner controls</button></p>}
  {!data&&!loadError&&<p role="status">Loading owner controls…</p>}
- {!!data?.reviewOperations.length&&<div className="settings-banner" role="alert"><p><strong>{data.reviewOperations.length} operations need reconciliation.</strong></p><button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></div>}
+ {!!data?.reviewOperations.length&&<div className="settings-banner" role="alert"><p><strong>{data.reviewOperations.length} {data.reviewOperations.length===1?'operation needs':'operations need'} reconciliation.</strong></p><button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></div>}
  {data&&observedMonth!==budgetWindow.current&&<div className="settings-banner" role="alert"><p><strong>Member AI is paused for {budgetWindow.current}.</strong> Set the measured month to {budgetWindow.current} and enter this month’s Cloudflare cost (usually 0 at the start of a month). Your own AI still works.</p><button type="button" onClick={()=>goToField('access','budget-cloudflareObservedMonth')}>Go to budgets</button></div>}
  {data&&observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<div className="settings-banner is-quiet" role="status"><p><strong>Monthly budget check on {budgetWindow.next}-01.</strong> Member AI pauses then until you set the measured month to {budgetWindow.next} and save that month’s Cloudflare cost.</p></div>}
  {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<div className="settings-banner" role="alert"><p><strong>Cloudflare spending has reached your warning amount.</strong> Review current usage before more AI work.</p></div>}
  {data&&<dl className="settings-kpis">
   <div><dt>Members</dt><dd>{members.length}{memberLimit>0&&<small> of {memberLimit}</small>}</dd></div>
-  <div><dt>AI cost · {data.aiCost.month??data.memberUsage.month}</dt><dd>US${data.aiCost.usd.toFixed(2)} <small>{data.aiCost.searches} searches</small></dd></div>
-  <div><dt>Storage</dt><dd>{formatBytes(storageUsed)}{totalStorage>0&&<small> of {formatBytes(totalStorage)}</small>}</dd></div>
+  <div title="What the provider bill comes to this month. Searches inside Google's monthly free allowance cost nothing here."><dt>AI bill · {data.aiCost.month??data.memberUsage.month}</dt><dd>US${data.aiCost.usd.toFixed(2)} <small>{data.aiCost.freeRemaining?`${data.aiCost.searches} searches, all free`:`${data.aiCost.searches} searches`}</small></dd></div>
+  <div className={totalStorage>0&&storageUsed>totalStorage?'is-attention':''}><dt>Storage{totalStorage>0&&storageUsed>totalStorage?' · over limit':''}</dt><dd>{formatBytes(storageUsed)}{totalStorage>0&&<small> of {formatBytes(totalStorage)}</small>}</dd></div>
   <div className={needsReview?'is-attention':''}><dt>Needs review</dt><dd>{needsReview} <small>LWIN</small></dd></div>
  </dl>}
  <div hidden={!data} className="settings-sections">
  <section hidden={section!=='members'} aria-label="Members and usage">
  {data&&<section id="member-usage" className="settings-card" aria-labelledby="member-usage-title">
-  <div className="settings-card-head"><h2 id="member-usage-title">Members · {data.memberUsage.month}</h2><small>Estimates can lag provider billing</small></div>
+  <div className="settings-card-head"><h2 id="member-usage-title">Members · {data.memberUsage.month}</h2><small>Cost prices every search at list price</small></div>
   <div className="settings-table-scroll"><table className="settings-table is-members">
-   <thead><tr><th scope="col">Member</th><th scope="col">Status</th><th scope="col" className="is-number">AI requests</th><th scope="col" className="is-number">Est. cost</th><th scope="col" className="is-number">Storage</th><th scope="col"><span className="visually-hidden">Actions</span></th></tr></thead>
+   <thead><tr><th scope="col">Member</th><th scope="col">Status</th><th scope="col" className="is-number">AI requests</th><th scope="col" className="is-number" title="Every search priced at list price, ignoring the monthly free allowance, so members compare fairly. It can be higher than the AI bill above.">List-price cost</th><th scope="col" className="is-number">Storage</th><th scope="col"><span className="visually-hidden">Actions</span></th></tr></thead>
    <tbody>{data.members.map(member=>{const usage=usageByUser.get(member.id),storage=storageByUser.get(member.id)??0,access=accessByUser.get(member.id),isMember=member.role==='member',open=expanded===member.id;return [
     <tr key={member.id}>
      <td><div className="settings-table-person"><span className="settings-avatar" aria-hidden="true">{initial(member.display_name)}</span><div><strong>{member.display_name}</strong><span>{[member.handle?`@${member.handle}`:'',member.email].filter(Boolean).join(' · ')}</span></div></div></td>
      <td><span className={`settings-chip${member.role==='owner'?' is-accent':member.status==='active'?' is-good':' is-warn'}`}>{member.role==='owner'?'Owner':member.status==='active'?'Active':'Suspended'}</span></td>
      <td className="is-number" data-label="AI requests">{usage?.requests??0}</td>
-     <td className="is-number" data-label="Est. cost">US${(usage?.estimatedMarginalUsd??0).toFixed(3)}</td>
+     <td className="is-number" data-label="List-price cost">US${(usage?.estimatedMarginalUsd??0).toFixed(3)}</td>
      <td className="is-number" data-label="Storage">{formatBytes(storage)}</td>
      <td><details className="settings-menu"><summary aria-label={`More options for ${member.display_name}`}>⋯</summary><div>
       <button type="button" onClick={e=>{setExpanded(open?'':member.id);e.currentTarget.closest('details')?.removeAttribute('open')}}>{open?'Hide details':'Show details'}</button>

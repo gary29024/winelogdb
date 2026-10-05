@@ -98,9 +98,10 @@
 .settings-meter.is-low>span{background:var(--warn)}
 
 /* A strip of figures. */
-.settings-page .settings-content dl.settings-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin:0;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
-.settings-page .settings-content .settings-stats>div{display:grid;gap:1px;padding:9px 12px;border:0;border-left:1px solid var(--line);border-radius:0;min-width:0}
-.settings-page .settings-content .settings-stats>div:first-child{border-left:0}
+/* Dividers are the 1px gaps showing the line colour behind the cells, so a strip
+   that wraps onto a second row on a phone keeps clean lines with no stray edge. */
+.settings-page .settings-content dl.settings-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;margin:0;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--line);overflow:hidden}
+.settings-page .settings-content .settings-stats>div{display:grid;gap:1px;padding:9px 12px;border:0;border-radius:0;background:var(--paper);min-width:0}
 .settings-stats dt{color:var(--ink-6);font-size:.72rem}
 .settings-stats dd{margin:0;font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums}
 .settings-stats dd small{color:var(--ink-6);font-size:.72rem;font-weight:500}
@@ -156,7 +157,7 @@
 .settings-table-person span{color:var(--ink-6);font-size:.72rem;overflow-wrap:anywhere}
 .settings-table-details>td{background:var(--ground)}
 .settings-table-details>td{padding:10px 12px}
-.settings-table-details .settings-stats{background:var(--paper);margin-bottom:8px}
+.settings-table-details .settings-stats{margin-bottom:8px}
 .settings-page .settings-content .settings-breakdown{display:grid;gap:4px;margin:8px 0 0;padding:0;list-style:none;font-size:.8rem}
 .settings-breakdown li{display:flex;justify-content:space-between;gap:12px}
 .settings-breakdown li span:last-child{text-align:right;color:var(--ink-4);font-variant-numeric:tabular-nums}
@@ -190,21 +191,23 @@
 .settings-card-head+.settings-job{border-top:0;padding-top:0}
 .settings-job-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
 .settings-job-name strong{font-size:.88rem}
-.settings-job-actions{grid-column:2;grid-row:1/3;display:flex;gap:6px}
-.settings-job-meta{grid-column:1;color:var(--ink-6);font-size:.76rem;overflow-wrap:anywhere}
+.settings-job-meta,.settings-job-explain{grid-column:1;color:var(--ink-6);font-size:.76rem;overflow-wrap:anywhere}
+.settings-page .settings-content .settings-job-explain{margin:0}
+/* On a wide screen the action sits at the right of the first two lines; on a
+   phone it falls in DOM order, after the figures it acts on. */
+.settings-job-actions{grid-column:2;grid-row:1/span 2;display:flex;gap:6px}
 .settings-job progress{grid-column:1/-1;width:100%;height:6px;accent-color:var(--good)}
 .settings-page .settings-content .settings-job-error{grid-column:1/-1;margin:0;font-size:.76rem}
-.settings-page .settings-content details.settings-job-about{margin:0}
-.settings-page .settings-content details.settings-job-about[open]{flex-basis:100%}
-.settings-page .settings-content details.settings-job-about>summary{display:inline-flex;min-height:24px;padding:0 4px;font-size:.82rem;font-weight:500;color:var(--ink-6)}
-.settings-page .settings-content details.settings-job-about>summary::after{content:none}
-.settings-page .settings-content details.settings-job-about p{margin:2px 0 4px}
+.settings-page .settings-content button.settings-job-about{display:inline-grid;place-items:center;width:24px;min-height:24px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink-6);font-size:.86rem;font-weight:500}
+.settings-page .settings-content button.settings-job-about:hover:not(:disabled){border:0;background:var(--sunken)}
+.settings-page .settings-content button.settings-job-about[aria-expanded=true]{border:0;background:var(--sunken);color:var(--ink)}
 
 @media(max-width:700px){
  .settings-page .settings-content dl.settings-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
  .settings-job{grid-template-columns:minmax(0,1fr)}
- .settings-job-actions{grid-column:1;grid-row:auto}
- .settings-page .settings-content .settings-banner button,.settings-page .settings-content details.settings-job-about>summary{min-height:44px}
+ .settings-job-actions{grid-column:1;grid-row:auto;margin-top:4px}
+ .settings-page .settings-content .settings-banner button{min-height:44px}
+ .settings-page .settings-content button.settings-job-about{width:44px;min-height:44px;margin:-10px -10px -10px -6px}
  .settings-page .settings-content .settings-grant select,.settings-page .settings-content .settings-card label.settings-num input{min-height:44px}
 }
 
