@@ -1,0 +1,150 @@
+[
+ {
+  "id": "montagne-de-reims",
+  "area": "montagne-de-reims",
+  "samples": [
+   [
+    3.95289,
+    49.22454
+   ]
+  ],
+  "vineyardElevation": 111.0,
+  "cells": [
+   {
+    "x": 7160,
+    "y": 24730,
+    "weight": 0.6673,
+    "elevation": 107.6
+   },
+   {
+    "x": 7160,
+    "y": 24650,
+    "weight": 0.14,
+    "elevation": 182.8
+   },
+   {
+    "x": 7240,
+    "y": 24730,
+    "weight": 0.1209,
+    "elevation": 94.2
+   },
+   {
+    "x": 7240,
+    "y": 24650,
+    "weight": 0.0718,
+    "elevation": 171.3
+   }
+  ]
+ },
+ {
+  "id": "vallee-de-la-marne",
+  "area": "vallee-de-la-marne",
+  "samples": [
+   [
+    4.07229,
+    49.06201
+   ]
+  ],
+  "vineyardElevation": 176.4,
+  "cells": [
+   {
+    "x": 7240,
+    "y": 24490,
+    "weight": 0.3227,
+    "elevation": 94.5
+   },
+   {
+    "x": 7240,
+    "y": 24570,
+    "weight": 0.3113,
+    "elevation": 214.1
+   },
+   {
+    "x": 7320,
+    "y": 24490,
+    "weight": 0.1849,
+    "elevation": 82.0
+   },
+   {
+    "x": 7320,
+    "y": 24570,
+    "weight": 0.1812,
+    "elevation": 167.9
+   }
+  ]
+ },
+ {
+  "id": "cote-des-blancs",
+  "area": "cote-des-blancs",
+  "samples": [
+   [
+    4.0545,
+    48.92247
+   ]
+  ],
+  "vineyardElevation": 99.7,
+  "cells": [
+   {
+    "x": 7240,
+    "y": 24410,
+    "weight": 0.4237,
+    "elevation": 143.0
+   },
+   {
+    "x": 7240,
+    "y": 24330,
+    "weight": 0.308,
+    "elevation": 133.4
+   },
+   {
+    "x": 7320,
+    "y": 24410,
+    "weight": 0.1422,
+    "elevation": 94.2
+   },
+   {
+    "x": 7320,
+    "y": 24330,
+    "weight": 0.1262,
+    "elevation": 115.9
+   }
+  ]
+ },
+ {
+  "id": "cote-des-bar",
+  "area": "cote-des-bar",
+  "samples": [
+   [
+    4.5719,
+    48.0779
+   ]
+  ],
+  "vineyardElevation": 274.2,
+  "cells": [
+   {
+    "x": 7640,
+    "y": 23450,
+    "weight": 0.7087,
+    "elevation": 267.4
+   },
+   {
+    "x": 7720,
+    "y": 23450,
+    "weight": 0.1559,
+    "elevation": 315.6
+   },
+   {
+    "x": 7640,
+    "y": 23370,
+    "weight": 0.0763,
+    "elevation": 263.2
+   },
+   {
+    "x": 7640,
+    "y": 23530,
+    "weight": 0.059,
+    "elevation": 272.8
+   }
+  ]
+ }
+]

@@ -244,10 +244,10 @@ export function ripeningSpread(years:Record<string,VillageSeason>,harvest:AreaHa
 const quarter=(value:number,[q25,q50,q75]:Quartiles)=>value>=q75&&value>q50?1:value<=q25&&value<q50?-1:0;
 const effectOf=(side:number,higherIsBetter:boolean):Effect=>side===0?'neutral':(side>0)===higherIsBetter?'helps':'hurts';
 
-export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number,pickSugar:number|null=null,minSugar=0,spread:RipeningSpread|null=null):ConditionsReading{
+export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:RipeningWeather,hang:number,normalHang:number,pickSugar:number|null=null,minSugar=0,spread:RipeningSpread|null=null,red=isRed(grape)):ConditionsReading{
   // Grapes picked below the appellation's legal minimum sugar were not ripe, whatever the weather did for freshness.
   const short=pickSugar!=null&&pickSugar<minSugar;
-  if(spread)return spreadConditions(grape,year,hang,short,pickSugar,minSugar,spread);
+  if(spread)return spreadConditions(red,year,hang,short,pickSugar,minSugar,spread);
   const hangDiff=hang-normalHang;
   const hangEffect:Effect=hangDiff>=4?'helps':hangDiff<=-4?'hurts':'neutral';
   const nightsDiff=year.coolNights-normal.coolNights;
@@ -269,7 +269,7 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
     effect:wetHigh||rainPct>=.3?'hurts':wetLow&&rainPct<=-.3?'helps':'neutral'};
 
   let conditions:Condition[];let title:string;
-  if(!isRed(grape)){
+  if(!red){
     title='Freshness & acidity';
     const acidity:Effect=tempDiff<=-.6?'helps':tempDiff>=.6?'hurts':'neutral';
     conditions=[
@@ -296,9 +296,8 @@ export function ripeningConditions(grape:GrapeId,year:RipeningWeather,normal:Rip
   return {title,verdict:score>=2?'Favourable':score<=-2?'Challenging':'Mixed',conditions};
 }
 
-function spreadConditions(grape:GrapeId,year:RipeningWeather,hang:number,short:boolean,pickSugar:number|null,minSugar:number,s:RipeningSpread):ConditionsReading{
+function spreadConditions(red:boolean,year:RipeningWeather,hang:number,short:boolean,pickSugar:number|null,minSugar:number,s:RipeningSpread):ConditionsReading{
   const x:DriverInputs={meanTemp:year.meanTemp,coolNights:year.coolNights,radiation:year.radiation,hang,pickSugar:pickSugar??s.pickSugar.median};
-  const red=isRed(grape);
   const sunPct=pct(year.radiation,s.radiation.median);
   // 1. Warmth and sun while ripening. In Burgundy's cool climate it ripens Pinot's colour
   //    and tannin; for Chardonnay it burns off acidity (BIVB samples: r = -0.73).
@@ -341,7 +340,9 @@ export type GrapeReading={
   conditions:ConditionsReading|null;
 };
 
-export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number,minSugar=0,spread:RipeningSpread|null=null):GrapeReading{
+export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:VillageNormal['grapes'][GrapeId],harvest:HarvestReading|null,ripeSugar:number,minSugar=0,spread:RipeningSpread|null=null,
+  // Whether the grape is read for colour and tannin: a black grape made into a white wine (Champagne) is not.
+  red=isRed(grape)):GrapeReading{
   const veraison=isoDay(season.veraison);
   const ripe=dayReaching(season.sugar,year,ripeSugar);
   const normalRipe=normal?dayReaching(normal.sugar,year,ripeSugar):null;
@@ -351,7 +352,7 @@ export function readGrape(grape:GrapeId,year:number,season:GrapeSeason,normal:Vi
   if(harvest&&normal){
     const normalHarvest={...harvest,start:harvest.typicalStart,end:addDays(harvest.typicalStart,PICKING_DAYS)};
     conditions=ripeningConditions(grape,season.ripening,normal.ripening,hangTime(veraison,harvest),hangTime(seasonDay(year,normal.veraison),normalHarvest),
-      picking?(picking.low+picking.high)/2:null,minSugar,spread);
+      picking?(picking.low+picking.high)/2:null,minSugar,spread,red);
   }
   return {
     grape,ripe,normalRipe,veraison,picking,normalPicking,
@@ -523,7 +524,12 @@ const EXPECT={
   white:{short:'Expect lean, sharp whites.',    warmWet:'Expect ripe whites, but rain late in the season made careful sorting essential.',hotHeat:'Expect rich, broad whites with low acidity; in places heat makes them heavy.',
     warm:'Expect rich, ripe whites with softer acidity; the best kept their freshness.',coolWet:'Expect lean, fresh whites — careful sorting made the difference.',
     cool:'Expect taut whites with bright acidity.',wet:'Expect uneven whites — the growers who sorted hardest made the best wines.',
-    riper:'Expect ripe, generous whites.',lessRipe:'Expect crisp, lighter whites.',usual:'Expect classic, balanced whites.'}
+    riper:'Expect ripe, generous whites.',lessRipe:'Expect crisp, lighter whites.',usual:'Expect classic, balanced whites.'},
+  // Champagne: the still base wines a house blends and ferments again in the bottle.
+  sparkling:{short:'Expect very lean, sharp base wines; most will go into non-vintage blends.',    warmWet:'Expect ripe base wines, but rain late in the season made careful sorting essential.',hotHeat:'Expect rich, broad base wines with low acidity; few houses will want them for a vintage.',
+    warm:'Expect ripe, generous base wines with softer acidity — a likely vintage year.',coolWet:'Expect lean, fresh base wines — careful sorting made the difference.',
+    cool:'Expect taut, high-acid base wines that need long ageing.',wet:'Expect uneven base wines — the growers who sorted hardest made the best.',
+    riper:'Expect ripe, well-balanced base wines.',lessRipe:'Expect crisp, lighter base wines.',usual:'Expect classic, balanced base wines.'}
 } satisfies Record<string,Record<string,string>>;
 
 /** Sauternes: how the noble-rot season compared with usual, and what it means in the glass. */
@@ -545,7 +551,7 @@ export function readNobleRot(season:SeasonWeather,normal:SeasonWeather):NobleRot
 
 /** Which set of wine-style words a grape's wines take. */
 const STYLE:Record<GrapeId,keyof typeof EXPECT>={'pinot-noir':'pinot',chardonnay:'white',merlot:'claret','cabernet-sauvignon':'claret','cabernet-franc':'claret',blend:'claret',
-  'sauvignon-blanc':'white',semillon:'white','blend-white':'white','blend-sweet':'white'};
+  'sauvignon-blanc':'white',semillon:'white','blend-white':'white','blend-sweet':'white',meunier:'pinot'};
 
 /**
  * The season story's closing line for one grape. The same weather pushes the two grapes
@@ -553,11 +559,11 @@ const STYLE:Record<GrapeId,keyof typeof EXPECT>={'pinot-noir':'pinot',chardonnay
  * line reads the grape's own ripening drivers, and the season's warmth and timing where
  * the drivers sit at usual. Without the four drivers it keeps the season's shared line.
  */
-export function grapeExpect(grape:GrapeId,conditions:ConditionsReading|null,levels:SeasonLevels,shiftDays:number,fallback:string){
+export function grapeExpect(grape:GrapeId,conditions:ConditionsReading|null,levels:SeasonLevels,shiftDays:number,fallback:string,style:keyof typeof EXPECT=STYLE[grape]){
   const value=(id:string)=>conditions?.conditions.find(item=>item.id===id)?.value;
   const warmth=value('warmth');
   if(!conditions||warmth==null)return fallback;
-  const words=EXPECT[STYLE[grape]];
+  const words=EXPECT[style];
   const warm=warmth==='Warmer'||(warmth==='Usual'&&(levels.warmth>=1||shiftDays<=-4));
   // A late start reads as cool only when the season was not also dry: drought can hold ripening back.
   const cool=warmth==='Cooler'||(warmth==='Usual'&&(levels.warmth<=-1||(shiftDays>=4&&levels.rain>=0)));

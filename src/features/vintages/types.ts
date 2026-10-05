@@ -8,7 +8,7 @@
  * same file shape serves any region: Burgundy is the first, not a special case.
  */
 
-export type GrapeId='pinot-noir'|'chardonnay'|'merlot'|'cabernet-sauvignon'|'cabernet-franc'|'sauvignon-blanc'|'semillon'|'blend'|'blend-white'|'blend-sweet';
+export type GrapeId='pinot-noir'|'chardonnay'|'merlot'|'cabernet-sauvignon'|'cabernet-franc'|'sauvignon-blanc'|'semillon'|'meunier'|'blend'|'blend-white'|'blend-sweet';
 
 /** Where a sampled place sits; one weather series is read per village. */
 export type VintageVillage={id:string;name:string;area:string;lat:number;lon:number};
@@ -44,6 +44,8 @@ export type VintageRegionConfig={
   dataDir:string;
   defaultVillage:string;
   defaultGrape:GrapeId;
+  /** Its wines are sparkling (Champagne): every grape, black or white, is read for freshness, not colour. */
+  sparkling?:boolean;
 };
 
 /** One season's weather at one village, Apr–Oct unless named otherwise. */

@@ -149,7 +149,55 @@ def planted_mix(path: Path, grapes: dict) -> dict[str, dict[str, dict[str, float
     return out
 
 
+REGIONS['champagne'] = {
+    'data': ROOT / 'scripts/vintages/data/champagne',
+    'out': ROOT / 'public/data/vintages/champagne',
+    'cache': ROOT / 'scripts/vintages/cache/champagne',
+    # The Comité Champagne's four sub-regions, one weather series each, read over the vines of
+    # their grand and premier cru and main villages (data/champagne/villages.json).
+    'areas': ['montagne-de-reims', 'vallee-de-la-marne', 'cote-des-blancs', 'cote-des-bar'],
+    # Meunier: GFV véraison from Parker et al. 2013 (one site, 11 observations, so low precision).
+    # No sugar-ripeness value is published for it; it takes Pinot Noir's, of which it is a mutation,
+    # and its curve is then matched to Meunier's own measured must every year.
+    'grapes': {
+        'pinot-noir': {'sugar200': 2840.0, 'veraison': 2511.0, 'colour': 'red'},
+        'meunier': {'sugar200': 2840.0, 'veraison': 2379.0, 'colour': 'red'},
+        'chardonnay': {'sugar200': 2890.0, 'veraison': 2547.0, 'colour': 'white'},
+    },
+    # Each area's harvest is read from its leading grape.
+    'harvest_grape': {'montagne-de-reims': 'pinot-noir', 'vallee-de-la-marne': 'meunier',
+                      'cote-des-blancs': 'chardonnay', 'cote-des-bar': 'pinot-noir'},
+    'anchor_area': 'montagne-de-reims',
+    'calibration': None,
+    # Growers pick riper than they did (about 9.5 % vol potential before 1990, 10.3 now).
+    'harvest_sugar_window': 10,
+    # Measured must: the Union des Maisons de Champagne's yearly mean potential alcohol at harvest
+    # per grape, 1959-2025, for Champagne as a whole (champagne_must.py turns it into
+    # measured_sugar.csv). One mean a year stands for a full sample.
+    'measured_sugar': 'measured_sugar.csv',
+    'measured_min_plots': 1,
+    'blends': {},
+    'consensus_groups': {'champagne': {'champagne': 0}},
+    'consensus_colours': {'champagne': 'champagne'},
+    # Critics rate Champagne as a whole: each sub-region's blend is fitted on that one rating.
+    # Minimum sugar: 143 g/L for every grape (décret of 2010; 9 % vol minimum natural strength).
+    'quality': {
+        'blend': {'groups': {'champagne': ['montagne-de-reims', 'vallee-de-la-marne', 'cote-des-blancs', 'cote-des-bar']},
+                  'min_sugar': {'pinot-noir': 143, 'meunier': 143, 'chardonnay': 143},
+                  'inputs': ['ripeness', 'warmth', 'heat', 'wet', 'harvestRain', 'acidity']},
+    },
+    'sources': [
+        {'label': 'Places', 'detail': 'The Comité Champagne’s four sub-regions, each read over the vine parcels (IGN Registre parcellaire graphique) of its grand cru, premier cru and main villages. The cahier des charges names the crus; where no official list puts a village in a sub-region it is placed by geography.'},
+        {'label': 'Sugar', 'detail': 'Grapevine Sugar Ripeness model (Parker et al., 2020): 200 g/L at a temperature sum from 1 April of 2840 (Pinot Noir) and 2890 (Chardonnay); Meunier, with no published value, takes Pinot Noir’s. Each grape’s curve is then matched to the Union des Maisons de Champagne’s mean must at harvest for that grape, every year from 1959 (potential alcohol × 16.83 g/L), dated to the middle of the picking fortnight. Only Champagne-wide means are published, so every sub-region is matched to the same value and differs by its own weather.'},
+        {'label': 'Véraison', 'detail': 'Grapevine Flowering Véraison model (Parker et al., 2013): temperature sum above 0 °C from 1 March of 2511 (Pinot Noir), 2379 (Meunier, from one site, so less certain) and 2547 (Chardonnay).'},
+        {'label': 'Harvest', 'detail': 'The Union des Maisons de Champagne’s harvest start: for Champagne as a whole from 1951, and per grape from 1989, when each sub-region takes its leading grape’s (Pinot Noir in the Montagne de Reims and the Côte des Bar, Meunier in the Vallée de la Marne, Chardonnay in the Côte des Blancs).'},
+        {'label': 'Planted mix', 'detail': 'Pinot Noir, Meunier and Chardonnay by each sub-region’s planted share (Union des Maisons de Champagne, about 2022).'},
+        {'label': 'Critics', 'detail': 'Critics rate Champagne as a whole, so every sub-region’s outlook is fitted on that one rating; its own weather and mix make the difference between them. The minimum ripeness is 143 g/L (9 % vol), set in 2010.'},
+    ],
+}
+
 REGIONS['bordeaux']['blends'] = planted_mix(REGIONS['bordeaux']['data'] / 'blends.csv', REGIONS['bordeaux']['grapes'])
+REGIONS['champagne']['blends'] = planted_mix(REGIONS['champagne']['data'] / 'blends.csv', REGIONS['champagne']['grapes'])
 
 
 def colour_of(grape: str) -> str:

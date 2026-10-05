@@ -1,5 +1,6 @@
 import { BORDEAUX_VILLAGES } from './bordeauxVillages';
 import { BURGUNDY_VILLAGES } from './burgundyVillages';
+import { CHAMPAGNE_VILLAGES } from './champagneVillages';
 import type { GrapeId,VintageGrape,VintageIndex,VintageRegionConfig,VintageVillage } from './types';
 
 /**
@@ -79,7 +80,36 @@ export function harvestArea(index:Pick<VintageIndex,'colourAreas'>|null|undefine
   return index?.colourAreas?.[grape.colour]?.[village.area]??village.area;
 }
 
-export const VINTAGE_REGIONS:readonly VintageRegionConfig[]=[BURGUNDY,BORDEAUX];
+/**
+ * Champagne by sub-region. Each blends Pinot Noir, Meunier and Chardonnay; all three are read
+ * as the base for a sparkling white, so black grapes are judged on freshness, not colour.
+ */
+export const CHAMPAGNE:VintageRegionConfig={
+  id:'champagne',
+  name:'Champagne',
+  country:'France',
+  hemisphere:'north',
+  areas:[
+    {id:'montagne-de-reims',name:'Montagne de Reims'},
+    {id:'vallee-de-la-marne',name:'Vallée de la Marne'},
+    {id:'cote-des-blancs',name:'Côte des Blancs'},
+    {id:'cote-des-bar',name:'Côte des Bar'}
+  ],
+  villages:CHAMPAGNE_VILLAGES,
+  grapes:[
+    // Minimum sugar 143 g/L for every grape (décret of 2010: 9 % vol natural strength).
+    {id:'blend',name:'Blend',ripeSugar:200,minSugar:143,colour:'white',blend:true},
+    {id:'pinot-noir',name:'Pinot Noir',ripeSugar:200,minSugar:143,colour:'red'},
+    {id:'meunier',name:'Meunier',ripeSugar:200,minSugar:143,colour:'red'},
+    {id:'chardonnay',name:'Chardonnay',ripeSugar:200,minSugar:143,colour:'white'}
+  ],
+  dataDir:'/data/vintages/champagne',
+  defaultVillage:'montagne-de-reims',
+  defaultGrape:'blend',
+  sparkling:true
+};
+
+export const VINTAGE_REGIONS:readonly VintageRegionConfig[]=[BURGUNDY,BORDEAUX,CHAMPAGNE];
 
 /** The region a village belongs to; village ids are unique across regions. */
 export function regionOfVillage(id:string|null|undefined):VintageRegionConfig|null{
