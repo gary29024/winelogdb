@@ -5,6 +5,7 @@ import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 import { burgundyRegionalMapTarget } from './burgundyRegionalMap';
 import { echezeauxNamedPlotIdentity } from './echezeauxNamedPlots';
+import { unlistedRegionalMapIds } from './unlistedRegionalMaps';
 
 export type VillageMapFeature={
  id:string;name:string;tier:string;kind:string;appellationId:number;denominationId:number|null;denominationIds?:number[];
@@ -148,4 +149,12 @@ export function umbrellaNote(catalogue:Pick<VillageMapCatalogue,'features'|'umbr
   .sort((a,b)=>(byId.get(b)?.areaHa??0)-(byId.get(a)?.areaHa??0));
  if(within.length)sentences.push(`${name(featureId)} lies within ${sentenceList(within.map(name))}, ${within.length>1?'wider Premier Cru names':'a wider Premier Cru name'}.`);
  return sentences.join(' ')||undefined;
+}
+
+const unlistedRegionalMaps=new Set(unlistedRegionalMapIds);
+
+/** The map the wine page offers, if any. */
+export function wineDetailMapTarget(wine:MapWine):BurgundyVillageMapTarget|null{
+ const target=burgundyVillageMapTarget(wine);
+ return target&&unlistedRegionalMaps.has(target.villageId)?null:target;
 }
