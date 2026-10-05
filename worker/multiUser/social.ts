@@ -237,7 +237,7 @@ export async function socialRoute(request:Request,env:SocialEnv,member:Member,ct
    return json({ok:true,name});
   }
  }
- if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare(`SELECT u.id,u.display_name,
+ if(path==='/api/friends'&&request.method==='GET')return json({items:(await env.DB.prepare(`SELECT u.id,u.display_name,f.created_at AS since,
    CASE WHEN d.recipient_id IS NULL THEN 0 ELSE 1 END AS defaultShare
    FROM friendships f JOIN app_users u ON u.id=f.friend_id AND u.status='active'
    LEFT JOIN member_share_defaults d ON d.owner_id=f.user_id AND d.recipient_id=f.friend_id
