@@ -6,7 +6,9 @@ name: Vintage data
 # cached and never downloaded twice.
 on:
   schedule:
-    - cron: '23 4 6 * *'
+    # 03:00 on the 6th in Japan (GMT+9) = 18:00 UTC on the 5th; cron is UTC.
+    # Runs overnight so it does not race daytime merges into main.
+    - cron: '0 18 5 * *'
   workflow_dispatch:
 
 permissions:
@@ -29,11 +31,13 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/vintages/pipeline/requirements.txt
       - run: pip install -r scripts/vintages/pipeline/requirements.txt
+      # Restore and save are split so the downloads are kept even when a later
+      # step fails; a re-run then skips the hour of fetching.
       - name: Restore downloaded history
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: scripts/vintages/cache
-          key: vintage-weather-${{ github.run_id }}
+          key: vintage-weather-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: vintage-weather-
       - name: Fetch new and missing years
         run: python scripts/vintages/pipeline/fetch.py
@@ -59,6 +63,12 @@ jobs:
           python scripts/vintages/pipeline/champagne_must.py
           python scripts/vintages/pipeline/build.py
           python scripts/vintages/pipeline/quality.py
+      - name: Save downloaded history
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: scripts/vintages/cache
+          key: vintage-weather-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Commit if anything changed
         run: |
           git add public/data/vintages scripts/vintages/data/outlook_record.csv scripts/vintages/data/bivb_sugar.csv scripts/vintages/data/bordeaux/measured_sugar.csv scripts/vintages/data/bordeaux/outlook_record.csv scripts/vintages/data/champagne/measured_sugar.csv scripts/vintages/data/champagne/umc_harvest.csv scripts/vintages/data/champagne/harvest_dates.csv scripts/vintages/data/champagne/outlook_record.csv
@@ -66,4 +76,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Refresh vintage data from Météo-France, the BIVB, Bordeaux Raisins and the UMC"
-          git push
+          # The build takes over an hour and main often moves meanwhile, so
+          # replay this commit on the latest main before pushing.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 10))
+          done
+          exit 1
