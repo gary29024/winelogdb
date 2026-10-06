@@ -2,3 +2,5 @@
 # Bordeaux: the reds by bank, dry whites, Sauternes) once each season was complete, before critics had rated it
 # (quality.py). Rows are added, never changed: compare them with critic_consensus.csv.
 year,colour,score,low,high,recorded
+2024,champagne,2.69,1.76,3.62,2026-10-06
+2025,champagne,4.08,3.15,5.0,2026-10-06

@@ -1,4 +1,6 @@
 # Quality outlooks recorded for each critics' group (Burgundy: the Côte d'Or, by colour;
-# Bordeaux: by bank) once each season was complete, before critics had rated it
+# Bordeaux: the reds by bank, dry whites, Sauternes) once each season was complete, before critics had rated it
 # (quality.py). Rows are added, never changed: compare them with critic_consensus.csv.
 year,colour,score,low,high,recorded
+2025,dry-white,3.63,3.05,4.21,2026-10-06
+2025,sauternes,3.73,3.07,4.39,2026-10-06
