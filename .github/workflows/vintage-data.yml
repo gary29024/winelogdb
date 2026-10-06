@@ -6,7 +6,9 @@ name: Vintage data
 # cached and never downloaded twice.
 on:
   schedule:
-    - cron: '23 4 6 * *'
+    # 03:00 on the 6th in Japan (GMT+9) = 18:00 UTC on the 5th; cron is UTC.
+    # Runs overnight so it does not race daytime merges into main.
+    - cron: '0 18 5 * *'
   workflow_dispatch:
 
 permissions:
