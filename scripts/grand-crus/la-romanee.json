@@ -14,9 +14,25 @@
     "la-romanee"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/la-romanee/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/la-romanee",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/romanee-la,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzIxJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "6cc2ccf75fae8e51e6db9ef2d13a0139c2b4f2ea8c5f966b0ad946aa8f114daf",
+    "coverageNote": "The official wine-board list names La Romanée as the cru's only climat, and the pinned cadastre records LA ROMANEE. The named area is the whole cru, so the official outline is retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "la-romanee",
+        "name": "La Romanée",
+        "sourceName": "LA ROMANEE",
+        "aliases": []
+      }
+    ],
+    "unresolved": []
   }
 }

@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DGeB4aoI.js"
+    "dist/client/assets/index-Db3FaCss.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-S6Wee1pr.js",
-    "dist/client/assets/SectionLabel-CYbikcdO.js",
-    "dist/client/assets/SparklingDetailsCard-D1U_DEVI.js",
-    "dist/client/assets/VillageMap-C4OrTpJL.js",
-    "dist/client/assets/api-CwMmKCpc.js",
-    "dist/client/assets/burgundyAtlas-Tod8FdpR.js",
-    "dist/client/assets/index-DGeB4aoI.js",
-    "dist/client/assets/index-Dn53AGCl.js",
+    "dist/client/assets/FriendTagDialog-DggadFiV.js",
+    "dist/client/assets/SectionLabel-DO321omO.js",
+    "dist/client/assets/SparklingDetailsCard-DfE8yE9w.js",
+    "dist/client/assets/VillageMap-DECuuIDj.js",
+    "dist/client/assets/api-Ewqh5mT2.js",
+    "dist/client/assets/burgundyAtlas-5_EwwpJr.js",
+    "dist/client/assets/index-DSch4lmJ.js",
+    "dist/client/assets/index-Db3FaCss.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-DnjQrAjn.js",
-    "dist/client/assets/wineDetailCompact-B_AWMkNq.js"
+    "dist/client/assets/useModalFocus-CpTSRlno.js",
+    "dist/client/assets/wineDetailCompact-FDW-V64e.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 6,
-  "evidenceBytesTotal": 1020389,
-  "evidenceGzipBytesTotal": 97718,
+  "evidenceChunkCount": 7,
+  "evidenceBytesTotal": 1061893,
+  "evidenceGzipBytesTotal": 104700,
   "parcelBundleBytesTotal": 463770,
   "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
@@ -47,6 +47,13 @@
       "sha256": "bbfb89d0afc889e53c07914872014f1f109ea895c1c6544f9502070169ffc044",
       "bytes": 80820,
       "gzipBytes": 13221
+    },
+    {
+      "cru": "la-romanee",
+      "file": "dist/client/assets/la-romanee.evidence-snbyVG7D.js",
+      "sha256": "bd8a54e62fb916d00357e564fffdc5d9d001629f6256a0f0be86195ffb93927b",
+      "bytes": 41504,
+      "gzipBytes": 6982
     },
     {
       "cru": "richebourg",

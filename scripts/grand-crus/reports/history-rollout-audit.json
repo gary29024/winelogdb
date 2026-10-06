@@ -9,7 +9,7 @@
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
   "evidenceBytesTotal": 5206157,
-  "evidenceGzipBytesTotal": 433652,
+  "evidenceGzipBytesTotal": 433653,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -651,10 +651,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "78527bd7cd79e5ba6078f0f0229f919bcf179c5a07e7f815b13e4a20aab551c8",
-      "evidenceSha256": "da14c79cd324a8e31ae288d4c0a925f0dbd472cab600f0f1c4fc8f11d50d4630",
+      "registerSha256": "c095368e75d25c404739c92b669cfc0571777a908e397aa43accd2722db6c2d4",
+      "evidenceSha256": "ee66bf3b7ff4e04981403884d5c1f3c62f84b43a29b84840c08b53de51eb5a8c",
       "evidenceBytes": 41349,
-      "evidenceGzipBytes": 6860,
+      "evidenceGzipBytes": 6861,
       "earliestRawEventSample": null
     },
     {

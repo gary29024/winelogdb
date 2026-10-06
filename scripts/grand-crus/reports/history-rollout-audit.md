@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5206157 bytes raw / 433652 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5206157 bytes raw / 433653 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -16,7 +16,7 @@ Lazy evidence total: 5206157 bytes raw / 433652 bytes gzip. Each cru loads its o
 | [richebourg](../../../docs/research/richebourg/register.md) | 58 | 1995-09-18 → 2025-05-12 | 32 / 11 | 6 / 13 | 0 | 0 / 0 | 11999 |
 | [romanee-saint-vivant](../../../docs/research/romanee-saint-vivant/register.md) | 17 | 1990-01-18 → 2022-05-16 | 7 / 3 | 3 / 3 | 0 | 0 / 0 | 9071 |
 | [romanee-conti](../../../docs/research/romanee-conti/register.md) | 2 | 1994-05-30 → 1994-05-30 | 1 / 1 | 1 / 1 | 0 | 0 / 0 | 7526 |
-| [la-romanee](../../../docs/research/la-romanee/register.md) | 1 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 6860 |
+| [la-romanee](../../../docs/research/la-romanee/register.md) | 1 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 6861 |
 | [la-tache](../../../docs/research/la-tache/register.md) | 2 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 6883 |
 | [la-grande-rue](../../../docs/research/la-grande-rue/register.md) | 3 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 7163 |
 | [musigny](../../../docs/research/musigny/register.md) | 51 | 1994-02-15 → 2024-07-15 | 7 / 3 | 6 / 7 | 0 | 0 / 1 | 9934 |
