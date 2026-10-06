@@ -389,5 +389,34 @@
     "communes": [
       "21714"
     ]
+  },
+  "auditCommunes": {
+    "21267": {
+      "name": "Flagey-Échezeaux",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+      "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+      "size": 130032,
+      "retrievedAt": "2026-10-06T15:47:57.613648Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21464": {
+      "name": "Nuits-Saint-Georges",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21464/cadastre-21464-parcelles.json.gz",
+      "sha256": "f2f3837c6a12775445a7131ff946da39938541f993e8539e1e3d94e14c6e02f5",
+      "size": 521312,
+      "retrievedAt": "2026-10-06T15:47:57.841220Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21716": {
+      "name": "Vougeot",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd",
+      "size": 34471,
+      "retrievedAt": "2026-10-06T15:47:57.682871Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    }
   }
 }

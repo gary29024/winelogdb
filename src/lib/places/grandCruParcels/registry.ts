@@ -1,16 +1,17 @@
 import bundle0 from './flagey-echezeaux.manifest.json';
-import bundle1 from './vougeot.manifest.json';
+import bundle1 from './vosne-romanee.manifest.json';
+import bundle2 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'flagey-echezeaux':bundle0,'vougeot':bundle1} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'flagey-echezeaux':bundle0,'vosne-romanee':bundle1,'vougeot':bundle2} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux';
+export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'richebourg';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -28,6 +29,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
+ {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},
 ];
 
 export const cruOnVillageMap=(cru:GrandCru,villageMap:string)=>cru.villageMaps.includes(villageMap);

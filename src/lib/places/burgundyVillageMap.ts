@@ -4,7 +4,7 @@ import { producerMapLocation } from './burgundyProducerLocations';
 import registry from './burgundyVillageMapRegistry.json';
 import { burgundyGrandCruMapIdentity } from './burgundyGrandCruClimats';
 import { burgundyRegionalMapTarget } from './burgundyRegionalMap';
-import { echezeauxNamedPlotIdentity } from './echezeauxNamedPlots';
+import { grandCruNamedPlotIdentity } from './grandCruNamedPlots';
 import { unlistedRegionalMapIds } from './unlistedRegionalMaps';
 
 export type VillageMapFeature={
@@ -24,7 +24,7 @@ export type VillageMapCatalogue={
  overview?:{dataUrl:string;geobufUrl:string;geobufRawUrl:string;downloadTimeoutMs:number;maxZoom:number;labelIds:string[]};
  // Large regional maps need time for a complete download on slow connections.
  downloadTimeoutMs?:number;
- namedPlots?:{dataUrl:string;parentFeatureId:string;source:{name:string;date:string;url:string;sha256:string;license:string};coverageNote:string};
+ namedPlots?:{dataUrl:string;parentFeatureId:string;source:{name:string;date:string;url:string;sha256:string;license:string};coverageNote:string}[];
  notes:Record<string,{note:string;paintedBy?:string;sameBoundaryAs?:string}>;features:VillageMapFeature[];coverageNote?:string;colourScope?:string;
  // Premier Crus lying inside a wider Premier Cru name, keyed by the wider one.
  umbrellas?:Record<string,string[]>;
@@ -62,7 +62,7 @@ export function burgundyVillageMapTarget(wine:MapWine):BurgundyVillageMapTarget|
  if(wineColour(wine)==='red'&&/\bmeursault\b/.test(text)&&/\bsantenots\b/.test(text)){
   return burgundyVillageMapTarget({...wine,...Object.fromEntries(fields.map(field=>[field,wine[field]?.replace(/\bmeursault\b/gi,'Volnay')]))});
  }
- const namedPlot=echezeauxNamedPlotIdentity(wine);
+ const namedPlot=grandCruNamedPlotIdentity(wine);
  const local=namedPlot===undefined?burgundyGrandCruMapIdentity(wine):namedPlot?.matchId??null;
  if(local===null)return null;
  const candidate=producerMapLocation(wine);

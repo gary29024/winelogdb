@@ -6,11 +6,11 @@ import type { VillageMapCatalogue } from './burgundyVillageMap';
 export async function loadVillageMapData(catalogue:Pick<VillageMapCatalogue,'dataUrl'|'geobufUrl'|'geobufRawUrl'|'brotliJsonUrl'|'gzipJsonUrl'|'namedPlots'>,signal:AbortSignal):Promise<unknown>{
  if(catalogue.namedPlots){
   const {namedPlots,...canonical}=catalogue;
-  const [data,plots]=await Promise.all([loadVillageMapData(canonical,signal),loadVillageMapData({dataUrl:namedPlots.dataUrl},signal)]);
+  const [data,...plots]=await Promise.all([loadVillageMapData(canonical,signal),...namedPlots.map(layer=>loadVillageMapData({dataUrl:layer.dataUrl},signal))]);
   const collection=(value:unknown):value is {type:'FeatureCollection';features:unknown[]}=>!!value&&typeof value==='object'&&'type' in value&&value.type==='FeatureCollection'&&'features' in value&&Array.isArray(value.features);
-  if(!collection(data)||!collection(plots))throw new Error('Named plot download is invalid');
+  if(!collection(data)||!plots.every(collection))throw new Error('Named plot download is invalid');
   signal.throwIfAborted();
-  return {...data,features:[...data.features,...plots.features]};
+  return {...data,features:[...data.features,...plots.flatMap(layer=>layer.features)]};
  }
  // Retain the existing conservative legacy path. Modern browsers decode
  // Content-Encoding: br at the HTTP layer; no JS Brotli decoder is needed.

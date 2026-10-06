@@ -239,7 +239,7 @@ const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
  if(!auditedCru(slug))throw new Error(`${slug} is hidden from the app until its commune-edge audit is committed`);
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[];namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string}[]}};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
  const features=(read(`public${manifest.dataUrl}`) as Parcels).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
@@ -282,6 +282,14 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  expect(downloads).toBe(0);
+ if(parcelCru.namedPlots&&parcelCru.namedPlots.displayLayer!==false){
+  const plot=parcelCru.namedPlots.plots[0];
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(`${parcelCru.slug}-plot-${plot.id}`);
+  await expect(dialog.getByRole('heading',{name:plot.name,exact:true})).toBeVisible();
+  await expect(dialog.getByText(`Cadastral named area within ${parcelCru.name} Grand Cru`,{exact:false})).toBeVisible();
+  await expect(dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`})).toBeVisible();
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(parcelCru.parentFeatureId);
+ }
  const toggle=dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`});
  await toggle.focus();await page.keyboard.press('Space');
  await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
@@ -1663,9 +1671,10 @@ for(const route of matrixRoutes){
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   const selector=dialog.getByRole('combobox',{name:'Explore a vineyard'});
   await expect(selector).toHaveValue('inao-denom-1274');
-  await expect(selector.locator('optgroup:not([label="Échezeaux · cadastral named areas"]) option')).toHaveCount(24);
+  await expect(selector.locator('optgroup:not([label$=" · cadastral named areas"]) option')).toHaveCount(24);
   await expect(selector.locator('optgroup[label="Échezeaux · cadastral named areas"] option')).toHaveCount(10);
-  await expect(selector.locator('option')).toHaveCount(34);
+  await expect(selector.locator('optgroup[label="Richebourg · cadastral named areas"] option')).toHaveCount(2);
+  await expect(selector.locator('option')).toHaveCount(36);
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Petits Monts');
   await expect(dialog.locator('.village-map-context')).toContainText('8 Grand Crus · 14 Premier Cru climats');
   await expect(dialog.locator('.village-map-context')).toContainText('Vosne-Romanée & Flagey-Échezeaux');
@@ -1673,7 +1682,7 @@ for(const route of matrixRoutes){
   const boundaries=requests.filter(url=>url.includes('/maps/'));
   expect(catalogues.length).toBeGreaterThan(0);expect(boundaries.length).toBeGreaterThan(0);
   expect(catalogues.every(url=>url.includes('vosneVillageMapCatalogue'))).toBe(true);
-  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/vosne-romanee']);
+  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/richebourg-named-plots','/maps/vosne-romanee']);
   for(const [id,name] of [['inao-denom-565','Échezeaux'],['inao-denom-645','Grands-Échezeaux']]){
    await selector.selectOption(id);
    await dialog.getByRole('button',{name:'Zoom to selection'}).click();

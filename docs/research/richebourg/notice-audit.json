@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-06",
+  "parentFeatureId": "inao-denom-1083",
+  "inputs": {
+    "parcelSnapshotSha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+    "history": "docs/research/richebourg/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/richebourg/curation.json",
+        "sha256": "d11f7db4b6a6974231194e189e10497b404a63c3b8ad461fb0fea7b3e1d608b3"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21714000AN0053",
+    "21714000AN0054",
+    "21714000AN0056",
+    "21714000AN0057",
+    "21714000AN0059",
+    "21714000AN0060",
+    "21714000AN0061",
+    "21714000AN0064",
+    "21714000AN0065",
+    "21714000AN0066",
+    "21714000AN0068",
+    "21714000AN0069",
+    "21714000AN0071",
+    "21714000AN0168",
+    "21714000AN0169",
+    "21714000AN0170",
+    "21714000AN0171",
+    "21714000AN0172",
+    "21714000AN0173",
+    "21714000AN0174",
+    "21714000AN0177",
+    "21714000AN0180",
+    "21714000AN0236",
+    "21714000AN0237",
+    "21714000AN0238",
+    "21714000AN0239",
+    "21714000AN0240",
+    "21714000AN0241",
+    "21714000AN0242",
+    "21714000AN0243",
+    "21714000AN0244",
+    "21714000AN0245",
+    "21714000AN0246",
+    "21714000AN0247",
+    "21714000AN0248",
+    "21714000AN0259",
+    "21714000AN0260",
+    "21714000AN0261",
+    "21714000AN0283",
+    "21714000AN0284",
+    "21714000AN0285",
+    "21714000AN0286",
+    "21714000AN0290",
+    "21714000AN0291",
+    "21714000AN0292",
+    "21714000AN0293",
+    "21714000AN0294",
+    "21714000AN0295",
+    "21714000AN0296",
+    "21714000AN0297",
+    "21714000AN0298",
+    "21714000AN0299",
+    "21714000AN0300",
+    "21714000AN0301",
+    "21714000AN0302",
+    "21714000AN0303",
+    "21714000AN0304",
+    "21714000AN0305",
+    "21714000AN0306",
+    "21714000AN0307",
+    "21714000AN0308",
+    "21714000AN0309",
+    "21714000AN0310",
+    "21714000AN0311",
+    "21714000AN0312",
+    "21714000AN0313",
+    "21714000AN0314",
+    "21714000AN0315",
+    "21714000AN0316",
+    "21714000AN0317",
+    "21714000AN0318"
+  ],
+  "reviewedMatches": 0,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [
+    "bfc-2022-101:p350"
+  ],
+  "finding": "The only OCR reference hit is bfc-2022-101:p350, already image-reviewed in the regional index. Its reviewed references D184, D558 and D774 are in Flagey-Echezeaux (21267). The Vosne-Romanee applicant address does not establish parcel commune. No exact Richebourg event is supported. No new page-image review is required because no unreviewed candidate remains.",
+  "unassignedReviewedReferences": [
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21714",
+        "printedCommune": "VOSNE-ROMANEE",
+        "printedReference": "AN 112",
+        "reference": "AN0112",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21714",
+        "printedCommune": "VOSNE-ROMANEE",
+        "printedReference": "AN 249",
+        "reference": "AN0249",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-005:p82:eugenie",
+        "actId": null,
+        "documentDate": "2009-12-24",
+        "printedDate": "24 décembre 2009",
+        "publicationDate": "2010-01-28",
+        "applicant": "SCEA DOMAINE EUGENIE",
+        "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+        "communeCode": "21714",
+        "printedCommune": "VOSNE ROMANEE",
+        "printedReference": "AB 100",
+        "reference": "AB0100",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          82
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    }
+  ],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

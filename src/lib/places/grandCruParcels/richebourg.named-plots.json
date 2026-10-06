@@ -1,0 +1,68 @@
+{
+  "dataUrl": "/maps/richebourg-named-plots.2026-06-01.787898166ff0.geojson",
+  "parentFeatureId": "inao-denom-1083",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-lieux_dits.json.gz",
+    "sha256": "fd4b5f66d3e72298c3dc39fb492dbacd5fea5d581debd831cb40b22d87d1b993",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Les Richebourgs and Les Vérroilles ou Richebourgs are cadastral named areas within Richebourg. Their outlines follow the cadastre inside the official cru boundary, with small gaps retained; they do not show producer holdings.",
+  "features": [
+    {
+      "id": "richebourg-plot-les-richebourgs",
+      "name": "Les Richebourgs",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 221,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-1083",
+      "parentAppellation": "Richebourg",
+      "sourceName": "LES RICHEBOURGS",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 5.0425,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.947303628615596,
+        47.1620942,
+        4.950760399945384,
+        47.1643697
+      ],
+      "labelPoint": [
+        4.9486665237776455,
+        47.16318560328874
+      ]
+    },
+    {
+      "id": "richebourg-plot-les-verroilles-ou-richebourgs",
+      "name": "Les Vérroilles ou Richebourgs",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 221,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-1083",
+      "parentAppellation": "Richebourg",
+      "sourceName": "LES VERROILLES OU RICHEBOURGS",
+      "communes": [
+        "21714"
+      ],
+      "areaHa": 2.988512,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.945675344260581,
+        47.1640729,
+        4.950232271524203,
+        47.16543371786752
+      ],
+      "labelPoint": [
+        4.947653337942128,
+        47.16479982705938
+      ]
+    }
+  ]
+}
