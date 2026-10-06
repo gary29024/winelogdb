@@ -112,7 +112,7 @@ export async function translateResearch(env:TranslationEnv&{DB:D1Database},owner
 
 /**
  * The last step of a Deep Search or producer research run: translate whatever
- * the run left untranslated, so 繁中 is ready the moment the research is.
+ * the run left untranslated, so 中 is ready the moment the research is.
  *
  * Best effort by design. The research is already saved and its run complete;
  * a translation that fails is logged and left for the owner to make on demand,

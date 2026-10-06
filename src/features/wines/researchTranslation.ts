@@ -4,7 +4,7 @@ import { getAccount } from '../../lib/auth/client';
 import type { DeepField } from './researchSections';
 
 /**
- * The EN / 繁中 switch on a research result.
+ * The EN / 中 switch on a research result.
  *
  * Research runs translate themselves as their last step, so the Chinese is
  * normally already saved: it is looked up (free) as soon as the research is on
@@ -65,7 +65,7 @@ export function useResearchTranslation(fields:Record<string,string>){
  /** The text to show for a field: Chinese when chosen and available, else the English. */
  const text=(field:string,fallback:string)=>showing&&translated[field]?translated[field]:fallback;
  return {lang:showing?'zh' as const:'en' as const,phase,error,choose,translate,cancel,text,available,
-  /** Sections still in English while 繁中 is chosen. */
+  /** Sections still in English while 中 is chosen. */
   missingCount:missing.length,partial:showing&&missing.length>0};
 }
 

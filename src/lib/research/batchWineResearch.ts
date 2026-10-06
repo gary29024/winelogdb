@@ -212,7 +212,7 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   return result;
 }
 
-/** The run is complete; make its Chinese now so 繁中 needs no wait. Never throws. */
+/** The run is complete; make its Chinese now so 中 needs no wait. Never throws. */
 const translateFinished=(env:Env,owner:string,wineId:string,requestId:string,result:DeepSearchResult)=>
   translateResearchAfterRun(env,owner,[result.summary,result.expectedProfile,result.vintageQuality,result.producerDetails,result.producerWinemakingPractices,result.winemakingTechniques,result.terroir,result.drinkingWindow],{kind:'wine_research',runId:requestId,targetId:wineId});
 

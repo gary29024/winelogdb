@@ -23,7 +23,7 @@ import { producerRangeAllowed } from './rangeAccess';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
 import { translateResearchAfterRun,type TranslationEnv } from '../research/translationService';
 
-/** The run is complete; make the profile's Chinese now so 繁中 needs no wait. Never throws. */
+/** The run is complete; make the profile's Chinese now so 中 needs no wait. Never throws. */
 async function translateFinished(env:Env,owner:string,producerId:string,requestId:string){
   const row=await env.DB.prepare('SELECT profile,winemaking_practices FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{profile:string|null;winemaking_practices:string|null}>().catch(()=>null);
   if(row)await translateResearchAfterRun(env,owner,[row.profile,row.winemaking_practices],{kind:'producer_research',runId:requestId,targetId:producerId});
