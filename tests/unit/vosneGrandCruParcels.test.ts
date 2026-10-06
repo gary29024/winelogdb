@@ -10,6 +10,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const reviewed=[
  {slug:'romanee-saint-vivant',name:'Romanée-Saint-Vivant',id:'inao-denom-1085'},
  {slug:'romanee-conti',name:'Romanée-Conti',id:'inao-denom-1084'},
+ {slug:'la-romanee',name:'La Romanée',id:'inao-denom-655'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/vosne-romanee.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{name:string;sourceName:string}[]}};

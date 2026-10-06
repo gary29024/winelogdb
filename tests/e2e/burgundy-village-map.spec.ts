@@ -307,7 +307,11 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await parcel.selectOption(parcelCru.evidenced[0]??parcelCru.parcels[0]);
  const details=dialog.locator('.village-map-parcel-details');
  if(parcelCru.evidenced.length)await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
- else await expect(details).toContainText('No dated records were found for this parcel.');
+ // Every parcel has #461 source coverage and tracing, so the region shows even without dated records.
+ else{
+  await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
+  await expect(details).toContainText('No matched dated rights, sale or notice records in the reviewed sources.');
+ }
  if(!parcelCru.hasDomaineLinks)await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
  await expect(details.getByText('Verified operator')).toHaveCount(0);
  if(parcelCru.unknown){
