@@ -2,6 +2,57 @@
 
 All notable WineLogDB changes are summarized here by shipped impact. Each stable release consolidates merged pull requests rather than duplicating the full PR-by-PR history.
 
+## [1.4.0] - 2026-10-06
+
+### Burgundy maps and parcel intelligence
+
+- Expanded Burgundy from static Atlas links into native geographic maps across the Côte d’Or, Côte Chalonnaise, Mâconnais, Chablis/Grand Auxerrois and broad regional appellations, with cru highlighting, split-label handling and conservative suppression where a region-wide map would be misleading.
+- Added a reusable Grand Cru parcel-research pipeline, starting from Échezeaux and extending researched parcel/holder evidence to further crus; official historical parcel evidence is now indexed across all 33 Burgundy Grand Crus while unresolved ownership/farming relationships remain explicitly unresolved rather than guessed.
+- Added dated parcel evidence, cadastral and named-area context, rights-history lineage, farm-structure notices, sale/deed evidence and account-scoped manual producer links with clear farming-verification status.
+- Reduced map payload and test cost through lossless geometry compression, pinned map assets and tiered browser coverage without weakening the distinct interactive-map behaviours under test.
+
+### Vintages becomes a first-class product area
+
+- Replaced the old Insights tab with a village-by-village **Vintages** experience built around season progression, phenology, ripening conditions and a calibrated quality outlook.
+- Reworked the Burgundy vintage model against published/observed records, including flowering/véraison timing, village-relative season grading, daily sunshine treatment and BIVB measured must-sugar anchors.
+- Added 2026 season support plus grape-aware season narratives and a four-driver ripening view.
+- Extended Vintages beyond Burgundy with Bordeaux red-bank/commune coverage, Pessac-Léognan dry whites, Sauternes/Barsac, measured sugar inputs where available, and Champagne coverage across four sub-regions with UMC must data and sourced critics’ outlooks.
+- Added and repaired the scheduled vintage-data workflow so source-data refreshes are maintained outside the interactive request path.
+
+### Deep Search, research reuse and durability
+
+- Made non-vintage research edition-aware using release designation, base year and disgorgement, preventing distinct Champagne editions from collapsing into one exact-wine result while retaining safe reuse of older generic research.
+- Hardened member Deep Search around provider uncertainty: durable recovery, idempotent replay, bounded reconciliation, explicit status checking, safe **Stop waiting**, and owner release controls for held operations.
+- Preserved validated partial research instead of discarding an otherwise useful report when one scope fails, and stopped costly ungrounded retries when grounded evidence is unavailable.
+- Added a Journal Deep Search completion mark/filter for owned and shared wines, including recipient-specific completion for research a member ran on a shared bottle.
+- Kept friend-shared research and LWIN producer ranges reusable without silently transferring another account’s private experience or changing wine identity.
+- Precise uncited figures are now labelled rather than causing the entire report to fail; vintage research remains separated by wine style, while legacy pre-style reports can still be reused where the style is unambiguous.
+
+### Accounts, member access and owner controls
+
+- Added unique `@handles` for accounts and friend discovery while keeping friendships, shares and tastings anchored to stable account IDs.
+- Opened capacity-controlled sign-up so any Google account can join while the deployment has room, instead of requiring every member to be pre-invited.
+- Revamped **Account & friends**, **Owner controls** and the account entry point for clearer mobile use, storage/cost reporting and maintenance actions.
+- Removed owner-facing AI admission limits while retaining accounting and duplicate-work safeguards, and made member admission failures distinguish the actual capacity/budget reason.
+- Changed Cloudflare-cost handling so monthly cost rolls into the next billing month instead of unnecessarily pausing members at a calendar boundary.
+
+### Traditional Chinese research reading
+
+- Added an **EN / 中** switch for Wine Deep Search and producer research, using Hong Kong Traditional Chinese wording while preserving producer/wine names and useful English wine terminology; the compact two-row Deep Search header keeps the research-status badge and language control clear on mobile.
+- Research translations are cached per section against the exact English content, allowing shared/reused research sections to reuse one translation and invalidating naturally when the English changes.
+- New research runs translate as a best-effort final step; older saved research can be translated through an owner backfill that uses Vertex Flex where available.
+- Translation cost is metered against the originating research run as its own step, with actual served tier recorded so a Flex request served at standard price is not under-counted.
+- This is research-content translation, not a claim that the entire application UI is localized.
+
+### Reliability, CI and release integrity
+
+- Fixed wine-save, LWIN validation, Champagne extraction reservation, producer-batch, shared-research and owner/mobile-control regressions found under real multi-user use.
+- Continued reducing CI/runtime cost: normal map browser coverage is tiered by distinct behaviour, merged PRs are not redundantly re-run, browser suites can be deferred while a PR is still draft, and map data is compressed without changing boundaries.
+- v1.4.0 consolidates **87 merged product PRs** after v1.3.0, through PR #490; still-open PR #472 is explicitly outside this release.
+- Product baseline before release metadata: `main` at `5e12f12f74fb9f3f7e5a415bad2d3743e76b4fbf` (merged PR #490). PR #490’s tested head `bdf0d3f51410597440ef83c6ca84f73b7b807d99` passed GitHub Actions CI run `37456199889`.
+- New schema migrations since v1.3.0 are `0084_snapshot_release_identity.sql` through `0094_ai_usage_step.sql` (11 migrations).
+- Production upgrades must use `npm run deploy` so outstanding remote D1 migrations run before the Worker is deployed.
+
 ## [1.3.0] - 2026-09-23
 
 ### Multi-user accounts and friend sharing
