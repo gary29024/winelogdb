@@ -332,16 +332,35 @@ tier and checklist come from there.
 
 | Step | Request |
 | --- | --- |
-| Shared history extension, first | "Implement the official acquisition/parser requirements in #461 using docs/grand-cru-parcel-rollout.md. Validate on Échezeaux, Grands-Échezeaux and Clos de Vougeot, then apply each bundle and publish per-cru coverage." |
-| Each cru, Tier 1 | "Start Grand Cru #378 (Clos de Vougeot), Tier 1, following docs/grand-cru-parcel-rollout.md and #461. Obtain official history to the earliest available records and report all source gaps." |
-| Optional Tier 2 | "Do Tier 2 research for #378." Attach or link any PDFs you want reviewed. |
-| Shared village | "Prepare the Gevrey-Chambertin bundle for #391–#399, then start #391, Tier 1." |
+| Each cru, Tier 1 | "Start Grand Cru #378 (Clos de Vougeot), Tier 1, following docs/grand-cru-parcel-rollout.md and #461." |
+| Shared village | "Start the Gevrey-Chambertin bundle, Tier 1: #391–#399, one PR per cru, following docs/grand-cru-parcel-rollout.md and #461." |
+| Backfill only | "Complete the #461 backfill for #378." For a cru whose legacy Tier 1 is already closed, as with #376 and #377. |
+| Optional Tier 2 | "Do Tier 2 research for #378." Attach or link any PDFs, filings or articles you want reviewed. |
 
-Each cru gets its own branch and PR, and the issue closes only after that PR is
-reviewed and merged. Suggested order: #377, #378, then one village bundle at a time
+Append "stop before opening the PR" to review the changes first, or "in a worktree"
+to keep the main checkout free.
+
+The shared #461 history pipeline is merged (#462, #463, #472, #491): all 33 crus
+already have rights history, notice history, sale records and lazy evidence. A
+Tier 1 run therefore:
+
+1. Reads the cru issue and its #461 checklist, and checks the generated files.
+2. Completes the remaining per-cru items: the commune-edge audit (which lets a
+   hidden cru appear on the maps), the named-area crosswalk, and page-image review
+   of any `unreviewedCandidates` in its `notice-history.json`.
+3. Regenerates outputs, updates the README results table and passes every `--check`.
+   Measure gzip payload sizes under Python 3.12 (as CI does) or 3.11; Python 3.14's
+   zlib-ng produces different sizes.
+4. Opens one PR per cru. After merge, the cru issue's #461 checklist is ticked with
+   its own evidence and links, the cru is ticked in #461, and the issue closes.
+
+Status (6 October 2026): #376 and #377 are complete, including the #461 backfill.
+Suggested order for the rest: #378, then one village bundle at a time
 (Vosne-Romanée, Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin,
 Puligny/Chassagne, the Corton hill), and Chablis (#408) last.
 
-Some government download sites may refuse connections from the cloud session. If
-a download is blocked, Claude reports it and gives the commands to run locally,
-as was done for earlier map batches.
+Some government download sites may refuse connections. The Côte-d'Or and Yonne
+prefecture sites refused every connection in October 2026, so earlier bulletins
+came from Internet Archive and Common Crawl copies
+([earlier-bulletins README](research/earlier-bulletins/README.md)). If a download is
+blocked, Claude reports it, records the gap and gives the commands to run locally.
