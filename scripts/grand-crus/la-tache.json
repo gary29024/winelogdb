@@ -14,9 +14,31 @@
     "la-tache"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/la-tache/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/la-tache",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/tache-la,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzIzJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "581aedee5783ef2f783b612c8c5fd0675657efaa042a39b55bcf905bd25c727c",
+    "coverageNote": "The official wine-board list names La Tâche and Les Gaudichots; the pinned cadastre divides the cru between LA TACHE and LES GAUDICHOTS OU LA TACHE. Both are audited, but the whole-cru outline is retained: the cru's own name is also one named area's name, so a La Tâche label cannot select either area without ambiguity. Producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "la-tache",
+        "name": "La Tâche",
+        "sourceName": "LA TACHE",
+        "aliases": []
+      },
+      {
+        "id": "les-gaudichots-ou-la-tache",
+        "name": "Les Gaudichots ou La Tâche",
+        "sourceName": "LES GAUDICHOTS OU LA TACHE",
+        "aliases": []
+      }
+    ],
+    "unresolved": []
   }
 }
