@@ -39,7 +39,7 @@ AVAILABILITY_PATH = ROOT / 'scripts/grand-crus/sources/notice-coverage-2026-10-0
 def load_availability(path=AVAILABILITY_PATH):
     availability = read_json(path)
     for department in availability['departments'].values():
-        for key in ('acquisitionRetry', 'archiveAcquisition', 'archiveRetry'):
+        for key in ('acquisitionRetry', 'archiveAcquisition', 'archiveRetry', 'commonCrawlRecovery'):
             if record := department.get(key):
                 raw = (ROOT / record['report']).read_bytes().replace(b'\r\n', b'\n')
                 require(sha256(raw) == record['sha256'], 'Notice acquisition report hash changed; review the dated snapshot')

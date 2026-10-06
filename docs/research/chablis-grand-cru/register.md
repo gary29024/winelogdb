@@ -1569,7 +1569,7 @@ Reviewed notice matches: 37; unreviewed search candidates: 0. Matched act dates:
 
 Department 89: published years located as early as 2008 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-yonne-archive', 'publicationYears': [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
-- Yonne: 1,239 queued bulletin URLs remain missing or unusable after the 4 October retry; see the dated retry report
+- Yonne: 1,229 queued bulletin URLs remain missing or unusable after the 4 October retry and the Common Crawl search (97 URLs across both departments exist there only as copies truncated at 1 MiB); see the dated reports
 - Yonne 2024–2026: no archived listing; only filename-dated captures
 - Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them
 - Before 2008: not searched

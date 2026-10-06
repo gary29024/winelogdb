@@ -209,7 +209,7 @@ Reviewed notice matches: 0; unreviewed search candidates: 0. Matched act dates: 
 Department 21: published years located as early as 2004 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}, {'corpus': 'departmental-cote-dor-earlier-archive', 'publicationYears': [2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
 - Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)
-- Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)
+- Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)
 - Departmental 2021–2026 publications outside the existing index
 - Regional publications before 2019 and any notice outside the indexed corpus
 - Before 2004: not searched

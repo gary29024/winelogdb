@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5114352,
-  "evidenceGzipBytesTotal": 422251,
+  "evidenceBytesTotal": 5197535,
+  "evidenceGzipBytesTotal": 429671,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -61,16 +61,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "d5c3861fec467195a81d5144343066b1d928321af8ffd0eac4c3b1ab4423fbc6",
-      "evidenceSha256": "e6fc8329e96e622a6e9e586db53fec87836689a0f730af9ee80c32f11f489901",
-      "evidenceBytes": 448040,
-      "evidenceGzipBytes": 38350,
+      "registerSha256": "8c22eb6a559b3ed0160e7be536f70dc3fbda36f9958973d019c2162074ddadf0",
+      "evidenceSha256": "4a4f6810b0a7b29e98298f6fc1ba86840e33545d37f523f4fcfc3945280d5402",
+      "evidenceBytes": 450608,
+      "evidenceGzipBytes": 38557,
       "earliestRawEventSample": {
         "id": "210:267:000:0000196:00001",
         "departmentCode": "210",
@@ -158,16 +158,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "590f5b23d28239bcda40f1c9262c7e022dc3b890f367f4b986fe3af261bc103c",
-      "evidenceSha256": "0db15c33564affebdd60a700e4c9b78a9136ff843eb916f29c3bea6af58f75d1",
-      "evidenceBytes": 79005,
-      "evidenceGzipBytes": 12614,
+      "registerSha256": "007121063f79f7f8bb81437dc87a7262a4cd34422a370e38a6cd5847ea39f8eb",
+      "evidenceSha256": "3fb975d6041c1a4e91e142ac0003874d932ef80d655571142d198d70680edef3",
+      "evidenceBytes": 81573,
+      "evidenceGzipBytes": 12856,
       "earliestRawEventSample": {
         "id": "210:267:000:0000326:00001",
         "departmentCode": "210",
@@ -253,16 +253,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "7b559b1900f166dcc70833d541329f465353fab366ee9a0191f0377a5f0c7b87",
-      "evidenceSha256": "e65cd0fcfef2594ed6cbf19d66c31f6fbed05def0d9dd1aac97652639ebbe60f",
-      "evidenceBytes": 209444,
-      "evidenceGzipBytes": 15921,
+      "registerSha256": "828a707df4fd1b719cac2c455f164db92709828c088b7a42384e7b1ce81fef69",
+      "evidenceSha256": "ab60c6e68aeadbbcd31448fa74f0b12355cd2dac5952f7ad9d0fc6c4649904cf",
+      "evidenceBytes": 212012,
+      "evidenceGzipBytes": 16134,
       "earliestRawEventSample": {
         "id": "210:716:000:0000052:00001",
         "departmentCode": "210",
@@ -352,16 +352,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "060d8d50ea433a5cf3909d1d31032d018e8683647fe1b1dc9a13053b4669185b",
-      "evidenceSha256": "53373c42ed60ef541d2cb3fe8ad4880be92eca07dbc773116c87cab584d34383",
-      "evidenceBytes": 158388,
-      "evidenceGzipBytes": 11654,
+      "registerSha256": "dde23320fc77e93d0eb432f1b7fd2845d465dc6e532020b45ebf80f7e8e36d68",
+      "evidenceSha256": "2b8182c3a7ec567d7e2365a8da868e371e8dc7b1bb7fbcbd65f6ee406bdbbcf8",
+      "evidenceBytes": 160956,
+      "evidenceGzipBytes": 11870,
       "earliestRawEventSample": {
         "id": "210:714:000:0000246:00001",
         "departmentCode": "210",
@@ -451,16 +451,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "09210b3b484a60d69ec8f3f23cc0d4ad78b90de739fa2667870c6943d4971102",
-      "evidenceSha256": "1962aa921232fb2bcbcf28829ec527762e8bb0eff25c057324a23a8723bf3883",
-      "evidenceBytes": 68390,
-      "evidenceGzipBytes": 8715,
+      "registerSha256": "02cce54a2106c2119e83659328fcd55815e9dc32cbf23e42c7655474121e9a41",
+      "evidenceSha256": "7fed8d09152f00875873fd0286f5e079510ce460e00cb5416e91b6e8754586e1",
+      "evidenceBytes": 70958,
+      "evidenceGzipBytes": 8954,
       "earliestRawEventSample": {
         "id": "210:714:000:0000226:00001",
         "departmentCode": "210",
@@ -550,16 +550,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "011be196d93b53fac2126f5092a16d00e9e7a70a7c2d11a9abcd287552f30682",
-      "evidenceSha256": "19d1a4e9f305373410da91e2dbbbecd173a50b7a892cd1f03556cd18b8626a6b",
-      "evidenceBytes": 40874,
-      "evidenceGzipBytes": 7157,
+      "registerSha256": "24430bf5e5ea33f3cd4b1b14bbe81d5a55e8d66adfc2cacd6084fb61c7bacce2",
+      "evidenceSha256": "20a30825c5f543a21e036d4461edd5f35bc6f0edd37fdc4df1e71b4a96772dc4",
+      "evidenceBytes": 43442,
+      "evidenceGzipBytes": 7406,
       "earliestRawEventSample": {
         "id": "210:714:000:0000241:00001",
         "departmentCode": "210",
@@ -645,16 +645,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "857d52e9f37281120d522c57f3498d728523ffa36c6ace06801090128a4ade84",
-      "evidenceSha256": "2d84a046dcca9c43a90a7604d9d0189e44563b11b0d3dd433ca0c9d5a95383db",
-      "evidenceBytes": 38523,
-      "evidenceGzipBytes": 6497,
+      "registerSha256": "5e04cb949d80f923b6e6b55a0418a8a535b43e7fc19dde6064fe19c30b393d26",
+      "evidenceSha256": "123c154d9c0e8549c3886dbea992fb200b38c0ee8ce8ea1f41002600844767b0",
+      "evidenceBytes": 41091,
+      "evidenceGzipBytes": 6740,
       "earliestRawEventSample": null
     },
     {
@@ -707,16 +707,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "997b91e9c9e9fa55aff162f982e33f9a50c1a3881e6c04e7c4fe357b3aeac7d8",
-      "evidenceSha256": "8c3cf52b29633e761a4862a2e5d47c61942e1873066b974497320e4dfa342d10",
-      "evidenceBytes": 38839,
-      "evidenceGzipBytes": 6518,
+      "registerSha256": "cfe914368a1482bbc644f912798be0c80578779e27b58b04f452777c7e307256",
+      "evidenceSha256": "bd32331e696eb8980d1f7d59c694bd0c24cdacfbfcf4c3e59bcb64ea9a87c6e0",
+      "evidenceBytes": 41407,
+      "evidenceGzipBytes": 6763,
       "earliestRawEventSample": null
     },
     {
@@ -769,16 +769,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "6d81d3670c15d4336e9cc15c3601c7f2f5d767edd7f84b5c21ee1c9f6a10588e",
-      "evidenceSha256": "f2f3c873f7472e120b16dcf3bc7db224954b0df33b0cab919bcc843b80e115e3",
-      "evidenceBytes": 40557,
-      "evidenceGzipBytes": 6800,
+      "registerSha256": "000b10f0e15e63fb5723121f8df62276423ff58b0ffe3184ecc7133347dcdb47",
+      "evidenceSha256": "2d40d10c32e757fb568fb2963fd788bb651399b4b2f9aae90724602d868389c7",
+      "evidenceBytes": 43125,
+      "evidenceGzipBytes": 7041,
       "earliestRawEventSample": null
     },
     {
@@ -832,16 +832,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "94a432ab9a5a117fe2378c2be981ccecfb4861d4759770c111f01c3e367a8858",
-      "evidenceSha256": "6b73b8c57c159caed22ebf725cc7a7fef3f918693cb6a345c265f5bed0f0265e",
-      "evidenceBytes": 78280,
-      "evidenceGzipBytes": 9600,
+      "registerSha256": "b49da73de194ff6677263e89b195c8db0215d7be33f808de2b2fe32d672312a2",
+      "evidenceSha256": "1acff7c78fb9cb681ca73c7590c7b73b3e514211365eb6a01024dbb2792c99d6",
+      "evidenceBytes": 80848,
+      "evidenceGzipBytes": 9819,
       "earliestRawEventSample": {
         "id": "210:133:000:0000257:00001",
         "departmentCode": "210",
@@ -936,16 +936,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "59611b07ea59d1c39ddf44a0629ebfd120e858b2ed11d3296a6beab230ea15e5",
-      "evidenceSha256": "16874530d32eaf905af9f66393cdca79d7d01dd05e646c26f1a14c3a36671cff",
-      "evidenceBytes": 116987,
-      "evidenceGzipBytes": 11132,
+      "registerSha256": "d8b03e8b431b5f25079832536b400cfff03362fe3dd4652b728d08371e646465",
+      "evidenceSha256": "eb5de9286b772f364b1be567b39d231c9fc68b5371858ab70fcfeaa7576f4c36",
+      "evidenceBytes": 119555,
+      "evidenceGzipBytes": 11341,
       "earliestRawEventSample": {
         "id": "210:133:000:0000254:00002",
         "departmentCode": "210",
@@ -1036,16 +1036,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "bbbbed5a24d7f8b13d3a77742db932a86ee89d883545f6380dba00ebdc81ea0b",
-      "evidenceSha256": "de5b18337126914b87ae98b8443ed71e70951b73ae109fe10778d54d13758d0a",
-      "evidenceBytes": 110931,
-      "evidenceGzipBytes": 9143,
+      "registerSha256": "599ae7ebe3d21b9f103bb2329c62cc295495b900682cec0e011c035a5955a4a1",
+      "evidenceSha256": "c9715bf8ce555beee8bf29e753bcd21bb6e0dd8fc4e3b96f6484ce65bf77f3d0",
+      "evidenceBytes": 113499,
+      "evidenceGzipBytes": 9360,
       "earliestRawEventSample": {
         "id": "210:442:000:0000359:00001",
         "departmentCode": "210",
@@ -1136,16 +1136,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "ed454af1acf0fffd5c785e6e87d46069657e492273096252940832901cfcfe2c",
-      "evidenceSha256": "5af58f30aa191feeff360c380cc0afb37140c8d5cf6481e0892d2428e4b92c54",
-      "evidenceBytes": 48931,
-      "evidenceGzipBytes": 7236,
+      "registerSha256": "df37af57938a926637a675cc0559f4de9856c533444fe0553ff0e7b9074dfeb0",
+      "evidenceSha256": "e2f47e7be35e8a141fe130484e26b7a86522da8bdb916d695fc790965d5bc59b",
+      "evidenceBytes": 51499,
+      "evidenceGzipBytes": 7474,
       "earliestRawEventSample": null
     },
     {
@@ -1199,16 +1199,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "c9e33c3ea868c3f832277dd54b1cd68dc7910fbc5e138d04b83c0c31eb0b5671",
-      "evidenceSha256": "68a5c1721d9cd7ac47081df8458da1a0772101e5ea9ff0bbf301e89d345af3d5",
-      "evidenceBytes": 83012,
-      "evidenceGzipBytes": 9600,
+      "registerSha256": "0b83f717dca4c29be2fdadd5d29fcd2d9747fe576c007c909a97593c0f44c02d",
+      "evidenceSha256": "54ff5e111a7da85b603a8b717dd1bdfb2fb198a212089e80dcabb93390b95300",
+      "evidenceBytes": 85580,
+      "evidenceGzipBytes": 9824,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00003",
         "departmentCode": "210",
@@ -1303,16 +1303,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "a65aceb2489e8fb63a09ceab050739dda7333e6e00323c183c041ff535e03394",
-      "evidenceSha256": "48d02436ec81a1837121cd9228fb9e45b179a5f0ffa35088a143c8204956998d",
-      "evidenceBytes": 136241,
-      "evidenceGzipBytes": 12095,
+      "registerSha256": "9495102ab83a73f4f1ef18aa066653672c1eac03440ed923247c705c66588515",
+      "evidenceSha256": "0262296951358a55cfed1e81778897d0f40c3920b24d279db0bed441ec044e88",
+      "evidenceBytes": 138809,
+      "evidenceGzipBytes": 12310,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00001",
         "departmentCode": "210",
@@ -1400,16 +1400,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "8653a036c10842cdd8a2608062fd58655a6c8aeeb080ba4f93199f143065184d",
-      "evidenceSha256": "24260377b822e9b4a63900127b8c44dd783186af6266b12f0bcb009802af1419",
-      "evidenceBytes": 123582,
-      "evidenceGzipBytes": 11224,
+      "registerSha256": "2effaeb8e38295cf84999810a9d5e7fbce7871fc830ecb46f09181f202643a57",
+      "evidenceSha256": "ebabde5a921aeba1b23ebf2d0400646dfb298d9763464051bac3bb111816c264",
+      "evidenceBytes": 126150,
+      "evidenceGzipBytes": 11434,
       "earliestRawEventSample": {
         "id": "210:295:000:0001073:00001",
         "departmentCode": "210",
@@ -1497,16 +1497,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9df2b3c6c7caf9c95dac7cac763ee07bbc82234c9100d98a54f1cb85b2f1732e",
-      "evidenceSha256": "97edc4188ad37e9f126fd9118b608c32d4204e31de2904bb3aefa0e77ac5ab58",
-      "evidenceBytes": 75729,
-      "evidenceGzipBytes": 9211,
+      "registerSha256": "058b40ae4383dbfa9147f4614465f51cde3f70ea89fe227fc9530ad48f0dd76d",
+      "evidenceSha256": "ab3eef49d9e237e005c098fa1c80e6b166305a9ef096e234dd6e81ccaed152a0",
+      "evidenceBytes": 78297,
+      "evidenceGzipBytes": 9435,
       "earliestRawEventSample": {
         "id": "210:295:000:0001073:00001",
         "departmentCode": "210",
@@ -1594,16 +1594,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "45300cde50cfdc271c36eaa4bfc74690c8d72ae1a00ad6def1d4cc76b0c5c2cf",
-      "evidenceSha256": "1a830418f55fc348d22351a096917a66bccc35ee12e1e933ddba21f7edb3772e",
-      "evidenceBytes": 79204,
-      "evidenceGzipBytes": 8885,
+      "registerSha256": "e9296ceb148fae6123080b7c8c3906d14cecc10c4e531106da585ab47643e012",
+      "evidenceSha256": "481aa7b858e551805d6ab1aea405648af30ed011499f1f224ef70c19f87af83d",
+      "evidenceBytes": 81772,
+      "evidenceGzipBytes": 9117,
       "earliestRawEventSample": {
         "id": "210:295:000:0001587:00001",
         "departmentCode": "210",
@@ -1691,16 +1691,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "85a428bcc87b69203bf7ecf3d2a83adfce2004113d26631b26628b5a773cbfe7",
-      "evidenceSha256": "992caa361a0f22542364c2e33f67631eda701e5a9261070a8097f94d54c6e3c4",
-      "evidenceBytes": 78177,
-      "evidenceGzipBytes": 8905,
+      "registerSha256": "cac540115e53cca79f7dd357efea15f893a02c5395e08fc02280d183a4e90fe8",
+      "evidenceSha256": "1ddfe7c8d31335b59aa2094589710fc0c50c955b25a75ee7a3de3a3e371ff408",
+      "evidenceBytes": 80745,
+      "evidenceGzipBytes": 9142,
       "earliestRawEventSample": {
         "id": "210:295:000:0001640:00001",
         "departmentCode": "210",
@@ -1788,16 +1788,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "26cd04159ba2c3434864b72f1c572d9180b67cfbdb798d6a95f8986ff5a5a467",
-      "evidenceSha256": "f60e7be6765aa5abcf01c07917d4c49fcea4ed60ab18e57c117c992c7cec7edb",
-      "evidenceBytes": 163270,
-      "evidenceGzipBytes": 13346,
+      "registerSha256": "105709aa5afb3665efad100bc1e80cb62d1b37f0e76e0d6dec3dd5f075d06444",
+      "evidenceSha256": "b75a600dec3e8a96985669ac6445b6036caf373f5204d402c616c0ee039aa542",
+      "evidenceBytes": 165838,
+      "evidenceGzipBytes": 13555,
       "earliestRawEventSample": {
         "id": "210:295:000:0001102:00001",
         "departmentCode": "210",
@@ -1885,16 +1885,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "8cc4df4554bff1506cdfd2b5e6e323a90ae53055d675ebd6a6a3479e32b57591",
-      "evidenceSha256": "197551722ec5ef816c3c1622812f61d5e4b085a57ab87816b03b002fc9769742",
-      "evidenceBytes": 163270,
-      "evidenceGzipBytes": 13346,
+      "registerSha256": "e20ab6019a4c68cf83849947ffb468635c4b1a8af921b3577ba3738b1763b20e",
+      "evidenceSha256": "1094d50aa6d35ff1bf27a3d3fef38268f6a70ad6611564dbf6a1a15c8a89b0e5",
+      "evidenceBytes": 165838,
+      "evidenceGzipBytes": 13555,
       "earliestRawEventSample": {
         "id": "210:295:000:0001102:00001",
         "departmentCode": "210",
@@ -1982,16 +1982,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "8d092e234cf5d4320c291e0360ecf8ecf47060038d40466c6e23cb78c790a94e",
-      "evidenceSha256": "66f11424cf20d0a25a62f9e8279f1d8a394dbce7f96632fc6622419d2f556149",
-      "evidenceBytes": 64874,
-      "evidenceGzipBytes": 8366,
+      "registerSha256": "f8bc986630a5377cefc9af5ad1000a6771b13c890fe33cbe1e718412f431558c",
+      "evidenceSha256": "5a7bce5573868596fe1fff44eb64e1bd978b2237ce143a3a858e2893e0e3e628",
+      "evidenceBytes": 67442,
+      "evidenceGzipBytes": 8596,
       "earliestRawEventSample": {
         "id": "210:295:000:0001212:00001",
         "departmentCode": "210",
@@ -2079,16 +2079,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "5678ae5e1f0e36c9153508be739c5fd64d3775b7f06d05c0ff3ff013a7223f30",
-      "evidenceSha256": "99636b87eff9dec81c9fb8dbc5db197028c7e282c9a65242e1f375fd84791428",
-      "evidenceBytes": 85091,
-      "evidenceGzipBytes": 9814,
+      "registerSha256": "0f1f006018867e741c884ed6f8a86e3f464b0026ab517df4d08cb3852d68a46f",
+      "evidenceSha256": "5a0c2b15054ac88991718d3af1c82c96cb25d8f78fd9fcca9fcfce8cd2e84bb2",
+      "evidenceBytes": 87659,
+      "evidenceGzipBytes": 10039,
       "earliestRawEventSample": {
         "id": "210:295:000:0001154:00001",
         "departmentCode": "210",
@@ -2178,16 +2178,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "e89f792786b9f6dea8119a2a6e23a607c1218b2d6b3bfac5d08b2c1c756e7bd9",
-      "evidenceSha256": "c48eceaa59e7b193739b3faf402e6d5a08690db830622daf21accee606ce390b",
-      "evidenceBytes": 58602,
-      "evidenceGzipBytes": 8330,
+      "registerSha256": "d177365a6aeb88779ecc941ceaef11e0d0426db0a561e756c7330406f05b7308",
+      "evidenceSha256": "2790a898ccd9b0c8852730edbeb49fdaa80756aa70bc1e9d8cb447f952df89b9",
+      "evidenceBytes": 61170,
+      "evidenceGzipBytes": 8561,
       "earliestRawEventSample": {
         "id": "210:295:000:0001446:00001",
         "departmentCode": "210",
@@ -2286,16 +2286,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "ccdc6edfbf25c0275bcadd3d01c1d4c0848a856fe1d95a2fe706d132e7232f3a",
-      "evidenceSha256": "d59bdd1584a9bff3d83f596560f6499fa4116aba720487d8f700e3827f56cb35",
-      "evidenceBytes": 140050,
-      "evidenceGzipBytes": 10925,
+      "registerSha256": "166c00763feabbfee2d728851c9c23697bd66e4f7bcf60bf7ee22ce51051bfa1",
+      "evidenceSha256": "95c2fb1ab2dfe6a54e0eefdfc915d2d12789d5165350fe2a2b4775580d0cbfd0",
+      "evidenceBytes": 142618,
+      "evidenceGzipBytes": 11147,
       "earliestRawEventSample": {
         "id": "210:150:000:0000315:00001",
         "departmentCode": "210",
@@ -2384,16 +2384,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "e3c1cad3b4bda7f3aa82bb5bfc4e469fbf11c14ccbc844fbcec4ac9a10fdad7f",
-      "evidenceSha256": "199ce0120ade84bef96e2b4200a8cc94c8e56bc5c4e0862a67c3f3522c4c4e5f",
-      "evidenceBytes": 109928,
-      "evidenceGzipBytes": 10357,
+      "registerSha256": "9b3727eecd51558c58959fe717addbfdff026abf3edac25c08df6c6c78520c58",
+      "evidenceSha256": "674d6e3732e2b2a5a7d7710eccca2dd1d4c43f0dcf013df0d10eec95a956e348",
+      "evidenceBytes": 112496,
+      "evidenceGzipBytes": 10576,
       "earliestRawEventSample": {
         "id": "210:512:000:0000202:00001",
         "departmentCode": "210",
@@ -2486,16 +2486,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "55b367508e47a5ea155563cc703f95d7fd40a00008946b43f8aee610516b0d11",
-      "evidenceSha256": "1a9b6e11e77fca0e36b4b45d9b4f02940662ff5f5b286637a3721150dbcfdb42",
-      "evidenceBytes": 139638,
-      "evidenceGzipBytes": 11759,
+      "registerSha256": "5e9760a15d471f5631dcd068af1b8c2fde5d40951c2515447277d81a74f58b44",
+      "evidenceSha256": "de02860ecabc5971f35bc8dfd488dcd7cae34a609a307572a7f238f0240ceab8",
+      "evidenceBytes": 142206,
+      "evidenceGzipBytes": 11971,
       "earliestRawEventSample": {
         "id": "210:150:000:0000313:00001",
         "departmentCode": "210",
@@ -2584,16 +2584,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "06610aadfa1e34761cc4e91d0a0cc361e952c0b6f6242dfb7bf1e9635708ff02",
-      "evidenceSha256": "aac96069053c5a672cd24ef5a56277e6a817b5550dd8ccd4edef1310750c8886",
-      "evidenceBytes": 93163,
-      "evidenceGzipBytes": 9768,
+      "registerSha256": "360b6de6ed06e91d8d82d2f9b3f831c154bc86892a204fac0318bfac8733c835",
+      "evidenceSha256": "9a95b0e73b0fd83f0afa0555f4cbd0dfaf23171ed1339eed6a0a29feba0c44c8",
+      "evidenceBytes": 95731,
+      "evidenceGzipBytes": 9988,
       "earliestRawEventSample": {
         "id": "210:512:000:0000245:00001",
         "departmentCode": "210",
@@ -2682,16 +2682,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "2186c706b3608be70173b74556058699511dc500134ffac5df655d81e369f6bd",
-      "evidenceSha256": "9db0d23275748965afb5751006161eeff81cc4816335c238207cb5309621199d",
-      "evidenceBytes": 48800,
-      "evidenceGzipBytes": 7669,
+      "registerSha256": "1eb2ba664166fa797e6b8800838b1348508a03bec0bb491c823b961e4ddaa8b8",
+      "evidenceSha256": "5929e2b6268b4701cd639d7b087085f08c95e47d3d2eb3083595a91d049b195c",
+      "evidenceBytes": 51368,
+      "evidenceGzipBytes": 7907,
       "earliestRawEventSample": {
         "id": "210:150:000:0000382:00001",
         "departmentCode": "210",
@@ -2793,16 +2793,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "a907714cdec1e9d2c83120670c442cede5679df9769f40c6b8edce05658ac46c",
-      "evidenceSha256": "769a27724b0197c1d665bf40e8a1bece430efccd785b04d3c91c26a613363a89",
-      "evidenceBytes": 794801,
-      "evidenceGzipBytes": 37745,
+      "registerSha256": "92255a85571e69722c94d861e627f63e8c41da35d811daabc3516b96e274cd1f",
+      "evidenceSha256": "2465be320da1acc9eb472f00d294228bfc4378c100b12f1e50b80715574931b2",
+      "evidenceBytes": 797369,
+      "evidenceGzipBytes": 38000,
       "earliestRawEventSample": {
         "id": "210:010:000:0000130:00001",
         "departmentCode": "210",
@@ -2904,16 +2904,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "2cd3114719b7c3cb4bedca2f7e973d13877dfe4bfaf4f7494b237999bf1e4537",
-      "evidenceSha256": "23e7e22294d6dc751d89e8bf4b4e73943a9b69c9985388acc8d75a63855982ae",
-      "evidenceBytes": 412784,
-      "evidenceGzipBytes": 23097,
+      "registerSha256": "1566365895228a1beeb1192fa184684dde72a6ac05494ffed98e6d4f6b7e14b9",
+      "evidenceSha256": "e5aa43485dfd41e54c00bb44d29b313ee0c9e8790a74ac419524987093ffda9c",
+      "evidenceBytes": 415352,
+      "evidenceGzipBytes": 23308,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",
@@ -3009,16 +3009,16 @@
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
-          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+          "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown. The 2013 and 2015 listings link 96 bulletins with no capture of the listed URL; 17 listed Côte-d'Or bulletins are probably obtained as same-filename captures whose cover year matches (see the Common Crawl report)",
           "Departmental 2021–2026 publications outside the existing index",
           "Regional publications before 2019 and any notice outside the indexed corpus",
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "58cbfa7a1a812318e3637d62055b62ba033b2f10096864c0cc0ad9262ea26a65",
-      "evidenceSha256": "c21fc32534e53c131a568e67777fe4b9a5e400465e45e4edae4f5245d829ced4",
-      "evidenceBytes": 370842,
-      "evidenceGzipBytes": 21092,
+      "registerSha256": "8b97f4c6ca521ee7d5db613109c9c84f11855eef749aed9764d07d685721f57c",
+      "evidenceSha256": "edf39fa0c29246a6867d426ed6172a3b83191cc0c69e382a2433d6b6dfddabe6",
+      "evidenceBytes": 373410,
+      "evidenceGzipBytes": 21300,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",
@@ -3105,16 +3105,16 @@
       "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "89": [
-          "Yonne: 1,239 queued bulletin URLs remain missing or unusable after the 4 October retry; see the dated retry report",
+          "Yonne: 1,229 queued bulletin URLs remain missing or unusable after the 4 October retry and the Common Crawl search (97 URLs across both departments exist there only as copies truncated at 1 MiB); see the dated reports",
           "Yonne 2024–2026: no archived listing; only filename-dated captures",
           "Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them",
           "Before 2008: not searched"
         ]
       },
-      "registerSha256": "d63f2df8c9ec642b35900845c7eac2c0e499e5eb99b02d98c6a768686e4dca00",
-      "evidenceSha256": "a18b6efeebec8d41ef8277794a5b0b407393a7ba0d101e0278aba492edead479",
-      "evidenceBytes": 416105,
-      "evidenceGzipBytes": 25380,
+      "registerSha256": "7a1614885d0b4f2ee1c0f143d17ddbcaaafac5d0fa19c9724f3a3deae7d42b28",
+      "evidenceSha256": "3f88584ddcce2b10b0650654e921cb3082829ea2266ebd39702efb14a3a15268",
+      "evidenceBytes": 417112,
+      "evidenceGzipBytes": 25591,
       "earliestRawEventSample": {
         "id": "890:068:000:0001086:00034",
         "departmentCode": "890",

@@ -98,7 +98,7 @@ jobs:
       - name: Historical evidence and cru config regressions
         if: needs.scope.outputs.research == 'true'
         working-directory: scripts
-        run: python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins test_pull_grand_cru_notice_bulletins test_index_cotedor_bulletins
+        run: python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins test_pull_commoncrawl_bulletins test_pull_grand_cru_notice_bulletins test_index_cotedor_bulletins
       - uses: ./.github/actions/test-setup
         if: needs.scope.outputs.quality == 'true'
       - name: Lint

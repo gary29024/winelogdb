@@ -2,51 +2,51 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-FEXATENu.js"
+    "dist/client/assets/index-B14W04L5.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-B8o1ZiTh.js",
-    "dist/client/assets/SectionLabel-Bf1KYXCs.js",
-    "dist/client/assets/SparklingDetailsCard-BpsEd1Xw.js",
-    "dist/client/assets/VillageMap-D7vnNCnD.js",
-    "dist/client/assets/api-CcyWdrW4.js",
-    "dist/client/assets/burgundyAtlas-CcnizNES.js",
-    "dist/client/assets/index-B4gmETwb.js",
-    "dist/client/assets/index-FEXATENu.js",
+    "dist/client/assets/FriendTagDialog-BQCZCsxp.js",
+    "dist/client/assets/SectionLabel-C-Tqsv-C.js",
+    "dist/client/assets/SparklingDetailsCard-C2iuhftR.js",
+    "dist/client/assets/VillageMap-0jZiDiev.js",
+    "dist/client/assets/api-B-TSd0P2.js",
+    "dist/client/assets/burgundyAtlas-PXMoTTmB.js",
+    "dist/client/assets/index-B14W04L5.js",
+    "dist/client/assets/index-FVV_ZoK1.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CCTIMujn.js",
-    "dist/client/assets/wineDetailCompact-DR8yEdZ5.js"
+    "dist/client/assets/useModalFocus-BXJMPIfH.js",
+    "dist/client/assets/wineDetailCompact-Ce745L3H.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 3,
-  "evidenceBytesTotal": 735832,
-  "evidenceGzipBytesTotal": 67518,
+  "evidenceBytesTotal": 743536,
+  "evidenceGzipBytesTotal": 68188,
   "parcelBundleBytesTotal": 386740,
   "parcelBundleGzipBytesTotal": 58961,
   "evidenceChunks": [
     {
       "cru": "clos-de-vougeot",
-      "file": "dist/client/assets/clos-de-vougeot.evidence-CRy_QWHa.js",
-      "sha256": "9f4b56eee76af0fc08b479cc765bd5d71a599ae1841633860dbb89eb1afa83cf",
-      "bytes": 209547,
-      "gzipBytes": 16113
+      "file": "dist/client/assets/clos-de-vougeot.evidence-DmqQltyd.js",
+      "sha256": "063872b3938d6dbea819aad84e1b46a0f0ad1dbff0599490281ff916682ce177",
+      "bytes": 212115,
+      "gzipBytes": 16328
     },
     {
       "cru": "echezeaux",
-      "file": "dist/client/assets/echezeaux.evidence-DggiNZU1.js",
-      "sha256": "4a770f02a01f97ead6938e22ea686428624a5b4dc4459066316f7e70b44ddf2f",
-      "bytes": 448291,
-      "gzipBytes": 38541
+      "file": "dist/client/assets/echezeaux.evidence-DmZDozh-.js",
+      "sha256": "c0dafcacd638f4d3ec2092813bb14b47d197fd3e4c6d1dccb5414cb7c1b05bad",
+      "bytes": 450859,
+      "gzipBytes": 38754
     },
     {
       "cru": "grands-echezeaux",
-      "file": "dist/client/assets/grands-echezeaux.evidence-CHPkXWzH.js",
-      "sha256": "d8499a0a9557340c47f1dd1c47b2379a7bcc57aa2dab380b013e55eacc8b422c",
-      "bytes": 77994,
-      "gzipBytes": 12864
+      "file": "dist/client/assets/grands-echezeaux.evidence-CPD4sCi0.js",
+      "sha256": "f0796632b33003537fdaa13018b4e8f8c464cfcb0b54800bf18b858a179dd2a2",
+      "bytes": 80562,
+      "gzipBytes": 13106
     }
   ],
   "parcelBundles": [

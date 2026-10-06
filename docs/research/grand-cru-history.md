@@ -85,10 +85,12 @@ record and coverage gap.
 The [4 October retry and rebuild](earlier-bulletins/retry-report-2026-10-04.json)
 rechecked 1,406 missing URLs and recovered 55 source URLs representing 37 new
 distinct PDFs. Exact capture timestamps and original URL spellings recovered files
-whose nearest-capture requests had failed. The rebuilt earlier indexes now contain
-111 Côte-d'Or and 1,251 Yonne PDF source URLs, with 44,752 fully extracted pages
+whose nearest-capture requests had failed. A [Common Crawl search](earlier-bulletins/commoncrawl-report-2026-10-04.json)
+of all 128 crawls then recovered 11 complete PDFs. A further 97 URLs exist there only as copies
+truncated at 1 MiB and stay missing. The rebuilt earlier indexes now contain
+112 Côte-d'Or and 1,261 Yonne PDF source URLs, with 44,907 fully extracted pages
 and no pending or failed OCR pages. Byte-identical aliases retain separate source
-citations. There are still 1,351 unresolved URLs. The updated coverage audit and
+citations. There are still 1,340 unresolved URLs. The updated coverage audit and
 all 33 notice histories retain the existing image-reviewed parcel readings; new
 search candidates are not automatically promoted to reviewed evidence.
 
@@ -192,7 +194,7 @@ The register and app evidence can be checked in CI without raw downloads:
 python scripts/build_grand_cru_research.py --all --check
 python scripts/build_grand_cru_app_registry.py --check
 cd scripts
-python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins
+python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins test_pull_commoncrawl_bulletins
 ```
 
 For a new catalogue date, run the source inventory with a fresh `--stamp`, review

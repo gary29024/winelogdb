@@ -17,8 +17,8 @@ captured document, its state and the gaps. It is pinned by hash in the
 
 | Department | PDF source URLs | Indexed pages | Years with bulletins | Gaps |
 | --- | ---: | ---: | --- | --- |
-| Côte-d'Or | 111 | 6,077 | 2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015 | Nothing obtained for 2007, 2009, 2012 or 2014; 112 queued URLs remain unresolved, including 96 links in the archived 2013 and 2015 listings |
-| Yonne | 1,251 | 38,675 | Every year 2008–2026 | 1,239 queued URLs remain missing or unusable; 2024–2026 have no archived listing |
+| Côte-d'Or | 112 | 6,147 | 2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015 | Nothing obtained for 2007, 2009, 2012 or 2014; 111 queued URLs remain unresolved, including 96 links in the archived 2013 and 2015 listings (17 listed bulletins are probably obtained as same-filename captures with a matching cover year) |
+| Yonne | 1,261 | 38,760 | Every year 2008–2026 | 1,229 queued URLs remain missing or unusable; 2024–2026 have no archived listing |
 
 Archive availability is not publication completeness. Missing captures, missing
 listings and unsearched years are unknown coverage, never evidence that no notice
@@ -36,6 +36,33 @@ though the catalogue's exact timestamp and original HTTP spelling worked. The
 downloader now supports this fallback with `--retry-unavailable`. Other captures
 remain unavailable or truncated. No catalogue match is not proof that a bulletin
 was never published or captured. The 2 October snapshots remain unchanged.
+
+A paged listing of every Internet Archive capture of both domains' download paths
+(21,849 captures, all content types) found no further complete copy: each remaining
+match is a capture already tried, most truncated at exactly 1 MiB.
+
+The [Common Crawl report](commoncrawl-report-2026-10-04.json) then searched all
+128 Common Crawl crawls (322 host lookups) for the remaining URLs, by listed URL or
+the same publisher document ID only. Filename-only matches are not used, because
+Yonne names such as `recueil n°4.pdf` repeat every year. Many matching
+Common Crawl bodies were truncated at 1 MiB. Older crawls did not flag the truncation,
+which shows instead as `Content-Length: 1048576` with a larger
+`X-Crawler-Content-Length`. Eleven complete PDFs were recovered and stored with
+their exact WARC record: Côte-d'Or 31 May 2005 and ten Yonne 2017 bulletins. The
+97 URLs found only truncated stay missing. None of the recovered pages names a
+Grand Cru commune in a land or parcel context, so no new page needed image review.
+The catalogue results checked in this run yielded no usable copy of the remaining
+Yonne 2020, 2021 or 2023 bulletins; this does not establish that no copy exists.
+
+The [6 October local and downloader check](downloader-check-2026-10-06.json)
+verified all 11 Common Crawl recoveries against their recorded publisher and WARC
+record. A live download reproduced the 31 May 2005 PDF's pinned hash and stored it
+successfully in a separate test archive. The prefecture hosts still returned empty
+replies; the Wayback catalogue returned 503 and the Common Crawl catalogue closed
+its connection. Known Common Crawl record downloads work even when catalogue
+discovery is unavailable. The downloader now scopes document IDs to their publisher,
+retains all listed URL aliases, initializes a fresh archive and checks that range
+responses cover the requested bytes before reading them.
 
 All recovered pages were text-extracted or OCRed and searched for Grand Cru commune
 names. Six Côte-d'Or covers were image-read to confirm their 2011/2013 issue dates;
@@ -127,6 +154,8 @@ python scripts/pull_wayback_bulletins.py inventory --out docs/research/earlier-b
 python scripts/pull_wayback_bulletins.py alternates --sources docs/research/earlier-bulletins/sources.json
 python scripts/pull_wayback_bulletins.py pull --sources docs/research/earlier-bulletins/sources.json
 python scripts/pull_wayback_bulletins.py pull --sources docs/research/earlier-bulletins/sources.json --retry-unavailable --limit 20 --report .tmp/wayback-retry.json
+python scripts/pull_commoncrawl_bulletins.py scan
+python scripts/pull_commoncrawl_bulletins.py recover
 python scripts/index_cotedor_bulletins.py --corpus 'cote-dor-200%' cote-dor-2010 cote-dor-2013 cote-dor-2015 cote-dor-undated --output <dir>
 python scripts/index_cotedor_bulletins.py --corpus 'yonne-%' --communes docs/research/bfc-bulletins/yonne-communes.json --output <dir>
 python scripts/pull_wayback_bulletins.py date --sources docs/research/earlier-bulletins/sources.json --out docs/research/earlier-bulletins/undated-dating.json
