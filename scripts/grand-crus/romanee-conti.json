@@ -14,9 +14,25 @@
     "romanee-conti"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/romanee-conti/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/romanee-conti",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/romanee-conti,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzgyJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "da07417541591884027972eacf4bb54128553ffba547171a3d1e8d70e8da8c6f",
+    "coverageNote": "The official wine-board list names La Romanée Conti as the cru's only climat, and the pinned cadastre records LA ROMANEE CONTI. The named area is the whole cru, so the official outline is retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "romanee-conti",
+        "name": "Romanée-Conti",
+        "sourceName": "LA ROMANEE CONTI",
+        "aliases": []
+      }
+    ],
+    "unresolved": []
   }
 }

@@ -35,7 +35,6 @@ describe('Richebourg Tier 1',()=>{
  });
  it('enables only the audited Vosne cru and keeps rights separate from farming',async()=>{
   expect(grandCruFor('inao-denom-1083','vosne-romanee')).toMatchObject({slug:'richebourg',domaineGrouping:false,evidenceFrom:['richebourg']});
-  expect(grandCruFor('inao-denom-1084','vosne-romanee')).toBeUndefined();
   const evidence=await loadParcelEvidence('inao-denom-1083');
   expect(evidence).not.toBeNull();
   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
