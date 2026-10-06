@@ -42,11 +42,16 @@ test('the owner translates Deep Search on request and switches back to English',
  await expect(panel).toContainText('A fresh, mineral white wine.');
  // Saved Chinese is looked up as soon as the research shows, so the switch never waits on it.
  await expect.poll(()=>posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
- // Small, on the Deep Search heading row, right-aligned, even on a phone.
+ // The heading row keeps its provenance badge at the end, as every section
+ // does; the small switch is right-aligned on the row below, beside the score.
  const head=await panel.locator('.deep-panel-head').boundingBox(),toggle=await panel.locator('.research-language-switch').boundingBox(),label=await panel.locator('.deep-panel-head .section-label-text').boundingBox();
+ const right=(box:{x:number;width:number})=>box.x+box.width,middle=(box:{y:number;height:number})=>box.y+box.height/2;
  expect(toggle!.height).toBeLessThanOrEqual(34);
- expect(Math.abs((toggle!.y+toggle!.height/2)-(label!.y+label!.height/2))).toBeLessThan(8);
- expect(head!.x+head!.width-(toggle!.x+toggle!.width)).toBeLessThan(2);
+ expect(toggle!.y).toBeGreaterThanOrEqual(label!.y+label!.height-1);
+ expect(right(head!)-right(toggle!)).toBeLessThan(2);
+ const badge=panel.locator('.deep-panel-head .provenance-chip'),pill=panel.locator('.deep-panel-meta .deep-quality-pill');
+ if(await badge.count()){const box=(await badge.boundingBox())!;expect(right(head!)-right(box)).toBeLessThan(2);expect(Math.abs(middle(box)-middle(label!))).toBeLessThan(8)}
+ if(await pill.count())expect(Math.abs(middle((await pill.boundingBox())!)-middle(toggle!))).toBeLessThan(8);
  await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText('This uses one AI request.');
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);

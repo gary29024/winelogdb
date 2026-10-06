@@ -148,7 +148,7 @@ export function SharedWinesPage(){
    <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
   </section>}
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel>{wine.deepSearch&&<ResearchLanguageSwitch state={research}/>}</div>
+   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel>{wine.deepSearch&&<div className="deep-panel-meta"><ResearchLanguageSwitch state={research}/></div>}</div>
    {/* The owner's page shows research while scopes are still missing, so this
        page does too, and says so the same way. */}
    {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
