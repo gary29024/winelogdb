@@ -1,6 +1,7 @@
 import { useMemo,type ReactNode } from 'react';
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { sourceDisplayHost,sourceLinkLabel } from './researchSections';
+import { RESEARCH_COPY } from './researchTranslation';
 
 /**
  * How a Deep Search result reads, for anyone looking at it. Both wine detail
@@ -34,7 +35,7 @@ export function ResearchText({text,flagged=[]}:{text:string;flagged?:readonly st
  return <div className="research-text">{nodes}{flagged.length>0&&<small className="uncited-figure-note">Highlighted figures were found during research but could not be tied to a specific cited source. Treat them as unconfirmed.</small>}</div>;
 }
 
-export function DeepSources({sources}:{sources:DeepSearchResult['sources']}){
+export function DeepSources({sources,lang='en'}:{sources:DeepSearchResult['sources'];lang?:'en'|'zh'}){
  const groups=useMemo(()=>{
   const map=new Map<string,typeof sources>();
   for(const source of sources){const host=sourceDisplayHost(source)||'other sources',list=map.get(host)??[];list.push(source);map.set(host,list)}
@@ -43,7 +44,7 @@ export function DeepSources({sources}:{sources:DeepSearchResult['sources']}){
  if(!sources.length)return null;
  // Unattributed redirects are not a website of their own, so they are not counted as one.
  const siteCount=groups.filter(([host])=>host!=='other sources').length;
- return <details className="deep-sources"><summary>{sources.length} source{sources.length===1?'':'s'}{siteCount>0&&<> · {siteCount} website{siteCount===1?'':'s'}</>}</summary>
+ return <details className="deep-sources"><summary>{RESEARCH_COPY[lang].sources(sources.length,siteCount)}</summary>
   <div className="deep-sources-list">{groups.map(([host,items])=><div className="deep-source-group" key={host}><strong>{host}</strong>{items.map(item=><a key={item.url} href={item.url} target="_blank" rel="noreferrer">{sourceLinkLabel(item,host)}</a>)}</div>)}</div>
  </details>;
 }

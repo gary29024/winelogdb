@@ -10,8 +10,10 @@ import { billingMonth,nextBillingReset,BILLING_TIME_ZONE } from './billingPeriod
  * are the product; this is the meter beside them, and a meter that can break
  * the thing it measures is worse than no meter.
  */
-export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','bottle_frame','vintage_window','search_embedding','lwin_backfill'] as const;
+export const AI_USAGE_KINDS=['producer_research','wine_research','scan_single','scan_batch','scan_group','scan_sheet','champagne_extraction','bottle_frame','vintage_window','search_embedding','lwin_backfill','research_translation'] as const;
 export type AiUsageKind=typeof AI_USAGE_KINDS[number];
+export const AI_USAGE_STEPS=['translation'] as const;
+export type AiUsageStep=typeof AI_USAGE_STEPS[number];
 
 export const kindLabels:Record<AiUsageKind,string>={
   producer_research:'Producer Deep Search',
@@ -24,7 +26,8 @@ export const kindLabels:Record<AiUsageKind,string>={
   bottle_frame:'Bottle framing',
   vintage_window:'Vintage window',
   search_embedding:'Smart search',
-  lwin_backfill:'LWIN identity backfill'
+  lwin_backfill:'LWIN identity backfill',
+  research_translation:'Research translation'
 };
 
 const whole=(value:unknown)=>{const parsed=Math.round(Number(value)||0);return parsed>0?parsed:0};
@@ -33,6 +36,8 @@ export type AiUsageEvent={
   /** Stable only for a persisted provider response, never for a fresh API attempt. */
   eventId?:string;
   kind:AiUsageKind;runId:string;targetId?:string|null;model:string;
+  /** A step inside the run (its Chinese translation); omitted for the run's own work. */
+  step?:AiUsageStep|null;
   requests?:number;searchQueries?:number;promptTokens?:number;outputTokens?:number;
   /**
    * How many wines this call covered. Recognition is quoted per wine, so a
@@ -70,7 +75,9 @@ export const unitOf:Record<AiUsageKind,'run'|'wine'>={
   // A document embedding covers one stored wine. The query embedding covers no
   // wine, so that request records zero units and cannot inflate the per-wine figure.
   search_embedding:'wine',
-  lwin_backfill:'wine'
+  lwin_backfill:'wine',
+  // One translation of one research result, wine or producer.
+  research_translation:'run'
 };
 
 /**
@@ -118,9 +125,9 @@ export async function recordAiUsage(env:AiUsageEnv,owner:string,event:AiUsageEve
           units=ai_usage_monthly.units+excluded.units,
           updated_at=excluded.updated_at`)
         .bind(owner,month,event.kind,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp,eventId),
-      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,created_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING`)
-        .bind(eventId,owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp),
+      env.DB.prepare(`INSERT INTO ai_usage_events(id,owner_id,kind,run_id,target_id,model,tier,requests,search_queries,prompt_tokens,output_tokens,units,created_at,step)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING`)
+        .bind(eventId,owner,event.kind,event.runId,event.targetId??null,event.model,tier,requests,searchQueries,promptTokens,outputTokens,units,stamp,event.step??null),
       env.DB.prepare(`DELETE FROM ai_usage_events WHERE owner_id=? AND created_at<datetime('now','-${RAW_EVENT_RETENTION_DAYS} days')`).bind(owner)
     ]);
     if(writes[1]?.meta?.changes===0)return;
@@ -149,6 +156,8 @@ export type KindSpend={
 };
 
 export type RunSpendPart={
+  /** null for the run's own work; 'translation' for its Chinese translation step. */
+  step:AiUsageStep|null;
   model:string;tier:string;createdAt:string;requests:number;searchQueries:number;
   promptTokens:number;outputTokens:number;cost:number;
 };
@@ -175,7 +184,7 @@ export const isAiUsageRunHistoryKind=(value:string):value is AiUsageRunHistoryKi
 export type UsageRunHistory={currency:string;days:number;kind:AiUsageRunHistoryKind;runs:AiUsageRunSpend[]};
 
 type EventRow={kind:string;model:string;tier:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number;units:number};
-type RunPartRow={kind:string;run_id:string;target_id:string|null;target_label:string|null;model:string;tier:string;created_at:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number};
+type RunPartRow={kind:string;step:string|null;run_id:string;target_id:string|null;target_label:string|null;model:string;tier:string;created_at:string;day:string;requests:number;search_queries:number;prompt_tokens:number;output_tokens:number};
 type RunRow={kind:string;runs:number};
 type MonthRow={kind:string;model:string;tier:string;search_queries:number;prompt_tokens:number;output_tokens:number};
 
@@ -281,7 +290,7 @@ export async function usageRunHistory(db:D1Database,owner:string,rates:AiRates,k
       WHERE owner_id=? AND kind=? AND created_at>datetime('now','-${window} days')
       GROUP BY run_id ORDER BY latest DESC LIMIT ?
     )
-    SELECT e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at) AS day,max(e.created_at) AS created_at,
+    SELECT e.kind,e.step,e.run_id,e.target_id,e.model,e.tier,date(e.created_at) AS day,max(e.created_at) AS created_at,
       sum(e.requests) AS requests,sum(e.search_queries) AS search_queries,sum(e.prompt_tokens) AS prompt_tokens,sum(e.output_tokens) AS output_tokens,
       CASE
         WHEN e.kind='producer_research' THEN (SELECT p.canonical_name FROM producers p WHERE p.owner_id=e.owner_id AND p.id=e.target_id LIMIT 1)
@@ -290,7 +299,7 @@ export async function usageRunHistory(db:D1Database,owner:string,rates:AiRates,k
       END AS target_label
     FROM ai_usage_events e JOIN recent_runs r ON r.run_id=e.run_id
     WHERE e.owner_id=? AND e.kind=? AND e.created_at>datetime('now','-${window} days')
-    GROUP BY e.owner_id,e.kind,e.run_id,e.target_id,e.model,e.tier,date(e.created_at)
+    GROUP BY e.owner_id,e.kind,e.run_id,e.target_id,e.step,e.model,e.tier,date(e.created_at)
     ORDER BY r.latest DESC,created_at ASC`).bind(owner,kind,RUN_HISTORY_LIMIT,owner,kind).all<RunPartRow>();
 
   const runMap=new Map<string,AiUsageRunSpend>();
@@ -298,7 +307,7 @@ export async function usageRunHistory(db:D1Database,owner:string,rates:AiRates,k
     const runId=String(row.run_id||'');if(!runId)continue;
     const totals:UsageTotals={searchQueries:Number(row.search_queries)||0,promptTokens:Number(row.prompt_tokens)||0,outputTokens:Number(row.output_tokens)||0};
     const createdAt=String(row.created_at||''),cost=toLocal(marginalCostUsd(totals,rates,row.model,{on:row.day,tier:row.tier}),rates);
-    const part:RunSpendPart={model:row.model,tier:row.tier,createdAt,requests:Number(row.requests)||0,
+    const part:RunSpendPart={step:row.step==='translation'?'translation':null,model:row.model,tier:row.tier,createdAt,requests:Number(row.requests)||0,
       searchQueries:totals.searchQueries,promptTokens:totals.promptTokens,outputTokens:totals.outputTokens,cost};
     const targetLabel=row.target_label??(kind==='vintage_window'?vintageTargetLabel(row.target_id):null),existing=runMap.get(runId);
     if(existing){

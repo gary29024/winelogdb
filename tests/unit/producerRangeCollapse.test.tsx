@@ -40,6 +40,8 @@ async function render(over:Record<string,unknown>={},options:{role?:'owner'|'mem
   authState.role=options.role??null;
   vi.stubGlobal('fetch',vi.fn(async(url:string,init?:RequestInit)=>{
     const target=String(url);
+    // The language switch looks up saved Chinese on load; that is not a research action.
+    if(target.includes('/api/research/translation'))return new Response(JSON.stringify({translation:{lang:'zh-Hant-HK',fields:{}}}),{status:200,headers:{'content-type':'application/json'}});
     if(init?.method==='POST'){posted.push({url:target,body:JSON.parse(String(init.body??'{}'))});return new Response(JSON.stringify({id:'d1',deleted:true}),{status:200,headers:{'content-type':'application/json'}})}
     if(target.includes('/name-suggestions'))return new Response(JSON.stringify({items:[]}),{status:200,headers:{'content-type':'application/json'}});
     if(target.includes('/research-status'))return options.researchRun?new Response(JSON.stringify(options.researchRun),{status:200,headers:{'content-type':'application/json'}}):new Response(null,{status:404});

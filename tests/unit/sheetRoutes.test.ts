@@ -95,7 +95,7 @@ describe('reading a wine list into a tasting',()=>{
     const writes=stub.calls.filter(call=>/INSERT INTO ai_usage_events/.test(call.sql));
     expect(writes).toHaveLength(1);
     expect(writes[0].args[2]).toBe('scan_sheet');
-    expect(writes[0].args.at(-2)).toBe(2);
+    expect(writes[0].args[11]).toBe(2);
   });
 
   it('refuses a tasting that is not yours before spending anything on Gemini',async()=>{

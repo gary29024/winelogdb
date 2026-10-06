@@ -106,10 +106,14 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
         <div className="ai-spend-run-token-split">
           <span>Input {count(selected.promptTokens)}</span><span>Output + thinking {count(selected.outputTokens)}</span>
         </div>
+        {selected.parts.some(part=>part.step==='translation')&&<div className="ai-spend-run-token-split">
+          <span>Research {money(currency,selected.parts.filter(part=>part.step!=='translation').reduce((sum,part)=>sum+part.cost,0))}</span>
+          <span>Chinese translation {money(currency,selected.parts.filter(part=>part.step==='translation').reduce((sum,part)=>sum+part.cost,0))}</span>
+        </div>}
         <div className="ai-spend-run-parts">
           <h3>Request breakdown</h3>
           {selected.parts.map((part,index)=><article key={`${part.model}-${part.tier}-${part.createdAt}-${index}`}>
-            <div><strong>{part.model}</strong><small>{part.tier} tier · {when(part.createdAt)}</small></div>
+            <div><strong>{part.step==='translation'?'Chinese translation':part.model}</strong><small>{part.step==='translation'?`${part.model} · `:''}{part.tier} tier · {when(part.createdAt)}</small></div>
             <b>{money(currency,part.cost)}</b>
             <p>{count(part.requests)} request{part.requests===1?'':'s'} · {count(part.searchQueries)} search{part.searchQueries===1?'':'es'} · {count(part.promptTokens)} input · {count(part.outputTokens)} output/thinking</p>
           </article>)}
