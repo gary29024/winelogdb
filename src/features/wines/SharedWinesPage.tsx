@@ -17,7 +17,7 @@ import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { SharedDeepSearchControls } from './SharedDeepSearchControls';
 import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
-import { ResearchLanguageToggle } from './ResearchLanguage';
+import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
 import { DEEP_FIELD_LABELS_ZH,useResearchTranslation } from './researchTranslation';
 import '../../favorites.css';
 import '../../wineDetailCompact.css';
@@ -147,11 +147,11 @@ export function SharedWinesPage(){
    <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
   </section>}
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel></div>
+   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel>{wine.deepSearch&&<ResearchLanguageSwitch state={research}/>}</div>
    {/* The owner's page shows research while scopes are still missing, so this
        page does too, and says so the same way. */}
    {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
-   <ResearchLanguageToggle state={research}/>
+   <ResearchLanguageStatus state={research}/>
    <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',wine.deepSearch.summary)}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>

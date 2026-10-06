@@ -60,7 +60,7 @@ describe('translateResearch',()=>{
   const env={DB:d.db,GEMINI_API_KEY:'key',CREDIT_CONTEXT:{exempt:true as const,reason:'owner'}};
   expect(await readResearchTranslation(d.db,request(english))).toBeNull();
   const first=await translateResearch(env,'owner',request(english));
-  expect(first).toMatchObject({cached:false,fields:chinese,model:'gemini-3.8-flash'});
+  expect(first).toMatchObject({cached:false,fields:chinese,model:'gemini-3.1-flash-lite'});
   const sent=JSON.parse(String((fetch.mock.calls[0] as unknown as [string,RequestInit])[1].body));
   expect(sent.tools).toBeUndefined();
   expect(sent.generationConfig.responseJsonSchema.required).toEqual(['summary','terroir']);

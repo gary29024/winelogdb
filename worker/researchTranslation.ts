@@ -36,7 +36,7 @@ export async function translateResearch(env:Env,owner:string,request:Translation
  if(env.CREDIT_CONTEXT&&'deny' in env.CREDIT_CONTEXT)throw new ApiError(403,'No Chinese translation has been made for this research yet. Only the account owner can create one.');
  const keys=Object.keys(request.fields),model=AI_MODELS.researchTranslation,runId=crypto.randomUUID();
  const body=JSON.stringify({contents:[{role:'user',parts:[{text:translationPrompt(request.fields)}]}],
-  generationConfig:{temperature:0.2,responseMimeType:'application/json',responseJsonSchema:translationResponseJsonSchema(keys),maxOutputTokens:OUTPUT_TOKENS,thinkingConfig:{thinkingLevel:'low'}}});
+  generationConfig:{temperature:0.2,responseMimeType:'application/json',responseJsonSchema:translationResponseJsonSchema(keys),maxOutputTokens:OUTPUT_TOKENS,thinkingConfig:{thinkingLevel:'minimal'}}});
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
  let payload:GeminiPayload;
  try{

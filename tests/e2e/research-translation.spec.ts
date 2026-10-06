@@ -40,6 +40,11 @@ test('the owner translates Deep Search on request and switches back to English',
  const panel=page.locator('.deep-search-panel');
  await expect(panel).toContainText('A fresh, mineral white wine.');
  expect(posts).toEqual([]);
+ // Small, on the Deep Search heading row, right-aligned, even on a phone.
+ const head=await panel.locator('.deep-panel-head').boundingBox(),toggle=await panel.locator('.research-language-switch').boundingBox(),label=await panel.locator('.deep-panel-head .section-label-text').boundingBox();
+ expect(toggle!.height).toBeLessThanOrEqual(34);
+ expect(Math.abs((toggle!.y+toggle!.height/2)-(label!.y+label!.height/2))).toBeLessThan(8);
+ expect(head!.x+head!.width-(toggle!.x+toggle!.width)).toBeLessThan(2);
  await panel.getByRole('button',{name:'繁中'}).click();
  await expect(panel).toContainText('This uses one AI request.');
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);

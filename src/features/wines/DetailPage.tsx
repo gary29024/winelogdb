@@ -19,7 +19,7 @@ import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } fr
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
-import { ResearchLanguageToggle } from './ResearchLanguage';
+import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
 import { DEEP_FIELD_LABELS_ZH,useResearchTranslation } from './researchTranslation';
 import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
@@ -242,11 +242,11 @@ export function DetailPage(){
   </section>
   <CellarStrip wineId={wine.id}/>
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined} trailing={deep?.quality?<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>:undefined}>Deep Search</SectionLabel></div>
+   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined} trailing={deep?.quality?<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>:undefined}>Deep Search</SectionLabel>{deep&&<ResearchLanguageSwitch state={research}/>}</div>
    {deep?<>
     {!deepComplete&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
-    <ResearchLanguageToggle state={research}/>
+    <ResearchLanguageStatus state={research}/>
     <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',deep.summary)}/><ClaimEvidence deep={deep} field="summary"/></div>
     {sections.length>0&&<div className="deep-research-sections">
      <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
