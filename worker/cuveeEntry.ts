@@ -30,7 +30,7 @@ import { runVisionRecognition } from './visionRecognition';
 import { measureBottleFrame } from './bottleFrameHandler';
 import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame';
 import { translationRequestSchema } from '../src/lib/research/translation';
-import { readResearchTranslation,translateResearch } from './researchTranslation';
+import { readResearchTranslation,translateResearch } from '../src/lib/research/translationService';
 
 type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};

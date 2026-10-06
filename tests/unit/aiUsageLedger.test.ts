@@ -293,7 +293,7 @@ describe('every path that spends money is metered',()=>{
     ['worker/vintageWindowHandler.ts',"kind:'vintage_window'"],
     ['src/lib/journal/semanticSearch.ts',"kind:'search_embedding'"],
     ['worker/multiUser/lwinRepair.ts',"kind:'lwin_backfill'"],
-    ['worker/researchTranslation.ts',"kind:'research_translation'"]
+    ['src/lib/research/translationService.ts',"kind:'research_translation'"]
   ];
   it.each(sources)('%s records usage',async(path,kind)=>{
     const { readFileSync }=await import('node:fs');

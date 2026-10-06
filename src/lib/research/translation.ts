@@ -31,9 +31,15 @@ export const translationRequestSchema=z.object({
  .refine(value=>Object.values(value.fields).reduce((sum,text)=>sum+text.length,0)<=MAX_TOTAL_CHARS,'This research is too long to translate at once');
 export type TranslationRequest=z.output<typeof translationRequestSchema>;
 
-/** Field order does not change the text, so it must not change the key. */
-export async function translationSourceHash(lang:TranslationLang,fields:Record<string,string>){
- const canonical=JSON.stringify([TRANSLATION_PROMPT_VERSION,lang,Object.entries(fields).sort(([a],[b])=>a<b?-1:a>b?1:0)]);
+/**
+ * Each section is filed on its own text. A wine's Deep Search is assembled at
+ * read time from producer, terroir and vintage sections that other wines (and
+ * friends) share, so a whole-result key would rarely match what is on screen;
+ * a section key matches wherever that exact text appears, the producer page
+ * included.
+ */
+export async function translationTextHash(lang:TranslationLang,text:string){
+ const canonical=JSON.stringify([TRANSLATION_PROMPT_VERSION,lang,text.trim()]);
  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical));
  return Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
 }

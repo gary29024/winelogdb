@@ -20,7 +20,7 @@ import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
-import { DEEP_FIELD_LABELS_ZH,useResearchTranslation } from './researchTranslation';
+import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
 import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
 import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
@@ -77,6 +77,7 @@ export function DetailPage(){
  const deepHeld=deepSearchHeld(deepRun);
  const photoInput=useRef<HTMLInputElement|null>(null);
  const research=useResearchTranslation(deepResearchText(wine?.deepSearch));
+ const copy=RESEARCH_COPY[research.lang];
  const pollRef=useRef<Poller|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();pollRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -249,7 +250,7 @@ export function DetailPage(){
     <ResearchLanguageStatus state={research}/>
     <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',deep.summary)}/><ClaimEvidence deep={deep} field="summary"/></div>
     {sections.length>0&&<div className="deep-research-sections">
-     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+     <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
      {sections.map(([label,field,value])=>{
       const open=openDeepFields.has(field),evidence=deep.provenance?.fields[field],panelId=`deep-section-${field}`;
       return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
@@ -260,13 +261,13 @@ export function DetailPage(){
        </button></h3>
        <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}>
         <ResearchText text={research.text(field,value)}/>
-        {field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}
+        {field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}
         <ClaimEvidence deep={deep} field={field}/>
        </div>
       </section>;
      })}
     </div>}
-    <DeepSources sources={deep.sources}/>
+    <DeepSources sources={deep.sources} lang={research.lang}/>
     <small>{technicalView?<>Latest research model: {deep.model} · </>:<>Research updated </>}{new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently{isResearchStale(deep.oldestResearchedAt??deep.researchedAt)&&<> · ⚠ may be outdated</>}</small>
    </>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
    {friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>void reloadWine()}/>}{deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" className="primary" onClick={()=>setDeepState('confirm-usage')}>{deepComplete?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deepComplete?'This refresh keeps reusable producer and terroir research, and refreshes only the vintage-sensitive parts for this wine.':technicalView?'WineLog checks permanent caches first and queues grounded research only for missing research scopes.':'WineLog reuses saved research first and researches only what is missing.'} The background job continues even if you close WineLog. Continue?</p><button type="button" className="primary" onClick={runDeepSearch}>{deepComplete?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{technicalView?(deepRun?.message||'Preparing the background job.'):'WineLog is researching this wine in the background.'}</p><small>{deepRun?<><ElapsedSeconds startedAt={deepRun.startedAt}/> · {technicalView?'Request':'Support ID'} {deepRun.requestId}</>:'0s'}</small><p>You can leave this page or close WineLog. The background research continues and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>{deepHeld?'Deep Search needs review.':'Deep Search did not complete.'}</strong>{deepHeld?<><p>WineLog could not confirm the previous request’s outcome. Any saved research is kept. WineLog is checking for a saved result. Check status to look for a saved result, or stop waiting to release this request. · Support ID {deepRun?.requestId}</p>{deepRun?.recoveryDeadline&&<p>Automatic recovery is available until {new Date(deepRun.recoveryDeadline).toLocaleString()}. You can stop waiting sooner.</p>}{deepError&&<p>{deepError}</p>}<button type="button" disabled={deepChecking||deepCancelling} onClick={checkDeepSearch}>{deepChecking?'Checking…':'Check status'}</button><button type="button" className="secondary-danger" disabled={deepCancelling||deepChecking} onClick={cancelDeepSearch}>{deepCancelling?'Stopping…':'Stop waiting'}</button></>:<><p>{deepError||(technicalView?deepRun?.message:null)||memberResearchFailure(deepRun)}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></>}</div>}

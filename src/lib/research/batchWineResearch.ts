@@ -18,8 +18,9 @@ import { discloseTechnicalContradictions,technicalContradictionFailureMessage } 
 import { getWineResearchRun,updateWineResearchRun } from './backgroundJobs';
 import { offerToSourceOwner,readableWine,recordSharedResearchComplete,researchWine,withSourceResearch,type ResearchWineRow } from './readableWine';
 import { recordAiUsage,type AnalyticsSink } from '../usage/aiUsage';
+import { translateResearchAfterRun,type TranslationEnv } from './translationService';
 
-type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
+type Env=TranslationEnv&{CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink;CREDIT_RESEARCH_SCOPES?:string[]};
 type WineRow={lwin7?:string|null;identity_match_status?:string|null;lwin_reference_json?:string|null;producer:string;producer_id:string|null;cuvee_id:string|null;wine_name:string;vintage:number|null;country:string|null;region:string|null;appellation:string|null;wine_style?:string|null;grapes_json:string;grape_blend_json:string;release_designation?:string|null;sparkling_details_json?:string|null;vintage_kind?:string|null};
 type ResearchRow={deep_search_json:string};
 const PRIMARY_MODEL=AI_MODELS.groundedResearchPrimary;
@@ -201,6 +202,10 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
   return result;
 }
 
+/** The run is complete; make its Chinese now so 繁中 needs no wait. Never throws. */
+const translateFinished=(env:Env,owner:string,wineId:string,requestId:string,result:DeepSearchResult)=>
+  translateResearchAfterRun(env,owner,[result.summary,result.expectedProfile,result.vintageQuality,result.producerDetails,result.producerWinemakingPractices,result.winemakingTechniques,result.terroir,result.drinkingWindow],{runId:requestId,targetId:wineId});
+
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
   const cancelled=await cancelGeminiBatch(env.GEMINI_API_KEY,googleName);
   if(!cancelled.ok)log('warn',{requestId,wineId,stage:'batch_cancel_failed',attempt,googleName,reason,status:cancelled.status,error:cancelled.error});
@@ -239,7 +244,7 @@ export async function startWineBatchResearch(env:Env,owner:string,wineId:string,
   if(prior){await env.RESEARCH_QUEUE.send({kind:'wine_batch_poll',owner,wineId,requestId,jobId:prior.id,pollCount:0});return {ok:true as const,cached:false}}
   let prepared:Awaited<ReturnType<typeof prepare>>;
   try{prepared=await prepare(env,owner,wineId,refresh)}catch(e){const error=(e as Error).message||'Could not prepare wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}
-  if(!prepared.missing.length){try{await finalize(env,owner,wineId,prepared.wine,prepared.targets);await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search already complete from reusable cached research','complete',0);return {ok:true as const,cached:true}}catch(e){if(e instanceof ResearchPersistenceError)throw e;const error=(e as Error).message||'Could not finalize cached wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}}
+  if(!prepared.missing.length){try{const result=await finalize(env,owner,wineId,prepared.wine,prepared.targets);await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search already complete from reusable cached research','complete',0);await translateFinished(env,owner,wineId,requestId,result);return {ok:true as const,cached:true}}catch(e){if(e instanceof ResearchPersistenceError)throw e;const error=(e as Error).message||'Could not finalize cached wine research';await updateWineResearchRun(env.DB,owner,requestId,'failed',error,'failed').catch(()=>undefined);return {ok:false as const,error}}}
   try{await submitAttempt(env,owner,wineId,requestId,1,prepared.missing);return {ok:true as const,cached:false}}
   catch(e){
     if(e instanceof ResearchPersistenceError)throw e;
@@ -306,8 +311,9 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
     // Repair the old split completion boundary using saved scopes only.
     if(job.status==='complete'&&(await getWineResearchRun(env.DB,owner,wineId,requestId))?.status==='running'){
       const wine=await loadWine(env.DB,owner,wineId,env.CREDIT_CONTEXT);if(!wine)throw new ResearchTerminalError('Wine not found');
-      await finalize(env,owner,wineId,wine,researchTargets(wine));
+      const result=await finalize(env,owner,wineId,wine,researchTargets(wine));
       await updateWineResearchRun(env.DB,owner,requestId,'complete','Deep Search finalisation recovered from saved research','complete',job.attempt);
+      await translateFinished(env,owner,wineId,requestId,result);
     }
     // Failed attempt persistence and the next attempt's dispatch are separate
     // boundaries. While the run is live, replay the saved result to finish the
@@ -353,7 +359,7 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
   // Routing learns from this: a model that grounds clears its own cooldown, one
   // that does not is stepped over on the next attempt and the next run.
   if(grounding.chunks>0||finishReason==='STOP')await recordGroundingObservation(env.DB,owner,job.model,grounding.chunks>0);
-  let applying=false;
+  let applying=false,finished:DeepSearchResult|null=null;
   try{
     const metadata=groundingMetadata;
     if(!sourcesFrom(metadata).length){ungrounded=true;throw new Error(`${job.model} returned no grounded web sources after ${countSearchQueries([inline])} Google searches. No claims from this answer were saved.`)}
@@ -391,7 +397,7 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
       errors=[ungrounded
         ?`${job.model} answered without grounding: the response carried ${grounding.chunks} web source${grounding.chunks===1?'':'s'} and ${grounding.supports} grounding segment${grounding.supports===1?'':'s'}, so no scope could be verified and nothing was saved. Google Search grounding was requested; this is a search or provider failure rather than a problem with the wine.`
         :conflictError??technicalError??`Gemini response was incomplete or failed the research quality gate for ${failed.map(scope=>scopeNames[scope]).join(', ')} (${[...new Set(warningsByScope.flat())].join(', ')||'no reason recorded'})`];
-    }else await finalize(env,owner,wineId,wine,targets);
+    }else finished=await finalize(env,owner,wineId,wine,targets);
   }catch(e){
     // Validation can legitimately choose a model fallback. Failure while
     // applying a validated answer must instead replay this saved answer.
@@ -415,4 +421,5 @@ async function applyWineBatchResearch(env:Env,owner:string,wineId:string,request
       .bind(job.attempt,'Gemini Batch Deep Search complete with claim evidence and contradiction audit',completedAt,completedAt,completedAt,owner,requestId)
   ]);
   log('log',{requestId,wineId,stage:'complete',attempt:job.attempt,model:job.model,scopes});
+  if(finished)await translateFinished(env,owner,wineId,requestId,finished);
 }

@@ -15,6 +15,9 @@ import { configureGeminiBatchGateway,clearGeminiBatchGateway,ResearchPersistence
 import { quote,reserve,reconcileOperation,plannedUnits,releaseHeldOperation,type CreditOperation } from '../../worker/multiUser/credits';
 import { maintainOperation } from '../../worker/multiUser/jobs';
 import { hash,seconds,stamp,type Member } from '../../worker/multiUser/common';
+// Research persistence is under test here; the translation step that follows a
+// finished run makes its own provider call and has its own tests.
+vi.mock('../../src/lib/research/translationService',async original=>({...await original<typeof import('../../src/lib/research/translationService')>(),translateResearchAfterRun:vi.fn(async()=>undefined)}));
 
 let database:ReturnType<typeof realD1>,producerId:string;
 const member:Member={id:'owner',role:'owner',email:'owner@example.com',display_name:'Owner',status:'active'};

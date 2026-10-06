@@ -6,10 +6,12 @@ import type { DeepField } from './researchSections';
 /**
  * The EN / 繁中 switch on a research result.
  *
- * Chinese is made on demand, never automatically: the first press looks for a
- * saved translation of exactly this English (free), and only if there is none
- * does the owner get asked to spend one model call making it. A member can read
- * a translation that already exists but cannot pay for a new one yet.
+ * Research runs translate themselves as their last step, so the Chinese is
+ * normally already saved: it is looked up (free) as soon as the research is on
+ * screen, and the switch is instant. Each section is saved on its own, so a
+ * page can have some sections in Chinese and others not yet - research saved
+ * before translation existed, or a run whose translation step failed. The
+ * owner is then offered the missing sections; a member reads what exists.
  */
 export type ResearchLang='en'|'zh';
 const LANG='zh-Hant-HK';
@@ -19,27 +21,36 @@ type Phase='idle'|'looking'|'confirm'|'translating'|'unavailable'|'error';
 export function useResearchTranslation(fields:Record<string,string>){
  // Only non-empty text is sent, so a section with no research is not "translated".
  const english=useMemo(()=>Object.fromEntries(Object.entries(fields).filter(([,text])=>text.trim())),[fields]);
- const key=JSON.stringify(english);
- const [lang,setLang]=useState<ResearchLang>('en'),[translated,setTranslated]=useState<Record<string,string>|null>(null);
+ const key=JSON.stringify(english),available=Object.keys(english).length>0;
+ const [lang,setLang]=useState<ResearchLang>('en'),[translated,setTranslated]=useState<Record<string,string>>({});
  const [phase,setPhase]=useState<Phase>('idle'),[error,setError]=useState('');
+ const current=useRef(key),lookup=useRef<Promise<Record<string,string>>|null>(null);
+ const stale=(asked:string)=>asked!==current.current;
+ const lookUp=()=>lookup.current??=apiJson<{translation:Translation}>('/api/research/translation/lookup','POST',{lang:LANG,fields:english}).then(body=>body.translation?.fields??{});
  // New English (a re-run, another wine) never keeps the old Chinese on screen,
  // and a reply for the previous English that lands afterwards is dropped.
- const current=useRef(key);
- useEffect(()=>{current.current=key;setLang('en');setTranslated(null);setPhase('idle');setError('')},[key]);
- const stale=(asked:string)=>asked!==current.current;
- const canTranslate=getAccount()?.role!=='member'&&Object.keys(english).length>0;
+ useEffect(()=>{
+  current.current=key;lookup.current=null;setLang('en');setTranslated({});setPhase('idle');setError('');
+  if(!available)return;
+  const asked=key;
+  lookUp().then(found=>{if(!stale(asked))setTranslated(found)},()=>{if(!stale(asked))lookup.current=null});
+ },[key]);
+ const canTranslate=getAccount()?.role!=='member'&&available;
+ const missing=Object.keys(english).filter(field=>!translated[field]);
 
  async function choose(next:ResearchLang){
   setError('');
   if(next==='en'){setLang('en');if(phase==='confirm'||phase==='unavailable')setPhase('idle');return}
-  if(translated){setLang('zh');return}
-  setPhase('looking');const asked=key;
-  try{
-   const {translation}=await apiJson<{translation:Translation|null}>('/api/research/translation/lookup','POST',{lang:LANG,fields:english});
+  const asked=key;let found=translated;
+  if(missing.length){
+   setPhase('looking');
+   try{found=await lookUp()}catch(e){lookup.current=null;if(!stale(asked)){setError((e as Error).message);setPhase('error')}return}
    if(stale(asked))return;
-   if(translation){setTranslated(translation.fields);setLang('zh');setPhase('idle');return}
-   setPhase(canTranslate?'confirm':'unavailable');
-  }catch(e){if(!stale(asked)){setError((e as Error).message);setPhase('error')}}
+   setTranslated(found);
+  }
+  const stillMissing=Object.keys(english).filter(field=>!found[field]);
+  if(stillMissing.length<Object.keys(english).length)setLang('zh');
+  setPhase(!stillMissing.length?'idle':canTranslate?'confirm':'unavailable');
  }
  async function translate(){
   setPhase('translating');setError('');const asked=key;
@@ -50,9 +61,12 @@ export function useResearchTranslation(fields:Record<string,string>){
   }catch(e){if(!stale(asked)){setError((e as Error).message);setPhase('error')}}
  }
  const cancel=()=>{setPhase('idle');setError('')};
+ const showing=lang==='zh'&&Object.keys(translated).length>0;
  /** The text to show for a field: Chinese when chosen and available, else the English. */
- const text=(field:string,fallback:string)=>lang==='zh'&&translated?.[field]?translated[field]:fallback;
- return {lang:translated&&lang==='zh'?'zh' as const:'en' as const,phase,error,choose,translate,cancel,text,available:Object.keys(english).length>0};
+ const text=(field:string,fallback:string)=>showing&&translated[field]?translated[field]:fallback;
+ return {lang:showing?'zh' as const:'en' as const,phase,error,choose,translate,cancel,text,available,
+  /** Sections still in English while 繁中 is chosen. */
+  missingCount:missing.length,partial:showing&&missing.length>0};
 }
 
 /** Section headings are fixed UI text, so they are translated here rather than by the model. */
@@ -66,3 +80,25 @@ export const DEEP_FIELD_LABELS_ZH:Record<DeepField,string>={
  terroir:'風土 (Terroir)',
  drinkingWindow:'適飲期'
 };
+
+/** The small fixed labels around research, in the language being read. Written here, never by the model. */
+export const RESEARCH_COPY={
+ en:{
+  sections:(n:number)=>`${n} research section${n===1?'':'s'}`,
+  expandAll:'Expand all',collapseAll:'Collapse all',
+  sources:(n:number,sites:number)=>`${n} source${n===1?'':'s'}${sites>0?` · ${sites} website${sites===1?'':'s'}`:''}`,
+  domaineContext:'General domaine context; not automatically treated as verified for this exact vintage.',
+  practicesHeading:'General winemaking practices',
+  producerWide:'Producer-wide context only. Exact cuvée/vintage techniques are researched separately on the wine page.',
+  references:(n:number,range:boolean,sites:number)=>`${n} ${range?'profile & range':'research'} reference${n===1?'':'s'}${sites?` · ${sites} website${sites===1?'':'s'}`:''}`
+ },
+ zh:{
+  sections:(n:number)=>`${n} 個研究部分`,
+  expandAll:'全部展開',collapseAll:'全部收起',
+  sources:(n:number,sites:number)=>`${n} 個資料來源${sites>0?` · ${sites} 個網站`:''}`,
+  domaineContext:'酒莊整體背景，未自動視為此年份已核實的資料。',
+  practicesHeading:'酒莊整體釀酒方式',
+  producerWide:'僅為酒莊整體背景。個別酒款／年份的釀造技術會在酒款頁面另行研究。',
+  references:(n:number,range:boolean,sites:number)=>`${n} 個${range?'酒莊簡介及酒款系列':'研究'}參考資料${sites?` · ${sites} 個網站`:''}`
+ }
+} as const;

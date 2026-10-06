@@ -18,7 +18,7 @@ import { DeepSources,ResearchText } from './ResearchPresentation';
 import { SharedDeepSearchControls } from './SharedDeepSearchControls';
 import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
 import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
-import { DEEP_FIELD_LABELS_ZH,useResearchTranslation } from './researchTranslation';
+import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
 import '../../favorites.css';
 import '../../wineDetailCompact.css';
 // The structure grid and the research panel are wine-detail markup whose rules
@@ -85,6 +85,7 @@ export function SharedWinesPage(){
  }
 
  const research=useResearchTranslation(deepResearchText(wine?.deepSearch));
+ const copy=RESEARCH_COPY[research.lang];
  if(error&&!wine)return <section className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><p role="alert">{error}</p></section>;
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
 
@@ -154,13 +155,13 @@ export function SharedWinesPage(){
    <ResearchLanguageStatus state={research}/>
    <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',wine.deepSearch.summary)}/></div>
    {sections.length>0&&<div className="deep-research-sections">
-    <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+    <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
     {sections.map(([label,field,value])=>{const open=openDeepFields.has(field),panelId=`shared-deep-section-${field}`;return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
      <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{research.lang==='zh'?DEEP_FIELD_LABELS_ZH[field]:label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
-     <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text(field,value)}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</div>
+     <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text(field,value)}/>{field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}</div>
     </section>})}
    </div>}
-   <DeepSources sources={wine.deepSearch.sources}/>
+   <DeepSources sources={wine.deepSearch.sources} lang={research.lang}/>
    {/* Research the reader ran is theirs. Anything else came with the bottle,
        so the line says so without naming the sharer, who is one press away on
        the tag button. */}

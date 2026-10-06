@@ -14,6 +14,9 @@ import {durableProvider} from '../../src/lib/credits/provider';
 import {deepSearchSchema} from '../../src/lib/db/schema';
 import {buildDeepSearchProvenance} from '../../src/lib/research/provenance';
 import {auditTechnicalContradictions} from '../../src/lib/research/technicalContradictions';
+// Research persistence is under test here; the translation step that follows a
+// finished run makes its own provider call and has its own tests.
+vi.mock('../../src/lib/research/translationService',async original=>({...await original<typeof import('../../src/lib/research/translationService')>(),translateResearchAfterRun:vi.fn(async()=>undefined)}));
 
 let database:ReturnType<typeof realD1>;
 const requestId='11155b35-cb71-48b4-aaca-40d8f52bd9e0';

@@ -217,7 +217,7 @@ export default {
  async queue(batch:Batch,env:MultiUserEnv){
   for(const message of batch.messages){
    const raw=message.body as (typeof message.body&JobEnvelope)|RolloutQueueJob,id=('_outboxId' in raw&&raw._outboxId)||message.id;
-   const lease=await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&raw.rollout==='lwin_ai'?LWIN_AI_LEASE_SECONDS:undefined);
+   const lease=await claimDelivery(env.DB,id,raw.kind==='admin_rollout'&&(raw.rollout==='lwin_ai'||raw.rollout==='translate')?LWIN_AI_LEASE_SECONDS:undefined);
    if(!lease){const done=await env.DB.prepare('SELECT done FROM queue_deliveries WHERE id=?').bind(id).first<{done:number}>();if(done?.done)message.ack();else message.retry({delaySeconds:60});continue}
    let retried=false,acknowledged=false;
    try{

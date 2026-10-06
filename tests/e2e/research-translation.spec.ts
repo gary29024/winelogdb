@@ -18,7 +18,8 @@ async function mock(page:Page,role:'owner'|'member',saved:Record<string,string>|
   const request=route.request(),path=new URL(request.url()).pathname;
   if(request.method()==='POST'&&path.startsWith('/api/research/translation')){
    const body=request.postDataJSON();posts.push({path,body});
-   if(path.endsWith('/lookup'))return route.fulfill({json:{translation:saved?{fields:saved}:null}});
+   const asked=(body as {fields:Record<string,string>}).fields;
+   if(path.endsWith('/lookup'))return route.fulfill({json:{translation:{lang:'zh-Hant-HK',fields:Object.fromEntries(Object.keys(asked).flatMap(key=>saved?.[key]?[[key,saved[key]]]:[]))}}});
    return route.fulfill({json:{translation:{fields:made}}});
   }
   if(path.endsWith('/research-status')||path.endsWith('/deep-search-status'))return route.fulfill({status:404,json:{error:'No run'}});
@@ -39,7 +40,8 @@ test('the owner translates Deep Search on request and switches back to English',
  await page.goto('/wines/layout-wine');
  const panel=page.locator('.deep-search-panel');
  await expect(panel).toContainText('A fresh, mineral white wine.');
- expect(posts).toEqual([]);
+ // Saved Chinese is looked up as soon as the research shows, so the switch never waits on it.
+ await expect.poll(()=>posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
  // Small, on the Deep Search heading row, right-aligned, even on a phone.
  const head=await panel.locator('.deep-panel-head').boundingBox(),toggle=await panel.locator('.research-language-switch').boundingBox(),label=await panel.locator('.deep-panel-head .section-label-text').boundingBox();
  expect(toggle!.height).toBeLessThanOrEqual(34);
@@ -82,4 +84,33 @@ test('producer research switches to a saved translation without asking',async({p
  await expect(page.getByText('酒莊整體釀酒方式')).toBeVisible();
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
  await page.locator('.producer-detail').screenshot({path:'test-results/research-translation-producer.png'});
+});
+
+test('research translated by its run switches instantly, labels included',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ const posts=await mock(page,'member',wineChinese,wineChinese);
+ await page.goto('/wines/layout-wine');
+ const panel=page.locator('.deep-search-panel');
+ await expect.poll(()=>posts.length).toBe(1);
+ await panel.getByRole('button',{name:'繁中'}).click();
+ await expect(panel).toContainText(wineChinese.summary);
+ await expect(panel).toContainText('1 個研究部分');
+ await expect(panel.getByRole('button',{name:'全部展開'})).toBeVisible();
+ await expect(panel).not.toContainText('Looking for a saved translation');
+ expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
+ await panel.getByRole('button',{name:'EN'}).click();
+ await expect(panel.getByRole('button',{name:'Expand all'})).toBeVisible();
+});
+
+test('a partly translated result shows what exists and offers the owner the rest',async({page})=>{
+ const posts=await mock(page,'owner',{summary:wineChinese.summary},wineChinese);
+ await page.goto('/wines/layout-wine');
+ const panel=page.locator('.deep-search-panel');
+ await expect.poll(()=>posts.length).toBe(1);
+ await panel.getByRole('button',{name:'繁中'}).click();
+ await expect(panel).toContainText(wineChinese.summary);
+ await expect(panel).toContainText('1 section is not translated yet.');
+ await panel.getByRole('button',{name:'Translate'}).click();
+ await expect(panel).not.toContainText('not translated yet');
+ expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup','/api/research/translation']);
 });
