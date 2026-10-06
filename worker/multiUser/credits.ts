@@ -181,7 +181,6 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  if(!quoted||quoted.fingerprint!==fingerprint||quoted.path!==new URL(request.url).pathname)throw new ApiError(409,'Quote expired or request changed; review a new quote');
  const config=member.role==='owner'?null:await settings(env.DB);
  if(config){
-  if(config.cloudflareObservedMonth!==stamp().slice(0,7))throw new ApiError(503,'Member AI is paused until the owner updates this month’s Cloudflare usage estimate.');
   if(config.cloudflareObservedUsd>=config.cloudflareStopUsd)throw new ApiError(503,'The Cloudflare spending limit has been reached. Ask the owner to review the budget; no work was submitted.');
   if(!config.allowOverages&&config.cloudflareObservedUsd>0)throw new ApiError(503,'Paid Cloudflare usage is disabled and usage has a recorded cost. Ask the owner to review the budget; no work was submitted.');
  }

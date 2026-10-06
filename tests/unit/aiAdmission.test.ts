@@ -104,13 +104,20 @@ describe('unlimited owner AI admission',()=>{
 
 describe('specific member admission errors',()=>{
  it.each([
-  [{cloudflareObservedMonth:'2000-01'},'updates this month’s Cloudflare usage estimate'],
   [{cloudflareObservedUsd:10},'Cloudflare spending limit'],
   [{cloudflareObservedUsd:1,allowOverages:false},'Paid Cloudflare usage is disabled'],
  ] as const)('retains the Cloudflare gate %j for members',async(patch,message)=>{
   settings(patch);const input=await prepareResearch('member-one',member),before=counts();
   await expect(input.run()).rejects.toMatchObject({status:503,message:expect.stringContaining(message)});
   expect(counts()).toEqual(before);
+ });
+ it('rolls a stale Cloudflare month forward instead of pausing members',async()=>{
+  // The month used to have to be updated by hand before members could start AI work.
+  settings({cloudflareObservedMonth:'2000-01',cloudflareObservedUsd:10});
+  const result=await (await prepareResearch('member-one',member)).run();
+  expect(result.operation).toMatchObject({status:'reserved',user_id:'member'});
+  const stored=JSON.parse(String(database.sql.prepare('SELECT value_json FROM pilot_settings WHERE id=1').get()!.value_json));
+  expect(stored).toMatchObject({cloudflareObservedMonth:stamp().slice(0,7),cloudflareObservedUsd:0,cloudflareAutoRolled:true});
  });
  it.each(['reserved','running','review'])('counts %s work toward member concurrency and writes nothing when full',async(status)=>{
   await startScan();database.sql.prepare('UPDATE credit_operations SET status=?').run(status);settings({aiConcurrency:1});

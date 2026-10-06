@@ -24,7 +24,6 @@ const formatBytes=(bytes:number)=>{if(!Number.isFinite(bytes)||bytes<=0)return '
 const labelKind=(kind:string)=>kind.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 const stateLabel=(state:RolloutState)=>state==='not_started'?'Not started':state==='paused'?'Paused':state==='running'?'Running':'Complete';
 const stateTone=(state:RolloutState)=>state==='complete'?' is-good':state==='running'?' is-accent':state==='paused'?' is-warn':'';
-const utcBudgetWindow=()=>{const now=new Date(),current=now.toISOString().slice(0,7),nextDate=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()+1,1)),days=Math.ceil((nextDate.getTime()-now.getTime())/86_400_000);return {current,next:nextDate.toISOString().slice(0,7),days}};
 const sections=[{id:'members',label:'Members & usage'},{id:'spend',label:'AI spend'},{id:'access',label:'Access & budgets'},{id:'maintenance',label:'Maintenance'}];
 const MB=1024*1024,GB=1024*MB;
 // Settings grouped as the owner thinks about them. Storage is entered in MB or
@@ -74,7 +73,6 @@ export function AdminPage(){
  }
  const usageByUser=new Map(data?.memberUsage.items.map(item=>[item.userId,item])??[]),storageByUser=new Map(data?.storage.map(item=>[item.owner_id,Number(item.metered_byte_size)||0])??[]),accessByUser=new Map(data?.actionAccess.map(item=>[item.userId,item.actions])??[]);
  const members=data?.members.filter(item=>item.role==='member')??[],allowancePolicies=policies.filter(item=>item.accessMode==='allowance');
- const budgetWindow=utcBudgetWindow(),observedMonth=String(config.cloudflareObservedMonth??'');
  const researchProcessed=(rolloutStatus?.research.wines.processed??0)+(rolloutStatus?.research.producers.processed??0),researchTotal=(rolloutStatus?.research.wines.total??0)+(rolloutStatus?.research.producers.total??0);
  // storage_totals keeps a '*' row with the deployment total beside each owner's row; summing every row counted it twice.
  const storageUsed=storageByUser.get('*')??[...storageByUser].filter(([owner])=>owner!=='*').reduce((sum,[,value])=>sum+value,0),totalStorage=Number(savedConfig.totalStorageBytes)||0,memberLimit=Number(savedConfig.memberLimit)||0,needsReview=rolloutStatus?.lwinCurrent?.needsReview??0;
@@ -108,8 +106,7 @@ export function AdminPage(){
  {loadError&&<p role="alert">{loadError} <button type="button" onClick={()=>void load(true).catch(e=>setLoadError(e.message))}>Retry owner controls</button></p>}
  {!data&&!loadError&&<p role="status">Loading owner controls…</p>}
  {!!data?.reviewOperations.length&&<div className="settings-banner" role="alert"><p><strong>{data.reviewOperations.length} {data.reviewOperations.length===1?'operation needs':'operations need'} reconciliation.</strong></p><button type="button" onClick={()=>selectSection('maintenance')}>Review operations</button></div>}
- {data&&observedMonth!==budgetWindow.current&&<div className="settings-banner" role="alert"><p><strong>Member AI is paused for {budgetWindow.current}.</strong> Set the measured month to {budgetWindow.current} and enter this month’s Cloudflare cost (usually 0 at the start of a month). Your own AI still works.</p><button type="button" onClick={()=>goToField('access','budget-cloudflareObservedMonth')}>Go to budgets</button></div>}
- {data&&observedMonth===budgetWindow.current&&budgetWindow.days<=3&&<div className="settings-banner is-quiet" role="status"><p><strong>Monthly budget check on {budgetWindow.next}-01.</strong> Member AI pauses then until you set the measured month to {budgetWindow.next} and save that month’s Cloudflare cost.</p></div>}
+ {data?.settings?.cloudflareAutoRolled===true&&<div className="settings-banner is-quiet" role="status"><p><strong>New month, nothing paused.</strong> The Cloudflare cost for {String(config.cloudflareObservedMonth)} started at $0. Update it when you have this month’s figure, so your warn and stop amounts stay accurate.</p><button type="button" onClick={()=>goToField('access','budget-cloudflareObservedUsd')}>Update cost</button></div>}
  {Number(config.cloudflareObservedUsd)>=Number(config.cloudflareWarningUsd)&&Number(config.cloudflareWarningUsd)>0&&<div className="settings-banner" role="alert"><p><strong>Cloudflare spending has reached your warning amount.</strong> Review current usage before more AI work.</p></div>}
  {data&&<dl className="settings-kpis">
   <div><dt>Members</dt><dd>{members.length}{memberLimit>0&&<small> of {memberLimit}</small>}</dd></div>
