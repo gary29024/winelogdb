@@ -20,13 +20,44 @@ function seed(database:ReturnType<typeof realD1>,targets:ResearchTarget[],owner=
 }
 
 describe('research survives promotion from names to entity IDs',()=>{
-  it('does not reuse a vintage report saved under the old style-blind key',async()=>{
-    const database=realD1(),targets=buildResearchTargets(wine),current=targets.find(target=>target.scope==='vintage_context')!;
-    const oldKey=JSON.stringify(['france','burgundy','chablis grand cru','2020']);
-    seed(database,[{...current,cacheKey:oldKey,subject:{country:'France',region:'Burgundy',appellation:'Chablis Grand Cru',vintage:2020}}]);
-    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(false);
-    seed(database,[current]);
-    expect((await loadWineResearchCache(database.db,'owner',targets,true)).has('vintage_context')).toBe(true);
+  describe('vintage reports saved before style was part of the key',()=>{
+    const place={vintage:2024,country:'New Zealand',region:'Wairarapa',appellation:'Martinborough'};
+    const riesling={producer:'Dry River',wineName:'Craighall Riesling',wineStyle:'white',...place};
+    const pinot={producer:'Dry River',wineName:'Pinot Noir',wineStyle:'red',...place};
+    const pinotSeason='The 2024 season was warm and dry; producers reported outstanding purity in their Pinot Noirs.';
+    function seedOld(database:ReturnType<typeof realD1>,report:string){
+      database.sql.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)`)
+        .run('owner','vintage_context',JSON.stringify(['new zealand','wairarapa','martinborough','2024']),JSON.stringify({country:'New Zealand',region:'Wairarapa',appellation:'Martinborough',vintage:2024}),JSON.stringify({vintageQuality:report}),JSON.stringify([{title:'Region',url:'https://example.com/2024'}]),'{}','original-model',researchedAt,researchedAt,researchedAt);
+    }
+    function addWine(database:ReturnType<typeof realD1>,id:string,item:typeof riesling){
+      database.sql.prepare('INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(id,'owner',item.producer,item.wineName,item.vintage,item.country,item.region,item.appellation,item.wineStyle,researchedAt,researchedAt);
+    }
+    const vintageOf=async(database:ReturnType<typeof realD1>,item:typeof riesling)=>(await loadWineResearchCache(database.db,'owner',buildResearchTargets(item),true)).get('vintage_context')?.payload.vintageQuality;
+
+    it('keeps showing the old report when no other style shares the place and year',async()=>{
+      const database=realD1();seedOld(database,'The 2024 season was cool and long.');addWine(database,'r',riesling);
+      expect(await vintageOf(database,riesling)).toBe('The 2024 season was cool and long.');
+    });
+
+    it('gives a red-grape report to the red wine only when both styles share it',async()=>{
+      const database=realD1();seedOld(database,pinotSeason);addWine(database,'r',riesling);addWine(database,'p',pinot);
+      expect(await vintageOf(database,riesling)).toBeUndefined();
+      expect(await vintageOf(database,pinot)).toBe(pinotSeason);
+    });
+
+    it('lends an ambiguous report to neither style',async()=>{
+      const database=realD1();seedOld(database,'The 2024 season was warm and dry.');addWine(database,'r',riesling);addWine(database,'p',pinot);
+      expect(await vintageOf(database,riesling)).toBeUndefined();
+      expect(await vintageOf(database,pinot)).toBeUndefined();
+    });
+
+    it('prefers research saved under the style key',async()=>{
+      const database=realD1();seedOld(database,pinotSeason);addWine(database,'r',riesling);addWine(database,'p',pinot);
+      const target=buildResearchTargets(riesling).find(item=>item.scope==='vintage_context')!;
+      database.sql.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)`)
+        .run('owner','vintage_context',target.cacheKey,JSON.stringify(target.subject),JSON.stringify({vintageQuality:'A fine year for Riesling.'}),JSON.stringify([{title:'Region',url:'https://example.com/2024'}]),'{}','new-model',researchedAt,researchedAt,researchedAt);
+      expect(await vintageOf(database,riesling)).toBe('A fine year for Riesling.');
+    });
   });
 
   it.each([false,true])('recovers the reported Moutonne report before another run (producer already linked: %s)',async linked=>{

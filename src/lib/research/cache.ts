@@ -188,6 +188,47 @@ function recoverSnapshotProvenance(scope:ResearchScope,payload:Record<string,str
   return provenanceForScope(snapshot.provenance,scope);
 }
 
+// Words that show which colour a vintage report was written about. "Red
+// fruit" is a tasting note, not a red-wine report, so bare colours need a noun.
+const STYLE_SIGNALS:Record<string,RegExp>={
+  red:/\b(?:reds|red (?:wines?|grapes?|varieties|varietals))\b|\b(?:pinot noir|cabernet|merlot|syrah|shiraz|grenache|garnacha|nebbiolo|sangiovese|tempranillo|malbec|zinfandel|gamay|mourv[eè]dre|carmen[eè]re|pinotage|barbera|touriga)/i,
+  white:/\b(?:whites|white (?:wines?|grapes?|varieties|varietals))\b|\b(?:riesling|chardonnay|sauvignon blanc|chenin|s[eé]millon|pinot gris|pinot grigio|gew[uü]rz|viognier|gr[uü]ner|albari[nñ]o|aromatic varieties)/i,
+  rose:/\bros[eé]s?\b/i,
+  sparkling:/\b(?:sparkling|champagne|cr[eé]mant|base wines?)\b/i
+};
+
+/**
+ * A vintage report saved before vintage context was keyed by style.
+ *
+ * Every wine of one place and year shared that row, so it may describe another
+ * colour (a Pinot Noir season shown on a Riesling). It still stands in for this
+ * wine when it can only have been written for this style: no other-style wine
+ * of this owner shares the place and year, or the text is plainly about this
+ * style and about none of the others. Otherwise the scope is researched again.
+ */
+async function styleBlindVintageContext(db:D1Database,owner:string,target:ResearchTarget,snapshot?:DeepSearchResult):Promise<CachedResearch|null>{
+  const {country,region,appellation,vintage}=target.subject;if(typeof vintage!=='number')return null;
+  const keys=[makeKey(country,region,appellation,vintage),makeLegacyKey(country,region,appellation,vintage)];
+  const {results:rows}=await db.prepare(`SELECT scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,source_user_id
+    FROM research_cache WHERE owner_id=? AND scope='vintage_context' AND cache_key IN (?,?)`).bind(owner,keys[0],keys[1]).all<CacheRow>();
+  const row=keys.map(key=>rows?.find(item=>item.cache_key===key)).find(Boolean);if(!row)return null;
+  const saved=parseJson<Record<string,unknown>>(row.subject_json,{});
+  if(['country','region','appellation','vintage'].some(field=>normalized(saved[field])!==normalized(target.subject[field])))return null;
+  const style=normalized(target.subject.wineStyle);
+  const {results:wines}=await db.prepare('SELECT wine_style,country,region,appellation FROM wines WHERE owner_id=? AND vintage=?').bind(owner,vintage).all<Record<string,unknown>>();
+  const others=new Set((wines??[]).filter(wine=>['country','region','appellation'].every(field=>normalized(wine[field])===normalized(target.subject[field])))
+    .map(wine=>normalized(wine.wine_style)).filter(other=>other!==style));
+  const payload=parseJson<Record<string,string>>(row.result_json,{}),report=payload.vintageQuality??'';
+  if(others.size){
+    // Ambiguous: only a report that is visibly about this style may be lent.
+    if(!style||!STYLE_SIGNALS[style]?.test(report))return null;
+    if([...others].some(other=>STYLE_SIGNALS[other]?.test(report)))return null;
+  }
+  const sources=parseJson<ResearchSource[]>(row.sources_json,[]),provenance=recoverSnapshotProvenance('vintage_context',payload,parseProvenance(row.provenance_json),snapshot);
+  if(!scopePassesQuality('vintage_context',payload,target,sources,provenance))return null;
+  return {target,payload,sources,provenance,model:row.model,researchedAt:row.researched_at,...(row.source_user_id?{contributorId:row.source_user_id}:{})};
+}
+
 async function readResearchCache(db:D1Database,owner:string,targets:ResearchTarget[],includeFriends:boolean,includePriorKeys:boolean,snapshot?:DeepSearchResult){
   const candidates=targets.map(target=>[target,...(includePriorKeys?priorResearchTargets(target):[])]);
   const lookups=[...new Map(candidates.flat().map(target=>[JSON.stringify([target.scope,target.cacheKey]),{scope:target.scope,cacheKey:target.cacheKey}])).values()];
@@ -206,6 +247,8 @@ async function readResearchCache(db:D1Database,owner:string,targets:ResearchTarg
     return null;
   });
   const cache=new Map<ResearchScope,CachedResearch>();for(const item of found)if(item)cache.set(item.scope,item.entry);
+  const vintageTarget=includePriorKeys?targets.find(target=>target.scope==='vintage_context'&&!cache.has('vintage_context')):undefined;
+  if(vintageTarget){const entry=await styleBlindVintageContext(db,owner,vintageTarget,snapshot);if(entry)cache.set('vintage_context',entry)}
   // Producer runs also save profiles on the producer itself. Views and quotes
   // must see that research before deciding another wine needs to buy it.
   const producerTarget=includePriorKeys?targets.find(target=>target.scope==='producer'&&!cache.has('producer')):undefined;
