@@ -11,12 +11,10 @@ umbrella issues #344 (named areas) and #364 (rights and farming evidence).
 Shared historical extension: [#461](https://github.com/gary29024/winelogdb/issues/461)
 requires official evidence back to the earliest available records for all 33 crus.
 The shared acquisition/parser and historical backfills now cover all 33 crus.
-See the [history delivery and source gaps](research/grand-cru-history.md). The 29
-remaining hidden cru registers supply the historical basis; they stay off the app's
-maps until their Tier 1 commune-edge audit is committed.
-[Richebourg](research/richebourg/README.md) adds the fourth app-visible cru with
-reviewed commune edges and named areas; its issue still requires PR review and merge.
-Earlier notice bulletins were partially recovered through archived copies, with
+See the [history delivery and source gaps](research/grand-cru-history.md). A cru's
+register supplies the historical basis, but the cru stays off the app's maps until
+its Tier 1 commune-edge audit is committed. Per-cru progress is tracked in the #461
+checklist, not here. Earlier notice bulletins were partially recovered through archived copies, with
 missing publications and unsearched intervals; #461 stays open for those gaps.
 
 ## 1. What Échezeaux established
@@ -351,15 +349,15 @@ Tier 1 run therefore:
    hidden cru appear on the maps), the named-area crosswalk, and page-image review
    of any `unreviewedCandidates` in its `notice-history.json`.
 3. Regenerates outputs, updates the README results table and passes every `--check`.
-   Measure gzip payload sizes under Python 3.12 (as CI does) or 3.11; Python 3.14's
-   zlib-ng produces different sizes.
+   Rebuild and measure under Python 3.12, as CI does. Python 3.14's zlib-ng gives
+   different gzip sizes, and Python 3.11's float `sum()` changes generated areas.
 4. Opens one PR per cru. After merge, the cru issue's #461 checklist is ticked with
    its own evidence and links, the cru is ticked in #461, and the issue closes.
 
-Status (6 October 2026): #376 and #377 are complete, including the #461 backfill.
-Suggested order for the rest: #378, then one village bundle at a time
-(Vosne-Romanée, Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin,
-Puligny/Chassagne, the Corton hill), and Chablis (#408) last.
+Progress is tracked in the #461 checklist and the Grand Cru milestone, not in this
+playbook. Suggested order: one village bundle at a time (Vosne-Romanée,
+Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin, Puligny/Chassagne, the
+Corton hill), then Chablis (#408) last.
 
 Some government download sites may refuse connections. The Côte-d'Or and Yonne
 prefecture sites refused every connection in October 2026, so earlier bulletins

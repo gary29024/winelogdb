@@ -214,7 +214,7 @@ python scripts/build_grand_cru_rights_history.py --cru clos-de-vougeot --check
 python scripts/build_grand_cru_sale_records.py --cru clos-de-vougeot --check
 python scripts/build_grand_cru_notice_history.py --cru clos-de-vougeot --check
 python scripts/build_grand_cru_research.py --all --check
-python scripts/build_grand_cru_history_rollout.py --check   # Python 3.12 or 3.11
+python scripts/build_grand_cru_history_rollout.py --check   # Python 3.12
 ```
 
 The parcel rebuild must reproduce SHA-256

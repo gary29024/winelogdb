@@ -128,7 +128,7 @@ tracked in #461; unverified operation and unresolved name research stay under
 
 ## Reproduce and validate
 
-Use Python 3.12 (3.11 also reproduces gzip measurements) with
+Use Python 3.12, as CI does, with
 `scripts/burgundy-map-requirements.txt`. From the repository root:
 
 ```sh
