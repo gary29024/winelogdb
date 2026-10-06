@@ -4,6 +4,7 @@ import { ApiError,body,json,ownerOnly,stamp,type IdentityEnv,type Member } from 
 import { similarFriendProducers } from '../../src/lib/research/similarProducers';
 import { rememberProducerAlias } from '../../src/lib/research/aliasBridge';
 import type { SharedDeepSearch,SharedWine } from '../../src/lib/wine/shared';
+import { isUnverifiedPreciseFigure } from '../../src/lib/research/preciseFigures';
 import { deepSearchSchema,type DeepSearchResult } from '../../src/lib/db/schema';
 import { adoptFriendResearch,assembleDeepSearch } from '../../src/lib/research/cache';
 import { recordSharedResearchComplete,sharedResearchForReader } from '../../src/lib/research/readableWine';
@@ -76,8 +77,19 @@ function publishDeepSearch(deep:DeepSearchResult,vintage:number|null):SharedDeep
   sources:deep.sources,
   researchedAt:deep.researchedAt,
   ...deep.oldestResearchedAt?{oldestResearchedAt:deep.oldestResearchedAt}:{},
+  ...uncitedFiguresOf(deep),
   complete:isDeepSearchComplete(deep,vintage)
  };
+}
+/** Sentences already in the shared text that carry an uncited precise figure,
+ * so a friend sees the same highlight. The evidence itself stays with the owner. */
+function uncitedFiguresOf(deep:DeepSearchResult):Pick<SharedDeepSearch,'uncitedFigures'>{
+ const out:NonNullable<SharedDeepSearch['uncitedFigures']>={};
+ for(const [field,evidence] of Object.entries(deep.provenance?.fields??{})){
+  const claims=(evidence?.claims??[]).filter(isUnverifiedPreciseFigure).map(item=>item.claim);
+  if(claims.length)out[field]=claims;
+ }
+ return Object.keys(out).length?{uncitedFigures:out}:{};
 }
 export function publishedDeepSearch(raw:unknown,vintage:number|null=null):SharedDeepSearch|null{
  if(typeof raw!=='string'||!raw)return null;

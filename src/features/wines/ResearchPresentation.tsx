@@ -12,10 +12,27 @@ import { RESEARCH_COPY } from './researchTranslation';
  * it and can re-run it.
  */
 
-export function ResearchText({text}:{text:string}){
+const UNCITED_FIGURE_TITLE='Precise figure that could not be tied to a cited source';
+
+/** Wrap each flagged sentence in a highlight. Sentences come from the same
+ * text, so they match as substrings; one that does not is left unmarked. */
+function highlightUncited(line:string,flagged:readonly string[]):ReactNode{
+ const hits=flagged.map(claim=>({claim,at:line.indexOf(claim)})).filter(hit=>hit.claim&&hit.at>=0).sort((a,b)=>a.at-b.at);
+ if(!hits.length)return line;
+ const out:ReactNode[]=[];let cursor=0;
+ for(const hit of hits){if(hit.at<cursor)continue;if(hit.at>cursor)out.push(line.slice(cursor,hit.at));out.push(<mark key={hit.at} className="uncited-figure" title={UNCITED_FIGURE_TITLE}>{hit.claim}<span className="uncited-figure-tag">unverified</span></mark>);cursor=hit.at+hit.claim.length}
+ if(cursor<line.length)out.push(line.slice(cursor));
+ return out;
+}
+
+/** `flagged` lists sentences carrying a precise figure (blend %, ageing time,
+ * disgorgement date…) without a direct citation. They stay in the report,
+ * highlighted so a reader does not take them as confirmed. */
+export function ResearchText({text,flagged=[]}:{text:string;flagged?:readonly string[]}){
  const nodes:ReactNode[]=[],lines=text.trim().split(/\r?\n/);let paragraph:string[]=[],bullets:string[]=[];
- const flushParagraph=()=>{if(paragraph.length){nodes.push(<p key={`p-${nodes.length}`}>{paragraph.join(' ')}</p>);paragraph=[]}},flushBullets=()=>{if(bullets.length){nodes.push(<ul key={`u-${nodes.length}`}>{bullets.map((item,index)=><li key={index}>{item}</li>)}</ul>);bullets=[]}};
- for(const raw of lines){const line=raw.trim();if(!line){flushParagraph();flushBullets();continue}const bullet=line.match(/^[-•]\s+(.*)$/);if(bullet){flushParagraph();bullets.push(bullet[1]);continue}flushBullets();paragraph.push(line)}flushParagraph();flushBullets();return <div className="research-text">{nodes}</div>;
+ const flushParagraph=()=>{if(paragraph.length){nodes.push(<p key={`p-${nodes.length}`}>{highlightUncited(paragraph.join(' '),flagged)}</p>);paragraph=[]}},flushBullets=()=>{if(bullets.length){nodes.push(<ul key={`u-${nodes.length}`}>{bullets.map((item,index)=><li key={index}>{highlightUncited(item,flagged)}</li>)}</ul>);bullets=[]}};
+ for(const raw of lines){const line=raw.trim();if(!line){flushParagraph();flushBullets();continue}const bullet=line.match(/^[-•]\s+(.*)$/);if(bullet){flushParagraph();bullets.push(bullet[1]);continue}flushBullets();paragraph.push(line)}flushParagraph();flushBullets();
+ return <div className="research-text">{nodes}{flagged.length>0&&<small className="uncited-figure-note">Highlighted figures were found during research but could not be tied to a specific cited source. Treat them as unconfirmed.</small>}</div>;
 }
 
 export function DeepSources({sources,lang='en'}:{sources:DeepSearchResult['sources'];lang?:'en'|'zh'}){

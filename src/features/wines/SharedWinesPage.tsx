@@ -16,7 +16,7 @@ import { hasTastingStructure,structureValueLabel,toggleStructure,type TastingStr
 import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { SharedDeepSearchControls } from './SharedDeepSearchControls';
-import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
+import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
 import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
 import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
 import '../../favorites.css';
@@ -153,12 +153,12 @@ export function SharedWinesPage(){
        page does too, and says so the same way. */}
    {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
    <ResearchLanguageStatus state={research}/>
-   <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',wine.deepSearch.summary)}/></div>
+   <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',wine.deepSearch.summary)} flagged={research.lang==='en'?uncitedFigures(wine.deepSearch,'summary'):[]}/></div>
    {sections.length>0&&<div className="deep-research-sections">
     <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
     {sections.map(([label,field,value])=>{const open=openDeepFields.has(field),panelId=`shared-deep-section-${field}`;return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
      <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{research.lang==='zh'?DEEP_FIELD_LABELS_ZH[field]:label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
-     <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text(field,value)}/>{field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}</div>
+     <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text(field,value)} flagged={research.lang==='en'?uncitedFigures(wine.deepSearch,field):[]}/>{field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}</div>
     </section>})}
    </div>}
    <DeepSources sources={wine.deepSearch.sources} lang={research.lang}/>

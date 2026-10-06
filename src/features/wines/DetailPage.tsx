@@ -21,7 +21,8 @@ import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
 import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
-import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
+import { isUnverifiedPreciseFigure } from '../../lib/research/preciseFigures';
+import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
 import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { PageHeader } from '../../components/PageHeader';
@@ -51,7 +52,8 @@ const qualityWarningLabel:Record<string,string>={
  'wrong-vintage-reference':'a year other than this vintage was asserted',
  'general-practice-presented-as-exact-vintage':'a general domaine habit was read as exact-vintage technique',
  'vintage-specific-detail-in-producer-scope':'a vintage-specific detail appeared in producer-wide practices',
- 'cross-source-technical-conflict':'sources disagree on an exact technical value'
+ 'cross-source-technical-conflict':'sources disagree on an exact technical value',
+ 'uncited-precise-figure':'a precise figure (highlighted) could not be tied to a cited source'
 };
 const qualityStatusLabel:Record<string,string>={verified:'Verified',mixed:'Mixed confidence',limited:'Limited confidence'};
 
@@ -66,7 +68,8 @@ function ResearchQuality({deep}:{deep:DeepSearchResult}){
 
 function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
  const evidence=deep.provenance?.fields[field];if(!evidence?.claims.length)return null;
- return <details className="claim-evidence"><summary>Evidence · {evidence.supportedCount} direct{evidence.conflictingCount?` · ${evidence.conflictingCount} disputed`:''}{evidence.partialCount?` · ${evidence.partialCount} partial`:''}{evidence.unsupportedCount?` · ${evidence.unsupportedCount} unsupported`:''}{evidence.uncertaintyCount?` · ${evidence.uncertaintyCount} uncertain`:''}</summary><ol>{evidence.claims.map((item,index)=><li key={`${field}-${index}`}><div className="claim-evidence-head"><span className={`claim-status ${item.supportStatus}`}>{claimStatusLabel[item.supportStatus]}</span>{item.sourceTier!=='none'&&<span className="claim-tier">{item.sourceTier}</span>}</div><p>{item.claim}</p>{item.sources.length>0&&<div className="claim-links">{item.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</li>)}</ol><small>Direct evidence means WineLog linked that claim to a cited source. “No direct citation” means the research may still be sourced overall, but that statement could not be tied to one specific citation. “Conflicting sources” means independent sources disagree, so WineLog preserves the dispute instead of choosing one figure.</small></details>;
+ const uncited=evidence.claims.filter(isUnverifiedPreciseFigure).length;
+ return <details className="claim-evidence"><summary>Evidence · {evidence.supportedCount} direct{evidence.conflictingCount?` · ${evidence.conflictingCount} disputed`:''}{evidence.partialCount?` · ${evidence.partialCount} partial`:''}{evidence.unsupportedCount?` · ${evidence.unsupportedCount} unsupported`:''}{evidence.uncertaintyCount?` · ${evidence.uncertaintyCount} uncertain`:''}{uncited?` · ${uncited} unverified figure${uncited===1?'':'s'}`:''}</summary><ol>{evidence.claims.map((item,index)=><li key={`${field}-${index}`}><div className="claim-evidence-head"><span className={`claim-status ${item.supportStatus}`}>{claimStatusLabel[item.supportStatus]}</span>{isUnverifiedPreciseFigure(item)&&<span className="claim-status uncited-figure-badge">Unverified figure</span>}{item.sourceTier!=='none'&&<span className="claim-tier">{item.sourceTier}</span>}</div><p>{item.claim}</p>{item.sources.length>0&&<div className="claim-links">{item.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</li>)}</ol><small>Direct evidence means WineLog linked that claim to a cited source. “No direct citation” means the research may still be sourced overall, but that statement could not be tied to one specific citation. “Unverified figure” marks a precise number or date without a direct citation; it is kept but should be treated as unconfirmed. “Conflicting sources” means independent sources disagree, so WineLog preserves the dispute instead of choosing one figure.</small></details>;
 }
 
 
@@ -248,7 +251,7 @@ export function DetailPage(){
     {!deepComplete&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
     <ResearchLanguageStatus state={research}/>
-    <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',deep.summary)}/><ClaimEvidence deep={deep} field="summary"/></div>
+    <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',deep.summary)} flagged={research.lang==='en'?uncitedFigures(deep,'summary'):[]}/><ClaimEvidence deep={deep} field="summary"/></div>
     {sections.length>0&&<div className="deep-research-sections">
      <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
      {sections.map(([label,field,value])=>{
@@ -260,7 +263,7 @@ export function DetailPage(){
         <span className="deep-chevron" aria-hidden="true"/>
        </button></h3>
        <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}>
-        <ResearchText text={research.text(field,value)}/>
+        <ResearchText text={research.text(field,value)} flagged={research.lang==='en'?uncitedFigures(deep,field):[]}/>
         {field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}
         <ClaimEvidence deep={deep} field={field}/>
        </div>
