@@ -13,6 +13,19 @@ from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, b
 
 
 class ConfigTests(unittest.TestCase):
+    def test_parcels_without_lieu_dit_are_reviewed(self):
+        # A parcel outside every lieu-dit polygon gets no guessed name, and must be listed in its config.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            with self.subTest(cru=slug):
+                parcels = read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels']
+                outside = sorted(i for i, p in parcels.items() if p['sourceName'] is None)
+                self.assertEqual(outside, cru['namedPlots'].get('parcelsWithoutLieuDit', []))
+                self.assertTrue(all(parcels[i]['name'] is None and parcels[i]['share'] == 0 for i in outside))
+        self.assertEqual(load_cru('la-grande-rue')[0]['namedPlots']['parcelsWithoutLieuDit'], ['21714000AM0002', '21714000AM0008'])
+
     def test_tier1_rechecks_match_pinned_source_availability(self):
         from inventory_grand_cru_sources import rights_releases, dfi_releases, dfi_schema
         reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]

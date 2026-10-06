@@ -3,7 +3,8 @@
 Uses the bundle's hash-pinned Etalab lieux-dits snapshots. Each parcel gets the lieu-dit
 holding most of its geometry; the builder fails if any parcel is split below 90%.
 Cadastral names without a reviewed crosswalk (the cru config's "unresolved") are kept
-as printed, with no name, and any other unreviewed name fails the build.
+as printed, with no name, and any other unreviewed name fails the build. A parcel that
+no lieu-dit polygon touches gets no name; it must be listed in "parcelsWithoutLieuDit".
 
   python scripts/build_grand_cru_parcel_named_areas.py --cru echezeaux
   python scripts/build_grand_cru_parcel_named_areas.py --cru echezeaux --check
@@ -41,9 +42,15 @@ def build(cru, bundle, manifest, directory):
             continue
         geometry = shape(feature['geometry'])
         share, name = max((geometry.intersection(area).area / geometry.area, name) for name, area in areas)
+        if share == 0:
+            # A hole in the lieu-dit layer: no cadastral name exists to assign, so none is guessed.
+            parcels[props['id']] = {'sourceName': None, 'name': None, 'share': 0}
+            continue
         require(share >= MINIMUM_SHARE, f"{props['id']} is split between named areas")
         parcels[props['id']] = {'sourceName': name, 'name': reviewed.get(name), 'share': round(share, 4)}
-    unreviewed = sorted({p['sourceName'] for p in parcels.values() if not p['name']})
+    outside = sorted(i for i, p in parcels.items() if p['sourceName'] is None)
+    require(outside == config.get('parcelsWithoutLieuDit', []), f'Unreviewed parcels outside every lieu-dit: {outside}')
+    unreviewed = sorted({p['sourceName'] for p in parcels.values() if p['sourceName'] and not p['name']})
     require(unreviewed == [u['sourceCandidate'] for u in config['unresolved']], f'Unexpected unreviewed names: {unreviewed}')
     inputs = {'parcelSnapshotSha256': manifest['sha256']}
     for index, insee in enumerate(communes(bundle)):

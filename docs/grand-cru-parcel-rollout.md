@@ -204,7 +204,9 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    once `docs/research/<slug>/curation.json` exists. A cru that is one whole-cru
    named area sets `namedPlots.displayLayer` to false, so the map keeps the official
    outline. The named-area builders treat same-name lieu-dit features in one commune
-   as a single named area (as for Romanée-Saint-Vivant). The commune audit allows 0.1% of
+   as a single named area (as for Romanée-Saint-Vivant). A parcel that no lieu-dit
+   polygon touches gets no guessed name and must be listed in
+   `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue). The commune audit allows 0.1% of
    the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
    a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
    explanation, and the exact INAO and cadastre hashes it was reviewed against), as in

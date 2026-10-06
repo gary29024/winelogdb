@@ -11,7 +11,7 @@ export const parcelBundles={'flagey-echezeaux':bundle0,'vosne-romanee':bundle1,'
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-grande-rue'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -29,6 +29,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
+ {slug:"la-grande-rue",name:"La Grande Rue",parentFeatureId:"inao-denom-654",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-grande-rue"],domaineGrouping:false},
  {slug:"la-romanee",name:"La Romanée",parentFeatureId:"inao-denom-655",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-romanee"],domaineGrouping:false},
  {slug:"la-tache",name:"La Tâche",parentFeatureId:"inao-denom-656",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-tache"],domaineGrouping:false},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},

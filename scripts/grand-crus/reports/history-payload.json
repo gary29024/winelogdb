@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-C9R9LHbJ.js"
+    "dist/client/assets/index-D8nXpN3j.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DWilOJU3.js",
-    "dist/client/assets/SectionLabel-BHa4gH4q.js",
-    "dist/client/assets/SparklingDetailsCard-z159Z02E.js",
-    "dist/client/assets/VillageMap-DVNvuwtq.js",
-    "dist/client/assets/api-C9YaW1dm.js",
-    "dist/client/assets/burgundyAtlas-CedvHJPK.js",
-    "dist/client/assets/index-C9R9LHbJ.js",
-    "dist/client/assets/index-Y2VVxYXq.js",
+    "dist/client/assets/FriendTagDialog-BgToB9Tn.js",
+    "dist/client/assets/SectionLabel-VieFgHPs.js",
+    "dist/client/assets/SparklingDetailsCard-CuYfU4GN.js",
+    "dist/client/assets/VillageMap-CW5pdyHP.js",
+    "dist/client/assets/api-BtXjaQQc.js",
+    "dist/client/assets/burgundyAtlas-CjQC7a7f.js",
+    "dist/client/assets/index-D8nXpN3j.js",
+    "dist/client/assets/index-xswijJpE.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CNI4GZLG.js",
-    "dist/client/assets/wineDetailCompact-DsIKFX_6.js"
+    "dist/client/assets/useModalFocus-Cj0-t7pW.js",
+    "dist/client/assets/wineDetailCompact-S0dNNzx9.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 8,
-  "evidenceBytesTotal": 1103691,
-  "evidenceGzipBytesTotal": 111706,
+  "evidenceChunkCount": 9,
+  "evidenceBytesTotal": 1147135,
+  "evidenceGzipBytesTotal": 118995,
   "parcelBundleBytesTotal": 463770,
   "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
@@ -47,6 +47,13 @@
       "sha256": "bbfb89d0afc889e53c07914872014f1f109ea895c1c6544f9502070169ffc044",
       "bytes": 80820,
       "gzipBytes": 13221
+    },
+    {
+      "cru": "la-grande-rue",
+      "file": "dist/client/assets/la-grande-rue.evidence-Ba2k7ThN.js",
+      "sha256": "acd82a5589f9c2275ce191954844e419099ba1ef9105ad0642645fc01b7ddf0b",
+      "bytes": 43444,
+      "gzipBytes": 7289
     },
     {
       "cru": "la-romanee",
