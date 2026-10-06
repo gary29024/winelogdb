@@ -1671,9 +1671,10 @@ for(const route of matrixRoutes){
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   const selector=dialog.getByRole('combobox',{name:'Explore a vineyard'});
   await expect(selector).toHaveValue('inao-denom-1274');
-  await expect(selector.locator('optgroup:not([label="Échezeaux · cadastral named areas"]) option')).toHaveCount(24);
+  await expect(selector.locator('optgroup:not([label$=" · cadastral named areas"]) option')).toHaveCount(24);
   await expect(selector.locator('optgroup[label="Échezeaux · cadastral named areas"] option')).toHaveCount(10);
-  await expect(selector.locator('option')).toHaveCount(34);
+  await expect(selector.locator('optgroup[label="Richebourg · cadastral named areas"] option')).toHaveCount(2);
+  await expect(selector.locator('option')).toHaveCount(36);
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Petits Monts');
   await expect(dialog.locator('.village-map-context')).toContainText('8 Grand Crus · 14 Premier Cru climats');
   await expect(dialog.locator('.village-map-context')).toContainText('Vosne-Romanée & Flagey-Échezeaux');
@@ -1681,7 +1682,7 @@ for(const route of matrixRoutes){
   const boundaries=requests.filter(url=>url.includes('/maps/'));
   expect(catalogues.length).toBeGreaterThan(0);expect(boundaries.length).toBeGreaterThan(0);
   expect(catalogues.every(url=>url.includes('vosneVillageMapCatalogue'))).toBe(true);
-  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/vosne-romanee']);
+  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/richebourg-named-plots','/maps/vosne-romanee']);
   for(const [id,name] of [['inao-denom-565','Échezeaux'],['inao-denom-645','Grands-Échezeaux']]){
    await selector.selectOption(id);
    await dialog.getByRole('button',{name:'Zoom to selection'}).click();
