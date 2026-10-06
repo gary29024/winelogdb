@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BEDnYPCM.js"
+    "dist/client/assets/index-Cvo2Ivs2.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CTyHUyHY.js",
-    "dist/client/assets/SectionLabel-B5lBqbJC.js",
-    "dist/client/assets/SparklingDetailsCard-DjLCRqbA.js",
-    "dist/client/assets/VillageMap-PJjYykZp.js",
-    "dist/client/assets/api-DLlWx45r.js",
-    "dist/client/assets/burgundyAtlas-BT-jrb6a.js",
-    "dist/client/assets/index-BEDnYPCM.js",
-    "dist/client/assets/index-Bf9NeiEJ.js",
+    "dist/client/assets/FriendTagDialog-CU3YB-iD.js",
+    "dist/client/assets/SectionLabel-BKYojSlk.js",
+    "dist/client/assets/SparklingDetailsCard-DRCoGhm4.js",
+    "dist/client/assets/VillageMap-DAg9l-Uf.js",
+    "dist/client/assets/api-FG7FZDTC.js",
+    "dist/client/assets/burgundyAtlas-DWRvg14Y.js",
+    "dist/client/assets/index-Cvo2Ivs2.js",
+    "dist/client/assets/index-Dp2jixfl.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-DfyeGNpD.js",
-    "dist/client/assets/wineDetailCompact-CpVuCg5h.js"
+    "dist/client/assets/useModalFocus-CnKGTCLk.js",
+    "dist/client/assets/wineDetailCompact-CvjDEGtl.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 4,
-  "evidenceBytesTotal": 905757,
-  "evidenceGzipBytesTotal": 80762,
+  "evidenceChunkCount": 5,
+  "evidenceBytesTotal": 976636,
+  "evidenceGzipBytesTotal": 90039,
   "parcelBundleBytesTotal": 463770,
   "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
@@ -54,6 +54,13 @@
       "sha256": "14d632746fc713a5bdbadea47f419b0c2bf30983b1b8a395f6e5e449d8911b7f",
       "bytes": 161369,
       "gzipBytes": 12183
+    },
+    {
+      "cru": "romanee-saint-vivant",
+      "file": "dist/client/assets/romanee-saint-vivant.evidence-DN-z5Uv5.js",
+      "sha256": "2b2bc6f64bbbd74d32f65723b4de6f573ab91b565551c900f7a36dc7424d37e3",
+      "bytes": 70879,
+      "gzipBytes": 9277
     }
   ],
   "parcelBundles": [

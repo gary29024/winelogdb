@@ -51,8 +51,11 @@ def main():
     features, metadata, diagnostics, geometries = [], [], [], []
     for entry in config['plots']:
         found = [f for f in inputs if key(f['properties']['nom']) == key(entry['sourceName'])]
-        assert len(found) == 1, f"Missing or duplicate cadastral name: {entry['sourceName']}"
-        original = shape(found[0]['geometry'])
+        assert found, f"Missing cadastral name: {entry['sourceName']}"
+        # The cadastre can record one lieu-dit as separate same-name features in one commune
+        # (Romanée-Saint-Vivant); they form one named area. Other crus keep their single feature.
+        assert len({f['properties']['commune'] for f in found}) == 1, f"Cadastral name in several communes: {entry['sourceName']}"
+        original = shape(found[0]['geometry']) if len(found) == 1 else unary_union([shape(f['geometry']) for f in found])
         assert original.is_valid and original.geom_type in ('Polygon', 'MultiPolygon')
         clipped = original.intersection(parent)
         parts = polygons(clipped)
@@ -78,7 +81,8 @@ def main():
         features.append({'type': 'Feature', 'id': properties['id'], 'properties': properties, 'geometry': mapping(geometry)})
         metadata.append(properties)
         diagnostics.append({'id': properties['id'], 'sourceHa': area(original) / 10000, 'clippedHa': area(geometry) / 10000,
-                            'parts': len(parts), 'holes': sum(len(p.interiors) for p in parts)})
+                            'parts': len(parts), 'holes': sum(len(p.interiors) for p in parts),
+                            **({'sourceFeatures': len(found)} if len(found) > 1 else {})})
     if not display_layer:
         # Audit the same exact clipped polygons even when a whole-cru named area needs no duplicate app layer.
         write_json(named_plot_report_path(cru), {

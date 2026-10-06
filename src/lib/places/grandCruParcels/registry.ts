@@ -11,7 +11,7 @@ export const parcelBundles={'flagey-echezeaux':bundle0,'vosne-romanee':bundle1,'
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'richebourg';
+export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'richebourg'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -30,6 +30,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},
+ {slug:"romanee-saint-vivant",name:"Romanée-Saint-Vivant",parentFeatureId:"inao-denom-1085",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-saint-vivant"],domaineGrouping:false},
 ];
 
 export const cruOnVillageMap=(cru:GrandCru,villageMap:string)=>cru.villageMaps.includes(villageMap);
