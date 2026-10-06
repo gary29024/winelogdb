@@ -246,7 +246,7 @@ export function DetailPage(){
   </section>
   <CellarStrip wineId={wine.id}/>
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined} trailing={deep?.quality?<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>:undefined}>Deep Search</SectionLabel>{deep&&<ResearchLanguageSwitch state={research}/>}</div>
+   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined}>Deep Search</SectionLabel>{deep&&<div className="deep-panel-meta">{deep.quality&&<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>}<ResearchLanguageSwitch state={research}/></div>}</div>
    {deep?<>
     {!deepComplete&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
