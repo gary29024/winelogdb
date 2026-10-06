@@ -47,18 +47,18 @@ test('the owner translates Deep Search on request and switches back to English',
  expect(toggle!.height).toBeLessThanOrEqual(34);
  expect(Math.abs((toggle!.y+toggle!.height/2)-(label!.y+label!.height/2))).toBeLessThan(8);
  expect(head!.x+head!.width-(toggle!.x+toggle!.width)).toBeLessThan(2);
- await panel.getByRole('button',{name:'繁中'}).click();
+ await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText('This uses one AI request.');
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
  expect(posts[0].body).toEqual({lang:'zh-Hant-HK',fields:{summary:'A fresh, mineral white wine.',drinkingWindow:'Enjoy from 2026 to 2032.'}});
  await panel.getByRole('button',{name:'Translate'}).click();
  await expect(panel).toContainText(wineChinese.summary);
  await expect(panel).toContainText('適飲期');
- await expect(panel.getByRole('button',{name:'繁中'})).toHaveAttribute('aria-pressed','true');
+ await expect(panel.getByRole('button',{name:'中',exact:true})).toHaveAttribute('aria-pressed','true');
  await panel.screenshot({path:'test-results/research-translation-wine-mobile.png'});
  await panel.getByRole('button',{name:'EN'}).click();
  await expect(panel).toContainText('A fresh, mineral white wine.');
- await panel.getByRole('button',{name:'繁中'}).click();
+ await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText(wineChinese.summary);
  // Switching back and forth uses the translation already on the page.
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup','/api/research/translation']);
@@ -68,7 +68,7 @@ test('a member sees a saved translation but is never offered a paid one',async({
  const posts=await mock(page,'member',null,wineChinese);
  await page.goto('/wines/layout-wine');
  const panel=page.locator('.deep-search-panel');
- await panel.getByRole('button',{name:'繁中'}).click();
+ await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText('Only the account owner can create one.');
  await expect(panel.getByRole('button',{name:'Translate'})).toHaveCount(0);
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup']);
@@ -78,7 +78,7 @@ test('producer research switches to a saved translation without asking',async({p
  const posts=await mock(page,'owner',producerChinese,producerChinese);
  await page.goto('/producers/p1');
  await expect(page.getByText('A family domaine in Burgundy.')).toBeVisible();
- await page.getByRole('button',{name:'繁中'}).click();
+ await page.getByRole('button',{name:'中',exact:true}).click();
  await expect(page.getByText(producerChinese.profile)).toBeVisible();
  await expect(page.getByText(producerChinese.winemakingPractices)).toBeVisible();
  await expect(page.getByText('酒莊整體釀酒方式')).toBeVisible();
@@ -92,7 +92,7 @@ test('research translated by its run switches instantly, labels included',async(
  await page.goto('/wines/layout-wine');
  const panel=page.locator('.deep-search-panel');
  await expect.poll(()=>posts.length).toBe(1);
- await panel.getByRole('button',{name:'繁中'}).click();
+ await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText(wineChinese.summary);
  await expect(panel).toContainText('1 個研究部分');
  await expect(panel.getByRole('button',{name:'全部展開'})).toBeVisible();
@@ -107,7 +107,7 @@ test('a partly translated result shows what exists and offers the owner the rest
  await page.goto('/wines/layout-wine');
  const panel=page.locator('.deep-search-panel');
  await expect.poll(()=>posts.length).toBe(1);
- await panel.getByRole('button',{name:'繁中'}).click();
+ await panel.getByRole('button',{name:'中',exact:true}).click();
  await expect(panel).toContainText(wineChinese.summary);
  await expect(panel).toContainText('1 section is not translated yet.');
  await panel.getByRole('button',{name:'Translate'}).click();

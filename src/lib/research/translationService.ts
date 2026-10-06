@@ -9,7 +9,7 @@ import { readTranslationReply,translationPrompt,translationResponseJsonSchema,tr
 import { postGeminiGenerateContent,resolveGeminiTransport,type GeminiTransportBindings } from '../../../worker/geminiTransport';
 
 export type TranslationEnv=GeminiTransportBindings&AiUsageEnv&{CREDIT_CONTEXT?:ProviderAuthorization};
-type GeminiPayload={candidates?:Array<{finishReason?:string;content?:{parts?:Array<{text?:string}>}}>;usageMetadata?:Parameters<typeof geminiCallTokens>[0]};
+type GeminiPayload={candidates?:Array<{finishReason?:string;content?:{parts?:Array<{text?:string}>}}>;usageMetadata?:Parameters<typeof geminiCallTokens>[0]&{trafficType?:string}};
 export type ResearchTranslation={lang:TranslationLang;fields:Record<string,string>};
 /**
  * 'flex' is half price on Vertex and may queue for minutes, so it is for work
@@ -46,13 +46,13 @@ function chunks(texts:string[]){
 async function translateChunk(env:TranslationEnv&{DB:D1Database},owner:string,lang:TranslationLang,texts:string[],options:TranslationOptions){
  const keys=texts.map((_,index)=>`t${index}`),fields=Object.fromEntries(keys.map((key,index)=>[key,texts[index]]));
  const model=AI_MODELS.researchTranslation,runId=options.runId??crypto.randomUUID();
- const flex=options.tier==='flex'&&resolveGeminiTransport(env)==='vertex-ai-gateway',tier:AiUsageTier=flex?'flex':'standard';
+ const flex=options.tier==='flex'&&resolveGeminiTransport(env)==='vertex-ai-gateway';
  const body=JSON.stringify({contents:[{role:'user',parts:[{text:translationPrompt(fields)}]}],
   generationConfig:{temperature:0.2,responseMimeType:'application/json',responseJsonSchema:translationResponseJsonSchema(keys),maxOutputTokens:OUTPUT_TOKENS,thinkingConfig:{thinkingLevel:'minimal'}}});
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),options.timeoutMs??(flex?FLEX_TIMEOUT_MS:STANDARD_TIMEOUT_MS));
  let payload:GeminiPayload;
  try{
-  const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{kind:'research_translation',lang,requestId:runId,model},flex?{serviceTier:'flex',serverTimeoutSeconds:FLEX_SERVER_TIMEOUT_S}:{});
+  const {response}=await postGeminiGenerateContent(env,model,body,controller.signal,{kind:'research_translation',lang,requestId:runId,model,tier:flex?'flex':'standard'},flex?{serviceTier:'flex',serverTimeoutSeconds:FLEX_SERVER_TIMEOUT_S}:{});
   if(!response.ok){await response.body?.cancel().catch(()=>{});throw new ApiError(502,`The translation could not be made (HTTP ${response.status}). Please try again.`)}
   try{payload=await response.json() as GeminiPayload}catch{throw new ApiError(502,'The translation came back unreadable. Please try again.')}
  }catch(error){
@@ -61,6 +61,11 @@ async function translateChunk(env:TranslationEnv&{DB:D1Database},owner:string,la
  }finally{clearTimeout(timer)}
  // Billed whether or not the reply is usable, so the spend card stays honest.
  const tokens=geminiCallTokens(payload.usageMetadata);
+ // Asking for Flex is not getting it: Vertex says which tier served the call,
+ // and the meter follows that. A Flex request answered as anything else (or
+ // with no traffic type at all) is metered at the standard price.
+ const trafficType=payload.usageMetadata?.trafficType??null,tier:AiUsageTier=flex&&trafficType==='ON_DEMAND_FLEX'?'flex':'standard';
+ if(flex&&tier!=='flex')console.warn(JSON.stringify({event:'research_translation_flex_not_served',runId,trafficType}));
  await recordAiUsage(env,owner,options.partOf
   // Units stay 0: the run already counted its wine or producer once.
   ?{kind:options.partOf.kind,step:'translation',runId:options.partOf.runId,targetId:options.partOf.targetId,model,tier,requests:1,units:0,...tokens}
@@ -112,7 +117,7 @@ export async function translateResearch(env:TranslationEnv&{DB:D1Database},owner
 
 /**
  * The last step of a Deep Search or producer research run: translate whatever
- * the run left untranslated, so 繁中 is ready the moment the research is.
+ * the run left untranslated, so 中 is ready the moment the research is.
  *
  * Best effort by design. The research is already saved and its run complete;
  * a translation that fails is logged and left for the owner to make on demand,

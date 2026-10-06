@@ -4,7 +4,7 @@ import '../../researchLanguage.css';
 type State=ReturnType<typeof useResearchTranslation>;
 
 /**
- * The EN / 繁中 buttons. Small enough to share a heading row; what happens after
+ * The EN / 中 buttons. Small enough to share a heading row; what happens after
  * a press (confirming, translating, errors) is ResearchLanguageStatus, which
  * sits below the heading where there is room for a sentence. See useResearchTranslation.
  */
@@ -13,7 +13,7 @@ export function ResearchLanguageSwitch({state}:{state:State}){
  const busy=state.phase==='looking'||state.phase==='translating';
  return <div className="research-language-switch" role="group" aria-label="Research language">
   <button type="button" aria-pressed={state.lang==='en'} disabled={busy} onClick={()=>void state.choose('en')}>EN</button>
-  <button type="button" lang="zh-Hant-HK" aria-pressed={state.lang==='zh'} disabled={busy} onClick={()=>void state.choose('zh')}>繁中</button>
+  <button type="button" lang="zh-Hant-HK" aria-pressed={state.lang==='zh'} disabled={busy} onClick={()=>void state.choose('zh')} title="繁體中文 (Traditional Chinese)">中</button>
  </div>;
 }
 
