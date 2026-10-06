@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BNd-5C8B.js"
+    "dist/client/assets/index-hCpB0vU_.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-BOHVJxo4.js",
-    "dist/client/assets/SectionLabel-BbPFvmmq.js",
-    "dist/client/assets/SparklingDetailsCard-_3X5lN5H.js",
-    "dist/client/assets/VillageMap-CKi9fIx9.js",
-    "dist/client/assets/api-D6QUY4Zf.js",
-    "dist/client/assets/burgundyAtlas-BYa4z0bh.js",
-    "dist/client/assets/index-BNd-5C8B.js",
-    "dist/client/assets/index-CVZm9Uo8.js",
+    "dist/client/assets/FriendTagDialog-CsqzbeH_.js",
+    "dist/client/assets/SectionLabel-Bq3KUR4N.js",
+    "dist/client/assets/SparklingDetailsCard-B8J7zdBv.js",
+    "dist/client/assets/VillageMap-BqvxLCdE.js",
+    "dist/client/assets/api-BZ5R_2Vk.js",
+    "dist/client/assets/burgundyAtlas-Ch9ePwI1.js",
+    "dist/client/assets/index-Yu22ra-q.js",
+    "dist/client/assets/index-hCpB0vU_.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CYyBs6QK.js",
-    "dist/client/assets/wineDetailCompact-BTMoFJjs.js"
+    "dist/client/assets/useModalFocus-kEStj0hE.js",
+    "dist/client/assets/wineDetailCompact-Bglk_5wW.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 3,
-  "evidenceBytesTotal": 744369,
-  "evidenceGzipBytesTotal": 68570,
-  "parcelBundleBytesTotal": 386740,
-  "parcelBundleGzipBytesTotal": 58961,
+  "evidenceChunkCount": 4,
+  "evidenceBytesTotal": 905738,
+  "evidenceGzipBytesTotal": 80753,
+  "parcelBundleBytesTotal": 463770,
+  "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
     {
       "cru": "clos-de-vougeot",
@@ -47,6 +47,13 @@
       "sha256": "bbfb89d0afc889e53c07914872014f1f109ea895c1c6544f9502070169ffc044",
       "bytes": 80820,
       "gzipBytes": 13221
+    },
+    {
+      "cru": "richebourg",
+      "file": "dist/client/assets/richebourg.evidence-DQOE6aG_.js",
+      "sha256": "14d632746fc713a5bdbadea47f419b0c2bf30983b1b8a395f6e5e449d8911b7f",
+      "bytes": 161369,
+      "gzipBytes": 12183
     }
   ],
   "parcelBundles": [
@@ -56,6 +63,13 @@
       "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
       "bytes": 239882,
       "gzipBytes": 35324
+    },
+    {
+      "bundle": "vosne-romanee",
+      "dataUrl": "/maps/vosne-romanee-parcels.2026-06-01.ef82eec2364d.geojson",
+      "sha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+      "bytes": 77030,
+      "gzipBytes": 12485
     },
     {
       "bundle": "vougeot",

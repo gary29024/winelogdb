@@ -1,0 +1,15 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/richebourg",
+  "plots": [
+    {
+      "id": "richebourg-plot-les-richebourgs",
+      "name": "Les Richebourgs",
+      "aliases": []
+    },
+    {
+      "id": "richebourg-plot-les-verroilles-ou-richebourgs",
+      "name": "Les Vérroilles ou Richebourgs",
+      "aliases": []
+    }
+  ]
+}

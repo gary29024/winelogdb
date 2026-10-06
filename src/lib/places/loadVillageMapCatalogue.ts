@@ -102,10 +102,12 @@ export async function loadVillageMapCatalogue(villageId:string):Promise<VillageM
  const catalogue=(await load()).default;
  if(catalogue.mapKind!=='regional'){
   const {default:lossless}=await import('./burgundyLosslessMapRegistry.json');
-  if(villageId==='vosne-romanee'){
-   const {default:named}=await import('./grandCruParcels/echezeaux.named-plots.json');
-   const {features,...namedPlots}=named;
-   return {...catalogue,...lossless[villageId as keyof typeof lossless],namedPlots,features:[...catalogue.features,...features]};
+  const {namedPlotCrus}=await import('./grandCruParcels/namedPlots');
+  const named=await Promise.all(namedPlotCrus.filter(cru=>cru.villageMaps.includes(villageId)).map(async cru=>(await cru.load()).default));
+  if(named.length){
+   return {...catalogue,...lossless[villageId as keyof typeof lossless],
+    namedPlots:named.map(layer=>({dataUrl:layer.dataUrl,parentFeatureId:layer.parentFeatureId,source:layer.source,coverageNote:layer.coverageNote})),
+    features:[...catalogue.features,...named.flatMap(layer=>layer.features)]};
   }
   return {...catalogue,...lossless[villageId as keyof typeof lossless]};
  }

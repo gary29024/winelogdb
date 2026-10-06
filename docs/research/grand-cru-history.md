@@ -4,11 +4,13 @@ The shared history pipeline covers all 33 Burgundy Grand Crus in issues #376–#
 using eight commune bundles. Each cru has its own register, source coverage and
 lazy app evidence. The [independent audit](../../scripts/grand-crus/reports/history-rollout-audit.md)
 links every delivery and records the complete raw-source cross-checks and payload
-sizes. This supplies the history basis for each Tier 1 issue; the 30 new cru
-registers still mark named-area and producer research as unreviewed. Their full
-Tier 1 commune-edge audits also remain pending, so they stay off the app's maps; the independent history audit
-checks that their current geometry matches the raw commune source. The three
-existing crus retain their reviewed commune and named-area audit gates.
+sizes. This supplies the history basis for each Tier 1 issue; 29 cru registers
+still await their Tier 1 named-area and commune-edge review,
+so they stay off the app's maps. [Richebourg](richebourg/README.md) now has its
+commune audit, two reviewed named areas and Tier 1 results; producer research
+remains separately deferred to Tier 2. The independent history audit
+checks every cru's current geometry against the raw commune source. The four
+app-visible crus retain their reviewed commune and named-area audit gates.
 
 ## Pinned coverage
 
@@ -222,7 +224,7 @@ tracing and per-parent coverage while retaining the existing source/parcel/holde
 fields. Configured `evidenceFrom` fallbacks still merge sources in order. Only crus
 with a committed commune-edge audit are wired into the app; each evidence file is a
 dynamic import, and browser checks ensure a cru fetches only its configured evidence.
-The other 30 crus' history files are complete but stay off the maps until their audits. The map, manual producer association and verified
+The other 29 crus' history files are complete but stay off the maps until their audits. The map, manual producer association and verified
 farming gates remain available to subsequent Tier 1 work.
 
 After `npm run build`, run `python scripts/measure_grand_cru_payload.py` to produce

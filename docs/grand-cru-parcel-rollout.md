@@ -11,11 +11,13 @@ umbrella issues #344 (named areas) and #364 (rights and farming evidence).
 Shared historical extension: [#461](https://github.com/gary29024/winelogdb/issues/461)
 requires official evidence back to the earliest available records for all 33 crus.
 The shared acquisition/parser and historical backfills now cover all 33 crus.
-See the [history delivery and source gaps](research/grand-cru-history.md). The 30
-new cru registers supply the historical basis; their remaining Tier 1 commune-edge,
-named-area and producer reviews are still pending, so they stay off the app's maps
-until their commune-edge audit is committed. Earlier notice bulletins (Côte-d'Or
-2004–2015, every Yonne year) were located but not obtained; #461 stays open for them.
+See the [history delivery and source gaps](research/grand-cru-history.md). The 29
+remaining hidden cru registers supply the historical basis; they stay off the app's
+maps until their Tier 1 commune-edge audit is committed.
+[Richebourg](research/richebourg/README.md) adds the fourth app-visible cru with
+reviewed commune edges and named areas; its issue still requires PR review and merge.
+Earlier notice bulletins were partially recovered through archived copies, with
+missing publications and unsearched intervals; #461 stays open for those gaps.
 
 ## 1. What Échezeaux established
 

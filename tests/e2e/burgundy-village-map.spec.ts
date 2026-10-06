@@ -239,7 +239,7 @@ const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
  if(!auditedCru(slug))throw new Error(`${slug} is hidden from the app until its commune-edge audit is committed`);
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[];namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string}[]}};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
  const features=(read(`public${manifest.dataUrl}`) as Parcels).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
@@ -282,6 +282,14 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  expect(downloads).toBe(0);
+ if(parcelCru.namedPlots&&parcelCru.namedPlots.displayLayer!==false){
+  const plot=parcelCru.namedPlots.plots[0];
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(`${parcelCru.slug}-plot-${plot.id}`);
+  await expect(dialog.getByRole('heading',{name:plot.name,exact:true})).toBeVisible();
+  await expect(dialog.getByText(`Cadastral named area within ${parcelCru.name} Grand Cru`,{exact:false})).toBeVisible();
+  await expect(dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`})).toBeVisible();
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(parcelCru.parentFeatureId);
+ }
  const toggle=dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`});
  await toggle.focus();await page.keyboard.press('Space');
  await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
