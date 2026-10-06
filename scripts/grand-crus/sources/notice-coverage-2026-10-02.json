@@ -1,0 +1,628 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-02",
+  "departments": {
+    "21": {
+      "earliestPublishedYearLocated": 2004,
+      "latestPublishedYearLocated": 2026,
+      "availabilityStatus": "Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved",
+      "officialAvailabilityUrls": [
+        "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2004",
+        "https://www.cote-dor.gouv.fr/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/Recueils-des-actes-administratifs-2005",
+        "https://www.cote-dor.gouv.fr/layout/set/print/Publications/Recueils-des-Actes-Administratifs/Recueils-des-actes-administratifs-des-annees-anterieures/%28offset%29/10"
+      ],
+      "availabilityEvidence": "Official publisher pages surfaced by web search list 2004 and 2005 PDFs and the earlier-years page lists 2006–2015. Search-index discovery does not constitute obtaining or reviewing those PDFs.",
+      "obtainedIndexRanges": [
+        {
+          "corpus": "departmental-cote-dor",
+          "publicationYears": [
+            2016,
+            2017,
+            2018,
+            2019,
+            2020
+          ]
+        },
+        {
+          "corpus": "regional-bfc-cote-dor",
+          "publicationYears": [
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ]
+        },
+        {
+          "corpus": "departmental-cote-dor-earlier-archive",
+          "publicationYears": [
+            2004,
+            2005,
+            2006,
+            2008,
+            2010,
+            2011,
+            2013,
+            2015
+          ],
+          "completeness": "partial: only archived captures; see archiveAcquisition"
+        }
+      ],
+      "failedAcquisitionMetadata": [
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-21-earlier.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json"
+      ],
+      "failedPublishedPdf": {
+        "url": "https://www.cote-dor.gouv.fr/contenu/telechargement/5563/70379/file/RAA30062004.pdf",
+        "status": "missing",
+        "reason": "Remote end closed connection without response",
+        "sourceId": "notices-21-earlier-pdf",
+        "lastAttemptedAt": "2026-10-01T16:28:51.064386Z"
+      },
+      "unsearchedIntervals": [
+        "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
+        "Côte-d'Or 2004–2006, 2008, 2010, 2011, 2013 and 2015: only the archived captures in the acquisition report; annual completeness unknown (the 2013 and 2015 listings link 96 bulletins with no capture)",
+        "Departmental 2021–2026 publications outside the existing index",
+        "Regional publications before 2019 and any notice outside the indexed corpus",
+        "Before 2004: not searched"
+      ],
+      "acquisitionRetry": {
+        "checkedAt": "2026-10-02",
+        "reportedAt": "2026-10-01T16:28:57.924805Z",
+        "report": "scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json",
+        "sha256": "7e9e6b7091dea29e1f91857a3c7e8809266f9341d37738ca54f2b2853f9d533b",
+        "publicationYearsRequested": [
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "annualListingRequestsThisRun": 1,
+        "annualPathsUnattempted": [
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "savedAnnualListings": 0,
+        "downloadedPDFs": 0,
+        "extractedPages": 0,
+        "imageReviewedPages": 0,
+        "result": "Acquisition blocked by publisher connection closures; no new PDF bytes or review evidence obtained"
+      },
+      "additionalAccessFailures": [
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Python urllib (direct public request)",
+          "reason": "Remote end closed connection without response"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Windows curl HTTP/1.1 and TLS 1.2",
+          "reason": "Empty reply from server"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "In-app browser",
+          "reason": "ERR_HTTP2_PROTOCOL_ERROR"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Web fetch",
+          "reason": "502 Bad Gateway"
+        }
+      ],
+      "archiveAcquisition": {
+        "checkedAt": "2026-10-02",
+        "report": "docs/research/earlier-bulletins/acquisition-report-2026-10-02.json",
+        "sha256": "0094c589a32b95f2260e70a68759e6746b38a51e6c72acdf840596f2830d7e0c",
+        "reportedAt": "2026-10-02T10:04:21Z",
+        "source": "Internet Archive Wayback Machine captures of the official prefecture URLs (raw id_ bytes); the live prefecture hosts refused every connection",
+        "method": "scripts/pull_wayback_bulletins.py inventory/alternates/pull/date; sources in docs/research/earlier-bulletins/sources.json",
+        "publicationYears": [
+          {
+            "publicationYear": 2004,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 18,
+            "downloadedPDFs": 18,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2005,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 22,
+            "downloadedPDFs": 21,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 1,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2006,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 16,
+            "downloadedPDFs": 16,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2007,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 0,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2008,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 2,
+            "downloadedPDFs": 2,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2009,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 0,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2010,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 3,
+            "downloadedPDFs": 3,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2011,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 26,
+            "datedFromCoverPDFs": 26,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2012,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 0,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2013,
+            "archivedListing": true,
+            "listedPDFs": 53,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 13,
+            "datedFromCoverPDFs": 13,
+            "noCapture": 53,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2014,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 0,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2015,
+            "archivedListing": true,
+            "listedPDFs": 43,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 1,
+            "datedFromCoverPDFs": 1,
+            "noCapture": 43,
+            "pending": 0
+          }
+        ],
+        "undatedCaptures": {
+          "downloaded": 45,
+          "datedFromCover": 40,
+          "duplicatesOfPinned2016": 5,
+          "noCapture": 20
+        },
+        "extraction": {
+          "pdfs": 105,
+          "pages": 5929,
+          "pending": 0,
+          "failed": 0
+        },
+        "imageReviewedPages": 7
+      }
+    },
+    "89": {
+      "earliestPublishedYearLocated": 2008,
+      "latestPublishedYearLocated": 2026,
+      "availabilityStatus": "Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved",
+      "officialAvailabilityUrls": [
+        "https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs/RAA-2009",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs",
+        "https://www.yonne.gouv.fr/Publications/Publications-legales/Recueil-des-actes-administratifs/RAA-2026"
+      ],
+      "availabilityEvidence": "The official publisher's 2008 bulletin and 2009 year page are discoverable. The main official listing shows 2017–2026 and its offset-five page shows 2012–2021. Earlier completeness cannot be established from search results.",
+      "obtainedIndexRanges": [
+        {
+          "corpus": "departmental-yonne-archive",
+          "publicationYears": [
+            2008,
+            2009,
+            2010,
+            2011,
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "completeness": "partial: only archived captures; see archiveAcquisition"
+        }
+      ],
+      "failedAcquisitionMetadata": [
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-89.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-01/notices-89-2009.html.metadata.json",
+        "scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json"
+      ],
+      "failedPublishedPdf": {
+        "url": "https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf",
+        "status": "missing",
+        "reason": "Remote end closed connection without response",
+        "sourceId": "notices-89-earlier-pdf",
+        "lastAttemptedAt": "2026-10-01T16:28:49.801149Z"
+      },
+      "additionalAccessFailures": [
+        {
+          "client": "Windows curl HTTP/1.1",
+          "reason": "Empty reply from server"
+        },
+        {
+          "client": "In-app browser",
+          "reason": "ERR_HTTP2_PROTOCOL_ERROR"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Python urllib (direct public request)",
+          "reason": "Remote end closed connection without response"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Windows curl HTTP/1.1 and TLS 1.2",
+          "reason": "Empty reply from server"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "In-app browser",
+          "reason": "ERR_HTTP2_PROTOCOL_ERROR"
+        },
+        {
+          "checkedAt": "2026-10-02",
+          "client": "Web fetch",
+          "reason": "502 Bad Gateway"
+        }
+      ],
+      "unsearchedIntervals": [
+        "Yonne bulletins linked by archived listings but never captured: 1,286 documents, mostly 2010, 2011, 2014, 2017, 2020, 2021 and 2023 (see the acquisition report)",
+        "Yonne 2024–2026: no archived listing; only filename-dated captures",
+        "Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them",
+        "Before 2008: not searched"
+      ],
+      "acquisitionRetry": {
+        "checkedAt": "2026-10-02",
+        "reportedAt": "2026-10-01T16:28:57.924805Z",
+        "report": "scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json",
+        "sha256": "7e9e6b7091dea29e1f91857a3c7e8809266f9341d37738ca54f2b2853f9d533b",
+        "publicationYearsRequested": [
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ],
+        "annualListingRequestsThisRun": 1,
+        "annualPathsUnattempted": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ],
+        "savedAnnualListings": 0,
+        "downloadedPDFs": 0,
+        "extractedPages": 0,
+        "imageReviewedPages": 0,
+        "result": "Acquisition blocked by publisher connection closures; no new PDF bytes or review evidence obtained"
+      },
+      "archiveAcquisition": {
+        "checkedAt": "2026-10-02",
+        "report": "docs/research/earlier-bulletins/acquisition-report-2026-10-02.json",
+        "sha256": "0094c589a32b95f2260e70a68759e6746b38a51e6c72acdf840596f2830d7e0c",
+        "reportedAt": "2026-10-02T10:04:21Z",
+        "source": "Internet Archive Wayback Machine captures of the official prefecture URLs (raw id_ bytes); the live prefecture hosts refused every connection",
+        "method": "scripts/pull_wayback_bulletins.py inventory/alternates/pull/date; sources in docs/research/earlier-bulletins/sources.json",
+        "publicationYears": [
+          {
+            "publicationYear": 2008,
+            "archivedListing": true,
+            "listedPDFs": 36,
+            "filenameDatedPDFs": 1,
+            "downloadedPDFs": 34,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 3,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2009,
+            "archivedListing": true,
+            "listedPDFs": 53,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 45,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 8,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2010,
+            "archivedListing": true,
+            "listedPDFs": 52,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 1,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 51,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2011,
+            "archivedListing": true,
+            "listedPDFs": 63,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 1,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 62,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2012,
+            "archivedListing": true,
+            "listedPDFs": 81,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 77,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 4,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2013,
+            "archivedListing": true,
+            "listedPDFs": 45,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 44,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 1,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2014,
+            "archivedListing": true,
+            "listedPDFs": 77,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 4,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 73,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2015,
+            "archivedListing": true,
+            "listedPDFs": 61,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 52,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 9,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2016,
+            "archivedListing": true,
+            "listedPDFs": 156,
+            "filenameDatedPDFs": 0,
+            "downloadedPDFs": 125,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 30,
+            "pending": 1
+          },
+          {
+            "publicationYear": 2017,
+            "archivedListing": true,
+            "listedPDFs": 155,
+            "filenameDatedPDFs": 7,
+            "downloadedPDFs": 10,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 152,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2018,
+            "archivedListing": true,
+            "listedPDFs": 120,
+            "filenameDatedPDFs": 124,
+            "downloadedPDFs": 194,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 50,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2019,
+            "archivedListing": true,
+            "listedPDFs": 143,
+            "filenameDatedPDFs": 2,
+            "downloadedPDFs": 130,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 15,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2020,
+            "archivedListing": true,
+            "listedPDFs": 234,
+            "filenameDatedPDFs": 5,
+            "downloadedPDFs": 11,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 228,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2021,
+            "archivedListing": true,
+            "listedPDFs": 336,
+            "filenameDatedPDFs": 3,
+            "downloadedPDFs": 5,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 334,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2022,
+            "archivedListing": true,
+            "listedPDFs": 315,
+            "filenameDatedPDFs": 5,
+            "downloadedPDFs": 313,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 7,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2023,
+            "archivedListing": true,
+            "listedPDFs": 386,
+            "filenameDatedPDFs": 1,
+            "downloadedPDFs": 128,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 259,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2024,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 9,
+            "downloadedPDFs": 9,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2025,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 13,
+            "downloadedPDFs": 13,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          },
+          {
+            "publicationYear": 2026,
+            "archivedListing": false,
+            "listedPDFs": 0,
+            "filenameDatedPDFs": 7,
+            "downloadedPDFs": 7,
+            "datedFromCoverPDFs": 0,
+            "noCapture": 0,
+            "pending": 0
+          }
+        ],
+        "extraction": {
+          "pdfs": 1202,
+          "pages": 36183,
+          "pending": 0,
+          "failed": 0
+        },
+        "imageReviewedPages": 12
+      }
+    }
+  },
+  "limitation": "Publication-year availability is assessed independently from rights, geometry and DFI validation dates. Access failures and unsearched intervals are unknown coverage, never evidence that no historical notice exists. PDF page-image review is required before a candidate becomes a parcel event.",
+  "previousAvailabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-01.json"
+}

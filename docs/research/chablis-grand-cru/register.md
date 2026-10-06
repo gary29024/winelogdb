@@ -1565,15 +1565,20 @@ Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed re
 | Deed date | Original references | Context on current references |
 | --- | --- | --- |
 
-Reviewed notice matches: 0; unreviewed search candidates: 0. Matched act dates: none matched to none matched. [Original readings, areas, paths and unresolved references](notice-history.json).
+Reviewed notice matches: 37; unreviewed search candidates: 0. Matched act dates: 2012-05-16 to 2013-05-22. [Original readings, areas, paths and unresolved references](notice-history.json).
 
-Department 89: published years located as early as 2008 and through 2026. Earlier published records located; absolute earliest year unresolved because the archive listing is inaccessible. Obtained index ranges: [].
+Department 89: published years located as early as 2008 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-yonne-archive', 'publicationYears': [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
-- All Yonne departmental notice publication years, including published 2008–2026 records
+- Yonne: 1,229 queued bulletin URLs remain missing or unusable after the 4 October retry and the Common Crawl search (97 URLs across both departments exist there only as copies truncated at 1 MiB); see the dated reports
+- Yonne 2024–2026: no archived listing; only filename-dated captures
 - Yonne regional farm-structure notices; the Côte-d’Or-only regional index does not cover them
-- Before the earliest located 2008 publication; availability unresolved
+- Before 2008: not searched
 
-Failed earlier PDF: [89 official bulletin](https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf). Remote end closed connection without response. These are coverage gaps, not absent notices.
+Earlier located PDF recovered: [89 official bulletin](https://www.yonne.gouv.fr/content/download/3879/24385/file/recueil072008-21042008.pdf). Recovered from an Internet Archive capture of the same publisher document ID; byte-identical to an already archived URL. Remaining coverage gaps do not establish absent notices.
+
+Acquisition retry 2026-10-02 for publication years 2008–2026: 0 annual listings saved; 0 PDFs obtained; 0 new pages image-reviewed. [Dated acquisition report](../../../scripts/grand-crus/sources/catalogues/2026-10-02/notices-acquisition.json). Unattempted annual paths remain discovery targets, not confirmed publications.
+
+Archive retry 2026-10-04: 1288 missing URLs rechecked; 49 URLs recovered (31 new distinct PDFs). [Dated retry and index report](../earlier-bulletins/retry-report-2026-10-04.json).
 
 ## Source log
 

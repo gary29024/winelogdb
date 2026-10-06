@@ -20,12 +20,30 @@ INDEXES = [
      'directory': 'docs/research/bfc-bulletins', 'index': 'notices.json', 'coverage': 'coverage.json'},
     {'id': 'departmental-cote-dor', 'department': '21', 'publicationYears': list(range(2016, 2021)),
      'directory': 'docs/research/cote-dor-bulletins', 'index': 'index/notices.json', 'coverage': 'index/coverage.json'},
+    # Internet Archive captures only: years with at least one obtained bulletin, most of them partial.
+    {'id': 'departmental-cote-dor-earlier-archive', 'department': '21',
+     'publicationYears': [2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015],
+     'directory': 'docs/research/earlier-bulletins/cote-dor', 'index': 'index/notices.json', 'coverage': 'index/coverage.json'},
+    # Yonne's own departmental bulletins; Côte-d'Or indexes are never applied to Yonne.
+    {'id': 'departmental-yonne-archive', 'department': '89', 'publicationYears': list(range(2008, 2027)),
+     'directory': 'docs/research/earlier-bulletins/yonne', 'index': 'index/notices.json', 'coverage': 'index/coverage.json'},
 ]
 
 # Article 2 names four communes collectively, without assigning its individual
 # rows. The earlier index used holder context for section D; preserve that reading
 # as unassigned context rather than treating it as a printed commune assignment.
 AMBIGUOUS_COMMUNE_NOTICES = {'bfc-2022-084:p171', 'bfc-2022-154:p19'}
+AVAILABILITY_PATH = ROOT / 'scripts/grand-crus/sources/notice-coverage-2026-10-04.json'
+
+
+def load_availability(path=AVAILABILITY_PATH):
+    availability = read_json(path)
+    for department in availability['departments'].values():
+        for key in ('acquisitionRetry', 'archiveAcquisition', 'archiveRetry', 'commonCrawlRecovery'):
+            if record := department.get(key):
+                raw = (ROOT / record['report']).read_bytes().replace(b'\r\n', b'\n')
+                require(sha256(raw) == record['sha256'], 'Notice acquisition report hash changed; review the dated snapshot')
+    return availability
 
 
 def normalized_reference(value):
@@ -62,11 +80,17 @@ def query_reviewed(record, reachable, current_ids, ancestry, events):
         if commune_unassigned:
             path['assignment'] = 'unassigned-context'
             path['qualifications'] = sorted(set(path['qualifications'] + ['printed-row-commune-not-assigned']))
+        if record['documentDate'] is None:  # impossible or incomplete printed date: no chronology check is possible
+            path['assignment'] = 'unassigned-context'
+            path['qualifications'] = sorted(set(path['qualifications'] + ['notice-act-date-unresolved']))
     return {'originalRecord': record, 'originalDate': record['documentDate'], 'dateRole': 'notice-act-date',
             'originalPrintedReference': record['printedReference'], 'matchedReferenceIds': matched,
             'sectionPrefixPrinted': False, 'referenceMatch': 'printed-row-commune-not-assigned' if commune_unassigned else
              'ambiguous-prefix' if ambiguous else 'unique-reachable-reference',
-            'directCurrentParcelIds': sorted(set(matched) & current_ids) if not ambiguous and not commune_unassigned else [],
+            'directCurrentParcelIds': sorted(set(matched) & current_ids)
+                if not ambiguous and not commune_unassigned and record['documentDate'] is not None else [],
+            **({'directMatchWithheld': 'notice-act-date-unresolved'}
+               if record['documentDate'] is None and set(matched) & current_ids else {}),
             'contextPaths': paths, 'currentFarmer': None,
             'limitation': 'A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.'}
 
@@ -79,8 +103,8 @@ def build(cru, bundle, history):
     reachable = current | {p for row in ancestry for p in row['ancestorIds']}
     events = history.get('documentedEvents', [])
     selected = [index for index in INDEXES if any(c.startswith(index['department']) for c in cru_communes)]
-    availability_path = ROOT / 'scripts/grand-crus/sources/notice-coverage-2026-10-01.json'
-    availability = read_json(availability_path)
+    availability_path = AVAILABILITY_PATH
+    availability = load_availability(availability_path)
     reviewed, candidates, unresolved, inputs, index_coverage = [], [], [], [], []
     for config in selected:
         directory = ROOT / config['directory']
@@ -151,8 +175,9 @@ def build(cru, bundle, history):
                                                'departments': {d: availability['departments'][d] for d in sorted({c[:2] for c in cru_communes})}},
                          'reachableReferencesQueried': sorted(reachable),
                          'reviewedMatches': len(reviewed), 'unreviewedSearchCandidates': len(candidates),
-                         'earliestMatchedActDate': min((r['originalDate'] for r in reviewed), default=None),
-                         'latestMatchedActDate': max((r['originalDate'] for r in reviewed), default=None),
+                         'earliestMatchedActDate': min((r['originalDate'] for r in reviewed if r['originalDate']), default=None),
+                         'latestMatchedActDate': max((r['originalDate'] for r in reviewed if r['originalDate']), default=None),
+                         'reviewedMatchesWithUnresolvedActDate': sum(r['originalDate'] is None for r in reviewed),
                          'limitation': 'Index publication years and matched act dates are different. Earlier unavailable or unsearched notices are not absent records; notice coverage does not reach back to the oldest DFI event.'},
             'reviewedMatches': reviewed, 'unreviewedCandidates': candidates, 'unassignedReviewedReferences': unresolved}
 

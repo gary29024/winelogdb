@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-06T14:58:42Z",
+  "localArchive": {
+    "downloadedSourceURLs": 1747,
+    "missingOrCorruptObjects": 0,
+    "validation": "Every downloaded entry's local PDF exists and matches its recorded size and SHA-256; the 11 Common Crawl recoveries also match their publisher-scoped catalogue records and exact WARC references.",
+    "earlierIndexes": {
+      "cote-dor": {"pdfSourceURLs": 112, "pages": 6147},
+      "yonne": {"pdfSourceURLs": 1261, "pages": 38760}
+    },
+    "additionalCommonCrawlPDFsSincePRHead18389739": 11,
+    "additionalPages": 155,
+    "additionalReviewedParcelReadings": 0
+  },
+  "liveChecks": [
+    {
+      "service": "Côte-d'Or official publisher",
+      "url": "https://www.cote-dor.gouv.fr/",
+      "result": "Empty reply from server; no HTTP response body"
+    },
+    {
+      "service": "Yonne official publisher",
+      "url": "https://www.yonne.gouv.fr/",
+      "result": "Empty reply from server; no HTTP response body"
+    },
+    {
+      "service": "Internet Archive CDX",
+      "url": "https://web.archive.org/cdx/search/cdx?url=www.cote-dor.gouv.fr/IMG/pdf/RAA31052005.pdf&output=json&fl=original,timestamp,mimetype&filter=statuscode:200",
+      "result": "HTTP 503 Service Unavailable"
+    },
+    {
+      "service": "Common Crawl catalogue",
+      "url": "https://index.commoncrawl.org/collinfo.json",
+      "result": "RemoteDisconnected: Remote end closed connection without response"
+    },
+    {
+      "service": "Common Crawl WARC download",
+      "url": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2019-47/segments/1573496668765.35/warc/CC-MAIN-20191116204950-20191116232950-00326.warc.gz",
+      "rangeStart": 200574009,
+      "rangeLength": 374942,
+      "warcRecordId": "<urn:uuid:93293ecb-37fb-4402-9e15-145b766b826c>",
+      "originalUrl": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA31052005.pdf",
+      "originalHTTPStatus": 200,
+      "pdfBytes": 454886,
+      "sha256": "67357ad4414a74514328bd3d506574ca1068bdeaa903b22cbabd56a9a6bfea96",
+      "result": "Downloaded, hash-matched, stored and verified in a separate test archive"
+    }
+  ],
+  "limitation": "Bounded probes establish observed service availability only. The successful repeat download is not a new bulletin and does not close historical coverage gaps. A failed catalogue or publisher request does not establish that a notice was never published or captured. No full archive rescan was run on 6 October."
+}

@@ -1,0 +1,146 @@
+{
+ "schemaVersion": 1,
+ "purpose": "Côte-d'Or 2004–2006 farm-structure decisions whose land lies in a Grand Cru commune but which print no parcel reference. Producer-research leads only.",
+ "method": "Article 1 extracted by Poppler pdftotext (reading order) from pages selected by the README query; text-screened, not image-reviewed.",
+ "limitation": "Commune-level only: never parcel evidence, never assignable to a current parcel, and an authorisation does not establish actual or current farming.",
+ "decisions": [
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA29072005.pdf",
+   "page": 87,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21512"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la création de l’EARL BOYER Renaud avec la reprise de 5,80 ha de vignes sur les communes de CORPEAU, ST ROMAIN et PULIGNY MONTRACHET précédemment exploitées par la SCEV GUYOT Père est ACCORDEE, ce qui conduit l’EARL BOYER Renaud à mettre en valeur la superficie de 5 ha 80 de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA29072005.pdf",
+   "page": 92,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21714"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 25,68 ares de vignes sur la commune de VOSNE ROMANEE précédemment exploitées par l’EARL CONFURON COTETIDOT est ACCORDEE, ce qui conduit M. CONFURON François à mettre en valeur la superficie de 11 ha 16 de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA29072005.pdf",
+   "page": 93,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21295"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 27,28 ares de vignes sur la commune de GEVREY CHAMBERTIN précédemment exploitées par Mme CHEVILLARD Geneviève est ACCORDEE, ce qui conduit l’EARL Domaine CLEMANCEY à mettre en valeur la superficie de 107,02 ha dont 7 ha 29 de vignes. Le Chef de Service Economie Agricole, M. VIOT Conformément aux dispositions de l’Article R 102... dans les deux mois suivant les réponses. ___________________________________________________________",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA30092005.pdf",
+   "page": 48,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21267",
+    "21714"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant l’entrée de M. NUDANT Guillaume en tant qu’associé exploitant au sein de l’EARL André NUDANT et Fils avec la reprise de 3,17 ha de vignes sur les communes de FLAGEY ECHEZEAUX, NUITS ST GEORGES, VOSNE ROMANEE et BONCOURT LE BOIS précédemment exploitées par l’EARL MUGNERET Jean Pierre est ACCORDEE, ce qui conduit l’EARL à mettre en valeur la superficie de 17 ha 79 de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA30092005.pdf",
+   "page": 49,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21295"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 44,66 ares de vignes sur la commune de GEVREY CHAMBERTIN précédemment exploitées par Mme CHEVILLON Colette est ACCORDEE, ce qui conduit l’EARL Bernard DUGAT-PY à mettre en valeur la superficie de 9,80 ha de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA28022005.pdf",
+   "page": 48,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21150"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 4,79 ha de vignes et 8,58 ares de terres à vignes sur la commune de CHASSAGNE MONTRACHET, précédemment exploitées par Mme ROUX Jacqueline est ACCORDEE au Domaine MOREAU Bernard et Fils, ce qui le conduit à mettre en valeur la superficie de 16 ha 00 de vignes et 8 ares 58 de terres à vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA29042005.pdf",
+   "page": 42,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21150"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 37,53 ares de vignes sur la commune de CHASSAGNE MONTRACHET précédemment exploités par M. BAUDRAND Jacques est ACCORDEE à la SCEA Domaine Jean Noël GAGNARD, ce qui la conduit à mettre en valeur la superficie de 9 ha 81 de vignes et 73 ares de terres.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA30112005.pdf",
+   "page": 67,
+   "corpus": "cote-dor-2005",
+   "grandCruCommunesOfLand": [
+    "21133",
+    "21295",
+    "21442"
+   ],
+   "article1Excerpt": "L'autorisation d'exploiter, concernant la reprise de 6,98 ha sur les communes de GEVREY-CHAMBERTIN, MOREY-SAINT-DENIS et CHAMBOLLE-MUSIGNY précédemment exploités par M. TRUCHOT Jacky est ACCORDEE, ce qui conduit l'EARL du DOMAINE Létizia et David DUBAND à mettre en valeur la superficie de 20 ha 87.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA_28022006.pdf",
+   "page": 79,
+   "corpus": "cote-dor-2006",
+   "grandCruCommunesOfLand": [
+    "21133"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la création de l’EARL CHATEAU ROBLOT avec la reprise de 69,99 ares de vignes sur la commune de CHAMBOLLE MUSIGNY précédemment exploitées par M. ROUMIER Hervé est ACCORDEE, ce qui conduit l’EARL a mettre en valeur la superficie de 69 ares 99 de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA_28022006.pdf",
+   "page": 80,
+   "corpus": "cote-dor-2006",
+   "grandCruCommunesOfLand": [
+    "21150"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 62,63 ares sur la commune de CHASSAGNE MONTRACHET dont 35,20 ares précédemment exploités par l’EARL CREPEAU Gaston et Fils et 27,43 ares précédemment exploités par l’EARL PONAVOY Jean Pierre est ACCORDEE à la SCV Du Domaine du Château de CHASSAGNE MONTRACHET, ce qui conduit la SCV a mettre en valeur la superficie de 21 ha 77.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA_29092006.pdf",
+   "page": 63,
+   "corpus": "cote-dor-2006",
+   "grandCruCommunesOfLand": [
+    "21133",
+    "21267",
+    "21295",
+    "21714"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant la reprise de 2,65 ha de vignes sur les communes de GEVREY CHAMBERTIN, CHAMBOLLE MUSIGNY, VOSNE ROMANEE et FLAGEY ECHEZEAUX précédemment exploitées pour 43,94 ares par M. ESMONIN André, 65,97 ares par M. CATHIARD Sylvain et 1,55 ha par M. RAILLARD Jean Louis est ACCORDEE à la SA Domaine DUJAC, ce qui conduit la SA à mettre en valeur la superficie de 15 ha 42 de vignes.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  },
+  {
+   "url": "https://www.cote-dor.pref.gouv.fr/onlinemedia/Upload/RAA_29092006.pdf",
+   "page": 64,
+   "corpus": "cote-dor-2006",
+   "grandCruCommunesOfLand": [
+    "21010"
+   ],
+   "article1Excerpt": "L’autorisation d’exploiter, concernant sur la transformation de l’exploitation individuelle de M. POTEL Nicolas de 1,83 ha de vignes en SCE Domaine POTEL GUITON dans laquelle celui-ci devient associé non exploitant et sa concubine Mlle GUITON Anna s’installe avec la reprise de 4,96 ha de vignes sur les communes de COMBLANCHIEN, CORGOLOIN, BEAUNE, SAVIGNY LES BEAUNE, ALOXE CORTON et VOLNAY dont 4,55 ha précédemment exploités par M. CARIMANTRAN Michel et 41,50 ares par le biais de la SAFER est ACCORDEE, ce qui conduit la SCE Domaine POTEL GUITON à mettre en valeur la superficie de 6 ha 80.",
+   "reviewStatus": "text-screened",
+   "parcelEvidence": false
+  }
+ ]
+}
