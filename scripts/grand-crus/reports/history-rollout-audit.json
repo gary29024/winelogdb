@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5197535,
-  "evidenceGzipBytesTotal": 429671,
+  "evidenceBytesTotal": 5206138,
+  "evidenceGzipBytesTotal": 433637,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -57,7 +57,7 @@
         "2025-11-20"
       ],
       "noticeMatches": 30,
-      "unreviewedNoticeCandidates": 2,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -67,10 +67,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "8c22eb6a559b3ed0160e7be536f70dc3fbda36f9958973d019c2162074ddadf0",
-      "evidenceSha256": "4a4f6810b0a7b29e98298f6fc1ba86840e33545d37f523f4fcfc3945280d5402",
-      "evidenceBytes": 450608,
-      "evidenceGzipBytes": 38557,
+      "registerSha256": "caab4de24d8fc226994ff7d12bd0b9a3b6d23c117fb8d1b464f4558a47421967",
+      "evidenceSha256": "6d8d4b84d50fbff2f7241a0835bc1787a9dea05d1fc74edc1eae4e18dc68e58a",
+      "evidenceBytes": 450906,
+      "evidenceGzipBytes": 38687,
       "earliestRawEventSample": {
         "id": "210:267:000:0000196:00001",
         "departmentCode": "210",
@@ -164,10 +164,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "007121063f79f7f8bb81437dc87a7262a4cd34422a370e38a6cd5847ea39f8eb",
-      "evidenceSha256": "3fb975d6041c1a4e91e142ac0003874d932ef80d655571142d198d70680edef3",
-      "evidenceBytes": 81573,
-      "evidenceGzipBytes": 12856,
+      "registerSha256": "1212a46c8ea246137ca1b1a752306dfeacaeb7aa2a2af68caa2670309e6d4f41",
+      "evidenceSha256": "737f228a9e4387dd41e1b00e03e8b990a7288691df82a05e73206090c8177bcc",
+      "evidenceBytes": 81831,
+      "evidenceGzipBytes": 12972,
       "earliestRawEventSample": {
         "id": "210:267:000:0000326:00001",
         "departmentCode": "210",
@@ -249,7 +249,7 @@
         "2025-08-29"
       ],
       "noticeMatches": 7,
-      "unreviewedNoticeCandidates": 2,
+      "unreviewedNoticeCandidates": 1,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -259,10 +259,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "828a707df4fd1b719cac2c455f164db92709828c088b7a42384e7b1ce81fef69",
-      "evidenceSha256": "ab60c6e68aeadbbcd31448fa74f0b12355cd2dac5952f7ad9d0fc6c4649904cf",
-      "evidenceBytes": 212012,
-      "evidenceGzipBytes": 16134,
+      "registerSha256": "4a43f44a7505d15cde9485df86786ace296ebce339fe1c4f9b2aca201f7cd56c",
+      "evidenceSha256": "fb0f07a84ccb932a74a59ed4b0d2ef33a501f310129c42ef1196dff6983d2ad5",
+      "evidenceBytes": 212289,
+      "evidenceGzipBytes": 16271,
       "earliestRawEventSample": {
         "id": "210:716:000:0000052:00001",
         "departmentCode": "210",
@@ -348,7 +348,7 @@
         "2025-12-17"
       ],
       "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 1,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -358,10 +358,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "dde23320fc77e93d0eb432f1b7fd2845d465dc6e532020b45ebf80f7e8e36d68",
-      "evidenceSha256": "2b8182c3a7ec567d7e2365a8da868e371e8dc7b1bb7fbcbd65f6ee406bdbbcf8",
-      "evidenceBytes": 160956,
-      "evidenceGzipBytes": 11870,
+      "registerSha256": "0dd3487cc8417a560c8b8e25bc9b2fdd09f6ce7bee357568bdb33c6c85a9edcb",
+      "evidenceSha256": "b5b9312a25182b32ceda3aac12a5cc3ac206dce29e540f019ee0b1f2f791c280",
+      "evidenceBytes": 161234,
+      "evidenceGzipBytes": 11995,
       "earliestRawEventSample": {
         "id": "210:714:000:0000246:00001",
         "departmentCode": "210",
@@ -457,10 +457,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "02cce54a2106c2119e83659328fcd55815e9dc32cbf23e42c7655474121e9a41",
-      "evidenceSha256": "7fed8d09152f00875873fd0286f5e079510ce460e00cb5416e91b6e8754586e1",
-      "evidenceBytes": 70958,
-      "evidenceGzipBytes": 8954,
+      "registerSha256": "875ed9cbc92f52ba3feb09a4f546547db0917208172b1aa631f7302d9b7aaa4d",
+      "evidenceSha256": "7d93281034d0e51be8780519d112cef3b07a745802ec5dae0febee7140da65f7",
+      "evidenceBytes": 71216,
+      "evidenceGzipBytes": 9070,
       "earliestRawEventSample": {
         "id": "210:714:000:0000226:00001",
         "departmentCode": "210",
@@ -556,10 +556,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "24430bf5e5ea33f3cd4b1b14bbe81d5a55e8d66adfc2cacd6084fb61c7bacce2",
-      "evidenceSha256": "20a30825c5f543a21e036d4461edd5f35bc6f0edd37fdc4df1e71b4a96772dc4",
-      "evidenceBytes": 43442,
-      "evidenceGzipBytes": 7406,
+      "registerSha256": "bb80110ccc3489d481f4558cfcf325e90b14049c4f1db005a373b58e44799ae1",
+      "evidenceSha256": "9b84dd20141c9fa303195ffc92e337188675bb291eb33202749efef9ae4e3e80",
+      "evidenceBytes": 43700,
+      "evidenceGzipBytes": 7525,
       "earliestRawEventSample": {
         "id": "210:714:000:0000241:00001",
         "departmentCode": "210",
@@ -651,10 +651,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "5e04cb949d80f923b6e6b55a0418a8a535b43e7fc19dde6064fe19c30b393d26",
-      "evidenceSha256": "123c154d9c0e8549c3886dbea992fb200b38c0ee8ce8ea1f41002600844767b0",
-      "evidenceBytes": 41091,
-      "evidenceGzipBytes": 6740,
+      "registerSha256": "78527bd7cd79e5ba6078f0f0229f919bcf179c5a07e7f815b13e4a20aab551c8",
+      "evidenceSha256": "da14c79cd324a8e31ae288d4c0a925f0dbd472cab600f0f1c4fc8f11d50d4630",
+      "evidenceBytes": 41349,
+      "evidenceGzipBytes": 6860,
       "earliestRawEventSample": null
     },
     {
@@ -713,10 +713,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "cfe914368a1482bbc644f912798be0c80578779e27b58b04f452777c7e307256",
-      "evidenceSha256": "bd32331e696eb8980d1f7d59c694bd0c24cdacfbfcf4c3e59bcb64ea9a87c6e0",
-      "evidenceBytes": 41407,
-      "evidenceGzipBytes": 6763,
+      "registerSha256": "3a3f25953238a699cd77a311cf9dfbd1f76494b97943669ad36b4d973b4652ca",
+      "evidenceSha256": "b21ce68391e502ede44343545926493c1ad5edd18bc774add3ce515821581fde",
+      "evidenceBytes": 41665,
+      "evidenceGzipBytes": 6883,
       "earliestRawEventSample": null
     },
     {
@@ -775,10 +775,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "000b10f0e15e63fb5723121f8df62276423ff58b0ffe3184ecc7133347dcdb47",
-      "evidenceSha256": "2d40d10c32e757fb568fb2963fd788bb651399b4b2f9aae90724602d868389c7",
-      "evidenceBytes": 43125,
-      "evidenceGzipBytes": 7041,
+      "registerSha256": "5a5ac38501e24865dff3543d1a41e6144b7190e7b1d9f7f64bd4504b2bd54cee",
+      "evidenceSha256": "3e7d7f326f03a148024eb701a16f16bd90f4d856b24c3e1c95379e99703c205c",
+      "evidenceBytes": 43383,
+      "evidenceGzipBytes": 7163,
       "earliestRawEventSample": null
     },
     {
@@ -838,10 +838,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "b49da73de194ff6677263e89b195c8db0215d7be33f808de2b2fe32d672312a2",
-      "evidenceSha256": "1acff7c78fb9cb681ca73c7590c7b73b3e514211365eb6a01024dbb2792c99d6",
-      "evidenceBytes": 80848,
-      "evidenceGzipBytes": 9819,
+      "registerSha256": "7a3e5d9c4859ee67a69ed66af8c8d95ebaefdd98b3524418c67f47ac12db0a4b",
+      "evidenceSha256": "0b95994e81bf33f42d75f4e148e9c93ab9d90c6be756012175e4973e750757d8",
+      "evidenceBytes": 81106,
+      "evidenceGzipBytes": 9934,
       "earliestRawEventSample": {
         "id": "210:133:000:0000257:00001",
         "departmentCode": "210",
@@ -942,10 +942,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "d8b03e8b431b5f25079832536b400cfff03362fe3dd4652b728d08371e646465",
-      "evidenceSha256": "eb5de9286b772f364b1be567b39d231c9fc68b5371858ab70fcfeaa7576f4c36",
-      "evidenceBytes": 119555,
-      "evidenceGzipBytes": 11341,
+      "registerSha256": "cda212d4ac8d677b0e2c9dd7d08b6ca6ce3b814dc382cb3bb8d82382627bb61b",
+      "evidenceSha256": "357be879738022c03a04de01ceb69b78a3147c5c7ada91109f90cbe3e92b4dbc",
+      "evidenceBytes": 119813,
+      "evidenceGzipBytes": 11464,
       "earliestRawEventSample": {
         "id": "210:133:000:0000254:00002",
         "departmentCode": "210",
@@ -1042,10 +1042,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "599ae7ebe3d21b9f103bb2329c62cc295495b900682cec0e011c035a5955a4a1",
-      "evidenceSha256": "c9715bf8ce555beee8bf29e753bcd21bb6e0dd8fc4e3b96f6484ce65bf77f3d0",
-      "evidenceBytes": 113499,
-      "evidenceGzipBytes": 9360,
+      "registerSha256": "9cbe454bc139bd6113977932bf77589030a51c3c7875e977a54c3b9b5b1609a8",
+      "evidenceSha256": "6cf4d8a38d84a78fa6a2418676076e312b9667d1f16183086c34a9c52546ba30",
+      "evidenceBytes": 113757,
+      "evidenceGzipBytes": 9482,
       "earliestRawEventSample": {
         "id": "210:442:000:0000359:00001",
         "departmentCode": "210",
@@ -1142,10 +1142,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "df37af57938a926637a675cc0559f4de9856c533444fe0553ff0e7b9074dfeb0",
-      "evidenceSha256": "e2f47e7be35e8a141fe130484e26b7a86522da8bdb916d695fc790965d5bc59b",
-      "evidenceBytes": 51499,
-      "evidenceGzipBytes": 7474,
+      "registerSha256": "a62b807ac4d80244b980f1a8e2ac713b4e36ed374762436f1cda7a6e04a1c0b6",
+      "evidenceSha256": "e0ba3bc4b6066f8242d2c05fec9d91f2a5d835a544c00bf887cbfa692164cab4",
+      "evidenceBytes": 51757,
+      "evidenceGzipBytes": 7597,
       "earliestRawEventSample": null
     },
     {
@@ -1205,10 +1205,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "0b83f717dca4c29be2fdadd5d29fcd2d9747fe576c007c909a97593c0f44c02d",
-      "evidenceSha256": "54ff5e111a7da85b603a8b717dd1bdfb2fb198a212089e80dcabb93390b95300",
-      "evidenceBytes": 85580,
-      "evidenceGzipBytes": 9824,
+      "registerSha256": "35bcbcc7f5ec841ade7dd13f52cf1ca8e72d743cc026de7c69640390fc04163f",
+      "evidenceSha256": "f2ddb9a46578c1a562b1ac03ca12032a4f2d2c8669a285bf7bc20f12d479a7c6",
+      "evidenceBytes": 85838,
+      "evidenceGzipBytes": 9944,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00003",
         "departmentCode": "210",
@@ -1309,10 +1309,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9495102ab83a73f4f1ef18aa066653672c1eac03440ed923247c705c66588515",
-      "evidenceSha256": "0262296951358a55cfed1e81778897d0f40c3920b24d279db0bed441ec044e88",
-      "evidenceBytes": 138809,
-      "evidenceGzipBytes": 12310,
+      "registerSha256": "42f668f3b40ed6955204ff68246a5830faf09706fe90920e5f67d959dd3578d5",
+      "evidenceSha256": "6e6c5435eb7a29095dd5cd1fc2015f27dad6dbe535adc8fb41d9d498f00eec7d",
+      "evidenceBytes": 139067,
+      "evidenceGzipBytes": 12429,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00001",
         "departmentCode": "210",
@@ -1406,10 +1406,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "2effaeb8e38295cf84999810a9d5e7fbce7871fc830ecb46f09181f202643a57",
-      "evidenceSha256": "ebabde5a921aeba1b23ebf2d0400646dfb298d9763464051bac3bb111816c264",
-      "evidenceBytes": 126150,
-      "evidenceGzipBytes": 11434,
+      "registerSha256": "011225315f1142cb9d28a162c5cb0fa7713ab416a8f906819d445c32b149e304",
+      "evidenceSha256": "2db666aeb6aa96918a469867a4ea097b250bf5f6bb7c2500a3b1c3e41b8e4ea4",
+      "evidenceBytes": 126408,
+      "evidenceGzipBytes": 11554,
       "earliestRawEventSample": {
         "id": "210:295:000:0001073:00001",
         "departmentCode": "210",
@@ -1503,10 +1503,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "058b40ae4383dbfa9147f4614465f51cde3f70ea89fe227fc9530ad48f0dd76d",
-      "evidenceSha256": "ab3eef49d9e237e005c098fa1c80e6b166305a9ef096e234dd6e81ccaed152a0",
-      "evidenceBytes": 78297,
-      "evidenceGzipBytes": 9435,
+      "registerSha256": "5171eafeef9b53f7aa45a82ad1c38c3a762f3c61db33b73244d3b89120f213ca",
+      "evidenceSha256": "47767dad017a43f6c2102e9c5e2f58feee1679ed42b00a1269f484add51f83c5",
+      "evidenceBytes": 78555,
+      "evidenceGzipBytes": 9552,
       "earliestRawEventSample": {
         "id": "210:295:000:0001073:00001",
         "departmentCode": "210",
@@ -1600,10 +1600,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "e9296ceb148fae6123080b7c8c3906d14cecc10c4e531106da585ab47643e012",
-      "evidenceSha256": "481aa7b858e551805d6ab1aea405648af30ed011499f1f224ef70c19f87af83d",
-      "evidenceBytes": 81772,
-      "evidenceGzipBytes": 9117,
+      "registerSha256": "4429537576419e2632287d6e22dbbb70fa01baf8acc4e258c9f5b8780aa8cab0",
+      "evidenceSha256": "4f2c8ba2b973d39ec856f4967e510c2450f78af2d5500c1b2943cf63f0a0e87b",
+      "evidenceBytes": 82030,
+      "evidenceGzipBytes": 9231,
       "earliestRawEventSample": {
         "id": "210:295:000:0001587:00001",
         "departmentCode": "210",
@@ -1697,10 +1697,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "cac540115e53cca79f7dd357efea15f893a02c5395e08fc02280d183a4e90fe8",
-      "evidenceSha256": "1ddfe7c8d31335b59aa2094589710fc0c50c955b25a75ee7a3de3a3e371ff408",
-      "evidenceBytes": 80745,
-      "evidenceGzipBytes": 9142,
+      "registerSha256": "63f584d782d527a7fcf0243e1904ff03c8beee01a7d26a21c52ce67e6f9af0c4",
+      "evidenceSha256": "49d75d6f8d535179b5d0568ad4b2aa79649b580659a7ce43716de6e521168960",
+      "evidenceBytes": 81003,
+      "evidenceGzipBytes": 9256,
       "earliestRawEventSample": {
         "id": "210:295:000:0001640:00001",
         "departmentCode": "210",
@@ -1794,10 +1794,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "105709aa5afb3665efad100bc1e80cb62d1b37f0e76e0d6dec3dd5f075d06444",
-      "evidenceSha256": "b75a600dec3e8a96985669ac6445b6036caf373f5204d402c616c0ee039aa542",
-      "evidenceBytes": 165838,
-      "evidenceGzipBytes": 13555,
+      "registerSha256": "bd252b87b64a5a4abb14d98e1cd7e1aca8adcf217f9e1042f08494e48273465f",
+      "evidenceSha256": "cc93e180b45f3a3d0544b830225615661cf6e8196871d49d5cf13ae3dc856b4b",
+      "evidenceBytes": 166097,
+      "evidenceGzipBytes": 13673,
       "earliestRawEventSample": {
         "id": "210:295:000:0001102:00001",
         "departmentCode": "210",
@@ -1891,10 +1891,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "e20ab6019a4c68cf83849947ffb468635c4b1a8af921b3577ba3738b1763b20e",
-      "evidenceSha256": "1094d50aa6d35ff1bf27a3d3fef38268f6a70ad6611564dbf6a1a15c8a89b0e5",
-      "evidenceBytes": 165838,
-      "evidenceGzipBytes": 13555,
+      "registerSha256": "9ca6eceefc6a9e773baf44eaaa8e9aa0765d79c741ee8dfbb6309db9514d85d4",
+      "evidenceSha256": "6eb87c243a8fa7d009e0a409abfa8004993b4a19a0d9e5d0913033dd344b6793",
+      "evidenceBytes": 166097,
+      "evidenceGzipBytes": 13673,
       "earliestRawEventSample": {
         "id": "210:295:000:0001102:00001",
         "departmentCode": "210",
@@ -1988,10 +1988,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "f8bc986630a5377cefc9af5ad1000a6771b13c890fe33cbe1e718412f431558c",
-      "evidenceSha256": "5a7bce5573868596fe1fff44eb64e1bd978b2237ce143a3a858e2893e0e3e628",
-      "evidenceBytes": 67442,
-      "evidenceGzipBytes": 8596,
+      "registerSha256": "29947d61fa5c952d71747ace32ec2d9cd33a1ce0805389186bcf26d4c6c002fc",
+      "evidenceSha256": "bf78cb093f642d804139c515d56487a2924399e92832771ae4466f641d37a435",
+      "evidenceBytes": 67700,
+      "evidenceGzipBytes": 8713,
       "earliestRawEventSample": {
         "id": "210:295:000:0001212:00001",
         "departmentCode": "210",
@@ -2085,10 +2085,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "0f1f006018867e741c884ed6f8a86e3f464b0026ab517df4d08cb3852d68a46f",
-      "evidenceSha256": "5a0c2b15054ac88991718d3af1c82c96cb25d8f78fd9fcca9fcfce8cd2e84bb2",
-      "evidenceBytes": 87659,
-      "evidenceGzipBytes": 10039,
+      "registerSha256": "0b7cab8010cc0be5fdef42fe982b056e02f0ada9cc1b31aee6e3d5dbad709494",
+      "evidenceSha256": "2c510abefbc72d79616a7e40c926074443b038ed66b28eb24afb0d60fb543317",
+      "evidenceBytes": 87917,
+      "evidenceGzipBytes": 10157,
       "earliestRawEventSample": {
         "id": "210:295:000:0001154:00001",
         "departmentCode": "210",
@@ -2184,10 +2184,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "d177365a6aeb88779ecc941ceaef11e0d0426db0a561e756c7330406f05b7308",
-      "evidenceSha256": "2790a898ccd9b0c8852730edbeb49fdaa80756aa70bc1e9d8cb447f952df89b9",
-      "evidenceBytes": 61170,
-      "evidenceGzipBytes": 8561,
+      "registerSha256": "91fba39c300205243eacfad8fba043b4186cac6b036c43164b9e95930070759f",
+      "evidenceSha256": "c37b1ff1d5f3521e929bd1c1cd143dbab4dc16f10a26053d32b985e35d861b6d",
+      "evidenceBytes": 61428,
+      "evidenceGzipBytes": 8681,
       "earliestRawEventSample": {
         "id": "210:295:000:0001446:00001",
         "departmentCode": "210",
@@ -2292,10 +2292,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "166c00763feabbfee2d728851c9c23697bd66e4f7bcf60bf7ee22ce51051bfa1",
-      "evidenceSha256": "95c2fb1ab2dfe6a54e0eefdfc915d2d12789d5165350fe2a2b4775580d0cbfd0",
-      "evidenceBytes": 142618,
-      "evidenceGzipBytes": 11147,
+      "registerSha256": "127a74012aabb1860065793c05e080431771bfa22ee3345837294313c203ac27",
+      "evidenceSha256": "d5c8a21f376f39803b7688f058c2546023f65891532da1572f76d4308ec8e6db",
+      "evidenceBytes": 142877,
+      "evidenceGzipBytes": 11261,
       "earliestRawEventSample": {
         "id": "210:150:000:0000315:00001",
         "departmentCode": "210",
@@ -2390,10 +2390,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9b3727eecd51558c58959fe717addbfdff026abf3edac25c08df6c6c78520c58",
-      "evidenceSha256": "674d6e3732e2b2a5a7d7710eccca2dd1d4c43f0dcf013df0d10eec95a956e348",
-      "evidenceBytes": 112496,
-      "evidenceGzipBytes": 10576,
+      "registerSha256": "24b1344c90e0e4da49b72bb857e369cba87a70364f25157fdafeb1c3fb280df4",
+      "evidenceSha256": "486b17e6f5373a3dd4568fb651f46951bf15abbd7c1c85bb7a418dfb0bb81184",
+      "evidenceBytes": 112754,
+      "evidenceGzipBytes": 10691,
       "earliestRawEventSample": {
         "id": "210:512:000:0000202:00001",
         "departmentCode": "210",
@@ -2492,10 +2492,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "5e9760a15d471f5631dcd068af1b8c2fde5d40951c2515447277d81a74f58b44",
-      "evidenceSha256": "de02860ecabc5971f35bc8dfd488dcd7cae34a609a307572a7f238f0240ceab8",
-      "evidenceBytes": 142206,
-      "evidenceGzipBytes": 11971,
+      "registerSha256": "a9c8ee1f86fddb23adc7ca4db66eff5d1a36accad64b8e3d8800ae9a558feb70",
+      "evidenceSha256": "2f0140459311311d3f38e1b6e8d688af0d81decf8dba1dcff1b66eb53df0916f",
+      "evidenceBytes": 142464,
+      "evidenceGzipBytes": 12088,
       "earliestRawEventSample": {
         "id": "210:150:000:0000313:00001",
         "departmentCode": "210",
@@ -2590,10 +2590,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "360b6de6ed06e91d8d82d2f9b3f831c154bc86892a204fac0318bfac8733c835",
-      "evidenceSha256": "9a95b0e73b0fd83f0afa0555f4cbd0dfaf23171ed1339eed6a0a29feba0c44c8",
-      "evidenceBytes": 95731,
-      "evidenceGzipBytes": 9988,
+      "registerSha256": "d56a3f8c16b1c31adf6923bfae20ca0bb4f0e4ad7f7a831439f00e576cc0886a",
+      "evidenceSha256": "9372f962b7fb374e35f7df63f425890775570bf4a1ca3f71326a954457d5ae36",
+      "evidenceBytes": 95989,
+      "evidenceGzipBytes": 10103,
       "earliestRawEventSample": {
         "id": "210:512:000:0000245:00001",
         "departmentCode": "210",
@@ -2688,10 +2688,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "1eb2ba664166fa797e6b8800838b1348508a03bec0bb491c823b961e4ddaa8b8",
-      "evidenceSha256": "5929e2b6268b4701cd639d7b087085f08c95e47d3d2eb3083595a91d049b195c",
-      "evidenceBytes": 51368,
-      "evidenceGzipBytes": 7907,
+      "registerSha256": "06bbf705bc1c1677ec2631ee1d9564d9968cbc118799edd4291e1458ea2288ef",
+      "evidenceSha256": "c85090dedc09eb2f3212af47eb49fe40fa2622198cd5e327e21ea223274e710e",
+      "evidenceBytes": 51626,
+      "evidenceGzipBytes": 8027,
       "earliestRawEventSample": {
         "id": "210:150:000:0000382:00001",
         "departmentCode": "210",
@@ -2799,10 +2799,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "92255a85571e69722c94d861e627f63e8c41da35d811daabc3516b96e274cd1f",
-      "evidenceSha256": "2465be320da1acc9eb472f00d294228bfc4378c100b12f1e50b80715574931b2",
-      "evidenceBytes": 797369,
-      "evidenceGzipBytes": 38000,
+      "registerSha256": "1f3d806af3983c83de147b6bd50c0fc203ce196d790ae302c0cfc149e76600fe",
+      "evidenceSha256": "1ed4c05102501e57dd677efcd59d5237428c9fbe98753e110eed307172252c9d",
+      "evidenceBytes": 797629,
+      "evidenceGzipBytes": 38139,
       "earliestRawEventSample": {
         "id": "210:010:000:0000130:00001",
         "departmentCode": "210",
@@ -2910,10 +2910,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "1566365895228a1beeb1192fa184684dde72a6ac05494ffed98e6d4f6b7e14b9",
-      "evidenceSha256": "e5aa43485dfd41e54c00bb44d29b313ee0c9e8790a74ac419524987093ffda9c",
-      "evidenceBytes": 415352,
-      "evidenceGzipBytes": 23308,
+      "registerSha256": "0bd8900042f0f90c9502173c4c2887649a7177861b06f1f585568cffffb3008b",
+      "evidenceSha256": "26342588c6cbcd8ebf96bf05ac1dacf5ee56689a77af0ffd9c41f4773ce1edd1",
+      "evidenceBytes": 415612,
+      "evidenceGzipBytes": 23435,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",
@@ -3015,10 +3015,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "8b97f4c6ca521ee7d5db613109c9c84f11855eef749aed9764d07d685721f57c",
-      "evidenceSha256": "edf39fa0c29246a6867d426ed6172a3b83191cc0c69e382a2433d6b6dfddabe6",
-      "evidenceBytes": 373410,
-      "evidenceGzipBytes": 21300,
+      "registerSha256": "879b504d16fa05b65e961c86cf234d1defb110ed19e841ab1fd529c6a1edd880",
+      "evidenceSha256": "78f1914c3b6f7f9aa72f93287161019040d49274f42fb37c7f6b6b898590a10b",
+      "evidenceBytes": 373670,
+      "evidenceGzipBytes": 21427,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",
@@ -3111,10 +3111,10 @@
           "Before 2008: not searched"
         ]
       },
-      "registerSha256": "7a1614885d0b4f2ee1c0f143d17ddbcaaafac5d0fa19c9724f3a3deae7d42b28",
-      "evidenceSha256": "3f88584ddcce2b10b0650654e921cb3082829ea2266ebd39702efb14a3a15268",
-      "evidenceBytes": 417112,
-      "evidenceGzipBytes": 25591,
+      "registerSha256": "8b541ecf548ce4b9bc1533b3f3fa0aed7ba82ca3c587114e695b86ae66352bbf",
+      "evidenceSha256": "caa56d0e7d838e844fc509a0620887e6b650d6c882e3b3abc48ea821f20d98e9",
+      "evidenceBytes": 417371,
+      "evidenceGzipBytes": 25700,
       "earliestRawEventSample": {
         "id": "890:068:000:0001086:00034",
         "departmentCode": "890",
