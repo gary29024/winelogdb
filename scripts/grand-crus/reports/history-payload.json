@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-Db3FaCss.js"
+    "dist/client/assets/index-C9R9LHbJ.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DggadFiV.js",
-    "dist/client/assets/SectionLabel-DO321omO.js",
-    "dist/client/assets/SparklingDetailsCard-DfE8yE9w.js",
-    "dist/client/assets/VillageMap-DECuuIDj.js",
-    "dist/client/assets/api-Ewqh5mT2.js",
-    "dist/client/assets/burgundyAtlas-5_EwwpJr.js",
-    "dist/client/assets/index-DSch4lmJ.js",
-    "dist/client/assets/index-Db3FaCss.js",
+    "dist/client/assets/FriendTagDialog-DWilOJU3.js",
+    "dist/client/assets/SectionLabel-BHa4gH4q.js",
+    "dist/client/assets/SparklingDetailsCard-z159Z02E.js",
+    "dist/client/assets/VillageMap-DVNvuwtq.js",
+    "dist/client/assets/api-C9YaW1dm.js",
+    "dist/client/assets/burgundyAtlas-CedvHJPK.js",
+    "dist/client/assets/index-C9R9LHbJ.js",
+    "dist/client/assets/index-Y2VVxYXq.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CpTSRlno.js",
-    "dist/client/assets/wineDetailCompact-FDW-V64e.js"
+    "dist/client/assets/useModalFocus-CNI4GZLG.js",
+    "dist/client/assets/wineDetailCompact-DsIKFX_6.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 7,
-  "evidenceBytesTotal": 1061893,
-  "evidenceGzipBytesTotal": 104700,
+  "evidenceChunkCount": 8,
+  "evidenceBytesTotal": 1103691,
+  "evidenceGzipBytesTotal": 111706,
   "parcelBundleBytesTotal": 463770,
   "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
@@ -54,6 +54,13 @@
       "sha256": "bd8a54e62fb916d00357e564fffdc5d9d001629f6256a0f0be86195ffb93927b",
       "bytes": 41504,
       "gzipBytes": 6982
+    },
+    {
+      "cru": "la-tache",
+      "file": "dist/client/assets/la-tache.evidence-C-p9JfuY.js",
+      "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
+      "bytes": 41798,
+      "gzipBytes": 7006
     },
     {
       "cru": "richebourg",
