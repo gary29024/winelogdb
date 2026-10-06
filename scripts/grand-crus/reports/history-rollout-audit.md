@@ -6,13 +6,13 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5206138 bytes raw / 433637 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5206157 bytes raw / 433646 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
 | [echezeaux](../../../docs/research/echezeaux/register.md) | 276 | 1991-01-22 → 2026-04-13 | 82 / 64 | 30 / 47 | 0 | 30 / 0 | 38687 |
 | [grands-echezeaux](../../../docs/research/grands-echezeaux/register.md) | 32 | 2019-03-12 → 2019-03-12 | 1 / 0 | 1 / 1 | 0 | 6 / 0 | 12972 |
-| [clos-de-vougeot](../../../docs/research/clos-de-vougeot/register.md) | 164 | 1989-04-20 → 2025-05-12 | 68 / 58 | 34 / 36 | 0 | 7 / 1 | 16271 |
+| [clos-de-vougeot](../../../docs/research/clos-de-vougeot/register.md) | 164 | 1989-04-20 → 2025-05-12 | 68 / 58 | 34 / 36 | 0 | 7 / 0 | 16280 |
 | [richebourg](../../../docs/research/richebourg/register.md) | 58 | 1995-09-18 → 2025-05-12 | 32 / 11 | 6 / 13 | 0 | 0 / 0 | 11995 |
 | [romanee-saint-vivant](../../../docs/research/romanee-saint-vivant/register.md) | 17 | 1990-01-18 → 2022-05-16 | 7 / 3 | 3 / 3 | 0 | 0 / 0 | 9070 |
 | [romanee-conti](../../../docs/research/romanee-conti/register.md) | 2 | 1994-05-30 → 1994-05-30 | 1 / 1 | 1 / 1 | 0 | 0 / 0 | 7525 |

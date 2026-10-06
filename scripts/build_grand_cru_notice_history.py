@@ -95,6 +95,25 @@ def query_reviewed(record, reachable, current_ids, ancestry, events):
             'limitation': 'A reviewed notice names an applicant or a historical procedure, never verified current operation. Original area and scope remain those of the notice.'}
 
 
+def curated_page_reviews(curation):
+    """The cru curation's page-image notice reviews, with the exact references its parcel events assign."""
+    events = {}
+    for event in curation['exactParcelEvents']:
+        events.setdefault(event['sourceId'], set()).update([*event['parcelIds'], *event.get('predecessorReferences', {})])
+    return [{**review, 'references': events.get(review['sourceId'], set())}
+            for review in curation.get('noticeReview', []) if review.get('reviewMethod') == 'page-image']
+
+
+def covered_by_curated_review(notice, bulletin, matched, reviews):
+    """An index hit the curation already read: same bulletin bytes, an overlapping page, every matched reference assigned."""
+    if bulletin is None or 'firstPage' not in notice:
+        return False
+    pages = set(range(notice['firstPage'], notice['lastPage'] + 1))
+    return any(
+        r['bulletin'] == notice['bulletin'] and r['sha256'] == bulletin['sha256'] and pages & set(r['pages'])
+        and set(matched) <= r['references'] for r in reviews)
+
+
 def build(cru, bundle, history):
     require(history['parentFeatureId'] == cru['parentFeatureId'], 'History belongs to another cru')
     current = {r['parcelId'] for r in history['parcels']}
@@ -106,6 +125,9 @@ def build(cru, bundle, history):
     availability_path = AVAILABILITY_PATH
     availability = load_availability(availability_path)
     reviewed, candidates, unresolved, inputs, index_coverage, already_reviewed = [], [], [], [], [], []
+    curation_path = research_path(cru, 'curation.json')
+    curation = read_json(curation_path) if curation_path.exists() else None
+    curated_reviews = curated_page_reviews(curation) if curation else []
     for config in selected:
         directory = ROOT / config['directory']
         reviewed_data, notices, coverage = (read_json(directory / 'reviewed-parcels.json'),
@@ -140,7 +162,8 @@ def build(cru, bundle, history):
             hints = {normalized_reference(h) for h in notice['referenceHints']} - {None}
             matched = sorted(p for p in reachable if p[:5] in notice['communesMentioned'] and p[-6:] in hints)
             # A notice whose page images were already read is reported through its reviewed rows, not as pending review.
-            if matched and notice['id'] in reviewed_notice_ids:
+            if matched and (notice['id'] in reviewed_notice_ids or
+                            covered_by_curated_review(notice, bulletins.get(notice.get('bulletin')), matched, curated_reviews)):
                 already_reviewed.append(notice['id'])
             elif matched:
                 candidates.append({'indexId': config['id'], 'noticeId': notice['id'], 'matchedReferenceIds': matched,
@@ -152,9 +175,7 @@ def build(cru, bundle, history):
                                'earlierAvailableYearsAudit': availability['departments'][config['department']],
                                'unsearchedIntervals': availability['departments'][config['department']]['unsearchedIntervals']})
     missing_departments = sorted({c[:2] for c in cru_communes} - {i['department'] for i in selected})
-    curation_path = research_path(cru, 'curation.json')
-    if curation_path.exists():
-        curation = read_json(curation_path)
+    if curation:
         source_map = {s['id']: s for s in curation['sources']}
         inputs.append({'path': relative(curation_path), 'sha256': sha256(curation_path.read_bytes().replace(b'\r\n', b'\n'))})
         for event in curation['exactParcelEvents']:

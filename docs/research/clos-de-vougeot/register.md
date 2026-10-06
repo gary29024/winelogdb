@@ -1392,7 +1392,7 @@ Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed re
 | --- | --- | --- |
 | 2021-11-25 | 217160000A0069, 217160000A0070 | 217160000A0581 → 217160000A0069 (historical-context; former-parcel-includes-other-daughters); 217160000A0582 → 217160000A0069 (historical-context; former-parcel-includes-other-daughters) |
 
-Reviewed notice matches: 7; unreviewed search candidates: 1. Matched act dates: 2022-06-30 to 2026-04-07. [Original readings, areas, paths and unresolved references](notice-history.json).
+Reviewed notice matches: 7; unreviewed search candidates: 0. Matched act dates: 2022-06-30 to 2026-04-07. [Original readings, areas, paths and unresolved references](notice-history.json).
 
 Department 21: published years located as early as 2004 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}, {'corpus': 'departmental-cote-dor-earlier-archive', 'publicationYears': [2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
