@@ -4,7 +4,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from build_grand_cru_notice_history import load_availability, match_printed_reference, normalized_reference, query_reviewed
+from build_grand_cru_notice_history import (covered_by_curated_review, load_availability, match_printed_reference,
+                                            normalized_reference, query_reviewed)
 from grand_cru_filiation import parse_dfi, trace_ancestry
 from test_grand_cru_filiation import pair
 
@@ -19,6 +20,24 @@ class NoticeHistoryTests(unittest.TestCase):
         self.assertIn('bfc-2022-101:p350', history['coverage']['searchMatchesAlreadyReviewed'])
         self.assertFalse({c['noticeId'] for c in history['unreviewedCandidates']} & reviewed)
         self.assertEqual(history['coverage']['unreviewedSearchCandidates'], len(history['unreviewedCandidates']))
+
+    def test_cru_curation_page_review_covers_only_the_same_bulletin_page_and_references(self):
+        # Lambrays (bfc-2024-008:p82, pages 82–84) was image-reviewed on page 83 in the Clos de Vougeot curation.
+        review = {'bulletin': 'bfc-2024-008', 'sha256': 'a' * 64, 'pages': [83], 'references': {'217160000A0037'}}
+        notice = {'bulletin': 'bfc-2024-008', 'firstPage': 82, 'lastPage': 84}
+        bulletin = {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, ['217160000A0037'], [review]))
+        # Different bytes, no page overlap, an unassigned reference or an unpaged index stay pending review.
+        self.assertFalse(covered_by_curated_review(notice, {'sha256': 'b' * 64}, ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review({**notice, 'firstPage': 85, 'lastPage': 86}, bulletin,
+                                                   ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, ['217160000A0037', '217160000A0038'], [review]))
+        self.assertFalse(covered_by_curated_review({'bulletin': 'bfc-2024-008'}, bulletin, ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review(notice, None, ['217160000A0037'], [review]))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/clos-de-vougeot/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2024-008:p82', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual(history['unreviewedCandidates'], [])
 
     def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
         audit = load_availability()

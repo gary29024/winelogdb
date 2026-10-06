@@ -2,37 +2,37 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-hCpB0vU_.js"
+    "dist/client/assets/index-BEDnYPCM.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CsqzbeH_.js",
-    "dist/client/assets/SectionLabel-Bq3KUR4N.js",
-    "dist/client/assets/SparklingDetailsCard-B8J7zdBv.js",
-    "dist/client/assets/VillageMap-BqvxLCdE.js",
-    "dist/client/assets/api-BZ5R_2Vk.js",
-    "dist/client/assets/burgundyAtlas-Ch9ePwI1.js",
-    "dist/client/assets/index-Yu22ra-q.js",
-    "dist/client/assets/index-hCpB0vU_.js",
+    "dist/client/assets/FriendTagDialog-CTyHUyHY.js",
+    "dist/client/assets/SectionLabel-B5lBqbJC.js",
+    "dist/client/assets/SparklingDetailsCard-DjLCRqbA.js",
+    "dist/client/assets/VillageMap-PJjYykZp.js",
+    "dist/client/assets/api-DLlWx45r.js",
+    "dist/client/assets/burgundyAtlas-BT-jrb6a.js",
+    "dist/client/assets/index-BEDnYPCM.js",
+    "dist/client/assets/index-Bf9NeiEJ.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-kEStj0hE.js",
-    "dist/client/assets/wineDetailCompact-Bglk_5wW.js"
+    "dist/client/assets/useModalFocus-DfyeGNpD.js",
+    "dist/client/assets/wineDetailCompact-CpVuCg5h.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 4,
-  "evidenceBytesTotal": 905738,
-  "evidenceGzipBytesTotal": 80753,
+  "evidenceBytesTotal": 905757,
+  "evidenceGzipBytesTotal": 80762,
   "parcelBundleBytesTotal": 463770,
   "parcelBundleGzipBytesTotal": 71446,
   "evidenceChunks": [
     {
       "cru": "clos-de-vougeot",
-      "file": "dist/client/assets/clos-de-vougeot.evidence-yYPFE_L1.js",
-      "sha256": "5ced47504abf12711348fb057f325d8c63afb6909f88ea69691815ab2b7e7685",
-      "bytes": 212392,
-      "gzipBytes": 16464
+      "file": "dist/client/assets/clos-de-vougeot.evidence-CA5w5n1I.js",
+      "sha256": "ccdb83cec3ebc5c3a48ba5d67e4aa5a58e0cedc3b79e0d1ebda54cd2b4239aa3",
+      "bytes": 212411,
+      "gzipBytes": 16473
     },
     {
       "cru": "echezeaux",
