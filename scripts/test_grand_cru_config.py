@@ -13,27 +13,35 @@ from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, b
 
 
 class ConfigTests(unittest.TestCase):
-    def test_richebourg_recheck_matches_pinned_source_availability(self):
+    def test_tier1_rechecks_match_pinned_source_availability(self):
         from inventory_grand_cru_sources import rights_releases, dfi_releases, dfi_schema
-        review = read_json(RESEARCH_DIR / 'richebourg/source-review.json')
-        for source in review['sources']:
-            if 'snapshot' in source:
-                raw = (ROOT / source['snapshot']).read_bytes()
-                self.assertEqual(grand_cru.sha256(raw), source['sha256'])
-                self.assertEqual(len(raw), source['size'])
-            self.assertTrue(source['retrievedAt'].endswith('Z'))
-        sources = {s['id']: s for s in review['sources']}
-        rights = rights_releases(read_json(ROOT / sources['rights']['snapshot']), '21')
-        self.assertEqual(rights, review['rightsReleases'])
-        history = read_json(RESEARCH_DIR / 'richebourg/rights-history.json')['coverage']
-        self.assertEqual([r['asOf'] for r in rights], history['rightsImported'])
-        dfi = read_json(ROOT / sources['dfi']['snapshot'])
-        self.assertEqual(dfi_releases(dfi, '21'), review['dfiReleases'])
-        self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
-        self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
-        geometry = history['geometry']['21714']
-        self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
-                         geometry['obtainedDates'])
+        reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
+        self.assertIn('richebourg', reviewed)
+        for slug in reviewed:
+            with self.subTest(cru=slug):
+                cru = load_cru(slug)[0]
+                review = read_json(RESEARCH_DIR / slug / 'source-review.json')
+                self.assertEqual(review['parentFeatureId'], cru['parentFeatureId'])
+                for source in review['sources']:
+                    if 'snapshot' in source:
+                        raw = (ROOT / source['snapshot']).read_bytes()
+                        self.assertEqual(grand_cru.sha256(raw), source['sha256'])
+                        self.assertEqual(len(raw), source['size'])
+                    self.assertTrue(source['retrievedAt'].endswith('Z'))
+                sources = {s['id']: s for s in review['sources']}
+                if 'namedPlots' in cru:
+                    self.assertEqual(cru['namedPlots']['nameSourceSha256'], sources['names']['sha256'])
+                rights = rights_releases(read_json(ROOT / sources['rights']['snapshot']), '21')
+                self.assertEqual(rights, review['rightsReleases'])
+                history = read_json(RESEARCH_DIR / slug / 'rights-history.json')['coverage']
+                self.assertEqual([r['asOf'] for r in rights], history['rightsImported'])
+                dfi = read_json(ROOT / sources['dfi']['snapshot'])
+                self.assertEqual(dfi_releases(dfi, '21'), review['dfiReleases'])
+                self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
+                self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
+                geometry = history['geometry']['21714']
+                self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
+                                 geometry['obtainedDates'])
 
     def test_every_cru_and_bundle_agree(self):
         self.assertIn('echezeaux', cru_slugs())

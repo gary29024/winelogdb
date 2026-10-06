@@ -15,6 +15,7 @@ import gzip
 import json
 
 from shapely.geometry import shape
+from shapely.ops import unary_union
 
 from grand_cru import (record_json, communes, in_cru, lieux_dits_file, load_cru, load_manifest, parcel_asset, pinned, require,
                        research_path, source_dir, write_or_check)
@@ -25,10 +26,13 @@ MINIMUM_SHARE = 0.9
 def build(cru, bundle, manifest, directory):
     config = cru['namedPlots']
     asset = parcel_asset(manifest)
-    areas = []
+    by_name = {}
     for insee in communes(bundle):
         data = pinned(directory, lieux_dits_file(insee), bundle['lieuxDits'][insee]['sha256'])
-        areas += [(f['properties']['nom'], shape(f['geometry'])) for f in json.loads(gzip.decompress(data))['features']]
+        for f in json.loads(gzip.decompress(data))['features']:
+            by_name.setdefault(f['properties']['nom'], []).append(shape(f['geometry']))
+    # Same-name features (one lieu-dit recorded in pieces) form one named area.
+    areas = [(name, shapes[0] if len(shapes) == 1 else unary_union(shapes)) for name, shapes in by_name.items()]
     reviewed = {p['sourceName']: p['name'] for p in config['plots']}
     parcels = {}
     for feature in json.loads(asset)['features']:
