@@ -10,6 +10,16 @@ from test_grand_cru_filiation import pair
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_already_reviewed_notices_are_not_pending_review(self):
+        # Michel Gros (bfc-2022-101:p350) was image-reviewed; it must not also be listed as an unreviewed candidate.
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/echezeaux/notice-history.json').read_text(encoding='utf-8'))
+        reviewed = {m['originalRecord'].get('noticeId') for m in history['reviewedMatches']}
+        self.assertIn('bfc-2022-101:p350', reviewed)
+        self.assertIn('bfc-2022-101:p350', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertFalse({c['noticeId'] for c in history['unreviewedCandidates']} & reviewed)
+        self.assertEqual(history['coverage']['unreviewedSearchCandidates'], len(history['unreviewedCandidates']))
+
     def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
         audit = load_availability()
         self.assertEqual(audit['checkedAt'], '2026-10-04')

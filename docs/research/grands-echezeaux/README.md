@@ -26,7 +26,7 @@ are dated evidence for further research, not farming links.
 | Published holdings compared by named area | 17 entries in Les Grands Échezeaux: 15 sized statements, including 1 métayer; 2 historical entries excluded from numeric comparison |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Official DFI validates reachable references from 2019-03-12; all 35 geometry vintages (2017–2026) and 2019–2025 rights imported; notice archive gaps remain explicit |
-| Raw / gzip payload | Parcels: 239,882 / 35,324 bytes. Evidence: 81,573 / 12,856 bytes |
+| Raw / gzip payload | Parcels: 239,882 / 35,324 bytes. Evidence: 81,831 / 12,972 bytes |
 
 Both files load only when "Parcel rights" is switched on. The parcel file is the one already
 used for Échezeaux; Grands-Échezeaux adds only its evidence file.

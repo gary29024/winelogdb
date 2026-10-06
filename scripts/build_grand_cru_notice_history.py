@@ -105,7 +105,7 @@ def build(cru, bundle, history):
     selected = [index for index in INDEXES if any(c.startswith(index['department']) for c in cru_communes)]
     availability_path = AVAILABILITY_PATH
     availability = load_availability(availability_path)
-    reviewed, candidates, unresolved, inputs, index_coverage = [], [], [], [], []
+    reviewed, candidates, unresolved, inputs, index_coverage, already_reviewed = [], [], [], [], [], []
     for config in selected:
         directory = ROOT / config['directory']
         reviewed_data, notices, coverage = (read_json(directory / 'reviewed-parcels.json'),
@@ -133,12 +133,16 @@ def build(cru, bundle, history):
                 source = bulletins[notice['bulletin']]
             reviewed.append({**match, 'indexId': config['id'], 'source': source,
                              'originalNoticeMetadata': source_metadata.get(record['noticeId'], notice)})
+        reviewed_notice_ids = {r['noticeId'] for r in reviewed_data['parcels']}
         for notice in notices['notices']:
             if not notice.get('farmStructures') or not set(notice['communesMentioned']) & {p[:5] for p in reachable}:
                 continue
             hints = {normalized_reference(h) for h in notice['referenceHints']} - {None}
             matched = sorted(p for p in reachable if p[:5] in notice['communesMentioned'] and p[-6:] in hints)
-            if matched:
+            # A notice whose page images were already read is reported through its reviewed rows, not as pending review.
+            if matched and notice['id'] in reviewed_notice_ids:
+                already_reviewed.append(notice['id'])
+            elif matched:
                 candidates.append({'indexId': config['id'], 'noticeId': notice['id'], 'matchedReferenceIds': matched,
                                    'printedOcrHints': notice['referenceHints'], 'notice': notice,
                                    'reviewStatus': 'unreviewed-search-candidate', 'assignment': 'unassigned',
@@ -175,6 +179,7 @@ def build(cru, bundle, history):
                                                'departments': {d: availability['departments'][d] for d in sorted({c[:2] for c in cru_communes})}},
                          'reachableReferencesQueried': sorted(reachable),
                          'reviewedMatches': len(reviewed), 'unreviewedSearchCandidates': len(candidates),
+                         'searchMatchesAlreadyReviewed': sorted(set(already_reviewed)),
                          'earliestMatchedActDate': min((r['originalDate'] for r in reviewed if r['originalDate']), default=None),
                          'latestMatchedActDate': max((r['originalDate'] for r in reviewed if r['originalDate']), default=None),
                          'reviewedMatchesWithUnresolvedActDate': sum(r['originalDate'] is None for r in reviewed),

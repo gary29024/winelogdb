@@ -232,6 +232,16 @@ class CommittedHistoryTests(unittest.TestCase):
         self.assertTrue(vougeot['217160000A0563'])
         self.assertFalse(successors('echezeaux', '212670000D0792')['212670000D0793'])
 
+    def test_coverage_counts_rejected_411_successors(self):
+        # The published coverage must not report zero rejections while retiredParcels keeps rejected slivers.
+        for slug, rejected in (('echezeaux', 8), ('clos-de-vougeot', 4), ('grands-echezeaux', 0)):
+            history = self.history(slug)
+            successors = [s for r in history['retiredParcels'] for s in r['successors']]
+            coverage = history['coverage']
+            self.assertEqual(coverage['nextVintageSuccessorsRejected'], sum(not s['accepted'] for s in successors), slug)
+            self.assertEqual(coverage['nextVintageSuccessorsAccepted'], sum(s['accepted'] for s in successors), slug)
+            self.assertEqual(coverage['nextVintageSuccessorsRejected'], rejected, slug)
+
 
 if __name__ == '__main__':
     unittest.main()
