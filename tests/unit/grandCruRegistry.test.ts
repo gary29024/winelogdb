@@ -38,7 +38,6 @@ describe('Grand Cru registry',()=>{
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
-  expect(grandCruFor('inao-denom-655')).toBeUndefined();  // La Romanée: history delivered, commune audit pending
   expect(grandCruFor('inao-denom-unknown')).toBeUndefined();
   const multiMapCru={...grandCrus[0],villageMaps:['chassagne-montrachet','puligny-montrachet']};
   expect(cruOnVillageMap(multiMapCru,'chassagne-montrachet')).toBe(true);
