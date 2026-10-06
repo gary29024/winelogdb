@@ -3,6 +3,8 @@ import { realD1 } from './support/realD1';
 import { readTranslationReply,translationPrompt,translationRequestSchema,translationTextHash } from '../../src/lib/research/translation';
 import { readResearchTranslation,translateResearch,translateResearchAfterRun,translateTexts } from '../../src/lib/research/translationService';
 import { processRolloutJob,rolloutRoute,rolloutStatus } from '../../worker/multiUser/rollout';
+import { recordAiUsage,usageRunHistory,usageSummary } from '../../src/lib/usage/aiUsage';
+import { DEFAULT_RATES } from '../../src/lib/usage/rates';
 import { deepResearchText } from '../../src/features/wines/researchSections';
 import { DEEP_FIELD_LABELS_ZH } from '../../src/features/wines/researchTranslation';
 import { DEEP_FIELDS } from '../../src/features/wines/researchSections';
@@ -116,23 +118,41 @@ describe('translateResearch',()=>{
 });
 
 describe('translation as the last step of a research run',()=>{
+ const wineRun={kind:'wine_research' as const,runId:'run-1',targetId:'w1'};
  it('translates a member run too, metered to that member, outside the run’s credit operation',async()=>{
   const d=realD1(),fetch=translatingModel();vi.stubGlobal('fetch',fetch);
   const run={DB:d.db,GEMINI_API_KEY:'key',CREDIT_CONTEXT:{db:d.db,operationId:'op-1',namespace:'queue'}};
-  await translateResearchAfterRun(run,'viewer',[english.summary,'',null,english.terroir,english.summary],{runId:'run-1',targetId:'w1'});
+  await translateResearchAfterRun(run,'viewer',[english.summary,'',null,english.terroir,english.summary],wineRun);
   expect(await readResearchTranslation(d.db,request(english))).toEqual({lang:'zh-Hant-HK',fields:chinese});
-  expect(d.sql.prepare('SELECT owner_id,run_id,target_id FROM ai_usage_events').all()).toEqual([{owner_id:'viewer',run_id:'run-1',target_id:'w1'}]);
+  expect(d.sql.prepare('SELECT owner_id,kind,step,run_id,target_id,units FROM ai_usage_events').all()).toEqual([{owner_id:'viewer',kind:'wine_research',step:'translation',run_id:'run-1',target_id:'w1',units:0}]);
   expect(d.sql.prepare('SELECT COUNT(*) AS n FROM provider_operations').get()).toEqual({n:0});
   // A re-delivered run finds everything saved and spends nothing.
-  await translateResearchAfterRun(run,'viewer',[english.summary,english.terroir]);
+  await translateResearchAfterRun(run,'viewer',[english.summary,english.terroir],wineRun);
   expect(fetch).toHaveBeenCalledTimes(1);
+ });
+ it('is part of the run’s cost, shown as its own line in the run’s breakdown',async()=>{
+  const d=realD1();vi.stubGlobal('fetch',translatingModel());
+  // The research itself, then its translation step under the same run.
+  await recordAiUsage({DB:d.db},'owner',{kind:'wine_research',runId:'run-1',targetId:'w1',model:'gemini-3.8-flash',tier:'flex',requests:1,units:1,searchQueries:4,promptTokens:20000,outputTokens:8000});
+  await translateResearchAfterRun({DB:d.db,GEMINI_API_KEY:'key'},'owner',[english.summary,english.terroir],wineRun);
+  const history=await usageRunHistory(d.db,'owner',DEFAULT_RATES,'wine_research');
+  expect(history.runs).toHaveLength(1);
+  const [run]=history.runs,research=run.parts.filter(part=>part.step===null),translation=run.parts.filter(part=>part.step==='translation');
+  expect(research).toHaveLength(1);expect(translation).toHaveLength(1);
+  expect(translation[0]).toMatchObject({model:'gemini-3.1-flash-lite',requests:1,searchQueries:0,promptTokens:900,outputTokens:600});
+  expect(translation[0].cost).toBeGreaterThan(0);
+  expect(run.cost).toBeCloseTo(research[0].cost+translation[0].cost,10);
+  // One run, not two, and no separate translation line on the spend card.
+  const summary=await usageSummary(d.db,'owner',DEFAULT_RATES);
+  expect(summary.kinds.map(kind=>[kind.kind,kind.runs,kind.unitCount])).toEqual([['wine_research',1,1]]);
+  expect(summary.kinds[0].cost).toBeCloseTo(run.cost,10);
  });
  it('never fails the run, and never reaches a provider from a context that may not',async()=>{
   const d=realD1();vi.stubGlobal('fetch',vi.fn(async()=>new Response('down',{status:500})));
   vi.spyOn(console,'warn').mockImplementation(()=>undefined);
-  await expect(translateResearchAfterRun({DB:d.db,GEMINI_API_KEY:'key'},'owner',[english.summary])).resolves.toBeUndefined();
+  await expect(translateResearchAfterRun({DB:d.db,GEMINI_API_KEY:'key'},'owner',[english.summary],wineRun)).resolves.toBeUndefined();
   const blocked=vi.fn();vi.stubGlobal('fetch',blocked);
-  await translateResearchAfterRun({DB:d.db,GEMINI_API_KEY:'key',CREDIT_CONTEXT:{deny:true,reason:'cleanup'}},'owner',[english.summary]);
+  await translateResearchAfterRun({DB:d.db,GEMINI_API_KEY:'key',CREDIT_CONTEXT:{deny:true,reason:'cleanup'}},'owner',[english.summary],wineRun);
   expect(blocked).not.toHaveBeenCalled();
  });
 });

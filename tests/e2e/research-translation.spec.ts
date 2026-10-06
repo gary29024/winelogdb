@@ -114,3 +114,30 @@ test('a partly translated result shows what exists and offers the owner the rest
  await expect(panel).not.toContainText('not translated yet');
  expect(posts.map(post=>post.path)).toEqual(['/api/research/translation/lookup','/api/research/translation']);
 });
+
+test('a Deep Search run’s cost shows its Chinese translation as a line of its own',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ const at='2026-10-06T08:00:00Z',later='2026-10-06T08:00:40Z';
+ const research={step:null,model:'gemini-3.8-flash',tier:'flex',createdAt:at,requests:1,searchQueries:6,promptTokens:21000,outputTokens:9000,cost:0.21};
+ const translation={step:'translation',model:'gemini-3.1-flash-lite',tier:'standard',createdAt:later,requests:1,searchQueries:0,promptTokens:3200,outputTokens:4100,cost:0.05};
+ const run={kind:'wine_research',runId:'run-1',targetId:'layout-wine',targetLabel:'Domaine Example · 2020 · Savigny',createdAt:later,requests:2,searchQueries:6,promptTokens:24200,outputTokens:13100,cost:0.26,parts:[research,translation]};
+ await page.route('**/api/**',async route=>{
+  const path=new URL(route.request().url()).pathname;
+  const data=path==='/api/me'?{user:{id:'owner',email:'o@example.com',display_name:'Owner',role:'owner',status:'active'}}
+   :path==='/api/usage/spend'?{currency:'HKD',days:30,empty:false,kinds:[{kind:'wine_research',label:'Wine Deep Search',runs:1,requests:2,searchQueries:6,promptTokens:24200,outputTokens:13100,units:1,unit:'run',unitCount:1,costPerUnit:0.26,cost:0.26,costPerRun:0.26,searchesPerRun:6}],month:{month:'2026-10',searchQueries:6,resetsAt:'2026-11-01T07:00:00Z',timeZone:'America/Los_Angeles',freeRemaining:4994,billableSearches:0,cost:0.26}}
+   :path==='/api/usage/spend/runs'?{currency:'HKD',days:30,kind:'wine_research',runs:[run]}
+   :path==='/api/admin/overview'?{members:[],actions:[],settings:{cloudflareObservedMonth:'2026-10'},prices:[],aiCost:{month:'2026-10',usd:0.03,searches:6},memberUsage:{month:'2026-10',items:[]},actionPolicies:[],actionAccess:[],storage:[],reviewOperations:[]}
+   :path==='/api/admin/rollout/status'?{storage:{state:'not_started',objects:0},research:{state:'not_started',wines:{processed:0,total:0},producers:{processed:0,total:0}},lwin:{state:'not_started',total:0},lwinValidation:{state:'not_started',total:0,reviewItems:[]},lwinAi:{state:'not_started',total:0}}
+   :{items:[],total:0,runs:[]};
+  await route.fulfill({json:data});
+ });
+ await page.goto('/admin');
+ await page.getByRole('tab',{name:'AI spend'}).or(page.getByRole('button',{name:'AI spend'})).first().click();
+ await page.getByText('Wine Deep Search').click();
+ await page.getByText('Domaine Example · 2020 · Savigny').click();
+ const dialog=page.getByRole('dialog');
+ await expect(dialog).toContainText('Chinese translation');
+ await expect(dialog).toContainText('Research');
+ await expect(dialog.locator('.ai-spend-run-parts article')).toHaveCount(2);
+ await dialog.screenshot({path:'test-results/research-translation-run-cost.png'});
+});

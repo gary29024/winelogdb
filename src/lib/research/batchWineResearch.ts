@@ -204,7 +204,7 @@ async function finalize(env:Env,owner:string,wineId:string,wine:ResearchWineRow<
 
 /** The run is complete; make its Chinese now so 繁中 needs no wait. Never throws. */
 const translateFinished=(env:Env,owner:string,wineId:string,requestId:string,result:DeepSearchResult)=>
-  translateResearchAfterRun(env,owner,[result.summary,result.expectedProfile,result.vintageQuality,result.producerDetails,result.producerWinemakingPractices,result.winemakingTechniques,result.terroir,result.drinkingWindow],{runId:requestId,targetId:wineId});
+  translateResearchAfterRun(env,owner,[result.summary,result.expectedProfile,result.vintageQuality,result.producerDetails,result.producerWinemakingPractices,result.winemakingTechniques,result.terroir,result.drinkingWindow],{kind:'wine_research',runId:requestId,targetId:wineId});
 
 async function cancelAttemptBatch(env:Env,requestId:string,wineId:string,attempt:number,googleName:string,reason:string){
   const cancelled=await cancelGeminiBatch(env.GEMINI_API_KEY,googleName);

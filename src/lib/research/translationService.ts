@@ -2,6 +2,9 @@ import { AI_MODELS } from '../ai/policy';
 import { ApiError } from '../credits/primitives';
 import type { ProviderAuthorization } from '../credits/provider';
 import { geminiCallTokens,recordAiUsage,type AiUsageEnv,type AiUsageTier } from '../usage/aiUsage';
+
+/** The research run a translation belongs to, when it is that run's last step. */
+export type TranslationRun={kind:'wine_research'|'producer_research';runId:string;targetId:string};
 import { readTranslationReply,translationPrompt,translationResponseJsonSchema,translationTextHash,type TranslationLang,type TranslationRequest } from './translation';
 import { postGeminiGenerateContent,resolveGeminiTransport,type GeminiTransportBindings } from '../../../worker/geminiTransport';
 
@@ -13,7 +16,9 @@ export type ResearchTranslation={lang:TranslationLang;fields:Record<string,strin
  * nobody is waiting on (translating existing research). The Developer API has
  * no flex tier: the call goes out at standard price and is metered as such.
  */
-export type TranslationOptions={tier?:'standard'|'flex';runId?:string;targetId?:string|null;timeoutMs?:number};
+export type TranslationOptions={tier?:'standard'|'flex';runId?:string;targetId?:string|null;timeoutMs?:number;
+ /** Meter the call as a step of this run, so the run's cost includes it, rather than as a separate translation. */
+ partOf?:TranslationRun};
 
 // One model call per chunk. Chinese runs to about one token per character plus
 // the bracketed English, well inside the output cap.
@@ -55,7 +60,11 @@ async function translateChunk(env:TranslationEnv&{DB:D1Database},owner:string,la
   throw error;
  }finally{clearTimeout(timer)}
  // Billed whether or not the reply is usable, so the spend card stays honest.
- await recordAiUsage(env,owner,{kind:'research_translation',runId,targetId:options.targetId??null,model,tier,requests:1,units:1,...geminiCallTokens(payload.usageMetadata)});
+ const tokens=geminiCallTokens(payload.usageMetadata);
+ await recordAiUsage(env,owner,options.partOf
+  // Units stay 0: the run already counted its wine or producer once.
+  ?{kind:options.partOf.kind,step:'translation',runId:options.partOf.runId,targetId:options.partOf.targetId,model,tier,requests:1,units:0,...tokens}
+  :{kind:'research_translation',runId,targetId:options.targetId??null,model,tier,requests:1,units:1,...tokens});
  const candidate=payload.candidates?.[0],text=candidate?.content?.parts?.map(part=>part.text??'').join('')??'';
  const reply=readTranslationReply(text,keys);
  if(!reply)throw new ApiError(502,candidate?.finishReason==='MAX_TOKENS'?'The translation ran out of room before it finished. Please try again.':'The translation came back incomplete. Please try again.');
@@ -112,17 +121,18 @@ export async function translateResearch(env:TranslationEnv&{DB:D1Database},owner
  * request (Check status, Cancel), and that request must not wait on Chinese.
  * It does not go through
  * the run's credit operation either - an uncertain send there would put a
- * finished Deep Search into review. The call is metered in the AI usage ledger
- * against the run's owner like the research itself, and a context that may
+ * finished Deep Search into review. The call is metered as a step of the run
+ * itself - same kind, run ID and owner - so the run's cost includes it and its
+ * breakdown shows it as a line, and a context that may
  * never reach a provider (cleanup) still never does.
  */
-export async function translateResearchAfterRun(env:TranslationEnv&{DB:D1Database},owner:string,texts:Array<string|null|undefined>,options:TranslationOptions={}){
+export async function translateResearchAfterRun(env:TranslationEnv&{DB:D1Database},owner:string,texts:Array<string|null|undefined>,run:TranslationRun){
  if(env.CREDIT_CONTEXT&&'deny' in env.CREDIT_CONTEXT)return;
  const sources=unique(texts.filter((text):text is string=>typeof text==='string'));if(!sources.length)return;
  try{
-  const {translatedCount}=await translateTexts({...env,CREDIT_CONTEXT:{exempt:true,reason:'Translation step of a research run'}},owner,'zh-Hant-HK',sources,{timeoutMs:AFTER_RUN_TIMEOUT_MS,...options});
-  if(translatedCount)console.log(JSON.stringify({event:'research_translated',owner,targetId:options.targetId??null,runId:options.runId??null,sections:translatedCount}));
+  const {translatedCount}=await translateTexts({...env,CREDIT_CONTEXT:{exempt:true,reason:'Translation step of a research run'}},owner,'zh-Hant-HK',sources,{timeoutMs:AFTER_RUN_TIMEOUT_MS,partOf:run,runId:run.runId});
+  if(translatedCount)console.log(JSON.stringify({event:'research_translated',owner,targetId:run.targetId,runId:run.runId,sections:translatedCount}));
  }catch(error){
-  console.warn(JSON.stringify({event:'research_translation_failed',owner,targetId:options.targetId??null,runId:options.runId??null,error:(error as Error).message}));
+  console.warn(JSON.stringify({event:'research_translation_failed',owner,targetId:run.targetId,runId:run.runId,error:(error as Error).message}));
  }
 }
