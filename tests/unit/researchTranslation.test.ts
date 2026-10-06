@@ -206,3 +206,28 @@ describe('translation routes',()=>{
   expect((await response.json() as {error:string}).error).toMatch(/Only the account owner/);
  });
 });
+
+describe('the route a translation takes to Gemini',()=>{
+ const gateway={CF_AI_GATEWAY_TOKEN:'token',AI_GATEWAY_ACCOUNT_ID:'account',AI_GATEWAY_ID:'winelog',VERTEX_PROJECT_ID:'project',VERTEX_REGION:'global'};
+ it('sends a run’s translation through AI Gateway to Vertex at the standard tier',async()=>{
+  const d=realD1(),fetch=translatingModel();vi.stubGlobal('fetch',fetch);
+  await translateResearchAfterRun({DB:d.db,...gateway},'owner',[english.summary],{kind:'wine_research',runId:'run-1',targetId:'w1'});
+  const [url,init]=fetch.mock.calls[0] as unknown as [string,RequestInit],headers=new Headers(init.headers);
+  expect(url).toBe('https://gateway.ai.cloudflare.com/v1/account/winelog/google-vertex-ai/v1/projects/project/locations/global/publishers/google/models/gemini-3.1-flash-lite:generateContent');
+  expect(headers.get('cf-aig-authorization')).toBe('Bearer token');
+  expect(headers.get('X-Vertex-AI-LLM-Shared-Request-Type')).toBeNull();
+  expect(d.sql.prepare('SELECT tier FROM ai_usage_events').get()).toEqual({tier:'standard'});
+ });
+ it('sends existing-research translation through AI Gateway on Flex, metered as Flex',async()=>{
+  const d=realD1(),fetch=translatingModel();vi.stubGlobal('fetch',fetch);
+  d.sql.exec("INSERT INTO producers(id,owner_id,canonical_name,match_key,profile,winemaking_practices,created_at,updated_at) VALUES('p1','owner','Domaine A','domaine a','A family domaine.','','now','now')");
+  const env={DB:d.db,...gateway,AUTH_SECRET:'a'.repeat(48),APP_URL:'https://wine.example',WINE_IMAGES:{} as R2Bucket,REFERENCE_DATA:{} as R2Bucket,RESEARCH_QUEUE:{send:vi.fn()} as unknown as Queue<unknown>};
+  await rolloutRoute(new Request('https://wine.example/api/admin/rollout/translate',{method:'POST'}),env,{id:'owner',email:'o@example.com',display_name:'Owner',role:'owner',status:'active'});
+  await processRolloutJob(env,'translate',{kind:'admin_rollout',owner:'owner',rollout:'translate'});
+  const [url,init]=fetch.mock.calls[0] as unknown as [string,RequestInit],headers=new Headers(init.headers);
+  expect(url).toContain('https://gateway.ai.cloudflare.com/v1/account/winelog/google-vertex-ai/');
+  expect(headers.get('X-Vertex-AI-LLM-Request-Type')).toBe('shared');
+  expect(headers.get('X-Vertex-AI-LLM-Shared-Request-Type')).toBe('flex');
+  expect(d.sql.prepare('SELECT tier FROM ai_usage_events').get()).toEqual({tier:'flex'});
+ });
+});
