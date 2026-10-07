@@ -11,6 +11,26 @@ def row(holder='123456789', right='P - Propriétaire', area='500'):
 
 
 class RightsJoinTests(unittest.TestCase):
+    def test_other_bundle_commune_cannot_fill_an_inao_commune_gap(self):
+        import gzip
+        import json
+        from unittest.mock import patch
+        from shapely.geometry import box, mapping
+        import build_grand_cru_commune_audit as audit
+        # Puligny is absent at the cru; Chassagne covers it, but is not an INAO commune.
+        boundary = mapping(box(4.75, 46.95, 4.751, 46.951))
+        parent = {'id': 'test-cru', 'geometry': boundary, 'properties': {'communes': ['21512']}}
+        raw = json.dumps({'features': [parent]}).encode()
+        own = gzip.compress(json.dumps({'features': [{'geometry': mapping(box(4.76, 46.96, 4.761, 46.961))}]}).encode())
+        neighbour = gzip.compress(json.dumps({'features': [{'geometry': boundary}]}).encode())
+        with patch.object(audit, 'village_map', return_value=({}, raw, 'boundary')), \
+             patch.object(audit, 'bundle_commune_names', return_value={}), \
+             patch.object(audit, 'cadastre_sources', return_value=[('21512', 'own', 'own'), ('21150', 'other', 'other')]), \
+             patch.object(audit, 'communes', return_value=['21512', '21150']), \
+             patch.object(audit, 'pinned', side_effect=lambda directory, name, digest: own if digest == 'own' else neighbour):
+            with self.assertRaisesRegex(ValueError, 'INAO communes leave .* uncovered'):
+                audit.build({'slug': 'test', 'parentFeatureId': 'test-cru'}, {}, None)
+
     def test_cross_commune_coverage_counts_shared_ground_once(self):
         from shapely.geometry import box
         from build_grand_cru_commune_audit import cross_commune_coverage

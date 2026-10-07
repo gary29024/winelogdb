@@ -8,6 +8,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 // Extend only after committing each cru's independent Tier 1 audit.
 const reviewed=[
  {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
+ {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
 ];
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
 const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};
@@ -25,6 +26,15 @@ describe('Montrachet bundle Tier 1 crus',()=>{
    const pending=config(slug);
    for(const village of pending.villageMaps)expect(grandCruFor(pending.parentFeatureId,village)).toBeUndefined();
   }
+ });
+ it('keeps Chassagne parcels outside Chevalier membership and measures them as neighbours',()=>{
+  const register=read('docs/research/chevalier-montrachet/register.json') as {parcels:{parcelId:string}[]};
+  expect(register.parcels.every(p=>p.parcelId.startsWith('21512'))).toBe(true);
+  const audit=read('scripts/grand-crus/reports/chevalier-montrachet-commune-audit.json');
+  expect(audit.importedCommunes).toEqual(['21512']);
+  expect(audit.neighbours.find((n:{commune:string})=>n.commune==='21150').contactAreaM2).toBe(12.3);
+  expect(audit.notCoveredByBundleParcelsM2).toBe(135.9);
+  expect(audit.notCoveredByBundleParcels.coveredByNeighbourParcelsM2).toBe(7.7);
  });
  it('keeps white wines on their full INAO feature when the cru name is a constituent name',async()=>{
   for(const cru of reviewed){

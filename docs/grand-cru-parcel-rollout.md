@@ -228,6 +228,9 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    of several constituent lieux-dits, retain `namedPlots.displayLayer: false`.
    Before enabling a selectable named-area layer for a white cru, test that its
    white wines still resolve to the official INAO feature.
+   A shared download bundle can include communes that INAO does not list for
+   an individual cru. The audit counts only the listed communes as its coverage;
+   other bundle communes are measured as neighbours and never fill its gaps.
 3. **Build**, from the repository root:
 
    ```sh

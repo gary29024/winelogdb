@@ -1,9 +1,8 @@
 {
   "schemaVersion": 1,
-  "parentFeatureId": "inao-denom-927",
-  "name": "Montrachet",
+  "parentFeatureId": "inao-denom-539",
+  "name": "Chevalier-Montrachet",
   "inaoCommunes": [
-    "21150",
     "21512"
   ],
   "bundleCommunes": [
@@ -20,14 +19,35 @@
       "sha256": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
     }
   ],
-  "boundaryAreaM2": 79880.7,
-  "coveredByBundleParcelsM2": 79637.4,
-  "notCoveredByBundleParcelsM2": 243.3,
+  "boundaryAreaM2": 75974.1,
+  "coveredByBundleParcelsM2": 75838.1,
+  "notCoveredByBundleParcelsM2": 135.9,
   "notCoveredByBundleParcels": {
-    "coveredByNeighbourParcelsM2": 0.0,
-    "coveredByNoParcelM2": 243.3
+    "coveredByNeighbourParcelsM2": 7.7,
+    "coveredByNoParcelM2": 128.2
   },
   "neighbours": [
+    {
+      "commune": "21150",
+      "name": "Chassagne-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+      "sha256": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+      "contactAreaM2": 12.3,
+      "contactsOverMinimumOverlap": 2,
+      "maxParcelPercent": 1.604,
+      "contacts": [
+        {
+          "parcelId": "21150000AE0165",
+          "overlapM2": 7.05,
+          "parcelPercent": 1.604
+        },
+        {
+          "parcelId": "21150000AE0166",
+          "overlapM2": 5.3,
+          "parcelPercent": 1.602
+        }
+      ]
+    },
     {
       "commune": "21541",
       "name": "Saint-Aubin",
@@ -42,30 +62,16 @@
   "excludedEdgeContacts": 1,
   "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
   "reviewedUncoveredArea": {
-    "maximumAreaM2": 243.4,
+    "maximumAreaM2": 136.0,
     "reviewedAt": "2026-10-07",
-    "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+    "parentSourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
     "cadastreSha256ByCommune": {
       "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
       "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
     },
-    "note": "The 243.347030 m² remainder (0.304638%) was inspected in EPSG:2154 against the unmodified pinned INAO and cadastral polygons. All five components touch the INAO boundary. The largest follows the northern edge; the second and fourth follow the southwest boundary; the third is a narrow gap between the two communes (maximum enclosing-rectangle width 0.596 m); the fifth is a 0.107 m² eastern edge sliver. No missing commune or detached interior parcel was found. The 243.4 m² cap is less than 0.053 m² above the measurement. No geometry is added, clipped, buffered or filled; changed hashes require a new review."
+    "note": "The 135.930216 m² remainder (0.178917%) is measured against Puligny-Montrachet only, the sole INAO commune. All three components were visually inspected against the unmodified pinned geometry: 122.831005 m² along the northern edge of the main cadastral block, 7.885774 m² on the southwest edge, and 5.213436 m² on the east edge. All touch the INAO boundary. Chassagne parcels remain neighbouring contacts even though both communes share a download bundle. The 136.0 m² cap allows less than 0.070 m² above the measurement. No geometry is added, clipped, buffered, filled or simplified; changed hashes require a new review."
   },
-  "crossCommuneCoverage": {
-    "coverageByCommuneM2": {
-      "21150": 39621.559257,
-      "21512": 40026.421854
-    },
-    "crossCommuneOverlaps": [
-      {
-        "communes": [
-          "21150",
-          "21512"
-        ],
-        "areaM2": 10.594752
-      }
-    ],
-    "unionCoverageM2": 79637.386359,
-    "note": "Full original parcel polygons are measured in EPSG:2154. Commune coverage can overlap; the union counts shared area once. Cru membership and the shared parcel asset are not split at the commune line."
-  }
+  "importedCommunes": [
+    "21512"
+  ]
 }

@@ -32,6 +32,7 @@ class ConfigTests(unittest.TestCase):
         reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
         self.assertIn('richebourg', reviewed)
         self.assertIn('montrachet', reviewed)
+        self.assertIn('chevalier-montrachet', reviewed)
         for slug in reviewed:
             with self.subTest(cru=slug):
                 cru = load_cru(slug)[0]
@@ -221,6 +222,8 @@ class ConfigTests(unittest.TestCase):
             report = read_json(path)
             pins = {insee: digest for insee, _, digest in cadastre_sources(bundle)}
             self.assertEqual({c['commune']: c['sha256'] for c in report['bundleCommunes']}, pins, f'{slug}: stale commune audit')
+            self.assertEqual(report.get('importedCommunes', sorted(pins)), sorted(report['inaoCommunes']),
+                             f'{slug}: other bundle communes must be neighbours, not imported coverage')
             review = cru.get('communeAudit', {}).get('reviewedUncoveredArea')
             self.assertEqual(report.get('reviewedUncoveredArea'), review, f'{slug}: rerun the commune audit after review')
             if review:
