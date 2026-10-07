@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-545",
+  "inputs": {
+    "parcelSnapshotSha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+    "history": "docs/research/clos-de-tart/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/clos-de-tart/curation.json",
+        "sha256": "715994b41fad9b39ce718235551ba309cf52aa05ce7220b2b731d8c7b3e385ad"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21442000AR0013",
+    "21442000AR0014",
+    "21442000AR0015",
+    "21442000AR0016",
+    "21442000AR0017",
+    "21442000AR0018",
+    "21442000AR0027",
+    "21442000AR0028",
+    "21442000AR0029",
+    "21442000AR0030",
+    "21442000AR0038",
+    "21442000AR0039",
+    "21442000AR0044",
+    "21442000AR0060",
+    "21442000AR0061",
+    "21442000AR0062",
+    "21442000AR0064",
+    "21442000AR0070",
+    "21442000AR0072",
+    "21442000AR0089",
+    "21442000AR0091",
+    "21442000AR0101",
+    "21442000AR0102",
+    "21442000AR0106",
+    "21442000AR0108",
+    "21442000AR0109",
+    "21442000AR0112",
+    "21442000AR0114",
+    "21442000AR0115",
+    "21442000AR0117",
+    "21442000AR0119",
+    "21442000AR0121",
+    "21442000AR0123",
+    "21442000AR0125",
+    "21442000AR0128",
+    "21442000AR0130",
+    "21442000AR0133",
+    "21442000AR0139",
+    "21442000AR0140",
+    "21442000AR0141",
+    "21442000AR0142",
+    "21442000AR0146",
+    "21442000AR0147",
+    "21442000AR0148",
+    "21442000AR0149"
+  ],
+  "reviewedMatches": 0,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-086:p67",
+      "matchedReferenceSuffixes": [
+        "AR0106",
+        "AR0114"
+      ],
+      "communesMentioned": [
+        "21071",
+        "21231",
+        "21361"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-091:p58",
+      "matchedReferenceSuffixes": [
+        "AR0015"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21512"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    }
+  ],
+  "finding": "No notice-index candidate matches the 45 current or reachable Clos de Tart references, including the 25 references merged in 1989. Two raw OCR reference-hint hits are in notices that never name Morey-Saint-Denis; they are recorded but not assigned. No exact Clos de Tart notice event is supported.",
+  "unassignedReviewedReferences": [],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

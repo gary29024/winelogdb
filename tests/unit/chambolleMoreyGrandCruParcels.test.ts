@@ -8,6 +8,11 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 // Chambolle-Morey bundle crus whose Tier 1 review is committed, with the village maps they appear on.
 const reviewed=[
  {slug:'musigny',name:'Musigny',id:'inao-denom-973',maps:['chambolle-musigny']},
+ {slug:'bonnes-mares',name:'Bonnes-Mares',id:'inao-denom-361',maps:['chambolle-musigny','morey-saint-denis']},
+ {slug:'clos-de-tart',name:'Clos de Tart',id:'inao-denom-545',maps:['morey-saint-denis']},
+ {slug:'clos-des-lambrays',name:'Clos des Lambrays',id:'inao-denom-547',maps:['morey-saint-denis']},
+ {slug:'clos-saint-denis',name:'Clos Saint-Denis',id:'inao-denom-548',maps:['morey-saint-denis']},
+ {slug:'clos-de-la-roche',name:'Clos de la Roche',id:'inao-denom-544',maps:['morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -37,5 +42,59 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
   for(const referenceParcel of ["La Combe d'Orveau",'Les Amoureuses']){
    expect(burgundyVillageMapTarget({...wine,referenceParcel})?.namedPlotId).toBeUndefined();
   }
+ });
+ it('keeps Bonnes-Mares on its official outline across both communes',async()=>{
+  for(const map of ['chambolle-musigny','morey-saint-denis']){
+   const layers=(await loadVillageMapCatalogue(map)).namedPlots??[];
+   expect(layers.map(layer=>layer.parentFeatureId)).not.toContain('inao-denom-361');
+  }
+  const wine={...red,appellation:'Bonnes-Mares',wineName:'Bonnes-Mares'};
+  for(const target of [wine,{...wine,referenceParcel:'Les Bonnes Mares'},{...wine,referenceParcel:'Les Véroilles'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result?.featureId).toBe('inao-denom-361');
+   expect(result?.namedPlotId).toBeUndefined();
+  }
+ });
+ it('keeps Clos de Tart on its official outline, whatever the cadastral name',()=>{
+  const wine={...red,appellation:'Clos de Tart',wineName:'Clos de Tart'};
+  for(const target of [wine,{...wine,referenceParcel:'Clos de Tart'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-545'});
+   expect(result?.namedPlotId).toBeUndefined();
+  }
+ });
+ it('never infers the Clos des Lambrays plot from the cru name alone',async()=>{
+  const catalogue=await loadVillageMapCatalogue('morey-saint-denis');
+  expect(catalogue.namedPlots?.map(layer=>layer.parentFeatureId)).toContain('inao-denom-547');
+  expect(catalogue.features.filter(f=>f.kind==='named_plot'&&f.parentFeatureId==='inao-denom-547').map(f=>f.name))
+   .toEqual(['Clos des Lambrays','Les Bouchots','Meix-Rentier']);
+  const wine={...red,appellation:'Clos des Lambrays',wineName:'Clos des Lambrays'};
+  for(const target of [wine,{...wine,referenceParcel:'Clos des Lambrays'},{...wine,referenceParcel:'Les Larrets'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-547'});
+   expect(result?.namedPlotId).toBeUndefined();
+  }
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Bouchots'})?.namedPlotId).toBe('clos-des-lambrays-plot-les-bouchots');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Meix Rentier'})?.namedPlotId).toBe('clos-des-lambrays-plot-meix-rentier');
+ });
+ it('selects Clos Saint-Denis climats by exact name, apart from the Échezeaux plot of the same name',()=>{
+  const wine={...red,appellation:'Clos Saint-Denis',wineName:'Clos Saint-Denis'};
+  expect(burgundyVillageMapTarget(wine)).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-548'});
+  expect(burgundyVillageMapTarget(wine)?.namedPlotId).toBeUndefined();
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Maison Brûlée'})?.namedPlotId).toBe('clos-saint-denis-plot-maison-brulee');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Calouère'})?.namedPlotId).toBe('clos-saint-denis-plot-calouere');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chaffots'})?.namedPlotId).toBe('clos-saint-denis-plot-les-chaffots');
+  const echezeaux={...red,appellation:'Échezeaux',wineName:'Échezeaux Clos Saint-Denis'};
+  expect(burgundyVillageMapTarget(echezeaux)?.namedPlotId).toBe('echezeaux-plot-clos-saint-denis');
+ });
+ it('selects Clos de la Roche climats in Morey only, never a Clos Saint-Denis climat',async()=>{
+  const plots=(await loadVillageMapCatalogue('morey-saint-denis')).features.filter(f=>f.kind==='named_plot'&&f.parentFeatureId==='inao-denom-544');
+  expect(plots.map(f=>f.name)).toEqual(['Clos de la Roche','Les Chabiots','Les Fremières','Les Froichots','Les Genavrières','Les Mochamps','Monts Luisants']);
+  expect(plots.every(f=>f.communes?.join()==='21442')).toBe(true);
+  const wine={...red,appellation:'Clos de la Roche',wineName:'Clos de la Roche'};
+  expect(burgundyVillageMapTarget(wine)?.namedPlotId).toBeUndefined();
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chabiots'})?.namedPlotId).toBe('clos-de-la-roche-plot-les-chabiots');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Monts Luisants'})?.namedPlotId).toBe('clos-de-la-roche-plot-monts-luisants');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chaffots'})?.namedPlotId).toBeUndefined();
  });
 });

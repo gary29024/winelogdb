@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5206928,
-  "evidenceGzipBytesTotal": 434030,
+  "evidenceBytesTotal": 5210595,
+  "evidenceGzipBytesTotal": 434622,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -931,8 +931,8 @@
         "2014-02-14",
         "2025-12-29"
       ],
-      "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 1,
+      "noticeMatches": 3,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -942,10 +942,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "cda212d4ac8d677b0e2c9dd7d08b6ca6ce3b814dc382cb3bb8d82382627bb61b",
-      "evidenceSha256": "357be879738022c03a04de01ceb69b78a3147c5c7ada91109f90cbe3e92b4dbc",
-      "evidenceBytes": 119813,
-      "evidenceGzipBytes": 11464,
+      "registerSha256": "602b24171d7299a30e812dae7368e4726648ae6dba199a458d78952e554b3c2c",
+      "evidenceSha256": "3faec22a1bd11c648dc72c7d4954fef5feeb79bab65c4e047a44e73bfecea94e",
+      "evidenceBytes": 121093,
+      "evidenceGzipBytes": 11784,
       "earliestRawEventSample": {
         "id": "210:133:000:0000254:00002",
         "departmentCode": "210",
@@ -1042,10 +1042,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9cbe454bc139bd6113977932bf77589030a51c3c7875e977a54c3b9b5b1609a8",
-      "evidenceSha256": "6cf4d8a38d84a78fa6a2418676076e312b9667d1f16183086c34a9c52546ba30",
+      "registerSha256": "1f1b53fbe92b34fc1880b005688440d2dfed8da51777518fe8780479fa08c823",
+      "evidenceSha256": "1e8e88993112fd1c617679450dcb757a269c440dd84f095224b48a721e65cad2",
       "evidenceBytes": 113757,
-      "evidenceGzipBytes": 9482,
+      "evidenceGzipBytes": 9484,
       "earliestRawEventSample": {
         "id": "210:442:000:0000359:00001",
         "departmentCode": "210",
@@ -1131,8 +1131,8 @@
         "2014-02-14",
         "2025-12-17"
       ],
-      "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 2,
+      "noticeMatches": 7,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -1142,10 +1142,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "a62b807ac4d80244b980f1a8e2ac713b4e36ed374762436f1cda7a6e04a1c0b6",
-      "evidenceSha256": "e0ba3bc4b6066f8242d2c05fec9d91f2a5d835a544c00bf887cbfa692164cab4",
-      "evidenceBytes": 51757,
-      "evidenceGzipBytes": 7597,
+      "registerSha256": "9a102a77eac02f31989bb5f9b0e3ccd2b2238ba4f438ea54f943fc757c93b1a2",
+      "evidenceSha256": "85c7d9a54900564a53fba73177343868bf146c338607b92fef2db51fbb5c8c18",
+      "evidenceBytes": 54144,
+      "evidenceGzipBytes": 7864,
       "earliestRawEventSample": null
     },
     {
@@ -1205,10 +1205,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "35bcbcc7f5ec841ade7dd13f52cf1ca8e72d743cc026de7c69640390fc04163f",
-      "evidenceSha256": "f2ddb9a46578c1a562b1ac03ca12032a4f2d2c8669a285bf7bc20f12d479a7c6",
+      "registerSha256": "b8466c1445ef57db204dd132fc0f217b039f9fea8c3163cc0228cbca017c8944",
+      "evidenceSha256": "257a80972b018fedbcd76c933300a070ebe891fa14523f530013b1260a577403",
       "evidenceBytes": 85838,
-      "evidenceGzipBytes": 9944,
+      "evidenceGzipBytes": 9945,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00003",
         "departmentCode": "210",
@@ -1309,10 +1309,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "42f668f3b40ed6955204ff68246a5830faf09706fe90920e5f67d959dd3578d5",
-      "evidenceSha256": "6e6c5435eb7a29095dd5cd1fc2015f27dad6dbe535adc8fb41d9d498f00eec7d",
+      "registerSha256": "6f85930654b08a60b048cee04f412034579cd96841731fdc57f310a941cda258",
+      "evidenceSha256": "515630f4358910592c715f865bd10b8923bedd510441bc58fd9cd1fbf119511b",
       "evidenceBytes": 139067,
-      "evidenceGzipBytes": 12429,
+      "evidenceGzipBytes": 12431,
       "earliestRawEventSample": {
         "id": "210:442:000:0000352:00001",
         "departmentCode": "210",
