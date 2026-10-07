@@ -12,7 +12,7 @@ export const parcelBundles={'flagey-echezeaux':bundle0,'gevrey-chambertin':bundl
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -30,6 +30,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"chambertin",name:"Chambertin",parentFeatureId:"inao-denom-447",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin"],domaineGrouping:false},
  {slug:"chambertin-clos-de-beze",name:"Chambertin-Clos de Bèze",parentFeatureId:"inao-denom-448",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin-clos-de-beze"],domaineGrouping:false},
  {slug:"chapelle-chambertin",name:"Chapelle-Chambertin",parentFeatureId:"inao-denom-475",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chapelle-chambertin"],domaineGrouping:false},
+ {slug:"charmes-chambertin",name:"Charmes-Chambertin",parentFeatureId:"inao-denom-477",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["charmes-chambertin"],domaineGrouping:false},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},

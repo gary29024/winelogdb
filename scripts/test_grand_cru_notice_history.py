@@ -4,13 +4,51 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from build_grand_cru_notice_history import (covered_by_curated_review, load_availability, match_printed_reference,
+from build_grand_cru_notice_history import (covered_by_curated_review, curated_page_reviews, load_availability, match_printed_reference,
                                             normalized_reference, query_reviewed)
 from grand_cru_filiation import parse_dfi, trace_ancestry
 from test_grand_cru_filiation import pair
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_rejected_ocr_hint_clears_only_the_reviewed_bytes_page_and_reference_without_an_event(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image',
+                  'rejectedReferenceHints': {reference: 'Printed BI158 belongs to Marsannay-la-Côte, not Gevrey BN58.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        reviews = curated_page_reviews(curation)
+        notice = {'bulletin': 'bfc-2021-006', 'firstPage': 43, 'lastPage': 45}
+        bulletin = {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, {'sha256': 'b' * 64}, [reference], reviews))
+        self.assertFalse(covered_by_curated_review({**notice, 'firstPage': 46, 'lastPage': 47}, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, [reference, '21295000BN0059'], reviews))
+        self.assertEqual(curation['exactParcelEvents'], [])
+        self.assertEqual(reviews[0]['rejectedReferenceHints'], review['rejectedReferenceHints'])
+
+    def test_rejected_hints_require_explicit_image_review_and_cannot_also_be_assigned(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image', 'rejectedReferenceHints': {reference: 'Wrong commune.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        for change in [{'reviewMethod': 'ocr'}, {'sha256': ''}, {'pages': []},
+                       {'rejectedReferenceHints': {'BN58': 'Wrong commune.'}}, {'rejectedReferenceHints': {reference: ' '}}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                curated_page_reviews({**curation, 'noticeReview': [{**review, **change}]})
+        with self.assertRaisesRegex(ValueError, 'both assigned and rejected'):
+            curated_page_reviews({**curation, 'exactParcelEvents': [{'sourceId': 'bouvier', 'parcelIds': [reference]}]})
+
+    def test_charmes_rejected_bouvier_ocr_never_becomes_a_reviewed_parcel_record(self):
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/charmes-chambertin/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-006:p43', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+        self.assertEqual({r['originalRecord']['status'] for r in history['reviewedMatches']}, {'refused'})
+        self.assertFalse(any('21295000BN0058' in r['matchedReferenceIds'] for r in history['reviewedMatches']))
+
     def test_already_reviewed_notices_are_not_pending_review(self):
         # Michel Gros (bfc-2022-101:p350) was image-reviewed; it must not also be listed as an unreviewed candidate.
         root = Path(__file__).resolve().parents[1]

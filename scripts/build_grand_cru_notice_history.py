@@ -96,16 +96,35 @@ def query_reviewed(record, reachable, current_ids, ancestry, events):
 
 
 def curated_page_reviews(curation):
-    """The cru curation's page-image notice reviews, with the exact references its parcel events assign."""
+    """Image-reviewed assigned references or explicitly rejected OCR hints; a rejection creates no event."""
     events = {}
     for event in curation['exactParcelEvents']:
         events.setdefault(event['sourceId'], set()).update([*event['parcelIds'], *event.get('predecessorReferences', {})])
-    return [{**review, 'references': events.get(review['sourceId'], set())}
-            for review in curation.get('noticeReview', []) if review.get('reviewMethod') == 'page-image']
+    sources = {source['id']: source for source in curation.get('sources', [])}
+    reviews = []
+    for review in curation.get('noticeReview', []):
+        rejected = review.get('rejectedReferenceHints', {})
+        require(isinstance(rejected, dict), 'Rejected notice hints require exact references and reasons')
+        if rejected:
+            require(review.get('reviewMethod') == 'page-image', 'Rejected notice hints require page-image review')
+            source = sources.get(review['sourceId'], {})
+            require(source.get('type', '').startswith('government') and source.get('url'),
+                    'Rejected notice hints require a government source')
+            require(re.fullmatch(r'[a-f0-9]{64}', review.get('sha256', '')) and review.get('pages')
+                    and all(isinstance(page, int) and page > 0 for page in review['pages']),
+                    'Rejected notice hints require pinned PDF bytes and reviewed pages')
+            require(all(re.fullmatch(r'[0-9AB]{5}[0-9]{3}[0-9A-Z]{2}[0-9]{4}', reference)
+                        and isinstance(reason, str) and reason.strip() for reference, reason in rejected.items()),
+                    'Rejected notice hints require full parcel references and nonempty reasons')
+            require(not set(rejected) & events.get(review['sourceId'], set()),
+                    'A notice reference cannot be both assigned and rejected')
+        if review.get('reviewMethod') == 'page-image':
+            reviews.append({**review, 'references': events.get(review['sourceId'], set()) | set(rejected)})
+    return reviews
 
 
 def covered_by_curated_review(notice, bulletin, matched, reviews):
-    """An index hit the curation already read: same bulletin bytes, an overlapping page, every matched reference assigned."""
+    """Same bulletin bytes, an overlapping image-reviewed page, every matched reference assigned or rejected."""
     if bulletin is None or 'firstPage' not in notice:
         return False
     pages = set(range(notice['firstPage'], notice['lastPage'] + 1))

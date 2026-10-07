@@ -14,9 +14,49 @@
     "charmes-chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/charmes-chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/charmes-chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/charmes-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjc0Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "6f8e50ba8bb70b07faf05abc1da77381435d0ab24699d963fd24537dd2e996fa",
+    "coverageNote": "The BIVB lists Aux Charmes and Charmes and explains that Charmes-Chambertin and Mazoyères-Chambertin have the same defined production area. Audit the exact AUX CHARMES and MAZOYERES OU CHARMES cadastral areas against INAO feature 477, without turning their wording into label aliases or selecting a smaller area for a broad Charmes wine. Feature geometry alone attaches parcels. CHAMPS-CHENYS edge-contact parcels retain an unresolved climat crosswalk.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "aux-charmes",
+        "name": "Aux Charmes",
+        "sourceName": "AUX CHARMES",
+        "aliases": []
+      },
+      {
+        "id": "mazoyeres-ou-charmes",
+        "name": "Mazoyères ou Charmes",
+        "sourceName": "MAZOYERES OU CHARMES",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "CHAMPS-CHENYS",
+        "sourceCandidate": "CHAMPS-CHENYS",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Charmes-Chambertin climat or extending the named areas."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
+  },
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 1381.9,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+      "cadastreSha256ByCommune": {
+        "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+      },
+      "note": "The 1381.874287 m² remainder (0.4467%) was inspected against the pinned INAO and original cadastral polygons in EPSG:2154. All 23 components touch the INAO boundary, following outer edges and the inset boundary along paths between parcel blocks; enlarged portions of the three largest components (299.825616, 272.578400 and 209.671336 m²) show narrow edge strips. Own-commune parcels already cover the mapped blocks; neither Brochon nor Morey-Saint-Denis covers the gaps. These are boundary mismatches, not evidence to import another commune or assign a label alias. Geometry remains unchanged. The 1381.9 m² cap is less than 0.1 m² above this measurement and is invalidated by changed source hashes."
+    }
   }
 }

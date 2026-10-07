@@ -11,11 +11,23 @@ const reviewed=[
  {slug:'chambertin-clos-de-beze',name:'Chambertin-Clos de Bèze',id:'inao-denom-448'},
  {slug:'chapelle-chambertin',name:'Chapelle-Chambertin',id:'inao-denom-475'},
  {slug:'griotte-chambertin',name:'Griotte-Chambertin',id:'inao-denom-646'},
+ {slug:'charmes-chambertin',name:'Charmes-Chambertin',id:'inao-denom-477'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/gevrey-chambertin.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string;sourceName:string}[]}};
 
 describe('Gevrey-Chambertin Tier 1 crus',()=>{
+ it('keeps Charmes and Mazoyères membership on their separate INAO identities despite the shared geometry',()=>{
+  const manifest=JSON.parse(readFileSync('src/lib/places/grandCruParcels/gevrey-chambertin.manifest.json','utf8')) as {dataUrl:string};
+  const asset=JSON.parse(readFileSync(`public${manifest.dataUrl}`,'utf8')) as {features:{properties:{id:string;overlaps:{parentFeatureId:string}[]}}[]};
+  const members=(parent:string)=>asset.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===parent)).map(f=>f.properties.id).sort();
+  expect(members('inao-denom-477')).toEqual(members('inao-denom-809'));
+  for(const [slug,name,id] of [['charmes-chambertin','Charmes-Chambertin','inao-denom-477'],['mazoyeres-chambertin','Mazoyères-Chambertin','inao-denom-809']]){
+   const register=JSON.parse(readFileSync(`docs/research/${slug}/register.json`,'utf8')) as {parcels:{parcelId:string}[]};
+   expect(register.parcels.map(p=>p.parcelId).sort()).toEqual(members(id));
+   expect(burgundyVillageMapTarget({country:'France',region:'Burgundy',appellation:name,classification:'grand_cru',colour:'red',wineName:name})).toMatchObject({featureId:id});
+  }
+ });
  it('enables reviewed crus with their own evidence and no inferred domaine grouping',async()=>{
   for(const cru of reviewed){
    expect(grandCruFor(cru.id,'gevrey-chambertin')).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
