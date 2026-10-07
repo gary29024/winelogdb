@@ -46,7 +46,6 @@
   "holders": [
     {
       "holderId": "U14132333",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"

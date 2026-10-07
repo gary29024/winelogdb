@@ -4,7 +4,8 @@
   python scripts/build_grand_cru_research.py --cru echezeaux --check
   python scripts/build_grand_cru_research.py --all --check      # every configured cru, as CI runs it
 
-Reads docs/research/<slug>/curation.json and the generated rights history, sale records
+Reads docs/research/<slug>/curation.json, with domaine candidates from the shared
+docs/research/holders/holder-links.json, and the generated rights history, sale records
 and named areas in the same folder; writes the register (JSON and Markdown) there and the
 app's lazy evidence file to src/lib/places/grandCruParcels/<slug>.evidence.json.
 A cru without research configured yet only has its config and registry entry validated.
@@ -18,8 +19,9 @@ import re
 from collections import Counter
 
 from build_grand_cru_evidence import build_evidence
+from build_grand_cru_holder_links import generate as build_holder_links
 from grand_cru import (record_json, bundle_commune_names, command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset,
-                       read_json, relative, require, research_path, sha256, ROOT)
+                       read_json, relative, require, research_path, resolve_curation, sha256, ROOT)
 
 
 class Context:
@@ -75,13 +77,6 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(h['parcelOperationConfirmed'] is False, 'Lead register cannot publish confirmed operation')
         require(set(h['sourceIds']) <= sources.keys(), 'Unknown holder source')
         require(not h['candidateNames'] or h['sourceIds'], 'Candidate requires a cited research source')
-        # A company-identity crosswalk annotates the provisional rights ID; it never replaces it.
-        crosswalk = h.get('legalIdentityCrosswalk')
-        if crosswalk:
-            siren = crosswalk['companySiren']
-            require(len(siren) == 9 and siren.isdigit() and siren not in holders, f"{h['holderId']}: invalid identity crosswalk")
-            require(crosswalk['sourceIds'] and set(crosswalk['sourceIds']) <= sources.keys(), 'Unknown crosswalk source')
-            require(crosswalk.get('limitation'), 'Identity crosswalk needs its limitation')
     require(history['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and history['parentFeatureId'] == parent,
             'Rights history built from another snapshot')
     lineage = {r['parcelId']: r for r in history['parcels']}
@@ -739,7 +734,8 @@ def render_evidence_coverage(register, context):
 
 def load_inputs(context):
     manifest = load_manifest(context.bundle)
-    return {'manifest': manifest, 'asset': parcel_asset(manifest), 'curation': read_json(context.curation),
+    return {'manifest': manifest, 'asset': parcel_asset(manifest),
+            'curation': resolve_curation(read_json(context.curation), context.cru['slug']),
             'history': read_json(context.history), 'sales': read_json(context.sales), 'named_areas': read_json(context.named_areas),
             'notice_records': read_json(context.notices) if context.notices.exists() else None}
 
@@ -842,6 +838,9 @@ def main():
     args = parser.parse_args()
     for slug in cru_slugs() if args.all else [args.cru]:
         run(slug, args.check)
+    if args.all:
+        # The shared holder table is checked against every cru's recorded holders.
+        build_holder_links(args.check)
 
 
 if __name__ == '__main__':

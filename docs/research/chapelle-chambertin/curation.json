@@ -46,7 +46,6 @@
   "holders": [
     {
       "holderId": "303576094",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -56,7 +55,6 @@
     },
     {
       "holderId": "411381908",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -66,7 +64,6 @@
     },
     {
       "holderId": "440668499",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -76,7 +73,6 @@
     },
     {
       "holderId": "U21361205",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"

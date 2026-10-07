@@ -44,7 +44,7 @@ def main():
             write_or_check(research_path(cru, 'notice-history.json'), record_json(notice_records), args.check)
             register(slug, args.check)
     if not args.bundle and not args.history_only:
-        for script in ('build_grand_cru_app_registry.py', 'audit_grand_cru_history_rollout.py'):
+        for script in ('build_grand_cru_holder_links.py', 'build_grand_cru_app_registry.py', 'audit_grand_cru_history_rollout.py'):
             subprocess.run([sys.executable, str(__file__).replace('build_grand_cru_history_rollout.py', script)]
                            + (['--check'] if args.check else []), check=True)
 

@@ -4,6 +4,7 @@
   "parentFeatureId": "inao-denom-645",
   "targetSeason": "2026",
   "status": "current-farmer-identification-incomplete",
+  "holderLinks": "shared",
   "scope": "All 32 mapped Grands-Échezeaux parcels inventoried; all nine recorded right holders revisited at Tier 2. Nineteen selected free company filings (804 pages), published whole-cru holdings and all seven Winehog vineyard-article previews reviewed. Seven parcels have exact-reference filing evidence. No verified current farmer; not an exhaustive search of every archive.",
   "rules": [
     "Candidate names are research hypotheses, never verified farmers.",
@@ -117,86 +118,6 @@
       "retrievedFrom": "https://domaine-eugenie.com/les-vins"
     },
     {
-      "id": "register-drc",
-      "title": "Official company search: Domaine de la Romanée-Conti",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778269407",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Active company at 1 place de l'Église, Vosne-Romanée, activity 01.21Z (vine growing). Confirms legal identity, not the farming of any parcel.",
-      "access": "read"
-    },
-    {
-      "id": "register-mongeard",
-      "title": "Official company search: SA Domaine Mongeard-Mugneret",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=303514681",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Active company at 14 rue de la Fontaine, Vosne-Romanée, activity 01.21Z, run by the Mongeard family. Confirms legal identity only.",
-      "access": "read"
-    },
-    {
-      "id": "register-mongeard-gfa",
-      "title": "Official company search: GFA Mongeard Mugneret et Fils",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778269498",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Land-holding group (activity 68.20B, letting of land) at rue de la Fontaine, Vosne-Romanée. Confirms identity; a GFA owns land and need not farm it.",
-      "access": "read"
-    },
-    {
-      "id": "register-eugenie",
-      "title": "Official company search: Domaine d'Eugénie",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=326533213",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Active company at 14 rue de la Goillotte, Vosne-Romanée, activity 01.21Z. Confirms legal identity only.",
-      "access": "read"
-    },
-    {
-      "id": "register-anne-gros",
-      "title": "Official company search: Anne Gros",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=348024928",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "SAS Anne Gros, 11 rue des Communes, Vosne-Romanée, activity 01.21Z, president Anne Gros. The address matches the 2022 application receipt.",
-      "access": "read"
-    },
-    {
-      "id": "register-sepv",
-      "title": "Official company search: Société d'Exploitation et Participation Viti-Vinicole (SEPV)",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=393095955",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Beaune company created 1993, activity 66.30Z (fund management); its board includes members of the Jousset-Drouhin family. Shared management is not evidence of who farms its land.",
-      "access": "read"
-    },
-    {
-      "id": "register-lamarche",
-      "title": "Official company search: Nathalie Pacareau Lamarche",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=538257932",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "SCEA created 2011, registered in Dijon, activity 01.21Z; partners include Nathalie Pacareau and Geneviève Lamarche. Confirms identity only.",
-      "access": "read"
-    },
-    {
-      "id": "register-bichot",
-      "title": "Official company search: Bichot SA",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=036380046",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-09-30",
-      "finding": "Beaune company run by the Bichot family (Albert Bichot). Confirms legal identity only.",
-      "access": "read"
-    },
-    {
       "id": "sepv-apports-1994",
       "title": "SEPV: contribution auditor report and vineyard schedules",
       "url": "https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d#page=4",
@@ -246,27 +167,6 @@
       "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
       "filingDate": "1995-02-13",
       "filingLabelDocumentDate": "1994-11-30"
-    },
-    {
-      "id": "sepv-stat-ccm",
-      "title": "SEPV: 2022 board minutes and updated statutes",
-      "url": "https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb#page=3",
-      "type": "company-filing",
-      "documentDate": "2022-07-07",
-      "reviewedAt": "2026-10-01",
-      "finding": "Article 2 names a majority participation in Maison Joseph Drouhin SA, SIREN 515620417. This is a documented corporate relationship, stronger than a shared surname; no Grands-Échezeaux parcel schedule or parcel-specific lease appears.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T15:57:29.199939+00:00",
-      "sha256": "f6f698ff81a9aa2db33c615329a4248c51e2be5c659234e874b2a1aa0edf2b63",
-      "bytes": 2893465,
-      "retrievedFrom": "https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb",
-      "reviewedPages": [
-        3,
-        6
-      ],
-      "pageCount": 48,
-      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
-      "filingDate": "2022-08-02"
     },
     {
       "id": "lamarche-contribution",
@@ -360,40 +260,6 @@
       "filingDate": "2022-04-05"
     },
     {
-      "id": "mongeard-gfa-1964",
-      "title": "Mongeard-Mugneret: founding contribution and 1997 GFA statutes",
-      "url": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5#page=1",
-      "type": "company-filing",
-      "documentDate": "1964-02-12",
-      "reviewedAt": "2026-10-01",
-      "finding": "The founding contribution schedule and its reproduction in the 1997 statutes print D535 (5,575 m²), D105 (290 m²), D104 (750 m²), total 6,615 m². Article 2 requires long-term leasing and forbids direct exploitation by the GFA; it does not identify an executed lease or tenant.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T16:14:51.068565+00:00",
-      "sha256": "4bb2a3e2d7753a75d511193e13fec2fbfbb4c2c1ec62b4b0add5674923c64ef9",
-      "bytes": 3121196,
-      "retrievedFrom": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5",
-      "reviewedPages": [
-        1,
-        2,
-        7,
-        48,
-        65
-      ],
-      "pageCount": 74,
-      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
-      "filingDate": "2002-10-22",
-      "otherDocumentDates": [
-        {
-          "date": "1997-12-31",
-          "kind": "GFA transformation and updated statutes"
-        },
-        {
-          "date": "1998-01-01",
-          "kind": "transformation effective date"
-        }
-      ]
-    },
-    {
       "id": "mongeard-gfa-2022",
       "title": "Mongeard-Mugneret GFA: share gift and updated statutes",
       "url": "https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098#page=1",
@@ -455,52 +321,6 @@
       "pageCount": 5,
       "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
       "filingDate": "2025-09-15"
-    },
-    {
-      "id": "modot-stat-ccm",
-      "title": "SCI Domaine Veuve Paul Modot: Schenk share changes and statutes",
-      "url": "https://actes.ccm2.net/acte/3182750#page=1",
-      "type": "company-filing",
-      "documentDate": "2023-02-22",
-      "reviewedAt": "2026-10-01",
-      "finding": "SIREN 778173500; Article 3 abbreviates the company as SCI Domaine Vve Paul MODOT, at 2 rue du Docteur Guyot, Savigny. The shares are held by Schenk Holding and Schenk Suisse after the Obrist merger. No Grands-Échezeaux cadastral schedule or lease.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T15:57:29.199439+00:00",
-      "sha256": "17d07757adffddd898dd8de40feee7f44dfc3c577f8ec17a36008a9df1059a7b",
-      "bytes": 955332,
-      "retrievedFrom": "https://actes.ccm2.net/acte/3182750",
-      "reviewedPages": [
-        1,
-        2,
-        3,
-        7,
-        8
-      ],
-      "pageCount": 18,
-      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
-      "filingDate": "2023-04-18"
-    },
-    {
-      "id": "modot-stat-2002",
-      "title": "SCI Domaine Veuve Paul Modot: 2001 capital conversion and statutes",
-      "url": "https://actes.ccm2.net/acte/6949588#page=1",
-      "type": "company-filing",
-      "documentDate": "2001-06-26",
-      "reviewedAt": "2026-10-01",
-      "finding": "Same company abbreviation and office confirm the identity crosswalk. The founding 8 February 1964 contribution is cash, not a Grands-Échezeaux property schedule. No parcel-specific lease.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T16:30:30.497417+00:00",
-      "sha256": "285127edc379e6bf88dc8b28e5519423647163f36009199a7e661ad864e30ec3",
-      "bytes": 630715,
-      "retrievedFrom": "https://actes.ccm2.net/acte/6949588",
-      "reviewedPages": [
-        1,
-        3,
-        7
-      ],
-      "pageCount": 18,
-      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
-      "filingDate": "2002-02-05"
     },
     {
       "id": "drc-stat-2024",
@@ -833,34 +653,6 @@
       "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images."
     },
     {
-      "id": "villamont-legal",
-      "title": "Henri de Villamont: legal notice",
-      "url": "https://henridevillamont.fr/mentions-legales",
-      "type": "estate",
-      "documentDate": null,
-      "reviewedAt": "2026-10-01",
-      "finding": "Identifies Domaine Henri de Villamont with Groupe Schenk, 5 rue du Docteur Guyot, Savigny. Together with the Modot share filings, this supports a group/estate lead, not a lease or identical street address.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T16:04:19.294433+00:00",
-      "sha256": "3d001baecbdd07bfd5727131b08eb3a28b753fc75a130bfdd17f524713526575",
-      "bytes": 33228,
-      "retrievedFrom": "https://henridevillamont.fr/mentions-legales"
-    },
-    {
-      "id": "modot-official",
-      "title": "Official company search: SCI Domaine Veuve Paul Modot",
-      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1",
-      "type": "registry",
-      "documentDate": null,
-      "reviewedAt": "2026-10-01",
-      "finding": "Official search by SIREN 778173500 confirms the company named by its abbreviation and office in the statutes. The DGFiP provisional holder identifier U18178008 remains unchanged.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T15:55:40.499899+00:00",
-      "sha256": "cab10da69ea414ead95eb308fd5b858fa7d47eada29dcc292585ef495b4b6146",
-      "bytes": 3449,
-      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778173500&per_page=1"
-    },
-    {
       "id": "bichot-ge",
       "title": "Albert Bichot: Domaine du Clos Frantin Grands-Échezeaux",
       "url": "https://catalogue.albert-bichot.com/MGLW1F",
@@ -1056,21 +848,6 @@
       "retrievedFrom": "https://www.decanter.com/premium/domaine-anne-gros-from-burgundy-to-languedoc-with-elegance-and-finesse-566529/"
     },
     {
-      "id": "liger-decanter-2022",
-      "title": "Decanter: Burgundy 2022 red wine score table",
-      "url": "https://www.decanter.com/burgundy-2022-red-wine-score-table/",
-      "type": "critic-research",
-      "documentDate": null,
-      "reviewedAt": "2026-10-01",
-      "finding": "Free 2022 Grands-Échezeaux row states 0.31 ha worked en métayage from Nathalie Pacareau Lamarche, first vintage. This is reported 2022 tenure, not proof of farming after the 2026 suspended application.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T16:30:30.496919+00:00",
-      "sha256": "1d18bb4a331d2eb781f1187fb4d723cfacafd4bd7bb12d5bf36841bbe2f00328",
-      "bytes": 2242937,
-      "retrievedFrom": "https://www.decanter.com/burgundy-2022-red-wine-score-table/",
-      "evidenceSeason": "2022"
-    },
-    {
       "id": "winehog-index",
       "title": "Winehog: Flagey-Échezeaux vineyard article index",
       "url": "https://winehog.org/vineyards/flagey-echezeaux-vineyard-articles/",
@@ -1097,20 +874,6 @@
       "sha256": "ad95b77be1beac574377ee55ed6a55d7424d6a2541a8c622dfcd7c9e6fe3509f",
       "bytes": 156519,
       "retrievedFrom": "https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-grands-echezeaux-20840/"
-    },
-    {
-      "id": "winehog-liger",
-      "title": "Winehog: Liger-Belair Grands-Échezeaux expansion",
-      "url": "https://winehog.org/domaine-comte-liger-belair-grands-echezeaux-51226/",
-      "type": "critic-research",
-      "documentDate": "2022-03-04",
-      "reviewedAt": "2026-10-01",
-      "finding": "Free preview reports a long-term arrangement with Nathalie Pacareau Lamarche from the 2022 vintage and 0.3007 ha. No cadastral reference is in the accessible text.",
-      "access": "read",
-      "retrievedAt": "2026-09-30T15:57:29.200439+00:00",
-      "sha256": "6ee74f0bcd33c6108c26c31cd1c201b35766d7fb98ac6755e99b5f8c0475a1eb",
-      "bytes": 175970,
-      "retrievedFrom": "https://winehog.org/domaine-comte-liger-belair-grands-echezeaux-51226/"
     },
     {
       "id": "winehog-liger-2023",
@@ -1277,9 +1040,6 @@
   "holders": [
     {
       "holderId": "778269407",
-      "candidateNames": [
-        "Domaine de la Romanée-Conti"
-      ],
       "basis": "estate-context",
       "sourceIds": [
         "register-drc",
@@ -1292,9 +1052,6 @@
     },
     {
       "holderId": "778269498",
-      "candidateNames": [
-        "Domaine Mongeard-Mugneret"
-      ],
       "basis": "estate-context",
       "sourceIds": [
         "register-mongeard-gfa",
@@ -1308,9 +1065,6 @@
     },
     {
       "holderId": "303514681",
-      "candidateNames": [
-        "Domaine Mongeard-Mugneret"
-      ],
       "basis": "estate-context",
       "sourceIds": [
         "register-mongeard",
@@ -1324,9 +1078,6 @@
     },
     {
       "holderId": "326533213",
-      "candidateNames": [
-        "Domaine d'Eugénie"
-      ],
       "basis": "estate-context",
       "sourceIds": [
         "register-eugenie",
@@ -1339,9 +1090,6 @@
     },
     {
       "holderId": "393095955",
-      "candidateNames": [
-        "Maison Joseph Drouhin"
-      ],
       "basis": "management-and-estate-context",
       "sourceIds": [
         "register-sepv",
@@ -1355,9 +1103,6 @@
     },
     {
       "holderId": "348024928",
-      "candidateNames": [
-        "Domaine Anne Gros"
-      ],
       "basis": "secondary-estate-context",
       "sourceIds": [
         "register-anne-gros",
@@ -1370,9 +1115,6 @@
     },
     {
       "holderId": "538257932",
-      "candidateNames": [
-        "Domaine du Comte Liger-Belair"
-      ],
       "basis": "reported-operator-relationship",
       "sourceIds": [
         "register-lamarche",
@@ -1386,9 +1128,6 @@
     },
     {
       "holderId": "U18178008",
-      "candidateNames": [
-        "Domaine Henri de Villamont"
-      ],
       "basis": "group-and-estate-context",
       "sourceIds": [
         "modot-stat-ccm",
@@ -1399,23 +1138,10 @@
         "winehog-sirugue"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Statutes tie SCI Domaine Vve Paul Modot (SIREN 778173500) to Groupe Schenk, named on Villamont’s legal page. Its recorded area, 0.434 ha (mapped 0.46 ha), matches a 2020 guide’s 0.43 ha; Villamont also states 0.5 ha and 16 ares. No lease or current farming found.",
-      "legalIdentityCrosswalk": {
-        "companySiren": "778173500",
-        "basis": "Exact statutory abbreviation and registered office; confirmed by official SIREN search.",
-        "sourceIds": [
-          "modot-stat-ccm",
-          "modot-stat-2002",
-          "modot-official"
-        ],
-        "limitation": "Does not rewrite the provisional DGFiP ID or prove identifier continuity in the annual rights files."
-      }
+      "finding": "Statutes tie SCI Domaine Vve Paul Modot (SIREN 778173500) to Groupe Schenk, named on Villamont’s legal page. Its recorded area, 0.434 ha (mapped 0.46 ha), matches a 2020 guide’s 0.43 ha; Villamont also states 0.5 ha and 16 ares. No lease or current farming found."
     },
     {
       "holderId": "036380046",
-      "candidateNames": [
-        "Domaine du Clos Frantin / Albert Bichot"
-      ],
       "basis": "estate-context",
       "sourceIds": [
         "register-bichot",
