@@ -6,7 +6,7 @@ Reviewed 2026-10-07; target season 2026.
 
 All 417 Chablis Grand Cru parcels reviewed against the pinned Chablis (89068) geometry, named areas, legal-entity rights, official DFI, DVF and Yonne notice archive. Aerial-spraying derogations identify a requester and printed treatment scope, not an owner or farmer. No current farmer is verified.
 
-Of 417 mapped parcels, 296 have recorded rights and 121 have no matched right holder. All 43 holder groups were triaged. 0 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 17 have an authorisation decision, 0 have co-sale leads through a later company holder, and 400 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 417 mapped parcels, 296 have recorded rights and 121 have no matched right holder. All 43 holder groups were triaged. 0 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 17 have an authorisation decision, 0 have co-sale leads through a later company holder, and 400 remain without a research lead. These are mutually exclusive research categories, not farmer counts. Treatment records name no operator candidate; 417 parcels have no named candidate.
 
 102 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 

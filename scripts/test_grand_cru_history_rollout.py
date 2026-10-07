@@ -3,7 +3,7 @@ import json
 import unittest
 
 from build_grand_cru_notice_history import build, indexed_event_notice
-from build_grand_cru_research import Context, build_register
+from build_grand_cru_research import Context, build_register, outputs
 from build_grand_cru_evidence import build_evidence
 
 from grand_cru import (APP_DIR, CONFIG_DIR, ROOT, cru_slugs, in_cru, load_cru, load_manifest,
@@ -105,6 +105,10 @@ class ChablisTier1Tests(unittest.TestCase):
                                  Context(self.cru, self.bundle), self.notices)
         evidence = build_evidence(register, self.curation, self.history, json.loads(asset)['features'])
         self.assertEqual(register['counts']['historicalAuthorisation'], 17)
+        context = Context(self.cru, self.bundle)
+        report = outputs(context)[0][context.report]
+        self.assertIn('417 parcels have no named candidate', report)
+        self.assertIn('400 remain without a research lead', report)
         self.assertTrue(all(not r['candidateLeads'] and r['currentFarmer'] is None for r in register['parcels']))
         for event in self.curation['exactParcelEvents']:
             parcel = event['parcelIds'][0]

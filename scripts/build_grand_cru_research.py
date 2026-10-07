@@ -368,6 +368,10 @@ def render_report(register, curation, history, context):
     counts = register['counts']
     sources = {s['id']: s for s in curation['sources']}
     name, research = context.cru['name'], context.cru['research']
+    has_treatments = any(e.get('operation') == 'aerial-spraying-derogation' for e in curation['exactParcelEvents'])
+    unresolved_label = 'a research lead' if has_treatments else 'a named candidate'
+    treatment_scope = (f" Treatment records name no operator candidate; {sum(not r['candidateLeads'] for r in register['parcels'])} parcels have no named candidate."
+                       if has_treatments else '')
     lines = [
         f'# {name} parcel farming research register', '',
         f"Reviewed {register['reviewedAt']}; target season {register['targetSeason']}.", '',
@@ -378,7 +382,7 @@ def render_report(register, curation, history, context):
         f"{counts['holderLead']} parcels have holder-derived or independent-research leads, {counts['historicalApplication']} have an "
         f"exact-reference application or suspended application, {counts['historicalAuthorisation']} have an authorisation decision, "
         f"{counts['saleLead']} have co-sale leads through a later company holder, and "
-        f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
+        f"{counts['unresolved']} remain without {unresolved_label}. These are mutually exclusive research categories, not farmer counts.{treatment_scope}", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
               f"{counts['withParcelFiling']} parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. "
