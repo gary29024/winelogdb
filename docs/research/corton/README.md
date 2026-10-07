@@ -1,7 +1,7 @@
 # Corton parcels: Tier 1 (#405)
 
 Corton uses INAO `inao-denom-549`, appellation 165, across Aloxe-Corton (21010),
-Ladoix-Serrigny (21480) and Pernand-Vergelesses (21606). Reviewed 7 October 2026
+Pernand-Vergelesses (21480) and Ladoix-Serrigny (21606). Reviewed 7 October 2026
 for season 2026 under the [rollout playbook](../../grand-cru-parcel-rollout.md)
 and [#461 history method](../grand-cru-history.md). It appears on all three
 village maps. Its shared Corton bundle also contains Corton-Charlemagne and
@@ -15,7 +15,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 
 | Measure | Value |
 | --- | ---: |
-| Cadastral parcels | 728; 159.823708 ha of measured cru overlap (448 in Aloxe-Corton, 133 in Ladoix-Serrigny, 147 in Pernand-Vergelesses) |
+| Cadastral parcels | 728; 159.823708 ha of measured cru overlap (448 in Aloxe-Corton, 133 in Pernand-Vergelesses, 147 in Ladoix-Serrigny) |
 | Parcels with recorded legal-entity rights (1 January 2025) | 387; 112 holder identifiers and 404 right records |
 | Parcels without matched rights | 341 |
 | Rights snapshots: available / imported years and missing releases | 2019–2025 / 2019–2025; no listed release missing; no earlier or 2026 rights file listed at the 7 October recheck |
@@ -27,13 +27,13 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Distinct DFI documents / analysis lots supporting those parcels | 99 / 138 |
 | Inferred-only ancestry / unresolved references or conflicting events | 0 inferred-only current parcels; 0 unresolved DFI events, traversal issues or spatial conflicts; one trace starts in the non-cadastral public domain and every other ends at a source boundary or unrecorded event |
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-07–2025-12-22. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
-| Parcels with an authorisation / application or suspension | 0 |
+| Parcels with an authorisation / application or suspension | 3; one page-reviewed 2021 application receipt |
 | Parcels with sale records (DVF) | 107; 43 deeds on current references, plus 1 deed on a historical reference retained with original scope |
-| Parcels with holder or research leads | 2; co-sale leads from DVF deeds. A recorded legal holder alone is not a lead |
-| Parcels with no lead | 726 |
+| Parcels with holder or research leads | 5; 3 parcels named in the reviewed notice and 2 co-sale leads from DVF deeds. A recorded legal holder alone is not a lead |
+| Parcels with no lead | 723 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages of the three communes and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 704,334 / 103,159 bytes. Evidence: 797,666 / 38,163 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 704,334 / 103,159 bytes. Evidence: 798,871 / 38,524 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 728-parcel Corton bundle; Corton's selection is every parcel in it,
@@ -68,7 +68,7 @@ No geometry is repaired, clipped, buffered or filled to pass this audit.
 The [BIVB appellation page](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/corton,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjkyJnw%3D)
 lists 25 Corton climats. All 25 match cadastral lieux-dits using only case, accent
 and hyphen normalization; `LES COMBES` is restricted to Aloxe-Corton because
-Ladoix-Serrigny has its own. The village maps already show Corton's climats as
+Pernand-Vergelesses has its own. The village maps already show Corton's climats as
 official INAO denominations, such as Corton Les Bressandes (`inao-denom-2357`),
 and wine labels already resolve to them. **This cadastral audit therefore
 publishes no second layer**: the named areas are audited and crosswalked, and the
@@ -141,17 +141,17 @@ of uninterrupted records.
 
 The [notice audit](notice-audit.json) and [notice history](notice-history.json)
 query all 900 current/reachable references against the three Côte-d'Or corpora.
-Both index candidates were read from their page images and rejected; the
-[curation](curation.json) records each reference with its reason:
+Both index candidates were read from their page images:
 
 - `bfc-2021-146:p36` (page 37), the EARL Domaine Philippe Girard receipt, prints
-  A139 under Chambolle-Musigny, not Aloxe-Corton.
+  A139 under Chambolle-Musigny, not Aloxe-Corton. The [curation](curation.json)
+  records the rejected reference with its reason.
 - `bfc-2022-044:p18` (page 19), the Thibaut Marion receipt for dossier 2021-180,
-  prints AK159, AK164 and AK36 under Ladoix-Serrigny only. The index had matched
-  the same numbers in Pernand-Vergelesses, and none of the Ladoix references is
-  reachable from Corton.
-
-No exact Corton notice event is supported.
+  prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), names CPEF à Beaune
+  as previous operator and was complete on 4 November 2021. All three are current
+  Corton parcels. The curation records one historical-application event on them;
+  the receipt does not authorise cultivation, and no outcome or actual operation
+  is established.
 
 The independent raw OCR sweep found 158 reference-hint hits across all indexed
 notices. Two more of them name a bundle commune and were read from their page

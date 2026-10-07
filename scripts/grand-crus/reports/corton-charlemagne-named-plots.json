@@ -1,7 +1,7 @@
 {
   "method": "Exact reviewed cadastral names intersected with the unchanged INAO Corton-Charlemagne boundary; metric diagnostics in EPSG:2154.",
   "displayLayer": false,
-  "coverageNote": "The official wine-board list names eight Corton-Charlemagne climats, and all match cadastral lieux-dits. The cru's Pernand-Vergelesses part also covers the cadastral LE ROGNET ET CORTON, which is not on that list. The same hill already shows Corton's official INAO climat outlines, so this cadastral audit adds no layer and the whole-cru outline is retained; producer holdings are not shown.",
+  "coverageNote": "The official wine-board list names eight Corton-Charlemagne climats, and all match cadastral lieux-dits. The cru's Ladoix-Serrigny part also covers the cadastral LE ROGNET ET CORTON, which is not on that list. The same hill already shows Corton's official INAO climat outlines, so this cadastral audit adds no layer and the whole-cru outline is retained; producer holdings are not shown.",
   "sources": [
     {
       "commune": "21010",
@@ -132,7 +132,7 @@
     {
       "name": "Corton-Charlemagne",
       "sourceCandidate": "LE ROGNET ET CORTON",
-      "reason": "About 3.0 ha of the Corton-Charlemagne outline in Pernand-Vergelesses lies in the cadastral LE ROGNET ET CORTON, which the wine-board Corton-Charlemagne list does not name. Several parcels lie wholly inside the cru in it. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+      "reason": "About 3.0 ha of the Corton-Charlemagne outline in Ladoix-Serrigny lies in the cadastral LE ROGNET ET CORTON, which the wine-board Corton-Charlemagne list does not name. Several parcels lie wholly inside the cru in it. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
     }
   ],
   "neighbouringLieuxDits": [

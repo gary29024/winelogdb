@@ -4,11 +4,11 @@ Reviewed 2026-10-07; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
-All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images and rejected; no exact notice event is assigned. Producer/company research remains Tier 2. No current farmer is verified.
+All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images: one is rejected, and the other supports one application event on three current parcels. Producer/company research remains Tier 2. No current farmer is verified.
 
-Of 728 mapped parcels, 387 have recorded rights and 341 have no matched right holder. All 112 holder groups were triaged. 0 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 0 have an authorisation decision, 2 have co-sale leads through a later company holder, and 726 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 728 mapped parcels, 387 have recorded rights and 341 have no matched right holder. All 112 holder groups were triaged. 0 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 2 have co-sale leads through a later company holder, and 723 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-320 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+317 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 0 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
 
@@ -1401,7 +1401,7 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | LES PETITES LOLIERES (neighbouring lieu-dit; edge parcels) | 1 (0.01 ha) | 0 (0.00 ha) | 0 (0.00 ha) | 0.00 ha |
 | Les Pougets | 24 (9.78 ha) | 3 (1.34 ha) | 3 (1.34 ha) | 0.00 ha |
 | Les Renardes | 66 (14.28 ha) | 26 (5.76 ha) | 24 (4.33 ha) | 0.00 ha |
-| Les Vergennes | 20 (3.40 ha) | 7 (2.04 ha) | 7 (2.04 ha) | 0.00 ha |
+| Les Vergennes | 20 (3.40 ha) | 7 (2.04 ha) | 4 (1.41 ha) | 0.00 ha |
 | No cadastral lieu-dit | 4 (0.51 ha) | 2 (0.00 ha) | 2 (0.00 ha) | 0.00 ha |
 
 **Published holdings by named area**
@@ -2058,7 +2058,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0030 | Le Rognet et Corton | 691.31 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
 | AK 0033 | Le Rognet et Corton | 4412.62 | [448502708](#holder-448502708) | Unresolved | Unconfirmed |
 | AK 0034 | Le Rognet et Corton | 1249.31 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
-| AK 0036 | Les Vergennes | 11.24 | None | Unresolved | Unconfirmed |
+| AK 0036 | Les Vergennes | 11.24 | None | Thibaut Marion (historical-application) | Unconfirmed |
 | AK 0039 | Les Grandes Lolières | 2700.51 | None | Unresolved | Unconfirmed |
 | AK 0040 | Les Grandes Lolières | 433.30 | [451042832](#holder-451042832) | Unresolved | Unconfirmed |
 | AK 0043 | Les Grandes Lolières | 2513.91 | None | Unresolved | Unconfirmed |
@@ -2097,12 +2097,12 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0154 | Les Vergennes | 313.97 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
 | AK 0155 | Les Vergennes | 319.61 | [U33360345](#holder-u33360345) | Unresolved | Unconfirmed |
 | AK 0156 | Les Vergennes | 292.04 | [302572094](#holder-302572094) | Unresolved | Unconfirmed |
-| AK 0159 | Les Vergennes | 2905.99 | None | Unresolved | Unconfirmed |
+| AK 0159 | Les Vergennes | 2905.99 | None | Thibaut Marion (historical-application) | Unconfirmed |
 | AK 0160 | Les Vergennes | 1061.26 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0161 | Les Vergennes | 119.13 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0162 | Les Vergennes | 770.32 | [200047827](#holder-200047827) | Unresolved | Unconfirmed |
 | AK 0163 | Les Vergennes | 1822.47 | [200047827](#holder-200047827) | Unresolved | Unconfirmed |
-| AK 0164 | Les Vergennes | 3459.75 | None | Unresolved | Unconfirmed |
+| AK 0164 | Les Vergennes | 3459.75 | None | Thibaut Marion (historical-application) | Unconfirmed |
 | AK 0165 | Les Vergennes | 3667.16 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0166 | Les Vergennes | 1567.40 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0167 | Le Rognet et Corton | 919.65 | [478499098](#holder-478499098) | Unresolved | Unconfirmed |
@@ -2146,6 +2146,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 
 Reviewed farm-structure notices name the applicant, the previous operator and the cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an authorisation is a dated decision, not proof of actual or current operation. References were read from the page image.
 
+- **2021-11-16 — Thibaut Marion.** Application received; previous operator CPEF à Beaune. Parcels: AK 0036, AK 0159, AK 0164. Dossier 2021-180: Ladoix-Serrigny AK159, AK164 and AK36, 0.6457 ha; complete 4 November 2021. The receipt is not an authorisation. [Thibaut Marion application receipt, dossier 2021-180](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/94259/602873/file/recueil-bfc-2022-044-recueil-des-actes-administratifs-special.pdf#page=19).
 
 ## Parcel-specific company filings
 
@@ -3280,7 +3281,7 @@ Sales catalogue range: {'end': '2025-12-31', 'start': '2014-01-01'}. Observed re
 | --- | --- | --- |
 | 2017-04-10 | 210100000A0007, 210100000A0010, 210100000A0094, 21480000AD0012, 21480000AE0162, 21480000AE0236, 21480000AK0289, 21480000AK0414, 21480000AK0423, 21480000AK0424, 21480000AK0427, 21480000AK0428, 21480000AK0455, 21480000AK0652, 21480000AK0654, 21480000AL0217, 21480000AL0218 | 210100000A0138 → 210100000A0007 (historical-context; context only); 210100000A0143 → 210100000A0010 (historical-context; former-parcel-includes-other-daughters); 210100000A0144 → 210100000A0010 (historical-context; former-parcel-includes-other-daughters); 210100000A0140 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 210100000A0141 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 210100000A0142 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 210100000A0145 → 210100000A0139 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 210100000A0147 → 210100000A0146 → 210100000A0139 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 210100000A0148 → 210100000A0146 → 210100000A0139 → 210100000A0094 (historical-context; former-parcel-includes-other-daughters); 21480000AL0353 → 21480000AL0217 (historical-context; former-parcel-includes-other-daughters); 21480000AL0365 → 21480000AL0352 → 21480000AL0217 (historical-context; former-parcel-includes-other-daughters); 21480000AL0366 → 21480000AL0352 → 21480000AL0217 (historical-context; former-parcel-includes-other-daughters); 21480000AL0354 → 21480000AL0218 (historical-context; former-parcel-includes-other-daughters); 21480000AL0355 → 21480000AL0218 (historical-context; former-parcel-includes-other-daughters) |
 
-Reviewed notice matches: 0; unreviewed search candidates: 0. Matched act dates: none matched to none matched. [Original readings, areas, paths and unresolved references](notice-history.json).
+Reviewed notice matches: 3; unreviewed search candidates: 0. Matched act dates: 2021-11-16 to 2021-11-16. [Original readings, areas, paths and unresolved references](notice-history.json).
 
 Department 21: published years located as early as 2004 and through 2026. Live publisher hosts unreachable; earlier bulletins obtained from Internet Archive captures with year-by-year gaps; absolute earliest year unresolved. Obtained index ranges: [{'corpus': 'departmental-cote-dor', 'publicationYears': [2016, 2017, 2018, 2019, 2020]}, {'corpus': 'regional-bfc-cote-dor', 'publicationYears': [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}, {'corpus': 'departmental-cote-dor-earlier-archive', 'publicationYears': [2004, 2005, 2006, 2008, 2010, 2011, 2013, 2015], 'completeness': 'partial: only archived captures; see archiveAcquisition'}].
 
@@ -3305,7 +3306,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **cadastre-history** — [Etalab available commune geometry vintages](https://files.data.gouv.fr/cadastre/etalab-cadastre/). geometry; read; document date not established. Full current geometry is preserved. Earlier observations support separately labelled spatial inference.
 - **dvf-sales** — [Cerema DVF+ open-data, Bourgogne-Franche-Comté](https://www.data.gouv.fr/datasets/dvf-open-data). registry-dataset; read; document date not established. Dated deed references, without prices or parties. Coverage is audited independently of DFI.
 - **girard-2021** — [EARL Domaine Philippe Girard application receipt, dossier 2021-122](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/89554/574828/file/recueil-bfc-2021-146-recueil-des-actes-administratifs-special.pdf#page=37). government-event; read; document date 2021-07-26. The receipt prints A139 under Chambolle-Musigny; its Aloxe-Corton references are L94, L24, L25, H59, E32 and E19. Aloxe-Corton A0139 is not named, so no event is assigned to this cru.
-- **thibaut-marion-2021** — [Thibaut Marion application receipt, dossier 2021-180](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/94259/602873/file/recueil-bfc-2022-044-recueil-des-actes-administratifs-special.pdf#page=19). government-event; read; document date 2021-11-16. The receipt prints AK159, AK164 and AK36 under Ladoix-Serrigny only (0.6457 ha, previous operator CPEF à Beaune). The index matched same-numbered Pernand-Vergelesses references; none of the Ladoix references is reachable from Corton, so no event is assigned.
+- **thibaut-marion-2021** — [Thibaut Marion application receipt, dossier 2021-180](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/94259/602873/file/recueil-bfc-2022-044-recueil-des-actes-administratifs-special.pdf#page=19). government-event; read; document date 2021-11-16. The receipt prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), previous operator CPEF à Beaune; filed and complete 4 November 2021. All three are current Corton parcels in Ladoix-Serrigny (21606). The receipt alone does not authorise cultivation.
 
 ## Remaining evidence and access gaps
 

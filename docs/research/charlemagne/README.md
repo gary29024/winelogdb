@@ -1,7 +1,7 @@
 # Charlemagne parcels: Tier 1 (#407)
 
 Charlemagne uses INAO `inao-denom-476`, appellation 152. Its INAO outline lies in
-Aloxe-Corton (21010) and Ladoix-Serrigny (21480) only. Reviewed 7 October 2026
+Aloxe-Corton (21010) and Pernand-Vergelesses (21480) only. Reviewed 7 October 2026
 for season 2026 under the [rollout playbook](../../grand-cru-parcel-rollout.md)
 and [#461 history method](../grand-cru-history.md). It appears on all three
 village maps of the Corton bundle. The bundle also contains Corton and
@@ -15,7 +15,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 
 | Measure | Value |
 | --- | ---: |
-| Cadastral parcels | 275; 62.850345 ha of measured cru overlap (142 in Aloxe-Corton, 133 in Ladoix-Serrigny) |
+| Cadastral parcels | 275; 62.850345 ha of measured cru overlap (142 in Aloxe-Corton, 133 in Pernand-Vergelesses) |
 | Parcels with recorded legal-entity rights (1 January 2025) | 129; 61 holder identifiers and 136 right records |
 | Parcels without matched rights | 146 |
 | Rights snapshots: available / imported years and missing releases | 2019–2025 / 2019–2025; no listed release missing; no earlier or 2026 rights file listed at the 7 October recheck |
@@ -68,7 +68,7 @@ repeats the eight Corton-Charlemagne climats. Five lie inside the INAO Charlemag
 outline and match cadastral lieux-dits using only case, accent and hyphen
 normalization: En Charlemagne, Le Charlemagne, Le Corton, Les Languettes and Les
 Pougets. Three do not: `BASSES MOUROTTES` and `HAUTES MOUROTTES` lie in
-Pernand-Vergelesses, outside this outline, and only 113 m² of `LES RENARDES`
+Ladoix-Serrigny, outside this outline, and only 113 m² of `LES RENARDES`
 touches its edge. All three are listed as unresolved. As for Corton, **this
 cadastral audit publishes no layer** and the map keeps the whole-cru outline. The
 [named-area audit](../../../scripts/grand-crus/reports/charlemagne-named-plots.json)

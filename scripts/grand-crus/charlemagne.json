@@ -38,7 +38,7 @@
     "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/charlemagne,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjkzJnw%3D",
     "nameSourceChecked": "2026-10-07",
     "nameSourceSha256": "7bc1d9e527ef9128f54fc1909f285c195af97bacf6855486c575392c5e6d84a3",
-    "coverageNote": "The official wine-board list for Charlemagne repeats the eight Corton-Charlemagne climats. Five match cadastral lieux-dits inside the INAO Charlemagne outline, which lies in Aloxe-Corton and Ladoix-Serrigny only; Basses Mourottes and Hautes Mourottes have no land inside it and Les Renardes only touches its edge. The whole-cru outline is retained and no layer is added; producer holdings are not shown.",
+    "coverageNote": "The official wine-board list for Charlemagne repeats the eight Corton-Charlemagne climats. Five match cadastral lieux-dits inside the INAO Charlemagne outline, which lies in Aloxe-Corton and Pernand-Vergelesses only; Basses Mourottes and Hautes Mourottes have no land inside it and Les Renardes only touches its edge. The whole-cru outline is retained and no layer is added; producer holdings are not shown.",
     "displayLayer": false,
     "plots": [
       {
@@ -76,12 +76,12 @@
       {
         "name": "Basses Mourottes",
         "sourceCandidate": null,
-        "reason": "The official list names Basses Mourottes, but the cadastral BASSES MOUROTTES lies in Pernand-Vergelesses, outside the INAO Charlemagne outline. No named area is drawn."
+        "reason": "The official list names Basses Mourottes, but the cadastral BASSES MOUROTTES lies in Ladoix-Serrigny, outside the INAO Charlemagne outline. No named area is drawn."
       },
       {
         "name": "Hautes Mourottes",
         "sourceCandidate": null,
-        "reason": "The official list names Hautes Mourottes, but the cadastral HAUTES MOUROTTES lies in Pernand-Vergelesses, outside the INAO Charlemagne outline. No named area is drawn."
+        "reason": "The official list names Hautes Mourottes, but the cadastral HAUTES MOUROTTES lies in Ladoix-Serrigny, outside the INAO Charlemagne outline. No named area is drawn."
       },
       {
         "name": "Les Renardes",
@@ -97,7 +97,7 @@
         ],
         "maximumAreaM2": 83.4,
         "reviewedAt": "2026-10-07",
-        "note": "The pinned cadastral lieux-dits EN CHARLEMAGNE (Ladoix-Serrigny) and LE CHARLEMAGNE (Aloxe-Corton) overlap by 83.365 m² inside the cru along the commune line. Both outlines are kept exactly as published; neither is clipped, and the overlap assigns no parcel to both."
+        "note": "The pinned cadastral lieux-dits EN CHARLEMAGNE (Pernand-Vergelesses) and LE CHARLEMAGNE (Aloxe-Corton) overlap by 83.365 m² inside the cru along the commune line. Both outlines are kept exactly as published; neither is clipped, and the overlap assigns no parcel to both."
       }
     ],
     "neighbouringLieuxDits": [

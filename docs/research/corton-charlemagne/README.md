@@ -1,7 +1,7 @@
 # Corton-Charlemagne parcels: Tier 1 (#406)
 
 Corton-Charlemagne uses INAO `inao-denom-550`, appellation 166, across
-Aloxe-Corton (21010), Ladoix-Serrigny (21480) and Pernand-Vergelesses (21606).
+Aloxe-Corton (21010), Pernand-Vergelesses (21480) and Ladoix-Serrigny (21606).
 Reviewed 7 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It appears on all three village
@@ -15,7 +15,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 
 | Measure | Value |
 | --- | ---: |
-| Cadastral parcels | 339; 71.606918 ha of measured cru overlap (160 in Aloxe-Corton, 133 in Ladoix-Serrigny, 46 in Pernand-Vergelesses) |
+| Cadastral parcels | 339; 71.606918 ha of measured cru overlap (160 in Aloxe-Corton, 133 in Pernand-Vergelesses, 46 in Ladoix-Serrigny) |
 | Parcels with recorded legal-entity rights (1 January 2025) | 168; 68 holder identifiers and 176 right records |
 | Parcels without matched rights | 171 |
 | Rights snapshots: available / imported years and missing releases | 2019–2025 / 2019–2025; no listed release missing; no earlier or 2026 rights file listed at the 7 October recheck |
@@ -72,7 +72,7 @@ hill already shows Corton's official INAO climat outlines, so, as for Corton,
 outline. The
 [named-area audit](../../../scripts/grand-crus/reports/corton-charlemagne-named-plots.json)
 maps 68.862639 of 71.910393 ha. Most of the 3.047754 ha unmapped is in
-Pernand-Vergelesses, recorded as `LE ROGNET ET CORTON`, which the wine-board list
+Ladoix-Serrigny, recorded as `LE ROGNET ET CORTON`, which the wine-board list
 does not name for Corton-Charlemagne; it is listed as unresolved. The cadastral
 `EN CHARLEMAGNE` and `LE CHARLEMAGNE` overlap by 83.365 m² along the commune line
 and are kept as published under a reviewed 83.4 m² cap.
