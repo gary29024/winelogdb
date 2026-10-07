@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BXc6AcuJ.js"
+    "dist/client/assets/index-CcUVAlw9.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-Cf_bfZ7T.js",
-    "dist/client/assets/SectionLabel-DpN-w3uY.js",
-    "dist/client/assets/SparklingDetailsCard-D14huFlv.js",
-    "dist/client/assets/VillageMap-K1c0ol11.js",
-    "dist/client/assets/api-fjpXn6W5.js",
-    "dist/client/assets/burgundyAtlas-DDHgY3nB.js",
-    "dist/client/assets/index-BCGcKhMy.js",
-    "dist/client/assets/index-BXc6AcuJ.js",
+    "dist/client/assets/FriendTagDialog-HAOIfVS6.js",
+    "dist/client/assets/SectionLabel-BT-RGdBp.js",
+    "dist/client/assets/SparklingDetailsCard-CanRqR7B.js",
+    "dist/client/assets/VillageMap-C5dR01nt.js",
+    "dist/client/assets/api-3yrSxXLe.js",
+    "dist/client/assets/burgundyAtlas-Bz2Oyp9g.js",
+    "dist/client/assets/index-CYjR1Mo5.js",
+    "dist/client/assets/index-CcUVAlw9.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-DNWp_QMr.js",
-    "dist/client/assets/wineDetailCompact-iWKKKRBW.js"
+    "dist/client/assets/useModalFocus-C2DnyaVc.js",
+    "dist/client/assets/wineDetailCompact-D-U-wc1V.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 14,
-  "evidenceBytesTotal": 1602534,
-  "evidenceGzipBytesTotal": 168957,
+  "evidenceChunkCount": 15,
+  "evidenceBytesTotal": 1741736,
+  "evidenceGzipBytesTotal": 181588,
   "parcelBundleBytesTotal": 809954,
   "parcelBundleGzipBytesTotal": 125799,
   "evidenceChunks": [
@@ -33,6 +33,13 @@
       "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
       "bytes": 121220,
       "gzipBytes": 11987
+    },
+    {
+      "cru": "clos-de-la-roche",
+      "file": "dist/client/assets/clos-de-la-roche.evidence-CybHdZ6Y.js",
+      "sha256": "4080348bb54bfc77d450b18f8238269129ecd97d98c87938a39c83a51b4e9a79",
+      "bytes": 139202,
+      "gzipBytes": 12631
     },
     {
       "cru": "clos-de-tart",

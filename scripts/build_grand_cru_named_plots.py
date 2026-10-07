@@ -53,8 +53,11 @@ def main():
         found = [f for f in inputs if key(f['properties']['nom']) == key(entry['sourceName'])]
         assert found, f"Missing cadastral name: {entry['sourceName']}"
         # The cadastre can record one lieu-dit as separate same-name features in one commune
-        # (Romanée-Saint-Vivant); they form one named area. A lieu-dit that crosses a commune line
-        # (Bonnes-Mares) is one named area only when its reviewed entry lists every commune.
+        # (Romanée-Saint-Vivant); they form one named area. A name used in several communes needs a
+        # reviewed `communes` list: every commune of a lieu-dit that crosses the line (Bonnes-Mares),
+        # or the one commune meant when another commune has its own place of that name (Les Chabiots).
+        if 'communes' in entry:
+            found = [f for f in found if f['properties']['commune'] in entry['communes']]
         found_communes = sorted({f['properties']['commune'] for f in found})
         assert found_communes == entry.get('communes', found_communes[:1]), f"Cadastral name in unreviewed communes: {entry['sourceName']}"
         original = shape(found[0]['geometry']) if len(found) == 1 else unary_union([shape(f['geometry']) for f in found])
