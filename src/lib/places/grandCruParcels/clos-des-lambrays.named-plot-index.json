@@ -1,0 +1,20 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/clos-des-lambrays",
+  "plots": [
+    {
+      "id": "clos-des-lambrays-plot-clos-des-lambrays",
+      "name": "Clos des Lambrays",
+      "aliases": []
+    },
+    {
+      "id": "clos-des-lambrays-plot-les-bouchots",
+      "name": "Les Bouchots",
+      "aliases": []
+    },
+    {
+      "id": "clos-des-lambrays-plot-meix-rentier",
+      "name": "Meix-Rentier",
+      "aliases": []
+    }
+  ]
+}

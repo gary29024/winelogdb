@@ -1,0 +1,203 @@
+{
+  "dataUrl": "/maps/clos-de-la-roche-named-plots.2026-06-01.d01f65a5d31f.geojson",
+  "parentFeatureId": "inao-denom-544",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Clos de la Roche, Les Chabiots, Les Fremières, Les Froichots, Les Genavrières, Les Mochamps and Monts Luisants are cadastral named areas within Clos de la Roche; only part of the cadastral Les Genavrières and Monts Luisants lies inside the cru. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+  "features": [
+    {
+      "id": "clos-de-la-roche-plot-clos-de-la-roche",
+      "name": "Clos de la Roche",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "CLOS DE LA ROCHE",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 4.548243,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.960981855888455,
+        47.20244278557479,
+        4.964403,
+        47.2048118
+      ],
+      "labelPoint": [
+        4.963275819732877,
+        47.203784026001216
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-chabiots",
+      "name": "Les Chabiots",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "LES CHABIOTS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.117693,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.962047531367573,
+        47.19941902454296,
+        4.964265652755618,
+        47.201269480637336
+      ],
+      "labelPoint": [
+        4.963099068315038,
+        47.20033828585231
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-fremieres",
+      "name": "Les Fremières",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "LES FREMIERES",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.273002,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9621795628012295,
+        47.20093555134684,
+        4.964660429734127,
+        47.2026134
+      ],
+      "labelPoint": [
+        4.963417428000347,
+        47.201764470937086
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-froichots",
+      "name": "Les Froichots",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "LES FROICHOTS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 0.643214,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.962233,
+        47.2023234,
+        4.9638741,
+        47.2030588
+      ],
+      "labelPoint": [
+        4.963048978721185,
+        47.202717198505766
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-genavrieres",
+      "name": "Les Genavrières",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "LES GENAVRIERES",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 0.879809,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.960022454713254,
+        47.202500061263684,
+        4.961617804019287,
+        47.2036953
+      ],
+      "labelPoint": [
+        4.96070154055532,
+        47.20308256582821
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-mochamps",
+      "name": "Les Mochamps",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "LES MOCHAMPS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.551223,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.963654,
+        47.20192850151703,
+        4.965523697217504,
+        47.2047134
+      ],
+      "labelPoint": [
+        4.96455971961635,
+        47.20340071102457
+      ]
+    },
+    {
+      "id": "clos-de-la-roche-plot-monts-luisants",
+      "name": "Monts Luisants",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 160,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-544",
+      "parentAppellation": "Clos de la Roche",
+      "sourceName": "MONTS LUISANTS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 3.755923,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.960112314718639,
+        47.20353070309588,
+        4.962675046160539,
+        47.2070446168139
+      ],
+      "labelPoint": [
+        4.961767874565137,
+        47.2057713248885
+      ]
+    }
+  ]
+}
