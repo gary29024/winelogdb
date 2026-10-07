@@ -28,6 +28,16 @@
   },
   "neighbours": [
     {
+      "commune": "21133",
+      "name": "Chambolle-Musigny",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+      "sha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
       "commune": "21267",
       "name": "Flagey-Échezeaux",
       "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
@@ -69,5 +79,8 @@
       "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
     },
     "note": "The measured 323.908325 m² remainder (0.4318%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The remainder is a single narrow strip along the cru's northern edge, between the official line and the nearest cadastral parcels. It is 1 piece with a mean width of 1.25 m. All of it lies along the outline edge. It is not a missing INAO commune. 323.908325 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
-  }
+  },
+  "importedCommunes": [
+    "21442"
+  ]
 }

@@ -638,5 +638,20 @@
       "21150",
       "21512"
     ]
+  },
+  "auditCommunes": {
+    "21541": {
+      "name": "Saint-Aubin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21541/cadastre-21541-parcelles.json.gz",
+      "sha256": "3f83619be0c35d570d71b6c7f92b795809935f907e309c4cd87004076268800c",
+      "size": 404902,
+      "retrievedAt": "2026-10-07T05:40:31Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence",
+      "resolvedUrl": "https://cadastre.s3.rbx.io.cloud.ovh.net:443/etalab-cadastre/2026-06-01/geojson/communes/21/21541/cadastre-21541-parcelles.json.gz",
+      "httpContentEncoding": null,
+      "transportSha256": "3f83619be0c35d570d71b6c7f92b795809935f907e309c4cd87004076268800c",
+      "transportSize": 404902
+    }
   }
 }

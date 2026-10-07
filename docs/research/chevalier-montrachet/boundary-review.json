@@ -1,0 +1,68 @@
+{
+  "slug": "chevalier-montrachet",
+  "parentSourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
+  "cadastreSha256ByCommune": {
+    "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+    "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+  },
+  "boundaryAreaM2": 75974.06484350287,
+  "uncoveredM2": 135.93021552490717,
+  "sharePercent": 0.17891660240228888,
+  "componentCount": 3,
+  "components": [
+    {
+      "areaM2": 122.8310051365097,
+      "boundsEPSG2154": [
+        832193.801640365,
+        6651179.831555383,
+        832297.8470000001,
+        6651236.80715627
+      ],
+      "rectangleWidthM": 4.173821649432215,
+      "rectangleLengthM": 117.92937855305658,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AH0130",
+        "21512000AH0140"
+      ]
+    },
+    {
+      "areaM2": 7.885774295264186,
+      "boundsEPSG2154": [
+        832010.6770000001,
+        6650902.974329474,
+        832018.336604832,
+        6650912.089648795
+      ],
+      "rectangleWidthM": 0.713045986870644,
+      "rectangleLengthM": 11.271613342542297,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AH0009",
+        "21512000AH0008"
+      ]
+    },
+    {
+      "areaM2": 5.213436093133266,
+      "boundsEPSG2154": [
+        832255.309954796,
+        6651103.926616907,
+        832260.1780000001,
+        6651109.198968856
+      ],
+      "rectangleWidthM": 1.8191816660363098,
+      "rectangleLengthM": 6.599379834369093,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AH0077"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "importedCommunes": [
+    "21512"
+  ],
+  "reviewMethod": "Projected pinned source polygons to EPSG:2154, measured all remainder components against only the INAO-listed commune, and visually inspected the overview and all three components.",
+  "finding": "The 135.930216 m² remainder (0.178917%) is measured against Puligny-Montrachet only, the sole INAO commune. All three components were visually inspected against the unmodified pinned geometry: 122.831005 m² along the northern edge of the main cadastral block, 7.885774 m² on the southwest edge, and 5.213436 m² on the east edge. All touch the INAO boundary. Chassagne parcels remain neighbouring contacts even though both communes share a download bundle. The 136.0 m² cap allows less than 0.070 m² above the measurement. No geometry is added, clipped, buffered, filled or simplified; changed hashes require a new review."
+}

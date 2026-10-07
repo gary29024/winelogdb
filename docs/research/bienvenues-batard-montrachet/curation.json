@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-351",
-  "status": "historical-extension-inventory",
-  "scope": "All 38 mapped Bienvenues-Bâtard-Montrachet parcels and 9 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 38 mapped Bienvenues-Bâtard-Montrachet parcels independently reviewed for Tier 1 and #461. Only INAO commune 21512 is imported; named areas and edge contacts audited. No current farmer verified. Producer research remains Tier 2.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,6 +41,15 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "bivb-names",
+      "title": "BIVB Bienvenues-Bâtard-Montrachet appellation and commune scope",
+      "url": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bienvenues-batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE5Jnw%3D",
+      "type": "appellation-reference",
+      "documentDate": null,
+      "access": "read",
+      "finding": "BIVB lists one white Grand Cru in Puligny-Montrachet. The main cadastral BIENVENUES BATARD-MONTRACHET polygon occupies most of it, while BATARD-MONTRACHET contacts its edge. Because the cru name also identifies a smaller constituent, displayLayer remains false; white wines keep the complete INAO feature. No producer holding or distinct official climat is inferred."
     }
   ],
   "holders": [
@@ -142,7 +151,7 @@
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
+    "Cadastral named areas are reviewed and the complete INAO outline retained. No producer holding is inferred.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."

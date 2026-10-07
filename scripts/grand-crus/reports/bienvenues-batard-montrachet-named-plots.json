@@ -1,0 +1,66 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Bienvenues-Bâtard-Montrachet boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "BIVB lists one white Grand Cru in Puligny-Montrachet. The main cadastral BIENVENUES BATARD-MONTRACHET polygon occupies most of it, while BATARD-MONTRACHET contacts its edge. Because the cru name also identifies a smaller constituent, displayLayer remains false; white wines keep the complete INAO feature. No producer holding or distinct official climat is inferred.",
+  "sources": [
+    {
+      "commune": "21150",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-lieux_dits.json.gz",
+      "sha256": "b146ad174c8cff83730183600713f99b111368d1acb0a3f39323a7b6b1aca1bb",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21512",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-lieux_dits.json.gz",
+      "sha256": "9b98034f372ee0749bb50eeec577a4a4dbe8f2d8890b136d86f20208b4cd1d86",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bienvenues-batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE5Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-communes.json.gz",
+      "sha256": "da1efabb947f470ba2f4f200bf345bbd7722093fcb399e8c9a760284b5fb703b"
+    }
+  ],
+  "parentHa": 3.689086484353718,
+  "mappedHa": 3.678209994581557,
+  "unmappedHa": 0.010876524088888706,
+  "plots": [
+    {
+      "id": "bienvenues-batard-montrachet-plot-bienvenues-batard-montrachet",
+      "sourceHa": 3.8307089131056427,
+      "clippedHa": 3.678209994581557,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": [],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "BATARD-MONTRACHET",
+      "reason": "Fourteen full parcels lie mostly outside this INAO cru and touch its edge. The adjacent cru name stays neighbouring cadastral context, not an official subdivision of Bienvenues."
+    }
+  ]
+}

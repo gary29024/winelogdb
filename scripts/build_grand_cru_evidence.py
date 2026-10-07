@@ -11,7 +11,8 @@ from grand_cru_filiation import historical_evidence_paths
 SCHEMA_VERSION = 2
 NOTE_LIMIT = 330
 KIND_ORDER = ['authorisation', 'suspended', 'application', 'notice', 'filing', 'research', 'ownership', 'sale', 'filiation', 'lineage', 'lead']
-EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application'}
+EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application',
+               'refused-application': 'notice'}
 RESEARCH_LABELS = {
     'critic-named-cadastral-reference': 'Named by parcel number',
     'critic-attribution-area-reconstructed': 'Matched by area only',
@@ -92,6 +93,8 @@ def event_item(event, via=None):
     kind = EVENT_KINDS[event['kind']]
     item = {'kind': kind, 'date': event['documentDate'], 'title': event['applicant'], 'note': event['appNote'],
             'sources': [event['sourceId']]}
+    if event['kind'] == 'refused-application':
+        item['label'] = 'Application refused'
     previous = event.get('previousOperator')
     if previous and previous != 'Not stated':
         item['detail'] = f'Previous operator named in notice: {previous}'

@@ -83,6 +83,16 @@
       "contactsOverMinimumOverlap": 0,
       "maxParcelPercent": 0,
       "contacts": []
+    },
+    {
+      "commune": "21606",
+      "name": "Ladoix-Serrigny",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-parcelles.json.gz",
+      "sha256": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
     }
   ],
   "excludedEdgeContacts": 8,
@@ -97,5 +107,9 @@
       "21606": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088"
     },
     "note": "The measured 3563.829610 m² remainder (0.5647%) was reviewed against the pinned INAO boundary and Aloxe-Corton and Pernand-Vergelesses and Ladoix-Serrigny cadastres. The cru outline has 7 separate parts and largely shares Corton-Charlemagne's edges; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 37 pieces, with mean widths of 0.22–1.09 m for those of at least 1 m². 105.099365 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 3563.829610 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
-  }
+  },
+  "importedCommunes": [
+    "21010",
+    "21480"
+  ]
 }
