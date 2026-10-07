@@ -1,0 +1,25 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/clos-saint-denis",
+  "plots": [
+    {
+      "id": "clos-saint-denis-plot-calouere",
+      "name": "Calouère",
+      "aliases": []
+    },
+    {
+      "id": "clos-saint-denis-plot-clos-saint-denis",
+      "name": "Clos Saint-Denis",
+      "aliases": []
+    },
+    {
+      "id": "clos-saint-denis-plot-les-chaffots",
+      "name": "Les Chaffots",
+      "aliases": []
+    },
+    {
+      "id": "clos-saint-denis-plot-maison-brulee",
+      "name": "Maison Brûlée",
+      "aliases": []
+    }
+  ]
+}
