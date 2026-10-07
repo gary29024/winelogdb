@@ -10,6 +10,7 @@ const reviewed=[
  {slug:'musigny',name:'Musigny',id:'inao-denom-973',maps:['chambolle-musigny']},
  {slug:'bonnes-mares',name:'Bonnes-Mares',id:'inao-denom-361',maps:['chambolle-musigny','morey-saint-denis']},
  {slug:'clos-de-tart',name:'Clos de Tart',id:'inao-denom-545',maps:['morey-saint-denis']},
+ {slug:'clos-des-lambrays',name:'Clos des Lambrays',id:'inao-denom-547',maps:['morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -59,5 +60,19 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
    expect(result).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-545'});
    expect(result?.namedPlotId).toBeUndefined();
   }
+ });
+ it('never infers the Clos des Lambrays plot from the cru name alone',async()=>{
+  const catalogue=await loadVillageMapCatalogue('morey-saint-denis');
+  expect(catalogue.namedPlots?.map(layer=>layer.parentFeatureId)).toContain('inao-denom-547');
+  expect(catalogue.features.filter(f=>f.kind==='named_plot'&&f.parentFeatureId==='inao-denom-547').map(f=>f.name))
+   .toEqual(['Clos des Lambrays','Les Bouchots','Meix-Rentier']);
+  const wine={...red,appellation:'Clos des Lambrays',wineName:'Clos des Lambrays'};
+  for(const target of [wine,{...wine,referenceParcel:'Clos des Lambrays'},{...wine,referenceParcel:'Les Larrets'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-547'});
+   expect(result?.namedPlotId).toBeUndefined();
+  }
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Bouchots'})?.namedPlotId).toBe('clos-des-lambrays-plot-les-bouchots');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Meix Rentier'})?.namedPlotId).toBe('clos-des-lambrays-plot-meix-rentier');
  });
 });
