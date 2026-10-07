@@ -1,0 +1,66 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Chapelle-Chambertin boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+    "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chapelle-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjY5Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-communes.json.gz",
+      "sha256": "83ba2993416c65e4305ef183d258de1fdd6a80ec9ffd44577918742683ceeb52"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    }
+  ],
+  "dataUrl": "/maps/chapelle-chambertin-named-plots.2026-06-01.6381059c33cb.geojson",
+  "sha256": "6381059c33cb0aa623c0db022245307d18d326841bb071c917bc6c65bfde2dfc",
+  "bytes": 4867,
+  "gzipEquivalentBytes": 1857,
+  "parentHa": 5.474293201898168,
+  "mappedHa": 5.451476645804884,
+  "unmappedHa": 0.022816561793722993,
+  "plots": [
+    {
+      "id": "chapelle-chambertin-plot-en-la-chapelle",
+      "sourceHa": 3.7904045073427595,
+      "clippedHa": 3.659580538678674,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "chapelle-chambertin-plot-les-gemeaux",
+      "sourceHa": 1.8480864572924427,
+      "clippedHa": 1.7918961071262112,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "CHERBAUDES",
+      "sourceCandidate": "CHERBAUDES",
+      "reason": "Full cadastral parcels in CHERBAUDES have only edge overlaps with the INAO feature. Retain the printed name without claiming it is a Chapelle-Chambertin climat or extending the named areas."
+    }
+  ]
+}

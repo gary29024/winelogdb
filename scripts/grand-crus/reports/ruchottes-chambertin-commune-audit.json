@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-1086",
+  "name": "Ruchottes-Chambertin",
+  "inaoCommunes": [
+    "21295"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21295",
+      "name": "Gevrey-Chambertin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+      "sha256": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+    }
+  ],
+  "boundaryAreaM2": 33107.2,
+  "coveredByBundleParcelsM2": 32805.0,
+  "notCoveredByBundleParcelsM2": 302.2,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 0.0,
+    "coveredByNoParcelM2": 302.2
+  },
+  "neighbours": [
+    {
+      "commune": "21110",
+      "name": "Brochon",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-parcelles.json.gz",
+      "sha256": "9fbede1fe311110ee21d7430481f6420c1e4c5620b9667c65bc86983ec6595e2",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21442",
+      "name": "Morey-Saint-Denis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-parcelles.json.gz",
+      "sha256": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 1,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 302.3,
+    "reviewedAt": "2026-10-07",
+    "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+    "cadastreSha256ByCommune": {
+      "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+    },
+    "note": "The 302.208354 m² remainder (0.9128%) was inspected against original pinned INAO/cadastral polygons in EPSG:2154. All 9 components touch the INAO boundary. The two largest components follow the northern edge of the separate cadastral blocks; the third follows the eastern boundary of the upper block. The remaining pieces are also on the INAO boundary. Neither Brochon nor Morey-Saint-Denis has parcel contact or covers any uncovered area. These are boundary mismatches, with no geometry added, clipped, buffered or filled. The 302.3 m² cap allows less than 0.1 m² above this measurement; changed source hashes require another review."
+  }
+}

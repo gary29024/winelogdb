@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-CcUVAlw9.js"
+    "dist/client/assets/index-BCUiTPSn.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-HAOIfVS6.js",
-    "dist/client/assets/SectionLabel-BT-RGdBp.js",
-    "dist/client/assets/SparklingDetailsCard-CanRqR7B.js",
-    "dist/client/assets/VillageMap-C5dR01nt.js",
-    "dist/client/assets/api-3yrSxXLe.js",
-    "dist/client/assets/burgundyAtlas-Bz2Oyp9g.js",
-    "dist/client/assets/index-CYjR1Mo5.js",
-    "dist/client/assets/index-CcUVAlw9.js",
+    "dist/client/assets/FriendTagDialog-C88wyGXj.js",
+    "dist/client/assets/SectionLabel-ClEn_qR_.js",
+    "dist/client/assets/SparklingDetailsCard-D_7JzQFZ.js",
+    "dist/client/assets/VillageMap-CYLDZvCi.js",
+    "dist/client/assets/api-BaBDEtmv.js",
+    "dist/client/assets/burgundyAtlas-CrejlJnj.js",
+    "dist/client/assets/index-BCUiTPSn.js",
+    "dist/client/assets/index-CNetorYn.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-C2DnyaVc.js",
-    "dist/client/assets/wineDetailCompact-D-U-wc1V.js"
+    "dist/client/assets/useModalFocus-D73wS8sa.js",
+    "dist/client/assets/wineDetailCompact-jgJEGC1v.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 15,
-  "evidenceBytesTotal": 1741736,
-  "evidenceGzipBytesTotal": 181588,
-  "parcelBundleBytesTotal": 809954,
-  "parcelBundleGzipBytesTotal": 125799,
+  "evidenceChunkCount": 24,
+  "evidenceBytesTotal": 2659505,
+  "evidenceGzipBytesTotal": 278126,
+  "parcelBundleBytesTotal": 1230848,
+  "parcelBundleGzipBytesTotal": 187822,
   "evidenceChunks": [
     {
       "cru": "bonnes-mares",
@@ -33,6 +33,34 @@
       "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
       "bytes": 121220,
       "gzipBytes": 11987
+    },
+    {
+      "cru": "chambertin",
+      "file": "dist/client/assets/chambertin.evidence-dSJGHgKc.js",
+      "sha256": "73fc401d9cdad49016863f20b32b6356b89dfd467e8cd45cb398d32211481800",
+      "bytes": 127252,
+      "gzipBytes": 12085
+    },
+    {
+      "cru": "chambertin-clos-de-beze",
+      "file": "dist/client/assets/chambertin-clos-de-beze.evidence-DmfkIpRE.js",
+      "sha256": "0fee451a4d19e245aefe55cddda35b03a4726e954e0fb668d9f22bd65dbc80a8",
+      "bytes": 78690,
+      "gzipBytes": 9745
+    },
+    {
+      "cru": "chapelle-chambertin",
+      "file": "dist/client/assets/chapelle-chambertin.evidence-CSGQscPB.js",
+      "sha256": "b5a552d03b2f32ef02be31c07bbe0cfc2d49d718dc458ee1bb7187e5255b17d0",
+      "bytes": 81573,
+      "gzipBytes": 9408
+    },
+    {
+      "cru": "charmes-chambertin",
+      "file": "dist/client/assets/charmes-chambertin.evidence-B2O2Ed9l.js",
+      "sha256": "8ef549a2c5dc00cc6268c389562f2b115ccf07ba3ded304c1a776f7ebb5b33f9",
+      "bytes": 166242,
+      "gzipBytes": 13869
     },
     {
       "cru": "clos-de-la-roche",
@@ -84,6 +112,13 @@
       "gzipBytes": 13221
     },
     {
+      "cru": "griotte-chambertin",
+      "file": "dist/client/assets/griotte-chambertin.evidence-Czht9Sob.js",
+      "sha256": "b396640014bddd5c11aa848ccdfe6cab0ace673dcf8d581efe158e584e317c6d",
+      "bytes": 80632,
+      "gzipBytes": 9438
+    },
+    {
       "cru": "la-grande-rue",
       "file": "dist/client/assets/la-grande-rue.evidence-Ba2k7ThN.js",
       "sha256": "acd82a5589f9c2275ce191954844e419099ba1ef9105ad0642645fc01b7ddf0b",
@@ -103,6 +138,27 @@
       "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
       "bytes": 41798,
       "gzipBytes": 7006
+    },
+    {
+      "cru": "latricieres-chambertin",
+      "file": "dist/client/assets/latricieres-chambertin.evidence-DGehKALB.js",
+      "sha256": "b2406ab6ed21a2734e2628eeacf62610574f04dd79b409bd0f61f17a59f82202",
+      "bytes": 67851,
+      "gzipBytes": 8901
+    },
+    {
+      "cru": "mazis-chambertin",
+      "file": "dist/client/assets/mazis-chambertin.evidence-CTtOHVz9.js",
+      "sha256": "71c2e0cecdefacb05892716f435bd24ec04e384381f77455f8a2deaa1bc55c9f",
+      "bytes": 88052,
+      "gzipBytes": 10346
+    },
+    {
+      "cru": "mazoyeres-chambertin",
+      "file": "dist/client/assets/mazoyeres-chambertin.evidence-Cpmm20Pz.js",
+      "sha256": "42763762ae2a480edf44c1e3480e0b515ca51a9b7be333481c58188dbc2a3519",
+      "bytes": 166242,
+      "gzipBytes": 13869
     },
     {
       "cru": "musigny",
@@ -131,6 +187,13 @@
       "sha256": "2b2bc6f64bbbd74d32f65723b4de6f573ab91b565551c900f7a36dc7424d37e3",
       "bytes": 70879,
       "gzipBytes": 9277
+    },
+    {
+      "cru": "ruchottes-chambertin",
+      "file": "dist/client/assets/ruchottes-chambertin.evidence-DM0Tgw5z.js",
+      "sha256": "a2ba6e739693c49de9e87fe2cd90e879ad2afc11a360fc90a422f6da443c6bdd",
+      "bytes": 61235,
+      "gzipBytes": 8877
     }
   ],
   "parcelBundles": [
@@ -147,6 +210,13 @@
       "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
       "bytes": 239882,
       "gzipBytes": 35324
+    },
+    {
+      "bundle": "gevrey-chambertin",
+      "dataUrl": "/maps/gevrey-chambertin-parcels.2026-06-01.ff650df461c3.geojson",
+      "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+      "bytes": 420894,
+      "gzipBytes": 62023
     },
     {
       "bundle": "vosne-romanee",

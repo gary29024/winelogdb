@@ -1,0 +1,15 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/chapelle-chambertin",
+  "plots": [
+    {
+      "id": "chapelle-chambertin-plot-en-la-chapelle",
+      "name": "En la Chapelle",
+      "aliases": []
+    },
+    {
+      "id": "chapelle-chambertin-plot-les-gemeaux",
+      "name": "Les Gémeaux",
+      "aliases": []
+    }
+  ]
+}

@@ -19,6 +19,10 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
+ 'chambertin':()=>import('./chambertin.evidence.json'),
+ 'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
+ 'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),
+ 'charmes-chambertin':()=>import('./charmes-chambertin.evidence.json'),
  'clos-de-la-roche':()=>import('./clos-de-la-roche.evidence.json'),
  'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
@@ -26,13 +30,18 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'clos-saint-denis':()=>import('./clos-saint-denis.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
+ 'griotte-chambertin':()=>import('./griotte-chambertin.evidence.json'),
  'la-grande-rue':()=>import('./la-grande-rue.evidence.json'),
  'la-romanee':()=>import('./la-romanee.evidence.json'),
  'la-tache':()=>import('./la-tache.evidence.json'),
+ 'latricieres-chambertin':()=>import('./latricieres-chambertin.evidence.json'),
+ 'mazis-chambertin':()=>import('./mazis-chambertin.evidence.json'),
+ 'mazoyeres-chambertin':()=>import('./mazoyeres-chambertin.evidence.json'),
  'musigny':()=>import('./musigny.evidence.json'),
  'richebourg':()=>import('./richebourg.evidence.json'),
  'romanee-conti':()=>import('./romanee-conti.evidence.json'),
  'romanee-saint-vivant':()=>import('./romanee-saint-vivant.evidence.json'),
+ 'ruchottes-chambertin':()=>import('./ruchottes-chambertin.evidence.json'),
 };
 
 const empty=():ParcelEvidenceData=>({sources:{},parcels:{},holderDomains:{}});

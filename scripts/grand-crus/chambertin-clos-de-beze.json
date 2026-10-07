@@ -14,9 +14,37 @@
     "chambertin-clos-de-beze"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/chambertin-clos-de-beze/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/chambertin-clos-de-beze",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chambertin-clos-de-beze,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjY1Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "d82c883875a77139478fdfdd6045f8c9b686a7911251e5ad6def3d6c852fbef5",
+    "coverageNote": "The BIVB names Clos-de-Bèze as the climat for this appellation. CLOS DE BEZE is audited inside the unchanged INAO Chambertin-Clos de Bèze feature; small boundary contacts with other lieux-dits are retained as unresolved cadastral context. No duplicate selectable layer or producer holdings are published, and the whole-cru outline remains the fallback.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "clos-de-beze",
+        "name": "Clos de Bèze",
+        "sourceName": "CLOS DE BEZE",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "BEL-AIR",
+        "sourceCandidate": "BEL-AIR",
+        "reason": "A full cadastral parcel in this lieu-dit has only an edge overlap with the INAO feature. Retain the printed cadastral name without treating it as a climat of Chambertin-Clos de Bèze or extending the named area."
+      },
+      {
+        "name": "LES MAZIS-HAUTS",
+        "sourceCandidate": "LES MAZIS-HAUTS",
+        "reason": "A full cadastral parcel in this lieu-dit has only an edge overlap with the INAO feature. Retain the printed cadastral name without treating it as a climat of Chambertin-Clos de Bèze or extending the named area."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
   }
 }

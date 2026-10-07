@@ -37,7 +37,12 @@ export function grandCruNamedPlotIdentity(wine:Wine):{matchId:string;plotId?:str
   const chars=[...text];
   for(const match of longest){ids.add(match.id);chars.fill(' ',match.start,match.end)}
   const rest=chars.join('').replace(marker,' ').replace(/\s+/g,' ').trim();
-  if(otherPlaces.some(name=>name!==parentName&&pattern(name).test(rest))){
+  // Ignore another name wholly inside the parent (Chambertin in Chapelle-Chambertin),
+  // but keep longer conflicting names (Grands Échezeaux for an Échezeaux wine).
+  const parents=[...rest.matchAll(pattern(parentName))];
+  const withinParent=(match:RegExpExecArray)=>parents.some(parent=>
+   parent.index<=match.index&&parent.index+parent[0].length>=match.index+match[0].length);
+  if(otherPlaces.some(name=>name!==parentName&&[...rest.matchAll(pattern(name))].some(match=>!withinParent(match)))){
    if(field!==1)return null;
    ambiguous=true;
   }

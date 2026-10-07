@@ -1,0 +1,426 @@
+{
+  "slug": "charmes-chambertin",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "cadastreSha256ByCommune": {
+    "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+  },
+  "boundaryAreaM2": 309383.8053620207,
+  "uncoveredM2": 1381.874287046353,
+  "sharePercent": 0.4466537236586686,
+  "componentCount": 23,
+  "components": [
+    {
+      "areaM2": 299.8256158757083,
+      "boundsEPSG2154": [
+        848861.6587293358,
+        6680627.642416749,
+        849084.225,
+        6680695.637
+      ],
+      "rectangleWidthM": 66.47171594963426,
+      "rectangleLengthM": 223.02764154396658,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0130",
+        "21295000BN0142",
+        "21295000BN0175",
+        "21295000BN0176",
+        "21295000BN0040",
+        "21295000BN0080",
+        "21295000BN0079",
+        "21295000BN0173",
+        "21295000BN0083"
+      ]
+    },
+    {
+      "areaM2": 272.5784004589335,
+      "boundsEPSG2154": [
+        848905.9770000001,
+        6680977.748680742,
+        849108.846,
+        6681114.082999999
+      ],
+      "rectangleWidthM": 14.11502594510682,
+      "rectangleLengthM": 242.26839477667684,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0056",
+        "21295000BN0057",
+        "21295000BN0051",
+        "21295000BN0052"
+      ]
+    },
+    {
+      "areaM2": 209.67133611924643,
+      "boundsEPSG2154": [
+        848739.416,
+        6680593.5118070375,
+        848897.127,
+        6681122.705999998
+      ],
+      "rectangleWidthM": 25.15240134442966,
+      "rectangleLengthM": 547.0201429231938,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0131",
+        "21295000BM0130",
+        "21295000BM0056",
+        "21295000BN0044",
+        "21295000BN0038",
+        "21295000BN0050",
+        "21295000BN0049",
+        "21295000BN0048",
+        "21295000BN0047"
+      ]
+    },
+    {
+      "areaM2": 199.8753583641947,
+      "boundsEPSG2154": [
+        849076.51,
+        6680486.8432994755,
+        849221.4,
+        6680595.563999998
+      ],
+      "rectangleWidthM": 78.42060430422534,
+      "rectangleLengthM": 167.63071119295262,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0075",
+        "21295000BM0962",
+        "21295000BM0961",
+        "21295000BM0069"
+      ]
+    },
+    {
+      "areaM2": 145.91462597498085,
+      "boundsEPSG2154": [
+        848898.148,
+        6680775.505328426,
+        849005.71,
+        6680831.563999998
+      ],
+      "rectangleWidthM": 47.49484098698532,
+      "rectangleLengthM": 108.05821099182998,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0067",
+        "21295000BN0068",
+        "21295000BN0066"
+      ]
+    },
+    {
+      "areaM2": 88.56980978723935,
+      "boundsEPSG2154": [
+        849004.2413972958,
+        6680751.435858317,
+        849070.4694565888,
+        6680772.532591712
+      ],
+      "rectangleWidthM": 5.759808865097968,
+      "rectangleLengthM": 68.66488026752097,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0092",
+        "21295000BN0073",
+        "21295000BN0071",
+        "21295000BN0066",
+        "21295000BN0091",
+        "21295000BN0085",
+        "21295000BN0216",
+        "21295000BN0217"
+      ]
+    },
+    {
+      "areaM2": 34.835023578072814,
+      "boundsEPSG2154": [
+        848890.799577096,
+        6680992.02087354,
+        848916.529,
+        6681047.916479763
+      ],
+      "rectangleWidthM": 9.46390831580951,
+      "rectangleLengthM": 61.259859642305614,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0049",
+        "21295000BN0045"
+      ]
+    },
+    {
+      "areaM2": 25.30167303731547,
+      "boundsEPSG2154": [
+        849050.867,
+        6680257.930510374,
+        849070.8918823091,
+        6680296.029715408
+      ],
+      "rectangleWidthM": 4.382216118526723,
+      "rectangleLengthM": 42.840130902022786,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0090",
+        "21295000BM0960",
+        "21295000BM0088",
+        "21295000BM0959"
+      ]
+    },
+    {
+      "areaM2": 22.195431471599473,
+      "boundsEPSG2154": [
+        848906.318,
+        6680836.199890435,
+        848920.9170732317,
+        6680934.284328233
+      ],
+      "rectangleWidthM": 1.6222566312426259,
+      "rectangleLengthM": 99.16168216595008,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0064",
+        "21295000BN0061",
+        "21295000BN0062",
+        "21295000BN0063"
+      ]
+    },
+    {
+      "areaM2": 17.372282073963163,
+      "boundsEPSG2154": [
+        849065.958,
+        6680355.390663785,
+        849078.6409490681,
+        6680444.356012962
+      ],
+      "rectangleWidthM": 2.3861184369043276,
+      "rectangleLengthM": 89.85456433322773,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0087",
+        "21295000BM0086",
+        "21295000BM0085",
+        "21295000BM0084",
+        "21295000BM0083",
+        "21295000BM0082",
+        "21295000BM0081",
+        "21295000BM0080",
+        "21295000BM0079",
+        "21295000BM0078"
+      ]
+    },
+    {
+      "areaM2": 15.794457081994327,
+      "boundsEPSG2154": [
+        849084.2689465882,
+        6680595.7597695235,
+        849096.479,
+        6680636.448896281
+      ],
+      "rectangleWidthM": 5.375982786683667,
+      "rectangleLengthM": 42.47996136308869,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0068",
+        "21295000BN0083",
+        "21295000BN0082"
+      ]
+    },
+    {
+      "areaM2": 12.114411257861528,
+      "boundsEPSG2154": [
+        848898.262,
+        6681067.727495275,
+        848907.7228059815,
+        6681106.536224864
+      ],
+      "rectangleWidthM": 5.001670450843825,
+      "rectangleLengthM": 39.880996399688286,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0051"
+      ]
+    },
+    {
+      "areaM2": 7.499461296888815,
+      "boundsEPSG2154": [
+        848892.816,
+        6680698.787627362,
+        848898.8300690171,
+        6680758.71689136
+      ],
+      "rectangleWidthM": 0.8616578979778506,
+      "rectangleLengthM": 60.21409690260237,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0074",
+        "21295000BN0075",
+        "21295000BN0076",
+        "21295000BN0068"
+      ]
+    },
+    {
+      "areaM2": 7.04776087061007,
+      "boundsEPSG2154": [
+        848783.212,
+        6680109.836,
+        848788.6481287124,
+        6680217.805416665
+      ],
+      "rectangleWidthM": 0.26614236623137794,
+      "rectangleLengthM": 108.1061812772016,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0133",
+        "21295000BM0029",
+        "21295000BM0124",
+        "21295000BM0123",
+        "21295000BM0122",
+        "21295000BM0119",
+        "21295000BM0033",
+        "21295000BM0034"
+      ]
+    },
+    {
+      "areaM2": 5.515404775649911,
+      "boundsEPSG2154": [
+        849062.6204098719,
+        6680294.432430327,
+        849067.546,
+        6680356.3714681
+      ],
+      "rectangleWidthM": 0.6011882949838645,
+      "rectangleLengthM": 62.12717224635549,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0038",
+        "21295000BM0039"
+      ]
+    },
+    {
+      "areaM2": 4.675044077673184,
+      "boundsEPSG2154": [
+        848889.988764087,
+        6681052.631175784,
+        848893.723,
+        6681057.362858888
+      ],
+      "rectangleWidthM": 0.9333295768700307,
+      "rectangleLengthM": 5.564298171214132,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0049"
+      ]
+    },
+    {
+      "areaM2": 4.299591895166846,
+      "boundsEPSG2154": [
+        848902.573,
+        6681054.688424681,
+        848906.0804954133,
+        6681058.95835674
+      ],
+      "rectangleWidthM": 1.7380140326462579,
+      "rectangleLengthM": 4.970416112040878,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0051"
+      ]
+    },
+    {
+      "areaM2": 2.19470899688714,
+      "boundsEPSG2154": [
+        848916.2593524968,
+        6680942.095789575,
+        848916.983,
+        6680979.674078341
+      ],
+      "rectangleWidthM": 0.26834046633549175,
+      "rectangleLengthM": 37.58206940018402,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0044",
+        "21295000BN0045"
+      ]
+    },
+    {
+      "areaM2": 1.7588865596609455,
+      "boundsEPSG2154": [
+        849073.2294271564,
+        6680461.637021274,
+        849074.694,
+        6680476.896736704
+      ],
+      "rectangleWidthM": 0.13451913496795273,
+      "rectangleLengthM": 15.328029420211802,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0966"
+      ]
+    },
+    {
+      "areaM2": 1.6289159398024085,
+      "boundsEPSG2154": [
+        848894.4808565604,
+        6680759.955672083,
+        848895.5389999999,
+        6680794.000548485
+      ],
+      "rectangleWidthM": 0.17980209858907098,
+      "rectangleLengthM": 34.057297528638536,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0209"
+      ]
+    },
+    {
+      "areaM2": 1.5693870936569958,
+      "boundsEPSG2154": [
+        848788.9990000001,
+        6680238.744985842,
+        848789.6016299562,
+        6680277.099331877
+      ],
+      "rectangleWidthM": 0.05680142755299509,
+      "rectangleLengthM": 38.358279749012745,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BM0133",
+        "21295000BM0985",
+        "21295000BM0986"
+      ]
+    },
+    {
+      "areaM2": 1.2120057227994405,
+      "boundsEPSG2154": [
+        848920.5,
+        6680968.556199632,
+        848920.9562239572,
+        6680991.071139368
+      ],
+      "rectangleWidthM": 0.19311283184780426,
+      "rectangleLengthM": 22.5186082333146,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0059",
+        "21295000BN0060"
+      ]
+    },
+    {
+      "areaM2": 0.424694736446918,
+      "boundsEPSG2154": [
+        848903.821,
+        6681049.099392923,
+        848904.3402940333,
+        6681051.183512396
+      ],
+      "rectangleWidthM": 0.24779876593820316,
+      "rectangleLengthM": 2.07910490998036,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BN0051"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "reviewMethod": "Metric overlay rendered at 1600×1120 pixels and visually inspected, including enlarged representative portions of the three largest components. Every component is checked to touch the INAO boundary; all original cadastre parcels within 20 m of the feature are included in the coverage union.",
+  "finding": "The 1381.874287 m² remainder (0.4467%) was inspected against the pinned INAO and original cadastral polygons in EPSG:2154. All 23 components touch the INAO boundary, following outer edges and the inset boundary along paths between parcel blocks; enlarged portions of the three largest components (299.825616, 272.578400 and 209.671336 m²) show narrow edge strips. Own-commune parcels already cover the mapped blocks; neither Brochon nor Morey-Saint-Denis covers the gaps. These are boundary mismatches, not evidence to import another commune or assign a label alias. Geometry remains unchanged. The 1381.9 m² cap is less than 0.1 m² above this measurement and is invalidated by changed source hashes."
+}

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-448",
-  "status": "historical-extension-inventory",
-  "scope": "All 56 mapped Chambertin-Clos de Bèze parcels and 21 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 56 mapped Chambertin-Clos de Bèze parcels and 21 recorded legal-entity holder identifiers reviewed for Tier 1, including commune edges, cadastral named areas and the #461 historical extension. The separate INAO feature and full parcel geometry are preserved even where Chambertin overlaps. No notice candidate or verified current farmer; producer/company research remains Tier 2.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -262,9 +262,9 @@
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "BEL-AIR and LES MAZIS-HAUTS occur on edge-contact parcels; no climat crosswalk is inferred (#344)."
   ]
 }

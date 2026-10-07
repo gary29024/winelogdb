@@ -11,6 +11,44 @@ from test_grand_cru_filiation import pair
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_rejected_ocr_hint_clears_only_the_reviewed_bytes_page_and_reference_without_an_event(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image',
+                  'rejectedReferenceHints': {reference: 'Printed BI158 belongs to Marsannay-la-Côte, not Gevrey BN58.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        reviews = curated_page_reviews(curation)
+        notice = {'bulletin': 'bfc-2021-006', 'firstPage': 43, 'lastPage': 45}
+        bulletin = {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, {'sha256': 'b' * 64}, [reference], reviews))
+        self.assertFalse(covered_by_curated_review({**notice, 'firstPage': 46, 'lastPage': 47}, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, [reference, '21295000BN0059'], reviews))
+        self.assertEqual(curation['exactParcelEvents'], [])
+        self.assertEqual(reviews[0]['rejectedReferenceHints'], review['rejectedReferenceHints'])
+
+    def test_rejected_hints_require_explicit_image_review_and_cannot_also_be_assigned(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image', 'rejectedReferenceHints': {reference: 'Wrong commune.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        for change in [{'reviewMethod': 'ocr'}, {'sha256': ''}, {'pages': []},
+                       {'rejectedReferenceHints': {'BN58': 'Wrong commune.'}}, {'rejectedReferenceHints': {reference: ' '}}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                curated_page_reviews({**curation, 'noticeReview': [{**review, **change}]})
+        with self.assertRaisesRegex(ValueError, 'both assigned and rejected'):
+            curated_page_reviews({**curation, 'exactParcelEvents': [{'sourceId': 'bouvier', 'parcelIds': [reference]}]})
+
+    def test_charmes_rejected_bouvier_ocr_never_becomes_a_reviewed_parcel_record(self):
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/charmes-chambertin/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-006:p43', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+        self.assertEqual({r['originalRecord']['status'] for r in history['reviewedMatches']}, {'refused'})
+        self.assertFalse(any('21295000BN0058' in r['matchedReferenceIds'] for r in history['reviewedMatches']))
+
     def test_already_reviewed_notices_are_not_pending_review(self):
         # Michel Gros (bfc-2022-101:p350) was image-reviewed; it must not also be listed as an unreviewed candidate.
         root = Path(__file__).resolve().parents[1]
@@ -41,9 +79,10 @@ class NoticeHistoryTests(unittest.TestCase):
 
     def test_page_review_can_reject_matched_references_without_an_event(self):
         # Girard (bfc-2021-146:p36) prints Chambolle A139, retired by DFI in 1995: read, rejected, never an event.
-        curation = {'exactParcelEvents': [], 'noticeReview': [
+        curation = {'exactParcelEvents': [], 'sources': [{'id': 'girard-2021', 'type': 'government-event', 'url': 'https://example.test/b.pdf'}],
+                    'noticeReview': [
             {'sourceId': 'girard-2021', 'bulletin': 'bfc-2021-146', 'sha256': 'a' * 64, 'pages': [37], 'reviewMethod': 'page-image',
-             'rejectedReferences': ['211330000A0139', '21133000AN0037']}]}
+             'rejectedReferenceHints': {'211330000A0139': 'Retired by DFI in 1995.', '21133000AN0037': 'Printed under Savigny.'}}]}
         reviews = curated_page_reviews(curation)
         notice, bulletin = {'bulletin': 'bfc-2021-146', 'firstPage': 36, 'lastPage': 38}, {'sha256': 'a' * 64}
         self.assertTrue(covered_by_curated_review(notice, bulletin, ['211330000A0139', '21133000AN0037'], reviews))
@@ -55,12 +94,15 @@ class NoticeHistoryTests(unittest.TestCase):
 
     def test_republished_act_is_covered_by_the_original_event(self):
         # Lambrays dossier 2021-061 appears in bfc-2021-096 and again in bfc-2021-128 under another act ID.
-        curation = {'exactParcelEvents': [{'sourceId': 'first', 'parcelIds': ['21442000AP0105']}], 'noticeReview': [
+        curation = {'exactParcelEvents': [{'sourceId': 'first', 'parcelIds': ['21442000AP0105']}],
+                    'sources': [{'id': 'first'}, {'id': 'repeat'}], 'noticeReview': [
             {'sourceId': 'first', 'bulletin': 'b1', 'sha256': 'a' * 64, 'pages': [258], 'reviewMethod': 'page-image'},
             {'sourceId': 'repeat', 'repeatOf': 'first', 'bulletin': 'b2', 'sha256': 'b' * 64, 'pages': [139], 'reviewMethod': 'page-image'}]}
         reviews = curated_page_reviews(curation)
         self.assertTrue(covered_by_curated_review({'bulletin': 'b2', 'firstPage': 138, 'lastPage': 140}, {'sha256': 'b' * 64},
                                                   ['21442000AP0105'], reviews))
+        with self.assertRaises(ValueError):  # a repeat must point at a reviewed act with an event
+            curated_page_reviews({**curation, 'noticeReview': [{**curation['noticeReview'][1], 'repeatOf': 'repeat'}]})
         root = Path(__file__).resolve().parents[1]
         history = json.loads((root / 'docs/research/clos-des-lambrays/notice-history.json').read_text(encoding='utf-8'))
         self.assertEqual(sorted(history['coverage']['searchMatchesAlreadyReviewed']), ['bfc-2021-096:p257', 'bfc-2021-128:p138'])

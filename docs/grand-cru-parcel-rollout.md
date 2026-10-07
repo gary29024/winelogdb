@@ -363,8 +363,9 @@ Tier 1 run therefore:
    hidden cru appear on the maps), the named-area crosswalk, and page-image review
    of any `unreviewedCandidates` in its `notice-history.json`. Record each read page
    in the curation's `noticeReview`: confirmed rows become `exactParcelEvents`, and
-   matched references the page does not support go in `rejectedReferences`. A
-   republished copy of the same act is reviewed with `repeatOf`, not a second event.
+   matched references the page does not support go in `rejectedReferenceHints`,
+   each with its reason. A republished copy of the same act is reviewed with
+   `repeatOf`, not a second event.
 3. Regenerates outputs, updates the README results table and passes every `--check`.
    Rebuild and measure under Python 3.12, as CI does. Python 3.14's zlib-ng gives
    different gzip sizes, and Python 3.11's float `sum()` changes generated areas.

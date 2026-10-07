@@ -240,10 +240,10 @@
         37
       ],
       "reviewMethod": "page-image",
-      "rejectedReferences": [
-        "211330000A0139",
-        "21133000AN0037"
-      ],
+      "rejectedReferenceHints": {
+        "211330000A0139": "Printed Chambolle-Musigny A139; DFI retired A0139 on 9 November 1995, so this 2021 reference is not joined to its descendant A0301.",
+        "21133000AN0037": "The OCR hint AN37 is printed under Savigny-lès-Beaune, not Chambolle-Musigny."
+      },
       "finding": "The receipt (dossier 2021-122, EARL Domaine Philippe Girard, previous operator Domaine Roux Père et Fils) prints Chambolle-Musigny A139. The DFI retired A0139 on 9 November 1995, so a 2021 reference to it is not joined to its descendant A0301; AN37 is printed under Savigny-lès-Beaune. No Musigny parcel event is assigned."
     }
   ]

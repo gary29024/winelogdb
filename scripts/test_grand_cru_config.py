@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest import mock
 
 import grand_cru
+from redact_grand_cru_html import GOOGLE_API_KEY, REPLACEMENT, redact_html
 from build_grand_cru_research import Context
 from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
                        named_plot_report_path, bundle_ids, bundle_parent_features, bundle_sources,
@@ -40,6 +41,21 @@ class ConfigTests(unittest.TestCase):
                         raw = (ROOT / source['snapshot']).read_bytes()
                         self.assertEqual(grand_cru.sha256(raw), source['sha256'])
                         self.assertEqual(len(raw), source['size'])
+                        if source['snapshot'].endswith('.html'):
+                            # Never include a matching value in test failure output.
+                            self.assertFalse(bool(GOOGLE_API_KEY.search(raw)), source['snapshot'])
+                        if 'redaction' in source:
+                            redaction = source['redaction']
+                            self.assertEqual(redaction['method'], 'google-api-key-v1')
+                            self.assertEqual(redaction['replacement'], REPLACEMENT.decode('ascii'))
+                            self.assertGreater(redaction['occurrences'], 0)
+                            self.assertEqual(raw.count(REPLACEMENT), redaction['occurrences'])
+                            self.assertNotEqual(source['sha256'], redaction['originalSha256'])
+                            self.assertEqual(redaction['originalSize'] - source['size'],
+                                             redaction['occurrences'] * (39 - len(REPLACEMENT)))
+                            if source.get('httpContentEncoding') is None:
+                                self.assertEqual(redaction['originalSha256'], source['transportSha256'])
+                                self.assertEqual(redaction['originalSize'], source['transportSize'])
                     self.assertTrue(source['retrievedAt'].endswith('Z'))
                 sources = {s['id']: s for s in review['sources']}
                 if 'namedPlots' in cru:
@@ -52,9 +68,27 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(dfi_releases(dfi, '21'), review['dfiReleases'])
                 self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
                 self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
-                for geometry in history['geometry'].values():
-                    self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
-                                     geometry['obtainedDates'])
+                for commune, geometry in history['geometry'].items():
+                    with self.subTest(commune=commune):
+                        self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
+                                         geometry['obtainedDates'])
+
+    def test_html_redaction_preserves_evidence_bytes_and_original_provenance(self):
+        # Synthetic value assembled to avoid committing even a key-shaped fixture.
+        fake_key = b'AIza' + b'X' * 35
+        before = b'<p>Lieu-dit: B\xe8ze</p>\r\n<script>key="'
+        after = b'";</script>\r\n'
+        original = before + fake_key + after
+        sanitized, metadata = redact_html(original)
+        self.assertEqual(sanitized, before + REPLACEMENT + after)
+        self.assertEqual(metadata['sha256'], grand_cru.sha256(sanitized))
+        self.assertEqual(metadata['size'], len(sanitized))
+        self.assertEqual(metadata['redaction']['originalSha256'], grand_cru.sha256(original))
+        self.assertEqual(metadata['redaction']['originalSize'], len(original))
+        self.assertEqual(metadata['redaction']['occurrences'], 1)
+        self.assertEqual(redact_html(original + original)[1]['redaction']['occurrences'], 2)
+        self.assertEqual(redact_html(sanitized), (sanitized, {
+            'sha256': grand_cru.sha256(sanitized), 'size': len(sanitized)}))
 
     def test_every_cru_and_bundle_agree(self):
         self.assertIn('echezeaux', cru_slugs())

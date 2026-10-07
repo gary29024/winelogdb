@@ -1,0 +1,68 @@
+{
+  "dataUrl": "/maps/chapelle-chambertin-named-plots.2026-06-01.6381059c33cb.geojson",
+  "parentFeatureId": "inao-denom-475",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+    "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "The BIVB lists En la Chapelle and Les Gémeaux. Their exact cadastral polygons are clipped to the unchanged INAO Chapelle-Chambertin feature, without filling gaps or inferring producer holdings. CHERBAUDES edge-contact parcels retain an unresolved climat crosswalk and the whole-cru fallback.",
+  "features": [
+    {
+      "id": "chapelle-chambertin-plot-en-la-chapelle",
+      "name": "En la Chapelle",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 151,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-475",
+      "parentAppellation": "Chapelle-Chambertin",
+      "sourceName": "EN LA CHAPELLE",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 3.659581,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.967249166797503,
+        47.2145577784677,
+        4.970009439774917,
+        47.217097728668094
+      ],
+      "labelPoint": [
+        4.9687150038069525,
+        47.215816057240374
+      ]
+    },
+    {
+      "id": "chapelle-chambertin-plot-les-gemeaux",
+      "name": "Les Gémeaux",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 151,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-475",
+      "parentAppellation": "Chapelle-Chambertin",
+      "sourceName": "LES GEMEAUX",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.791896,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.968156809199181,
+        47.21660608826921,
+        4.97042651282484,
+        47.21806174703654
+      ],
+      "labelPoint": [
+        4.969321099385541,
+        47.21732201807522
+      ]
+    }
+  ]
+}
