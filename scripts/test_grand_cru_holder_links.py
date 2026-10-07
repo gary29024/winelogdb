@@ -71,8 +71,25 @@ class HolderLinkTableTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'must not claim farming'):
             self.check(lambda t: self.link(t, '778269407').update(basis='The domaine farms these parcels.'))
         for entry in self.table['holders'].values():
-            for link in entry['links']:
+            for link in entry.get('links', []):
                 self.assertNotRegex(link['basis'] + link['domaine'], r'(?i)\bfarms\b|farmed by')
+            for search in entry.get('searches', []):
+                self.assertNotRegex(search.get('note', ''), r'(?i)\bfarms\b|farmed by')
+
+    def test_partner_company_needs_a_company_record_and_searches_are_checked(self):
+        def estate_only(t):
+            link = self.link(t, '953306917')
+            t['sources'].append({**next(s for s in t['sources'] if s['id'] == 'villamont-legal'), 'id': 'estate-only'})
+            link['sourceIds'] = ['estate-only']
+        self.assertEqual(self.link(self.table, '953306917')['relation'], 'partner-company')
+        with self.assertRaisesRegex(ValueError, 'company record, filing or legal notice'):
+            self.check(estate_only)
+        with self.assertRaisesRegex(ValueError, 'unknown search field'):
+            self.check(lambda t: t['holders']['212100101']['searches'][0].update(farmer='x'))
+        with self.assertRaisesRegex(ValueError, 'search notes must not claim farming'):
+            self.check(lambda t: t['holders']['212100101']['searches'][0].update(note='The commune farms it.'))
+        with self.assertRaisesRegex(ValueError, 'records the search that found none'):
+            self.check(lambda t: t['holders']['212100101'].update(searches=[]))
 
     def test_no_stale_or_duplicated_sources(self):
         with self.assertRaisesRegex(ValueError, 'Stale shared sources'):
@@ -95,14 +112,19 @@ class ResolutionTests(unittest.TestCase):
         return {h['holderId']: h for h in resolve_curation(curation, slug, table or self.table)['holders']}
 
     def test_only_adopting_crus_take_links(self):
-        corton = read_json(Context(*load_cru('corton')).curation)
-        self.assertNotEqual(corton.get('holderLinks'), 'shared')
-        self.assertIn('200047827', self.table['holders'])  # Hospices: linked, and a Corton holder
-        self.assertTrue(all(h['candidateNames'] == [] for h in self.holders(corton, 'corton').values()))
-        adopted = self.holders({**corton, 'holderLinks': 'shared'}, 'corton')
-        self.assertEqual(adopted['200047827']['candidateNames'], ['Domaine des Hospices de Beaune'])
+        # Corton-Charlemagne shares Corton's parcels but has not adopted the table yet.
+        cc = read_json(Context(*load_cru('corton-charlemagne')).curation)
+        self.assertNotEqual(cc.get('holderLinks'), 'shared')
+        self.assertIn('328186416', self.table['holders'])  # Bonneau du Martray: linked, and a Corton-Charlemagne holder
+        self.assertTrue(all(h['candidateNames'] == [] for h in self.holders(cc, 'corton-charlemagne').values()))
+        adopted = self.holders({**cc, 'holderLinks': 'shared'}, 'corton-charlemagne')
+        self.assertEqual(adopted['328186416']['candidateNames'], ['Domaine Bonneau du Martray'])
+        corton = self.holders(read_json(Context(*load_cru('corton')).curation), 'corton')
+        self.assertEqual(corton['200047827']['candidateNames'], ['Domaine des Hospices de Beaune'])
         # Bichot's Clos Frantin label is limited to the Vosne/Flagey crus.
-        self.assertEqual(adopted['036380046']['candidateNames'], [])
+        self.assertEqual(corton['036380046']['candidateNames'], [])
+        # A filing lease applies only in the crus whose parcels it names.
+        self.assertEqual(corton['U22282316']['candidateNames'], ['Domaine d’Ardhuy'])
 
     def test_inline_candidates_are_rejected(self):
         curation = copy.deepcopy(self.echezeaux)
@@ -161,6 +183,41 @@ class GroupingTests(unittest.TestCase):
         for domain in evidence['holderDomains'].values():
             self.assertNotIn('currentFarmer', domain)
             self.assertNotRegex(domain['name'] + domain['basis'], r'(?i)\bfarms\b|farmed by')
+
+
+class CortonGroupingTests(unittest.TestCase):
+    """Corton adopts the table: one applicable link groups, everything else keeps its legal name, nothing claims farming."""
+
+    @classmethod
+    def setUpClass(cls):
+        context = Context(*load_cru('corton'))
+        i = load_inputs(context)
+        cls.curation = i['curation']
+        cls.register = build_cru_register(i['manifest'], i['asset'], i['curation'], i['history'], i['sales'], i['named_areas'],
+                                          context, i['notice_records'])
+        cls.evidence = build_evidence(cls.register, i['curation'], i['history'], json.loads(i['asset'])['features'])
+
+    def test_grouping_only_for_linked_holders(self):
+        linked = {h['holderId'] for h in self.curation['holders'] if len(h['candidateNames']) == 1}
+        self.assertEqual(set(self.evidence['holderDomains']), linked)
+        unlinked = {h['holderId'] for h in self.curation['holders'] if not h['candidateNames']}
+        self.assertTrue(unlinked)
+        self.assertEqual({h['basis'] for h in self.curation['holders'] if h['holderId'] in unlinked}, {'unresolved'})
+        for hid in unlinked:
+            rows = [r for r in self.register['parcels'] if hid in r['holderResearchIds']]
+            self.assertTrue(rows, hid)  # an unlinked holder's parcels and rights stay listed
+            self.assertTrue(all(any(x['holderId'] == hid for x in r['recordedRights']) for r in rows))
+        # A lessor link is a lead with its own basis, never an estate heading.
+        self.assertEqual(self.evidence['holderDomains']['U21852238']['basis'], 'filing-tenant-relationship')
+        self.assertTrue(any(not r['recordedRights'] and r['researchStatus'] == 'unresolved' for r in self.register['parcels']))
+
+    def test_wording_never_claims_farming(self):
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(r['currentFarmer'] is None for r in self.register['parcels']))
+        # The builder's own disclaimer ("None states who farms a parcel today") is the only farming wording allowed.
+        self.assertTrue(self.evidence['note'].startswith('Dated records per parcel. None states who farms'))
+        text = json.dumps({k: v for k, v in self.evidence.items() if k != 'note'}, ensure_ascii=False)
+        self.assertNotRegex(text, r'(?i)\bfarms\b|farmed by|is farming|currently farming')
 
 
 if __name__ == '__main__':

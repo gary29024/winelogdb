@@ -24,6 +24,7 @@ RELATIONS = {
     'subsidiary': 'a company the domaine controls',
     'parent-group': 'a company that controls the domaine',
     'common-ownership': 'a sister company under the same owners',
+    'partner-company': "the domaine's company is a recorded partner of the holder",
     'management': 'shared management only',
     'brand-identity': "the company behind the domaine's brand",
     'lessor-per-filing': 'a filing names the domaine side as tenant or intended tenant',
@@ -34,7 +35,7 @@ RELATIONS = {
 # A lease or a reported tenancy covers particular land, so the link is limited to the crus whose parcels it names.
 SCOPED = {'lessor-per-filing', 'reported-tenancy'}
 # A corporate relation, or any reviewed link, rests on a company record, filing or legal notice.
-CORPORATE = {'family-holding', 'subsidiary', 'parent-group', 'common-ownership'}
+CORPORATE = {'family-holding', 'subsidiary', 'parent-group', 'common-ownership', 'partner-company'}
 IDENTITY_SOURCE_TYPES = {'registry', 'registry-aggregator', 'company-filing', 'legal-notice-republisher', 'court-decision',
                          'government-decision', 'government-event'}
 LEASE_STATUSES = {'executed', 'recited', 'mandate-only'}
@@ -133,6 +134,8 @@ def validate(table, recorded, cru_curations):
         for search in searches:
             require(DATE.match(search['at']) and search['where'] and search['outcome'] in SEARCH_OUTCOMES,
                     f'{hid}: a search records its date, where and outcome')
+            require(set(search) <= {'at', 'where', 'outcome', 'note'}, f'{hid}: unknown search field')
+            require(not FARMING_CLAIM.search(search.get('note', '')), f'{hid}: search notes must not claim farming')
         if effort := entry.get('effort'):
             require(set(effort) <= {'filingsScreened', 'pagesRead', 'note'} and
                     all(isinstance(effort.get(k, 0), int) and effort.get(k, 0) >= 0 for k in ('filingsScreened', 'pagesRead')),
@@ -251,7 +254,8 @@ def render(table, recorded, parcels_with_rights, cru_curations):
                          f"Sources: {', '.join(link['sourceIds'])}.")
         for search in entry.get('searches', []):
             if search['outcome'] == 'no-link-found':
-                lines.append(f"- **{hid}** — searched {search['at']} in {', '.join(search['where'])}; no link found.")
+                note = f" {search['note']}" if search.get('note') else ''
+                lines.append(f"- **{hid}** — searched {search['at']} in {', '.join(search['where'])}; no link found.{note}")
     lines += ['', '## Sources', '']
     for s in table['sources']:
         dates = f"document date {s['documentDate'] or 'not established'}; reviewed {s['reviewedAt']}"

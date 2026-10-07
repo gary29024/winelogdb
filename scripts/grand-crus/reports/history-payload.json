@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-Dss3s_54.js"
+    "dist/client/assets/index-CnvpZG43.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-B-s2hLae.js",
-    "dist/client/assets/SectionLabel-YAyPrIWF.js",
-    "dist/client/assets/SparklingDetailsCard-CXwQ1RfP.js",
-    "dist/client/assets/VillageMap-Dm5Rid4E.js",
-    "dist/client/assets/api-MbYtj0QO.js",
-    "dist/client/assets/burgundyAtlas-D-Eu7lRg.js",
-    "dist/client/assets/index-BLliWwZM.js",
-    "dist/client/assets/index-Dss3s_54.js",
+    "dist/client/assets/FriendTagDialog-DdAwZTJp.js",
+    "dist/client/assets/SectionLabel-DNtSS-dv.js",
+    "dist/client/assets/SparklingDetailsCard-Cemd8AY8.js",
+    "dist/client/assets/VillageMap-BzpMmjlI.js",
+    "dist/client/assets/api-Vd5vpTw2.js",
+    "dist/client/assets/burgundyAtlas-C-yo4nju.js",
+    "dist/client/assets/index-CnvpZG43.js",
+    "dist/client/assets/index-NpjYNrx9.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-Cgjtjfnu.js",
-    "dist/client/assets/wineDetailCompact-FYfJ9KU1.js"
+    "dist/client/assets/useModalFocus-DXhn8YPD.js",
+    "dist/client/assets/wineDetailCompact-B4rtU_7C.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5218814,
-  "evidenceGzipBytesTotal": 443026,
+  "evidenceBytesTotal": 5417914,
+  "evidenceGzipBytesTotal": 471059,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -134,10 +134,10 @@
     },
     {
       "cru": "corton",
-      "file": "dist/client/assets/corton.evidence-DqGlzfaU.js",
-      "sha256": "adc9bde0631f848dcd72c5a76f90ffc53f499866e16deab6c1b8bcac44898cf8",
-      "bytes": 798998,
-      "gzipBytes": 38753
+      "file": "dist/client/assets/corton.evidence-U_srWRD-.js",
+      "sha256": "43b1c451f5b9f4f48468dadb693af784cd24a199f7d839a7f4c93987e06bf4fa",
+      "bytes": 998098,
+      "gzipBytes": 66786
     },
     {
       "cru": "corton-charlemagne",

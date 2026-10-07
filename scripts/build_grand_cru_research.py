@@ -85,12 +85,15 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(finding['parcelIds'] and set(finding['parcelIds']) <= ids, 'History finding outside research cru')
         require(finding['sourceIds'] and set(finding['sourceIds']) <= sources.keys(), 'Unknown history finding source')
         require(finding.get('currentFarmer') is None, 'Rights history cannot establish current farming')
-    # Only rule-accepted splits may carry evidence to today's parcels; rejected spatial candidates never do.
+    # Only rule-accepted splits or documented DFI ancestry may carry evidence to today's parcels; rejected spatial
+    # candidates never do.
     successors = {r['parcelId']: {s['parcelId'] for s in r['successors'] if s['accepted']} for r in history['retiredParcels']}
+    documented = {r['parcelId']: set(r['documentedAncestry']['ancestorIds']) for r in history['parcels'] if 'documentedAncestry' in r}
 
     def check_lineage(item, kind):
         for retired, current in item.get('predecessorReferences', {}).items():
-            require(retired in successors and set(current) <= successors[retired] & ids,
+            require(current and set(current) <= ids and
+                    all(pid in successors.get(retired, set()) or retired in documented.get(pid, set()) for pid in current),
                     f'{kind} predecessor reference without matching cadastral lineage')
     for event in curation['exactParcelEvents']:
         require(set(event['parcelIds']) <= ids, 'Event reference outside research cru')
