@@ -77,6 +77,21 @@ class NoticeHistoryTests(unittest.TestCase):
         self.assertIn('bfc-2024-008:p82', history['coverage']['searchMatchesAlreadyReviewed'])
         self.assertEqual(history['unreviewedCandidates'], [])
 
+    def test_page_review_can_reject_matched_references_without_an_event(self):
+        # Girard (bfc-2021-146:p36) prints Chambolle A139, retired by DFI in 1995: read, rejected, never an event.
+        curation = {'exactParcelEvents': [], 'sources': [{'id': 'girard-2021', 'type': 'government-event', 'url': 'https://example.test/b.pdf'}],
+                    'noticeReview': [
+            {'sourceId': 'girard-2021', 'bulletin': 'bfc-2021-146', 'sha256': 'a' * 64, 'pages': [37], 'reviewMethod': 'page-image',
+             'rejectedReferenceHints': {'211330000A0139': 'Retired by DFI in 1995.', '21133000AN0037': 'Printed under Savigny.'}}]}
+        reviews = curated_page_reviews(curation)
+        notice, bulletin = {'bulletin': 'bfc-2021-146', 'firstPage': 36, 'lastPage': 38}, {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, ['211330000A0139', '21133000AN0037'], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, ['211330000A0139', '211330000A0140'], reviews))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/musigny/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-146:p36', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual((history['unreviewedCandidates'], history['reviewedMatches']), ([], []))
+
     def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
         audit = load_availability()
         self.assertEqual(audit['checkedAt'], '2026-10-04')
