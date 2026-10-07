@@ -96,11 +96,14 @@ def query_reviewed(record, reachable, current_ids, ancestry, events):
 
 
 def curated_page_reviews(curation):
-    """The cru curation's page-image notice reviews, with the exact references its parcel events assign."""
+    """The cru curation's page-image notice reviews, with the exact references its parcel events assign.
+
+    A review can also reject a matched reference ("rejectedReferences", with its finding): the page was read
+    and the printed reference is not joined to this cru, so it is no longer a pending candidate."""
     events = {}
     for event in curation['exactParcelEvents']:
         events.setdefault(event['sourceId'], set()).update([*event['parcelIds'], *event.get('predecessorReferences', {})])
-    return [{**review, 'references': events.get(review['sourceId'], set())}
+    return [{**review, 'references': events.get(review['sourceId'], set()) | set(review.get('rejectedReferences', []))}
             for review in curation.get('noticeReview', []) if review.get('reviewMethod') == 'page-image']
 
 
