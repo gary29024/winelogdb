@@ -1,19 +1,20 @@
 import bundle0 from './chambolle-morey.manifest.json';
-import bundle1 from './flagey-echezeaux.manifest.json';
-import bundle2 from './gevrey-chambertin.manifest.json';
-import bundle3 from './vosne-romanee.manifest.json';
-import bundle4 from './vougeot.manifest.json';
+import bundle1 from './corton.manifest.json';
+import bundle2 from './flagey-echezeaux.manifest.json';
+import bundle3 from './gevrey-chambertin.manifest.json';
+import bundle4 from './vosne-romanee.manifest.json';
+import bundle5 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'chambolle-morey':bundle0,'flagey-echezeaux':bundle1,'gevrey-chambertin':bundle2,'vosne-romanee':bundle3,'vougeot':bundle4} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'chambolle-morey':bundle0,'corton':bundle1,'flagey-echezeaux':bundle2,'gevrey-chambertin':bundle3,'vosne-romanee':bundle4,'vougeot':bundle5} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
+export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -38,6 +39,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"clos-des-lambrays",name:"Clos des Lambrays",parentFeatureId:"inao-denom-547",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-des-lambrays"],domaineGrouping:false},
  {slug:"clos-saint-denis",name:"Clos Saint-Denis",parentFeatureId:"inao-denom-548",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-saint-denis"],domaineGrouping:false},
+ {slug:"corton",name:"Corton",parentFeatureId:"inao-denom-549",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"griotte-chambertin",name:"Griotte-Chambertin",parentFeatureId:"inao-denom-646",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["griotte-chambertin"],domaineGrouping:false},

@@ -256,6 +256,7 @@ const parcelCru=(()=>{
 })();
 
 test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped producer links from its config`,async({page},testInfo)=>{
+ test.setTimeout(60_000); // Corton's 728 parcels make this the longest journey under parallel workers.
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.setViewportSize({width:390,height:844});
  const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
