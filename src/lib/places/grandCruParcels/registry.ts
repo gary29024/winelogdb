@@ -12,7 +12,7 @@ export const parcelBundles={'chambolle-morey':bundle0,'flagey-echezeaux':bundle1
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-grande-rue'|'la-romanee'|'la-tache'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='bonnes-mares'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-grande-rue'|'la-romanee'|'la-tache'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -27,6 +27,7 @@ export type GrandCru={
 // Mirrors scripts/grand-crus/<slug>.json (checked by tests/unit/grandCruRegistry.test.ts).
 // Components look crus up here; they never name a cru or INAO feature themselves.
 export const grandCrus:readonly GrandCru[]=[
+ {slug:"bonnes-mares",name:"Bonnes-Mares",parentFeatureId:"inao-denom-361",villageMaps:["chambolle-musigny", "morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["bonnes-mares"],domaineGrouping:false},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
