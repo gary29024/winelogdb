@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-547",
+  "inputs": {
+    "parcelSnapshotSha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+    "history": "docs/research/clos-des-lambrays/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/clos-des-lambrays/curation.json",
+        "sha256": "e1f06943501ced1bbf58eb37ba71e1d03f06af2a8843ef211877a82af0ff4fd9"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21442000AP0074",
+    "21442000AP0081",
+    "21442000AP0089",
+    "21442000AP0090",
+    "21442000AP0096",
+    "21442000AP0097",
+    "21442000AP0099",
+    "21442000AP0101",
+    "21442000AP0102",
+    "21442000AP0103",
+    "21442000AP0104",
+    "21442000AP0105",
+    "21442000AP0106",
+    "21442000AP0107",
+    "21442000AP0108",
+    "21442000AP0109",
+    "21442000AP0178",
+    "21442000AP0179",
+    "21442000AP0180",
+    "21442000AP0181",
+    "21442000AP0182",
+    "21442000AP0199"
+  ],
+  "reviewedMatches": 7,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [
+    "bfc-2021-096:p257",
+    "bfc-2021-128:p138"
+  ],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-096:p257",
+      "matchedReferenceSuffixes": [
+        "AP0105",
+        "AP0107",
+        "AP0199"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21267",
+        "21442",
+        "21464",
+        "21512"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": true
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-128:p138",
+      "matchedReferenceSuffixes": [
+        "AP0105",
+        "AP0107",
+        "AP0199"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21267",
+        "21442",
+        "21464",
+        "21512"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": true
+    }
+  ],
+  "finding": "Both notice-index candidates were read from their page images. bfc-2021-096:p257 (page 258) is the Domaine des Lambrays receipt for dossier 2021-061, act BFC-2021-04-09-00018, printing Morey-Saint-Denis AP0101, AP0102, AP0105, AP0106, AP0107, AP0108 and AP0199; OCR found only three of them. bfc-2021-128:p138 (page 139) republishes the same letter as act BFC-2021-04-09-00022. The curation records one historical-application event on the seven current parcels and the republication as a repeat. The receipt does not authorise cultivation, and no outcome or operation is established.",
+  "unassignedReviewedReferences": [],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}
