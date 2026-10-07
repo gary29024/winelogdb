@@ -1,0 +1,96 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Musigny boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "sources": [
+    {
+      "commune": "21133",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+      "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb"
+    },
+    {
+      "commune": "21442",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-lieux_dits.json.gz",
+      "sha256": "ad9759b3d80eebe0e3b015a60648db90478300526c32a0c5a85d5403bb61a23a"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/musigny,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzYwJnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    }
+  ],
+  "dataUrl": "/maps/musigny-named-plots.2026-06-01.46b56a990fef.geojson",
+  "sha256": "46b56a990fef6be47871ae20189ed26cf9a707fa5bb06a1ebb77bf7a4cfcee4b",
+  "bytes": 7969,
+  "gzipEquivalentBytes": 3108,
+  "parentHa": 10.87816580303135,
+  "mappedHa": 10.087409390729471,
+  "unmappedHa": 0.790756378664662,
+  "plots": [
+    {
+      "id": "musigny-plot-les-musigny",
+      "sourceHa": 6.120284075392947,
+      "clippedHa": 5.894061385294524,
+      "parts": 3,
+      "holes": 0
+    },
+    {
+      "id": "musigny-plot-les-petits-musigny",
+      "sourceHa": 4.48884053866601,
+      "clippedHa": 4.193348005434945,
+      "parts": 3,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "La Combe d'Orveau",
+      "sourceCandidate": null,
+      "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. The seven parcels there are listed in parcelsWithoutLieuDit and keep no cadastral name. Do not infer this identity from proximity or fill the gap."
+    }
+  ],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "LA TAUPE",
+      "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES AMOUREUSES",
+      "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES ARGILLERES",
+      "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES BORNIQUES",
+      "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    }
+  ]
+}

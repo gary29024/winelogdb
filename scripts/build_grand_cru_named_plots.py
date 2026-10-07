@@ -95,6 +95,7 @@ def main():
             'parentHa': area(parent) / 10000, 'mappedHa': area(unary_union(geometries)) / 10000,
             'unmappedHa': area(parent.difference(unary_union(geometries))) / 10000,
             'plots': diagnostics, 'unresolved': config['unresolved'],
+            **({'neighbouringLieuxDits': config['neighbouringLieuxDits']} if 'neighbouringLieuxDits' in config else {}),
         })
         print(f'{len(features)} named areas audited; whole-cru outline retained ({config["coverageNote"]})')
         return
@@ -123,7 +124,8 @@ def main():
         'dataUrl': data_url, 'sha256': sha256(payload), 'bytes': len(payload), 'gzipEquivalentBytes': len(gzip.compress(payload, mtime=0)),
         'parentHa': area(parent) / 10000, 'mappedHa': area(unary_union(geometries)) / 10000,
         'unmappedHa': area(parent.difference(unary_union(geometries))) / 10000,
-        'plots': diagnostics, 'unresolved': config['unresolved']})
+        'plots': diagnostics, 'unresolved': config['unresolved'],
+        **({'neighbouringLieuxDits': config['neighbouringLieuxDits']} if 'neighbouringLieuxDits' in config else {})})
     write_json(named_plot_report_path(cru), report)
     print(f'{len(features)} plots, {len(payload)} bytes, {len(gzip.compress(payload, mtime=0))} gzip-equivalent bytes')
 
