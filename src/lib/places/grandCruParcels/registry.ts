@@ -12,7 +12,7 @@ export const parcelBundles={'flagey-echezeaux':bundle0,'gevrey-chambertin':bundl
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'mazoyeres-chambertin'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazoyeres-chambertin'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -38,6 +38,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"la-grande-rue",name:"La Grande Rue",parentFeatureId:"inao-denom-654",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-grande-rue"],domaineGrouping:false},
  {slug:"la-romanee",name:"La Romanée",parentFeatureId:"inao-denom-655",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-romanee"],domaineGrouping:false},
  {slug:"la-tache",name:"La Tâche",parentFeatureId:"inao-denom-656",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-tache"],domaineGrouping:false},
+ {slug:"latricieres-chambertin",name:"Latricières-Chambertin",parentFeatureId:"inao-denom-666",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["latricieres-chambertin"],domaineGrouping:false},
  {slug:"mazoyeres-chambertin",name:"Mazoyères-Chambertin",parentFeatureId:"inao-denom-809",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazoyeres-chambertin"],domaineGrouping:false},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},
  {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:false},

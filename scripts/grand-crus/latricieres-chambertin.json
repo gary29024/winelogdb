@@ -14,9 +14,48 @@
     "latricieres-chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/latricieres-chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/latricieres-chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/latricieres-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzI4Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "dee978e09ebd2499d0358aace46647e9c90875443044fa5f57f56d3ebad2189a",
+    "coverageNote": "The BIVB lists Latricières. Audit the exact LATRICIERES cadastral area with displayLayer false: the own-name area does not replace the official whole-cru outline, which also meets other lieux-dits.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "latricieres",
+        "name": "Latricières",
+        "sourceName": "LATRICIERES",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "AUX COMBOTTES",
+        "sourceCandidate": "AUX COMBOTTES",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Latricières-Chambertin climat or extending the named areas."
+      },
+      {
+        "name": "LES LIARDS ET COMBE AUX AS",
+        "sourceCandidate": "LES LIARDS ET COMBE AUX AS",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Latricières-Chambertin climat or extending the named areas."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
+  },
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 365.4,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+      "cadastreSha256ByCommune": {
+        "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+      },
+      "note": "The 365.382774 m² remainder (0.4963%) was inspected against original pinned INAO/cadastral polygons in EPSG:2154. All 8 components touch the INAO boundary. The largest remainder follows the northern and western edges; the next strips follow the eastern edge and the western inset. Morey-Saint-Denis parcels overlap the INAO feature by 28.770869 m², entirely where Gevrey parcels already cover it. They cover none of the uncovered remainder and are not imported. Brochon has no contact. These are boundary mismatches, with no geometry added, clipped, buffered or filled. The 365.4 m² cap allows less than 0.1 m² above this measurement; changed source hashes require another review."
+    }
   }
 }

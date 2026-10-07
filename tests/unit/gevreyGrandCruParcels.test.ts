@@ -13,6 +13,7 @@ const reviewed=[
  {slug:'griotte-chambertin',name:'Griotte-Chambertin',id:'inao-denom-646'},
  {slug:'charmes-chambertin',name:'Charmes-Chambertin',id:'inao-denom-477'},
  {slug:'mazoyeres-chambertin',name:'Mazoyères-Chambertin',id:'inao-denom-809'},
+ {slug:'latricieres-chambertin',name:'Latricières-Chambertin',id:'inao-denom-666'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/gevrey-chambertin.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string;sourceName:string}[]}};

@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-666",
+  "sources": [
+    {
+      "id": "rights",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+      "retrievedAt": "2026-10-07T00:19:39Z",
+      "status": "obtained",
+      "resolvedUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+      "httpContentEncoding": null,
+      "transportSha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+      "transportSize": 14649,
+      "size": 14649,
+      "sha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/rights.json"
+    },
+    {
+      "id": "dfi",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+      "retrievedAt": "2026-10-07T00:19:39Z",
+      "status": "obtained",
+      "resolvedUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles",
+      "httpContentEncoding": null,
+      "transportSha256": "35434a9022c067b5fd4af8ccd67a2a621dc1b72b2f605656d76d09bd7e0fc08a",
+      "transportSize": 13071,
+      "size": 13071,
+      "sha256": "35434a9022c067b5fd4af8ccd67a2a621dc1b72b2f605656d76d09bd7e0fc08a",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/dfi.json"
+    },
+    {
+      "id": "geometry",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+      "retrievedAt": "2026-10-07T00:19:39Z",
+      "status": "obtained",
+      "resolvedUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+      "httpContentEncoding": null,
+      "transportSha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+      "transportSize": 4271,
+      "size": 4271,
+      "sha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/geometry.html"
+    },
+    {
+      "id": "sales",
+      "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+      "retrievedAt": "2026-10-07T00:19:40Z",
+      "status": "obtained",
+      "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+      "httpContentEncoding": null,
+      "transportSha256": "7357f4e8428ece5eab4e4c7d683ea939d24b2191baae9d775f16c995a91579c6",
+      "transportSize": 8966,
+      "size": 8966,
+      "sha256": "7357f4e8428ece5eab4e4c7d683ea939d24b2191baae9d775f16c995a91579c6",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/sales.json"
+    },
+    {
+      "id": "sales-listing",
+      "url": "https://cerema.app.box.com/v/dvfplus-opendata",
+      "retrievedAt": "2026-10-07T00:19:40Z",
+      "status": "obtained",
+      "resolvedUrl": "https://cerema.app.box.com/v/dvfplus-opendata",
+      "httpContentEncoding": null,
+      "transportSha256": "e8fa4da57054a50900d03196a49f97c9d4ec7e2634a58012e7685151edfb70b6",
+      "transportSize": 36875,
+      "size": 36875,
+      "sha256": "e8fa4da57054a50900d03196a49f97c9d4ec7e2634a58012e7685151edfb70b6",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/sales-listing.html"
+    },
+    {
+      "id": "names",
+      "url": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/latricieres-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzI4Jnw%3D",
+      "retrievedAt": "2026-10-07T00:46:10Z",
+      "status": "obtained",
+      "resolvedUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/latricieres-chambertin,2458,9253.html?&args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzI4Jnw%3D",
+      "httpContentEncoding": null,
+      "transportSha256": "c02e1f7c1b07676995b65c91d2ce6eeb6fffacef64c2e97867f4c3966ed4e7f2",
+      "transportSize": 91524,
+      "size": 91510,
+      "sha256": "dee978e09ebd2499d0358aace46647e9c90875443044fa5f57f56d3ebad2189a",
+      "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-gevrey-chambertin/names-latricieres-chambertin.html",
+      "redaction": {
+        "method": "google-api-key-v1",
+        "replacement": "[REDACTED_GOOGLE_API_KEY]",
+        "occurrences": 1,
+        "originalSha256": "c02e1f7c1b07676995b65c91d2ce6eeb6fffacef64c2e97867f4c3966ed4e7f2",
+        "originalSize": 91524
+      }
+    }
+  ],
+  "rightsReleases": [
+    {
+      "id": "fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+      "title": "Fichier des parcelles (situation 2019)-dept 01 à 61.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2019_dept_01_a_61_zip",
+      "asOf": "2019-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+      "title": "Fichier des parcelles (situation 2020)-dept 01 à 61.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2020_dept_01_a_61_zip",
+      "asOf": "2020-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+      "title": "Fichier des parcelles (situation 2021)-dept 01 à 61.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2021_dept_01_a_61_zip",
+      "asOf": "2021-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+      "title": "Fichier des parcelles (situation 2022)-dept 01 à 61.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2022_dept_01_a_61_zip",
+      "asOf": "2022-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+      "title": "Fichier des parcelles(situation 2023)-dept 01 à 61.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2023_dept_01_a_61_zip",
+      "asOf": "2023-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+      "title": "Fichier des parcelles (situation 2024)- dpts 01 à 60.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2024_dpts_01_a_60_zip",
+      "asOf": "2024-01-01"
+    },
+    {
+      "id": "fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+      "title": "fichier des parcelles (situation 2025) - dpts 01 à 56.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip",
+      "asOf": "2025-01-01"
+    }
+  ],
+  "dfiReleases": [
+    {
+      "id": "documents_de_filiations_informatises_situation_janvier_2024_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiations informatisés (situation janvier 2024) - dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiations_informatises_situation_janvier_2024_dept_2a0_a_dept_580_zip",
+      "asOf": "2024-01-01"
+    },
+    {
+      "id": "documents_de_filiations_informatises_situation_avril_2024_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiations informatisés (situation avril 2024) - dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiations_informatises_situation_avril_2024_dept_2a0_a_dept_580_zip",
+      "asOf": "2024-04-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_juillet_2024_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiation informatisés (situation juillet 2024) - dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2024_dept_2a0_a_dept_580_zip",
+      "asOf": "2024-07-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_octobre_2024_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiation informatisés (situation octobre 2024) - dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_octobre_2024_dept_2a0_a_dept_580_zip",
+      "asOf": "2024-10-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_janvier_2025_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiation informatisés (situation janvier 2025) - dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_janvier_2025_dept_2a0_a_dept_580_zip",
+      "asOf": "2025-01-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_avril_2025_dept_2a0_a_dept_580_zip",
+      "title": "Documents de filiation informatisés (situation avril 2025)-dept 2A0 à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_avril_2025_dept_2a0_a_dept_580_zip",
+      "asOf": "2025-04-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_juillet_2025_dept_2a0a_dept_580_zip",
+      "title": "Documents de filiation informatisés (situation juillet 2025)-dept 2A0à dept 580.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2025_dept_2a0a_dept_580_zip",
+      "asOf": "2025-07-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_octobre_2025_dept2a0_a_dept_500_zip",
+      "title": "Documents de filiation informatisés (situation Octobre 2025)-dept2A0 à dept 500.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_octobre_2025_dept2a0_a_dept_500_zip",
+      "asOf": "2025-10-01"
+    },
+    {
+      "id": "documents_de_filiation_informatisee_situation_janvier_2026_dept_2a0_a_dept_550zip",
+      "title": "Documents de filiation informatisée (situation janvier 2026) - dept 2A0 à dept 550.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatisee_situation_janvier_2026_dept_2a0_a_dept_550zip",
+      "asOf": "2026-01-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_avril_2026zip",
+      "title": "Documents de filiation informatisés (situation avril 2026).zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_avril_2026zip",
+      "asOf": "2026-04-01"
+    },
+    {
+      "id": "documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+      "title": "Documents de filiation informatisés (situation juillet 2026)- dept2A0 à dept49.zip",
+      "mimetype": "application/zip",
+      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/documents-de-filiation-informatises-dfi-des-parcelles/attachments/documents_de_filiation_informatises_situation_juillet_2026_dept2a0_a_dept49zip",
+      "asOf": "2026-07-01"
+    }
+  ],
+  "latestDfiSchema": "2025-01",
+  "geometryReleases": [
+    "2017-07-06",
+    "2017-10-12",
+    "2018-01-02",
+    "2018-04-03",
+    "2018-06-29",
+    "2018-10-01",
+    "2019-01-01",
+    "2019-04-01",
+    "2019-07-01",
+    "2019-10-01",
+    "2020-01-01",
+    "2020-07-01",
+    "2020-10-01",
+    "2021-02-01",
+    "2021-04-01",
+    "2021-07-01",
+    "2021-10-01",
+    "2022-01-01",
+    "2022-04-01",
+    "2022-07-01",
+    "2022-10-01",
+    "2023-01-01",
+    "2023-04-01",
+    "2023-07-01",
+    "2023-10-01",
+    "2024-01-01",
+    "2024-04-01",
+    "2024-07-01",
+    "2024-10-01",
+    "2025-01-01",
+    "2025-04-01",
+    "2025-09-01",
+    "2025-12-01",
+    "2026-03-01",
+    "2026-06-01",
+    "2026-09-01"
+  ],
+  "salesResources": [
+    {
+      "title": "Documentation DVF+",
+      "url": "https://datafoncier.cerema.fr/donnees/autres-donnees-foncieres/dvfplus-open-data"
+    },
+    {
+      "title": "Données DVF+ open-data (csv + shp)",
+      "url": "https://cerema.app.box.com/v/dvfplus-opendata"
+    },
+    {
+      "title": "Données DVF+ open-data (dump PostgreSQL/PostGIS)",
+      "url": "https://cerema.app.box.com/v/dvfplus-opendata"
+    }
+  ],
+  "salesCatalogueTemporalCoverage": {
+    "end": "2025-12-31",
+    "start": "2014-01-01"
+  },
+  "salesLatestReleaseFolderObserved": "avril_2026",
+  "salesListingCheckedAt": "2026-10-07",
+  "finding": "Rechecked 7 October 2026: 2019–2025 rights, July 2026 DFI, January 2025 schema, all 35 commune geometries through the pinned June 2026 map; September 2026 is outside the pinned map range. DVF+ latest listing remains avril_2026 with declared 2014–2025 coverage. No rights date is backdated by filiation. The 4 October notice archive audit retains its explicit gaps."
+}
