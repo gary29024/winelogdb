@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-Czqa6zMh.js"
+    "dist/client/assets/index-DMh7jQz8.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-D6fBU1o_.js",
-    "dist/client/assets/SectionLabel-DdXzi865.js",
-    "dist/client/assets/SparklingDetailsCard-r_YI60Q6.js",
-    "dist/client/assets/VillageMap-DCfaiH-t.js",
-    "dist/client/assets/api-BZDgm5aO.js",
-    "dist/client/assets/burgundyAtlas-By7_hQLV.js",
-    "dist/client/assets/index-Cbviw3Uu.js",
-    "dist/client/assets/index-Czqa6zMh.js",
+    "dist/client/assets/FriendTagDialog-CDq7DMHK.js",
+    "dist/client/assets/SectionLabel-THn0ay6Z.js",
+    "dist/client/assets/SparklingDetailsCard-CTP0Ao11.js",
+    "dist/client/assets/VillageMap-CgLVpfBd.js",
+    "dist/client/assets/api-CXK-QIRj.js",
+    "dist/client/assets/burgundyAtlas-D4hxA6kk.js",
+    "dist/client/assets/index-Cb-J4TY_.js",
+    "dist/client/assets/index-DMh7jQz8.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-GO5PWhBs.js",
-    "dist/client/assets/wineDetailCompact-B3KxhsAB.js"
+    "dist/client/assets/useModalFocus-CdiZoAFu.js",
+    "dist/client/assets/wineDetailCompact-f7DH_r9j.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 10,
-  "evidenceBytesTotal": 1274387,
-  "evidenceGzipBytesTotal": 131080,
+  "evidenceChunkCount": 11,
+  "evidenceBytesTotal": 1353077,
+  "evidenceGzipBytesTotal": 140825,
   "parcelBundleBytesTotal": 884664,
   "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
@@ -33,6 +33,13 @@
       "sha256": "73fc401d9cdad49016863f20b32b6356b89dfd467e8cd45cb398d32211481800",
       "bytes": 127252,
       "gzipBytes": 12085
+    },
+    {
+      "cru": "chambertin-clos-de-beze",
+      "file": "dist/client/assets/chambertin-clos-de-beze.evidence-DmfkIpRE.js",
+      "sha256": "0fee451a4d19e245aefe55cddda35b03a4726e954e0fb668d9f22bd65dbc80a8",
+      "bytes": 78690,
+      "gzipBytes": 9745
     },
     {
       "cru": "clos-de-vougeot",

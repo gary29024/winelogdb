@@ -8,6 +8,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 // Extend this list only when that cru's independent Tier 1 audit is committed.
 const reviewed=[
  {slug:'chambertin',name:'Chambertin',id:'inao-denom-447'},
+ {slug:'chambertin-clos-de-beze',name:'Chambertin-Clos de Bèze',id:'inao-denom-448'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/gevrey-chambertin.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{name:string;sourceName:string}[]}};
