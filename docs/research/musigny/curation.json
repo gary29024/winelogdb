@@ -61,7 +61,6 @@
   "holders": [
     {
       "holderId": "037180015",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -71,7 +70,6 @@
     },
     {
       "holderId": "212101331",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -81,7 +79,6 @@
     },
     {
       "holderId": "381505338",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -91,7 +88,6 @@
     },
     {
       "holderId": "401584503",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -101,7 +97,6 @@
     },
     {
       "holderId": "491471041",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -111,7 +106,6 @@
     },
     {
       "holderId": "515520385",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -121,7 +115,6 @@
     },
     {
       "holderId": "775567928",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -131,7 +124,6 @@
     },
     {
       "holderId": "778173427",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -141,7 +133,6 @@
     },
     {
       "holderId": "778233098",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -151,7 +142,6 @@
     },
     {
       "holderId": "794244434",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -161,7 +151,6 @@
     },
     {
       "holderId": "814197737",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -171,7 +160,6 @@
     },
     {
       "holderId": "U18181478",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -181,7 +169,6 @@
     },
     {
       "holderId": "U21200736",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -191,7 +178,6 @@
     },
     {
       "holderId": "U21388794",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -201,7 +187,6 @@
     },
     {
       "holderId": "U21401984",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -211,7 +196,6 @@
     },
     {
       "holderId": "U23906784",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"

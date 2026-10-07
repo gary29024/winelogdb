@@ -5,7 +5,7 @@ import unittest
 
 from build_grand_cru_evidence import build_evidence
 from build_grand_cru_research import Context, build_register as build_cru_register
-from grand_cru import ROOT, load_cru, manifest_path
+from grand_cru import HOLDER_LINKS, ROOT, load_cru, manifest_path, read_json, resolve_curation
 
 CONTEXT = Context(*load_cru('echezeaux'))
 CURATION, EVIDENCE, HISTORY, SALES, NAMED_AREAS = (CONTEXT.curation, CONTEXT.evidence, CONTEXT.history, CONTEXT.sales,
@@ -22,7 +22,8 @@ class FarmingResearchTests(unittest.TestCase):
     def setUpClass(cls):
         cls.manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
         cls.asset = (ROOT / 'public' / cls.manifest['dataUrl'].lstrip('/')).read_bytes()
-        cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
+        # Domaine candidates come from the shared holder table, as the builder reads them.
+        cls.curation = resolve_curation(json.loads(CURATION.read_text(encoding='utf-8')), 'echezeaux')
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
         cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
         cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
@@ -482,7 +483,7 @@ class ParcelEvidenceTests(unittest.TestCase):
         cls.manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
         cls.asset = (ROOT / 'public' / cls.manifest['dataUrl'].lstrip('/')).read_bytes()
         cls.features = json.loads(cls.asset)['features']
-        cls.curation = json.loads(CURATION.read_text(encoding='utf-8'))
+        cls.curation = resolve_curation(json.loads(CURATION.read_text(encoding='utf-8')), 'echezeaux')
         cls.history = json.loads(HISTORY.read_text(encoding='utf-8'))
         cls.sales = json.loads(SALES.read_text(encoding='utf-8'))
         cls.named_areas = json.loads(NAMED_AREAS.read_text(encoding='utf-8'))
@@ -589,7 +590,7 @@ class GrandsEchezeauxTests(unittest.TestCase):
         cls.context = Context(*load_cru('grands-echezeaux'))
         cls.files, cls.register = outputs(cls.context)
         cls.evidence = json.loads(cls.files[cls.context.evidence])
-        cls.curation = json.loads(cls.context.curation.read_text(encoding='utf-8'))
+        cls.curation = resolve_curation(json.loads(cls.context.curation.read_text(encoding='utf-8')), 'grands-echezeaux')
 
     def test_pinned_population_and_no_invented_farmers(self):
         counts = self.register['counts']
@@ -617,7 +618,7 @@ class GrandsEchezeauxTests(unittest.TestCase):
         self.assertEqual(lamarche['basis'], 'reported-operator-relationship')
         self.assertIn('raa-2026-067', lamarche['sources'])  # reported tenancy does not erase suspension
         modot = next(h for h in self.curation['holders'] if h['holderId'] == 'U18178008')
-        self.assertEqual(modot['legalIdentityCrosswalk']['companySiren'], '778173500')
+        self.assertEqual(read_json(HOLDER_LINKS)['holders']['U18178008']['identity']['companySiren'], '778173500')
         self.assertFalse(modot['parcelOperationConfirmed'])
         self.assertNotIn('778173500', self.evidence['holderDomains'])  # do not rewrite the provisional rights ID
 
@@ -634,21 +635,14 @@ class GrandsEchezeauxTests(unittest.TestCase):
         self.assertNotIn('212670000D0111', expected)
         self.assertFalse(any(i['kind'] == 'filing' for i in self.evidence['parcels']['212670000D0111']))
 
-    def test_crosswalk_and_printed_references_are_validated(self):
+    def test_printed_references_are_validated(self):
+        # Identity crosswalks are validated with the shared holder table (test_grand_cru_holder_links).
         from build_grand_cru_research import load_inputs
         inputs = load_inputs(self.context)
 
         def build(curation):
             return build_cru_register(inputs['manifest'], inputs['asset'], curation, inputs['history'],
                                       inputs['sales'], inputs['named_areas'], self.context)
-        curation = copy.deepcopy(self.curation)
-        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['companySiren'] = '77817350'
-        with self.assertRaisesRegex(ValueError, 'invalid identity crosswalk'):
-            build(curation)
-        curation = copy.deepcopy(self.curation)
-        next(h for h in curation['holders'] if h['holderId'] == 'U18178008')['legalIdentityCrosswalk']['sourceIds'] = ['nonexistent']
-        with self.assertRaisesRegex(ValueError, 'Unknown crosswalk source'):
-            build(curation)
         curation = copy.deepcopy(self.curation)
         curation['unmatchedPrintedReferences'][0]['parcelIds'] = ['212670000D0111']
         with self.assertRaisesRegex(ValueError, 'cannot name current parcels'):

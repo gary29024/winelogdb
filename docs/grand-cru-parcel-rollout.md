@@ -146,6 +146,47 @@ the historical extension for a cru.
 - Published producer holdings and independent articles (e.g. Winehog), facts only
   with links; printed references kept separate from today's parcels.
 
+#### Shared holder research
+
+Many legal holders have rights in several crus, so holder-to-domaine research is done
+once per holder in [`docs/research/holders/holder-links.json`](research/holders/holder-links.json),
+not in each cru's curation. Entries are keyed by the identifier the DGFiP rights file
+records (SIREN or provisional `U…`). The generated [holder report](research/holders/holders.md)
+lists every recorded holder by parcels held. It is the research queue and the coverage
+record.
+
+- **A link** names the domaine or producer, a `relation` and its `basis`, `sourceIds`,
+  `reviewStatus` and `reviewedAt`.
+  - Relations: `owner-company`, `family-holding`, `subsidiary`, `parent-group`,
+    `common-ownership`, `management`, `brand-identity`, `lessor-per-filing`,
+    `reported-tenancy`, `succession` and `shared-office`. None of them means farming.
+  - A lease or reported tenancy covers particular land. It lists the `crus` whose
+    parcels it names. A filing lease also records `leaseStatus`: `executed`, `recited`
+    or `mandate-only`.
+  - Any link may be limited to `crus` when the domaine label differs by village.
+- **Review status:** `provisional` marks a cited lead whose relation is not yet
+  established. A `retired` link keeps its `retiredReason` and is never shown.
+- **No link found:** a holder searched without finding one keeps a `searches` record,
+  so later crus don't repeat the search. Record `effort` (filings screened, pages read)
+  as you go.
+- **Provisional `U…` identifiers** need an `identity` crosswalk to a SIREN, with sources
+  and its limitation, before they can be linked. The rights file keeps the provisional
+  identifier.
+- **Evidence:** family holdings and other corporate relations need a company record,
+  filing or legal notice. Never link from a similar name or monopole reputation.
+- **Sources** live in the table: shared source IDs are unique across the table and every
+  curation. A filing records its deed date as `documentDate`, its raw-byte SHA-256 and the
+  pages read; a filing or deposit date is a separate field.
+
+A cru uses the table by setting `"holderLinks": "shared"` in its curation, in its Tier 2 PR.
+Its `holders[]` rows keep the cru's own `basis`, `finding` and `sourceIds`. Candidate
+names never appear inline: the research builder fills them from the links that apply to
+that cru and appends their sources. Exactly one applicable link gives the app's domaine
+heading (`holderDomains`, and with it domaine grouping); two or more stay listed leads.
+Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
+also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
+identifier no cru records, an unused source or a stale report.
+
 ### Tier 3 — deferred
 
 - Paid land-registry (SPF) copies, domaine or CVI outreach.

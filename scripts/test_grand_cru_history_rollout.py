@@ -7,7 +7,7 @@ from build_grand_cru_research import Context, build_register, outputs
 from build_grand_cru_evidence import build_evidence
 
 from grand_cru import (APP_DIR, CONFIG_DIR, ROOT, cru_slugs, in_cru, load_cru, load_manifest,
-                       parcel_asset, read_json, research_path, sha256)
+                       parcel_asset, read_json, research_path, resolve_curation, sha256)
 
 
 class HistoryRolloutTests(unittest.TestCase):
@@ -80,7 +80,7 @@ class ChablisTier1Tests(unittest.TestCase):
     def setUpClass(cls):
         cls.cru, cls.bundle = load_cru('chablis-grand-cru')
         cls.history = read_json(research_path(cls.cru, 'rights-history.json'))
-        cls.curation = read_json(research_path(cls.cru, 'curation.json'))
+        cls.curation = resolve_curation(read_json(research_path(cls.cru, 'curation.json')), cls.cru['slug'])
         cls.notices = build(cls.cru, cls.bundle, cls.history)
 
     def test_curated_rows_do_not_duplicate_the_37_yonne_matches(self):

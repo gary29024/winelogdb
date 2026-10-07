@@ -76,7 +76,6 @@
   "holders": [
     {
       "holderId": "410725691",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -86,7 +85,6 @@
     },
     {
       "holderId": "U21078600",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -96,7 +94,6 @@
     },
     {
       "holderId": "U21465754",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"

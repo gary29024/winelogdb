@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D1F6N-p2.js"
+    "dist/client/assets/index-Dss3s_54.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CeeqbuXG.js",
-    "dist/client/assets/SectionLabel-BeiwpviR.js",
-    "dist/client/assets/SparklingDetailsCard-CqZtz3sI.js",
-    "dist/client/assets/VillageMap-Crjldl0s.js",
-    "dist/client/assets/api-DlekUOAF.js",
-    "dist/client/assets/burgundyAtlas-CjPiJsRX.js",
-    "dist/client/assets/index-D1F6N-p2.js",
-    "dist/client/assets/index-DzAYRnP3.js",
+    "dist/client/assets/FriendTagDialog-B-s2hLae.js",
+    "dist/client/assets/SectionLabel-YAyPrIWF.js",
+    "dist/client/assets/SparklingDetailsCard-CXwQ1RfP.js",
+    "dist/client/assets/VillageMap-Dm5Rid4E.js",
+    "dist/client/assets/api-MbYtj0QO.js",
+    "dist/client/assets/burgundyAtlas-D-Eu7lRg.js",
+    "dist/client/assets/index-BLliWwZM.js",
+    "dist/client/assets/index-Dss3s_54.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-C8e5NUrX.js",
-    "dist/client/assets/wineDetailCompact-Bv-F327l.js"
+    "dist/client/assets/useModalFocus-Cgjtjfnu.js",
+    "dist/client/assets/wineDetailCompact-FYfJ9KU1.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5211196,
-  "evidenceGzipBytesTotal": 441620,
+  "evidenceBytesTotal": 5218814,
+  "evidenceGzipBytesTotal": 443026,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -155,10 +155,10 @@
     },
     {
       "cru": "echezeaux",
-      "file": "dist/client/assets/echezeaux.evidence-XX0mW8xJ.js",
-      "sha256": "a4cce6550dcf5356326fcf818227a21d0313221504cfe9a5bc7e3650ead73428",
-      "bytes": 451157,
-      "gzipBytes": 38885
+      "file": "dist/client/assets/echezeaux.evidence-B2CCSGYh.js",
+      "sha256": "de8c9834fe814e3bff3986d545488f9ffe3db0f19360f3c3a2d27ea065a1f76d",
+      "bytes": 458775,
+      "gzipBytes": 40291
     },
     {
       "cru": "grands-echezeaux",
