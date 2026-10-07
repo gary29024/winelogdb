@@ -223,6 +223,22 @@ class ConfigTests(unittest.TestCase):
                     self.assertEqual(entry['communes'], sorted(set(entry['communes'])), slug)
                     self.assertGreater(len(entry['communes']), 1, slug)
 
+    def test_overlapping_named_areas_need_a_reviewed_cap(self):
+        # Clos Saint-Denis: the cadastral CALOUERE and MAISON BRULEE overlap; both outlines are kept as published.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            report = read_json(named_plot_report_path(cru))
+            reviews = cru['namedPlots'].get('reviewedOverlaps', [])
+            with self.subTest(cru=slug):
+                self.assertEqual(len(report.get('overlaps', [])), len(reviews))
+                for overlap, review in zip(report.get('overlaps', []), reviews):
+                    self.assertEqual(overlap['plots'], [f'{slug}-plot-{p}' for p in review['plots']])
+                    self.assertLessEqual(overlap['areaM2'], review['maximumAreaM2'])
+                    self.assertLess(review['maximumAreaM2'] - overlap['areaM2'], 0.1)
+        self.assertEqual(load_cru('clos-saint-denis')[0]['namedPlots']['reviewedOverlaps'][0]['plots'], ['calouere', 'maison-brulee'])
+
     def test_edge_parcels_in_neighbouring_lieux_dits_are_declared(self):
         # Musigny's edge parcels lie wholly in neighbouring lieux-dits such as Les Amoureuses; none is a Musigny climat.
         checked = []
