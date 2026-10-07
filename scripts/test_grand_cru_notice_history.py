@@ -53,6 +53,19 @@ class NoticeHistoryTests(unittest.TestCase):
         self.assertIn('bfc-2021-146:p36', history['coverage']['searchMatchesAlreadyReviewed'])
         self.assertEqual((history['unreviewedCandidates'], history['reviewedMatches']), ([], []))
 
+    def test_republished_act_is_covered_by_the_original_event(self):
+        # Lambrays dossier 2021-061 appears in bfc-2021-096 and again in bfc-2021-128 under another act ID.
+        curation = {'exactParcelEvents': [{'sourceId': 'first', 'parcelIds': ['21442000AP0105']}], 'noticeReview': [
+            {'sourceId': 'first', 'bulletin': 'b1', 'sha256': 'a' * 64, 'pages': [258], 'reviewMethod': 'page-image'},
+            {'sourceId': 'repeat', 'repeatOf': 'first', 'bulletin': 'b2', 'sha256': 'b' * 64, 'pages': [139], 'reviewMethod': 'page-image'}]}
+        reviews = curated_page_reviews(curation)
+        self.assertTrue(covered_by_curated_review({'bulletin': 'b2', 'firstPage': 138, 'lastPage': 140}, {'sha256': 'b' * 64},
+                                                  ['21442000AP0105'], reviews))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/clos-des-lambrays/notice-history.json').read_text(encoding='utf-8'))
+        self.assertEqual(sorted(history['coverage']['searchMatchesAlreadyReviewed']), ['bfc-2021-096:p257', 'bfc-2021-128:p138'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+
     def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
         audit = load_availability()
         self.assertEqual(audit['checkedAt'], '2026-10-04')

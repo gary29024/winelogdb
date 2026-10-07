@@ -1,0 +1,71 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Bonnes-Mares boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The official wine-board list names Les Bonnes Mares as the cru's only climat. The pinned cadastre records LES BONNES MARES on both sides of the Chambolle-Musigny and Morey-Saint-Denis line. The named area is the whole cru, so the official outline is retained; producer holdings are not shown.",
+  "sources": [
+    {
+      "commune": "21133",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+      "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21442",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-lieux_dits.json.gz",
+      "sha256": "ad9759b3d80eebe0e3b015a60648db90478300526c32a0c5a85d5403bb61a23a",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bonnes-mares,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjI0Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    }
+  ],
+  "parentHa": 15.067627208027139,
+  "mappedHa": 15.014907074471045,
+  "unmappedHa": 0.052720131898906585,
+  "plots": [
+    {
+      "id": "bonnes-mares-plot-les-bonnes-mares",
+      "sourceHa": 15.964015219559043,
+      "clippedHa": 15.014907074471045,
+      "parts": 1,
+      "holes": 2,
+      "sourceFeatures": 2
+    }
+  ],
+  "unresolved": [],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "EN LA RUE DE VERGY",
+      "reason": "Not an official Bonnes-Mares climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES VEROILLES",
+      "reason": "Not an official Bonnes-Mares climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    }
+  ]
+}

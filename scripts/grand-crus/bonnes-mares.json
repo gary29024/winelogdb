@@ -14,10 +14,52 @@
   "evidenceFrom": [
     "bonnes-mares"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 307.6,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 307.519720 m² remainder (0.2041%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The cru crosses the Chambolle-Musigny and Morey-Saint-Denis line, and both communes are imported; the remainder is narrow strips between the official line or parcel edges and the nearest cadastral parcels. It forms 12 pieces, with mean widths of 0.21–1.18 m for those of at least 1 m². 51.971008 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 307.519720 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/bonnes-mares/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/bonnes-mares",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bonnes-mares,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjI0Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "e663229f999e024bd57bb6d208dd18fa7ecf4f32f04bb2ec1f1e87060d0eb3d8",
+    "coverageNote": "The official wine-board list names Les Bonnes Mares as the cru's only climat. The pinned cadastre records LES BONNES MARES on both sides of the Chambolle-Musigny and Morey-Saint-Denis line. The named area is the whole cru, so the official outline is retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "les-bonnes-mares",
+        "name": "Les Bonnes Mares",
+        "sourceName": "LES BONNES MARES",
+        "communes": [
+          "21133",
+          "21442"
+        ],
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "EN LA RUE DE VERGY",
+        "reason": "Not an official Bonnes-Mares climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES VEROILLES",
+        "reason": "Not an official Bonnes-Mares climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ]
   }
 }
