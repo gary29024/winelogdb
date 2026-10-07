@@ -297,7 +297,7 @@ def build_census(rows, holdings, named_areas, holder_names):
     it never places a holding on particular parcels."""
     reviewed = {a['sourceName']: a['name'] for a in named_areas['parcels'].values()}
     census = []
-    for name in sorted({r['namedArea'] for r in rows}):
+    for name in sorted({r['namedArea'] for r in rows}, key=lambda n: (n is None, n or '')):
         here = [r for r in rows if r['namedArea'] == name]
         m2 = lambda items: round(sum(r['cruOverlapM2'] for r in items))
         entries, beyond_total = [], 0
@@ -561,6 +561,8 @@ def render_history(register, curation, history, sources, context):
 
 def area_label(source_name, register):
     reviewed = {a['sourceName']: a['name'] for a in register['namedAreaCensus']}
+    if source_name is None:  # Unreviewed crus label it; a reviewed parcel outside every lieu-dit has no name.
+        return reviewed[None] or 'No cadastral lieu-dit'
     return reviewed[source_name] or f'{source_name} (cadastral; unreviewed)'
 
 
