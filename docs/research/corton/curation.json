@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-549",
-  "status": "historical-extension-inventory",
-  "scope": "All 728 mapped Corton parcels and 112 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images and rejected; no exact notice event is assigned. Producer/company research remains Tier 2. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,6 +41,36 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "girard-2021",
+      "title": "EARL Domaine Philippe Girard application receipt, dossier 2021-122",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/89554/574828/file/recueil-bfc-2021-146-recueil-des-actes-administratifs-special.pdf#page=37",
+      "type": "government-event",
+      "documentDate": "2021-07-26",
+      "reviewedAt": "2026-10-07",
+      "sha256": "9acba589232c4459401ee96a258a4b0aa2d56375071fab2d7591479756842881",
+      "reviewedPages": [
+        37
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The receipt prints A139 under Chambolle-Musigny; its Aloxe-Corton references are L94, L24, L25, H59, E32 and E19. Aloxe-Corton A0139 is not named, so no event is assigned to this cru."
+    },
+    {
+      "id": "thibaut-marion-2021",
+      "title": "Thibaut Marion application receipt, dossier 2021-180",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/94259/602873/file/recueil-bfc-2022-044-recueil-des-actes-administratifs-special.pdf#page=19",
+      "type": "government-event",
+      "documentDate": "2021-11-16",
+      "reviewedAt": "2026-10-07",
+      "sha256": "98963cdfdbd5752df492ddc8c27ab4128e2b737c28c15bf7b9b5b15b74a5fde4",
+      "reviewedPages": [
+        19
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The receipt prints AK159, AK164 and AK36 under Ladoix-Serrigny only (0.6457 ha, previous operator CPEF à Beaune). The index matched same-numbered Pernand-Vergelesses references; none of the Ladoix references is reachable from Corton, so no event is assigned."
     }
   ],
   "holders": [
@@ -1172,9 +1202,38 @@
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "girard-2021",
+      "bulletin": "bfc-2021-146",
+      "sha256": "9acba589232c4459401ee96a258a4b0aa2d56375071fab2d7591479756842881",
+      "pages": [
+        37
+      ],
+      "reviewMethod": "page-image",
+      "rejectedReferenceHints": {
+        "210100000A0139": "The page prints A139 under Chambolle-Musigny, not Aloxe-Corton; the OCR hint matched the wrong commune."
+      },
+      "finding": "The receipt prints A139 under Chambolle-Musigny; its Aloxe-Corton references are L94, L24, L25, H59, E32 and E19. Aloxe-Corton A0139 is not named, so no event is assigned to this cru."
+    },
+    {
+      "sourceId": "thibaut-marion-2021",
+      "bulletin": "bfc-2022-044",
+      "sha256": "98963cdfdbd5752df492ddc8c27ab4128e2b737c28c15bf7b9b5b15b74a5fde4",
+      "pages": [
+        19
+      ],
+      "reviewMethod": "page-image",
+      "rejectedReferenceHints": {
+        "21606000AK0036": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses.",
+        "21606000AK0159": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses.",
+        "21606000AK0164": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses."
+      },
+      "finding": "The receipt prints AK159, AK164 and AK36 under Ladoix-Serrigny only (0.6457 ha, previous operator CPEF à Beaune). The index matched same-numbered Pernand-Vergelesses references; none of the Ladoix references is reachable from Corton, so no event is assigned."
+    }
   ]
 }

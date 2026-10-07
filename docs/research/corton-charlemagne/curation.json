@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-550",
-  "status": "historical-extension-inventory",
-  "scope": "All 339 mapped Corton-Charlemagne parcels and 68 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 339 mapped Corton-Charlemagne parcels and 68 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. The one notice-index candidate was read from its page image and rejected; no exact notice event is assigned. Producer/company research remains Tier 2. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,6 +41,21 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "girard-2021",
+      "title": "EARL Domaine Philippe Girard application receipt, dossier 2021-122",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/89554/574828/file/recueil-bfc-2021-146-recueil-des-actes-administratifs-special.pdf#page=37",
+      "type": "government-event",
+      "documentDate": "2021-07-26",
+      "reviewedAt": "2026-10-07",
+      "sha256": "9acba589232c4459401ee96a258a4b0aa2d56375071fab2d7591479756842881",
+      "reviewedPages": [
+        37
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The receipt prints A139 under Chambolle-Musigny; its Aloxe-Corton references are L94, L24, L25, H59, E32 and E19. Aloxe-Corton A0139 is not named, so no event is assigned to this cru."
     }
   ],
   "holders": [
@@ -732,9 +747,23 @@
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "girard-2021",
+      "bulletin": "bfc-2021-146",
+      "sha256": "9acba589232c4459401ee96a258a4b0aa2d56375071fab2d7591479756842881",
+      "pages": [
+        37
+      ],
+      "reviewMethod": "page-image",
+      "rejectedReferenceHints": {
+        "210100000A0139": "The page prints A139 under Chambolle-Musigny, not Aloxe-Corton; the OCR hint matched the wrong commune."
+      },
+      "finding": "The receipt prints A139 under Chambolle-Musigny; its Aloxe-Corton references are L94, L24, L25, H59, E32 and E19. Aloxe-Corton A0139 is not named, so no event is assigned to this cru."
+    }
   ]
 }
