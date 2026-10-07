@@ -123,9 +123,13 @@ Both act dates stay null rather than corrected. The notice history withholds the
 direct and ancestor matches as `notice-act-date-unresolved`.
 
 **Yonne** ([`review-decisions.json`](yonne/review-decisions.json),
-[`reviewed-parcels.json`](yonne/reviewed-parcels.json)): no Yonne farm-structure
-decision prints a Chablis parcel reference. One 2016 decision whose land includes
-Chablis is kept as [context](yonne/commune-context.json). Two aerial-spraying
+[`reviewed-parcels.json`](yonne/reviewed-parcels.json)): the reviewed Yonne
+farm-structure decisions print no Chablis parcel reference. Commune-only decisions
+remain [context](yonne/commune-context.json). The
+[7 October Chablis page audit](../chablis-grand-cru/notice-audit.json) corrects the
+Rottiers exclusion: Chablis is explicitly a land commune. It also records
+Lecuiller and Colombier decisions without parcel references. None can be assigned
+to a Grand Cru parcel. Two aerial-spraying
 derogations for Soufflet Vigne list Chablis Grand Cru parcels by section, number,
 lieu-dit and surface:
 

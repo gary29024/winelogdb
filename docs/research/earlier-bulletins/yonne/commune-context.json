@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "purpose": "Yonne farm-structure (CDOA) decisions whose land includes Chablis but which print no parcel reference. Producer-research leads only.",
- "method": "Located by full-text search of the committed Yonne page text (README query); text-screened, not image-reviewed.",
+ "method": "Initial full-text triage, with page-image correction on 7 October 2026. Review status is recorded per decision; the Chablis Tier 1 audit records every reviewed page.",
  "limitation": "Commune-level only: never parcel evidence, never assignable to a current parcel, and an authorisation does not establish actual or current farming. Yonne CDOA decisions print areas and communes, not parcel references.",
  "decisions": [
   {
@@ -25,6 +25,36 @@
    "decisionNumber": "N°20",
    "reviewStatus": "text-screened",
    "parcelEvidence": false
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18708/158988/file/recueil%20n%C2%B04.pdf",
+   "page": 47,
+   "applicant": "Richard Rottiers / SCEA Domaine des Malandes",
+   "communesOfLandPrinted": [
+    "BEINES",
+    "CHABLIS",
+    "LA CHAPELLE VAUPELTEIGNE",
+    "COURGIS",
+    "SAINT CYR LES COLONS",
+    "COLLAN",
+    "LIGNORELLES"
+   ],
+   "communeCodesOfLand": [
+    "89034",
+    "89068",
+    "89081",
+    "89123",
+    "89341",
+    "89112",
+    "89226"
+   ],
+   "printedArea": "33,35 ha de vignes",
+   "outcome": "ACCEPTEE",
+   "reviewStatus": "page-image",
+   "reviewedAt": "2026-10-07",
+   "sha256": "2cc30bba9d6562f26ed0dfb8da23b1276039ee31799927fb91ce105f93267e9a",
+   "parcelEvidence": false,
+   "correction": "The page image explicitly lists Chablis among the land communes; the earlier text-screened exclusion was incorrect."
   }
  ],
  "screenedExcluded": [
@@ -32,11 +62,7 @@
    "url": "https://www.yonne.gouv.fr/contenu/telechargement/16927/148090/file/recueil%20n%C2%B010.pdf",
    "page": 90,
    "reason": "SAS William Fèvre (Chablis) authorised for 28,01 ha of vines in Viviers, not Chablis."
-  },
-  {
-   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18708/158988/file/recueil%20n%C2%B04.pdf",
-   "page": 47,
-   "reason": "M. Rottiers Richard (Chablis), 33,35 ha within SCEA Domaine des Malandes; the land commune is not printed in the screened text."
   }
- ]
+ ],
+ "pageImageAudit": "../../chablis-grand-cru/notice-audit.json"
 }

@@ -1,21 +1,22 @@
-import bundle0 from './chambolle-morey.manifest.json';
-import bundle1 from './corton.manifest.json';
-import bundle2 from './flagey-echezeaux.manifest.json';
-import bundle3 from './gevrey-chambertin.manifest.json';
-import bundle4 from './montrachet.manifest.json';
-import bundle5 from './vosne-romanee.manifest.json';
-import bundle6 from './vougeot.manifest.json';
+import bundle0 from './chablis.manifest.json';
+import bundle1 from './chambolle-morey.manifest.json';
+import bundle2 from './corton.manifest.json';
+import bundle3 from './flagey-echezeaux.manifest.json';
+import bundle4 from './gevrey-chambertin.manifest.json';
+import bundle5 from './montrachet.manifest.json';
+import bundle6 from './vosne-romanee.manifest.json';
+import bundle7 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'chambolle-morey':bundle0,'corton':bundle1,'flagey-echezeaux':bundle2,'gevrey-chambertin':bundle3,'montrachet':bundle4,'vosne-romanee':bundle5,'vougeot':bundle6} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'chablis':bundle0,'chambolle-morey':bundle1,'corton':bundle2,'flagey-echezeaux':bundle3,'gevrey-chambertin':bundle4,'montrachet':bundle5,'vosne-romanee':bundle6,'vougeot':bundle7} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='batard-montrachet'|'bienvenues-batard-montrachet'|'bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charlemagne'|'charmes-chambertin'|'chevalier-montrachet'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'corton-charlemagne'|'criots-batard-montrachet'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'montrachet'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
+export type EvidenceSourceId='batard-montrachet'|'bienvenues-batard-montrachet'|'bonnes-mares'|'chablis-grand-cru'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charlemagne'|'charmes-chambertin'|'chevalier-montrachet'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'corton-charlemagne'|'criots-batard-montrachet'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'montrachet'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -33,6 +34,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"batard-montrachet",name:"Bâtard-Montrachet",parentFeatureId:"inao-denom-273",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["batard-montrachet"],domaineGrouping:false},
  {slug:"bienvenues-batard-montrachet",name:"Bienvenues-Bâtard-Montrachet",parentFeatureId:"inao-denom-351",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["bienvenues-batard-montrachet"],domaineGrouping:false},
  {slug:"bonnes-mares",name:"Bonnes-Mares",parentFeatureId:"inao-denom-361",villageMaps:["chambolle-musigny", "morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["bonnes-mares"],domaineGrouping:false},
+ {slug:"chablis-grand-cru",name:"Chablis Grand Cru",parentFeatureId:"inao-denom-439",villageMaps:["chablis"],bundle:"chablis",evidenceFrom:["chablis-grand-cru"],domaineGrouping:false},
  {slug:"chambertin",name:"Chambertin",parentFeatureId:"inao-denom-447",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin"],domaineGrouping:false},
  {slug:"chambertin-clos-de-beze",name:"Chambertin-Clos de Bèze",parentFeatureId:"inao-denom-448",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin-clos-de-beze"],domaineGrouping:false},
  {slug:"chapelle-chambertin",name:"Chapelle-Chambertin",parentFeatureId:"inao-denom-475",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chapelle-chambertin"],domaineGrouping:false},

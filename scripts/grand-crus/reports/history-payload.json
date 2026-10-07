@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BTddsIXO.js"
+    "dist/client/assets/index-D1F6N-p2.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DdHhVYNC.js",
-    "dist/client/assets/SectionLabel-CWHbq3p5.js",
-    "dist/client/assets/SparklingDetailsCard-BH6_oOx7.js",
-    "dist/client/assets/VillageMap-B-rOUunX.js",
-    "dist/client/assets/api-Bod8fOvn.js",
-    "dist/client/assets/burgundyAtlas-BPVPN9W0.js",
-    "dist/client/assets/index-BTddsIXO.js",
-    "dist/client/assets/index-C_Ax7QtG.js",
+    "dist/client/assets/FriendTagDialog-CeeqbuXG.js",
+    "dist/client/assets/SectionLabel-BeiwpviR.js",
+    "dist/client/assets/SparklingDetailsCard-CqZtz3sI.js",
+    "dist/client/assets/VillageMap-Crjldl0s.js",
+    "dist/client/assets/api-DlekUOAF.js",
+    "dist/client/assets/burgundyAtlas-CjPiJsRX.js",
+    "dist/client/assets/index-D1F6N-p2.js",
+    "dist/client/assets/index-DzAYRnP3.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-C4mdLdjk.js",
-    "dist/client/assets/wineDetailCompact-C5I-K4_U.js"
+    "dist/client/assets/useModalFocus-C8e5NUrX.js",
+    "dist/client/assets/wineDetailCompact-Bv-F327l.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 32,
-  "evidenceBytesTotal": 4794747,
-  "evidenceGzipBytesTotal": 415546,
-  "parcelBundleBytesTotal": 2112530,
-  "parcelBundleGzipBytesTotal": 318045,
+  "evidenceChunkCount": 33,
+  "evidenceBytesTotal": 5211196,
+  "evidenceGzipBytesTotal": 441620,
+  "parcelBundleBytesTotal": 2479029,
+  "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
     {
       "cru": "batard-montrachet",
@@ -47,6 +47,13 @@
       "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
       "bytes": 121220,
       "gzipBytes": 11987
+    },
+    {
+      "cru": "chablis-grand-cru",
+      "file": "dist/client/assets/chablis-grand-cru.evidence-BmrIcSgl.js",
+      "sha256": "1b872a54086497e1280d96a1555f33f20fb7bc3ca5629f33ce78113adb14677f",
+      "bytes": 416449,
+      "gzipBytes": 26074
     },
     {
       "cru": "chambertin",
@@ -253,6 +260,13 @@
     }
   ],
   "parcelBundles": [
+    {
+      "bundle": "chablis",
+      "dataUrl": "/maps/chablis-parcels.2026-06-01.56b25a5e7459.geojson",
+      "sha256": "56b25a5e7459cc0a0fc18fc56c179520902c53b4c3e4bf4619995f7d1c49b9d2",
+      "bytes": 366499,
+      "gzipBytes": 53055
+    },
     {
       "bundle": "chambolle-morey",
       "dataUrl": "/maps/chambolle-morey-parcels.2026-06-01.86d6bad8f507.geojson",

@@ -1,0 +1,13 @@
+{
+  "id": "sales",
+  "url": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+  "retrievedAt": "2026-10-07T08:25:34Z",
+  "status": "obtained",
+  "resolvedUrl": "https://www.data.gouv.fr/api/1/datasets/dvf-open-data/",
+  "httpContentEncoding": null,
+  "transportSha256": "febb5147b7d62209436d3365f94849be9c2a31e2733f60043e18809a1e6c7eeb",
+  "transportSize": 8966,
+  "sha256": "febb5147b7d62209436d3365f94849be9c2a31e2733f60043e18809a1e6c7eeb",
+  "size": 8966,
+  "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-chablis/sales.json"
+}

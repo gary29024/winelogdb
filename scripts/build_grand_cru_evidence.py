@@ -6,6 +6,7 @@ app can show "History and evidence" without reading the large research files.
 Every record is dated evidence; none states who farms a parcel today.
 """
 import re
+from build_grand_cru_notice_history import indexed_event_notice
 from grand_cru_filiation import historical_evidence_paths
 
 SCHEMA_VERSION = 2
@@ -93,6 +94,8 @@ def event_item(event, via=None):
     kind = EVENT_KINDS[event['kind']]
     item = {'kind': kind, 'date': event['documentDate'], 'title': event['applicant'], 'note': event['appNote'],
             'sources': [event['sourceId']]}
+    if event.get('operation') == 'aerial-spraying-derogation':
+        item['label'] = 'Aerial-spraying derogation'
     if event['kind'] == 'refused-application':
         item['label'] = 'Application refused'
     previous = event.get('previousOperator')
@@ -227,7 +230,13 @@ def build_evidence(register, curation, history, features):
                                 'sources': list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))})
         for event in curation['exactParcelEvents']:
             if parcel_id in event['parcelIds']:
-                add(parcel_id, event_item(event))
+                item = event_item(event)
+                if 'indexedNotice' in event:
+                    notice = indexed_event_notice(event, sources[event['sourceId']], row['reviewedNoticeReferences'])
+                    item.update(dateRole=notice['dateRole'], originalNoticeRecord=notice['originalRecord'],
+                                originalReferenceIds=notice['matchedReferenceIds'],
+                                originalScope='printed-notice-reference-and-area', contextPaths=notice['contextPaths'])
+                add(parcel_id, item)
             for retired, current in event.get('predecessorReferences', {}).items():
                 if parcel_id in current:
                     add(parcel_id, original_context(parcel_id, event_item(event, via=retired), retired, 'printed-notice-reference-and-area'))
@@ -257,9 +266,13 @@ def build_evidence(register, curation, history, features):
             if not url:
                 continue
             document_key = lambda value: value.split('/telechargement/')[-1].split('#')[0]
-            if any(e['documentDate'] == notice['originalDate'] and
+            if any((e.get('indexedNotice', {}).get('noticeId') == notice['originalRecord']['noticeId'] and
+                    e['indexedNotice']['indexId'] == notice['indexId'] and
+                    e['indexedNotice']['originalReferenceId'] in notice['matchedReferenceIds'])
+                   if 'indexedNotice' in e else
+                   (e['documentDate'] == notice['originalDate'] and
                    document_key(sources[e['sourceId']]['url']) == document_key(url) and
-                   (parcel_id in e['parcelIds'] or parcel_id in {p for ps in e.get('predecessorReferences', {}).values() for p in ps})
+                   (parcel_id in e['parcelIds'] or parcel_id in {p for ps in e.get('predecessorReferences', {}).values() for p in ps}))
                    for e in curation['exactParcelEvents']):
                 continue
             source_id = 'notice-history:' + notice['indexId'] + ':' + str(notice['originalRecord']['noticeId'])

@@ -32,13 +32,17 @@ class ConfigTests(unittest.TestCase):
         reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
         self.assertIn('richebourg', reviewed)
         self.assertIn('montrachet', reviewed)
+        self.assertIn('chablis-grand-cru', reviewed)
         self.assertIn('chevalier-montrachet', reviewed)
         self.assertIn('batard-montrachet', reviewed)
         self.assertIn('bienvenues-batard-montrachet', reviewed)
         self.assertIn('criots-batard-montrachet', reviewed)
         for slug in reviewed:
             with self.subTest(cru=slug):
-                cru = load_cru(slug)[0]
+                cru, bundle = load_cru(slug)
+                departments = {code[:2] for code in communes(bundle)}
+                self.assertEqual(len(departments), 1)
+                department = next(iter(departments))
                 review = read_json(RESEARCH_DIR / slug / 'source-review.json')
                 self.assertEqual(review['parentFeatureId'], cru['parentFeatureId'])
                 for source in review['sources']:
@@ -65,12 +69,13 @@ class ConfigTests(unittest.TestCase):
                 sources = {s['id']: s for s in review['sources']}
                 if 'namedPlots' in cru:
                     self.assertEqual(cru['namedPlots']['nameSourceSha256'], sources['names']['sha256'])
-                rights = rights_releases(read_json(ROOT / sources['rights']['snapshot']), '21')
+                self.assertEqual(review.get('department', '21'), department)
+                rights = rights_releases(read_json(ROOT / sources['rights']['snapshot']), department)
                 self.assertEqual(rights, review['rightsReleases'])
                 history = read_json(RESEARCH_DIR / slug / 'rights-history.json')['coverage']
                 self.assertEqual([r['asOf'] for r in rights], history['rightsImported'])
                 dfi = read_json(ROOT / sources['dfi']['snapshot'])
-                self.assertEqual(dfi_releases(dfi, '21'), review['dfiReleases'])
+                self.assertEqual(dfi_releases(dfi, department), review['dfiReleases'])
                 self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
                 self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
                 for commune, geometry in history['geometry'].items():
