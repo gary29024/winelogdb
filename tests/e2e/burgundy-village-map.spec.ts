@@ -1104,8 +1104,8 @@ matrixTest('conflicting wine identities do not show a map entry point',async({pa
 });
 
 for(const village of [
- {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:34,catalogue:'moreyVillageMapCatalogue'},
- {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:30,catalogue:'chambolleVillageMapCatalogue'},
+ {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:34,catalogue:'moreyVillageMapCatalogue',namedPlots:['clos-des-lambrays','clos-saint-denis']},
+ {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:30,catalogue:'chambolleVillageMapCatalogue',namedPlots:['musigny']},
 ].filter(village=>fullMapMatrix||village.id==='morey-saint-denis')){
  for(const route of matrixRoutes){
   test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
@@ -1126,7 +1126,9 @@ for(const village of [
    await expect(dialog.locator('.village-map-selected-label')).toHaveText(village.cru);
    expect(requests.filter(url=>url.includes('/maps/')).length).toBeGreaterThan(0);
    expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).length).toBeGreaterThan(0);
-   expect(requests.filter(url=>url.includes('/maps/')).every(url=>url.includes(`/maps/${village.id}.`))).toBe(true);
+   // Only this village's map and the named-area layers of its reviewed crus load.
+   expect([...new Set(requests.filter(url=>url.includes('/maps/')).map(url=>new URL(url).pathname.split('.')[0]))].sort())
+    .toEqual([`/maps/${village.id}`,...village.namedPlots.map(slug=>`/maps/${slug}-named-plots`)].sort());
    expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).every(url=>url.includes(village.catalogue))).toBe(true);
    await selector.selectOption('inao-denom-361');
    await expect(dialog.locator('.village-map-selected-label')).toHaveText('Bonnes-Mares');
