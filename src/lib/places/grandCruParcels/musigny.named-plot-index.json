@@ -1,0 +1,15 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/musigny",
+  "plots": [
+    {
+      "id": "musigny-plot-les-musigny",
+      "name": "Les Musigny",
+      "aliases": []
+    },
+    {
+      "id": "musigny-plot-les-petits-musigny",
+      "name": "Les Petits Musigny",
+      "aliases": []
+    }
+  ]
+}

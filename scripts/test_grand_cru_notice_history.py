@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from build_grand_cru_notice_history import (covered_by_curated_review, load_availability, match_printed_reference,
+from build_grand_cru_notice_history import (covered_by_curated_review, curated_page_reviews, load_availability, match_printed_reference,
                                             normalized_reference, query_reviewed)
 from grand_cru_filiation import parse_dfi, trace_ancestry
 from test_grand_cru_filiation import pair
@@ -38,6 +38,20 @@ class NoticeHistoryTests(unittest.TestCase):
         history = json.loads((root / 'docs/research/clos-de-vougeot/notice-history.json').read_text(encoding='utf-8'))
         self.assertIn('bfc-2024-008:p82', history['coverage']['searchMatchesAlreadyReviewed'])
         self.assertEqual(history['unreviewedCandidates'], [])
+
+    def test_page_review_can_reject_matched_references_without_an_event(self):
+        # Girard (bfc-2021-146:p36) prints Chambolle A139, retired by DFI in 1995: read, rejected, never an event.
+        curation = {'exactParcelEvents': [], 'noticeReview': [
+            {'sourceId': 'girard-2021', 'bulletin': 'bfc-2021-146', 'sha256': 'a' * 64, 'pages': [37], 'reviewMethod': 'page-image',
+             'rejectedReferences': ['211330000A0139', '21133000AN0037']}]}
+        reviews = curated_page_reviews(curation)
+        notice, bulletin = {'bulletin': 'bfc-2021-146', 'firstPage': 36, 'lastPage': 38}, {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, ['211330000A0139', '21133000AN0037'], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, ['211330000A0139', '211330000A0140'], reviews))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/musigny/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-146:p36', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual((history['unreviewedCandidates'], history['reviewedMatches']), ([], []))
 
     def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
         audit = load_availability()
