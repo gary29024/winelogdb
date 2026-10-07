@@ -2,31 +2,38 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D8nXpN3j.js"
+    "dist/client/assets/index-Czqa6zMh.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-BgToB9Tn.js",
-    "dist/client/assets/SectionLabel-VieFgHPs.js",
-    "dist/client/assets/SparklingDetailsCard-CuYfU4GN.js",
-    "dist/client/assets/VillageMap-CW5pdyHP.js",
-    "dist/client/assets/api-BtXjaQQc.js",
-    "dist/client/assets/burgundyAtlas-CjQC7a7f.js",
-    "dist/client/assets/index-D8nXpN3j.js",
-    "dist/client/assets/index-xswijJpE.js",
+    "dist/client/assets/FriendTagDialog-D6fBU1o_.js",
+    "dist/client/assets/SectionLabel-DdXzi865.js",
+    "dist/client/assets/SparklingDetailsCard-r_YI60Q6.js",
+    "dist/client/assets/VillageMap-DCfaiH-t.js",
+    "dist/client/assets/api-BZDgm5aO.js",
+    "dist/client/assets/burgundyAtlas-By7_hQLV.js",
+    "dist/client/assets/index-Cbviw3Uu.js",
+    "dist/client/assets/index-Czqa6zMh.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-Cj0-t7pW.js",
-    "dist/client/assets/wineDetailCompact-S0dNNzx9.js"
+    "dist/client/assets/useModalFocus-GO5PWhBs.js",
+    "dist/client/assets/wineDetailCompact-B3KxhsAB.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 9,
-  "evidenceBytesTotal": 1147135,
-  "evidenceGzipBytesTotal": 118995,
-  "parcelBundleBytesTotal": 463770,
-  "parcelBundleGzipBytesTotal": 71446,
+  "evidenceChunkCount": 10,
+  "evidenceBytesTotal": 1274387,
+  "evidenceGzipBytesTotal": 131080,
+  "parcelBundleBytesTotal": 884664,
+  "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
+    {
+      "cru": "chambertin",
+      "file": "dist/client/assets/chambertin.evidence-dSJGHgKc.js",
+      "sha256": "73fc401d9cdad49016863f20b32b6356b89dfd467e8cd45cb398d32211481800",
+      "bytes": 127252,
+      "gzipBytes": 12085
+    },
     {
       "cru": "clos-de-vougeot",
       "file": "dist/client/assets/clos-de-vougeot.evidence-CA5w5n1I.js",
@@ -98,6 +105,13 @@
       "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
       "bytes": 239882,
       "gzipBytes": 35324
+    },
+    {
+      "bundle": "gevrey-chambertin",
+      "dataUrl": "/maps/gevrey-chambertin-parcels.2026-06-01.ff650df461c3.geojson",
+      "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+      "bytes": 420894,
+      "gzipBytes": 62023
     },
     {
       "bundle": "vosne-romanee",

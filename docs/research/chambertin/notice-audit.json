@@ -1,0 +1,827 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-447",
+  "inputs": {
+    "parcelSnapshotSha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+    "history": "docs/research/chambertin/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/chambertin/curation.json",
+        "sha256": "710cd13e3897eb7454f85f445c8b44db27114ab1db32871ef924ff412b43e544"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "212950000A0169",
+    "212950000A0171",
+    "212950000A0238",
+    "21295000BN0001",
+    "21295000BN0002",
+    "21295000BN0003",
+    "21295000BN0004",
+    "21295000BN0007",
+    "21295000BN0008",
+    "21295000BN0009",
+    "21295000BN0010",
+    "21295000BN0015",
+    "21295000BN0016",
+    "21295000BN0017",
+    "21295000BN0018",
+    "21295000BN0019",
+    "21295000BN0022",
+    "21295000BN0023",
+    "21295000BN0025",
+    "21295000BN0027",
+    "21295000BN0030",
+    "21295000BN0031",
+    "21295000BN0032",
+    "21295000BN0033",
+    "21295000BN0034",
+    "21295000BN0035",
+    "21295000BN0036",
+    "21295000BN0037",
+    "21295000BN0140",
+    "21295000BN0141",
+    "21295000BN0144",
+    "21295000BN0145",
+    "21295000BN0146",
+    "21295000BN0147",
+    "21295000BN0148",
+    "21295000BN0149",
+    "21295000BN0150",
+    "21295000BN0151",
+    "21295000BN0152",
+    "21295000BN0153",
+    "21295000BN0154",
+    "21295000BN0155",
+    "21295000BN0158",
+    "21295000BN0159",
+    "21295000BN0160",
+    "21295000BN0162",
+    "21295000BN0163",
+    "21295000BN0164",
+    "21295000BN0165",
+    "21295000BN0180",
+    "21295000BN0182",
+    "21295000BN0183",
+    "21295000BN0184",
+    "21295000BN0185",
+    "21295000BN0186",
+    "21295000BN0191",
+    "21295000BN0192",
+    "21295000BN0193",
+    "21295000BN0194",
+    "21295000BN0195",
+    "21295000BN0196",
+    "21295000BN0197",
+    "21295000BN0198",
+    "21295000BN0199",
+    "21295000BN0200",
+    "21295000BN0201",
+    "21295000BN0202",
+    "21295000BN0203",
+    "21295000BN0204",
+    "21295000BN0205",
+    "21295000BN0206",
+    "21295000BN0207",
+    "21295000BN0212",
+    "21295000BN0213",
+    "21295000BN0225",
+    "21295000BN0226",
+    "21295000BN0227",
+    "21295000BN0228",
+    "21295000BN0229",
+    "21295000BN0230",
+    "21295000BN0231",
+    "21295000BN0232",
+    "21295000BN0233",
+    "21295000BN0234",
+    "21295000BN0235",
+    "21295000BN0236",
+    "21295000BN0237",
+    "21295000BN0238",
+    "21295000BN0239",
+    "21295000BO0012",
+    "21295000BO0013",
+    "21295000BO0015",
+    "21295000BO0017",
+    "21295000BO0018",
+    "21295000BO0043",
+    "21295000BO0044",
+    "21295000BO0045",
+    "21295000BO0046",
+    "21295000BO0047",
+    "21295000BO0051",
+    "21295000BO0057",
+    "21295000BO0058",
+    "21295000BO0059",
+    "21295000BO0060",
+    "21295000BO0061",
+    "21295000BO0063",
+    "21295000BO0064",
+    "21295000BO0065",
+    "21295000BO0066",
+    "21295000BO0067",
+    "21295000BO0068",
+    "21295000BO0072",
+    "21295000BO0073",
+    "21295000BO0074",
+    "21295000BO0075",
+    "21295000BO0076",
+    "21295000BO0077",
+    "21295000BO0078",
+    "21295000BO0080",
+    "21295000BO0081",
+    "21295000BO0082",
+    "21295000BO0083",
+    "21295000BO0084",
+    "21295000BO0085",
+    "21295000BO0086",
+    "21295000BO0087",
+    "21295000BO0088",
+    "21295000BO0089",
+    "21295000BO0090",
+    "21295000BO0091",
+    "21295000BO0092",
+    "21295000BO0094",
+    "21295000BO0095",
+    "21295000BO0096",
+    "21295000BO0121",
+    "21295000BO0122",
+    "21295000BO0125",
+    "21295000BO0126",
+    "21295000BO0127",
+    "21295000BO0130",
+    "21295000BO0131",
+    "21295000BO0132",
+    "21295000BO0141",
+    "21295000BO0142",
+    "21295000BO0143",
+    "21295000BO0144",
+    "21295000BO0145",
+    "21295000BS0061",
+    "21295000BS0063",
+    "21295000BS0077",
+    "21295000BS0078"
+  ],
+  "reviewedMatches": 1,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [
+    "bfc-2023-037:p10"
+  ],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2020-039:p50",
+      "matchedReferenceSuffixes": [
+        "0A0171"
+      ],
+      "communesMentioned": [
+        "21156",
+        "21164",
+        "21181",
+        "21231",
+        "21251",
+        "21264",
+        "21363",
+        "21374",
+        "21414",
+        "21447",
+        "21567",
+        "21680",
+        "21715"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-052:p17",
+      "matchedReferenceSuffixes": [
+        "BO0122"
+      ],
+      "communesMentioned": [
+        "21187",
+        "21231",
+        "21600"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-056:p27",
+      "matchedReferenceSuffixes": [
+        "0A0171"
+      ],
+      "communesMentioned": [
+        "21064",
+        "21137",
+        "21231",
+        "21308",
+        "21341",
+        "21389",
+        "21413",
+        "21425",
+        "21448",
+        "21663"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-059:p54",
+      "matchedReferenceSuffixes": [
+        "0A0169"
+      ],
+      "communesMentioned": [
+        "21020",
+        "21128",
+        "21231",
+        "21251"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2023-037:p10",
+      "matchedReferenceSuffixes": [
+        "BN0034"
+      ],
+      "communesMentioned": [
+        "21133",
+        "21231",
+        "21295",
+        "21447",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": true
+    }
+  ],
+  "pageImageReviews": [
+    {
+      "sourceId": "eugenie-2022",
+      "bulletin": "bfc-2023-037",
+      "sha256": "c0b7b3b5b341bcf02d99fe9c6d747e998e1700425c86bc64006c216f91d9fb59",
+      "pages": [
+        1,
+        10,
+        11
+      ],
+      "reviewMethod": "page-image",
+      "renderMethod": "Poppler pdftoppm: page 11 at 1800 pixels on the long edge, heading at 1200 and cover at 1000. Visually checked commune grouping, references, stamp, publication and no-permission clause.",
+      "actId": "BFC-2023-12-15-00001",
+      "indexedActDate": "2023-12-15",
+      "printedDocumentDate": "2022-12-15",
+      "publicationDate": "2023-04-04",
+      "printedReferencesByCommune": {
+        "21133": [
+          "AB304",
+          "AB438",
+          "AB440"
+        ],
+        "21295": [
+          "BN34",
+          "AC6",
+          "AC287",
+          "AC288",
+          "AC289"
+        ]
+      },
+      "finding": "Page 11 explicitly groups BN34 under GEVREY-CHAMBERTIN. The letter is stamped 15 DEC. 2022; the cover was published 4 April 2023 and the printed act identifier says BFC-2023-12-15-00001. Retain that identifier, but use the stamped letter date. Application/completion date is 24 November 2022; 0.6426 ha is the combined area across both communes and is not assigned to BN34. The receipt expressly does not authorise cultivation."
+    }
+  ],
+  "unassignedReviewedReferences": [
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+        "actId": null,
+        "documentDate": "2010-04-23",
+        "printedDate": "23 avril 2010",
+        "publicationDate": "2010-06-01",
+        "applicant": "HOSPICES DE BEAUNE",
+        "previousOperator": null,
+        "communeCode": "21295",
+        "printedCommune": "GEVREY-CHAMBERTIN",
+        "printedReference": "BN 40",
+        "reference": "BN0040",
+        "status": "refused",
+        "areaHa": null,
+        "sourcePages": [
+          49
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+        "actId": null,
+        "documentDate": "2010-04-23",
+        "printedDate": "23 avril 2010",
+        "publicationDate": "2010-06-01",
+        "applicant": "HOSPICES DE BEAUNE",
+        "previousOperator": null,
+        "communeCode": "21295",
+        "printedCommune": "GEVREY-CHAMBERTIN",
+        "printedReference": "BN 75",
+        "reference": "BN0075",
+        "status": "refused",
+        "areaHa": null,
+        "sourcePages": [
+          49
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+        "actId": null,
+        "documentDate": "2010-04-23",
+        "printedDate": "23 avril 2010",
+        "publicationDate": "2010-06-01",
+        "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+        "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY-CHAMBERTIN",
+        "printedReference": "BP 255",
+        "reference": "BP0255",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          49,
+          50
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+        "actId": null,
+        "documentDate": "2010-04-23",
+        "printedDate": "23 avril 2010",
+        "publicationDate": "2010-06-01",
+        "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+        "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY-CHAMBERTIN",
+        "printedReference": "BP 258",
+        "reference": "BP0258",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          49,
+          50
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 8",
+        "reference": "AD0008",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 61",
+        "reference": "AD0061",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 62",
+        "reference": "AD0062",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 63",
+        "reference": "AD0063",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 107",
+        "reference": "AD0107",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 116",
+        "reference": "AD0116",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 121",
+        "reference": "AD0121",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AD 138",
+        "reference": "AD0138",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AK 106",
+        "reference": "AK0106",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "BI 146",
+        "reference": "BI0146",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "BR 134",
+        "reference": "BR0134",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "BR 135",
+        "reference": "BR0135",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "BR 152",
+        "reference": "BR0152",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21295",
+        "printedCommune": "GEVREY CHAMBERTIN",
+        "printedReference": "AL 162",
+        "reference": "AL0162",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    }
+  ],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0,
+  "finding": "All 151 current/reachable references queried. One exact page-image-reviewed application receipt for BN0034, dated by its 15 December 2022 stamp; the conflicting 2023 act identifier is retained. The 0.6426 ha total across two communes is not assigned to this parcel. No pending candidate and no current farmer confirmed. Raw suffix hits without the cru commune are unassigned search context, not parcel evidence."
+}

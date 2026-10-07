@@ -1,17 +1,18 @@
 import bundle0 from './flagey-echezeaux.manifest.json';
-import bundle1 from './vosne-romanee.manifest.json';
-import bundle2 from './vougeot.manifest.json';
+import bundle1 from './gevrey-chambertin.manifest.json';
+import bundle2 from './vosne-romanee.manifest.json';
+import bundle3 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'flagey-echezeaux':bundle0,'vosne-romanee':bundle1,'vougeot':bundle2} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'flagey-echezeaux':bundle0,'gevrey-chambertin':bundle1,'vosne-romanee':bundle2,'vougeot':bundle3} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-grande-rue'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='chambertin'|'clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-grande-rue'|'la-romanee'|'la-tache'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -26,6 +27,7 @@ export type GrandCru={
 // Mirrors scripts/grand-crus/<slug>.json (checked by tests/unit/grandCruRegistry.test.ts).
 // Components look crus up here; they never name a cru or INAO feature themselves.
 export const grandCrus:readonly GrandCru[]=[
+ {slug:"chambertin",name:"Chambertin",parentFeatureId:"inao-denom-447",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin"],domaineGrouping:false},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},

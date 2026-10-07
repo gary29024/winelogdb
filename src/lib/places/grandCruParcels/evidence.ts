@@ -18,6 +18,7 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
+ 'chambertin':()=>import('./chambertin.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),

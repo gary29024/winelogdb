@@ -14,9 +14,48 @@
     "chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjY0Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "75219598e4cd082fa301fb0962c4cd4ca804ee36eb60e9f033768cdbb9b22468",
+    "coverageNote": "The unchanged INAO Chambertin feature includes Clos de Bèze. CHAMBERTIN and CLOS DE BEZE are audited cadastral areas, distinct from producer holdings. No selectable named-area layer is published: the cru name would otherwise match only the smaller CHAMBERTIN area. Small contacts in neighbouring lieux-dits remain unresolved and the whole-cru outline is retained.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "chambertin",
+        "name": "Chambertin",
+        "sourceName": "CHAMBERTIN",
+        "aliases": []
+      },
+      {
+        "id": "clos-de-beze",
+        "name": "Clos de Bèze",
+        "sourceName": "CLOS DE BEZE",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "BEL-AIR",
+        "sourceCandidate": "BEL-AIR",
+        "reason": "A full cadastral parcel in this lieu-dit has only an edge overlap with the INAO feature. Retain its printed cadastral name without claiming it is a Chambertin climat or extending a named area."
+      },
+      {
+        "name": "LES MAZIS-HAUTS",
+        "sourceCandidate": "LES MAZIS-HAUTS",
+        "reason": "A full cadastral parcel in this lieu-dit has only an edge overlap with the INAO feature. Retain its printed cadastral name without claiming it is a Chambertin climat or extending a named area."
+      },
+      {
+        "name": "MONTCHARMONT",
+        "sourceCandidate": "MONTCHARMONT",
+        "reason": "A full cadastral parcel in this lieu-dit has only an edge overlap with the INAO feature. Retain its printed cadastral name without claiming it is a Chambertin climat or extending a named area."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
   }
 }
