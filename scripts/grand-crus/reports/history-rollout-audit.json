@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5339884,
-  "evidenceGzipBytesTotal": 456655,
+  "evidenceBytesTotal": 5544460,
+  "evidenceGzipBytesTotal": 485905,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -67,10 +67,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "cbc06fc02796d65e64856f2b9848bacef3613569161e3ab80e2010558c0cf481",
-      "evidenceSha256": "fc51f545a671af4df0577e0349ea35246b3c17e62ce69a019196b33146dea621",
-      "evidenceBytes": 458524,
-      "evidenceGzipBytes": 40020,
+      "registerSha256": "91420087d4ca6d1c1c9da17ec658521613a4dd27bdb0beeae0913a3278bb3c74",
+      "evidenceSha256": "5a3a3632dcf8c41a5f9696bd51422bf387d5798a42c46da098baec134bfe01a7",
+      "evidenceBytes": 458809,
+      "evidenceGzipBytes": 40052,
       "earliestRawEventSample": {
         "id": "210:267:000:0000196:00001",
         "departmentCode": "210",
@@ -259,10 +259,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "b6cb8bbc7ab78f6e4748549e5f61f17b58b22439e1e51d65d1a3a09bc63e5dca",
-      "evidenceSha256": "b0b248abb91cad2ef47978ec0b62b9f10cdcc98589bff47d0cdd824ec66af6ab",
-      "evidenceBytes": 299040,
-      "evidenceGzipBytes": 31397,
+      "registerSha256": "3f7cb98395b7f095998be620519ebf2b91fa2df514fa46bd0c4137ff54df2a39",
+      "evidenceSha256": "86e82c3b9264a047de9276b5fdd58dbdadfceaf6b3963d5eaaa537af9b029a75",
+      "evidenceBytes": 300002,
+      "evidenceGzipBytes": 31707,
       "earliestRawEventSample": {
         "id": "210:716:000:0000052:00001",
         "departmentCode": "210",
@@ -2799,10 +2799,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "00c7aac49fe1c879707b4ce1de3ecc39e6685182e59eabd0c002e3c374937ace",
-      "evidenceSha256": "9f47e2d1bad2f85724cfd1fa49ffadc8d9b9c75bef474055cbd8b520f639ded1",
-      "evidenceBytes": 798871,
-      "evidenceGzipBytes": 38524,
+      "registerSha256": "b4406d0f9b67d0ee4793d6c3a34e7ebc5060f74309aeb2b90638cd3f8750c7e9",
+      "evidenceSha256": "e4760871dcf789d5bd284fe5d29e5fec78b570470b1d69e08d9b4485ba08add0",
+      "evidenceBytes": 1002200,
+      "evidenceGzipBytes": 67432,
       "earliestRawEventSample": {
         "id": "210:010:000:0000130:00001",
         "departmentCode": "210",

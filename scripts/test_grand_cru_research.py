@@ -4,7 +4,7 @@ import json
 import unittest
 
 from build_grand_cru_evidence import build_evidence
-from build_grand_cru_research import Context, build_register as build_cru_register
+from build_grand_cru_research import Context, build_register as build_cru_register, load_inputs
 from grand_cru import HOLDER_LINKS, ROOT, load_cru, manifest_path, read_json, resolve_curation
 
 CONTEXT = Context(*load_cru('echezeaux'))
@@ -170,6 +170,27 @@ class FarmingResearchTests(unittest.TestCase):
         curation['externalResearch'][0]['sourceIds'] = []
         with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
             self.build(curation)
+
+    def test_printed_references_reach_parcels_through_documented_dfi_lineage(self):
+        # Corton's Le Corton plots 8 and 9 were merged and re-divided by DFI events; their spatial successors were rejected.
+        context = Context(*load_cru('corton'))
+        i = load_inputs(context)
+
+        def build(curation):
+            return build_cru_register(i['manifest'], i['asset'], curation, i['history'], i['sales'], i['named_areas'], context,
+                                      i['notice_records'])
+        rows = {p['reference']: p for p in build(i['curation'])['parcels']}
+        for ref in ('C 0124', 'C 0125'):
+            self.assertIn('wh-bouchard-lecorton', rows[ref]['externalResearchIds'])
+            self.assertEqual(rows[ref]['candidateLeads'][0]['basis'], 'critic-named-cadastral-reference on predecessor C0008')
+            self.assertIsNone(rows[ref]['currentFarmer'])
+        retired = {r['parcelId']: r for r in i['history']['retiredParcels']}
+        self.assertFalse(any(s['accepted'] for s in retired['210100000C0008']['successors']))
+        curation = copy.deepcopy(i['curation'])
+        bouchard = next(x for x in curation['externalResearch'] if x['id'] == 'wh-bouchard-lecorton')
+        bouchard['predecessorReferences']['210100000C0008'].append('210100000C0122')  # a descendant of C 0004 instead
+        with self.assertRaisesRegex(ValueError, 'External research predecessor reference without matching cadastral lineage'):
+            build(curation)
 
     def test_a_sale_lead_names_a_later_holder_without_asserting_a_buyer(self):
         result = self.build()

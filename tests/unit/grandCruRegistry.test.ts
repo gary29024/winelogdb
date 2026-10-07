@@ -90,6 +90,21 @@ describe('Grand Cru registry',()=>{
   expect(evidence.parcels['217160000A0372'].map(i=>i.kind)).toContain('research');
   expect(Object.keys(evidence.parcels).every(id=>id.startsWith('21716'))).toBe(true);
  });
+ it('loads Richebourg research while keeping an unnamed owner report and weak holder links unverified',async()=>{
+  expect(grandCruFor('inao-denom-1083','vosne-romanee')?.domaineGrouping).toBe(true);
+  expect(parcelRightsSnapshot('inao-denom-1083')?.holderIds).toHaveLength(10);
+  const evidence=await loadParcelEvidence('inao-denom-1083');
+  expect(evidence.holderDomains?.['778269407']?.basis).toBe('company-identity');
+  expect(evidence.holderDomains?.['885114322']?.basis).toBe('filing-tenant-relationship');
+  expect(evidence.holderDomains?.['U14149307']?.basis).toBe('name-and-seat-crosswalk');
+  expect(evidence.holderDomains?.['318506367']).toBeUndefined();
+  for(const n of [292,293,294,295]){
+   const items=evidence.parcels[`21714000AN0${n}`];
+   expect(items.some(i=>i.kind==='research'&&i.note?.includes('leaves the new owner unnamed'))).toBe(true);
+  }
+  expect(Object.keys(evidence.tracing??{})).toHaveLength(58);
+  expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer/);
+ });
  it('merges several research files without dropping records or overriding the first domaine heading',()=>{
   const item=(title:string)=>({kind:'lead' as const,date:null,title,sources:[]});
   const heading=(name:string)=>({name,basis:'estate-context',note:'',sources:[]});

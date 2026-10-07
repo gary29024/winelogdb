@@ -30,8 +30,9 @@
   },
   "research": {
     "methodDoc": "docs/research/corton/README.md",
+    "filingsDoc": "docs/research/corton/filings.md",
     "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "producerResearch": "tier-2-reviewed"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-beaune/corton",
