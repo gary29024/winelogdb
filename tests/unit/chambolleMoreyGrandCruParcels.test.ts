@@ -9,6 +9,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const reviewed=[
  {slug:'musigny',name:'Musigny',id:'inao-denom-973',maps:['chambolle-musigny']},
  {slug:'bonnes-mares',name:'Bonnes-Mares',id:'inao-denom-361',maps:['chambolle-musigny','morey-saint-denis']},
+ {slug:'clos-de-tart',name:'Clos de Tart',id:'inao-denom-545',maps:['morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -48,6 +49,14 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
   for(const target of [wine,{...wine,referenceParcel:'Les Bonnes Mares'},{...wine,referenceParcel:'Les Véroilles'}]){
    const result=burgundyVillageMapTarget(target);
    expect(result?.featureId).toBe('inao-denom-361');
+   expect(result?.namedPlotId).toBeUndefined();
+  }
+ });
+ it('keeps Clos de Tart on its official outline, whatever the cadastral name',()=>{
+  const wine={...red,appellation:'Clos de Tart',wineName:'Clos de Tart'};
+  for(const target of [wine,{...wine,referenceParcel:'Clos de Tart'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-545'});
    expect(result?.namedPlotId).toBeUndefined();
   }
  });
