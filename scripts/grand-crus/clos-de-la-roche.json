@@ -13,10 +13,91 @@
   "evidenceFrom": [
     "clos-de-la-roche"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 673.6,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 673.577408 m² remainder (0.3986%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The remainder is narrow strips along the cru's edges; on the northern side the official line runs past the Morey-Saint-Denis cadastre into Gevrey-Chambertin parcels, which are measured but never imported. It forms 12 pieces, with mean widths of 0.07–1.29 m for those of at least 1 m². All of it lies along the outline edge. It is not a missing INAO commune. Neighbouring Gevrey-Chambertin parcels account for 456.622061 m² of it. 216.955347 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/clos-de-la-roche/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/clos-de-la-roche",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-la-roche,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjgyJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "96e4ecd805c03fc3c8fa3d489e368812bbab62b37c6ce396f34bed920df26326",
+    "coverageNote": "Clos de la Roche, Les Chabiots, Les Fremières, Les Froichots, Les Genavrières, Les Mochamps and Monts Luisants are cadastral named areas within Clos de la Roche; only part of the cadastral Les Genavrières and Monts Luisants lies inside the cru. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+    "plots": [
+      {
+        "id": "clos-de-la-roche",
+        "name": "Clos de la Roche",
+        "sourceName": "CLOS DE LA ROCHE",
+        "aliases": []
+      },
+      {
+        "id": "les-chabiots",
+        "name": "Les Chabiots",
+        "sourceName": "LES CHABIOTS",
+        "communes": [
+          "21442"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "les-fremieres",
+        "name": "Les Fremières",
+        "sourceName": "LES FREMIERES",
+        "communes": [
+          "21442"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "les-froichots",
+        "name": "Les Froichots",
+        "sourceName": "LES FROICHOTS",
+        "aliases": []
+      },
+      {
+        "id": "les-genavrieres",
+        "name": "Les Genavrières",
+        "sourceName": "LES GENAVRIERES",
+        "aliases": []
+      },
+      {
+        "id": "les-mochamps",
+        "name": "Les Mochamps",
+        "sourceName": "LES MOCHAMPS",
+        "aliases": []
+      },
+      {
+        "id": "monts-luisants",
+        "name": "Monts Luisants",
+        "sourceName": "MONTS LUISANTS",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "Clos de la Roche",
+        "sourceCandidate": "LES CHAFFOTS",
+        "reason": "LES CHAFFOTS is an official Clos Saint-Denis climat, not a Clos de la Roche one. Parcel AB0419 lies 86% inside Clos de la Roche (and 10% in Clos Saint-Denis) but in that lieu-dit; AB0418 and AB0474 only touch the edge. No crosswalk is made; these parcels keep the whole-cru outline."
+      }
+    ],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "LE VILLAGE",
+        "reason": "Not an official Clos de la Roche climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ]
   }
 }

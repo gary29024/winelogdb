@@ -1,0 +1,689 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-361",
+  "inputs": {
+    "parcelSnapshotSha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+    "history": "docs/research/bonnes-mares/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/bonnes-mares/curation.json",
+        "sha256": "a703606984905aa4227c15d8e27ec119a0841b4fb1d0d48834bfb7e0994f9130"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21133000AB0038",
+    "21133000AB0040",
+    "21133000AB0041",
+    "21133000AB0044",
+    "21133000AB0045",
+    "21133000AB0046",
+    "21133000AB0049",
+    "21133000AB0050",
+    "21133000AB0051",
+    "21133000AB0052",
+    "21133000AB0053",
+    "21133000AB0061",
+    "21133000AB0064",
+    "21133000AB0065",
+    "21133000AB0066",
+    "21133000AB0067",
+    "21133000AB0068",
+    "21133000AB0069",
+    "21133000AB0072",
+    "21133000AB0075",
+    "21133000AB0076",
+    "21133000AB0077",
+    "21133000AB0078",
+    "21133000AB0079",
+    "21133000AB0080",
+    "21133000AB0081",
+    "21133000AB0082",
+    "21133000AB0083",
+    "21133000AB0084",
+    "21133000AB0085",
+    "21133000AB0086",
+    "21133000AB0087",
+    "21133000AB0089",
+    "21133000AB0090",
+    "21133000AB0091",
+    "21133000AB0092",
+    "21133000AB0093",
+    "21133000AB0094",
+    "21133000AB0095",
+    "21133000AB0096",
+    "21133000AB0097",
+    "21133000AB0098",
+    "21133000AB0099",
+    "21133000AB0100",
+    "21133000AB0101",
+    "21133000AB0102",
+    "21133000AB0104",
+    "21133000AB0105",
+    "21133000AB0106",
+    "21133000AB0110",
+    "21133000AB0111",
+    "21133000AB0114",
+    "21133000AB0115",
+    "21133000AB0116",
+    "21133000AB0119",
+    "21133000AB0120",
+    "21133000AB0121",
+    "21133000AB0122",
+    "21133000AB0123",
+    "21133000AB0124",
+    "21133000AB0128",
+    "21133000AB0129",
+    "21133000AB0130",
+    "21133000AB0132",
+    "21133000AB0133",
+    "21133000AB0134",
+    "21133000AB0135",
+    "21133000AB0136",
+    "21133000AB0266",
+    "21133000AB0267",
+    "21133000AB0269",
+    "21133000AB0270",
+    "21133000AB0275",
+    "21133000AB0276",
+    "21133000AB0277",
+    "21133000AB0278",
+    "21133000AB0279",
+    "21133000AB0280",
+    "21133000AB0281",
+    "21133000AB0282",
+    "21133000AB0283",
+    "21133000AB0284",
+    "21133000AB0285",
+    "21133000AB0286",
+    "21133000AB0287",
+    "21133000AB0288",
+    "21133000AB0290",
+    "21133000AB0291",
+    "21133000AB0292",
+    "21133000AB0293",
+    "21133000AB0294",
+    "21133000AB0297",
+    "21133000AB0298",
+    "21133000AB0303",
+    "21133000AB0304",
+    "21133000AB0305",
+    "21133000AB0306",
+    "21133000AB0321",
+    "21133000AB0322",
+    "21133000AB0323",
+    "21133000AB0328",
+    "21133000AB0338",
+    "21133000AB0339",
+    "21133000AB0340",
+    "21133000AB0341",
+    "21133000AB0356",
+    "21133000AB0357",
+    "21133000AB0358",
+    "21133000AB0359",
+    "21133000AB0360",
+    "21133000AB0365",
+    "21133000AB0366",
+    "21133000AB0367",
+    "21133000AB0368",
+    "21133000AB0407",
+    "21133000AB0408",
+    "21133000AB0437",
+    "21133000AB0438",
+    "21133000AB0439",
+    "21133000AB0440",
+    "21133000AB0467",
+    "21133000AB0468",
+    "21133000AB0469",
+    "21133000AB0470",
+    "21133000AB0481",
+    "21133000AB0482",
+    "21442000AR0057",
+    "21442000AR0064",
+    "21442000AR0065",
+    "21442000AR0066",
+    "21442000AR0067",
+    "21442000AR0068",
+    "21442000AR0069",
+    "21442000AR0078",
+    "21442000AR0150",
+    "21442000AR0151",
+    "21442000AR0152",
+    "21442000AR0153",
+    "21442000AR0154",
+    "21442000AR0155",
+    "21442000AR0156"
+  ],
+  "reviewedMatches": 3,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [
+    "bfc-2023-037:p10"
+  ],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2019-038:p62",
+      "matchedReferenceSuffixes": [
+        "AB0084",
+        "AB0085"
+      ],
+      "communesMentioned": [
+        "21103",
+        "21231"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2019-054:p80",
+      "matchedReferenceSuffixes": [
+        "AB0114",
+        "AB0115"
+      ],
+      "communesMentioned": [
+        "21017",
+        "21088",
+        "21133",
+        "21231",
+        "21289",
+        "21384",
+        "21442",
+        "21447",
+        "21464",
+        "21714"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": true
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2019-073:p44",
+      "matchedReferenceSuffixes": [
+        "AB0040"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21369",
+        "21629"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2019-088:p89",
+      "matchedReferenceSuffixes": [
+        "AB0045"
+      ],
+      "communesMentioned": [
+        "21054",
+        "21110",
+        "21116",
+        "21169",
+        "21173",
+        "21231",
+        "21265",
+        "21295",
+        "21512",
+        "21617"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2020-040:p46",
+      "matchedReferenceSuffixes": [
+        "AB0083",
+        "AB0084"
+      ],
+      "communesMentioned": [
+        "21080",
+        "21224",
+        "21231",
+        "21552",
+        "21648"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2020-072:p18",
+      "matchedReferenceSuffixes": [
+        "AB0040"
+      ],
+      "communesMentioned": [
+        "21012",
+        "21115",
+        "21231",
+        "21346",
+        "21396",
+        "21455",
+        "21526",
+        "21704",
+        "21717"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-006:p49",
+      "matchedReferenceSuffixes": [
+        "AB0094"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21238",
+        "21306",
+        "21520",
+        "21611"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-020:p262",
+      "matchedReferenceSuffixes": [
+        "AB0046"
+      ],
+      "communesMentioned": [
+        "21117",
+        "21231",
+        "21526",
+        "21549"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-086:p60",
+      "matchedReferenceSuffixes": [
+        "AB0084"
+      ],
+      "communesMentioned": [
+        "21163",
+        "21231",
+        "21240",
+        "21275",
+        "21361",
+        "21472",
+        "21599",
+        "21638",
+        "21667"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-020:p34",
+      "matchedReferenceSuffixes": [
+        "AB0288"
+      ],
+      "communesMentioned": [
+        "21089",
+        "21231",
+        "21366"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-053:p36",
+      "matchedReferenceSuffixes": [
+        "AB0040",
+        "AB0041",
+        "AB0044",
+        "AB0045",
+        "AB0046",
+        "AB0122",
+        "AB0130"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21506",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-084:p171",
+      "matchedReferenceSuffixes": [
+        "AB0083"
+      ],
+      "communesMentioned": [
+        "21009",
+        "21186",
+        "21231",
+        "21267",
+        "21506",
+        "21517",
+        "21714",
+        "21716"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-101:p329",
+      "matchedReferenceSuffixes": [
+        "AB0116",
+        "AB0130"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21261",
+        "21656"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-154:p19",
+      "matchedReferenceSuffixes": [
+        "AB0083"
+      ],
+      "communesMentioned": [
+        "21186",
+        "21231",
+        "21267",
+        "21506",
+        "21517",
+        "21714",
+        "21716"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2023-037:p10",
+      "matchedReferenceSuffixes": [
+        "AB0304",
+        "AB0438",
+        "AB0440"
+      ],
+      "communesMentioned": [
+        "21133",
+        "21231",
+        "21295",
+        "21447",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": true
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2023-053:p25",
+      "matchedReferenceSuffixes": [
+        "AB0040",
+        "AB0046",
+        "AB0119",
+        "AB0120"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21241",
+        "21464",
+        "21506",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "departmental-cote-dor",
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p56",
+      "matchedReferenceSuffixes": [
+        "AB0069"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21671",
+        "21693"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "departmental-cote-dor",
+      "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p101",
+      "matchedReferenceSuffixes": [
+        "AB0129"
+      ],
+      "communesMentioned": [
+        "21196",
+        "21231",
+        "21541",
+        "21617"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "departmental-cote-dor",
+      "noticeId": "eeccafed59c196e0ae158e1e008243c305d5d8b813fc0582f03306f07f856655:p6",
+      "matchedReferenceSuffixes": [
+        "AB0046",
+        "AB0049"
+      ],
+      "communesMentioned": [
+        "21255"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    }
+  ],
+  "finding": "The only notice-index candidate, bfc-2023-037:p10, was read from its page image (page 11). The SCEA Domaine d'Eugenie receipt, dossier 2022-217, prints Chambolle-Musigny AB304, AB438 and AB440 separately from its Gevrey-Chambertin references; it is recorded in the curation as one historical-application event on those three current parcels. The receipt does not authorise cultivation, and no outcome or operation is established. The raw OCR sweep also hit bfc-2019-054:p80, a 28 January 2019 SARL Domaine Michel Gros application receipt (dossier 2019-012) that the index does not flag as farm-structures. Its page image (page 81) prints AB114 and AB115 under Vosne-Romanee, not Chambolle-Musigny, and none of its Chambolle-Musigny or Morey-Saint-Denis references is reachable from any cru in this bundle, so nothing is assigned. Seventeen other raw hits are in notices that never name either commune.",
+  "unassignedReviewedReferences": [
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE-MUSIGNY",
+        "printedReference": "AC 41",
+        "reference": "AC0041",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE-MUSIGNY",
+        "printedReference": "AH 271",
+        "reference": "AH0271",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE-MUSIGNY",
+        "printedReference": "AC 42",
+        "reference": "AC0042",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE MUSIGNY",
+        "printedReference": "AH 19",
+        "reference": "AH0019",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE MUSIGNY",
+        "printedReference": "AH 241",
+        "reference": "AH0241",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2011-011:p55:cluny",
+        "actId": null,
+        "documentDate": "2011-02-21",
+        "printedDate": "21 février 2011",
+        "publicationDate": "2011-03-31",
+        "applicant": "SARL CLUNY Hervé",
+        "previousOperator": "M. CLUNY Hervé à BROCHON",
+        "communeCode": "21133",
+        "printedCommune": "CHAMBOLLE MUSIGNY",
+        "printedReference": "AH 243",
+        "reference": "AH0243",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          55
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    }
+  ],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

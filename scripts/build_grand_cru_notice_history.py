@@ -96,7 +96,10 @@ def query_reviewed(record, reachable, current_ids, ancestry, events):
 
 
 def curated_page_reviews(curation):
-    """Image-reviewed assigned references or explicitly rejected OCR hints; a rejection creates no event."""
+    """Image-reviewed assigned references or explicitly rejected OCR hints; a rejection creates no event.
+
+    A republished copy of an already-reviewed act ("repeatOf" its source) is covered by that act's event,
+    not a second event."""
     events = {}
     for event in curation['exactParcelEvents']:
         events.setdefault(event['sourceId'], set()).update([*event['parcelIds'], *event.get('predecessorReferences', {})])
@@ -118,8 +121,12 @@ def curated_page_reviews(curation):
                     'Rejected notice hints require full parcel references and nonempty reasons')
             require(not set(rejected) & events.get(review['sourceId'], set()),
                     'A notice reference cannot be both assigned and rejected')
+        if 'repeatOf' in review:
+            require(review['repeatOf'] in events and review['repeatOf'] in sources,
+                    'A republished act must repeat a reviewed source with a parcel event')
         if review.get('reviewMethod') == 'page-image':
-            reviews.append({**review, 'references': events.get(review['sourceId'], set()) | set(rejected)})
+            reviews.append({**review, 'references': events.get(review['sourceId'], set()) | events.get(review.get('repeatOf'), set())
+                            | set(rejected)})
     return reviews
 
 

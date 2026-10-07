@@ -1,0 +1,95 @@
+{
+  "dataUrl": "/maps/clos-des-lambrays-named-plots.2026-06-01.b164770b3eff.geojson",
+  "parentFeatureId": "inao-denom-547",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Clos des Lambrays, Les Bouchots and Meix-Rentier are cadastral named areas within Clos des Lambrays; the cadastre records the first as LES LARRETS OU CLOS DES LAMBRAYS. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+  "features": [
+    {
+      "id": "clos-des-lambrays-plot-clos-des-lambrays",
+      "name": "Clos des Lambrays",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 163,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-547",
+      "parentAppellation": "Clos des Lambrays",
+      "sourceName": "LES LARRETS OU CLOS DES LAMBRAYS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 5.631826,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.957247230526088,
+        47.197083211462754,
+        4.9608735,
+        47.1993643
+      ],
+      "labelPoint": [
+        4.9588826644152295,
+        47.1982267512487
+      ]
+    },
+    {
+      "id": "clos-des-lambrays-plot-les-bouchots",
+      "name": "Les Bouchots",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 163,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-547",
+      "parentAppellation": "Clos des Lambrays",
+      "sourceName": "LES BOUCHOTS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.993299,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.957133433916648,
+        47.1991945,
+        4.960433596932485,
+        47.2002247
+      ],
+      "labelPoint": [
+        4.958748111434887,
+        47.19970552289905
+      ]
+    },
+    {
+      "id": "clos-des-lambrays-plot-meix-rentier",
+      "name": "Meix-Rentier",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 163,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-547",
+      "parentAppellation": "Clos des Lambrays",
+      "sourceName": "MEIX RENTIER",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.11484,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9604429,
+        47.19668659868416,
+        4.962046471746777,
+        47.198194
+      ],
+      "labelPoint": [
+        4.96119000049654,
+        47.1974271
+      ]
+    }
+  ]
+}

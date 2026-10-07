@@ -18,11 +18,16 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
+ 'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
  'chambertin':()=>import('./chambertin.evidence.json'),
  'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
  'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),
  'charmes-chambertin':()=>import('./charmes-chambertin.evidence.json'),
+ 'clos-de-la-roche':()=>import('./clos-de-la-roche.evidence.json'),
+ 'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
+ 'clos-des-lambrays':()=>import('./clos-des-lambrays.evidence.json'),
+ 'clos-saint-denis':()=>import('./clos-saint-denis.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
  'griotte-chambertin':()=>import('./griotte-chambertin.evidence.json'),

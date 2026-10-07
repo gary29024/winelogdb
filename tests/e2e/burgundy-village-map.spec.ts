@@ -1104,7 +1104,7 @@ matrixTest('conflicting wine identities do not show a map entry point',async({pa
 });
 
 for(const village of [
- {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue',namedPlots:[]},
+ {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:41,catalogue:'moreyVillageMapCatalogue',namedPlots:['clos-des-lambrays','clos-saint-denis','clos-de-la-roche']},
  {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:30,catalogue:'chambolleVillageMapCatalogue',namedPlots:['musigny']},
 ].filter(village=>fullMapMatrix||village.id==='morey-saint-denis')){
  for(const route of matrixRoutes){
