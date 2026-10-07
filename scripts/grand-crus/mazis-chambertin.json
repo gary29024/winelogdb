@@ -14,9 +14,54 @@
     "mazis-chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/mazis-chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/mazis-chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/mazis-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzQzJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "967f43c60a9c227ee8a858d7ed413fde4758634dced233190acb53398288829d",
+    "coverageNote": "Les Mazis-Bas and Les Mazis-Hauts are cadastral named areas within the official Mazis-Chambertin boundary. A broad or unmatched wine keeps the whole Grand Cru outline. These areas do not identify producer holdings.",
+    "displayLayer": true,
+    "plots": [
+      {
+        "id": "les-mazis-bas",
+        "name": "Les Mazis-Bas",
+        "sourceName": "LES MAZIS-BAS",
+        "aliases": []
+      },
+      {
+        "id": "les-mazis-hauts",
+        "name": "Les Mazis-Hauts",
+        "sourceName": "LES MAZIS-HAUTS",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "LES CORBEAUX",
+        "sourceCandidate": "LES CORBEAUX",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Mazis-Chambertin climat or extending the named areas."
+      },
+      {
+        "name": "RUCHOTTES DU BAS",
+        "sourceCandidate": "RUCHOTTES DU BAS",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Mazis-Chambertin climat or extending the named areas."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
+  },
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 356.8,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+      "cadastreSha256ByCommune": {
+        "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+      },
+      "note": "The 356.707904 m² remainder (0.3912%) was inspected against original pinned INAO/cadastral polygons in EPSG:2154. All 8 components touch the INAO boundary. The three largest components follow the diagonal southwestern boundary, the western edge of the eastern parcel block and the northwestern edge. Neither Brochon nor Morey-Saint-Denis has parcel contact or covers any uncovered area. These are boundary mismatches, with no geometry added, clipped, buffered or filled. The 356.8 m² cap allows less than 0.1 m² above this measurement; changed source hashes require another review."
+    }
   }
 }

@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5206910 bytes raw / 434016 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5206910 bytes raw / 434017 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -32,7 +32,7 @@ Lazy evidence total: 5206910 bytes raw / 434016 bytes gzip. Each cru loads its o
 | [charmes-chambertin](../../../docs/research/charmes-chambertin/register.md) | 157 | 1990-11-05 → 2025-06-02 | 27 / 12 | 11 / 13 | 0 | 2 / 0 | 13687 |
 | [mazoyeres-chambertin](../../../docs/research/mazoyeres-chambertin/register.md) | 157 | 1990-11-05 → 2025-06-02 | 27 / 12 | 11 / 13 | 0 | 2 / 0 | 13687 |
 | [latricieres-chambertin](../../../docs/research/latricieres-chambertin/register.md) | 25 | 1995-09-25 → 2023-02-13 | 11 / 10 | 6 / 6 | 0 | 0 / 0 | 8714 |
-| [mazis-chambertin](../../../docs/research/mazis-chambertin/register.md) | 62 | 1993-05-03 → 2026-03-02 | 7 / 3 | 5 / 5 | 0 | 0 / 0 | 10157 |
+| [mazis-chambertin](../../../docs/research/mazis-chambertin/register.md) | 62 | 1993-05-03 → 2026-03-02 | 7 / 3 | 5 / 5 | 0 | 0 / 0 | 10158 |
 | [ruchottes-chambertin](../../../docs/research/ruchottes-chambertin/register.md) | 26 | 2008-10-06 → 2015-06-29 | 7 / 7 | 3 / 3 | 0 | 0 / 0 | 8681 |
 | [montrachet](../../../docs/research/montrachet/register.md) | 47 | 1994-06-28 → 2023-02-27 | 20 / 6 | 7 / 10 | 0 | 1 / 0 | 11261 |
 | [chevalier-montrachet](../../../docs/research/chevalier-montrachet/register.md) | 44 | 1989-09-22 → 2020-03-16 | 21 / 19 | 13 / 13 | 0 | 0 / 0 | 10691 |

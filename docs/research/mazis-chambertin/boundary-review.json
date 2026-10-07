@@ -1,0 +1,154 @@
+{
+  "slug": "mazis-chambertin",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "cadastreSha256ByCommune": {
+    "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+  },
+  "boundaryAreaM2": 91174.64508566161,
+  "uncoveredM2": 356.70790414623445,
+  "sharePercent": 0.3912358570862497,
+  "componentCount": 8,
+  "components": [
+    {
+      "areaM2": 246.5952976361802,
+      "boundsEPSG2154": [
+        848737.487,
+        6681837.657420086,
+        848923.9040000001,
+        6681997.378999998
+      ],
+      "rectangleWidthM": 92.21150829055071,
+      "rectangleLengthM": 204.40731543411692,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0137",
+        "21295000BS0071",
+        "21295000BS0070"
+      ]
+    },
+    {
+      "areaM2": 48.282836530866206,
+      "boundsEPSG2154": [
+        848893.156,
+        6681672.754734934,
+        848928.1320285564,
+        6681836.952121659
+      ],
+      "rectangleWidthM": 6.544033843089236,
+      "rectangleLengthM": 167.84510841216877,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0059",
+        "21295000BS0058",
+        "21295000BS0057",
+        "21295000BS0056",
+        "21295000BS0055",
+        "21295000BS0054",
+        "21295000BS0164"
+      ]
+    },
+    {
+      "areaM2": 28.695640358092874,
+      "boundsEPSG2154": [
+        848645.47,
+        6681801.628789961,
+        848666.3879191789,
+        6681837.738999998
+      ],
+      "rectangleWidthM": 5.207902697663724,
+      "rectangleLengthM": 41.64501443498744,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0079",
+        "21295000BS0082",
+        "21295000BS0124",
+        "21295000BS0158"
+      ]
+    },
+    {
+      "areaM2": 9.548902773964233,
+      "boundsEPSG2154": [
+        848736.2390000001,
+        6681845.4352940135,
+        848743.5504288571,
+        6681854.89710779
+      ],
+      "rectangleWidthM": 0.9227516580063946,
+      "rectangleLengthM": 11.630481707723009,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0073"
+      ]
+    },
+    {
+      "areaM2": 9.330525737737986,
+      "boundsEPSG2154": [
+        848767.781,
+        6682033.1575020505,
+        848774.8186118712,
+        6682046.281
+      ],
+      "rectangleWidthM": 1.0929639209986366,
+      "rectangleLengthM": 14.796124468925264,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0038",
+        "21295000BS0144"
+      ]
+    },
+    {
+      "areaM2": 8.362761030748322,
+      "boundsEPSG2154": [
+        848742.5930000001,
+        6681856.527742281,
+        848749.4874248956,
+        6681892.399863275
+      ],
+      "rectangleWidthM": 3.5165892129962235,
+      "rectangleLengthM": 36.47399855091996,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0073",
+        "21295000BS0072",
+        "21295000BS0136",
+        "21295000BS0071"
+      ]
+    },
+    {
+      "areaM2": 5.566941359912511,
+      "boundsEPSG2154": [
+        848732.1115949658,
+        6681833.907117519,
+        848736.2419642429,
+        6681844.832985778
+      ],
+      "rectangleWidthM": 1.1427559312576934,
+      "rectangleLengthM": 11.331875377459,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0126",
+        "21295000BS0073",
+        "21295000BS0158"
+      ]
+    },
+    {
+      "areaM2": 0.32499871873215935,
+      "boundsEPSG2154": [
+        848917.3230000001,
+        6681868.322715054,
+        848917.7210680593,
+        6681876.228793612
+      ],
+      "rectangleWidthM": 0.07178021099048326,
+      "rectangleLengthM": 7.91246236115814,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BS0051"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "reviewMethod": "Metric overlay rendered at 1600×1120 pixels and visually inspected, including enlarged representative portions of the three largest components. Every component is checked to touch the INAO boundary; all original cadastre parcels within 20 m of the feature are included in the coverage union.",
+  "finding": "The 356.707904 m² remainder (0.3912%) was inspected against original pinned INAO/cadastral polygons in EPSG:2154. All 8 components touch the INAO boundary. The three largest components follow the diagonal southwestern boundary, the western edge of the eastern parcel block and the northwestern edge. Neither Brochon nor Morey-Saint-Denis has parcel contact or covers any uncovered area. These are boundary mismatches, with no geometry added, clipped, buffered or filled. The 356.8 m² cap allows less than 0.1 m² above this measurement; changed source hashes require another review."
+}

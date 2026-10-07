@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DoK1DmGq.js"
+    "dist/client/assets/index-DZtol0dR.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-jaelrTOK.js",
-    "dist/client/assets/SectionLabel-Cm8rbRp6.js",
-    "dist/client/assets/SparklingDetailsCard-B1gU4lm3.js",
-    "dist/client/assets/VillageMap-OLjT6Rci.js",
-    "dist/client/assets/api-D3izos7-.js",
-    "dist/client/assets/burgundyAtlas-B0PaRSDp.js",
-    "dist/client/assets/index-DFMecm_g.js",
-    "dist/client/assets/index-DoK1DmGq.js",
+    "dist/client/assets/FriendTagDialog-DT2-ugr3.js",
+    "dist/client/assets/SectionLabel-CVZwubkI.js",
+    "dist/client/assets/SparklingDetailsCard-DrWnHU_Q.js",
+    "dist/client/assets/VillageMap-D-WwAslr.js",
+    "dist/client/assets/api-DvJh7sDw.js",
+    "dist/client/assets/burgundyAtlas-DXHHPoIP.js",
+    "dist/client/assets/index-DZtol0dR.js",
+    "dist/client/assets/index-Dh-elQbY.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-Cwr74zbs.js",
-    "dist/client/assets/wineDetailCompact-BFcpOiwV.js"
+    "dist/client/assets/useModalFocus-DgWPcgGc.js",
+    "dist/client/assets/wineDetailCompact-DHmtYuTJ.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 16,
-  "evidenceBytesTotal": 1915617,
-  "evidenceGzipBytesTotal": 196310,
+  "evidenceChunkCount": 17,
+  "evidenceBytesTotal": 2003669,
+  "evidenceGzipBytesTotal": 206656,
   "parcelBundleBytesTotal": 884664,
   "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
@@ -110,6 +110,13 @@
       "sha256": "b2406ab6ed21a2734e2628eeacf62610574f04dd79b409bd0f61f17a59f82202",
       "bytes": 67851,
       "gzipBytes": 8901
+    },
+    {
+      "cru": "mazis-chambertin",
+      "file": "dist/client/assets/mazis-chambertin.evidence-CTtOHVz9.js",
+      "sha256": "71c2e0cecdefacb05892716f435bd24ec04e384381f77455f8a2deaa1bc55c9f",
+      "bytes": 88052,
+      "gzipBytes": 10346
     },
     {
       "cru": "mazoyeres-chambertin",

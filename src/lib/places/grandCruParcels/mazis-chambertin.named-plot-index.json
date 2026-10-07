@@ -1,0 +1,15 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/mazis-chambertin",
+  "plots": [
+    {
+      "id": "mazis-chambertin-plot-les-mazis-bas",
+      "name": "Les Mazis-Bas",
+      "aliases": []
+    },
+    {
+      "id": "mazis-chambertin-plot-les-mazis-hauts",
+      "name": "Les Mazis-Hauts",
+      "aliases": []
+    }
+  ]
+}

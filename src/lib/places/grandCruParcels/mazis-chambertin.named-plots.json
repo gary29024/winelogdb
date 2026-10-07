@@ -1,0 +1,68 @@
+{
+  "dataUrl": "/maps/mazis-chambertin-named-plots.2026-06-01.84a24ba25058.geojson",
+  "parentFeatureId": "inao-denom-808",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+    "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Les Mazis-Bas and Les Mazis-Hauts are cadastral named areas within the official Mazis-Chambertin boundary. A broad or unmatched wine keeps the whole Grand Cru outline. These areas do not identify producer holdings.",
+  "features": [
+    {
+      "id": "mazis-chambertin-plot-les-mazis-bas",
+      "name": "Les Mazis-Bas",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 201,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-808",
+      "parentAppellation": "Mazis-Chambertin",
+      "sourceName": "LES MAZIS-BAS",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 4.566142,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.966098236665469,
+        47.21806774148466,
+        4.96953803491742,
+        47.2220318046556
+      ],
+      "labelPoint": [
+        4.968559800435347,
+        47.220052481141735
+      ]
+    },
+    {
+      "id": "mazis-chambertin-plot-les-mazis-hauts",
+      "name": "Les Mazis-Hauts",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 201,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-808",
+      "parentAppellation": "Mazis-Chambertin",
+      "sourceName": "LES MAZIS-HAUTS",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 4.50796,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.964407064911543,
+        47.21891936728001,
+        4.968096123702134,
+        47.22159924612315
+      ],
+      "labelPoint": [
+        4.966862538011663,
+        47.22026938375799
+      ]
+    }
+  ]
+}
