@@ -22,6 +22,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'chambertin':()=>import('./chambertin.evidence.json'),
  'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
  'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),
+ 'charlemagne':()=>import('./charlemagne.evidence.json'),
  'charmes-chambertin':()=>import('./charmes-chambertin.evidence.json'),
  'clos-de-la-roche':()=>import('./clos-de-la-roche.evidence.json'),
  'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),

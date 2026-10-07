@@ -14,7 +14,7 @@ export const parcelBundles={'chambolle-morey':bundle0,'corton':bundle1,'flagey-e
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'corton-charlemagne'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
+export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charlemagne'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'corton-charlemagne'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -33,6 +33,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"chambertin",name:"Chambertin",parentFeatureId:"inao-denom-447",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin"],domaineGrouping:false},
  {slug:"chambertin-clos-de-beze",name:"Chambertin-Clos de Bèze",parentFeatureId:"inao-denom-448",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin-clos-de-beze"],domaineGrouping:false},
  {slug:"chapelle-chambertin",name:"Chapelle-Chambertin",parentFeatureId:"inao-denom-475",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chapelle-chambertin"],domaineGrouping:false},
+ {slug:"charlemagne",name:"Charlemagne",parentFeatureId:"inao-denom-476",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["charlemagne"],domaineGrouping:false},
  {slug:"charmes-chambertin",name:"Charmes-Chambertin",parentFeatureId:"inao-denom-477",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["charmes-chambertin"],domaineGrouping:false},
  {slug:"clos-de-la-roche",name:"Clos de la Roche",parentFeatureId:"inao-denom-544",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-la-roche"],domaineGrouping:false},
  {slug:"clos-de-tart",name:"Clos de Tart",parentFeatureId:"inao-denom-545",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-tart"],domaineGrouping:false},
