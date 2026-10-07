@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-XPyj151x.js"
+    "dist/client/assets/index-BIxmDj5I.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CG215UdB.js",
-    "dist/client/assets/SectionLabel-DRrA2JR0.js",
-    "dist/client/assets/SparklingDetailsCard-BL7cFXzg.js",
-    "dist/client/assets/VillageMap-BtRrxX-h.js",
-    "dist/client/assets/api-XV0ippB-.js",
-    "dist/client/assets/burgundyAtlas-DoP6I3WY.js",
-    "dist/client/assets/index-CCJ-PBj1.js",
-    "dist/client/assets/index-XPyj151x.js",
+    "dist/client/assets/FriendTagDialog-DaDq-3FS.js",
+    "dist/client/assets/SectionLabel-Btcygh4H.js",
+    "dist/client/assets/SparklingDetailsCard-CVPg0a3w.js",
+    "dist/client/assets/VillageMap-BKVo35eZ.js",
+    "dist/client/assets/api-toBbXQE8.js",
+    "dist/client/assets/burgundyAtlas-CJUdAnNA.js",
+    "dist/client/assets/index-BIxmDj5I.js",
+    "dist/client/assets/index-BRbytvam.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-p_8CGvkr.js",
-    "dist/client/assets/wineDetailCompact-DsVgKeNz.js"
+    "dist/client/assets/useModalFocus-BFlx4dG4.js",
+    "dist/client/assets/wineDetailCompact-C_8BuqIj.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 11,
-  "evidenceBytesTotal": 1349614,
-  "evidenceGzipBytesTotal": 141117,
+  "evidenceChunkCount": 12,
+  "evidenceBytesTotal": 1463296,
+  "evidenceGzipBytesTotal": 150811,
   "parcelBundleBytesTotal": 809954,
   "parcelBundleGzipBytesTotal": 125799,
   "evidenceChunks": [
@@ -33,6 +33,13 @@
       "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
       "bytes": 121220,
       "gzipBytes": 11987
+    },
+    {
+      "cru": "clos-de-tart",
+      "file": "dist/client/assets/clos-de-tart.evidence-D5twt3Ru.js",
+      "sha256": "b411b36599b0235afed2b0caedd27dd9d9ea99292728a4e58387c6a938ee27e8",
+      "bytes": 113682,
+      "gzipBytes": 9694
     },
     {
       "cru": "clos-de-vougeot",
