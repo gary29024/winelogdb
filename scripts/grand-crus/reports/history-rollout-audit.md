@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5211358 bytes raw / 434970 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5211431 bytes raw / 435023 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -39,7 +39,7 @@ Lazy evidence total: 5211358 bytes raw / 434970 bytes gzip. Each cru loads its o
 | [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 12427 |
 | [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 10106 |
 | [criots-batard-montrachet](../../../docs/research/criots-batard-montrachet/register.md) | 11 | 2001-03-15 → 2013-04-22 | 6 / 6 | 3 / 3 | 0 | 0 / 0 | 8028 |
-| [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 0 / 2 | 38139 |
-| [corton-charlemagne](../../../docs/research/corton-charlemagne/register.md) | 339 | 1990-01-10 → 2026-03-16 | 96 / 65 | 49 / 64 | 0 | 0 / 1 | 23435 |
-| [charlemagne](../../../docs/research/charlemagne/register.md) | 275 | 1990-01-10 → 2026-03-16 | 93 / 62 | 42 / 57 | 0 | 0 / 1 | 21427 |
+| [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 0 / 0 | 38163 |
+| [corton-charlemagne](../../../docs/research/corton-charlemagne/register.md) | 339 | 1990-01-10 → 2026-03-16 | 96 / 65 | 49 / 64 | 0 | 0 / 0 | 23450 |
+| [charlemagne](../../../docs/research/charlemagne/register.md) | 275 | 1990-01-10 → 2026-03-16 | 93 / 62 | 42 / 57 | 0 | 0 / 0 | 21441 |
 | [chablis-grand-cru](../../../docs/research/chablis-grand-cru/register.md) | 417 | 1991-03-22 → 2024-11-19 | 102 / 83 | 35 / 58 | 0 | 37 / 0 | 25700 |
