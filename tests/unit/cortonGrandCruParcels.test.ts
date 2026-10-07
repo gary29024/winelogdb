@@ -10,6 +10,7 @@ const maps=['aloxe-corton','ladoix','pernand-vergelesses'];
 const reviewed=[
  {slug:'corton',id:'inao-denom-549'},
  {slug:'corton-charlemagne',id:'inao-denom-550'},
+ {slug:'charlemagne',id:'inao-denom-476'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/corton.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean}};

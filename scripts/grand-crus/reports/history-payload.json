@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D8xugZcL.js"
+    "dist/client/assets/index-BEhLVr3E.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DHw8lP6p.js",
-    "dist/client/assets/SectionLabel-CPik-4PZ.js",
-    "dist/client/assets/SparklingDetailsCard-BwAVJv8h.js",
-    "dist/client/assets/VillageMap-BnPN2SG_.js",
-    "dist/client/assets/api-_PNvgugG.js",
-    "dist/client/assets/burgundyAtlas-LumrNbQC.js",
-    "dist/client/assets/index-D8xugZcL.js",
-    "dist/client/assets/index-KSOWaVLB.js",
+    "dist/client/assets/FriendTagDialog-EdaPdusO.js",
+    "dist/client/assets/SectionLabel-Bf2mrXD2.js",
+    "dist/client/assets/SparklingDetailsCard-Dq0Ju1uq.js",
+    "dist/client/assets/VillageMap-_6sm8Rm1.js",
+    "dist/client/assets/api-C8xdwkZn.js",
+    "dist/client/assets/burgundyAtlas-BypbEvJH.js",
+    "dist/client/assets/index-BEhLVr3E.js",
+    "dist/client/assets/index-C0jK2byj.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-DTWrC7Cp.js",
-    "dist/client/assets/wineDetailCompact-DBA41qIO.js"
+    "dist/client/assets/useModalFocus-DFsP8j9S.js",
+    "dist/client/assets/wineDetailCompact-SCYp4fEp.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 26,
-  "evidenceBytesTotal": 3873071,
-  "evidenceGzipBytesTotal": 340168,
+  "evidenceChunkCount": 27,
+  "evidenceBytesTotal": 4246894,
+  "evidenceGzipBytesTotal": 361801,
   "parcelBundleBytesTotal": 1935182,
   "parcelBundleGzipBytesTotal": 290981,
   "evidenceChunks": [
@@ -54,6 +54,13 @@
       "sha256": "b5a552d03b2f32ef02be31c07bbe0cfc2d49d718dc458ee1bb7187e5255b17d0",
       "bytes": 81573,
       "gzipBytes": 9408
+    },
+    {
+      "cru": "charlemagne",
+      "file": "dist/client/assets/charlemagne.evidence-BsnZ5LO0.js",
+      "sha256": "a92add1afafd5a2eaa6d8b46faf87185cce06926e75e70e83d8d2b26634a6493",
+      "bytes": 373823,
+      "gzipBytes": 21633
     },
     {
       "cru": "charmes-chambertin",
