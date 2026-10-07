@@ -20,7 +20,9 @@ export function grandCruNamedPlotIdentity(wine:Wine):{matchId:string;plotId?:str
  const cru=namedPlotCrus.find(cru=>app===placeKey(cru.name)||app.startsWith(placeKey(cru.name)+' '));
  if(!cru)return undefined;
  const {index}=cru,parentName=placeKey(cru.name);
- const plots=index.plots.map(plot=>({...plot,patterns:[plot.name,...plot.aliases].map(pattern)}));
+ // A plot named exactly like its cru (Clos des Lambrays) is only one part of it: the cru's own
+ // name keeps the whole-cru outline, so that plot is selected by its aliases or on the map only.
+ const plots=index.plots.map(plot=>({...plot,patterns:[plot.name,...plot.aliases].filter(name=>placeKey(name)!==parentName).map(pattern)}));
  if(!burgundyAtlasWinePlace({...wine,appellation:cru.name}))return null;
  const fields=[wine.appellation,wine.wineName,wine.referenceSite,wine.referenceParcel];
  const colour=placeKey(wine.colour??'')||placeKey(wine.wineStyle??'');

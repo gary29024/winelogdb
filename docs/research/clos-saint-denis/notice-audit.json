@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-548",
+  "inputs": {
+    "parcelSnapshotSha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+    "history": "docs/research/clos-saint-denis/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/clos-saint-denis/curation.json",
+        "sha256": "893a2247509941547eced5e06c7bb11ff58c9c630a2aff71888dd9d7f4bc25c0"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21442000AB0048",
+    "21442000AB0049",
+    "21442000AB0241",
+    "21442000AB0242",
+    "21442000AB0243",
+    "21442000AB0244",
+    "21442000AB0245",
+    "21442000AB0246",
+    "21442000AB0248",
+    "21442000AB0250",
+    "21442000AB0253",
+    "21442000AB0255",
+    "21442000AB0256",
+    "21442000AB0257",
+    "21442000AB0260",
+    "21442000AB0261",
+    "21442000AB0263",
+    "21442000AB0264",
+    "21442000AB0265",
+    "21442000AB0266",
+    "21442000AB0267",
+    "21442000AB0268",
+    "21442000AB0270",
+    "21442000AB0271",
+    "21442000AB0272",
+    "21442000AB0273",
+    "21442000AB0274",
+    "21442000AB0291",
+    "21442000AB0297",
+    "21442000AB0298",
+    "21442000AB0299",
+    "21442000AB0301",
+    "21442000AB0304",
+    "21442000AB0305",
+    "21442000AB0306",
+    "21442000AB0307",
+    "21442000AB0334",
+    "21442000AB0403",
+    "21442000AB0404",
+    "21442000AB0405",
+    "21442000AB0406",
+    "21442000AB0409",
+    "21442000AB0410",
+    "21442000AB0411",
+    "21442000AB0412",
+    "21442000AB0413",
+    "21442000AB0414",
+    "21442000AB0415",
+    "21442000AB0416",
+    "21442000AB0417",
+    "21442000AB0419",
+    "21442000AB0422",
+    "21442000AB0429",
+    "21442000AB0430",
+    "21442000AB0431",
+    "21442000AB0432",
+    "21442000AB0433",
+    "21442000AB0434",
+    "21442000AB0435",
+    "21442000AB0436",
+    "21442000AB0437",
+    "21442000AB0438",
+    "21442000AB0439",
+    "21442000AB0455",
+    "21442000AB0470",
+    "21442000AB0471",
+    "21442000AB0472",
+    "21442000AB0473",
+    "21442000AB0475",
+    "21442000AB0476",
+    "21442000AB0493",
+    "21442000AB0494",
+    "21442000AP0019",
+    "21442000AP0020",
+    "21442000AP0021",
+    "21442000AP0022",
+    "21442000AP0023",
+    "21442000AP0025",
+    "21442000AP0026",
+    "21442000AP0027",
+    "21442000AP0028",
+    "21442000AP0029",
+    "21442000AP0193",
+    "21442000AP0194",
+    "21442000AP0230",
+    "21442000AP0231",
+    "21442000AP0232",
+    "21442000AP0233",
+    "21442000AP0252"
+  ],
+  "reviewedMatches": 0,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-091:p54",
+      "matchedReferenceSuffixes": [
+        "AP0019",
+        "AP0020",
+        "AP0022"
+      ],
+      "communesMentioned": [
+        "21093",
+        "21231",
+        "21302",
+        "21460",
+        "21499",
+        "21711"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2023-037:p10",
+      "matchedReferenceSuffixes": [
+        "AB0304",
+        "AB0438"
+      ],
+      "communesMentioned": [
+        "21133",
+        "21231",
+        "21295",
+        "21447",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2023-053:p25",
+      "matchedReferenceSuffixes": [
+        "AB0241",
+        "AB0246"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21241",
+        "21464",
+        "21506",
+        "21714"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "departmental-cote-dor",
+      "noticeId": "eeccafed59c196e0ae158e1e008243c305d5d8b813fc0582f03306f07f856655:p6",
+      "matchedReferenceSuffixes": [
+        "AB0049"
+      ],
+      "communesMentioned": [
+        "21255"
+      ],
+      "farmStructures": false,
+      "mentionsCruCommune": false
+    }
+  ],
+  "finding": "No notice-index candidate matches the 89 current or reachable Clos Saint-Denis references, including the 1989 merger references. Four raw OCR reference-hint hits are in notices that never name Morey-Saint-Denis; they are recorded but not assigned. No exact Clos Saint-Denis notice event is supported.",
+  "unassignedReviewedReferences": [],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

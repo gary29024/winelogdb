@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-361",
+  "name": "Bonnes-Mares",
+  "inaoCommunes": [
+    "21133",
+    "21442"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21133",
+      "name": "Chambolle-Musigny",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-parcelles.json.gz",
+      "sha256": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34"
+    },
+    {
+      "commune": "21442",
+      "name": "Morey-Saint-Denis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-parcelles.json.gz",
+      "sha256": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+    }
+  ],
+  "boundaryAreaM2": 150676.3,
+  "coveredByBundleParcelsM2": 150368.8,
+  "notCoveredByBundleParcelsM2": 307.5,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 0.0,
+    "coveredByNoParcelM2": 307.5
+  },
+  "neighbours": [
+    {
+      "commune": "21267",
+      "name": "Flagey-Échezeaux",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+      "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21295",
+      "name": "Gevrey-Chambertin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+      "sha256": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21716",
+      "name": "Vougeot",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 3,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 307.6,
+    "reviewedAt": "2026-10-07",
+    "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+    "cadastreSha256ByCommune": {
+      "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+      "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+    },
+    "note": "The measured 307.519720 m² remainder (0.2041%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The cru crosses the Chambolle-Musigny and Morey-Saint-Denis line, and both communes are imported; the remainder is narrow strips between the official line or parcel edges and the nearest cadastral parcels. It forms 12 pieces, with mean widths of 0.21–1.18 m for those of at least 1 m². 51.971008 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 307.519720 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+  }
+}
