@@ -206,7 +206,12 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    outline. The named-area builders treat same-name lieu-dit features in one commune
    as a single named area (as for Romanée-Saint-Vivant). A parcel that no lieu-dit
    polygon touches gets no guessed name and must be listed in
-   `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue). The commune audit allows 0.1% of
+   `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue and Musigny). An official
+   climat with no cadastral candidate at all is an `unresolved` entry whose
+   `sourceCandidate` is null (Musigny's La Combe d'Orveau). Parcels that only touch the
+   cru edge can lie mostly in a neighbouring lieu-dit; list those names in
+   `namedPlots.neighbouringLieuxDits`, which the crosswalk accepts only for parcels
+   mostly outside the cru. The commune audit allows 0.1% of
    the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
    a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
    explanation, and the exact INAO and cadastre hashes it was reviewed against), as in
@@ -352,7 +357,10 @@ Tier 1 run therefore:
 1. Reads the cru issue and its #461 checklist, and checks the generated files.
 2. Completes the remaining per-cru items: the commune-edge audit (which lets a
    hidden cru appear on the maps), the named-area crosswalk, and page-image review
-   of any `unreviewedCandidates` in its `notice-history.json`.
+   of any `unreviewedCandidates` in its `notice-history.json`. Record each read page
+   in the curation's `noticeReview`: confirmed rows become `exactParcelEvents`, and
+   matched references the page does not support go in `rejectedReferenceHints`,
+   each with its reason.
 3. Regenerates outputs, updates the README results table and passes every `--check`.
    Rebuild and measure under Python 3.12, as CI does. Python 3.14's zlib-ng gives
    different gzip sizes, and Python 3.11's float `sum()` changes generated areas.

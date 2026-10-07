@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-s6w0Ucng.js"
+    "dist/client/assets/index-qv1AJY_Y.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DQj_FcMs.js",
-    "dist/client/assets/SectionLabel-BsrYFDIU.js",
-    "dist/client/assets/SparklingDetailsCard-qXhDs0wV.js",
-    "dist/client/assets/VillageMap-BZ3hAnLx.js",
-    "dist/client/assets/api-ZgSSqKvq.js",
-    "dist/client/assets/burgundyAtlas-D9YKqYfU.js",
-    "dist/client/assets/index-DM9CJOR3.js",
-    "dist/client/assets/index-s6w0Ucng.js",
+    "dist/client/assets/FriendTagDialog-CUTKzT89.js",
+    "dist/client/assets/SectionLabel-9wpcnfd2.js",
+    "dist/client/assets/SparklingDetailsCard-CTCUP4aT.js",
+    "dist/client/assets/VillageMap-C7_1Qw0C.js",
+    "dist/client/assets/api-n8vTkC4d.js",
+    "dist/client/assets/burgundyAtlas-DmQozIP8.js",
+    "dist/client/assets/index-D5ZP4lAV.js",
+    "dist/client/assets/index-qv1AJY_Y.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-D-uGDlRU.js",
-    "dist/client/assets/wineDetailCompact-C8TsH4KJ.js"
+    "dist/client/assets/useModalFocus-eX116bUo.js",
+    "dist/client/assets/wineDetailCompact-Dsy7YBwL.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 15,
-  "evidenceBytesTotal": 1847766,
-  "evidenceGzipBytesTotal": 187409,
-  "parcelBundleBytesTotal": 884664,
-  "parcelBundleGzipBytesTotal": 133469,
+  "evidenceChunkCount": 16,
+  "evidenceBytesTotal": 1929025,
+  "evidenceGzipBytesTotal": 197544,
+  "parcelBundleBytesTotal": 1230848,
+  "parcelBundleGzipBytesTotal": 187822,
   "evidenceChunks": [
     {
       "cru": "chambertin",
@@ -112,6 +112,13 @@
       "gzipBytes": 13869
     },
     {
+      "cru": "musigny",
+      "file": "dist/client/assets/musigny.evidence-Dq6NZNin.js",
+      "sha256": "b4846f2b773872031bb4f65340526f2c462848ff826a46fcbfb781b3492d329d",
+      "bytes": 81259,
+      "gzipBytes": 10135
+    },
+    {
       "cru": "richebourg",
       "file": "dist/client/assets/richebourg.evidence-DQOE6aG_.js",
       "sha256": "14d632746fc713a5bdbadea47f419b0c2bf30983b1b8a395f6e5e449d8911b7f",
@@ -134,6 +141,13 @@
     }
   ],
   "parcelBundles": [
+    {
+      "bundle": "chambolle-morey",
+      "dataUrl": "/maps/chambolle-morey-parcels.2026-06-01.86d6bad8f507.geojson",
+      "sha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+      "bytes": 346184,
+      "gzipBytes": 54353
+    },
     {
       "bundle": "flagey-echezeaux",
       "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
