@@ -11,6 +11,7 @@ const reviewed=[
  {slug:'bonnes-mares',name:'Bonnes-Mares',id:'inao-denom-361',maps:['chambolle-musigny','morey-saint-denis']},
  {slug:'clos-de-tart',name:'Clos de Tart',id:'inao-denom-545',maps:['morey-saint-denis']},
  {slug:'clos-des-lambrays',name:'Clos des Lambrays',id:'inao-denom-547',maps:['morey-saint-denis']},
+ {slug:'clos-saint-denis',name:'Clos Saint-Denis',id:'inao-denom-548',maps:['morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -74,5 +75,15 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
   }
   expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Bouchots'})?.namedPlotId).toBe('clos-des-lambrays-plot-les-bouchots');
   expect(burgundyVillageMapTarget({...wine,referenceParcel:'Meix Rentier'})?.namedPlotId).toBe('clos-des-lambrays-plot-meix-rentier');
+ });
+ it('selects Clos Saint-Denis climats by exact name, apart from the Échezeaux plot of the same name',()=>{
+  const wine={...red,appellation:'Clos Saint-Denis',wineName:'Clos Saint-Denis'};
+  expect(burgundyVillageMapTarget(wine)).toMatchObject({villageId:'morey-saint-denis',featureId:'inao-denom-548'});
+  expect(burgundyVillageMapTarget(wine)?.namedPlotId).toBeUndefined();
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Maison Brûlée'})?.namedPlotId).toBe('clos-saint-denis-plot-maison-brulee');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Calouère'})?.namedPlotId).toBe('clos-saint-denis-plot-calouere');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chaffots'})?.namedPlotId).toBe('clos-saint-denis-plot-les-chaffots');
+  const echezeaux={...red,appellation:'Échezeaux',wineName:'Échezeaux Clos Saint-Denis'};
+  expect(burgundyVillageMapTarget(echezeaux)?.namedPlotId).toBe('echezeaux-plot-clos-saint-denis');
  });
 });

@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-036hfaHL.js"
+    "dist/client/assets/index-BXc6AcuJ.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DAvw7BPq.js",
-    "dist/client/assets/SectionLabel-DBeBRfUn.js",
-    "dist/client/assets/SparklingDetailsCard-HtNnpUmC.js",
-    "dist/client/assets/VillageMap-BGS-CdvR.js",
-    "dist/client/assets/api-DZKHvQx8.js",
-    "dist/client/assets/burgundyAtlas-qTBkgu6l.js",
-    "dist/client/assets/index-036hfaHL.js",
-    "dist/client/assets/index-x383p52W.js",
+    "dist/client/assets/FriendTagDialog-Cf_bfZ7T.js",
+    "dist/client/assets/SectionLabel-DpN-w3uY.js",
+    "dist/client/assets/SparklingDetailsCard-D14huFlv.js",
+    "dist/client/assets/VillageMap-K1c0ol11.js",
+    "dist/client/assets/api-fjpXn6W5.js",
+    "dist/client/assets/burgundyAtlas-DDHgY3nB.js",
+    "dist/client/assets/index-BCGcKhMy.js",
+    "dist/client/assets/index-BXc6AcuJ.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-Z_FrVMaZ.js",
-    "dist/client/assets/wineDetailCompact-Dw3yqSKb.js"
+    "dist/client/assets/useModalFocus-DNWp_QMr.js",
+    "dist/client/assets/wineDetailCompact-iWKKKRBW.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 13,
-  "evidenceBytesTotal": 1516901,
-  "evidenceGzipBytesTotal": 158802,
+  "evidenceChunkCount": 14,
+  "evidenceBytesTotal": 1602534,
+  "evidenceGzipBytesTotal": 168957,
   "parcelBundleBytesTotal": 809954,
   "parcelBundleGzipBytesTotal": 125799,
   "evidenceChunks": [
@@ -54,6 +54,13 @@
       "sha256": "aaefde37e715daebea7c2961a28035ac41ea9f52cb025049b699a28d0e6ffebb",
       "bytes": 53605,
       "gzipBytes": 7991
+    },
+    {
+      "cru": "clos-saint-denis",
+      "file": "dist/client/assets/clos-saint-denis.evidence-CxtXz2Q5.js",
+      "sha256": "beaece0ff2f70db15318a2378239b4d4e25588060bd73440422eb36ac8947590",
+      "bytes": 85633,
+      "gzipBytes": 10155
     },
     {
       "cru": "echezeaux",
