@@ -1104,8 +1104,8 @@ matrixTest('conflicting wine identities do not show a map entry point',async({pa
 });
 
 for(const village of [
- {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue'},
- {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:28,catalogue:'chambolleVillageMapCatalogue'},
+ {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:30,catalogue:'moreyVillageMapCatalogue'},
+ {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:30,catalogue:'chambolleVillageMapCatalogue'},
 ].filter(village=>fullMapMatrix||village.id==='morey-saint-denis')){
  for(const route of matrixRoutes){
   test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
