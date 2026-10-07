@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5210595,
-  "evidenceGzipBytesTotal": 434625,
+  "evidenceBytesTotal": 5210668,
+  "evidenceGzipBytesTotal": 434678,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -2789,7 +2789,7 @@
         "2025-12-22"
       ],
       "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 2,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -2799,10 +2799,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "1f3d806af3983c83de147b6bd50c0fc203ce196d790ae302c0cfc149e76600fe",
-      "evidenceSha256": "1ed4c05102501e57dd677efcd59d5237428c9fbe98753e110eed307172252c9d",
-      "evidenceBytes": 797629,
-      "evidenceGzipBytes": 38139,
+      "registerSha256": "6ef00245f125182eca844c27469d5ce79453b8893d3bf63dcb09d5f10f6a8972",
+      "evidenceSha256": "19fa938e8d17ff02bc0aedbcd33a6488e272a6cde13ae954e2814e357f979785",
+      "evidenceBytes": 797666,
+      "evidenceGzipBytes": 38163,
       "earliestRawEventSample": {
         "id": "210:010:000:0000130:00001",
         "departmentCode": "210",
@@ -2900,7 +2900,7 @@
         "2025-12-22"
       ],
       "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 1,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -2910,10 +2910,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "0bd8900042f0f90c9502173c4c2887649a7177861b06f1f585568cffffb3008b",
-      "evidenceSha256": "26342588c6cbcd8ebf96bf05ac1dacf5ee56689a77af0ffd9c41f4773ce1edd1",
-      "evidenceBytes": 415612,
-      "evidenceGzipBytes": 23435,
+      "registerSha256": "b74f3f11841ff8614ea80c577eb552a34e7b5c96d64cd33cc8d7b08bb6b792d0",
+      "evidenceSha256": "4bf9f79b30f5b922943d64ee3d24d563e876bb68d8ae8b0a75e329765aed000a",
+      "evidenceBytes": 415630,
+      "evidenceGzipBytes": 23450,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",
@@ -3005,7 +3005,7 @@
         "2025-12-22"
       ],
       "noticeMatches": 0,
-      "unreviewedNoticeCandidates": 1,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -3015,10 +3015,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "879b504d16fa05b65e961c86cf234d1defb110ed19e841ab1fd529c6a1edd880",
-      "evidenceSha256": "78f1914c3b6f7f9aa72f93287161019040d49274f42fb37c7f6b6b898590a10b",
-      "evidenceBytes": 373670,
-      "evidenceGzipBytes": 21427,
+      "registerSha256": "c924cac16f2114081d8821dba2b1e33ed3a3d10682d08ef7e3632ea41021fe06",
+      "evidenceSha256": "8fe9a91b838d92d94a1d031573ebc16f403d4df98ca2c094ed6141c583a2b40a",
+      "evidenceBytes": 373688,
+      "evidenceGzipBytes": 21441,
       "earliestRawEventSample": {
         "id": "210:010:000:0000141:00001",
         "departmentCode": "210",

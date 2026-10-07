@@ -203,7 +203,8 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
    once `docs/research/<slug>/curation.json` exists. A cru that is one whole-cru
    named area sets `namedPlots.displayLayer` to false, so the map keeps the official
-   outline. The named-area builders treat same-name lieu-dit features in one commune
+   outline. So does a cru whose climats INAO already maps as denominations
+   (Corton): the cadastral areas are audited and crosswalked, never drawn twice. The named-area builders treat same-name lieu-dit features in one commune
    as a single named area (as for Romanée-Saint-Vivant). A parcel that no lieu-dit
    polygon touches gets no guessed name and must be listed in
    `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue and Musigny). An official

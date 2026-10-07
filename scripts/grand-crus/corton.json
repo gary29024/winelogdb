@@ -15,10 +15,246 @@
   "evidenceFrom": [
     "corton"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 8251.3,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+      "cadastreSha256ByCommune": {
+        "21010": "94cd91e1840378554a0cf63751fc189272cbbf9b703c79fb40f2c2fa0e65b8f9",
+        "21480": "d824740a61b9b9c75b8e4be1acfbd4c5c017fb22a313e4d8bc7bcdf4f3c7d010",
+        "21606": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088"
+      },
+      "note": "The measured 8251.295167 m² remainder (0.5139%) was reviewed against the pinned INAO boundary and Aloxe-Corton and Pernand-Vergelesses and Ladoix-Serrigny cadastres. The cru outline has 18 separate parts on the hill across Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 68 pieces, with mean widths of 0.07–1.22 m for those of at least 1 m². 105.099365 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 8251.295167 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/corton/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-beaune/corton",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/corton,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjkyJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "bfa10777719bd78941f80a9b8eb1644bb296fb84f65a59774afe4a7c645c4cff",
+    "coverageNote": "The official wine-board list names 25 Corton climats, and all match cadastral lieux-dits in Aloxe-Corton, Ladoix-Serrigny or Pernand-Vergelesses. The village maps already show Corton's climats as official INAO denominations, so this cadastral audit adds no second layer and the official outlines are retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "basses-mourottes",
+        "name": "Basses Mourottes",
+        "sourceName": "BASSES MOUROTTES",
+        "aliases": []
+      },
+      {
+        "id": "en-charlemagne",
+        "name": "En Charlemagne",
+        "sourceName": "EN CHARLEMAGNE",
+        "aliases": []
+      },
+      {
+        "id": "hautes-mourottes",
+        "name": "Hautes Mourottes",
+        "sourceName": "HAUTES MOUROTTES",
+        "aliases": []
+      },
+      {
+        "id": "la-vigne-au-saint",
+        "name": "La Vigne-au-Saint",
+        "sourceName": "LA VIGNE AU SAINT",
+        "aliases": []
+      },
+      {
+        "id": "le-charlemagne",
+        "name": "Le Charlemagne",
+        "sourceName": "LE CHARLEMAGNE",
+        "aliases": []
+      },
+      {
+        "id": "le-clos-du-roi",
+        "name": "Le Clos du Roi",
+        "sourceName": "LE CLOS DU ROI",
+        "aliases": []
+      },
+      {
+        "id": "le-corton",
+        "name": "Le Corton",
+        "sourceName": "LE CORTON",
+        "aliases": []
+      },
+      {
+        "id": "le-meix-lallemand",
+        "name": "Le Meix Lallemand",
+        "sourceName": "LE MEIX LALLEMAND",
+        "aliases": []
+      },
+      {
+        "id": "le-rognet-et-corton",
+        "name": "Le Rognet et Corton",
+        "sourceName": "LE ROGNET ET CORTON",
+        "aliases": []
+      },
+      {
+        "id": "les-bressandes",
+        "name": "Les Bressandes",
+        "sourceName": "LES BRESSANDES",
+        "aliases": []
+      },
+      {
+        "id": "les-chaumes",
+        "name": "Les Chaumes",
+        "sourceName": "LES CHAUMES",
+        "aliases": []
+      },
+      {
+        "id": "les-chaumes-et-la-voierosse",
+        "name": "Les Chaumes et la Voierosse",
+        "sourceName": "LES CHAUMES ET LA VOIEROSSE",
+        "aliases": []
+      },
+      {
+        "id": "les-combes",
+        "name": "Les Combes",
+        "sourceName": "LES COMBES",
+        "communes": [
+          "21010"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "les-fietres",
+        "name": "Les Fiètres",
+        "sourceName": "LES FIETRES",
+        "aliases": []
+      },
+      {
+        "id": "les-grandes-lolieres",
+        "name": "Les Grandes Lolières",
+        "sourceName": "LES GRANDES LOLIERES",
+        "aliases": []
+      },
+      {
+        "id": "les-greves",
+        "name": "Les Grèves",
+        "sourceName": "LES GREVES",
+        "aliases": []
+      },
+      {
+        "id": "les-languettes",
+        "name": "Les Languettes",
+        "sourceName": "LES LANGUETTES",
+        "aliases": []
+      },
+      {
+        "id": "les-marechaudes",
+        "name": "Les Maréchaudes",
+        "sourceName": "LES MARECHAUDES",
+        "aliases": []
+      },
+      {
+        "id": "les-meix",
+        "name": "Les Meix",
+        "sourceName": "LES MEIX",
+        "aliases": []
+      },
+      {
+        "id": "les-moutottes",
+        "name": "Les Moutottes",
+        "sourceName": "LES MOUTOTTES",
+        "aliases": []
+      },
+      {
+        "id": "les-paulands",
+        "name": "Les Paulands",
+        "sourceName": "LES PAULANDS",
+        "aliases": []
+      },
+      {
+        "id": "les-perrieres",
+        "name": "Les Perrières",
+        "sourceName": "LES PERRIERES",
+        "aliases": []
+      },
+      {
+        "id": "les-pougets",
+        "name": "Les Pougets",
+        "sourceName": "LES POUGETS",
+        "aliases": []
+      },
+      {
+        "id": "les-renardes",
+        "name": "Les Renardes",
+        "sourceName": "LES RENARDES",
+        "aliases": []
+      },
+      {
+        "id": "les-vergennes",
+        "name": "Les Vergennes",
+        "sourceName": "LES VERGENNES",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "La Toppe au Vert",
+        "sourceCandidate": "LA TOPPE AU VERT",
+        "reason": "INAO maps Corton La Toppe au Vert as a Corton denomination (inao-denom-2351), but the wine-board climat list used for this audit omits it. Parcel AS0022 lies 25% inside Corton in this cadastral lieu-dit. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+      },
+      {
+        "name": "Corton",
+        "sourceCandidate": "LE VILLAGE",
+        "reason": "Parcel I0038 lies 53% inside Corton but in the cadastral lieu-dit LE VILLAGE, which is not an official Corton climat; the other LE VILLAGE parcels only touch the edge. No crosswalk is made; the parcels keep the whole-cru outline."
+      },
+      {
+        "name": "Les Carrières",
+        "sourceCandidate": "LES CARRIERES",
+        "reason": "INAO maps Corton Les Carrières as a Corton denomination (inao-denom-2358), but the wine-board climat list used for this audit omits it. Several parcels lie almost wholly inside Corton in this cadastral lieu-dit. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+      }
+    ],
+    "reviewedOverlaps": [
+      {
+        "plots": [
+          "en-charlemagne",
+          "le-charlemagne"
+        ],
+        "maximumAreaM2": 83.4,
+        "reviewedAt": "2026-10-07",
+        "note": "The pinned cadastral lieux-dits EN CHARLEMAGNE (Ladoix-Serrigny) and LE CHARLEMAGNE (Aloxe-Corton) overlap by 83.365 m² inside the cru along the commune line. Both outlines are kept exactly as published; neither is clipped, and the overlap assigns no parcel to both."
+      },
+      {
+        "plots": [
+          "le-rognet-et-corton",
+          "les-renardes"
+        ],
+        "maximumAreaM2": 0.2,
+        "reviewedAt": "2026-10-07",
+        "note": "The pinned cadastral lieux-dits LE ROGNET ET CORTON (Ladoix-Serrigny) and LES RENARDES (Aloxe-Corton) overlap by 0.137 m² inside the cru along the commune line. Both outlines are kept exactly as published."
+      }
+    ],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "BOIS DE CORTON",
+        "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "BOIS DE NAGET",
+        "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "EN CHAGNIARDS",
+        "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES PETITES LOLIERES",
+        "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ],
+    "parcelsWithoutLieuDit": [
+      "210100000N0012",
+      "210100000N0029",
+      "210100000N0043",
+      "210100000N0082"
+    ]
   }
 }
