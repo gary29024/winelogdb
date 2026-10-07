@@ -1,0 +1,44 @@
+{
+  "slug": "criots-batard-montrachet",
+  "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+  "cadastreSha256ByCommune": {
+    "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+    "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+  },
+  "boundaryAreaM2": 15718.181559867066,
+  "uncoveredM2": 279.1368904913432,
+  "sharePercent": 1.7758853937917227,
+  "componentCount": 1,
+  "components": [
+    {
+      "areaM2": 279.1368904913432,
+      "boundsEPSG2154": [
+        832062.415,
+        6650454.19192932,
+        832304.541,
+        6650526.494999998
+      ],
+      "rectangleWidthM": 70.5493051620904,
+      "rectangleLengthM": 242.13267467133588,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21150000AE0097",
+        "21150000AE0179",
+        "21150000AE0180",
+        "21150000AE0192",
+        "21150000AE0191",
+        "21150000AE0189",
+        "21150000AE0190",
+        "21150000AE0090",
+        "21150000AE0091"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "importedCommunes": [
+    "21150"
+  ],
+  "reviewMethod": "Projected pinned source polygons to EPSG:2154, measured the single connected remainder against only the INAO-listed commune, and inspected the complete overview and enlarged component.",
+  "finding": "The 279.136890 m² remainder (1.775885%) is one connected strip along the northern and western INAO edges, tapering at the eastern corner. Its large enclosing rectangle reflects the bent edge, not a missing interior parcel. Visually inspected the overview and enlarged component. Only Chassagne counts as imported coverage; other bundle communes remain neighbours. The 279.2 m² source-hash-bound cap allows less than 0.064 m² above the measured difference. No geometry is clipped, buffered, filled or simplified."
+}

@@ -42,7 +42,7 @@ class Context:
 
 
 EVENT_KINDS = {'historical-application': 'Application received', 'authorisation': 'Authorisation decision',
-               'suspended-application': 'Application suspended'}
+               'suspended-application': 'Application suspended', 'refused-application': 'Application refused'}
 SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
 # A later holder may have received a contribution after the sale; it is not necessarily the buyer.
 LATER_HOLDER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
@@ -254,6 +254,8 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
                                    if any(e['kind'] == 'authorisation' for e in events) else
                                    'Check the decision after the suspension ends, and who farms meanwhile.'
                                    if any(e['kind'] == 'suspended-application' for e in events) else
+                                   'Check any later appeal or decision and obtain current operation evidence; this application was refused.'
+                                   if any(e['kind'] == 'refused-application' for e in events) else
                                    'Resolve application outcome, actual operation and cadastral continuity.'
                                    if events or inherited else 'Obtain dated parcel-specific operation evidence and scope.'
                                    if leads else 'Trace the co-sale and subsequent transfers; the later company holder is not necessarily the buyer. Obtain parcel-specific operation evidence.'

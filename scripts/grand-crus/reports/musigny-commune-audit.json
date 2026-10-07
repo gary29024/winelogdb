@@ -48,6 +48,16 @@
       "contacts": []
     },
     {
+      "commune": "21442",
+      "name": "Morey-Saint-Denis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-parcelles.json.gz",
+      "sha256": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
       "commune": "21716",
       "name": "Vougeot",
       "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
@@ -75,5 +85,8 @@
       "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
     },
     "note": "The measured 491.630167 m² remainder (0.4519%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The cru outline has five separate parts; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 10 pieces, with mean widths of 0.13–1.09 m for those of at least 1 m². All of it lies along the outline edge. It is not a missing INAO commune. Neighbouring Vougeot parcels account for 1.719153 m² of it. 489.911014 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
-  }
+  },
+  "importedCommunes": [
+    "21133"
+  ]
 }

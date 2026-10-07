@@ -15,9 +15,68 @@
     "batard-montrachet"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/batard-montrachet/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-beaune/batard-montrachet",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE2Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "e00e88589e62c41275f6a9480b560564fcfcae5066ad6c8a7d294b587fc2bf9f",
+    "coverageNote": "BIVB lists one white Grand Cru spanning Puligny-Montrachet and Chassagne-Montrachet. The two exact cadastral spellings are audited on their respective sides of the commune line within one cru parcel set. BIENVENUES BATARD-MONTRACHET contributes only neighbouring edge contacts. The cru name also names a smaller constituent, so displayLayer stays false and white wines retain the entire INAO outline. No distinct official climat or producer holding is inferred.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "batard-montrachet-chassagne",
+        "name": "Bâtard Montrachet",
+        "sourceName": "BATARD MONTRACHET",
+        "communes": [
+          "21150"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "batard-montrachet-puligny",
+        "name": "Bâtard-Montrachet",
+        "sourceName": "BATARD-MONTRACHET",
+        "communes": [
+          "21512"
+        ],
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "BIENVENUES BATARD-MONTRACHET",
+        "reason": "Three full parcels lie mostly outside this cru and touch its northern edge. Retain their printed cadastral name without treating the neighbouring Grand Cru as a Bâtard named subdivision."
+      }
+    ],
+    "parcelsWithoutLieuDit": [],
+    "reviewedOverlaps": [
+      {
+        "plots": [
+          "batard-montrachet-chassagne",
+          "batard-montrachet-puligny"
+        ],
+        "maximumAreaM2": 4.2,
+        "reviewedAt": "2026-10-07",
+        "note": "The original clipped cadastral named-area polygons overlap by 4.144941 m² across the commune line. Preserve both published outlines; the union counts shared ground once. This is distinct from the parcel overlap measurement."
+      }
+    ]
+  },
+  "communeAudit": {
+    "measureCrossCommuneOverlap": true,
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 511.9,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+      "cadastreSha256ByCommune": {
+        "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+        "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+      },
+      "note": "The 511.849881 m² remainder (0.431741%) was measured against both INAO communes and visually reviewed in an overview and all seven component views. Six components touch the INAO boundary: narrow western and northern edge strips, a 48.896868 m² gap along the commune line and a 26.247291 m² southeastern edge wedge. The seventh is a 1.514982 m² interior strip at the commune line, 0.864 m from the INAO edge, with a 0.143 m enclosing-rectangle width. No missing commune or detached missing parcel was found. The 511.9 m² cap allows less than 0.051 m² above the measured gap and is tied to exact source hashes. No geometry is clipped, buffered, filled or simplified."
+    }
   }
 }

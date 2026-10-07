@@ -1,0 +1,94 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Montrachet boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "BIVB lists Montrachet as the Grand Cru across Puligny-Montrachet and Chassagne-Montrachet. The cadastre names its two principal areas MONTRACHET and LE MONTRACHET. These cadastral names are audited without asserting separate official climats or producer holdings. The cru name is also a constituent name, so displayLayer remains false and every white Montrachet wine retains the whole INAO outline across the commune line.",
+  "sources": [
+    {
+      "commune": "21150",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-lieux_dits.json.gz",
+      "sha256": "b146ad174c8cff83730183600713f99b111368d1acb0a3f39323a7b6b1aca1bb",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21512",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-lieux_dits.json.gz",
+      "sha256": "9b98034f372ee0749bb50eeec577a4a4dbe8f2d8890b136d86f20208b4cd1d86",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/montrachet,2377,9170.html?args=Y29tcF9pZD0yMjA1JmFjdGlvbj12aWV3RmljaGUmaWQ9MzU1Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-communes.json.gz",
+      "sha256": "da1efabb947f470ba2f4f200bf345bbd7722093fcb399e8c9a760284b5fb703b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71369/cadastre-71369-communes.json.gz",
+      "sha256": "c385f514297e9cff61d5ea74d151c1001ca03fa2a5743a7a3b5cd88226e37644"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    }
+  ],
+  "parentHa": 7.988073338888574,
+  "mappedHa": 7.938671033308335,
+  "unmappedHa": 0.049402305373875105,
+  "plots": [
+    {
+      "id": "montrachet-plot-le-montrachet",
+      "sourceHa": 3.9877534919115285,
+      "clippedHa": 3.9547049642513348,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "montrachet-plot-montrachet",
+      "sourceHa": 4.114280791754199,
+      "clippedHa": 3.9850254247276813,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "overlaps": [
+    {
+      "plots": [
+        "montrachet-plot-le-montrachet",
+        "montrachet-plot-montrachet"
+      ],
+      "areaM2": 10.592858384952866
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "CHEVALIER MONTRACHET",
+      "sourceCandidate": "CHEVALIER MONTRACHET",
+      "reason": "Full cadastral parcels in this neighbouring lieu-dit have only edge contact with the INAO cru. Preserve the source name without declaring a Montrachet climat or producer holding."
+    },
+    {
+      "name": "DENT DE CHIEN",
+      "sourceCandidate": "DENT DE CHIEN",
+      "reason": "Full cadastral parcels in this neighbouring lieu-dit have only edge contact with the INAO cru. Preserve the source name without declaring a Montrachet climat or producer holding."
+    }
+  ]
+}

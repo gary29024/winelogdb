@@ -4,8 +4,8 @@
   python scripts/build_grand_cru_commune_audit.py --cru grands-echezeaux --check
 
 Import scope is the communes INAO lists for the cru. The audit proves that scope is complete:
-every INAO commune is in the bundle, and the bundle's parcels cover the boundary apart from
-a small remainder. Neighbouring communes pinned in the bundle's
+every INAO commune is in the bundle, and its own communes' parcels cover the boundary apart from
+a small remainder. Other communes in the shared bundle and neighbours pinned in
 "auditCommunes" are measured, never imported: where the INAO line and the cadastral commune
 line disagree, their parcels touch the cru by a few square metres. Each contact is published
 with its area and share of the parcel.
@@ -14,6 +14,7 @@ Requires scripts/burgundy-map-requirements.txt and download_grand_cru_sources.py
 import argparse
 import gzip
 import json
+from itertools import combinations
 
 from pyproj import Transformer
 from shapely.geometry import shape
@@ -23,6 +24,20 @@ from grand_cru import (audit_file, bundle_commune_names, cadastre_sources, commu
                        pinned, read_json, require, source_dir, village_map, write_or_check)
 
 MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would leave far more
+
+
+def cross_commune_coverage(boundary, covers):
+    """Measure original cadastral coverage without double-counting commune overlaps."""
+    clipped = {insee: cover.intersection(boundary) for insee, cover in covers.items()}
+    return {
+        'coverageByCommuneM2': {insee: round(cover.area, 6) for insee, cover in clipped.items()},
+        'crossCommuneOverlaps': [
+            {'communes': [left, right], 'areaM2': round(clipped[left].intersection(clipped[right]).area, 6)}
+            for left, right in combinations(sorted(clipped), 2)
+        ],
+        'unionCoverageM2': round(unary_union(list(clipped.values())).area, 6),
+        'note': 'Full original parcel polygons are measured in EPSG:2154. Commune coverage can overlap; the union counts shared area once. Cru membership and the shared parcel asset are not split at the commune line.',
+    }
 
 
 def uncovered_area_limit(cru, bundle, parent_hash, boundary_area):
@@ -44,27 +59,39 @@ def build(cru, bundle, directory):
     feature = next(f for f in json.loads(canonical)['features'] if f['id'] == cru['parentFeatureId'])
     boundary = transform(project, shape(feature['geometry']))
     names = bundle_commune_names(bundle)
+    inao = feature['properties']['communes']
+    require(set(inao) <= set(communes(bundle)), f'{cru["slug"]}: INAO commune missing from the bundle: {sorted(set(inao) - set(communes(bundle)))}')
 
     def parcels(name, digest):
         return [transform(project, shape(f['geometry']))
                 for f in json.loads(gzip.decompress(pinned(directory, name, digest)))['features']]
 
     own = []
-    for insee, _, digest in cadastre_sources(bundle):
-        own += parcels(parcels_file(insee), digest)
+    by_commune = {}
+    neighbour_sources = {insee: (source, audit_file(insee)) for insee, source in bundle.get('auditCommunes', {}).items()}
+    for insee, url, digest in cadastre_sources(bundle):
+        if insee not in inao:
+            # Shared acquisition does not expand this cru's INAO import scope.
+            source = {'name': names.get(insee), 'url': url, 'sha256': digest}
+            if insee in neighbour_sources:
+                require(neighbour_sources[insee][0]['sha256'] == digest, f'{insee}: conflicting audit and bundle cadastre')
+            neighbour_sources[insee] = (source, parcels_file(insee))
+            continue
+        shapes = parcels(parcels_file(insee), digest)
+        if cru.get('communeAudit', {}).get('measureCrossCommuneOverlap'):
+            by_commune[insee] = unary_union(shapes)
+        own += shapes
     own_cover = unary_union(own)
     covered = own_cover.intersection(boundary).area
     uncovered = boundary.area - covered
     outside_bundle = boundary.difference(own_cover)
-    inao = feature['properties']['communes']
-    require(set(inao) <= set(communes(bundle)), f'{cru["slug"]}: INAO commune missing from the bundle: {sorted(set(inao) - set(communes(bundle)))}')
     limit = uncovered_area_limit(cru, bundle, parent_hash, boundary.area)
-    require(uncovered <= limit, f'{cru["slug"]}: bundle communes leave {uncovered:.1f} m² uncovered (limit {limit:.1f} m²)')
+    require(uncovered <= limit, f'{cru["slug"]}: INAO communes leave {uncovered:.1f} m² uncovered (limit {limit:.1f} m²)')
     neighbours, neighbour_parcels = [], []
-    for insee, source in sorted(bundle.get('auditCommunes', {}).items()):
+    for insee, (source, filename) in sorted(neighbour_sources.items()):
         require(insee not in inao, f'{cru["slug"]}: INAO lists {insee}; import it in the bundle instead of auditing it')
         contacts = []
-        for f in json.loads(gzip.decompress(pinned(directory, audit_file(insee), source['sha256'])))['features']:
+        for f in json.loads(gzip.decompress(pinned(directory, filename, source['sha256'])))['features']:
             metric = transform(project, shape(f['geometry']))
             neighbour_parcels.append(metric)
             overlap = metric.intersection(boundary).area
@@ -100,6 +127,10 @@ def build(cru, bundle, directory):
     }
     if review := cru.get('communeAudit', {}).get('reviewedUncoveredArea'):
         result['reviewedUncoveredArea'] = review
+    if set(inao) != set(communes(bundle)):
+        result['importedCommunes'] = sorted(inao)
+    if cru.get('communeAudit', {}).get('measureCrossCommuneOverlap'):
+        result['crossCommuneCoverage'] = cross_commune_coverage(boundary, by_commune)
     return result
 
 

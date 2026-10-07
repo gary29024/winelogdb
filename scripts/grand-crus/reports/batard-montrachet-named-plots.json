@@ -1,0 +1,89 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Bâtard-Montrachet boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "BIVB lists one white Grand Cru spanning Puligny-Montrachet and Chassagne-Montrachet. The two exact cadastral spellings are audited on their respective sides of the commune line within one cru parcel set. BIENVENUES BATARD-MONTRACHET contributes only neighbouring edge contacts. The cru name also names a smaller constituent, so displayLayer stays false and white wines retain the entire INAO outline. No distinct official climat or producer holding is inferred.",
+  "sources": [
+    {
+      "commune": "21150",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-lieux_dits.json.gz",
+      "sha256": "b146ad174c8cff83730183600713f99b111368d1acb0a3f39323a7b6b1aca1bb",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21512",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-lieux_dits.json.gz",
+      "sha256": "9b98034f372ee0749bb50eeec577a4a4dbe8f2d8890b136d86f20208b4cd1d86",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE2Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-communes.json.gz",
+      "sha256": "da1efabb947f470ba2f4f200bf345bbd7722093fcb399e8c9a760284b5fb703b"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/71/71369/cadastre-71369-communes.json.gz",
+      "sha256": "c385f514297e9cff61d5ea74d151c1001ca03fa2a5743a7a3b5cd88226e37644"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-communes.json.gz",
+      "sha256": "22b3eebde39036f1663861b8fa13f411391b3bc167e0c783eea381d018caa831"
+    }
+  ],
+  "parentHa": 11.855471217928034,
+  "mappedHa": 11.83557405035246,
+  "unmappedHa": 0.019897168199110114,
+  "plots": [
+    {
+      "id": "batard-montrachet-plot-batard-montrachet-chassagne",
+      "sourceHa": 6.1403331067044915,
+      "clippedHa": 5.798427279796166,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "batard-montrachet-plot-batard-montrachet-puligny",
+      "sourceHa": 6.238592049241326,
+      "clippedHa": 6.037561684246114,
+      "parts": 1,
+      "holes": 1
+    }
+  ],
+  "overlaps": [
+    {
+      "plots": [
+        "batard-montrachet-plot-batard-montrachet-chassagne",
+        "batard-montrachet-plot-batard-montrachet-puligny"
+      ],
+      "areaM2": 4.144941098466113
+    }
+  ],
+  "unresolved": [],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "BIENVENUES BATARD-MONTRACHET",
+      "reason": "Three full parcels lie mostly outside this cru and touch its northern edge. Retain their printed cadastral name without treating the neighbouring Grand Cru as a Bâtard named subdivision."
+    }
+  ]
+}

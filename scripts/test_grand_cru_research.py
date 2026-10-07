@@ -62,6 +62,21 @@ class FarmingResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'snapshot hash'):
             self.build(asset=self.asset + b' ')
 
+    def test_refusal_keeps_the_negative_decision_and_never_authorises_farming(self):
+        curation = copy.deepcopy(self.curation)
+        event = curation['exactParcelEvents'][0]
+        event.update(kind='refused-application', outcome='refused', appNote='Application refused; current farming unconfirmed.')
+        result = self.build(curation)
+        evidence = build_evidence(result, curation, self.history, json.loads(self.asset)['features'])
+        for parcel_id in event['parcelIds']:
+            row = next(p for p in result['parcels'] if p['parcelId'] == parcel_id)
+            self.assertIsNone(row['currentFarmer'])
+            self.assertNotEqual(row['researchStatus'], 'historical-authorisation')
+            self.assertIn('this application was refused', row['nextEvidenceNeeded'])
+            items = [i for i in evidence['parcels'][parcel_id] if event['sourceId'] in i['sources']]
+            self.assertTrue(any(i['kind'] == 'notice' and i.get('label') == 'Application refused' for i in items))
+            self.assertFalse(any(i['kind'] == 'authorisation' for i in items))
+
     def test_missing_holder_cannot_silently_lose_research(self):
         curation = copy.deepcopy(self.curation)
         curation['holders'].pop()

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-539",
+  "name": "Chevalier-Montrachet",
+  "inaoCommunes": [
+    "21512"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21150",
+      "name": "Chassagne-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+      "sha256": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9"
+    },
+    {
+      "commune": "21512",
+      "name": "Puligny-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-parcelles.json.gz",
+      "sha256": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+    }
+  ],
+  "boundaryAreaM2": 75974.1,
+  "coveredByBundleParcelsM2": 75838.1,
+  "notCoveredByBundleParcelsM2": 135.9,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 7.7,
+    "coveredByNoParcelM2": 128.2
+  },
+  "neighbours": [
+    {
+      "commune": "21150",
+      "name": "Chassagne-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+      "sha256": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+      "contactAreaM2": 12.3,
+      "contactsOverMinimumOverlap": 2,
+      "maxParcelPercent": 1.604,
+      "contacts": [
+        {
+          "parcelId": "21150000AE0165",
+          "overlapM2": 7.05,
+          "parcelPercent": 1.604
+        },
+        {
+          "parcelId": "21150000AE0166",
+          "overlapM2": 5.3,
+          "parcelPercent": 1.602
+        }
+      ]
+    },
+    {
+      "commune": "21541",
+      "name": "Saint-Aubin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21541/cadastre-21541-parcelles.json.gz",
+      "sha256": "3f83619be0c35d570d71b6c7f92b795809935f907e309c4cd87004076268800c",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 1,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 136.0,
+    "reviewedAt": "2026-10-07",
+    "parentSourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
+    "cadastreSha256ByCommune": {
+      "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+      "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+    },
+    "note": "The 135.930216 m² remainder (0.178917%) is measured against Puligny-Montrachet only, the sole INAO commune. All three components were visually inspected against the unmodified pinned geometry: 122.831005 m² along the northern edge of the main cadastral block, 7.885774 m² on the southwest edge, and 5.213436 m² on the east edge. All touch the INAO boundary. Chassagne parcels remain neighbouring contacts even though both communes share a download bundle. The 136.0 m² cap allows less than 0.070 m² above the measurement. No geometry is added, clipped, buffered, filled or simplified; changed hashes require a new review."
+  },
+  "importedCommunes": [
+    "21512"
+  ]
+}
