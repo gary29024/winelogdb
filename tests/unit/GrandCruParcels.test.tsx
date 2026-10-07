@@ -7,6 +7,7 @@ import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCr
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
+import gevreyManifest from '../../src/lib/places/grandCruParcels/gevrey-chambertin.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 const evidenceLoad=vi.hoisted(()=>({fail:false,calls:0}));
@@ -26,13 +27,21 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals();evidenceLoad.fail=false;evidenceLoad.calls=0});
 describe('Cadastral parcel controls',()=>{
- it('keeps all 69 Vougeot legal holders searchable, both rights and unknown parcels without domaine crosswalks',async()=>{
+ it('keeps all 69 Vougeot legal holders searchable and groups only company-record links under a domaine',async()=>{
   const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
   render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
   fireEvent.click(screen.getByRole('switch'));
-  fireEvent.click(await screen.findByRole('button',{name:'Show all 69 right holders'}));
+  const grouping=await screen.findByLabelText('Group right holders by');
   const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
+  // Domaine view: a company-record link groups; a lease mandate and a name-only match stay legal-holder rows.
+  fireEvent.click(await screen.findByRole('button',{name:/Show all .* entries/}));
+  expect(within(holders).getByRole('button',{name:/Château de la Tour.*Company record/})).toBeTruthy();
+  expect(within(holders).getByRole('button',{name:/GFA Misset Cheron/i})).toBeTruthy();
+  expect(within(holders).queryByRole('button',{name:/^Domaine du Couvent/})).toBeNull();
+  expect(within(holders).getAllByRole('button',{name:/identity by name and seat only/})).toHaveLength(2);
+  fireEvent.change(grouping,{target:{value:'holder'}});  // the expanded list stays expanded
+  expect(screen.getByRole('button',{name:'Show fewer'})).toBeTruthy();
   expect(within(holders).getAllByRole('button')).toHaveLength(69);
   const named=vougeot.features.find(f=>f.properties.recordedRights.length)!.properties.recordedRights[0];
   fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:named.name}});
@@ -40,7 +49,6 @@ describe('Cadastral parcel controls',()=>{
   const parcel=screen.getByLabelText('Cadastral parcel');
   fireEvent.change(parcel,{target:{value:'217160000A0001'}});
   expect(await within(await screen.findByRole('region',{name:'History and evidence'})).findByText('Application suspended')).toBeTruthy();
-  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
   fireEvent.change(parcel,{target:{value:'217160000A0025'}});
   const details=screen.getByRole('heading',{name:'Parcel A 0025'}).closest('.village-map-parcel-details')! as HTMLElement;
   for(const right of vougeot.features.find(f=>f.properties.id==='217160000A0025')!.properties.recordedRights){
@@ -53,20 +61,20 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.queryByText('Verified parcel links')).toBeNull();
  });
  it('does not download a cru’s research for the holder list when it has no domaine research',async()=>{
-  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
-  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
-  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  const gevrey=JSON.parse(readFileSync('public'+gevreyManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(gevrey)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-447"/>);
   fireEvent.click(screen.getByRole('switch'));
-  expect(await screen.findByRole('button',{name:'Show all 69 right holders'})).toBeTruthy();
+  expect(await screen.findByRole('button',{name:'Show all 33 right holders'})).toBeTruthy();
   expect(evidenceLoad.calls).toBe(0);
  });
  it('never mentions domaine research for a cru that has none, even when its evidence fails to load',async()=>{
   evidenceLoad.fail=true;
-  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
-  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
-  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  const gevrey=JSON.parse(readFileSync('public'+gevreyManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(gevrey)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-447"/>);
   fireEvent.click(screen.getByRole('switch'));
-  expect(await screen.findByRole('button',{name:'Show all 69 right holders'})).toBeTruthy();
+  expect(await screen.findByRole('button',{name:'Show all 33 right holders'})).toBeTruthy();
   await new Promise(resolve=>setTimeout(resolve,0));  // let the rejected evidence load settle
   expect(screen.queryByText(/domaine research/i)).toBeNull();
   expect(screen.queryByRole('button',{name:'Retry domaine research'})).toBeNull();

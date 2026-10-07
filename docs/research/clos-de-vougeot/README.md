@@ -1,9 +1,11 @@
-# Clos de Vougeot parcels: Tier 1 (#378)
+# Clos de Vougeot parcels: Tier 1 (#378) and Tier 2 (#424)
 
 Clos de Vougeot uses INAO `inao-denom-546`, appellation 162, and commune 21716
 Vougeot. This is the third cru through the [rollout playbook](../../grand-cru-parcel-rollout.md).
-The review uses free public datasets and the existing Côte-d'Or notice indexes.
-Reviewed 1 October 2026; target season 2026.
+Tier 1 uses free public datasets and the existing Côte-d'Or notice indexes. Tier 2 researches
+all 69 recorded holders through the [shared holder-to-domaine table](../holders/holders.md),
+free company filings, published holdings and independent research. Tier 1 reviewed
+1 October 2026; Tier 2 reviewed 7 October 2026; target season 2026.
 
 **No parcel has a confirmed current farmer.** A legal right, application receipt,
 sale or cadastral predecessor never establishes actual farming.
@@ -26,19 +28,21 @@ sale or cadastral predecessor never establishes actual farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ 2014–2025 available and imported (deeds 26 March 2014 – 29 August 2025); notices: regional 2019–2026, departmental 2016–2020 and archived Côte-d'Or 2004–2015 captures; 2007, 2009, 2012, 2014 and before 2004 not obtained |
 | Parcels with an authorisation / application or suspension | 7; 4 image-reviewed events; no exact-parcel authorisation |
 | Parcels with sale records (DVF) | 22; 12 deeds |
-| Parcels with holder or research leads | 7 (7 notice parcels; no holder leads) |
-| Parcels with no lead | 157 |
+| Parcels with exact-reference company filings | 32, in 22 filings (14.0232 ha cadastral area) |
+| Parcels with holder or research leads | 96 (89 holder or independent-research leads, including 8 parcels without a company record; 7 notice parcels) |
+| Parcels with no lead | 68 |
+| Published holdings compared by named area | 8 statements in Clos de Vougeot; 0.82 ha published beyond linked company records |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered: official DFI ancestry from 20 April 1989, all 35 geometry vintages (2017–2026) and 2019–2025 rights; notice archive gaps remain explicit |
-| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 212,308 / 16,280 bytes |
+| Raw / gzip payload | Parcels: 146,858 / 23,637 bytes. Evidence: 298,746 / 31,287 bytes |
 
 A lead is a named candidate in the [register](register.md): a holder lead from
-reviewed research, a parcel named in an official notice, or a co-sale lead. A recorded
-legal holder alone is not a lead. The seven leads are the parcels named in the four
-notices below; the other 157 parcels, including 101 with recorded rights, have no named
-candidate. All 69 holder identities are inventoried, but this Tier 1 review establishes
-no holder-to-domaine crosswalk, so the app shows legal holders without a domaine
-grouping control.
+reviewed research, a parcel named in an official notice or independent research, or a
+co-sale lead. A recorded legal holder alone is not a lead. Tier 2 links 49 of the
+69 holders to a domaine or producer through the shared table, so the app now offers the
+domaine grouping control. Grouping applies only to company-record links; lease, mandate,
+management and name-only links stay listed as leads under the legal holder. The other
+69 parcels, mostly without a company record, have no named candidate.
 
 The [#461 historical extension](../grand-cru-history.md) adds official parcel
 filiation, every catalogue-listed historical vintage and original-reference evidence.
@@ -184,6 +188,62 @@ unresolved alternate Nextcloud links remain an access limitation of the shared
 archive. Source URLs, dates, hashes, reviewed page numbers and decisions are in
 [curation](curation.json); original PDFs are not committed.
 
+## Tier 2 (#424)
+
+Reviewed 7 October 2026. Holder research now lives in the
+[shared holder-to-domaine table](../holders/holders.md); this cru adopts it
+(`"holderLinks": "shared"` in [curation](curation.json)). Each link names its company
+relation and sources and is shown as **Research link · farming unverified**.
+
+- **Holders.** All 69 recorded holders were researched: 49 now have an applicable
+  link (44 reviewed, 5 provisional) and the rest record the search that found
+  none. Free register records were read for every company holder and for related
+  companies; 180 free filings (5,187 pages) from 48 companies were screened by
+  embedded text or OCR, and cited schedules were checked against the text and page images.
+- **Provisional identifiers.** Exact filing schedules crosswalk four `U…` identifiers
+  to a SIREN (Domaine Jacques Prieur, Les Héritiers Confuron, GFA du Clos de(s) V and
+  GFA Méo Camuzet Parents); three more (GFA Dom Lamarche, SCI Dom Leroy and GFV
+  Domaine Chantal Ropiteau) match only by name and seat, so their links stay
+  provisional or absent. Ambiguous names (GFA Barrière, SA ASB, GFA Bachus 21 and
+  Maison Lejay-Lagoutte) stay unlinked. An undated owner map reproduced in 2016 was
+  checked but not used: the current rights file and later filings supersede it.
+- **Exact references.** 22 filings name 32 current parcels with matching
+  cadastral areas. Leases are kept apart by status: executed (Les Héritiers Confuron to
+  the SCE du Domaine Jean-Jacques Confuron, 2024; the GFA du Domaine Tortochot's
+  published 50-year lease of all its land from 1986 to Domaine Tortochot; the two
+  Saint-Vincent GFVs' published leases of A516 from 2005 and A517 from 2006 to 2032,
+  both to an individual vigneron, whose death a 2018 deed records), recited as in
+  force (Coquard-Loison-Fleurot to 2037; the GFA de Châteauneuf's métayage to Domaine
+  Leroy since 1959; Château de la Tour's 1993–2019 métayage to Domaine Labet
+  Déchelette; Château Genot-Boulanger for all of the GFA de la Grenelle's land, whose
+  1995 statutes show A433 let to an individual until 2012; the GFA Domaine Xavier
+  Liger-Belair's métayage leases, tenants unnamed) and mandated (Misset Chéron and Saint Martin to Domaine
+  Misset Chéron, now Domaine du Couvent; Méo Camuzet Parents to the Méo-Camuzet GFA;
+  Les Vendanges du Clos to an individual vigneron). The GFA Famille Jean Dufouleur's
+  2015 statutes contribute A3 free of any lease, the GFV Raphet's 2011 statutes
+  contribute A412 without naming a lease, and Domaine du Château de Marsannay's 1998
+  meeting authorised contributing A264 to another company, though the rights file
+  still records Marsannay. Two more deeds name current references
+  without qualifying as exact-reference filings: the Guillon GFA's 2021 deed recites a
+  2011 lease of A242 to SAS Domaine Jean-Michel Guillon but prints no area, and a 1997
+  Méo family deed lists A7, A11, A24 and A61 before their current holder existed.
+  Deed and filing dates are separate.
+- **Independent research.** Winehog names A372 (Domaine André Chopin, free article),
+  A34 (Mugneret-Gibourg) and the eight Gros Frère et Sœur plots in the Musigni section
+  (premium articles supplied by the repository owner; facts only). A 1994 deed of
+  the société civile du Domaine Joseph Drouhin reproduces its 1940s lease of section A
+  no. 40, 62 ares, today's area of A40; that reference predates later cadastral
+  revisions and the lease ran to 1951. A372, A40 and the Gros plots have no company
+  record.
+- **Published holdings.** 8 statements are compared in the
+  [named-area census](register.md#named-area-census). Only Jadot (about 2.5 ha) and
+  Faiveley (1.2669 ha) exceed their linked company records, by 0.39 and 0.42 ha. Areas
+  are never assigned to parcels.
+
+**Verified farming links remain zero.** No reviewed filing combines a current
+parcel-specific executed lease with evidence of actual operation (#364). Access gaps
+and unresolved leads are listed in the [register](register.md#remaining-evidence-and-access-gaps).
+
 ## Limitations and deferred research
 
 Private individuals and other exclusions are absent from the legal-entity files.
@@ -191,10 +251,9 @@ The 58 unmatched parcels do not imply ownerless land. The rights snapshot and
 latest DVF deed predate the 2026 target season; notice coverage is limited to the
 regional and departmental years above. Boundary mismatches remain measurable.
 
-Free company filings, published producer holdings and independent articles are
-Tier 2 and were not reviewed for this cru. [The filing inventory](filings.md)
-states that scope explicitly. Paid SPF copies and domaine/CVI outreach are Tier
-3 and remain deferred. Future operator evidence belongs with #364; an exact
+Tier 2 (above) covers free company filings, published holdings and independent
+research; [the filing inventory](filings.md) lists every filing used. Paid SPF
+copies and domaine/CVI outreach are Tier 3 and remain deferred. Future operator evidence belongs with #364; an exact
 subdivision crosswalk belongs with #344. Manual app links retain
 **Manual link · unverified** and are scoped to the wine's producer.
 
