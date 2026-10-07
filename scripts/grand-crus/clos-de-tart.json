@@ -13,10 +13,50 @@
   "evidenceFrom": [
     "clos-de-tart"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 324.0,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 323.908325 m² remainder (0.4318%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The remainder is a single narrow strip along the cru's northern edge, between the official line and the nearest cadastral parcels. It is 1 piece with a mean width of 1.25 m. All of it lies along the outline edge. It is not a missing INAO commune. 323.908325 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/clos-de-tart/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/clos-de-tart",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-tart,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjgzJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "9effdba25685d3c658ce277fcfd9e905240033a3fff67564c2e3de7594edb09d",
+    "coverageNote": "The official wine-board list names Clos de Tart as the cru's only climat. The pinned cadastre records CLOS DE TART over about 97% of the outline; the southern part lies in the cadastral LES BONNES MARES, which has no reviewed crosswalk. The whole-cru outline is retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "clos-de-tart",
+        "name": "Clos de Tart",
+        "sourceName": "CLOS DE TART",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "Clos de Tart",
+        "sourceCandidate": "LES BONNES MARES",
+        "reason": "Parcel AR0064 lies 88% inside the official Clos de Tart outline, with a small overlap into Bonnes-Mares, but its cadastral lieu-dit is LES BONNES MARES. That name is not an official Clos de Tart climat. No crosswalk is made; the parcel keeps the whole-cru outline."
+      }
+    ],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "EN LA RUE DE VERGY",
+        "reason": "Not an official Clos de Tart climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ]
   }
 }

@@ -13,10 +13,72 @@
   "evidenceFrom": [
     "clos-saint-denis"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 197.7,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 197.649623 m² remainder (0.2984%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The cru outline has three separate parts; the remainder is narrow strips along their edges and between parcels. It forms 15 pieces, with mean widths of 0.19–1.28 m for those of at least 1 m². 13.663154 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 197.649623 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/clos-saint-denis/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/clos-saint-denis",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-saint-denis,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg5Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "851f98820857cc77710e5602833a289081abbbfbfdc437af5c62792853c00c0b",
+    "coverageNote": "Calouère, Clos Saint-Denis, Les Chaffots and Maison Brûlée are cadastral named areas within Clos Saint-Denis; only part of the cadastral Les Chaffots lies inside the cru. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+    "plots": [
+      {
+        "id": "calouere",
+        "name": "Calouère",
+        "sourceName": "CALOUERE",
+        "aliases": []
+      },
+      {
+        "id": "clos-saint-denis",
+        "name": "Clos Saint-Denis",
+        "sourceName": "CLOS SAINT-DENIS",
+        "aliases": []
+      },
+      {
+        "id": "les-chaffots",
+        "name": "Les Chaffots",
+        "sourceName": "LES CHAFFOTS",
+        "aliases": []
+      },
+      {
+        "id": "maison-brulee",
+        "name": "Maison Brûlée",
+        "sourceName": "MAISON BRULEE",
+        "aliases": []
+      }
+    ],
+    "reviewedOverlaps": [
+      {
+        "plots": [
+          "calouere",
+          "maison-brulee"
+        ],
+        "maximumAreaM2": 10.3,
+        "reviewedAt": "2026-10-07",
+        "note": "The pinned cadastral lieux-dits CALOUERE and MAISON BRULEE overlap by 10.205 m² inside the cru. Both outlines are kept exactly as published; neither is clipped to resolve it, and the overlap does not assign a parcel to both."
+      }
+    ],
+    "unresolved": [],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "LES GENAVRIERES",
+        "reason": "Not an official Clos Saint-Denis climat. It holds most of a parcel that only touches the cru edge; it stays a cru parcel for rights and history, with no named area."
+      }
+    ]
   }
 }
