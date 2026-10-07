@@ -11,6 +11,7 @@ const reviewed=[
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38},
+ {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
 ];
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
 const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};

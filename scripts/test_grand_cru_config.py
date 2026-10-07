@@ -35,6 +35,7 @@ class ConfigTests(unittest.TestCase):
         self.assertIn('chevalier-montrachet', reviewed)
         self.assertIn('batard-montrachet', reviewed)
         self.assertIn('bienvenues-batard-montrachet', reviewed)
+        self.assertIn('criots-batard-montrachet', reviewed)
         for slug in reviewed:
             with self.subTest(cru=slug):
                 cru = load_cru(slug)[0]

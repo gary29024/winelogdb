@@ -31,6 +31,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
  'clos-des-lambrays':()=>import('./clos-des-lambrays.evidence.json'),
  'clos-saint-denis':()=>import('./clos-saint-denis.evidence.json'),
+ 'criots-batard-montrachet':()=>import('./criots-batard-montrachet.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
  'griotte-chambertin':()=>import('./griotte-chambertin.evidence.json'),
