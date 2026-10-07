@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-1083",
   "appellationId": 221,
   "issue": 379,
-  "tier": 1,
+  "tier": 2,
   "bundle": "vosne-romanee",
   "villageMaps": [
     "vosne-romanee"
@@ -15,8 +15,7 @@
   ],
   "research": {
     "methodDoc": "docs/research/richebourg/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/richebourg/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/richebourg",
