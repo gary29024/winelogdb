@@ -1,0 +1,89 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Clos des Lambrays boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "sources": [
+    {
+      "commune": "21133",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+      "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb"
+    },
+    {
+      "commune": "21442",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-lieux_dits.json.gz",
+      "sha256": "ad9759b3d80eebe0e3b015a60648db90478300526c32a0c5a85d5403bb61a23a"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-des-lambrays,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg4Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    }
+  ],
+  "dataUrl": "/maps/clos-des-lambrays-named-plots.2026-06-01.b164770b3eff.geojson",
+  "sha256": "b164770b3eff428914bc040abfe088e773d775e9bdad985060f92aeefc3d7a7f",
+  "bytes": 8741,
+  "gzipEquivalentBytes": 3045,
+  "parentHa": 8.789809360446801,
+  "mappedHa": 8.739965293577272,
+  "unmappedHa": 0.04984406593911577,
+  "plots": [
+    {
+      "id": "clos-des-lambrays-plot-clos-des-lambrays",
+      "sourceHa": 5.718971191857166,
+      "clippedHa": 5.631826295629682,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "clos-des-lambrays-plot-les-bouchots",
+      "sourceHa": 2.0524856304095693,
+      "clippedHa": 1.9932985240659673,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-des-lambrays-plot-meix-rentier",
+      "sourceHa": 1.1794774250080344,
+      "clippedHa": 1.1148404738816224,
+      "parts": 2,
+      "holes": 0
+    }
+  ],
+  "unresolved": [],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "LE VILLAGE",
+      "reason": "Not an official Clos des Lambrays climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES LARRETS",
+      "reason": "Not an official Clos des Lambrays climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    }
+  ]
+}

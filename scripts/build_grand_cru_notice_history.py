@@ -99,11 +99,13 @@ def curated_page_reviews(curation):
     """The cru curation's page-image notice reviews, with the exact references its parcel events assign.
 
     A review can also reject a matched reference ("rejectedReferences", with its finding): the page was read
-    and the printed reference is not joined to this cru, so it is no longer a pending candidate."""
+    and the printed reference is not joined to this cru, so it is no longer a pending candidate. A republished
+    copy of an already-reviewed act ("repeatOf" its source) is covered by that act's event, not a second event."""
     events = {}
     for event in curation['exactParcelEvents']:
         events.setdefault(event['sourceId'], set()).update([*event['parcelIds'], *event.get('predecessorReferences', {})])
-    return [{**review, 'references': events.get(review['sourceId'], set()) | set(review.get('rejectedReferences', []))}
+    return [{**review, 'references': events.get(review['sourceId'], set()) | events.get(review.get('repeatOf'), set())
+                                     | set(review.get('rejectedReferences', []))}
             for review in curation.get('noticeReview', []) if review.get('reviewMethod') == 'page-image']
 
 

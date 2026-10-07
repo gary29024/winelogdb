@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BIxmDj5I.js"
+    "dist/client/assets/index-036hfaHL.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DaDq-3FS.js",
-    "dist/client/assets/SectionLabel-Btcygh4H.js",
-    "dist/client/assets/SparklingDetailsCard-CVPg0a3w.js",
-    "dist/client/assets/VillageMap-BKVo35eZ.js",
-    "dist/client/assets/api-toBbXQE8.js",
-    "dist/client/assets/burgundyAtlas-CJUdAnNA.js",
-    "dist/client/assets/index-BIxmDj5I.js",
-    "dist/client/assets/index-BRbytvam.js",
+    "dist/client/assets/FriendTagDialog-DAvw7BPq.js",
+    "dist/client/assets/SectionLabel-DBeBRfUn.js",
+    "dist/client/assets/SparklingDetailsCard-HtNnpUmC.js",
+    "dist/client/assets/VillageMap-BGS-CdvR.js",
+    "dist/client/assets/api-DZKHvQx8.js",
+    "dist/client/assets/burgundyAtlas-qTBkgu6l.js",
+    "dist/client/assets/index-036hfaHL.js",
+    "dist/client/assets/index-x383p52W.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-BFlx4dG4.js",
-    "dist/client/assets/wineDetailCompact-C_8BuqIj.js"
+    "dist/client/assets/useModalFocus-Z_FrVMaZ.js",
+    "dist/client/assets/wineDetailCompact-Dw3yqSKb.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 12,
-  "evidenceBytesTotal": 1463296,
-  "evidenceGzipBytesTotal": 150811,
+  "evidenceChunkCount": 13,
+  "evidenceBytesTotal": 1516901,
+  "evidenceGzipBytesTotal": 158802,
   "parcelBundleBytesTotal": 809954,
   "parcelBundleGzipBytesTotal": 125799,
   "evidenceChunks": [
@@ -47,6 +47,13 @@
       "sha256": "ccdb83cec3ebc5c3a48ba5d67e4aa5a58e0cedc3b79e0d1ebda54cd2b4239aa3",
       "bytes": 212411,
       "gzipBytes": 16473
+    },
+    {
+      "cru": "clos-des-lambrays",
+      "file": "dist/client/assets/clos-des-lambrays.evidence-DdUGDUoR.js",
+      "sha256": "aaefde37e715daebea7c2961a28035ac41ea9f52cb025049b699a28d0e6ffebb",
+      "bytes": 53605,
+      "gzipBytes": 7991
     },
     {
       "cru": "echezeaux",

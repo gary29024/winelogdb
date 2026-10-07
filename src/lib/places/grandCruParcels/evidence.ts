@@ -21,6 +21,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
  'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
+ 'clos-des-lambrays':()=>import('./clos-des-lambrays.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
  'la-grande-rue':()=>import('./la-grande-rue.evidence.json'),
