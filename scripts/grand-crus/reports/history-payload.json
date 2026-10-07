@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-B3XpL-oh.js"
+    "dist/client/assets/index-Cbs_14Cc.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CPjJSoBN.js",
-    "dist/client/assets/SectionLabel-CHQ3fnpn.js",
-    "dist/client/assets/SparklingDetailsCard-BHM5wWFh.js",
-    "dist/client/assets/VillageMap-CWRh5Hm0.js",
-    "dist/client/assets/api-DEaaTud2.js",
-    "dist/client/assets/burgundyAtlas-C366suGL.js",
-    "dist/client/assets/index-B3XpL-oh.js",
-    "dist/client/assets/index-rStvPd5G.js",
+    "dist/client/assets/FriendTagDialog-7PL6Htgh.js",
+    "dist/client/assets/SectionLabel-6d6e0plA.js",
+    "dist/client/assets/SparklingDetailsCard-flbfmb29.js",
+    "dist/client/assets/VillageMap-DIq6fKSQ.js",
+    "dist/client/assets/api--If5IOK4.js",
+    "dist/client/assets/burgundyAtlas-ClXglG7N.js",
+    "dist/client/assets/index-Cbs_14Cc.js",
+    "dist/client/assets/index-DiIqJu6K.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-BBgks9wE.js",
-    "dist/client/assets/wineDetailCompact-v8BL9HzA.js"
+    "dist/client/assets/useModalFocus-BBHpfczt.js",
+    "dist/client/assets/wineDetailCompact-Ciyb0Veb.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 12,
-  "evidenceBytesTotal": 1434650,
-  "evidenceGzipBytesTotal": 150233,
+  "evidenceChunkCount": 13,
+  "evidenceBytesTotal": 1515282,
+  "evidenceGzipBytesTotal": 159671,
   "parcelBundleBytesTotal": 884664,
   "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
@@ -68,6 +68,13 @@
       "sha256": "bbfb89d0afc889e53c07914872014f1f109ea895c1c6544f9502070169ffc044",
       "bytes": 80820,
       "gzipBytes": 13221
+    },
+    {
+      "cru": "griotte-chambertin",
+      "file": "dist/client/assets/griotte-chambertin.evidence-Czht9Sob.js",
+      "sha256": "b396640014bddd5c11aa848ccdfe6cab0ace673dcf8d581efe158e584e317c6d",
+      "bytes": 80632,
+      "gzipBytes": 9438
     },
     {
       "cru": "la-grande-rue",

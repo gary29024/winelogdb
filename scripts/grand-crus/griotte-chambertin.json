@@ -14,9 +14,37 @@
     "griotte-chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/griotte-chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/griotte-chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/griotte-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE1Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "406cfb870dc17b04bab8cb63bc731840f925043309cc7ea43235e52ba73bfc62",
+    "coverageNote": "The BIVB lists En Griotte as the single climat. EN GRIOTTE is audited against the unchanged INAO Griotte-Chambertin feature, with no duplicate selectable layer. EN LA CHAPELLE and AUX ETELOIS occur on edge-contact parcels and retain unresolved climat crosswalks. The official whole-cru outline remains the fallback; no producer holdings or label aliases are inferred.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "en-griotte",
+        "name": "En Griotte",
+        "sourceName": "EN GRIOTTE",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "AUX ETELOIS",
+        "sourceCandidate": "AUX ETELOIS",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Griotte-Chambertin climat or extending the named area."
+      },
+      {
+        "name": "EN LA CHAPELLE",
+        "sourceCandidate": "EN LA CHAPELLE",
+        "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Griotte-Chambertin climat or extending the named area."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
   }
 }

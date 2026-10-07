@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5206874 bytes raw / 433985 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5206874 bytes raw / 433987 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -28,7 +28,7 @@ Lazy evidence total: 5206874 bytes raw / 433985 bytes gzip. Each cru loads its o
 | [chambertin](../../../docs/research/chambertin/register.md) | 137 | 1989-04-17 → 2024-11-04 | 34 / 32 | 10 / 14 | 0 | 1 / 0 | 11882 |
 | [chambertin-clos-de-beze](../../../docs/research/chambertin-clos-de-beze/register.md) | 56 | 1989-04-17 → 2024-11-04 | 11 / 9 | 6 / 6 | 0 | 0 / 0 | 9553 |
 | [chapelle-chambertin](../../../docs/research/chapelle-chambertin/register.md) | 23 | 2022-05-16 → 2025-06-02 | 6 / 0 | 2 / 3 | 0 | 0 / 0 | 9232 |
-| [griotte-chambertin](../../../docs/research/griotte-chambertin/register.md) | 20 | 2023-12-18 → 2025-06-02 | 5 / 0 | 3 / 3 | 0 | 0 / 0 | 9256 |
+| [griotte-chambertin](../../../docs/research/griotte-chambertin/register.md) | 20 | 2023-12-18 → 2025-06-02 | 5 / 0 | 3 / 3 | 0 | 0 / 0 | 9258 |
 | [charmes-chambertin](../../../docs/research/charmes-chambertin/register.md) | 157 | 1990-11-05 → 2025-06-02 | 27 / 12 | 11 / 13 | 0 | 2 / 1 | 13673 |
 | [mazoyeres-chambertin](../../../docs/research/mazoyeres-chambertin/register.md) | 157 | 1990-11-05 → 2025-06-02 | 27 / 12 | 11 / 13 | 0 | 2 / 1 | 13673 |
 | [latricieres-chambertin](../../../docs/research/latricieres-chambertin/register.md) | 25 | 1995-09-25 → 2023-02-13 | 11 / 10 | 6 / 6 | 0 | 0 / 0 | 8713 |
