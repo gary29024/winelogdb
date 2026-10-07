@@ -53,8 +53,10 @@ def main():
         found = [f for f in inputs if key(f['properties']['nom']) == key(entry['sourceName'])]
         assert found, f"Missing cadastral name: {entry['sourceName']}"
         # The cadastre can record one lieu-dit as separate same-name features in one commune
-        # (Romanée-Saint-Vivant); they form one named area. Other crus keep their single feature.
-        assert len({f['properties']['commune'] for f in found}) == 1, f"Cadastral name in several communes: {entry['sourceName']}"
+        # (Romanée-Saint-Vivant); they form one named area. A lieu-dit that crosses a commune line
+        # (Bonnes-Mares) is one named area only when its reviewed entry lists every commune.
+        found_communes = sorted({f['properties']['commune'] for f in found})
+        assert found_communes == entry.get('communes', found_communes[:1]), f"Cadastral name in unreviewed communes: {entry['sourceName']}"
         original = shape(found[0]['geometry']) if len(found) == 1 else unary_union([shape(f['geometry']) for f in found])
         assert original.is_valid and original.geom_type in ('Polygon', 'MultiPolygon')
         clipped = original.intersection(parent)
@@ -74,7 +76,7 @@ def main():
             'id': f'{cru["slug"]}-plot-' + entry['id'], 'name': entry['name'], 'kind': 'named_plot',
             'tier': 'grand_cru', 'appellationId': cru['appellationId'], 'denominationId': None,
             'parentFeatureId': cru['parentFeatureId'], 'parentAppellation': cru['name'],
-            'sourceName': entry['sourceName'], 'communes': [found[0]['properties']['commune']],
+            'sourceName': entry['sourceName'], 'communes': found_communes,
             'areaHa': round(area(geometry) / 10000, 6), 'matchId': '', 'atlasUrl': None,
             'bounds': list(geometry.bounds), 'labelPoint': [point.x, point.y],
         }

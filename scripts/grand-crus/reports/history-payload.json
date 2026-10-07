@@ -2,31 +2,38 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BKsYgjFg.js"
+    "dist/client/assets/index-XPyj151x.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CJMcCt-Z.js",
-    "dist/client/assets/SectionLabel-AWLlw3ej.js",
-    "dist/client/assets/SparklingDetailsCard-Dpzx9W8U.js",
-    "dist/client/assets/VillageMap-DSn_obG9.js",
-    "dist/client/assets/api--nvoJB4Q.js",
-    "dist/client/assets/burgundyAtlas-CiZzlsYj.js",
-    "dist/client/assets/index-BKsYgjFg.js",
-    "dist/client/assets/index-qGbdwdAe.js",
+    "dist/client/assets/FriendTagDialog-CG215UdB.js",
+    "dist/client/assets/SectionLabel-DRrA2JR0.js",
+    "dist/client/assets/SparklingDetailsCard-BL7cFXzg.js",
+    "dist/client/assets/VillageMap-BtRrxX-h.js",
+    "dist/client/assets/api-XV0ippB-.js",
+    "dist/client/assets/burgundyAtlas-DoP6I3WY.js",
+    "dist/client/assets/index-CCJ-PBj1.js",
+    "dist/client/assets/index-XPyj151x.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-QoOVTsZg.js",
-    "dist/client/assets/wineDetailCompact-AYVBDS-6.js"
+    "dist/client/assets/useModalFocus-p_8CGvkr.js",
+    "dist/client/assets/wineDetailCompact-DsVgKeNz.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 10,
-  "evidenceBytesTotal": 1228394,
-  "evidenceGzipBytesTotal": 129130,
+  "evidenceChunkCount": 11,
+  "evidenceBytesTotal": 1349614,
+  "evidenceGzipBytesTotal": 141117,
   "parcelBundleBytesTotal": 809954,
   "parcelBundleGzipBytesTotal": 125799,
   "evidenceChunks": [
+    {
+      "cru": "bonnes-mares",
+      "file": "dist/client/assets/bonnes-mares.evidence-CqgdD8OG.js",
+      "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
+      "bytes": 121220,
+      "gzipBytes": 11987
+    },
     {
       "cru": "clos-de-vougeot",
       "file": "dist/client/assets/clos-de-vougeot.evidence-CA5w5n1I.js",

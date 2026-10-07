@@ -8,6 +8,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 // Chambolle-Morey bundle crus whose Tier 1 review is committed, with the village maps they appear on.
 const reviewed=[
  {slug:'musigny',name:'Musigny',id:'inao-denom-973',maps:['chambolle-musigny']},
+ {slug:'bonnes-mares',name:'Bonnes-Mares',id:'inao-denom-361',maps:['chambolle-musigny','morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -36,6 +37,18 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
   // La Combe d'Orveau has no cadastral crosswalk, and a neighbouring lieu-dit is never a Musigny named area.
   for(const referenceParcel of ["La Combe d'Orveau",'Les Amoureuses']){
    expect(burgundyVillageMapTarget({...wine,referenceParcel})?.namedPlotId).toBeUndefined();
+  }
+ });
+ it('keeps Bonnes-Mares on its official outline across both communes',async()=>{
+  for(const map of ['chambolle-musigny','morey-saint-denis']){
+   const layers=(await loadVillageMapCatalogue(map)).namedPlots??[];
+   expect(layers.map(layer=>layer.parentFeatureId)).not.toContain('inao-denom-361');
+  }
+  const wine={...red,appellation:'Bonnes-Mares',wineName:'Bonnes-Mares'};
+  for(const target of [wine,{...wine,referenceParcel:'Les Bonnes Mares'},{...wine,referenceParcel:'Les Véroilles'}]){
+   const result=burgundyVillageMapTarget(target);
+   expect(result?.featureId).toBe('inao-denom-361');
+   expect(result?.namedPlotId).toBeUndefined();
   }
  });
 });

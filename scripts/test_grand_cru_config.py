@@ -211,6 +211,18 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
 
+    def test_cross_commune_named_areas_list_every_commune(self):
+        # Bonnes-Mares: LES BONNES MARES is recorded in both communes and forms one reviewed named area.
+        plot = load_cru('bonnes-mares')[0]['namedPlots']['plots'][0]
+        self.assertEqual(plot['communes'], ['21133', '21442'])
+        report = read_json(named_plot_report_path(load_cru('bonnes-mares')[0]))
+        self.assertEqual(report['plots'][0]['sourceFeatures'], 2)
+        for slug in cru_slugs():
+            for entry in load_cru(slug)[0].get('namedPlots', {}).get('plots', []):
+                if 'communes' in entry:
+                    self.assertEqual(entry['communes'], sorted(set(entry['communes'])), slug)
+                    self.assertGreater(len(entry['communes']), 1, slug)
+
     def test_edge_parcels_in_neighbouring_lieux_dits_are_declared(self):
         # Musigny's edge parcels lie wholly in neighbouring lieux-dits such as Les Amoureuses; none is a Musigny climat.
         checked = []
