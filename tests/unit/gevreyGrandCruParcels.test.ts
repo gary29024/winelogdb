@@ -9,9 +9,10 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const reviewed=[
  {slug:'chambertin',name:'Chambertin',id:'inao-denom-447'},
  {slug:'chambertin-clos-de-beze',name:'Chambertin-Clos de Bèze',id:'inao-denom-448'},
+ {slug:'chapelle-chambertin',name:'Chapelle-Chambertin',id:'inao-denom-475'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/gevrey-chambertin.json','utf8')) as {crus:string[]};
-const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{name:string;sourceName:string}[]}};
+const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string;sourceName:string}[]}};
 
 describe('Gevrey-Chambertin Tier 1 crus',()=>{
  it('enables reviewed crus with their own evidence and no inferred domaine grouping',async()=>{
@@ -38,6 +39,30 @@ describe('Gevrey-Chambertin Tier 1 crus',()=>{
     expect(result?.namedPlotId).toBeUndefined();
    }
   }
+ });
+ it('selects reviewed constituent areas while broad or unresolved wines retain the whole cru',()=>{
+  for(const cru of reviewed){
+   const named=config(cru.slug).namedPlots!;
+   if(named.displayLayer===false)continue;
+   const wine={country:'France',region:'Burgundy',appellation:cru.name,classification:'grand_cru',colour:'red',wineName:cru.name};
+   for(const target of [wine,{...wine,referenceParcel:'Unknown area'}]){
+    const result=burgundyVillageMapTarget(target);
+    expect(result?.featureId).toBe(cru.id);
+    expect(result?.namedPlotId).toBeUndefined();
+   }
+   for(const plot of named.plots){
+    for(const referenceParcel of [plot.name,plot.sourceName]){
+     expect(burgundyVillageMapTarget({...wine,referenceParcel})).toMatchObject({featureId:cru.id,namedPlotId:`${cru.slug}-plot-${plot.id}`});
+    }
+   }
+  }
+ });
+ it('distinguishes the Chambertin part of Chapelle-Chambertin from a conflicting reference',()=>{
+  const wine={country:'France',region:'Burgundy',appellation:'Chapelle-Chambertin',classification:'grand_cru',colour:'red',wineName:'Chapelle-Chambertin'};
+  expect(burgundyVillageMapTarget(wine)).toMatchObject({featureId:'inao-denom-475'});
+  expect(burgundyVillageMapTarget({...wine,referenceSite:'Chambertin'})).toBeNull();
+  expect(burgundyVillageMapTarget({...wine,appellation:'Chapelle-Chambertin Chambertin'})).toBeNull();
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Gémeaux',wineName:'Chambertin'})?.namedPlotId).toBeUndefined();
  });
  it('preserves the stamped 2022 Chambertin application date despite the 2023 index identifier',async()=>{
   const evidence=await loadParcelEvidence('inao-denom-447');

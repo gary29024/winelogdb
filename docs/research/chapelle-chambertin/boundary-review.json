@@ -1,0 +1,112 @@
+{
+  "slug": "chapelle-chambertin",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "cadastreSha256ByCommune": {
+    "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+  },
+  "boundaryAreaM2": 54742.93201898168,
+  "uncoveredM2": 132.13601886745855,
+  "sharePercent": 0.24137548719831345,
+  "componentCount": 5,
+  "components": [
+    {
+      "areaM2": 110.62590278050314,
+      "boundsEPSG2154": [
+        848873.981,
+        6681267.311559364,
+        848955.5588229272,
+        6681609.780954657
+      ],
+      "rectangleWidthM": 9.069947926933718,
+      "rectangleLengthM": 351.9955793580287,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BP0353",
+        "21295000BP0011",
+        "21295000BP0260",
+        "21295000BP0335",
+        "21295000BP0336",
+        "21295000BP0015",
+        "21295000BP0229",
+        "21295000BP0298",
+        "21295000BP0299",
+        "21295000BP0300",
+        "21295000BP0243",
+        "21295000BP0019",
+        "21295000BP0021",
+        "21295000BP0022",
+        "21295000BP0023",
+        "21295000BP0230",
+        "21295000BP0025",
+        "21295000BP0355",
+        "21295000BP0356"
+      ]
+    },
+    {
+      "areaM2": 14.241391741472341,
+      "boundsEPSG2154": [
+        849049.4063573921,
+        6681270.875413361,
+        849060.171,
+        6681331.410109581
+      ],
+      "rectangleWidthM": 4.2172726400168115,
+      "rectangleLengthM": 61.46238389214388,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BP0353"
+      ]
+    },
+    {
+      "areaM2": 3.844131028246089,
+      "boundsEPSG2154": [
+        849058.9202859638,
+        6681365.396078534,
+        849061.987,
+        6681408.717903488
+      ],
+      "rectangleWidthM": 0.6832302235088438,
+      "rectangleLengthM": 43.42241098132613,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BP0353"
+      ]
+    },
+    {
+      "areaM2": 2.9509590227501405,
+      "boundsEPSG2154": [
+        849104.4998523043,
+        6681539.360513929,
+        849106.577,
+        6681549.932119362
+      ],
+      "rectangleWidthM": 0.3000203239258116,
+      "rectangleLengthM": 10.722130478411708,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BP0023"
+      ]
+    },
+    {
+      "areaM2": 0.4736342944868467,
+      "boundsEPSG2154": [
+        849104.9016731842,
+        6681519.862286931,
+        849105.3290000001,
+        6681526.069977091
+      ],
+      "rectangleWidthM": 0.09062751844343299,
+      "rectangleLengthM": 6.216390619286376,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21295000BP0243",
+        "21295000BP0019",
+        "21295000BP0020"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "reviewMethod": "Metric overlay rendered at 1600×1120 pixels and visually inspected, including enlarged representative portions of the three largest components. Every component is checked to touch the INAO boundary; all original cadastre parcels within 20 m of the feature are included in the coverage union.",
+  "finding": "The measured 132.136019 m² remainder (0.2414%) was inspected in an EPSG:2154 overlay of the pinned INAO boundary and original commune parcels, with close views of its largest components. All five components touch the INAO boundary: 110.625903 m² follows the western boundary, with 14.241392, 3.844131, 2.950959 and 0.473634 m² on the eastern boundary. These are narrow cadastral/INAO boundary mismatches, not a missing commune. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above the reviewed measurement; changed source hashes require another review."
+}

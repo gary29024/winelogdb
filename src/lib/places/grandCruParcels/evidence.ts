@@ -20,6 +20,7 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'chambertin':()=>import('./chambertin.evidence.json'),
  'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
+ 'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),

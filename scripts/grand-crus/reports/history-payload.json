@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DMh7jQz8.js"
+    "dist/client/assets/index-B3XpL-oh.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CDq7DMHK.js",
-    "dist/client/assets/SectionLabel-THn0ay6Z.js",
-    "dist/client/assets/SparklingDetailsCard-CTP0Ao11.js",
-    "dist/client/assets/VillageMap-CgLVpfBd.js",
-    "dist/client/assets/api-CXK-QIRj.js",
-    "dist/client/assets/burgundyAtlas-D4hxA6kk.js",
-    "dist/client/assets/index-Cb-J4TY_.js",
-    "dist/client/assets/index-DMh7jQz8.js",
+    "dist/client/assets/FriendTagDialog-CPjJSoBN.js",
+    "dist/client/assets/SectionLabel-CHQ3fnpn.js",
+    "dist/client/assets/SparklingDetailsCard-BHM5wWFh.js",
+    "dist/client/assets/VillageMap-CWRh5Hm0.js",
+    "dist/client/assets/api-DEaaTud2.js",
+    "dist/client/assets/burgundyAtlas-C366suGL.js",
+    "dist/client/assets/index-B3XpL-oh.js",
+    "dist/client/assets/index-rStvPd5G.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CdiZoAFu.js",
-    "dist/client/assets/wineDetailCompact-f7DH_r9j.js"
+    "dist/client/assets/useModalFocus-BBgks9wE.js",
+    "dist/client/assets/wineDetailCompact-v8BL9HzA.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 11,
-  "evidenceBytesTotal": 1353077,
-  "evidenceGzipBytesTotal": 140825,
+  "evidenceChunkCount": 12,
+  "evidenceBytesTotal": 1434650,
+  "evidenceGzipBytesTotal": 150233,
   "parcelBundleBytesTotal": 884664,
   "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
@@ -40,6 +40,13 @@
       "sha256": "0fee451a4d19e245aefe55cddda35b03a4726e954e0fb668d9f22bd65dbc80a8",
       "bytes": 78690,
       "gzipBytes": 9745
+    },
+    {
+      "cru": "chapelle-chambertin",
+      "file": "dist/client/assets/chapelle-chambertin.evidence-CSGQscPB.js",
+      "sha256": "b5a552d03b2f32ef02be31c07bbe0cfc2d49d718dc458ee1bb7187e5255b17d0",
+      "bytes": 81573,
+      "gzipBytes": 9408
     },
     {
       "cru": "clos-de-vougeot",
