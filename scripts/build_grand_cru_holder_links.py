@@ -126,7 +126,10 @@ def validate(table, recorded, cru_curations):
         if identity:
             require(hid.startswith('U'), f'{hid}: only a provisional identifier takes an identity crosswalk')
             siren = identity['companySiren']
-            require(len(siren) == 9 and siren.isdigit() and siren not in table['holders'], f'{hid}: invalid identity crosswalk')
+            # A company can hold rights under both its SIREN and an old provisional identifier, but not in the same cru,
+            # where one set of parcels would be counted under two names.
+            shared_crus = recorded.get(siren, {}).get('crus', set()) & recorded[hid]['crus']
+            require(len(siren) == 9 and siren.isdigit() and not shared_crus, f'{hid}: invalid identity crosswalk')
             require(identity['sourceIds'] and set(identity['sourceIds']) <= sources.keys(), f'{hid}: unknown crosswalk source')
             require(identity.get('limitation'), f'{hid}: identity crosswalk needs its limitation')
             cited.update(identity['sourceIds'])

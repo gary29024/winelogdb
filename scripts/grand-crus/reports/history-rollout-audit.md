@@ -6,13 +6,13 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5418508 bytes raw / 464795 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5510243 bytes raw / 481129 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
 | [echezeaux](../../../docs/research/echezeaux/register.md) | 276 | 1991-01-22 → 2026-04-13 | 82 / 64 | 30 / 47 | 0 | 30 / 0 | 40052 |
 | [grands-echezeaux](../../../docs/research/grands-echezeaux/register.md) | 32 | 2019-03-12 → 2019-03-12 | 1 / 0 | 1 / 1 | 0 | 6 / 0 | 12972 |
-| [clos-de-vougeot](../../../docs/research/clos-de-vougeot/register.md) | 164 | 1989-04-20 → 2025-05-12 | 68 / 58 | 34 / 36 | 0 | 7 / 0 | 16280 |
+| [clos-de-vougeot](../../../docs/research/clos-de-vougeot/register.md) | 164 | 1989-04-20 → 2025-05-12 | 68 / 58 | 34 / 36 | 0 | 7 / 0 | 31599 |
 | [richebourg](../../../docs/research/richebourg/register.md) | 58 | 1995-09-18 → 2025-05-12 | 32 / 11 | 6 / 13 | 0 | 0 / 0 | 11999 |
 | [romanee-saint-vivant](../../../docs/research/romanee-saint-vivant/register.md) | 17 | 1990-01-18 → 2022-05-16 | 7 / 3 | 3 / 3 | 0 | 0 / 0 | 9071 |
 | [romanee-conti](../../../docs/research/romanee-conti/register.md) | 2 | 1994-05-30 → 1994-05-30 | 1 / 1 | 1 / 1 | 0 | 0 / 0 | 7526 |
@@ -39,7 +39,7 @@ Lazy evidence total: 5418508 bytes raw / 464795 bytes gzip. Each cru loads its o
 | [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 12427 |
 | [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 10106 |
 | [criots-batard-montrachet](../../../docs/research/criots-batard-montrachet/register.md) | 11 | 2001-03-15 → 2013-04-22 | 6 / 6 | 3 / 3 | 0 | 0 / 0 | 8028 |
-| [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 3 / 0 | 66417 |
+| [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 3 / 0 | 67432 |
 | [corton-charlemagne](../../../docs/research/corton-charlemagne/register.md) | 339 | 1990-01-10 → 2026-03-16 | 96 / 65 | 49 / 64 | 0 | 0 / 0 | 23450 |
 | [charlemagne](../../../docs/research/charlemagne/register.md) | 275 | 1990-01-10 → 2026-03-16 | 93 / 62 | 42 / 57 | 0 | 0 / 0 | 21441 |
 | [chablis-grand-cru](../../../docs/research/chablis-grand-cru/register.md) | 417 | 1991-03-22 → 2024-11-19 | 102 / 83 | 35 / 58 | 0 | 37 / 0 | 25853 |

@@ -31,13 +31,13 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-07–2025-12-22. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 3; one page-reviewed 2021 application receipt |
 | Parcels with sale records (DVF) | 107; 43 deeds on current references, plus 1 deed on a historical reference retained with original scope |
-| Parcels with holder or research leads | 261: 256 holder or research leads, 3 parcels named in the reviewed notice and 2 co-sale leads from DVF deeds. A recorded legal holder alone is not a lead |
-| Parcels with no lead | 467 |
+| Parcels with holder or research leads | 267: 262 holder or research leads, 3 parcels named in the reviewed notice and 2 co-sale leads from DVF deeds. A recorded legal holder alone is not a lead |
+| Parcels with no lead | 461 |
 | Parcels with exact-reference company filings | 82, in 26 filing rows from 25 filings of 25 companies; 13 rows recite a lease, tenancy or lease mandate |
 | Published holdings compared by named area | 35 statements from 18 producers in 15 named areas: 27 sized for one named area, 5 unsized, 3 spread over several named areas |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages of the three communes and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 704,334 / 103,159 bytes. Evidence: 997,865 / 66,417 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 704,334 / 103,159 bytes. Evidence: 1,002,200 / 67,432 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 728-parcel Corton bundle; Corton's selection is every parcel in it,
@@ -191,13 +191,18 @@ table and were not searched again; Capitain-Gagnerot's link gained its own legal
 its SIREN. The other 106 were looked up in the official company register and the free filing index
 of entreprises.lefigaro.fr, and their founding, contribution, merger and latest-statute filings were
 OCR-screened. Each now has a link or a `searches` record with what was found, plus its `effort`
-(filings screened and pages).
+(filings screened and pages). Eight of them were also researched for Clos de Vougeot (#424), whose
+entries reached the table first and are kept. Two of those give Corton links this search had not
+found: the Grenelle GFA, through a 2004 partition deed reciting a long-term lease of all its land to
+SCEV Château Genot-Boulanger, and Leroy SA (Maison Leroy). One was corrected with new evidence: after
+its 2026 contribution, the holder recorded as Maison Bouchard Père et Fils is the parent company of
+Bouchard Père et Fils, so its relation is now parent group.
 
-- 62 holders have a link that applies to Corton: 48 reviewed and 14 provisional. Relations are
-  owner company (26), lessor per filing (10), family holding (9), brand identity (5), subsidiary (3),
+- 64 holders have a link that applies to Corton: 53 reviewed and 11 provisional. Relations are
+  owner company (27), lessor per filing (11), family holding (9), brand identity (5), subsidiary (3),
   management (2), succession (2), common ownership (2), parent group, shared office and partner
-  company (1 each). They reach 253 of the 387 parcels with recorded rights.
-- 50 holders have no applicable link. They include the communes and public syndicates, investment
+  company (1 each). They reach 259 of the 387 parcels with recorded rights.
+- 48 holders have no applicable link. They include the communes and public syndicates, investment
   GFVs, family land companies whose filings name no tenant or let to a person rather than a company,
   and companies tied to a domaine only by a similar name. The Bichot SA and SCI Les Climats links
   from earlier crus are limited to those crus and do not apply here.
@@ -208,8 +213,9 @@ OCR-screened. Each now has a link or a `searches` record with what was found, pl
   SIREN in this cru, and no crosswalk is recorded.
 - A new `partner-company` relation records a domaine company that is a recorded partner of the
   holder (Domaine de Montille in SCEA Corton Clos du Roi).
-- App headings: 62 holders give one domaine heading. Leases and filing mandates never form headings;
-  those holders keep their legal name with the lead in the evidence panel.
+- App headings: 50 linked holders group under 44 domaine headings, from company records, estate
+  sources or brand identity. The 11 lease and mandate rows, the two successions and the shared-office
+  match stay leads under the holder's legal name.
 
 **Filings.** [Filing readings](filings.md) cover 349 filings of 105 companies (about 8,400 pages)
 and every cited schedule, with deed and deposit dates, pages, page-image checks and SHA-256. 26 rows
@@ -284,9 +290,8 @@ include leased land.
   file predates it, as it predates the Remoissenet (2022), Belin-Naigeon (2024) and Maurice Chapuis
   (2025) mergers it still records.
 - Provisional links to check: Rapet (Robert Rapet GFA), Ravaut GFA, Pavelot GFA, Tollot-Beaut GFA,
-  Clavelier GFV, Gille GFV, Roumier (Clos de la Bussière), Méo-Camuzet (two companies), Vougeraie
-  (Ponnelle), d'Ardhuy (SC de la Juvinière), Comte Senard, Sordoillet/Chapuis and the Esprit 20
-  lease mandate.
+  Clavelier GFV, Gille GFV, Roumier (Clos de la Bussière), Comte Senard, Méo-Camuzet (Corton
+  Investissement's shared office), Sordoillet/Chapuis and the Esprit 20 lease mandate.
 - Unresolved holders worth a further look: SC Dom Hippolyte Thevenot (10 parcels, 1.98 ha, no SIREN
   found), SCI Royland (shares Pousse d'Or's office; no filing names its Clos du Roi parcels), SCI des
   Bressandes, GFA Dom Emile Voarick, SCEV Domaine Frey (Château Corton-André until 2015), the Parc

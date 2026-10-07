@@ -16,13 +16,21 @@ const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/corton.json','u
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean}};
 
 describe('Corton hill Tier 1 crus',()=>{
- it('enables only reviewed crus, without domaine grouping or farming claims',async()=>{
+ it('enables only reviewed crus; only Corton (Tier 2) groups holders, from the shared table',async()=>{
   for(const cru of reviewed){
-   for(const map of maps)expect(grandCruFor(cru.id,map)).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
+   const tier2=cru.slug==='corton';
+   for(const map of maps)expect(grandCruFor(cru.id,map)).toMatchObject({slug:cru.slug,domaineGrouping:tier2,evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
    expect(evidence).not.toBeNull();
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
+   if(!tier2)expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
   }
+  // Tier 2 (#451): links come from the shared holder table; unlinked holders keep their legal names.
+  const corton=await loadParcelEvidence('inao-denom-549');
+  expect(corton.holderDomains?.['515520385']).toMatchObject({name:'Maison Leroy',basis:'company-identity'});
+  expect(corton.holderDomains?.['427468962']).toMatchObject({name:'Domaine Louis Latour',basis:'filing-tenant-relationship'});
+  expect(corton.holderDomains?.['408975357']?.basis).toBe('succession-lead');
+  expect(corton.holderDomains?.['212100101']).toBeUndefined();
+  expect(corton.holderDomains?.['U21845728']).toBeUndefined();
   const hidden=bundle.crus.filter(slug=>!reviewed.some(cru=>cru.slug===slug));
   for(const slug of hidden)for(const map of maps)expect(grandCruFor(config(slug).parentFeatureId,map)).toBeUndefined();
  });

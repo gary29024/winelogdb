@@ -48,8 +48,9 @@ EVENT_KINDS = {'historical-application': 'Application received', 'authorisation'
 SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
 # A later holder may have received a contribution after the sale; it is not necessarily the buyer.
 LATER_HOLDER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
+# A company filing that names a parcel with no company record is research context, not a parcel filing of its holder.
 EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description',
-                  'estate-area-exact-match', 'estate-area-near-match', 'court-named-cadastral-reference'}
+                  'estate-area-exact-match', 'estate-area-near-match', 'court-named-cadastral-reference', 'filing-named-cadastral-reference'}
 HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 

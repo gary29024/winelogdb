@@ -6,7 +6,7 @@ Reviewed 2026-10-07; target season 2026.
 
 All 728 mapped Corton parcels and 112 recorded legal-entity identifiers, reviewed for Tier 1 (commune edges, named-area audit, #461 history) and Tier 2: every holder searched in the official company register and the free filing index, 349 filings OCR-screened, schedules and lease recitals read, estate, importer and Winehog sources compared by named area. Holder-to-domaine links live in the shared holder table.
 
-Of 728 mapped parcels, 387 have recorded rights and 341 have no matched right holder. All 112 holder groups were triaged. 256 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 2 have co-sale leads through a later company holder, and 467 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 728 mapped parcels, 387 have recorded rights and 341 have no matched right holder. All 112 holder groups were triaged. 262 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 2 have co-sale leads through a later company holder, and 461 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
 314 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
@@ -122,7 +122,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (7): C 0117, C 0120, AK 0153, AK 0156, AK 0225, AK 0227, AK 0229.
 
-**Candidate to investigate:** Domaine Parent. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Parent. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Pommard farming company of Domaine Parent; seven small Renardes, Rognet and Vergennes parcels. Current parcel farming unconfirmed.
 
@@ -146,11 +146,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): B 0004.
 
-**Candidate to investigate:** Domaine Joseph Drouhin. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Joseph Drouhin. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds Les Languettes B 0004. Current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DOMAINE JOSEPH DROUHIN (314306747)](https://annuaire-entreprises.data.gouv.fr/entreprise/314306747), [BODACC: Domaine Joseph Drouhin](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22314306747%22&order_by=dateparution).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DOMAINE JOSEPH DROUHIN (314306747)](https://annuaire-entreprises.data.gouv.fr/entreprise/314306747).
 
 <a id="holder-314722661"></a>
 
@@ -158,7 +158,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): I 0009, I 0252.
 
-**Candidate to investigate:** Domaine Comte Senard. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Comte Senard. **Basis:** family-company-record. **Current farming:** unconfirmed.
 
 Senard family company formed in 1978; its two small Corton-outline parcels are buildings and garden. The domaine company’s commercial lease concerns another building. Current parcel farming unconfirmed.
 
@@ -170,7 +170,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (7): A 0116, A 0117, A 0124, AL 0119, AL 0124, AL 0282, AL 0309.
 
-**Candidate to investigate:** Domaine Rapet Père et Fils. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Rapet Père et Fils. **Basis:** family-company-record. **Current farming:** unconfirmed.
 
 The family GFA of the Rapet family at Pernand-Vergelesses; its filings name no tenant. Current parcel farming unconfirmed.
 
@@ -182,7 +182,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (6): A 0027, AL 0091, AL 0092, AL 0177, AL 0178, AL 0179.
 
-**Candidate to investigate:** Domaine Pavelot (Pernand-Vergelesses). **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Pavelot (Pernand-Vergelesses). **Basis:** family-company-record. **Current farming:** unconfirmed.
 
 Family GFA named after Domaine Pavelot, in the same Pernand-Vergelesses street as SCEV Domaine Pavelot. Current parcel farming unconfirmed.
 
@@ -254,7 +254,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): A 0065.
 
-**Candidate to investigate:** Domaine Patrick Javillier. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Patrick Javillier. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Recorded as GFA Javillier; since 2025 SAS Patrick Javillier, vine growing, Meursault. Current parcel farming unconfirmed.
 
@@ -266,11 +266,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): A 0066, B 0005.
 
-**Candidate to investigate:** Domaine d’Ardhuy. **Basis:** management-and-estate-context. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine d'Ardhuy. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
 Managed by Société Civile d’Ardhuy, whose recorded partner is the Domaine d’Ardhuy company. Current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SOC CIVILE DE LA JUVINIERE (327166898)](https://annuaire-entreprises.data.gouv.fr/entreprise/327166898), [Company register: SOCIETE CIVILE D'ARDHUY (443817382)](https://annuaire-entreprises.data.gouv.fr/entreprise/443817382).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SOC CIVILE DE LA JUVINIERE (327166898)](https://annuaire-entreprises.data.gouv.fr/entreprise/327166898), [Company register: SOCIETE CIVILE D'ARDHUY (443817382)](https://annuaire-entreprises.data.gouv.fr/entreprise/443817382), [Company register: DOMAINE D'ARDHUY (JUV) (325421634)](https://annuaire-entreprises.data.gouv.fr/entreprise/325421634).
 
 <a id="holder-328061346"></a>
 
@@ -278,7 +278,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): C 0046, AL 0285.
 
-**Candidate to investigate:** Domaine Françoise André. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Françoise André. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds two Corton parcels. Current parcel farming unconfirmed.
 
@@ -314,7 +314,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): AL 0173, AL 0175.
 
-**Candidate to investigate:** Domaine Philippe Charlopin. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Philippe Charlopin. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds En Charlemagne AL 0173 and AL 0175. Current parcel farming unconfirmed.
 
@@ -350,7 +350,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): B 0014.
 
-**Candidate to investigate:** Domaine Chapuis. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Chapuis. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 EARL Domaine Maurice Chapuis, renamed SARL Maurice Chapuis (trading as Domaine Chapuis) in 2025 after absorbing 408975357. Current parcel farming unconfirmed.
 
@@ -362,7 +362,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AK 0014.
 
-**Candidate to investigate:** Domaine Taupenot-Merme. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Taupenot-Merme. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds Le Rognet AK 0014. Current parcel farming unconfirmed.
 
@@ -398,11 +398,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): A 0028, I 0235.
 
-**Candidate to investigate:** Unresolved. **Basis:** unresolved. **Current farming:** unconfirmed.
+**Candidate to investigate:** Château Genot-Boulanger. **Basis:** filing-tenant-relationship. **Current farming:** unconfirmed.
 
-Its 1995 founding deed recites a lease to an individual ending 31 January 2013; no domaine company named.
+Holds Le Charlemagne A 0028 and Les Combes I 0235. Its 1995 founding deed recites an earlier lease to an individual; a 2004 partition deed states that all the GFA’s land, including its Aloxe-Corton vines, is let long-term to SCEV Château Genot-Boulanger. No filing names these two references; current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA DE LA GRENELLE (400737938)](https://annuaire-entreprises.data.gouv.fr/entreprise/400737938).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA DE LA GRENELLE (400737938)](https://annuaire-entreprises.data.gouv.fr/entreprise/400737938), [GFA de la Grenelle: 14 January 2004 partition deed](https://actes.ccm2.net/acte/6ee2afdd-1e24-4917-b477-9ca4f2c3734f#page=7).
 
 <a id="holder-402345144"></a>
 
@@ -434,7 +434,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AL 0284.
 
-**Candidate to investigate:** Domaine Pierre Marey et Fils. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Pierre Marey et Fils. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds one Corton parcel. Current parcel farming unconfirmed.
 
@@ -446,7 +446,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): A 0135, A 0136.
 
-**Candidate to investigate:** Domaine Chapuis. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Chapuis. **Basis:** succession-lead. **Current farming:** unconfirmed.
 
 SARL Maurice Chapuis was merged into 378948053 and struck off in March 2025; the 2025 rights file still records it. Current parcel farming unconfirmed.
 
@@ -470,7 +470,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AL 0356.
 
-**Candidate to investigate:** Domaine Pavelot (Pernand-Vergelesses). **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Pavelot (Pernand-Vergelesses). **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Pernand-Vergelesses farming company named Domaine Pavelot; its 1998 filings show Régis Pavelot leasing vines to the company. Current parcel farming unconfirmed.
 
@@ -482,7 +482,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): N 0008, N 0087.
 
-**Candidate to investigate:** Domaine Jean Fery et Fils. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Jean Fery et Fils. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
 S2V holds 99 of the SCI’s 100 shares, and the SCI’s Corton “Les Chaumes” parcel is under a farm lease to S2V. The 2015 deed prints no cadastral reference. Current parcel farming unconfirmed.
 
@@ -602,11 +602,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): B 0066, AK 0033.
 
-**Candidate to investigate:** Domaine Méo-Camuzet. **Basis:** estate-context. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Méo-Camuzet. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
 Méo-Camuzet’s office company holds Les Perrières B 0066 and Clos Rognet AK 0033; the domaine publishes both Cortons. Current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: MEO CAMUZET FRERE ET SOEURS (448502708)](https://annuaire-entreprises.data.gouv.fr/entreprise/448502708), [Domaine Méo-Camuzet: Corton Les Perrières](https://www.meo-camuzet.com/en/the-wines/4/corton-les-perrieres), [Domaine Méo-Camuzet: Corton Clos Rognet](https://www.meo-camuzet.com/en/the-wines/3/corton-clos-rognet), [Domaine Méo-Camuzet: legal notice](https://www.meo-camuzet.com/en/mentions-legales), [BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: MEO CAMUZET FRERE ET SOEURS (448502708)](https://annuaire-entreprises.data.gouv.fr/entreprise/448502708), [Domaine Méo-Camuzet: Corton Les Perrières](https://www.meo-camuzet.com/en/the-wines/4/corton-les-perrieres), [Domaine Méo-Camuzet: Corton Clos Rognet](https://www.meo-camuzet.com/en/the-wines/3/corton-clos-rognet), [Company register: DOMAINE MEO CAMUZET (320926439)](https://annuaire-entreprises.data.gouv.fr/entreprise/320926439).
 
 <a id="holder-449347426"></a>
 
@@ -650,7 +650,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): D 0029, D 0128.
 
-**Candidate to investigate:** Domaine de la Pousse d’Or. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine de la Pousse d’Or. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds Bressandes D 0029 and Clos du Roi D 0128. Current parcel farming unconfirmed.
 
@@ -662,7 +662,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AL 0319.
 
-**Candidate to investigate:** Domaine Dublère. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Dublère. **Basis:** succession-lead. **Current farming:** unconfirmed.
 
 Recorded with bare ownership (N) of AL 0319; the GFA was dissolved into its partner Domaine Dublère in 2024. Current parcel farming unconfirmed.
 
@@ -674,7 +674,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AL 0319.
 
-**Candidate to investigate:** Domaine Dublère. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Dublère. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds usufruct (U) on En Charlemagne AL 0319, whose bare ownership is recorded to GFA Héritiers Belin-Naigon. Current parcel farming unconfirmed.
 
@@ -758,7 +758,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): A 0026, A 0029.
 
-**Candidate to investigate:** Domaine Tawse. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Tawse. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds Le Charlemagne A 0026 and A 0029. Current parcel farming unconfirmed.
 
@@ -794,11 +794,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (4): C 0013, C 0014, C 0015, C 0052.
 
-**Candidate to investigate:** Unresolved. **Basis:** unresolved. **Current farming:** unconfirmed.
+**Candidate to investigate:** Maison Leroy. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Leroy SA, Auxey-Duresses; no legal notice or filing seen ties it to a domaine label.
+Register identity of Leroy SA (Maison Leroy), partner in the Domaine Leroy companies; it holds Le Corton C 0013, C 0014 and C 0015 and Renardes C 0052. No reviewed filing names these parcels or a lease; current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: LEROY S A (515520385)](https://annuaire-entreprises.data.gouv.fr/entreprise/515520385).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: LEROY S A (515520385)](https://annuaire-entreprises.data.gouv.fr/entreprise/515520385), [Company register: SCI DOMAINE LEROY (427469135)](https://annuaire-entreprises.data.gouv.fr/entreprise/427469135).
 
 <a id="holder-515620193"></a>
 
@@ -806,11 +806,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): D 0011.
 
-**Candidate to investigate:** Domaine de la Vougeraie. **Basis:** management-and-estate-context. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine de la Vougeraie. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
 Vougeraie publishes 0.497 ha of Corton Clos du Roi, exactly the cadastral area of this company’s only parcel, D 0011. Current parcel farming unconfirmed.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193), [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954), [Domaine de la Vougeraie: Corton Le Clos du Roi 2024](https://www.domainedelavougeraie.com/fr/les-vins.r-693/grands-crus.r-703/corton-grand-cru.v-17126.html?id_millesime=57).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193), [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954), [Company register: SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE (330713074)](https://annuaire-entreprises.data.gouv.fr/entreprise/330713074), [Company register: SCI JEAN FAYE (433359320)](https://annuaire-entreprises.data.gouv.fr/entreprise/433359320).
 
 <a id="holder-515620466"></a>
 
@@ -890,7 +890,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): B 0028.
 
-**Candidate to investigate:** Maison Louis Latour. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Maison Louis Latour. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
 Holds the Aloxe-Corton cellar building on Les Perrières B 0028, contributed by Maison Louis Latour in 2011. Not a vineyard parcel.
 
@@ -998,7 +998,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): D 0006.
 
-**Candidate to investigate:** Domaine Thénard. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Thénard. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Holds Clos du Roi D 0006. Current parcel farming unconfirmed.
 
@@ -1190,7 +1190,7 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (4): AK 0235, AK 0236, AK 0237, AK 0238.
 
-**Candidate to investigate:** Domaine Jacob-Frèrebeau. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Jacob-Frèrebeau. **Basis:** company-identity. **Current farming:** unconfirmed.
 
 Recorded with right code R. Current parcel farming unconfirmed.
 
@@ -1486,10 +1486,10 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | A 0023 | Le Charlemagne | 1449.31 | None | Unresolved | Unconfirmed |
 | A 0024 | Le Charlemagne | 641.17 | [323178111](#holder-323178111) | Domaine Michel Mallard (brand-identity-confirmed) | Unconfirmed |
 | A 0025 | Le Charlemagne | 425.37 | [323178111](#holder-323178111) | Domaine Michel Mallard (brand-identity-confirmed) | Unconfirmed |
-| A 0026 | Le Charlemagne | 959.53 | [515045292](#holder-515045292) | Domaine Tawse (identity-only) | Unconfirmed |
-| A 0027 | Le Charlemagne | 1440.37 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
-| A 0028 | Le Charlemagne | 2875.11 | [400737938](#holder-400737938) | Unresolved | Unconfirmed |
-| A 0029 | Le Charlemagne | 1854.36 | [515045292](#holder-515045292) | Domaine Tawse (identity-only) | Unconfirmed |
+| A 0026 | Le Charlemagne | 959.53 | [515045292](#holder-515045292) | Domaine Tawse (company-identity) | Unconfirmed |
+| A 0027 | Le Charlemagne | 1440.37 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
+| A 0028 | Le Charlemagne | 2875.11 | [400737938](#holder-400737938) | Château Genot-Boulanger (filing-tenant-relationship) | Unconfirmed |
+| A 0029 | Le Charlemagne | 1854.36 | [515045292](#holder-515045292) | Domaine Tawse (company-identity) | Unconfirmed |
 | A 0030 | Le Charlemagne | 837.24 | [349583500](#holder-349583500) | Unresolved | Unconfirmed |
 | A 0031 | Le Charlemagne | 1361.61 | [349583500](#holder-349583500) | Unresolved | Unconfirmed |
 | A 0032 | Le Charlemagne | 4.00 | [392477600](#holder-392477600) | Domaine du Pavillon / Albert Bichot (estate-context) | Unconfirmed |
@@ -1520,8 +1520,8 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | A 0062 | Les Pougets | 977.63 | [212100101](#holder-212100101) | Unresolved | Unconfirmed |
 | A 0063 | Les Pougets | 2631.55 | [312990021](#holder-312990021) | Domaine des Héritiers Louis Jadot (estate-context) | Unconfirmed |
 | A 0064 | Les Pougets | 85.76 | None | Unresolved | Unconfirmed |
-| A 0065 | Les Pougets | 1642.51 | [326791548](#holder-326791548) | Domaine Patrick Javillier (identity-only) | Unconfirmed |
-| A 0066 | Les Pougets | 1212.12 | [327166898](#holder-327166898) | Domaine d’Ardhuy (management-and-estate-context) | Unconfirmed |
+| A 0065 | Les Pougets | 1642.51 | [326791548](#holder-326791548) | Domaine Patrick Javillier (company-identity) | Unconfirmed |
+| A 0066 | Les Pougets | 1212.12 | [327166898](#holder-327166898) | Domaine d'Ardhuy (group-company-record) | Unconfirmed |
 | A 0067 | Les Pougets | 20614.94 | [312990021](#holder-312990021) | Domaine des Héritiers Louis Jadot (estate-context) | Unconfirmed |
 | A 0069 | Les Pougets | 4409.86 | [832275333](#holder-832275333) | Domaine Rapet Père et Fils (filing-tenant-relationship) | Unconfirmed |
 | A 0070 | Les Chaumes et la Voierosse | 720.29 | None | Unresolved | Unconfirmed |
@@ -1541,15 +1541,15 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | A 0097 | Le Charlemagne | 1988.43 | None | Unresolved | Unconfirmed |
 | A 0099 | Le Charlemagne | 3137.24 | None | Unresolved | Unconfirmed |
 | A 0101 | Le Charlemagne | 3336.70 | None | Unresolved | Unconfirmed |
-| A 0116 | Le Charlemagne | 1679.49 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
-| A 0117 | Les Chaumes et la Voierosse | 853.79 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
+| A 0116 | Le Charlemagne | 1679.49 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
+| A 0117 | Les Chaumes et la Voierosse | 853.79 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
 | A 0118 | Les Chaumes et la Voierosse | 2386.67 | [U21845728](#holder-u21845728) | Unresolved | Unconfirmed |
 | A 0119 | Les Chaumes et la Voierosse | 1905.03 | [312990021](#holder-312990021) | Domaine des Héritiers Louis Jadot (estate-context) | Unconfirmed |
 | A 0120 | Les Chaumes et la Voierosse | 5476.59 | [511314635](#holder-511314635) | Domaine Chapuis (filing-tenant-relationship) | Unconfirmed |
 | A 0121 | Les Chaumes et la Voierosse | 794.34 | [832275333](#holder-832275333) | Domaine Rapet Père et Fils (filing-tenant-relationship) | Unconfirmed |
 | A 0122 | Le Charlemagne | 819.46 | None | Unresolved | Unconfirmed |
 | A 0123 | Le Charlemagne | 885.22 | None | Unresolved | Unconfirmed |
-| A 0124 | Les Chaumes et la Voierosse | 3068.58 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
+| A 0124 | Les Chaumes et la Voierosse | 3068.58 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
 | A 0125 | Les Pougets | 3026.96 | None | Unresolved | Unconfirmed |
 | A 0126 | Les Pougets | 10262.18 | None | Unresolved | Unconfirmed |
 | A 0129 | Le Charlemagne | 980.46 | None | Unresolved | Unconfirmed |
@@ -1558,8 +1558,8 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | A 0132 | Le Charlemagne | 1665.93 | None | Unresolved | Unconfirmed |
 | A 0133 | Le Charlemagne | 1666.57 | None | Unresolved | Unconfirmed |
 | A 0134 | Le Charlemagne | 2043.74 | None | Unresolved | Unconfirmed |
-| A 0135 | Les Chaumes et la Voierosse | 4246.69 | [408975357](#holder-408975357) | Domaine Chapuis (identity-only) | Unconfirmed |
-| A 0136 | Les Chaumes et la Voierosse | 959.25 | [408975357](#holder-408975357) | Domaine Chapuis (identity-only) | Unconfirmed |
+| A 0135 | Les Chaumes et la Voierosse | 4246.69 | [408975357](#holder-408975357) | Domaine Chapuis (succession-lead) | Unconfirmed |
+| A 0136 | Les Chaumes et la Voierosse | 959.25 | [408975357](#holder-408975357) | Domaine Chapuis (succession-lead) | Unconfirmed |
 | A 0137 | Les Chaumes et la Voierosse | 756.12 | [880256847](#holder-880256847) | Unresolved | Unconfirmed |
 | A 0138 | Le Charlemagne | 19.04 | [328186416](#holder-328186416) | Domaine Bonneau du Martray (estate-context) | Unconfirmed |
 | A 0140 | Le Charlemagne | 8896.50 | [824253181](#holder-824253181) | Unresolved | Unconfirmed |
@@ -1574,11 +1574,11 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | A 0150 | Le Charlemagne | 1584.41 | None | Unresolved | Unconfirmed |
 | B 0002 | Les Languettes | 12.69 | None | Unresolved | Unconfirmed |
 | B 0003 | Les Languettes | 4194.59 | None | Unresolved | Unconfirmed |
-| B 0004 | Les Languettes | 3377.90 | [314306747](#holder-314306747) | Domaine Joseph Drouhin (identity-only) | Unconfirmed |
-| B 0005 | Les Languettes | 5061.76 | [327166898](#holder-327166898) | Domaine d’Ardhuy (management-and-estate-context) | Unconfirmed |
+| B 0004 | Les Languettes | 3377.90 | [314306747](#holder-314306747) | Domaine Joseph Drouhin (company-identity) | Unconfirmed |
+| B 0005 | Les Languettes | 5061.76 | [327166898](#holder-327166898) | Domaine d'Ardhuy (group-company-record) | Unconfirmed |
 | B 0006 | Les Languettes | 19466.89 | [487716805](#holder-487716805) | Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | B 0013 | Les Perrières | 5283.28 | [511314635](#holder-511314635) | Domaine Chapuis (filing-tenant-relationship) | Unconfirmed |
-| B 0014 | Les Perrières | 5444.76 | [378948053](#holder-378948053) | Domaine Chapuis (identity-only) | Unconfirmed |
+| B 0014 | Les Perrières | 5444.76 | [378948053](#holder-378948053) | Domaine Chapuis (company-identity) | Unconfirmed |
 | B 0015 | Les Perrières | 1444.35 | None | Unresolved | Unconfirmed |
 | B 0020 | Les Perrières | 111.14 | [212101869](#holder-212101869) | Unresolved | Unconfirmed |
 | B 0021 | Les Perrières | 1302.60 | [U21859561](#holder-u21859561) | Unresolved | Unconfirmed |
@@ -1586,7 +1586,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | B 0023 | Les Perrières | 1589.83 | None | Unresolved | Unconfirmed |
 | B 0026 | Les Perrières | 6358.19 | [528291362](#holder-528291362), [U21852238](#holder-u21852238) | Maison Louis Latour (group-and-estate-context); Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | B 0027 | Les Perrières | 96.41 | None | Unresolved | Unconfirmed |
-| B 0028 | Les Perrières | 127.05 | [528291479](#holder-528291479) | Maison Louis Latour (identity-only) | Unconfirmed |
+| B 0028 | Les Perrières | 127.05 | [528291479](#holder-528291479) | Maison Louis Latour (group-company-record) | Unconfirmed |
 | B 0029 | Les Grèves | 9081.79 | [528291362](#holder-528291362), [U21852238](#holder-u21852238) | Maison Louis Latour (group-and-estate-context); Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | B 0031 | Les Grèves | 2967.53 | None | Unresolved | Unconfirmed |
 | B 0032 | Les Grèves | 1174.65 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context) | Unconfirmed |
@@ -1615,7 +1615,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | B 0063 | Les Perrières | 2771.48 | None | Unresolved | Unconfirmed |
 | B 0064 | Les Perrières | 2688.07 | None | Unresolved | Unconfirmed |
 | B 0065 | Les Perrières | 3399.91 | [518966478](#holder-518966478) | Domaine Méo-Camuzet (registered-office-match) | Unconfirmed |
-| B 0066 | Les Perrières | 3438.98 | [448502708](#holder-448502708) | Domaine Méo-Camuzet (estate-context) | Unconfirmed |
+| B 0066 | Les Perrières | 3438.98 | [448502708](#holder-448502708) | Domaine Méo-Camuzet (group-company-record) | Unconfirmed |
 | B 0069 | Les Perrières | 684.46 | None | Unresolved | Unconfirmed |
 | B 0070 | Les Perrières | 688.37 | None | Unresolved | Unconfirmed |
 | B 0071 | Les Languettes | 2213.11 | None | Unresolved | Unconfirmed |
@@ -1642,9 +1642,9 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | C 0007 | Le Corton | 21555.29 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-and-estate-context) | Unconfirmed |
 | C 0010 | Le Corton | 5637.57 | [528291362](#holder-528291362), [U21852238](#holder-u21852238) | Maison Louis Latour (group-and-estate-context); Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | C 0011 | Le Corton | 5658.97 | [931134381](#holder-931134381) | Domaine Poisot-Piguet (filing-tenant-relationship) | Unconfirmed |
-| C 0013 | Le Corton | 2417.71 | [515520385](#holder-515520385) | Unresolved | Unconfirmed |
-| C 0014 | Le Corton | 25.03 | [515520385](#holder-515520385) | Unresolved | Unconfirmed |
-| C 0015 | Le Corton | 1835.21 | [515520385](#holder-515520385) | Unresolved | Unconfirmed |
+| C 0013 | Le Corton | 2417.71 | [515520385](#holder-515520385) | Maison Leroy (company-identity) | Unconfirmed |
+| C 0014 | Le Corton | 25.03 | [515520385](#holder-515520385) | Maison Leroy (company-identity) | Unconfirmed |
+| C 0015 | Le Corton | 1835.21 | [515520385](#holder-515520385) | Maison Leroy (company-identity) | Unconfirmed |
 | C 0016 | Le Corton | 3247.81 | None | Unresolved | Unconfirmed |
 | C 0017 | Le Corton | 852.23 | None | Unresolved | Unconfirmed |
 | C 0018 | Le Corton | 2014.87 | None | Unresolved | Unconfirmed |
@@ -1669,11 +1669,11 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | C 0041 | Les Renardes | 11.25 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context) | Unconfirmed |
 | C 0044 | Les Renardes | 1681.43 | None | Unresolved | Unconfirmed |
 | C 0045 | Les Renardes | 2980.97 | None | Unresolved | Unconfirmed |
-| C 0046 | Les Renardes | 2882.14 | [328061346](#holder-328061346) | Domaine Françoise André (identity-only) | Unconfirmed |
+| C 0046 | Les Renardes | 2882.14 | [328061346](#holder-328061346) | Domaine Françoise André (company-identity) | Unconfirmed |
 | C 0049 | Les Renardes | 3249.58 | None | Unresolved | Unconfirmed |
 | C 0050 | Les Renardes | 4486.47 | [U22282316](#holder-u22282316) | Domaine d’Ardhuy (filing-tenant-relationship) | Unconfirmed |
 | C 0051 | Les Renardes | 1622.05 | [U12947760](#holder-u12947760) | Domaine Gille (estate-context) | Unconfirmed |
-| C 0052 | Les Renardes | 5008.48 | [515520385](#holder-515520385) | Unresolved | Unconfirmed |
+| C 0052 | Les Renardes | 5008.48 | [515520385](#holder-515520385) | Maison Leroy (company-identity) | Unconfirmed |
 | C 0053 | Les Renardes | 869.47 | None | Unresolved | Unconfirmed |
 | C 0054 | Les Renardes | 3296.32 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (brand-identity-confirmed) | Unconfirmed |
 | C 0055 | Les Renardes | 5.96 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (brand-identity-confirmed) | Unconfirmed |
@@ -1727,10 +1727,10 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | C 0114 | Les Renardes | 1691.66 | [442062527](#holder-442062527) | Unresolved | Unconfirmed |
 | C 0115 | Les Renardes | 5414.46 | [428680011](#holder-428680011) | Unresolved | Unconfirmed |
 | C 0116 | Les Renardes | 16.79 | None | Unresolved | Unconfirmed |
-| C 0117 | Les Renardes | 4.16 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| C 0117 | Les Renardes | 4.16 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | C 0118 | Les Renardes | 994.49 | None | Unresolved | Unconfirmed |
 | C 0119 | Les Renardes | 954.59 | None | Unresolved | Unconfirmed |
-| C 0120 | Les Renardes | 1010.13 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| C 0120 | Les Renardes | 1010.13 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | C 0122 | Le Corton | 11093.80 | None | Unresolved | Unconfirmed |
 | C 0123 | Le Corton | 5063.47 | None | Unresolved | Unconfirmed |
 | C 0124 | Le Corton | 27626.18 | None | Bouchard Père & Fils (critic-named-cadastral-reference on predecessor C0008); Bouchard Père & Fils (critic-named-cadastral-reference on predecessor C0009) | Unconfirmed |
@@ -1740,10 +1740,10 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | D 0003 | Le Clos du Roi | 948.96 | [778256123](#holder-778256123) | Domaine Chandon de Briailles (estate-context); Domaine Chandon de Briailles (estate-area-exact-match) | Unconfirmed |
 | D 0004 | Le Clos du Roi | 1928.19 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context) | Unconfirmed |
 | D 0005 | Le Clos du Roi | 3470.59 | [778256123](#holder-778256123) | Domaine Chandon de Briailles (estate-context); Domaine Chandon de Briailles (estate-area-exact-match) | Unconfirmed |
-| D 0006 | Le Clos du Roi | 8996.83 | [778586172](#holder-778586172) | Domaine Thénard (identity-only) | Unconfirmed |
+| D 0006 | Le Clos du Roi | 8996.83 | [778586172](#holder-778586172) | Domaine Thénard (company-identity) | Unconfirmed |
 | D 0007 | Le Clos du Roi | 3870.84 | None | Unresolved | Unconfirmed |
 | D 0009 | Le Clos du Roi | 7.62 | [U18180683](#holder-u18180683) | Unresolved | Unconfirmed |
-| D 0011 | Le Clos du Roi | 4883.49 | [515620193](#holder-515620193) | Domaine de la Vougeraie (management-and-estate-context); Domaine de la Vougeraie (estate-area-exact-match) | Unconfirmed |
+| D 0011 | Le Clos du Roi | 4883.49 | [515620193](#holder-515620193) | Domaine de la Vougeraie (group-company-record); Domaine de la Vougeraie (estate-area-exact-match) | Unconfirmed |
 | D 0012 | Le Clos du Roi | 5422.76 | [U21845728](#holder-u21845728) | Unresolved | Unconfirmed |
 | D 0013 | Le Clos du Roi | 13.17 | [U21845728](#holder-u21845728) | Unresolved | Unconfirmed |
 | D 0014 | Le Clos du Roi | 5684.91 | None | Unresolved | Unconfirmed |
@@ -1758,7 +1758,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | D 0026 | Les Bressandes | 1132.67 | [511314635](#holder-511314635) | Domaine Chapuis (filing-tenant-relationship) | Unconfirmed |
 | D 0027 | Les Bressandes | 7261.16 | [778256123](#holder-778256123) | Domaine Chandon de Briailles (estate-context) | Unconfirmed |
 | D 0028 | Les Bressandes | 3623.30 | [200047827](#holder-200047827) | Domaine des Hospices de Beaune (estate-context) | Unconfirmed |
-| D 0029 | Les Bressandes | 4786.47 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (identity-only) | Unconfirmed |
+| D 0029 | Les Bressandes | 4786.47 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (company-identity) | Unconfirmed |
 | D 0030 | Les Bressandes | 4952.23 | [528291362](#holder-528291362), [U21852238](#holder-u21852238) | Maison Louis Latour (group-and-estate-context); Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | D 0031 | Les Bressandes | 2208.38 | None | Unresolved | Unconfirmed |
 | D 0032 | Les Bressandes | 1401.66 | [778256123](#holder-778256123) | Domaine Chandon de Briailles (estate-context) | Unconfirmed |
@@ -1825,7 +1825,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | D 0125 | Les Bressandes | 947.18 | [448234492](#holder-448234492) | Unresolved | Unconfirmed |
 | D 0126 | Les Bressandes | 1096.21 | [478499098](#holder-478499098) | Unresolved | Unconfirmed |
 | D 0127 | Le Clos du Roi | 13774.09 | [U18180683](#holder-u18180683) | Unresolved | Unconfirmed |
-| D 0128 | Le Clos du Roi | 13530.75 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (identity-only) | Unconfirmed |
+| D 0128 | Le Clos du Roi | 13530.75 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (company-identity) | Unconfirmed |
 | D 0129 | Le Clos du Roi | 938.99 | [U18180683](#holder-u18180683) | Unresolved | Unconfirmed |
 | D 0130 | Les Bressandes | 1119.35 | None | Unresolved | Unconfirmed |
 | D 0131 | Les Bressandes | 1115.69 | None | Unresolved | Unconfirmed |
@@ -1860,14 +1860,14 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | I 0004 | Le Meix Lallemand | 39.63 | None | Unresolved | Unconfirmed |
 | I 0006 | Le Meix Lallemand | 59.57 | None | Unresolved | Unconfirmed |
 | I 0007 | Les Meix | 1469.83 | None | Unresolved | Unconfirmed |
-| I 0009 | Les Meix | 478.19 | [314722661](#holder-314722661) | Domaine Comte Senard (identity-only) | Unconfirmed |
+| I 0009 | Les Meix | 478.19 | [314722661](#holder-314722661) | Domaine Comte Senard (family-company-record) | Unconfirmed |
 | I 0010 | Les Meix | 812.95 | None | Unresolved | Unconfirmed |
 | I 0011 | Les Meix | 1579.90 | None | Unresolved | Unconfirmed |
 | I 0032 | LE VILLAGE (cadastral; unreviewed) | 18.82 | [U22260456](#holder-u22260456) | Unresolved | Unconfirmed |
 | I 0038 | LE VILLAGE (cadastral; unreviewed) | 3025.64 | [515520369](#holder-515520369) | Unresolved | Unconfirmed |
 | I 0148 | Les Combes | 3087.19 | [440712529](#holder-440712529) | Domaine Tollot-Beaut (secondary-estate-context) | Unconfirmed |
 | I 0149 | Les Combes | 2895.17 | [424927424](#holder-424927424) | Unresolved | Unconfirmed |
-| I 0235 | Les Combes | 4607.28 | [400737938](#holder-400737938) | Unresolved | Unconfirmed |
+| I 0235 | Les Combes | 4607.28 | [400737938](#holder-400737938) | Château Genot-Boulanger (filing-tenant-relationship) | Unconfirmed |
 | I 0236 | Les Combes | 913.70 | [832275333](#holder-832275333) | Domaine Rapet Père et Fils (filing-tenant-relationship) | Unconfirmed |
 | I 0238 | Les Fiètres | 3437.82 | [U21854744](#holder-u21854744) | Unresolved | Unconfirmed |
 | I 0239 | Les Fiètres | 3499.64 | None | Unresolved | Unconfirmed |
@@ -1875,7 +1875,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | I 0248 | Le Meix Lallemand | 126.29 | None | Unresolved | Unconfirmed |
 | I 0249 | Le Meix Lallemand | 5252.85 | None | Unresolved | Unconfirmed |
 | I 0250 | Les Meix | 32.43 | None | Unresolved | Unconfirmed |
-| I 0252 | LE VILLAGE (cadastral; unreviewed) | 34.65 | [314722661](#holder-314722661) | Domaine Comte Senard (identity-only) | Unconfirmed |
+| I 0252 | LE VILLAGE (cadastral; unreviewed) | 34.65 | [314722661](#holder-314722661) | Domaine Comte Senard (family-company-record) | Unconfirmed |
 | I 0254 | LE VILLAGE (cadastral; unreviewed) | 1.78 | None | Unresolved | Unconfirmed |
 | I 0262 | Les Meix | 6575.25 | None | Unresolved | Unconfirmed |
 | I 0263 | Les Meix | 4643.80 | None | Unresolved | Unconfirmed |
@@ -1887,7 +1887,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | N 0005 | Les Chaumes | 754.08 | [921219176](#holder-921219176) | Unresolved | Unconfirmed |
 | N 0006 | Les Chaumes | 872.71 | None | Unresolved | Unconfirmed |
 | N 0007 | Les Chaumes | 517.14 | None | Unresolved | Unconfirmed |
-| N 0008 | Les Chaumes | 1655.99 | [422190785](#holder-422190785) | Domaine Jean Fery et Fils (identity-only) | Unconfirmed |
+| N 0008 | Les Chaumes | 1655.99 | [422190785](#holder-422190785) | Domaine Jean Fery et Fils (group-company-record) | Unconfirmed |
 | N 0009 | Les Chaumes | 1444.47 | [427468962](#holder-427468962) | Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | N 0010 | Les Chaumes | 6283.15 | [427468962](#holder-427468962) | Domaine Louis Latour (filing-tenant-relationship) | Unconfirmed |
 | N 0012 | No cadastral lieu-dit | 5071.94 | [778159715](#holder-778159715) | Domaine Louis Latour (estate-context) | Unconfirmed |
@@ -1912,7 +1912,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | N 0082 | No cadastral lieu-dit | 5.20 | [832275333](#holder-832275333) | Domaine Rapet Père et Fils (filing-tenant-relationship) | Unconfirmed |
 | N 0085 | La Vigne-au-Saint | 1978.88 | [518310024](#holder-518310024) | Domaine Méo-Camuzet (critic-attribution-area-reconstructed) | Unconfirmed |
 | N 0086 | La Vigne-au-Saint | 2879.06 | [324989359](#holder-324989359) | Domaine des Croix (estate-context); Domaine des Croix (critic-attribution-area-reconstructed) | Unconfirmed |
-| N 0087 | Les Chaumes | 713.53 | [422190785](#holder-422190785) | Domaine Jean Fery et Fils (identity-only) | Unconfirmed |
+| N 0087 | Les Chaumes | 713.53 | [422190785](#holder-422190785) | Domaine Jean Fery et Fils (group-company-record) | Unconfirmed |
 | N 0088 | Les Chaumes | 249.96 | [921219176](#holder-921219176) | Unresolved | Unconfirmed |
 | N 0089 | Les Chaumes | 1528.78 | None | Unresolved | Unconfirmed |
 | N 0090 | Les Chaumes | 1449.30 | None | Unresolved | Unconfirmed |
@@ -1934,8 +1934,8 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0076 | En Charlemagne | 4.07 | [794416461](#holder-794416461) | Unresolved | Unconfirmed |
 | AL 0077 | En Charlemagne | 5.71 | [794416461](#holder-794416461) | Unresolved | Unconfirmed |
 | AL 0085 | En Charlemagne | 32.01 | [U21859561](#holder-u21859561) | Unresolved | Unconfirmed |
-| AL 0091 | En Charlemagne | 483.78 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
-| AL 0092 | En Charlemagne | 480.70 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
+| AL 0091 | En Charlemagne | 483.78 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
+| AL 0092 | En Charlemagne | 480.70 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
 | AL 0093 | En Charlemagne | 630.60 | None | Unresolved | Unconfirmed |
 | AL 0094 | En Charlemagne | 1825.63 | None | Unresolved | Unconfirmed |
 | AL 0095 | En Charlemagne | 657.37 | None | Unresolved | Unconfirmed |
@@ -1946,10 +1946,10 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0100 | En Charlemagne | 1207.82 | None | Unresolved | Unconfirmed |
 | AL 0112 | En Charlemagne | 4880.24 | None | Unresolved | Unconfirmed |
 | AL 0118 | En Charlemagne | 605.12 | None | Unresolved | Unconfirmed |
-| AL 0119 | En Charlemagne | 1695.59 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
+| AL 0119 | En Charlemagne | 1695.59 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
 | AL 0122 | En Charlemagne | 606.60 | [212104806](#holder-212104806) | Unresolved | Unconfirmed |
 | AL 0123 | En Charlemagne | 3199.17 | None | Unresolved | Unconfirmed |
-| AL 0124 | En Charlemagne | 1092.95 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
+| AL 0124 | En Charlemagne | 1092.95 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
 | AL 0125 | En Charlemagne | 1005.33 | None | Unresolved | Unconfirmed |
 | AL 0126 | En Charlemagne | 1693.65 | None | Unresolved | Unconfirmed |
 | AL 0127 | En Charlemagne | 539.53 | None | Unresolved | Unconfirmed |
@@ -1981,13 +1981,13 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0169 | En Charlemagne | 2080.81 | None | Unresolved | Unconfirmed |
 | AL 0171 | En Charlemagne | 895.48 | None | Unresolved | Unconfirmed |
 | AL 0172 | En Charlemagne | 342.81 | None | Unresolved | Unconfirmed |
-| AL 0173 | En Charlemagne | 332.73 | [334354859](#holder-334354859) | Domaine Philippe Charlopin (identity-only) | Unconfirmed |
+| AL 0173 | En Charlemagne | 332.73 | [334354859](#holder-334354859) | Domaine Philippe Charlopin (company-identity) | Unconfirmed |
 | AL 0174 | En Charlemagne | 638.27 | [409988342](#holder-409988342) | Unresolved | Unconfirmed |
-| AL 0175 | En Charlemagne | 605.12 | [334354859](#holder-334354859) | Domaine Philippe Charlopin (identity-only) | Unconfirmed |
+| AL 0175 | En Charlemagne | 605.12 | [334354859](#holder-334354859) | Domaine Philippe Charlopin (company-identity) | Unconfirmed |
 | AL 0176 | En Charlemagne | 229.99 | [409988342](#holder-409988342) | Unresolved | Unconfirmed |
-| AL 0177 | En Charlemagne | 814.64 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
-| AL 0178 | En Charlemagne | 2492.87 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
-| AL 0179 | En Charlemagne | 1801.37 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
+| AL 0177 | En Charlemagne | 814.64 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
+| AL 0178 | En Charlemagne | 2492.87 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
+| AL 0179 | En Charlemagne | 1801.37 | [322463894](#holder-322463894) | Domaine Pavelot (Pernand-Vergelesses) (family-company-record) | Unconfirmed |
 | AL 0180 | En Charlemagne | 1498.39 | None | Unresolved | Unconfirmed |
 | AL 0181 | En Charlemagne | 605.75 | [509207429](#holder-509207429) | Unresolved | Unconfirmed |
 | AL 0190 | En Charlemagne | 1915.98 | None | Unresolved | Unconfirmed |
@@ -2004,9 +2004,9 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0261 | En Charlemagne | 15.24 | None | Unresolved | Unconfirmed |
 | AL 0263 | En Charlemagne | 12.83 | None | Unresolved | Unconfirmed |
 | AL 0265 | En Charlemagne | 1768.08 | None | Unresolved | Unconfirmed |
-| AL 0282 | En Charlemagne | 3734.21 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
-| AL 0284 | En Charlemagne | 1553.66 | [407881291](#holder-407881291) | Domaine Pierre Marey et Fils (identity-only) | Unconfirmed |
-| AL 0285 | En Charlemagne | 3497.54 | [328061346](#holder-328061346) | Domaine Françoise André (identity-only) | Unconfirmed |
+| AL 0282 | En Charlemagne | 3734.21 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
+| AL 0284 | En Charlemagne | 1553.66 | [407881291](#holder-407881291) | Domaine Pierre Marey et Fils (company-identity) | Unconfirmed |
+| AL 0285 | En Charlemagne | 3497.54 | [328061346](#holder-328061346) | Domaine Françoise André (company-identity) | Unconfirmed |
 | AL 0286 | En Charlemagne | 914.76 | [330713074](#holder-330713074) | Domaine de la Vougeraie (brand-identity-confirmed) | Unconfirmed |
 | AL 0287 | En Charlemagne | 913.54 | [330713074](#holder-330713074) | Domaine de la Vougeraie (brand-identity-confirmed) | Unconfirmed |
 | AL 0288 | En Charlemagne | 721.47 | [330713074](#holder-330713074) | Domaine de la Vougeraie (brand-identity-confirmed) | Unconfirmed |
@@ -2015,7 +2015,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0296 | En Charlemagne | 461.09 | None | Unresolved | Unconfirmed |
 | AL 0299 | En Charlemagne | 27.11 | None | Unresolved | Unconfirmed |
 | AL 0308 | En Charlemagne | 8643.75 | [832275333](#holder-832275333) | Domaine Rapet Père et Fils (filing-tenant-relationship) | Unconfirmed |
-| AL 0309 | En Charlemagne | 7369.93 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (identity-only) | Unconfirmed |
+| AL 0309 | En Charlemagne | 7369.93 | [319775433](#holder-319775433) | Domaine Rapet Père et Fils (family-company-record) | Unconfirmed |
 | AL 0310 | En Charlemagne | 2333.46 | None | Unresolved | Unconfirmed |
 | AL 0311 | En Charlemagne | 1535.88 | None | Unresolved | Unconfirmed |
 | AL 0314 | En Charlemagne | 2938.21 | None | Unresolved | Unconfirmed |
@@ -2023,7 +2023,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0316 | En Charlemagne | 1296.30 | None | Unresolved | Unconfirmed |
 | AL 0317 | En Charlemagne | 2006.07 | None | Unresolved | Unconfirmed |
 | AL 0318 | En Charlemagne | 1248.05 | None | Unresolved | Unconfirmed |
-| AL 0319 | En Charlemagne | 1951.46 | [481279297](#holder-481279297), [482807393](#holder-482807393) | Domaine Dublère (identity-only); Domaine Dublère (identity-only) | Unconfirmed |
+| AL 0319 | En Charlemagne | 1951.46 | [481279297](#holder-481279297), [482807393](#holder-482807393) | Domaine Dublère (succession-lead); Domaine Dublère (company-identity) | Unconfirmed |
 | AL 0320 | En Charlemagne | 2390.98 | [498546258](#holder-498546258) | Unresolved | Unconfirmed |
 | AL 0325 | En Charlemagne | 58.00 | None | Unresolved | Unconfirmed |
 | AL 0326 | En Charlemagne | 62.87 | [834914756](#holder-834914756) | Unresolved | Unconfirmed |
@@ -2044,7 +2044,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AL 0353 | En Charlemagne | 6554.96 | [824253181](#holder-824253181) | Unresolved | Unconfirmed |
 | AL 0354 | En Charlemagne | 10542.78 | [328186416](#holder-328186416) | Domaine Bonneau du Martray (estate-context) | Unconfirmed |
 | AL 0355 | En Charlemagne | 4919.34 | [824253181](#holder-824253181) | Unresolved | Unconfirmed |
-| AL 0356 | En Charlemagne | 53.04 | [420088387](#holder-420088387) | Domaine Pavelot (Pernand-Vergelesses) (identity-only) | Unconfirmed |
+| AL 0356 | En Charlemagne | 53.04 | [420088387](#holder-420088387) | Domaine Pavelot (Pernand-Vergelesses) (company-identity) | Unconfirmed |
 | AL 0365 | En Charlemagne | 2733.01 | [885311902](#holder-885311902) | Unresolved | Unconfirmed |
 | AL 0366 | En Charlemagne | 20327.33 | [328186416](#holder-328186416) | Domaine Bonneau du Martray (estate-context) | Unconfirmed |
 | AL 0367 | En Charlemagne | 1615.37 | None | Unresolved | Unconfirmed |
@@ -2100,7 +2100,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0011 | Le Rognet et Corton | 6.81 | None | Unresolved | Unconfirmed |
 | AK 0012 | Le Rognet et Corton | 2456.41 | [533960894](#holder-533960894) | Unresolved | Unconfirmed |
 | AK 0013 | Le Rognet et Corton | 3676.76 | [323178111](#holder-323178111) | Domaine Michel Mallard (brand-identity-confirmed) | Unconfirmed |
-| AK 0014 | Le Rognet et Corton | 4086.75 | [388212649](#holder-388212649) | Domaine Taupenot-Merme (identity-only) | Unconfirmed |
+| AK 0014 | Le Rognet et Corton | 4086.75 | [388212649](#holder-388212649) | Domaine Taupenot-Merme (company-identity) | Unconfirmed |
 | AK 0015 | Le Rognet et Corton | 2205.49 | [449347426](#holder-449347426) | Unresolved | Unconfirmed |
 | AK 0016 | Le Rognet et Corton | 2.73 | None | Unresolved | Unconfirmed |
 | AK 0017 | Le Rognet et Corton | 3239.33 | None | Unresolved | Unconfirmed |
@@ -2111,7 +2111,7 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0024 | Le Rognet et Corton | 1066.44 | [775567928](#holder-775567928) | Domaine Faiveley (brand-identity-confirmed) | Unconfirmed |
 | AK 0029 | Le Rognet et Corton | 475.07 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
 | AK 0030 | Le Rognet et Corton | 691.31 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
-| AK 0033 | Le Rognet et Corton | 4412.62 | [448502708](#holder-448502708) | Domaine Méo-Camuzet (estate-context) | Unconfirmed |
+| AK 0033 | Le Rognet et Corton | 4412.62 | [448502708](#holder-448502708) | Domaine Méo-Camuzet (group-company-record) | Unconfirmed |
 | AK 0034 | Le Rognet et Corton | 1249.31 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0036 | Les Vergennes | 11.24 | None | Thibaut Marion (historical-application) | Unconfirmed |
 | AK 0039 | Les Grandes Lolières | 2700.51 | None | Unresolved | Unconfirmed |
@@ -2148,10 +2148,10 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0150 | Le Rognet et Corton | 1565.84 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
 | AK 0151 | Le Rognet et Corton | 797.18 | [U33360345](#holder-u33360345) | Domaine Bruno Clavelier (estate-context) | Unconfirmed |
 | AK 0152 | Le Rognet et Corton | 2019.15 | [U33360345](#holder-u33360345) | Domaine Bruno Clavelier (estate-context) | Unconfirmed |
-| AK 0153 | Le Rognet et Corton | 84.59 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| AK 0153 | Le Rognet et Corton | 84.59 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | AK 0154 | Les Vergennes | 313.97 | [403405764](#holder-403405764) | Unresolved | Unconfirmed |
 | AK 0155 | Les Vergennes | 319.61 | [U33360345](#holder-u33360345) | Domaine Bruno Clavelier (estate-context) | Unconfirmed |
-| AK 0156 | Les Vergennes | 292.04 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| AK 0156 | Les Vergennes | 292.04 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | AK 0159 | Les Vergennes | 2905.99 | None | Thibaut Marion (historical-application) | Unconfirmed |
 | AK 0160 | Les Vergennes | 1061.26 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
 | AK 0161 | Les Vergennes | 119.13 | [300461761](#holder-300461761) | Unresolved | Unconfirmed |
@@ -2175,20 +2175,20 @@ All references are in communes 21010 (Aloxe-Corton), 21480 (Pernand-Vergelesses)
 | AK 0222 | Le Rognet et Corton | 704.45 | [323178111](#holder-323178111) | Domaine Michel Mallard (brand-identity-confirmed) | Unconfirmed |
 | AK 0223 | Le Rognet et Corton | 142.34 | [323178111](#holder-323178111) | Domaine Michel Mallard (brand-identity-confirmed) | Unconfirmed |
 | AK 0224 | Le Rognet et Corton | 3635.83 | [443958350](#holder-443958350) | Unresolved | Unconfirmed |
-| AK 0225 | Le Rognet et Corton | 711.27 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| AK 0225 | Le Rognet et Corton | 711.27 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | AK 0226 | Le Rognet et Corton | 56.14 | None | Unresolved | Unconfirmed |
-| AK 0227 | Le Rognet et Corton | 154.03 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| AK 0227 | Le Rognet et Corton | 154.03 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | AK 0228 | Le Rognet et Corton | 880.58 | None | Unresolved | Unconfirmed |
-| AK 0229 | Le Rognet et Corton | 34.80 | [302572094](#holder-302572094) | Domaine Parent (identity-only) | Unconfirmed |
+| AK 0229 | Le Rognet et Corton | 34.80 | [302572094](#holder-302572094) | Domaine Parent (company-identity) | Unconfirmed |
 | AK 0230 | Le Rognet et Corton | 937.04 | None | Unresolved | Unconfirmed |
 | AK 0231 | Les Grandes Lolières | 3065.93 | [398805366](#holder-398805366) | Unresolved | Unconfirmed |
 | AK 0232 | Les Grandes Lolières | 2996.34 | [398805366](#holder-398805366) | Unresolved | Unconfirmed |
 | AK 0233 | Les Grandes Lolières | 2942.22 | [398805366](#holder-398805366) | Unresolved | Unconfirmed |
 | AK 0234 | Les Grandes Lolières | 3034.87 | [398805366](#holder-398805366) | Unresolved | Unconfirmed |
-| AK 0235 | Les Vergennes | 707.57 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (identity-only) | Unconfirmed |
-| AK 0236 | Les Vergennes | 774.58 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (identity-only) | Unconfirmed |
-| AK 0237 | Les Vergennes | 768.68 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (identity-only) | Unconfirmed |
-| AK 0238 | Les Vergennes | 1354.20 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (identity-only) | Unconfirmed |
+| AK 0235 | Les Vergennes | 707.57 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (company-identity) | Unconfirmed |
+| AK 0236 | Les Vergennes | 774.58 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (company-identity) | Unconfirmed |
+| AK 0237 | Les Vergennes | 768.68 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (company-identity) | Unconfirmed |
+| AK 0238 | Les Vergennes | 1354.20 | [977634369](#holder-977634369) | Domaine Jacob-Frèrebeau (company-identity) | Unconfirmed |
 | AS 0022 | LA TOPPE AU VERT (cadastral; unreviewed) | 1116.36 | [515620466](#holder-515620466) | Domaine Capitain-Gagnerot (brand-identity-confirmed) | Unconfirmed |
 | AS 0486 | LA TOPPE AU VERT (cadastral; unreviewed) | 22.65 | None | Unresolved | Unconfirmed |
 | AS 0487 | LA TOPPE AU VERT (cadastral; unreviewed) | 9.80 | None | Unresolved | Unconfirmed |
@@ -3452,11 +3452,9 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **bichot-marechaudes** — [Albert Bichot: Corton Clos des Maréchaudes, Domaine du Pavillon](https://www.albert-bichot.com/en/corton-grand-cru-clos-des-marechaudes-monopole_19). estate; read; document date not established. Corton Clos des Maréchaudes is a monopole of Domaine du Pavillon in Aloxe-Corton; parcel size 0.55 ha. The clos also holds premier cru land. No parcel number is stated.
 - **bodacc-belin-naigeon** — [BODACC: GFA Héritiers Belin-Naigeon universal transfer and removal](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22481279297%22&order_by=dateparution+desc&limit=20). registry; read; document date 2024-10-17. July 2024 notice of a universal transfer of assets (transmission universelle du patrimoine); the GFA was struck off on 17 October 2024. Its recorded partner is Domaine Dublère (482119443).
 - **bodacc-bouchard-2026** — [BODACC: Maison Bouchard Père et Fils partial asset contribution and renaming](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22515420255%22&order_by=dateparution+desc&limit=20). registry; read; document date 2026-04-10. Notice of 25 February 2026: Maison Bouchard Père et Fils (515420255) contributes a branch of activity to NOMINOE (981574650), receiving 3,142,126 of the 3,142,858 shares the beneficiary will then have. Notice of 10 April 2026: 515420255 is renamed Vignoble des Cabottes. The contributed assets are not itemised in the notice.
-- **bodacc-drouhin** — [BODACC: Domaine Joseph Drouhin](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22314306747%22&order_by=dateparution). registry; read; document date not established. Domaine Joseph Drouhin's registered office is 1 rue d'Enfer, Beaune: the ORVEAUX GFA's address.
 - **bodacc-fermiere-remoissenet** — [BODACC: Fermière Viticole Remoissenet merger and removal](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22448234492%22&order_by=dateparution+desc&limit=20). registry; read; document date 2022-09-01. April 2022 notice of the 29 March 2022 merger project absorbing Fermière Viticole Remoissenet into Fermière Remoissenet SAS (487842965); the company was struck off on 1 September 2022, after which the 1 January 2025 rights file still records it.
 - **bodacc-javillier** — [BODACC: G.F.A. Patrick Javillier merger and transformation](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22326791548%22&order_by=dateparution+desc&limit=20). registry; read; document date 2025-08-05. June 2025 merger project: G.F.A. Patrick Javillier absorbs SARL Guyot Javillier (331593939); in August 2025 it becomes SAS Patrick Javillier, vine growing, 9 rue des Forges, Meursault.
 - **bodacc-maurice-chapuis** — [BODACC: SARL Maurice Chapuis merger and removal](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22408975357%22&order_by=dateparution+desc&limit=20). registry; read; document date 2025-03-28. February 2025 merger project between EARL Domaine Maurice Chapuis (378948053) and SARL Maurice Chapuis (408975357); the latter was struck off on 28 March 2025, and 378948053 became SARL Maurice Chapuis in April 2025.
-- **bodacc-meo-seat** — [BODACC: companies at 11 rue des Grands Crus, Vosne-Romanée](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=ville%20like%20%22Vosne*%22%20and%20search(listepersonnes%2C%22Grands%20Crus%22)). registry; read; document date not established. Méo-Camuzet Frère et Sœurs, GFA Méo Camuzet Parents and the Méo family's other companies have their registered office at 11 rue des Grands Crus, the same address as the Grands Crus Investissement companies.
 - **bodacc-pousse-dor** — [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution). registry; read; document date 2022-09-08. SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.
 - **bouchard-legal** — [Bouchard Père & Fils: legal notices](https://www.bouchard-pereetfils.com/en/legal-notices). estate; read; document date not established. Publisher: Bouchard Père & Fils, rue Saint-Vincent, Savigny-lès-Beaune, RCS 981 574 650, capital €31,428,580.
 - **camila-gfv-2024** — [GFV Camila: 24 January 2024 founding deed](https://actes.ccm2.net/acte/4fa3606a-f47c-4f06-af51-cf1845535fa3#page=3). company-filing; read; document date 2024-01-24. Two contributors each contribute an undivided half of Aloxe-Corton Les Renardes C 61 (4 a 41 ca) and C 100 (60 a 19 ca), together 64 a 60 ca, with Les Valozières village land.
@@ -3478,6 +3476,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **gerouk-2003** — [GEROUK GFA: 12 November 2003 founding deed (2019 copy)](https://actes.ccm2.net/acte/01c3688f-09eb-4b38-8bb9-dab576059ad7#page=37). company-filing; read; document date 2003-11-12. The founding deed empowers a partner to buy Aloxe-Corton C 74 Les Renardes (31 a 29 ca) for €390,000 on the GFA’s behalf. The purchase deed itself is not reproduced.
 - **gille-gfv-2002** — [GFV Domaine Pierre et Anne-Marie Gille: 2002 deed](https://actes.ccm2.net/acte/94d660c9-a82e-4e24-9cd7-24da1d15c748#page=3). company-filing; read; document date 2002-08. The deed names the GFV “Groupement Foncier Viticole Domaine Pierre et Anne-Marie Gille” (34 route nationale 74, Comblanchien). Aloxe-Corton Les Renardes C 51 (16 a 25 ca) is among its land, let with Vosne-Romanée vines to S.C.E.V. Domaine Anne Marie Gille under a 1996 lease running from 11 November 1995 to 10 November 2013.
 - **gille-home** — [Domaine Gille: home page](https://www.domainegille.fr/). estate; read; document date not established. Says Pierre Gille (born 1947) and his wife Anne-Marie bought appellations including Corton Grand Cru.
+- **grenelle-partition-2004** — [GFA de la Grenelle: 14 January 2004 partition deed](https://actes.ccm2.net/acte/6ee2afdd-1e24-4917-b477-9ca4f2c3734f#page=7). company-filing; read; document date 2004-01-14. States that the GFA owns vines in Aloxe-Corton, Chassagne-Montrachet and Vougeot and that all its property is let on a long-term lease to the SCEV Château Genot-Boulanger. No cadastral reference.
 - **latour-immeubles-2011** — [LATOUR IMMEUBLES: statutes after the 28 September 2011 contribution](https://actes.ccm2.net/acte/10f5e549-5947-4c60-be23-9d6aa45aae75#page=1). company-filing; read; document date 2011-09-28. Maison Louis Latour contributes buildings, including the Aloxe-Corton cellar on Les Perrières B 28 (24 a 28 ca), and then holds 164,999 of the 165,000 shares.
 - **maladiere-gfa-2013** — [GFA de la Maladière: December 2013 founding deed](https://actes.ccm2.net/acte/70f2c8df-a737-401a-927d-1982c1fef343#page=5). company-filing; read; document date 2013-12. Contribution of Aloxe-Corton A 14 Le Charlemagne (9 a 34 ca, Corton-Charlemagne) among family vineyards. No lease or tenant is recited for it.
 - **mallard-legal** — [Domaine Mallard: legal notice](https://www.domaine-mallard.com/vins/index.php/fr/mentions-legales-menu). estate; read; document date not established. Site owner: EARL Michel Mallard et Fils, 43 route de Dijon, Ladoix-Serrigny, RCS 323178111.
@@ -3496,24 +3495,25 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **rne-300461761** — [Company register: SOCIETE DE GESTION DU DOMAINE DU CHATEAU DE MEURSAULT (300461761)](https://annuaire-entreprises.data.gouv.fr/entreprise/300461761). registry; read; document date not established. SOCIETE DE GESTION DU DOMAINE DU CHATEAU DE MEURSAULT, general partnership (SNC), Bastion Des Dames Rue Vivant Gardin 21200 Beaune, activity 01.21Z vine growing. Corporate officers or partners: BEAUNOISE DE FINANCEMENT ET DE PARTICIPATION (353995087). Legal identity only.
 - **rne-302572094** — [Company register: SOCIETE D'EXPLOITATION DU DOMAINE PARENT (302572094)](https://annuaire-entreprises.data.gouv.fr/entreprise/302572094). registry; read; document date not established. SOCIETE D'EXPLOITATION DU DOMAINE PARENT, SAS, 19 Place De L'Eglise 21630 Pommard, activity 01.21Z vine growing, created 1974-01-01. Legal identity only.
 - **rne-312990021** — [Company register: SOC CIV DOMAINE HERITIERS LOUIS JADOT (312990021)](https://annuaire-entreprises.data.gouv.fr/entreprise/312990021). registry; read; document date not established. SOC CIV DOMAINE HERITIERS LOUIS JADOT, farming company (société civile d’exploitation agricole), 41 Avenue De La Sabliere 21200 Beaune, activity 01.21Z vine growing, created 1963-09-28. Legal identity only.
-- **rne-314306747** — [Company register: DOMAINE JOSEPH DROUHIN (314306747)](https://annuaire-entreprises.data.gouv.fr/entreprise/314306747). registry; read; document date not established. DOMAINE JOSEPH DROUHIN, SARL, 1 Rue D'Enfer 21200 Beaune, activity 01.21Z vine growing, created 1978-01-01. Legal identity only.
+- **rne-314306747** — [Company register: DOMAINE JOSEPH DROUHIN (314306747)](https://annuaire-entreprises.data.gouv.fr/entreprise/314306747). registry; read; document date not established. DOMAINE JOSEPH DROUHIN: registered office 1 Rue D'Enfer 21200 Beaune; activity 01.21Z; created 1978-01-01; active. Legal identity only; not farming evidence.
 - **rne-314637141** — [Company register: DOMAINE MAILLARD PERE ET FILS (314637141)](https://annuaire-entreprises.data.gouv.fr/entreprise/314637141). registry; read; document date not established. DOMAINE MAILLARD PERE ET FILS, SAS, 2 Rue Joseph Bard 21200 Chorey-Les-Beaune, activity 01.21Z vine growing, created 1978-01-01. Legal identity only.
 - **rne-314722661** — [Company register: SOCIETE CIVILE RUE DES CHAUMES (314722661)](https://annuaire-entreprises.data.gouv.fr/entreprise/314722661). registry; read; document date not established. SOCIETE CIVILE RUE DES CHAUMES, société civile, Rue Des Chaumes 21420 Aloxe-Corton, activity 41.10D property development, created 1979-01-01. Corporate officers or partners: LM&E HOLDING (931154561). Legal identity only.
 - **rne-319775417** — [Company register: SAS DU DOMAINE RAPET PERE ET FILS (319775417)](https://annuaire-entreprises.data.gouv.fr/entreprise/319775417). registry; read; document date not established. SAS DU DOMAINE RAPET PERE ET FILS, SAS, 2 Place De La Mairie 21420 Pernand-Vergelesses, activity 01.21Z vine growing, created 1980-07-24. Legal identity only.
 - **rne-319775433** — [Company register: GFA DOMAINE ROBERT RAPET (319775433)](https://annuaire-entreprises.data.gouv.fr/entreprise/319775433). registry; read; document date not established. GFA DOMAINE ROBERT RAPET, land company (GFA), Grande Rue 21420 Pernand-Vergelesses, activity 68.20B letting of land, created 1980-07-24. Legal identity only.
+- **rne-320926439** — [Company register: DOMAINE MEO CAMUZET (320926439)](https://annuaire-entreprises.data.gouv.fr/entreprise/320926439). registry; read; document date not established. DOMAINE MEO CAMUZET: registered office 11 Rue Des Grands Crus 21700 Vosne-Romanee; activity 01.21Z; created 1980-12-22; active. Company officers or partners: MEO CAMUZET FRERE ET SOEURS (448502708). Legal identity only; not farming evidence.
 - **rne-322463894** — [Company register: GFA DU DOMAINE PAVELOT (322463894)](https://annuaire-entreprises.data.gouv.fr/entreprise/322463894). registry; read; document date not established. GFA DU DOMAINE PAVELOT, land company (GFA), Rue Du Paulart 21420 Pernand-Vergelesses, activity 68.20B letting of land, created 1981-08-07. Legal identity only.
 - **rne-322826686** — [Company register: SCA CHARLEMAGNE (322826686)](https://annuaire-entreprises.data.gouv.fr/entreprise/322826686). registry; read; document date not established. SCA CHARLEMAGNE, farming company (société civile d’exploitation agricole), 14 Rue Beffroy 92200 Neuilly-Sur-Seine, activity 68.20B letting of land, created 1981-08-29. Corporate officers or partners: CANADA INC. Legal identity only.
 - **rne-323178111** — [Company register: MICHEL MALLARD ET FILS (323178111)](https://annuaire-entreprises.data.gouv.fr/entreprise/323178111). registry; read; document date not established. MICHEL MALLARD ET FILS, SAS, Ci 14 43 Route De Dijon 21550 Ladoix-Serrigny, activity 01.21Z vine growing, created 1981-11-10. Legal identity only.
 - **rne-324989359** — [Company register: DOMAINE DES CROIX (324989359)](https://annuaire-entreprises.data.gouv.fr/entreprise/324989359). registry; read; document date not established. DOMAINE DES CROIX, farming company (société civile d’exploitation agricole), 2 Rue Colbert 21200 Beaune, activity 01.21Z vine growing, created 1982-06-03. Corporate officers or partners: DICI (827692401), TMFC & C. Legal identity only.
-- **rne-325421634** — [Company register: DOMAINE D'ARDHUY (JUV) (325421634)](https://annuaire-entreprises.data.gouv.fr/entreprise/325421634). registry; read; document date not established. DOMAINE D'ARDHUY (JUV), SARL, Clos Des Langres 21700 Corgoloin, activity 01.21Z vine growing, created 1982-08-09. Legal identity only.
+- **rne-325421634** — [Company register: DOMAINE D'ARDHUY (JUV) (325421634)](https://annuaire-entreprises.data.gouv.fr/entreprise/325421634). registry; read; document date not established. DOMAINE D'ARDHUY (JUV): registered office Clos Des Langres 21700 Corgoloin; activity 01.21Z; created 1982-08-09; active. Legal identity only; not farming evidence.
 - **rne-326781853** — [Company register: EARL GASTON ET PIERRE RAVAUT (326781853)](https://annuaire-entreprises.data.gouv.fr/entreprise/326781853). registry; read; document date not established. EARL GASTON ET PIERRE RAVAUT, farming company (EARL), Ham De Buisson 21550 Ladoix-Serrigny, activity 01.21Z vine growing, created 1982-09-01. Legal identity only.
 - **rne-326791548** — [Company register: PATRICK JAVILLIER (326791548)](https://annuaire-entreprises.data.gouv.fr/entreprise/326791548). registry; read; document date not established. PATRICK JAVILLIER, SAS, 9 Rue Des Forges 21190 Meursault, activity 01.21Z vine growing, created 1983-02-22. Legal identity only.
-- **rne-327166898** — [Company register: SOC CIVILE DE LA JUVINIERE (327166898)](https://annuaire-entreprises.data.gouv.fr/entreprise/327166898). registry; read; document date not established. SOC CIVILE DE LA JUVINIERE, farming company (société civile d’exploitation agricole), Clos Des Langres 21700 Corgoloin, activity 01.21Z vine growing, created 1983-03-01. Corporate officers or partners: DOMAINE DE LA JUVINIERE (325421634), SOCIETE CIVILE D'ARDHUY (443817382). Legal identity only.
+- **rne-327166898** — [Company register: SOC CIVILE DE LA JUVINIERE (327166898)](https://annuaire-entreprises.data.gouv.fr/entreprise/327166898). registry; read; document date not established. SOC CIVILE DE LA JUVINIERE: registered office Clos Des Langres 21700 Corgoloin; activity 01.21Z; created 1983-03-01; active. Company officers or partners: DOMAINE DE LA JUVINIERE (325421634), SOCIETE CIVILE D'ARDHUY (443817382). Legal identity only; not farming evidence.
 - **rne-328061346** — [Company register: DOMAINE FRANCOISE ANDRE (328061346)](https://annuaire-entreprises.data.gouv.fr/entreprise/328061346). registry; read; document date not established. DOMAINE FRANCOISE ANDRE, farming company (société civile d’exploitation agricole), 7 Rempart Saint-Jean 21200 Beaune, activity 01.21Z vine growing, created 1983-09-07. Corporate officers or partners: FAMILIALE MICHEL ET FRANCOISE ANDRE (789868882). Legal identity only.
 - **rne-328186416** — [Company register: DOMAINE BONNEAU DU MARTRAY (BONNEAU DU MARTRAY GRANDS CRUS) (328186416)](https://annuaire-entreprises.data.gouv.fr/entreprise/328186416). registry; read; document date not established. DOMAINE BONNEAU DU MARTRAY (BONNEAU DU MARTRAY GRANDS CRUS), farming company (société civile d’exploitation agricole), 2 Rue De Fretille 21420 Pernand-Vergelesses, activity 01.21Z vine growing, created 1978-01-01. Corporate officers or partners: ROMEFI (824423396). Legal identity only.
-- **rne-330713074** — [Company register: SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE (330713074)](https://annuaire-entreprises.data.gouv.fr/entreprise/330713074). registry; read; document date not established. SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE, farming company (société civile d’exploitation agricole), Premeaux-Prissey 7 Rue De L'Eglise 21700 Premeaux-Prissey, activity 01.21Z vine growing, created 1984-09-21. Corporate officers or partners: DOMAINE BARBIER ET FILS (320281173), SOCIETE CIVILE D'EXPLOITATION VITICOLE DOMAINE LOUIS VIOLLAND (349583500). Legal identity only.
+- **rne-330713074** — [Company register: SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE (330713074)](https://annuaire-entreprises.data.gouv.fr/entreprise/330713074). registry; read; document date not established. SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE: registered office Premeaux-Prissey 7 Rue De L'Eglise 21700 Premeaux-Prissey; activity 01.21Z; created 1984-09-21; active. Company officers or partners: DOMAINE BARBIER ET FILS (320281173), SOCIETE CIVILE D'EXPLOITATION VITICOLE DOMAINE LOUIS VIOLLAND (349583500). Legal identity only; not farming evidence.
 - **rne-334354859** — [Company register: SAS DOMAINE PHILIPPE CHARLOPIN PARIZOT (334354859)](https://annuaire-entreprises.data.gouv.fr/entreprise/334354859). registry; read; document date not established. SAS DOMAINE PHILIPPE CHARLOPIN PARIZOT, SAS, 31 Rue Des Baraques 21220 Gevrey-Chambertin, activity 01.21Z vine growing, created 1985-12-18. Legal identity only.
-- **rne-338113954** — [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954). registry; read; document date not established. SFG LA VOUGERAIE, SAS, 2 Passage Montgolfier 21700 Nuits-Saint-Georges, activity 64.30Z investment fund, created 1986-06-26. Corporate officers or partners: SEGUIN ET COMPAGNIE (845303650). Legal identity only.
+- **rne-338113954** — [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954). registry; read; document date not established. SFG LA VOUGERAIE: registered office 2 Passage Montgolfier 21700 Nuits-Saint-Georges; activity 64.30Z; created 1986-06-26; active. Company officers or partners: SEGUIN ET COMPAGNIE (845303650). Legal identity only; not farming evidence.
 - **rne-340727072** — [Company register: S2V (DOMAINE JEAN FERY ET FILS) (340727072)](https://annuaire-entreprises.data.gouv.fr/entreprise/340727072). registry; read; document date not established. S2V (DOMAINE JEAN FERY ET FILS), SAS, 2 Rue De Marey 21420 Echevronne, activity 01.21Z vine growing, created 1987-03-24. Corporate officers or partners: FIMAGE PACKAGING (449151273). Legal identity only.
 - **rne-348852237** — [Company register: GFA DU DOMAINE RAVAUT PERE ET FILS (348852237)](https://annuaire-entreprises.data.gouv.fr/entreprise/348852237). registry; read; document date not established. GFA DU DOMAINE RAVAUT PERE ET FILS, land company (GFA), Ham De Buisson 21550 Ladoix-Serrigny, activity 68.20B letting of land, created 1988-12-12. Its 1988 founding schedule matches the parcels of provisional rights identifier U14137631. Legal identity only.
 - **rne-349583500** — [Company register: SCEV DOMAINE LOUIS VIOLLAND (349583500)](https://annuaire-entreprises.data.gouv.fr/entreprise/349583500). registry; read; document date not established. SCEV DOMAINE LOUIS VIOLLAND, farming company (société civile d’exploitation agricole), Passage Montgolfier 21700 Nuits-Saint-Georges, activity 01.21Z vine growing, created 1989-02-09. Corporate officers or partners: SCA DOMAINE DE LA VOUGERAIE (330713074), SFG DE LA VOUGERAIE (338113954), SA GRANDS VINS JEAN CLAUDE BOISSET (349583500). Legal identity only.
@@ -3523,7 +3523,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **rne-388212649** — [Company register: DOMAINE TAUPENOT MERME (388212649)](https://annuaire-entreprises.data.gouv.fr/entreprise/388212649). registry; read; document date not established. DOMAINE TAUPENOT MERME, farming company (société civile d’exploitation agricole), 33 Route Des Grands Crus 21220 Morey-Saint-Denis, activity 01.21Z vine growing, created 1992-02-15. Legal identity only.
 - **rne-392477600** — [Company register: DOMAINE LE CLOS DU PAVILLON (392477600)](https://annuaire-entreprises.data.gouv.fr/entreprise/392477600). registry; read; document date not established. DOMAINE LE CLOS DU PAVILLON, SAS, Rue De La Croix De Pommard 21630 Pommard, activity 01.21Z vine growing, created 1993-09-15. Legal identity only.
 - **rne-398805366** — [Company register: GROUP.FONCIER VITICOLE PRESTIGE BOURG. (398805366)](https://annuaire-entreprises.data.gouv.fr/entreprise/398805366). registry; read; document date not established. GROUP.FONCIER VITICOLE PRESTIGE BOURG., land company (GFV), 24 Avenue Albert Camus 21000 Dijon, activity 68.20B letting of land, created 1994-09-14. Corporate officers or partners: CAISSE FEDERALE DE CREDIT MUTUEL (588505354). Legal identity only.
-- **rne-400737938** — [Company register: GFA DE LA GRENELLE (400737938)](https://annuaire-entreprises.data.gouv.fr/entreprise/400737938). registry; read; document date not established. GFA DE LA GRENELLE, land company (GFA), 65 Rue De Citeaux 21190 Meursault, activity 68.20B letting of land, created 1995-03-29. Legal identity only.
+- **rne-400737938** — [Company register: GFA DE LA GRENELLE (400737938)](https://annuaire-entreprises.data.gouv.fr/entreprise/400737938). registry; read; document date not established. GFA DE LA GRENELLE: registered office 65 Rue De Citeaux 21190 Meursault; activity 68.20B; created 1995-03-29; active. Legal identity only; not farming evidence.
 - **rne-402345144** — [Company register: LES COTEAUX DE SANTENAY (402345144)](https://annuaire-entreprises.data.gouv.fr/entreprise/402345144). registry; read; document date not established. LES COTEAUX DE SANTENAY, land company (GFA), 91-93 Uniger 91 Boulevard Pasteur 75015 Paris, activity 68.20B letting of land, created 1995-07-31. Corporate officers or partners: AMUNDI IMMOBILIER (315429837). Legal identity only.
 - **rne-403231137** — [Company register: MAISON LOUIS JADOT (403231137)](https://annuaire-entreprises.data.gouv.fr/entreprise/403231137). registry; read; document date not established. MAISON LOUIS JADOT, SAS (46.34Z wine wholesale), 21 rue Eugène Spuller, Beaune: the registered office of Domaine Clair Daü.
 - **rne-403405764** — [Company register: GROUPEMENT FONCIER VITICOLE PIERRELIANNE (403405764)](https://annuaire-entreprises.data.gouv.fr/entreprise/403405764). registry; read; document date not established. GROUPEMENT FONCIER VITICOLE PIERRELIANNE, land company (GFA), 21420 Savigny-Les-Beaune, activity 68.20B letting of land, created 1995-12-28. Legal identity only.
@@ -3537,14 +3537,16 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **rne-424927424** — [Company register: GFA MAIGNE OCQUIDANT (424927424)](https://annuaire-entreprises.data.gouv.fr/entreprise/424927424). registry; read; document date not established. GFA MAIGNE OCQUIDANT, land company (GFA), 12 Rue Du Chateau 28130 Villiers-Le-Morhier, activity 68.20B letting of land, created 1976-08-12. Legal identity only.
 - **rne-427468962** — [Company register: GFA DU DOMAINE BELGRAND LATOUR (427468962)](https://annuaire-entreprises.data.gouv.fr/entreprise/427468962). registry; read; document date not established. GFA DU DOMAINE BELGRAND LATOUR, land company (GFA), 18 Rue Des Tonneliers 21200 Beaune, activity 68.20B letting of land, created 1974-11-04. Legal identity only.
 - **rne-427468988** — [Company register: GFA DOMAINE MARCHAL LATOUR (427468988)](https://annuaire-entreprises.data.gouv.fr/entreprise/427468988). registry; read; document date not established. GFA DOMAINE MARCHAL LATOUR, land company (GFA), 21420 Aloxe-Corton, activity 68.20B letting of land, created 1975-03-28. Legal identity only.
+- **rne-427469135** — [Company register: SCI DOMAINE LEROY (427469135)](https://annuaire-entreprises.data.gouv.fr/entreprise/427469135). registry; read; document date not established. SCI DOMAINE LEROY: registered office 15 Rue De La Fontaine 21700 Vosne-Romanee; activity 68.20A; created 1990-01-01; active. Company officers or partners: SA LEROY (515520385). Legal identity only; not farming evidence.
 - **rne-428680011** — [Company register: LES RENARDES (428680011)](https://annuaire-entreprises.data.gouv.fr/entreprise/428680011). registry; read; document date not established. LES RENARDES, land company (GFA), Rue Jacques Copeau 21420 Pernand-Vergelesses, activity 68.20B letting of land, created 1999-12-17. Legal identity only.
+- **rne-433359320** — [Company register: SCI JEAN FAYE (433359320)](https://annuaire-entreprises.data.gouv.fr/entreprise/433359320). registry; read; document date not established. SCI JEAN FAYE: registered office La Vougeraie 21700 Premeaux-Prissey; activity 68.20B; created 2000-10-27; active. Company officers or partners: SOCIETE CIVILE AGRICOLE DOMAINE DE LA VOUGERAIE (330713074), SOCIETE FAMILIALE DE GESTION DE LA VOUGERAIE (338113954). Legal identity only; not farming evidence.
 - **rne-440712529** — [Company register: GFA TOLLOT BEAUT ET FILS (440712529)](https://annuaire-entreprises.data.gouv.fr/entreprise/440712529). registry; read; document date not established. GFA TOLLOT BEAUT ET FILS, land company (GFA), 21200 Chorey-Les-Beaune, activity 68.20B letting of land, created 1973-01-01. Legal identity only.
 - **rne-442062527** — [Company register: SOC CIVILE PHYSALIS (442062527)](https://annuaire-entreprises.data.gouv.fr/entreprise/442062527). registry; read; document date not established. SOC CIVILE PHYSALIS, société civile, Daix 2 Rue Du Meix Pillon 21121 Daix, activity 64.20Z holding company, created 2002-05-04. Corporate officers or partners: ALTOSTRATUS (895310035), EUPHYLLIA (895317824). Legal identity only.
-- **rne-443817382** — [Company register: SOCIETE CIVILE D'ARDHUY (443817382)](https://annuaire-entreprises.data.gouv.fr/entreprise/443817382). registry; read; document date not established. SOCIETE CIVILE D'ARDHUY, société civile, Clos Des Langres 21700 Corgoloin, activity 42.99Z civil engineering, created 1976-12-06. Corporate officers or partners: DOMAINE DE LA JUVINIERE (325421634). Legal identity only.
+- **rne-443817382** — [Company register: SOCIETE CIVILE D'ARDHUY (443817382)](https://annuaire-entreprises.data.gouv.fr/entreprise/443817382). registry; read; document date not established. SOCIETE CIVILE D'ARDHUY: registered office Clos Des Langres 21700 Corgoloin; activity 42.99Z; created 1976-12-06; active. Company officers or partners: DOMAINE DE LA JUVINIERE (325421634). Legal identity only; not farming evidence.
 - **rne-443958350** — [Company register: SCI DES DOMAINES DUPRAY (443958350)](https://annuaire-entreprises.data.gouv.fr/entreprise/443958350). registry; read; document date not established. SCI DES DOMAINES DUPRAY, property company (SCI), 51 Rue Du Faubourg Madeleine 21200 Beaune, activity 68.20A letting of housing, created 1968-09-13. Legal identity only.
 - **rne-444606594** — [Company register: GFV DU DOMAINE GILLE-POUDOU (444606594)](https://annuaire-entreprises.data.gouv.fr/entreprise/444606594). registry; read; document date not established. GFV DU DOMAINE GILLE-POUDOU, land company (GFA), M. Gille Pierre 34 Rte N 74 21700 Comblanchien, activity 68.20B letting of land, created 2002-08-23. First registered as GFV Domaine Pierre et Anne-Marie Gille (renamed 2007); its founding schedule names Renardes C 51. Legal identity only.
 - **rne-448234492** — [Company register: FERMIERE VITICOLE REMOISSENET (448234492)](https://annuaire-entreprises.data.gouv.fr/entreprise/448234492). registry; read; document date not established. FERMIERE VITICOLE REMOISSENET, société civile, 10 Rue Du Mont Thabor 75001 Paris 1, activity 68.20B letting of land, created 2003-03-29. Corporate officers or partners: SARL I C M CONSULTANTS (382621217), SCI PATRIMONIALE KAYSER (480174739), FERMIERE REMOISSENET SAS (487842965). The register marks the company as closed. Legal identity only.
-- **rne-448502708** — [Company register: MEO CAMUZET FRERE ET SOEURS (448502708)](https://annuaire-entreprises.data.gouv.fr/entreprise/448502708). registry; read; document date not established. MEO CAMUZET FRERE ET SOEURS, SAS, 11 Rue Des Grands Crus 21700 Vosne-Romanee, activity 46.34Z wine trade, created 2003-04-15. Corporate officers or partners: ATRISEV (752430488). Legal identity only.
+- **rne-448502708** — [Company register: MEO CAMUZET FRERE ET SOEURS (448502708)](https://annuaire-entreprises.data.gouv.fr/entreprise/448502708). registry; read; document date not established. MEO CAMUZET FRERE ET SOEURS: registered office 11 Rue Des Grands Crus 21700 Vosne-Romanee; activity 46.34Z; created 2003-04-15; active. Company officers or partners: ATRISEV (752430488). Legal identity only; not farming evidence.
 - **rne-449347426** — [Company register: GFV CLAUDE CHEVALIER (449347426)](https://annuaire-entreprises.data.gouv.fr/entreprise/449347426). registry; read; document date not established. GFV CLAUDE CHEVALIER, société civile, Hameau Du Buisson 21550 Ladoix-Serrigny, activity 68.20B letting of land, created 2003-06-05. Legal identity only.
 - **rne-451042832** — [Company register: GEROUK (451042832)](https://annuaire-entreprises.data.gouv.fr/entreprise/451042832). registry; read; document date not established. GEROUK, land company (GFA), M Baraniak Robert 10 Rue Du 19 Mars 1962 71230 Saint-Vallier, activity 68.20B letting of land, created 2003-11-12. Legal identity only.
 - **rne-478499098** — [Company register: GFA LE CLOS DE LA BARRE (478499098)](https://annuaire-entreprises.data.gouv.fr/entreprise/478499098). registry; read; document date not established. GFA LE CLOS DE LA BARRE, land company (GFA), Rue D'Amour 21190 Volnay, activity 68.20B letting of land, created 2004-09-03. Legal identity only.
@@ -3552,7 +3554,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **rne-481279297** — [Company register: GFA HERITIERS BELIN NAIGON (481279297)](https://annuaire-entreprises.data.gouv.fr/entreprise/481279297). registry; read; document date not established. GFA HERITIERS BELIN NAIGON, land company (GFA), Chemin Sous La Velle 21190 Auxey-Duresses, activity 68.20B letting of land, created 2005-02-27. Corporate officers or partners: DOMAINE DUBLERE (482119443). The register marks the company as closed. Legal identity only.
 - **rne-482119443** — [Company register: DOMAINE DUBLERE (482119443)](https://annuaire-entreprises.data.gouv.fr/entreprise/482119443). registry; read; document date not established. DOMAINE DUBLERE, property company (SCI), Chemin Sous La Velle 21190 Auxey-Duresses, activity 68.20B letting of land, created 2005-05-02. Corporate officers or partners: DOMAINE DES TERRES DE VELLE (512629445). The register marks the company as closed. Legal identity only.
 - **rne-482807393** — [Company register: SCEA DOMAINE DUBLERE (482807393)](https://annuaire-entreprises.data.gouv.fr/entreprise/482807393). registry; read; document date not established. SCEA DOMAINE DUBLERE, farming company (société civile d’exploitation agricole), Chemin Sous La Velle 21190 Auxey-Duresses, activity 01.21Z vine growing, created 2005-04-06. Corporate officers or partners: DOMAINE DES TERRES DE VELLE (512629445). Legal identity only.
-- **rne-483134516** — [Company register: DOMAINE DE MONTILLE (483134516)](https://annuaire-entreprises.data.gouv.fr/entreprise/483134516). registry; read; document date not established. DOMAINE DE MONTILLE, SAS, Rue Du Pied De La Vallee 21190 Volnay, activity 47.25Z drinks retail, created 2005-07-01. Corporate officers or partners: EM CONSEIL (439237900). Legal identity only.
+- **rne-483134516** — [Company register: DOMAINE DE MONTILLE (483134516)](https://annuaire-entreprises.data.gouv.fr/entreprise/483134516). registry; read; document date not established. DOMAINE DE MONTILLE: registered office Rue Du Pied De La Vallee 21190 Volnay; activity 47.25Z; created 2005-07-01; active. Company officers or partners: EM CONSEIL (439237900). Legal identity only; not farming evidence.
 - **rne-487716805** — [Company register: GROUPEMENT FONCIER AGRICOLE ROLLAND - LATOUR (487716805)](https://annuaire-entreprises.data.gouv.fr/entreprise/487716805). registry; read; document date not established. GROUPEMENT FONCIER AGRICOLE ROLLAND - LATOUR, land company (GFA), 21 Rue De Lille 75007 Paris, activity 02.40Z forestry support, created 2005-09-26. Legal identity only.
 - **rne-498107572** — [Company register: VIGNOBLES CLEMENCET (DOMAINE PATRICK CLEMENCET) (498107572)](https://annuaire-entreprises.data.gouv.fr/entreprise/498107572). registry; read; document date not established. VIGNOBLES CLEMENCET (DOMAINE PATRICK CLEMENCET), farming company (société civile d’exploitation agricole), 7 Route De Monthelie 21190 Meursault, activity 01.21Z vine growing, created 2007-03-23. Corporate officers or partners: LES GRANDS CHAIS DE FRANCE (315999201), TERRES DE BOURGOGNE (793920448). Legal identity only.
 - **rne-498546258** — [Company register: GROUPEMENT FONCIER VITICOLE L'EMPEREUR (498546258)](https://annuaire-entreprises.data.gouv.fr/entreprise/498546258). registry; read; document date not established. GROUPEMENT FONCIER VITICOLE L'EMPEREUR, land company (GFA), Route Des Vergelesses 21420 Pernand-Vergelesses, activity 68.20B letting of land, created 2007-05-12. Legal identity only.
@@ -3560,10 +3562,10 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **rne-510368210** — [Company register: GROUPEMENT FONCIER AGRICOLE DES BEAUMONTS (510368210)](https://annuaire-entreprises.data.gouv.fr/entreprise/510368210). registry; read; document date not established. GROUPEMENT FONCIER AGRICOLE DES BEAUMONTS, land company (GFA), 2 Rue Joseph Bard 21200 Chorey-Les-Beaune, activity 68.20B letting of land, created 2008-11-21. Legal identity only.
 - **rne-511314635** — [Company register: GROUPEMENT FONCIER VITICOLE MARIE SORDOILLET (511314635)](https://annuaire-entreprises.data.gouv.fr/entreprise/511314635). registry; read; document date not established. GROUPEMENT FONCIER VITICOLE MARIE SORDOILLET, land company (GFA), 5 Rue Billot 21150 Gresigny-Sainte-Reine, activity 68.20B letting of land, created 2009-02-26. Legal identity only.
 - **rne-515045292** — [Company register: DOMAINE TAWSE (515045292)](https://annuaire-entreprises.data.gouv.fr/entreprise/515045292). registry; read; document date not established. DOMAINE TAWSE, société civile, 3 Avenue De L'Aigue 21200 Beaune, activity 01.21Z vine growing, created 2009-09-24. Corporate officers or partners: TAWSE INTERNATIONAL HOLDING INC. Legal identity only.
-- **rne-515420255** — [Company register: VIGNOBLE DES CABOTTES (515420255)](https://annuaire-entreprises.data.gouv.fr/entreprise/515420255). registry; read; document date not established. VIGNOBLE DES CABOTTES, SAS, 15 Rue Du Chateau 21200 Beaune, activity 46.34Z wine trade, created 1954-01-01. Corporate officers or partners: ARTEMIS DOMAINES (911907111). Legal identity only.
+- **rne-515420255** — [Company register: VIGNOBLE DES CABOTTES (515420255)](https://annuaire-entreprises.data.gouv.fr/entreprise/515420255). registry; read; document date not established. VIGNOBLE DES CABOTTES: registered office 15 Rue Du Chateau 21200 Beaune; activity 46.34Z; created 1954-01-01; active. Company officers or partners: ARTEMIS DOMAINES (911907111). Legal identity only; not farming evidence.
 - **rne-515520369** — [Company register: SCEV DOMAINE FREY (515520369)](https://annuaire-entreprises.data.gouv.fr/entreprise/515520369). registry; read; document date not established. SCEV DOMAINE FREY, farming company (société civile d’exploitation agricole), 5 Rue Des Corton 21420 Aloxe-Corton, activity 01.21Z vine growing, created 1955-01-01. Corporate officers or partners: PJA DIFFUSION (429157498), MONTEBELLO DOMAINES (430479832). Legal identity only.
-- **rne-515520385** — [Company register: LEROY S A (515520385)](https://annuaire-entreprises.data.gouv.fr/entreprise/515520385). registry; read; document date not established. LEROY S A, SA, Auxey Duresses 21190 Auxey-Duresses, activity 46.34Z wine trade, created 1955-01-01. Corporate officers or partners: TAKASHIMAYA (FRANCE) S A (777348780). Legal identity only.
-- **rne-515620193** — [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193). registry; read; document date not established. LES PETITS FILS DE PIERRE PONNELLE, SAS, 2 Rue Paradis 21200 Beaune, activity 46.34Z wine trade, created 1956-01-01. Corporate officers or partners: SFG LA VOUGERAIE (338113954). Legal identity only.
+- **rne-515520385** — [Company register: LEROY S A (515520385)](https://annuaire-entreprises.data.gouv.fr/entreprise/515520385). registry; read; document date not established. LEROY S A: registered office Auxey Duresses 21190 Auxey-Duresses; activity 46.34Z; created 1955-01-01; active. Company officers or partners: TAKASHIMAYA (FRANCE) S A (777348780). Legal identity only; not farming evidence.
+- **rne-515620193** — [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193). registry; read; document date not established. LES PETITS FILS DE PIERRE PONNELLE: registered office 2 Rue Paradis 21200 Beaune; activity 46.34Z; created 1956-01-01; active. Company officers or partners: SFG LA VOUGERAIE (338113954). Legal identity only; not farming evidence.
 - **rne-515620466** — [Company register: MAISON CAPITAIN GAGNEROT (515620466)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620466). registry; read; document date not established. MAISON CAPITAIN GAGNEROT, SAS (recorded in the rights file as SARL CAPITAIN GAGNEROT), 38 route de Dijon, Ladoix-Serrigny, activity 01.21Z vine growing, created 1956. Legal identity only.
 - **rne-515720076** — [Company register: MAISON LOUIS LATOUR (515720076)](https://annuaire-entreprises.data.gouv.fr/entreprise/515720076). registry; read; document date not established. MAISON LOUIS LATOUR, SA with management board, 18 Rue Des Tonneliers 21200 Beaune, activity 46.34Z wine trade, created 1957-01-01. Corporate officers or partners: SOCIETE CIVILE DOMAINE LOUIS LATOUR (778159715). Legal identity only.
 - **rne-518310024** — [Company register: SAINT VINCENT LA VIGNE AU SAINT (518310024)](https://annuaire-entreprises.data.gouv.fr/entreprise/518310024). registry; read; document date not established. SAINT VINCENT LA VIGNE AU SAINT, land company (GFA), Parc Valmy 37 Rue Elsa Triolet 21000 Dijon, activity 68.20B letting of land, created 2009-11-04. Legal identity only.

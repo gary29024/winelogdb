@@ -21,6 +21,7 @@ RESEARCH_LABELS = {
     'estate-area-exact-match': 'Matched by exact area',
     'estate-area-near-match': 'Near-area reconstruction',
     'court-named-cadastral-reference': 'Named in a court ruling',
+    'filing-named-cadastral-reference': 'Named in a company filing',
 }
 LEAD_LABELS = {
     'brand-identity-confirmed': 'Brand identity confirmed',
@@ -40,6 +41,10 @@ LEAD_LABELS = {
     'filing-tenant-relationship': 'Dated lease relationship',
     'filing-lease-mandate': 'Named in a lease mandate',
     'filing-family-tenant-context': 'Named individual tenant',
+    'company-identity': 'Company record',
+    'family-company-record': 'Family company record',
+    'group-company-record': 'Group company record',
+    'name-and-seat-crosswalk': 'Identity by name and seat only',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
 SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}

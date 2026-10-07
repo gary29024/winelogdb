@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5418508,
-  "evidenceGzipBytesTotal": 464795,
+  "evidenceBytesTotal": 5510243,
+  "evidenceGzipBytesTotal": 481129,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -259,10 +259,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9211b2cd12c2ec780828e146efb519fa49bda1226a61105605c6665cc4c1d0c1",
-      "evidenceSha256": "67925bdba669b209dda3066a45605e08c587ef0a7568fda0c12575ccff568eae",
-      "evidenceBytes": 212308,
-      "evidenceGzipBytes": 16280,
+      "registerSha256": "d023f917be4dee05d7ad9a82ea669eacb9a8e6e1a8533b3473a805808650c0c2",
+      "evidenceSha256": "a5d77c66f75a57e7ab3ab501cd1cad1edd35083c7a363671971f72e96c44278e",
+      "evidenceBytes": 299708,
+      "evidenceGzipBytes": 31599,
       "earliestRawEventSample": {
         "id": "210:716:000:0000052:00001",
         "departmentCode": "210",
@@ -2799,10 +2799,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "efa2792fa09f4a8828714967d56e0ad0d096abc48fa2e67c10bebba7c5fea8d2",
-      "evidenceSha256": "eb3c7657114145df25de7018654aa15c9a2b82aacdf7e53b3dab27c48242a8c2",
-      "evidenceBytes": 997865,
-      "evidenceGzipBytes": 66417,
+      "registerSha256": "b4406d0f9b67d0ee4793d6c3a34e7ebc5060f74309aeb2b90638cd3f8750c7e9",
+      "evidenceSha256": "e4760871dcf789d5bd284fe5d29e5fec78b570470b1d69e08d9b4485ba08add0",
+      "evidenceBytes": 1002200,
+      "evidenceGzipBytes": 67432,
       "earliestRawEventSample": {
         "id": "210:010:000:0000130:00001",
         "departmentCode": "210",

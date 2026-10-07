@@ -793,7 +793,7 @@
     },
     {
       "holderId": "302572094",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-302572094"
@@ -814,7 +814,7 @@
     },
     {
       "holderId": "314306747",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-314306747"
@@ -824,7 +824,7 @@
     },
     {
       "holderId": "314722661",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-314722661"
@@ -834,7 +834,7 @@
     },
     {
       "holderId": "319775433",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-319775433"
@@ -844,7 +844,7 @@
     },
     {
       "holderId": "322463894",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-322463894"
@@ -914,7 +914,7 @@
     },
     {
       "holderId": "326791548",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-326791548"
@@ -924,7 +924,7 @@
     },
     {
       "holderId": "327166898",
-      "basis": "management-and-estate-context",
+      "basis": "group-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-327166898"
@@ -934,7 +934,7 @@
     },
     {
       "holderId": "328061346",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-328061346"
@@ -966,7 +966,7 @@
     },
     {
       "holderId": "334354859",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-334354859"
@@ -996,7 +996,7 @@
     },
     {
       "holderId": "378948053",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-378948053"
@@ -1006,7 +1006,7 @@
     },
     {
       "holderId": "388212649",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-388212649"
@@ -1036,13 +1036,13 @@
     },
     {
       "holderId": "400737938",
-      "basis": "unresolved",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
         "dgfip-current",
         "rne-400737938"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Its 1995 founding deed recites a lease to an individual ending 31 January 2013; no domaine company named."
+      "finding": "Holds Le Charlemagne A 0028 and Les Combes I 0235. Its 1995 founding deed recites an earlier lease to an individual; a 2004 partition deed states that all the GFA’s land, including its Aloxe-Corton vines, is let long-term to SCEV Château Genot-Boulanger. No filing names these two references; current parcel farming unconfirmed."
     },
     {
       "holderId": "402345144",
@@ -1066,7 +1066,7 @@
     },
     {
       "holderId": "407881291",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-407881291"
@@ -1076,7 +1076,7 @@
     },
     {
       "holderId": "408975357",
-      "basis": "identity-only",
+      "basis": "succession-lead",
       "sourceIds": [
         "dgfip-current",
         "rne-408975357"
@@ -1096,7 +1096,7 @@
     },
     {
       "holderId": "420088387",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-420088387"
@@ -1106,7 +1106,7 @@
     },
     {
       "holderId": "422190785",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-422190785"
@@ -1208,7 +1208,7 @@
     },
     {
       "holderId": "448502708",
-      "basis": "estate-context",
+      "basis": "group-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-448502708",
@@ -1250,7 +1250,7 @@
     },
     {
       "holderId": "480400407",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-480400407"
@@ -1260,7 +1260,7 @@
     },
     {
       "holderId": "481279297",
-      "basis": "identity-only",
+      "basis": "succession-lead",
       "sourceIds": [
         "dgfip-current",
         "rne-481279297"
@@ -1270,7 +1270,7 @@
     },
     {
       "holderId": "482807393",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-482807393"
@@ -1342,7 +1342,7 @@
     },
     {
       "holderId": "515045292",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-515045292"
@@ -1373,17 +1373,17 @@
     },
     {
       "holderId": "515520385",
-      "basis": "unresolved",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-515520385"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Leroy SA, Auxey-Duresses; no legal notice or filing seen ties it to a domaine label."
+      "finding": "Register identity of Leroy SA (Maison Leroy), partner in the Domaine Leroy companies; it holds Le Corton C 0013, C 0014 and C 0015 and Renardes C 0052. No reviewed filing names these parcels or a lease; current parcel farming unconfirmed."
     },
     {
       "holderId": "515620193",
-      "basis": "management-and-estate-context",
+      "basis": "group-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-515620193"
@@ -1455,7 +1455,7 @@
     },
     {
       "holderId": "528291479",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
         "dgfip-current",
         "rne-528291479"
@@ -1554,7 +1554,7 @@
     },
     {
       "holderId": "778586172",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-778586172"
@@ -1715,7 +1715,7 @@
     },
     {
       "holderId": "977634369",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
         "dgfip-current",
         "rne-977634369"
