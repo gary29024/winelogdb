@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-550",
+  "name": "Corton-Charlemagne",
+  "inaoCommunes": [
+    "21010",
+    "21480",
+    "21606"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21010",
+      "name": "Aloxe-Corton",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21010/cadastre-21010-parcelles.json.gz",
+      "sha256": "94cd91e1840378554a0cf63751fc189272cbbf9b703c79fb40f2c2fa0e65b8f9"
+    },
+    {
+      "commune": "21480",
+      "name": "Pernand-Vergelesses",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21480/cadastre-21480-parcelles.json.gz",
+      "sha256": "d824740a61b9b9c75b8e4be1acfbd4c5c017fb22a313e4d8bc7bcdf4f3c7d010"
+    },
+    {
+      "commune": "21606",
+      "name": "Ladoix-Serrigny",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-parcelles.json.gz",
+      "sha256": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088"
+    }
+  ],
+  "boundaryAreaM2": 719103.9,
+  "coveredByBundleParcelsM2": 715102.7,
+  "notCoveredByBundleParcelsM2": 4001.3,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 0.0,
+    "coveredByNoParcelM2": 4001.3
+  },
+  "neighbours": [
+    {
+      "commune": "21173",
+      "name": "Chorey-lès-Beaune",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21173/cadastre-21173-parcelles.json.gz",
+      "sha256": "27d119c6a57028977566dde3dbd83298de8e58e19be85def807935d47a69d3f6",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21195",
+      "name": "Corgoloin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21195/cadastre-21195-parcelles.json.gz",
+      "sha256": "3040434feba56101f7653c4ca0e8fd2e934af16227438397b2b2076c463bfce1",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21240",
+      "name": "Échevronne",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21240/cadastre-21240-parcelles.json.gz",
+      "sha256": "20324b6896c87c7c6e5cb9918ae4535e2a8cfab594dfbcc95f561446313c36e3",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21369",
+      "name": "Magny-lès-Villers",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21369/cadastre-21369-parcelles.json.gz",
+      "sha256": "4e7cc2d330ad13f747b673ae398c0dfc58c57f297ff2cf338012ed603bc5a5db",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    },
+    {
+      "commune": "21590",
+      "name": "Savigny-lès-Beaune",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21590/cadastre-21590-parcelles.json.gz",
+      "sha256": "fdbc13c09de3bf08735a5f0ab0757b52d89ad7fe765014659c63187ef2ded747",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 8,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 4001.3,
+    "reviewedAt": "2026-10-07",
+    "parentSourceSha256": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+    "cadastreSha256ByCommune": {
+      "21010": "94cd91e1840378554a0cf63751fc189272cbbf9b703c79fb40f2c2fa0e65b8f9",
+      "21480": "d824740a61b9b9c75b8e4be1acfbd4c5c017fb22a313e4d8bc7bcdf4f3c7d010",
+      "21606": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088"
+    },
+    "note": "The measured 4001.252178 m² remainder (0.5564%) was reviewed against the pinned INAO boundary and Aloxe-Corton and Pernand-Vergelesses and Ladoix-Serrigny cadastres. The cru outline has 8 separate parts across Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses and largely shares Corton's edges; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 39 pieces, with mean widths of 0.22–1.22 m for those of at least 1 m². 105.099365 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 4001.252178 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+  }
+}

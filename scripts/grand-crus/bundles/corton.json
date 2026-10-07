@@ -64,6 +64,53 @@
       "sha256": "928f8fde6b2aafb96f702e55daafd04a28771164c3823c2c3e6c0d2761b22f8f"
     }
   },
+  "auditCommunes": {
+    "21173": {
+      "name": "Chorey-lès-Beaune",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21173/cadastre-21173-parcelles.json.gz",
+      "sha256": "27d119c6a57028977566dde3dbd83298de8e58e19be85def807935d47a69d3f6",
+      "size": 157851,
+      "retrievedAt": "2026-10-07T05:08:51.404178Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21195": {
+      "name": "Corgoloin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21195/cadastre-21195-parcelles.json.gz",
+      "sha256": "3040434feba56101f7653c4ca0e8fd2e934af16227438397b2b2076c463bfce1",
+      "size": 313458,
+      "retrievedAt": "2026-10-07T05:09:00.840681Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21240": {
+      "name": "Échevronne",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21240/cadastre-21240-parcelles.json.gz",
+      "sha256": "20324b6896c87c7c6e5cb9918ae4535e2a8cfab594dfbcc95f561446313c36e3",
+      "size": 74091,
+      "retrievedAt": "2026-10-07T05:08:55.076214Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21369": {
+      "name": "Magny-lès-Villers",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21369/cadastre-21369-parcelles.json.gz",
+      "sha256": "4e7cc2d330ad13f747b673ae398c0dfc58c57f297ff2cf338012ed603bc5a5db",
+      "size": 69390,
+      "retrievedAt": "2026-10-07T05:08:58.013216Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21590": {
+      "name": "Savigny-lès-Beaune",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21590/cadastre-21590-parcelles.json.gz",
+      "sha256": "fdbc13c09de3bf08735a5f0ab0757b52d89ad7fe765014659c63187ef2ded747",
+      "size": 331377,
+      "retrievedAt": "2026-10-07T05:08:43.832074Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    }
+  },
   "rightsHistory": {
     "successorInsideShare": 0.95,
     "rights": [

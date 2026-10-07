@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-h87pKFIB.js"
+    "dist/client/assets/index-DIslqSdK.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CeNffdIC.js",
-    "dist/client/assets/SectionLabel-mO0KcQYD.js",
-    "dist/client/assets/SparklingDetailsCard-DdhPiXn1.js",
-    "dist/client/assets/VillageMap-Dch193FF.js",
-    "dist/client/assets/api-DsAsUkQf.js",
-    "dist/client/assets/burgundyAtlas-DYJ_GxoF.js",
-    "dist/client/assets/index-BsS8wcWS.js",
-    "dist/client/assets/index-h87pKFIB.js",
+    "dist/client/assets/FriendTagDialog-7175SnBK.js",
+    "dist/client/assets/SectionLabel-BO1_UT2z.js",
+    "dist/client/assets/SparklingDetailsCard-BupUL0C4.js",
+    "dist/client/assets/VillageMap-YX1O4DpC.js",
+    "dist/client/assets/api-DyPbnZOD.js",
+    "dist/client/assets/burgundyAtlas-B4X_Nw7K.js",
+    "dist/client/assets/index-B7gbn1xT.js",
+    "dist/client/assets/index-DIslqSdK.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CXX8VwqV.js",
-    "dist/client/assets/wineDetailCompact-BFPv1RUe.js"
+    "dist/client/assets/useModalFocus-44jjp5ar.js",
+    "dist/client/assets/wineDetailCompact-zqXnneC1.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 28,
-  "evidenceBytesTotal": 3154884,
-  "evidenceGzipBytesTotal": 323335,
-  "parcelBundleBytesTotal": 1408196,
-  "parcelBundleGzipBytesTotal": 214886,
+  "evidenceChunkCount": 31,
+  "evidenceBytesTotal": 4742273,
+  "evidenceGzipBytesTotal": 407010,
+  "parcelBundleBytesTotal": 2112530,
+  "parcelBundleGzipBytesTotal": 318045,
   "evidenceChunks": [
     {
       "cru": "batard-montrachet",
@@ -68,6 +68,13 @@
       "sha256": "b5a552d03b2f32ef02be31c07bbe0cfc2d49d718dc458ee1bb7187e5255b17d0",
       "bytes": 81573,
       "gzipBytes": 9408
+    },
+    {
+      "cru": "charlemagne",
+      "file": "dist/client/assets/charlemagne.evidence-BsnZ5LO0.js",
+      "sha256": "a92add1afafd5a2eaa6d8b46faf87185cce06926e75e70e83d8d2b26634a6493",
+      "bytes": 373823,
+      "gzipBytes": 21633
     },
     {
       "cru": "charmes-chambertin",
@@ -117,6 +124,20 @@
       "sha256": "beaece0ff2f70db15318a2378239b4d4e25588060bd73440422eb36ac8947590",
       "bytes": 85633,
       "gzipBytes": 10155
+    },
+    {
+      "cru": "corton",
+      "file": "dist/client/assets/corton.evidence-CfRxeEoi.js",
+      "sha256": "118b9bd9e1907f0f405e63f614203b6cbcbe4c7c0a85297627b5accb3757ab03",
+      "bytes": 797801,
+      "gzipBytes": 38400
+    },
+    {
+      "cru": "corton-charlemagne",
+      "file": "dist/client/assets/corton-charlemagne.evidence-BkcMb2Fr.js",
+      "sha256": "353df45b8994c1b9d7a6737116d4c424a4d6c132ed61f7a72e0158d608d514d4",
+      "bytes": 415765,
+      "gzipBytes": 23642
     },
     {
       "cru": "echezeaux",
@@ -231,6 +252,13 @@
       "sha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
       "bytes": 346184,
       "gzipBytes": 54353
+    },
+    {
+      "bundle": "corton",
+      "dataUrl": "/maps/corton-parcels.2026-06-01.d644b286b60b.geojson",
+      "sha256": "d644b286b60b00fe9c8e23e18b4ba3bf4f15b8ddcbbc7ab06eab0c6859f1b036",
+      "bytes": 704334,
+      "gzipBytes": 103159
     },
     {
       "bundle": "flagey-echezeaux",
