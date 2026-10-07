@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-273",
-  "status": "historical-extension-inventory",
-  "scope": "All 89 mapped Bâtard-Montrachet parcels and 28 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 89 mapped Bâtard-Montrachet parcels across both INAO communes independently reviewed for Tier 1 and #461. One page-image-reviewed refusal on an exact current reference. No current farmer verified; producer research remains Tier 2.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,6 +41,24 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "bivb-names",
+      "title": "BIVB Bâtard-Montrachet appellation and commune scope",
+      "url": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE2Jnw%3D",
+      "type": "appellation-reference",
+      "documentDate": null,
+      "access": "read",
+      "finding": "One white Grand Cru in Puligny-Montrachet and Chassagne-Montrachet. Cadastral names are not separate official climats or producer holdings."
+    },
+    {
+      "id": "boillot-refusal-2019",
+      "title": "BFC-2019-02-07-002: S.C. Guillaume BOILLOT refusal, pages 44–48",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/55154/364190/file/recueil-bfc-2019-013-recueil-des-actes-administratifs-special.pdf",
+      "type": "government-decision",
+      "documentDate": "2019-02-07",
+      "access": "read",
+      "finding": "Page 46 Article 1 refuses the application for Puligny-Montrachet AI15, AK16, AM19 and AM11. Page 47 stamps 7 February 2019. Only AI15 is in this cru; no current farming conclusion follows."
     }
   ],
   "holders": [
@@ -326,15 +344,47 @@
     }
   ],
   "historyFindings": [],
-  "exactParcelEvents": [],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "21512000AI0015"
+      ],
+      "sourceId": "boillot-refusal-2019",
+      "kind": "refused-application",
+      "applicant": "S.C. Guillaume BOILLOT",
+      "previousOperator": "GFA Domaine JOMAIN",
+      "documentDate": "2019-02-07",
+      "outcome": "refused",
+      "currentFarmer": null,
+      "summary": "Article 1 refuses the application for Puligny-Montrachet AI15 (0 ha 32 a 23 ca), AK16, AM19 and AM11; total 1 ha 47 a 27 ca across four references. Only AI15 belongs to this cru. The printed section omits prefix 000; it uniquely matches the reachable Puligny reference. GFA Domaine JOMAIN is the previous operator stated at this date, not a verified current farmer.",
+      "appNote": "Application refused for Puligny-Montrachet AI15 (0.3223 ha). The four-parcel total is not assigned to AI15. GFA Domaine JOMAIN is dated context only; current farming unconfirmed."
+    }
+  ],
   "externalResearch": [],
   "parcelFilings": [],
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
+    "Cadastral named areas are reviewed; the whole-cru outline remains because the cru name also names a smaller constituent. No producer holding is inferred.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "boillot-refusal-2019",
+      "bulletin": "bfc-2019-013",
+      "sha256": "8cec43b75540169a15bb88120a5ca44a16afe37ef015bcd2512dbcdb8b11a073",
+      "pages": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Read all six indexed page images rendered by Poppler. Page 44 heading identifies the refusal; page 45 identifies the applicant and previous operator; page 46 Article 1 names 21512 AI15 (0 ha 32 a 23 ca), AK16, AM19 and AM11 and explicitly refuses cultivation; page 47 stamps 7 February 2019; page 48 is blank and page 49 starts an unrelated Haute-Saône act. Only AI15 is assigned within this cru. No authorisation, current farmer or outcome of a later appeal is inferred."
+    }
   ]
 }

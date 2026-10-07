@@ -9,6 +9,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const reviewed=[
  {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
+ {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
 ];
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
 const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};
@@ -80,5 +81,15 @@ describe('Montrachet bundle Tier 1 crus',()=>{
   expect(match.originalRecord.printedDate).toBe('3 décembre 2013');
   expect(match.originalRecord.publicationDate).toBe('2013-01-31');
   expect(history.unreviewedCandidates).toHaveLength(0);
+ });
+ it('preserves the image-reviewed Bâtard refusal without granting authorisation',async()=>{
+  const evidence=await loadParcelEvidence('inao-denom-273');
+  const items=evidence.parcels['21512000AI0015'];
+  expect(items).toEqual(expect.arrayContaining([expect.objectContaining({kind:'notice',label:'Application refused',date:'2019-02-07',title:'S.C. Guillaume BOILLOT'})]));
+  expect(items.some(item=>item.kind==='authorisation')).toBe(false);
+  const register=read('docs/research/batard-montrachet/register.json');
+  expect(register.counts).toMatchObject({historicalApplication:1,historicalAuthorisation:0,currentFarmerConfirmed:0});
+  expect(register.parcels.find((p:{parcelId:string})=>p.parcelId==='21512000AI0015').currentFarmer).toBeNull();
+  expect(read('docs/research/batard-montrachet/notice-history.json').unreviewedCandidates).toHaveLength(0);
  });
 });

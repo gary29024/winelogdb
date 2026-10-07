@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5210595,
-  "evidenceGzipBytesTotal": 434627,
+  "evidenceBytesTotal": 5211358,
+  "evidenceGzipBytesTotal": 434966,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -2481,8 +2481,8 @@
         "2014-01-03",
         "2025-12-17"
       ],
-      "noticeMatches": 1,
-      "unreviewedNoticeCandidates": 1,
+      "noticeMatches": 2,
+      "unreviewedNoticeCandidates": 0,
       "noticeGaps": {
         "21": [
           "Côte-d'Or 2007, 2009, 2012 and 2014: no bulletin obtained (no archived listing and no dated capture)",
@@ -2492,10 +2492,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "a9c8ee1f86fddb23adc7ca4db66eff5d1a36accad64b8e3d8800ae9a558feb70",
-      "evidenceSha256": "2f0140459311311d3f38e1b6e8d688af0d81decf8dba1dcff1b66eb53df0916f",
-      "evidenceBytes": 142464,
-      "evidenceGzipBytes": 12088,
+      "registerSha256": "0e01eb8a256ab547eaa7f68236f8426c1215eff6ba36a97a321e2a83adb138cd",
+      "evidenceSha256": "4b69d75493df2f1e0984d1eecfa7ab4e6336190ae94bb605811eae1f5e010072",
+      "evidenceBytes": 143227,
+      "evidenceGzipBytes": 12427,
       "earliestRawEventSample": {
         "id": "210:150:000:0000313:00001",
         "departmentCode": "210",

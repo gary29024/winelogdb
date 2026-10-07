@@ -1,0 +1,175 @@
+{
+  "slug": "batard-montrachet",
+  "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+  "cadastreSha256ByCommune": {
+    "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+    "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+  },
+  "boundaryAreaM2": 118554.71217928035,
+  "uncoveredM2": 511.849881240141,
+  "sharePercent": 0.431741490347607,
+  "componentCount": 7,
+  "components": [
+    {
+      "areaM2": 181.11867889683782,
+      "boundsEPSG2154": [
+        832321.787,
+        6650982.838222671,
+        832480.974,
+        6651130.108999998
+      ],
+      "rectangleWidthM": 71.96113645367383,
+      "rectangleLengthM": 197.21053849891933,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AI0138",
+        "21512000AI0137",
+        "21512000AI0136",
+        "21512000AI0135",
+        "21512000AI0134",
+        "21512000AI0112",
+        "21512000AI0001",
+        "21512000AI0002",
+        "21512000AI0144",
+        "21512000AI0160",
+        "21512000AI0159"
+      ]
+    },
+    {
+      "areaM2": 119.85027109308946,
+      "boundsEPSG2154": [
+        832101.5590000001,
+        6650531.264377511,
+        832205.7629196197,
+        6650742.855811051
+      ],
+      "rectangleWidthM": 11.298465467687068,
+      "rectangleLengthM": 235.50904377422216,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21150000AE0053",
+        "21150000AE0054",
+        "21150000AE0055",
+        "21150000AE0061",
+        "21150000AE0062",
+        "21150000AE0069",
+        "21150000AE0148",
+        "21150000AE0160",
+        "21150000AE0176",
+        "21150000AE0202",
+        "21150000AE0201",
+        "21150000AE0038",
+        "21150000AE0060",
+        "21150000AE0158",
+        "21150000AE0175",
+        "21150000AE0157",
+        "21150000AE0065",
+        "21150000AE0147",
+        "21150000AE0177",
+        "21150000AE0063"
+      ]
+    },
+    {
+      "areaM2": 118.94627855328342,
+      "boundsEPSG2154": [
+        832219.218,
+        6650779.7643916765,
+        832322.4009152852,
+        6650981.707037459
+      ],
+      "rectangleWidthM": 10.970921712045119,
+      "rectangleLengthM": 226.36455229704808,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AI0015",
+        "21512000AI0007",
+        "21512000AI0146",
+        "21512000AI0120",
+        "21512000AI0121",
+        "21512000AI0145",
+        "21512000AI0144"
+      ]
+    },
+    {
+      "areaM2": 48.896868361450686,
+      "boundsEPSG2154": [
+        832301.0698761682,
+        6650697.9385683825,
+        832439.4647742175,
+        6650763.161647252
+      ],
+      "rectangleWidthM": 0.5734815294229478,
+      "rectangleLengthM": 152.81523324227905,
+      "distanceToInaoBoundaryM": 4.3292066025618026e-11,
+      "adjacentParcels": [
+        "21150000AE0149",
+        "21512000AI0126",
+        "21512000AI0166"
+      ]
+    },
+    {
+      "areaM2": 26.247290723412377,
+      "boundsEPSG2154": [
+        832328.7902644046,
+        6650520.470163954,
+        832350.947,
+        6650532.633455377
+      ],
+      "rectangleWidthM": 2.137110857127717,
+      "rectangleLengthM": 24.77923550764204,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21150000AE0053",
+        "21150000AE0052"
+      ]
+    },
+    {
+      "areaM2": 15.275511114369179,
+      "boundsEPSG2154": [
+        832205.263,
+        6650743.857820141,
+        832219.5439365132,
+        6650778.773279463
+      ],
+      "rectangleWidthM": 1.4136004147245227,
+      "rectangleLengthM": 37.45315872832924,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21150000AE0069",
+        "21150000AE0070",
+        "21150000AE0206",
+        "21150000AE0207",
+        "21512000AI0146"
+      ]
+    },
+    {
+      "areaM2": 1.514982497698023,
+      "boundsEPSG2154": [
+        832273.6843177899,
+        6650745.723111412,
+        832292.2659786454,
+        6650754.093999762
+      ],
+      "rectangleWidthM": 0.14230566787961055,
+      "rectangleLengthM": 20.32920316179115,
+      "distanceToInaoBoundaryM": 0.8642013467843944,
+      "adjacentParcels": [
+        "21150000AE0183",
+        "21150000AE0205",
+        "21150000AE0204",
+        "21150000AE0203",
+        "21512000AI0168",
+        "21512000AI0167",
+        "21512000AI0166"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "importedCommunes": [
+    "21150",
+    "21512"
+  ],
+  "reviewMethod": "Projected original source polygons to EPSG:2154; measured every component and visually inspected the overview plus all seven component views.",
+  "finding": "The 511.849881 m² remainder (0.431741%) was measured against both INAO communes and visually reviewed in an overview and all seven component views. Six components touch the INAO boundary: narrow western and northern edge strips, a 48.896868 m² gap along the commune line and a 26.247291 m² southeastern edge wedge. The seventh is a 1.514982 m² interior strip at the commune line, 0.864 m from the INAO edge, with a 0.143 m enclosing-rectangle width. No missing commune or detached missing parcel was found. The 511.9 m² cap allows less than 0.051 m² above the measured gap and is tied to exact source hashes. No geometry is clipped, buffered, filled or simplified."
+}

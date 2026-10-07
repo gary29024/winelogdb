@@ -2,31 +2,38 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BnpNhYEn.js"
+    "dist/client/assets/index-fkqOzbib.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CNbUyOEl.js",
-    "dist/client/assets/SectionLabel-BmoVCwYP.js",
-    "dist/client/assets/SparklingDetailsCard-CRGK_sf0.js",
-    "dist/client/assets/VillageMap-CMsVg844.js",
-    "dist/client/assets/api-5j9UgGMg.js",
-    "dist/client/assets/burgundyAtlas-JVKcVMYE.js",
-    "dist/client/assets/index-BnpNhYEn.js",
-    "dist/client/assets/index-DxIbcFcH.js",
+    "dist/client/assets/FriendTagDialog-Co1l5e9a.js",
+    "dist/client/assets/SectionLabel-C_OjBdFo.js",
+    "dist/client/assets/SparklingDetailsCard-D8vxIfcC.js",
+    "dist/client/assets/VillageMap-Cs57TZ0k.js",
+    "dist/client/assets/api-BIu6KDKL.js",
+    "dist/client/assets/burgundyAtlas-CjEYwo7W.js",
+    "dist/client/assets/index-1EhG0tbP.js",
+    "dist/client/assets/index-fkqOzbib.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CpYAEAgk.js",
-    "dist/client/assets/wineDetailCompact-BL4Tb2xI.js"
+    "dist/client/assets/useModalFocus-IrzBB3wn.js",
+    "dist/client/assets/wineDetailCompact-D6DfMu0L.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 26,
-  "evidenceBytesTotal": 2915406,
-  "evidenceGzipBytesTotal": 300461,
+  "evidenceChunkCount": 27,
+  "evidenceBytesTotal": 3058760,
+  "evidenceGzipBytesTotal": 313064,
   "parcelBundleBytesTotal": 1408196,
   "parcelBundleGzipBytesTotal": 214886,
   "evidenceChunks": [
+    {
+      "cru": "batard-montrachet",
+      "file": "dist/client/assets/batard-montrachet.evidence-BynlMaZP.js",
+      "sha256": "5308f039a0b8443f519a7893dd6f1ed5ecf942ad0e42a224454f86e33924ba87",
+      "bytes": 143354,
+      "gzipBytes": 12603
+    },
     {
       "cru": "bonnes-mares",
       "file": "dist/client/assets/bonnes-mares.evidence-CqgdD8OG.js",
