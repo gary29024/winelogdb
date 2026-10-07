@@ -1,7 +1,7 @@
 {
   "method": "Exact reviewed cadastral names intersected with the unchanged INAO Charlemagne boundary; metric diagnostics in EPSG:2154.",
   "displayLayer": false,
-  "coverageNote": "The official wine-board list for Charlemagne repeats the eight Corton-Charlemagne climats. Five match cadastral lieux-dits inside the INAO Charlemagne outline, which lies in Aloxe-Corton and Ladoix-Serrigny only; Basses Mourottes and Hautes Mourottes have no land inside it and Les Renardes only touches its edge. The whole-cru outline is retained and no layer is added; producer holdings are not shown.",
+  "coverageNote": "The official wine-board list for Charlemagne repeats the eight Corton-Charlemagne climats. Five match cadastral lieux-dits inside the INAO Charlemagne outline, which lies in Aloxe-Corton and Pernand-Vergelesses only; Basses Mourottes and Hautes Mourottes have no land inside it and Les Renardes only touches its edge. The whole-cru outline is retained and no layer is added; producer holdings are not shown.",
   "sources": [
     {
       "commune": "21010",
@@ -111,12 +111,12 @@
     {
       "name": "Basses Mourottes",
       "sourceCandidate": null,
-      "reason": "The official list names Basses Mourottes, but the cadastral BASSES MOUROTTES lies in Pernand-Vergelesses, outside the INAO Charlemagne outline. No named area is drawn."
+      "reason": "The official list names Basses Mourottes, but the cadastral BASSES MOUROTTES lies in Ladoix-Serrigny, outside the INAO Charlemagne outline. No named area is drawn."
     },
     {
       "name": "Hautes Mourottes",
       "sourceCandidate": null,
-      "reason": "The official list names Hautes Mourottes, but the cadastral HAUTES MOUROTTES lies in Pernand-Vergelesses, outside the INAO Charlemagne outline. No named area is drawn."
+      "reason": "The official list names Hautes Mourottes, but the cadastral HAUTES MOUROTTES lies in Ladoix-Serrigny, outside the INAO Charlemagne outline. No named area is drawn."
     },
     {
       "name": "Les Renardes",

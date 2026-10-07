@@ -4,7 +4,7 @@
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-549",
   "status": "tier-1-reviewed",
-  "scope": "All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images and rejected; no exact notice event is assigned. Producer/company research remains Tier 2. No current farmer is verified.",
+  "scope": "All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images: one is rejected, and the other supports one application event on three current parcels. Producer/company research remains Tier 2. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -70,7 +70,7 @@
       ],
       "reviewMethod": "page-image",
       "access": "read",
-      "finding": "The receipt prints AK159, AK164 and AK36 under Ladoix-Serrigny only (0.6457 ha, previous operator CPEF à Beaune). The index matched same-numbered Pernand-Vergelesses references; none of the Ladoix references is reachable from Corton, so no event is assigned."
+      "finding": "The receipt prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), previous operator CPEF à Beaune; filed and complete 4 November 2021. All three are current Corton parcels in Ladoix-Serrigny (21606). The receipt alone does not authorise cultivation."
     }
   ],
   "holders": [
@@ -1196,7 +1196,24 @@
     }
   ],
   "historyFindings": [],
-  "exactParcelEvents": [],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "21606000AK0036",
+        "21606000AK0159",
+        "21606000AK0164"
+      ],
+      "sourceId": "thibaut-marion-2021",
+      "kind": "historical-application",
+      "applicant": "Thibaut Marion",
+      "previousOperator": "CPEF à Beaune",
+      "documentDate": "2021-11-16",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2021-180: Ladoix-Serrigny AK159, AK164 and AK36, 0.6457 ha; complete 4 November 2021. The receipt is not an authorisation.",
+      "appNote": "Application complete 4 November 2021. Receipt is not an authorisation; outcome and actual operation unconfirmed."
+    }
+  ],
   "externalResearch": [],
   "parcelFilings": [],
   "producerHoldings": [],
@@ -1228,12 +1245,7 @@
         19
       ],
       "reviewMethod": "page-image",
-      "rejectedReferenceHints": {
-        "21606000AK0036": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses.",
-        "21606000AK0159": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses.",
-        "21606000AK0164": "The page prints this number under Ladoix-Serrigny, not Pernand-Vergelesses."
-      },
-      "finding": "The receipt prints AK159, AK164 and AK36 under Ladoix-Serrigny only (0.6457 ha, previous operator CPEF à Beaune). The index matched same-numbered Pernand-Vergelesses references; none of the Ladoix references is reachable from Corton, so no event is assigned."
+      "finding": "The receipt prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), previous operator CPEF à Beaune; filed and complete 4 November 2021. All three are current Corton parcels in Ladoix-Serrigny (21606). The receipt alone does not authorise cultivation."
     }
   ]
 }

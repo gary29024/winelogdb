@@ -44,7 +44,7 @@
       },
       {
         "path": "docs/research/corton/curation.json",
-        "sha256": "1966615d94aeca61471490e0affd44cf3d28bac1646a2da0e120291151d44a74"
+        "sha256": "1951892adff899153e3faa22b207d3e9935a42be2ea82d60c0c51ba9aa5078d4"
       }
     ]
   },
@@ -950,7 +950,7 @@
     "21606000AS0504",
     "21606000AS0505"
   ],
-  "reviewedMatches": 0,
+  "reviewedMatches": 3,
   "unreviewedSearchCandidates": 0,
   "previouslyImageReviewedSearchMatches": [
     "bfc-2021-146:p36",
@@ -3829,7 +3829,7 @@
       "mentionsCruCommune": false
     }
   ],
-  "finding": "Both notice-index candidates were read from their page images and rejected. bfc-2021-146:p36 (page 37) prints A139 under Chambolle-Musigny, not Aloxe-Corton. bfc-2022-044:p18 (page 19), the Thibaut Marion receipt for dossier 2021-180, prints AK159, AK164 and AK36 under Ladoix-Serrigny only; the index matched the same numbers in Pernand-Vergelesses, and none of the Ladoix references is reachable from Corton. The curation records each rejected reference with its reason. The raw OCR sweep's other hits naming a bundle commune, bfc-2020-072:p58 (Michel Gayot et Fils, dossier 2019-173, page 59: Pernand-Vergelesses A1 to I1) and bfc-2022-059:p48 (EARL de Chenove, dossier 2021-179, page 49: Pernand-Vergelesses C and AC references, Savigny-les-Beaune D references), were read from their page images; none of their references is reachable from this cru. All other raw hits never name a bundle commune and are recorded but not assigned. No exact Corton notice event is supported.",
+  "finding": "Both notice-index candidates were read from their page images. bfc-2021-146:p36 (page 37) prints A139 under Chambolle-Musigny, not Aloxe-Corton, and is recorded as rejected. bfc-2022-044:p18 (page 19), the Thibaut Marion receipt for dossier 2021-180, prints Ladoix-Serrigny AK159, AK164 and AK36, all current Corton parcels; the curation records one historical-application event on them. The receipt does not authorise cultivation, and no outcome or operation is established. The raw OCR sweep's other hits naming a bundle commune, bfc-2020-072:p58 (Michel Gayot et Fils, dossier 2019-173, page 59: Pernand-Vergelesses A1 to I1) and bfc-2022-059:p48 (EARL de Chenove, dossier 2021-179, page 49: Pernand-Vergelesses C and AC references, Savigny-les-Beaune D references), were read from their page images; none of their references is reachable from this cru. All other raw hits never name a bundle commune and are recorded but not assigned.",
   "unassignedReviewedReferences": [
     {
       "originalRecord": {
