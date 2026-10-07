@@ -1,0 +1,293 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Corton boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The official wine-board list names 25 Corton climats, and all match cadastral lieux-dits in Aloxe-Corton, Ladoix-Serrigny or Pernand-Vergelesses. The village maps already show Corton's climats as official INAO denominations, so this cadastral audit adds no second layer and the official outlines are retained; producer holdings are not shown.",
+  "sources": [
+    {
+      "commune": "21010",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21010/cadastre-21010-lieux_dits.json.gz",
+      "sha256": "430df5a8e3cc1c7698cdad9a678101c8a7bc6d73a22077cc3a2aade73779af43",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21480",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21480/cadastre-21480-lieux_dits.json.gz",
+      "sha256": "033b0b85f20dadaff67843c78d3d43ba83de01c8ae6167b245bbdc9d06c70e0f",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    },
+    {
+      "commune": "21606",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-lieux_dits.json.gz",
+      "sha256": "928f8fde6b2aafb96f702e55daafd04a28771164c3823c2c3e6c0d2761b22f8f",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/corton,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjkyJnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21010/cadastre-21010-communes.json.gz",
+      "sha256": "d26470c5169170fa50b56e06e6d44c642ea677e65a265b1d68709d7217e63dd6"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21480/cadastre-21480-communes.json.gz",
+      "sha256": "1d93b314b9c8bf4dc34a586773614e47b5c4d65552d60bad0650589e032d8693"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21606/cadastre-21606-communes.json.gz",
+      "sha256": "11ae7d378d9bab8317071d5ea78b4d7b029ac0ef44e2fc80ee680e001fd5ed19"
+    }
+  ],
+  "parentHa": 160.55195650790318,
+  "mappedHa": 159.06733755943378,
+  "unmappedHa": 1.4846190028688429,
+  "plots": [
+    {
+      "id": "corton-plot-basses-mourottes",
+      "sourceHa": 2.006438501450955,
+      "clippedHa": 0.9404782919744025,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-en-charlemagne",
+      "sourceHa": 19.905116569174336,
+      "clippedHa": 17.430515366520762,
+      "parts": 5,
+      "holes": 2
+    },
+    {
+      "id": "corton-plot-hautes-mourottes",
+      "sourceHa": 5.03267497465638,
+      "clippedHa": 1.9451875004373895,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-la-vigne-au-saint",
+      "sourceHa": 2.498966967215529,
+      "clippedHa": 2.4514589456151934,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-le-charlemagne",
+      "sourceHa": 17.282904022102993,
+      "clippedHa": 16.91922703300107,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-le-clos-du-roi",
+      "sourceHa": 11.20682104948549,
+      "clippedHa": 10.885605449507162,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-le-corton",
+      "sourceHa": 12.282583124314892,
+      "clippedHa": 11.771571039510148,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-le-meix-lallemand",
+      "sourceHa": 0.6796794853188688,
+      "clippedHa": 0.5596863671208377,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-le-rognet-et-corton",
+      "sourceHa": 12.758015705852815,
+      "clippedHa": 11.778351175948163,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-bressandes",
+      "sourceHa": 17.67811480360767,
+      "clippedHa": 17.142992745010904,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-chaumes",
+      "sourceHa": 2.9613858064500738,
+      "clippedHa": 2.786867038760299,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-chaumes-et-la-voierosse",
+      "sourceHa": 4.160846069692374,
+      "clippedHa": 3.8967190944218477,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-combes",
+      "sourceHa": 2.3906101883996125,
+      "clippedHa": 1.156129987524417,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-fietres",
+      "sourceHa": 1.1372336368784055,
+      "clippedHa": 1.0989967129103952,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-grandes-lolieres",
+      "sourceHa": 3.2609928332167826,
+      "clippedHa": 3.02422514824788,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-greves",
+      "sourceHa": 2.44609345707447,
+      "clippedHa": 2.3317666194918845,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-languettes",
+      "sourceHa": 7.620558293377522,
+      "clippedHa": 7.291825478608836,
+      "parts": 3,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-marechaudes",
+      "sourceHa": 6.758267842857858,
+      "clippedHa": 4.399426925190209,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-meix",
+      "sourceHa": 4.457182081589389,
+      "clippedHa": 2.1632102966910143,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-moutottes",
+      "sourceHa": 2.0021064536537185,
+      "clippedHa": 0.8234566769096675,
+      "parts": 2,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-paulands",
+      "sourceHa": 5.023591751345709,
+      "clippedHa": 1.0519530260788592,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-perrieres",
+      "sourceHa": 10.098951301115829,
+      "clippedHa": 9.66421141141883,
+      "parts": 6,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-pougets",
+      "sourceHa": 10.050933869020088,
+      "clippedHa": 9.839658987083771,
+      "parts": 4,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-renardes",
+      "sourceHa": 14.561857494211177,
+      "clippedHa": 14.303722103207896,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "corton-plot-les-vergennes",
+      "sourceHa": 3.646509686127583,
+      "clippedHa": 3.4184443638707394,
+      "parts": 2,
+      "holes": 0,
+      "sourceFeatures": 2
+    }
+  ],
+  "overlaps": [
+    {
+      "plots": [
+        "corton-plot-en-charlemagne",
+        "corton-plot-le-charlemagne"
+      ],
+      "areaM2": 83.36512751948382
+    },
+    {
+      "plots": [
+        "corton-plot-le-rognet-et-corton",
+        "corton-plot-les-renardes"
+      ],
+      "areaM2": 0.1370225191675467
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "La Toppe au Vert",
+      "sourceCandidate": "LA TOPPE AU VERT",
+      "reason": "INAO maps Corton La Toppe au Vert as a Corton denomination (inao-denom-2351), but the wine-board climat list used for this audit omits it. Parcel AS0022 lies 25% inside Corton in this cadastral lieu-dit. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+    },
+    {
+      "name": "Corton",
+      "sourceCandidate": "LE VILLAGE",
+      "reason": "Parcel I0038 lies 53% inside Corton but in the cadastral lieu-dit LE VILLAGE, which is not an official Corton climat; the other LE VILLAGE parcels only touch the edge. No crosswalk is made; the parcels keep the whole-cru outline."
+    },
+    {
+      "name": "Les Carrières",
+      "sourceCandidate": "LES CARRIERES",
+      "reason": "INAO maps Corton Les Carrières as a Corton denomination (inao-denom-2358), but the wine-board climat list used for this audit omits it. Several parcels lie almost wholly inside Corton in this cadastral lieu-dit. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+    }
+  ],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "BOIS DE CORTON",
+      "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "BOIS DE NAGET",
+      "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "EN CHAGNIARDS",
+      "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    },
+    {
+      "sourceName": "LES PETITES LOLIERES",
+      "reason": "Not an official Corton climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    }
+  ]
+}
