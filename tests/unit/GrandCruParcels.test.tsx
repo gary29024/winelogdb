@@ -46,7 +46,7 @@ describe('Cadastral parcel controls',()=>{
   if(all)fireEvent.click(all);
   expect(within(holders).getAllByRole('button')).toHaveLength(10);
   const parcel=screen.getByLabelText('Cadastral parcel');
-  expect((parcel as HTMLSelectElement).options).toHaveLength(59);
+  expect((parcel as unknown as HTMLSelectElement).options).toHaveLength(59);
   fireEvent.change(parcel,{target:{value:'21714000AN0292'}});
   expect(screen.getByText('No matched rights record')).toBeTruthy();
   const panel=await screen.findByRole('region',{name:'History and evidence'});

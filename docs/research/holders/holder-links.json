@@ -4432,7 +4432,7 @@
         33
       ],
       "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images.",
-      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and Marcelle Bize-Leroy as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.",
+      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and an individual as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.",
       "screenedPages": 43
     },
     {
@@ -4734,7 +4734,7 @@
     },
     {
       "id": "ric-af-gros-formation-2020",
-      "title": "885114322: af gros formation 2020",
+      "title": "GFA Héritiers AF-Gros: 1 July 2020 founding contribution and lease recital",
       "url": "https://actes.ccm2.net/acte/de0997df-6924-4dcb-b213-a7a17418aa28#page=2",
       "type": "company-filing",
       "documentDate": "2020-07-01",
@@ -4874,7 +4874,7 @@
     },
     {
       "id": "ric-leroy-representative-2006",
-      "title": "427469135: leroy representative 2006",
+      "title": "Leroy SA: 15 September 2006 representative appointment for SCI and SCE",
       "url": "https://actes.ccm2.net/acte/49ab5756-3546-4877-bc89-56c14ff55243#page=1",
       "type": "company-filing",
       "documentDate": "2006-09-15",

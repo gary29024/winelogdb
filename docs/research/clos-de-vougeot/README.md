@@ -34,7 +34,7 @@ sale or cadastral predecessor never establishes actual farming.
 | Published holdings compared by named area | 8 statements in Clos de Vougeot; 0.82 ha published beyond linked company records |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered: official DFI ancestry from 20 April 1989, all 35 geometry vintages (2017–2026) and 2019–2025 rights; notice archive gaps remain explicit |
-| Raw / gzip payload (parcels, evidence) | Parcels: 146,858 / 23,637 bytes. Evidence: 300,002 / 31,707 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 146,858 / 23,637 bytes. Evidence: 300,036 / 31,723 bytes |
 
 A lead is a named candidate in the [register](register.md): a holder lead from
 reviewed research, a parcel named in an official notice or independent research, or a

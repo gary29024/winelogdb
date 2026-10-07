@@ -374,6 +374,8 @@ class RichebourgTests(unittest.TestCase):
                 self.assertEqual(row['candidateLeads'], [])
         self.assertEqual(len(self.curation['producerHoldings']), 11)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        af_holding = next(h for h in self.curation['producerHoldings'] if h['id'] == 'ric-af-gros')
+        self.assertEqual(af_holding['ownerHolderIds'], [])  # The GFA's 0.1281 ha is not the whole published 0.60 ha.
         self.assertEqual(sum(not p['recordedRights'] for p in self.register['parcels']), 32)
 
     def test_every_screened_filing_has_provenance_and_all_page_screening(self):

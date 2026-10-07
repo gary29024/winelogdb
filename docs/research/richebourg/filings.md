@@ -43,7 +43,7 @@ These are counts for the Richebourg pass, including files re-screened after earl
 
 ### ric-bichot-2022
 
-[036380046: bichot 2022](https://actes.ccm2.net/acte/22570176#page=1) — 8 PDF pages, all screened. Deed/decision **2022-06-28**; deposit **2022-07-27**. Relevant pages: 1, 3.
+[Bichot SA: 28 June 2022 governance and statutes](https://actes.ccm2.net/acte/22570176#page=1) — 8 PDF pages, all screened. Deed/decision **2022-06-28**; deposit **2022-07-27**. Relevant pages: 1, 3.
 
 Governance and updated statutes; no exact Richebourg reference or parcel lease found.
 
@@ -51,7 +51,7 @@ SHA-256: `383884876ab39260e10efec4bdbabf49263c6a99e043c2dc5dbda474f015b7c3`. Ret
 
 ### ric-bichot-2014
 
-[036380046: bichot 2014](https://actes.ccm2.net/acte/22570320#page=1) — 14 PDF pages, all screened. Deed/decision **2014-08-28**; deposit **2014-11-07**. Relevant pages: 1, 3, 5, 9.
+[Bichot SA: 28 August 2014 location-gérance termination](https://actes.ccm2.net/acte/22570320#page=1) — 14 PDF pages, all screened. Deed/decision **2014-08-28**; deposit **2014-11-07**. Relevant pages: 1, 3, 5, 9.
 
 Termination of a location-gérance arrangement; no AN53 schedule or Richebourg parcel tenant identified.
 
@@ -59,7 +59,7 @@ SHA-256: `6ce243a2e112960de49860dd14b4720e74642cc7238fb1d066473ac31199098d`. Ret
 
 ### ric-bichot-2007
 
-[036380046: bichot 2007](https://actes.ccm2.net/acte/22570244#page=1) — 58 PDF pages, all screened. Deed/decision **2007-03-15**; deposit **2007-06-19**. Relevant pages: 1, 20.
+[Bichot SA: 15 March 2007 merger project](https://actes.ccm2.net/acte/22570244#page=1) — 58 PDF pages, all screened. Deed/decision **2007-03-15**; deposit **2007-06-19**. Relevant pages: 1, 20.
 
 Merger project includes leases elsewhere; no exact Richebourg parcel reference or tenant found.
 
@@ -67,7 +67,7 @@ SHA-256: `7fd51fdfc87736c5e24d0ab5721d1c4c80a7f3f051fc117cdec3fe837682d154`. Ret
 
 ### ric-bichot-1995
 
-[036380046: bichot 1995](https://actes.ccm2.net/acte/22570272#page=1) — 18 PDF pages, all screened. Deed/decision **1995-06-29**; deposit **1995-11-09**. Relevant pages: 1, 3.
+[Bichot SA: 29 June 1995 governance and statutes](https://actes.ccm2.net/acte/22570272#page=1) — 18 PDF pages, all screened. Deed/decision **1995-06-29**; deposit **1995-11-09**. Relevant pages: 1, 3.
 
 Governance and statutes; no exact Richebourg reference or parcel lease found.
 
@@ -75,7 +75,7 @@ SHA-256: `e5539f087b107c2c9e29f953398db38f7512ec0edc8d770e3314fba601fc336f`. Ret
 
 ### ric-grivot-2025
 
-[318506367: grivot 2025](https://actes.ccm2.net/acte/260b4e13-ce3d-4c08-9909-19fec99a7cb9#page=1) — 22 PDF pages, all screened. Deed/decision **2025-01-29**; deposit **2025-02-04**. Relevant pages: 1, 2, 3.
+[GFA Jean Grivot: statutes updated 29 January 2025](https://actes.ccm2.net/acte/260b4e13-ce3d-4c08-9909-19fec99a7cb9#page=1) — 22 PDF pages, all screened. Deed/decision **2025-01-29**; deposit **2025-02-04**. Relevant pages: 1, 2, 3.
 
 GFA statutes reproduce cash formation and require long-term leasing, without AN247 or a named tenant.
 
@@ -83,7 +83,7 @@ SHA-256: `4f138095acdd3e6fa1315cc20e4def2305a5d0657a8a1861a33c3b6a4594e6c4`. Ret
 
 ### ric-grivot-2011
 
-[318506367: grivot 2011](https://actes.ccm2.net/acte/2781e896-2b03-40df-8b89-cfa70326ea5f#page=2) — 11 PDF pages, all screened. Deed/decision **2011-03-12**; deposit **2012-03-26**. Relevant pages: 2, 3.
+[Jean Grivot: 12 March 2011 share donation](https://actes.ccm2.net/acte/2781e896-2b03-40df-8b89-cfa70326ea5f#page=2) — 11 PDF pages, all screened. Deed/decision **2011-03-12**; deposit **2012-03-26**. Relevant pages: 2, 3.
 
 Donation of company shares; no AN247 schedule or named parcel tenant found.
 
@@ -91,7 +91,7 @@ SHA-256: `2847c2bb31a272721d84dc0f14b561eac4866c27a5b2ae0188e76b567a46ead4`. Ret
 
 ### ric-grivot-transformation-2024
 
-[318506367: grivot transformation 2024](https://actes.ccm2.net/acte/2df01b5f-26a1-4a45-a3e5-5e3d6522a64e#page=1) — 5 PDF pages, all screened. Deed/decision **2024-01-31**; deposit **not established**. Relevant pages: 1, 4.
+[Jean Grivot: 31 January 2024 GFA transformation](https://actes.ccm2.net/acte/2df01b5f-26a1-4a45-a3e5-5e3d6522a64e#page=1) — 5 PDF pages, all screened. Deed/decision **2024-01-31**; deposit **not established**. Relevant pages: 1, 4.
 
 Transformation into a GFA; long-term leasing is a statutory requirement, not an executed lease. Deposit date is not printed in the index.
 
@@ -99,7 +99,7 @@ SHA-256: `703f1b3f320cf9d1bfa600bf7d737e03b1c6aa08b8647ff3a9b01ddb3481e505`. Ret
 
 ### ric-grivot-statutes-2024
 
-[318506367: grivot statutes 2024](https://actes.ccm2.net/acte/515d7f4c-32c3-49bd-84ad-b5e1119571c6#page=1) — 23 PDF pages, all screened. Deed/decision **2024-01-31**; deposit **not established**. Relevant pages: 1, 2, 3.
+[GFA Jean Grivot: 31 January 2024 statutes](https://actes.ccm2.net/acte/515d7f4c-32c3-49bd-84ad-b5e1119571c6#page=1) — 23 PDF pages, all screened. Deed/decision **2024-01-31**; deposit **not established**. Relevant pages: 1, 2, 3.
 
 GFA statutes; no AN247 schedule or named tenant. Deposit date is not printed in the index.
 
@@ -107,7 +107,7 @@ SHA-256: `21b5218027270849505b3878535f15f194d9cd7a7385b1f91a1950738f27ac17`. Ret
 
 ### ric-meo-transformation-2017
 
-[320926439: meo transformation 2017](https://actes.ccm2.net/acte/4a5bf72b-2d2e-4580-9a88-2a333b582f7e#page=2) — 123 PDF pages, all screened. Deed/decision **2017-07-21**; deposit **2017-10-30**. Relevant pages: 2, 85.
+[Domaine Méo Camuzet: 21 July 2017 transformation and asset list](https://actes.ccm2.net/acte/4a5bf72b-2d2e-4580-9a88-2a333b582f7e#page=2) — 123 PDF pages, all screened. Deed/decision **2017-07-21**; deposit **2017-10-30**. Relevant pages: 2, 85.
 
 Transformation into an agricultural civil company. The asset list names usufructs of AN54 and AN59 but supplies no cadastral areas, so it is holder-level context only.
 
@@ -123,7 +123,7 @@ SHA-256: `883626d125b98f4a2252ab4a84706bed562304697fb8c753aeb94a72af212ab5`. Ret
 
 ### ric-meo-statutes-2012
 
-[320926439: meo statutes 2012](https://actes.ccm2.net/acte/2d95e7e6-8831-4a7e-880c-4d1e9aa25f20#page=2) — 28 PDF pages, all screened. Deed/decision **2012-12-20**; deposit **2013-01-28**. Relevant pages: 2, 6, 15.
+[GFA du Domaine Méo Camuzet: 20 December 2012 statutes](https://actes.ccm2.net/acte/2d95e7e6-8831-4a7e-880c-4d1e9aa25f20#page=2) — 28 PDF pages, all screened. Deed/decision **2012-12-20**; deposit **2013-01-28**. Relevant pages: 2, 6, 15.
 
 Updated statutes repeat AN54 (3,061 m²), AN59 (462 m²), and the historical nine-year métayage from 11 November 1961; no current farming season established.
 
@@ -131,7 +131,7 @@ SHA-256: `7be91196efe0d1fb9fdf0954301524536369cf3b559d68b7efd1893137ddbf53`. Ret
 
 ### ric-meo-donation-1997
 
-[320926439: meo donation 1997](https://actes.ccm2.net/acte/a00e2e27-6266-4c25-ae4b-c0c1de30d6cc#page=1) — 73 PDF pages, all screened. Deed/decision **1997-04-12**; deposit **1997-09-02**. Relevant pages: 1, 35, 51.
+[GFA du Domaine Méo Camuzet: 12 April 1997 share donation and annexes](https://actes.ccm2.net/acte/a00e2e27-6266-4c25-ae4b-c0c1de30d6cc#page=1) — 73 PDF pages, all screened. Deed/decision **1997-04-12**; deposit **1997-09-02**. Relevant pages: 1, 35, 51.
 
 Donation and annexed statutes repeat AN54 (3,061 m²), AN59 (462 m²), and the historical 1961 métayage. This predates creation of SAS Méo-Camuzet Frère et Sœurs.
 
@@ -139,7 +139,7 @@ SHA-256: `de531fac7d37eadaf2f76fb2e5efa3905504a3fd0c5f8a5cbaf01d42c1bfd955`. Ret
 
 ### ric-anne-gros-2022
 
-[348024928: anne gros 2022](https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271#page=1) — 30 PDF pages, all screened. Deed/decision **2022-02-28**; deposit **2022-04-05**. Relevant pages: 1, 3.
+[Anne Gros: 28 February 2022 transformation into a SAS](https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271#page=1) — 30 PDF pages, all screened. Deed/decision **2022-02-28**; deposit **2022-04-05**. Relevant pages: 1, 3.
 
 Transformation into a SAS; no additional Richebourg schedule or lease found.
 
@@ -147,7 +147,7 @@ SHA-256: `b39bebb6f970a0c891f9ba47c3745b421b2b76fa270216cdd4dcf65fc4aeb9e5`. Ret
 
 ### ric-anne-gros-contribution-2019
 
-[348024928: anne gros contribution 2019](https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38#page=3) — 40 PDF pages, all screened. Deed/decision **2019-11-27**; deposit **2019-12-04**. Relevant pages: 3, 9, 10, 11, 13, 14.
+[Anne Gros: 27 November 2019 contribution of bare and full ownership](https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38#page=3) — 40 PDF pages, all screened. Deed/decision **2019-11-27**; deposit **2019-12-04**. Relevant pages: 3, 9, 10, 11, 13, 14.
 
 Contribution of bare ownership of AN174 (4,384 m²) and AN236 (1,066 m²), and full ownership of AN180 (338 m²) and AN238 (214 m²). Recites 2013 leases to SARL Anne Gros; ownership and tenancy consolidate for AN180/238 at contribution.
 
@@ -155,7 +155,7 @@ SHA-256: `b8dc58de10557da901b6c746d698d887f3c19de7d7c7d9a42406b2af7a2757dd`. Ret
 
 ### ric-anne-gros-2014
 
-[348024928: anne gros 2014](https://actes.ccm2.net/acte/7e3f47c5-5290-40c6-82dc-67f4db6b7740#page=1) — 13 PDF pages, all screened. Deed/decision **2014-01-31**; deposit **2014-06-06**. Relevant pages: 1, 3.
+[Anne Gros: 31 January 2014 capital increase](https://actes.ccm2.net/acte/7e3f47c5-5290-40c6-82dc-67f4db6b7740#page=1) — 13 PDF pages, all screened. Deed/decision **2014-01-31**; deposit **2014-06-06**. Relevant pages: 1, 3.
 
 Capital increase from reserves; no exact Richebourg schedule or parcel lease found.
 
@@ -163,7 +163,7 @@ SHA-256: `b563de722d7563f0b8311c5c5403eeb07ee2981e820f93d284dbd7e971c63c38`. Ret
 
 ### ric-anne-gros-1996
 
-[348024928: anne gros 1996](https://actes.ccm2.net/acte/7d38b907-63f5-4748-8db8-cd5c930ec693#page=1) — 28 PDF pages, all screened. Deed/decision **1996-08-28**; deposit **1996-10-30**. Relevant pages: 1, 2.
+[Anne Gros: 28 August 1996 name change and statutes](https://actes.ccm2.net/acte/7d38b907-63f5-4748-8db8-cd5c930ec693#page=1) — 28 PDF pages, all screened. Deed/decision **1996-08-28**; deposit **1996-10-30**. Relevant pages: 1, 2.
 
 Renames SCE Domaine Anne et François Gros as Anne Gros; no exact Richebourg schedule or parcel lease found.
 
@@ -171,7 +171,7 @@ SHA-256: `f9e292433071b4bab4c004ca58a9ede691e5d237dca7f4fb7c311d98fb06aa3b`. Ret
 
 ### ric-hudelot-2025
 
-[438871279: hudelot 2025](https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09#page=1) — 23 PDF pages, all screened. Deed/decision **2025-03-31**; deposit **2025-05-05**. Relevant pages: 1, 3.
+[GFV Hudelot-Noëllat: statutes updated 31 March 2025](https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09#page=1) — 23 PDF pages, all screened. Deed/decision **2025-03-31**; deposit **2025-05-05**. Relevant pages: 1, 3.
 
 Updated statutes reproduce the original contribution of AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²). They do not print the current AN290/291 successors.
 
@@ -179,7 +179,7 @@ SHA-256: `8b4666d6ace8f594a7ccd8a290f6e3b6747049ea27d036cd6861a75f5230918f`. Ret
 
 ### ric-hudelot-2021-contribution
 
-[438871279: hudelot 2021 contribution](https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21#page=2) — 55 PDF pages, all screened. Deed/decision **2021-11-12**; deposit **2021-12-21**. Relevant pages: 2, 10, 36.
+[GFV Hudelot-Noëllat: 12 November 2021 contribution and statutes](https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21#page=2) — 55 PDF pages, all screened. Deed/decision **2021-11-12**; deposit **2021-12-21**. Relevant pages: 2, 10, 36.
 
 Contribution deed and annexed statutes repeat AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²); no exact Richebourg tenant identified.
 
@@ -187,7 +187,7 @@ SHA-256: `53fefeb7d83edf5c8fb62644030a8ddbc3641b473f3e8d026b74159bbd71fef4`. Ret
 
 ### ric-hudelot-2021-donation
 
-[438871279: hudelot 2021 donation](https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9#page=3) — 45 PDF pages, all screened. Deed/decision **2021-03-19**; deposit **2021-04-20**. Relevant pages: 3, 5, 27.
+[GFV Hudelot-Noëllat: 19 March 2021 share donation and statutes](https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9#page=3) — 45 PDF pages, all screened. Deed/decision **2021-03-19**; deposit **2021-04-20**. Relevant pages: 3, 5, 27.
 
 Share donation and statutes repeat the historical AN64/65/66 contribution; no current AN290/291 schedule or exact Richebourg tenant identified.
 
@@ -195,7 +195,7 @@ SHA-256: `b8a6bb6689343fb0df298032fc1397be027c52a2e1f0521ab36840f04b65cf81`. Ret
 
 ### ric-hudelot-2012
 
-[438871279: hudelot 2012](https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f#page=3) — 44 PDF pages, all screened. Deed/decision **2012-06-11**; deposit **2015-03-27**. Relevant pages: 3, 7, 11, 27.
+[GFV Hudelot-Noëllat: 11 June 2012 share donation and statutes](https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f#page=3) — 44 PDF pages, all screened. Deed/decision **2012-06-11**; deposit **2015-03-27**. Relevant pages: 3, 7, 11, 27.
 
 Share donation and statutes reproduce AN64/65/66. Historical leases elsewhere and general leasing clauses do not identify a Richebourg parcel tenant.
 
@@ -203,7 +203,7 @@ SHA-256: `f8d737a37918afa1625ac51bf6884cd98ffdc55bb4a645d71a8ff4b616331307`. Ret
 
 ### ric-hudelot-formation-2001
 
-[438871279: hudelot formation 2001](https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014#page=2) — 21 PDF pages, all screened. Deed/decision **2001-06-28**; deposit **2001-08-09**. Relevant pages: 2, 3, 4.
+[GFV Hudelot-Noëllat: 28 June 2001 founding contribution](https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014#page=2) — 21 PDF pages, all screened. Deed/decision **2001-06-28**; deposit **2001-08-09**. Relevant pages: 2, 3, 4.
 
 Founding contribution prints AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²). Article 2 requires long-term letting, without a named executed Richebourg lease.
 
@@ -211,7 +211,7 @@ SHA-256: `ab55eeb5b1b4d790260f0e9b91913834c647e872a1c846e6e1e0750dd3f265b1`. Ret
 
 ### ric-meo-sas-2022
 
-[448502708: meo sas 2022](https://actes.ccm2.net/acte/0b44fdea-e60a-4e7d-895b-686d08f666a2#page=1) — 15 PDF pages, all screened. Deed/decision **2022-11-15**; deposit **2023-04-03**. Relevant pages: 1, 2.
+[Méo-Camuzet Frère et Sœurs: 15 November 2022 capital reduction](https://actes.ccm2.net/acte/0b44fdea-e60a-4e7d-895b-686d08f666a2#page=1) — 15 PDF pages, all screened. Deed/decision **2022-11-15**; deposit **2023-04-03**. Relevant pages: 1, 2.
 
 Capital reduction and statutes; no exact Richebourg schedule or parcel tenant found.
 
@@ -219,7 +219,7 @@ SHA-256: `2e9676fcd9ffd443e00ec4a347d6de595c78b9dc87f2e9aa039dbeac1886f0e7`. Ret
 
 ### ric-meo-sas-2017
 
-[448502708: meo sas 2017](https://actes.ccm2.net/acte/5fc776e7-7f47-4192-9b3b-abd6089933ca#page=2) — 20 PDF pages, all screened. Deed/decision **2017-08-25**; deposit **2017-12-07**. Relevant pages: 2, 3.
+[Méo-Camuzet Frère et Sœurs: 25 August 2017 share contribution](https://actes.ccm2.net/acte/5fc776e7-7f47-4192-9b3b-abd6089933ca#page=2) — 20 PDF pages, all screened. Deed/decision **2017-08-25**; deposit **2017-12-07**. Relevant pages: 2, 3.
 
 Contribution of shares in Domaine Méo Camuzet; corporate relationship only, without an exact Richebourg land schedule or parcel tenant.
 
@@ -227,7 +227,7 @@ SHA-256: `6cb465e8fa5909a54533a11f6eb28fcfd634e5b8e6bdbef0139ee9c73740ba34`. Ret
 
 ### ric-meo-sas-2012
 
-[448502708: meo sas 2012](https://actes.ccm2.net/acte/3df01297-7f22-4814-8ec2-3e1c2b20ee6e#page=2) — 18 PDF pages, all screened. Deed/decision **2012-12-20**; deposit **2013-01-31**. Relevant pages: 2, 3.
+[Méo-Camuzet Frère et Sœurs: 20 December 2012 decisions](https://actes.ccm2.net/acte/3df01297-7f22-4814-8ec2-3e1c2b20ee6e#page=2) — 18 PDF pages, all screened. Deed/decision **2012-12-20**; deposit **2013-01-31**. Relevant pages: 2, 3.
 
 Decision refers generally to acquisition of vines and removes a distribution requirement; no exact Richebourg reference or area.
 
@@ -235,7 +235,7 @@ SHA-256: `1ced3e65aa7b62332967f10f70f0e22bdd664747c6b4ed594ce7669fceb75b12`. Ret
 
 ### ric-meo-sas-formation-2003
 
-[448502708: meo sas formation 2003](https://actes.ccm2.net/acte/8a1e3870-0fa4-4778-bce6-ceacd0da2a42#page=1) — 20 PDF pages, all screened. Deed/decision **2003-04-15**; deposit **2003-05-15**. Relevant pages: 1, 2, 3.
+[Méo-Camuzet Frère et Sœurs: 15 April 2003 formation](https://actes.ccm2.net/acte/8a1e3870-0fa4-4778-bce6-ceacd0da2a42#page=1) — 20 PDF pages, all screened. Deed/decision **2003-04-15**; deposit **2003-05-15**. Relevant pages: 1, 2, 3.
 
 Cash formation and subscribed capital; no exact Richebourg schedule or parcel tenant found.
 
@@ -243,7 +243,7 @@ SHA-256: `19cd39ba434a9ce456b74661347260a2ee0fa48fd14cbeb2ea9881d8e58c4af7`. Ret
 
 ### ric-drc-2024
 
-[778269407: drc 2024](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 41, 42, 44, 46, 103.
+[DRC: 14 November 2024 management declaration and bundled share deeds](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 41, 42, 44, 46, 103.
 
 Management declaration concerning share transfers and statutes updated 27 July 2024; Richebourg labels and company history are not an exact parcel schedule.
 
@@ -251,7 +251,7 @@ SHA-256: `f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc`. Ret
 
 ### ric-drc-2022
 
-[778269407: drc 2022](https://actes.ccm2.net/acte/5409233#page=2) — 65 PDF pages, all screened. Deed/decision **2022-03-21**; deposit **2022-04-15**. Relevant pages: 2, 31, 32.
+[DRC: 21 March 2022 share donation and statutes](https://actes.ccm2.net/acte/5409233#page=2) — 65 PDF pages, all screened. Deed/decision **2022-03-21**; deposit **2022-04-15**. Relevant pages: 2, 31, 32.
 
 Share donation and statutes reproduce Richebourg label wording, without an exact current cadastral schedule.
 
@@ -259,7 +259,7 @@ SHA-256: `5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708`. Ret
 
 ### ric-drc-statutes-1974
 
-[778269407: drc statutes 1974](https://actes.ccm2.net/acte/5409256#page=1) — 125 PDF pages, all screened. Deed/decision **1974-12-21**; deposit **2002-07-31**. Relevant pages: 1, 36, 38, 39, 74.
+[DRC: 21 December 1974 notarial statutes and estate schedule (filed 2002)](https://actes.ccm2.net/acte/5409256#page=1) — 125 PDF pages, all screened. Deed/decision **1974-12-21**; deposit **2002-07-31**. Relevant pages: 1, 36, 38, 39, 74.
 
 The 21 December 1974 notarial statutes list the then estate, including AN56, AN60, AN68, AN69, AN71, AN169, AN171 and AN173 with individual areas matching today. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.
 
@@ -267,7 +267,7 @@ SHA-256: `f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68`. Ret
 
 ### ric-mongeard-2022
 
-[778269498: mongeard 2022](https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098#page=2) — 31 PDF pages, all screened. Deed/decision **2022-05-25**; deposit **2022-06-17**. Relevant pages: 2, 12, 14.
+[GFA Mongeard-Mugneret: 25 May 2022 share donation and statutes](https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098#page=2) — 31 PDF pages, all screened. Deed/decision **2022-05-25**; deposit **2022-06-17**. Relevant pages: 2, 12, 14.
 
 Share donation and statutes updated 30 May 2022; no exact AN248 schedule or named Richebourg tenant found.
 
@@ -275,7 +275,7 @@ SHA-256: `36b403704aa63d30b73d968bbb89609b1cd67a4ba915fc88406fc192db2665e0`. Ret
 
 ### ric-mongeard-2017
 
-[778269498: mongeard 2017](https://actes.ccm2.net/acte/0fb79a93-c4a6-42ee-a72f-403c1c88cbcc#page=2) — 63 PDF pages, all screened. Deed/decision **2017-03-20**; deposit **2017-11-21**. Relevant pages: 2, 3.
+[GFA Mongeard-Mugneret: 20 March 2017 share and statutory changes](https://actes.ccm2.net/acte/0fb79a93-c4a6-42ee-a72f-403c1c88cbcc#page=2) — 63 PDF pages, all screened. Deed/decision **2017-03-20**; deposit **2017-11-21**. Relevant pages: 2, 3.
 
 Share and statutory changes; no exact AN248 schedule or named Richebourg tenant found.
 
@@ -291,7 +291,7 @@ SHA-256: `4bb2a3e2d7753a75d511193e13fec2fbfbb4c2c1ec62b4b0add5674923c64ef9`. Ret
 
 ### ric-af-gros-donation-2020
 
-[885114322: af gros donation 2020](https://actes.ccm2.net/acte/44e2969c-e634-44a3-85b5-b5376e45ca12#page=2) — 61 PDF pages, all screened. Deed/decision **2020-07-22**; deposit **2020-10-07**. Relevant pages: 2, 37, 39, 40.
+[GFA Héritiers AF-Gros: 22 July 2020 share donation](https://actes.ccm2.net/acte/44e2969c-e634-44a3-85b5-b5376e45ca12#page=2) — 61 PDF pages, all screened. Deed/decision **2020-07-22**; deposit **2020-10-07**. Relevant pages: 2, 37, 39, 40.
 
 Share donation reproduces the founding AN243/245 schedule and existing lease recital to Domaine A.F Gros; it is not a second land purchase.
 
@@ -299,7 +299,7 @@ SHA-256: `7c91dae2e9ca52d3913b6a0d26e5c1b5337fbb261a3468045b7a2c35fd03379a`. Ret
 
 ### ric-af-gros-formation-2020
 
-[885114322: af gros formation 2020](https://actes.ccm2.net/acte/de0997df-6924-4dcb-b213-a7a17418aa28#page=2) — 49 PDF pages, all screened. Deed/decision **2020-07-01**; deposit **2020-07-16**. Relevant pages: 2, 6, 8, 9.
+[GFA Héritiers AF-Gros: 1 July 2020 founding contribution and lease recital](https://actes.ccm2.net/acte/de0997df-6924-4dcb-b213-a7a17418aa28#page=2) — 49 PDF pages, all screened. Deed/decision **2020-07-01**; deposit **2020-07-16**. Relevant pages: 2, 6, 8, 9.
 
 Contributes AN243 (949 m²) and AN245 (332 m²), already let to SAS Domaine A.F Gros (383967346) for 18 years from 11 November 2017 under a notarial lease dated 12 June 2018. Only the recital, not the lease instrument, was reviewed.
 
@@ -307,7 +307,7 @@ SHA-256: `cd56a3854557ceed5ef4a37be4fa638eaf76d4ac214b8dd3460e6f8ddff4843e`. Ret
 
 ### ric-leroy-representative-2006
 
-[427469135: leroy representative 2006](https://actes.ccm2.net/acte/49ab5756-3546-4877-bc89-56c14ff55243#page=1) — 3 PDF pages, all screened. Deed/decision **2006-09-15**; deposit **2007-03-22**. Relevant pages: 1, 2, 3.
+[Leroy SA: 15 September 2006 representative appointment for SCI and SCE](https://actes.ccm2.net/acte/49ab5756-3546-4877-bc89-56c14ff55243#page=1) — 3 PDF pages, all screened. Deed/decision **2006-09-15**; deposit **2007-03-22**. Relevant pages: 1, 2, 3.
 
 Leroy SA appoints its representative in both the SCE and SCI Domaine Leroy. This corporate connection does not resolve the provisional DGFiP identifier by a parcel schedule.
 
@@ -317,13 +317,13 @@ SHA-256: `e49b4183fb1cc88cb6fbc23f9a4d4da90227d2a3f0217bf54f90f4f0eac7f675`. Ret
 
 [SCI Domaine Leroy: 10 December 2001 minutes and original statutes](https://actes.ccm2.net/acte/1f10cb0c-c858-465c-b3ac-1d1c0b8cc1f8#page=1) — 43 PDF pages, all screened. Deed/decision **2001-12-10**; deposit **2001-12-27**. Relevant pages: 1, 2, 33.
 
-The SCI, formed in 1947 and registered in 2001, has Leroy SA and Marcelle Bize-Leroy as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.
+The SCI, formed in 1947 and registered in 2001, has Leroy SA and an individual as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.
 
 SHA-256: `52d3b534091b92c7e6b5d097f6042b1bbbeadd45af6ff8367fb6dc6b9e2a62af`. Retrieved: 2026-10-07T16:19:43.841172+00:00; 1,498,220 bytes.
 
 ### ric-leroy-2024
 
-[427469135: leroy 2024](https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf#page=1) — 3 PDF pages, all screened. Deed/decision **2024-06-03**; deposit **not established**. Relevant pages: 1, 2, 3.
+[SCI Domaine Leroy: 3 June 2024 annual meeting](https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf#page=1) — 3 PDF pages, all screened. Deed/decision **2024-06-03**; deposit **not established**. Relevant pages: 1, 2, 3.
 
 Annual meeting and manager replacement; no parcel schedule. Deposit date is not established by the free index or PDF.
 
