@@ -14,7 +14,7 @@ export const parcelBundles={'chambolle-morey':bundle0,'corton':bundle1,'flagey-e
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
+export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'corton'|'corton-charlemagne'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -40,6 +40,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-des-lambrays",name:"Clos des Lambrays",parentFeatureId:"inao-denom-547",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-des-lambrays"],domaineGrouping:false},
  {slug:"clos-saint-denis",name:"Clos Saint-Denis",parentFeatureId:"inao-denom-548",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-saint-denis"],domaineGrouping:false},
  {slug:"corton",name:"Corton",parentFeatureId:"inao-denom-549",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton"],domaineGrouping:false},
+ {slug:"corton-charlemagne",name:"Corton-Charlemagne",parentFeatureId:"inao-denom-550",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton-charlemagne"],domaineGrouping:false},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"griotte-chambertin",name:"Griotte-Chambertin",parentFeatureId:"inao-denom-646",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["griotte-chambertin"],domaineGrouping:false},

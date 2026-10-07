@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-B1zLC_w0.js"
+    "dist/client/assets/index-D8xugZcL.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-C7O2YI-X.js",
-    "dist/client/assets/SectionLabel-BfFsMq3b.js",
-    "dist/client/assets/SparklingDetailsCard-CqET-Tvh.js",
-    "dist/client/assets/VillageMap-XXNhSJ65.js",
-    "dist/client/assets/api-VBaEhpao.js",
-    "dist/client/assets/burgundyAtlas-UTkHUehT.js",
-    "dist/client/assets/index-B1zLC_w0.js",
-    "dist/client/assets/index-CCwkqpRx.js",
+    "dist/client/assets/FriendTagDialog-DHw8lP6p.js",
+    "dist/client/assets/SectionLabel-CPik-4PZ.js",
+    "dist/client/assets/SparklingDetailsCard-BwAVJv8h.js",
+    "dist/client/assets/VillageMap-BnPN2SG_.js",
+    "dist/client/assets/api-_PNvgugG.js",
+    "dist/client/assets/burgundyAtlas-LumrNbQC.js",
+    "dist/client/assets/index-D8xugZcL.js",
+    "dist/client/assets/index-KSOWaVLB.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-CEr3v5o4.js",
-    "dist/client/assets/wineDetailCompact-LOBLY7xX.js"
+    "dist/client/assets/useModalFocus-DTWrC7Cp.js",
+    "dist/client/assets/wineDetailCompact-DBA41qIO.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 25,
-  "evidenceBytesTotal": 3457306,
-  "evidenceGzipBytesTotal": 316526,
+  "evidenceChunkCount": 26,
+  "evidenceBytesTotal": 3873071,
+  "evidenceGzipBytesTotal": 340168,
   "parcelBundleBytesTotal": 1935182,
   "parcelBundleGzipBytesTotal": 290981,
   "evidenceChunks": [
@@ -103,6 +103,13 @@
       "sha256": "118b9bd9e1907f0f405e63f614203b6cbcbe4c7c0a85297627b5accb3757ab03",
       "bytes": 797801,
       "gzipBytes": 38400
+    },
+    {
+      "cru": "corton-charlemagne",
+      "file": "dist/client/assets/corton-charlemagne.evidence-BkcMb2Fr.js",
+      "sha256": "353df45b8994c1b9d7a6737116d4c424a4d6c132ed61f7a72e0158d608d514d4",
+      "bytes": 415765,
+      "gzipBytes": 23642
     },
     {
       "cru": "echezeaux",

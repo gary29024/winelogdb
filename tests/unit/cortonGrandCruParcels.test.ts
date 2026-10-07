@@ -9,6 +9,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const maps=['aloxe-corton','ladoix','pernand-vergelesses'];
 const reviewed=[
  {slug:'corton',id:'inao-denom-549'},
+ {slug:'corton-charlemagne',id:'inao-denom-550'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/corton.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean}};
@@ -35,5 +36,7 @@ describe('Corton hill Tier 1 crus',()=>{
   expect(burgundyVillageMapTarget({...wine,wineName:'Les Bressandes'})).toMatchObject({featureId:'inao-denom-2357'});
   expect(burgundyVillageMapTarget({...wine,wineName:'Le Rognet et Corton'})).toMatchObject({featureId:'inao-denom-2356'});
   expect(burgundyVillageMapTarget({...wine,wineName:'Les Bressandes'})?.namedPlotId).toBeUndefined();
+  const white={...wine,appellation:'Corton-Charlemagne',colour:'white'};
+  for(const wineName of ['Corton-Charlemagne','Le Charlemagne','Les Pougets'])expect(burgundyVillageMapTarget({...white,wineName})?.namedPlotId).toBeUndefined();
  });
 });
