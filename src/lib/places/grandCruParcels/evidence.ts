@@ -35,6 +35,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'richebourg':()=>import('./richebourg.evidence.json'),
  'romanee-conti':()=>import('./romanee-conti.evidence.json'),
  'romanee-saint-vivant':()=>import('./romanee-saint-vivant.evidence.json'),
+ 'ruchottes-chambertin':()=>import('./ruchottes-chambertin.evidence.json'),
 };
 
 const empty=():ParcelEvidenceData=>({sources:{},parcels:{},holderDomains:{}});
