@@ -13,9 +13,10 @@ requires official evidence back to the earliest available records for all 33 cru
 The shared acquisition/parser and historical backfills now cover all 33 crus.
 See the [history delivery and source gaps](research/grand-cru-history.md). A cru's
 register supplies the historical basis, but the cru stays off the app's maps until
-its Tier 1 commune-edge audit is committed. Per-cru progress is tracked in the #461
-checklist, not here. Earlier notice bulletins were partially recovered through archived copies, with
-missing publications and unsearched intervals; #461 stays open for those gaps.
+its Tier 1 commune-edge audit is committed. Per-cru progress is tracked in the cru
+issues and the #461 checklist, not here. Earlier notice bulletins were partially
+recovered through archived copies; missing publications and unsearched intervals
+stay explicit in each cru's notice coverage.
 
 ## 1. What Échezeaux established
 
@@ -264,8 +265,7 @@ evidence together with the history and coverage report.
    one is anything but a pending historical-extension delivery. Components need no change.
 5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
    method, sources and limitations. Commit every build report, including the
-   commune audit and the named-area audit. Historical-extension deliveries use
-   the shared method doc until these remaining per-cru Tier 1 reviews are completed.
+   commune audit and the named-area audit.
 
 Generated research JSON uses one compact line per record (`record_json` in `grand_cru.py`), so a changed parcel
 shows as a one-line diff.
@@ -370,6 +370,9 @@ already have rights history, notice history, sale records and lazy evidence. A
 Tier 1 run therefore:
 
 1. Reads the cru issue and its #461 checklist, and checks the generated files.
+   Looks up every commune code it will name (`bundle_commune_names` in
+   `grand_cru.py`, or geo.api.gouv.fr); a notice's printed commune is matched by
+   code, so a swapped code flips accept/reject decisions.
 2. Completes the remaining per-cru items: the commune-edge audit (which lets a
    hidden cru appear on the maps), the named-area crosswalk, and page-image review
    of any `unreviewedCandidates` in its `notice-history.json`. Record each read page
@@ -382,11 +385,6 @@ Tier 1 run therefore:
    different gzip sizes, and Python 3.11's float `sum()` changes generated areas.
 4. Opens one PR per cru. After merge, the cru issue's #461 checklist is ticked with
    its own evidence and links, the cru is ticked in #461, and the issue closes.
-
-Progress is tracked in the #461 checklist and the Grand Cru milestone, not in this
-playbook. Suggested order: one village bundle at a time (Vosne-Romanée,
-Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin, Puligny/Chassagne, the
-Corton hill), then Chablis (#408) last.
 
 Some government download sites may refuse connections. The Côte-d'Or and Yonne
 prefecture sites refused every connection in October 2026, so earlier bulletins
