@@ -215,13 +215,16 @@ class ConfigTests(unittest.TestCase):
         # Bonnes-Mares: LES BONNES MARES is recorded in both communes and forms one reviewed named area.
         plot = load_cru('bonnes-mares')[0]['namedPlots']['plots'][0]
         self.assertEqual(plot['communes'], ['21133', '21442'])
+        # Clos de la Roche: Chambolle-Musigny has its own LES CHABIOTS and LES FREMIERES; only Morey's are used.
+        roche = {p['sourceName']: p.get('communes') for p in load_cru('clos-de-la-roche')[0]['namedPlots']['plots']}
+        self.assertEqual((roche['LES CHABIOTS'], roche['LES FREMIERES']), (['21442'], ['21442']))
         report = read_json(named_plot_report_path(load_cru('bonnes-mares')[0]))
         self.assertEqual(report['plots'][0]['sourceFeatures'], 2)
         for slug in cru_slugs():
             for entry in load_cru(slug)[0].get('namedPlots', {}).get('plots', []):
                 if 'communes' in entry:
                     self.assertEqual(entry['communes'], sorted(set(entry['communes'])), slug)
-                    self.assertGreater(len(entry['communes']), 1, slug)
+                    self.assertTrue(set(entry['communes']) <= set(communes(load_cru(slug)[1])), slug)
 
     def test_overlapping_named_areas_need_a_reviewed_cap(self):
         # Clos Saint-Denis: the cadastral CALOUERE and MAISON BRULEE overlap; both outlines are kept as published.

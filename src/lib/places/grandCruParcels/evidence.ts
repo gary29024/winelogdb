@@ -19,6 +19,7 @@ export type ParcelEvidenceData={sources:Record<string,EvidenceSource>;parcels:Re
 // Each research file is a separate chunk, loaded on first use so the map itself does not carry the records.
 const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
+ 'clos-de-la-roche':()=>import('./clos-de-la-roche.evidence.json'),
  'clos-de-tart':()=>import('./clos-de-tart.evidence.json'),
  'clos-de-vougeot':()=>import('./clos-de-vougeot.evidence.json'),
  'clos-des-lambrays':()=>import('./clos-des-lambrays.evidence.json'),

@@ -12,6 +12,7 @@ const reviewed=[
  {slug:'clos-de-tart',name:'Clos de Tart',id:'inao-denom-545',maps:['morey-saint-denis']},
  {slug:'clos-des-lambrays',name:'Clos des Lambrays',id:'inao-denom-547',maps:['morey-saint-denis']},
  {slug:'clos-saint-denis',name:'Clos Saint-Denis',id:'inao-denom-548',maps:['morey-saint-denis']},
+ {slug:'clos-de-la-roche',name:'Clos de la Roche',id:'inao-denom-544',maps:['morey-saint-denis']},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
@@ -85,5 +86,15 @@ describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
   expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chaffots'})?.namedPlotId).toBe('clos-saint-denis-plot-les-chaffots');
   const echezeaux={...red,appellation:'Échezeaux',wineName:'Échezeaux Clos Saint-Denis'};
   expect(burgundyVillageMapTarget(echezeaux)?.namedPlotId).toBe('echezeaux-plot-clos-saint-denis');
+ });
+ it('selects Clos de la Roche climats in Morey only, never a Clos Saint-Denis climat',async()=>{
+  const plots=(await loadVillageMapCatalogue('morey-saint-denis')).features.filter(f=>f.kind==='named_plot'&&f.parentFeatureId==='inao-denom-544');
+  expect(plots.map(f=>f.name)).toEqual(['Clos de la Roche','Les Chabiots','Les Fremières','Les Froichots','Les Genavrières','Les Mochamps','Monts Luisants']);
+  expect(plots.every(f=>f.communes?.join()==='21442')).toBe(true);
+  const wine={...red,appellation:'Clos de la Roche',wineName:'Clos de la Roche'};
+  expect(burgundyVillageMapTarget(wine)?.namedPlotId).toBeUndefined();
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chabiots'})?.namedPlotId).toBe('clos-de-la-roche-plot-les-chabiots');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Monts Luisants'})?.namedPlotId).toBe('clos-de-la-roche-plot-monts-luisants');
+  expect(burgundyVillageMapTarget({...wine,referenceParcel:'Les Chaffots'})?.namedPlotId).toBeUndefined();
  });
 });

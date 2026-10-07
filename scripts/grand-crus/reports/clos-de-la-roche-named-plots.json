@@ -1,0 +1,119 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Clos de la Roche boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "sources": [
+    {
+      "commune": "21133",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+      "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb"
+    },
+    {
+      "commune": "21442",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-lieux_dits.json.gz",
+      "sha256": "ad9759b3d80eebe0e3b015a60648db90478300526c32a0c5a85d5403bb61a23a"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-de-la-roche,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjgyJnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-communes.json.gz",
+      "sha256": "1d506f62355c351741a87c84e8d4a8ea221f6c38dfc566c61b62792b2c3b8197"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-communes.json.gz",
+      "sha256": "0199186d35a17ecd55cc2e856fa720f28031e4df9f00a29095e6afcdc3d01bb3"
+    }
+  ],
+  "dataUrl": "/maps/clos-de-la-roche-named-plots.2026-06-01.d01f65a5d31f.geojson",
+  "sha256": "d01f65a5d31fe5bf8ee1037df503de93dfba3a09e7fef5aa0f168834a961b2ec",
+  "bytes": 19845,
+  "gzipEquivalentBytes": 6488,
+  "parentHa": 16.898850109174465,
+  "mappedHa": 16.769108906999733,
+  "unmappedHa": 0.12974121284122797,
+  "plots": [
+    {
+      "id": "clos-de-la-roche-plot-clos-de-la-roche",
+      "sourceHa": 4.664017680471009,
+      "clippedHa": 4.5482433166971585,
+      "parts": 3,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-chabiots",
+      "sourceHa": 2.2318248610926155,
+      "clippedHa": 2.1176931025153065,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-fremieres",
+      "sourceHa": 2.33127478329282,
+      "clippedHa": 2.273002280000687,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-froichots",
+      "sourceHa": 0.6432142360052899,
+      "clippedHa": 0.6432142353171243,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-genavrieres",
+      "sourceHa": 2.0026975902471364,
+      "clippedHa": 0.8798093143477046,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-mochamps",
+      "sourceHa": 2.6873688553279997,
+      "clippedHa": 2.5512232944790463,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "clos-de-la-roche-plot-monts-luisants",
+      "sourceHa": 11.567652422415142,
+      "clippedHa": 3.755923363642698,
+      "parts": 3,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "Clos de la Roche",
+      "sourceCandidate": "LES CHAFFOTS",
+      "reason": "LES CHAFFOTS is an official Clos Saint-Denis climat, not a Clos de la Roche one. Parcel AB0419 lies 86% inside Clos de la Roche (and 10% in Clos Saint-Denis) but in that lieu-dit; AB0418 and AB0474 only touch the edge. No crosswalk is made; these parcels keep the whole-cru outline."
+    }
+  ],
+  "neighbouringLieuxDits": [
+    {
+      "sourceName": "LE VILLAGE",
+      "reason": "Not an official Clos de la Roche climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+    }
+  ]
+}
