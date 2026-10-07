@@ -564,10 +564,11 @@ class ResultsTableTests(unittest.TestCase):
         self.table_check(lambda text: text)
 
     def test_a_legal_holder_is_not_a_lead(self):
-        with self.assertRaisesRegex(ValueError, 'must start with 7,'):
-            self.table_check(lambda text: text.replace('| Parcels with holder or research leads | 7', '| Parcels with holder or research leads | 108'))
-        with self.assertRaisesRegex(ValueError, 'must start with 157'):
-            self.table_check(lambda text: text.replace('| Parcels with no lead | 157', '| Parcels with no lead | 56'))
+        # 106 parcels have recorded rights, but a legal holder alone is not a lead.
+        with self.assertRaisesRegex(ValueError, 'must start with 96,'):
+            self.table_check(lambda text: text.replace('| Parcels with holder or research leads | 96', '| Parcels with holder or research leads | 106'))
+        with self.assertRaisesRegex(ValueError, 'must start with 68'):
+            self.table_check(lambda text: text.replace('| Parcels with no lead | 68', '| Parcels with no lead | 58'))
 
     def test_history_row_and_measured_payload_are_required(self):
         with self.assertRaisesRegex(ValueError, 'Official history to earliest records'):

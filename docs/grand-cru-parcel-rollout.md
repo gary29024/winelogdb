@@ -171,9 +171,16 @@ record.
   as you go.
 - **Provisional `U…` identifiers** need an `identity` crosswalk to a SIREN, with sources
   and its limitation, before they can be linked. The rights file keeps the provisional
-  identifier.
+  identifier. The SIREN may be another table key only if the two record no parcels in
+  the same cru.
 - **Evidence:** family holdings and other corporate relations need a company record,
   filing or legal notice. Never link from a similar name or monopole reputation.
+  An undated or older owner map never overrides the current rights file or a later
+  filing; use one only where nothing newer covers the parcel, and never record the
+  private owners it names.
+- **Scanned filings:** OCR every page before calling a screen negative; many deeds are
+  image-only. A filing that names a parcel with no company record is
+  `externalResearch` (`filing-named-cadastral-reference`), not a `parcelFilings` entry.
 - **Sources** live in the table: shared source IDs are unique across the table and every
   curation. A filing records its deed date as `documentDate`, its raw-byte SHA-256 and the
   pages read; a filing or deposit date is a separate field.
@@ -183,6 +190,9 @@ Its `holders[]` rows keep the cru's own `basis`, `finding` and `sourceIds`. Cand
 names never appear inline: the research builder fills them from the links that apply to
 that cru and appends their sources. Exactly one applicable link gives the app's domaine
 heading (`holderDomains`, and with it domaine grouping); two or more stay listed leads.
+Only a company-record row `basis` groups (`company-identity`, `family-company-record`,
+`group-company-record` and the estate and identity bases); lease, mandate, management,
+succession and name-and-seat rows stay leads under the legal holder.
 Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
 also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
 identifier no cru records, an unused source or a stale report.

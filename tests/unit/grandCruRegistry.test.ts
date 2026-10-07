@@ -73,7 +73,7 @@ describe('Grand Cru registry',()=>{
   expect(notices?.indexes.map(i=>[i.id,i.department])).toEqual([['departmental-yonne-archive','89']]);
   expect(Object.keys(chablis.tracing??{}).every(id=>id.startsWith('89068'))).toBe(true);
  });
- it('loads Vougeot’s 69 holders and dated notices without inventing domaine research',async()=>{
+ it('loads Vougeot’s 69 holders, dated notices and its shared-table domaine research',async()=>{
   expect(grandCruFor('inao-denom-546','vougeot')?.slug).toBe('clos-de-vougeot');
   expect(grandCruFor('inao-denom-546','vosne-romanee')).toBeUndefined();
   const snapshot=parcelRightsSnapshot('inao-denom-546')!;
@@ -82,7 +82,12 @@ describe('Grand Cru registry',()=>{
   const evidence=await loadParcelEvidence('inao-denom-546');
   expect(evidence.parcels['217160000A0001'].map(i=>i.kind)).toContain('suspended');
   expect(evidence.parcels['217160000A0523'].map(i=>i.kind)).toContain('application');
-  expect(evidence.holderDomains).toEqual({});
+  // Tier 2 (#424): domaine headings come from the shared holder table, never for unlinked holders.
+  expect(evidence.holderDomains?.['423994045']).toMatchObject({name:'Château de la Tour',basis:'company-identity'});
+  expect(evidence.holderDomains?.['888079175']?.basis).toBe('filing-lease-mandate');
+  expect(evidence.holderDomains?.['318520137']).toBeUndefined();
+  expect(evidence.holderDomains?.['U18180763']).toBeUndefined();
+  expect(evidence.parcels['217160000A0372'].map(i=>i.kind)).toContain('research');
   expect(Object.keys(evidence.parcels).every(id=>id.startsWith('21716'))).toBe(true);
  });
  it('merges several research files without dropping records or overriding the first domaine heading',()=>{

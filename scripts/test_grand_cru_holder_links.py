@@ -7,7 +7,7 @@ from build_grand_cru_evidence import build_evidence
 from build_grand_cru_holder_links import curations, generate, recorded_holders, validate
 from build_grand_cru_research import Context, load_inputs
 from build_grand_cru_research import build_register as build_cru_register
-from grand_cru import HOLDER_LINKS, load_cru, read_json, resolve_curation
+from grand_cru import HOLDER_LINKS, ROOT, load_cru, read_json, resolve_curation
 
 
 class HolderLinkTableTests(unittest.TestCase):
@@ -161,6 +161,64 @@ class GroupingTests(unittest.TestCase):
         for domain in evidence['holderDomains'].values():
             self.assertNotIn('currentFarmer', domain)
             self.assertNotRegex(domain['name'] + domain['basis'], r'(?i)\bfarms\b|farmed by')
+
+
+class ClosDeVougeotTests(unittest.TestCase):
+    """The first Tier 2 cru on the shared table: links stay research links and unlinked holders stay visible."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('clos-de-vougeot'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_grouping_only_for_linked_holders(self):
+        rows = {h['holderId']: h for h in self.curation['holders']}
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        for hid in self.evidence['holderDomains']:
+            entry = self.table['holders'][hid]
+            self.assertTrue(any(l['reviewStatus'] != 'retired' and 'clos-de-vougeot' in l.get('crus', ['clos-de-vougeot'])
+                                for l in entry['links']), hid)
+        # Searched without a link, or ambiguous provisional identifiers: no domaine heading.
+        for hid in ('318520137', 'U21966062', 'U18180763', 'U18180059', 'U22312052', 'U21837853', '222100018', 'U22314167'):
+            self.assertIn(hid, rows)
+            self.assertNotIn(hid, self.evidence['holderDomains'])
+
+    def test_unlinked_and_unknown_holders_stay_visible(self):
+        parcels = self.register['parcels']
+        self.assertEqual(sum(not p['recordedRights'] for p in parcels), 58)
+        holders = {r['holderId'] for p in parcels for r in p['recordedRights']}
+        self.assertEqual(len(holders), 69)
+        self.assertTrue({'318520137', 'U18180763', '222100018'} <= holders)
+
+    def test_leases_and_name_only_matches_never_group(self):
+        presentation = (ROOT / 'src/lib/places/parcelPresentation.ts').read_text(encoding='utf-8')
+        headings = presentation[presentation.index('const headingLabels'):presentation.index('const leadLabels')]
+        for hid, domain in self.evidence['holderDomains'].items():
+            links = [l for l in self.table['holders'][hid]['links'] if 'clos-de-vougeot' in l.get('crus', ['clos-de-vougeot'])]
+            if any(l['relation'] in {'lessor-per-filing', 'reported-tenancy'} for l in links):
+                self.assertIn(domain['basis'], {'filing-tenant-relationship', 'filing-lease-mandate'}, hid)
+                self.assertNotIn(f"'{domain['basis']}'", headings)
+            if domain['basis'] == 'name-and-seat-crosswalk':
+                self.assertTrue(all(l['reviewStatus'] == 'provisional' for l in links), hid)
+                self.assertNotIn("'name-and-seat-crosswalk'", headings)
+
+    def test_wording_never_claims_farming(self):
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        texts = [d['note'] + d['name'] for d in self.evidence['holderDomains'].values()]
+        texts += [i.get('note', '') for items in self.evidence['parcels'].values() for i in items]
+        for text in texts:
+            self.assertNotRegex(text, r'(?i)farms|farmed by|is farming')
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_cru_scoped_link_leaves_other_crus_unchanged(self):
+        echezeaux = resolve_curation(read_json(Context(*load_cru('echezeaux')).curation), 'echezeaux', self.table)
+        bichot = next(h for h in echezeaux['holders'] if h['holderId'] == '036380046')
+        self.assertEqual(bichot['candidateNames'], ['Domaine du Clos Frantin / Albert Bichot'])
+        self.assertNotIn('caviste-clos-frantin-vougeot', bichot['sourceIds'])
 
 
 if __name__ == '__main__':

@@ -14,10 +14,13 @@ export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[
 const headingLabels:Record<string,string>={
  'estate-context':'Estate source','secondary-estate-context':'Estate source','management-and-estate-context':'Estate source',
  'group-and-estate-context':'Estate source via group',
- 'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only'};
+ 'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only',
+ // Company-register or filing evidence for the relation, with no estate page needed.
+ 'company-identity':'Company record','family-company-record':'Family company record','group-company-record':'Group company record'};
 const leadLabels:Record<string,string>={
  'registered-office-match':'office address only','management-only-lead':'shared management only',
- 'succession-lead':'ownership succession lead','partial-succession-lead':'ownership succession lead'};
+ 'succession-lead':'ownership succession lead','partial-succession-lead':'ownership succession lead',
+ 'name-and-seat-crosswalk':'identity by name and seat only'};
 
 // A saved catalogue identity is not a fuzzy producer-name suggestion.
 // Prefer the account's ID; only missing IDs use the complete normalized name.
