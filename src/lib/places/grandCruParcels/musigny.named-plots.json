@@ -1,0 +1,68 @@
+{
+  "dataUrl": "/maps/musigny-named-plots.2026-06-01.46b56a990fef.geojson",
+  "parentFeatureId": "inao-denom-973",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Les Musigny and Les Petits Musigny are cadastral named areas within Musigny. The official list also names La Combe d'Orveau, but no cadastral lieu-dit covers the cru's south-western part, so that part keeps the whole-cru outline. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings.",
+  "features": [
+    {
+      "id": "musigny-plot-les-musigny",
+      "name": "Les Musigny",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 211,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-973",
+      "parentAppellation": "Musigny",
+      "sourceName": "LES MUSIGNY",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 5.894061,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.953096066459618,
+        47.17651080831998,
+        4.956612517584795,
+        47.1802076
+      ],
+      "labelPoint": [
+        4.954562128129334,
+        47.17860179143469
+      ]
+    },
+    {
+      "id": "musigny-plot-les-petits-musigny",
+      "name": "Les Petits Musigny",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 211,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-973",
+      "parentAppellation": "Musigny",
+      "sourceName": "LES PETITS MUSIGNY",
+      "communes": [
+        "21133"
+      ],
+      "areaHa": 4.193348,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.95209898620754,
+        47.174769,
+        4.9550107,
+        47.17741867796671
+      ],
+      "labelPoint": [
+        4.953496446629341,
+        47.17612981448689
+      ]
+    }
+  ]
+}

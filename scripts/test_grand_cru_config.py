@@ -39,9 +39,9 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(dfi_releases(dfi, '21'), review['dfiReleases'])
                 self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
                 self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
-                geometry = history['geometry']['21714']
-                self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
-                                 geometry['obtainedDates'])
+                for geometry in history['geometry'].values():
+                    self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
+                                     geometry['obtainedDates'])
 
     def test_every_cru_and_bundle_agree(self):
         self.assertIn('echezeaux', cru_slugs())
@@ -197,6 +197,27 @@ class ConfigTests(unittest.TestCase):
             used = {s['commune']: s['sha256'] for s in report['sources']} if 'sources' in report else {communes(bundle)[0]: report['source']['sha256']}
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
+
+    def test_unnamed_and_edge_parcels_are_declared_in_the_named_area_review(self):
+        # Musigny has parcels outside every lieu-dit and edge parcels lying wholly in neighbouring lieux-dits.
+        checked = []
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru or not (RESEARCH_DIR / slug / 'parcel-named-areas.json').exists():
+                continue
+            config, rows = cru['namedPlots'], read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels'].values()
+            if not any(r.get('neighbouringLieuDit') or ('share' in r and r['sourceName'] is None) for r in rows):
+                continue
+            checked.append(slug)
+            neighbouring = {n['sourceName'] for n in config.get('neighbouringLieuxDits', [])}
+            reviewed = {p['sourceName'] for p in config['plots']}
+            self.assertFalse(neighbouring & reviewed, slug)
+            self.assertEqual({r['sourceName'] for r in rows if r.get('neighbouringLieuDit')}, neighbouring, slug)
+            self.assertTrue(all(r['name'] is None for r in rows if r.get('neighbouringLieuDit')), slug)
+            unnamed = [r for r in rows if r['sourceName'] is None]
+            self.assertTrue(all(r['name'] is None and r['share'] == 0 for r in unnamed), slug)
+            self.assertEqual(bool(unnamed), any(u['sourceCandidate'] is None for u in config['unresolved']), slug)
+        self.assertIn('musigny', checked)
 
     def test_generated_research_json_has_one_line_per_record(self):
         from grand_cru import record_json

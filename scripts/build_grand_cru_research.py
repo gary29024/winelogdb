@@ -296,8 +296,9 @@ def build_census(rows, holdings, named_areas, holder_names):
     A holding is published by a producer for a whole named area. The census only compares areas;
     it never places a holding on particular parcels."""
     reviewed = {a['sourceName']: a['name'] for a in named_areas['parcels'].values()}
+    neighbouring = {a['sourceName'] for a in named_areas['parcels'].values() if a.get('neighbouringLieuDit')}
     census = []
-    for name in sorted({r['namedArea'] for r in rows}):
+    for name in sorted({r['namedArea'] for r in rows}, key=lambda n: (n is None, n or '')):
         here = [r for r in rows if r['namedArea'] == name]
         m2 = lambda items: round(sum(r['cruOverlapM2'] for r in items))
         entries, beyond_total = [], 0
@@ -321,7 +322,8 @@ def build_census(rows, holdings, named_areas, holder_names):
                             'owners': [holder_names[i] for i in h['ownerHolderIds']]})
         unrecorded = [r for r in here if not r['recordedRights']]
         census.append({
-            'sourceName': name, 'name': reviewed[name], 'parcels': len(here), 'areaM2': m2(here),
+            'sourceName': name, 'name': reviewed[name], **({'neighbouringLieuDit': True} if name in neighbouring else {}),
+            'parcels': len(here), 'areaM2': m2(here),
             'withoutCompanyRecord': len(unrecorded), 'withoutCompanyRecordM2': m2(unrecorded),
             'withoutCompanyRecordOrLead': sum(r['researchStatus'] == 'unresolved' for r in unrecorded),
             'withoutCompanyRecordOrLeadM2': m2([r for r in unrecorded if r['researchStatus'] == 'unresolved']),
@@ -560,8 +562,12 @@ def render_history(register, curation, history, sources, context):
 
 
 def area_label(source_name, register):
-    reviewed = {a['sourceName']: a['name'] for a in register['namedAreaCensus']}
-    return reviewed[source_name] or f'{source_name} (cadastral; unreviewed)'
+    area = next(a for a in register['namedAreaCensus'] if a['sourceName'] == source_name)
+    if area.get('neighbouringLieuDit'):
+        return f'{source_name} (neighbouring lieu-dit; edge parcels)'
+    if area['name']:
+        return area['name']
+    return 'No cadastral lieu-dit' if source_name is None else f'{source_name} (cadastral; unreviewed)'
 
 
 def hectares(m2):
@@ -574,7 +580,14 @@ def render_census(register, curation, sources, context):
                 'Named-area and climat crosswalks remain unreviewed. The exact whole-cru INAO feature is preserved; '
                 'no cadastral name, internal subdivision or producer holding is assigned by this history delivery.', '']
     unresolved = context.cru['namedPlots']['unresolved']
-    crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." for u in unresolved)
+    crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." if u['sourceCandidate'] is not None
+                         else f" {u['name']} has no cadastral lieu-dit inside the cru; parcels no lieu-dit touches are listed without one."
+                         for u in unresolved)
+    neighbouring = [n['sourceName'] for n in context.cru['namedPlots'].get('neighbouringLieuxDits', [])]
+    if neighbouring:
+        crosswalks += (f" {', '.join(f'`{n}`' for n in neighbouring)} {'holds' if len(neighbouring) == 1 else 'hold'} most of some parcels that "
+                       f"only touch the cru edge; {'it is a neighbouring lieu-dit' if len(neighbouring) == 1 else 'they are neighbouring lieux-dits'}, "
+                       f"not {context.cru['name']} climats.")
     printed = ''.join(f"; {u['name']} has no reviewed cadastral crosswalk" for u in unresolved)
     lines = ['## Named-area census', '',
              'Parcels are grouped by the cadastral lieu-dit holding most of their geometry. For each named area the census '

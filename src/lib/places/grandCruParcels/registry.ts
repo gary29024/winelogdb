@@ -1,17 +1,18 @@
-import bundle0 from './flagey-echezeaux.manifest.json';
-import bundle1 from './vosne-romanee.manifest.json';
-import bundle2 from './vougeot.manifest.json';
+import bundle0 from './chambolle-morey.manifest.json';
+import bundle1 from './flagey-echezeaux.manifest.json';
+import bundle2 from './vosne-romanee.manifest.json';
+import bundle3 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'flagey-echezeaux':bundle0,'vosne-romanee':bundle1,'vougeot':bundle2} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'chambolle-morey':bundle0,'flagey-echezeaux':bundle1,'vosne-romanee':bundle2,'vougeot':bundle3} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-romanee'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
+export type EvidenceSourceId='clos-de-vougeot'|'echezeaux'|'grands-echezeaux'|'la-romanee'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -30,6 +31,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"la-romanee",name:"La Romanée",parentFeatureId:"inao-denom-655",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-romanee"],domaineGrouping:false},
+ {slug:"musigny",name:"Musigny",parentFeatureId:"inao-denom-973",villageMaps:["chambolle-musigny"],bundle:"chambolle-morey",evidenceFrom:["musigny"],domaineGrouping:false},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},
  {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:false},
  {slug:"romanee-saint-vivant",name:"Romanée-Saint-Vivant",parentFeatureId:"inao-denom-1085",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-saint-vivant"],domaineGrouping:false},

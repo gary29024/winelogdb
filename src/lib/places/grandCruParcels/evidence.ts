@@ -22,6 +22,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'echezeaux':()=>import('./echezeaux.evidence.json'),
  'grands-echezeaux':()=>import('./grands-echezeaux.evidence.json'),
  'la-romanee':()=>import('./la-romanee.evidence.json'),
+ 'musigny':()=>import('./musigny.evidence.json'),
  'richebourg':()=>import('./richebourg.evidence.json'),
  'romanee-conti':()=>import('./romanee-conti.evidence.json'),
  'romanee-saint-vivant':()=>import('./romanee-saint-vivant.evidence.json'),
