@@ -144,7 +144,10 @@ the historical extension for a cru.
 
 - Free company-filing mirrors: deeds, contributions, lease recitals.
 - Published producer holdings and independent articles (e.g. Winehog), facts only
-  with links; printed references kept separate from today's parcels.
+  with links; printed references kept separate from today's parcels. A printed
+  reference reaches a current parcel only through an accepted spatial successor or
+  documented DFI ancestry (`predecessorReferences`); otherwise it stays in
+  `unmatchedPrintedReferences`.
 
 #### Shared holder research
 
@@ -158,7 +161,8 @@ record.
 - **A link** names the domaine or producer, a `relation` and its `basis`, `sourceIds`,
   `reviewStatus` and `reviewedAt`.
   - Relations: `owner-company`, `family-holding`, `subsidiary`, `parent-group`,
-    `common-ownership`, `management`, `brand-identity`, `lessor-per-filing`,
+    `common-ownership`, `partner-company` (the domaine's company is a recorded partner
+    of the holder), `management`, `brand-identity`, `lessor-per-filing`,
     `reported-tenancy`, `succession` and `shared-office`. None of them means farming.
   - A lease or reported tenancy covers particular land. It lists the `crus` whose
     parcels it names. A filing lease also records `leaseStatus`: `executed`, `recited`
@@ -167,8 +171,8 @@ record.
 - **Review status:** `provisional` marks a cited lead whose relation is not yet
   established. A `retired` link keeps its `retiredReason` and is never shown.
 - **No link found:** a holder searched without finding one keeps a `searches` record,
-  so later crus don't repeat the search. Record `effort` (filings screened, pages read)
-  as you go.
+  so later crus don't repeat the search; an optional `note` says what was found instead.
+  Record `effort` (filings screened, pages read) as you go.
 - **Provisional `U…` identifiers** need an `identity` crosswalk to a SIREN, with sources
   and its limitation, before they can be linked. The rights file keeps the provisional
   identifier. The SIREN may be another table key only if the two record no parcels in

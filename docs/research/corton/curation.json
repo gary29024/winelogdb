@@ -3,8 +3,9 @@
   "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-549",
-  "status": "tier-1-reviewed",
-  "scope": "All 728 mapped Corton parcels and 112 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in all bundle communes, the cadastral named-area audit and the #461 historical extension. Both notice-index candidates were read from their page images: one is rejected, and the other supports one application event on three current parcels. Producer/company research remains Tier 2. No current farmer is verified.",
+  "holderLinks": "shared",
+  "status": "tier-2-reviewed",
+  "scope": "All 728 mapped Corton parcels and 112 recorded legal-entity identifiers, reviewed for Tier 1 (commune edges, named-area audit, #461 history) and Tier 2: every holder searched in the official company register and the free filing index, 349 filings OCR-screened, schedules and lease recitals read, estate, importer and Winehog sources compared by named area. Holder-to-domaine links live in the shared holder table.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -71,1016 +72,1786 @@
       "reviewMethod": "page-image",
       "access": "read",
       "finding": "The receipt prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), previous operator CPEF à Beaune; filed and complete 4 November 2021. All three are current Corton parcels in Ladoix-Serrigny (21606). The receipt alone does not authorise cultivation."
+    },
+    {
+      "id": "wh-gaunoux",
+      "title": "Winehog: Domaine Michel Gaunoux Corton Renardes",
+      "url": "https://winehog.org/terroir-insight-domaine-michel-gaunoux-renardes-44255/",
+      "type": "critic-research",
+      "documentDate": "2020-12-02",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:17.512684+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-michel-gaunoux-renardes-44255/",
+      "sha256": "c18d3053a8f65aca3e3e827016324d9890931f418545a493f40714b36d45abee",
+      "bytes": 170023,
+      "finding": "Free part states that Gaunoux owns 0.63 ha in the core of Corton Renardes. No parcel number; the rest of the article is for subscribers."
+    },
+    {
+      "id": "wh-croix-greves",
+      "title": "Winehog: Domaine des Croix Corton Les Grèves",
+      "url": "https://winehog.org/terroir-insight-domaine-des-croix-corton-lesgreves-43706/",
+      "type": "critic-research",
+      "documentDate": "2020-11-21",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:19.794254+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-des-croix-corton-lesgreves-43706/",
+      "sha256": "07f2e427d969230f37179bd0d01116de01cdecbff51c0e011da8301b8b9b036c",
+      "bytes": 166888,
+      "finding": "States that Domaine des Croix owns 0.5500 ha in the middle of Les Grèves."
+    },
+    {
+      "id": "wh-croix-vas",
+      "title": "Winehog: Domaine des Croix Corton La Vigne au Saint",
+      "url": "https://winehog.org/terroir-insight-domaine-des-croix-corton-au-saint-43585/",
+      "type": "critic-research",
+      "documentDate": "2020-10-15",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:47.246936+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-des-croix-corton-au-saint-43585/",
+      "sha256": "fa5bbeacec21917fa459c36e3e71d32d1cc666585385578a2c623074afa62a12",
+      "bytes": 167231,
+      "finding": "States that Domaine des Croix owns 0.2877 ha in the western end of La Vigne au Saint."
+    },
+    {
+      "id": "wh-croix-cc",
+      "title": "Winehog: Domaine des Croix Corton-Charlemagne",
+      "url": "https://winehog.org/terroir-insight-domaine-des-croix-corton-charlemagne-2-44185/",
+      "type": "critic-research",
+      "documentDate": "2020-11-22",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:06:30.776482+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-des-croix-corton-charlemagne-2-44185/",
+      "sha256": "bbc79afbb7a460ac4640379bbe8357bd16334e2e4243819f713805130e192ea6",
+      "bytes": 165116,
+      "finding": "States two Le Charlemagne plots owned by the domaine: cadastre no. 45 (0.1254 ha) and no. 19 (0.1233 ha)."
+    },
+    {
+      "id": "wh-montille-cdr",
+      "title": "Winehog: Domaine de Montille Corton Clos du Roi",
+      "url": "https://winehog.org/terroir-insight-domaine-montille-cls-du-roi-43708/",
+      "type": "critic-research",
+      "documentDate": "2020-10-30",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:22.130204+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-montille-cls-du-roi-43708/",
+      "sha256": "93421e0f448e468d1583af80417b6b2ee2d4cbdf31d22ea04019029921df144d",
+      "bytes": 172351,
+      "finding": "States that Montille acquired its Clos du Roi in 2005, buying part of the Thomas Moillard estate with Domaine Dujac."
+    },
+    {
+      "id": "wh-montille-pougets",
+      "title": "Winehog: Domaine de Montille Corton Pougets",
+      "url": "https://winehog.org/terroir-insight-domaine-montille-pougets-43616/",
+      "type": "critic-research",
+      "documentDate": "2020-10-21",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:42.636825+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-montille-pougets-43616/",
+      "sha256": "59b3f8b23ce724a3919d408018dd4f3ee4df2ab9457b26c72a307e3ab751ce6e",
+      "bytes": 182010,
+      "finding": "States that Montille owns 1.02 ha in the eastern end of Les Pougets, acquired in 2004 and since regrafted or replanted with chardonnay."
+    },
+    {
+      "id": "wh-latour-vas",
+      "title": "Winehog: Louis Latour Corton Clos de la Vigne au Saint",
+      "url": "https://winehog.org/terroir-insight-latour-vigne-saint-2-43680/",
+      "type": "critic-research",
+      "documentDate": "2020-10-27",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:37.634289+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-latour-vigne-saint-2-43680/",
+      "sha256": "b27e0e16c434fa8dd12c188505f14dc2e17ad57cc912ec768b009feed47bbb1f",
+      "bytes": 169064,
+      "finding": "States that Louis Latour owns 26.59 ha of Corton, and two Vigne au Saint plots, cadastre nos. 50 and 51, totalling 1.9762 ha."
+    },
+    {
+      "id": "wh-bouchard-lecorton",
+      "title": "Winehog: Bouchard Père et Fils Le Corton",
+      "url": "https://winehog.org/terroir-insight-bouchard-le-corton-43669/",
+      "type": "critic-research",
+      "documentDate": "2020-10-22",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:40.103045+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-bouchard-le-corton-43669/",
+      "sha256": "f78ae90bdaac71de44fe5ae9b67d21baacf28733340cc65e4d19d0a3ee09c0e5",
+      "bytes": 165244,
+      "finding": "States that Bouchard acquired about 60% of Le Corton in 1909 and that its red Le Corton includes cadastre plots 8 and 9."
+    },
+    {
+      "id": "wh-meo-vas",
+      "title": "Winehog: Domaine Méo-Camuzet Corton La Vigne au Saint",
+      "url": "https://winehog.org/terroir-insight-domaine-meo-vigne-saint-2-2-43604/",
+      "type": "critic-research",
+      "documentDate": "2020-10-16",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:04:44.980892+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-meo-vigne-saint-2-2-43604/",
+      "sha256": "1bc370d5f5084ce121f83ff0351308bf546c548496dde41311deec3e1947e67a",
+      "bytes": 173989,
+      "finding": "States that Méo-Camuzet added a Vigne au Saint plot in 2009 and owns 0.1983 ha in the west end of the climat."
+    },
+    {
+      "id": "wh-mallard-cc",
+      "title": "Winehog: Domaine Michel Mallard Corton-Charlemagne",
+      "url": "https://winehog.org/terroir-insight-domaine-michel-mallard-charlemagne-44757/",
+      "type": "critic-research",
+      "documentDate": "2020-12-29",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:06:10.005837+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-michel-mallard-charlemagne-44757/",
+      "sha256": "86f73ff8a10728a1bc5e5521b8db21af5c1382fdfa6c4a52f5f1cfebc39dfdba",
+      "bytes": 168360,
+      "finding": "States that Mallard has plots in Corton Les Maréchaudes, Le Rognet, Renardes and Le Charlemagne, on a 13 ha estate."
+    },
+    {
+      "id": "wh-chantereves-cc",
+      "title": "Winehog: Chanterêves Corton-Charlemagne",
+      "url": "https://winehog.org/terroir-insight-domaine-chantereves-corton-charlemagne-2-44534/",
+      "type": "critic-research",
+      "documentDate": "2020-12-18",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:06:12.433993+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-chantereves-corton-charlemagne-2-44534/",
+      "sha256": "3fde3dea95db1d8143c2f1f1ff6a962f4e2982c29543877b61832d39ef438e37",
+      "bytes": 168436,
+      "finding": "States that Chanterêves buys grapes, in a négoce-like arrangement, from En Charlemagne cadastre no. 168 (0.0433 ha) from 2020. A purchase, not a holding."
+    },
+    {
+      "id": "wh-drc-cc",
+      "title": "Winehog: Domaine de la Romanée-Conti Corton-Charlemagne",
+      "url": "https://winehog.org/terroir-insight-domaine-romanee-conti-charlemagne-2-43710/",
+      "type": "critic-research",
+      "documentDate": "2020-11-15",
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:06:33.439841+00:00",
+      "retrievedFrom": "https://winehog.org/terroir-insight-domaine-romanee-conti-charlemagne-2-43710/",
+      "sha256": "845c9a523870b9193d0491e11047bdf03eceba915bf55ecf66e06d31418a1a1a",
+      "bytes": 173536,
+      "finding": "States that DRC took over cultivation of part of the Bonneau du Martray vineyards under a lease agreed in 2018, first wine 2019. No parcels named."
+    },
+    {
+      "id": "drc-corton",
+      "title": "Domaine de la Romanée-Conti: Corton",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/1/corton",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:07.484150+00:00",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/1/corton",
+      "sha256": "408c1df2a223a6ea60fee9a67c04b55b8268484b23a67efc3eda8c7cad273061",
+      "bytes": 213001,
+      "finding": "States 2.2746 ha taken en fermage from 11 November 2008 from Domaine Prince Florent de Mérode, in Le Clos du Roi, Les Bressandes and Les Renardes; first harvest 2009."
+    },
+    {
+      "id": "cdb-bressandes",
+      "title": "Chandon de Briailles: Corton Les Bressandes",
+      "url": "https://www.chandondebriailles.com/fr_FR/vin/corton-les-bressandes",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:30:56.635766+00:00",
+      "retrievedFrom": "https://www.chandondebriailles.com/fr_FR/vin/corton-les-bressandes",
+      "sha256": "f4088d252e24c45ed43d5420f7cbd6d0bfbf8e3b762cdefb5acbbf289eafb7ed",
+      "bytes": 49200,
+      "finding": "Four parcels totalling 1.4535 ha, spread north to south through Les Bressandes. No tenure stated."
+    },
+    {
+      "id": "cdb-cdr",
+      "title": "Chandon de Briailles: Corton Clos du Roi",
+      "url": "https://www.chandondebriailles.com/fr_FR/vin/corton-clos-du-roi",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:30:59.687092+00:00",
+      "retrievedFrom": "https://www.chandondebriailles.com/fr_FR/vin/corton-clos-du-roi",
+      "sha256": "eecac66333f4912c35ef1a93906a38b542c1aea5e684eb8a45ba5c4cb3fa13bd",
+      "bytes": 48855,
+      "finding": "Two parcels totalling 0.4465 ha: 0.3505 ha planted 1961 and 0.096 ha planted 2018."
+    },
+    {
+      "id": "cdb-marechaudes",
+      "title": "Chandon de Briailles: Corton Les Maréchaudes",
+      "url": "https://www.chandondebriailles.com/fr_FR/vin/corton-les-marechaudes",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:02.662480+00:00",
+      "retrievedFrom": "https://www.chandondebriailles.com/fr_FR/vin/corton-les-marechaudes",
+      "sha256": "a55850a18d772b6e2b73c5ef329dbfa428639d71bde18d28f5f7e2dfa8537177",
+      "bytes": 49013,
+      "finding": "Two parcels: 0.2742 ha planted 1975 and 0.123 ha planted 1980."
+    },
+    {
+      "id": "cdb-blanc",
+      "title": "Chandon de Briailles: Corton Blanc",
+      "url": "https://www.chandondebriailles.com/fr_FR/vin/corton-blanc",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:04.339886+00:00",
+      "retrievedFrom": "https://www.chandondebriailles.com/fr_FR/vin/corton-blanc",
+      "sha256": "a21146b8a42a7fb75eb9b7e7e6b9c25baa0aaf29ba096f8e90a0f023dbae0ba1",
+      "bytes": 48966,
+      "finding": "Three parcels totalling 0.5578 ha, two of them in Les Bressandes."
+    },
+    {
+      "id": "ardhuy-hm",
+      "title": "Domaine d’Ardhuy: Corton Hautes Mourottes",
+      "url": "https://www.ardhuy.com/vins/corton-grand-cru-hautes-mourottes",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:51.853711+00:00",
+      "retrievedFrom": "https://www.ardhuy.com/vins/corton-grand-cru-hautes-mourottes",
+      "sha256": "b11fe4551ded082bb63ba8fb9038e793edf8bc1538a72a87eda281c23c353c7e",
+      "bytes": 142720,
+      "finding": "States a surface of 0.63 ha."
+    },
+    {
+      "id": "ardhuy-ren",
+      "title": "Domaine d’Ardhuy: Corton Les Renardes",
+      "url": "https://www.ardhuy.com/vins/corton-grand-cru-les-renardes",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:54.352420+00:00",
+      "retrievedFrom": "https://www.ardhuy.com/vins/corton-grand-cru-les-renardes",
+      "sha256": "95356e5c6b2d53b66fad1a5aeeac208e03ba3052691da7c44ee4d65464cbb37c",
+      "bytes": 142713,
+      "finding": "States a surface of 1.63 ha."
+    },
+    {
+      "id": "ardhuy-cdr",
+      "title": "Domaine d’Ardhuy: Corton Le Clos du Roi",
+      "url": "https://www.ardhuy.com/vins/corton-grand-cru-le-clos-du-roi",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:56.689087+00:00",
+      "retrievedFrom": "https://www.ardhuy.com/vins/corton-grand-cru-le-clos-du-roi",
+      "sha256": "bbab003fdf6cddd125a27e7655525a24eeb30679b645b67496a162f8b340c3f7",
+      "bytes": 142910,
+      "finding": "States a surface of 0.96 ha."
+    },
+    {
+      "id": "ardhuy-pou",
+      "title": "Domaine d’Ardhuy: Corton Les Pougets",
+      "url": "https://www.ardhuy.com/vins/corton-grand-cru-les-pougets",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:31:59.104274+00:00",
+      "retrievedFrom": "https://www.ardhuy.com/vins/corton-grand-cru-les-pougets",
+      "sha256": "26f38e4eab60db7f212629ec411d5f1b3fd626e68145a5edc72723b3279c5cb1",
+      "bytes": 142677,
+      "finding": "States a surface of 0.15 ha."
+    },
+    {
+      "id": "guyon-bressandes",
+      "title": "Domaine Antonin Guyon: Corton Bressandes",
+      "url": "https://www.guyon-bourgogne.com/Les-vins/pages/Corton-Bressandes-Grand-Cru.html",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:28.045194+00:00",
+      "retrievedFrom": "https://www.guyon-bourgogne.com/Les-vins/pages/Corton-Bressandes-Grand-Cru.html",
+      "sha256": "d9810630b56b1692118716672c91ebb11c559e94e1861766743f5dc1d93ea636",
+      "bytes": 13399,
+      "finding": "States 85 ares of Corton Bressandes, Aloxe-Corton."
+    },
+    {
+      "id": "guyon-cdr",
+      "title": "Domaine Antonin Guyon: Corton Clos du Roy",
+      "url": "https://www.guyon-bourgogne.com/Les-vins/pages/Corton-Clos-du-Roy-Grand-Cru.html",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:26.632833+00:00",
+      "retrievedFrom": "https://www.guyon-bourgogne.com/Les-vins/pages/Corton-Clos-du-Roy-Grand-Cru.html",
+      "sha256": "28e1fbff04752746efc49ad5f3424fc76bd551be76ff8263e741ab23d429f564",
+      "bytes": 13354,
+      "finding": "States 55 ares of Corton Clos du Roy, Aloxe-Corton."
+    },
+    {
+      "id": "arnoux-rognet",
+      "title": "Domaine Arnoux Père et Fils: Corton Le Rognet",
+      "url": "https://www.domaine-arnoux.com/vin/corton-grand-cru-le-rognet/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:30.977723+00:00",
+      "retrievedFrom": "https://www.domaine-arnoux.com/vin/corton-grand-cru-le-rognet/",
+      "sha256": "c27f4b07fb737e797300ad7e486f69f49e255d2dd670717ec7a6fd94e2bea91f",
+      "bytes": 89268,
+      "finding": "States 34 ares, planted 1984."
+    },
+    {
+      "id": "montille-cdr",
+      "title": "Domaine de Montille: Corton Clos du Roi",
+      "url": "https://www.demontille.com/fr_FR/wine/corton-grand-cru-clos-du-roi",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:16.134475+00:00",
+      "retrievedFrom": "https://www.demontille.com/fr_FR/wine/corton-grand-cru-clos-du-roi",
+      "sha256": "7273339e7d1439b41cd5701641ce50b975e4e3fda6f1d063841f71fa090e8008",
+      "bytes": 34202,
+      "finding": "States 0.84 ha of Corton Clos du Roi (2023 vintage page).",
+      "evidenceSeason": "2023"
+    },
+    {
+      "id": "bertagna-corton",
+      "title": "Domaine Bertagna: Corton Les Grandes Lolières",
+      "url": "https://www.domainebertagna.com/corton-gc",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:04.809228+00:00",
+      "retrievedFrom": "https://www.domainebertagna.com/corton-gc",
+      "sha256": "22391285bb7efc89bca30f7ed1cfbbadafcac3dc3a25a9a9ef2e88091236cb36",
+      "bytes": 713663,
+      "finding": "States 0 ha 25 of Corton Les Grandes Lolières."
+    },
+    {
+      "id": "cdm-verg",
+      "title": "Château de Meursault: Corton Vergennes",
+      "url": "https://www.chateau-meursault.com/vins/corton-vergennes-grand-cru-blanc/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:32:08.536152+00:00",
+      "retrievedFrom": "https://www.chateau-meursault.com/vins/corton-vergennes-grand-cru/",
+      "sha256": "67f502a85d96bfc59c809d56a0a43f24d81102558163e88a5e68f5e16caf43e0",
+      "bytes": 224127,
+      "finding": "States 18.20 ares exploited (superficie exploitée) in Corton Vergennes."
+    },
+    {
+      "id": "bw-croix-greves",
+      "title": "Becky Wasserman: Domaine des Croix Corton Les Grèves",
+      "url": "https://www.beckywasserman.com/domaines/domaine-des-croix/corton-greves-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:06.585179+00:00",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/domaine-des-croix/corton-greves-grand-cru/",
+      "sha256": "c98578204c1e8d3ab88c54a14b2cc629eaba27baef68d2cea596976a925a21ff",
+      "bytes": 58224,
+      "finding": "States 0.55 ha, planted 1960."
+    },
+    {
+      "id": "bw-croix-vas",
+      "title": "Becky Wasserman: Domaine des Croix Corton La Vigne au Saint",
+      "url": "https://www.beckywasserman.com/domaines/domaine-des-croix/corton-la-vigne-au-saint-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:08.147799+00:00",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/domaine-des-croix/corton-la-vigne-au-saint-grand-cru/",
+      "sha256": "14e64d01e20b4c83b0e3c6f88674a059371b42cb214760eea1b702e14e730831",
+      "bytes": 50709,
+      "finding": "States 0.29 ha, planted 1960."
+    },
+    {
+      "id": "jadot-pougets",
+      "title": "Louis Jadot: Corton Pougets technical sheet",
+      "url": "https://www.louisjadot.com/bo/wp-content/pdf/vins/vin-1582-corton-pougets.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:35:15.343299+00:00",
+      "retrievedFrom": "https://www.louisjadot.com/bo/wp-content/pdf/vins/vin-1582-corton-pougets.pdf",
+      "sha256": "6276270679e1043718a8b553e1920d26a6dbdd2d391e3709fa80d5ae492adee1",
+      "bytes": 3445736,
+      "finding": "States that the wine comes from the domaine des Héritiers Louis Jadot (1.54 hectares) in Les Pougets."
+    },
+    {
+      "id": "meo-rognet",
+      "title": "Domaine Méo-Camuzet: Corton Clos Rognet",
+      "url": "https://www.meo-camuzet.com/en/the-wines/3/corton-clos-rognet",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:19.164730+00:00",
+      "retrievedFrom": "https://www.meo-camuzet.com/en/the-wines/3/corton-clos-rognet",
+      "sha256": "64bed60c37cf1a73b20cda1e572c18dcf19e285681d6d452b7498759878c39ab",
+      "bytes": 40407,
+      "finding": "Clos Rognet, in Ladoix-Serrigny, is “just over one acre”."
+    },
+    {
+      "id": "meo-perrieres",
+      "title": "Domaine Méo-Camuzet: Corton Les Perrières",
+      "url": "https://www.meo-camuzet.com/en/the-wines/4/corton-les-perrieres",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:22.938708+00:00",
+      "retrievedFrom": "https://www.meo-camuzet.com/en/the-wines/4/corton-les-perrieres",
+      "sha256": "2776de129de4aedcad8285b50764733a82d9939abb59a0c14d2a3057d9ad6a68",
+      "bytes": 40821,
+      "finding": "Les Perrières is “about one and a half acres”, north of the village of Aloxe."
+    },
+    {
+      "id": "meo-vas",
+      "title": "Domaine Méo-Camuzet: Corton La Vigne au Saint",
+      "url": "https://www.meo-camuzet.com/en/the-wines/5/corton-la-vigne-au-saint",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:39:24.779862+00:00",
+      "retrievedFrom": "https://www.meo-camuzet.com/en/the-wines/5/corton-la-vigne-au-saint",
+      "sha256": "bb9d6c58ad2076c45004fb8542b1b69ec41eec2e48036d20bf20fa158d3a0b22",
+      "bytes": 39926,
+      "finding": "La Vigne au Saint is “nearly half an acre”."
+    },
+    {
+      "id": "capitain-rouges",
+      "title": "Capitain-Gagnerot: red wines",
+      "url": "https://www.capitain-gagnerot.com/les-vins-rouges/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:32:45.941640+00:00",
+      "retrievedFrom": "https://www.capitain-gagnerot.com/les-vins-rouges/",
+      "sha256": "5c4484a01ba5860440e35defb87730074610b4656862218139e6c527e09d7add",
+      "bytes": 26021,
+      "finding": "Lists Corton Les Grandes Lolières, Les Maréchaudes and Renardes, without areas."
+    },
+    {
+      "id": "faiveley-cdc",
+      "title": "Domaine Faiveley: Corton Clos des Cortons Faiveley",
+      "url": "https://domaine-faiveley.com/fiche-vin/corton-clos-des-cortons-faiveley-grand-cru-monopole/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:32:42.582850+00:00",
+      "retrievedFrom": "https://domaine-faiveley.com/fiche-vin/corton-clos-des-cortons-faiveley-grand-cru-monopole/",
+      "sha256": "32c366cd73b8045fc794f076df44c5ca313c697d2a0147c2d82fd773d4d76912",
+      "bytes": 80361,
+      "finding": "States 2 ha 76 a 52 ca, a family monopole since 1874. No lieu-dit or commune is named."
+    },
+    {
+      "id": "latour-grancey",
+      "title": "Louis Latour: Château Corton Grancey",
+      "url": "https://www.louislatour.com/en/maison-louis-latour/domaine-chateau-corton-grancey",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:34:05.217060+00:00",
+      "retrievedFrom": "https://www.louislatour.com/en/maison-louis-latour/domaine-chateau-corton-grancey",
+      "sha256": "d6f1ad9aed0a3476ef413c0d190a37fd0ec4b5d5c97c7f6d5eae8de7f3004504",
+      "bytes": 51917,
+      "finding": "A blend of Les Bressandes, Les Perrières, Les Grèves and Le Clos du Roi. No areas."
+    },
+    {
+      "id": "bdm-colline",
+      "title": "Bonneau du Martray: la colline de Corton",
+      "url": "https://www.bonneaudumartray.com/fr/un-site/6/la-colline-de-corton",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:34:12.106488+00:00",
+      "retrievedFrom": "https://www.bonneaudumartray.com/fr/un-site/6/la-colline-de-corton",
+      "sha256": "eeab3fed122393d3e7303d5e6c6ddd257170abafa1a7b88d8589d16700ba804e",
+      "bytes": 183109,
+      "finding": "The domaine’s vines are all on the Corton hill, in Le and En Charlemagne; no red Corton area is given."
+    },
+    {
+      "id": "mallard-marechaudes",
+      "title": "Domaine Mallard: Corton Les Maréchaudes technical sheet",
+      "url": "https://www.domaine-mallard.com/vins/images/pdf_appellations/CortonGrandCruLesMarechaudes.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:35:08.945761+00:00",
+      "retrievedFrom": "https://www.domaine-mallard.com/vins/images/pdf_appellations/CortonGrandCruLesMarechaudes.pdf",
+      "sha256": "a3c48789e40c9fdeedb3079c88e5b680fa2d1e16f5e9e5d705ba29ac65c37652",
+      "bytes": 390457,
+      "finding": "States 30 ares 35 of Corton Les Maréchaudes."
+    },
+    {
+      "id": "winebow-tollot",
+      "title": "Winebow: Domaine Tollot-Beaut",
+      "url": "https://www.winebow.com/our-brands/domaine-tollot-beaut",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:34:26.822465+00:00",
+      "retrievedFrom": "https://www.winebow.com/index.php/our-brands/domaine-tollot-beaut",
+      "sha256": "d47dda21dc7fcb767aa5ddc7c48050e609c3e981b5cd6676d6d7dd43f11ce742",
+      "bytes": 447845,
+      "finding": "Importer profile of the Chorey-lès-Beaune estate; lists a Corton wine. No Corton area captured."
+    },
+    {
+      "id": "hdb-dumay",
+      "title": "Hospices de Beaune: Corton Charlotte Dumay",
+      "url": "https://domaine.hospices-de-beaune.com/node/201",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:54.554059+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/201",
+      "sha256": "55e0b339270f92f1fc1c448ec3aa74b4243d891f0bc4d87786ee7c69d7dc128e",
+      "bytes": 28846,
+      "finding": "Cuvée made entirely from Les Bressandes. No area."
+    },
+    {
+      "id": "hdb-peste",
+      "title": "Hospices de Beaune: Corton Docteur Peste",
+      "url": "https://domaine.hospices-de-beaune.com/node/202",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:55.984909+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/202",
+      "sha256": "f17647169cd4320657150b5d4da2e39d090d31440abed422c1d9a94bc596b8a3",
+      "bytes": 28789,
+      "finding": "Climats Les Chaumes, Les Grèves and Les Bressandes. No area."
+    },
+    {
+      "id": "hdb-cdr",
+      "title": "Hospices de Beaune: Corton Clos du Roi Baronne du Baÿ",
+      "url": "https://domaine.hospices-de-beaune.com/node/203",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:58.143634+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/203",
+      "sha256": "38c0ae9593ff13414538d3def6e5a5e89cface66642982bdec48c823b3c9dd0d",
+      "bytes": 28978,
+      "finding": "Cuvée from Le Clos du Roi. No area."
+    },
+    {
+      "id": "hdb-berthier",
+      "title": "Hospices de Beaune: Corton Les Renardes Berthier-Sweeney",
+      "url": "https://domaine.hospices-de-beaune.com/node/246",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:33:59.532557+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/246",
+      "sha256": "d4b09a1b7d0868a368a474c80870181c34ed581bb8c67112646f410dbac6733a",
+      "bytes": 26752,
+      "finding": "Cuvée from Les Renardes. No area."
+    },
+    {
+      "id": "hdb-chanson",
+      "title": "Hospices de Beaune: Corton Vergennes Paul Chanson",
+      "url": "https://domaine.hospices-de-beaune.com/node/225",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:34:01.765406+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/225",
+      "sha256": "a0b80b785f23cf21f9c6f1cbda6ed1173930f2153e1db0028e4b6958fba0fe8b",
+      "bytes": 28612,
+      "finding": "White cuvée from Les Vergennes. No area."
+    },
+    {
+      "id": "hdb-pesteb",
+      "title": "Hospices de Beaune: Corton Blanc Docteur Peste",
+      "url": "https://domaine.hospices-de-beaune.com/node/239",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-07",
+      "access": "read",
+      "retrievedAt": "2026-10-07T13:34:03.203790+00:00",
+      "retrievedFrom": "https://domaine.hospices-de-beaune.com/node/239",
+      "sha256": "ad4b16f0c4d9b595f5d978d3ba23c9ffbaf9292cfc0fa78351c83a45d5603522",
+      "bytes": 28515,
+      "finding": "White cuvée from Les Fiètres. No area."
     }
   ],
   "holders": [
     {
       "holderId": "036380046",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Bichot SA holds Les Languettes B 0047. Its existing Domaine du Clos Frantin link is limited to the Flagey crus; no source ties this Corton parcel to a Bichot label, so the legal name is shown."
     },
     {
       "holderId": "037180015",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-037180015",
+        "bertagna-corton"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Bertagna publishes 0 ha 25 of Corton Les Grandes Lolières; the company also holds small Rognet and Carrières parcels. Current parcel farming unconfirmed."
     },
     {
       "holderId": "200047827",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-200047827",
+        "hdb-dumay",
+        "hdb-peste",
+        "hdb-cdr",
+        "hdb-berthier",
+        "hdb-chanson",
+        "hdb-pesteb"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The Hospices name their Corton cuvées by climat (Bressandes, Chaumes, Grèves, Clos du Roi, Renardes, Vergennes, Fiètres) without areas; their 32 recorded parcels are compared by named area only. Current parcel farming unconfirmed."
     },
     {
       "holderId": "212100101",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-212100101"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public body. Its recorded parcels are small strips or plots inside the cru; no domaine applies."
     },
     {
       "holderId": "212101869",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-212101869"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public body. Its recorded parcels are small strips or plots inside the cru; no domaine applies."
     },
     {
       "holderId": "212104806",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-212104806"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public body. Its recorded parcels are small strips or plots inside the cru; no domaine applies."
     },
     {
       "holderId": "242106300",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public intercommunal syndicate; the SIREN returns no register record."
     },
     {
       "holderId": "300461761",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-300461761"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Register officers are Beaunoise de Financement et de Participation and a Boisseaux family member; Château de Meursault’s own legal notice names another company (SCEV du Château de Meursault, 752 036 418). Not linked from the name."
     },
     {
       "holderId": "302572094",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-302572094"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Pommard farming company of Domaine Parent; seven small Renardes, Rognet and Vergennes parcels. Current parcel farming unconfirmed."
     },
     {
       "holderId": "312990021",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-312990021",
+        "jadot-pougets"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Jadot’s Corton Pougets sheet says the wine comes from the Domaine des Héritiers Louis Jadot (1.54 ha); the company holds 2.84 ha of mapped Pougets and Chaumes et Voierosse overlap. Current parcel farming unconfirmed."
     },
     {
       "holderId": "314306747",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-314306747"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Les Languettes B 0004. Current parcel farming unconfirmed."
     },
     {
       "holderId": "314722661",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-314722661"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Senard family company formed in 1978; its two small Corton-outline parcels are buildings and garden. The domaine company’s commercial lease concerns another building. Current parcel farming unconfirmed."
     },
     {
       "holderId": "319775433",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-319775433"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The family GFA of the Rapet family at Pernand-Vergelesses; its filings name no tenant. Current parcel farming unconfirmed."
     },
     {
       "holderId": "322463894",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-322463894"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Family GFA named after Domaine Pavelot, in the same Pernand-Vergelesses street as SCEV Domaine Pavelot. Current parcel farming unconfirmed."
     },
     {
       "holderId": "322826686",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-322826686"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Former Duparet family GFA converted to an SCA in 2017; manager Canada Inc. No tenant named."
     },
     {
       "holderId": "323178111",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-323178111",
+        "mallard-marechaudes"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The estate’s legal notice names EARL Michel Mallard et Fils, RCS 323178111. The company holds usufruct (U) on its Le Rognet and Le Charlemagne parcels. Current parcel farming unconfirmed."
     },
     {
       "holderId": "324989359",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-324989359",
+        "wh-croix-cc",
+        "wh-croix-greves",
+        "wh-croix-vas",
+        "bw-croix-greves",
+        "bw-croix-vas"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Winehog names this domaine’s plots 19 and 45 in Le Charlemagne and gives its Grèves (0.5500 ha) and Vigne au Saint (0.2877 ha) areas; all match the company’s parcels exactly. Current parcel farming unconfirmed."
     },
     {
       "holderId": "325421634",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-325421634",
+        "ardhuy-hm",
+        "ardhuy-ren",
+        "ardhuy-cdr",
+        "ardhuy-pou"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The company, formerly Société du Domaine Les Terres Vineuses and Domaine de la Juvinière, is now registered as Domaine d’Ardhuy. d’Ardhuy publishes Corton Hautes Mourottes, Renardes, Clos du Roi and Pougets areas. Current parcel farming unconfirmed."
     },
     {
       "holderId": "326781853",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-326781853"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The estate’s legal notice names this EARL; it holds Hautes Mourottes AH 0171. Current parcel farming unconfirmed."
     },
     {
       "holderId": "326791548",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-326791548"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Recorded as GFA Javillier; since 2025 SAS Patrick Javillier, vine growing, Meursault. Current parcel farming unconfirmed."
     },
     {
       "holderId": "327166898",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-327166898"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Managed by Société Civile d’Ardhuy, whose recorded partner is the Domaine d’Ardhuy company. Current parcel farming unconfirmed."
     },
     {
       "holderId": "328061346",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-328061346"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds two Corton parcels. Current parcel farming unconfirmed."
     },
     {
       "holderId": "328186416",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-328186416",
+        "bdm-colline",
+        "wh-drc-cc"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Bonneau du Martray’s land lies on the Pernand side of the hill; Winehog reports that Domaine de la Romanée-Conti took over cultivation of part of it under a lease from 2019. Current parcel farming unconfirmed."
     },
     {
       "holderId": "330713074",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-330713074"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Vougeraie’s legal notice names this company; its four recorded parcels are in En Charlemagne. Current parcel farming unconfirmed."
     },
     {
       "holderId": "334354859",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-334354859"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds En Charlemagne AL 0173 and AL 0175. Current parcel farming unconfirmed."
     },
     {
       "holderId": "349583500",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-349583500"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Officers include SCA Domaine de la Vougeraie and SFG de la Vougeraie with the role “Autre”; the relation is not stated."
     },
     {
       "holderId": "377495288",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-377495288"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Roumier publishes 0.2040 ha of Corton-Charlemagne in Pernand-Vergelesses, exactly the area of this GFA’s En Charlemagne AL 0192. Current parcel farming unconfirmed."
     },
     {
       "holderId": "378948053",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-378948053"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "EARL Domaine Maurice Chapuis, renamed SARL Maurice Chapuis (trading as Domaine Chapuis) in 2025 after absorbing 408975357. Current parcel farming unconfirmed."
     },
     {
       "holderId": "388212649",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-388212649"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Le Rognet AK 0014. Current parcel farming unconfirmed."
     },
     {
       "holderId": "392477600",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-392477600"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Bichot publishes Corton Clos des Maréchaudes as a 0.55 ha monopole of Domaine du Pavillon; this company holds the clos parcel E 0118 (0.49 ha inside the cru). Current parcel farming unconfirmed."
     },
     {
       "holderId": "398805366",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-398805366"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Investment GFV managed by Caisse Fédérale de Crédit Mutuel; screened filings name no tenant."
     },
     {
       "holderId": "400737938",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-400737938"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Le Charlemagne A 0028 and Les Combes I 0235. Its 1995 founding deed recites an earlier lease to an individual; a 2004 partition deed states that all the GFA’s land, including its Aloxe-Corton vines, is let long-term to SCEV Château Genot-Boulanger. No filing names these two references; current parcel farming unconfirmed."
     },
     {
       "holderId": "402345144",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-402345144"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Amundi-managed GFV; its leases concern Santenay land."
     },
     {
       "holderId": "403405764",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-403405764"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Guillemot family GFV (Savigny-lès-Beaune); filings name no tenant for its Corton parcels."
     },
     {
       "holderId": "407881291",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-407881291"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds one Corton parcel. Current parcel farming unconfirmed."
     },
     {
       "holderId": "408975357",
-      "basis": "identity-only",
+      "basis": "succession-lead",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-408975357"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "SARL Maurice Chapuis was merged into 378948053 and struck off in March 2025; the 2025 rights file still records it. Current parcel farming unconfirmed."
     },
     {
       "holderId": "409988342",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-409988342"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Investment GFV managed by André & Associés; its founding deed names its En Charlemagne parcels, no tenant."
     },
     {
       "holderId": "420088387",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-420088387"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Pernand-Vergelesses farming company named Domaine Pavelot; its 1998 filings show Régis Pavelot leasing vines to the company. Current parcel farming unconfirmed."
     },
     {
       "holderId": "422190785",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-422190785"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "S2V holds 99 of the SCI’s 100 shares, and the SCI’s Corton “Les Chaumes” parcel is under a farm lease to S2V. The 2015 deed prints no cadastral reference. Current parcel farming unconfirmed."
     },
     {
       "holderId": "423743657",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-423743657"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Gay family GFA at Chorey-lès-Beaune; no tenant named."
     },
     {
       "holderId": "424927424",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-424927424"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Maigne family GFA (1976); no tenant named."
     },
     {
       "holderId": "427468962",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-427468962"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The family GFA’s statutes recite that all contributed land is let to the Société Civile Domaine Louis Latour, to 10 November 2026. Its four Corton parcels match the founding schedule by reference and area. Current parcel farming unconfirmed."
     },
     {
       "holderId": "427468988",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-427468988"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The family GFA’s statutes recite that all contributed land is let to the Société Civile Domaine Louis Latour, to 10 November 2026. Its four Corton parcels match the founding schedule by reference and area. Current parcel farming unconfirmed."
     },
     {
       "holderId": "428680011",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-428680011"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Delarche family GFA at Pernand-Vergelesses (1999); no tenant named."
     },
     {
       "holderId": "440712529",
-      "basis": "identity-only",
+      "basis": "secondary-estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-440712529",
+        "winebow-tollot"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Family GFA of the Tollot family at Chorey-lès-Beaune; no filing reviewed names a tenant. Current parcel farming unconfirmed."
     },
     {
       "holderId": "442062527",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-442062527"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holding société civile; no tenant named."
     },
     {
       "holderId": "443958350",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-443958350"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Dufouleur family SCI in Beaune; one filing, no tenant named."
     },
     {
       "holderId": "448234492",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-448234492",
+        "bodacc-fermiere-remoissenet"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Merged into Fermière Remoissenet SAS (487842965) in 2022; the merger list names its Corton parcels. Not linked to a label without a source."
     },
     {
       "holderId": "448502708",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-448502708",
+        "meo-perrieres",
+        "meo-rognet"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Méo-Camuzet’s office company holds Les Perrières B 0066 and Clos Rognet AK 0033; the domaine publishes both Cortons. Current parcel farming unconfirmed."
     },
     {
       "holderId": "449347426",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-449347426"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFV named after Claude Chevalier at Hameau de Buisson, Ladoix-Serrigny; its one filing names no tenant, and no estate source was reachable."
     },
     {
       "holderId": "451042832",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-451042832"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Family GFA (Saint-Vallier) whose founding deed mandated the purchase of Renardes C 74; no tenant named."
     },
     {
       "holderId": "478499098",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-478499098"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Coupet family GFA at Volnay; no tenant named."
     },
     {
       "holderId": "480400407",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-480400407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Bressandes D 0029 and Clos du Roi D 0128. Current parcel farming unconfirmed."
     },
     {
       "holderId": "481279297",
-      "basis": "identity-only",
+      "basis": "succession-lead",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-481279297"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Recorded with bare ownership (N) of AL 0319; the GFA was dissolved into its partner Domaine Dublère in 2024. Current parcel farming unconfirmed."
     },
     {
       "holderId": "482807393",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-482807393"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds usufruct (U) on En Charlemagne AL 0319, whose bare ownership is recorded to GFA Héritiers Belin-Naigon. Current parcel farming unconfirmed."
     },
     {
       "holderId": "483134516",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-483134516",
+        "montille-cdr",
+        "wh-montille-cdr"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Montille publishes 0.84 ha of Corton Clos du Roi, close to its three parcels plus the SCEA’s D 132 (0.84 ha together). Current parcel farming unconfirmed."
     },
     {
       "holderId": "487716805",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-487716805"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2005 founding deed recites that A 48 and B 6 are let to the Société Civile Domaine Louis Latour to 10 November 2026; both match by reference and area. Current parcel farming unconfirmed."
     },
     {
       "holderId": "498546258",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-498546258"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Its 2007 founding deed mandates a long-term lease of En Charlemagne AL 320 to an individual; no domaine company named."
     },
     {
       "holderId": "509207429",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-509207429"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Its only asset is En Charlemagne AL 181, bought before 2012; no tenant named."
     },
     {
       "holderId": "510368210",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-510368210"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2008 founding deed names AK 47 and AK 49 with their areas and recites leases of both to S.A.R.L. Domaine Maillard Père et Fils, the latest stated end being 10 November 2014. Renewal and current farming unconfirmed."
     },
     {
       "holderId": "511314635",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-511314635"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2009 founding deed names five Corton parcels with their areas and recites their lease to Maurice Chapuis personally, for 25 years from 1 July 1995. Continuation after 2020 and current farming unconfirmed."
     },
     {
       "holderId": "515045292",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515045292"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Le Charlemagne A 0026 and A 0029. Current parcel farming unconfirmed."
     },
     {
       "holderId": "515420255",
-      "basis": "identity-only",
+      "basis": "group-and-estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515420255",
+        "wh-bouchard-lecorton"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Recorded on 1 January 2025 as Maison Bouchard Père et Fils; renamed Vignoble des Cabottes in 2026 after contributing a business branch to the company now publishing as Bouchard Père & Fils. Which assets moved is not itemised. Current parcel farming unconfirmed."
     },
     {
       "holderId": "515520369",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515520369"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Renamed SCEV Château Corton-André in 2015 and now SCEV Domaine Frey; partners PJA Diffusion and Montebello Domaines. No current estate source names this company."
     },
     {
       "holderId": "515520385",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515520385"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Register identity of Leroy SA (Maison Leroy), partner in the Domaine Leroy companies; it holds Le Corton C 0013, C 0014 and C 0015 and Renardes C 0052. No reviewed filing names these parcels or a lease; current parcel farming unconfirmed."
     },
     {
       "holderId": "515620193",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515620193"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Vougeraie publishes 0.497 ha of Corton Clos du Roi, exactly the cadastral area of this company’s only parcel, D 0011. Current parcel farming unconfirmed."
     },
     {
       "holderId": "515620466",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515620466",
+        "capitain-rouges"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The estate’s own legal notice gives SIREN 515620466. Its 2019 merger with the family GFA and the red Corton pages (Grandes Lolières, Maréchaudes, Renardes) give no areas. Current parcel farming unconfirmed."
     },
     {
       "holderId": "518310024",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-518310024"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA of 27 individual partners (2009), Dijon office. Winehog’s 0.1983 ha for Méo-Camuzet’s Vigne au Saint plot equals its parcel N 0085, but no filing names a lease or tenant."
     },
     {
       "holderId": "518966478",
-      "basis": "identity-only",
+      "basis": "registered-office-match",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-518966478"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Its office is the Méo-Camuzet address; it holds Les Perrières B 0065 next to the Méo company’s B 0066. Current parcel farming unconfirmed."
     },
     {
       "holderId": "521056788",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-521056788"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Coupet family GFA (2010); no tenant named."
     },
     {
       "holderId": "521440776",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-521440776"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA with 23 individual partners, Paris office; no tenant named."
     },
     {
       "holderId": "528291362",
-      "basis": "identity-only",
+      "basis": "group-and-estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-528291362",
+        "wh-latour-vas"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Maison Louis Latour contributed its undivided one-third shares in these parcels in 2011 and holds 54,999 of 55,000 shares; the other two-thirds are the Corton-Grancey GFA’s. Current parcel farming unconfirmed."
     },
     {
       "holderId": "528291479",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-528291479"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds the Aloxe-Corton cellar building on Les Perrières B 0028, contributed by Maison Louis Latour in 2011. Not a vineyard parcel."
     },
     {
       "holderId": "532929288",
-      "basis": "identity-only",
+      "basis": "filing-lease-mandate",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-532929288"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The founding deed names AH 120 (72 a 85 ca, coppice) and mandates a long-term lease to Vignobles Clemencet. Execution and current farming unconfirmed."
     },
     {
       "holderId": "533960894",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-533960894"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2011 founding deed recites long leases of its Corton parcels to a family member personally; no domaine company is named."
     },
     {
       "holderId": "775567928",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-775567928",
+        "faiveley-cdc"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Faiveley’s legal notice gives this SIREN. Its Clos des Cortons Faiveley page states 2 ha 76 a 52 ca as a family monopole but names no lieu-dit, so it is not placed in the named-area census. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778159715",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778159715",
+        "latour-grancey"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The Latour GFAs’ filings name this company as tenant of their land; Latour publishes Château Corton Grancey (Bressandes, Perrières, Grèves, Clos du Roi) and Clos de la Vigne au Saint. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778159731",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778159731",
+        "guyon-bressandes",
+        "guyon-cdr"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Guyon publishes 85 ares of Corton Bressandes and 55 ares of Clos du Roy; this company holds Bressandes D 0043 only. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778179846",
-      "basis": "identity-only",
+      "basis": "brand-identity-confirmed",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778179846",
+        "arnoux-rognet"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Arnoux publishes 34 ares of Corton Le Rognet; this company holds AK 0129 (0.17 ha). Current parcel farming unconfirmed."
     },
     {
       "holderId": "778230359",
-      "basis": "identity-only",
+      "basis": "secondary-estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778230359"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Domaine Clair Daü holds Les Grèves B 0045 (0.44 ha). The Jadot link rests on shared office and partner companies, not on a Corton lease. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778256123",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778256123",
+        "cdb-bressandes",
+        "cdb-cdr",
+        "cdb-marechaudes",
+        "cdb-blanc"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1967 founding statutes name nine of its eleven parcels with matching areas; the estate’s Clos du Roi (0.3505 + 0.096 ha) and Maréchaudes (0.2742 + 0.123 ha) figures equal D 5, D 3, E 98 and E 105. Current parcel farming unconfirmed."
     },
     {
       "holderId": "778586172",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778586172"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Holds Clos du Roi D 0006. Current parcel farming unconfirmed."
     },
     {
       "holderId": "793920448",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-793920448"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Partners include many domaine companies (Grands Chais de France, Sauvestre, Moillard and others); no single domaine."
     },
     {
       "holderId": "794416461",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-794416461"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public body. Its recorded parcels are small strips or plots inside the cru; no domaine applies."
     },
     {
       "holderId": "798977476",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-798977476"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "SCI Les Climats’ existing lessor link covers an Échezeaux parcel only; no filing names a tenant for its Corton parcel."
     },
     {
       "holderId": "802390898",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-802390898"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Cauvard family GFA (2013) whose deed names Le Charlemagne A 14; no tenant named."
     },
     {
       "holderId": "824253181",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-824253181"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Presided by Emperor Vineyards Limited; office at Parc Valmy, Dijon, shared with HBM II, Remus Vignobles and Saint Vincent La Vigne au Saint."
     },
     {
       "holderId": "832275333",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-832275333"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2017 founding deed names A 69, A 88, A 121, N 82 and AL 308 with their areas, and SAS du Domaine Rapet Père et Fils declares itself tenant in place. Current parcel farming unconfirmed."
     },
     {
       "holderId": "833027865",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-833027865"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "SCI whose officers include Remoissenet companies; no tenant named."
     },
     {
       "holderId": "834914756",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-834914756"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Family GFA (Demigny); no tenant named."
     },
     {
       "holderId": "851405357",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-851405357"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Presided by Romulus Vineyards Limited; same Dijon office as HBM Vignobles."
     },
     {
       "holderId": "880256847",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-880256847"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Its 2019 founding deed lets its parcels to a family member personally from 2018; no domaine company named."
     },
     {
       "holderId": "885311902",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-885311902"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Presided by FICOFI Partners Holding (Singapore); same Dijon office as HBM Vignobles."
     },
     {
       "holderId": "891743239",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-891743239"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Investor GFV whose partners include SCEA du Domaine Guy et Yvan Dufouleur among many; no tenant named."
     },
     {
       "holderId": "921219176",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-921219176"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Fery family SCI (Bron) whose officers include Fimage Packaging, also an officer of S2V; no lease or company tie to a domaine."
     },
     {
       "holderId": "931134381",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-931134381"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2024 statutes list Le Corton C 11 (57 a 00 ca) and define an 18-year lease to SCEA du Domaine Poisot-Piguet. Current parcel farming unconfirmed."
     },
     {
       "holderId": "953306917",
-      "basis": "identity-only",
+      "basis": "group-and-estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-953306917",
+        "montille-cdr"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Domaine de Montille contributed Clos du Roi D 132 in 2023 and kept the adjoining D 133; Montille publishes 0.84 ha of Corton Clos du Roi. Current parcel farming unconfirmed."
     },
     {
       "holderId": "977634369",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-977634369"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Recorded with right code R. Current parcel farming unconfirmed."
     },
     {
       "holderId": "983900960",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-983900960",
+        "mallard-renardes"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFV’s two Renardes parcels, C 61 and C 100, total 64 a 60 ca, exactly the area Domaine Mallard publishes for its Corton Les Renardes. No lease is filed. Current parcel farming unconfirmed."
     },
     {
       "holderId": "U12947760",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "gille-home"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFV was first named Domaine Pierre et Anne-Marie Gille; its 2002 deed names Renardes C 51 (16 a 25 ca) and a 1995–2013 lease to S.C.E.V. Domaine Anne Marie Gille. Current parcel farming unconfirmed."
     },
     {
       "holderId": "U14137631",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ravaut-bressandes"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA’s 1988 statutes name all seven parcels with their areas. Its three Bressandes parcels total 42 a 63 ca; the Ravaut estate publishes 0.42 ha of Corton Les Bressandes. No tenant is named. Current parcel farming unconfirmed."
     },
     {
       "holderId": "U18180442",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The identical name SCI des Domaines Dupray is SIREN 443958350, itself a recorded holder in this cru; continuity of the two identifiers is not proved."
     },
     {
       "holderId": "U18180683",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "ROYLAND (425000429) shares Domaine de la Pousse d’Or’s Paris office and lists that company among its officers, but no filing names this identifier’s Clos du Roi parcels; no crosswalk."
     },
     {
       "holderId": "U18181717",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Name search finds LES BRESSANDES SOC (778159707, Aloxe-Corton, no filings) and a closed SCI Les Bressandes; neither is proved to be this identifier."
     },
     {
       "holderId": "U21845728",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "No register record matches SC Dom Hippolyte Thevenot Aloxe Corton by name; no SIREN found."
     },
     {
       "holderId": "U21852238",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA’s statutes recite that all land it received in 1972 is let to the Société Civile Domaine Louis Latour, now to 31 October 2031. Its 16 contributed Corton parcels match by reference and area. A lease is not proof of current farming of each parcel."
     },
     {
       "holderId": "U21854744",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "No register record matches GFA Dom Emile Voarick; Voarick companies in Aloxe-Corton have other names."
     },
     {
       "holderId": "U21859561",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Public water syndicate for Beaune; no register record found by name."
     },
     {
       "holderId": "U22208861",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFV’s founding deed names E 117 Les Maréchaudes (28 a 80 ca) and replaces a 2004 lease with a 30-year lease to one of its managers personally from 2014. No domaine company is named."
     },
     {
       "holderId": "U22260456",
-      "basis": "identity-only",
+      "basis": "unresolved",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "A 19 m² parcel recorded to a hotel company; no domaine applies."
     },
     {
       "holderId": "U22282316",
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA’s 2004 founding contributions and 2020 statutes name Renardes C 29 and C 50 with their areas and recite a 1970 long-term lease to the company now named Domaine d’Ardhuy, renewed to 2010; a renewal from 1 November 2019 was authorised in 2020. Current parcel farming unconfirmed."
     },
     {
       "holderId": "U33360345",
-      "basis": "identity-only",
+      "basis": "estate-context",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFV’s 2024 founding deed names its four Le Rognet and Vergennes parcels with their areas; the rights file records bare ownership. Domaine Bruno Clavelier lists Corton “Le Rognet”. Current parcel farming unconfirmed."
     }
   ],
   "historyFindings": [],
@@ -1102,12 +1873,1946 @@
       "appNote": "Application complete 4 November 2021. Receipt is not an authorisation; outcome and actual operation unconfirmed."
     }
   ],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "wh-latour-vas",
+      "title": "Latour: Vigne au Saint plots 50 and 51",
+      "parcelIds": [
+        "210100000N0050",
+        "210100000N0051"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names La Vigne au Saint cadastre nos. 50 and 51, 1.9762 ha together, as Louis Latour’s; their cadastral areas (14,923 + 4,839 m²) sum exactly to that. The section letter is not printed; N is the only section of this climat.",
+      "sourceIds": [
+        "wh-latour-vas"
+      ],
+      "dateSourceId": "wh-latour-vas",
+      "currentFarmer": null,
+      "producer": "Domaine Louis Latour",
+      "printedReferences": [
+        "50",
+        "51"
+      ],
+      "appNote": "Winehog (2020) names plots 50 and 51 in La Vigne au Saint, 1.9762 ha, as Louis Latour’s; the cadastral areas match exactly. Ownership statement, not farming."
+    },
+    {
+      "id": "wh-croix-cc",
+      "title": "Des Croix: Le Charlemagne plots 19 and 45",
+      "parcelIds": [
+        "210100000A0019",
+        "210100000A0045"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names Le Charlemagne cadastre no. 45 (0.1254 ha) and no. 19 (0.1233 ha) as Domaine des Croix’s; both match A 0045 and A 0019, recorded to Domaine des Croix, by number and area.",
+      "sourceIds": [
+        "wh-croix-cc"
+      ],
+      "dateSourceId": "wh-croix-cc",
+      "currentFarmer": null,
+      "producer": "Domaine des Croix",
+      "printedReferences": [
+        "19",
+        "45"
+      ],
+      "appNote": "Winehog (2020) names this plot, with its exact area, as Domaine des Croix’s Corton-Charlemagne. Ownership statement, not farming."
+    },
+    {
+      "id": "wh-croix-areas",
+      "title": "Des Croix: Grèves and Vigne au Saint areas",
+      "parcelIds": [
+        "210100000B0044",
+        "210100000N0086"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog gives 0.5500 ha in Les Grèves and 0.2877 ha in La Vigne au Saint; they equal the cadastral areas of B 0044 and N 0086, both recorded to Domaine des Croix. Matched by area, not by printed number.",
+      "sourceIds": [
+        "wh-croix-greves",
+        "wh-croix-vas"
+      ],
+      "dateSourceId": "wh-croix-greves",
+      "currentFarmer": null,
+      "producer": "Domaine des Croix",
+      "appNote": "Winehog’s stated Domaine des Croix area in this climat equals this parcel’s cadastral area. Matched by area only; not farming."
+    },
+    {
+      "id": "wh-meo-vas",
+      "title": "Méo-Camuzet: Vigne au Saint area",
+      "parcelIds": [
+        "210100000N0085"
+      ],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog (2020) says Méo-Camuzet owns 0.1983 ha in the west end of La Vigne au Saint, the cadastral area of N 0085, which is recorded to the GFA Saint Vincent La Vigne au Saint. No filing links that GFA to Méo-Camuzet.",
+      "sourceIds": [
+        "wh-meo-vas",
+        "meo-vas"
+      ],
+      "dateSourceId": "wh-meo-vas",
+      "currentFarmer": null,
+      "producer": "Domaine Méo-Camuzet",
+      "appNote": "Winehog’s 0.1983 ha for Méo-Camuzet equals this parcel’s area; the recorded holder is an unlinked GFA. Area match only."
+    },
+    {
+      "id": "wh-bouchard-lecorton",
+      "title": "Bouchard: Le Corton plots 8 and 9",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) says Bouchard’s red Le Corton includes cadastre plots 8 and 9. C 0008 and C 0009, recorded to Maison Bouchard Père et Fils in 2019–2024, were merged into C 0121 (DFI 2024) and divided into today’s C 0124 and C 0125 (DFI 2025), which have no company record yet. The DFI lineage is partial in scope.",
+      "sourceIds": [
+        "wh-bouchard-lecorton"
+      ],
+      "dateSourceId": "wh-bouchard-lecorton",
+      "currentFarmer": null,
+      "producer": "Bouchard Père & Fils",
+      "printedReferences": [
+        "8",
+        "9"
+      ],
+      "predecessorReferences": {
+        "210100000C0008": [
+          "210100000C0124",
+          "210100000C0125"
+        ],
+        "210100000C0009": [
+          "210100000C0124",
+          "210100000C0125"
+        ]
+      },
+      "appNote": "Winehog (2020) names Le Corton plots 8 and 9 as Bouchard’s; DFI lineage carries them to this parcel with partial scope. Not farming."
+    },
+    {
+      "id": "chandon-areas",
+      "title": "Chandon de Briailles: Clos du Roi and Maréchaudes parcels",
+      "parcelIds": [
+        "210100000D0003",
+        "210100000D0005",
+        "210100000E0098",
+        "210100000E0105"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "The estate’s parcel areas (Clos du Roi 0.3505 and 0.096 ha; Maréchaudes 0.2742 and 0.123 ha) equal the cadastral areas of D 0005, D 0003, E 0098 and E 0105, all recorded to the domaine’s company. The pages are undated.",
+      "sourceIds": [
+        "cdb-cdr",
+        "cdb-marechaudes"
+      ],
+      "dateSourceId": "cdb-cdr",
+      "currentFarmer": null,
+      "producer": "Domaine Chandon de Briailles",
+      "appNote": "The estate’s stated parcel area equals this parcel’s cadastral area exactly; the parcel is recorded to its company. Not farming."
+    },
+    {
+      "id": "vougeraie-cdr",
+      "title": "Vougeraie: Clos du Roi area",
+      "parcelIds": [
+        "210100000D0011"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Vougeraie states 0.497 ha for its Corton Clos du Roi (2024 page), the cadastral area of D 0011, recorded to Les Petits Fils de Pierre Ponnelle, which SFG La Vougeraie presides.",
+      "sourceIds": [
+        "vougeraie-cdr"
+      ],
+      "dateSourceId": "vougeraie-cdr",
+      "currentFarmer": null,
+      "producer": "Domaine de la Vougeraie",
+      "appNote": "Vougeraie’s 0.497 ha of Corton Clos du Roi equals this parcel’s cadastral area. Area match only; not farming."
+    },
+    {
+      "id": "mallard-renardes",
+      "title": "Mallard: Renardes area",
+      "parcelIds": [
+        "210100000C0061",
+        "210100000C0100"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Mallard states 64 ares 60 of Corton Les Renardes; GFV Camila’s C 0061 (441 m²) and C 0100 (6,019 m²) sum exactly to it.",
+      "sourceIds": [
+        "mallard-renardes"
+      ],
+      "dateSourceId": "mallard-renardes",
+      "currentFarmer": null,
+      "producer": "Domaine Michel Mallard",
+      "appNote": "Mallard’s 64 a 60 ca of Renardes equals this parcel and its pair in GFV Camila. Area match only; not farming."
+    },
+    {
+      "id": "roumier-cc",
+      "title": "Roumier: Corton-Charlemagne area",
+      "parcelIds": [
+        "21480000AL0192"
+      ],
+      "basis": "estate-area-exact-match",
+      "finding": "Roumier states 0.2040 ha of Corton-Charlemagne in Pernand-Vergelesses, the cadastral area of AL 0192, recorded to GFA Clos de la Bussière.",
+      "sourceIds": [
+        "roumier-cc"
+      ],
+      "dateSourceId": "roumier-cc",
+      "currentFarmer": null,
+      "producer": "Domaine Georges Roumier",
+      "appNote": "Roumier’s 0.2040 ha of Corton-Charlemagne equals this parcel’s cadastral area. Area match only; not farming."
+    },
+    {
+      "id": "chantereves-al168",
+      "title": "Chanterêves: grape purchase from En Charlemagne no. 168",
+      "parcelIds": [
+        "21480000AL0168"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) says Chanterêves buys grapes from En Charlemagne cadastre no. 168, 0.0433 ha, the cadastral area of AL 0168, which has no company record. A grape purchase names no owner or farmer, so no lead is created.",
+      "sourceIds": [
+        "wh-chantereves-cc"
+      ],
+      "dateSourceId": "wh-chantereves-cc",
+      "currentFarmer": null,
+      "printedReferences": [
+        "168"
+      ],
+      "appNote": "Winehog (2020): Chanterêves buys grapes from this 0.0433 ha plot. A purchase, not ownership or farming."
+    },
+    {
+      "id": "latour-total",
+      "title": "Louis Latour: 26.59 ha of Corton",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog (2020) gives Louis Latour 26.59 ha on the Corton hill. Latour company records cover 12.64 ha of mapped overlap, 20.46 ha with the three family GFAs whose land is recited as let to the Société Civile Domaine Louis Latour; the figure may also include Corton-Charlemagne and other leased land.",
+      "sourceIds": [
+        "wh-latour-vas",
+        "latour-grancey"
+      ],
+      "dateSourceId": "wh-latour-vas",
+      "currentFarmer": null
+    },
+    {
+      "id": "drc-bdm-lease",
+      "title": "DRC: lease of part of Bonneau du Martray",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog (2020) reports that Domaine de la Romanée-Conti took over cultivation of part of the Bonneau du Martray vineyard under a lease agreed in 2018. No parcels or area are named, so no parcel lead is created.",
+      "sourceIds": [
+        "wh-drc-cc"
+      ],
+      "dateSourceId": "wh-drc-cc",
+      "currentFarmer": null
+    },
+    {
+      "id": "mallard-plots",
+      "title": "Mallard: Corton plots by climat",
+      "parcelIds": [],
+      "basis": "critic-holding-description",
+      "finding": "Winehog (2020) lists Mallard plots in Maréchaudes, Le Rognet, Renardes and Le Charlemagne. The company holds usufruct on Le Rognet and Le Charlemagne parcels; its Maréchaudes land has no linked company record.",
+      "sourceIds": [
+        "wh-mallard-cc"
+      ],
+      "dateSourceId": "wh-mallard-cc",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "corton-grancey-1972",
+      "sourceId": "corton-grancey-statutes",
+      "title": "Corton-Grancey GFA: founding contributions and Latour lease",
+      "holderId": "U21852238",
+      "companySiren": "427468970",
+      "documentDate": "1972",
+      "parcelAreasM2": {
+        "210100000A0046": 7933,
+        "210100000A0047": 3967,
+        "210100000A0049": 4252,
+        "210100000A0050": 8145,
+        "210100000A0051": 290,
+        "210100000B0026": 6387,
+        "210100000B0029": 9180,
+        "210100000B0033": 8483,
+        "210100000B0034": 7218,
+        "210100000B0035": 1540,
+        "210100000B0036": 3512,
+        "210100000C0010": 5700,
+        "210100000C0056": 3184,
+        "210100000D0030": 5040,
+        "210100000D0062": 11353,
+        "210100000N0050": 14923
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "signedDate": "1966-03-26",
+          "effectiveFrom": "1966-01-01",
+          "initialTermYears": 25,
+          "renewalRecital": "Renewed early by deed of 14 April and 17 June 1998 to 12 June 2016, amended 6 December 2001, and renewed early by deed of 3 June 2013 for 18 years, 4 months and 29 days.",
+          "recitedEnd": "2031-10-31",
+          "pages": [
+            18,
+            19,
+            3
+          ],
+          "limitation": "Recited in the statutes; the 2013 renewal deed is not filed. The tenant is identified by name and seat (Château Corton-Grancey, Aloxe-Corton), not by SIREN."
+        }
+      ],
+      "finding": "The 1972 schedule, reproduced in the 2025 statutes, contributes undivided two-thirds of 13 of these parcels and B 33, B 34 and B 35 in full; all 16 match today’s references and areas. B 27 (1 a 13 ca, a garden) also matches but has no company record today. D 91 and D 97 are recited as merged into D 100 in 1972 and re-divided in 1983 (D 109 kept; D 108 exchanged for D 105 and D 106). The statutes recite that all contributed land is let to the Société Civile Domaine Louis Latour to 31 October 2031.",
+      "appNote": "The GFA’s 1972 statutes name this parcel with its area and recite that its land is let to the Société Civile Domaine Louis Latour, renewed in 2013 to 31 October 2031. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        3,
+        4,
+        5,
+        7,
+        8,
+        12,
+        18,
+        19
+      ],
+      "printedReferences": [
+        "A 46",
+        "A 47",
+        "A 49",
+        "A 50",
+        "A 51",
+        "B 26",
+        "B 27",
+        "B 29",
+        "B 33",
+        "B 34",
+        "B 35",
+        "B 36",
+        "C 10",
+        "C 56",
+        "D 30",
+        "D 62",
+        "D 91",
+        "D 97",
+        "I 141",
+        "N 50"
+      ],
+      "filingDate": "2026-04-21",
+      "tenure": "undivided two-thirds contributed (B 33, B 34 and B 35 in full)"
+    },
+    {
+      "id": "vignoble-latour-2011",
+      "sourceId": "vignoble-latour-2011",
+      "title": "Vignoble Latour: 2011 contribution of one-third shares",
+      "holderId": "528291362",
+      "companySiren": "528291362",
+      "documentDate": "2011-09-28",
+      "parcelAreasM2": {
+        "210100000A0046": 7933,
+        "210100000A0047": 3967,
+        "210100000A0049": 4252,
+        "210100000A0050": 8145,
+        "210100000A0051": 290,
+        "210100000B0026": 6387,
+        "210100000B0029": 9180,
+        "210100000B0036": 3512,
+        "210100000C0010": 5700,
+        "210100000C0056": 3184,
+        "210100000D0030": 5040,
+        "210100000D0062": 11353,
+        "210100000D0105": 19,
+        "210100000D0106": 31,
+        "210100000D0109": 7825,
+        "210100000N0050": 14923
+      },
+      "leaseEvidence": [],
+      "finding": "Maison Louis Latour contributes its undivided one-third of these 16 Corton parcels (and of D 23, recorded to another holder today, and one-sixth of I 141). All 16 match today’s references and areas; the Corton-Grancey GFA holds the other two-thirds.",
+      "appNote": "Maison Louis Latour contributed its undivided one-third of this parcel to Vignoble Latour on 28 September 2011; the Corton-Grancey GFA holds the rest. Ownership history, not farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "printedReferences": [
+        "A 46",
+        "A 47",
+        "A 49",
+        "A 50",
+        "A 51",
+        "B 26",
+        "B 29",
+        "B 36",
+        "C 10",
+        "C 56",
+        "D 23",
+        "D 30",
+        "D 62",
+        "D 105",
+        "D 106",
+        "D 109",
+        "I 141",
+        "N 50"
+      ],
+      "filingDate": "2011-12-30",
+      "tenure": "undivided one-third contributed"
+    },
+    {
+      "id": "latour-immeubles-2011",
+      "sourceId": "latour-immeubles-2011",
+      "title": "Latour Immeubles: 2011 contribution of the Aloxe-Corton cellar",
+      "holderId": "528291479",
+      "companySiren": "528291479",
+      "documentDate": "2011-09-28",
+      "parcelAreasM2": {
+        "210100000B0028": 2428
+      },
+      "leaseEvidence": [],
+      "finding": "Maison Louis Latour contributes the cellar building on Les Perrières B 28 (24 a 28 ca), which lies inside the Corton outline.",
+      "appNote": "A cellar building contributed by Maison Louis Latour in 2011, not a vineyard parcel.",
+      "supportingSourceIds": [],
+      "pages": [
+        5,
+        6
+      ],
+      "printedReferences": [
+        "B 28"
+      ],
+      "filingDate": "2011-12-30"
+    },
+    {
+      "id": "belgrand-latour-1974",
+      "sourceId": "belgrand-latour-statutes",
+      "title": "Belgrand-Latour GFA: founding contribution and Latour lease",
+      "holderId": "427468962",
+      "companySiren": "427468962",
+      "documentDate": "1974-11",
+      "parcelAreasM2": {
+        "210100000A0042": 9031,
+        "210100000A0055": 7482,
+        "210100000N0009": 1445,
+        "210100000N0010": 6293
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "signedDate": "2001-12-06",
+          "effectiveFrom": "2001-11-11",
+          "recitedEnd": "2026-11-10",
+          "initialTermYears": 25,
+          "pages": [
+            6
+          ],
+          "limitation": "Recited in the statutes; the lease deed is not filed. A renewal after November 2026 is not recited."
+        }
+      ],
+      "finding": "The founding contribution names these four parcels with areas matching today’s cadastre. The statutes recite that all contributed land is let to the Société Civile Domaine Louis Latour: the 1966 lease, then a new 25-year lease signed 6 December 2001, to 10 November 2026.",
+      "appNote": "Named with its area in the family GFA’s founding contribution; recited as let to the Société Civile Domaine Louis Latour to 10 November 2026. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        3,
+        5,
+        6
+      ],
+      "printedReferences": [
+        "A 42",
+        "A 55",
+        "N 9",
+        "N 10"
+      ]
+    },
+    {
+      "id": "marchal-latour-1975",
+      "sourceId": "marchal-latour-statutes",
+      "title": "Marchal-Latour GFA: founding contribution and Latour lease",
+      "holderId": "427468988",
+      "companySiren": "427468988",
+      "documentDate": "1975",
+      "parcelAreasM2": {
+        "210100000A0041": 7874,
+        "210100000A0056": 11993,
+        "210100000A0092": 1398,
+        "210100000D0020": 3700
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "signedDate": "2001-12-07",
+          "effectiveFrom": "2001-11-11",
+          "recitedEnd": "2026-11-10",
+          "initialTermYears": 25,
+          "pages": [
+            5
+          ],
+          "limitation": "Recited in the statutes; the lease deed is not filed. A renewal after November 2026 is not recited."
+        }
+      ],
+      "finding": "The founding contribution names these four parcels with areas matching today’s cadastre. The statutes recite that all contributed land is let to the Société Civile Domaine Louis Latour: the 1966 lease, then a new 25-year lease of 7 December 2001, to 10 November 2026.",
+      "appNote": "Named with its area in the family GFA’s founding contribution; recited as let to the Société Civile Domaine Louis Latour to 10 November 2026. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        2,
+        3,
+        5
+      ],
+      "printedReferences": [
+        "A 41",
+        "A 56",
+        "A 92",
+        "D 20"
+      ]
+    },
+    {
+      "id": "rolland-latour-2005",
+      "sourceId": "rolland-latour-2005",
+      "title": "Rolland-Latour GFA: 2005 contribution and Latour lease",
+      "holderId": "487716805",
+      "companySiren": "487716805",
+      "documentDate": "2005-12-15",
+      "parcelAreasM2": {
+        "210100000A0048": 9340,
+        "210100000B0006": 19580
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "signedDate": "2001-11-08",
+          "effectiveFrom": "2001-11-11",
+          "recitedEnd": "2026-11-10",
+          "initialTermYears": 25,
+          "pages": [
+            20
+          ],
+          "limitation": "Recited in the founding deed; the lease deed is not filed."
+        }
+      ],
+      "finding": "The founding deed contributes A 48 (93 a 40 ca) and B 6 (1 ha 95 a 80 ca), both matching today’s cadastre, and recites their lease to the Société Civile Domaine Louis Latour by deed of 8 November 2001, for 11 November 2001 to 10 November 2026.",
+      "appNote": "Contributed in 2005 with its area; recited as let to the Société Civile Domaine Louis Latour from 2001 to 10 November 2026. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        19,
+        20
+      ],
+      "printedReferences": [
+        "A 48",
+        "B 6"
+      ],
+      "filingDate": "2006-02-21"
+    },
+    {
+      "id": "chandon-1967",
+      "sourceId": "chandon-founding-1967",
+      "title": "Chandon de Briailles: 1967 founding contributions",
+      "holderId": "778256123",
+      "companySiren": "778256123",
+      "documentDate": "1967-09-23",
+      "parcelAreasM2": {
+        "210100000A0083": 1168,
+        "210100000D0003": 960,
+        "210100000D0005": 3505,
+        "210100000D0027": 7435,
+        "210100000D0032": 1385,
+        "210100000D0047": 1765,
+        "210100000D0055": 3233,
+        "210100000E0098": 2742,
+        "210100000E0105": 1230
+      },
+      "leaseEvidence": [],
+      "finding": "The 1967 statutes contribute these nine parcels with areas matching today’s cadastre. D 34 (54 a 15 ca) is also contributed but is recorded to another holder today; E 17 lies outside the cru.",
+      "appNote": "Contributed with its area in the domaine company’s 1967 founding statutes. Ownership history, not current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        9
+      ],
+      "printedReferences": [
+        "A 83",
+        "D 3",
+        "D 5",
+        "D 27",
+        "D 32",
+        "D 34",
+        "D 47",
+        "D 55",
+        "E 17",
+        "E 98",
+        "E 105"
+      ],
+      "filingDate": "2002-10-31"
+    },
+    {
+      "id": "ravaut-1988",
+      "sourceId": "ravaut-gfa-1988",
+      "title": "Ravaut GFA: 1988 founding contributions",
+      "holderId": "U14137631",
+      "companySiren": "348852237",
+      "documentDate": "1988-10-25",
+      "parcelAreasM2": {
+        "21606000AH0121": 168,
+        "21606000AH0122": 973,
+        "21606000AH0123": 1933,
+        "21606000AH0124": 351,
+        "210100000D0084": 2121,
+        "210100000D0090": 952,
+        "210100000D0101": 1190
+      },
+      "leaseEvidence": [],
+      "finding": "The 1988 statutes contribute these seven parcels, all matching today’s references and areas. AH 123 is split 10 a 00 ca planted for Corton-Charlemagne and 9 a 33 ca for red Corton. The GFA may only let its land; no tenant is named.",
+      "appNote": "Named with its area in the Ravaut family GFA’s 1988 statutes. No tenant is named; current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        16,
+        17
+      ],
+      "printedReferences": [
+        "AH 121",
+        "AH 122",
+        "AH 123",
+        "AH 124",
+        "D 84",
+        "D 90",
+        "D 101"
+      ],
+      "filingDate": "2020-09-10"
+    },
+    {
+      "id": "vincent-rapet-2017",
+      "sourceId": "vincent-rapet-gfa-2017",
+      "title": "Vincent Rapet GFA: 2017 contributions and tenant in place",
+      "holderId": "832275333",
+      "companySiren": "832275333",
+      "documentDate": "2017",
+      "parcelAreasM2": {
+        "210100000A0069": 4565,
+        "210100000A0088": 1250,
+        "210100000A0121": 863,
+        "210100000N0082": 3800,
+        "21480000AL0308": 8973
+      },
+      "leaseEvidence": [
+        {
+          "kind": "tenant-in-place-declaration",
+          "tenants": [
+            "SAS du Domaine Rapet Père et Fils"
+          ],
+          "tenantSiren": "319775417",
+          "pages": [
+            35
+          ],
+          "limitation": "The company declares itself tenant in place in the deed; the lease deeds of 1985 and 1999 are recited (page 26) but not filed."
+        }
+      ],
+      "finding": "The founding deed contributes these five parcels with areas matching today’s cadastre. SAS du Domaine Rapet Père et Fils (319 775 417) declares itself the tenant in place of the contributed parcels; leases of 1985 (AL 308) and 1999 (A 69) are recited.",
+      "appNote": "Contributed in 2017 with its area; SAS du Domaine Rapet Père et Fils declares itself tenant in place. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        9,
+        10,
+        11,
+        14,
+        26,
+        35
+      ],
+      "printedReferences": [
+        "A 69",
+        "A 88",
+        "A 121",
+        "N 82",
+        "AL 308"
+      ],
+      "filingDate": "2017-09-29"
+    },
+    {
+      "id": "sordoillet-2009",
+      "sourceId": "sordoillet-gfv-2009",
+      "title": "Marie Sordoillet GFV: 2009 contributions and lease",
+      "holderId": "511314635",
+      "companySiren": "511314635",
+      "documentDate": "2009",
+      "parcelAreasM2": {
+        "210100000A0004": 4558,
+        "210100000A0058": 3635,
+        "210100000A0120": 5528,
+        "210100000B0013": 5321,
+        "210100000D0026": 1134
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Maurice Chapuis"
+          ],
+          "signedDate": "2001-06-21",
+          "effectiveFrom": "1995-07-01",
+          "initialTermYears": 25,
+          "pages": [
+            12
+          ],
+          "limitation": "The tenant is an individual. The 25-year term from 1 July 1995 would end in 2020; no renewal is recited."
+        }
+      ],
+      "finding": "The founding deed contributes these five parcels with areas matching today’s cadastre and recites their lease to Maurice Chapuis, agriculteur at Aloxe-Corton, personally: deed of 20 and 21 June 2001 renewing the lease for 25 years from 1 July 1995.",
+      "appNote": "Contributed in 2009 with its area; recited as let to Maurice Chapuis personally for 25 years from 1 July 1995. Continuation and current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        8,
+        9,
+        12
+      ],
+      "printedReferences": [
+        "A 4",
+        "A 58",
+        "A 120",
+        "B 13",
+        "D 26"
+      ],
+      "filingDate": "2009-03-26"
+    },
+    {
+      "id": "camila-2024",
+      "sourceId": "camila-gfv-2024",
+      "title": "GFV Camila: 2024 contributions",
+      "holderId": "983900960",
+      "companySiren": "983900960",
+      "documentDate": "2024-01-24",
+      "parcelAreasM2": {
+        "210100000C0061": 441,
+        "210100000C0100": 6019
+      },
+      "leaseEvidence": [],
+      "finding": "Two contributors each bring an undivided half of Renardes C 61 (4 a 41 ca) and C 100 (60 a 19 ca); together 64 a 60 ca, the area Domaine Mallard publishes for its Corton Les Renardes. No lease is recited.",
+      "appNote": "Contributed in 2024 with its area; together with C 61/C 100 equal to Mallard’s published Renardes area. No lease is filed.",
+      "supportingSourceIds": [],
+      "pages": [
+        3,
+        4
+      ],
+      "printedReferences": [
+        "C 61",
+        "C 100"
+      ],
+      "filingDate": "2024-01-25",
+      "tenure": "undivided halves contributed by two partners"
+    },
+    {
+      "id": "clavelier-2024",
+      "sourceId": "clavelier-gfv-2024",
+      "title": "GFV Bruno et Valérie Clavelier: 2024 contributions",
+      "holderId": "U33360345",
+      "companySiren": "937952174",
+      "documentDate": "2024-11-20",
+      "parcelAreasM2": {
+        "21606000AK0149": 205,
+        "21606000AK0151": 811,
+        "21606000AK0152": 2017,
+        "21606000AK0155": 335
+      },
+      "leaseEvidence": [],
+      "finding": "The founding deed contributes these four Ladoix-Serrigny parcels (33 a 68 ca together), all matching today’s cadastre. The rights file records the GFV with bare ownership (N).",
+      "appNote": "Contributed in November 2024 with its area. The rights file records bare ownership; no lease is filed.",
+      "supportingSourceIds": [],
+      "pages": [
+        6,
+        7
+      ],
+      "printedReferences": [
+        "AK 149",
+        "AK 151",
+        "AK 152",
+        "AK 155"
+      ],
+      "filingDate": "2024-11-26"
+    },
+    {
+      "id": "st-vincent-marechaudes-2014",
+      "sourceId": "st-vincent-marechaudes-2014",
+      "title": "GFV Saint Vincent Corton Les Maréchaudes: contribution and lease",
+      "holderId": "U22208861",
+      "companySiren": "808909774",
+      "documentDate": "2014-12",
+      "parcelAreasM2": {
+        "210100000E0117": 2880
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "a co-manager of the GFV, personally"
+          ],
+          "effectiveFrom": "2014-09-01",
+          "initialTermYears": 30,
+          "pages": [
+            7
+          ],
+          "limitation": "The deed provides for terminating the 2004 lease and concluding the new lease; the signed lease is not filed."
+        }
+      ],
+      "finding": "The founding deed contributes E 117 Les Maréchaudes (28 a 80 ca). A 2004 nine-year lease is to be ended and replaced by a 30-year long-term lease, retroactive to 1 September 2014, to one of the GFV’s managers personally.",
+      "appNote": "Contributed with its area; a 30-year lease from 2014 to one of the GFV’s managers personally is provided for. Current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        5,
+        7
+      ],
+      "printedReferences": [
+        "E 117"
+      ],
+      "filingDate": "2015-01-22"
+    },
+    {
+      "id": "gille-2002",
+      "sourceId": "gille-gfv-2002",
+      "title": "GFV Domaine Pierre et Anne-Marie Gille: Renardes C 51 and lease",
+      "holderId": "U12947760",
+      "companySiren": "444606594",
+      "documentDate": "2002-08",
+      "parcelAreasM2": {
+        "210100000C0051": 1625
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "S.C.E.V. Domaine Anne Marie Gille"
+          ],
+          "signedDate": "1996-03-11",
+          "effectiveFrom": "1995-11-11",
+          "recitedEnd": "2013-11-10",
+          "initialTermYears": 18,
+          "pages": [
+            7
+          ],
+          "limitation": "The lease ended in 2013 unless renewed; no SIREN is printed for the tenant and no current record was found under that name."
+        }
+      ],
+      "finding": "The 2002 deed lists Renardes C 51 (16 a 25 ca) among the GFV’s land and recites its lease, with Vosne-Romanée vines, to S.C.E.V. Domaine Anne Marie Gille under a 1996 lease running from 11 November 1995 to 10 November 2013.",
+      "appNote": "Named with its area in the GFV’s 2002 deed; recited as let to S.C.E.V. Domaine Anne Marie Gille from 1995 to 2013. Later tenure unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        3,
+        7,
+        13
+      ],
+      "printedReferences": [
+        "C 51"
+      ],
+      "filingDate": "2002-12-27"
+    },
+    {
+      "id": "corton-clos-du-roi-2023",
+      "sourceId": "corton-clos-du-roi-2023",
+      "title": "SCEA Corton Clos du Roi: 2023 contribution by Domaine de Montille",
+      "holderId": "953306917",
+      "companySiren": "953306917",
+      "documentDate": "2023-06-21",
+      "parcelAreasM2": {
+        "210100000D0132": 2027
+      },
+      "leaseEvidence": [],
+      "finding": "Domaine de Montille contributes Clos du Roi D 132 (20 a 27 ca), divided from a parcel whose remainder of 21 a 49 ca it keeps (today’s D 0133, recorded to Montille), in exchange for 33,000 new shares.",
+      "appNote": "Contributed by Domaine de Montille in June 2023 for new shares; the remainder D 133 stays with Montille. Ownership history, not farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        1,
+        4
+      ],
+      "printedReferences": [
+        "D 132"
+      ]
+    },
+    {
+      "id": "memoire-de-vignes-2024",
+      "sourceId": "memoire-de-vignes-2024",
+      "title": "Mémoire de Vignes: Le Corton C 11 and Poisot-Piguet lease",
+      "holderId": "931134381",
+      "companySiren": "931134381",
+      "documentDate": "2024-07-24",
+      "parcelAreasM2": {
+        "210100000C0011": 5700
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "SCEA du Domaine Poisot-Piguet"
+          ],
+          "tenantSiren": "384069985",
+          "signedDate": "2024-07-24",
+          "initialTermYears": 18,
+          "pages": [
+            2
+          ],
+          "limitation": "Defined in the statutes; the lease deed is not filed."
+        }
+      ],
+      "finding": "The parcel annex lists Le Corton C 11 (57 a 00 ca, Corton-Charlemagne). The statutes define an 18-year rural lease of the parcels, by deed of 24 July 2024, to SCEA du Domaine Poisot-Piguet (384 069 985).",
+      "appNote": "Listed with its area in the 2024 statutes; the parcels are under an 18-year lease to SCEA du Domaine Poisot-Piguet from July 2024. A lease is not proof of current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        2,
+        3,
+        25
+      ],
+      "printedReferences": [
+        "C 11"
+      ]
+    },
+    {
+      "id": "gerouk-2003",
+      "sourceId": "gerouk-2003",
+      "title": "GEROUK: purchase mandate for Renardes C 74",
+      "holderId": "451042832",
+      "companySiren": "451042832",
+      "documentDate": "2003-11-12",
+      "parcelAreasM2": {
+        "210100000C0074": 3129
+      },
+      "leaseEvidence": [],
+      "finding": "The founding deed empowers a partner to buy Renardes C 74 (31 a 29 ca) on the GFA’s behalf for €390,000. The GFA holds C 0074 today; the purchase deed is not filed.",
+      "appNote": "The 2003 founding deed mandates buying this parcel (31 a 29 ca); the GFA holds it today. No lease is filed.",
+      "supportingSourceIds": [],
+      "pages": [
+        37
+      ],
+      "printedReferences": [
+        "C 74"
+      ],
+      "filingDate": "2019-04-29",
+      "tenure": "purchase mandate"
+    },
+    {
+      "id": "fermiere-remoissenet-2022",
+      "sourceId": "fermiere-remoissenet-2022",
+      "title": "Fermière Viticole Remoissenet: 2022 merger asset list",
+      "holderId": "448234492",
+      "companySiren": "448234492",
+      "documentDate": "2022-03-29",
+      "parcelAreasM2": {
+        "210100000D0125": 956,
+        "21480000AL0336": 301
+      },
+      "leaseEvidence": [],
+      "finding": "The merger project transferring the company to Fermière Remoissenet SAS lists Les Bressandes D 125 (9 a 56 ca) and En Charlemagne AL 336 (3 a 01 ca), both matching today’s cadastre.",
+      "appNote": "Listed with its area among the assets merged into Fermière Remoissenet SAS in 2022; the 2025 rights file still records the old company.",
+      "supportingSourceIds": [],
+      "pages": [
+        20
+      ],
+      "printedReferences": [
+        "D 125",
+        "AL 336"
+      ],
+      "filingDate": "2022-04-04"
+    },
+    {
+      "id": "fermiere-remoissenet-2022-al328",
+      "sourceId": "fermiere-remoissenet-2022",
+      "title": "Fermière Viticole Remoissenet: 2022 merger asset list (AL 328 and AL 332)",
+      "holderId": "448234492",
+      "companySiren": "448234492",
+      "documentDate": "2022-03-29",
+      "parcelAreasM2": {
+        "21480000AL0328": 63,
+        "21480000AL0332": 342
+      },
+      "leaseEvidence": [],
+      "finding": "The merger list gives En Charlemagne AL 328 and AL 332 together as 4 a 05 ca, equal to their combined cadastral area.",
+      "appNote": "Listed with AL 328 as one 4 a 05 ca line among the assets merged into Fermière Remoissenet SAS in 2022.",
+      "supportingSourceIds": [],
+      "pages": [
+        20
+      ],
+      "printedReferences": [
+        "AL 328",
+        "AL 332"
+      ],
+      "filingDate": "2022-04-04",
+      "areaEvidence": {
+        "kind": "aggregate-only",
+        "recitedTotalM2": 405,
+        "individualAreasSource": "pinned-cadastral-snapshot"
+      }
+    },
+    {
+      "id": "beaumonts-2008",
+      "sourceId": "beaumonts-gfa-2008",
+      "title": "GFA des Beaumonts: contributions and Maillard leases",
+      "holderId": "510368210",
+      "companySiren": "510368210",
+      "documentDate": "2008-11-21",
+      "parcelAreasM2": {
+        "21606000AK0047": 1890,
+        "21606000AK0049": 3982
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "S.A.R.L. Domaine Maillard Père et Fils"
+          ],
+          "tenantSiren": "314637141",
+          "parcelAreasM2": {
+            "21606000AK0047": 1890
+          },
+          "signedDate": "1982-12-29",
+          "effectiveFrom": "1982-01-01",
+          "recitedEnd": "2008-12-31",
+          "pages": [
+            19
+          ],
+          "limitation": "Recited as tacitly prolonged to 31 December 2008."
+        },
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "S.A.R.L. Domaine Maillard Père et Fils"
+          ],
+          "tenantSiren": "314637141",
+          "parcelAreasM2": {
+            "21606000AK0049": 3982
+          },
+          "signedDate": "1996-12-12",
+          "effectiveFrom": "1996-11-11",
+          "recitedEnd": "2014-11-10",
+          "pages": [
+            19,
+            20
+          ],
+          "limitation": "No renewal after 2014 is recited."
+        }
+      ],
+      "finding": "The founding deed contributes AK 47 (Corton grand cru, 18 a 90 ca) and AK 49 (39 a 82 ca) and recites both as let to S.A.R.L. Domaine Maillard Père et Fils: AK 47 under a 1982 lease prolonged to 31 December 2008, AK 49 under a 1996 lease to 10 November 2014.",
+      "appNote": "Contributed in 2008 with its area; recited as let to S.A.R.L. Domaine Maillard Père et Fils (lease ending 2008 or 2014). Renewal and current farming unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        14,
+        15,
+        19,
+        20
+      ],
+      "printedReferences": [
+        "AK 47",
+        "AK 49"
+      ],
+      "filingDate": "2009-02-12"
+    },
+    {
+      "id": "maladiere-2013",
+      "sourceId": "maladiere-gfa-2013",
+      "title": "GFA de la Maladière: Le Charlemagne A 14",
+      "holderId": "802390898",
+      "companySiren": "802390898",
+      "documentDate": "2013-12",
+      "parcelAreasM2": {
+        "210100000A0014": 934
+      },
+      "leaseEvidence": [],
+      "finding": "The founding deed contributes Le Charlemagne A 14 (9 a 34 ca, Corton-Charlemagne). No lease is recited.",
+      "appNote": "Contributed with its area in the family GFA’s founding deed. No tenant is named.",
+      "supportingSourceIds": [],
+      "pages": [
+        5
+      ],
+      "printedReferences": [
+        "A 14"
+      ],
+      "filingDate": "2014-05-22"
+    },
+    {
+      "id": "durst-2012",
+      "sourceId": "durst-gfv-2012",
+      "title": "GFV Durst Corton-Charlemagne: En Charlemagne AL 181",
+      "holderId": "509207429",
+      "companySiren": "509207429",
+      "documentDate": "2012-06-29",
+      "parcelAreasM2": {
+        "21480000AL0181": 610
+      },
+      "leaseEvidence": [],
+      "finding": "The company’s only asset is En Charlemagne AL 181 (6 a 10 ca), acquired by purchase. No lease is recited.",
+      "appNote": "The GFV’s only asset, bought before 2012 (6 a 10 ca). No tenant is named.",
+      "supportingSourceIds": [],
+      "pages": [
+        4,
+        6
+      ],
+      "printedReferences": [
+        "AL 181"
+      ],
+      "filingDate": "2015-06-09"
+    },
+    {
+      "id": "esprit20-2010",
+      "sourceId": "esprit20-gfv-2010",
+      "title": "GFV Esprit 20 de Bourgogne: Hautes Mourottes AH 120 and lease mandate",
+      "holderId": "532929288",
+      "companySiren": "532929288",
+      "documentDate": "2010-12",
+      "parcelAreasM2": {
+        "21606000AH0120": 7285
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "Vignobles Clemencet"
+          ],
+          "tenantSiren": "498107572",
+          "pages": [
+            19
+          ],
+          "limitation": "A mandate to grant the lease; no executed lease is filed."
+        }
+      ],
+      "finding": "The founding deed contributes Hautes Mourottes AH 120 (72 a 85 ca), described as coppice in the Ladoix area, and mandates a long-term lease of the contributed parcels to Vignobles Clemencet.",
+      "appNote": "Contributed with its area; the founding deed mandates a long-term lease to Vignobles Clemencet. Execution unconfirmed.",
+      "supportingSourceIds": [],
+      "pages": [
+        5,
+        19
+      ],
+      "printedReferences": [
+        "AH 120"
+      ],
+      "filingDate": "2011-06-16"
+    },
+    {
+      "id": "empereur-2007",
+      "sourceId": "empereur-gfv-2007",
+      "title": "GFV L’Empereur: En Charlemagne AL 320",
+      "holderId": "498546258",
+      "companySiren": "498546258",
+      "documentDate": "2007-05-12",
+      "parcelAreasM2": {
+        "21480000AL0320": 2432
+      },
+      "leaseEvidence": [
+        {
+          "kind": "lease-mandate",
+          "tenants": [
+            "a named individual"
+          ],
+          "pages": [
+            25
+          ],
+          "limitation": "A mandate to conclude the lease; no executed lease is filed."
+        }
+      ],
+      "finding": "The founding deed contributes En Charlemagne AL 320 (24 a 32 ca, 20 a 72 ca planted) and mandates a long-term rural lease to a named individual.",
+      "appNote": "Contributed with its area; a lease to an individual was mandated in 2007. No domaine company is named.",
+      "supportingSourceIds": [],
+      "pages": [
+        9,
+        25
+      ],
+      "printedReferences": [
+        "AL 320"
+      ],
+      "filingDate": "2007-06-26"
+    },
+    {
+      "id": "vifoncier-1996",
+      "sourceId": "vifoncier-gfv-1996",
+      "title": "GFV Vifoncier Charlemagne: En Charlemagne contributions",
+      "holderId": "409988342",
+      "companySiren": "409988342",
+      "documentDate": "1996-10-30",
+      "parcelAreasM2": {
+        "21480000AL0130": 1190,
+        "21480000AL0174": 644,
+        "21480000AL0176": 236
+      },
+      "leaseEvidence": [],
+      "finding": "The founding deed contributes undivided rights in En Charlemagne AL 130 (11 a 90 ca), AL 174 (6 a 44 ca) and AL 176 (2 a 36 ca). No tenant is named.",
+      "appNote": "Contributed with its area in 1996. No tenant is named.",
+      "supportingSourceIds": [],
+      "pages": [
+        5
+      ],
+      "printedReferences": [
+        "AL 130",
+        "AL 174",
+        "AL 176"
+      ]
+    },
+    {
+      "id": "chapuis-gfv-2019",
+      "sourceId": "chapuis-gfv-2019",
+      "title": "GFV CHAPUIS: contributions and family lease",
+      "holderId": "880256847",
+      "companySiren": "880256847",
+      "documentDate": "2019-12-13",
+      "parcelAreasM2": {
+        "210100000A0137": 767,
+        "210100000B0075": 142
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "a family member, personally"
+          ],
+          "signedDate": "2018-08-04",
+          "effectiveFrom": "2018-03-26",
+          "pages": [
+            4,
+            5
+          ],
+          "limitation": "The tenant is an individual."
+        }
+      ],
+      "finding": "The founding deed contributes A 137 (7 a 67 ca) and B 75 (1 a 42 ca), matching today’s cadastre, with B 72 and H 92, and recites a lease to a family member personally of 4 August 2018 for 18 years, 7 months and 16 days from 26 March 2018.",
+      "appNote": "Contributed in 2019 with its area; let to a family member personally from 2018. No domaine company is named.",
+      "supportingSourceIds": [],
+      "pages": [
+        4,
+        5
+      ],
+      "printedReferences": [
+        "A 137",
+        "B 72",
+        "B 75",
+        "H 92"
+      ],
+      "filingDate": "2020-01-06"
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "chandon-bressandes",
+      "producer": "Domaine Chandon de Briailles",
+      "namedAreas": [
+        "LES BRESSANDES"
+      ],
+      "publishedAreaHa": 1.4535,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "cdb-bressandes"
+      ],
+      "finding": "Four red parcels; two more Bressandes parcels go into the white Corton below.",
+      "producerHolderIds": [
+        "778256123"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "chandon-cdr",
+      "producer": "Domaine Chandon de Briailles",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": 0.4465,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "cdb-cdr"
+      ],
+      "finding": "Two parcels, 0.3505 and 0.096 ha, equal to the cadastral areas of D 0005 and D 0003.",
+      "producerHolderIds": [
+        "778256123"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "chandon-marechaudes",
+      "producer": "Domaine Chandon de Briailles",
+      "namedAreas": [
+        "LES MARECHAUDES"
+      ],
+      "publishedAreaHa": 0.3972,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "cdb-marechaudes"
+      ],
+      "finding": "Sum of the two stated parcels, 0.2742 and 0.123 ha, equal to E 0098 and E 0105.",
+      "producerHolderIds": [
+        "778256123"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "chandon-blanc",
+      "producer": "Domaine Chandon de Briailles",
+      "namedAreas": [
+        "LES BRESSANDES",
+        "LES CHAUMES ET LA VOIEROSSE"
+      ],
+      "publishedAreaHa": 0.5578,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "cdb-blanc"
+      ],
+      "finding": "Three white parcels, two in Les Bressandes; the total covers two named areas and is not split.",
+      "producerHolderIds": [
+        "778256123"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ardhuy-hm",
+      "producer": "Domaine d’Ardhuy",
+      "namedAreas": [
+        "HAUTES MOUROTTES"
+      ],
+      "publishedAreaHa": 0.63,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ardhuy-hm"
+      ],
+      "finding": "Stated surface; no parcel numbers.",
+      "producerHolderIds": [
+        "325421634",
+        "327166898",
+        "U22282316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ardhuy-ren",
+      "producer": "Domaine d’Ardhuy",
+      "namedAreas": [
+        "LES RENARDES"
+      ],
+      "publishedAreaHa": 1.63,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ardhuy-ren"
+      ],
+      "finding": "Stated surface. The Les Chagnots GFA’s C 29 and C 50 (0.85 ha) are recited as let to this company; the figure may include leased land.",
+      "producerHolderIds": [
+        "325421634",
+        "327166898",
+        "U22282316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ardhuy-cdr",
+      "producer": "Domaine d’Ardhuy",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": 0.96,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ardhuy-cdr"
+      ],
+      "finding": "Stated surface; no parcel numbers.",
+      "producerHolderIds": [
+        "325421634",
+        "327166898",
+        "U22282316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ardhuy-pou",
+      "producer": "Domaine d’Ardhuy",
+      "namedAreas": [
+        "LES POUGETS"
+      ],
+      "publishedAreaHa": 0.15,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ardhuy-pou"
+      ],
+      "finding": "Stated surface; no parcel numbers.",
+      "producerHolderIds": [
+        "325421634",
+        "327166898",
+        "U22282316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mallard-renardes",
+      "producer": "Domaine Michel Mallard",
+      "namedAreas": [
+        "LES RENARDES"
+      ],
+      "publishedAreaHa": 0.646,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mallard-renardes"
+      ],
+      "finding": "64 ares 60, equal to GFV Camila’s C 0061 and C 0100 together.",
+      "producerHolderIds": [
+        "323178111",
+        "983900960"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mallard-marechaudes",
+      "producer": "Domaine Michel Mallard",
+      "namedAreas": [
+        "LES MARECHAUDES"
+      ],
+      "publishedAreaHa": 0.3035,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mallard-marechaudes"
+      ],
+      "finding": "30 ares 35; no Mallard-linked company record lies in this named area.",
+      "producerHolderIds": [
+        "323178111",
+        "983900960"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "vougeraie-cdr",
+      "producer": "Domaine de la Vougeraie",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": 0.497,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "vougeraie-cdr"
+      ],
+      "finding": "Equal to the cadastral area of D 0011, recorded to Les Petits Fils de Pierre Ponnelle.",
+      "producerHolderIds": [
+        "330713074",
+        "515620193"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "cdm-vergennes",
+      "producer": "Château de Meursault",
+      "namedAreas": [
+        "LES VERGENNES"
+      ],
+      "publishedAreaHa": 0.182,
+      "precision": "square-metre",
+      "relation": "farmer",
+      "sourceIds": [
+        "cdm-verg"
+      ],
+      "finding": "“Superficie exploitée”: area worked, tenure not stated. No company record is linked to Château de Meursault.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bertagna-lolieres",
+      "producer": "Domaine Bertagna",
+      "namedAreas": [
+        "LES GRANDES LOLIERES"
+      ],
+      "publishedAreaHa": 0.25,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bertagna-corton"
+      ],
+      "finding": "Stated as 0 ha 25.",
+      "producerHolderIds": [
+        "037180015"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ravaut-bressandes",
+      "producer": "Domaine Gaston et Pierre Ravaut",
+      "namedAreas": [
+        "LES BRESSANDES"
+      ],
+      "publishedAreaHa": 0.42,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ravaut-bressandes"
+      ],
+      "finding": "The Ravaut GFA’s three Bressandes parcels total 0.4263 ha.",
+      "producerHolderIds": [
+        "326781853",
+        "U14137631"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "croix-greves",
+      "producer": "Domaine des Croix",
+      "namedAreas": [
+        "LES GREVES"
+      ],
+      "publishedAreaHa": 0.55,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-croix-greves",
+        "bw-croix-greves"
+      ],
+      "finding": "Winehog gives 0.5500 ha, the cadastral area of B 0044.",
+      "producerHolderIds": [
+        "324989359"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "croix-vas",
+      "producer": "Domaine des Croix",
+      "namedAreas": [
+        "LA VIGNE AU SAINT"
+      ],
+      "publishedAreaHa": 0.2877,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-croix-vas",
+        "bw-croix-vas"
+      ],
+      "finding": "Winehog gives 0.2877 ha, the cadastral area of N 0086; the importer rounds to 0.29 ha.",
+      "producerHolderIds": [
+        "324989359"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "montille-cdr",
+      "producer": "Domaine de Montille",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": 0.84,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "montille-cdr",
+        "wh-montille-cdr"
+      ],
+      "finding": "Compared with Montille’s three parcels and the SCEA’s D 0132 together.",
+      "producerHolderIds": [
+        "483134516",
+        "953306917"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "montille-pougets",
+      "producer": "Domaine de Montille",
+      "namedAreas": [
+        "LES POUGETS"
+      ],
+      "publishedAreaHa": 1.02,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-montille-pougets"
+      ],
+      "finding": "Winehog (2020). No Montille-linked company record lies in Les Pougets.",
+      "producerHolderIds": [
+        "483134516",
+        "953306917"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "guyon-bressandes",
+      "producer": "Domaine Antonin Guyon",
+      "namedAreas": [
+        "LES BRESSANDES"
+      ],
+      "publishedAreaHa": 0.85,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "guyon-bressandes"
+      ],
+      "finding": "85 ares.",
+      "producerHolderIds": [
+        "778159731"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "guyon-cdr",
+      "producer": "Domaine Antonin Guyon",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": 0.55,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "guyon-cdr"
+      ],
+      "finding": "55 ares; no Guyon company record lies in Le Clos du Roi.",
+      "producerHolderIds": [
+        "778159731"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "arnoux-rognet",
+      "producer": "Domaine Arnoux Père et Fils",
+      "namedAreas": [
+        "LE ROGNET ET CORTON"
+      ],
+      "publishedAreaHa": 0.34,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "arnoux-rognet"
+      ],
+      "finding": "34 ares.",
+      "producerHolderIds": [
+        "778179846"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "pavillon-marechaudes",
+      "producer": "Domaine du Pavillon / Albert Bichot",
+      "namedAreas": [
+        "LES MARECHAUDES"
+      ],
+      "publishedAreaHa": 0.55,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "bichot-marechaudes"
+      ],
+      "finding": "Monopole Clos des Maréchaudes; the clos also holds premier cru land.",
+      "producerHolderIds": [
+        "392477600"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "jadot-pougets",
+      "producer": "Domaine des Héritiers Louis Jadot",
+      "namedAreas": [
+        "LES POUGETS"
+      ],
+      "publishedAreaHa": 1.54,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "jadot-pougets"
+      ],
+      "finding": "The red Corton Pougets source; the company’s Pougets land is larger.",
+      "producerHolderIds": [
+        "312990021"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "gaunoux-renardes",
+      "producer": "Domaine Michel Gaunoux",
+      "namedAreas": [
+        "LES RENARDES"
+      ],
+      "publishedAreaHa": 0.63,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-gaunoux"
+      ],
+      "finding": "No company record is linked to Gaunoux.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "latour-vas",
+      "producer": "Domaine Louis Latour",
+      "namedAreas": [
+        "LA VIGNE AU SAINT"
+      ],
+      "publishedAreaHa": 1.9762,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-latour-vas"
+      ],
+      "finding": "Winehog’s plots 50 and 51 equal N 0050 and N 0051.",
+      "producerHolderIds": [
+        "528291362",
+        "U21852238",
+        "778159715"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "meo-vas",
+      "producer": "Domaine Méo-Camuzet",
+      "namedAreas": [
+        "LA VIGNE AU SAINT"
+      ],
+      "publishedAreaHa": 0.1983,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "wh-meo-vas",
+        "meo-vas"
+      ],
+      "finding": "Winehog’s figure equals N 0085, recorded to an unlinked GFA.",
+      "producerHolderIds": [
+        "448502708",
+        "518966478"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "meo-rognet",
+      "producer": "Domaine Méo-Camuzet",
+      "namedAreas": [
+        "LE ROGNET ET CORTON"
+      ],
+      "publishedAreaHa": 0.4,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "meo-rognet"
+      ],
+      "finding": "“Just over one acre” (about 0.40 ha).",
+      "producerHolderIds": [
+        "448502708",
+        "518966478"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "meo-perrieres",
+      "producer": "Domaine Méo-Camuzet",
+      "namedAreas": [
+        "LES PERRIERES"
+      ],
+      "publishedAreaHa": 0.61,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "meo-perrieres"
+      ],
+      "finding": "“About one and a half acres” (about 0.61 ha).",
+      "producerHolderIds": [
+        "448502708",
+        "518966478"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "drc-merode",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LE CLOS DU ROI",
+        "LES BRESSANDES",
+        "LES RENARDES"
+      ],
+      "publishedAreaHa": 2.2746,
+      "precision": "square-metre",
+      "relation": "farmer",
+      "sourceIds": [
+        "drc-corton"
+      ],
+      "finding": "Taken en fermage from Domaine Prince Florent de Mérode from 11 November 2008; the owner has no company record here. Spread over three named areas, so not split.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-bressandes",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LES BRESSANDES"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-dumay"
+      ],
+      "finding": "Cuvée Charlotte Dumay; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-cdr",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LE CLOS DU ROI"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-cdr"
+      ],
+      "finding": "Cuvée Baronne du Baÿ; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-renardes",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LES RENARDES"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-berthier"
+      ],
+      "finding": "Cuvée Berthier-Sweeney; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-vergennes",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LES VERGENNES"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-chanson"
+      ],
+      "finding": "Cuvée Paul Chanson; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-fietres",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LES FIETRES"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-pesteb"
+      ],
+      "finding": "White cuvée Docteur Peste; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "hospices-peste",
+      "producer": "Domaine des Hospices de Beaune",
+      "namedAreas": [
+        "LES CHAUMES",
+        "LES GREVES",
+        "LES BRESSANDES"
+      ],
+      "publishedAreaHa": null,
+      "precision": "none",
+      "relation": "unstated",
+      "sourceIds": [
+        "hdb-peste"
+      ],
+      "finding": "Red cuvée Docteur Peste; no area published.",
+      "producerHolderIds": [
+        "200047827"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
+    "Tier 2 screened 349 free filings (about 8,400 PDF pages) of 105 companies by OCR and read the schedules and lease recitals it cites from page images or text layers. It is not an exhaustive reading of every corporate archive. Paid land-registry (SPF) copies and outreach remain Tier 3.",
+    "Fourteen operating-company filings without contribution or merger content were deliberately not OCR-screened.",
+    "Private individuals are absent from the legal-entity file: 341 parcels have no matched company record. Published holdings compare whole named-area totals and do not assign those parcels.",
+    "No filing reviewed is a signed current lease plus evidence of actual operation. Lease recitals in statutes (Latour GFAs to 2026 and 2031, Les Chagnots, Mémoire de Vignes, Vincent Rapet) and mandates (Esprit 20, L’Empereur) do not prove current farming.",
+    "Several recited leases have lapsed on their stated terms (Beaumonts 2008/2014, Gille 2013, Sordoillet 2020) and renewals are not recited; the Belgrand-, Marchal- and Rolland-Latour leases end on 10 November 2026.",
+    "Five provisional identifiers remain without a SIREN: SC Dom Hippolyte Thevenot, GFA Dom Emile Voarick, SCI des Bressandes, SCI Royland and the Beaune water syndicate; SCI des Domaines Dupray’s name matches a separately recorded SIREN in this cru.",
+    "The free filing index mislabels two Latour filings (each appears under the other company); their content was read and attributed by the company named in the document.",
+    "Winehog’s subscriber-only parcel details were not accessed; its free parts were read. Estate pages for Domaine Parent (HTTP 429), Château Corton C, Pavelot, Tollot-Beaut, Chevalier and Dublère were unavailable or gave no Corton area.",
+    "Bouchard’s 2026 partial asset contribution does not itemise which vineyards moved to the new Bouchard Père et Fils company; the 2025 rights file predates it.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."
   ],
@@ -1134,6 +3839,38 @@
       ],
       "reviewMethod": "page-image",
       "finding": "The receipt prints Ladoix-Serrigny AK159, AK164 and AK36 (0.6457 ha), previous operator CPEF à Beaune; filed and complete 4 November 2021. All three are current Corton parcels in Ladoix-Serrigny (21606). The receipt alone does not authorise cultivation."
+    }
+  ],
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "corton-grancey-statutes",
+      "page": 4,
+      "printedReference": "D 91",
+      "printedCru": "CORTON",
+      "documentContextDate": "1972",
+      "parcelIds": [],
+      "areaM2": 6758,
+      "limitation": "The statutes recite D 91 and D 97 merged into D 100 in 1972 and D 100 divided into D 108 and D 109 in 1983 (D 108 then exchanged for D 105 and D 106). That is a recital, not accepted cadastral lineage; DFI records start later."
+    },
+    {
+      "sourceId": "corton-grancey-statutes",
+      "page": 5,
+      "printedReference": "D 97",
+      "printedCru": "CORTON",
+      "documentContextDate": "1972",
+      "parcelIds": [],
+      "areaM2": 1117,
+      "limitation": "Recited as merged into D 100 in 1972; see D 91."
+    },
+    {
+      "sourceId": "corton-grancey-statutes",
+      "page": 5,
+      "printedReference": "I 141",
+      "printedCru": "CORTON",
+      "documentContextDate": "1972",
+      "parcelIds": [],
+      "areaM2": 144,
+      "limitation": "No current I 141 exists in the pinned cadastre; Vignoble Latour’s 2011 deed calls it unplanted."
     }
   ]
 }
