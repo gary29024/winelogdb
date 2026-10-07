@@ -2,13 +2,15 @@
 import index0 from './chapelle-chambertin.named-plot-index.json';
 import index1 from './echezeaux.named-plot-index.json';
 import index2 from './mazis-chambertin.named-plot-index.json';
-import index3 from './richebourg.named-plot-index.json';
-import index4 from './ruchottes-chambertin.named-plot-index.json';
+import index3 from './musigny.named-plot-index.json';
+import index4 from './richebourg.named-plot-index.json';
+import index5 from './ruchottes-chambertin.named-plot-index.json';
 
 export const namedPlotCrus=[
  {name:"Chapelle-Chambertin",villageMaps:["gevrey-chambertin"],index:index0,load:()=>import('./chapelle-chambertin.named-plots.json')},
  {name:"Échezeaux",villageMaps:["vosne-romanee"],index:index1,load:()=>import('./echezeaux.named-plots.json')},
  {name:"Mazis-Chambertin",villageMaps:["gevrey-chambertin"],index:index2,load:()=>import('./mazis-chambertin.named-plots.json')},
- {name:"Richebourg",villageMaps:["vosne-romanee"],index:index3,load:()=>import('./richebourg.named-plots.json')},
- {name:"Ruchottes-Chambertin",villageMaps:["gevrey-chambertin"],index:index4,load:()=>import('./ruchottes-chambertin.named-plots.json')},
+ {name:"Musigny",villageMaps:["chambolle-musigny"],index:index3,load:()=>import('./musigny.named-plots.json')},
+ {name:"Richebourg",villageMaps:["vosne-romanee"],index:index4,load:()=>import('./richebourg.named-plots.json')},
+ {name:"Ruchottes-Chambertin",villageMaps:["gevrey-chambertin"],index:index5,load:()=>import('./ruchottes-chambertin.named-plots.json')},
 ];
