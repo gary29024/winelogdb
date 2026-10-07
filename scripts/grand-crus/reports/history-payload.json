@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BLpq5LUW.js"
+    "dist/client/assets/index-s6w0Ucng.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-hpJHAeUZ.js",
-    "dist/client/assets/SectionLabel-CYplzPFt.js",
-    "dist/client/assets/SparklingDetailsCard-BCZebXLb.js",
-    "dist/client/assets/VillageMap-BpuAWjAd.js",
-    "dist/client/assets/api-CMZ8EWPR.js",
-    "dist/client/assets/burgundyAtlas-BV2HRsVy.js",
-    "dist/client/assets/index-BLpq5LUW.js",
-    "dist/client/assets/index-Iaib8KVw.js",
+    "dist/client/assets/FriendTagDialog-DQj_FcMs.js",
+    "dist/client/assets/SectionLabel-BsrYFDIU.js",
+    "dist/client/assets/SparklingDetailsCard-qXhDs0wV.js",
+    "dist/client/assets/VillageMap-BZ3hAnLx.js",
+    "dist/client/assets/api-ZgSSqKvq.js",
+    "dist/client/assets/burgundyAtlas-D9YKqYfU.js",
+    "dist/client/assets/index-DM9CJOR3.js",
+    "dist/client/assets/index-s6w0Ucng.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-B_em6o6Q.js",
-    "dist/client/assets/wineDetailCompact-wJIIc1ZR.js"
+    "dist/client/assets/useModalFocus-D-uGDlRU.js",
+    "dist/client/assets/wineDetailCompact-C8TsH4KJ.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 14,
-  "evidenceBytesTotal": 1681524,
-  "evidenceGzipBytesTotal": 173540,
+  "evidenceChunkCount": 15,
+  "evidenceBytesTotal": 1847766,
+  "evidenceGzipBytesTotal": 187409,
   "parcelBundleBytesTotal": 884664,
   "parcelBundleGzipBytesTotal": 133469,
   "evidenceChunks": [
@@ -103,6 +103,13 @@
       "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
       "bytes": 41798,
       "gzipBytes": 7006
+    },
+    {
+      "cru": "mazoyeres-chambertin",
+      "file": "dist/client/assets/mazoyeres-chambertin.evidence-Cpmm20Pz.js",
+      "sha256": "42763762ae2a480edf44c1e3480e0b515ca51a9b7be333481c58188dbc2a3519",
+      "bytes": 166242,
+      "gzipBytes": 13869
     },
     {
       "cru": "richebourg",
