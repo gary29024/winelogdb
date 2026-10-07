@@ -245,6 +245,37 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
 
+    def test_cross_commune_named_areas_list_every_commune(self):
+        # Bonnes-Mares: LES BONNES MARES is recorded in both communes and forms one reviewed named area.
+        plot = load_cru('bonnes-mares')[0]['namedPlots']['plots'][0]
+        self.assertEqual(plot['communes'], ['21133', '21442'])
+        # Clos de la Roche: Chambolle-Musigny has its own LES CHABIOTS and LES FREMIERES; only Morey's are used.
+        roche = {p['sourceName']: p.get('communes') for p in load_cru('clos-de-la-roche')[0]['namedPlots']['plots']}
+        self.assertEqual((roche['LES CHABIOTS'], roche['LES FREMIERES']), (['21442'], ['21442']))
+        report = read_json(named_plot_report_path(load_cru('bonnes-mares')[0]))
+        self.assertEqual(report['plots'][0]['sourceFeatures'], 2)
+        for slug in cru_slugs():
+            for entry in load_cru(slug)[0].get('namedPlots', {}).get('plots', []):
+                if 'communes' in entry:
+                    self.assertEqual(entry['communes'], sorted(set(entry['communes'])), slug)
+                    self.assertTrue(set(entry['communes']) <= set(communes(load_cru(slug)[1])), slug)
+
+    def test_overlapping_named_areas_need_a_reviewed_cap(self):
+        # Clos Saint-Denis: the cadastral CALOUERE and MAISON BRULEE overlap; both outlines are kept as published.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            report = read_json(named_plot_report_path(cru))
+            reviews = cru['namedPlots'].get('reviewedOverlaps', [])
+            with self.subTest(cru=slug):
+                self.assertEqual(len(report.get('overlaps', [])), len(reviews))
+                for overlap, review in zip(report.get('overlaps', []), reviews):
+                    self.assertEqual(overlap['plots'], [f'{slug}-plot-{p}' for p in review['plots']])
+                    self.assertLessEqual(overlap['areaM2'], review['maximumAreaM2'])
+                    self.assertLess(review['maximumAreaM2'] - overlap['areaM2'], 0.1)
+        self.assertEqual(load_cru('clos-saint-denis')[0]['namedPlots']['reviewedOverlaps'][0]['plots'], ['calouere', 'maison-brulee'])
+
     def test_edge_parcels_in_neighbouring_lieux_dits_are_declared(self):
         # Musigny's edge parcels lie wholly in neighbouring lieux-dits such as Les Amoureuses; none is a Musigny climat.
         checked = []

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-547",
-  "status": "historical-extension-inventory",
-  "scope": "All 22 mapped Clos des Lambrays parcels and 3 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 22 mapped Clos des Lambrays parcels and 3 recorded legal-entity identifiers reviewed for Tier 1, including commune edges, cadastral named areas and the #461 historical extension. Both notice-index candidates were read from their page images; they are two publications of one application, which becomes one event on seven current parcels. Producer/company research remains Tier 2. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,6 +41,36 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "lambrays-2021",
+      "title": "Domaine des Lambrays application receipt, dossier 2021-061",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/85605/550949/file/recueil-bfc-2021-096-recueil-des-actes-administratifs-special.pdf#page=258",
+      "type": "government-event",
+      "documentDate": "2021-04-09",
+      "reviewedAt": "2026-10-07",
+      "sha256": "056a64a039e8ea1bb1970a0c20d0c0d3e1e715d6c35aac1f8341712c8139e118",
+      "reviewedPages": [
+        258
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The receipt (dossier 2021-061, act BFC-2021-04-09-00018) prints Morey-Saint-Denis AP0101, AP0102, AP0105, AP0106, AP0107, AP0108 and AP0199 among 23 Morey references, separately from Puligny-Montrachet, Flagey-Echezeaux and Nuits-Saint-Georges. 13.2473 ha across all four communes, previous operator SCEA Les Beaux Monts; filed 15 March 2021, complete 7 April 2021. OCR found only AP0105, AP0107 and AP0199; the page image shows all seven."
+    },
+    {
+      "id": "lambrays-2021-repeat",
+      "title": "Repeated Domaine des Lambrays application receipt, dossier 2021-061",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/87924/565224/file/recueil-bfc-2021-128-recueil-des-actes-administratifs.pdf#page=139",
+      "type": "government-event",
+      "documentDate": "2021-04-09",
+      "reviewedAt": "2026-10-07",
+      "sha256": "87d82464396fcd8a69300cce6a7697502ecc0017bd1a2e0dfc58a5c0b70f45b3",
+      "reviewedPages": [
+        139
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The same 9 April 2021 letter for dossier 2021-061 is republished as act BFC-2021-04-09-00022. Retained as a second source occurrence, not a second parcel event."
     }
   ],
   "holders": [
@@ -76,15 +106,58 @@
     }
   ],
   "historyFindings": [],
-  "exactParcelEvents": [],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "21442000AP0101",
+        "21442000AP0102",
+        "21442000AP0105",
+        "21442000AP0106",
+        "21442000AP0107",
+        "21442000AP0108",
+        "21442000AP0199"
+      ],
+      "sourceId": "lambrays-2021",
+      "kind": "historical-application",
+      "applicant": "Domaine des Lambrays",
+      "previousOperator": "SCEA Les Beaux Monts",
+      "documentDate": "2021-04-09",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2021-061: seven Morey-Saint-Denis references in this cru are printed in the commune's own list; 13.2473 ha across four communes; complete 7 April 2021. A receipt is not an authorisation.",
+      "appNote": "Application complete 7 April 2021. Receipt is not an authorisation; outcome and actual operation unconfirmed."
+    }
+  ],
   "externalResearch": [],
   "parcelFilings": [],
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
     "Current farming remains unconfirmed for every parcel."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "lambrays-2021",
+      "bulletin": "bfc-2021-096",
+      "sha256": "056a64a039e8ea1bb1970a0c20d0c0d3e1e715d6c35aac1f8341712c8139e118",
+      "pages": [
+        258
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The receipt (dossier 2021-061, act BFC-2021-04-09-00018) prints Morey-Saint-Denis AP0101, AP0102, AP0105, AP0106, AP0107, AP0108 and AP0199 among 23 Morey references, separately from Puligny-Montrachet, Flagey-Echezeaux and Nuits-Saint-Georges. 13.2473 ha across all four communes, previous operator SCEA Les Beaux Monts; filed 15 March 2021, complete 7 April 2021. OCR found only AP0105, AP0107 and AP0199; the page image shows all seven."
+    },
+    {
+      "sourceId": "lambrays-2021-repeat",
+      "repeatOf": "lambrays-2021",
+      "bulletin": "bfc-2021-128",
+      "sha256": "87d82464396fcd8a69300cce6a7697502ecc0017bd1a2e0dfc58a5c0b70f45b3",
+      "pages": [
+        139
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The same 9 April 2021 letter for dossier 2021-061 is republished as act BFC-2021-04-09-00022. Retained as a second source occurrence, not a second parcel event."
+    }
   ]
 }

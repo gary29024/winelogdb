@@ -1,0 +1,122 @@
+{
+  "dataUrl": "/maps/clos-saint-denis-named-plots.2026-06-01.797d0b7a1320.geojson",
+  "parentFeatureId": "inao-denom-548",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21133/cadastre-21133-lieux_dits.json.gz",
+    "sha256": "b61591339ff22e6fc1af357848879ff5801eea8c3820cea5477f9a57354a33eb",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Calouère, Clos Saint-Denis, Les Chaffots and Maison Brûlée are cadastral named areas within Clos Saint-Denis; only part of the cadastral Les Chaffots lies inside the cru. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+  "features": [
+    {
+      "id": "clos-saint-denis-plot-calouere",
+      "name": "Calouère",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 164,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-548",
+      "parentAppellation": "Clos Saint-Denis",
+      "sourceName": "CALOUERE",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.291922,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.958452095376228,
+        47.1999723747671,
+        4.960234242290091,
+        47.2014264
+      ],
+      "labelPoint": [
+        4.959327167770798,
+        47.20073298441616
+      ]
+    },
+    {
+      "id": "clos-saint-denis-plot-clos-saint-denis",
+      "name": "Clos Saint-Denis",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 164,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-548",
+      "parentAppellation": "Clos Saint-Denis",
+      "sourceName": "CLOS SAINT-DENIS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 2.151786,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.9603906,
+        47.200162051090054,
+        4.962372338167291,
+        47.2022444
+      ],
+      "labelPoint": [
+        4.961579088266813,
+        47.201209926553915
+      ]
+    },
+    {
+      "id": "clos-saint-denis-plot-les-chaffots",
+      "name": "Les Chaffots",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 164,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-548",
+      "parentAppellation": "Clos Saint-Denis",
+      "sourceName": "LES CHAFFOTS",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.365648,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.958451233186631,
+        47.2007628,
+        4.962134335794763,
+        47.202686227412244
+      ],
+      "labelPoint": [
+        4.9606499051733195,
+        47.20172772349328
+      ]
+    },
+    {
+      "id": "clos-saint-denis-plot-maison-brulee",
+      "name": "Maison Brûlée",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 164,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-548",
+      "parentAppellation": "Clos Saint-Denis",
+      "sourceName": "MAISON BRULEE",
+      "communes": [
+        "21442"
+      ],
+      "areaHa": 1.808949,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.959560931948118,
+        47.19927367313766,
+        4.962041333005156,
+        47.2008488
+      ],
+      "labelPoint": [
+        4.9608147677567,
+        47.20007431477396
+      ]
+    }
+  ]
+}

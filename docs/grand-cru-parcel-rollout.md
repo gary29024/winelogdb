@@ -211,7 +211,11 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    `sourceCandidate` is null (Musigny's La Combe d'Orveau). Parcels that only touch the
    cru edge can lie mostly in a neighbouring lieu-dit; list those names in
    `namedPlots.neighbouringLieuxDits`, which the crosswalk accepts only for parcels
-   mostly outside the cru. The commune audit allows 0.1% of
+   mostly outside the cru. A lieu-dit recorded on both sides of a commune line is one
+   named area only when its plot lists `communes` (Bonnes-Mares). Overlapping
+   lieux-dits keep their published outlines under a capped `reviewedOverlaps` pair
+   (Clos Saint-Denis). A plot named exactly like its cru is never matched from a wine
+   label, so the cru's own name keeps the whole-cru outline. The commune audit allows 0.1% of
    the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
    a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
    explanation, and the exact INAO and cadastre hashes it was reviewed against), as in
@@ -359,7 +363,8 @@ Tier 1 run therefore:
    hidden cru appear on the maps), the named-area crosswalk, and page-image review
    of any `unreviewedCandidates` in its `notice-history.json`. Record each read page
    in the curation's `noticeReview`: confirmed rows become `exactParcelEvents`, and
-   matched references the page does not support go in `rejectedReferences`.
+   matched references the page does not support go in `rejectedReferences`. A
+   republished copy of the same act is reviewed with `repeatOf`, not a second event.
 3. Regenerates outputs, updates the README results table and passes every `--check`.
    Rebuild and measure under Python 3.12, as CI does. Python 3.14's zlib-ng gives
    different gzip sizes, and Python 3.11's float `sum()` changes generated areas.
