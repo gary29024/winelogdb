@@ -565,9 +565,9 @@ def area_label(source_name, register):
     area = next(a for a in register['namedAreaCensus'] if a['sourceName'] == source_name)
     if area.get('neighbouringLieuDit'):
         return f'{source_name} (neighbouring lieu-dit; edge parcels)'
-    if area['name']:
-        return area['name']
-    return 'No cadastral lieu-dit' if source_name is None else f'{source_name} (cadastral; unreviewed)'
+    if source_name is None:  # Unreviewed crus label it; a reviewed parcel outside every lieu-dit has no name.
+        return area['name'] or 'No cadastral lieu-dit'
+    return area['name'] or f'{source_name} (cadastral; unreviewed)'
 
 
 def hectares(m2):

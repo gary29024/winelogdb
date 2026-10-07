@@ -11,6 +11,8 @@ const reviewed=[
  {slug:'romanee-saint-vivant',name:'Romanée-Saint-Vivant',id:'inao-denom-1085'},
  {slug:'romanee-conti',name:'Romanée-Conti',id:'inao-denom-1084'},
  {slug:'la-romanee',name:'La Romanée',id:'inao-denom-655'},
+ {slug:'la-tache',name:'La Tâche',id:'inao-denom-656'},
+ {slug:'la-grande-rue',name:'La Grande Rue',id:'inao-denom-654'},
 ];
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/vosne-romanee.json','utf8')) as {crus:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;namedPlots?:{displayLayer?:boolean;plots:{name:string;sourceName:string}[]}};
@@ -33,7 +35,7 @@ describe('Vosne-Romanée Tier 1 crus',()=>{
    expect(named.displayLayer===false).toBe(!layers.includes(cru.id));
    if(named.displayLayer!==false)continue;
    const wine={country:'France',region:'Burgundy',appellation:cru.name,classification:'grand_cru',colour:'red',wineName:cru.name};
-   for(const target of [wine,{...wine,referenceParcel:named.plots[0].sourceName}]){
+   for(const target of [wine,...named.plots.map(plot=>({...wine,referenceParcel:plot.sourceName}))]){
     const result=burgundyVillageMapTarget(target);
     expect(result).toMatchObject({villageId:'vosne-romanee',featureId:cru.id});
     expect(result?.namedPlotId).toBeUndefined();

@@ -204,11 +204,14 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    once `docs/research/<slug>/curation.json` exists. A cru that is one whole-cru
    named area sets `namedPlots.displayLayer` to false, so the map keeps the official
    outline. The named-area builders treat same-name lieu-dit features in one commune
-   as a single named area (as for Romanée-Saint-Vivant). Parcels that only touch the
+   as a single named area (as for Romanée-Saint-Vivant). A parcel that no lieu-dit
+   polygon touches gets no guessed name and must be listed in
+   `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue and Musigny). An official
+   climat with no cadastral candidate at all is an `unresolved` entry whose
+   `sourceCandidate` is null (Musigny's La Combe d'Orveau). Parcels that only touch the
    cru edge can lie mostly in a neighbouring lieu-dit; list those names in
    `namedPlots.neighbouringLieuxDits`, which the crosswalk accepts only for parcels
-   mostly outside the cru. Parcels no lieu-dit touches need an `unresolved` entry
-   whose `sourceCandidate` is null (Musigny's La Combe d'Orveau). The commune audit allows 0.1% of
+   mostly outside the cru. The commune audit allows 0.1% of
    the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
    a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
    explanation, and the exact INAO and cadastre hashes it was reviewed against), as in

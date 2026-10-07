@@ -1,0 +1,60 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO La Tâche boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The official wine-board list names La Tâche and Les Gaudichots; the pinned cadastre divides the cru between LA TACHE and LES GAUDICHOTS OU LA TACHE. Both are audited, but the whole-cru outline is retained: the cru's own name is also one named area's name, so a La Tâche label cannot select either area without ambiguity. Producer holdings are not shown.",
+  "sources": [
+    {
+      "commune": "21714",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-lieux_dits.json.gz",
+      "sha256": "fd4b5f66d3e72298c3dc39fb492dbacd5fea5d581debd831cb40b22d87d1b993",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/tache-la,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzIzJnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-communes.json.gz",
+      "sha256": "6eb11d5360ac38a3cb59194fd143d705e32986fe36ce4387d377cc3cb8e517c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-communes.json.gz",
+      "sha256": "900668aed2a5fcc479cf833d7050d96e9af239ea6aeff7d5ef49bee20a5eaf44"
+    }
+  ],
+  "parentHa": 6.048304144998903,
+  "mappedHa": 6.048240678935952,
+  "unmappedHa": 6.347634790897507e-05,
+  "plots": [
+    {
+      "id": "la-tache-plot-la-tache",
+      "sourceHa": 1.4700151475084953,
+      "clippedHa": 1.4483371560053306,
+      "parts": 1,
+      "holes": 0
+    },
+    {
+      "id": "la-tache-plot-les-gaudichots-ou-la-tache",
+      "sourceHa": 4.663071413745921,
+      "clippedHa": 4.599903522930622,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": []
+}

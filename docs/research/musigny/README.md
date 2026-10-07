@@ -78,7 +78,8 @@ reports 0.790756 ha unmapped in all, the south-western part plus edge slivers.
 
 The [parcel crosswalk](parcel-named-areas.json) assigns 32 parcels to Les Musigny
 and 1 to Les Petits Musigny, each wholly inside that lieu-dit at stored precision.
-Seven parcels in the south-western part touch no lieu-dit and keep no name.
+Seven parcels in the south-western part touch no lieu-dit, keep no name and are
+listed in the config's `parcelsWithoutLieuDit`.
 Eleven parcels only touch the cru edge, by 2.8–123.0 m² each, and lie wholly in
 the neighbouring lieux-dits `LA TAUPE`, `LES AMOUREUSES`, `LES ARGILLERES` and
 `LES BORNIQUES`. They remain Musigny parcels for rights and history, but the

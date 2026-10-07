@@ -72,7 +72,7 @@
     {
       "name": "La Combe d'Orveau",
       "sourceCandidate": null,
-      "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. Seven parcels there keep no cadastral name. Do not infer this identity from proximity or fill the gap."
+      "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. The seven parcels there are listed in parcelsWithoutLieuDit and keep no cadastral name. Do not infer this identity from proximity or fill the gap."
     }
   ],
   "neighbouringLieuxDits": [

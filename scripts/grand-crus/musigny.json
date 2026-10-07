@@ -54,7 +54,7 @@
       {
         "name": "La Combe d'Orveau",
         "sourceCandidate": null,
-        "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. Seven parcels there keep no cadastral name. Do not infer this identity from proximity or fill the gap."
+        "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. The seven parcels there are listed in parcelsWithoutLieuDit and keep no cadastral name. Do not infer this identity from proximity or fill the gap."
       }
     ],
     "neighbouringLieuxDits": [
@@ -74,6 +74,15 @@
         "sourceName": "LES BORNIQUES",
         "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
       }
+    ],
+    "parcelsWithoutLieuDit": [
+      "21133000AN0064",
+      "21133000AN0065",
+      "21133000AN0070",
+      "21133000AN0075",
+      "21133000AN0076",
+      "21133000AN0077",
+      "21133000AN0078"
     ]
   }
 }

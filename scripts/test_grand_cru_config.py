@@ -13,6 +13,19 @@ from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, b
 
 
 class ConfigTests(unittest.TestCase):
+    def test_parcels_without_lieu_dit_are_reviewed(self):
+        # A parcel outside every lieu-dit polygon gets no guessed name, and must be listed in its config.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            with self.subTest(cru=slug):
+                parcels = read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels']
+                outside = sorted(i for i, p in parcels.items() if p['sourceName'] is None)
+                self.assertEqual(outside, cru['namedPlots'].get('parcelsWithoutLieuDit', []))
+                self.assertTrue(all(parcels[i]['name'] is None and parcels[i]['share'] == 0 for i in outside))
+        self.assertEqual(load_cru('la-grande-rue')[0]['namedPlots']['parcelsWithoutLieuDit'], ['21714000AM0002', '21714000AM0008'])
+
     def test_tier1_rechecks_match_pinned_source_availability(self):
         from inventory_grand_cru_sources import rights_releases, dfi_releases, dfi_schema
         reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
@@ -198,25 +211,21 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
 
-    def test_unnamed_and_edge_parcels_are_declared_in_the_named_area_review(self):
-        # Musigny has parcels outside every lieu-dit and edge parcels lying wholly in neighbouring lieux-dits.
+    def test_edge_parcels_in_neighbouring_lieux_dits_are_declared(self):
+        # Musigny's edge parcels lie wholly in neighbouring lieux-dits such as Les Amoureuses; none is a Musigny climat.
         checked = []
         for slug in cru_slugs():
             cru = load_cru(slug)[0]
-            if 'namedPlots' not in cru or not (RESEARCH_DIR / slug / 'parcel-named-areas.json').exists():
+            if 'namedPlots' not in cru:
                 continue
             config, rows = cru['namedPlots'], read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels'].values()
-            if not any(r.get('neighbouringLieuDit') or ('share' in r and r['sourceName'] is None) for r in rows):
-                continue
-            checked.append(slug)
             neighbouring = {n['sourceName'] for n in config.get('neighbouringLieuxDits', [])}
-            reviewed = {p['sourceName'] for p in config['plots']}
-            self.assertFalse(neighbouring & reviewed, slug)
-            self.assertEqual({r['sourceName'] for r in rows if r.get('neighbouringLieuDit')}, neighbouring, slug)
-            self.assertTrue(all(r['name'] is None for r in rows if r.get('neighbouringLieuDit')), slug)
-            unnamed = [r for r in rows if r['sourceName'] is None]
-            self.assertTrue(all(r['name'] is None and r['share'] == 0 for r in unnamed), slug)
-            self.assertEqual(bool(unnamed), any(u['sourceCandidate'] is None for u in config['unresolved']), slug)
+            with self.subTest(cru=slug):
+                self.assertFalse(neighbouring & {p['sourceName'] for p in config['plots']})
+                self.assertEqual({r['sourceName'] for r in rows if r.get('neighbouringLieuDit')}, neighbouring)
+                self.assertTrue(all(r['name'] is None for r in rows if r.get('neighbouringLieuDit')))
+            if neighbouring:
+                checked.append(slug)
         self.assertIn('musigny', checked)
 
     def test_generated_research_json_has_one_line_per_record(self):
