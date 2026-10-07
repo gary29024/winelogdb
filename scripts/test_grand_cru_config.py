@@ -31,6 +31,7 @@ class ConfigTests(unittest.TestCase):
         from inventory_grand_cru_sources import rights_releases, dfi_releases, dfi_schema
         reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
         self.assertIn('richebourg', reviewed)
+        self.assertIn('montrachet', reviewed)
         for slug in reviewed:
             with self.subTest(cru=slug):
                 cru = load_cru(slug)[0]

@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BCUiTPSn.js"
+    "dist/client/assets/index-B65ghEzL.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-C88wyGXj.js",
-    "dist/client/assets/SectionLabel-ClEn_qR_.js",
-    "dist/client/assets/SparklingDetailsCard-D_7JzQFZ.js",
-    "dist/client/assets/VillageMap-CYLDZvCi.js",
-    "dist/client/assets/api-BaBDEtmv.js",
-    "dist/client/assets/burgundyAtlas-CrejlJnj.js",
-    "dist/client/assets/index-BCUiTPSn.js",
-    "dist/client/assets/index-CNetorYn.js",
+    "dist/client/assets/FriendTagDialog-BfzBM5YL.js",
+    "dist/client/assets/SectionLabel-SHPN9NDT.js",
+    "dist/client/assets/SparklingDetailsCard-D8YEcCAy.js",
+    "dist/client/assets/VillageMap-BkEaAxBe.js",
+    "dist/client/assets/api-Cyfhy7x1.js",
+    "dist/client/assets/burgundyAtlas-B6UU-eve.js",
+    "dist/client/assets/index-B65ghEzL.js",
+    "dist/client/assets/index-COBZJND1.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-BTb3bBYT.js",
     "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-D73wS8sa.js",
-    "dist/client/assets/wineDetailCompact-jgJEGC1v.js"
+    "dist/client/assets/useModalFocus-DqMC6SNA.js",
+    "dist/client/assets/wineDetailCompact-D8FIf75f.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 24,
-  "evidenceBytesTotal": 2659505,
-  "evidenceGzipBytesTotal": 278126,
-  "parcelBundleBytesTotal": 1230848,
-  "parcelBundleGzipBytesTotal": 187822,
+  "evidenceChunkCount": 25,
+  "evidenceBytesTotal": 2802517,
+  "evidenceGzipBytesTotal": 289562,
+  "parcelBundleBytesTotal": 1408196,
+  "parcelBundleGzipBytesTotal": 214886,
   "evidenceChunks": [
     {
       "cru": "bonnes-mares",
@@ -161,6 +161,13 @@
       "gzipBytes": 13869
     },
     {
+      "cru": "montrachet",
+      "file": "dist/client/assets/montrachet.evidence-BJnqo9SW.js",
+      "sha256": "ba6b0930c3eff3573321c0b5322352b1ea62c1b05c64b56b4c5add249ee4b31a",
+      "bytes": 143012,
+      "gzipBytes": 11436
+    },
+    {
       "cru": "musigny",
       "file": "dist/client/assets/musigny.evidence-Dq6NZNin.js",
       "sha256": "b4846f2b773872031bb4f65340526f2c462848ff826a46fcbfb781b3492d329d",
@@ -217,6 +224,13 @@
       "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
       "bytes": 420894,
       "gzipBytes": 62023
+    },
+    {
+      "bundle": "montrachet",
+      "dataUrl": "/maps/montrachet-parcels.2026-06-01.772994c2e4a4.geojson",
+      "sha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+      "bytes": 177348,
+      "gzipBytes": 27064
     },
     {
       "bundle": "vosne-romanee",

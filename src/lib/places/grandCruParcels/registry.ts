@@ -1,19 +1,20 @@
 import bundle0 from './chambolle-morey.manifest.json';
 import bundle1 from './flagey-echezeaux.manifest.json';
 import bundle2 from './gevrey-chambertin.manifest.json';
-import bundle3 from './vosne-romanee.manifest.json';
-import bundle4 from './vougeot.manifest.json';
+import bundle3 from './montrachet.manifest.json';
+import bundle4 from './vosne-romanee.manifest.json';
+import bundle5 from './vougeot.manifest.json';
 
 /** A commune bundle's parcel file and rights snapshot, built by scripts/build_grand_cru_parcels.py. */
 export type ParcelManifest=typeof bundle0;
 
 // One entry per scripts/grand-crus/bundles/<id>.json. A bundle serves every cru in its communes,
 // so several crus share one parcel download (Flagey serves Échezeaux and Grands-Échezeaux).
-export const parcelBundles={'chambolle-morey':bundle0,'flagey-echezeaux':bundle1,'gevrey-chambertin':bundle2,'vosne-romanee':bundle3,'vougeot':bundle4} satisfies Record<string,ParcelManifest>;
+export const parcelBundles={'chambolle-morey':bundle0,'flagey-echezeaux':bundle1,'gevrey-chambertin':bundle2,'montrachet':bundle3,'vosne-romanee':bundle4,'vougeot':bundle5} satisfies Record<string,ParcelManifest>;
 export type ParcelBundleId=keyof typeof parcelBundles;
 
 /** Crus whose research files feed the evidence panel; see ./evidence.ts. */
-export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
+export type EvidenceSourceId='bonnes-mares'|'chambertin'|'chambertin-clos-de-beze'|'chapelle-chambertin'|'charmes-chambertin'|'clos-de-la-roche'|'clos-de-tart'|'clos-de-vougeot'|'clos-des-lambrays'|'clos-saint-denis'|'echezeaux'|'grands-echezeaux'|'griotte-chambertin'|'la-grande-rue'|'la-romanee'|'la-tache'|'latricieres-chambertin'|'mazis-chambertin'|'mazoyeres-chambertin'|'montrachet'|'musigny'|'richebourg'|'romanee-conti'|'romanee-saint-vivant'|'ruchottes-chambertin';
 
 export type GrandCru={
  slug:string;name:string;parentFeatureId:string;
@@ -47,6 +48,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"latricieres-chambertin",name:"Latricières-Chambertin",parentFeatureId:"inao-denom-666",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["latricieres-chambertin"],domaineGrouping:false},
  {slug:"mazis-chambertin",name:"Mazis-Chambertin",parentFeatureId:"inao-denom-808",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazis-chambertin"],domaineGrouping:false},
  {slug:"mazoyeres-chambertin",name:"Mazoyères-Chambertin",parentFeatureId:"inao-denom-809",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazoyeres-chambertin"],domaineGrouping:false},
+ {slug:"montrachet",name:"Montrachet",parentFeatureId:"inao-denom-927",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["montrachet"],domaineGrouping:false},
  {slug:"musigny",name:"Musigny",parentFeatureId:"inao-denom-973",villageMaps:["chambolle-musigny"],bundle:"chambolle-morey",evidenceFrom:["musigny"],domaineGrouping:false},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:false},
  {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:false},

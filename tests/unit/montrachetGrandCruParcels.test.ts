@@ -1,0 +1,74 @@
+import {describe,expect,it} from 'vitest';
+import {readFileSync} from 'node:fs';
+import {burgundyVillageMapTarget} from '../../src/lib/places/burgundyVillageMap';
+import {loadVillageMapCatalogue} from '../../src/lib/places/loadVillageMapCatalogue';
+import {grandCruFor} from '../../src/lib/places/grandCruParcels/registry';
+import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence';
+
+// Extend only after committing each cru's independent Tier 1 audit.
+const reviewed=[
+ {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
+];
+const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
+const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};
+const config=(slug:string)=>read(`scripts/grand-crus/${slug}.json`) as {parentFeatureId:string;villageMaps:string[];namedPlots:{displayLayer:boolean;plots:{id:string;name:string;sourceName:string}[]}};
+
+describe('Montrachet bundle Tier 1 crus',()=>{
+ it('enables each reviewed cru in every village context with its own evidence',async()=>{
+  for(const cru of reviewed){
+   for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
+   const evidence=await loadParcelEvidence(cru.id);
+   expect(evidence).not.toBeNull();
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
+  }
+  for(const slug of bundle.crus.filter(slug=>!reviewed.some(cru=>cru.slug===slug))){
+   const pending=config(slug);
+   for(const village of pending.villageMaps)expect(grandCruFor(pending.parentFeatureId,village)).toBeUndefined();
+  }
+ });
+ it('keeps white wines on their full INAO feature when the cru name is a constituent name',async()=>{
+  for(const cru of reviewed){
+   const named=config(cru.slug).namedPlots;
+   expect(named.displayLayer).toBe(false);
+   for(const village of cru.villages){
+    const catalogue=await loadVillageMapCatalogue(village);
+    expect(catalogue.namedPlots?.some(layer=>layer.parentFeatureId===cru.id)??false).toBe(false);
+   }
+   for(const colour of ['white','White']){
+    const wine={country:'France',region:'Burgundy',appellation:cru.name,classification:'grand_cru',colour,wineName:cru.name};
+    for(const target of [wine,{...wine,referenceParcel:'Unknown area'},...named.plots.map(plot=>({...wine,referenceParcel:plot.sourceName}))]){
+     const result=burgundyVillageMapTarget(target);
+     expect(result).toMatchObject({featureId:cru.id});
+     expect(result?.namedPlotId).toBeUndefined();
+    }
+   }
+  }
+ });
+ it('keeps both communes in one unique parcel set without cropping at their line',()=>{
+  const manifest=read('src/lib/places/grandCruParcels/montrachet.manifest.json') as {dataUrl:string};
+  const asset=read(`public${manifest.dataUrl}`) as {features:{id:string;properties:{commune:string;overlaps:{parentFeatureId:string}[]}}[]};
+  expect(new Set(asset.features.map(f=>f.id)).size).toBe(asset.features.length);
+  for(const cru of reviewed){
+   const members=asset.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.id));
+   expect(members).toHaveLength(cru.parcels);
+   const register=read(`docs/research/${cru.slug}/register.json`) as {parcels:{parcelId:string}[]};
+   expect(register.parcels.map(p=>p.parcelId).sort()).toEqual(members.map(f=>f.id).sort());
+   if(cru.villages.length===2){
+    expect([...new Set(members.map(f=>f.properties.commune))].sort()).toEqual(['21150','21512']);
+    const audit=read(`scripts/grand-crus/reports/${cru.slug}-commune-audit.json`);
+    const coverage=audit.crossCommuneCoverage;
+    expect(coverage.crossCommuneOverlaps).toHaveLength(1);
+    expect(coverage.crossCommuneOverlaps[0].areaM2).toBeGreaterThan(0);
+    expect(coverage.coverageByCommuneM2['21150']+coverage.coverageByCommuneM2['21512']-coverage.crossCommuneOverlaps[0].areaM2).toBeCloseTo(coverage.unionCoverageM2,5);
+   }
+  }
+ });
+ it('withholds the chronologically inconsistent 2013 notice from a parcel event',()=>{
+  const history=read('docs/research/montrachet/notice-history.json');
+  const match=history.reviewedMatches.find((m:{originalPrintedReference:string})=>m.originalPrintedReference==='AE 172');
+  expect(match).toMatchObject({originalDate:null,directMatchWithheld:'notice-act-date-unresolved',directCurrentParcelIds:[],contextPaths:[],currentFarmer:null});
+  expect(match.originalRecord.printedDate).toBe('3 décembre 2013');
+  expect(match.originalRecord.publicationDate).toBe('2013-01-31');
+  expect(history.unreviewedCandidates).toHaveLength(0);
+ });
+});

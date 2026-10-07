@@ -14,6 +14,7 @@ Requires scripts/burgundy-map-requirements.txt and download_grand_cru_sources.py
 import argparse
 import gzip
 import json
+from itertools import combinations
 
 from pyproj import Transformer
 from shapely.geometry import shape
@@ -23,6 +24,20 @@ from grand_cru import (audit_file, bundle_commune_names, cadastre_sources, commu
                        pinned, read_json, require, source_dir, village_map, write_or_check)
 
 MAX_UNCOVERED_SHARE = 0.001  # gaps between parcels; a missing commune would leave far more
+
+
+def cross_commune_coverage(boundary, covers):
+    """Measure original cadastral coverage without double-counting commune overlaps."""
+    clipped = {insee: cover.intersection(boundary) for insee, cover in covers.items()}
+    return {
+        'coverageByCommuneM2': {insee: round(cover.area, 6) for insee, cover in clipped.items()},
+        'crossCommuneOverlaps': [
+            {'communes': [left, right], 'areaM2': round(clipped[left].intersection(clipped[right]).area, 6)}
+            for left, right in combinations(sorted(clipped), 2)
+        ],
+        'unionCoverageM2': round(unary_union(list(clipped.values())).area, 6),
+        'note': 'Full original parcel polygons are measured in EPSG:2154. Commune coverage can overlap; the union counts shared area once. Cru membership and the shared parcel asset are not split at the commune line.',
+    }
 
 
 def uncovered_area_limit(cru, bundle, parent_hash, boundary_area):
@@ -50,8 +65,11 @@ def build(cru, bundle, directory):
                 for f in json.loads(gzip.decompress(pinned(directory, name, digest)))['features']]
 
     own = []
+    by_commune = {}
     for insee, _, digest in cadastre_sources(bundle):
-        own += parcels(parcels_file(insee), digest)
+        shapes = parcels(parcels_file(insee), digest)
+        by_commune[insee] = unary_union(shapes)
+        own += shapes
     own_cover = unary_union(own)
     covered = own_cover.intersection(boundary).area
     uncovered = boundary.area - covered
@@ -100,6 +118,8 @@ def build(cru, bundle, directory):
     }
     if review := cru.get('communeAudit', {}).get('reviewedUncoveredArea'):
         result['reviewedUncoveredArea'] = review
+    if cru.get('communeAudit', {}).get('measureCrossCommuneOverlap'):
+        result['crossCommuneCoverage'] = cross_commune_coverage(boundary, by_commune)
     return result
 
 

@@ -15,9 +15,73 @@
     "montrachet"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/montrachet/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-beaune/montrachet",
+    "nameSourceUrl": "https://www.vins-bourgogne.fr/vins-et-terroirs/la-bourgogne-et-ses-appellations/montrachet,2377,9170.html?args=Y29tcF9pZD0yMjA1JmFjdGlvbj12aWV3RmljaGUmaWQ9MzU1Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "dd66b3c1d12d0e42debfc42418070a2d85eab1548dda1736e6c863a02e3c57e6",
+    "coverageNote": "BIVB lists Montrachet as the Grand Cru across Puligny-Montrachet and Chassagne-Montrachet. The cadastre names its two principal areas MONTRACHET and LE MONTRACHET. These cadastral names are audited without asserting separate official climats or producer holdings. The cru name is also a constituent name, so displayLayer remains false and every white Montrachet wine retains the whole INAO outline across the commune line.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "le-montrachet",
+        "name": "Le Montrachet",
+        "sourceName": "LE MONTRACHET",
+        "communes": [
+          "21150"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "montrachet",
+        "name": "Montrachet",
+        "sourceName": "MONTRACHET",
+        "communes": [
+          "21512"
+        ],
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "CHEVALIER MONTRACHET",
+        "sourceCandidate": "CHEVALIER MONTRACHET",
+        "reason": "Full cadastral parcels in this neighbouring lieu-dit have only edge contact with the INAO cru. Preserve the source name without declaring a Montrachet climat or producer holding."
+      },
+      {
+        "name": "DENT DE CHIEN",
+        "sourceCandidate": "DENT DE CHIEN",
+        "reason": "Full cadastral parcels in this neighbouring lieu-dit have only edge contact with the INAO cru. Preserve the source name without declaring a Montrachet climat or producer holding."
+      }
+    ],
+    "parcelsWithoutLieuDit": [],
+    "reviewedOverlaps": [
+      {
+        "plots": [
+          "le-montrachet",
+          "montrachet"
+        ],
+        "maximumAreaM2": 10.6,
+        "reviewedAt": "2026-10-07",
+        "note": "The original lieux-dits outlines overlap by 10.592858 m² inside the unchanged INAO feature at the commune line. Both published outlines are retained. The cap is less than 0.008 m² above the measured overlap; the shared parcel set remains unsplit."
+      }
+    ]
+  },
+  "communeAudit": {
+    "measureCrossCommuneOverlap": true,
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 243.4,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+      "cadastreSha256ByCommune": {
+        "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+        "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+      },
+      "note": "The 243.347030 m² remainder (0.304638%) was inspected in EPSG:2154 against the unmodified pinned INAO and cadastral polygons. All five components touch the INAO boundary. The largest follows the northern edge; the second and fourth follow the southwest boundary; the third is a narrow gap between the two communes (maximum enclosing-rectangle width 0.596 m); the fifth is a 0.107 m² eastern edge sliver. No missing commune or detached interior parcel was found. The 243.4 m² cap is less than 0.053 m² above the measurement. No geometry is added, clipped, buffered or filled; changed hashes require a new review."
+    }
   }
 }

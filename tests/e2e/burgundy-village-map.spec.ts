@@ -19,7 +19,8 @@ const auditedCru=(slug:string)=>existsSync(`scripts/grand-crus/reports/${slug}-c
 // White-only crus need a white wine for their village map to open.
 const whiteCru=(slug:string)=>/chablis|montrachet|charlemagne/.test(slug);
 // Cover each app-visible history bundle on a real map.
-for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).entries()){
+const historyCrus=[...new Set(['echezeaux','clos-de-vougeot',...(process.env.WINELOG_E2E_CRU?[process.env.WINELOG_E2E_CRU]:[])])];
+for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
  test(`Official history: ${slug} loads its own evidence and preserves dated source roles`,async({page},testInfo)=>{
   test.setTimeout(60_000); // Allow a cold local Vite/Worker startup before the real map assertions.
   const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
@@ -251,8 +252,9 @@ const parcelCru=(()=>{
  const held=features.find(f=>f.properties.recordedRights.length)!;
  const unknown=features.find(f=>!f.properties.recordedRights.length);
  const multiple=features.find(f=>f.properties.recordedRights.length>1);
- const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===cru.villageMaps[0])!;
- return {...cru,village:village.name,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,held,unknown,multiple};
+ // A cross-commune cru can open in a configured village other than the bundle's first one.
+ const villages=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.filter(v=>cru.villageMaps.includes(v.id)).map(v=>v.name);
+ return {...cru,villages,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,held,unknown,multiple};
 })();
 
 test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped producer links from its config`,async({page},testInfo)=>{
@@ -278,7 +280,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await page.route(`**${parcelCru.dataUrl}`,route=>++downloads===1?route.fulfill({status:503}):route.continue());
  await page.goto('/wines/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
- let dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ let dialog=page.getByRole('dialog');
+ await expect(dialog).toHaveAccessibleName(new RegExp(`^(${parcelCru.villages.join('|')})$`));
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  expect(downloads).toBe(0);
@@ -343,7 +346,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  expect(links[0].holderId).toBe(holder.holderId);
  await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
- dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ dialog=page.getByRole('dialog');
+ await expect(dialog).toHaveAccessibleName(new RegExp(`^(${parcelCru.villages.join('|')})$`));
  await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
  await expect(dialog.getByRole('link',{name:producer.canonicalName,exact:true})).toBeVisible();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');

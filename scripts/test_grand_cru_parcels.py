@@ -11,6 +11,16 @@ def row(holder='123456789', right='P - Propriétaire', area='500'):
 
 
 class RightsJoinTests(unittest.TestCase):
+    def test_cross_commune_coverage_counts_shared_ground_once(self):
+        from shapely.geometry import box
+        from build_grand_cru_commune_audit import cross_commune_coverage
+        result = cross_commune_coverage(box(0, 0, 10, 10), {
+            '21150': box(-2, 0, 6, 10), '21512': box(5, 0, 12, 10),
+        })
+        self.assertEqual(result['coverageByCommuneM2'], {'21150': 60, '21512': 50})
+        self.assertEqual(result['crossCommuneOverlaps'], [{'communes': ['21150', '21512'], 'areaM2': 10}])
+        self.assertEqual(result['unionCoverageM2'], 100)
+
     def test_evidence_references_keep_the_actual_cadastral_section(self):
         from build_grand_cru_evidence import short_reference
         self.assertEqual(short_reference('217160000A0523'), 'A0523')
