@@ -140,6 +140,23 @@ def covered_by_curated_review(notice, bulletin, matched, reviews):
         and set(matched) <= r['references'] for r in reviews)
 
 
+def indexed_event_notice(event, source, reviewed):
+    """A curated reading may refine one canonical indexed row without adding another match."""
+    link = event['indexedNotice']
+    matches = [n for n in reviewed if n['indexId'] == link['indexId']
+               and n['originalRecord']['noticeId'] == link['noticeId']
+               and n['matchedReferenceIds'] == [link['originalReferenceId']]]
+    require(len(matches) == 1, 'Indexed event must identify exactly one reviewed notice row')
+    notice = matches[0]
+    require(event['parcelIds'] == [link['originalReferenceId']] and not event.get('predecessorReferences')
+            and link['originalReferenceId'] in notice['directCurrentParcelIds'],
+            'Indexed event must retain the directly printed current reference')
+    require(event['documentDate'] == notice['originalDate'], 'Indexed event act date differs from reviewed row')
+    require(source.get('sha256') and source['sha256'] == (notice.get('source') or {}).get('sha256'),
+            'Indexed event PDF hash differs from reviewed row')
+    return notice
+
+
 def build(cru, bundle, history):
     require(history['parentFeatureId'] == cru['parentFeatureId'], 'History belongs to another cru')
     current = {r['parcelId'] for r in history['parcels']}
@@ -207,6 +224,9 @@ def build(cru, bundle, history):
         for event in curation['exactParcelEvents']:
             source = source_map[event['sourceId']]
             if not source['type'].startswith('government'):
+                continue
+            if 'indexedNotice' in event:
+                indexed_event_notice(event, source, reviewed)
                 continue
             original_references = [*event['parcelIds'], *event.get('predecessorReferences', {})]
             for reference in original_references:

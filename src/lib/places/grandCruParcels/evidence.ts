@@ -21,6 +21,7 @@ const loaders:Record<EvidenceSourceId,()=>Promise<{default:unknown}>>={
  'batard-montrachet':()=>import('./batard-montrachet.evidence.json'),
  'bienvenues-batard-montrachet':()=>import('./bienvenues-batard-montrachet.evidence.json'),
  'bonnes-mares':()=>import('./bonnes-mares.evidence.json'),
+ 'chablis-grand-cru':()=>import('./chablis-grand-cru.evidence.json'),
  'chambertin':()=>import('./chambertin.evidence.json'),
  'chambertin-clos-de-beze':()=>import('./chambertin-clos-de-beze.evidence.json'),
  'chapelle-chambertin':()=>import('./chapelle-chambertin.evidence.json'),

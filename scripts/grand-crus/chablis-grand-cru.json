@@ -14,9 +14,110 @@
     "chablis-grand-cru"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/chablis-grand-cru/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/chablis/chablis-grand-cru",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chablis-grand-cru,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjYyJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "75a42dcc1a774ed7b006d7d817334c9553318f0588420e3a6f3a1a7da2779a98",
+    "coverageNote": "BIVB lists seven climats, already mapped as INAO denominations 440–446. Seven reviewed cadastral name correspondences are audited without publishing a second layer. These are partial cadastral correspondences, not replacement climat boundaries. Four additional cadastral names remain unresolved. La Moutonne is not an eighth climat; its existing producer illustration is separate.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "blanchot",
+        "name": "Blanchot",
+        "sourceName": "COTE DE BLANCHOT",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "bougros",
+        "name": "Bougros",
+        "sourceName": "LES BOUGUEROTS",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "grenouilles",
+        "name": "Grenouilles",
+        "sourceName": "LES GRENOUILLES",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "les-clos",
+        "name": "Les Clos",
+        "sourceName": "LES CLOS",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "les-preuses",
+        "name": "Les Preuses",
+        "sourceName": "LES PREUSES",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "valmur",
+        "name": "Valmur",
+        "sourceName": "CÔTE DE VALMUR",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "vaudesir",
+        "name": "Vaudésir",
+        "sourceName": "LES VAUDESIRS",
+        "communes": [
+          "89068"
+        ],
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "Valmur / Les Clos",
+        "sourceCandidate": "ENVERS DE VALMUR",
+        "reason": "Two same-name cadastral features hold 29 mapped parcels. Within the Grand Cru, their union intersects official Valmur by 56,720.636 m² and Les Clos by 22,655.233 m². No single climat name is assigned to this cadastral name; retain its printed name and the official whole-cru fallback."
+      },
+      {
+        "name": "Vaudésir / Grenouilles",
+        "sourceCandidate": "ENVERS DES VAUDESIRS",
+        "reason": "This cadastral feature holds 40 mapped parcels and intersects official Vaudésir by 52,700.950 m² and Grenouilles by 263.739 m². It is not a separate official climat. Keep the cadastral name without a climat alias; the seven official outlines remain available."
+      },
+      {
+        "name": "Les Preuses",
+        "sourceCandidate": "LES QUATRE CHEMINS",
+        "reason": "Four mapped parcels use this cadastral name, contributing 8,815.472 m² inside the official Les Preuses outline. BIVB does not list it as a climat; spatial inclusion alone is not an exact-name alias."
+      },
+      {
+        "name": "Les Clos",
+        "sourceCandidate": "SUR LES CLOS",
+        "reason": "One mapped parcel uses this cadastral name. The feature intersects the Grand Cru by 242.904 m², principally in official Les Clos. BIVB does not list it as a climat; no alias is inferred."
+      },
+      {
+        "name": "La Moutonne",
+        "sourceCandidate": null,
+        "reason": "Absent from the seven BIVB climats and from the pinned cadastral lieux-dits. The existing separately labelled producer illustration spans parts of Vaudésir and Les Preuses; it is not a cadastral boundary or an eighth climat. No parcel or holder assignment is made."
+      }
+    ],
+    "neighbouringLieuxDits": [],
+    "parcelsWithoutLieuDit": []
   }
 }

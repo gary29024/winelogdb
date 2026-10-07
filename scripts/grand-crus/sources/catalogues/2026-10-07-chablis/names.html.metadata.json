@@ -1,0 +1,20 @@
+{
+  "id": "names",
+  "url": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chablis-grand-cru,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjYyJnw%3D",
+  "retrievedAt": "2026-10-07T08:25:37Z",
+  "status": "obtained",
+  "resolvedUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chablis-grand-cru,2458,9253.html?&args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjYyJnw%3D",
+  "httpContentEncoding": null,
+  "transportSha256": "2c91f8942316bd7e037f8a2bf064310392ebb929ddc58cb9a6ea4b0e4a316b2d",
+  "transportSize": 91308,
+  "sha256": "75a42dcc1a774ed7b006d7d817334c9553318f0588420e3a6f3a1a7da2779a98",
+  "size": 91294,
+  "redaction": {
+    "method": "google-api-key-v1",
+    "replacement": "[REDACTED_GOOGLE_API_KEY]",
+    "occurrences": 1,
+    "originalSha256": "2c91f8942316bd7e037f8a2bf064310392ebb929ddc58cb9a6ea4b0e4a316b2d",
+    "originalSize": 91308
+  },
+  "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-chablis/names.html"
+}

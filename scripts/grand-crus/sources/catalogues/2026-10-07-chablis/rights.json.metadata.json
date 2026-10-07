@@ -1,0 +1,13 @@
+{
+  "id": "rights",
+  "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "retrievedAt": "2026-10-07T08:25:34Z",
+  "status": "obtained",
+  "resolvedUrl": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+  "httpContentEncoding": null,
+  "transportSha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+  "transportSize": 14649,
+  "sha256": "d11f6ffb871108d6b1e49ae3ab2da09127f4ed8c5f95c1ffaa10f8676d78d58b",
+  "size": 14649,
+  "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-chablis/rights.json"
+}

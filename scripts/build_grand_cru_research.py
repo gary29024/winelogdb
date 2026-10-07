@@ -102,6 +102,10 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(event['sourceId'] in sources, 'Unknown event source')
         require(event['kind'] in EVENT_KINDS, f"Unknown event kind: {event['kind']}")
         require(event['currentFarmer'] is None, 'Historical event cannot establish current farming')
+        if operation := event.get('operation'):
+            require(operation == 'aerial-spraying-derogation' and event['kind'] == 'authorisation'
+                    and event.get('indexedNotice') and event.get('applicantRole') and event['previousOperator'] is None,
+                    'A treatment derogation needs its indexed row and a requester role, never an operator')
         # A retired reference named in a notice reaches today's parcels only through recorded lineage.
         check_lineage(event, 'Event')
     for item in curation['externalResearch']:
@@ -205,9 +209,11 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         leads = [{'name': name, 'holderId': hid, 'basis': holders[hid]['basis'],
                   'sourceIds': holders[hid]['sourceIds']}
                  for hid in holder_ids for name in holders[hid]['candidateNames']]
-        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]} for e in events]
+        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]} for e in events
+                       if e.get('operation') != 'aerial-spraying-derogation']
         event_leads += [{'name': e['applicant'], 'basis': f"{e['kind']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
-                         'sourceIds': [e['sourceId']]} for e, r in inherited]
+                         'sourceIds': [e['sourceId']]} for e, r in inherited
+                        if e.get('operation') != 'aerial-spraying-derogation']
         external_leads = [{'name': x['producer'], 'basis': x['basis'], 'sourceIds': x['sourceIds']}
                           for x in external if x.get('producer')]
         external_leads += [{'name': x['producer'], 'basis': f"{x['basis']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
@@ -250,7 +256,9 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
                               'holder-group-triage' if holder_ids else
                               'sale-record-reviewed' if sale_records else 'inventory-only'),
             'currentFarmer': None, 'verifiedAsOf': None, 'operationScope': 'unconfirmed',
-            'nextEvidenceNeeded': ('Confirm actual operation, scope and continuation since the decision.'
+            'nextEvidenceNeeded': ('Obtain independent parcel-specific operator evidence; the treatment requester is not an identified farmer.'
+                                   if events and all(e.get('operation') == 'aerial-spraying-derogation' for e in events) else
+                                   'Confirm actual operation, scope and continuation since the decision.'
                                    if any(e['kind'] == 'authorisation' for e in events) else
                                    'Check the decision after the suspension ends, and who farms meanwhile.'
                                    if any(e['kind'] == 'suspended-application' for e in events) else
@@ -408,17 +416,22 @@ def render_report(register, curation, history, context):
     rows_by_id = {r['parcelId']: r for r in register['parcels']}
     ref = lambda pid: rows_by_id[pid]['reference'] if pid in rows_by_id else f"{pid[8:10].lstrip('0')} {pid[10:]}"
     lines += ['', '## Exact-reference administrative events', '',
+              ('Reviewed treatment derogations name a requester and printed cadastral references and areas. '
+               'The requester is not an identified owner or operator. A treatment authorisation does not establish '
+               'actual treatment or farming. References and footnotes were read from the page images.'
+               if curation['exactParcelEvents'] and all(e.get('operation') == 'aerial-spraying-derogation'
+                                                      for e in curation['exactParcelEvents']) else
               'Reviewed farm-structure notices name the applicant, the previous operator and the '
               'cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an '
               'authorisation is a dated decision, not proof of actual or current operation. References were read from the '
-              'page image.' + other_cru_note(curation, context), '']
+              'page image.') + other_cru_note(curation, context), '']
     for e in sorted(curation['exactParcelEvents'], key=lambda e: e['documentDate']):
         refs = ', '.join(ref(i) for i in e['parcelIds'])
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}"
                         for r, cs in e.get('predecessorReferences', {}).items())
-        label = EVENT_KINDS[e['kind']]
+        label = 'Aerial-spraying derogation' if e.get('operation') == 'aerial-spraying-derogation' else EVENT_KINDS[e['kind']]
         lines.append(f"- **{e['documentDate']} — {cell(e['applicant'])}.** {label}; previous operator "
-                     f"{cell(e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
+                     f"{cell('not stated' if e.get('operation') == 'aerial-spraying-derogation' else e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
                      f". {e['summary']} [{cell(sources[e['sourceId']]['title'])}]({sources[e['sourceId']]['url']}).")
     lines += ['', '## Parcel-specific company filings', '',
               'Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates '

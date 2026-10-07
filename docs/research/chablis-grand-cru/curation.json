@@ -1,490 +1,1278 @@
 {
-  "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
-  "targetSeason": "2026",
-  "parentFeatureId": "inao-denom-439",
-  "status": "historical-extension-inventory",
-  "scope": "All 417 mapped Chablis Grand Cru parcels and 43 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
-  "sources": [
-    {
-      "id": "dgfip-current",
-      "title": "DGFiP department 89 legal-entity rights, 2025-01-01",
-      "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
-      "type": "registry-dataset",
-      "documentDate": "2025-01-01",
-      "access": "read",
-      "finding": "Exact current references and every holder/right code retained. Rights are not farming."
-    },
-    {
-      "id": "dgfip-history",
-      "title": "DGFiP available annual legal-entity rights",
-      "url": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
-      "type": "registry-dataset",
-      "documentDate": null,
-      "access": "read",
-      "finding": "Pinned annual source members and original-reference dates are in rights-history.json and the shared inventory."
-    },
-    {
-      "id": "cadastre-history",
-      "title": "Etalab available commune geometry vintages",
-      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
-      "type": "geometry",
-      "documentDate": null,
-      "access": "read",
-      "finding": "Full current geometry is preserved. Earlier observations support separately labelled spatial inference."
-    },
-    {
-      "id": "dvf-sales",
-      "title": "Cerema DVF+ open-data, Bourgogne-Franche-Comté",
-      "url": "https://www.data.gouv.fr/datasets/dvf-open-data",
-      "type": "registry-dataset",
-      "documentDate": null,
-      "access": "read",
-      "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
-    }
-  ],
-  "holders": [
-    {
-      "holderId": "218900686",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "314306747",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "315432823",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "323300400",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "327949061",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "328696653",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "329608368",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "334537875",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "350828414",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "377878749",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "379093016",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "384572640",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "388018616",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "393095955",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "394405997",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "400717799",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "410784524",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "411922941",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "419450374",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "422605980",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "424718583",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "425720703",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "429384555",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "430361238",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "439446949",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "520830076",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "532490349",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "778655381",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "778655803",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "790084826",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "820901478",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "821524907",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "878728732",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "896520038",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U18602530",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U18870946",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22175398",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22175815",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22175904",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22199826",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22222417",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U22289319",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    },
-    {
-      "holderId": "U23923051",
-      "candidateNames": [],
-      "basis": "identity-only",
-      "sourceIds": [
-        "dgfip-current"
-      ],
-      "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
-    }
-  ],
-  "historyFindings": [],
-  "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
-  "historicalOwnerLists": [],
-  "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+ "schemaVersion": 1,
+ "reviewedAt": "2026-10-07",
+ "targetSeason": "2026",
+ "parentFeatureId": "inao-denom-439",
+ "status": "tier-1-reviewed",
+ "scope": "All 417 Chablis Grand Cru parcels reviewed against the pinned Chablis (89068) geometry, named areas, legal-entity rights, official DFI, DVF and Yonne notice archive. Aerial-spraying derogations identify a requester and printed treatment scope, not an owner or farmer. No current farmer is verified.",
+ "sources": [
+  {
+   "id": "dgfip-current",
+   "title": "DGFiP department 89 legal-entity rights, 2025-01-01",
+   "url": "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_57_a_976_zip",
+   "type": "registry-dataset",
+   "documentDate": "2025-01-01",
+   "access": "read",
+   "finding": "Exact current references and every holder/right code retained. Rights are not farming."
+  },
+  {
+   "id": "dgfip-history",
+   "title": "DGFiP available annual legal-entity rights",
+   "url": "https://www.data.gouv.fr/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales",
+   "type": "registry-dataset",
+   "documentDate": null,
+   "access": "read",
+   "finding": "Pinned annual source members and original-reference dates are in rights-history.json and the shared inventory."
+  },
+  {
+   "id": "cadastre-history",
+   "title": "Etalab available commune geometry vintages",
+   "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+   "type": "geometry",
+   "documentDate": null,
+   "access": "read",
+   "finding": "Full current geometry is preserved. Earlier observations support separately labelled spatial inference."
+  },
+  {
+   "id": "dvf-sales",
+   "title": "Cerema DVF+ open-data, Bourgogne-Franche-Comté",
+   "url": "https://www.data.gouv.fr/datasets/dvf-open-data",
+   "type": "registry-dataset",
+   "documentDate": null,
+   "access": "read",
+   "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+  },
+  {
+   "id": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "title": "DDT/SEEP/2012/0018 — aerial-spraying derogation",
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf#page=3",
+   "type": "government-notice",
+   "documentDate": "2012-05-16",
+   "access": "read",
+   "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+   "pages": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "finding": "Page images confirm the requester, treatment period, parcel rows and footnotes; no owner, tenant or current farmer is identified."
+  },
+  {
+   "id": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "title": "DDT/SEEP/2013/0011 — aerial-spraying derogation",
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf#page=128",
+   "type": "government-notice",
+   "documentDate": "2013-05-22",
+   "access": "read",
+   "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+   "pages": [
+    128,
+    129,
+    130,
+    131
+   ],
+   "finding": "Page images confirm the requester, treatment period, parcel rows and footnotes; no owner, tenant or current farmer is identified."
+  },
+  {
+   "id": "yonne-2018-auxerre-planning",
+   "title": "DDT/SAAT/2018/0045 — Auxerre planning derogation",
+   "url": "https://www.yonne.gouv.fr/content/download/26494/208912/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf#page=44",
+   "type": "government-notice",
+   "documentDate": "2018-06-13",
+   "access": "read",
+   "finding": "The act applies to Auxerre (89024). UR3 is a planning zone; Route de Chablis is a road label inside Auxerre."
+  }
+ ],
+ "holders": [
+  {
+   "holderId": "218900686",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "314306747",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "315432823",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "323300400",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "327949061",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "328696653",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "329608368",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "334537875",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "350828414",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "377878749",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "379093016",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "384572640",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "388018616",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "393095955",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "394405997",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "400717799",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "410784524",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "411922941",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "419450374",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "422605980",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "424718583",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "425720703",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "429384555",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "430361238",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "439446949",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "520830076",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "532490349",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "778655381",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "778655803",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "790084826",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "820901478",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "821524907",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "878728732",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "896520038",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U18602530",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U18870946",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22175398",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22175815",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22175904",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22199826",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22222417",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U22289319",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  },
+  {
+   "holderId": "U23923051",
+   "candidateNames": [],
+   "basis": "identity-only",
+   "sourceIds": [
+    "dgfip-current"
+   ],
+   "parcelOperationConfirmed": false,
+   "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+  }
+ ],
+ "historyFindings": [],
+ "exactParcelEvents": [
+  {
+   "parcelIds": [
+    "890680000A0137"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0137"
+   },
+   "summary": "Printed Chablis A 137, Envers de Vaudésirs, 0.216 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 137, 0.216 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0104"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0104"
+   },
+   "summary": "Printed Chablis A 104, Vaudésirs, 0.617 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 104, 0.617 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0105"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0105"
+   },
+   "summary": "Printed Chablis A 105, Vaudésirs, 0.074 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 105, 0.074 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0106"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0106"
+   },
+   "summary": "Printed Chablis A 106, Vaudésirs, 0.0593 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 106, 0.0593 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0107"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0107"
+   },
+   "summary": "Printed Chablis A 107, Vaudésirs, 0.2077 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 107, 0.2077 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0785"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000R0785"
+   },
+   "summary": "Printed Chablis R 785, Blanchots, 0.1622 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed R 785, 0.1622 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0784"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000R0784"
+   },
+   "summary": "Printed Chablis R 784, Blanchots, 0.1128 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed R 784, 0.1128 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0783"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000R0783"
+   },
+   "summary": "Printed Chablis R 783, Blanchots, 0.025 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed R 783, 0.025 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "89068000YB0130"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "89068000YB0130"
+   },
+   "summary": "Printed Chablis YB 130, Valmur, 0.2287 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed YB 130, 0.2287 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0489"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000R0489"
+   },
+   "summary": "Printed Chablis R 489, Côte de Blanchot, 0.05 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed R 489, 0.05 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0203"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0203"
+   },
+   "summary": "Printed Chablis A 203, Les Bouguerots (1), 0.6963 ha. Treatment derogation valid until 2012-08-15. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 203, 0.6963 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0188"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0188"
+   },
+   "summary": "Printed Chablis A 188, Les Bouguerots, 0.2022 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 188, 0.2022 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0189"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0189"
+   },
+   "summary": "Printed Chablis A 189, Les Bouguerots (1), 0.2446 ha. Treatment derogation valid until 2012-08-15. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 189, 0.2446 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0187"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0187"
+   },
+   "summary": "Printed Chablis A 187, Les Bouguerots (1), 0.3276 ha. Treatment derogation valid until 2012-08-15. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 187, 0.3276 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0612"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0612"
+   },
+   "summary": "Printed Chablis A 612, Les Bouguerots (1), 0.8229 ha. Treatment derogation valid until 2012-08-15. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 612, 0.8229 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0021"
+   ],
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "kind": "authorisation",
+   "applicant": "SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2012-05-16",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+    "originalReferenceId": "890680000A0021"
+   },
+   "summary": "Printed Chablis A 21, Les Preuses, 0.2211 ha. Treatment derogation valid until 2012-08-15. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2012-08-15; printed A 21, 0.2211 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0137"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0137"
+   },
+   "summary": "Printed Chablis A 137, Envers de Vaudésirs, 0.216 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 137, 0.216 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0104"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0104"
+   },
+   "summary": "Printed Chablis A 104, Vaudésirs, 0.617 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 104, 0.617 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0105"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0105"
+   },
+   "summary": "Printed Chablis A 105, Vaudésirs, 0.074 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 105, 0.074 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0106"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0106"
+   },
+   "summary": "Printed Chablis A 106, Vaudésirs, 0.0593 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 106, 0.0593 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0107"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0107"
+   },
+   "summary": "Printed Chablis A 107, Vaudésirs, 0.2077 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 107, 0.2077 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0785"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000R0785"
+   },
+   "summary": "Printed Chablis R 785, Blanchots, 0.1622 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed R 785, 0.1622 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0784"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000R0784"
+   },
+   "summary": "Printed Chablis R 784, Blanchots, 0.1128 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed R 784, 0.1128 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0783"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000R0783"
+   },
+   "summary": "Printed Chablis R 783, Blanchots, 0.025 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed R 783, 0.025 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "89068000YB0130"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "89068000YB0130"
+   },
+   "summary": "Printed Chablis YB 130, Valmur, 0.2287 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed YB 130, 0.2287 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000R0489"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000R0489"
+   },
+   "summary": "Printed Chablis R 489, Côte de Blanchot (1), 0.05 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed R 489, 0.05 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0203"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0203"
+   },
+   "summary": "Printed Chablis A 203, Les Bouguerots (1), 0.6963 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 203, 0.6963 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0188"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0188"
+   },
+   "summary": "Printed Chablis A 188, Les Bouguerots (1), 0.2022 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 188, 0.2022 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0189"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0189"
+   },
+   "summary": "Printed Chablis A 189, Les Bouguerots (1), 0.2446 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 189, 0.2446 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0187"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0187"
+   },
+   "summary": "Printed Chablis A 187, Les Bouguerots (1), 0.3276 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 187, 0.3276 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0612"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0612"
+   },
+   "summary": "Printed Chablis A 612, Les Bouguerots (1), 0.8229 ha. Treatment derogation valid until 2013-08-19. Only the parts more than 50 m from a watercourse qualify. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 612, 0.8229 ha. Only the parts more than 50 m from a watercourse qualify. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0021"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0021"
+   },
+   "summary": "Printed Chablis A 21, Les Preuses, 0.2211 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 21, 0.2211 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  },
+  {
+   "parcelIds": [
+    "890680000A0095"
+   ],
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "kind": "authorisation",
+   "applicant": "SOCIETE SOUFFLET VIGNE",
+   "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+   "previousOperator": null,
+   "documentDate": "2013-05-22",
+   "outcome": "derogation-granted",
+   "currentFarmer": null,
+   "indexedNotice": {
+    "indexId": "departmental-yonne-archive",
+    "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+    "originalReferenceId": "890680000A0095"
+   },
+   "summary": "Printed Chablis A 95, Les Vaudésirs, 1.4641 ha. Treatment derogation valid until 2013-08-19. No owner or farmer is identified.",
+   "appNote": "Aerial-spraying derogation until 2013-08-19; printed A 95, 1.4641 ha. Soufflet Vigne is the requester, not an identified owner or farmer. Actual treatment and current farming are unconfirmed.",
+   "operation": "aerial-spraying-derogation"
+  }
+ ],
+ "externalResearch": [],
+ "parcelFilings": [],
+ "producerHoldings": [],
+ "historicalOwnerLists": [],
+ "accessGaps": [
+  "Four cadastral names remain without an exact climat crosswalk; the existing seven INAO climat boundaries remain authoritative. La Moutonne has no exact cadastral boundary here.",
+  "Yonne archive: 1,229 queued bulletin URLs remain missing/unusable; pre-2008 and Yonne regional farm-structure notices remain unsearched; 2024–2026 lack archived listings. Indexed 2008–2026 years are partial, not continuous coverage.",
+  "Former A11, A23 and A101 notice rows retain DFI context with unassigned treatment scope; no authorisation is transferred to a successor parcel.",
+  "Producer/company investigations are Tier 2; paid SPF copies and outreach are Tier 3. No current farmer is confirmed."
+ ],
+ "noticeReview": [
+  {
+   "sourceId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+   "bulletin": "Recueil spécial des actes administratifs n° 17/2012 du 16 mai 2012",
+   "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+   "pages": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "reviewMethod": "page-image",
+   "reviewedAt": "2026-10-07",
+   "finding": "All cited pages read at 110 dpi with Poppler. Matches checked against the printed Chablis rows and geo.api.gouv.fr commune identities. Former A11, A23 and A101 remain original-reference context through DFI, never assigned treatment scope on their successors."
+  },
+  {
+   "sourceId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+   "bulletin": "Recueil des actes administratifs n° 5 du 31 mai 2013",
+   "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+   "pages": [
+    128,
+    129,
+    130,
+    131
+   ],
+   "reviewMethod": "page-image",
+   "reviewedAt": "2026-10-07",
+   "finding": "All cited pages read at 110 dpi with Poppler. Matches checked against the printed Chablis rows and geo.api.gouv.fr commune identities. Former A11, A23 and A101 remain original-reference context through DFI, never assigned treatment scope on their successors."
+  },
+  {
+   "sourceId": "yonne-2018-auxerre-planning",
+   "bulletin": "efcec0bd2cce808d3a24fb6d2d33e543a0d609e9ef2c25ad45326ccccd275d69",
+   "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+   "pages": [
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54
+   ],
+   "reviewMethod": "page-image",
+   "reviewedAt": "2026-10-07",
+   "rejectedReferenceHints": {
+    "89068000UR0003": "UR3 on PDF pages 48 and 50 denotes a PLU zone in Auxerre (89024), not section UR parcel 3 in Chablis (89068). The Chablis word on page 53 is Route de Chablis."
+   }
+  }
+ ]
 }

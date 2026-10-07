@@ -60,7 +60,9 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
   await expect(panel.locator('.parcel-evidence-tracing').getByText(/Earliest supported event:/).locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`)).toBeVisible();
   if(slug==='chablis-grand-cru'){
    await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
-   await expect(panel.getByText(/All Yonne departmental notice publication years/)).toBeVisible();
+   await expect(panel.getByText(/Department 89: published years located from 2008 through 2026/)).toBeVisible();
+   await expect(panel.getByText(/Yonne: 1,229 queued bulletin URLs remain missing or unusable/)).toBeVisible();
+   await expect(panel.getByText('Before 2008: not searched',{exact:true})).toBeVisible();
   }
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
