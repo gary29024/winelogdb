@@ -180,13 +180,22 @@
 .village-map-grouping{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;font-size:.85rem}
 .village-map-grouping select{flex:1;min-width:0;max-width:100%}
 .village-map-owner-name{min-width:0;overflow-wrap:anywhere}
-/* How strong a domaine link is, strongest first; a weak lead stays visibly weaker. No farming claim.
-   Medium (estate or registry source) is the plain badge; a domaine's own confirmation is the only solid one. */
-.village-map-basis{justify-self:start;display:inline-block;margin-top:.25rem;padding:1px 8px;border:1px solid var(--line-strong);border-radius:999px;background:var(--ground);color:var(--ink-4);font-size:.66rem;font-weight:700;line-height:1.5}
-.village-map-owner-name>.village-map-basis{margin-top:0;vertical-align:.06em}
-.village-map-basis.is-domaine{border-color:var(--good-ink);background:var(--good-ink);color:var(--paper)}
-.village-map-basis.is-strong{border-color:var(--good-line);background:var(--good-wash);color:var(--good-ink)}
-.village-map-basis.is-weak{border-style:dashed;border-color:var(--warn-line);background:var(--warn-wash);color:var(--warn)}
-.village-map-basis-key{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .45rem;margin:.1rem 0 .55rem;font-size:.72rem;color:var(--muted)}
-.village-map-basis-key>.village-map-basis{margin-top:0}
+/* Link strength as a seal after the name, like a profile check; strongest first. Only a domaine's own
+   confirmation is solid, a weak lead is dashed with "?". None of them is a farming claim. */
+.village-map-seal{width:1.05em;height:1.05em;vertical-align:-.17em;overflow:visible}
+.village-map-seal-label{white-space:nowrap}
+.village-map-seal-shape{stroke-width:1.6;stroke-linejoin:round}
+.village-map-seal-mark{fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.village-map-seal.is-domaine .village-map-seal-shape{fill:var(--good-ink);stroke:var(--good-ink)}
+.village-map-seal.is-domaine .village-map-seal-mark{stroke:var(--paper)}
+.village-map-seal.is-strong .village-map-seal-shape{fill:var(--good-wash);stroke:var(--good-ink)}
+.village-map-seal.is-strong .village-map-seal-mark{stroke:var(--good-ink)}
+.village-map-seal.is-medium .village-map-seal-shape{fill:var(--ground);stroke:var(--ink-6)}
+.village-map-seal.is-medium .village-map-seal-mark{stroke:var(--ink-6)}
+.village-map-seal.is-weak .village-map-seal-shape{fill:var(--warn-wash);stroke:var(--warn);stroke-dasharray:2.2 1.6}
+.village-map-seal.is-weak .village-map-seal-mark{stroke:var(--warn)}
+.village-map-seal.is-weak .village-map-seal-dot{fill:var(--warn)}
+.village-map-seal-key{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .8rem;margin:.1rem 0 .55rem;font-size:.72rem;color:var(--muted)}
+.village-map-seal-key-item{display:inline-flex;align-items:center;gap:.25rem;color:var(--ink-4)}
+.village-map-seal-key .village-map-seal{vertical-align:0}
 .village-map-link-notice{margin:0;padding:9px 11px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);background:var(--ground);color:var(--ink-4);font-size:.76rem;line-height:1.45}

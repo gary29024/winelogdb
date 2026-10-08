@@ -92,8 +92,9 @@ describe('PR416 map feedback',()=>{
   // The row stays one name tall: the recorded company name is searchable, not shown.
   expect(office.textContent).not.toMatch(/GFV Grands Crus Investissement/);
   expect(office.textContent).toMatch(/0.45 ha · 3/);
-  expect(office.textContent).toMatch(/Weak lead · office address only/);
-  expect(office.querySelector('.village-map-basis.is-weak')).toBeTruthy();
+  expect(within(office).getByRole('img',{name:/Weak lead · office address only/})).toBeTruthy();
+  expect(office.textContent).not.toMatch(/Weak lead/);
+  expect(office.querySelector('.village-map-seal.is-weak')).toBeTruthy();
   fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:'Grands Crus Investissement'}});
   expect(within(list).getAllByRole('button').map(b=>b.textContent)).toEqual([expect.stringMatching(/^Domaine Méo-Camuzet/)]);
   fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:''}});
@@ -122,8 +123,8 @@ describe('PR416 map feedback',()=>{
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const faiveley=await within(list).findByRole('button',{name:/Domaine Faiveley/});
   expect(faiveley.textContent).not.toMatch(/Consortium Viticole/);
-  expect(faiveley.textContent).toMatch(/Brand identity confirmed/);
-  expect(faiveley.querySelector('.village-map-basis.is-medium')).toBeTruthy();
+  expect(within(faiveley).getByRole('img',{name:/^Estate or registry source: Brand identity confirmed/})).toBeTruthy();
+  expect(faiveley.querySelector('.village-map-seal.is-medium')).toBeTruthy();
   expect(screen.getByRole('region',{name:'Parcel rights'}).textContent).not.toMatch(/farming unverified|Current farming|tenant/i);
   fireEvent.change(screen.getByPlaceholderText('Search right holders'),{target:{value:'Consortium'}});
   expect(within(list).getByRole('button',{name:/Faiveley/})).toBeTruthy();

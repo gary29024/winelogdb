@@ -42,15 +42,21 @@ describe('Cadastral parcel controls',()=>{
   expect(within(holders).getByRole('button',{name:/GFA Heritiers AF-Gros/i})).toBeTruthy();
   expect(within(holders).queryByRole('button',{name:/^Domaine A\.-F\. Gros/})).toBeNull();
   expect(within(holders).getByRole('button',{name:/identity by name and seat only/})).toBeTruthy();
-  // One line per name: no company names or per-row source links; strength shows as a badge, with a key.
+  // One line per name: no company names or per-row source links; strength shows as a seal check, with a key.
   const drc=within(holders).getByRole('button',{name:/^Domaine de la Romanée-Conti/});
   expect(drc.textContent).not.toMatch(/DOMAINE DE LA ROMANEE CONTI|Domaine de la Romanee Conti/);
-  expect(drc.querySelector('.village-map-basis.is-strong')).toBeTruthy();
+  expect(drc.querySelector('.village-map-seal.is-strong')).toBeTruthy();
+  // The reason is only in the seal’s tooltip and accessible name, not printed in the row.
+  const seal=within(drc).getByRole('img');
+  expect(seal.getAttribute('aria-label')).toMatch(/^Company record/);
+  expect(seal.getAttribute('title')).toBe(seal.getAttribute('aria-label'));
+  expect(drc.textContent).not.toMatch(/Company record/);
   fireEvent.click(drc);
   expect(drc.getAttribute('aria-pressed')).toBe('true');
   expect(within(holders).queryAllByRole('link')).toHaveLength(0);
   const key=screen.getByText('Link strength').parentElement!;
-  expect([...key.querySelectorAll('.village-map-basis')].map(b=>b.textContent)).toEqual(['Company record','Weak lead']);
+  expect([...key.querySelectorAll('.village-map-seal-key-item')].map(b=>b.textContent)).toEqual(['Company record','Weak lead']);
+  expect(key.querySelector('.village-map-seal.is-weak')).toBeTruthy();
   expect(screen.getByText(/Domaine headings and leads come from reviewed research/).textContent).toMatch(/cited sources for Richebourg.*none is recorded yet/);
   fireEvent.change(grouping,{target:{value:'holder'}});
   expect(screen.queryByText('Link strength')).toBeNull();
