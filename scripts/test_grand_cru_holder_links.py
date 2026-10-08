@@ -574,7 +574,8 @@ class RomaneeContiTests(unittest.TestCase):
         self.assertEqual([h['holderId'] for h in self.curation['holders']], ['778269407'])
         entry = self.table['holders']['778269407']
         self.assertTrue(any(s['at'] == '2026-10-08' and 'Romanée-Conti estate publications' in s['where'] for s in entry['searches']))
-        self.assertIn('Romanée-Conti #427', entry['effort']['note'])
+        # Each later DRC pass replaces the effort note and keeps the prior pass's totals in it.
+        self.assertIn('effort', entry)
         self.assertEqual(self.evidence['holderDomains']['778269407']['basis'], 'company-identity')
         self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (2, 0))
 
@@ -643,6 +644,36 @@ class LaRomaneeTests(unittest.TestCase):
         holding = self.curation['producerHoldings'][0]
         self.assertEqual((holding['publishedAreaHa'], holding['producerHolderIds'], holding['ownerHolderIds']), (0.8452, [], []))
         self.assertNotIn('parcelIds', holding)
+
+
+class LaTacheTests(unittest.TestCase):
+    """Both La Tâche parcels are named exactly in the DRC's 1974 schedule; the estate total stays census."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('la-tache'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_both_parcels_have_the_1974_filing_and_the_shared_link(self):
+        self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))
+        [filing] = self.curation['parcelFilings']
+        self.assertEqual(filing['parcelAreasM2'], {'21714000AM0009': 46275, '21714000AM0016': 14345})
+        self.assertEqual(filing['documentDate'], '1974-12-21')
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        self.assertTrue(all(r['parcelFilingIds'] == ['lt-drc-1974'] for r in rows.values()))
+        self.assertEqual(self.evidence['holderDomains']['778269407']['basis'], 'company-identity')
+        entry = self.table['holders']['778269407']
+        self.assertTrue(any('La Tâche estate publications' in s['where'] for s in entry['searches']))
+
+    def test_the_estate_total_is_census_and_farming_stays_unverified(self):
+        [holding] = self.curation['producerHoldings']
+        self.assertEqual((holding['publishedAreaHa'], sorted(holding['namedAreas'])), (6.062, ['LA TACHE', 'LES GAUDICHOTS OU LA TACHE']))
+        self.assertEqual(self.curation['externalResearch'], [])
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['currentFarmerConfirmed']), (2, 0))
 
 
 if __name__ == '__main__':

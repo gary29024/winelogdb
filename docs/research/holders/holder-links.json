@@ -8930,12 +8930,22 @@
             "Romanée-Conti estate publications"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "La Tâche estate publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
         "filingsScreened": 7,
         "pagesRead": 548,
-        "note": "Romanée-Conti #427 pass; re-screens DRC filings read for earlier crus, not an additive lifetime total. Prior recorded pass: 10 filings / 610 pages."
+        "note": "La Tâche #429 pass; re-screens DRC filings read for earlier crus, not an additive lifetime total. Prior recorded pass: 7 filings / 548 pages."
       }
     },
     "778269498": {

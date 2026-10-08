@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DKQPDZFM.js"
+    "dist/client/assets/index-CkqZcN97.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CoJsY8hH.js",
-    "dist/client/assets/SectionLabel-4tpnRBca.js",
-    "dist/client/assets/SparklingDetailsCard-By6DvMqR.js",
-    "dist/client/assets/VillageMap-BnxcHPqU.js",
-    "dist/client/assets/burgundyAtlas-BvBnc8c8.js",
-    "dist/client/assets/index-2DGgtQ4k.js",
-    "dist/client/assets/index-DKQPDZFM.js",
+    "dist/client/assets/FriendTagDialog-BpyXIg_1.js",
+    "dist/client/assets/SectionLabel-Bp2RjpPm.js",
+    "dist/client/assets/SparklingDetailsCard-ByG01tNs.js",
+    "dist/client/assets/VillageMap-CvLfZcES.js",
+    "dist/client/assets/burgundyAtlas-DEkHDm_U.js",
+    "dist/client/assets/index-CkqZcN97.js",
+    "dist/client/assets/index-DMa6wVPR.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-CH_nh-mn.js",
-    "dist/client/assets/wineDetailCompact-CzgREZ_h.js"
+    "dist/client/assets/useModalFocus-CxE4ILGt.js",
+    "dist/client/assets/wineDetailCompact-DNa4Wa1K.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5602433,
-  "evidenceGzipBytesTotal": 503117,
+  "evidenceBytesTotal": 5606330,
+  "evidenceGzipBytesTotal": 504064,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -189,10 +189,10 @@
     },
     {
       "cru": "la-tache",
-      "file": "dist/client/assets/la-tache.evidence-C-p9JfuY.js",
-      "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
-      "bytes": 41798,
-      "gzipBytes": 7006
+      "file": "dist/client/assets/la-tache.evidence-BRt1uWNF.js",
+      "sha256": "0768338757d94192aecc979eefd842b6113c9ca0085745c62fd6e2b47931924f",
+      "bytes": 45695,
+      "gzipBytes": 7953
     },
     {
       "cru": "latricieres-chambertin",

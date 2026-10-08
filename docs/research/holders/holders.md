@@ -37,7 +37,7 @@ A cru uses the table once its curation sets `"holderLinks": "shared"`, normally 
 | Griotte-Chambertin | no | 8 | 0 | 16 | 0 |
 | La Grande Rue | no | 1 | 1 | 3 | 3 |
 | La Romanée | yes | 1 | 1 | 1 | 1 |
-| La Tâche | no | 1 | 1 | 2 | 2 |
+| La Tâche | yes | 1 | 1 | 2 | 2 |
 | Latricières-Chambertin | no | 12 | 4 | 15 | 5 |
 | Mazis-Chambertin | no | 15 | 4 | 38 | 10 |
 | Mazoyères-Chambertin | no | 40 | 7 | 83 | 15 |
