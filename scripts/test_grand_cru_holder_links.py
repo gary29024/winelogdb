@@ -541,6 +541,21 @@ class RomaneeSaintVivantTests(unittest.TestCase):
         self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
                           self.register['counts']['unresolved']), (15, 2))
 
+    def test_winehog_numbers_count_only_when_number_and_area_match(self):
+        articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
+        self.assertEqual(len(articles), 13)
+        for s in articles:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(s['url'].startswith('https://winehog.org/') and s['documentDate'] and s['bytes'])
+        critic = [x for x in self.curation['externalResearch'] if x['basis'] == 'critic-named-cadastral-reference']
+        self.assertEqual(sorted(p for x in critic for p in x['parcelIds']),
+                         ['21714000AL0001', '21714000AL0326', '21714000AL0327'])
+        # Dujac's 325 (0.170 ha) and Confuron's 300/298 (0.4982 ha) differ from the cadastre, so they stay as printed.
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertEqual(sorted(u['sourceId'] for u in unmatched), ['rsv-winehog-confuron', 'rsv-winehog-dujac'])
+        self.assertTrue(all(u['parcelIds'] == [] for u in unmatched))
+        self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
+
     def test_screened_filings_have_provenance_and_farming_stays_unverified(self):
         sources = {s['id']: s for s in self.resolved['sources']}
         own = [s for s in self.curation['sources'] if s['type'] == 'company-filing']
@@ -568,6 +583,15 @@ class RomaneeContiTests(unittest.TestCase):
         cls.evidence = json.loads(cls.files[cls.context.evidence])
         cls.curation = read_json(cls.context.curation)
         cls.table = read_json(HOLDER_LINKS)
+
+    def test_supplied_winehog_articles_print_no_romanee_conti_reference(self):
+        articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
+        self.assertEqual(len(articles), 2)
+        for s in articles:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+        self.assertFalse(any(x['basis'] == 'critic-named-cadastral-reference' for x in self.curation['externalResearch']))
+        self.assertEqual(self.curation['unmatchedPrintedReferences'], [])
+        self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
 
     def test_the_one_holder_is_researched_through_the_shared_link(self):
         self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))
@@ -610,6 +634,15 @@ class LaRomaneeTests(unittest.TestCase):
         cls.curation = read_json(cls.context.curation)
         cls.table = read_json(HOLDER_LINKS)
         cls.sources = {s['id']: s for s in cls.table['sources']}
+
+    def test_supplied_winehog_articles_print_no_la_romanee_reference(self):
+        articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
+        self.assertEqual(len(articles), 4)
+        for s in articles:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+        self.assertFalse(any(x['basis'] == 'critic-named-cadastral-reference' for x in self.curation['externalResearch']))
+        self.assertEqual(self.curation['unmatchedPrintedReferences'], [])
+        self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
 
     def test_the_identifier_is_matched_to_its_company_by_filings(self):
         entry = self.table['holders']['U14132333']
@@ -657,6 +690,15 @@ class LaTacheTests(unittest.TestCase):
         cls.evidence = json.loads(cls.files[cls.context.evidence])
         cls.curation = read_json(cls.context.curation)
         cls.table = read_json(HOLDER_LINKS)
+
+    def test_supplied_winehog_articles_print_no_la_tache_reference(self):
+        articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
+        self.assertEqual(len(articles), 4)
+        for s in articles:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+        self.assertFalse(any(x['basis'] == 'critic-named-cadastral-reference' for x in self.curation['externalResearch']))
+        self.assertEqual(self.curation['unmatchedPrintedReferences'], [])
+        self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
 
     def test_both_parcels_have_the_1974_filing_and_the_shared_link(self):
         self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))

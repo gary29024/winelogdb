@@ -92,10 +92,21 @@ One producer holding is retained only in the named-area census; it names the who
 | --- | --- | --- | --- | --- |
 | Domaine de la Romanée-Conti | 1.814 ha | square-metre | Undated estate page gives 1.8140 ha, equal to the summed cadastral areas of AN 72 (927 m²) and AN 258 (17,213 m²) recorded to the DRC. Census evidence only; no farming season inferred. | [Domaine de la Romanée-Conti: Romanée-Conti](https://www.romanee-conti.fr/fr/9-grand-crus/7/romanee-conti) |
 
+## Winehog articles
+
+The repository owner supplied both requested Winehog subscriber articles as saved webarchives. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
+
+| Article | Printed date | Printed reference | Result |
+| --- | --- | --- | --- |
+| [Domaine de la Romanée-Conti – Producer Profile](https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/) | 2012-09-27 (page modified 2012-11-02) | — | no cadastral number |
+| [From Romanee-Conti to Vougeot in the vines](https://winehog.org/from-romanee-conti-to-vougeot-in-the-vines-46975/) | 2021-04-25 | — | no cadastral number |
+
+Neither article prints a Romanée-Conti area, plot or cadastral reference, so neither changes a parcel lead, filing or census figure.
+
 ## Remaining gaps
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “From Romanee-Conti to Vougeot in the vines” (2021-04-25). No paywalled text was accessed.
+- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.

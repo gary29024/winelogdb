@@ -86,12 +86,25 @@ One producer holding is retained only in the named-area census; it names the who
 
 | Producer | Published area | Precision | Finding | Sources |
 | --- | --- | --- | --- | --- |
-| Domaine de la Romanée-Conti | 6.062 ha | square-metre | Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Census evidence only; no farming season inferred. | [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache) |
+| Domaine de la Romanée-Conti | 6.062 ha | square-metre | Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Winehog (2014) gives 6.06 ha in two named parts. Census evidence only; no farming season inferred. | [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/) |
+
+## Winehog articles
+
+The repository owner supplied all 4 requested Winehog subscriber articles as saved webarchives. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
+
+| Article | Printed date | Printed reference | Result |
+| --- | --- | --- | --- |
+| [Domaine de la Romanée-Conti – Producer Profile](https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/) | 2012-09-27 (page modified 2012-11-02) | — | no cadastral number |
+| [Vosne-Romanee Les Gaudichots – History, owners & wines – update](https://winehog.org/vosne-romanee-les-gaudichots-16919/) | 2014-07-01 (page modified 2017-10-01) | — | no cadastral number |
+| [La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/) | 2014-08-17 (page modified 2026-05-14) | — | no cadastral number |
+| [The Story Behind The 1923 La Tâche Bottled by Maison Nicolas](https://winehog.org/the-story-behind-the-1923-la-tache-bottled-by-maison-nicolas-74167/) | 2026-05-28 (page modified 2026-05-29) | — | no cadastral number |
+
+The history articles give La Tâche’s two named parts as 1.43 ha and 4.63 ha (6.06 ha). Those rounded totals agree with the 1974 schedule and the estate page but print no cadastral number, so they stay census context and change no lead or filing. The ownership history is the critic’s account, not company evidence.
 
 ## Remaining gaps
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “La Tâche – a historic view on a legendary grand cru” (2014-08-17); “Vosne-Romanee Les Gaudichots – History, owners & wines – update” (2014-07-01); “The Story Behind The 1923 La Tâche Bottled by Maison Nicolas” (2026-05-28). No paywalled text was accessed.
+- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Tâche cadastral number; their 1.43 ha and 4.63 ha named-area totals are rounded and stay census context.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.

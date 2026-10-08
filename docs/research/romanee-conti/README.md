@@ -121,6 +121,8 @@ The 21 December 1974 notarial statutes, deposited in 2002, list the estate as th
 
 The DRC’s estate page publishes 1.8140 ha, equal to the summed cadastral areas of AN 72 and AN 258. It feeds only the named-area census; an equal total is not a parcel assignment.
 
+The repository owner supplied both requested Winehog articles (see [filings](filings.md#winehog-articles)); neither prints a Romanée-Conti area, plot or cadastral reference.
+
 Research leads rise from **0 to 2 of 2 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
 | Measure | Tier 1 | Tier 2 |
@@ -146,7 +148,7 @@ The counts above describe this pass, including DRC files re-screened after earli
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “From Romanee-Conti to Vougeot in the vines” (2021-04-25). No paywalled text was accessed.
+- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
 
 ## Reproduce and validate

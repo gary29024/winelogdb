@@ -381,6 +381,80 @@
       "sha256": "7499540e3e39e812f8a54de3c60864d3a8a0076429e69306032b95d531af71a3",
       "bytes": 45477,
       "finding": "Legal notice of liger-belair.fr naming Domaine du Comte Liger-Belair, Château de Vosne-Romanée, as the site’s publisher."
+    },
+    {
+      "id": "lr-winehog-essence",
+      "title": "Winehog: The Essence of La Romanee",
+      "url": "https://winehog.org/the-essence-of-la-romanee-23847/",
+      "type": "critic-research",
+      "documentDate": "2015-06-20",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "865cc694d5f321a2edcf0752857252b61816170233ca0004e9ba79276b8c86c1",
+      "bytes": 3146488,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Tasting essay after a 2002–2013 vertical of Domaine du Comte Liger-Belair’s La Romanée at an anniversary tasting, comparing the cru with its neighbours. It prints no area, owner, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-200-years",
+      "title": "Winehog: 200 years, 72 bottles of Domaine du Comte Liger-Belair",
+      "url": "https://winehog.org/200-years-72-bottles-of-domaine-du-comte-liger-belair-23767/",
+      "type": "critic-research",
+      "documentDate": "2015-06-12",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "4854fa158918c65141842739f659096c970409e345f2e1722479b81f505f0f8a",
+      "bytes": 3466045,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Report of an anniversary tasting of 72 bottles from Domaine du Comte Liger-Belair, including a 2002–2013 La Romanée vertical. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2015-06-14",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-hedonistic",
+      "title": "Winehog: La Romanée – a hedonistic treat",
+      "url": "https://winehog.org/on-the-table-in-la-romanee-2008-2-42558/",
+      "type": "critic-research",
+      "documentDate": "2020-08-05",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f6bd4a6e30d3a22ec73870f23023ef2b13858787e7b66f36ab3a5e5356d4a8d1",
+      "bytes": 3313100,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Tasting note on Domaine du Comte Liger-Belair’s La Romanée 2008. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2020-12-03",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-1928",
+      "title": "Winehog: A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque",
+      "url": "https://winehog.org/a-1928-la-romanee-from-the-legendary-la-rotisserie-de-la-reine-pedauque-74420/",
+      "type": "critic-research",
+      "documentDate": "2026-06-10",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "8013b84c083e2c9bca3f123ed1a0f381cc799ed719dd37bcfa3434e136dc083b",
+      "bytes": 3044358,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Bottle history of a 1928 La Romanée bottled by a Paris restaurant. It gives La Romanée as a 0.85 ha monopole and says that before 1933 the wine was also sold under domaine and négociant labels. It prints no cadastral reference; the rounded total is not a parcel crosswalk."
     }
   ],
   "holders": [
@@ -533,7 +607,7 @@
     "CLB Participations was GFV co-manager from 3 May 2019 until its resignation from 4 June 2023; today the two companies share family partners and their seat, not a manager.",
     "The domaine’s pages are undated producer publications. They give La Romanée’s area and a 2002 start of operation; they stay census evidence.",
     "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
-    "Winehog subscriber articles requested, not supplied: “The Essence of La Romanee” (2015-06-20); “200 years, 72 bottles of Domaine du Comte Liger-Belair” (2015-06-12); “La Romanée – a hedonistic treat” (2020-08-05); “A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque” (2026-06-10). No paywalled text was accessed.",
+    "All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Romanée plot or cadastral reference; one gives the cru as a 0.85 ha monopole, a rounded total that is not a parcel crosswalk.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed; paid SPF copies and outreach remain Tier 3."
   ],
   "unmatchedPrintedReferences": [],
