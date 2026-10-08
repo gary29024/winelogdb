@@ -923,6 +923,86 @@
       "retrievedAt": "2026-10-08",
       "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
       "finding": "Reports northern plots 292/294, 0.2167 ha, and southern plots 293/295, 0.3083 ha. Their present cadastral area sums agree. The article deliberately leaves the new owner unnamed; no producer or farming identity is inferred."
+    },
+    {
+      "id": "ric-winehog-grivot",
+      "title": "Winehog: Terroir Insight – Domaine Jean Grivot Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-jean-grivot-richebourg-28264/",
+      "type": "critic-research",
+      "documentDate": "2016-05-31",
+      "otherDocumentDates": [
+        {
+          "date": "2018-09-27",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "09d7c7705df9aa178fba610bcce979b3236bd105e7a8a14c9e19c1418129d276",
+      "bytes": 3545484,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names the Grivot holding as cadastre 247, 0.3199 ha, bought in 1984 from the Charles Viénot house, with a first 1984 vintage. Places Mongeard-Mugneret on 248 to the north and the Thibault Liger-Belair holdings on 172 and 170 to the south; its 2016 cadastral map shows the same numbers."
+    },
+    {
+      "id": "ric-winehog-mongeard",
+      "title": "Winehog: Terroir Insight – Domaine Mongeard-Mugneret Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-mongeard-mugneret-richebourg-36803/",
+      "type": "critic-research",
+      "documentDate": "2018-10-05",
+      "otherDocumentDates": [
+        {
+          "date": "2018-10-05",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "cdcc950a39455aecf43e3a6be9bd2d02ec00e05af901e5cb22b1c2076410c54d",
+      "bytes": 4980371,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names the Mongeard-Mugneret plot as cadastre 248, 0.3112 ha, the northern half of the former Charles Viénot plot, bought in 1984. Places Grivot on 247 and the Thibault Liger-Belair holdings on 172 and 170 to the south."
+    },
+    {
+      "id": "ric-winehog-leroy",
+      "title": "Winehog: Terroir Insight – Domaine Leroy Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-leroy-richebourg-25047/",
+      "type": "critic-research",
+      "documentDate": "2015-10-11",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "9fc812389374a66a759eef8b99b849ab2f3b5a13bb91e871fab5189ca3fa52b4",
+      "bytes": 4753205,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names three Leroy plots: cadastre 57 (0.5522 ha), 61 (0.1321 ha) and a plot printed as 69 (0.0922 ha), 0.7765 ha in all, acquired with the Charles Noëllat estate in 1988. It names the domaine, not the DGFiP company identifier."
+    },
+    {
+      "id": "ric-winehog-meo",
+      "title": "Winehog: Terroir Insight – Domaine Méo-Camuzet Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-meo-camuzet-richebourg-23896/",
+      "type": "critic-research",
+      "documentDate": "2015-06-28",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "7630ea959885c16678ddc18eb121f1dba6d5d5f9396877bb339965abe917c323",
+      "bytes": 3768037,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Gives two plots, 0.0462 ha in Les Richebourg and 0.3061 ha in Les Verroilles ou Richebourg (0.3523 ha), without cadastral numbers, and reports that the family’s métayage of these vines ended in 1987, when they returned to the domaine."
     }
   ],
   "holders": [
@@ -1142,6 +1222,94 @@
       "appNote": "Former AN170/AN172 (52 a 05 ca), let by the family GFA under a 2005 métayage and contributed to Domaine Thibault Liger-Belair in 2015. The term ran to end-2022; renewal and position after the April 2025 sale are unknown. Historical tenancy, not current farming.",
       "dateSourceId": "ric-tlb-lease-contribution-2015",
       "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-grivot-247",
+      "title": "Winehog: Domaine Jean Grivot plot, cadastre 247",
+      "parcelIds": [
+        "21714000AN0247"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (31 May 2016; page edited 27 September 2018) names cadastre 247, 0.3199 ha, as the Domaine Jean Grivot Richebourg plot, bought in 1984 from the Charles Viénot house. The area equals AN247’s cadastral area. DGFiP records GFA Jean Grivot (318506367) as holder; the article does not identify that company, so no holder-to-domaine link is made. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-grivot"
+      ],
+      "producer": "Domaine Jean Grivot",
+      "printedReferences": [
+        "247"
+      ],
+      "appNote": "Winehog (2016) names cadastre 247 (0.3199 ha, equal to this parcel) as the Domaine Jean Grivot plot, bought in 1984. The recorded holder GFA Jean Grivot is not linked to the domaine by this article. Not current farming.",
+      "dateSourceId": "ric-winehog-grivot",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-mongeard-248",
+      "title": "Winehog: Domaine Mongeard-Mugneret plot, cadastre 248",
+      "parcelIds": [
+        "21714000AN0248"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (5 October 2018) names cadastre 248, 0.3112 ha, as the Mongeard-Mugneret Richebourg plot, bought in 1984 from the Charles Viénot house. The area equals AN248’s cadastral area and the estate’s published 0.3112 ha. It confirms the existing holder lead; it is not current farming.",
+      "sourceIds": [
+        "ric-winehog-mongeard"
+      ],
+      "producer": "Domaine Mongeard-Mugneret",
+      "printedReferences": [
+        "248"
+      ],
+      "appNote": "Winehog (2018) names cadastre 248 (0.3112 ha, equal to this parcel) as the Mongeard-Mugneret plot, bought in 1984. Not current farming.",
+      "dateSourceId": "ric-winehog-mongeard",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-tlb-170-172",
+      "title": "Winehog: Thibault Liger-Belair holdings, cadastre 170 and 172",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog’s Grivot (2016) and Mongeard-Mugneret (2018) articles place the Thibault Liger-Belair Richebourg holdings on cadastre 172 and 170, south of 247, and the 2016 cadastral map shows those numbers. This independently matches the 2005 métayage filing. Both references were divided in 2025 and reach AN292/293 and AN294/295 only through documented DFI lineage. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-grivot",
+        "ric-winehog-mongeard"
+      ],
+      "producer": "Domaine Thibault Liger-Belair",
+      "printedReferences": [
+        "170",
+        "172"
+      ],
+      "predecessorReferences": {
+        "21714000AN0170": [
+          "21714000AN0292",
+          "21714000AN0293"
+        ],
+        "21714000AN0172": [
+          "21714000AN0294",
+          "21714000AN0295"
+        ]
+      },
+      "appNote": "Winehog (2016, 2018) places the Thibault Liger-Belair holdings on former cadastre 170 and 172, matching the 2005 métayage filing. Divided in 2025; carried here by DFI lineage. Not current farming.",
+      "dateSourceId": "ric-winehog-grivot",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-leroy-57-61",
+      "title": "Winehog: Domaine Leroy plots, cadastre 57 and 61",
+      "parcelIds": [
+        "21714000AN0057",
+        "21714000AN0061"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (11 October 2015; page edited 6 April 2016) names Leroy plots cadastre 57 (0.5522 ha) and 61 (0.1321 ha), equal to AN57 and AN61. Its third plot is printed as 69 (0.0922 ha) and stays unmatched. The article names the domaine, not the company behind provisional identifier U14149307, so the identity crosswalk stays provisional. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-leroy"
+      ],
+      "producer": "Domaine Leroy",
+      "printedReferences": [
+        "57",
+        "61"
+      ],
+      "appNote": "Winehog (2015) names this parcel’s number and area as a Domaine Leroy plot. The DGFiP holder remains a provisional identifier; not current farming.",
+      "dateSourceId": "ric-winehog-leroy",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -1236,12 +1404,14 @@
             33,
             34
           ],
-          "limitation": "Historical recital in annexed 1980 statutes; no original lease or renewal reviewed. Not the separate 2012 usufruct."
+          "limitation": "Historical recital in annexed 1980 statutes; no original lease or renewal reviewed. Not the separate 2012 usufruct. Winehog (2015) reports a métayage ending in 1987, without citing this instrument."
         }
       ],
-      "finding": "The 2016 filing annexes the 22 December 1980 statutes: AN54/59 and individual areas match today. They recite a nine-year métayage signed 8 and 19 November 1961, effective 11 November 1961, to an individual. No reviewed renewal establishes a current season.",
+      "finding": "The 2016 filing annexes the 22 December 1980 statutes: AN54/59 and individual areas match today. They recite a nine-year métayage signed 8 and 19 November 1961, effective 11 November 1961, to an individual. No reviewed renewal establishes a current season. Winehog (2015) separately reports that the family’s métayage of these vines ended in 1987; it does not cite the 1961 instrument.",
       "appNote": "Annexed 1980 statutes name this parcel with matching area and recite a nine-year 1961 métayage to an individual. This historical lease is distinct from the separately recited 2012 usufruct; current farming unverified.",
-      "supportingSourceIds": [],
+      "supportingSourceIds": [
+        "ric-winehog-meo"
+      ],
       "pages": [
         21,
         24,
@@ -1505,9 +1675,10 @@
       "relation": "unstated",
       "sourceIds": [
         "ric-winehog-history",
-        "ric-meo-richebourg-sheet"
+        "ric-meo-richebourg-sheet",
+        "ric-winehog-meo"
       ],
-      "finding": "Estate sheet says slightly over 34 ares across both named areas; 0.34 ha is approximate. Winehog lists 0.35 ha. No parcel assignment inferred.",
+      "finding": "Estate sheet says slightly over 34 ares across both named areas; 0.34 ha is approximate. Winehog lists 0.35 ha. No parcel assignment inferred. Winehog’s 2015 Méo article gives 0.0462 and 0.3061 ha, equal to the filed AN59 and AN54 areas, without cadastral numbers.",
       "producerHolderIds": [
         "320926439"
       ],
@@ -1618,10 +1789,10 @@
   "historicalOwnerLists": [],
   "accessGaps": [
     "All ten free filing indexes and official registry records were checked; 36 selected filings were downloaded and all 1,454 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.",
-    "Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files.",
-    "U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168.",
+    "Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files. Winehog names AN247 and AN248 by cadastral number; these are critic leads, not company crosswalks.",
+    "U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168. Winehog names AN57 and AN61 as Leroy plots; its third printed number, 69 (0.0922 ha), stays unmatched.",
     "Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.",
-    "Winehog subscriber text was reviewed only from two authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.",
+    "Winehog subscriber text was reviewed only from six authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.",
     "The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.",
     "A supplementary pass screened 39 filings / 504 pages of eight related companies with no current Richebourg rights: Domaine Thibault Liger-Belair, its family holding, GFA Domaine Xavier Liger-Belair, Domaine A.F. Gros, Gros Frère et Sœur, SCEA Domaine de la Levrière (formed 2026), SCE du Domaine Leroy and SC Domaine Jean Grivot. Only the Liger-Belair filings name Richebourg references (former AN170/AN172). The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.",
     "Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.",
@@ -1633,6 +1804,13 @@
       "printedReference": "Vosne-Romanée AN65 (787 m²)",
       "parcelIds": [],
       "limitation": "Retired reference. The current AN290/291 references are not printed in the reviewed filings; official filiation remains in rights history, not a new exact filing match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ric-winehog-leroy",
+      "printedReference": "cadastre no 69 (0.0922 ha), Leroy",
+      "parcelIds": [],
+      "limitation": "Printed as a Leroy plot. Today AN69 is a 2,144 m² parcel recorded to the DRC. AN168, recorded to the provisional Leroy identifier, measures 922 m², but equal area is not a crosswalk and the printed number is not corrected.",
       "currentFarmer": null
     }
   ],

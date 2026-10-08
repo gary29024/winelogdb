@@ -400,13 +400,24 @@ The 24 October 2025 article prints northern plots 292/294 (2,167 m² combined) a
 
 Archive hashes cover the exact user-supplied webarchive bytes: history `f1d65b87d64864ae12e7a75cc1abd4d1a03e5c1d39a75cdafea094f6ef91ac87`; new owner `ff7632ac454272841cdc2095996c9f35db32d93c5d015aa1f906e4649f290dd9`. Only factual findings are published.
 
+The repository owner also supplied four Winehog “Terroir Insight” articles. Only factual findings and hashes are kept:
+
+| Article | Published / page edited | Cadastral findings | SHA-256 |
+| --- | --- | --- | --- |
+| [Domaine Jean Grivot Richebourg](https://winehog.org/terroir-insight-domaine-jean-grivot-richebourg-28264/) | 2016-05-31 / 2018-09-27 | Grivot on 247 (0.3199 ha, bought 1984); Mongeard-Mugneret on 248; Thibault Liger-Belair on 172 and 170, shown on a 2016 cadastral map | `09d7c7705df9aa178fba610bcce979b3236bd105e7a8a14c9e19c1418129d276` |
+| [Domaine Mongeard-Mugneret Richebourg](https://winehog.org/terroir-insight-domaine-mongeard-mugneret-richebourg-36803/) | 2018-10-05 / 2018-10-05 | Mongeard-Mugneret on 248 (0.3112 ha, bought 1984); Grivot on 247; Thibault Liger-Belair on 172 and 170 | `cdcc950a39455aecf43e3a6be9bd2d02ec00e05af901e5cb22b1c2076410c54d` |
+| [Domaine Leroy Richebourg](https://winehog.org/terroir-insight-domaine-leroy-richebourg-25047/) | 2015-10-11 / 2016-04-06 | Leroy on 57 (0.5522 ha) and 61 (0.1321 ha); a third plot printed as 69 (0.0922 ha) stays unmatched | `9fc812389374a66a759eef8b99b849ab2f3b5a13bb91e871fab5189ca3fa52b4` |
+| [Domaine Méo-Camuzet Richebourg](https://winehog.org/terroir-insight-domaine-meo-camuzet-richebourg-23896/) | 2015-06-28 / 2017-10-01 | No cadastral numbers; 0.0462 and 0.3061 ha, equal to the filed AN59 and AN54; métayage ended 1987 | `7630ea959885c16678ddc18eb121f1dba6d5d5f9396877bb339965abe917c323` |
+
+Printed numbers reach a current parcel only when number and area both match, or through documented DFI lineage (170 and 172). AN247 thereby gains Domaine Jean Grivot as a named candidate; the article does not identify GFA Jean Grivot, so no holder-to-domaine link is made. The other references add independent support to existing leads. The printed 69 is not corrected to AN168 on area alone. Page-edit dates come from page metadata and are not printed.
+
 ## Remaining gaps
 
 - All ten free filing indexes and official registry records were checked; 36 selected filings were downloaded and all 1,454 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.
-- Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files.
-- U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168.
+- Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files. Winehog names AN247 and AN248 by cadastral number; these are critic leads, not company crosswalks.
+- U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168. Winehog names AN57 and AN61 as Leroy plots; its third printed number, 69 (0.0922 ha), stays unmatched.
 - Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.
-- Winehog subscriber text was reviewed only from two authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.
+- Winehog subscriber text was reviewed only from six authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.
 - The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.
 - The supplementary pass is a bounded selection of 39 related-company filings. The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.
 - Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.

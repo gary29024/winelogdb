@@ -101,11 +101,13 @@ describe('Grand Cru registry',()=>{
   for(const n of [292,293,294,295]){
    const items=evidence.parcels[`21714000AN0${n}`];
    expect(items.some(i=>i.kind==='research'&&i.note?.includes('leaves the new owner unnamed'))).toBe(true);
-   // The 2005 lease names the retired reference, so it reaches the split parcel only through lineage.
-   const lease=items.find(i=>i.kind==='research'&&i.via===(n<294?'AN0170':'AN0172'));
-   expect(lease?.title).toMatch(/Thibault Liger-Belair: 2005 métayage/);
-   expect(lease?.note).toMatch(/not current farming/);
+   // The 2005 lease and the critic articles name the retired reference, so both reach the split parcel only through lineage.
+   const via=items.filter(i=>i.kind==='research'&&i.via===(n<294?'AN0170':'AN0172'));
+   expect(via.map(i=>i.title)).toEqual(expect.arrayContaining([expect.stringMatching(/Thibault Liger-Belair: 2005 métayage/),expect.stringMatching(/Thibault Liger-Belair holdings, cadastre 170 and 172/)]));
+   expect(via.every(i=>/[Nn]ot current farming/.test(i.note??''))).toBe(true);
   }
+  expect(evidence.parcels['21714000AN0247'].some(i=>i.kind==='research'&&i.title.includes('Domaine Jean Grivot plot, cadastre 247'))).toBe(true);
+  expect(evidence.holderDomains?.['318506367']).toBeUndefined();
   expect(Object.keys(evidence.tracing??{})).toHaveLength(58);
   expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer/);
  });

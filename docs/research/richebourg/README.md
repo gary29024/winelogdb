@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-20–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 23; 5 deeds on current references, plus 2 deeds on historical references retained with original scope |
-| Parcels with holder or research leads | 29; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 29 |
+| Parcels with holder or research leads | 30; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 28 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1995, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 201,225 / 17,499 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 207,351 / 18,058 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the Richebourg selection contains 58 of
@@ -169,8 +169,26 @@ renewal, and no position after the 3 April 2025 sale, is established. Winehog’
 2013 map places the Liger-Belair plot here but prints no cadastral reference.
 This is a historical tenancy lead, not current farming.
 
-Research leads rise from **0 to 29 of 58 parcels**. **29 remain without a named
-candidate**: the other 28 parcels without company rights and Grivot AN247.
+Four authorized Winehog “Terroir Insight” articles then supplied cadastral
+numbers. The Jean Grivot article (31 May 2016, page edited 27 September 2018)
+names cadastre 247, 0.3199 ha, bought in 1984; the Mongeard-Mugneret article
+(5 October 2018) names cadastre 248, 0.3112 ha. Both areas equal the current
+cadastre. Both articles also place the Thibault Liger-Belair holdings on
+cadastre 172 and 170, independently matching the 2005 métayage filing, and the
+2016 cadastral map shows those numbers. The Leroy article (11 October 2015)
+names cadastre 57 (0.5522 ha) and 61 (0.1321 ha), equal to AN57 and AN61. Its
+third plot is printed as 69 (0.0922 ha); today AN69 is a DRC parcel, so the
+reference stays unmatched even though Leroy’s AN168 measures 922 m². The
+Méo-Camuzet article prints areas equal to the filed AN59 and AN54 without
+cadastral numbers, and reports that the family’s métayage ended in 1987.
+
+These are `critic-named-cadastral-reference` leads. AN247 gains Domaine Jean
+Grivot as a named candidate, but the article does not identify GFA Jean Grivot,
+so no holder-to-domaine link is made. AN248, AN57/61 and AN292–AN295 already
+had leads; the articles add independent support. None establishes current farming.
+
+Research leads rise from **0 to 30 of 58 parcels**. **28 remain without a named
+candidate**, all of them parcels without company rights.
 The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
 | Recorded holder | Filings | Pages | Outcome |
@@ -194,10 +212,10 @@ changing their parcel research categories.
 ### Tier 2 access and evidence gaps
 
 - All ten free filing indexes and official registry records were checked; 36 selected filings were downloaded and all 1,454 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.
-- Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files.
-- U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168.
+- Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files. Winehog names AN247 and AN248 by cadastral number; these are critic leads, not company crosswalks.
+- U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168. Winehog names AN57 and AN61 as Leroy plots; its third printed number, 69 (0.0922 ha), stays unmatched.
 - Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.
-- Winehog subscriber text was reviewed only from two authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.
+- Winehog subscriber text was reviewed only from six authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.
 - The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.
 - A supplementary pass screened 39 filings / 504 pages of eight related companies with no current Richebourg rights: Domaine Thibault Liger-Belair, its family holding, GFA Domaine Xavier Liger-Belair, Domaine A.F. Gros, Gros Frère et Sœur, SCEA Domaine de la Levrière (formed 2026), SCE du Domaine Leroy and SC Domaine Jean Grivot. Only the Liger-Belair filings name Richebourg references (former AN170/AN172). The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.
 - Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.
