@@ -751,5 +751,70 @@ class ClosDesLambraysTier2Tests(unittest.TestCase):
         self.assertEqual((dated['cl-sci-candidate-2018']['documentDate'], dated['cl-sci-candidate-2018']['filingDate']),
                          ('2018-05-26', '2019-05-29'))
 
+
+class ClosSaintDenisTier2Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.table = read_json(HOLDER_LINKS)
+        cls.curation = read_json(ROOT / 'docs/research/clos-saint-denis/curation.json')
+        cls.register = read_json(ROOT / 'docs/research/clos-saint-denis/register.json')
+        cls.evidence = read_json(ROOT / 'src/lib/places/grandCruParcels/clos-saint-denis.evidence.json')
+
+    def test_company_identity_and_historical_tenants_do_not_collapse_holders(self):
+        self.assertEqual(set(self.evidence['holderDomains']),
+                         {'037180015', '322396185', '323824649', '417882644', 'U21586080'})
+        self.assertEqual(self.table['holders']['U21940937']['identity']['companySiren'], '501519938')
+        for hid in ['U21940937', '439629254', '383521408', '893542001', 'U21585571']:
+            self.assertEqual(self.table['holders'][hid]['links'], [])
+        self.assertNotIn('identity', self.table['holders']['U21585571'])
+        arlaud = self.table['holders']['U21586080']['links']
+        self.assertEqual(next(x for x in arlaud if x['id'].endswith('/arlaud-lease'))['crus'], ['bonnes-mares'])
+        self.assertEqual(next(x for x in arlaud if x['id'].endswith('/arlaud-lease-saint-denis'))['crus'], ['clos-saint-denis'])
+        for pid in ['21442000AB0475', '21442000AB0476']:
+            parcel = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertEqual({r['holderId'] for r in parcel['recordedRights']}, {'383521408', '417882644'})
+
+    def test_plantation_contribution_and_expired_leases_stay_historical(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        magnien = filings['csd-magnien-plantations-1998']
+        self.assertEqual(magnien['parcelAreasM2'], {'21442000AB0472': 5144})
+        self.assertEqual(magnien['documentDate'], '1998-12-18')
+        self.assertIn('excludes the underlying land', magnien['finding'])
+        self.assertIn('310 m2', magnien['finding'])
+        self.assertEqual(filings['csd-saint-loup-2001']['leaseEvidence'][0]['recitedEnd'], '2019-09-30')
+        self.assertEqual(filings['csd-saint-roch-2007']['leaseEvidence'][0]['recitedEnd'], '2022-12-31')
+        self.assertEqual((len(filings), self.register['counts']['withParcelFiling']), (6, 16))
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_old_reference_uses_dfi_and_critic_area_mismatch_is_not_forced(self):
+        ext = {x['id']: x for x in self.curation['externalResearch']}
+        old = ext['csd-lignier-former-ap26']
+        self.assertEqual(old['parcelIds'], [])
+        self.assertEqual(old['predecessorReferences'],
+                         {'21442000AP0026': ['21442000AP0232', '21442000AP0233']})
+        self.assertNotIn('producer', old)
+        for pid in ['21442000AP0232', '21442000AP0233']:
+            parcel = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertIn(old['id'], parcel['externalResearchIds'])
+        self.assertEqual(ext['csd-wh-clf']['parcelIds'], ['21442000AB0405'])
+        self.assertIn('492', self.curation['unmatchedPrintedReferences'][0]['limitation'])
+        self.assertEqual(len(self.curation['producerHoldings']), 7)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (16, 33))
+
+    def test_new_screening_and_reused_bundled_deed_are_not_double_counted(self):
+        sources = {s['id']: s for s in self.table['sources']}
+        selected = [s for sid, s in sources.items()
+                    if sid.startswith('csd-') and s['type'] == 'company-filing' and sid != 'csd-lignier-1990']
+        self.assertEqual((len(selected), sum(s['pageCount'] for s in selected)), (21, 718))
+        self.assertTrue(all(s['screenedPages'] == s['pageCount'] for s in selected))
+        self.assertEqual(sources['csd-lignier-1990']['sha256'], sources['bm-lignier-1976']['sha256'])
+        self.assertEqual(sources['csd-lignier-1990']['documentDate'], '1990-12-21')
+        self.assertEqual(sources['csd-magnien-contribution-1998']['filingDate'], '2005-03-24')
+        self.assertEqual(sources['csd-magnien-2024']['documentDate'], '2024-01-15')
+        self.assertIsNone(sources['csd-magnien-2024']['filingDate'])
+        self.assertEqual(self.table['holders']['U21585571']['effort']['filingsScreened'], 0)
+
 if __name__ == '__main__':
     unittest.main()

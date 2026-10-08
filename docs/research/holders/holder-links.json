@@ -7847,6 +7847,730 @@
       "sha256": "b24f46896b489949ee34791d35aa2e14ac2afd9f5e6fde421443610fe0978f89",
       "bytes": 4615,
       "finding": "Exact registered company identity. The Rennes SCI is a candidate only and is not crosswalked to the recorded U-id; corporate identity alone is not current farming."
+    },
+    {
+      "id": "csd-magnien-formation-1998",
+      "title": "417882644: magnien formation 1998",
+      "url": "https://actes.ccm2.net/acte/19737735",
+      "type": "company-filing",
+      "documentDate": "1998-01-25",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:06.961191+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19737735",
+      "sha256": "f22415e81139e48ca77356657eea650b4405b8a5f254d38c283b0a8079327c5c",
+      "bytes": 1118150,
+      "finding": "Formation of EARL Domaine Magnien Michel et Fils, including business-reprise provisions and the wine-company identity; no individual CSD property schedule.",
+      "filingDate": "1998-03-06",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        2,
+        4,
+        44,
+        46,
+        48,
+        50,
+        52,
+        54
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-magnien-contribution-1998",
+      "title": "417882644: magnien contribution 1998",
+      "url": "https://actes.ccm2.net/acte/19737711",
+      "type": "company-filing",
+      "documentDate": "1998-12-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:07.121342+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19737711",
+      "sha256": "4a3dc96e0074d704060c8b172d77bb7f294b3487bf8b86562cf1d7edb023996f",
+      "bytes": 2399194,
+      "finding": "Composite 2005 deposit contains the 18 December 1998 vineyard-business contribution and ratification, plus a 2002 rectification. AB472 is printed at 5144 m2, with 310 m2 described as Clos Saint-Denis. Plantations are transferred but the underlying land is expressly excluded. Historical business activity and lease availability remain dated research; no present farming claim.",
+      "filingDate": "2005-03-24",
+      "pageCount": 82,
+      "screenedPages": 82,
+      "reviewedPages": [
+        35,
+        36,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51
+      ],
+      "imageReviewedPages": [
+        45,
+        46,
+        48,
+        50
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-magnien-2010",
+      "title": "417882644: magnien 2010",
+      "url": "https://actes.ccm2.net/acte/19737737",
+      "type": "company-filing",
+      "documentDate": "2010-11-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:06.655535+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19737737",
+      "sha256": "5dc8d58426e3809734e23d6cc5f3c8f89e635cee4d42f683a8717838ab2753c4",
+      "bytes": 306961,
+      "finding": "Updated SCEV statutes preserve the company SIREN and record the 2006 conversion/name change. No new CSD individual property schedule or current tenant evidence.",
+      "filingDate": "2011-02-03",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        2,
+        15
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-magnien-2020",
+      "title": "417882644: magnien 2020",
+      "url": "https://actes.ccm2.net/acte/19737710",
+      "type": "company-filing",
+      "documentDate": "2020-09-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:07.043190+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19737710",
+      "sha256": "ecd22218f7e26111bef3e2ec0f35679e495432b9d978eecd096844e6bfde1024",
+      "bytes": 1511459,
+      "finding": "Share transfers to Magnien Fred and updated wine-company statutes. Corporate shares are not cadastral transfers; no individual CSD schedule.",
+      "filingDate": "2020-10-14",
+      "pageCount": 26,
+      "screenedPages": 26,
+      "reviewedPages": [
+        2,
+        3,
+        5,
+        7,
+        12,
+        13
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-magnien-2024",
+      "title": "417882644: magnien 2024",
+      "url": "https://actes.ccm2.net/acte/1258663",
+      "type": "company-filing",
+      "documentDate": "2024-01-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:08.944595+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1258663",
+      "sha256": "476c82dfb1274562b75469d7e7082d5551da20c2383ca1c9fe18c0e993879e2d",
+      "bytes": 176965,
+      "finding": "The free index has no document date, but the four-page decision is dated 15 January 2024. Share transfer and co-manager appointment, with no individual property schedule.",
+      "filingDate": null,
+      "pageCount": 4,
+      "screenedPages": 4,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-saint-roch-2007",
+      "title": "501519938: saint roch 2007",
+      "url": "https://actes.ccm2.net/acte/6d6a89b5-0b2b-4545-abb3-58690352687c",
+      "type": "company-filing",
+      "documentDate": "2007-12-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:09.582839+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6d6a89b5-0b2b-4545-abb3-58690352687c",
+      "sha256": "db3ae92902d723c50606f565fc470e49234baba81a1f167e9c4f84d774ece06a",
+      "bytes": 1077108,
+      "finding": "Formation identifies GFA Saint Roch and exact AB494, AP230 and AP232 areas, crosswalking the recorded U-id to SIREN 501519938. A 2004 lease to Philippe Jouan is recited with a printed end of 31 December 2022; no renewal or independently documented domaine identity.",
+      "filingDate": "2007-12-20",
+      "pageCount": 28,
+      "screenedPages": 28,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        8,
+        10
+      ],
+      "imageReviewedPages": [
+        5,
+        10
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-saint-roch-2008",
+      "title": "501519938: saint roch 2008",
+      "url": "https://actes.ccm2.net/acte/751aa159-00b9-4ade-994f-3bceb056a720",
+      "type": "company-filing",
+      "documentDate": "2008-02-13",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:09.807841+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/751aa159-00b9-4ade-994f-3bceb056a720",
+      "sha256": "9ae00e0f92446dcaa4dd05713ffb38ae72295f665b74cb6f03995322aed4ca12",
+      "bytes": 1271842,
+      "finding": "Share donation and updated statutes repeat the GFA identity, contribution schedule and historical lease to Philippe Jouan. No current renewal or producer-brand crosswalk.",
+      "filingDate": "2008-03-03",
+      "pageCount": 34,
+      "screenedPages": 34,
+      "reviewedPages": [
+        1,
+        5,
+        9,
+        10,
+        11,
+        17
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-saint-loup-2001",
+      "title": "439629254: saint loup 2001",
+      "url": "https://actes.ccm2.net/acte/65d946e0-0472-4029-a112-c57237bffeb2",
+      "type": "company-filing",
+      "documentDate": "2001-09-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:09.955839+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/65d946e0-0472-4029-a112-c57237bffeb2",
+      "sha256": "0be9c50196c54845c46d9c3283d88eb6629e9d55b90b6b6d2b309dc22b5edf44",
+      "bytes": 1363572,
+      "finding": "Formation contributes AB245 (2916 m2) and AB256 (264 m2). A separate long-term lease to Jean Paul Magnien is proposed; its later execution is recited in the 2014 donation. No present tenant or producer succession inferred.",
+      "filingDate": "2001-10-25",
+      "pageCount": 35,
+      "screenedPages": 35,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        12,
+        13,
+        14
+      ],
+      "imageReviewedPages": [
+        6,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-saint-loup-2014",
+      "title": "439629254: saint loup 2014",
+      "url": "https://actes.ccm2.net/acte/ba88102b-0922-4348-9736-b109e0cdb5c4",
+      "type": "company-filing",
+      "documentDate": "2014-12-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:11.942974+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ba88102b-0922-4348-9736-b109e0cdb5c4",
+      "sha256": "d81c7d174b1376b6d0c0ea04ce2d43c1f7a4ed8f1383b1c6a88c05baa29d2031",
+      "bytes": 3385648,
+      "finding": "Donation and retained schedule recite the executed 3 September 2001 lease to Jean Paul Magnien of AB245/256 and other land, effective 1 October 2001 through 30 September 2019. Original lease and renewal unreviewed; no Stephane Magnien link from relatives.",
+      "filingDate": "2015-06-01",
+      "pageCount": 52,
+      "screenedPages": 52,
+      "reviewedPages": [
+        3,
+        14,
+        19,
+        23,
+        24,
+        30
+      ],
+      "imageReviewedPages": [
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-saint-loup-2026",
+      "title": "439629254: saint loup 2026",
+      "url": "https://actes.ccm2.net/acte/ba123a24-0bba-4165-b99a-3a979699a17d",
+      "type": "company-filing",
+      "documentDate": "2026-02-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:12.784972+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ba123a24-0bba-4165-b99a-3a979699a17d",
+      "sha256": "da14c11c31b56591671679d6a89db3b0c0407cdc7be108fed9d73528e71d1307",
+      "bytes": 5254630,
+      "finding": "Updated statutes retain historical contribution schedules and old lease language. The 2026 cover date does not turn those old recitals into a current tenancy confirmation.",
+      "filingDate": "2026-02-19",
+      "pageCount": 34,
+      "screenedPages": 34,
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        6,
+        12
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-chezeaux-1996",
+      "title": "323824649: chezeaux 1996",
+      "url": "https://actes.ccm2.net/acte/66a5a99a-3f95-414f-9059-5dd7ca57952f",
+      "type": "company-filing",
+      "documentDate": "1996-12-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:12.494279+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/66a5a99a-3f95-414f-9059-5dd7ca57952f",
+      "sha256": "612bfb08e2b49ac0f471951ae2038837a50f8d5f56700410357ca4b75579a951",
+      "bytes": 1236460,
+      "finding": "Updated GFA statutes and capital history; the reviewed property list covers Gevrey references, not exact CSD AB246/255.",
+      "filingDate": "1997-02-25",
+      "pageCount": 37,
+      "screenedPages": 37,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        7,
+        8,
+        32,
+        33
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-chezeaux-2008",
+      "title": "323824649: chezeaux 2008",
+      "url": "https://actes.ccm2.net/acte/b8ee4428-a846-4600-8dfb-ac3147deaf51",
+      "type": "company-filing",
+      "documentDate": "2008-04-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:12.418499+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b8ee4428-a846-4600-8dfb-ac3147deaf51",
+      "sha256": "13869293836a823000d5f68c7a8aae092a61de5eb2a3446f1254326d02ec316e",
+      "bytes": 567726,
+      "finding": "Capital increase and updated GFA statutes; no individually area-matched CSD schedule or executed CSD lease in the selected filing.",
+      "filingDate": "2008-10-28",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        2,
+        6,
+        7,
+        19,
+        20,
+        21
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-chezeaux-2021",
+      "title": "323824649: chezeaux 2021",
+      "url": "https://actes.ccm2.net/acte/e68ad092-abce-4037-bd0d-1409f269536f",
+      "type": "company-filing",
+      "documentDate": "2021-10-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:15.101961+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/e68ad092-abce-4037-bd0d-1409f269536f",
+      "sha256": "18eb8c69e8de2bee149c39f1453e5fdaf2e8a5e9ffff8fc46f7e4646c0b235ce",
+      "bytes": 1479215,
+      "finding": "Company-share and receivable transfer from the Mercier holders to the Van Canneyt couple. The listed property schedule does not identify CSD AB246/255; a share sale is not a newly proven parcel transfer.",
+      "filingDate": "2021-12-01",
+      "pageCount": 27,
+      "screenedPages": 27,
+      "reviewedPages": [
+        2,
+        3,
+        5,
+        11,
+        12,
+        13,
+        27
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-chezeaux-2022",
+      "title": "323824649: chezeaux 2022",
+      "url": "https://actes.ccm2.net/acte/5f8b96ed-f6d2-40ad-be4d-7eb9f15cddee",
+      "type": "company-filing",
+      "documentDate": "2022-08-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:15.189959+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5f8b96ed-f6d2-40ad-be4d-7eb9f15cddee",
+      "sha256": "4226ab0c647a25d24c650e2dae174db79a9589112c491146b0cd589c90f96d20",
+      "bytes": 1297938,
+      "finding": "The assembly removes the ban on direct exploitation and adds vineyard cultivation, vinification, conditioning and wine sales to Domaine des Chezeaux company objects. Wine-company identity only; permitted activities do not establish actual operation of individual parcels.",
+      "filingDate": "2022-09-20",
+      "pageCount": 23,
+      "screenedPages": 23,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-grains-1997",
+      "title": "383521408: grains 1997",
+      "url": "https://actes.ccm2.net/acte/b1882852-3e46-430d-b0a1-37a774c1fcce",
+      "type": "company-filing",
+      "documentDate": "1997-07-24",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:15.189959+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b1882852-3e46-430d-b0a1-37a774c1fcce",
+      "sha256": "5fec849af0e579a97cca43682c8cbc2e2d59e3990e781a5e8d2bb44ad6ed07ac",
+      "bytes": 1179235,
+      "finding": "Earlier GFA des Tilleuls statutes and seat change. No CSD AB475/476 schedule or independently named current tenant in this bounded review.",
+      "filingDate": "1997-11-04",
+      "pageCount": 36,
+      "screenedPages": 36,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-grains-2001",
+      "title": "383521408: grains 2001",
+      "url": "https://actes.ccm2.net/acte/603957c3-fa8d-4307-be4b-68ac7db7320b",
+      "type": "company-filing",
+      "documentDate": "2001-03-06",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:15.341956+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/603957c3-fa8d-4307-be4b-68ac7db7320b",
+      "sha256": "4fe22ef71435d8a5f30bae872f902601d0ad16d82387a04e10f4113d79b7dac4",
+      "bytes": 1020030,
+      "finding": "GFA des Tilleuls capital increase through a Fixin contribution; no exact CSD schedule. The legal person remains a property company, not a producer link.",
+      "filingDate": "2001-05-30",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        3,
+        4,
+        25,
+        26,
+        27
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-grains-conversion-2008",
+      "title": "383521408: grains conversion 2008",
+      "url": "https://actes.ccm2.net/acte/32db1e54-a67e-4ab1-a110-052f4b2a0b8e",
+      "type": "company-filing",
+      "documentDate": "2008-03-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:18.138743+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/32db1e54-a67e-4ab1-a110-052f4b2a0b8e",
+      "sha256": "6cc3301d3e5d5159cf707144021d0529b98b86038813e3a1dc6e86ce86a98f98",
+      "bytes": 1368266,
+      "finding": "GFA des Tilleuls converts to SCI des Tilleuls after capital changes. No CSD tenant, current parcel schedule or producer identity established.",
+      "filingDate": "2008-07-28",
+      "pageCount": 37,
+      "screenedPages": 37,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        6,
+        21,
+        22,
+        23
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-grains-transfer-2008",
+      "title": "383521408: grains transfer 2008",
+      "url": "https://actes.ccm2.net/acte/258e4c8b-78dc-421c-a833-12c24d4a94e8",
+      "type": "company-filing",
+      "documentDate": "2008-03-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:18.279741+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/258e4c8b-78dc-421c-a833-12c24d4a94e8",
+      "sha256": "3994063813d54bb29b7cf913a4f7eaa30d0a42b43ba615cc1c94f2dfe1649f5e",
+      "bytes": 2322562,
+      "finding": "SCI shares transfer to Frederic Magnien and Magnien Fred; the company becomes Grains de Lune. Listed properties are Fixin/Brochon. Shared management and shareholders do not identify the CSD tenant; no AB475/476 exact schedule.",
+      "filingDate": "2008-07-28",
+      "pageCount": 62,
+      "screenedPages": 62,
+      "reviewedPages": [
+        2,
+        3,
+        5,
+        6,
+        9,
+        12,
+        13,
+        29,
+        52,
+        53,
+        57
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-clos-formation-2021",
+      "title": "893542001: clos formation 2021",
+      "url": "https://actes.ccm2.net/acte/f8a5ac0b-6246-4ab5-a1e1-f3396d13667e",
+      "type": "company-filing",
+      "documentDate": "2021-01-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:17.993741+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f8a5ac0b-6246-4ab5-a1e1-f3396d13667e",
+      "sha256": "f2034032104ed12fb50d0b5bdd6816b1c4836d1da07c192938eb38fa4c985eab",
+      "bytes": 936831,
+      "finding": "Cash formation and future authority to buy unspecified Clos Saint-Denis land and arrange an 18-year lease. No AP19 individual reference, area or named tenant.",
+      "filingDate": "2021-02-01",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        14,
+        15
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-clos-capital-2021",
+      "title": "893542001: clos capital 2021",
+      "url": "https://actes.ccm2.net/acte/3ea93d83-ccde-4a56-8a92-9875db3fb638",
+      "type": "company-filing",
+      "documentDate": "2021-01-14",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:17.915738+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3ea93d83-ccde-4a56-8a92-9875db3fb638",
+      "sha256": "b300d7291fb4c5b79b0b6ad08aef92b9a46a8419104da82f5c46f2d5ebeea9b2",
+      "bytes": 958536,
+      "finding": "Cash capital increase and revised statutes repeat prospective acquisition/lease authority without an individual cadastral schedule or identified tenant.",
+      "filingDate": "2021-02-25",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        8,
+        19
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-clos-donation-2021",
+      "title": "893542001: clos donation 2021",
+      "url": "https://actes.ccm2.net/acte/b5d570a3-3aaa-49c5-be2c-b82dbef0aa63",
+      "type": "company-filing",
+      "documentDate": "2021-11-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:46:21.066472+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b5d570a3-3aaa-49c5-be2c-b82dbef0aa63",
+      "sha256": "6fe31b6f8612aeb038c46a9f7d8950aa976d4f278310f0a867dd8e746d6025c4",
+      "bytes": 2158426,
+      "finding": "The 2022 deposit contains November 2021 decisions/donation evidence and February 2021 share transfers. Prospective 18-year lease authority remains generic. Shareholder names do not establish a Lignier-Michelot tenancy of AP19.",
+      "filingDate": "2022-08-11",
+      "pageCount": 46,
+      "screenedPages": 46,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        23,
+        28,
+        30,
+        31,
+        32,
+        35,
+        41,
+        46
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; selected exact schedules and lease clauses checked against page images."
+    },
+    {
+      "id": "csd-rne-417882644",
+      "title": "Company register: MAGNIEN MICHEL ET FILS (417882644)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=417882644",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:05.894636+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=417882644",
+      "sha256": "536530fc4cf0fd72980118359590d2ce99d82aa0d48d560c8cfe45b7490ce576",
+      "bytes": 4160,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-rne-501519938",
+      "title": "Company register: GFA SAINT ROCH (501519938)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=501519938",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:08.699006+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=501519938",
+      "sha256": "066f7b58b42d00a3c44e7f1876bcce8762e18d3faa905c8cf74e9e73d2643f67",
+      "bytes": 3525,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-rne-439629254",
+      "title": "Company register: GFV SAINT LOUP (439629254)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=439629254",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:10.609598+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=439629254",
+      "sha256": "05b2e43888df102606ee9e4c8a377b0cb1eeade25e8676f4b5d2c4e8b2ad7793",
+      "bytes": 3583,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-rne-323824649",
+      "title": "Company register: GFA DOMAINE DES CHEZEAUX (323824649)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=323824649",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:12.637983+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=323824649",
+      "sha256": "28ce16a17b4b1d567d12827ad91a6e274d217d149ca4485946757a894773e01b",
+      "bytes": 3497,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-rne-383521408",
+      "title": "Company register: GRAINS DE LUNE (383521408)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=383521408",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:15.458706+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=383521408",
+      "sha256": "7980a9bf8f756ee7f05622d4f3946b627b3aefb78eb285f57213adf85cb01c56",
+      "bytes": 3302,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-rne-893542001",
+      "title": "Company register: LE CLOS SAINT DENIS (893542001)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=893542001",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:44:17.151390+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=893542001",
+      "sha256": "5a128376e783ee1663e23c014bfa517c3982ac6b53f9e2112fef51a7cc1ba573",
+      "bytes": 4550,
+      "finding": "Exact registered company identity; property companies and their officers are not automatically wine producers or current parcel tenants."
+    },
+    {
+      "id": "csd-lignier-1990",
+      "title": "GFA Domaine Georges Lignier: distinct 21 December 1990 deed in the reused 1976/1990 filing bundle",
+      "url": "https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa",
+      "type": "company-filing",
+      "documentDate": "1990-12-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:57.725294+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa",
+      "sha256": "35c4359ffbeb6b74d44cb9c396b99ddc8d2e09d7a59abb333a95366ca7275229",
+      "bytes": 3092481,
+      "finding": "A distinct bundled 1990 deed adopts the contribution/capital increase naming AP27 (738 m2) and AP28 (493 m2). Same 90-page PDF already screened for Bonnes-Mares; not an additional filing or new screening effort. Generic future-lease authority does not establish an executed tenant relationship.",
+      "filingDate": "2002-10-31",
+      "pageCount": 90,
+      "screenedPages": 90,
+      "reviewedPages": [
+        67,
+        68,
+        72
+      ],
+      "imageReviewedPages": [
+        68
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
     }
   ],
   "holders": {
@@ -8600,6 +9324,38 @@
         "filingsScreened": 3,
         "pagesRead": 102,
         "note": "pagesRead counts OCR-screened PDF pages; 1 cited pages checked against page images."
+      }
+    },
+    "323824649": {
+      "links": [
+        {
+          "id": "323824649/wine-company",
+          "domaine": "Domaine des Chezeaux",
+          "relation": "owner-company",
+          "basis": "The 2022 filed wine-production objects and registered name establish Domaine des Chezeaux wine-company identity. No exact CSD schedule in the selected filings. The 2021 transaction transfers company shares; neither it nor the 2024 critic article establishes a current Ponsot or Hudelot-Noellat tenant.",
+          "sourceIds": [
+            "csd-rne-323824649",
+            "csd-chezeaux-2022"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=323824649",
+            "https://entreprises.lefigaro.fr/gfa-domaine-des-chezeaux-21/entreprise-323824649"
+          ],
+          "outcome": "linked",
+          "note": "The 2022 filed wine-production objects and registered name establish Domaine des Chezeaux wine-company identity. No exact CSD schedule in the selected filings. The 2021 transaction transfers company shares; neither it nor the 2024 critic article establishes a current Ponsot or Hudelot-Noellat tenant."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 108,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
       }
     },
     "324989359": {
@@ -9627,6 +10383,25 @@
         "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
+    "383521408": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=383521408",
+            "https://entreprises.lefigaro.fr/grains-de-lune-21/entreprise-383521408"
+          ],
+          "outcome": "no-link-found",
+          "note": "The filed GFA des Tilleuls to SCI des Tilleuls to Grains de Lune name chain is reviewed. The selected Fixin/Brochon schedules do not identify CSD AB475/476. Magnien shareholders/officers alone do not establish the producer or tenant."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 165,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
+      }
+    },
     "383925674": {
       "links": [
         {
@@ -10101,6 +10876,38 @@
         "pagesRead": 86
       }
     },
+    "417882644": {
+      "links": [
+        {
+          "id": "417882644/wine-company",
+          "domaine": "Domaine Michel Magnien",
+          "relation": "owner-company",
+          "basis": "The exact registered EARL/SCEV and filed statutes identify Domaine Michel Magnien. Its 1998 business contribution names AB472 and transfers plantations while excluding underlying land. Historical operation research only, retained with user approval; no current farming accepted.",
+          "sourceIds": [
+            "csd-rne-417882644",
+            "csd-magnien-2010"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=417882644",
+            "https://entreprises.lefigaro.fr/magnien-michel-et-fils-21/entreprise-417882644"
+          ],
+          "outcome": "linked",
+          "note": "The exact registered EARL/SCEV and filed statutes identify Domaine Michel Magnien. Its 1998 business contribution names AB472 and transfers plantations while excluding underlying land. Historical operation research only, retained with user approval; no current farming accepted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 182,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
+      }
+    },
     "420088387": {
       "links": [
         {
@@ -10516,6 +11323,25 @@
         "filingsScreened": 5,
         "pagesRead": 188,
         "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 8 filings / 289 pages."
+      }
+    },
+    "439629254": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=439629254",
+            "https://entreprises.lefigaro.fr/gfv-saint-loup-21/entreprise-439629254"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact AB245/256 formation schedule and a 2014 recital of a 2001-2019 lease to Jean Paul Magnien. Renewal and an independent present producer-company relationship were not found; do not substitute Stephane Magnien from family names."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 121,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
       }
     },
     "440712529": {
@@ -12572,6 +13398,25 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "893542001": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=893542001",
+            "https://entreprises.lefigaro.fr/le-clos-saint-denis-92/entreprise-893542001"
+          ],
+          "outcome": "no-link-found",
+          "note": "Cash formation, capital increase and share/donation records name no exact AP19 area or tenant. General future acquisition and lease authority is not an executed lease; Lignier-Michelot is not inferred from shareholder names."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 80,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
+      }
+    },
     "911887461": {
       "links": [
         {
@@ -13568,6 +14413,27 @@
         "note": "All selected pages OCR-screened. Bounded source selection and candidate limits in Clos des Lambrays filings.md."
       }
     },
+    "U21585571": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=429825250&per_page=10",
+            "https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa",
+            "https://actes.ccm2.net/acte/d36c4be6-51df-475d-b64d-62bacdc04aa5",
+            "https://actes.ccm2.net/acte/9e4a024d-bd07-48bc-aede-529e438675fd"
+          ],
+          "outcome": "no-link-found",
+          "note": "GFA Georges Lignier name search and already screened candidate filings provide no independent company-record crosswalk for AB493/AP231. Candidate SIREN 429825250 separately holds rights in this same cru and cannot be collapsed into this U-id. No surname-only link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Reuses the 3 PDFs / 173 pages already counted under 429825250; no duplicate screening effort or accepted identity."
+      }
+    },
     "U21586080": {
       "links": [
         {
@@ -13583,6 +14449,22 @@
           "reviewedAt": "2026-10-09",
           "crus": [
             "bonnes-mares"
+          ],
+          "leaseStatus": "recited"
+        },
+        {
+          "id": "U21586080/arlaud-lease-saint-denis",
+          "domaine": "Domaine Arlaud",
+          "relation": "lessor-per-filing",
+          "basis": "The 2013 deed recites the 30 June 1998 lease of GFA property to SCEA Domaine Arlaud Pere et Fils 418411518; its retained schedule identifies AB305 (1264 m2) and AB306 (504 m2). Original lease, term and renewal unreviewed. Historical tenancy research only.",
+          "sourceIds": [
+            "bm-arlaud-gfa-2013",
+            "bm-rne-418411518"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "clos-saint-denis"
           ],
           "leaseStatus": "recited"
         }
@@ -13723,6 +14605,34 @@
         "filingsScreened": 0,
         "pagesRead": 0,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "U21940937": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=501519938",
+            "https://entreprises.lefigaro.fr/gfa-saint-roch-21/entreprise-501519938"
+          ],
+          "outcome": "no-link-found",
+          "note": "GFA Saint Roch identity is crosswalked by the filed company name, SIREN and three exact current parcel/area pairs. The lease names Philippe Jouan and prints an end in 2022; no renewal or separate Domaine Henri Jouan brand/company crosswalk established."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 62,
+        "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
+      },
+      "identity": {
+        "companySiren": "501519938",
+        "sourceIds": [
+          "csd-rne-501519938",
+          "csd-saint-roch-2007",
+          "csd-saint-roch-2008"
+        ],
+        "limitation": "Exact company name, filed SIREN and AB494/AP230/AP232 individual area schedule establish the company-record crosswalk. The recited tenant is Philippe Jouan; no current producer or renewal inferred."
       }
     },
     "U21966026": {

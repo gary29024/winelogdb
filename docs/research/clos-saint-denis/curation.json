@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-548",
-  "status": "tier-1-reviewed",
-  "scope": "All 49 mapped Clos Saint-Denis parcels and 11 recorded legal-entity identifiers reviewed for Tier 1, including commune edges, cadastral named areas and the #461 historical extension. The notice indexes contain no exact reachable-reference evidence and no pending candidates. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 49 mapped Clos Saint-Denis parcels and 11 recorded holders reviewed through the shared holder table. Exact historical schedules, dated critic references and official DFI inheritance are distinguished from current operation. Verified farming remains zero.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,118 +41,766 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "csd-winehog-ponsot",
+      "title": "Winehog: Terroir Insight: Ponsot Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-ponsot-clos-saint-denis-2-66774/",
+      "type": "critic-research",
+      "documentDate": "2024-10-03",
+      "otherDocumentDates": [
+        {
+          "date": "2024-10-03",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "71e226c3388c67c71b3811d086b1d79d2e0235d90cfa1e269e8c510b5c03cb0a",
+      "bytes": 3123357,
+      "retrievedAt": "2026-10-08T15:22:09.115287+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML, hashed as original bytes. Complete article text and attached common cadastral/climat maps reviewed; some lazy-loaded producer maps are absent. Matches use explicit printed reference and individual area in the text. Raw archive, text and images stay outside Git.",
+      "finding": "AB246 2693 m2 and AB255 1083 m2 match individually. Historical Ponsot leases, the 2016/2017 separation and 2021 Chezeaux sale are discussed, with later operation uncertain. No current tenant inferred."
+    },
+    {
+      "id": "csd-winehog-clf",
+      "title": "Winehog: Terroir Insight: Domaine Coquard-Loison-Fleurot Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-clf-clos-saint-denis-2-66758/",
+      "type": "critic-research",
+      "documentDate": "2024-10-01",
+      "otherDocumentDates": [
+        {
+          "date": "2024-10-01",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "ae34fbebb502a667d840eabc7de39d4852cb8f3e85afec97824d90f38b35f648",
+      "bytes": 2932873,
+      "retrievedAt": "2026-10-08T15:22:09.179419+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML, hashed as original bytes. Complete article text and attached common cadastral/climat maps reviewed; some lazy-loaded producer maps are absent. Matches use explicit printed reference and individual area in the text. Raw archive, text and images stay outside Git.",
+      "finding": "AB405 1190 m2 matches; AB403 is printed as 504 m2 while the pinned cadastre says 492 m2. The printed 0.1694 ha census is retained without forcing the mismatch."
+    },
+    {
+      "id": "csd-winehog-amiot-servelle",
+      "title": "Winehog: Terroir Insight: Domaine Amiot-Servelle Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-amiot-servelle-clos-saint-denis-66639/",
+      "type": "critic-research",
+      "documentDate": "2024-09-26",
+      "otherDocumentDates": [
+        {
+          "date": "2024-09-26",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "4011c140d70c5dffceb82b392895bd3955837a04bb29078edf0c1012aed00678",
+      "bytes": 4693383,
+      "retrievedAt": "2026-10-08T15:22:09.268419+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML, hashed as original bytes. Complete article text and attached common cadastral/climat maps reviewed; some lazy-loaded producer maps are absent. Matches use explicit printed reference and individual area in the text. Raw archive, text and images stay outside Git.",
+      "finding": "AB304 1072 m2 and AB307 686 m2 match individually; a dated critic attribution, not legal ownership or current farming proof."
+    },
+    {
+      "id": "csd-winehog-heresztyn-mazzini",
+      "title": "Winehog: Terroir Insight Domaine Heresztyn-Mazzini Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-heresztyn-mazzini-clos-saint-denis-32801/",
+      "type": "critic-research",
+      "documentDate": "2017-08-20",
+      "otherDocumentDates": [
+        {
+          "date": "2017-08-20",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "286bd125591a25020ef29dfcb024c25f62652045b81043c6c5e533bafecf6bcc",
+      "bytes": 4668042,
+      "retrievedAt": "2026-10-08T15:22:09.356918+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML, hashed as original bytes. Complete article text and attached common cadastral/climat maps reviewed; some lazy-loaded producer maps are absent. Matches use explicit printed reference and individual area in the text. Raw archive, text and images stay outside Git.",
+      "finding": "AB301 2323 m2 matches individually. The reported 1977 purchase and 1980 replanting are critic history, not primary property deeds."
+    },
+    {
+      "id": "csd-winehog-chezeaux-public",
+      "title": "Winehog: Domaine des Chezeaux - the new estate",
+      "url": "https://winehog.org/domaine-des-chezeaux-new-68219/",
+      "type": "critic-research",
+      "documentDate": "2025-01-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:17:24.757Z",
+      "sha256": "c74274023bcabb14cb44fa11e49678e3f61702dd55ced2ab41a8db8d16175e68",
+      "bytes": 36063,
+      "representation": "web-tool public rendered text (navigation omitted)",
+      "finding": "The public full text describes the 2021 Van Canneyt acquisition and a Chezeaux estate separate from Hudelot-Noellat. Hash identifies the saved public rendered-text capture, not raw HTML; no exact individual parcel schedule or current lease established."
     }
   ],
   "holders": [
     {
       "holderId": "037180015",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-037180015"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuse the reviewed Domaine Bertagna wine-company link and prior 5 filings / 72 pages of effort. No new exact AP25 filing or current operation claim."
     },
     {
       "holderId": "322396185",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-322396185",
+        "bm-dujac-gfa-2000",
+        "bm-dujac-gfa-2018",
+        "bm-dujac-sa-1997",
+        "bm-dujac-sas-2007"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuse the provisional Domaine Dujac family-company link and four screened filings (140 pages). The historical 1997 metayage recital lacks an individual CSD schedule and current renewal; no upgrade to reviewed operation."
     },
     {
       "holderId": "323824649",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-323824649",
+        "csd-chezeaux-1996",
+        "csd-chezeaux-2008",
+        "csd-chezeaux-2021",
+        "csd-chezeaux-2022"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2022 filed wine-production objects and registered name establish Domaine des Chezeaux wine-company identity. No exact CSD schedule in the selected filings. The 2021 transaction transfers company shares; neither it nor the 2024 critic article establishes a current Ponsot or Hudelot-Noellat tenant."
     },
     {
       "holderId": "383521408",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-383521408",
+        "csd-grains-1997",
+        "csd-grains-2001",
+        "csd-grains-conversion-2008",
+        "csd-grains-transfer-2008"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The filed GFA des Tilleuls to SCI des Tilleuls to Grains de Lune name chain is reviewed. The selected Fixin/Brochon schedules do not identify CSD AB475/476. Magnien shareholders/officers alone do not establish the producer or tenant."
     },
     {
       "holderId": "417882644",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-417882644",
+        "csd-magnien-formation-1998",
+        "csd-magnien-contribution-1998",
+        "csd-magnien-2010",
+        "csd-magnien-2020",
+        "csd-magnien-2024"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The exact registered EARL/SCEV and filed statutes identify Domaine Michel Magnien. Its 1998 business contribution names AB472 and transfers plantations while excluding underlying land. Historical operation research only, retained with user approval; no current farming accepted."
     },
     {
       "holderId": "429825250",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-429825250",
+        "bm-lignier-1976",
+        "csd-lignier-1990",
+        "bm-lignier-2012",
+        "bm-lignier-2018"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reused GFA identity and three fully screened filings. Eight current CSD references match individual areas across the 1976 and 1990 schedules; old AP26 reaches two descendants only through documented DFI ancestry. No executed producer lease or current operation established."
     },
     {
       "holderId": "439629254",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-439629254",
+        "csd-saint-loup-2001",
+        "csd-saint-loup-2014",
+        "csd-saint-loup-2026"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Exact AB245/256 formation schedule and a 2014 recital of a 2001-2019 lease to Jean Paul Magnien. Renewal and an independent present producer-company relationship were not found; do not substitute Stephane Magnien from family names."
     },
     {
       "holderId": "893542001",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-893542001",
+        "csd-clos-formation-2021",
+        "csd-clos-capital-2021",
+        "csd-clos-donation-2021"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Cash formation, capital increase and share/donation records name no exact AP19 area or tenant. General future acquisition and lease authority is not an executed lease; Lignier-Michelot is not inferred from shareholder names."
     },
     {
       "holderId": "U21585571",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-429825250",
+        "bm-lignier-1976",
+        "bm-lignier-2012",
+        "bm-lignier-2018"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA Georges Lignier name search and already screened candidate filings provide no independent company-record crosswalk for AB493/AP231. Candidate SIREN 429825250 separately holds rights in this same cru and cannot be collapsed into this U-id. No surname-only link."
     },
     {
       "holderId": "U21586080",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-444144190",
+        "bm-arlaud-gfa-2013",
+        "bm-rne-418411518"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuse the GFA Arlaud company-record identity and fully screened 2013 filing. AB305/306 exact areas and the recited 1998 lease support a CSD-scoped historical lessor link; no present lease or farming confirmation."
     },
     {
       "holderId": "U21940937",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "csd-rne-501519938",
+        "csd-saint-roch-2007",
+        "csd-saint-roch-2008"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA Saint Roch identity is crosswalked by the filed company name, SIREN and three exact current parcel/area pairs. The lease names Philippe Jouan and prints an end in 2022; no renewal or separate Domaine Henri Jouan brand/company crosswalk established."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "csd-wh-ponsot",
+      "title": "Winehog: Domaine Ponsot (historical attribution) dated parcel references",
+      "parcelIds": [
+        "21442000AB0246",
+        "21442000AB0255"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "The 2024 article prints both current references and exact areas, but its later operator table is uncertain after the Ponsot split and 2021 Chezeaux sale. Historical critic attribution only; no present tenant or farming confirmed.",
+      "sourceIds": [
+        "csd-winehog-ponsot"
+      ],
+      "producer": "Domaine Ponsot (historical attribution)",
+      "printedReferences": [
+        "AB246",
+        "AB255"
+      ],
+      "printedAreasM2": {
+        "AB246": 2693,
+        "AB255": 1083
+      },
+      "dateSourceId": "csd-winehog-ponsot",
+      "appNote": "The 2024 article prints both current references and exact areas, but its later operator table is uncertain after the Ponsot split and 2021 Chezeaux sale. Historical critic attribution only; no present tenant or farming confirmed.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-wh-clf",
+      "title": "Winehog: Domaine Coquard-Loison-Fleurot dated parcel references",
+      "parcelIds": [
+        "21442000AB0405"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "The 2024 article identifies AB405 at 1190 m2. Its second printed reference AB403 fails the area test and is excluded. Dated critic evidence, not present operation.",
+      "sourceIds": [
+        "csd-winehog-clf"
+      ],
+      "producer": "Domaine Coquard-Loison-Fleurot",
+      "printedReferences": [
+        "AB405"
+      ],
+      "printedAreasM2": {
+        "AB405": 1190
+      },
+      "dateSourceId": "csd-winehog-clf",
+      "appNote": "The 2024 article identifies AB405 at 1190 m2. Its second printed reference AB403 fails the area test and is excluded. Dated critic evidence, not present operation.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-wh-amiot",
+      "title": "Winehog: Domaine Amiot-Servelle dated parcel references",
+      "parcelIds": [
+        "21442000AB0304",
+        "21442000AB0307"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "The 2024 article prints AB304 at 1072 m2 and AB307 at 686 m2, both matching individually. No present legal owner or current farmer inferred.",
+      "sourceIds": [
+        "csd-winehog-amiot-servelle"
+      ],
+      "producer": "Domaine Amiot-Servelle",
+      "printedReferences": [
+        "AB304",
+        "AB307"
+      ],
+      "printedAreasM2": {
+        "AB304": 1072,
+        "AB307": 686
+      },
+      "dateSourceId": "csd-winehog-amiot-servelle",
+      "appNote": "The 2024 article prints AB304 at 1072 m2 and AB307 at 686 m2, both matching individually. No present legal owner or current farmer inferred.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-wh-heresztyn",
+      "title": "Winehog: Domaine Heresztyn-Mazzini dated parcel references",
+      "parcelIds": [
+        "21442000AB0301"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "The 2017 article prints AB301 at 2323 m2 in Calouere. Historical acquisition/replanting claims remain critic research; current farming unverified.",
+      "sourceIds": [
+        "csd-winehog-heresztyn-mazzini"
+      ],
+      "producer": "Domaine Heresztyn-Mazzini",
+      "printedReferences": [
+        "AB301"
+      ],
+      "printedAreasM2": {
+        "AB301": 2323
+      },
+      "dateSourceId": "csd-winehog-heresztyn-mazzini",
+      "appNote": "The 2017 article prints AB301 at 2323 m2 in Calouere. Historical acquisition/replanting claims remain critic research; current farming unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-lignier-former-ap26",
+      "title": "GFA Georges Lignier: 1976 former AP26 contribution",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 1976 GFA schedule identifies former AP26 at 5586 m2. Its evidence reaches current AP232 and AP233 only through their documented official DFI ancestry. The current holders differ; no 1976 ownership allocation onto descendants, current producer or inferred transfer is made.",
+      "sourceIds": [
+        "bm-lignier-1976",
+        "cadastre-history"
+      ],
+      "printedReferences": [
+        "AP26"
+      ],
+      "printedAreasM2": {
+        "21442000AP0026": 5586
+      },
+      "predecessorReferences": {
+        "21442000AP0026": [
+          "21442000AP0232",
+          "21442000AP0233"
+        ]
+      },
+      "dateSourceId": "bm-lignier-1976",
+      "pages": [
+        14
+      ],
+      "appNote": "1976 GFA contribution on former AP26 (5586 m2), inherited as research through official DFI ancestry only. It does not identify the current owner or farmer.",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "csd-lignier-1976",
+      "sourceId": "bm-lignier-1976",
+      "title": "lignier 1976: dated cadastral schedule",
+      "holderId": "429825250",
+      "companySiren": "429825250",
+      "documentDate": "1976-03-30",
+      "parcelAreasM2": {
+        "21442000AB0250": 1369,
+        "21442000AB0404": 35,
+        "21442000AB0406": 80,
+        "21442000AB0419": 728,
+        "21442000AP0021": 819,
+        "21442000AP0022": 217
+      },
+      "pages": [
+        9,
+        13,
+        59,
+        62
+      ],
+      "printedReferences": [
+        "AB250",
+        "AB404",
+        "AB406",
+        "AB419",
+        "AP21",
+        "AP22"
+      ],
+      "leaseEvidence": [],
+      "supportingSourceIds": [],
+      "finding": "The retained 1976 contribution schedule supplies six current references and exact individual areas. AP22 is described as building/sol with dwellings, cellar and garages; AB419 as land. This is a historical property schedule, not a vineyard-only allocation or current producer relationship.",
+      "appNote": "The retained 1976 contribution schedule supplies six current references and exact individual areas. AP22 is described as building/sol with dwellings, cellar and garages; AB419 as land. This is a historical property schedule, not a vineyard-only allocation or current producer relationship. Current farming remains unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-lignier-1990",
+      "sourceId": "csd-lignier-1990",
+      "title": "lignier 1990: dated cadastral schedule",
+      "holderId": "429825250",
+      "companySiren": "429825250",
+      "documentDate": "1990-12-21",
+      "parcelAreasM2": {
+        "21442000AP0027": 738,
+        "21442000AP0028": 493
+      },
+      "pages": [
+        67,
+        68,
+        72
+      ],
+      "printedReferences": [
+        "AP27",
+        "AP28"
+      ],
+      "leaseEvidence": [],
+      "supportingSourceIds": [],
+      "finding": "The distinct 21 December 1990 deed adopts a contribution/capital increase identifying AP27 and AP28 individually. It is contained in the previously screened 90-page filing, not a newly downloaded PDF. Future lease authority is not an executed tenancy.",
+      "appNote": "The distinct 21 December 1990 deed adopts a contribution/capital increase identifying AP27 and AP28 individually. It is contained in the previously screened 90-page filing, not a newly downloaded PDF. Future lease authority is not an executed tenancy. Current farming remains unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-arlaud-2013",
+      "sourceId": "bm-arlaud-gfa-2013",
+      "title": "arlaud 2013: dated cadastral schedule",
+      "holderId": "U21586080",
+      "companySiren": "444144190",
+      "documentDate": "2013-04-26",
+      "parcelAreasM2": {
+        "21442000AB0305": 1264,
+        "21442000AB0306": 504
+      },
+      "pages": [
+        5,
+        34
+      ],
+      "printedReferences": [
+        "AB305",
+        "AB306"
+      ],
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "rural lease",
+          "tenants": [
+            "SCEA Domaine Arlaud Pere et Fils"
+          ],
+          "tenantSiren": "418411518",
+          "signedDate": "1998-06-30",
+          "pages": [
+            5,
+            34
+          ],
+          "parcelAreasM2": {
+            "21442000AB0305": 1264,
+            "21442000AB0306": 504
+          },
+          "limitation": "Recited lease of GFA property; original instrument, effective term and renewal not reviewed."
+        }
+      ],
+      "supportingSourceIds": [],
+      "finding": "The 2013 GFA deed retains AB305 and AB306 with exact individual areas and recites the 1998 lease to the distinct SCEA Domaine Arlaud. Original lease, duration and renewal remain unreviewed.",
+      "appNote": "The 2013 GFA deed retains AB305 and AB306 with exact individual areas and recites the 1998 lease to the distinct SCEA Domaine Arlaud. Original lease, duration and renewal remain unreviewed. Current farming remains unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-saint-roch-2007",
+      "sourceId": "csd-saint-roch-2007",
+      "title": "saint roch 2007: dated cadastral schedule",
+      "holderId": "U21940937",
+      "companySiren": "501519938",
+      "documentDate": "2007-12-12",
+      "parcelAreasM2": {
+        "21442000AB0494": 1112,
+        "21442000AP0230": 2324,
+        "21442000AP0232": 155
+      },
+      "pages": [
+        4,
+        5,
+        10
+      ],
+      "printedReferences": [
+        "AB494",
+        "AP230",
+        "AP232"
+      ],
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "long-term rural lease",
+          "tenants": [
+            "Philippe Jouan"
+          ],
+          "signedDate": "2004-01-21",
+          "effectiveFrom": "2004-01-01",
+          "recitedEnd": "2022-12-31",
+          "pages": [
+            10
+          ],
+          "parcelAreasM2": {
+            "21442000AB0494": 1112,
+            "21442000AP0230": 2324,
+            "21442000AP0232": 155
+          },
+          "limitation": "The source says 18 years but prints 1 January 2004 through 31 December 2022; dates are preserved without silently resolving the inconsistency. Renewal and producer identity unreviewed."
+        }
+      ],
+      "supportingSourceIds": [
+        "csd-saint-roch-2008"
+      ],
+      "finding": "The formation schedule matches three current references and areas, independently grounding the U-id company crosswalk. It recites a lease to Philippe Jouan, with a printed end in 2022. No producer-brand or current renewal claim.",
+      "appNote": "The formation schedule matches three current references and areas, independently grounding the U-id company crosswalk. It recites a lease to Philippe Jouan, with a printed end in 2022. No producer-brand or current renewal claim. Current farming remains unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-saint-loup-2001",
+      "sourceId": "csd-saint-loup-2001",
+      "title": "saint loup 2001: dated cadastral schedule",
+      "holderId": "439629254",
+      "companySiren": "439629254",
+      "documentDate": "2001-09-03",
+      "parcelAreasM2": {
+        "21442000AB0245": 2916,
+        "21442000AB0256": 264
+      },
+      "pages": [
+        6,
+        7,
+        13
+      ],
+      "printedReferences": [
+        "AB245",
+        "AB256"
+      ],
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "sourceId": "csd-saint-loup-2014",
+          "leaseType": "long-term rural lease",
+          "tenants": [
+            "Jean Paul Magnien"
+          ],
+          "signedDate": "2001-09-03",
+          "effectiveFrom": "2001-10-01",
+          "recitedEnd": "2019-09-30",
+          "pages": [
+            14
+          ],
+          "parcelAreasM2": {
+            "21442000AB0245": 2916,
+            "21442000AB0256": 264
+          },
+          "limitation": "Execution is recited on page 14 of the 2014 donation, not in the prospective language of the 2001 formation. Original lease and renewal unreviewed."
+        }
+      ],
+      "supportingSourceIds": [
+        "csd-saint-loup-2014",
+        "csd-saint-loup-2026"
+      ],
+      "finding": "The 2001 contribution identifies AB245 and AB256 exactly. A later 2014 donation recites the separate 3 September 2001 lease to Jean Paul Magnien through September 2019. No renewal or succession to a different producer is established.",
+      "appNote": "The 2001 contribution identifies AB245 and AB256 exactly. A later 2014 donation recites the separate 3 September 2001 lease to Jean Paul Magnien through September 2019. No renewal or succession to a different producer is established. Current farming remains unverified.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-magnien-plantations-1998",
+      "sourceId": "csd-magnien-contribution-1998",
+      "title": "magnien plantations 1998: dated cadastral schedule",
+      "holderId": "417882644",
+      "companySiren": "417882644",
+      "documentDate": "1998-12-18",
+      "parcelAreasM2": {
+        "21442000AB0472": 5144
+      },
+      "pages": [
+        35,
+        44,
+        45,
+        46,
+        48,
+        50,
+        51
+      ],
+      "printedReferences": [
+        "AB472"
+      ],
+      "leaseEvidence": [],
+      "supportingSourceIds": [],
+      "finding": "The 1998 vineyard-business contribution names AB472 at 5144 m2, with only 310 m2 described as Clos Saint-Denis and the remainder Morey premier cru. It transfers plantations and expressly excludes the underlying land. Dated business/operation context is retained with user approval for Tier 2; no land acquisition or current operation is asserted.",
+      "appNote": "The 1998 business contribution names AB472 (5144 m2), with 310 m2 described as Clos Saint-Denis. It transfers plantations and excludes underlying land. Historical research only; current farming unverified.",
+      "currentFarmer": null
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "csd-ponsot-core",
+      "producer": "Domaine Ponsot (historical attribution)",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.2693,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-ponsot"
+      ],
+      "finding": "The 2024 article recounts a historically leased holding; subsequent operator is uncertain. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-ponsot-chaffots",
+      "producer": "Domaine Ponsot (historical attribution)",
+      "namedAreas": [
+        "LES CHAFFOTS"
+      ],
+      "publishedAreaHa": 0.1083,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-ponsot"
+      ],
+      "finding": "Historical lease attribution; not a current Ponsot census. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-clf-core",
+      "producer": "Domaine Coquard-Loison-Fleurot",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.119,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-clf"
+      ],
+      "finding": "Printed article area. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-clf-chaffots",
+      "producer": "Domaine Coquard-Loison-Fleurot",
+      "namedAreas": [
+        "LES CHAFFOTS"
+      ],
+      "publishedAreaHa": 0.0504,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-clf"
+      ],
+      "finding": "Printed article area retained despite the individual-reference mismatch. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-amiot-core",
+      "producer": "Domaine Amiot-Servelle",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.1072,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-amiot-servelle"
+      ],
+      "finding": "Printed article area. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-amiot-chaffots",
+      "producer": "Domaine Amiot-Servelle",
+      "namedAreas": [
+        "LES CHAFFOTS"
+      ],
+      "publishedAreaHa": 0.0686,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-amiot-servelle"
+      ],
+      "finding": "Printed article area. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-heresztyn",
+      "producer": "Domaine Heresztyn-Mazzini",
+      "namedAreas": [
+        "CALOUERE"
+      ],
+      "publishedAreaHa": 0.2323,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-heresztyn-mazzini"
+      ],
+      "finding": "Printed 2017 article area. Named-area census only; no allocation to current parcels, ownership or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "Twenty-one selected new public filings (718 pages) fully OCR-screened at 150 dpi with RapidOCR and DirectML: Magnien 5/182, Saint Roch 2/62, Saint Loup 3/121, Chezeaux 4/108, Grains de Lune 4/165, Le Clos Saint Denis 3/80. Selection is bounded, not every deposited filing.",
+    "Reused Bertagna 5/72, Dujac 4/140, Georges Lignier 3/173 and Arlaud 1/55 research and effort. The separately dated 1990 deed is in the already-screened Lignier PDF; neither it nor the unresolved Lignier U-id duplicates screening counts.",
+    "Saint Roch U21940937 is crosswalked through company records and three exact schedules. U21585571 remains unresolved: SIREN 429825250 already has separate rights in this cru and cannot be assigned from a matching name. No current producer is inferred from Jouan, Magnien or Lignier relatives/shareholders.",
+    "Saint Loup recites a Jean Paul Magnien lease ending September 2019. Saint Roch prints an 18-year lease effective January 2004 but ending December 2022; the inconsistent duration/dates are retained, and no renewal is presumed. The Arlaud and Dujac original leases and current renewals remain unreviewed.",
+    "The Magnien deed is dated 18 December 1998, deposited in a composite 2005 filing. It transfers plantations/business assets, expressly excludes underlying land and describes only 310 m2 of AB472 as Grand Cru. Historical operation context is retained with explicit user approval; adjudication under #364 and current operation remain separate.",
+    "Four supplied Winehog texts were reviewed. Attached common maps add context but some lazy-loaded producer maps are absent. Text supplies all accepted numbers/areas; CLF AB403 has an area mismatch. No map-only allocation or correction is made.",
+    "Unsupplied paywalled Winehog: Clos Saint-Denis overview (2015-08-30, https://winehog.org/vineyard-insight-clos-saint-denis-the-queen-of-morey-24456/); Domaine Arlaud (2024-09-24, https://winehog.org/terroir-insight-domaine-arlaud-clos-saint-denis-2-33130/); Domaine Dujac (2017-08-23, https://winehog.org/terroir-insight-domaine-dujac-clos-saint-denis-32844/). Only available public text is used; no login or paywall bypass.",
+    "The public 2025 Chezeaux article distinguishes the new estate from Hudelot-Noellat. The supplied 2024 Ponsot article leaves recent operator years uncertain. Neither article assigns a current tenant to AB246/255.",
+    "Former AP26 reaches AP232/AP233 through existing official DFI ancestry, without current ownership allocation. Other unmatched old references remain unresolved. Original property/lease instruments, paid SPF copies and present-season confirmation remain gaps."
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "csd-winehog-clf",
+      "printedReference": "AB403, 0.0504 ha (504 m2)",
+      "parcelIds": [],
+      "limitation": "Current AB403 has 492 m2. Same number and map position do not satisfy the independent area test; no rounding or forced correction.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-lignier-1976",
+      "printedReference": "AB251, 5817 m2; AB276, 924 m2",
+      "parcelIds": [],
+      "limitation": "These original historical references are not current mapped parcels and no documented DFI ancestry or accepted successor reaches the present selection. They are not forced onto nearby AB438 or other parcels.",
+      "currentFarmer": null
+    }
   ]
 }

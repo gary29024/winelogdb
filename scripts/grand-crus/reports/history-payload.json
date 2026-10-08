@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BDY17WJp.js"
+    "dist/client/assets/index-WyTkjrbd.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-C2RLAwtE.js",
-    "dist/client/assets/SectionLabel-BqBA9QsI.js",
-    "dist/client/assets/SparklingDetailsCard-Dn1XEtBk.js",
-    "dist/client/assets/VillageMap-BuO5JPuo.js",
-    "dist/client/assets/burgundyAtlas-DENuPBKR.js",
-    "dist/client/assets/index-BDY17WJp.js",
-    "dist/client/assets/index-CSU7UQqN.js",
+    "dist/client/assets/FriendTagDialog-pPmTLcdA.js",
+    "dist/client/assets/SectionLabel-BHB3juxm.js",
+    "dist/client/assets/SparklingDetailsCard-DBwsxmrw.js",
+    "dist/client/assets/VillageMap-BGakWwtv.js",
+    "dist/client/assets/burgundyAtlas-DCEbDMgU.js",
+    "dist/client/assets/index-BrE9b1Y9.js",
+    "dist/client/assets/index-WyTkjrbd.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-Qewzz7-f.js",
-    "dist/client/assets/wineDetailCompact-b34VaJUj.js"
+    "dist/client/assets/useModalFocus-CH-GwEKz.js",
+    "dist/client/assets/wineDetailCompact-CJtkcXHy.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5637379,
-  "evidenceGzipBytesTotal": 506646,
+  "evidenceBytesTotal": 5662357,
+  "evidenceGzipBytesTotal": 510732,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -126,10 +126,10 @@
     },
     {
       "cru": "clos-saint-denis",
-      "file": "dist/client/assets/clos-saint-denis.evidence-CxtXz2Q5.js",
-      "sha256": "beaece0ff2f70db15318a2378239b4d4e25588060bd73440422eb36ac8947590",
-      "bytes": 85633,
-      "gzipBytes": 10155
+      "file": "dist/client/assets/clos-saint-denis.evidence-D1BG481U.js",
+      "sha256": "98cee5a7900de6198ec26c43f049ceee3d4543b4b2a5b34a774ffa7b085475ee",
+      "bytes": 110611,
+      "gzipBytes": 14241
     },
     {
       "cru": "corton",
