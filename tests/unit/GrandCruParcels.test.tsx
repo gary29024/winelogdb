@@ -4,13 +4,14 @@ import {cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/r
 import {readFileSync} from 'node:fs';
 import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
+import {saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
 import gevreyManifest from '../../src/lib/places/grandCruParcels/gevrey-chambertin.manifest.json';
 import vosneManifest from '../../src/lib/places/grandCruParcels/vosne-romanee.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
-vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
+vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]})),saveParcelProducerLink:vi.fn(),removeParcelProducerLink:vi.fn()}));
 const evidenceLoad=vi.hoisted(()=>({fail:false,calls:0}));
 vi.mock('../../src/lib/places/grandCruParcels/evidence',async importOriginal=>{
  const real=await importOriginal<typeof import('../../src/lib/places/grandCruParcels/evidence')>();
@@ -234,7 +235,7 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('switch'));
   expect(signal?.aborted).toBe(true);
  });
- it('shows a verified producer link, and name-only matches only on request',async()=>{
+ it('shows a verified producer link without a name-only guess',async()=>{
   const sample=structuredClone(data);
   const linked=sample.features.filter(f=>inEchezeaux(f)&&holds(f,'DOMAINE MONGEARD MUGNERET'));
   expect(linked.length).toBeGreaterThan(0);
@@ -248,39 +249,28 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.getByText(`${linked.length} parcel${linked.length===1?'':'s'}`,{exact:false})).toBeTruthy();
   // The legend is reported by an effect that can trail the panel text under load.
   await waitFor(()=>expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified']));
-  const toggle=screen.getByLabelText(/Show possible matches for Mongeard-Mugneret/) as unknown as HTMLInputElement;
-  expect(toggle.checked).toBe(false);
-  expect(screen.queryByText('Possible match · name only')).toBeNull();
-  fireEvent.click(toggle);
-  expect(screen.getByText('Possible match · name only')).toBeTruthy();
-  const possibleCard=document.querySelector('.village-map-producer.is-possible')! as HTMLElement;
-  expect(within(possibleCard).getByText('GFA Mongeard Mugneret et Fils')).toBeTruthy();
-  // The verified right holder is never repeated as a mere possibility.
-  expect(within(possibleCard).queryByText('Domaine Mongeard Mugneret')).toBeNull();
-  expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified','possible']);
+  expect(screen.queryByLabelText(/Show possible matches/)).toBeNull();
+  expect(screen.queryByText(/Looks like/)).toBeNull();
  });
- it('makes possible parcels visibly blue and zooms to them without asserting farming',async()=>{
+ it('suggests the producer’s row and links it in one tap, with no blue guess on the map',async()=>{
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  vi.mocked(saveParcelProducerLink).mockImplementation(async(_parent,holderId,producerId)=>({holderId,producerId,producerName:'Domaine Nicole Lamarche',status:'manual',updatedAt:'2026-10-08'}));
   const map=mapStub();
-  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Domaine Nicole Lamarche"/>);
+  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Domaine Nicole Lamarche" producerId="nicole"/>);
   fireEvent.click(screen.getByRole('switch'));
-  fireEvent.click(await screen.findByLabelText(/Show possible matches/));
-  expect(screen.getByText('3 parcels · 1.10 ha')).toBeTruthy();
-  expect(screen.getByRole('button',{name:'Link Nicole Lamarche to an app producer'})).toBeTruthy();
-  const fill=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible');
-  const line=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible-line');
-  expect(fill.paint).toEqual({'fill-color':'#0067b1','fill-opacity':0.58});
-  expect(line.paint['line-dasharray']).toEqual([2,1.5]);
-  fireEvent.click(screen.getByRole('button',{name:'Show possible matches on map'}));
+  const card=await screen.findByRole('region',{name:'This wine’s producer'});
+  expect((await within(card).findByText(/Looks like/)).textContent).toBe('Looks like Domaine Nicole Lamarche · 1.10 ha');
+  expect(screen.queryByLabelText(/Show possible matches/)).toBeNull();
+  expect(map.addLayer.mock.calls.map(([layer])=>layer.id).filter(id=>id.includes('possible'))).toEqual([]);
+  fireEvent.click(within(card).getByRole('button',{name:'Link Domaine Nicole Lamarche to Domaine Nicole Lamarche'}));
+  expect(await within(card).findByText('Manual link · unverified')).toBeTruthy();
+  expect(saveParcelProducerLink).toHaveBeenCalledWith('inao-denom-565','397738634','nicole');
   expect(map.fitBounds).toHaveBeenCalled();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
-  // A selected possible parcel keeps the blue vocabulary; wine red is reserved for verified producers.
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
-  const detail=screen.getByText('Possible match, unverified');
-  expect(detail.classList.contains('is-possible')).toBe(true);
-  expect(detail.classList.contains('is-wine')).toBe(false);
+  expect(screen.queryByText(/Possible match/)).toBeNull();
  });
- it('keeps each parcel’s dated operator evidence when a right holder is selected, with unverified parcels still distinct',async()=>{
+ it('keeps each parcel’s dated operator evidence when a right holder is selected',async()=>{
   const sample=structuredClone(data);
   const linked=sample.features.filter(f=>inEchezeaux(f)&&holds(f,'DOMAINE DE LA ROMANEE CONTI'));
   expect(linked.length).toBeGreaterThan(2);
@@ -296,10 +286,8 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.getByRole('link',{name:'Evidence for parcel 1'}).getAttribute('href')).toBe('https://example.test/parcel-1');
   expect(screen.queryByRole('link',{name:'Evidence for parcel 0'})).toBeNull();
   expect(screen.getByText(/Verified operator · effective 2025-01-01/)).toBeTruthy();
-  fireEvent.click(screen.getByLabelText(/Show possible matches/));
-  const card=within(document.querySelector('.village-map-producer.is-possible')! as HTMLElement);
-  expect(card.getByText('Domaine de la Romanee Conti')).toBeTruthy();
-  expect(card.getByText(new RegExp(`^${linked.length-2} parcels? ·`))).toBeTruthy();
+  // Verified links stand alone: no name-only suggestion for the rest of the holder's parcels.
+  expect(screen.queryByText(/Looks like/)).toBeNull();
  });
 });
 describe('Parcel owner names',()=>{

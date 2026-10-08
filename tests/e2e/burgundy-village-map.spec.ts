@@ -65,21 +65,20 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
  });
 }
 
-test('Échezeaux: manually link a possible producer and retain it in owner and shared views',async({page},testInfo)=>{
+test('Échezeaux: link the wine’s producer in one tap and keep it in owner and shared views',async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
- await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche'});
- const producers=[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeLocality:'Vosne-Romanée'},
-  {id:'shared::friend::anne',canonicalName:'Domaine Anne Gros',homeLocality:'Vosne-Romanée',sharedOnly:true}];
- let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
- await page.route('**/api/producers',route=>route.fulfill({json:{items:producers}}));
+ await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche',producerId:'nicole'});
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[],catalogue=0;
+ // The map opens from the wine, so its producer is known: the catalogue is never needed.
+ await page.route('**/api/producers',route=>{catalogue++;return route.fulfill({json:{items:[]}})});
  await page.route('**/api/parcel-producer-links?*',async route=>{
   const request=route.request();
   if(request.method()==='PUT'){
-   const input=request.postDataJSON();const producer=producers.find(p=>p.id===input.producerId)!;
-   links=[{...input,producerName:producer.canonicalName,status:'manual',updatedAt:'2026-09-28'}];
-   return route.fulfill({json:links[0]});
+   const input=request.postDataJSON(),saved={...input,producerName:'Domaine Nicole Lamarche',status:'manual',updatedAt:'2026-10-08'};
+   links=[...links.filter(l=>l.holderId!==input.holderId),saved];
+   return route.fulfill({json:saved});
   }
-  if(request.method()==='DELETE'){links=[];return route.fulfill({json:{deleted:true}})}
+  if(request.method()==='DELETE'){const input=request.postDataJSON();links=links.filter(l=>l.holderId!==input.holderId);return route.fulfill({json:{deleted:true}})}
   return route.fulfill({json:{items:links}});
  });
  await page.setViewportSize({width:390,height:844});
@@ -90,44 +89,37 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
   await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();return dialog;
  };
  let dialog=await open('/wines/layout-wine');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('button',{name:'Show possible matches on map'}).click();
+ let card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText('Looks like Domaine Nicole Lamarche');
+ await expect(dialog.getByRole('checkbox',{name:/Show possible matches/})).toHaveCount(0);
+ await card.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
- await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
- await page.screenshot({path:testInfo.outputPath('possible-producer-blue-mobile.png')});
- await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
- await dialog.getByRole('searchbox',{name:'Search app producers'}).fill('Nicole');
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
- await page.screenshot({path:testInfo.outputPath('producer-link-editor-mobile.png')});
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
- await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toHaveAttribute('href','/producers/nicole');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await expect(dialog.getByLabel('Map legend')).not.toContainText('possible');
+ await page.screenshot({path:testInfo.outputPath('producer-suggestion-mobile.png')});
+ await card.getByRole('button',{name:'Link Domaine Nicole Lamarche to Domaine Nicole Lamarche',exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ expect(links.map(l=>[l.holderId,l.producerId])).toEqual([['397738634','nicole']]);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  // A fresh shared-wine view reloads the saved account association.
  dialog=await open('/shared/layout-wine');
- await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toBeVisible();
+ card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText('Linked to Domaine Nicole Lamarche');
  // The link for this wine's producer opens the map on that holder's parcels, not the whole cru.
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).uncheck();
- await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
- await dialog.getByRole('button',{name:'Show on map'}).click();
+ await card.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.getByText('Verified parcel links')).toHaveCount(0);
- await dialog.getByRole('button',{name:'Change link'}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('shared::friend::anne');
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- // A deliberate reassignment stays saved, but must not appear on Nicole's wine.
- await expect(dialog.getByRole('link',{name:'Domaine Anne Gros',exact:true})).toHaveCount(0);
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
- expect(links[0].producerId).toBe('shared::friend::anne');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await dialog.getByRole('button',{name:'Remove link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ // The chosen row offers the same link: unlink it there, then link it again in one tap.
+ const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
+ await owners.getByRole('button',{name:'Unlink',exact:true}).click();
+ await expect(card).toContainText('Not linked to any parcels yet.');
+ expect(links).toEqual([]);
+ await owners.getByRole('button',{name:'Link to Domaine Nicole Lamarche',exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('producer-linked-row-mobile.png')});
+ expect(catalogue).toBe(0);
 });
 
 for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Échezeaux: the map stays in view while choosing an owner or parcel at ${viewport.width}px`,async({page})=>{
@@ -266,20 +258,21 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  test.setTimeout(60_000); // Corton's 728 parcels make this the longest journey under parallel workers.
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.setViewportSize({width:390,height:844});
- const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
+ const producer={id:'parcel-test',canonicalName:'Parcel test producer'};
  await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id,
   ...(whiteCru(parcelCru.slug)?{colour:'White',wineStyle:'white'}:{})});
- await page.route('**/api/producers',route=>route.fulfill({json:{items:[producer,other]}}));
- let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[],catalogue=0;
+ await page.route('**/api/producers',route=>{catalogue++;return route.fulfill({json:{items:[producer]}})});
  await page.route('**/api/parcel-producer-links?*',async route=>{
   const request=route.request(),query=new URL(request.url()).searchParams;
   expect(query.get('parent')).toBe(parcelCru.parentFeatureId);
   expect(query.get('snapshot')).toBe(parcelCru.rightsAsOf);
   if(request.method()==='PUT'){
-   const input=request.postDataJSON(),target=[producer,other].find(p=>p.id===input.producerId)!;
-   links=[{...input,producerName:target.canonicalName,status:'manual',updatedAt:'2026-10-01'}];
-   return route.fulfill({json:links[0]});
+   const input=request.postDataJSON(),saved={...input,producerName:producer.canonicalName,status:'manual',updatedAt:'2026-10-01'};
+   links=[...links.filter(l=>l.holderId!==input.holderId),saved];
+   return route.fulfill({json:saved});
   }
+  if(request.method()==='DELETE'){const input=request.postDataJSON();links=links.filter(l=>l.holderId!==input.holderId);return route.fulfill({json:{deleted:true}})}
   return route.fulfill({json:{items:links}});
  });
  let downloads=0;
@@ -345,32 +338,31 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-holders-mobile.png`)});
- await dialog.getByRole('button',{name:'Link chosen right holder to an app producer',exact:true}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption(producer.id);
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
- expect(links[0].holderId).toBe(holder.holderId);
+ // The wine's producer is known, so the chosen row links to it in one tap.
+ await holderList.getByRole('button',{name:`Link to ${producer.canonicalName}`,exact:true}).click();
+ await expect(holderList.getByText(`Linked to ${producer.canonicalName}`,{exact:true})).toBeVisible();
+ await expect(dialog.getByRole('region',{name:'This wine’s producer'}).getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ expect(links.map(l=>[l.holderId,l.producerId])).toEqual([[holder.holderId,producer.id]]);
  await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
  dialog=page.getByRole('dialog');
  await expect(dialog).toHaveAccessibleName(new RegExp(`^(${parcelCru.villages.join('|')})$`));
  await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
- await expect(dialog.getByRole('link',{name:producer.canonicalName,exact:true})).toBeVisible();
+ const card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText(`Linked to ${parcelCru.row.name}`);
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await page.setViewportSize({width:1280,height:900});
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-linked-shared-desktop.png`)});
- await dialog.getByRole('button',{name:'Change link'}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption(other.id);
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
- expect(links[0].producerId).toBe(other.id);
- await expect(dialog.getByRole('link',{name:other.canonicalName,exact:true})).toHaveCount(0);
+ await card.getByRole('button',{name:`Unlink ${parcelCru.row.name}`,exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ expect(links).toEqual([]);
+ expect(catalogue).toBe(0);
  await page.keyboard.press('Escape');
  await expect(page.getByRole('button',{name:'View village map'})).toBeFocused();
 });
 
-test('Échezeaux pilot: a verified producer link and opt-in name matches',async({page},testInfo)=>{
+test('Échezeaux pilot: a verified producer link with no name-only guess',async({page},testInfo)=>{
  await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Mongeard-Mugneret'});
  // No verified links are published yet, so this adds one to a copy of the real data.
  await page.route('**/maps/echezeaux-parcels.*',async route=>{
@@ -389,12 +381,9 @@ test('Échezeaux pilot: a verified producer link and opt-in name matches',async(
  await expect(card).toContainText('THIS WINE’S PRODUCER');
  await expect(card).toContainText('Verified parcel links');
  await expect(dialog.getByLabel('Map legend')).toContainText('Producer · verified');
- const possible=dialog.getByRole('checkbox',{name:/Show possible matches/});
- await expect(possible).not.toBeChecked();
- await expect(dialog.getByText('Possible match · name only')).toHaveCount(0);
- await possible.check();
- await expect(dialog.locator('.village-map-producer.is-possible')).toContainText('GFA Mongeard Mugneret et Fils');
- await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
+ await expect(dialog.getByRole('checkbox',{name:/Show possible matches/})).toHaveCount(0);
+ await expect(dialog.getByText(/Looks like/)).toHaveCount(0);
+ await expect(dialog.getByLabel('Map legend')).not.toContainText('possible');
  await page.screenshot({path:testInfo.outputPath('echezeaux-producer-desktop.png')});
 });
 
