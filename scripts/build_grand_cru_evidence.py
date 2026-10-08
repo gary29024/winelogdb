@@ -45,6 +45,8 @@ LEAD_LABELS = {
     'family-company-record': 'Family company record',
     'group-company-record': 'Group company record',
     'name-and-seat-crosswalk': 'Identity by name and seat only',
+    # Tier 3 placeholder: the domaine's own dated reply, recorded as a domaine-outreach source.
+    'domaine-confirmed': 'Confirmed by the domaine',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
 SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
@@ -86,7 +88,7 @@ def short_reference(parcel_id):
 SOURCE_KINDS = {
     'critic-research': 'research', 'registry-dataset': 'data', 'geometry': 'data', 'court-decision': 'official',
     'registry': 'company', 'registry-aggregator': 'company', 'company-filing': 'company', 'legal-notice-republisher': 'company',
-    'estate': 'estate', 'estate-hosted-press': 'estate', 'estate-visit-report': 'estate',
+    'estate': 'estate', 'estate-hosted-press': 'estate', 'estate-visit-report': 'estate', 'domaine-outreach': 'estate',
 }
 
 

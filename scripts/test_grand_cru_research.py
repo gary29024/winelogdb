@@ -94,6 +94,22 @@ class FarmingResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'cannot establish current farming'):
             self.build(curation)
 
+    def test_domaine_confirmation_needs_the_domaines_own_reply(self):
+        # Tier 3 placeholder: only a dated domaine-outreach source can carry the strongest heading.
+        curation = copy.deepcopy(self.curation)
+        holder = next(h for h in curation['holders'] if len(h['candidateNames']) == 1)
+        holder['basis'] = 'domaine-confirmed'
+        with self.assertRaisesRegex(ValueError, 'needs a domaine-outreach source'):
+            self.build(curation)
+        curation['sources'].append({'id': 'outreach-reply', 'title': 'Reply from the domaine', 'url': 'https://example.test/reply',
+                                    'type': 'domaine-outreach', 'documentDate': '2026-10-08'})
+        holder['sourceIds'] = [*holder['sourceIds'], 'outreach-reply']
+        result = self.build(curation)
+        evidence = build_evidence(result, curation, self.history, json.loads(self.asset)['features'])
+        self.assertEqual(evidence['holderDomains'][holder['holderId']]['basis'], 'domaine-confirmed')
+        self.assertEqual(evidence['sources']['outreach-reply']['kind'], 'estate')
+        self.assertEqual(result['counts']['currentFarmerConfirmed'], 0)
+
     def test_no_orphan_evidence_or_wrong_cru_reference(self):
         curation = copy.deepcopy(self.curation)
         curation['holders'][0]['sourceIds'] = ['nonexistent-source']

@@ -3,6 +3,7 @@ import {existsSync,readFileSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 import {ownerName} from '../../src/lib/places/parcelOwners';
+import {groupParcelRightHolders,type HolderResearch} from '../../src/lib/places/parcelPresentation';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
 import type {ParcelEvidenceData} from '../../src/features/vineyards/ParcelEvidence';
 import {unlistedRegionalMapIds} from '../../src/lib/places/unlistedRegionalMaps';
@@ -146,6 +147,8 @@ for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Éc
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();
  const canvas=dialog.locator('.village-map-canvas'),owners=dialog.locator('ul.village-map-owners');
+ // The rows regroup once domaine research loads; wait for its key so the rows below stay attached.
+ await expect(dialog.getByText('Link strength',{exact:true})).toBeVisible();
  await expect(owners.locator('li').last()).toBeVisible();
  // Scroll down to the owner list: the map must still be on screen, under the header.
  await owners.locator('li').last().scrollIntoViewIfNeeded();
@@ -198,8 +201,9 @@ for(const route of allMapRoutes){
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(false);
   const toggle=dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'});
   await toggle.check();
-  await dialog.getByLabel('Group right holders by').selectOption('holder');
   const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
+  // Rows are grouped by researched domaine; there is no legal-holder switch.
+  await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
   await expect(owners.getByRole('button')).toHaveCount(6);
   // The reference finder stays folded; it is the keyboard route to any parcel.
   await dialog.getByText('Find a parcel by cadastral reference').click();
@@ -208,9 +212,10 @@ for(const route of allMapRoutes){
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(true);
   // One legend: the parcel keys join the cru keys under the map.
   await expect(dialog.getByLabel('Map legend')).toContainText('No matched rights');
-  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','false');
-  await dialog.getByRole('button',{name:/Domaine de la Romanee Conti/}).click();
-  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','true');
+  const drc=owners.getByRole('button',{name:/^Domaine de la Romanée-Conti/});
+  await expect(drc).toHaveAttribute('aria-pressed','false');
+  await drc.click();
+  await expect(drc).toHaveAttribute('aria-pressed','true');
   await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
   const known=await parcel.locator('option',{hasText:'Domaine de la Romanee Conti'}).first().getAttribute('value');
   await parcel.selectOption(known!);
@@ -251,12 +256,16 @@ const parcelCru=(()=>{
  const evidenced=research.flatMap(source=>Object.keys(source.parcels)).filter(id=>parcels.includes(id)).sort();
  const hasDomaineLinks=research.some(source=>Object.keys(source.holderDomains).length>0);
  const holders=new Set(features.flatMap(f=>f.properties.recordedRights.map(r=>r.holderId))).size;
- const held=features.find(f=>f.properties.recordedRights.length)!;
+ // The holder list always groups by researched domaine, so the journey picks a row that stands for one legal holder.
+ const holderDomains:Record<string,HolderResearch>={};
+ for(const source of research)for(const [id,item] of Object.entries(source.holderDomains as Record<string,HolderResearch>))holderDomains[id]??=item;
+ const rows=groupParcelRightHolders(features,cru.parentFeatureId,holderDomains);
+ const row=rows.find(g=>g.holderIds.length===1&&rows.filter(o=>o.name===g.name).length===1)!;
  const unknown=features.find(f=>!f.properties.recordedRights.length);
  const multiple=features.find(f=>f.properties.recordedRights.length>1);
  // A cross-commune cru can open in a configured village other than the bundle's first one.
  const villages=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.filter(v=>cru.villageMaps.includes(v.id)).map(v=>v.name);
- return {...cru,villages,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,held,unknown,multiple};
+ return {...cru,villages,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,rows:rows.length,row,unknown,multiple};
 })();
 
 test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped producer links from its config`,async({page},testInfo)=>{
@@ -303,10 +312,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await dialog.getByRole('button',{name:'Retry parcels'}).click();
  await expect(dialog.getByText(`${parcelCru.parcels.length} parcels in ${parcelCru.name}`,{exact:false})).toBeVisible();
  expect(downloads).toBe(2);
- if(parcelCru.hasDomaineLinks){
-  await expect(dialog.getByLabel('Group right holders by')).toHaveValue('domaine');
-  await dialog.getByLabel('Group right holders by').selectOption('holder');
- }
+ await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
+ if(parcelCru.hasDomaineLinks)await expect(dialog.getByText(/Domaine headings are research links/)).toBeVisible();
  await dialog.getByText('Find a parcel by cadastral reference').click();
  const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
  await expect(parcel.getByRole('option')).toHaveCount(parcelCru.parcels.length+1);
@@ -318,7 +325,6 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
   await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
   await expect(details).toContainText('No matched dated rights, sale or notice records in the reviewed sources.');
  }
- if(!parcelCru.hasDomaineLinks)await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
  await expect(details.getByText('Verified operator')).toHaveCount(0);
  if(parcelCru.unknown){
   await parcel.selectOption(parcelCru.unknown.properties.id);
@@ -331,12 +337,15 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  }
  const holderSection=dialog.locator('.village-map-owner-section');
  if(!await holderSection.getByRole('list').isVisible())await holderSection.locator('summary').click();
- if(parcelCru.holders>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.holders} right holders`,exact:true}).click();
+ if(parcelCru.rows>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.rows} ${parcelCru.hasDomaineLinks?'entries':'right holders'}`,exact:true}).click();
  const holderList=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
- await expect(holderList.getByRole('button')).toHaveCount(parcelCru.holders);
- const holder=parcelCru.held.properties.recordedRights[0];
- if(parcelCru.holders>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
- await holderList.getByRole('button').filter({hasText:ownerName(holder.name)}).click();
+ await expect(holderList.getByRole('button')).toHaveCount(parcelCru.rows);
+ // Every legal holder is still counted when several share a domaine row.
+ await expect(holderSection.locator('.village-map-count')).toHaveText(parcelCru.rows===parcelCru.holders?`${parcelCru.holders}`:`${parcelCru.rows} listed · ${parcelCru.holders} legal holders`);
+ const holder={holderId:parcelCru.row.holderIds[0],name:parcelCru.row.legalNames[0]};
+ if(parcelCru.rows>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
+ const rowName=new RegExp(`^${parcelCru.row.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\u00a0?$`);
+ await holderList.getByRole('button').filter({has:page.locator('.village-map-owner-name',{hasText:rowName})}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();

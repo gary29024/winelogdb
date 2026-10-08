@@ -43,7 +43,7 @@ STATUSES = ACTIVE_LINK_STATUSES | {'retired'}
 SEARCH_OUTCOMES = {'linked', 'no-link-found', 'partial'}
 SOURCE_TYPES = {'registry', 'registry-aggregator', 'company-filing', 'legal-notice-republisher', 'court-decision',
                 'government-decision', 'government-event', 'estate', 'estate-hosted-press', 'importer', 'merchant',
-                'press', 'critic-research', 'book', 'auction'}
+                'press', 'critic-research', 'book', 'auction', 'domaine-outreach'}
 DATE = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 HOLDER_ID = re.compile(r'^(\d{9}|U\d+)$')
 # Exported wording never claims farming.

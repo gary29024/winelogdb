@@ -197,6 +197,13 @@ heading (`holderDomains`, and with it domaine grouping); two or more stay listed
 Only a company-record row `basis` groups (`company-identity`, `family-company-record`,
 `group-company-record` and the estate and identity bases); lease, mandate, management,
 succession and name-and-seat rows stay leads under the legal holder.
+The app marks each row with a link-strength seal check after the name: company record
+(strong, green), estate or registry source (medium, grey) and lead (weak, dashed amber
+with "?"), with `domaine-confirmed` reserved above them as the only solid seal (Tier 3).
+The reason shows in the seal's tooltip and accessible name, not as row text.
+The list is always grouped this way (there is no legal-holder switch). Rows show the
+research name only; recorded legal names stay searchable, appear in each parcel's details
+and are counted in the list total. Sources are summarised under "About this data", not per row.
 Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
 also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
 identifier no cru records, an unused source or a stale report.
@@ -204,6 +211,11 @@ identifier no cru records, an unused source or a stale report.
 ### Tier 3 — deferred
 
 - Paid land-registry (SPF) copies, domaine or CVI outreach.
+- Placeholder for outreach: record a domaine's own dated reply as a `domaine-outreach` source.
+  Only then may a holder row use basis `domaine-confirmed` (the research build rejects it
+  otherwise), shown as the solid seal, "Confirmed by domaine". It confirms the
+  holder-to-domaine relation, not farming, which still needs the verified-operator gate.
+  Keep correspondence text and personal contact details out of the repository.
 
 ## 3. Make the pipeline generic first
 
