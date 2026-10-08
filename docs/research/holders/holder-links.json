@@ -5711,6 +5711,1653 @@
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
       "pageCount": 31
+    },
+    {
+      "id": "bm-arlaud-gfa-2013",
+      "title": "444144190: arlaud gfa 2013",
+      "url": "https://actes.ccm2.net/acte/4d6f4544-61da-4c40-b4e6-2b1470bb3c20",
+      "type": "company-filing",
+      "documentDate": "2013-04-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:11.275839+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4d6f4544-61da-4c40-b4e6-2b1470bb3c20",
+      "sha256": "048b71706007cb05609960257b57aefdd87f5c04ee6c89c03da6cdc5f9479220",
+      "bytes": 11857043,
+      "finding": "Donation deed identifies GFA du Domaine Arlaud Père et Fils 444144190 and separate producing SCEA 418411518. Attached historical statutes give Chambolle AB121 1,421 m² and AB76 660 m²; both match current U21586080. P5 recites a 30 June 1998 long-term lease of all GFA property to the named SCEA, without duration, original lease or current operation confirmation. The separate GFA registration 429825441 was also checked and is not equated with this exact-schedule legal company.",
+      "filingDate": "2014-12-18",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        28,
+        34,
+        35,
+        39
+      ],
+      "imageReviewedPages": [
+        5,
+        35
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-auvenay-2001",
+      "title": "778252445: auvenay 2001",
+      "url": "https://actes.ccm2.net/acte/211c190d-e869-45ef-8160-338682de40e8",
+      "type": "company-filing",
+      "documentDate": "2001-12-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:58.073293+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/211c190d-e869-45ef-8160-338682de40e8",
+      "sha256": "89352b6d2ebf22ed21a94b10409a2d11016f28d68081e90efe1ed8a2aac4e147",
+      "bytes": 2003528,
+      "finding": "Registration bundle includes original 15 February 1960 statutes and 10 December 2001 updates identifying the wine company. No Bonnes-Mares reference-and-area schedule.",
+      "filingDate": "2001-12-27",
+      "pageCount": 54,
+      "screenedPages": 54,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-auvenay-2019",
+      "title": "778252445: auvenay 2019",
+      "url": "https://actes.ccm2.net/acte/7fe94976-ca43-40ca-b699-eb67dffd9f6d",
+      "type": "company-filing",
+      "documentDate": "2019-12-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:54.082109+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7fe94976-ca43-40ca-b699-eb67dffd9f6d",
+      "sha256": "01d5b1b4fcb312921c41657631583c34f87763e95888ce68f631c5417e762a57",
+      "bytes": 1505949,
+      "finding": "Capital and updated statutes identify SCEA du Domaine d Auvenay. No individual AB90/91 schedule located.",
+      "filingDate": "2020-07-07",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-auvenay-2024",
+      "title": "778252445: auvenay 2024",
+      "url": "https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7",
+      "type": "company-filing",
+      "documentDate": "2024-05-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:57.273337+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7",
+      "sha256": "b06c32f1247974b8bc05a0409d73f12b499c5670d64b716b8923a4b5af456d7d",
+      "bytes": 1312121,
+      "finding": "Current filed statutes identify the Domaine d Auvenay wine company; original property contributions concern other communes. No individual AB90/91 schedule.",
+      "filingDate": null,
+      "pageCount": 26,
+      "screenedPages": 26,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bachus-1995",
+      "title": "401538525: bachus 1995",
+      "url": "https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19",
+      "type": "company-filing",
+      "documentDate": "1995-06-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:19.924297+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19",
+      "sha256": "3c5d19c9fc018fab41e8d527c45c35387663d8c2c5e988b3f12a8557846ac703",
+      "bytes": 1114188,
+      "finding": "Original GFA Bachus 21 formation contains the acquisition/lease mandates repeated in the 2024 copy, without the U21373997 current AB437/439 references. A mandate is not an executed acquisition or lease.",
+      "filingDate": "1995-07-06",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        2,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bachus-2024",
+      "title": "401538525: bachus 2024",
+      "url": "https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b",
+      "type": "company-filing",
+      "documentDate": "2024-12-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:21.524234+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b",
+      "sha256": "4c00cb0cb15e0244ae90ff336b83e9d426dee0a3478936054249f97da9cb3158",
+      "bytes": 1926114,
+      "finding": "GFA Bachus 21 statutes repeat mandates for acquisition and a lease to Domaine Drouhin-Laroze 398910034, naming AB438 362 m², AB440 1,560 m² and AB304 218 m². These are now recorded to Bouchard, not U21373997, whose parcels are AB437/439. No U-id identity established; original printed schedules may be external historical leads only, not current holder/tenancy assignments. Current AB438 is 436 m2 and AB440 is 1741 m2, unlike printed 362 and 1560. AB304 matches 218 m2 but is recorded to Bouchard, not this GFA. The printed sum also differs from the margin total; no corrections or reassignment to AB437/439.",
+      "filingDate": "2025-02-03",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        3,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "imageReviewedPages": [
+        27
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bart-clair-1994",
+      "title": "398367029: bart clair 1994",
+      "url": "https://actes.ccm2.net/acte/43893fc0-07ab-41e9-be2b-42e05bde84f6",
+      "type": "company-filing",
+      "documentDate": "1994-07-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:01.263502+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/43893fc0-07ab-41e9-be2b-42e05bde84f6",
+      "sha256": "09b2ea4380517982024d34b2c2618f32ee4e32bccc05d742bd35235d9f3553d2",
+      "bytes": 1070332,
+      "finding": "Founding GFA statutes repeat the AB41 1,490 m² and AB85 6,690 m² contribution, with generic long-term leasing obligations. Identity/property evidence, without an independent link to SCEV du Domaine Bart 343043600. Original date and schedule images pending.",
+      "filingDate": "1994-09-26",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        9,
+        32
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bart-clair-2022",
+      "title": "398367029: bart clair 2022",
+      "url": "https://actes.ccm2.net/acte/53e9e82f-1d7f-4d80-a1c1-4f054c6b4fa1",
+      "type": "company-filing",
+      "documentDate": "2022-05-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:00.838504+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/53e9e82f-1d7f-4d80-a1c1-4f054c6b4fa1",
+      "sha256": "5b1ca86c5b95a28da9ae7266a7f2b755f0186f31bd99e6f9b2c3141587034ee6",
+      "bytes": 1755016,
+      "finding": "Updated statutes identify GFA du Domaine Bart-Clair 398367029 and repeat contribution schedule AB41 1,490 m², including 350 m² of lande, and AB85 6,690 m². Both references and full areas match current U21459182. AB41 is described as Chambolle-Musigny rather than Bonnes-Mares; preserve partial overlap and source description. No named producer-company lease in selected bundle.",
+      "filingDate": "2022-07-13",
+      "pageCount": 39,
+      "screenedPages": 39,
+      "reviewedPages": [
+        1,
+        3,
+        9,
+        17
+      ],
+      "imageReviewedPages": [
+        17
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bertheau-2012",
+      "title": "326418761: bertheau 2012",
+      "url": "https://actes.ccm2.net/acte/31e2f8a9-78d6-445d-80ef-0c54caa8849b",
+      "type": "company-filing",
+      "documentDate": "2012-04-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:47.040350+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/31e2f8a9-78d6-445d-80ef-0c54caa8849b",
+      "sha256": "0d1ba7db3380190678e7af3fc40f3342715cbab7820bd64e34839b0818c970a9",
+      "bytes": 581483,
+      "finding": "Statutes updated 12 April 2012 reproduce the 20 November 1982 founding contribution: Chambolle-Musigny AB119 (2,417 m²) and AB79 (1,027 m²). This is holder/property evidence; the general leasing object does not name a current tenant.",
+      "filingDate": "2012-05-31",
+      "pageCount": 36,
+      "screenedPages": 36,
+      "reviewedPages": [
+        2,
+        3,
+        6,
+        15,
+        36
+      ],
+      "imageReviewedPages": [
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bertheau-2020",
+      "title": "326418761: bertheau 2020",
+      "url": "https://actes.ccm2.net/acte/90fa8a30-cf0e-4a9a-be6c-0685d6974943",
+      "type": "company-filing",
+      "documentDate": "2020-07-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:48.832679+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/90fa8a30-cf0e-4a9a-be6c-0685d6974943",
+      "sha256": "8ee425a09ce76e4920525d7517a17c1d4b59004200ec7b1a17a571f20a465476",
+      "bytes": 3034087,
+      "finding": "Donation bundle repeats GFA Bertheau et Fils’ original contributions, including Chambolle AB119 (2,417 m²) and AB79 (1,027 m²). Original contribution date and current copy date kept distinct. No named tenant in the reviewed selected bundle; family officers alone do not identify a separate producing business. Copy deed date still to verify.",
+      "filingDate": "2020-09-15",
+      "pageCount": 64,
+      "screenedPages": 64,
+      "reviewedPages": [
+        1,
+        30,
+        33,
+        34,
+        42,
+        48,
+        64
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bertheau-2024",
+      "title": "326418761: bertheau 2024",
+      "url": "https://actes.ccm2.net/acte/3b1fa017-3ea8-4bce-8d08-9bbbefe77308",
+      "type": "company-filing",
+      "documentDate": "2024-05-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:50.933971+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3b1fa017-3ea8-4bce-8d08-9bbbefe77308",
+      "sha256": "0c4c28f84ad9ec387f1bfc9b773f3ae338a6a9da78d3c0b5fd1417edd9ea9775",
+      "bytes": 1739641,
+      "finding": "Two-page minutes name a new co-manager and amend the management article. The free index calls this updated statutes but the actual document is an extract of minutes. No parcel schedule; deposit date unavailable in the free index.",
+      "filingDate": null,
+      "pageCount": 2,
+      "screenedPages": 2,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bons-consorts-2005",
+      "title": "482772282: bons consorts 2005",
+      "url": "https://actes.ccm2.net/acte/a7790bf4-6a0b-411e-8b6f-17949121f53b",
+      "type": "company-filing",
+      "documentDate": "2005-05-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:13.793254+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a7790bf4-6a0b-411e-8b6f-17949121f53b",
+      "sha256": "a9703019d7dcc9d2b76f4d80d318c4114b9d832a7484819cf526e5ed9d142862",
+      "bytes": 525939,
+      "finding": "Formation of Les Bons Consorts, cash contributions and general property powers. No AB96 schedule or named tenant.",
+      "filingDate": "2005-06-15",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        9,
+        16
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bons-consorts-2015",
+      "title": "482772282: bons consorts 2015",
+      "url": "https://actes.ccm2.net/acte/71d1cd03-f3fa-4fab-a7dd-b1123f85c2f0",
+      "type": "company-filing",
+      "documentDate": "2015-02-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:11.623004+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/71d1cd03-f3fa-4fab-a7dd-b1123f85c2f0",
+      "sha256": "c6cf8be50b4fcc6f1c3622539e3b3ea7a924e00d3382011215123c350d462b6c",
+      "bytes": 1504122,
+      "finding": "Conversion from civil company to GFA without a new legal person; no AB96 schedule or tenant identified.",
+      "filingDate": "2015-02-25",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        19
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bons-consorts-2018",
+      "title": "482772282: bons consorts 2018",
+      "url": "https://actes.ccm2.net/acte/a582b8d3-4595-497d-8c61-0e427cb927d5",
+      "type": "company-filing",
+      "documentDate": "2018-10-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:14.388252+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a582b8d3-4595-497d-8c61-0e427cb927d5",
+      "sha256": "ce12a959700c3d8ace2f5cfcb2a1811e9ea4bb823866cb48961616a5b331fce1",
+      "bytes": 3231311,
+      "finding": "Donation of shares in distinct Seysses-family companies. No AB96 schedule or explicit lessor/operator relation established; common family participation alone is not a producer-company link.",
+      "filingDate": "2019-04-08",
+      "pageCount": 68,
+      "screenedPages": 68,
+      "reviewedPages": [
+        1,
+        2,
+        6,
+        20,
+        53,
+        68
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bussiere-2009",
+      "title": "377495288: bussiere 2009",
+      "url": "https://actes.ccm2.net/acte/0c67b3ee-1f4b-4eb4-a539-bc6d6984ca77",
+      "type": "company-filing",
+      "documentDate": "2009-04-02",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:17.646746+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0c67b3ee-1f4b-4eb4-a539-bc6d6984ca77",
+      "sha256": "7bd10747a03d315691dbc14a431bd937f3d3b9863afc1ff838f1d94e82812ac3",
+      "bytes": 1116278,
+      "finding": "Statutes updated 2 April 2009, deposited 2012, give Chambolle AB66 1,070 m² in the GFA's original contribution. This matches U21155571's current reference and full area and supports a legal-holder identity crosswalk. No named lessee found; schedule image pending.",
+      "filingDate": "2012-03-30",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        2,
+        5,
+        6,
+        30
+      ],
+      "imageReviewedPages": [
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-bussiere-2026",
+      "title": "377495288: bussiere 2026",
+      "url": "https://actes.ccm2.net/acte/8e5f36f6-1b7e-44ab-9a79-a3e46d24ed98",
+      "type": "company-filing",
+      "documentDate": "2026-03-24",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:14.766710+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8e5f36f6-1b7e-44ab-9a79-a3e46d24ed98",
+      "sha256": "e7937341ef8db621aad794a7f21027ad500ddf1387d97118bc639026eb576df4",
+      "bytes": 3957976,
+      "finding": "Updated statutes identify GFA Clos de la Bussière 377495288 and retain the 22 December 1989 original contribution. OCR of older pages poor; exact AB66 schedule readable in 2009 copy. Shareholders and manager alone do not establish a separate Roumier producer-company relationship.",
+      "filingDate": "2026-06-04",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        20
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-cote-nuits-1995",
+      "title": "343567632: cote nuits 1995",
+      "url": "https://actes.ccm2.net/acte/425be87f-6775-4d1f-a1b1-2840effa7b37",
+      "type": "company-filing",
+      "documentDate": "1995-03-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:33.190251+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/425be87f-6775-4d1f-a1b1-2840effa7b37",
+      "sha256": "a19dad08829c7aacbe258d392c94ddc7562bd1a147927f21a319456979b2fc01",
+      "bytes": 18110,
+      "finding": "A one-page attestation changes the management company’s representative. It identifies the same GFA; no property schedule or producer-company relation.",
+      "filingDate": "1995-04-06",
+      "pageCount": 1,
+      "screenedPages": 1,
+      "reviewedPages": [
+        1
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-cote-nuits-2015",
+      "title": "343567632: cote nuits 2015",
+      "url": "https://actes.ccm2.net/acte/a49f0b2a-e0a9-49fa-af51-ba19103058a8",
+      "type": "company-filing",
+      "documentDate": "2015-12-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:34.214791+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a49f0b2a-e0a9-49fa-af51-ba19103058a8",
+      "sha256": "c9c794d3391d1d579c1c1b16267b6290bd74e4b2712b7f7dd6afcfb146ec3893",
+      "bytes": 297665,
+      "finding": "Statutes identify GFA de la Côte de Nuits 343567632 and management by La Française Real Estate Managers 399922699, effective registered-office move 1 January 2016. Cash capital and a general long-term leasing object; no named producer, Bonnes-Mares schedule or specific tenant.",
+      "filingDate": "2016-03-25",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-cpgc",
+      "title": "CPGC: GFA de la Cote de Nuits",
+      "url": "https://www.cpgc.fr/domaine-cotes-de-nuits/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09",
+      "sha256": "70dd2cd156f7248e5fde741f3050379eab307a26ecf1b054853d77bcb25225a5",
+      "bytes": 7721,
+      "retrievalNote": "Hash covers the combined saved web-tool public text capture, not raw HTML or PDF bytes. Direct download returned HTTP 503.",
+      "finding": "The fund describes its Chambolle-Musigny holdings, including Bonnes-Mares, and names Joel Hudelot followed by Dominique Le Guen and his wife. Undated commune-level reported tenancy; no individual references or current-season confirmation."
+    },
+    {
+      "id": "bm-dujac-gfa-2000",
+      "title": "322396185: dujac gfa 2000",
+      "url": "https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef",
+      "type": "company-filing",
+      "documentDate": "2000-05-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:31.498701+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef",
+      "sha256": "bc9924e21bd7dbfe721a6ab08e1439e7a3dec2fc29984b2996c18e8aca1e403a",
+      "bytes": 807147,
+      "finding": "The 31 May 2000 notarial deposit incorporates the 25 March 2000 conversion of Société Civile d’Exploitation du Domaine Dujac into GFA du Domaine Dujac, unchanged SIREN 322396185. Minutes p19 recite an eighteen-year métayage of all built and unbuilt property to Domaine Dujac SA from 1 July 1997. No individual Bonnes-Mares schedule or renewal is printed. Historical denomination suggests a candidate for U21117863, but no exact current parcel identity crosswalk establishes it; 322396185 is separately recorded in this same cru.",
+      "filingDate": "2000-07-21",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        19,
+        20,
+        23,
+        24
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-dujac-gfa-2018",
+      "title": "322396185: dujac gfa 2018",
+      "url": "https://actes.ccm2.net/acte/66933b15-daed-4bc3-a3bc-e0c24c268fd7",
+      "type": "company-filing",
+      "documentDate": "2018-10-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:36.093079+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/66933b15-daed-4bc3-a3bc-e0c24c268fd7",
+      "sha256": "95027f177bb3b1ca1d7ac5faa837490446b8455b07026ec36668195f9abaab82",
+      "bytes": 3232312,
+      "finding": "Donation and updated statutes distinguish GFA du Domaine Dujac 322396185, Domaine Dujac SAS 413372608 and Les Bons Consorts 482772282. Shared family share transfers do not independently establish a parcel-specific tenancy. No Bonnes-Mares cadastral schedule was located in the selected bundle.",
+      "filingDate": "2019-04-08",
+      "pageCount": 72,
+      "screenedPages": 72,
+      "reviewedPages": [
+        1,
+        7,
+        22,
+        36,
+        38,
+        40,
+        53,
+        57
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-dujac-sa-1997",
+      "title": "413372608: dujac sa 1997",
+      "url": "https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d",
+      "type": "company-filing",
+      "documentDate": "1997-07-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:24.830767+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d",
+      "sha256": "86d81ebadc7031fa8fad9f6693efab76082f360797af639ace589c2b1c159f4b",
+      "bytes": 620787,
+      "finding": "Formation identifies the producing Domaine Dujac SA 413372608, distinct from holder GFA 322396185. Cash subscriptions and wine-business object, without an individual Bonnes-Mares schedule.",
+      "filingDate": "1997-08-29",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        3,
+        18,
+        19
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-dujac-sas-2007",
+      "title": "413372608: dujac sas 2007",
+      "url": "https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68",
+      "type": "company-filing",
+      "documentDate": "2007-12-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:25.240541+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68",
+      "sha256": "20b6525951915a3c28ccb43373d2237b8778541670f17c5cad60180bd2e1c9d4",
+      "bytes": 827062,
+      "finding": "Conversion of Domaine Dujac SA to SAS, unchanged SIREN 413372608. No individual Bonnes-Mares schedule; corroborates operating-company identity only.",
+      "filingDate": "2008-02-27",
+      "pageCount": 25,
+      "screenedPages": 25,
+      "reviewedPages": [
+        1,
+        2,
+        4
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-grands-vins-2005",
+      "title": "483678264: grands vins 2005",
+      "url": "https://actes.ccm2.net/acte/da09000a-ac9b-4bf6-a912-9a34d364dd53",
+      "type": "company-filing",
+      "documentDate": "2005-07-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:40.447654+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/da09000a-ac9b-4bf6-a912-9a34d364dd53",
+      "sha256": "39ce55b1b16f947e60a2005dcf6a5e55acff078f1c150a0a8bd6c4442244c937",
+      "bytes": 1094294,
+      "finding": "Original formation deed prints the same four Bonnes-Mares references and areas, with a historical Domaine de Bauclair lease recital. Exact schedule corroborated by the image-reviewed 2024 copy; original images still to review.",
+      "filingDate": "2005-08-24",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        1,
+        3,
+        7,
+        8,
+        14,
+        15
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-grands-vins-2024",
+      "title": "483678264: grands vins 2024",
+      "url": "https://actes.ccm2.net/acte/310a455a-6b34-4e9a-86cd-0fa6ea5deacd",
+      "type": "company-filing",
+      "documentDate": "2024-12-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:45.702273+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/310a455a-6b34-4e9a-86cd-0fa6ea5deacd",
+      "sha256": "4fdb895a0bb4e5af1aa4b1c0c03a01e251ee1d54afec3077c9638dda8f75ac61",
+      "bytes": 4679624,
+      "finding": "Updated statutes retain 27 July 2005 property contributions: Chambolle AB134 485 m² and Morey AR66 9,235 m², AR67 1,246 m², AR68 955 m². All four match current references, areas and holder denomination, supporting U21966026 -> 483678264. The schedule recites a 19 February 1986 lease to Domaine de Bauclair, 30 years from 1 January 1986, without renewal or an established producer-company crosswalk. The adjacent Jadot preference right concerns disposal, not tenancy.",
+      "filingDate": "2025-01-16",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        1,
+        9,
+        10,
+        16,
+        17
+      ],
+      "imageReviewedPages": [
+        1,
+        9,
+        10,
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-groffier-2007",
+      "title": "330763426: groffier 2007",
+      "url": "https://actes.ccm2.net/acte/7f58240a-1ac5-42b5-9620-a4f64f514f73",
+      "type": "company-filing",
+      "documentDate": "2007-07-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:04.503036+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7f58240a-1ac5-42b5-9620-a4f64f514f73",
+      "sha256": "88c134b2755400cfcd0898909a0ae6c3f697fc5d9df9139e16748dd4056f4109",
+      "bytes": 1198745,
+      "finding": "Donation of shares in Groffier Robert Père et Fils 330763426 with original cash-funded company statutes, not a donation of Bonnes-Mares land. No exact AB266 schedule.",
+      "filingDate": "2007-07-16",
+      "pageCount": 38,
+      "screenedPages": 38,
+      "reviewedPages": [
+        1,
+        3,
+        6,
+        11,
+        15,
+        17,
+        23,
+        38
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-groffier-2015",
+      "title": "330763426: groffier 2015",
+      "url": "https://actes.ccm2.net/acte/1cfb6849-7d72-45c3-9e20-b9f0f0863973",
+      "type": "company-filing",
+      "documentDate": "2015-12-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:10.798815+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1cfb6849-7d72-45c3-9e20-b9f0f0863973",
+      "sha256": "cd79953cff46436efb61bfa56fca3612acb5ff18169f93d04f2c4698221f1e10",
+      "bytes": 3575710,
+      "finding": "Conversion and renaming statutes identify the Groffier wine company and its business object, supporting company identity. No AB266 parcel schedule or individual lease; general long-term leasing language is not parcel-level evidence.",
+      "filingDate": "2016-02-29",
+      "pageCount": 62,
+      "screenedPages": 62,
+      "reviewedPages": [
+        1,
+        4,
+        16,
+        17,
+        40,
+        62
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-groffier-2022",
+      "title": "330763426: groffier 2022",
+      "url": "https://actes.ccm2.net/acte/780cedba-1b1c-4f98-9d82-33b96c3e9709",
+      "type": "company-filing",
+      "documentDate": "2022-08-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:05.192669+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/780cedba-1b1c-4f98-9d82-33b96c3e9709",
+      "sha256": "93eb53e5d73faf215c5cb58a294e05b6da12639a1b8763828a60b49c7ffdd5a7",
+      "bytes": 2247359,
+      "finding": "Capital reduction and updated statutes identify Domaine Robert Groffier Père et Fils 330763426 as the wine business. Its object expressly covers the Domaine Groffier business and wine sales. No AB266 property schedule; exact signing dates to verify.",
+      "filingDate": "2022-10-18",
+      "pageCount": 34,
+      "screenedPages": 34,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        9,
+        10,
+        34
+      ],
+      "imageReviewedPages": [
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-hudelot-history",
+      "title": "Domaine Hudelot-Baillet: estate history",
+      "url": "https://domainehudelotbaillet.com/en/our-story/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:33:38.871220+00:00",
+      "retrievedFrom": "https://domainehudelotbaillet.com/en/our-story/",
+      "sha256": "455003008eeb20c480822a1c9f8b1d3ff2a4003261257f4e0f37d2f661b6ac48",
+      "bytes": 107973,
+      "finding": "The estate identifies Joel Hudelot as its founder and Dominique Le Guen as his successor. This identifies the domaine named indirectly by the fund; no cadastral assignment is inferred."
+    },
+    {
+      "id": "bm-les-bonnes-mares-2018-capital",
+      "title": "841127582: les bonnes mares 2018 capital",
+      "url": "https://actes.ccm2.net/acte/38ac3cbc-75ff-4b76-a704-4481417e29f1",
+      "type": "company-filing",
+      "documentDate": "2018-07-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:31.902428+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/38ac3cbc-75ff-4b76-a704-4481417e29f1",
+      "sha256": "6254fe465d8c62671674a0dd17b01d0ced0b22543d4db5a57477b1fff2eed52d",
+      "bytes": 1243625,
+      "finding": "Cash-funded capital increase and updated GFA statutes permit Bonnes-Mares acquisitions and a future lease to an unnamed vigneron. No individual references, areas, executed lease or producer-company crosswalk.",
+      "filingDate": "2018-10-01",
+      "pageCount": 26,
+      "screenedPages": 26,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        8,
+        21,
+        26
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-les-bonnes-mares-2018-formation",
+      "title": "841127582: les bonnes mares 2018 formation",
+      "url": "https://actes.ccm2.net/acte/dde35736-4446-4065-aa0a-3ff0bd0d94ea",
+      "type": "company-filing",
+      "documentDate": "2018-07-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:31.425635+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/dde35736-4446-4065-aa0a-3ff0bd0d94ea",
+      "sha256": "a4840c372e2c272074e0e415ec0eab84f885fadbbf664491a4a0508121927430",
+      "bytes": 826109,
+      "finding": "Formation authorizes future acquisitions and a fermage lease to a vigneron yet to be selected. No individual schedule or named producer. Exact handwritten signing date on p15 pending.",
+      "filingDate": "2018-07-17",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        10,
+        15
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-lignier-1976",
+      "title": "429825250: lignier 1976",
+      "url": "https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa",
+      "type": "company-filing",
+      "documentDate": "1976-03-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:57.725294+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa",
+      "sha256": "35c4359ffbeb6b74d44cb9c396b99ddc8d2e09d7a59abb333a95366ca7275229",
+      "bytes": 3092481,
+      "finding": "The formation schedule names AB68 (525 m2) and AB130 (2335 m2); historical fractional interests are retained. A later 21 December 1990 contribution contains authority for a future lease to EARL Lignier Georges et Fils, not proof that an executed lease covers these Bonnes-Mares parcels.",
+      "filingDate": "2002-10-31",
+      "pageCount": 90,
+      "screenedPages": 90,
+      "reviewedPages": [
+        1,
+        15,
+        16,
+        20,
+        71
+      ],
+      "imageReviewedPages": [
+        15,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-lignier-2012",
+      "title": "429825250: lignier 2012",
+      "url": "https://actes.ccm2.net/acte/d36c4be6-51df-475d-b64d-62bacdc04aa5",
+      "type": "company-filing",
+      "documentDate": "2012-12-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:54.944396+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d36c4be6-51df-475d-b64d-62bacdc04aa5",
+      "sha256": "a8759233b78f85840b0aa42c5c09c371bf3d5fb845436afed254ad81d38309e9",
+      "bytes": 1983187,
+      "finding": "Capital increase and updated statutes retain historic general authority to sign a lease, without an individual Bonnes-Mares lease instrument.",
+      "filingDate": "2015-11-09",
+      "pageCount": 41,
+      "screenedPages": 41,
+      "reviewedPages": [
+        1,
+        36
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-lignier-2018",
+      "title": "429825250: lignier 2018",
+      "url": "https://actes.ccm2.net/acte/9e4a024d-bd07-48bc-aede-529e438675fd",
+      "type": "company-filing",
+      "documentDate": "2018-07-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:52.894971+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9e4a024d-bd07-48bc-aede-529e438675fd",
+      "sha256": "78506e2cd3055eb3433fdc016252e2f82c55331c896df17fbb6f1f20ce14e5c0",
+      "bytes": 1805069,
+      "finding": "Management and updated GFA statutes. No individual Bonnes-Mares schedule in this selected bundle.",
+      "filingDate": "2019-01-28",
+      "pageCount": 42,
+      "screenedPages": 42,
+      "reviewedPages": [
+        1,
+        11,
+        15
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-mommessin-thorin-2004",
+      "title": "685750598: mommessin thorin 2004",
+      "url": "https://actes.ccm2.net/acte/a64b848c-616b-4321-bc57-48668fbcfe0e",
+      "type": "company-filing",
+      "documentDate": "2004-11-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:20.389856+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a64b848c-616b-4321-bc57-48668fbcfe0e",
+      "sha256": "e780ac38319334f3d633753b3239a0473ab9e0905c895997cf29de4acbd85707",
+      "bytes": 564285,
+      "finding": "Vins et Vignobles 685750598 renamed Maison Mommessin et Thorin. No Morey AR64 parcel or independent identity crosswalk to recorded U18178981 Maison Mommessin; historical names must not be conflated.",
+      "filingDate": "2004-12-22",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-nabuca-2004",
+      "title": "383339470: nabuca 2004",
+      "url": "https://actes.ccm2.net/acte/9ed60b0a-1bfd-4354-9fea-a2bcc57ea660",
+      "type": "company-filing",
+      "documentDate": "2004-07-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:43.985387+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9ed60b0a-1bfd-4354-9fea-a2bcc57ea660",
+      "sha256": "fea3f475b0941bebfbdb495a6e408c061e7a5dc00a7773c6f6fa87d0ca79dde6",
+      "bytes": 658525,
+      "finding": "GFA Domaine Newman capital contribution concerns Beaune CX336/CZ483 premises, not a Bonnes-Mares acquisition or named tenant. Exact deed date pending.",
+      "filingDate": "2004-10-18",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1,
+        2,
+        5
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-nabuca-2014",
+      "title": "383339470: nabuca 2014",
+      "url": "https://actes.ccm2.net/acte/2cdc80e0-34c9-4f41-9440-7fcb299845a3",
+      "type": "company-filing",
+      "documentDate": "2014-05-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:47.250349+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2cdc80e0-34c9-4f41-9440-7fcb299845a3",
+      "sha256": "bfc37d42f80b014e0001e6076b233a14f29259278d6a5f3749629a38b18526b8",
+      "bytes": 3148978,
+      "finding": "Share transfer and renaming of GFA Domaine Newman to GFA Nabuca retain SIREN 383339470. Property schedule p8 gives AB82 1,530 m², AB97 417 m² and AB116 1,378 m², matching the current holder and individual areas. Powers to consent to 25-year métayage do not name the tenants or show execution. The authentic-copy footer p41 prints 12/05/2013, conflicting with the operative deed p6 and resolutions p3 dated 12 May 2014; retain this discrepancy.",
+      "filingDate": "2014-06-20",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        32,
+        35,
+        41,
+        42,
+        43
+      ],
+      "imageReviewedPages": [
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-nabuca-2026",
+      "title": "383339470: nabuca 2026",
+      "url": "https://actes.ccm2.net/acte/014b2169-36e3-418b-b645-0bbd14d8f0d0",
+      "type": "company-filing",
+      "documentDate": "2026-03-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:40.839159+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/014b2169-36e3-418b-b645-0bbd14d8f0d0",
+      "sha256": "878a989df9d92c1f66f7a4d22efbe3e53aa5e98f2f9b9b39add2c9ad1aabe4e6",
+      "bytes": 394926,
+      "finding": "Updated statutes identify GFA Nabuca 383339470 and private shareholders, with a general leasing object and no individual schedule or named tenant. Manager Arnaud Mortet alone is insufficient to link a producing domaine.",
+      "filingDate": "2026-03-30",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-rne-322396185",
+      "title": "Company register: GFA DU DOMAINE DUJAC (322396185)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=322396185&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:55.582849+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=322396185&per_page=10",
+      "sha256": "48f228845fa8f8a35b09778289aed4894ac33adef1822485c032391659e65e98",
+      "bytes": 4587,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-326418761",
+      "title": "Company register: GFA BERTHEAU ET FILS (326418761)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=326418761&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:13.805172+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=326418761&per_page=10",
+      "sha256": "ae85a776609b719d8f007d88962eb6456ece9653832fca72c574575015cd808b",
+      "bytes": 5212,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-330763426",
+      "title": "Company register: DOMAINE ROBERT GROFFIER PERE ET FILS (GROFFIER COLLECTION - DOMAINE DECELINE) (330763426)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=330763426&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:17.165063+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=330763426&per_page=10",
+      "sha256": "e0910ef11a592ae4e540cdd10182862ab8c2c80c900f6c29bfa86506e8035532",
+      "bytes": 3625,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-343043600",
+      "title": "Company register: SCEV DU DOMAINE BART (343043600)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=343043600",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:22:39.032270+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=343043600",
+      "sha256": "2c592e0f43907004707891c0b0cc83ac78d4cc39bc41aed17c2334719bc5edbf",
+      "bytes": 3634,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-343567632",
+      "title": "Company register: GFA COTE DE NUITS (343567632)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=343567632&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:11.623575+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=343567632&per_page=10",
+      "sha256": "8d09d172197242ee06e367105f8ed87e26bb7c05885b40f25f00022b72bbf415",
+      "bytes": 3054,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-348999020",
+      "title": "Company register: GFA DES VEROILLES (348999020)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=348999020&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:52.873771+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=348999020&per_page=10",
+      "sha256": "73de0094bdb8b6ff2248bc75f0b2d711073f1003467cb76934f0429bb68c178e",
+      "bytes": 4786,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-377495288",
+      "title": "Company register: GFA CLOS DE LA BUSSIERE (377495288)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=377495288&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:52.874771+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=377495288&per_page=10",
+      "sha256": "b67683a58e56260f7016963a1117fc42745cdf0c84074c66525c42871ba19ad6",
+      "bytes": 3714,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-383339470",
+      "title": "Company register: GFA NABUCA (383339470)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=383339470&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:13.515454+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=383339470&per_page=10",
+      "sha256": "5ec6e261ec187315c87a212769ef1fef0cbc3ec6fa4c08e336f9b383c5fc88d4",
+      "bytes": 3521,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-398367029",
+      "title": "Company register: GFA DU DOMAINE BART CLAIR (398367029)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=398367029&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:15.415225+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=398367029&per_page=10",
+      "sha256": "f54faab7e6da5dcaf24a283225a0ae100c6fb0df1640f4d7c1890bdc33a7c336",
+      "bytes": 4062,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-401538525",
+      "title": "Company register: GFA BACHUS 21 (401538525)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=401538525&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:52.803770+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=401538525&per_page=10",
+      "sha256": "305189ca01b6774dab76b4b4f66aedca988033407de1639c5ca0429eb234e024",
+      "bytes": 4325,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-413372608",
+      "title": "Company register: DOMAINE DUJAC (413372608)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:54.754429+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10",
+      "sha256": "45c5f8203eeba9c2c3e312de10e8e32f40b3454f6c814d0b1de023b705ed6cf6",
+      "bytes": 4169,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-418411518",
+      "title": "Company register: DOMAINE ARLAUD PERE ET FILS (418411518)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=418411518",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:33:45.590770+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=418411518",
+      "sha256": "96df59e598cdade5566f0c483ed23021cabaa25532ce3aaeb7b326c50f18f814",
+      "bytes": 3424,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-429825250",
+      "title": "Company register: DOMAINE GEORGES LIGNIER PERE ET FILS (429825250)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=429825250&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:14.806674+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=429825250&per_page=10",
+      "sha256": "f842657634c78e6109ab80bb57089d5f4110a65d99c4cf74e6fa27dfb1d60fbd",
+      "bytes": 4075,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-429825441",
+      "title": "Company register: GFA ARLAUD PERE ET FILS (429825441)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=429825441",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:22:38.730269+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=429825441",
+      "sha256": "0b531b9dc765c1c33a2395ea523c26609d85ed8b44235974d26c5d977dc22447",
+      "bytes": 2948,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-444144190",
+      "title": "Company register: GFA DU DOMAINE ARLAUD PERE ET FILS (444144190)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=444144190&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:15.852313+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=444144190&per_page=10",
+      "sha256": "3c201e919ab3c356edf5af60d6b0bcfe06686119f8296750253050e92deb6ad8",
+      "bytes": 4014,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-451563118",
+      "title": "Company register: DOMAINE HUDELOT BAILLET (451563118)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=451563118",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:33:44.567650+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=451563118",
+      "sha256": "245837cca1345464cc4d25907f38438e5a3f47bca2e80ca7609b3edb47ad03d7",
+      "bytes": 3291,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-482772282",
+      "title": "Company register: LES BONS CONSORTS (SFV BONS CONSORTS) (482772282)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=482772282&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:17.405062+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=482772282&per_page=10",
+      "sha256": "664a4c2ff4a366e93a0931cf7669c088e21b43e827ca7e855d14833468c8ec34",
+      "bytes": 4276,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-483678264",
+      "title": "Company register: GFA DES GRANDS VINS FINS (483678264)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=483678264&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:11.643607+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=483678264&per_page=10",
+      "sha256": "f03976d7691ce7b72226aa6c2a3376fc066415ed5001e7741b9796de404c2033",
+      "bytes": 6562,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-685750598",
+      "title": "Company register: MAISON MOMMESSIN ET THORIN (MMT) (685750598)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=685750598&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:59:52.872826+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=685750598&per_page=10",
+      "sha256": "bd61ebfc071c5489041c230423bf7df3253b97244a47472175e933dcfa3e3154",
+      "bytes": 3227,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-778252445",
+      "title": "Company register: SCE DU DOMAINE D AUVENAY (778252445)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:14.806674+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10",
+      "sha256": "80dd05e96474a66a1e94b32ada170d13e767605a337f2fad70c02abe0bdf27ef",
+      "bytes": 3789,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-818134116",
+      "title": "Company register: VINES (818134116)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=818134116&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:11.623575+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=818134116&per_page=10",
+      "sha256": "2a1c8219fe794bfdd64eacce0f1dc16d8f5abd2d2e02b47042c85aad73c8d9bc",
+      "bytes": 3294,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-rne-841127582",
+      "title": "Company register: LES BONNES MARES (841127582)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=841127582&per_page=10",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T15:58:11.646576+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=841127582&per_page=10",
+      "sha256": "ddd426068035d954aa287ba75b854c8f2ec2195710e31bb988003c1f25aedfe3",
+      "bytes": 7113,
+      "finding": "Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming."
+    },
+    {
+      "id": "bm-veroilles-2025",
+      "title": "348999020: veroilles 2025",
+      "url": "https://actes.ccm2.net/acte/a4768e36-1bbf-4177-b811-305761677fc2",
+      "type": "company-filing",
+      "documentDate": "2024-07-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:22.655638+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a4768e36-1bbf-4177-b811-305761677fc2",
+      "sha256": "8043cca50d1c8f12775e23e89b90f518192a902b4be085ca3aa24ea1657c5688",
+      "bytes": 4902006,
+      "finding": "Updated GFA des Véroilles 348999020 statutes retain 24 September 1988 formation. Article 17bis mandates acquisition of Chambolle AB59 (689 m²), with handwritten additions 45,46,56,60,42,43 without individual areas. AB46 is not an exact filing match; mandate does not establish execution, tenant or a distinct U21197768 company crosswalk. Update date on cover to verify. Cover date 11 July 2024 is partly overlaid by the certification signature; original statutes dated 24 September 1988.",
+      "filingDate": "2025-10-07",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        11,
+        21
+      ],
+      "imageReviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-vines-2016-change",
+      "title": "818134116: vines 2016 change",
+      "url": "https://actes.ccm2.net/acte/2b3717ee-f795-4f4f-8794-3319723dd44e",
+      "type": "company-filing",
+      "documentDate": "2016-05-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:37.954059+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2b3717ee-f795-4f4f-8794-3319723dd44e",
+      "sha256": "4bd8b3a8c72f2a994d7fd3ce708cc2120b73b0c764ee06b797e6553866d0168b",
+      "bytes": 971348,
+      "finding": "Office and president change; selected filed statutes provide no Bonnes-Mares schedule or named external producer. Officer identities alone do not establish a domaine link.",
+      "filingDate": "2016-06-10",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-vines-2016-formation",
+      "title": "818134116: vines 2016 formation",
+      "url": "https://actes.ccm2.net/acte/b6587f8e-a343-4b72-bf80-1f17d64a58f7",
+      "type": "company-filing",
+      "documentDate": "2016",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:37.882059+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b6587f8e-a343-4b72-bf80-1f17d64a58f7",
+      "sha256": "de948de6a666aedc1165e11032a8dc7350587047057e7240416fe225c18d28d1",
+      "bytes": 888588,
+      "finding": "Cash-funded VINES company formation with generic vineyard operating powers; no individual Bonnes-Mares schedule or producer-company relation. Exact signing date pending.",
+      "filingDate": "2016-02-04",
+      "pageCount": 22,
+      "screenedPages": 22,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        20,
+        22
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-vines-2017",
+      "title": "818134116: vines 2017",
+      "url": "https://actes.ccm2.net/acte/d37ccb08-2e14-4c59-b6aa-e51c33a0b119",
+      "type": "company-filing",
+      "documentDate": "2017-11-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:01:36.241081+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d37ccb08-2e14-4c59-b6aa-e51c33a0b119",
+      "sha256": "b7cf0138717b8313bd2694bbf4195ace88542daea510952908bc33f789a3da94",
+      "bytes": 1059846,
+      "finding": "Capitalization and general agricultural object; no Bonnes-Mares reference, named producer-company relation or parcel lease.",
+      "filingDate": "2018-03-15",
+      "pageCount": 22,
+      "screenedPages": 22,
+      "reviewedPages": [
+        1,
+        2,
+        9,
+        10
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-vins-vignobles-1997",
+      "title": "685750598: vins vignobles 1997",
+      "url": "https://actes.ccm2.net/acte/590b0871-84b1-4398-8c6c-32beee776cca",
+      "type": "company-filing",
+      "documentDate": "1997-03-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:02:25.139958+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/590b0871-84b1-4398-8c6c-32beee776cca",
+      "sha256": "bdb83350f4c148a7a4e40733de47c12420e607ce68f5ef69f108b129f0016e05",
+      "bytes": 1048072,
+      "finding": "Corporate governance/year-end change of Vins et Vignobles; no Bonnes-Mares schedule, lease or U18178981 identity evidence.",
+      "filingDate": "1997-06-05",
+      "pageCount": 31,
+      "screenedPages": 31,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "bm-clos-tart-2017",
+      "title": "686042409: clos tart 2017",
+      "url": "https://actes.ccm2.net/acte/30227429",
+      "type": "company-filing",
+      "documentDate": "2017-11-16",
+      "filingDate": "2017-12-14",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:02.743599+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/30227429",
+      "sha256": "5f2f8543a72abcd726d1ff821b1f806c5640662074050ac0bd17c4fa39767bab",
+      "bytes": 921647,
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "imageReviewedPages": [],
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedule and dates checked against page images.",
+      "pageNumbering": "one-based PDF",
+      "finding": "The filed statutes identify Societe du Clos de Tart SIREN 686042409, preserve company continuity from the 1931 incorporation, and state the 16 November 2017 conversion from SA into SCEA. Wine-estate business object; no individual property schedule in this 18-page selection."
+    },
+    {
+      "id": "bm-mommessin-2009",
+      "title": "686042409: mommessin 2009",
+      "url": "https://actes.ccm2.net/acte/30227327",
+      "type": "company-filing",
+      "documentDate": "2009-06-13",
+      "filingDate": "2009-06-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:02.612046+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/30227327",
+      "sha256": "8838b69acb320ea62d3c421b6e7bd171957fd78ec8c4a9e963d0ca8972b768cf",
+      "bytes": 1109806,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        6,
+        7
+      ],
+      "imageReviewedPages": [],
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedule and dates checked against page images.",
+      "pageNumbering": "one-based PDF",
+      "finding": "The assembly renames Maison Mommessin to Famille Mommessin with unchanged SIREN 686042409. This is distinct from Maison Mommessin et Thorin 685750598. No individual cadastral schedule in this 28-page selection."
+    },
+    {
+      "id": "bm-mommessin-1998",
+      "title": "686042409: mommessin 1998",
+      "url": "https://actes.ccm2.net/acte/30227371",
+      "type": "company-filing",
+      "documentDate": "1998-12-12",
+      "filingDate": "1999-01-14",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:01.869149+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/30227371",
+      "sha256": "db602a9f6324e23fa42dff6aac42275fe825bddfda16bd5beac7169e790f0b0e",
+      "bytes": 1420477,
+      "pageCount": 44,
+      "screenedPages": 44,
+      "reviewedPages": [
+        1,
+        6,
+        13,
+        15,
+        19,
+        23,
+        24
+      ],
+      "imageReviewedPages": [],
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedule and dates checked against page images.",
+      "pageNumbering": "one-based PDF",
+      "finding": "The assembly approves contribution of agricultural business assets of the Mommessin-Bellenand indivision to Maison Mommessin 686042409. The indivision previously held the Clos de Tart business under a vigneronnage lease from the company. The contribution concerns business assets; it does not provide an exact individual cadastral schedule or verify present operation."
+    },
+    {
+      "id": "bm-clos-tart-2022",
+      "title": "686042409: clos tart 2022",
+      "url": "https://actes.ccm2.net/acte/4337198",
+      "type": "company-filing",
+      "documentDate": "2022-09-30",
+      "filingDate": "2023-04-13",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:02.749799+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4337198",
+      "sha256": "14985b0a407579b795d0b1a8115de52033971837b85f3e3b3b3b3da6ac603028",
+      "bytes": 1854602,
+      "pageCount": 42,
+      "screenedPages": 42,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        26,
+        27
+      ],
+      "imageReviewedPages": [],
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedule and dates checked against page images.",
+      "pageNumbering": "one-based PDF",
+      "finding": "The 2022 assembly and updated statutes identify the same SCEA and an Artemis group share contribution and manager change. A corporate transaction does not establish a current parcel operator. No individual property schedule in this selection."
+    },
+    {
+      "id": "bm-clos-tart-2018",
+      "title": "686042409: clos tart 2018",
+      "url": "https://actes.ccm2.net/acte/30227419",
+      "type": "company-filing",
+      "documentDate": "2018-04-05",
+      "filingDate": "2018-07-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:14.468312+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/30227419",
+      "sha256": "b7a2cdd2db64472b3acb2b6d1e8d4dc8fa17abc430a366e0d8230a3503e426b7",
+      "bytes": 14350313,
+      "pageCount": 290,
+      "screenedPages": 290,
+      "reviewedPages": [
+        1,
+        2,
+        18,
+        35,
+        37,
+        116,
+        217,
+        218,
+        221,
+        227,
+        230,
+        231,
+        232
+      ],
+      "imageReviewedPages": [
+        217,
+        35,
+        232
+      ],
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedule and dates checked against page images.",
+      "pageNumbering": "one-based PDF",
+      "finding": "The 5 April 2018 share-transfer bundle includes an annex naming Societe du Clos de Tart as owner of Morey AR60 (72548 m2), AR64 (2780 m2), AR148 (1596 m2) and AR149 (29 m2), all matching the current Maison Mommessin U-id. It recites a 7 December 1932 acquisition and the 2003 division of AR62; the 2018 transaction transfers shares, not these parcels anew. The annex also documents the 2017 Famille Mommessin to Societe du Clos de Tart renaming without a new legal person. No present farming verification."
+    },
+    {
+      "id": "bm-rne-686042409",
+      "title": "Company register: Societe du Clos de Tart (686042409)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=686042409",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:51:52.509777+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=686042409",
+      "sha256": "600d68a92419cedefa867204832c310e141e72db8246ab3dead044ff692a14b9",
+      "bytes": 8284,
+      "finding": "Current registered SCEA identity. Earlier filed names Maison Mommessin and Famille Mommessin share this SIREN; distinct from Maison Mommessin et Thorin 685750598."
+    },
+    {
+      "id": "cm-winehog-clos-tart",
+      "title": "Winehog: Clos de Tart – the Tête de Cuvée of Morey",
+      "url": "https://winehog.org/clos-de-tart-the-tete-de-cuvee-of-morey-24696/",
+      "type": "critic-research",
+      "documentDate": "2015-09-14",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "dd6c5c5837afb7743a57a833815297a830bd737de7a480c8224096db8b3efb7e",
+      "bytes": 3065633,
+      "retrievedAt": "2026-10-08T15:22:08.993076+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash identifies the original archive; full text and images stay outside Git.",
+      "finding": "Names cadastre 60 at 7.2548 ha and 64 at 0.2780 ha as Clos de Tart. It reports that the latter retained the Bonnes-Mares cadastral name after its 1966 inclusion in Clos de Tart. Historical references and classification, not present farming."
     }
   ],
   "holders": {
@@ -6337,8 +7984,21 @@
             "recherche-entreprises.api.gouv.fr"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef"
+          ],
+          "outcome": "linked",
+          "note": "Existing provisional family-company lead retained. The 2000 conversion recites an 18-year metayage from 1997 to Domaine Dujac SA without an individual Bonnes-Mares schedule or renewal. Distinct operating-company filings also screened."
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 140,
+        "note": "Two GFA filings (96 pages) and two distinct Dujac operating-company filings (44 pages); also reused for the unresolved U-id and Bons Consorts."
+      }
     },
     "322463894": {
       "links": [
@@ -6513,6 +8173,25 @@
         "filingsScreened": 5,
         "pagesRead": 156,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "326418761": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=326418761",
+            "https://entreprises.lefigaro.fr/gfa-bertheau-et-fils-21/entreprise-326418761"
+          ],
+          "outcome": "no-link-found",
+          "note": "The GFA statutes retain exact AB79/119 contributions. The family name alone does not establish a relationship to a separate producer company or current tenant."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 102,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
     "326533213": {
@@ -6855,6 +8534,39 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "330763426": {
+      "links": [
+        {
+          "id": "330763426/groffier",
+          "domaine": "Domaine Robert Groffier",
+          "relation": "owner-company",
+          "basis": "The filed 2015 conversion and 2022 statutes identify the wine-producing company and the same SIREN.",
+          "sourceIds": [
+            "bm-rne-330763426",
+            "bm-groffier-2015",
+            "bm-groffier-2022"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=330763426",
+            "https://entreprises.lefigaro.fr/domaine-robert-groffier-pere-et-fils-21/entreprise-330763426"
+          ],
+          "outcome": "linked",
+          "note": "Filed conversion and wine-business statutes identify Domaine Robert Groffier Pere et Fils. No exact AB266 filing was located."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 134,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
     "332161249": {
       "links": [
         {
@@ -6930,6 +8642,44 @@
         "filingsScreened": 2,
         "pagesRead": 33,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "343567632": {
+      "links": [
+        {
+          "id": "343567632/hudelot-baillet",
+          "domaine": "Domaine Hudelot-Baillet",
+          "relation": "reported-tenancy",
+          "basis": "The fund describes its Chambolle-Musigny holding, including Bonnes-Mares, under the Hudelot/Le Guen succession identified by the estate history. Undated report; individual lease scope and current season are unconfirmed.",
+          "sourceIds": [
+            "bm-rne-343567632",
+            "bm-cote-nuits-2015",
+            "bm-cpgc",
+            "bm-hudelot-history",
+            "bm-rne-451563118"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "bonnes-mares"
+          ]
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=343567632",
+            "https://entreprises.lefigaro.fr/gfa-cote-de-nuits-75/entreprise-343567632"
+          ],
+          "outcome": "linked",
+          "note": "The company register and statutes identify GFA Cote de Nuits. The fund reports a Chambolle-Musigny tenancy; the estate history identifies Hudelot-Baillet. Undated report, no executed parcel lease."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 19,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
     "348024928": {
@@ -7368,6 +9118,25 @@
           "outcome": "linked"
         }
       ]
+    },
+    "383339470": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=383339470",
+            "https://entreprises.lefigaro.fr/gfa-nabuca-21/entreprise-383339470"
+          ],
+          "outcome": "no-link-found",
+          "note": "The 2014 deed renames GFA Domaine Newman to GFA NabuCa without creating a new legal person. Its exact schedule matches three parcels. Individual managers and a mandate naming no tenant do not establish a current producer link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 86,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
     },
     "383925674": {
       "links": [
@@ -8089,6 +9858,25 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "429825250": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=429825250",
+            "https://entreprises.lefigaro.fr/domaine-georges-lignier-pere-et-fils-21/entreprise-429825250"
+          ],
+          "outcome": "no-link-found",
+          "note": "This legal holder is a GFA. Its 1976 schedule matches AB68/130, with historical fractional interests retained. Later future-lease authority does not prove the named operating company leases these parcels."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 173,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
     "431340140": {
       "links": [
         {
@@ -8422,6 +10210,25 @@
       "effort": {
         "filingsScreened": 8,
         "pagesRead": 167
+      }
+    },
+    "482772282": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=482772282",
+            "https://entreprises.lefigaro.fr/les-bons-consorts-21/entreprise-482772282"
+          ],
+          "outcome": "no-link-found",
+          "note": "Cash formation, GFA conversion and family share donation do not establish a specific AB96 acquisition, producer-company relationship or executed tenancy."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 103,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
     "482807393": {
@@ -9454,6 +11261,38 @@
         }
       ]
     },
+    "778252445": {
+      "links": [
+        {
+          "id": "778252445/auvenay",
+          "domaine": "Domaine d Auvenay",
+          "relation": "owner-company",
+          "basis": "The 2024 statutes identify SCEA du Domaine d Auvenay and its wine business.",
+          "sourceIds": [
+            "bm-rne-778252445",
+            "bm-auvenay-2024"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=778252445",
+            "https://entreprises.lefigaro.fr/sce-du-domaine-d-auvenay-21/entreprise-778252445"
+          ],
+          "outcome": "linked",
+          "note": "The statutes and register explicitly identify the Domaine d Auvenay wine company. No exact AB90/91 schedule was located."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 113,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
     "778256123": {
       "links": [
         {
@@ -9788,6 +11627,25 @@
         "pagesRead": 141
       }
     },
+    "818134116": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=818134116",
+            "https://entreprises.lefigaro.fr/vines-21/entreprise-818134116"
+          ],
+          "outcome": "no-link-found",
+          "note": "VINES cash capital and generic wine-business objects do not identify a separate domaine or individual Bonnes-Mares parcels."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 76,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
     "824253181": {
       "searches": [
         {
@@ -9881,6 +11739,25 @@
         "filingsScreened": 3,
         "pagesRead": 56,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "841127582": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=841127582",
+            "https://entreprises.lefigaro.fr/les-bonnes-mares-92/entreprise-841127582"
+          ],
+          "outcome": "no-link-found",
+          "note": "Cash formation and capital filings authorize a future Bonnes-Mares acquisition and an unnamed tenant. No individual current schedule or producer-company link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 41,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
     "851405357": {
@@ -10555,6 +12432,58 @@
         "pagesRead": 90
       }
     },
+    "U18178981": {
+      "links": [
+        {
+          "id": "U18178981/clos-de-tart",
+          "domaine": "Clos de Tart",
+          "relation": "owner-company",
+          "basis": "Filed name continuity and the exact 2018 property schedule establish Societe du Clos de Tart 686042409 as the recorded Maison Mommessin holder; the statutes identify the estate wine company. AR64 is described as part of Clos de Tart by Winehog despite its Bonnes-Mares cadastral name.",
+          "sourceIds": [
+            "bm-rne-686042409",
+            "bm-mommessin-2009",
+            "bm-clos-tart-2017",
+            "bm-clos-tart-2018"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=685750598",
+            "https://entreprises.lefigaro.fr/maison-mommessin-et-thorin-69/entreprise-685750598"
+          ],
+          "outcome": "no-link-found",
+          "note": "Maison Mommessin is a candidate denomination. The company renaming filings contain no exact Morey AR64 company identity crosswalk; no Clos de Tart link assigned."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=686042409",
+            "https://entreprises.lefigaro.fr/societe-du-clos-de-tart-21/entreprise-686042409"
+          ],
+          "outcome": "linked",
+          "note": "The related Clos de Tart investigation identified the correct former Maison Mommessin company. Five further filings (422 pages) resolve the identity through name continuity and exact schedules, without relying on monopole reputation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 7,
+        "pagesRead": 471,
+        "note": "Two initial Mommessin et Thorin candidate filings (49 pages) plus five correct-company filings (422 pages), every page OCR-screened. Reused for Clos de Tart without a second screen."
+      },
+      "identity": {
+        "companySiren": "686042409",
+        "sourceIds": [
+          "bm-rne-686042409",
+          "bm-mommessin-2009",
+          "bm-clos-tart-2018"
+        ],
+        "limitation": "The filed company-name chain Maison Mommessin to Famille Mommessin to Societe du Clos de Tart is independently supported by the 2018 property annex matching all four current AR60/64/148/149 references and individual areas. The separate Mommessin et Thorin company 685750598 is not this holder. Company identity is not present operation."
+      }
+    },
     "U18179935": {
       "identity": {
         "companySiren": "353647951",
@@ -10777,6 +12706,108 @@
         "pagesRead": 25
       }
     },
+    "U21117863": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=322396185",
+            "https://entreprises.lefigaro.fr/gfa-du-domaine-dujac-21/entreprise-322396185"
+          ],
+          "outcome": "no-link-found",
+          "note": "The 2000 conversion explains the old Dujac exploitation denomination, but SIREN 322396185 separately holds AB72 in this same cru. It cannot also crosswalk this U-id without resolving the two recorded identities."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Reused the Dujac company investigation recorded under 322396185; no second screen counted."
+      }
+    },
+    "U21119406": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=U21119406"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact-name searches for BND 133 AB0045 did not establish a legal company or producer. No U-id crosswalk assigned."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
+    "U21119549": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=U21119549"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact-name searches for BND 133 AB0132 did not establish a legal company or producer. No U-id crosswalk assigned."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
+    "U21155571": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=377495288",
+            "https://entreprises.lefigaro.fr/gfa-clos-de-la-bussiere-21/entreprise-377495288"
+          ],
+          "outcome": "no-link-found",
+          "note": "The exact GFA denomination and AB66 (1070 m2) schedule support the U-id company identity. The old usufruct contribution does not establish a producer link; the separate shared SIREN entry has only a provisional Roumier-family lead, not sufficient to copy to this U-id."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 60,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      },
+      "identity": {
+        "companySiren": "377495288",
+        "sourceIds": [
+          "bm-rne-377495288",
+          "bm-bussiere-2009",
+          "bm-bussiere-2026"
+        ],
+        "limitation": "AB66 matches its 1070 m2 filed contribution and exact company identity. The separately keyed SIREN has no rights in this cru; its provisional producer lead is not copied."
+      }
+    },
+    "U21197768": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=348999020",
+            "https://entreprises.lefigaro.fr/gfa-des-veroilles-75/entreprise-348999020"
+          ],
+          "outcome": "no-link-found",
+          "note": "The GFA Veroilles candidate mentions AB46 in a handwritten acquisition mandate without an individual area. This does not establish the U-id identity, a completed purchase or a producer relationship."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 1,
+        "pagesRead": 21,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      }
+    },
     "U21200736": {
       "links": [],
       "searches": [
@@ -10794,6 +12825,25 @@
         "filingsScreened": 0,
         "pagesRead": 0,
         "note": "Registry and public-source search; no matched filing reviewed."
+      }
+    },
+    "U21373997": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=401538525",
+            "https://entreprises.lefigaro.fr/gfa-bachus-21-68/entreprise-401538525"
+          ],
+          "outcome": "no-link-found",
+          "note": "GFA Bachus 21 is a same-name candidate, without an identity crosswalk for AB437/439. Its historical acquisition and lease mandates name different references AB438/440/304; two areas also differ from the current cadastre. No completed transaction inferred."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 64,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
     "U21388794": {
@@ -10866,6 +12916,77 @@
           "cm-sepv-1994-approval"
         ],
         "limitation": "Company-record identity is supported by the exact denomination and the four matching AN40/57/60/61 schedules. It does not verify a 2026 operator or establish ownership merely from a published producer area."
+      }
+    },
+    "U21459182": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=398367029",
+            "https://entreprises.lefigaro.fr/gfa-du-domaine-bart-clair-21/entreprise-398367029"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact legal denomination, SIREN and individually matched AB41/85 schedules identify GFA Domaine Bart-Clair. SCEV du Domaine Bart 343043600 is separate; shared names and officers do not establish a producer relation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 71,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      },
+      "identity": {
+        "companySiren": "398367029",
+        "sourceIds": [
+          "bm-rne-398367029",
+          "bm-bart-clair-2022"
+        ],
+        "limitation": "AB41/85 match exact individual areas, legal denomination and SIREN; no separate producer-company identity inferred."
+      }
+    },
+    "U21586080": {
+      "links": [
+        {
+          "id": "U21586080/arlaud-lease",
+          "domaine": "Domaine Arlaud",
+          "relation": "lessor-per-filing",
+          "basis": "The 2013 deed recites the 30 June 1998 lease of GFA property to SCEA Domaine Arlaud Pere et Fils 418411518 and retains AB76/121 in its schedule. No original lease, duration or renewal reviewed.",
+          "sourceIds": [
+            "bm-arlaud-gfa-2013",
+            "bm-rne-418411518"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "bonnes-mares"
+          ],
+          "leaseStatus": "recited"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=444144190",
+            "https://entreprises.lefigaro.fr/gfa-du-domaine-arlaud-pere-et-fils-21/entreprise-444144190"
+          ],
+          "outcome": "linked",
+          "note": "The GFA deed identifies SIREN 444144190 and exact AB76/121 contribution areas; it recites a 1998 lease of its property to SCEA Domaine Arlaud Pere et Fils 418411518. No original lease, duration or renewal reviewed. The separate registry entry 429825441 is not equated with 444144190."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 1,
+        "pagesRead": 55,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      },
+      "identity": {
+        "companySiren": "444144190",
+        "sourceIds": [
+          "bm-rne-444144190",
+          "bm-arlaud-gfa-2013"
+        ],
+        "limitation": "The filed legal name and SIREN are supported by AB76/121 with exact individual areas. Separate GFA registry entry 429825441 is not treated as the same legal person; no present farming established."
       }
     },
     "U21837853": {
@@ -10979,6 +13100,33 @@
         "filingsScreened": 0,
         "pagesRead": 0,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "U21966026": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=483678264",
+            "https://entreprises.lefigaro.fr/gfa-des-grands-vins-fins-21/entreprise-483678264"
+          ],
+          "outcome": "no-link-found",
+          "note": "The exact legal name and four matching individual schedules support the provisional holder crosswalk. The old lease names Domaine de Bauclair; no independent modern identity or renewal was established. Jadot preference rights are not tenancy."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 59,
+        "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
+      },
+      "identity": {
+        "companySiren": "483678264",
+        "sourceIds": [
+          "bm-rne-483678264",
+          "bm-grands-vins-2024"
+        ],
+        "limitation": "AB134 and Morey AR66/67/68 match the filed legal name, SIREN and individual areas. Historical property evidence, not current operation."
       }
     },
     "U21966062": {

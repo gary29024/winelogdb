@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-B57ioynH.js"
+    "dist/client/assets/index-ClAesjuy.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CfRI0-45.js",
-    "dist/client/assets/SectionLabel-CCfJGeoS.js",
-    "dist/client/assets/SparklingDetailsCard-Bdy8eXBy.js",
-    "dist/client/assets/VillageMap-Cdk32qOk.js",
-    "dist/client/assets/burgundyAtlas-BOhP1AmR.js",
-    "dist/client/assets/index-B57ioynH.js",
-    "dist/client/assets/index-BLKoIuGT.js",
+    "dist/client/assets/FriendTagDialog-XNM2G-s0.js",
+    "dist/client/assets/SectionLabel-DXNTz8bs.js",
+    "dist/client/assets/SparklingDetailsCard-BOcwZ8rD.js",
+    "dist/client/assets/VillageMap-De61gBF2.js",
+    "dist/client/assets/burgundyAtlas-BAiUWHyV.js",
+    "dist/client/assets/index-ClAesjuy.js",
+    "dist/client/assets/index-iVuDVRx8.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-DaapVxoa.js",
-    "dist/client/assets/wineDetailCompact-DRk_b-9r.js"
+    "dist/client/assets/useModalFocus-DX8hH9rM.js",
+    "dist/client/assets/wineDetailCompact-DyUwFt7F.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5582097,
-  "evidenceGzipBytesTotal": 497743,
+  "evidenceBytesTotal": 5620375,
+  "evidenceGzipBytesTotal": 504087,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -42,10 +42,10 @@
     },
     {
       "cru": "bonnes-mares",
-      "file": "dist/client/assets/bonnes-mares.evidence-CqgdD8OG.js",
-      "sha256": "3140f30b2ec07e79d42caea59d2674e72f715e0f6cd50d1a7c109acf5d73dec7",
-      "bytes": 121220,
-      "gzipBytes": 11987
+      "file": "dist/client/assets/bonnes-mares.evidence-CTl6EjSK.js",
+      "sha256": "68ea8993470c15f7063b2e762a0d3afc6dff23cedd78c78f27c37cfd08e1054a",
+      "bytes": 159498,
+      "gzipBytes": 18331
     },
     {
       "cru": "chablis-grand-cru",
