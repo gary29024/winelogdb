@@ -114,12 +114,12 @@ describe('PR416 map feedback',()=>{
   view.rerender(<ParcelProducerLinker {...props} parentId="renamed" producer="A renamed catalogue producer" producerId="nicole"/>);
   expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
  });
- it('groups by sourced domaine names with legal identities searchable, not shown, and preserves highlighting when modes change',async()=>{
+ it('groups by sourced domaine names with legal identities searchable, not shown, and keeps highlighting when a parcel opens',async()=>{
   const map=mapStub();
   render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
   fireEvent.click(screen.getByRole('switch'));
-  await screen.findByLabelText('Group right holders by');
-  fireEvent.click(screen.getByRole('button',{name:/Show all \d+ entries/}));
+  fireEvent.click(await screen.findByRole('button',{name:/Show all \d+ entries/}));
+  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const faiveley=await within(list).findByRole('button',{name:/Domaine Faiveley/});
   expect(faiveley.textContent).not.toMatch(/Consortium Viticole/);
@@ -132,9 +132,11 @@ describe('PR416 map feedback',()=>{
   expect(map.match('212670000D0331')).toBe('owner');
   // Sources are described once under About this data, not listed per row.
   expect(within(list).queryAllByRole('link')).toHaveLength(0);
-  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
+  // The company name behind the heading shows in the parcel's details.
+  fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0331'}});
   expect(map.match('212670000D0331')).toBe('owner');
-  expect(within(list).getByRole('button',{name:/Consortium Viticole/})).toHaveProperty('ariaPressed','true');
+  const details=document.querySelector('.village-map-parcel-details') as HTMLElement;
+  expect(within(details).getByText(/^Consortium Viticole/)).toBeTruthy();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
  });
 });

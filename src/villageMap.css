@@ -177,8 +177,6 @@
 .village-map-overview-note{font-size:.76rem;line-height:1.5;color:var(--ink-6);padding:10px 12px;border-left:2px solid var(--wine-ink);background:var(--paper)}
 
 /* Research names lead; legal identities and uncertainty remain readable on phones. */
-.village-map-grouping{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;font-size:.85rem}
-.village-map-grouping select{flex:1;min-width:0;max-width:100%}
 .village-map-owner-name{min-width:0;overflow-wrap:anywhere}
 /* Link strength as a seal after the name, like a profile check; strongest first. Only a domaine's own
    confirmation is solid, a weak lead is dashed with "?". None of them is a farming claim. */

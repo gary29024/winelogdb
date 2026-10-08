@@ -107,7 +107,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const [show,setShow]=useState(false),[data,setData]=useState<Parcels|null>(null),[error,setError]=useState(false),[attempt,setAttempt]=useState(0);
  const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
  const [showPossible,setShowPossible]=useState(false);
- const [groupByDomaine,setGroupByDomaine]=useState(true),[research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);
+ const [research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);
  useEffect(()=>{
   if(!show||research||!withResearch)return;
   let active=true;
@@ -134,8 +134,9 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const overlapOf=(f:ParcelFeature)=>overlapIn(f,parentId);
  const parcels=useMemo(()=>data?.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===parentId))??[],[data,parentId]);
  const owners=useMemo(()=>rightHolders(parcels,parentId),[parcels,parentId]);
+ // Rows are always grouped by researched domaine where a cru has research; recorded company names stay
+ // searchable and appear in each parcel's details. Without research every row is a legal holder.
  const domaineOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId,research?.holderDomains),[parcels,parentId,research]);
- const legalOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId),[parcels,parentId]);
  const chosenHolders=useMemo(()=>new Set(domaineOwners.find(g=>g.id===owner)?.holderIds??(owners.some(h=>h.id===owner)?[owner]:[])),[domaineOwners,owners,owner]);
  const isChosen=(group:HolderGroup)=>group.holderIds.length===chosenHolders.size&&group.holderIds.every(id=>chosenHolders.has(id));
  const wineProducer=producer?.trim()??'';
@@ -242,7 +243,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
   if(f)fit(union([f]));
  };
  const chooseOwner=(id:string)=>{
-  const group=domaineOwners.find(g=>g.id===id)??legalOwners.find(g=>g.id===id);
+  const group=domaineOwners.find(g=>g.id===id);
   if(!group)return;
   autoFocused.current=true;
   const next=isChosen(group)?'':id;setOwner(next);setSelectedId('');
@@ -262,14 +263,13 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
  const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
- // Known from the registry, so the control and its loading/failure notes appear only for crus with domaine research.
- const useDomaineGroups=cru.domaineGrouping&&groupByDomaine;
- const listed=useDomaineGroups?domaineOwners:legalOwners;
+ // cru.domaineGrouping comes from the registry, so research notes and the key appear only for crus with domaine research.
+ const listed=domaineOwners;
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
  // The key names only the link strengths this list uses, strongest first.
- const strengths=useDomaineGroups?confidenceOrder.filter(level=>listed.some(o=>o.confidence===level)):[];
+ const strengths=cru.domaineGrouping?confidenceOrder.filter(level=>listed.some(o=>o.confidence===level)):[];
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
  const selectedMatch=selected?matches.get(selected.properties.id)??'':'';
@@ -329,18 +329,17 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     </div>}
     <div>
      <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
-     {cru.domaineGrouping&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
-     <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. A seal after each name shows how strong the link is (hover for the reason); recorded company names stay searchable and appear under Legal holder. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     <p className="village-map-note">{cru.domaineGrouping?'Domaine headings are research links, not proof of ownership. A seal after each name shows how strong the link is (hover for the reason); recorded company names stay searchable and appear in each parcel’s details. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
      {strengths.length>0&&<p className="village-map-seal-key"><span>Link strength</span>{strengths.map(level=><span key={level} className="village-map-seal-key-item"><StrengthSeal level={level}/>{confidenceLabels[level]}</span>)}<span>Not farming verification</span></p>}
-     {useDomaineGroups&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
-     {useDomaineGroups&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
+     {cru.domaineGrouping&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
+     {cru.domaineGrouping&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
       <span className="village-map-owner-name">{o.name}{o.confidence&&<>{'\u00a0'}<span role="img" className="village-map-seal-label" aria-label={sealLabel(o)} title={sealLabel(o)}><StrengthSeal level={o.confidence}/></span></>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
      </button></li>)}</ul>
      <div className="village-map-link-actions">
       {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
-      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${useDomaineGroups?'entries':'right holders'}`}</button>}
+      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${cru.domaineGrouping?'entries':'right holders'}`}</button>}
      </div>
      </details>
     </div>

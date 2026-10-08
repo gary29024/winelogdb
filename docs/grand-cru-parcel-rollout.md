@@ -201,8 +201,9 @@ The app marks each row with a link-strength seal check after the name: company r
 (strong, green), estate or registry source (medium, grey) and lead (weak, dashed amber
 with "?"), with `domaine-confirmed` reserved above them as the only solid seal (Tier 3).
 The reason shows in the seal's tooltip and accessible name, not as row text.
-Rows show the research name only; recorded legal names stay searchable and appear under
-the Legal holder grouping. Sources are summarised under "About this data", not per row.
+The list is always grouped this way (there is no legal-holder switch). Rows show the
+research name only; recorded legal names stay searchable, appear in each parcel's details
+and are counted in the list total. Sources are summarised under "About this data", not per row.
 Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
 also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
 identifier no cru records, an unused source or a stale report.
