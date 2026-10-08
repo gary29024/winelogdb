@@ -53,7 +53,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"griotte-chambertin",name:"Griotte-Chambertin",parentFeatureId:"inao-denom-646",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["griotte-chambertin"],domaineGrouping:false},
  {slug:"la-grande-rue",name:"La Grande Rue",parentFeatureId:"inao-denom-654",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-grande-rue"],domaineGrouping:false},
- {slug:"la-romanee",name:"La Romanée",parentFeatureId:"inao-denom-655",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-romanee"],domaineGrouping:false},
+ {slug:"la-romanee",name:"La Romanée",parentFeatureId:"inao-denom-655",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-romanee"],domaineGrouping:true},
  {slug:"la-tache",name:"La Tâche",parentFeatureId:"inao-denom-656",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["la-tache"],domaineGrouping:false},
  {slug:"latricieres-chambertin",name:"Latricières-Chambertin",parentFeatureId:"inao-denom-666",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["latricieres-chambertin"],domaineGrouping:false},
  {slug:"mazis-chambertin",name:"Mazis-Chambertin",parentFeatureId:"inao-denom-808",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazis-chambertin"],domaineGrouping:false},

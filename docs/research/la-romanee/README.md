@@ -1,7 +1,8 @@
-# La Romanée parcels: Tier 1 (#382)
+# La Romanée parcels: Tier 2 (#428)
 
 La Romanée uses INAO `inao-denom-655`, appellation 190, and Vosne-Romanée
-commune 21714. Reviewed 7 October 2026 for season 2026 under the
+commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed
+8 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only La Romanée.
@@ -27,11 +28,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-20–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 0; no deed on the current reference |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 1 |
+| Parcels with holder or research leads | 1; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 0 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: the complete DFI member contains no event for AN0074, so tracing stops at the source boundary; all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 41,349 / 6,861 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 48,363 / 8,715 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the La Romanée selection contains 1 of
@@ -79,9 +80,11 @@ record carries the provisional identifier `U14132333`. Because the two
 identifiers cannot be proved equal, the change is kept as an unprovable
 identifier change rather than merged. `U14132333` remains an identifier, not a
 verified SIREN. A recorded owner does not establish who farms the vineyard, and
-no monopoly or operator claim is inferred from the holder's name. No
-holder-to-domaine crosswalk is established, so domaine grouping stays off.
-Producer research and company filings remain Tier 2; paid SPF copies and outreach
+no monopoly or operator claim is inferred from the holder's name. Tier 2 adopts
+the [shared holder table](../holders/holder-links.json): company filings match `U14132333`
+to RCS 408 280 667 there, while the rights file keeps the provisional identifier, and a
+reviewed `family-holding` link groups the parcel under Domaine du Comte Liger-Belair.
+The app says **Research link · farming unverified**. Paid SPF copies and outreach
 remain Tier 3.
 
 [Rights history](rights-history.json) finds no DFI event for AN0074 in the
@@ -112,6 +115,47 @@ an unsearched interval is a gap, not absence of history. These shared gaps remai
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
 
+## Tier 2 holder and filing research
+
+The one recorded holder identifier, `U14132333`, was researched through the shared table. The pass screened **17 filings / 518 pages**: the company’s own filings and those of the domaine company that publishes La Romanée. The [filing inventory](filings.md) records dates, references, page numbers, hashes, bounded negatives and effort.
+
+The rights file’s name, SCI DU CHATEAU DE VOSNE ROMANEE, is the pre-2003 name of RCS 408 280 667. That company’s 2002 registration filing contains statutes updated in 1998 that reproduce the 3 July 1967 contribution of Vosne-Romanée AN 74, 84 a 52 ca, its lieu-dit corrected in the margin to “La Romanée”; the area equals today’s cadastral area, so this is an exact filing. A 2003 notarial deed turned the company into the GFV du Château de Vosne-Romanée under the same number. On that evidence the shared table matches `U14132333` to 408280667; the rights file keeps the provisional identifier.
+
+The 2003 deed also recites three long leases the company granted to one of its partners, without a parcel list. The GFV’s 14 April 2021 notarial deed schedules them: the 8 November 2001 métayage covers AN 74, La Romanée, 84 a 52 ca (with three Aux Raignots parcels), for 18 years from 1 November 2001, tacitly renewable by nine-year periods. The deed states that the leased land, except buildings added in 2005, is made available by that partner to SCEA Domaine du Comte Liger-Belair (429010846) with the lessor’s authorisation, that rents are paid by the tenant or that domaine, and that the leases are valid at its date. The register lists the same family partners in the GFV and the SCEA at the same Château seat, and CLB Participations, a partner and manager of the SCEA, was GFV co-manager from 2019 to 2023. On that company evidence the `family-holding` link to Domaine du Comte Liger-Belair is **reviewed**.
+
+The 2021 statement is a dated, parcel-specific recital that the land is made available to the domaine company. It is flagged for #364 as a candidate verified-operator record as of 14 April 2021; it is not a current farming season, and verified farming stays **0**.
+
+The domaine’s undated climat page publishes La Romanée, monopole, at 0.8452 ha — AN 74’s cadastral area — and its history page says the domaine took La Romanée into operation in 2002. These undated producer publications stay in the named-area census; they do not meet the verified-operator gate.
+
+Research leads rise from **0 to 1 of 1 parcel**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels with holder or research leads | 0 | 1 of 1 |
+| Parcels with no named candidate | 1 | 0 |
+| Holder identifiers matched to a SIREN by company filings | 0 | 1 of 1 |
+| Holders with an applicable link | 0 | 1 of 1: reviewed `family-holding` |
+| Parcels with exact-reference company filings | 0 | 1 in 2 filing entries |
+| Published holdings in the named-area census | 0 | 1 |
+| Verified farming links | 0 | **0** |
+
+### Effort per holder
+
+| Recorded holder | Filings | Pages | Outcome |
+| --- | ---: | ---: | --- |
+| GFV du Château de Vosne-Romanée (`U14132333`) | 17 | 518 | Company filings match U14132333 to GFV du Château de Vosne-Romanée (408280667): its statutes contribute AN74 and its 2021 deed lists AN74 under a 2001 métayage to a partner, with the land made available to SCEA Domaine du Comte Liger-Belair. Dated recital only; farming unverified. |
+
+### Tier 2 access and evidence gaps
+
+- Bounded filing review: 17 filings (518 pages) were screened — 13 of the 13 filings the free index lists for the GFV and 4 of the 9 for the SCEA. Unscreened filings are a bounded negative.
+- `U14132333` is matched to RCS 408280667 by the rights file’s name, the company’s 2002 registration filing (whose statutes contribute AN 74 with its exact area) and the 2003 renaming deed; the 2019 MAJIC code PBCLPZ stays an unprovable identifier change in the rights file.
+- The 2001 métayage over AN 74 is held by a partner personally; the 2021 deed states it is tacitly renewed and valid and that the land is made available to SCEA Domaine du Comte Liger-Belair. That dated recital (14 April 2021) is flagged for #364 as a candidate verified-operator record; it is not a current farming season, and verified farming stays 0. The lease deed and any later change are unreviewed.
+- CLB Participations was GFV co-manager from 3 May 2019 until its resignation from 4 June 2023; today the two companies share family partners and their seat, not a manager.
+- The domaine’s pages are undated producer publications. They give La Romanée’s area and a 2002 start of operation; they stay census evidence.
+- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
+- Winehog subscriber articles requested, not supplied: “The Essence of La Romanee” (2015-06-20); “200 years, 72 bottles of Domaine du Comte Liger-Belair” (2015-06-12); “La Romanée – a hedonistic treat” (2020-08-05); “A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque” (2026-06-10). No paywalled text was accessed.
+- Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed; paid SPF copies and outreach remain Tier 3.
+
 ## Reproduce and validate
 
 Use Python 3.12, as CI does, with
@@ -134,5 +178,5 @@ python scripts/measure_grand_cru_payload.py
 The browser journey uses `WINELOG_E2E_CRU=la-romanee` with
 `burgundy-village-map.spec.ts`, without expanding the normal Chromium matrix.
 
-The cru issue remains open until this PR passes review and merges; only then are
-its acceptance boxes and the La Romanée entry in #461 completed.
+This delivery references #428 and tracker #420 without closing them. Tier 1 history
+review remains separately tracked under #461; current farming remains under #364.

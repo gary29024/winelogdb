@@ -5060,6 +5060,149 @@
           "kind": "general meeting"
         }
       ]
+    },
+    {
+      "id": "rne-408280667",
+      "title": "Company register: GFA DU CHATEAU DE VOSNE ROMANEE (408280667)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/408280667",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:08:15Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=408280667",
+      "sha256": "261253ff77a33a4dc25c42a7f539a1d44130406f8d315c44e01bf249976340f0",
+      "bytes": 3637,
+      "finding": "GFA DU CHATEAU DE VOSNE ROMANEE: registered office Château, 21700 Vosne-Romanée; activity 68.20B; created 1967-07-03; active; legal form GFA (6534). Its partners and manager are members of the Bocquillon Liger-Belair family. Legal identity only; not farming evidence."
+    },
+    {
+      "id": "rne-429010846",
+      "title": "Company register: DOMAINE DU COMTE LIGER-BELAIR (429010846)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/429010846",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:08:17Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=429010846",
+      "sha256": "cd385a11099f51d819499d69f1c40481c8694f705afffa8a477ce51c02549773",
+      "bytes": 3552,
+      "finding": "DOMAINE DU COMTE LIGER-BELAIR: SCEA (6597), registered office Château, 21700 Vosne-Romanée; activity 01.21Z vine growing; created 2000-01-03; active. Its partners are two Bocquillon Liger-Belair family members, one of them manager, who are also recorded partners of GFA du Château de Vosne-Romanée, and CLB Participations (480929355). Legal identity only; not farming evidence."
+    },
+    {
+      "id": "chateau-vosne-statutes-1998",
+      "title": "SCI du Château de Vosne-Romanée: statutes updated after the 15 December 1998 meeting (registration filing, 2002)",
+      "url": "https://actes.ccm2.net/acte/220fc960-bd3d-4aad-9e64-e20b114d13db#page=11",
+      "type": "company-filing",
+      "documentDate": "1998-12-15",
+      "filingDate": "2002-10-15",
+      "access": "read",
+      "finding": "Deposited when the company, constituted on 3 July 1967, was registered as RCS Beaune 408 280 667, with 1991 minutes. Article six of the statutes updated after the 15 December 1998 meeting reproduces the 1967 contributions, including a vine at Vosne-Romanée, section AN no. 74, 84 a 52 ca, its lieu-dit corrected in the margin to “La Romanée” (page image checked). The object is ownership and letting; no tenant is named.",
+      "reviewedPages": [
+        1,
+        9,
+        11,
+        12
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:44+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/220fc960-bd3d-4aad-9e64-e20b114d13db",
+      "sha256": "7227f01bde677ceba5162c815ceef61d9066039346ce4c0594b25b2327aa40f7",
+      "bytes": 1486995,
+      "pageCount": 38,
+      "screenedPages": 38,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "1967-07-03",
+          "kind": "formation deed (contributions)"
+        },
+        {
+          "date": "1991-12-07",
+          "kind": "extraordinary general meeting minutes"
+        }
+      ]
+    },
+    {
+      "id": "chateau-vosne-gfa-2003",
+      "title": "GFV du Château de Vosne-Romanée: 8 September 2003 notarial transformation of the SCI into a GFA",
+      "url": "https://actes.ccm2.net/acte/235abaa2-bbc1-4741-8157-a90eda8808c7#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-09-08",
+      "filingDate": "2003-10-22",
+      "access": "read",
+      "finding": "Notarial minutes of the partners of the Société Civile du Château de Vosne-Romanée (RCS 408 280 667) turn it into a GFA named Groupement Foncier Viticole du Château de Vosne-Romanée and extend its term by 50 years. They recite three long leases granted by the company to one of its partners: a bail à ferme and a métayage, both from 3 January 2000 to 3 January 2018, and a métayage from 1 November 2001 to 1 November 2019, so that the company does not farm directly. No parcel list is given for the leases; article six summarises the 1967 contributions by value only.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:44+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/235abaa2-bbc1-4741-8157-a90eda8808c7",
+      "sha256": "48d3d8fbc3f340668e79ad26b5de97126a12fc5cf71424d24fc294ad63ee149c",
+      "bytes": 875456,
+      "pageCount": 26,
+      "screenedPages": 26,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "chateau-vosne-donation-2019",
+      "title": "GFV du Château de Vosne-Romanée: 27 December 2019 notarial donation-partage (filed 2020)",
+      "url": "https://actes.ccm2.net/acte/cc85d2d5-cb9c-4c56-8d2c-2705ea1782da#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-12-27",
+      "filingDate": "2020-06-03",
+      "access": "read",
+      "finding": "Donation-partage of the bare ownership of shares in CLB Participations (480929355), the GFV du Château de Vosne-Romanée and SCEA Domaine du Comte Liger-Belair (429010846). The deed describes the GFV as then managed by its gérante and by CLB Participations, which the register lists as a partner and manager of the SCEA. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        6,
+        7,
+        15,
+        16
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:46+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cc85d2d5-cb9c-4c56-8d2c-2705ea1782da",
+      "sha256": "23fb72688d82301f98b636fe90a596f21138ef4aebfa18efa7d526262e8f2a72",
+      "bytes": 2682713,
+      "pageCount": 50,
+      "screenedPages": 50,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "chateau-vosne-2021",
+      "title": "GFV du Château de Vosne-Romanée: 14 April 2021 share sale with lease schedule and same-day meeting",
+      "url": "https://actes.ccm2.net/acte/d2d4586d-aea6-4028-b051-308c58b0041f#page=1",
+      "type": "company-filing",
+      "documentDate": "2021-04-14",
+      "filingDate": "2021-06-15",
+      "access": "read",
+      "finding": "Notarial sale of bare-ownership parts (with SAFER substitution) and the same day’s meeting. The deed describes the GFV’s estate (3 ha 61 a 71 ca in use: 1 ha 54 a 11 ca under métayage, 2 ha 07 a 60 ca under fermage) and schedules its leases to a partner. The 8 November 2001 métayage names AN 74, La Romanée, 84 a 52 ca (page image checked), for 18 years from 1 November 2001, tacitly renewable by nine-year periods. The deed states that the leased land, except that added in 2005, is made available by the tenant to Domaine du Comte Liger-Belair with the lessor’s authorisation, that rents are paid by the tenant or that domaine, and that the leases are valid at its date.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        11,
+        13,
+        20,
+        22,
+        23,
+        25
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:47+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d2d4586d-aea6-4028-b051-308c58b0041f",
+      "sha256": "4b45dab8e46fac8f3ab12cc25713b999d161120dbfb9ac534596fbe52e012882",
+      "bytes": 2677301,
+      "pageCount": 81,
+      "screenedPages": 81,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
     }
   ],
   "holders": {
@@ -10617,6 +10760,52 @@
         "filingsScreened": 2,
         "pagesRead": 44,
         "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
+    },
+    "U14132333": {
+      "identity": {
+        "companySiren": "408280667",
+        "sourceIds": [
+          "chateau-vosne-statutes-1998",
+          "chateau-vosne-gfa-2003",
+          "rne-408280667"
+        ],
+        "limitation": "The rights file’s name, SCI DU CHATEAU DE VOSNE ROMANEE, is the pre-2003 name of RCS 408 280 667, whose 2002 registration filing contributes AN 74 with the recorded area; the 2003 deed renames it GFV du Château de Vosne-Romanée under the same number. The rights file keeps the provisional identifier."
+      },
+      "links": [
+        {
+          "id": "U14132333/domaine-du-comte-liger-belair",
+          "domaine": "Domaine du Comte Liger-Belair",
+          "relation": "family-holding",
+          "basis": "GFV du Château de Vosne-Romanée (408280667) and SCEA Domaine du Comte Liger-Belair (429010846) share the Château seat and two partners, and CLB Participations, a partner and manager of the SCEA, was GFV co-manager from 2019 to 2023. The GFV’s 2021 deed schedules AN 74 under a 2001 métayage to one of those partners and states that the leased land is made available to the SCEA with the lessor’s authorisation.",
+          "sourceIds": [
+            "rne-408280667",
+            "rne-429010846",
+            "chateau-vosne-gfa-2003",
+            "chateau-vosne-donation-2019",
+            "chateau-vosne-2021"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "La Romanée producer publications"
+          ],
+          "outcome": "linked",
+          "note": "Identity resolved from company filings. The 2021 deed’s mise à disposition to the SCEA is a dated recital, not a verified current farming season; flagged for #364."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 17,
+        "pagesRead": 518,
+        "note": "La Romanée #428 pass; includes 4 filings of the linked SCEA."
       }
     }
   }

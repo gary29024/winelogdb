@@ -597,5 +597,53 @@ class RomaneeContiTests(unittest.TestCase):
             self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
 
 
+class LaRomaneeTests(unittest.TestCase):
+    """A provisional rights identifier, its company and a dated lease recital stay separate from farming."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('la-romanee'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+        cls.sources = {s['id']: s for s in cls.table['sources']}
+
+    def test_the_identifier_is_matched_to_its_company_by_filings(self):
+        entry = self.table['holders']['U14132333']
+        self.assertEqual(entry['identity']['companySiren'], '408280667')
+        self.assertTrue({'registry', 'company-filing'} <= {self.sources[s]['type'] for s in entry['identity']['sourceIds']})
+        self.assertIn('keeps the provisional identifier', entry['identity']['limitation'])
+        # The rights file itself is not rewritten.
+        self.assertEqual([r['holderId'] for r in self.register['parcels'][0]['recordedRights']], ['U14132333'])
+
+    def test_the_family_link_is_reviewed_but_not_farming(self):
+        link = self.table['holders']['U14132333']['links'][0]
+        self.assertEqual((link['relation'], link['reviewStatus'], link['domaine']),
+                         ('family-holding', 'reviewed', 'Domaine du Comte Liger-Belair'))
+        self.assertIn('chateau-vosne-2021', link['sourceIds'])
+        self.assertEqual(self.evidence['holderDomains']['U14132333']['basis'], 'family-company-record')
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['currentFarmerConfirmed']), (1, 0))
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_both_filings_name_an74_with_its_exact_area(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        self.assertEqual(set(filings), {'lr-chateau-1967', 'lr-chateau-2021'})
+        for f in filings.values():
+            self.assertEqual((f['holderId'], f['companySiren'], f['parcelAreasM2']), ('U14132333', '408280667', {'21714000AN0074': 8452}))
+        kinds = [l['kind'] for l in filings['lr-chateau-2021']['leaseEvidence']]
+        self.assertEqual(kinds, ['existing-lease-recital', 'mise-a-disposition-declaration'])
+        disposal = filings['lr-chateau-2021']['leaseEvidence'][1]
+        self.assertEqual((disposal['beneficiarySiren'], disposal['declaredOn']), ('429010846', '2021-04-14'))
+        self.assertIn('#364', disposal['limitation'])
+        self.assertEqual(self.register['counts']['withParcelFiling'], 1)
+
+    def test_the_published_area_stays_census(self):
+        holding = self.curation['producerHoldings'][0]
+        self.assertEqual((holding['publishedAreaHa'], holding['producerHolderIds'], holding['ownerHolderIds']), (0.8452, [], []))
+        self.assertNotIn('parcelIds', holding)
+
+
 if __name__ == '__main__':
     unittest.main()
