@@ -35,7 +35,7 @@ A cru uses the table once its curation sets `"holderLinks": "shared"`, normally 
 | Échezeaux | yes | 36 | 34 | 119 | 112 |
 | Grands-Échezeaux | yes | 9 | 9 | 19 | 19 |
 | Griotte-Chambertin | no | 8 | 0 | 16 | 0 |
-| La Grande Rue | no | 1 | 1 | 3 | 3 |
+| La Grande Rue | yes | 1 | 1 | 3 | 3 |
 | La Romanée | yes | 1 | 1 | 1 | 1 |
 | La Tâche | yes | 1 | 1 | 2 | 2 |
 | Latricières-Chambertin | no | 12 | 4 | 15 | 5 |
@@ -115,7 +115,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | 323300400 | GFA PINSON | 1 | 7 | — | — | — | — |
 | 328972344 | DOMAINE ARNOUX - LACHAUX | 4 | 7 | Domaine Arnoux-Lachaux (owner-company; reviewed) | — | 5 filings, 113 pages | 2026-10-08 |
 | 353847510 | GFA DU DOMAINE MICHEL NOELLAT | 2 | 7 | Domaine Michel Noëllat (management; provisional) | — | — | 2026-10-07 |
-| 397738634 | NICOLE LAMARCHE | 3 | 7 | Domaine Nicole Lamarche (owner-company; reviewed) | — | — | 2026-10-07 |
+| 397738634 | NICOLE LAMARCHE | 3 | 7 | Domaine Nicole Lamarche (owner-company; reviewed) | — | 17 filings, 591 pages | 2026-10-08 |
 | 417882644 | MAGNIEN MICHEL ET FILS | 2 | 7 | — | — | — | — |
 | 480400407 | DOMAINE DE LA POUSSE D'OR | 5 | 7 | Domaine de la Pousse d’Or (owner-company; reviewed) | — | 5 filings, 76 pages | 2026-10-07 |
 | 519906606 | G F A  DU DOMAINE PEIRAZEAU | 3 | 7 | — | — | — | — |

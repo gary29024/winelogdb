@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-CkqZcN97.js"
+    "dist/client/assets/index-CegBrC_g.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-BpyXIg_1.js",
-    "dist/client/assets/SectionLabel-Bp2RjpPm.js",
-    "dist/client/assets/SparklingDetailsCard-ByG01tNs.js",
-    "dist/client/assets/VillageMap-CvLfZcES.js",
-    "dist/client/assets/burgundyAtlas-DEkHDm_U.js",
-    "dist/client/assets/index-CkqZcN97.js",
-    "dist/client/assets/index-DMa6wVPR.js",
+    "dist/client/assets/FriendTagDialog-BlfUULnm.js",
+    "dist/client/assets/SectionLabel-8acoXCmA.js",
+    "dist/client/assets/SparklingDetailsCard-BDozIEeo.js",
+    "dist/client/assets/VillageMap-BaU96fOQ.js",
+    "dist/client/assets/burgundyAtlas-BtEoKuD4.js",
+    "dist/client/assets/index-BjrDoXe3.js",
+    "dist/client/assets/index-CegBrC_g.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-CxE4ILGt.js",
-    "dist/client/assets/wineDetailCompact-DNa4Wa1K.js"
+    "dist/client/assets/useModalFocus-D8CSxBlP.js",
+    "dist/client/assets/wineDetailCompact-Bj-3_m-A.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5606330,
-  "evidenceGzipBytesTotal": 504064,
+  "evidenceBytesTotal": 5613966,
+  "evidenceGzipBytesTotal": 505525,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -175,10 +175,10 @@
     },
     {
       "cru": "la-grande-rue",
-      "file": "dist/client/assets/la-grande-rue.evidence-Ba2k7ThN.js",
-      "sha256": "acd82a5589f9c2275ce191954844e419099ba1ef9105ad0642645fc01b7ddf0b",
-      "bytes": 43444,
-      "gzipBytes": 7289
+      "file": "dist/client/assets/la-grande-rue.evidence-2thah-5i.js",
+      "sha256": "f726e73e36ee77138abdc06d60e4dc2782b8c5125bc99ce0116a6e6cc371eb5f",
+      "bytes": 51080,
+      "gzipBytes": 8750
     },
     {
       "cru": "la-romanee",

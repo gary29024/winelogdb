@@ -1,7 +1,8 @@
-# La Grande Rue parcels: Tier 1 (#384)
+# La Grande Rue parcels: Tier 2 (#430)
 
 La Grande Rue uses INAO `inao-denom-654`, appellation 189, and Vosne-Romanée
-commune 21714. Reviewed 7 October 2026 for season 2026 under the
+commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed
+8 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only La Grande Rue.
@@ -27,11 +28,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-20–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 0; no deed on any current reference |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 3 |
+| Parcels with holder or research leads | 3; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 0 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: the complete DFI member contains no event for AM0001, AM0002 or AM0008, so tracing stops at the source boundary; all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 43,383 / 7,164 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 51,219 / 8,623 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the La Grande Rue selection contains 3 of
@@ -87,9 +88,10 @@ for that identifier changes in the 2022 file. The absence in 2019 is not evidenc
 of a private owner or a sale: this dataset omits private persons, and nothing is
 inferred about the earlier holder. A recorded owner does not establish who farms
 the vineyard, and no monopoly or operator claim is inferred from the holder's
-name. No holder-to-domaine crosswalk is established, so domaine grouping stays
-off. Producer research and company filings remain Tier 2; paid SPF copies and
-outreach remain Tier 3.
+name. Tier 2 adopts the [shared holder table](../holders/holder-links.json), whose
+reviewed `owner-company` link names the holder as the company of Domaine Nicole
+Lamarche; the app groups all three parcels under that heading and says
+**Research link · farming unverified**. Paid SPF copies and outreach remain Tier 3.
 
 [Rights history](rights-history.json) finds no DFI event for AM0001, AM0002 or
 AM0008 in the complete July 2026 department member, whose commune records start on
@@ -121,6 +123,41 @@ an unsearched interval is a gap, not absence of history. These shared gaps remai
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
 
+## Tier 2 holder and filing research
+
+The one recorded holder, `397738634`, was researched through the shared table. Its reviewed `owner-company` link to Domaine Nicole Lamarche, recorded for Échezeaux, now applies here. The pass screened **17 of the company’s 17 indexed filings / 591 pages** with embedded text and OCR of every image page. The [filing inventory](filings.md) records dates, page numbers, hashes, bounded negatives and effort.
+
+No filing prints AM 1, AM 2 or AM 8. The GFA Domaine François Lamarche was formed in 1994 and received the whole vineyard business by an 11 August 1994 notarial deed that later statutes recite by value only; that deed is not in the free index. In 2001 the GFA authorised a long-term lease of its land to a family member, to be made available to the operating SARL; in 2019 it absorbed that SARL and became SAS Nicole Lamarche, which also absorbed EARL Nicole Lamarche in 2022. These filings explain the rights file’s 2022 change of recorded name for the same identifier but are not parcel-specific operation evidence.
+
+The domaine’s own La Grande Rue page, captured by the Internet Archive in November 2022, gives the monopole as 1 ha 65 a, consistent with the three parcels’ 16,525 m². It feeds only the named-area census; the domain now serves unrelated content.
+
+Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels with holder or research leads | 0 | 3 of 3 |
+| Parcels with no named candidate | 3 | 0 |
+| Holders with an applicable link | 0 | 1 of 1: reviewed `owner-company` |
+| Parcels with exact-reference company filings | 0 | 0 |
+| Published holdings in the named-area census | 0 | 1 |
+| Verified farming links | 0 | **0** |
+
+### Effort per holder
+
+| Recorded holder | Filings | Pages | Outcome |
+| --- | ---: | ---: | --- |
+| Nicole Lamarche (`397738634`) | 17 | 591 | Filings trace the 1994 GFA, which received the whole Lamarche vineyard business by an unfiled 1994 deed, to SAS Nicole Lamarche after its 2019 merger with the operating company. No filing prints AM1, AM2 or AM8; the company link is reviewed. Farming unverified. |
+
+### Tier 2 access and evidence gaps
+
+- Bounded filing review: 17 of the 17 filings the free index lists for 397738634 were screened (591 pages); the rest are listed below as not screened. None prints AM 1, AM 2 or AM 8.
+- The 11 August 1994 notarial deed that contributed the Lamarche vineyard business to the GFA is recited by value only and is not in the free index; its parcel list would need a paid land-register copy (Tier 3).
+- The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.
+- The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.
+- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
+- Winehog subscriber articles requested, not supplied: “La Grande Rue – in a Vosne-Romanee sweet spot” (2014-06-22); “Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”” (2018-12-09). No paywalled text was accessed.
+- Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3.
+
 ## Reproduce and validate
 
 Use Python 3.12, as CI does, with
@@ -143,5 +180,5 @@ python scripts/measure_grand_cru_payload.py
 The browser journey uses `WINELOG_E2E_CRU=la-grande-rue` with
 `burgundy-village-map.spec.ts`, without expanding the normal Chromium matrix.
 
-The cru issue remains open until this PR passes review and merges; only then are
-its acceptance boxes and the La Grande Rue entry in #461 completed.
+This delivery references #430 and tracker #420 without closing them. Tier 1 history
+review remains separately tracked under #461; current farming remains under #364.

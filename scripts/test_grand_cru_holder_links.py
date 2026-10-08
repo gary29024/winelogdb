@@ -676,5 +676,34 @@ class LaTacheTests(unittest.TestCase):
         self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['currentFarmerConfirmed']), (2, 0))
 
 
+class LaGrandeRueTests(unittest.TestCase):
+    """A reviewed company link groups the parcels without any parcel schedule or farming claim."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('la-grande-rue'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_the_existing_company_link_applies_without_parcel_filings(self):
+        self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))
+        link = self.table['holders']['397738634']['links'][0]
+        self.assertEqual((link['relation'], link['reviewStatus']), ('owner-company', 'reviewed'))
+        self.assertEqual(self.evidence['holderDomains']['397738634']['basis'], 'company-identity')
+        self.assertEqual((self.curation['parcelFilings'], self.curation['externalResearch']), ([], []))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['withParcelFiling']), (3, 0))
+        self.assertIn('effort', self.table['holders']['397738634'])
+
+    def test_the_archived_estate_area_stays_census_and_farming_unverified(self):
+        [holding] = self.curation['producerHoldings']
+        self.assertEqual((holding['publishedAreaHa'], holding['precision'], holding['namedAreas']), (1.65, 'are', ['LA GRANDE RUE']))
+        self.assertNotIn('parcelIds', holding)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+
 if __name__ == '__main__':
     unittest.main()

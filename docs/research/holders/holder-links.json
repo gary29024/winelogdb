@@ -6967,8 +6967,23 @@
             "Échezeaux and Grands-Échezeaux research sources"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "La Grande Rue producer publications and Internet Archive captures"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 17,
+        "pagesRead": 591,
+        "note": "La Grande Rue #430 pass; first filing screening for this holder."
+      }
     },
     "398805366": {
       "searches": [

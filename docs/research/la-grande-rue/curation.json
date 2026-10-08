@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-08",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-654",
-  "status": "tier-1-reviewed",
-  "scope": "All 3 mapped La Grande Rue parcels and 1 recorded legal-entity identifier reviewed for Tier 1, including commune edges, the cadastral named area and the #461 historical extension. The notice indexes contain no exact reachable-reference evidence and no pending candidates. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All three mapped La Grande Rue parcels and the one recorded holder identifier reviewed for Tier 2 (#430) through the shared holder table; 17 filings / 591 pages screened. No filing names a current parcel; the company link and the published holding remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,28 +41,498 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "lgr-lamarche-1994",
+      "title": "GFA Domaine François Lamarche: 15 June 1994 statutes and 16 June 1994 meeting",
+      "url": "https://actes.ccm2.net/acte/0ab99856-abdc-4e80-bd7e-f5cdb71d1b92#page=1",
+      "type": "company-filing",
+      "documentDate": "1994-06-15",
+      "filingDate": "1994-07-25",
+      "access": "read",
+      "finding": "Private-deed statutes of the groupement foncier agricole, formed with 10,000 francs in cash, with an object of owning and letting agricultural land; the next day’s meeting appoints the management. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0ab99856-abdc-4e80-bd7e-f5cdb71d1b92",
+      "sha256": "7036519b3a04e4a511dfcd3beb1a64c076eeb0515fcb0991a306ead2b727852f",
+      "bytes": 619039,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "1994-06-16",
+          "kind": "ordinary general meeting"
+        }
+      ]
+    },
+    {
+      "id": "lgr-lamarche-2001",
+      "title": "GFA Domaine François Lamarche: 5 July 2001 meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/0d595715-4a61-49be-8a26-e953652c6263#page=1",
+      "type": "company-filing",
+      "documentDate": "2001-07-05",
+      "filingDate": "2001-09-17",
+      "access": "read",
+      "finding": "The meeting forbids direct farming, converts the capital, and authorises a long-term lease of the GFA’s land to a family member, who is to make it available to SARL du Domaine Lamarche. The updated statutes recite that an 11 August 1994 notarial deed contributed all the fixed assets of the François Lamarche vineyard business (26,387,000 francs). No parcel list is given.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        10
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:49+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0d595715-4a61-49be-8a26-e953652c6263",
+      "sha256": "a4dc40ed86fb1c6d2de48799050496a0de0f81bf421a2aecd37ef177fd399d14",
+      "bytes": 744018,
+      "pageCount": 24,
+      "screenedPages": 24,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2010",
+      "title": "GFV Domaine François Lamarche: 5 October 2010 donation of shares and updated statutes",
+      "url": "https://actes.ccm2.net/acte/5044ad92-e033-404f-91b1-762ccb632bde#page=1",
+      "type": "company-filing",
+      "documentDate": "2010-10-05",
+      "filingDate": "2010-12-20",
+      "access": "read",
+      "finding": "Notarial donation of GFV shares with updated statutes repeating the 1994 cash formation and the 11 August 1994 contribution of the whole vineyard business, by value only. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:49+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5044ad92-e033-404f-91b1-762ccb632bde",
+      "sha256": "d2630f5e0566587bd3797a65488bf0b550ad696035e3c40d559bd4c845731938",
+      "bytes": 309382,
+      "pageCount": 17,
+      "screenedPages": 17,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-merger-2019",
+      "title": "Draft merger of SARL Domaine François Lamarche into the GFV (10 May 2019)",
+      "url": "https://actes.ccm2.net/acte/b65c4c73-219b-4477-8856-3366b1d8c11b#page=2",
+      "type": "company-filing",
+      "documentDate": "2019-05-10",
+      "filingDate": "2019-05-13",
+      "access": "read",
+      "finding": "Draft treaty for the GFV to absorb SARL Domaine François Lamarche (353336068), the operating company. It states that the SARL benefits from mises à disposition of vines held under long, nine-year or oral leases whose tenant is a family member, continuing for the GFV; the two companies share a manager. No parcel list is given.",
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:50+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b65c4c73-219b-4477-8856-3366b1d8c11b",
+      "sha256": "222124108bd7c8e2954244992c309bde41128fae3c2ffca870ed6e2e39c80a15",
+      "bytes": 3765636,
+      "pageCount": 107,
+      "screenedPages": 107,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-cac-2019",
+      "title": "Domaine François Lamarche: contribution auditor’s report on the 2019 merger",
+      "url": "https://actes.ccm2.net/acte/19c87d3a-a618-4ad0-9f06-8dbc86aa527f#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-05-15",
+      "filingDate": "2019-05-21",
+      "access": "read",
+      "finding": "Auditor’s report on the value of the operating company’s contribution in the merger. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:49+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19c87d3a-a618-4ad0-9f06-8dbc86aa527f",
+      "sha256": "142fc1f3d6a7a50992d287e22bb35d4a2d4945fed6ce9ec45aae58b6685add30",
+      "bytes": 236662,
+      "pageCount": 7,
+      "screenedPages": 7,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-cac-2019b",
+      "title": "Domaine François Lamarche: contribution auditor’s report on the 2019 merger (second index entry)",
+      "url": "https://actes.ccm2.net/acte/fb5aa12f-7851-4e09-8cad-11040784fb3e#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-05-15",
+      "filingDate": "2019-05-21",
+      "access": "read",
+      "finding": "Auditor’s report on the merger contribution. The same deposit is indexed again under the company’s former management number; content identical apart from the registry cover.",
+      "reviewedPages": [
+        1,
+        5,
+        7
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:50+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fb5aa12f-7851-4e09-8cad-11040784fb3e",
+      "sha256": "55ec758391828cd1940f2527c1c47b46447e9997572bd0f6878163fc9ac458e0",
+      "bytes": 236659,
+      "pageCount": 7,
+      "screenedPages": 7,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-transformation-report-2019",
+      "title": "GFV Domaine François Lamarche: report on the transformation into an SAS",
+      "url": "https://actes.ccm2.net/acte/4c25b43c-1ee8-41ab-807b-8280f8e494b1#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-05-15",
+      "filingDate": "2019-05-21",
+      "access": "read",
+      "finding": "Transformation auditor’s report following the 14 April 2019 meeting. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:50+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4c25b43c-1ee8-41ab-807b-8280f8e494b1",
+      "sha256": "38556d4879bc997bbca3cc3e1cd256bf960ae07b7a731b0bd11287e39b5b72ef",
+      "bytes": 133619,
+      "pageCount": 5,
+      "screenedPages": 5,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-transformation-report-2019b",
+      "title": "GFV Domaine François Lamarche: report on the transformation (second index entry)",
+      "url": "https://actes.ccm2.net/acte/f933680f-b483-4fe3-82e7-56d3bbf45578#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-05-15",
+      "filingDate": "2019-05-21",
+      "access": "read",
+      "finding": "Transformation auditor’s report. The same deposit is indexed again under the company’s former management number; content identical apart from the registry cover.",
+      "reviewedPages": [
+        1,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:36:01+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f933680f-b483-4fe3-82e7-56d3bbf45578",
+      "sha256": "e46b5c1806c13f7bb8711ecaddb0e07da78db1ba60824f25665356c506cac2d1",
+      "bytes": 133618,
+      "pageCount": 5,
+      "screenedPages": 5,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2019-04",
+      "title": "GFV Domaine François Lamarche: 14 April 2019 meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/7303d6ec-5916-4f26-91f9-49e2d417ee8a#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-04-14",
+      "filingDate": "2019-06-07",
+      "access": "read",
+      "finding": "Meeting increasing the capital, with updated statutes repeating the 1994 contribution history by value. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        9,
+        10
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:51+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7303d6ec-5916-4f26-91f9-49e2d417ee8a",
+      "sha256": "77888c7dd15016081eb559c164d8369f641d344e0e09b1a22c4929336685e55d",
+      "bytes": 1019995,
+      "pageCount": 33,
+      "screenedPages": 33,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2019-04b",
+      "title": "GFV Domaine François Lamarche: 14 April 2019 meeting (second index entry)",
+      "url": "https://actes.ccm2.net/acte/90e4570d-e6d2-4f1f-ad23-953239fc0778#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-04-14",
+      "filingDate": "2019-06-07",
+      "access": "read",
+      "finding": "Capital increase meeting and updated statutes. The same deposit is indexed again under the company’s former management number; content identical apart from the registry cover.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:34:41+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/90e4570d-e6d2-4f1f-ad23-953239fc0778",
+      "sha256": "4e5bb0ffc6fa153b13f58f9335a0a8fdd2fc9d70f67038080f3e82839820d683",
+      "bytes": 1019990,
+      "pageCount": 33,
+      "screenedPages": 33,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2019-06",
+      "title": "Nicole Lamarche: 20 June 2019 meeting approving the merger and the transformation into an SAS",
+      "url": "https://actes.ccm2.net/acte/04b743c1-1ad1-4ece-9653-bbd60e0db3eb#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-06-20",
+      "filingDate": "2019-07-18",
+      "access": "read",
+      "finding": "Meeting approving the absorption of the operating SARL, the transformation of the GFV into SAS Nicole Lamarche and an object that now includes farming vines directly or through leases and mises à disposition. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        8,
+        9
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:51+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/04b743c1-1ad1-4ece-9653-bbd60e0db3eb",
+      "sha256": "45b1f55919567d3237ee66c3ead97c6e66de62bb407ad96a6ba568a96f08b90b",
+      "bytes": 3265933,
+      "pageCount": 79,
+      "screenedPages": 79,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-merger-2022",
+      "title": "Draft merger of EARL Nicole Lamarche into SAS Nicole Lamarche (26 January 2022)",
+      "url": "https://actes.ccm2.net/acte/b711c226-96b1-42ab-886b-4ca23d7905e6#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-01-26",
+      "filingDate": "2022-02-04",
+      "access": "read",
+      "finding": "Draft treaty for SAS Nicole Lamarche to absorb EARL Nicole Lamarche (538257973). No parcel schedule or lease.",
+      "reviewedPages": [
+        2,
+        4,
+        22
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:52+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b711c226-96b1-42ab-886b-4ca23d7905e6",
+      "sha256": "63bf876b132305c19f9130241d40f61289202b4a3a410764bff818a8c9ad5990",
+      "bytes": 7546391,
+      "pageCount": 37,
+      "screenedPages": 37,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2022",
+      "title": "SAS Nicole Lamarche: completion of the 2022 merger and statutes updated 16 March 2022",
+      "url": "https://actes.ccm2.net/acte/fa94508a-c840-47a9-ac70-0352a7b4be0a#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-03-16",
+      "filingDate": "2022-05-03",
+      "access": "read",
+      "finding": "Completion of the EARL merger and capital increase, with updated statutes. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        4,
+        10,
+        12,
+        35
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:51+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fa94508a-c840-47a9-ac70-0352a7b4be0a",
+      "sha256": "4ff6805225605383cd11a57bf2f5f94d2bec2044b4d97e31957d6a96f646d1ab",
+      "bytes": 1476864,
+      "pageCount": 35,
+      "screenedPages": 35,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-merger-2019b",
+      "title": "Draft merger of SARL Domaine François Lamarche into the GFV (second index entry)",
+      "url": "https://actes.ccm2.net/acte/150d7cbe-f7c5-4190-81b6-5ec8833c95d7#page=2",
+      "type": "company-filing",
+      "documentDate": "2019-05-10",
+      "filingDate": "2019-05-13",
+      "access": "read",
+      "finding": "Draft merger treaty. The same deposit is indexed again under the company’s former management number; content identical apart from the registry cover.",
+      "reviewedPages": [
+        2,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:36:15+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/150d7cbe-f7c5-4190-81b6-5ec8833c95d7",
+      "sha256": "5d00f1ef2059bcc4060e4c844c7d67aba167848e46aa395bf9f00c388b9095d6",
+      "bytes": 3765632,
+      "pageCount": 107,
+      "screenedPages": 107,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-donation-2010",
+      "title": "GFV Domaine François Lamarche: 4–5 October 2010 notarial donation of shares",
+      "url": "https://actes.ccm2.net/acte/252c38f7-043a-4bb9-a698-658b9620ad9c#page=2",
+      "type": "company-filing",
+      "documentDate": "2010-10-05",
+      "filingDate": "2010-12-20",
+      "access": "read",
+      "finding": "Notarial donation of bare-ownership shares. It recites a 29 November 2001 notarial rural lease by the GFV to two family members, from 1 January 2001 to 31 December 2018, of “the parcels belonging to it” in Vosne-Romanée, Vougeot, Flagey-Échezeaux and Boncourt-le-Bois, and their mise à disposition, authorised by the lessor, to SARL Domaine François Lamarche (353336068). No parcel list is given.",
+      "reviewedPages": [
+        2,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:44:38+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/252c38f7-043a-4bb9-a698-658b9620ad9c",
+      "sha256": "87bd8bd6ebd4e04c1f01f43805fae90fdb5f80519992690a572ef008921b938e",
+      "bytes": 600001,
+      "pageCount": 29,
+      "screenedPages": 29,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2010-10-04",
+          "kind": "first signing day of the deed"
+        }
+      ]
+    },
+    {
+      "id": "lgr-lamarche-2014",
+      "title": "GFV Domaine François Lamarche: 31 January 2014 meeting appointing managers",
+      "url": "https://actes.ccm2.net/acte/6722d073-acb0-4d56-8587-49785c7295bc#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-01-31",
+      "filingDate": "2014-02-07",
+      "access": "read",
+      "finding": "Mixed meeting appointing new managers after a founder’s death. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:41:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6722d073-acb0-4d56-8587-49785c7295bc",
+      "sha256": "d5e6117de7bd583177375d1bc273546e5cf589ffc490dde92c5175accee77909",
+      "bytes": 595269,
+      "pageCount": 19,
+      "screenedPages": 19,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-2014b",
+      "title": "GFV Domaine François Lamarche: 31 January 2014 meeting (second index entry)",
+      "url": "https://actes.ccm2.net/acte/5c421e1f-851d-4ab2-b7b1-68733f6b615c#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-01-31",
+      "filingDate": "2014-02-07",
+      "access": "read",
+      "finding": "Mixed meeting appointing new managers. The same deposit is indexed again under the company’s former management number; content identical apart from the registry cover.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T16:43:22+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5c421e1f-851d-4ab2-b7b1-68733f6b615c",
+      "sha256": "c9734c7a0e69052749874952121d2dffbbda2a782fecce35ac5e3a248aede4ef",
+      "bytes": 613168,
+      "pageCount": 19,
+      "screenedPages": 19,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "lgr-lamarche-page-2022",
+      "title": "Domaine François Lamarche: La Grande Rue technical sheet (archived 27 November 2022)",
+      "url": "https://web.archive.org/web/20221127112203/http://www.domaine-lamarche.com/pages/vins-fiches.php?rub=vins&lang=fr&vin=grande_rue",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:42Z",
+      "retrievedFrom": "https://web.archive.org/web/20221127112203/http://www.domaine-lamarche.com/pages/vins-fiches.php?rub=vins&lang=fr&vin=grande_rue",
+      "sha256": "7e3c6c4effb8b9ee9715ba45c25b4954591d4cc63e6e0a4254007288afeded3d",
+      "bytes": 36779,
+      "finding": "Internet Archive capture of the domaine’s own La Grande Rue page: “La Grande Rue, Monopole”, superficie 1 ha 65 a. No cadastral reference. The domain now serves unrelated content, so the archived capture is the cited version.",
+      "archivedAt": "2022-11-27"
     }
   ],
   "holders": [
     {
       "holderId": "397738634",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "lgr-lamarche-1994",
+        "lgr-lamarche-2001",
+        "lgr-lamarche-2010",
+        "lgr-lamarche-merger-2019",
+        "lgr-lamarche-cac-2019",
+        "lgr-lamarche-cac-2019b",
+        "lgr-lamarche-transformation-report-2019",
+        "lgr-lamarche-transformation-report-2019b",
+        "lgr-lamarche-2019-04",
+        "lgr-lamarche-2019-04b",
+        "lgr-lamarche-2019-06",
+        "lgr-lamarche-merger-2022",
+        "lgr-lamarche-2022",
+        "lgr-lamarche-merger-2019b",
+        "lgr-lamarche-donation-2010",
+        "lgr-lamarche-2014",
+        "lgr-lamarche-2014b",
+        "nicole"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Filings trace the 1994 GFA, which received the whole Lamarche vineyard business by an unfiled 1994 deed, to SAS Nicole Lamarche after its 2019 merger with the operating company. No filing prints AM1, AM2 or AM8; the company link is reviewed. Farming unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
   "externalResearch": [],
   "parcelFilings": [],
-  "producerHoldings": [],
+  "producerHoldings": [
+    {
+      "id": "lgr-lamarche",
+      "producer": "Domaine François Lamarche / Nicole Lamarche",
+      "namedAreas": [
+        "LA GRANDE RUE"
+      ],
+      "publishedAreaHa": 1.65,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "lgr-lamarche-page-2022"
+      ],
+      "finding": "A November 2022 capture of the domaine’s page gives La Grande Rue, monopole, 1 ha 65 a; AM 1, AM 2 and AM 8, recorded to Nicole Lamarche, measure 16,525 m² together. Census evidence only; no parcel or farming season is assigned.",
+      "producerHolderIds": [
+        "397738634"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "Bounded filing review: 17 of the 17 filings the free index lists for 397738634 were screened (591 pages); the rest are listed below as not screened. None prints AM 1, AM 2 or AM 8.",
+    "The 11 August 1994 notarial deed that contributed the Lamarche vineyard business to the GFA is recited by value only and is not in the free index; its parcel list would need a paid land-register copy (Tier 3).",
+    "The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.",
+    "The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.",
+    "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
+    "Winehog subscriber articles requested, not supplied: “La Grande Rue – in a Vosne-Romanee sweet spot” (2014-06-22); “Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”” (2018-12-09). No paywalled text was accessed.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3."
+  ],
+  "unmatchedPrintedReferences": [],
+  "holderLinks": "shared"
 }
