@@ -10,6 +10,7 @@ import laMoutonne from '../../lib/places/laMoutonneApproximation.json';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { GrandCruParcels,ParcelLegend,type ParcelLegendKey } from './GrandCruParcels';
 import { grandCruFor } from '../../lib/places/grandCruParcels/registry';
+import { climatParents } from '../../lib/places/grandCruParcels/climats';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const tiers:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village',regional:'Regional denomination'};
@@ -147,6 +148,8 @@ function VillageMapView({target,catalogue,producer,producerId}:{target:BurgundyV
  const grandClimats=catalogue.features.filter(f=>f.parentAppellation&&f.kind!=='named_plot');
  const namedPlots=catalogue.features.filter(f=>f.kind==='named_plot');
  const namedParent=selected.parentFeatureId??selected.id;
+ // An INAO climat (Corton Les Bressandes) shares its Grand Cru's parcel rights; the panel opens on its own parcels.
+ const climatParent=climatParents[selected.id],parcelParent=climatParent??namedParent;
  const namedLayer=catalogue.namedPlots?.find(layer=>layer.parentFeatureId===namedParent);
  const namedVisible=!!namedLayer;
  // Chablis's seven Grand Cru climats form one compact hillside inside a much
@@ -385,7 +388,7 @@ function VillageMapView({target,catalogue,producer,producerId}:{target:BurgundyV
      {selectionNotes.map(note=><p className="village-map-overlap" key={note}>{note}</p>)}
     </div>
     {selectedId!==wineSelectionId&&<button type="button" className="village-map-return" onClick={backToWine}>Back to this wine</button>}
-    {grandCruFor(namedParent,catalogue.id)&&<GrandCruParcels key={namedParent} map={ready?mapRef.current:null} parentId={namedParent} producer={producer} producerId={producerId} onLegend={setParcelLegend}/>}
+    {grandCruFor(parcelParent,catalogue.id)&&<GrandCruParcels key={parcelParent} map={ready?mapRef.current:null} parentId={parcelParent} climat={climatParent?{id:selected.id,name:selected.name}:null} producer={producer} producerId={producerId} onLegend={setParcelLegend}/>}
     <p className="village-map-hint">{hasVineyards?'Tap a vineyard on the map to explore it.':regional&&catalogue.features[0].coverage==='partial'?'Choose a commune to centre the overview. Coverage of this appellation is incomplete.':regional?(catalogue.features.length>1?`Compare the overview with the published ${catalogue.features[1].sectorColour??'red'}-only sector. Choosing a commune centres the view and keeps that area highlighted.`:catalogue.communes.length>1?'Choose a commune to centre the overview. The highlight continues to show the whole denomination.':`The map shows the full denomination in ${catalogue.communes[0].name}.`):'The map shows the appellation area across its producing communes.'}</p>
     <p className="village-map-context">{hasVineyards?<>{countLabel(grandCount,'Grand Cru','Grand Crus')}{grandClimats.length>0&&<> · {countLabel(grandClimats.length,'Grand Cru climat','Grand Cru climats')}</>} · {countLabel(vineyardCount('premier_cru'),'Premier Cru climat','Premier Cru climats')}</>:regional?`Regional denomination · ${countLabel(catalogue.communes.length,'commune','communes')}`:'Village appellation area'}{(!regional||catalogue.communes.length===1)&&<><br/>{joinPlaces(catalogue.communes.map(commune=>commune.name))}</>}</p>
     {catalogue.coverageNote&&<p className="village-map-note">{catalogue.coverageNote}</p>}{namedVisible&&<p className="village-map-note">{namedLayer?.coverageNote}</p>}

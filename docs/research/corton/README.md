@@ -319,6 +319,7 @@ python scripts/build_grand_cru_history_rollout.py --bundle corton --check
 python scripts/build_grand_cru_holder_links.py --check
 python scripts/build_grand_cru_research.py --all --check
 python scripts/build_grand_cru_app_registry.py --check
+python scripts/build_grand_cru_climats.py --check
 python scripts/audit_grand_cru_history_rollout.py --check
 npm run build
 python scripts/measure_grand_cru_payload.py

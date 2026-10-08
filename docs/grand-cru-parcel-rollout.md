@@ -332,6 +332,11 @@ evidence together with the history and coverage report.
    Otherwise the app lists recorded legal holders without domaine-research messages. Only crus with a committed commune-edge audit are wired into the app
    (`app_cru_slugs` in `grand_cru.py`); `test_grand_cru_config` fails if a cru without
    one is anything but a pending historical-extension delivery. Components need no change.
+   If the cru is divided into INAO climats on its village maps (Corton Les Bressandes,
+   Chablis Les Clos), also run `python scripts/build_grand_cru_climats.py`. It measures
+   each parcel's area in each climat from the committed parcel file and village maps, so
+   a climat's wine opens the panel on its own parcels. `test_grand_cru_parcels` runs it
+   with `--check`, so a rebuilt parcel bundle fails CI until the climat files follow.
 5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
    method, sources and limitations. Commit every build report, including the
    commune audit and the named-area audit.
