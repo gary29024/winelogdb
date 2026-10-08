@@ -541,6 +541,21 @@ class RomaneeSaintVivantTests(unittest.TestCase):
         self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
                           self.register['counts']['unresolved']), (15, 2))
 
+    def test_winehog_numbers_count_only_when_number_and_area_match(self):
+        articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
+        self.assertEqual(len(articles), 13)
+        for s in articles:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(s['url'].startswith('https://winehog.org/') and s['documentDate'] and s['bytes'])
+        critic = [x for x in self.curation['externalResearch'] if x['basis'] == 'critic-named-cadastral-reference']
+        self.assertEqual(sorted(p for x in critic for p in x['parcelIds']),
+                         ['21714000AL0001', '21714000AL0326', '21714000AL0327'])
+        # Dujac's 325 (0.170 ha) and Confuron's 300/298 (0.4982 ha) differ from the cadastre, so they stay as printed.
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertEqual(sorted(u['sourceId'] for u in unmatched), ['rsv-winehog-confuron', 'rsv-winehog-dujac'])
+        self.assertTrue(all(u['parcelIds'] == [] for u in unmatched))
+        self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
+
     def test_screened_filings_have_provenance_and_farming_stays_unverified(self):
         sources = {s['id']: s for s in self.resolved['sources']}
         own = [s for s in self.curation['sources'] if s['type'] == 'company-filing']
