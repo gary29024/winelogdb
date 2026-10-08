@@ -294,5 +294,160 @@ class ClosDeVougeotTests(unittest.TestCase):
         self.assertNotIn('caviste-clos-frantin-vougeot', bichot['sourceIds'])
 
 
+class RichebourgTests(unittest.TestCase):
+    """Exact filings, uncertain identities and unnamed reports must keep different meanings."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('richebourg'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+        cls.resolved = resolve_curation(cls.curation, 'richebourg', cls.table)
+
+    def test_all_ten_holders_are_researched_without_inventing_a_grivot_link(self):
+        self.assertEqual(self.context.cru['tier'], 2)
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        self.assertEqual(len(self.curation['holders']), 10)
+        for h in self.curation['holders']:
+            self.assertNotIn('candidateNames', h)
+            self.assertLessEqual(len(h['finding']), 330)
+            entry = self.table['holders'][h['holderId']]
+            self.assertTrue(entry['searches'])
+            self.assertGreater(entry['effort']['filingsScreened'], 0)
+        self.assertEqual(self.table['holders']['318506367']['links'], [])
+        self.assertNotIn('318506367', self.evidence['holderDomains'])
+        self.assertEqual(len(self.evidence['holderDomains']), 9)
+
+    def test_weak_identities_and_tenancy_cannot_be_domaine_headings(self):
+        expected = {'448502708': 'management-only-lead', '885114322': 'filing-tenant-relationship',
+                    'U14149307': 'name-and-seat-crosswalk'}
+        presentation = (ROOT / 'src/lib/places/parcelPresentation.ts').read_text(encoding='utf-8')
+        headings = presentation[presentation.index('const headingLabels'):presentation.index('const leadLabels')]
+        for hid, basis in expected.items():
+            self.assertEqual(self.evidence['holderDomains'][hid]['basis'], basis)
+            self.assertNotIn(f"'{basis}'", headings)
+        self.assertEqual(self.table['holders']['U14149307']['links'][0]['reviewStatus'], 'provisional')
+        af = self.table['holders']['885114322']['links'][0]
+        self.assertEqual((af['crus'], af['leaseStatus']), (['richebourg'], 'recited'))
+
+    def test_only_exact_current_filing_references_receive_evidence(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        exact = set()
+        sources = {s['id']: s for s in self.resolved['sources']}
+        for f in self.curation['parcelFilings']:
+            exact.update(f['parcelAreasM2'])
+            self.assertEqual(f['documentDate'], sources[f['sourceId']]['documentDate'])
+            for pid in f['parcelAreasM2']:
+                self.assertIn(f['holderId'], {r['holderId'] for r in rows[pid]['recordedRights']})
+        self.assertEqual(len(exact), 18)
+        self.assertEqual(len(self.curation['parcelFilings']), 5)
+        for n in (53, 57, 61, 65, 168, 247, 248, 290, 291):
+            self.assertNotIn(f'21714000AN{n:04}', exact)
+        self.assertEqual(self.register['counts']['withParcelFiling'], 18)
+
+    def test_historical_lease_dates_and_consolidated_tenancy_stay_qualified(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        meo = filings['ric-meo-1980-annex']
+        self.assertEqual(meo['documentDate'], '2016-12-29')
+        self.assertEqual(meo['leaseEvidence'][0]['effectiveFrom'], '1961-11-11')
+        self.assertEqual(meo['leaseEvidence'][0]['tenants'], ['an individual'])
+        anne = filings['ric-anne-gros-2019']['leaseEvidence']
+        self.assertEqual(anne[1]['parcelIds'], ['21714000AN0180', '21714000AN0238'])
+        self.assertIn('consolidates ownership and tenancy', anne[1]['limitation'])
+        af = filings['ric-af-gros-2020']['leaseEvidence'][0]
+        self.assertEqual((af['tenantSiren'], af['signedDate'], af['effectiveFrom']),
+                         ('383967346', '2018-06-12', '2017-11-11'))
+        self.assertTrue(all(l['kind'] == 'existing-lease-recital'
+                            for f in filings.values() for l in f['leaseEvidence']))
+
+    def test_unnamed_2025_report_and_census_never_create_a_candidate(self):
+        reports = [r for r in self.curation['externalResearch'] if r['sourceIds'] == ['ric-winehog-new-owner']]
+        self.assertEqual({p for r in reports for p in r['parcelIds']},
+                         {f'21714000AN{n:04}' for n in (292, 293, 294, 295)})
+        self.assertTrue(all(r['producer'] is None and r['currentFarmer'] is None for r in reports))
+        for row in self.register['parcels']:
+            if row['parcelId'] in {p for r in reports for p in r['parcelIds']}:
+                # Candidates come only from references printed for the retired parcels, never the unnamed report.
+                self.assertTrue(all(c['basis'].endswith(('on predecessor AN0170', 'on predecessor AN0172'))
+                                    for c in row['candidateLeads']))
+        self.assertEqual(len(self.curation['producerHoldings']), 11)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        af_holding = next(h for h in self.curation['producerHoldings'] if h['id'] == 'ric-af-gros')
+        self.assertEqual(af_holding['ownerHolderIds'], [])  # The GFA's 0.1281 ha is not the whole published 0.60 ha.
+        self.assertEqual(sum(not p['recordedRights'] for p in self.register['parcels']), 32)
+
+    def test_liger_belair_lease_reaches_split_parcels_only_through_lineage(self):
+        lease = next(r for r in self.curation['externalResearch'] if r['id'] == 'ric-tlb-metayage-2005')
+        self.assertEqual((lease['basis'], lease['parcelIds'], lease['currentFarmer']),
+                         ('filing-named-cadastral-reference', [], None))
+        self.assertEqual(lease['predecessorReferences'],
+                         {'21714000AN0170': ['21714000AN0292', '21714000AN0293'],
+                          '21714000AN0172': ['21714000AN0294', '21714000AN0295']})
+        self.assertIn('end of 2022', lease['finding'])  # The lease term and the 2025 sale stay stated.
+        self.assertIn('3 April 2025 sale', lease['finding'])
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n, former in ((292, 'AN0170'), (293, 'AN0170'), (294, 'AN0172'), (295, 'AN0172')):
+            row = rows[f'21714000AN{n:04}']
+            self.assertEqual((row['researchStatus'], row['recordedRights'], row['currentFarmer']), ('holder-lead', [], None))
+            self.assertEqual([(c['name'], c['basis']) for c in row['candidateLeads']],
+                             [('Domaine Thibault Liger-Belair', f'filing-named-cadastral-reference on predecessor {former}'),
+                              ('Domaine Thibault Liger-Belair', f'critic-named-cadastral-reference on predecessor {former}')])
+            items = [i for i in self.evidence['parcels'][row['parcelId']] if i['kind'] == 'research' and i.get('via') == former]
+            self.assertEqual(len(items), 2)
+            self.assertTrue(all(i['originalReferenceId'] == f'21714000{former}' for i in items))
+        sources = {s['id']: s for s in self.resolved['sources']}
+        deed = sources['ric-tlb-lease-contribution-2015']
+        self.assertEqual((deed['documentDate'], deed['filingDate'], deed['screenedPages']), ('2015-12-30', '2017-05-17', deed['pageCount']))
+        for printed in ('353575103', '44 a 13 ca', '7 a 92 ca'):
+            self.assertIn(printed, deed['finding'])
+        self.assertNotIn('ric-tlb-lease-contribution-2015', {sid for h in self.curation['holders'] for sid in h['sourceIds']})
+
+    def test_critic_cadastre_numbers_name_candidates_without_company_links(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        grivot = rows['21714000AN0247']
+        self.assertEqual((grivot['researchStatus'], [(c['name'], c['basis']) for c in grivot['candidateLeads']]),
+                         ('holder-lead', [('Domaine Jean Grivot', 'critic-named-cadastral-reference')]))
+        self.assertEqual(self.table['holders']['318506367']['links'], [])  # A critic article is not a company crosswalk.
+        self.assertNotIn('318506367', self.evidence['holderDomains'])
+        named = {r['id']: r for r in self.curation['externalResearch'] if r['basis'] == 'critic-named-cadastral-reference'}
+        self.assertEqual((named['ric-wh-mongeard-248']['parcelIds'], named['ric-wh-leroy-57-61']['parcelIds']),
+                         (['21714000AN0248'], ['21714000AN0057', '21714000AN0061']))
+        self.assertTrue(all(r['currentFarmer'] is None for r in named.values()))
+        # Leroy's printed "69" (0.0922 ha) is kept as printed, never corrected to AN168 by area.
+        printed = [u for u in self.curation['unmatchedPrintedReferences'] if u['sourceId'] == 'ric-winehog-leroy']
+        self.assertEqual([u['parcelIds'] for u in printed], [[]])
+        self.assertEqual([c['basis'] for c in rows['21714000AN0168']['candidateLeads']], ['name-and-seat-crosswalk'])
+        self.assertEqual(self.table['holders']['U14149307']['links'][0]['reviewStatus'], 'provisional')
+        sources = {s['id']: s for s in self.resolved['sources']}
+        for sid in ('ric-winehog-grivot', 'ric-winehog-mongeard', 'ric-winehog-leroy', 'ric-winehog-meo'):
+            self.assertRegex(sources[sid]['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(sources[sid]['documentDate'] and sources[sid]['otherDocumentDates'])
+
+    def test_every_screened_filing_has_provenance_and_all_page_screening(self):
+        sources = {s['id']: s for s in self.resolved['sources']}
+        used = {sid for h in self.curation['holders'] for sid in h['sourceIds']}
+        filings = [sources[sid] for sid in used if sources[sid]['type'] == 'company-filing']
+        self.assertEqual(len(filings), 36)
+        self.assertEqual(sum(s['pageCount'] for s in filings), 1454)
+        for source in filings:
+            self.assertEqual(source['screenedPages'], source['pageCount'])
+            self.assertRegex(source['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(source['documentDate'] and source['retrievedAt'] and source['reviewedPages'])
+            self.assertIn('filingDate', source)
+
+    def test_farming_and_other_cru_links_do_not_change(self):
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (30, 28))
+        echezeaux = resolve_curation(read_json(Context(*load_cru('echezeaux')).curation), 'echezeaux', self.table)
+        bichot = next(h for h in echezeaux['holders'] if h['holderId'] == '036380046')
+        self.assertNotIn('ric-bichot-richebourg-sheet', bichot['sourceIds'])
+        for d in self.evidence['holderDomains'].values():
+            self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
+
+
 if __name__ == '__main__':
     unittest.main()

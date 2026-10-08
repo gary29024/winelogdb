@@ -8,6 +8,7 @@ import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
 import gevreyManifest from '../../src/lib/places/grandCruParcels/gevrey-chambertin.manifest.json';
+import vosneManifest from '../../src/lib/places/grandCruParcels/vosne-romanee.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
 const evidenceLoad=vi.hoisted(()=>({fail:false,calls:0}));
@@ -27,6 +28,31 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals();evidenceLoad.fail=false;evidenceLoad.calls=0});
 describe('Cadastral parcel controls',()=>{
+ it('keeps Richebourg’s ten holders and unknown parcels visible when domaine grouping is enabled',async()=>{
+  const vosne=JSON.parse(readFileSync('public'+vosneManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vosne)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-1083"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  const grouping=await screen.findByLabelText('Group right holders by');
+  const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
+  const expand=screen.queryByRole('button',{name:/Show all .* entries/});
+  if(expand)fireEvent.click(expand);
+  expect(within(holders).getByRole('button',{name:/Domaine de la Romanée-Conti.*Company record/})).toBeTruthy();
+  expect(within(holders).getByRole('button',{name:/GFA Heritiers AF-Gros/i})).toBeTruthy();
+  expect(within(holders).queryByRole('button',{name:/^Domaine A\.-F\. Gros/})).toBeNull();
+  expect(within(holders).getByRole('button',{name:/identity by name and seat only/})).toBeTruthy();
+  fireEvent.change(grouping,{target:{value:'holder'}});
+  const all=screen.queryByRole('button',{name:/Show all 10 right holders/});
+  if(all)fireEvent.click(all);
+  expect(within(holders).getAllByRole('button')).toHaveLength(10);
+  const parcel=screen.getByLabelText('Cadastral parcel');
+  expect((parcel as unknown as HTMLSelectElement).options).toHaveLength(59);
+  fireEvent.change(parcel,{target:{value:'21714000AN0292'}});
+  expect(screen.getByText('No matched rights record')).toBeTruthy();
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(await within(panel).findByText(/leaves the new owner unnamed/)).toBeTruthy();
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
+ });
  it('keeps all 69 Vougeot legal holders searchable and groups only company-record links under a domaine',async()=>{
   const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));

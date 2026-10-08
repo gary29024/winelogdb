@@ -1260,9 +1260,9 @@
       "type": "company-filing",
       "documentDate": "2016-12-29",
       "filingDate": "2017-01-09",
-      "reviewedAt": "2026-10-07",
+      "reviewedAt": "2026-10-08",
       "access": "read",
-      "retrievedAt": "2026-10-07T11:43:58+00:00",
+      "retrievedAt": "2026-10-07T16:17:47.346780+00:00",
       "retrievedFrom": "https://actes.ccm2.net/acte/5b35a47b-a310-44b8-8c6f-0175473db175",
       "sha256": "883626d125b98f4a2252ab4a84706bed562304697fb8c753aeb94a72af212ab5",
       "bytes": 2682202,
@@ -1270,10 +1270,15 @@
       "reviewedPages": [
         7,
         8,
-        12
+        12,
+        21,
+        24,
+        33,
+        34
       ],
-      "screeningMethod": "All pages screened by embedded text or OCR; cited pages checked against the text and, for schedules, page images.",
-      "finding": "Records the GFA’s 20-year usufruct, from 29 December 2012, of vines owned by SAS Méo-Camuzet Frère et Sœurs, and withdraws Vougeot A548 (15 a 68 ca) to the partners."
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images.",
+      "finding": "Records the GFA’s 20-year usufruct, from 29 December 2012, of vines owned by SAS Méo-Camuzet Frère et Sœurs, and withdraws Vougeot A548 (15 a 68 ca) to the partners. Richebourg review: The annexed 22 December 1980 statutes print AN54 (3,061 m²) and AN59 (462 m²), and recite a nine-year 1961 métayage to an individual. The separately recited 2012 usufruct is not that lease.",
+      "screenedPages": 47
     },
     {
       "id": "meo-legal",
@@ -1400,10 +1405,10 @@
       "url": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5#page=1",
       "type": "company-filing",
       "documentDate": "1964-02-12",
-      "reviewedAt": "2026-10-01",
-      "finding": "The founding contribution schedule and its reproduction in the 1997 statutes print D535 (5,575 m²), D105 (290 m²), D104 (750 m²), total 6,615 m². Article 2 requires long-term leasing and forbids direct exploitation by the GFA; it does not identify an executed lease or tenant.",
+      "reviewedAt": "2026-10-08",
+      "finding": "The founding contribution schedule and its reproduction in the 1997 statutes print D535 (5,575 m²), D105 (290 m²), D104 (750 m²), total 6,615 m². Article 2 requires long-term leasing and forbids direct exploitation by the GFA; it does not identify an executed lease or tenant. Richebourg review: The original contribution and 1997 statutes name other vineyards, not current AN248. Mandatory long-term letting does not name a tenant; the estate’s 0.3112 ha publication remains census evidence only.",
       "access": "read",
-      "retrievedAt": "2026-09-30T16:14:51.068565+00:00",
+      "retrievedAt": "2026-10-07T16:19:21.821495+00:00",
       "sha256": "4bb2a3e2d7753a75d511193e13fec2fbfbb4c2c1ec62b4b0add5674923c64ef9",
       "bytes": 3121196,
       "retrievedFrom": "https://actes.ccm2.net/acte/5cd69d1a-b284-4aa8-85fc-5ea04e0d26e5",
@@ -1415,7 +1420,7 @@
         65
       ],
       "pageCount": 74,
-      "screeningMethod": "All pages screened by text/OCR; relevant schedules and recitals checked against page images.",
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images.",
       "filingDate": "2002-10-22",
       "otherDocumentDates": [
         {
@@ -1426,7 +1431,8 @@
           "date": "1998-01-01",
           "kind": "transformation effective date"
         }
-      ]
+      ],
+      "screenedPages": 74
     },
     {
       "id": "nicole",
@@ -4413,9 +4419,9 @@
       "type": "company-filing",
       "documentDate": "2001-12-10",
       "filingDate": "2001-12-27",
-      "reviewedAt": "2026-10-07",
+      "reviewedAt": "2026-10-08",
       "access": "read",
-      "retrievedAt": "2026-10-07T12:17:20+00:00",
+      "retrievedAt": "2026-10-07T16:19:43.841172+00:00",
       "retrievedFrom": "https://actes.ccm2.net/acte/1f10cb0c-c858-465c-b3ac-1d1c0b8cc1f8",
       "sha256": "52d3b534091b92c7e6b5d097f6042b1bbbeadd45af6ff8367fb6dc6b9e2a62af",
       "bytes": 1498220,
@@ -4425,8 +4431,9 @@
         2,
         33
       ],
-      "screeningMethod": "All pages screened by embedded text or OCR; cited pages checked against the text and, for schedules, page images.",
-      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and Marcelle Bize-Leroy as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference."
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images.",
+      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and an individual as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.",
+      "screenedPages": 43
     },
     {
       "id": "senard-legal",
@@ -4724,6 +4731,169 @@
       "sha256": "6ee74f0bcd33c6108c26c31cd1c201b35766d7fb98ac6755e99b5f8c0475a1eb",
       "bytes": 175970,
       "retrievedFrom": "https://winehog.org/domaine-comte-liger-belair-grands-echezeaux-51226/"
+    },
+    {
+      "id": "ric-af-gros-formation-2020",
+      "title": "GFA Héritiers AF-Gros: 1 July 2020 founding contribution and lease recital",
+      "url": "https://actes.ccm2.net/acte/de0997df-6924-4dcb-b213-a7a17418aa28#page=2",
+      "type": "company-filing",
+      "documentDate": "2020-07-01",
+      "filingDate": "2020-07-16",
+      "access": "read",
+      "finding": "Contributes AN243 (949 m²) and AN245 (332 m²), already let to SAS Domaine A.F Gros (383967346) for 18 years from 11 November 2017 under a notarial lease dated 12 June 2018. Only the recital, not the lease instrument, was reviewed.",
+      "reviewedPages": [
+        2,
+        6,
+        8,
+        9
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:32.852991+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/de0997df-6924-4dcb-b213-a7a17418aa28",
+      "sha256": "cd56a3854557ceed5ef4a37be4fa638eaf76d4ac214b8dd3460e6f8ddff4843e",
+      "bytes": 3194067,
+      "pageCount": 49,
+      "screenedPages": 49,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "rne-036380046",
+      "title": "Company register: BICHOT SA (036380046)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/036380046",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:13:10.116346+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=036380046",
+      "sha256": "318b8682daa3e4de4bf70218bc084c17f5f5d35537742bd3a350cb23809ad694",
+      "bytes": 5478,
+      "finding": "Exact SIREN and legal denomination; registered in BEAUNE, activity 11.02B. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-318506367",
+      "title": "Company register: JEAN GRIVOT (318506367)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/318506367",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:14:03.056748+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=318506367",
+      "sha256": "c699ab57190f13e9822046627efa954c4681d4b4fc8a342844372769c1718a42",
+      "bytes": 3915,
+      "finding": "Exact SIREN and legal denomination; registered in VOSNE-ROMANEE, activity 68.20B. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-348024928",
+      "title": "Company register: ANNE GROS (348024928)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/348024928",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:14:11.556666+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=348024928",
+      "sha256": "21ec945680fde91c6bdb0f9242dcf1ed62977b54c8c6b77ee9599b1f7967e74d",
+      "bytes": 3183,
+      "finding": "Exact SIREN and legal denomination; registered in VOSNE-ROMANEE, activity 01.21Z. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-778269407",
+      "title": "Company register: DOMAINE DE LA ROMANEE CONTI (778269407)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/778269407",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:14:24.868322+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778269407",
+      "sha256": "583b099e2c5c73dab1b8716ee3236fecbe73e47eb188f093280eb6413755cea2",
+      "bytes": 15113,
+      "finding": "Exact SIREN and legal denomination; registered in VOSNE-ROMANEE, activity 01.21Z. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-778269498",
+      "title": "Company register: GFA MONGEARD MUGNERET ET FILS (778269498)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/778269498",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:14:28.964142+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778269498",
+      "sha256": "340774f3733acbc29a06767318afe903d60cfef9cb61759243261008b52e1859",
+      "bytes": 4705,
+      "finding": "Exact SIREN and legal denomination; registered in VOSNE-ROMANEE, activity 68.20B. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-885114322",
+      "title": "Company register: GFA HERITIERS AF-GROS (885114322)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/885114322",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:14:33.468815+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=885114322",
+      "sha256": "c78135ff0fd778bb66d5789cc6591eff87d677c92548fa47fd6b06da9bc2f024",
+      "bytes": 4428,
+      "finding": "Exact SIREN and legal denomination; registered in POMMARD, activity 68.20B. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "rne-383967346",
+      "title": "Company register: DOMAINE A.F.GROS (383967346)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/383967346",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:37:47.492066+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=383967346",
+      "sha256": "4478aef730252b0b543b9fbaa52b5613fc107afdcee05f3fc20c7aac3e5980d5",
+      "bytes": 3896,
+      "finding": "Exact SIREN and legal denomination; registered in POMMARD, activity 01.21Z. Legal identity only; not parcel operation."
+    },
+    {
+      "id": "ric-bichot-richebourg-sheet",
+      "title": "Albert Bichot: Richebourg Grand Cru, Domaine du Clos Frantin",
+      "url": "https://www.albert-bichot.com/fichiers/Richebourg_Grand_Cru_Domaine_du_Clos_Frantin--Domaines_Albert_Bichot--vin_co_M1ILHF.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:04.658431+00:00",
+      "retrievedFrom": "https://www.albert-bichot.com/fichiers/Richebourg_Grand_Cru_Domaine_du_Clos_Frantin--Domaines_Albert_Bichot--vin_co_M1ILHF.pdf",
+      "sha256": "dda957a4ad843c7c740e229674f1a32104d5674cf5a9b29c0160b06ebab5f26a",
+      "bytes": 2739648,
+      "finding": "Official undated sheet identifies Domaine du Clos Frantin and 0.07 ha. No cadastral reference or farming season.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "ric-leroy-representative-2006",
+      "title": "Leroy SA: 15 September 2006 representative appointment for SCI and SCE",
+      "url": "https://actes.ccm2.net/acte/49ab5756-3546-4877-bc89-56c14ff55243#page=1",
+      "type": "company-filing",
+      "documentDate": "2006-09-15",
+      "filingDate": "2007-03-22",
+      "access": "read",
+      "finding": "Leroy SA appoints its representative in both the SCE and SCI Domaine Leroy. This corporate connection does not resolve the provisional DGFiP identifier by a parcel schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:35.748927+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/49ab5756-3546-4877-bc89-56c14ff55243",
+      "sha256": "e49b4183fb1cc88cb6fbc23f9a4d4da90227d2a3f0217bf54f90f4f0eac7f675",
+      "bytes": 58707,
+      "pageCount": 3,
+      "screenedPages": 3,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
     }
   ],
   "holders": {
@@ -4789,6 +4959,21 @@
           ],
           "reviewStatus": "reviewed",
           "reviewedAt": "2026-10-07"
+        },
+        {
+          "id": "036380046/richebourg",
+          "domaine": "Domaine du Clos Frantin / Albert Bichot",
+          "relation": "owner-company",
+          "basis": "The exact Bichot company identity and its official Richebourg sheet identify the Domaine du Clos Frantin label. This addition is limited to Richebourg.",
+          "sourceIds": [
+            "rne-036380046",
+            "ric-bichot-richebourg-sheet"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08",
+          "crus": [
+            "richebourg"
+          ]
         }
       ],
       "searches": [
@@ -4806,8 +4991,23 @@
             "producer site"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 98,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "037180015": {
       "links": [
@@ -5243,11 +5443,22 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
         "filingsScreened": 4,
-        "pagesRead": 366
+        "pagesRead": 271,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 4 filings / 366 pages."
       }
     },
     "322396185": {
@@ -5887,8 +6098,23 @@
             "Échezeaux and Grands-Échezeaux research sources"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 111,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "348334384": {
       "links": [
@@ -7023,11 +7249,22 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 8,
-        "pagesRead": 289
+        "filingsScreened": 5,
+        "pagesRead": 188,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 8 filings / 289 pages."
       }
     },
     "440712529": {
@@ -7141,11 +7378,22 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 5,
-        "pagesRead": 150
+        "filingsScreened": 4,
+        "pagesRead": 73,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 5 filings / 150 pages."
       }
     },
     "449347426": {
@@ -8308,8 +8556,23 @@
             "Échezeaux and Grands-Échezeaux research sources"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 325,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "778269498": {
       "links": [
@@ -8333,8 +8596,23 @@
             "Échezeaux and Grands-Échezeaux research sources"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 168,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "778269928": {
       "links": [],
@@ -9071,7 +9349,7 @@
           "sci-domaine-leroy-2001",
           "rne-427469135"
         ],
-        "limitation": "SCI Domaine Leroy (Vosne-Romanée) matches this abbreviated name and seat; its 2001 filing describes a Clos Vougeot vine without a current cadastral reference, so the match rests on name and seat. The rights file keeps the provisional identifier."
+        "limitation": "SCI Domaine Leroy (Vosne-Romanée) matches the abbreviated name and seat. Its three reviewed filings provide no exact Richebourg schedule for AN57, AN61 or AN168, so the DGFiP provisional identifier is not resolved by parcel evidence."
       },
       "links": [
         {
@@ -9082,7 +9360,8 @@
           "sourceIds": [
             "rne-427469135",
             "rne-778269365",
-            "sci-domaine-leroy-2001"
+            "sci-domaine-leroy-2001",
+            "ric-leroy-representative-2006"
           ],
           "reviewStatus": "provisional",
           "reviewedAt": "2026-10-07"
@@ -9097,11 +9376,22 @@
             "actes.ccm2.net"
           ],
           "outcome": "partial"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "partial"
         }
       ],
       "effort": {
-        "filingsScreened": 1,
-        "pagesRead": 43
+        "filingsScreened": 3,
+        "pagesRead": 49,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 1 filings / 43 pages."
       }
     },
     "U18178008": {
@@ -9917,6 +10207,64 @@
           "outcome": "linked"
         }
       ]
+    },
+    "318506367": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "no-link-found"
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 61,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
+    },
+    "885114322": {
+      "links": [
+        {
+          "id": "885114322/richebourg",
+          "domaine": "Domaine A.-F. Gros",
+          "relation": "lessor-per-filing",
+          "basis": "The GFA’s 1 July 2020 founding deed names SAS Domaine A.F Gros (383967346) as tenant of AN243 and AN245 under a recited 2018 lease. The original lease and current operation are unverified.",
+          "sourceIds": [
+            "rne-885114322",
+            "rne-383967346",
+            "ric-af-gros-formation-2020"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08",
+          "crus": [
+            "richebourg"
+          ],
+          "leaseStatus": "recited"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 110,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     }
   }
 }

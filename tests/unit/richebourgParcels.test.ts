@@ -33,10 +33,12 @@ describe('Richebourg Tier 1',()=>{
   expect(burgundyVillageMapTarget({...wine,referenceSite:'Échezeaux Les Richebourgs'})).toBeNull();
   expect(burgundyVillageMapTarget({...wine,appellation:'Échezeaux',wineName:'Les Richebourgs'})?.namedPlotId).toBeUndefined();
  });
- it('enables only the audited Vosne cru and keeps rights separate from farming',async()=>{
-  expect(grandCruFor('inao-denom-1083','vosne-romanee')).toMatchObject({slug:'richebourg',domaineGrouping:false,evidenceFrom:['richebourg']});
+ it('enables only the audited Vosne cru; Tier 2 groups holders from the shared table, separate from farming',async()=>{
+  expect(grandCruFor('inao-denom-1083','vosne-romanee')).toMatchObject({slug:'richebourg',domaineGrouping:true,evidenceFrom:['richebourg']});
   const evidence=await loadParcelEvidence('inao-denom-1083');
   expect(evidence).not.toBeNull();
-  expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
+  // Tier 2 (#425): nine of ten holders have a shared-table link; Grivot keeps its legal name.
+  expect(Object.keys(evidence.holderDomains??{})).toHaveLength(9);
+  expect(evidence.holderDomains?.['318506367']).toBeUndefined();
  });
 });
