@@ -44,7 +44,7 @@ A cru uses the table once its curation sets `"holderLinks": "shared"`, normally 
 | Montrachet | no | 15 | 3 | 33 | 7 |
 | Musigny | no | 16 | 5 | 30 | 9 |
 | Richebourg | yes | 10 | 9 | 26 | 25 |
-| Romanée-Conti | no | 1 | 1 | 2 | 2 |
+| Romanée-Conti | yes | 1 | 1 | 2 | 2 |
 | Romanée-Saint-Vivant | yes | 11 | 10 | 16 | 15 |
 | Ruchottes-Chambertin | no | 6 | 2 | 13 | 3 |
 
@@ -55,7 +55,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | Holder | Recorded name | Crus | Parcels | Links | Identity | Effort | Last review |
 | --- | --- | ---: | ---: | --- | --- | --- | --- |
 | 200047827 | HOSPICES CIVILS DE BEAUNE | 5 | 34 | Domaine des Hospices de Beaune (owner-company; reviewed) | — | — | 2026-10-07 |
-| 778269407 | DOMAINE DE LA ROMANEE CONTI | 8 | 33 | Domaine de la Romanée-Conti (owner-company; reviewed) | — | 10 filings, 610 pages | 2026-10-08 |
+| 778269407 | DOMAINE DE LA ROMANEE CONTI | 8 | 33 | Domaine de la Romanée-Conti (owner-company; reviewed) | — | 7 filings, 548 pages | 2026-10-08 |
 | 424718583 | DOMAINE DE CHATEAU GRENOUILLE | 1 | 32 | — | — | — | — |
 | 425720703 | SOC EXPLOIT DOMAINES ALEXANDRE MOREAU | 1 | 32 | — | — | — | — |
 | U22199826 | GROUPEMENT FONCIER VITICOLE WILLIAM FEVRE | 1 | 30 | — | — | — | — |

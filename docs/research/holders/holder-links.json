@@ -8777,12 +8777,22 @@
             "Romanée-Saint-Vivant producer and importer publications"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Conti estate publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 10,
-        "pagesRead": 610,
-        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 3 filings / 325 pages."
+        "filingsScreened": 7,
+        "pagesRead": 548,
+        "note": "Romanée-Conti #427 pass; re-screens DRC filings read for earlier crus, not an additive lifetime total. Prior recorded pass: 10 filings / 610 pages."
       }
     },
     "778269498": {

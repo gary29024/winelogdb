@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-InBiPPyw.js"
+    "dist/client/assets/index-Bp_uLGSu.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-C2iqaA6u.js",
-    "dist/client/assets/SectionLabel-p8lTgdK3.js",
-    "dist/client/assets/SparklingDetailsCard-DI8-gpuJ.js",
-    "dist/client/assets/VillageMap-CToIz-0_.js",
-    "dist/client/assets/burgundyAtlas-BHRqxyCu.js",
-    "dist/client/assets/index-CzV0jQcD.js",
-    "dist/client/assets/index-InBiPPyw.js",
+    "dist/client/assets/FriendTagDialog-DB_zLb7-.js",
+    "dist/client/assets/SectionLabel-BjvYY4pk.js",
+    "dist/client/assets/SparklingDetailsCard-CAIaW2Jb.js",
+    "dist/client/assets/VillageMap-BxNKeW4d.js",
+    "dist/client/assets/burgundyAtlas-CZwWPm94.js",
+    "dist/client/assets/index-00281tQW.js",
+    "dist/client/assets/index-Bp_uLGSu.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-B-SUHjSk.js",
-    "dist/client/assets/wineDetailCompact-B6b50A71.js"
+    "dist/client/assets/useModalFocus-CVnHvya-.js",
+    "dist/client/assets/wineDetailCompact-CM1py8mu.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5590805,
-  "evidenceGzipBytesTotal": 500065,
+  "evidenceBytesTotal": 5595621,
+  "evidenceGzipBytesTotal": 501255,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -238,10 +238,10 @@
     },
     {
       "cru": "romanee-conti",
-      "file": "dist/client/assets/romanee-conti.evidence-ZajyZk14.js",
-      "sha256": "d42a804e795ea71be424ad7cface2a0b46979780e872fc0c94fd59173c60de6c",
-      "bytes": 43753,
-      "gzipBytes": 7679
+      "file": "dist/client/assets/romanee-conti.evidence-C4fINfmD.js",
+      "sha256": "3c69440472e5835b4d4b2541961ecaa8d0d539c95b546d10a91d6cc9f1b55e5a",
+      "bytes": 48569,
+      "gzipBytes": 8869
     },
     {
       "cru": "romanee-saint-vivant",

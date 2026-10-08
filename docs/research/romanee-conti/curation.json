@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-08",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-1084",
-  "status": "tier-1-reviewed",
-  "scope": "All 2 mapped Romanée-Conti parcels and 1 recorded legal-entity identifier reviewed for Tier 1, including commune edges, the cadastral named area and the #461 historical extension. The notice indexes contain no exact reachable-reference evidence and no pending candidates. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "Both mapped Romanée-Conti parcels and the one recorded holder identifier reviewed for Tier 2 (#427) through the shared holder table; 7 DRC filings / 548 pages screened. The exact 1974 schedule, the retired reference reached through DFI lineage and the published estate total remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,28 +41,288 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "rc-drc-statutes-1974",
+      "title": "DRC: 21 December 1974 notarial statutes and estate schedule (filed 2002)",
+      "url": "https://actes.ccm2.net/acte/5409256#page=38",
+      "type": "company-filing",
+      "documentDate": "1974-12-21",
+      "filingDate": "2002-07-31",
+      "access": "read",
+      "finding": "Romanée-Conti review: the 21 December 1974 notarial statutes describe the Domaine de la Romanée-Conti as then composed, including 28°) AN 72 “La Romanée Conti”, 9 a 27 ca, matching today, and 29°) AN 73 “La Romanée Conti”, 1 ha 71 a 23 ca, retired in 1994 for AN 258. Schedule checked against the page images. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "reviewedPages": [
+        36,
+        38,
+        39,
+        74
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409256",
+      "sha256": "f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68",
+      "bytes": 3706675,
+      "pageCount": 125,
+      "screenedPages": 125,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2003",
+      "title": "DRC: 27 November 2003 meeting and recast statutes",
+      "url": "https://actes.ccm2.net/acte/5409358#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "filingDate": "2004-01-29",
+      "access": "read",
+      "finding": "Recast statutes reciting the 1942 contribution of the whole estate and its brands; no cadastral reference or Romanée-Conti schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        32,
+        33
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409358",
+      "sha256": "8490ca607cdfb6ded3aae9dc22f92226f64ea6a7922d50d02590bf98aefb2c9e",
+      "bytes": 2082952,
+      "pageCount": 63,
+      "screenedPages": 63,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2018",
+      "title": "DRC: 26 January 2018 completion of the December 2017 capital increase",
+      "url": "https://actes.ccm2.net/acte/5409360#page=2",
+      "type": "company-filing",
+      "documentDate": "2018-01-26",
+      "filingDate": "2018-06-21",
+      "access": "read",
+      "finding": "Records the capital increase decided on 20 December 2017 and updated statutes. No cadastral reference or Romanée-Conti schedule.",
+      "reviewedPages": [
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:05+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409360",
+      "sha256": "1e587daa78a0c37ea9e71f7d8778cf83d94ed5b926b67d41e8edd29e1c80a51a",
+      "bytes": 2554683,
+      "pageCount": 57,
+      "screenedPages": 57,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2022",
+      "title": "DRC: 21 March 2022 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/5409233#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-03-21",
+      "filingDate": "2022-04-15",
+      "access": "read",
+      "finding": "Share donation and updated statutes reproducing the brand wording; no cadastral reference.",
+      "reviewedPages": [
+        2,
+        31,
+        32
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:32:21+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409233",
+      "sha256": "5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708",
+      "bytes": 2655931,
+      "pageCount": 65,
+      "screenedPages": 65,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2024",
+      "title": "DRC: 14 November 2024 management declaration and bundled share deeds",
+      "url": "https://actes.ccm2.net/acte/34207319#page=6",
+      "type": "company-filing",
+      "documentDate": "2024-11-14",
+      "filingDate": "2024-11-14",
+      "access": "read",
+      "finding": "Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including “Romanée-Conti”. No cadastral reference or parcel schedule.",
+      "reviewedPages": [
+        6,
+        45,
+        46
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:07:24+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
+      "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
+      "bytes": 8473781,
+      "pageCount": 135,
+      "screenedPages": 135,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2003-first",
+      "title": "DRC: 27 November 2003 extraordinary meeting and updated statutes (first deposit)",
+      "url": "https://actes.ccm2.net/acte/5409357#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "filingDate": "2003-12-02",
+      "access": "read",
+      "finding": "Meeting simplifying the statutes, with updated statutes reciting the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including “Romanée-Conti”. No cadastral reference or parcel schedule. The same meeting’s recast statutes were deposited again on 29 January 2004.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        32
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T15:15:01+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409357",
+      "sha256": "d0e1c017dc40652a98d1ee00d7626023bd5ff85c00199edee5460ecbdf70efc3",
+      "bytes": 2107504,
+      "pageCount": 62,
+      "screenedPages": 62,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-2009",
+      "title": "DRC: 15 April 2009 extraordinary meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/5409238#page=1",
+      "type": "company-filing",
+      "documentDate": "2009-04-15",
+      "filingDate": "2009-05-25",
+      "access": "read",
+      "finding": "Meeting changing the voting rights of usufructuaries and bare owners (articles 12, 21 and 22). The updated statutes recite the 1942 contribution of the whole estate and its brands, including “Romanée-Conti”. No cadastral reference or parcel schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        7,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T15:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409238",
+      "sha256": "dd0eeaa91e31c1766bdad78c0c1fb9f36caa621872c3f0782b195bcb0fcfec9d",
+      "bytes": 1103977,
+      "pageCount": 41,
+      "screenedPages": 41,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rc-drc-estate",
+      "title": "Domaine de la Romanée-Conti: Romanée-Conti",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/7/romanee-conti",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:00:44Z",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/7/romanee-conti",
+      "sha256": "3dd404c9f6c259e4a3f3cf92640305039de2f112db0ac5bbb187d7f12aaab58d",
+      "bytes": 219286,
+      "finding": "Undated estate page publishes 1.8140 ha and bottle counts from 1953. That figure equals the summed cadastral areas of AN 72 and AN 258 recorded to the DRC, but a published total is not a parcel assignment."
     }
   ],
   "holders": [
     {
       "holderId": "778269407",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rc-drc-statutes-1974",
+        "rc-drc-2003",
+        "rc-drc-2018",
+        "rc-drc-2022",
+        "rc-drc-2024",
+        "rc-drc-2003-first",
+        "rc-drc-2009",
+        "rne-778269407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1974 notarial estate schedule names AN72 with its exact area and retired AN73, which reaches AN258 only through the 1994 DFI croquis. 6 later DRC filings add no cadastral schedule or lease; legal company identity remains a research link. Farming unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "rc-drc-1974-an73",
+      "title": "DRC: 1974 schedule of former AN 73",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The DRC’s 21 December 1974 notarial statutes list AN 73, “La Romanée Conti”, 1 ha 71 a 23 ca, written out in words. A one-to-one DFI croquis validated on 30 May 1994 replaced AN 73 with AN 258, whose cadastral area is 1 ha 72 a 13 ca (90 m² more). The filing never prints AN 258, so it reaches that parcel only through documented DFI lineage; DGFiP lists the DRC as owner of AN 258 in every available year from 2019. Historical estate evidence; current farming is not established.",
+      "sourceIds": [
+        "rc-drc-statutes-1974",
+        "dgfip-history"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AN73"
+      ],
+      "predecessorReferences": {
+        "21714000AN0073": [
+          "21714000AN0258"
+        ]
+      },
+      "appNote": "Former AN 73 (1 ha 71 a 23 ca) is in the DRC’s 1974 estate schedule; a 1994 DFI croquis replaced it with this parcel, 90 m² larger. Historical estate evidence via lineage, not current farming.",
+      "dateSourceId": "rc-drc-statutes-1974",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "rc-drc-1974",
+      "sourceId": "rc-drc-statutes-1974",
+      "title": "DRC: 1974 notarial estate schedule",
+      "holderId": "778269407",
+      "companySiren": "778269407",
+      "documentDate": "1974-12-21",
+      "parcelAreasM2": {
+        "21714000AN0072": 927
+      },
+      "leaseEvidence": [],
+      "finding": "The 21 December 1974 notarial statutes list AN 72, “La Romanée Conti”, 9 a 27 ca, matching today’s area. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "appNote": "The 1974 notarial statutes name this parcel and its exact cadastral area. Filed in 2002; this is historical estate evidence, not a 2002 acquisition or verified current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        36,
+        38,
+        74
+      ],
+      "printedReferences": [
+        "AN72"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "rc-drc",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LA ROMANEE CONTI"
+      ],
+      "publishedAreaHa": 1.814,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "rc-drc-estate"
+      ],
+      "finding": "Undated estate page gives 1.8140 ha, equal to the summed cadastral areas of AN 72 (927 m²) and AN 258 (17,213 m²) recorded to the DRC. Census evidence only; no farming season inferred.",
+      "producerHolderIds": [
+        "778269407"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.",
+    "No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.",
+    "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
+    "Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “From Romanee-Conti to Vougeot in the vines” (2021-04-25). No paywalled text was accessed.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3."
+  ],
+  "unmatchedPrintedReferences": [],
+  "holderLinks": "shared"
 }

@@ -61,7 +61,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"montrachet",name:"Montrachet",parentFeatureId:"inao-denom-927",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["montrachet"],domaineGrouping:false},
  {slug:"musigny",name:"Musigny",parentFeatureId:"inao-denom-973",villageMaps:["chambolle-musigny"],bundle:"chambolle-morey",evidenceFrom:["musigny"],domaineGrouping:false},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:true},
- {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:false},
+ {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:true},
  {slug:"romanee-saint-vivant",name:"Romanée-Saint-Vivant",parentFeatureId:"inao-denom-1085",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-saint-vivant"],domaineGrouping:true},
  {slug:"ruchottes-chambertin",name:"Ruchottes-Chambertin",parentFeatureId:"inao-denom-1086",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["ruchottes-chambertin"],domaineGrouping:false},
 ];

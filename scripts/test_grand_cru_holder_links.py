@@ -557,5 +557,45 @@ class RomaneeSaintVivantTests(unittest.TestCase):
         self.assertIn('Romanée-Saint-Vivant review', sources['heritiers-confuron-statutes-2024']['finding'])
 
 
+class RomaneeContiTests(unittest.TestCase):
+    """The DRC's 1974 schedule is exact only where the printed reference and area are today's."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('romanee-conti'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_the_one_holder_is_researched_through_the_shared_link(self):
+        self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))
+        self.assertEqual([h['holderId'] for h in self.curation['holders']], ['778269407'])
+        entry = self.table['holders']['778269407']
+        self.assertTrue(any(s['at'] == '2026-10-08' and 'Romanée-Conti estate publications' in s['where'] for s in entry['searches']))
+        self.assertIn('Romanée-Conti #427', entry['effort']['note'])
+        self.assertEqual(self.evidence['holderDomains']['778269407']['basis'], 'company-identity')
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (2, 0))
+
+    def test_an72_is_exact_and_an258_inherits_only_through_the_1994_croquis(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        self.assertEqual(rows['21714000AN0072']['parcelFilingIds'], ['rc-drc-1974'])
+        self.assertEqual(rows['21714000AN0258']['parcelFilingIds'], [])
+        lineage = next(x for x in self.curation['externalResearch'] if x['id'] == 'rc-drc-1974-an73')
+        self.assertEqual((lineage['parcelIds'], lineage['predecessorReferences']), ([], {'21714000AN0073': ['21714000AN0258']}))
+        items = [i for i in self.evidence['parcels']['21714000AN0258'] if i['kind'] == 'research' and i.get('via') == 'AN0073']
+        self.assertEqual(len(items), 1)
+        self.assertEqual(self.register['counts']['withParcelFiling'], 1)
+
+    def test_the_published_total_stays_census_and_farming_unverified(self):
+        holding = self.curation['producerHoldings'][0]
+        self.assertEqual((holding['publishedAreaHa'], holding['namedAreas']), (1.814, ['LA ROMANEE CONTI']))
+        self.assertNotIn('parcelIds', holding)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        for d in self.evidence['holderDomains'].values():
+            self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
+
+
 if __name__ == '__main__':
     unittest.main()
