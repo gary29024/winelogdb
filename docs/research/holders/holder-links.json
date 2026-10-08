@@ -5108,6 +5108,7 @@
         1,
         2,
         3,
+        9,
         14,
         18,
         19,
@@ -5117,7 +5118,19 @@
       "screenedPages": 39,
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
-      "pageCount": 39
+      "pageCount": 39,
+      "additionalReviews": [
+        {
+          "reviewedAt": "2026-10-09",
+          "pages": [
+            9
+          ],
+          "imageReviewedPages": [
+            9
+          ],
+          "finding": "The same historical property schedule identifies Morey AR146, En La Rue de Vergy, 1537 m2, described as AOC Morey-Saint-Denis. Exact recorded-holder property evidence; the tiny Clos de Tart overlap does not override the printed classification."
+        }
+      ]
     },
     {
       "id": "cm-perrot-minot-2017",
@@ -7358,6 +7371,147 @@
       "retrievedAt": "2026-10-08T15:22:08.993076+00:00",
       "retrievalNote": "Authorized user-supplied MHTML. Hash identifies the original archive; full text and images stay outside Git.",
       "finding": "Names cadastre 60 at 7.2548 ha and 64 at 0.2780 ha as Clos de Tart. It reports that the latter retained the Bonnes-Mares cadastral name after its 1966 inclusion in Clos de Tart. Historical references and classification, not present farming."
+    },
+    {
+      "id": "ct-mabi-1998",
+      "title": "420933681: mabi 1998",
+      "url": "https://actes.ccm2.net/acte/efe9dd96-0cfe-495e-9c3b-68ba031befc0",
+      "type": "company-filing",
+      "documentDate": "1998-11-13",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:06.248839+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/efe9dd96-0cfe-495e-9c3b-68ba031befc0",
+      "sha256": "0ca87f366b2993757a8b53517461f5ca37fd1cbeb1cdf1871765c64f26dbbb81",
+      "bytes": 540008,
+      "finding": "GFA MABI cash formation; the final mandate authorizes an unspecified property acquisition, future long-term rural lease and borrowing. No AR139 reference, individual area or named producer/tenant. The family name alone does not establish a domaine link.",
+      "filingDate": "1998-11-26",
+      "pageCount": 13,
+      "screenedPages": 13,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        12,
+        13
+      ],
+      "imageReviewedPages": [
+        13
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "ct-perrot-scea-2017",
+      "title": "432273274: perrot scea 2017",
+      "url": "https://actes.ccm2.net/acte/fc241c4e-afb1-40e7-96bd-00a4905c8ae7",
+      "type": "company-filing",
+      "documentDate": "2017-05-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:06.175836+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fc241c4e-afb1-40e7-96bd-00a4905c8ae7",
+      "sha256": "302f03d1fd54635f88e88890004e6d3052057b041453ffda97b2b85df0fbf9c3",
+      "bytes": 575153,
+      "finding": "Share transfer to the distinct company Christophe Perrot Minot 413728650 and updated wine-estate SCEA statutes. Corporate share ownership, not an AR147 property transfer or a parcel lease.",
+      "filingDate": "2017-07-10",
+      "pageCount": 13,
+      "screenedPages": 13,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        6,
+        7,
+        8
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "ct-perrot-scea-2007",
+      "title": "432273274: perrot scea 2007",
+      "url": "https://actes.ccm2.net/acte/2b33bd2b-a467-4b51-b3cf-8d1f6fd5180e",
+      "type": "company-filing",
+      "documentDate": "2007-12-19",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:05.455421+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2b33bd2b-a467-4b51-b3cf-8d1f6fd5180e",
+      "sha256": "c2894bbe203b1c2fc1fa963d20eef326200cdfc0b3731bcaf647cbb5910043d8",
+      "bytes": 274913,
+      "finding": "Capital reduction followed by cash increase and updated SCEA statutes. No individual AR147 cadastral or tenancy evidence.",
+      "filingDate": "2008-06-19",
+      "pageCount": 11,
+      "screenedPages": 11,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "ct-perrot-scea-2000",
+      "title": "432273274: perrot scea 2000",
+      "url": "https://actes.ccm2.net/acte/3d668223-6f9a-4545-bcde-0c5847eaa8f5",
+      "type": "company-filing",
+      "documentDate": "2000-07-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:53:07.775303+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3d668223-6f9a-4545-bcde-0c5847eaa8f5",
+      "sha256": "e530252288d30edb197913f4c51df5db098b546b396e5c23629093175973e3c0",
+      "bytes": 245014,
+      "finding": "Formation of the SCEA du Domaine Christophe Perrot Minot, SIREN 432273274, with cash capital and agricultural production and harvest-sale objects. No AR147 property contribution or lease schedule.",
+      "filingDate": "2000-07-21",
+      "pageCount": 11,
+      "screenedPages": 11,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        10,
+        11
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "ct-rne-420933681",
+      "title": "Company register: GFA MABI (420933681)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=420933681",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:51:55.415454+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=420933681",
+      "sha256": "4fbdc408f24fdd8d9eae21476bdb88a03d71a6f7ecadcc0055d0d4cb86f2140c",
+      "bytes": 3290,
+      "finding": "Exact registered denomination, SIREN and activity. Company identity alone establishes neither parcel tenancy nor present farming."
+    },
+    {
+      "id": "ct-rne-432273274",
+      "title": "Company register: SCEA DU DOMAINE PERROT MINOT (432273274)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=432273274",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:51:58.022267+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=432273274",
+      "sha256": "b0b134fa437a5176119adf55f00a9640f0fdf6fd806bee03d1957d84d57aa9a2",
+      "bytes": 3573,
+      "finding": "Exact registered denomination, SIREN and activity. Company identity alone establishes neither parcel tenancy nor present farming."
     }
   ],
   "holders": {
@@ -9627,6 +9781,25 @@
         "pagesRead": 25
       }
     },
+    "420933681": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=420933681",
+            "https://entreprises.lefigaro.fr/gfa-mabi-21/entreprise-420933681"
+          ],
+          "outcome": "no-link-found",
+          "note": "Cash formation and an unspecified acquisition and lease mandate do not identify AR139 or a producer. The family surname is insufficient for a domaine link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 1,
+        "pagesRead": 13,
+        "note": "All selected PDF pages OCR-screened; bounded selection recorded in Clos de Tart filings.md."
+      }
+    },
     "422190785": {
       "links": [
         {
@@ -9900,6 +10073,39 @@
           "outcome": "linked"
         }
       ]
+    },
+    "432273274": {
+      "links": [
+        {
+          "id": "432273274/perrot-minot",
+          "domaine": "Domaine Perrot-Minot",
+          "relation": "owner-company",
+          "basis": "The filed denomination SCEA du Domaine Christophe Perrot Minot, exact SIREN, agricultural production and harvest-sale objects, and registered wine-growing activity identify the wine-estate company. This is corporate identity, not proof it operates the mapped AR147 contact.",
+          "sourceIds": [
+            "ct-rne-432273274",
+            "ct-perrot-scea-2000",
+            "ct-perrot-scea-2017"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=432273274",
+            "https://entreprises.lefigaro.fr/scea-du-domaine-perrot-minot-21/entreprise-432273274"
+          ],
+          "outcome": "linked",
+          "note": "Filed SCEA statutes identify the wine-estate company and its agricultural production and harvest-sale objects; the exact SIREN also carries wine-growing activity in the registry. No individual AR147 contribution or lease was located. The distinct company 413728650 acquires shares in 2017, not the parcel."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 35,
+        "note": "All selected PDF pages OCR-screened; bounded selection recorded in Clos de Tart filings.md."
+      }
     },
     "438871279": {
       "links": [

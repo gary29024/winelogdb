@@ -14,7 +14,7 @@ const reviewed=[
  {slug:'clos-saint-denis',name:'Clos Saint-Denis',id:'inao-denom-548',maps:['morey-saint-denis']},
  {slug:'clos-de-la-roche',name:'Clos de la Roche',id:'inao-denom-544',maps:['morey-saint-denis']},
 ];
-const tier2=new Map([['musigny',9],['bonnes-mares',13]]);
+const tier2=new Map([['musigny',9],['bonnes-mares',13],['clos-de-tart',3]]);
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
 const red={country:'France',region:'Burgundy',classification:'grand_cru',colour:'red'};

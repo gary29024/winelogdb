@@ -1,10 +1,10 @@
-# Clos de Tart parcels: Tier 1 (#387)
+# Clos de Tart parcels: Tier 2 (#433)
 
 Clos de Tart uses INAO `inao-denom-545`, appellation 161, and Morey-Saint-Denis
-commune 21442. Reviewed 7 October 2026 for season 2026 under the
+commune 21442. Tier 1 reviewed 7 October; Tier 2 reviewed 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). Its shared Chambolle-Morey bundle
-also contains five other crus; this delivery enables only Clos de Tart.
+also contains five other crus; this delivery advances Clos de Tart to Tier 2.
 
 **No current farmer is verified.** Recorded rights, parcel filiation, deeds and
 administrative procedures are distinct evidence, and none establishes farming.
@@ -29,11 +29,11 @@ before any verified operator link.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 0 |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 17 |
+| Parcels with holder or research leads | 7; Tier 1 had zero leads |
+| Parcels with no lead | 10 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 113,757 / 9,484 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 124,541 / 11,396 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos de Tart selection
@@ -92,10 +92,10 @@ All rights join on complete parcel references. The 9 records are all code
 P (ownership), one per parcel, for five identifiers; recorded fiscal areas match
 the current cadastre's stated areas for all 9. The main parcel, AR0060, carries
 72,095 m² of the cru. Private-person rights are absent from this legal-entity
-dataset. Two provisional `U…` identifiers remain identifiers, not verified SIRENs
-or inferred persons. No holder-to-domaine crosswalk is established, so domaine
-grouping stays off. Producer research and company filings remain Tier 2; paid SPF
-copies and outreach remain Tier 3.
+dataset. The two provisional `U…` keys are retained, with company-record crosswalks to
+686042409 (Clos de Tart) and 424223410 (Perrot-Minot GFA). Three company links
+enable grouping; the GFA and MABI remain unlinked to a producer. Paid SPF copies
+and present-season confirmation remain Tier 3.
 
 [Rights history](rights-history.json) preserves four documents and four complete
 analysis lots. On 18 April 1989, DFI records both the merger of 25 references into
@@ -129,6 +129,41 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). Access failure 
 an unsearched interval is a gap, not absence of history. These shared gaps remain
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
+
+## Tier 2 holder and source review
+
+All five recorded holders have a local research row in the [shared holder table](../holders/holder-links.json).
+Two entries are new; three reuse prior links, searches and effort. Clos de Tart, Groffier and
+Perrot-Minot have company links. The Perrot-Minot GFA and GFA MABI remain unlinked to a producer.
+Company relationships create seven parcel leads; ten parcels remain unresolved. None establishes
+current farming or changes a printed appellation classification.
+
+The Maison Mommessin U-id resolves to **686042409** through the filed Maison Mommessin → Famille
+Mommessin → Societe du Clos de Tart name chain and an exact four-parcel property annex. The
+separate Mommessin et Thorin company 685750598 is excluded. The 2018 transaction transfers shares;
+its annex recites a 1932 land acquisition. AR60, AR64, AR148 and AR149 match individual current areas.
+The already reviewed Perrot-Minot GFA formation adds exact AR146, described as AOC Morey-Saint-Denis.
+That parcel's 20.6304 m² mapped contact does not change its classification. Two filing entries thus
+cover five current parcels, with no inference of a new land transfer or present operation.
+
+The two new holders required **four additional PDFs / 48 pages**. Five correct-company Clos de Tart
+filings / 422 pages were already screened in Bonnes-Mares and are reused. All nine files / 470 pages
+were checked for byte count, SHA-256, page count and complete OCR coverage. Prior Groffier and
+Perrot-Minot GFA work is reused as well. The [filing log](filings.md) separates newly screened and
+reused effort. Every selected image page was OCR-screened using RapidOCR with DirectML at 150 dpi.
+
+The supplied Winehog history individually matches references 60 (7.2548 ha) and 64 (0.2780 ha).
+Its 1828 reference 929 and two unnumbered expansion plots remain unmatched. A later summary says
+1965 where the decree discussion says 1966; that source discrepancy is retained, without changing
+the named-area audit or asserting an independently reviewed decree. The article and public estate
+page publish 7.53 ha: a whole-cru named-area census, with no distribution across current cadastral
+areas. In particular AR64's cadastral name remains unresolved in the named-area crosswalk.
+
+The SCEA Perrot-Minot and Groffier links cover small edge contacts, without inferring a Clos de Tart
+wine holding. MABI's cash formation and generic future-acquisition mandate name no producer or
+AR139 schedule. No current tenant is established for the Perrot-Minot GFA from shared officers or
+family names. Original leases, renewals, paid SPF records and present-season confirmation remain
+unreviewed. **Verified farming stays zero.** Raw PDFs, archives, OCR and images remain outside Git.
 
 ## Reproduce and validate
 

@@ -42,7 +42,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"charmes-chambertin",name:"Charmes-Chambertin",parentFeatureId:"inao-denom-477",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["charmes-chambertin"],domaineGrouping:false},
  {slug:"chevalier-montrachet",name:"Chevalier-Montrachet",parentFeatureId:"inao-denom-539",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["chevalier-montrachet"],domaineGrouping:false},
  {slug:"clos-de-la-roche",name:"Clos de la Roche",parentFeatureId:"inao-denom-544",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-la-roche"],domaineGrouping:false},
- {slug:"clos-de-tart",name:"Clos de Tart",parentFeatureId:"inao-denom-545",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-tart"],domaineGrouping:false},
+ {slug:"clos-de-tart",name:"Clos de Tart",parentFeatureId:"inao-denom-545",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-tart"],domaineGrouping:true},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:true},
  {slug:"clos-des-lambrays",name:"Clos des Lambrays",parentFeatureId:"inao-denom-547",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-des-lambrays"],domaineGrouping:false},
  {slug:"clos-saint-denis",name:"Clos Saint-Denis",parentFeatureId:"inao-denom-548",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-saint-denis"],domaineGrouping:false},

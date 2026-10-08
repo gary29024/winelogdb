@@ -644,5 +644,59 @@ class BonnesMaresTier2Tests(unittest.TestCase):
         self.assertEqual(len(archives), 4)
         self.assertTrue(all(s['bytes'] and s['sha256'] and s['retrievalNote'] for s in archives))
 
+
+class ClosDeTartTier2Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.table = read_json(HOLDER_LINKS)
+        cls.curation = read_json(ROOT / 'docs/research/clos-de-tart/curation.json')
+        cls.register = read_json(ROOT / 'docs/research/clos-de-tart/register.json')
+        cls.evidence = read_json(ROOT / 'src/lib/places/grandCruParcels/clos-de-tart.evidence.json')
+
+    def test_company_links_keep_unlinked_gfa_and_edge_contacts_distinct(self):
+        self.assertEqual(set(self.evidence['holderDomains']), {'U18178981', '330763426', '432273274'})
+        self.assertEqual(self.table['holders']['U18178981']['identity']['companySiren'], '686042409')
+        self.assertEqual(self.table['holders']['U21388794']['identity']['companySiren'], '424223410')
+        for hid in ('420933681', 'U21388794'):
+            self.assertEqual(self.table['holders'][hid]['links'], [])
+            self.assertTrue(self.table['holders'][hid]['searches'])
+        for pid in ('21442000AR0070', '21442000AR0072', '21442000AR0147'):
+            row = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertLess(row['cruOverlapM2'], 21)
+            self.assertIsNone(row['currentFarmer'])
+
+    def test_exact_schedules_preserve_transaction_and_classification_limits(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        self.assertEqual(filings['ct-clos-tart-2018']['parcelAreasM2'],
+                         {'21442000AR0060': 72548, '21442000AR0064': 2780,
+                          '21442000AR0148': 1596, '21442000AR0149': 29})
+        self.assertIn('shares, not these parcels', filings['ct-clos-tart-2018']['finding'])
+        self.assertEqual(filings['ct-perrot-gfa-1999']['parcelAreasM2'], {'21442000AR0146': 1537})
+        self.assertIn('AOC Morey-Saint-Denis', filings['ct-perrot-gfa-1999']['finding'])
+        self.assertTrue(all(not f['leaseEvidence'] for f in filings.values()))
+        self.assertEqual(self.register['counts']['withParcelFiling'], 5)
+
+    def test_critic_census_does_not_invent_successors_or_current_farming(self):
+        self.assertEqual(self.curation['externalResearch'][0]['parcelIds'],
+                         ['21442000AR0060', '21442000AR0064'])
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 2)
+        self.assertTrue(all(not r['parcelIds'] for r in self.curation['unmatchedPrintedReferences']))
+        census = self.curation['producerHoldings'][0]
+        self.assertEqual((census['namedAreas'], census['publishedAreaHa']), (['CLOS DE TART'], 7.53))
+        self.assertNotIn('parcelIds', census)
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (7, 10))
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_new_selection_is_fully_screened_and_shared_effort_is_reused(self):
+        sources = [s for s in self.table['sources'] if s['id'].startswith('ct-') and s['type'] == 'company-filing']
+        self.assertEqual((len(sources), sum(s['pageCount'] for s in sources)), (4, 48))
+        for source in sources:
+            self.assertEqual(source['screenedPages'], source['pageCount'])
+            self.assertRegex(source['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(source['bytes'] and source['documentDate'] and source['reviewedPages'])
+        self.assertEqual(self.table['holders']['U18178981']['effort']['pagesRead'], 471)
+        self.assertEqual(self.table['holders']['U21388794']['effort']['pagesRead'], 133)
+
 if __name__ == '__main__':
     unittest.main()

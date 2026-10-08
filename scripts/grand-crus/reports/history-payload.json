@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-ClAesjuy.js"
+    "dist/client/assets/index-A-YPT6B8.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-XNM2G-s0.js",
-    "dist/client/assets/SectionLabel-DXNTz8bs.js",
-    "dist/client/assets/SparklingDetailsCard-BOcwZ8rD.js",
-    "dist/client/assets/VillageMap-De61gBF2.js",
-    "dist/client/assets/burgundyAtlas-BAiUWHyV.js",
-    "dist/client/assets/index-ClAesjuy.js",
-    "dist/client/assets/index-iVuDVRx8.js",
+    "dist/client/assets/FriendTagDialog-C_amKYPW.js",
+    "dist/client/assets/SectionLabel-DKQ1BczY.js",
+    "dist/client/assets/SparklingDetailsCard-BpVxDmZq.js",
+    "dist/client/assets/VillageMap-B-jk9RUc.js",
+    "dist/client/assets/burgundyAtlas-B7BQO5oO.js",
+    "dist/client/assets/index-A-YPT6B8.js",
+    "dist/client/assets/index-Bs74zrD9.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-DX8hH9rM.js",
-    "dist/client/assets/wineDetailCompact-DyUwFt7F.js"
+    "dist/client/assets/useModalFocus-DXvvJNG2.js",
+    "dist/client/assets/wineDetailCompact-CO7RnabD.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5620375,
-  "evidenceGzipBytesTotal": 504087,
+  "evidenceBytesTotal": 5631235,
+  "evidenceGzipBytesTotal": 506033,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -105,10 +105,10 @@
     },
     {
       "cru": "clos-de-tart",
-      "file": "dist/client/assets/clos-de-tart.evidence-D5twt3Ru.js",
-      "sha256": "b411b36599b0235afed2b0caedd27dd9d9ea99292728a4e58387c6a938ee27e8",
-      "bytes": 113682,
-      "gzipBytes": 9694
+      "file": "dist/client/assets/clos-de-tart.evidence-Bncv1T5P.js",
+      "sha256": "82953e9e0abe415a6409324684453e7eba4efa78bfb916d12eea23839f09183d",
+      "bytes": 124542,
+      "gzipBytes": 11640
     },
     {
       "cru": "clos-de-vougeot",
