@@ -168,7 +168,18 @@ One producer holding is retained only in the named-area census; it names the who
 
 | Producer | Published area | Precision | Finding | Sources |
 | --- | --- | --- | --- | --- |
-| Domaine François Lamarche / Nicole Lamarche | 1.65 ha | are | A November 2022 capture of the domaine’s page gives La Grande Rue, monopole, 1 ha 65 a; AM 1, AM 2 and AM 8, recorded to Nicole Lamarche, measure 16,525 m² together. Census evidence only; no parcel or farming season is assigned. | [Domaine François Lamarche: La Grande Rue technical sheet (archived 27 November 2022)](https://web.archive.org/web/20221127112203/http://www.domaine-lamarche.com/pages/vins-fiches.php?rub=vins&lang=fr&vin=grande_rue) |
+| Domaine François Lamarche / Nicole Lamarche | 1.65 ha | are | A November 2022 capture of the domaine’s page gives La Grande Rue, monopole, 1 ha 65 a; AM 1, AM 2 and AM 8, recorded to Nicole Lamarche, measure 16,525 m² together. Winehog (2014) also gives 1.65 ha. Census evidence only; no parcel or farming season is assigned. | [Domaine François Lamarche: La Grande Rue technical sheet (archived 27 November 2022)](https://web.archive.org/web/20221127112203/http://www.domaine-lamarche.com/pages/vins-fiches.php?rub=vins&lang=fr&vin=grande_rue), [Winehog: La Grande Rue – in a Vosne-Romanee sweet spot](https://winehog.org/la-grande-rue-vosne-sweetspot-20242/) |
+
+## Winehog articles
+
+The repository owner supplied both requested Winehog subscriber articles as saved webarchives. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
+
+| Article | Printed date | Printed reference | Result |
+| --- | --- | --- | --- |
+| [La Grande Rue – in a Vosne-Romanee sweet spot](https://winehog.org/la-grande-rue-vosne-sweetspot-20242/) | 2014-06-22 (page modified 2019-08-25) | — | no cadastral number |
+| [Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”](https://winehog.org/grande-rue-1959-37050/) | 2018-12-09 | — | no cadastral number |
+
+Both articles give La Grande Rue as 1.65 ha. The 2014 article links its former Gaudichots part to the 1989 grand cru promotion, the 2018 article to a 1959 exchange of plots with the DRC. The 2018 article’s 0.2318 ha equals AM 2 + AM 8 (2,096 + 222 m²), the two parcels without a La Grande Rue lieu-dit, but no number is printed, so equal area is not a crosswalk and no lead, filing or census figure changes.
 
 ## Remaining gaps
 
@@ -177,5 +188,5 @@ One producer holding is retained only in the named-area census; it names the who
 - The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.
 - The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “La Grande Rue – in a Vosne-Romanee sweet spot” (2014-06-22); “Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”” (2018-12-09). No paywalled text was accessed.
+- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a cadastral number. The 2014 article links the former Gaudichots part to the 1989 promotion and the 2018 article to a 1959 exchange with the DRC; the 2018 article’s 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3.

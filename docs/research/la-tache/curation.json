@@ -220,6 +220,86 @@
       "sha256": "5c0f0082226ddc97d7986cdd60711f9116f92c6893dfdcdde6cdf25cef2a0281",
       "bytes": 214798,
       "finding": "Undated estate page publishes 6.0620 ha and bottle counts. That figure equals the summed cadastral areas of AM 9 and AM 16 recorded to the DRC, but a published total is not a parcel assignment."
+    },
+    {
+      "id": "lt-winehog-drc-profile",
+      "title": "Winehog: Domaine de la Romanée-Conti – Producer Profile",
+      "url": "https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/",
+      "type": "critic-research",
+      "documentDate": "2012-09-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f59d705350f667241026335d650844067a2624ef85ffd63779e5c1b4860b5946",
+      "bytes": 2958029,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Producer profile of the DRC’s wines and style, naming Romanée-Conti and La Tâche as its two monopoles. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2012-11-02",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-history",
+      "title": "Winehog: La Tâche – a historic view on a legendary grand cru",
+      "url": "https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/",
+      "type": "critic-research",
+      "documentDate": "2014-08-17",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "eb65580b74c550f5631e1f8b103c5ba8cd6bc3020edb037f37bcee293c304c96",
+      "bytes": 3467108,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Ownership history of La Tâche. The original climat, about 1.4 ha, was sold at a 1933 auction and merged with the DRC side’s Les Gaudichots holdings after a 1932 court ruling allowed most of Les Gaudichots to use the name. It gives the two parts as La Tâche (1.43 ha) and Les Gaudichots ou La Tâche (4.63 ha), 6.06 ha in all. No cadastral number is printed; rounded named-area totals are not a parcel crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2026-05-14",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-gaudichots",
+      "title": "Winehog: Vosne-Romanee Les Gaudichots – History, owners & wines – update",
+      "url": "https://winehog.org/vosne-romanee-les-gaudichots-16919/",
+      "type": "critic-research",
+      "documentDate": "2014-07-01",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "a9a884436f0fecc45310cc3b60e1c27f598c6118536a757f1723a2a2ff9d064f",
+      "bytes": 3396375,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "History and owners of Les Gaudichots: most of it became part of La Tâche after 1933, the remaining premier cru plots lie around La Tâche, and its plots inside La Grande Rue joined that grand cru in 1989. It repeats the 1.43 ha and 4.63 ha parts of La Tâche without cadastral numbers.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-1923",
+      "title": "Winehog: The Story Behind The 1923 La Tâche Bottled by Maison Nicolas",
+      "url": "https://winehog.org/the-story-behind-the-1923-la-tache-bottled-by-maison-nicolas-74167/",
+      "type": "critic-research",
+      "documentDate": "2026-05-28",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "43d777b4c62d555cf9faaea6a703a303247cac10b5daf78b75a90fd1e78d5695",
+      "bytes": 3287313,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Bottle history of a 1923 La Tâche bottled by Maison Nicolas and labelled as a Liger-Belair cuvée, which the article links to the original 1.4 ha La Tâche. It recounts the 1933 auction and the merger into the 6.06 ha monopole. No cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2026-05-29",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
     }
   ],
   "holders": [
@@ -283,15 +363,22 @@
       "precision": "square-metre",
       "relation": "unstated",
       "sourceIds": [
-        "lt-drc-estate"
+        "lt-drc-estate",
+        "lt-winehog-history"
       ],
-      "finding": "Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Census evidence only; no farming season inferred.",
+      "finding": "Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Winehog (2014) gives 6.06 ha in two named parts. Census evidence only; no farming season inferred.",
       "producerHolderIds": [
         "778269407"
       ],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        {
+          "areaHa": 6.06,
+          "sourceId": "lt-winehog-history",
+          "note": "Winehog 2014: La Tâche 1.43 ha and Les Gaudichots ou La Tâche 4.63 ha; no cadastral numbers."
+        }
+      ]
     }
   ],
   "historicalOwnerLists": [],
@@ -299,7 +386,7 @@
     "Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.",
     "The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.",
     "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
-    "Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “La Tâche – a historic view on a legendary grand cru” (2014-08-17); “Vosne-Romanee Les Gaudichots – History, owners & wines – update” (2014-07-01); “The Story Behind The 1923 La Tâche Bottled by Maison Nicolas” (2026-05-28). No paywalled text was accessed.",
+    "All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Tâche cadastral number; their 1.43 ha and 4.63 ha named-area totals are rounded and stay census context.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3."
   ],
   "unmatchedPrintedReferences": [],

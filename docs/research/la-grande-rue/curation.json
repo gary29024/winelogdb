@@ -466,6 +466,40 @@
       "bytes": 36779,
       "finding": "Internet Archive capture of the domaine’s own La Grande Rue page: “La Grande Rue, Monopole”, superficie 1 ha 65 a. No cadastral reference. The domain now serves unrelated content, so the archived capture is the cited version.",
       "archivedAt": "2022-11-27"
+    },
+    {
+      "id": "lgr-winehog-sweet-spot",
+      "title": "Winehog: La Grande Rue – in a Vosne-Romanee sweet spot",
+      "url": "https://winehog.org/la-grande-rue-vosne-sweetspot-20242/",
+      "type": "critic-research",
+      "documentDate": "2014-06-22",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "626bb0dc93edc2adde1ae8931a3b2efef02a5f0c6643ab910b9ad87d155eda4b",
+      "bytes": 3673197,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "History of La Grande Rue, in Lamarche ownership since a 1933 purchase. Lavalle (1855) and Rodier (1920) give 1 ha 32 a 95 ca; the article says the 1989 grand cru promotion took in Lamarche plots of Les Gaudichots, still Les Gaudichots in the cadastre, raising the cru from 1.42 to 1.65 ha. No cadastral number is printed.",
+      "otherDocumentDates": [
+        {
+          "date": "2019-08-25",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lgr-winehog-1959",
+      "title": "Winehog: Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”",
+      "url": "https://winehog.org/grande-rue-1959-37050/",
+      "type": "critic-research",
+      "documentDate": "2018-12-09",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "d12e69b6b7ed318d66ca6090921439dcc915e67b38794d151757a04b2ad0781b",
+      "bytes": 5086518,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Explains the Lamarche “Cuvée 1959”: a 1959 exchange of plots between the DRC and Lamarche moved a net 0.0875 ha of Les Gaudichots ou La Tâche into La Grande Rue, which then reached 1.65 ha, 0.2318 ha of it formerly Gaudichots ou La Tâche; the cuvée comes mainly from a 0.0803 ha area. No cadastral number is printed. 0.2318 ha equals AM 2 + AM 8 (2,096 + 222 m²), but equal area is not a crosswalk."
     }
   ],
   "holders": [
@@ -512,9 +546,10 @@
       "precision": "are",
       "relation": "unstated",
       "sourceIds": [
-        "lgr-lamarche-page-2022"
+        "lgr-lamarche-page-2022",
+        "lgr-winehog-sweet-spot"
       ],
-      "finding": "A November 2022 capture of the domaine’s page gives La Grande Rue, monopole, 1 ha 65 a; AM 1, AM 2 and AM 8, recorded to Nicole Lamarche, measure 16,525 m² together. Census evidence only; no parcel or farming season is assigned.",
+      "finding": "A November 2022 capture of the domaine’s page gives La Grande Rue, monopole, 1 ha 65 a; AM 1, AM 2 and AM 8, recorded to Nicole Lamarche, measure 16,525 m² together. Winehog (2014) also gives 1.65 ha. Census evidence only; no parcel or farming season is assigned.",
       "producerHolderIds": [
         "397738634"
       ],
@@ -530,7 +565,7 @@
     "The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.",
     "The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.",
     "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
-    "Winehog subscriber articles requested, not supplied: “La Grande Rue – in a Vosne-Romanee sweet spot” (2014-06-22); “Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”” (2018-12-09). No paywalled text was accessed.",
+    "Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a cadastral number. The 2014 article links the former Gaudichots part to the 1989 promotion and the 2018 article to a 1959 exchange with the DRC; the 2018 article’s 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3."
   ],
   "unmatchedPrintedReferences": [],

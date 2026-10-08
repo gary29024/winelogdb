@@ -177,6 +177,19 @@ One producer holding is retained only in the named-area census; it names the who
 | --- | --- | --- | --- | --- |
 | Domaine du Comte Liger-Belair | 0.8452 ha | square-metre | Undated climat page gives La Romanée, monopole, 0.8452 ha, equal to AN 74’s cadastral area; the history page says the domaine took it into operation in 2002. Undated producer publication: census evidence only, not a verified farming season. | [Domaine du Comte Liger-Belair: Our climats](https://www.liger-belair.fr/en/our-climats/), [Domaine du Comte Liger-Belair: history of the domaine](https://www.liger-belair.fr/histoire-du-domaine-du-comte-liger-belair/), [Domaine du Comte Liger-Belair: legal notice](https://www.liger-belair.fr/mentions-legales/) |
 
+## Winehog articles
+
+The repository owner supplied all 4 requested Winehog subscriber articles as saved webarchives. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
+
+| Article | Printed date | Printed reference | Result |
+| --- | --- | --- | --- |
+| [200 years, 72 bottles of Domaine du Comte Liger-Belair](https://winehog.org/200-years-72-bottles-of-domaine-du-comte-liger-belair-23767/) | 2015-06-12 (page modified 2015-06-14) | — | no cadastral number |
+| [The Essence of La Romanee](https://winehog.org/the-essence-of-la-romanee-23847/) | 2015-06-20 (page modified 2017-10-01) | — | no cadastral number |
+| [La Romanée – a hedonistic treat](https://winehog.org/on-the-table-in-la-romanee-2008-2-42558/) | 2020-08-05 (page modified 2020-12-03) | — | no cadastral number |
+| [A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque](https://winehog.org/a-1928-la-romanee-from-the-legendary-la-rotisserie-de-la-reine-pedauque-74420/) | 2026-06-10 | — | no cadastral number |
+
+Three articles are tasting reports on the domaine’s wine. The 1928 bottle history gives La Romanée as a 0.85 ha monopole; that rounded total is not a parcel crosswalk and changes no lead, filing or census figure.
+
 ## Remaining gaps
 
 - Bounded filing review: 17 filings (518 pages) were screened — 13 of the 13 filings the free index lists for the GFV and 4 of the 9 for the SCEA. Unscreened filings are a bounded negative.
@@ -185,5 +198,5 @@ One producer holding is retained only in the named-area census; it names the who
 - CLB Participations was GFV co-manager from 3 May 2019 until its resignation from 4 June 2023; today the two companies share family partners and their seat, not a manager.
 - The domaine’s pages are undated producer publications. They give La Romanée’s area and a 2002 start of operation; they stay census evidence.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “The Essence of La Romanee” (2015-06-20); “200 years, 72 bottles of Domaine du Comte Liger-Belair” (2015-06-12); “La Romanée – a hedonistic treat” (2020-08-05); “A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque” (2026-06-10). No paywalled text was accessed.
+- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Romanée plot or cadastral reference; one gives the cru as a 0.85 ha monopole, a rounded total that is not a parcel crosswalk.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed; paid SPF copies and outreach remain Tier 3.

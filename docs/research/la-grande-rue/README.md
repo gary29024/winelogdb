@@ -131,6 +131,8 @@ No filing prints AM 1, AM 2 or AM 8. The GFA Domaine François Lamarche was form
 
 The domaine’s own La Grande Rue page, captured by the Internet Archive in November 2022, gives the monopole as 1 ha 65 a, consistent with the three parcels’ 16,525 m². It feeds only the named-area census; the domain now serves unrelated content.
 
+The repository owner supplied both requested Winehog articles (see [filings](filings.md#winehog-articles)). Both give 1.65 ha and neither prints a cadastral number. They link the former Gaudichots part to the 1989 promotion and to a 1959 exchange of plots with the DRC respectively; its 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
+
 Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
 | Measure | Tier 1 | Tier 2 |
@@ -155,7 +157,7 @@ Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry 
 - The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.
 - The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “La Grande Rue – in a Vosne-Romanee sweet spot” (2014-06-22); “Terroir Insight: Domaine Lamarche, La Grande Rue “Cuvée 1959”” (2018-12-09). No paywalled text was accessed.
+- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a cadastral number. The 2014 article links the former Gaudichots part to the 1989 promotion and the 2018 article to a 1959 exchange with the DRC; the 2018 article’s 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3.
 
 ## Reproduce and validate

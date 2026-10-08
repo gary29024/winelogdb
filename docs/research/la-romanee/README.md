@@ -127,6 +127,8 @@ The 2021 statement is a dated, parcel-specific recital that the land is made ava
 
 The domaine’s undated climat page publishes La Romanée, monopole, at 0.8452 ha — AN 74’s cadastral area — and its history page says the domaine took La Romanée into operation in 2002. These undated producer publications stay in the named-area census; they do not meet the verified-operator gate.
 
+The repository owner supplied all four requested Winehog articles (see [filings](filings.md#winehog-articles)). None prints a La Romanée plot or cadastral reference; the 1928 bottle history’s 0.85 ha is a rounded cru total, not a parcel crosswalk.
+
 Research leads rise from **0 to 1 of 1 parcel**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
 | Measure | Tier 1 | Tier 2 |
@@ -153,7 +155,7 @@ Research leads rise from **0 to 1 of 1 parcel**. The legal-rights and geometry c
 - CLB Participations was GFV co-manager from 3 May 2019 until its resignation from 4 June 2023; today the two companies share family partners and their seat, not a manager.
 - The domaine’s pages are undated producer publications. They give La Romanée’s area and a 2002 start of operation; they stay census evidence.
 - data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Winehog subscriber articles requested, not supplied: “The Essence of La Romanee” (2015-06-20); “200 years, 72 bottles of Domaine du Comte Liger-Belair” (2015-06-12); “La Romanée – a hedonistic treat” (2020-08-05); “A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque” (2026-06-10). No paywalled text was accessed.
+- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Romanée plot or cadastral reference; one gives the cru as a 0.85 ha monopole, a rounded total that is not a parcel crosswalk.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed; paid SPF copies and outreach remain Tier 3.
 
 ## Reproduce and validate
