@@ -533,15 +533,17 @@ class RomaneeSaintVivantTests(unittest.TestCase):
 
     def test_equal_published_area_never_assigns_al325_or_al329(self):
         rows = {p['parcelId']: p for p in self.register['parcels']}
-        self.assertEqual((rows['21714000AL0325']['researchStatus'], rows['21714000AL0329']['researchStatus']),
-                         ('unresolved', 'unresolved'))
+        # AL325's only lead is the critic's printed plot number: neither the equal published area nor a company link.
+        self.assertEqual([(lead['name'], lead['basis']) for lead in rows['21714000AL0325']['candidateLeads']],
+                         [('Domaine Dujac', 'critic-named-cadastral-reference')])
+        self.assertEqual(rows['21714000AL0329']['researchStatus'], 'unresolved')
         dujac = next(h for h in self.curation['producerHoldings'] if h['id'] == 'rsv-dujac')
         self.assertEqual((dujac['publishedAreaHa'], dujac['producerHolderIds']), (0.1656, []))
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
-                          self.register['counts']['unresolved']), (15, 2))
+                          self.register['counts']['unresolved']), (16, 1))
 
-    def test_winehog_numbers_count_only_when_number_and_area_match(self):
+    def test_winehog_numbers_count_when_number_and_rounded_area_match(self):
         articles = [s for s in self.curation['sources'] if s['type'] == 'critic-research']
         self.assertEqual(len(articles), 13)
         for s in articles:
@@ -549,11 +551,12 @@ class RomaneeSaintVivantTests(unittest.TestCase):
             self.assertTrue(s['url'].startswith('https://winehog.org/') and s['documentDate'] and s['bytes'])
         critic = [x for x in self.curation['externalResearch'] if x['basis'] == 'critic-named-cadastral-reference']
         self.assertEqual(sorted(p for x in critic for p in x['parcelIds']),
-                         ['21714000AL0001', '21714000AL0326', '21714000AL0327'])
-        # Dujac's 325 (0.170 ha) and Confuron's 300/298 (0.4982 ha) differ from the cadastre, so they stay as printed.
-        unmatched = self.curation['unmatchedPrintedReferences']
-        self.assertEqual(sorted(u['sourceId'] for u in unmatched), ['rsv-winehog-confuron', 'rsv-winehog-dujac'])
-        self.assertTrue(all(u['parcelIds'] == [] for u in unmatched))
+                         ['21714000AC0298', '21714000AC0300', '21714000AL0001', '21714000AL0325', '21714000AL0326',
+                          '21714000AL0327'])
+        # Dujac's 325 (0.170 ha) and Confuron's 300/298 (0.4982 ha) differ from the cadastre only by rounding.
+        rounded = {x['id'] for x in critic if 'rounding' in x['finding'] or 'rounded' in x['finding']}
+        self.assertEqual(rounded, {'rsv-wh-dujac-325', 'rsv-wh-confuron-298-300'})
+        self.assertEqual(self.curation['unmatchedPrintedReferences'], [])
         self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
 
     def test_screened_filings_have_provenance_and_farming_stays_unverified(self):
