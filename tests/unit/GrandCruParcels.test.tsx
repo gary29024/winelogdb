@@ -58,7 +58,10 @@ describe('Cadastral parcel controls',()=>{
   const key=screen.getByText('Link strength').parentElement!;
   expect([...key.querySelectorAll('.village-map-seal-key-item')].map(b=>b.textContent)).toEqual(['Company record','Weak lead']);
   expect(key.querySelector('.village-map-seal.is-weak')).toBeTruthy();
-  expect(screen.getByText(/Domaine headings and leads come from reviewed research/).textContent).toMatch(/cited sources for Richebourg.*none is recorded yet/);
+  // The longer explanation lives under About this data; the list keeps one line and the key.
+  expect(screen.getByText('Areas show parcel coverage, not ownership shares.')).toBeTruthy();
+  expect(screen.queryByText(/Not farming verification/)).toBeNull();
+  expect(screen.getByText(/Domaine headings are research links, not proof of ownership/).textContent).toMatch(/groups 10 recorded legal holders into 10 rows.*cited sources for Richebourg.*none is recorded yet/);
   // All ten legal holders keep a row, and a company name found only behind a heading is still searchable.
   expect(screen.getByText('10',{selector:'.village-map-count'})).toBeTruthy();
   expect(within(holders).getAllByRole('button')).toHaveLength(10);
@@ -87,7 +90,9 @@ describe('Cadastral parcel controls',()=>{
   expect(within(holders).getByRole('button',{name:/GFA Misset Cheron/i})).toBeTruthy();
   expect(within(holders).queryByRole('button',{name:/^Domaine du Couvent/})).toBeNull();
   expect(within(holders).getAllByRole('button',{name:/identity by name and seat only/})).toHaveLength(2);
-  expect(screen.getByText(/ listed · 69 legal holders$/,{selector:'.village-map-count'})).toBeTruthy();
+  const rows=Number(screen.getByText(/^\d+$/,{selector:'.village-map-count'}).textContent);
+  expect(rows).toBeLessThan(69);
+  expect(screen.getByText(/Domaine headings are research links/).textContent).toContain(`groups 69 recorded legal holders into ${rows} rows`);
   // Every legal holder's recorded name still finds its row, whether or not it sits under a domaine heading.
   const search=screen.getByRole('searchbox',{name:'Search right holders'});
   const legal=new Set(vougeot.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId==='inao-denom-546')).flatMap(f=>f.properties.recordedRights.map(r=>r.name)));
@@ -188,7 +193,7 @@ describe('Cadastral parcel controls',()=>{
   expect(fetcher).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('switch',{name:/Parcel rights/}));
   await screen.findByText('Recorded right holders by mapped area');
-  expect(screen.getByRole('img',{name:/% of the parcel area has recorded rights/})).toBeTruthy();
+  expect(screen.getByText(/parcels in Échezeaux · \d+ with recorded rights$/)).toBeTruthy();
   expect(await screen.findByRole('button',{name:/^Domaine de la Romanée-Conti/})).toBeTruthy();
   fireEvent.click(screen.getByRole('button',{name:/Show all .* entries/}));
   const holderRow=within(screen.getByRole('list',{name:'Recorded right holders by mapped area'})).getByRole('button',{name:new RegExp(ownerName(holder.name))});

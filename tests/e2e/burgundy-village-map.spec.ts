@@ -57,14 +57,8 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
   await expect(history.locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`).first()).toBeVisible();
   await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
   expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
-  await panel.getByText('Source coverage and tracing',{exact:true}).click();
-  await expect(panel.locator('.parcel-evidence-tracing').getByText(/Earliest supported event:/).locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`)).toBeVisible();
-  if(slug==='chablis-grand-cru'){
-   await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
-   await expect(panel.getByText(/Department 89: published years located from 2008 through 2026/)).toBeVisible();
-   await expect(panel.getByText(/Yonne: 1,229 queued bulletin URLs remain missing or unusable/)).toBeVisible();
-   await expect(panel.getByText('Before 2008: not searched',{exact:true})).toBeVisible();
-  }
+  // Source coverage and tracing stay in the research files; readers see the dated records only.
+  await expect(panel.getByText('Source coverage and tracing',{exact:true})).toHaveCount(0);
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
   await page.screenshot({path:testInfo.outputPath(`${slug}-official-history-mobile.png`)});
@@ -313,7 +307,8 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await expect(dialog.getByText(`${parcelCru.parcels.length} parcels in ${parcelCru.name}`,{exact:false})).toBeVisible();
  expect(downloads).toBe(2);
  await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
- if(parcelCru.hasDomaineLinks)await expect(dialog.getByText(/Domaine headings are research links/)).toBeVisible();
+ // The research explanation sits under the folded About this data.
+ if(parcelCru.hasDomaineLinks)await expect(dialog.getByText(/Domaine headings are research links/)).toBeAttached();
  await dialog.getByText('Find a parcel by cadastral reference').click();
  const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
  await expect(parcel.getByRole('option')).toHaveCount(parcelCru.parcels.length+1);
@@ -340,8 +335,7 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  if(parcelCru.rows>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.rows} ${parcelCru.hasDomaineLinks?'entries':'right holders'}`,exact:true}).click();
  const holderList=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
  await expect(holderList.getByRole('button')).toHaveCount(parcelCru.rows);
- // Every legal holder is still counted when several share a domaine row.
- await expect(holderSection.locator('.village-map-count')).toHaveText(parcelCru.rows===parcelCru.holders?`${parcelCru.holders}`:`${parcelCru.rows} listed · ${parcelCru.holders} legal holders`);
+ await expect(holderSection.locator('.village-map-count')).toHaveText(`${parcelCru.rows}`);
  const holder={holderId:parcelCru.row.holderIds[0],name:parcelCru.row.legalNames[0]};
  if(parcelCru.rows>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
  const rowName=new RegExp(`^${parcelCru.row.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\u00a0?$`);

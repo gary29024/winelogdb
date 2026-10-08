@@ -35,14 +35,14 @@ describe('Parcel evidence panel',()=>{
  it('lists an authorisation as a dated notice with its caveat and a source link, and folds weak leads',async()=>{
   render(<ParcelEvidence parcelId={id('665')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
-  expect(within(panel).getByText('Dated notices, recorded rights, sales, company filings and published research.')).toBeTruthy();
+  expect(within(panel).queryByText(/Dated notices, recorded rights/)).toBeNull();
   expect(within(panel).getByText('Authorisation decision')).toBeTruthy();
   expect(within(panel).getByText('4 Jul 2022').getAttribute('datetime')).toBe('2022-07-04');
   expect(within(panel).getByText('Previous operator named in notice: Domaine Daniel Rion et Fils')).toBeTruthy();
   expect(within(panel).getByRole('link',{name:/Official notice/}).getAttribute('href')).toContain('recueil-bfc-2022-084');
   const leads=panel.querySelector('details.parcel-evidence-leads') as HTMLDetailsElement;
   expect(leads.open).toBe(false);
-  expect(within(leads).getByText('Names and recorded rights context only.')).toBeTruthy();
+  expect(within(leads).queryByText(/context only/)).toBeNull();
  });
  it('shows a suspended application as procedural and keeps it off any farming claim',async()=>{
   render(<ParcelEvidence parcelId={id('673')} parentId="inao-denom-565"/>);
@@ -117,15 +117,16 @@ describe('Parcel evidence panel',()=>{
   render(<ParcelEvidence parcelId={id('1')} parentId="inao-denom-565"/>);
   expect(await screen.findByText('No matched records in the reviewed sources for this parcel.')).toBeTruthy();
  });
- it('shows the 1991 DFI validation, whole event group and source-boundary stop',async()=>{
+ it('shows the 1991 DFI validation and whole event group, without the research tracing notes',async()=>{
   const Fresh=await fresh();
   render(<Fresh parcelId={id('736')} parentId="inao-denom-565"/>);
   const panel=await screen.findByRole('region',{name:'History and evidence'});
   expect(within(panel).getByText('Official event group: D0327 → D0736, D0737')).toBeTruthy();
   expect(within(panel).getAllByText('22 Jan 1991').every(t=>t.getAttribute('datetime')==='1991-01-22')).toBe(true);
   expect(within(panel).getAllByText('DFI validation date').length).toBeGreaterThan(0);
-  expect(within(panel).getByText(/Earliest supported event:/).querySelector('time')?.getAttribute('datetime')).toBe('1991-01-22');
-  expect(within(panel).getByText(/No earlier correspondence in the obtained DFI file/)).toBeTruthy();
+  // Source coverage and tracing stay in the research files, not in the reader's panel.
+  expect(within(panel).queryByText('Source coverage and tracing')).toBeNull();
+  expect(within(panel).queryByText(/Earliest supported event:|No earlier correspondence in the obtained DFI file/)).toBeNull();
   expect(within(panel).getByRole('link',{name:/DGFiP official DFI/}).getAttribute('href')).toContain('juillet_2026');
   expect(within(panel).queryByText(/Created by/)).toBeNull();
  });

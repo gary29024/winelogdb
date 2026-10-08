@@ -202,8 +202,11 @@ The app marks each row with a link-strength seal check after the name: company r
 with "?"), with `domaine-confirmed` reserved above them as the only solid seal (Tier 3).
 The reason shows in the seal's tooltip and accessible name, not as row text.
 The list is always grouped this way (there is no legal-holder switch). Rows show the
-research name only; recorded legal names stay searchable, appear in each parcel's details
-and are counted in the list total. Sources are summarised under "About this data", not per row.
+research name only; recorded legal names stay searchable and appear in each parcel's details.
+The list keeps one note line and the seal key; "About this data" says the headings are
+research links, how many legal holders the rows group, and summarises the sources.
+Each parcel's evidence panel shows the dated records; source coverage and tracing stay
+in the research files and are not shown to readers.
 Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
 also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
 identifier no cru records, an unused source or a stale report.
@@ -326,8 +329,7 @@ evidence together with the history and coverage report.
    configs. List all of its `villageMaps` in the cru config. CI checks that the
    generated registry matches every config. The generator enables `domaineGrouping`
    only when the cru's research files contain holder-to-domaine links (`holderDomains`).
-   Otherwise the app shows legal holders without a grouping control or domaine-research
-   messages. Only crus with a committed commune-edge audit are wired into the app
+   Otherwise the app lists recorded legal holders without domaine-research messages. Only crus with a committed commune-edge audit are wired into the app
    (`app_cru_slugs` in `grand_cru.py`); `test_grand_cru_config` fails if a cru without
    one is anything but a pending historical-extension delivery. Components need no change.
 5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
