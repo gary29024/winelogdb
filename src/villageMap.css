@@ -122,10 +122,7 @@
 .village-map-link-actions button,.village-map-producer-links button{min-height:44px;white-space:normal;font:inherit}
 .village-map-link-button{justify-self:start;min-height:32px;padding:0;border:0;background:none;color:var(--wine-ink);font:inherit;font-size:.74rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .village-map-link-button:hover:not(:disabled){border:0;background:none;color:var(--wine)}
-.village-map-parcel-share{display:grid;gap:5px}
-.village-map-parcel-bar{display:flex;height:8px;overflow:hidden;border:1px solid var(--line);border-radius:999px;background:repeating-linear-gradient(45deg,var(--ink-6) 0 1.5px,transparent 1.5px 4px)}
-.village-map-parcel-bar b{background:var(--ink-5)}
-.village-map-parcel-key{display:flex;justify-content:space-between;gap:8px;color:var(--ink-5);font-size:.72rem;font-variant-numeric:tabular-nums}
+.village-map-parcel-share{margin:0}
 .village-map-parcel-label{margin:0 0 6px;font-size:.72rem;font-weight:700;color:var(--ink-6)}
 .village-map-parcels input[type=search]{width:100%;min-height:40px;margin-bottom:6px;border:1px solid var(--line);border-radius:var(--r-sm,7px);padding:7px 9px;background:var(--ground);color:var(--ink);font:inherit;font-size:.78rem}
 .village-map-owners{display:grid;gap:2px;margin:0;padding:0;list-style:none}
