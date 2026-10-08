@@ -449,5 +449,113 @@ class RichebourgTests(unittest.TestCase):
             self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
 
 
+class RomaneeSaintVivantTests(unittest.TestCase):
+    """Exact filings, lineage-only references and a shared-area coincidence keep different meanings."""
+
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('romanee-saint-vivant'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+        cls.resolved = resolve_curation(cls.curation, 'romanee-saint-vivant', cls.table)
+
+    def test_all_eleven_holders_are_researched_without_a_nicholem_link(self):
+        self.assertEqual(self.context.cru['tier'], 2)
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        self.assertEqual(len(self.curation['holders']), 11)
+        for h in self.curation['holders']:
+            self.assertNotIn('candidateNames', h)
+            self.assertLessEqual(len(h['finding']), 330)
+            entry = self.table['holders'][h['holderId']]
+            self.assertTrue(any(s['at'] == '2026-10-08' for s in entry['searches']))
+            self.assertIn('effort', entry)
+        nicholem = self.table['holders']['484070800']
+        self.assertEqual((nicholem.get('links', []), nicholem['searches'][-1]['outcome']), ([], 'no-link-found'))
+        self.assertNotIn('484070800', self.evidence['holderDomains'])
+        self.assertEqual(len(self.evidence['holderDomains']), 10)
+
+    def test_new_relations_rest_on_company_records_and_stay_qualified(self):
+        arlot = self.table['holders']['322235748']['links'][0]
+        self.assertEqual((arlot['relation'], arlot['reviewStatus']), ('common-ownership', 'reviewed'))
+        sources = {s['id']: s for s in self.table['sources']}
+        self.assertTrue({'registry', 'company-filing'} <= {sources[s]['type'] for s in arlot['sourceIds']})
+        cathiard = self.table['holders']['405387101']['links'][0]
+        self.assertEqual((cathiard['relation'], cathiard['reviewStatus']), ('family-holding', 'provisional'))
+        self.assertIn('No filing names a tenant', cathiard['basis'])
+        confuron = self.table['holders']['U33201044']
+        self.assertEqual(confuron['links'][0]['crus'], ['clos-de-vougeot', 'romanee-saint-vivant'])
+        self.assertIn('AC 298', confuron['identity']['limitation'])
+        # Lease and name-and-seat rows remain leads under the legal holder.
+        for hid, basis in {'931134381': 'filing-tenant-relationship', 'U21852238': 'filing-tenant-relationship',
+                           'U33201044': 'filing-tenant-relationship', 'U14149307': 'name-and-seat-crosswalk'}.items():
+            self.assertEqual(self.evidence['holderDomains'][hid]['basis'], basis)
+        self.assertEqual(self.table['holders']['U14149307']['links'][0]['reviewStatus'], 'provisional')
+
+    def test_only_exact_current_references_are_parcel_filings(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        sources = {s['id']: s for s in self.resolved['sources']}
+        exact = set()
+        for f in self.curation['parcelFilings']:
+            exact.update(f['parcelAreasM2'])
+            self.assertEqual(f['documentDate'], sources[f['sourceId']]['documentDate'])
+            for pid, area in f['parcelAreasM2'].items():
+                self.assertIn(f['holderId'], {r['holderId'] for r in rows[pid]['recordedRights']})
+        self.assertEqual(exact, {'21714000AC0298', '21714000AC0300', '21714000AL0326', '21714000AL0330', '21714000AL0001'})
+        # AL 1 is held jointly: each company's own filing names its undivided share.
+        self.assertEqual(sorted(f['holderId'] for f in self.curation['parcelFilings'] if '21714000AL0001' in f['parcelAreasM2']),
+                         ['528291362', 'U21852238'])
+        self.assertEqual(self.register['counts']['withParcelFiling'], 5)
+
+    def test_retired_hudelot_references_reach_the_2022_daughters_only_through_lineage(self):
+        lineage = next(x for x in self.curation['externalResearch'] if x['id'] == 'rsv-hudelot-2001-ac271-273')
+        self.assertEqual((lineage['basis'], lineage['parcelIds'], lineage['producer']), ('filing-named-cadastral-reference', [], None))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n, former in ((357, 'AC0271'), (358, 'AC0271'), (359, 'AC0273'), (360, 'AC0273')):
+            pid = f'21714000AC0{n}'
+            self.assertEqual(rows[pid]['parcelFilingIds'], [])
+            items = [i for i in self.evidence['parcels'][pid] if i['kind'] == 'research' and i.get('via') == former]
+            self.assertEqual(len(items), 1)
+
+    def test_a_former_owners_schedule_stays_research_not_a_filing(self):
+        # Marey-Monge's statutes print today's AC230/231 areas, but it is not the recorded holder.
+        former = next(x for x in self.curation['externalResearch'] if x['id'] == 'rsv-marey-monge-ac230-231')
+        self.assertEqual((former['basis'], former['parcelIds']),
+                         ('filing-named-cadastral-reference', ['21714000AC0230', '21714000AC0231']))
+        self.assertNotIn('predecessorReferences', former)
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for pid in former['parcelIds']:
+            self.assertEqual(rows[pid]['parcelFilingIds'], [])
+            self.assertEqual(rows[pid]['externalResearchIds'], ['rsv-marey-monge-ac230-231'])
+            self.assertEqual({r['holderId'] for r in rows[pid]['recordedRights']}, {'778269407'})
+
+    def test_equal_published_area_never_assigns_al325_or_al329(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        self.assertEqual((rows['21714000AL0325']['researchStatus'], rows['21714000AL0329']['researchStatus']),
+                         ('unresolved', 'unresolved'))
+        dujac = next(h for h in self.curation['producerHoldings'] if h['id'] == 'rsv-dujac')
+        self.assertEqual((dujac['publishedAreaHa'], dujac['producerHolderIds']), (0.1656, []))
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
+                          self.register['counts']['unresolved']), (15, 2))
+
+    def test_screened_filings_have_provenance_and_farming_stays_unverified(self):
+        sources = {s['id']: s for s in self.resolved['sources']}
+        own = [s for s in self.curation['sources'] if s['type'] == 'company-filing']
+        self.assertTrue(own)
+        for source in own:
+            self.assertEqual(source['screenedPages'], source['pageCount'])
+            self.assertRegex(source['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(source['documentDate'] and source['retrievedAt'] and source['reviewedPages'])
+            self.assertIn('filingDate', source)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+        for d in self.evidence['holderDomains'].values():
+            self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
+        self.assertIn('Romanée-Saint-Vivant review', sources['heritiers-confuron-statutes-2024']['finding'])
+
+
 if __name__ == '__main__':
     unittest.main()

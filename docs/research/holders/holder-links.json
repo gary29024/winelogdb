@@ -1035,12 +1035,13 @@
       "bytes": 605586,
       "pageCount": 35,
       "reviewedPages": [
+        5,
         6,
         9,
         10
       ],
       "screeningMethod": "All pages screened by embedded text or OCR; cited pages checked against the text and, for schedules, page images.",
-      "finding": "Article five contributes Vougeot A393 (25 a 68 ca) and A406 (25 a 85 ca). Page 9 recites a 24-year rural lease signed the same day, before the statutes, to the SCE du Domaine Jean-Jacques Confuron (348024712); the GFV received the lease contract."
+      "finding": "Article five contributes Vougeot A393 (25 a 68 ca) and A406 (25 a 85 ca). Page 9 recites a 24-year rural lease signed the same day, before the statutes, to the SCE du Domaine Jean-Jacques Confuron (348024712); the GFV received the lease contract. Romanée-Saint-Vivant review: article four contributes Vosne-Romanée AC 298 (17 a 18 ca) and AC 300 (32 a 66 ca), Romanée Saint Vivant, under the same 24-year lease."
     },
     {
       "id": "hor-filing",
@@ -1247,11 +1248,13 @@
       "reviewedPages": [
         2,
         3,
+        6,
+        7,
         25
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "All pages screened by OCR text search; listed pages read from the OCR text.",
-      "finding": "Formed as a GFV on 15 July 2024 and converted to an SCI on 24 July 2024. Its parcel annex includes Aloxe-Corton Le Corton C 11 (57 a 00 ca). The statutes define an 18-year rural lease of the parcels, by deed of 24 July 2024, to SCEA du Domaine Poisot-Piguet (384 069 985), and record LVMH Miscellanées acquiring shares the same day. The PDF has a text layer."
+      "finding": "Formed as a GFV on 15 July 2024 and converted to an SCI on 24 July 2024. Its parcel annex includes Aloxe-Corton Le Corton C 11 (57 a 00 ca). The statutes define an 18-year rural lease of the parcels, by deed of 24 July 2024, to SCEA du Domaine Poisot-Piguet (384 069 985), and record LVMH Miscellanées acquiring shares the same day. The PDF has a text layer. Romanée-Saint-Vivant review: the 24 July 2024 capital increase contributes Vosne-Romanée AL 330, Romanée Saint Vivant (24 a 57 ca), listed again in Annex 0."
     },
     {
       "id": "meo-gfa-withdrawal-2016",
@@ -4429,10 +4432,14 @@
       "reviewedPages": [
         1,
         2,
-        33
+        32,
+        33,
+        34,
+        35,
+        36
       ],
       "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images.",
-      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and an individual as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat.",
+      "finding": "The SCI, formed in 1947 and registered in 2001, has Leroy SA and an individual as partners. Its original statutes value a Clos Vougeot vine under pre-renovation references; no current cadastral reference. Richebourg review: All pages screened for Richebourg: no exact AN57, AN61 or AN168 schedule. The match of SCI Domaine Leroy to U14149307 remains provisional on abbreviated name and seat. Romanée-Saint-Vivant review: every page screened again; the 1947 founding schedule lists Noëllat-family vines under pre-renovation section A references and names no Romanée-Saint-Vivant parcel; no AC 299 or AC 301 schedule.",
       "screenedPages": 43
     },
     {
@@ -4643,7 +4650,7 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "All pages screened by OCR text search; listed pages read from the OCR text.",
-      "finding": "Maison Louis Latour contributes undivided one-third shares of Corton parcels co-owned with the Corton-Grancey GFA, among them A 46, A 47, A 49, A 50, A 51, B 26, B 29, B 36, C 10, C 56, D 30, D 62, D 105, D 106, D 109 and N 50, each with its area. Maison Louis Latour then holds 54,999 of the 55,000 shares.",
+      "finding": "Maison Louis Latour contributes undivided one-third shares of Corton parcels co-owned with the Corton-Grancey GFA, among them A 46, A 47, A 49, A 50, A 51, B 26, B 29, B 36, C 10, C 56, D 30, D 62, D 105, D 106, D 109 and N 50, each with its area. Maison Louis Latour then holds 54,999 of the 55,000 shares. Romanée-Saint-Vivant review: the statutes’ contribution article 10° also lists the undivided third of Vosne-Romanée AL 1, Romanée Saint Vivant (76 a 30 ca).",
       "indexNote": "The free filing index lists this document under LATOUR IMMEUBLES (528291479); its content is VIGNOBLE LATOUR’s."
     },
     {
@@ -4894,6 +4901,165 @@
       "pageCount": 3,
       "screenedPages": 3,
       "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "rne-484070800",
+      "title": "Company register: NICHOLEM (484070800)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/484070800",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:07:44Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=484070800",
+      "sha256": "e23f3ce213a1e472718263193291c6fa8397009dce586fa7c23a8efaadc7e873",
+      "bytes": 3363,
+      "finding": "NICHOLEM: registered office 6 Rue du Pot de Fer 21190 Puligny-Montrachet; activity 68.20B; created 2005-07-08; active; legal form GFA (6534). Officers are two individual managing partners. Legal identity only; not farming evidence."
+    },
+    {
+      "id": "rne-405387101",
+      "title": "Company register: GFA FAMILLE CATHIARD (405387101)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/405387101",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:07:56Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=405387101",
+      "sha256": "d2f3965273440c9856698c8fa9c13dab42d3ef620d58109431a44c3307dab700",
+      "bytes": 3390,
+      "finding": "GFA FAMILLE CATHIARD: registered office 11 Rue Saint-Bernard 21700 Nuits-Saint-Georges; activity 68.20B; created 1996-04-05; active. Its manager and partner are members of the Cathiard family. Legal identity only; not farming evidence."
+    },
+    {
+      "id": "rne-497497719",
+      "title": "Company register: DOMAINE SYLVAIN CATHIARD ET FILS (497497719)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/497497719",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:08:01Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=497497719",
+      "sha256": "1cf8f01d75b1162c8e4f588de7293e9eb46b5fd5b60eb282245c650d9ba53ecc",
+      "bytes": 3222,
+      "finding": "DOMAINE SYLVAIN CATHIARD ET FILS: SAS, registered office 24 Rue de la Goillotte 21700 Vosne-Romanée; activity 01.21Z vine growing; created 2007-01-01; active. Its president is a Cathiard family member who is also a recorded partner of GFA Famille Cathiard. Legal identity only; not farming evidence."
+    },
+    {
+      "id": "rne-322235748",
+      "title": "Company register: SCI DE L ARLOT (322235748)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/322235748",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:07:57Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=322235748",
+      "sha256": "0a59361f1fd095648476714f4c9bc7d278bf47e6790f063a3a2724f5400c6b7c",
+      "bytes": 3315,
+      "finding": "SCI DE L ARLOT: registered at Premeaux-Prissey; activity 68.20B; created 1987-04-01 (constituted 1942); active. Partners: AXA (572093920) and AXA MILLESIMES (702047424). Legal identity only; not farming evidence."
+    },
+    {
+      "id": "rne-341179430",
+      "title": "Company register: SOC CIVILE EXPLOITATION DOMAINE L'ARLOT (341179430)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/341179430",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:07:59Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=341179430",
+      "sha256": "ff2d431e748fede2754397e2274850c3d7dfbf1f30a6e2666f143efc6cacd395",
+      "bytes": 3407,
+      "finding": "SOC CIVILE EXPLOITATION DOMAINE L'ARLOT: registered office 14 RD 974 21700 Premeaux-Prissey; activity 01.21Z vine growing; created 1987-04-09; active. Partners: SOCIETE CIVILE IMMOBILIERE DE L'ARLOT (322235748) and AXA MILLESIMES (702047424); manager AXA MILLESIMES FINANCES (343832689). Legal identity only; not farming evidence."
+    },
+    {
+      "id": "arlot-sci-minutes-1992",
+      "title": "SCI de l'Arlot: 1991–2000 minutes and statutes (filed 2002)",
+      "url": "https://actes.ccm2.net/acte/c82f61af-a6e6-428b-a271-86d08586be89#page=8",
+      "type": "company-filing",
+      "documentDate": "1992-03-13",
+      "filingDate": "2002-10-31",
+      "access": "read",
+      "finding": "Bundle filed on 31 October 2002 for the company’s registration: minutes of 22 July 1991, 13 March 1992 and 31 March 2000 with original and updated statutes. The 13 March 1992 management report says the SCI received, for the first time, the rent of “our parcel in Romanée Saint Vivant acquired in 1990”, and calls the SCE du Domaine de l’Arlot “our subsidiary and tenant”. No cadastral reference, area or lease deed is printed.",
+      "reviewedPages": [
+        1,
+        8,
+        9,
+        20
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:12:23+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c82f61af-a6e6-428b-a271-86d08586be89",
+      "sha256": "c9042f61f24bd4e5987802af16cd10c81444854355ba471cba49ce745a01cf42",
+      "bytes": 1087719,
+      "pageCount": 37,
+      "screenedPages": 37,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "1991-07-22",
+          "kind": "ordinary general meeting minutes"
+        },
+        {
+          "date": "2000-03-31",
+          "kind": "extraordinary general meeting: capital increase"
+        }
+      ]
+    },
+    {
+      "id": "cathiard-gfa-1996",
+      "title": "GFA Famille Cathiard: 5 April 1996 notarial formation and contributions",
+      "url": "https://actes.ccm2.net/acte/988500b3-97d3-45ab-80b3-e21c28eda13e#page=9",
+      "type": "company-filing",
+      "documentDate": "1996-04-05",
+      "filingDate": "1996-05-30",
+      "access": "read",
+      "finding": "Notarial founding deed of the GFA by Cathiard family members. Article 9 contributes Vosne-Romanée AL 326, Romanée Saint Vivant, 16 a 73 ca. Article 3 forbids direct farming and requires long-term letting; no tenant or lease deed is named. The scanned PDF has no text layer; every page was OCR-screened and the schedule checked against the page image.",
+      "reviewedPages": [
+        1,
+        5,
+        9,
+        10
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:06:31+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/988500b3-97d3-45ab-80b3-e21c28eda13e",
+      "sha256": "c465a2a99f7d0ba2324b4740b2688f0b84a5b4ffc0135c916cb9e4a38cfed463",
+      "bytes": 989042,
+      "pageCount": 32,
+      "screenedPages": 32,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "arlot-sce-2007",
+      "title": "SCE du Domaine de l'Arlot: 19 January 2007 share transfer and recast statutes",
+      "url": "https://actes.ccm2.net/acte/0755e7e3-2e88-4144-9091-ad492b6d701b#page=1",
+      "type": "company-filing",
+      "documentDate": "2007-01-19",
+      "filingDate": "2007-03-22",
+      "access": "read",
+      "finding": "AXA Millésimes (702047424) buys the 2,450 parts held by Société des Quatre Chemins; meetings of 18 and 19 January 2007 change the manager and recast the statutes, which give the SCI de l’Arlot (322235748) the other 2,550 of 5,000 parts. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        9,
+        13
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:44+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0755e7e3-2e88-4144-9091-ad492b6d701b",
+      "sha256": "b3275e29badd81178a44ef636e0165b59942120cb9dd21348b72cb0652b2d324",
+      "bytes": 569723,
+      "pageCount": 21,
+      "screenedPages": 21,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2007-01-18",
+          "kind": "general meeting"
+        }
+      ]
     }
   ],
   "holders": {
@@ -5934,8 +6100,23 @@
             "recherche-entreprises.api.gouv.fr"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 113,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "330345414": {
       "links": [
@@ -7259,12 +7440,22 @@
             "Richebourg official producer publications and authorized Winehog archives"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 5,
-        "pagesRead": 188,
-        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 8 filings / 289 pages."
+        "filingsScreened": 8,
+        "pagesRead": 289,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 5 filings / 188 pages."
       }
     },
     "440712529": {
@@ -8140,12 +8331,22 @@
             "actes.ccm2.net (2 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 2,
-        "pagesRead": 40,
-        "note": "pagesRead counts OCR-screened PDF pages."
+        "filingsScreened": 4,
+        "pagesRead": 156,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 2 filings / 40 pages."
       }
     },
     "528291479": {
@@ -8566,12 +8767,22 @@
             "Richebourg official producer publications and authorized Winehog archives"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 325,
-        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+        "filingsScreened": 10,
+        "pagesRead": 610,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 3 filings / 325 pages."
       }
     },
     "778269498": {
@@ -9152,12 +9363,22 @@
             "actes.ccm2.net (3 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 82,
-        "note": "pagesRead counts OCR-screened PDF pages."
+        "filingsScreened": 4,
+        "pagesRead": 117,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 3 filings / 82 pages."
       }
     },
     "953306917": {
@@ -9386,12 +9607,22 @@
             "Richebourg official producer publications and authorized Winehog archives"
           ],
           "outcome": "partial"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "partial"
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 49,
-        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 1 filings / 43 pages."
+        "filingsScreened": 4,
+        "pagesRead": 99,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 3 filings / 49 pages."
       }
     },
     "U18178008": {
@@ -9784,12 +10015,22 @@
             "statutes and filings of GFA du Domaine de Corton-Grancey (427468970)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 67,
-        "note": "pagesRead counts OCR-screened PDF pages; 8 cited pages checked against page images."
+        "filingsScreened": 1,
+        "pagesRead": 37,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 3 filings / 67 pages."
       }
     },
     "U21854744": {
@@ -10097,7 +10338,7 @@
           "heritiers-confuron-statutes-2024",
           "rne-934003641"
         ],
-        "limitation": "The 2024 founding deed’s two Clos de Vougeot references and areas match this provisional rights identifier. The rights file keeps the provisional identifier."
+        "limitation": "The 2024 founding deed’s two Clos de Vougeot references and two Romanée-Saint-Vivant references (AC 298, AC 300) and their areas match this provisional rights identifier. The rights file keeps the provisional identifier."
       },
       "links": [
         {
@@ -10106,15 +10347,16 @@
           "relation": "lessor-per-filing",
           "leaseStatus": "executed",
           "crus": [
-            "clos-de-vougeot"
+            "clos-de-vougeot",
+            "romanee-saint-vivant"
           ],
-          "basis": "The 2024 founding deed recites a 24-year rural lease, signed the same day before the contribution, to the SCE du Domaine Jean-Jacques Confuron (348024712).",
+          "basis": "The 2024 founding deed recites a 24-year rural lease, signed the same day before the contribution, to the SCE du Domaine Jean-Jacques Confuron (348024712). It covers the contributed Clos de Vougeot and Romanée-Saint-Vivant parcels.",
           "sourceIds": [
             "heritiers-confuron-statutes-2024",
             "rne-348024712"
           ],
           "reviewStatus": "reviewed",
-          "reviewedAt": "2026-10-07"
+          "reviewedAt": "2026-10-08"
         }
       ],
       "searches": [
@@ -10126,11 +10368,22 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
         }
       ],
       "effort": {
         "filingsScreened": 1,
-        "pagesRead": 35
+        "pagesRead": 35,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total. Prior recorded pass: 1 filings / 35 pages."
       }
     },
     "U33360345": {
@@ -10264,6 +10517,96 @@
         "filingsScreened": 2,
         "pagesRead": 110,
         "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
+    },
+    "322235748": {
+      "links": [
+        {
+          "id": "322235748/domaine-de-l-arlot",
+          "domaine": "Domaine de l'Arlot",
+          "relation": "common-ownership",
+          "basis": "The register lists AXA Millésimes (702047424) as a partner of both the SCI de l’Arlot and the Société Civile d’Exploitation du Domaine de l’Arlot (341179430) at Premeaux-Prissey, of which the SCI is itself a partner. The SCI’s 1992 minutes call that company its subsidiary and tenant. Its 2007 filing gives the SCI 2,550 of that company’s 5,000 parts and AXA Millésimes the rest.",
+          "sourceIds": [
+            "rne-322235748",
+            "rne-341179430",
+            "arlot-sci-minutes-1992",
+            "arlot-sce-2007"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "linked"
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 58,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
+    },
+    "405387101": {
+      "links": [
+        {
+          "id": "405387101/domaine-sylvain-cathiard-et-fils",
+          "domaine": "Domaine Sylvain Cathiard et Fils",
+          "relation": "family-holding",
+          "basis": "GFA Famille Cathiard was formed in 1996 from Cathiard family contributions and is managed by the family. The register lists one of its partners as president of SAS Domaine Sylvain Cathiard et Fils (497497719). No filing names a tenant.",
+          "sourceIds": [
+            "rne-405387101",
+            "rne-497497719",
+            "cathiard-gfa-1996"
+          ],
+          "reviewStatus": "provisional",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "partial",
+          "note": "Provisional family-holding lead: shared family officer only; no filing names a tenant."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 128,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
+    },
+    "484070800": {
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; every image page OCR-screened",
+            "Romanée-Saint-Vivant producer and importer publications"
+          ],
+          "outcome": "no-link-found",
+          "note": "Formed in 2005 by two individuals to acquire and operate Vosne-Romanée vineyards; turned into a GFA in 2021 whose statutes require letting by métayage. Neither filing names a parcel, tenant or domaine."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 44,
+        "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
       }
     }
   }
