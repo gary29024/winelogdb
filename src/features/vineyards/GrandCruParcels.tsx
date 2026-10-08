@@ -26,10 +26,14 @@ export type ParcelLegendKey='recorded'|'unrecorded'|'owner'|'verified'|'selected
 
 const sourceId='cadastral-parcels',hatchId='cadastral-parcel-hatch';
 const layers=['cadastral-parcel-hatch','cadastral-parcel-owner','cadastral-parcel-producer','cadastral-parcel-outline',
- 'cadastral-parcel-selected-casing','cadastral-parcel-selected','cadastral-parcel-hit'];
+ 'cadastral-parcel-selected-casing','cadastral-parcel-selected','cadastral-parcel-hit','cadastral-parcel-unrecorded-tint'];
 // Ink for the parcel grid, gold edged in dark brown for a chosen holder (the Grand Cru browns
 // swallowed the old ochre) and crimson for the wine's verified producer.
-const ink='#26324a',gold='#f5b800',goldEdge='#3d2800',crimson='#c51f45';
+const ink='#26324a',gold='#f5b800',goldEdge='#3d2800',crimson='#c51f45',hatchInk='#596983';
+// Zoomed out, hundreds of outlines and their hatching merge into a dark mesh. The grid fades in as the
+// view nears one vineyard (about zoom 13-15 on a phone, 11.5 for a whole hill), and a parcel without a
+// matched record is a flat tint until its hatching takes over. Chosen and producer parcels never fade.
+const byZoom=(far:unknown,near:unknown,from:number,to:number)=>['interpolate',['linear'],['zoom'],from,far,to,near] as never;
 const ha=(m2:number)=>`${(m2/10000).toFixed(2)} ha`;
 const plural=(n:number,one:string,many=`${one}s`)=>`${n} ${n===1?one:many}`;
 // Snapshot dates come from the cru's bundle manifest, e.g. "1 January 2025" and "June 2026".
@@ -209,13 +213,14 @@ function GrandCruParcelsView({map,parentId,climat,producer,producerId,onLegend,c
    if(map.hasImage&&!map.hasImage(hatchId))map.addImage(hatchId,hatch());
    if(!map.getLayer(layers[0])){
     const dim=(on:number,off:number)=>['case',['get','dim'],off,on];
-    map.addLayer({id:layers[0],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-pattern':hatchId,'fill-opacity':dim(1,0.35) as never}});
+    map.addLayer({id:layers[0],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-pattern':hatchId,'fill-opacity':byZoom(0,dim(1,0.35),13.5,15)}});
+    map.addLayer({id:layers[7],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-color':hatchInk,'fill-opacity':byZoom(dim(0.18,0.07),0,13.5,15)}},layers[0]);
     map.addLayer({id:layers[1],type:'fill',source:sourceId,filter:['==',['get','match'],'owner'],paint:{'fill-color':gold,'fill-opacity':0.85}});
     map.addLayer({id:layers[2],type:'fill',source:sourceId,filter:['==',['get','match'],'verified'],paint:{'fill-color':crimson,'fill-opacity':0.72}});
     map.addLayer({id:layers[3],type:'line',source:sourceId,paint:{
      'line-color':['match',['get','match'],'owner',goldEdge,'verified',crimson,ink],
-     'line-width':['match',['get','match'],'',0.6,'owner',1.8,1.1],
-     'line-opacity':['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1]}});
+     'line-width':byZoom(['match',['get','match'],'',0.3,'owner',1.8,1.1],['match',['get','match'],'',0.6,'owner',1.8,1.1],12.5,15.5),
+     'line-opacity':byZoom(['case',['get','dim'],0.06,['==',['get','match'],''],0.14,1],['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1],12.5,15.5)}});
     map.addLayer({id:layers[4],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':5}});
     map.addLayer({id:layers[5],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#10182d','line-width':2.4}});
     map.addLayer({id:layers[6],type:'fill',source:sourceId,paint:{'fill-opacity':0}});

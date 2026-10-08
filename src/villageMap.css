@@ -48,7 +48,7 @@
 .map-swatch-named-plot{border:1.5px dashed #65533f!important;background:none}
 /* Parcel keys reuse the map's ink, the owner gold and the wine's crimson. */
 .map-swatch-parcel{border-color:#26324a8c!important;background:none}
-.map-swatch-parcel-unrecorded{border-color:#26324a8c!important;background:repeating-linear-gradient(45deg,#59698373 0 1.5px,transparent 1.5px 4px)}
+.map-swatch-parcel-unrecorded{border-color:#26324a8c!important;background:repeating-linear-gradient(45deg,#59698373 0 1.5px,transparent 1.5px 4px),#59698338}
 .map-swatch-parcel-owner{border-color:#3d2800!important;background:#f5b800d9}
 .map-swatch-parcel-producer{border-color:#c51f45!important;background:#c51f45b8}
 .map-swatch-parcel-selected{border:2.5px solid #10182d!important;background:none}

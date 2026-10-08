@@ -270,6 +270,30 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
   expect(screen.queryByText(/Possible match/)).toBeNull();
  });
+ it('softens the parcel grid and hatching when zoomed out, never the chosen or producer parcels',async()=>{
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  const map=mapStub();
+  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  await screen.findByText('Recorded right holders by mapped area');
+  // The stub declares only the layer; MapLibre's second argument is the layer to draw beneath.
+  const added=map.addLayer.mock.calls.map(call=>({...call[0],before:(call as unknown[])[1]}));
+  const layer=(id:string)=>added.find(l=>l.id===id)!;
+  // Every zoomed paint is ['interpolate',['linear'],['zoom'],far zoom,far value,near zoom,near value].
+  const stops=(value:unknown[])=>{expect(value.slice(0,3)).toEqual(['interpolate',['linear'],['zoom']]);return {far:value[4],near:value[6],from:value[3] as number,to:value[5] as number}};
+  const opacity=stops(layer('cadastral-parcel-outline').paint['line-opacity']);
+  // case: dim, then an unmatched parcel, else (chosen, producer) full strength at both ends.
+  expect(opacity.far).toEqual(['case',['get','dim'],0.06,['==',['get','match'],''],0.14,1]);
+  expect(opacity.near).toEqual(['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1]);
+  expect(opacity.from).toBeLessThan(opacity.to);
+  const hatch=stops(layer('cadastral-parcel-hatch').paint['fill-opacity']),tint=stops(layer('cadastral-parcel-unrecorded-tint').paint['fill-opacity']);
+  expect([hatch.far,tint.near]).toEqual([0,0]);
+  expect([tint.from,tint.to]).toEqual([hatch.from,hatch.to]);
+  // The flat tint sits under the hatching, for the same parcels without a matched record.
+  expect(layer('cadastral-parcel-unrecorded-tint').before).toBe('cadastral-parcel-hatch');
+  expect(layer('cadastral-parcel-unrecorded-tint').filter).toEqual(layer('cadastral-parcel-hatch').filter);
+  expect(layer('cadastral-parcel-owner').paint['fill-opacity']).toBe(0.85);
+ });
  it('keeps each parcel’s dated operator evidence when a right holder is selected',async()=>{
   const sample=structuredClone(data);
   const linked=sample.features.filter(f=>inEchezeaux(f)&&holds(f,'DOMAINE DE LA ROMANEE CONTI'));
