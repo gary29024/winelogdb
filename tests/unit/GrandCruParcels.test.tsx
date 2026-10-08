@@ -37,11 +37,23 @@ describe('Cadastral parcel controls',()=>{
   const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const expand=screen.queryByRole('button',{name:/Show all .* entries/});
   if(expand)fireEvent.click(expand);
-  expect(within(holders).getByRole('button',{name:/Domaine de la Romanée-Conti.*Company record/})).toBeTruthy();
+  // Domaine research loads after the parcels; wait for its headings.
+  expect(await within(holders).findByRole('button',{name:/Domaine de la Romanée-Conti.*Company record/})).toBeTruthy();
   expect(within(holders).getByRole('button',{name:/GFA Heritiers AF-Gros/i})).toBeTruthy();
   expect(within(holders).queryByRole('button',{name:/^Domaine A\.-F\. Gros/})).toBeNull();
   expect(within(holders).getByRole('button',{name:/identity by name and seat only/})).toBeTruthy();
+  // One line per name: no company names or per-row source links; strength shows as a badge, with a key.
+  const drc=within(holders).getByRole('button',{name:/^Domaine de la Romanée-Conti/});
+  expect(drc.textContent).not.toMatch(/DOMAINE DE LA ROMANEE CONTI|Domaine de la Romanee Conti/);
+  expect(drc.querySelector('.village-map-basis.is-strong')).toBeTruthy();
+  fireEvent.click(drc);
+  expect(drc.getAttribute('aria-pressed')).toBe('true');
+  expect(within(holders).queryAllByRole('link')).toHaveLength(0);
+  const key=screen.getByText('Link strength').parentElement!;
+  expect([...key.querySelectorAll('.village-map-basis')].map(b=>b.textContent)).toEqual(['Company record','Weak lead']);
+  expect(screen.getByText(/Domaine headings and leads come from reviewed research/).textContent).toMatch(/cited sources for Richebourg.*none is recorded yet/);
   fireEvent.change(grouping,{target:{value:'holder'}});
+  expect(screen.queryByText('Link strength')).toBeNull();
   const all=screen.queryByRole('button',{name:/Show all 10 right holders/});
   if(all)fireEvent.click(all);
   expect(within(holders).getAllByRole('button')).toHaveLength(10);
@@ -62,7 +74,7 @@ describe('Cadastral parcel controls',()=>{
   const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   // Domaine view: a company-record link groups; a lease mandate and a name-only match stay legal-holder rows.
   fireEvent.click(await screen.findByRole('button',{name:/Show all .* entries/}));
-  expect(within(holders).getByRole('button',{name:/Château de la Tour.*Company record/})).toBeTruthy();
+  expect(await within(holders).findByRole('button',{name:/Château de la Tour.*Company record/})).toBeTruthy();
   expect(within(holders).getByRole('button',{name:/GFA Misset Cheron/i})).toBeTruthy();
   expect(within(holders).queryByRole('button',{name:/^Domaine du Couvent/})).toBeNull();
   expect(within(holders).getAllByRole('button',{name:/identity by name and seat only/})).toHaveLength(2);

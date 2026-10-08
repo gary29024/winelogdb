@@ -89,9 +89,14 @@ describe('PR416 map feedback',()=>{
   fireEvent.click(await screen.findByRole('button',{name:/Show all \d+ entries/}));
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const office=await within(list).findByRole('button',{name:/^Domaine Méo-Camuzet/});
-  expect(office.textContent).toMatch(/GFV Grands Crus Investissement/);
+  // The row stays one name tall: the recorded company name is searchable, not shown.
+  expect(office.textContent).not.toMatch(/GFV Grands Crus Investissement/);
   expect(office.textContent).toMatch(/0.45 ha · 3/);
   expect(office.textContent).toMatch(/Weak lead · office address only/);
+  expect(office.querySelector('.village-map-basis.is-weak')).toBeTruthy();
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:'Grands Crus Investissement'}});
+  expect(within(list).getAllByRole('button').map(b=>b.textContent)).toEqual([expect.stringMatching(/^Domaine Méo-Camuzet/)]);
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:''}});
   expect(within(list).getByRole('button',{name:/SCI les Climats|SCI Les Climats/i}).textContent).not.toMatch(/Marsannay/);
   expect(within(list).queryByRole('button',{name:/^Domaine du Château de Marsannay/})).toBeNull();
  });
@@ -108,7 +113,7 @@ describe('PR416 map feedback',()=>{
   view.rerender(<ParcelProducerLinker {...props} parentId="renamed" producer="A renamed catalogue producer" producerId="nicole"/>);
   expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
  });
- it('groups by sourced domaine names with legal identities underneath, and preserves highlighting when modes change',async()=>{
+ it('groups by sourced domaine names with legal identities searchable, not shown, and preserves highlighting when modes change',async()=>{
   const map=mapStub();
   render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
   fireEvent.click(screen.getByRole('switch'));
@@ -116,14 +121,16 @@ describe('PR416 map feedback',()=>{
   fireEvent.click(screen.getByRole('button',{name:/Show all \d+ entries/}));
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const faiveley=await within(list).findByRole('button',{name:/Domaine Faiveley/});
-  expect(faiveley.textContent).toMatch(/Consortium Viticole/);
+  expect(faiveley.textContent).not.toMatch(/Consortium Viticole/);
   expect(faiveley.textContent).toMatch(/Brand identity confirmed/);
+  expect(faiveley.querySelector('.village-map-basis.is-medium')).toBeTruthy();
   expect(screen.getByRole('region',{name:'Parcel rights'}).textContent).not.toMatch(/farming unverified|Current farming|tenant/i);
   fireEvent.change(screen.getByPlaceholderText('Search right holders'),{target:{value:'Consortium'}});
   expect(within(list).getByRole('button',{name:/Faiveley/})).toBeTruthy();
   fireEvent.click(faiveley);
   expect(map.match('212670000D0331')).toBe('owner');
-  expect(within(list).getAllByRole('link').length).toBeGreaterThan(0);
+  // Sources are described once under About this data, not listed per row.
+  expect(within(list).queryAllByRole('link')).toHaveLength(0);
   fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
   expect(map.match('212670000D0331')).toBe('owner');
   expect(within(list).getByRole('button',{name:/Consortium Viticole/})).toHaveProperty('ariaPressed','true');

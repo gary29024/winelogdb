@@ -8,7 +8,7 @@ import {hasParcelEvidence,loadParcelEvidence,type ParcelEvidenceData} from '../.
 import {ParcelProducerLinker} from './ParcelProducerLinker';
 import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
 import {ParcelEvidence} from './ParcelEvidence';
-import {groupParcelRightHolders,matchesLinkedProducer,type HolderGroup} from '../../lib/places/parcelPresentation';
+import {confidenceLabels,confidenceOrder,groupParcelRightHolders,matchesLinkedProducer,type HolderGroup} from '../../lib/places/parcelPresentation';
 
 type Right={holderId:string;siren:string|null;name:string;rightCode:string;rightLabel:string;legalForm:string;legalFormLabel:string};
 // producerNames are reviewed spellings of the producer field, as in
@@ -249,6 +249,8 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
+ // The key names only the link strengths this list uses, strongest first.
+ const strengths=useDomaineGroups?confidenceOrder.filter(level=>listed.some(o=>o.confidence===level)):[];
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
  const selectedMatch=selected?matches.get(selected.properties.id)??'':'';
@@ -309,13 +311,14 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     <div>
      <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
      {cru.domaineGrouping&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
-     <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. Badges show how strong each link is; recorded company names stay searchable and appear under Legal holder. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
+     {strengths.length>0&&<p className="village-map-basis-key"><span>Link strength</span>{strengths.map(level=><span key={level} className={`village-map-basis is-${level}`}>{confidenceLabels[level]}</span>)}</p>}
      {useDomaineGroups&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
      {useDomaineGroups&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
-      <span className="village-map-owner-name">{o.name}{(o.domaine||o.lead)&&<small>{o.legalNames.join(' · ')}</small>}{(o.basisLabel||o.lead)&&<span className={`village-map-basis${o.lead?' is-lead':''}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
-     </button>{isChosen(o)&&o.sources.length>0&&<div className="village-map-group-sources">{o.sources.map(id=>{const source=research?.sources[id];return source?<a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>:null})}</div>}</li>)}</ul>
+      <span className="village-map-owner-name">{o.name}{o.confidence&&<> <span className={`village-map-basis is-${o.confidence}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span></>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
+     </button></li>)}</ul>
      <div className="village-map-link-actions">
       {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
       {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${useDomaineGroups?'entries':'right holders'}`}</button>}
@@ -328,6 +331,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     </details>
     <details><summary>About this data</summary>
      <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, {monthYear(manifest.cadastreDate)} (<a href={manifest.cadastreLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.cadastreLicence}</a>), and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of {longDate(manifest.rightsAsOf)} (<a href={manifest.rightsLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.rightsLicence}</a>). Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
+     {cru.domaineGrouping&&research&&<p>Domaine headings and leads come from reviewed research: company registers and filings, estate publications and independent articles ({plural(Object.keys(research.sources).length,'cited source')} for {name}). Badges rank each link from a company record down to a weak lead; “{confidenceLabels.domaine}” is kept for a domaine’s own dated confirmation{domaineOwners.some(o=>o.confidence==='domaine')?'':', and none is recorded yet'}. None of these sources shows who farms the vines.</p>}
     </details>
    </>}
   </>}

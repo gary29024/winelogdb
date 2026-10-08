@@ -78,6 +78,9 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(h['parcelOperationConfirmed'] is False, 'Lead register cannot publish confirmed operation')
         require(set(h['sourceIds']) <= sources.keys(), 'Unknown holder source')
         require(not h['candidateNames'] or h['sourceIds'], 'Candidate requires a cited research source')
+        # Tier 3 placeholder: only the domaine's own dated reply can carry this basis.
+        require(h['basis'] != 'domaine-confirmed' or any(sources[s].get('type') == 'domaine-outreach' for s in h['sourceIds']),
+                'A domaine-confirmed holder needs a domaine-outreach source')
     require(history['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and history['parentFeatureId'] == parent,
             'Rights history built from another snapshot')
     lineage = {r['parcelId']: r for r in history['parcels']}
