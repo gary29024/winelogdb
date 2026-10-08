@@ -364,19 +364,45 @@ class RichebourgTests(unittest.TestCase):
                             for f in filings.values() for l in f['leaseEvidence']))
 
     def test_unnamed_2025_report_and_census_never_create_a_candidate(self):
-        reports = self.curation['externalResearch']
+        reports = [r for r in self.curation['externalResearch'] if r['basis'] == 'critic-named-cadastral-reference']
         self.assertEqual({p for r in reports for p in r['parcelIds']},
                          {f'21714000AN{n:04}' for n in (292, 293, 294, 295)})
         self.assertTrue(all(r['producer'] is None and r['currentFarmer'] is None for r in reports))
         for row in self.register['parcels']:
             if row['parcelId'] in {p for r in reports for p in r['parcelIds']}:
-                self.assertEqual(row['researchStatus'], 'unresolved')
-                self.assertEqual(row['candidateLeads'], [])
+                # The only candidate is the filing lead on the retired reference, never the unnamed report.
+                self.assertTrue(all(c['basis'].startswith('filing-named-cadastral-reference on predecessor')
+                                    for c in row['candidateLeads']))
         self.assertEqual(len(self.curation['producerHoldings']), 11)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         af_holding = next(h for h in self.curation['producerHoldings'] if h['id'] == 'ric-af-gros')
         self.assertEqual(af_holding['ownerHolderIds'], [])  # The GFA's 0.1281 ha is not the whole published 0.60 ha.
         self.assertEqual(sum(not p['recordedRights'] for p in self.register['parcels']), 32)
+
+    def test_liger_belair_lease_reaches_split_parcels_only_through_lineage(self):
+        lease = next(r for r in self.curation['externalResearch'] if r['id'] == 'ric-tlb-metayage-2005')
+        self.assertEqual((lease['basis'], lease['parcelIds'], lease['currentFarmer']),
+                         ('filing-named-cadastral-reference', [], None))
+        self.assertEqual(lease['predecessorReferences'],
+                         {'21714000AN0170': ['21714000AN0292', '21714000AN0293'],
+                          '21714000AN0172': ['21714000AN0294', '21714000AN0295']})
+        self.assertIn('end of 2022', lease['finding'])  # The lease term and the 2025 sale stay stated.
+        self.assertIn('3 April 2025 sale', lease['finding'])
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n, former in ((292, 'AN0170'), (293, 'AN0170'), (294, 'AN0172'), (295, 'AN0172')):
+            row = rows[f'21714000AN{n:04}']
+            self.assertEqual((row['researchStatus'], row['recordedRights'], row['currentFarmer']), ('holder-lead', [], None))
+            self.assertEqual([(c['name'], c['basis']) for c in row['candidateLeads']],
+                             [('Domaine Thibault Liger-Belair', f'filing-named-cadastral-reference on predecessor {former}')])
+            item = next(i for i in self.evidence['parcels'][row['parcelId']] if i.get('via') == former)
+            self.assertEqual(item['originalReferenceId'], f'21714000{former}')
+        self.assertEqual(rows['21714000AN0247']['researchStatus'], 'unresolved')
+        sources = {s['id']: s for s in self.resolved['sources']}
+        deed = sources['ric-tlb-lease-contribution-2015']
+        self.assertEqual((deed['documentDate'], deed['filingDate'], deed['screenedPages']), ('2015-12-30', '2017-05-17', deed['pageCount']))
+        for printed in ('353575103', '44 a 13 ca', '7 a 92 ca'):
+            self.assertIn(printed, deed['finding'])
+        self.assertNotIn('ric-tlb-lease-contribution-2015', {sid for h in self.curation['holders'] for sid in h['sourceIds']})
 
     def test_every_screened_filing_has_provenance_and_all_page_screening(self):
         sources = {s['id']: s for s in self.resolved['sources']}
@@ -393,7 +419,7 @@ class RichebourgTests(unittest.TestCase):
     def test_farming_and_other_cru_links_do_not_change(self):
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
-        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (25, 33))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (29, 29))
         echezeaux = resolve_curation(read_json(Context(*load_cru('echezeaux')).curation), 'echezeaux', self.table)
         bichot = next(h for h in echezeaux['holders'] if h['holderId'] == '036380046')
         self.assertNotIn('ric-bichot-richebourg-sheet', bichot['sourceIds'])

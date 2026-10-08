@@ -4,7 +4,7 @@
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-1083",
   "status": "tier-2-reviewed",
-  "scope": "All 58 mapped Richebourg parcels and all 10 recorded holder identifiers reviewed for Tier 2 (#425) through the shared holder table; 36 filings / 1,454 pages screened. Exact schedules, historical leases, published holding totals and unnamed reports remain distinct. No current farmer is verified.",
+  "scope": "All 58 mapped Richebourg parcels and all 10 recorded holder identifiers reviewed for Tier 2 (#425) through the shared holder table; 36 filings / 1,454 pages screened, plus 39 filings / 504 pages of eight related companies that hold no current Richebourg rights. Exact schedules, historical leases, published holding totals and unnamed reports remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -753,6 +753,66 @@
       "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
     },
     {
+      "id": "ric-tlb-lease-contribution-2015",
+      "title": "Domaine Thibault Liger-Belair: 30 December 2015 notarial contribution of lease rights (filed 2017)",
+      "url": "https://actes.ccm2.net/acte/2118907a-ffa5-4235-8242-fc415cbb75c3#page=4",
+      "type": "company-filing",
+      "documentDate": "2015-12-30",
+      "filingDate": "2017-05-17",
+      "access": "read",
+      "finding": "Contributes to the company Domaine Thibault Liger-Belair (443134523) a métayage right under a 14 May 2005 notarial lease, published at the Beaune land registry on 20 June 2005, by which GFA Domaine Xavier Liger-Belair (353575103), owner and lessor, let Richebourg AN170 (44 a 13 ca) and AN172 (7 a 92 ca), with other vines, for 18 years from 1 January 2005. The GFA intervenes to approve; the leases had been made available to the company since its formation. The lease instrument itself was not reviewed.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T00:18:36.621649+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2118907a-ffa5-4235-8242-fc415cbb75c3",
+      "sha256": "682d099d7fa4551c213f175c5818b80220f48678b574c3096eb7c48df11dcb8f",
+      "bytes": 1136504,
+      "pageCount": 25,
+      "screenedPages": 25,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU). Relevant schedules checked against page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2005-05-14",
+          "kind": "recited métayage lease"
+        },
+        {
+          "date": "2005-06-20",
+          "kind": "recited land-registry publication of the lease"
+        }
+      ]
+    },
+    {
+      "id": "ric-tlb-statutes-2025",
+      "title": "Domaine Thibault Liger-Belair: statutes updated after the 3 April 2025 decisions (filed July 2025)",
+      "url": "https://actes.ccm2.net/acte/ad237e6f-66db-4ae4-a17a-b2485263e6d2#page=3",
+      "type": "company-filing",
+      "documentDate": "2025-04-03",
+      "filingDate": "2025-07-07",
+      "access": "read",
+      "finding": "Article 6.3 still recites the 30 December 2015 contribution of the 2005 métayage right over Vosne-Romanée AN170 and AN172, among other parcels. This is capital history; it does not show the lease in force in 2025 or after the 3 April 2025 sale.",
+      "reviewedPages": [
+        1,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T23:50:26.111682+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ad237e6f-66db-4ae4-a17a-b2485263e6d2",
+      "sha256": "e86988e3fa9d2dabf109e05e4a630414c9dfcebed6907aff5df1f819058e877c",
+      "bytes": 487409,
+      "pageCount": 18,
+      "screenedPages": 18,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU). Relevant schedules checked against page images."
+    },
+    {
       "id": "ric-anne-gros-richebourg",
       "title": "Domaine Anne Gros: Richebourg",
       "url": "https://www.anne-gros.com/products-category/richebourg-grand-cru/",
@@ -842,7 +902,13 @@
       "bytes": 3498778,
       "retrievedAt": "2026-10-08",
       "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
-      "finding": "Historical owner list gives eleven producer totals and named-area locations. The printed publication date is 18 August 2013; the update date is not established. No map colour or holding total is used as a current parcel crosswalk."
+      "finding": "Historical owner list gives eleven producer totals and named-area locations, including 0.55 ha for Thibault Liger-Belair in Les Richebourg with a first 2002 vintage after an earlier lease to another domaine. The printed publication date is 18 August 2013; page metadata records a last modification on 1 October 2017, which the text does not print. No map colour or holding total is used as a current parcel crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
     },
     {
       "id": "ric-winehog-new-owner",
@@ -1044,6 +1110,38 @@
       "dateSourceId": "ric-winehog-new-owner",
       "currentFarmer": null,
       "evidenceSeason": "2025"
+    },
+    {
+      "id": "ric-tlb-metayage-2005",
+      "title": "Domaine Thibault Liger-Belair: 2005 métayage of former AN170/AN172",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "A 30 December 2015 notarial contribution, filed in 2017, transfers to Domaine Thibault Liger-Belair (443134523) a métayage right under a 14 May 2005 lease by which GFA Domaine Xavier Liger-Belair (353575103), owner and lessor, let Richebourg AN170 (44 a 13 ca) and AN172 (7 a 92 ca) for 18 years from 1 January 2005. Both areas equal the April 2025 cadastre, and DGFiP records the GFA as owner of both references in 2019–2025. A 2025 survey divided them into AN292/293 and AN294/295, which receive this evidence only through documented DFI lineage. The 2025 statutes still recite the contribution. The lease term ran to the end of 2022; no renewal, and no position after the 3 April 2025 sale, is established. Winehog’s 2013 map places the Liger-Belair plot here but prints no cadastral reference. Historical tenancy only; current farming is not established.",
+      "sourceIds": [
+        "ric-tlb-lease-contribution-2015",
+        "ric-tlb-statutes-2025",
+        "dgfip-history",
+        "cadastre-history",
+        "ric-winehog-history"
+      ],
+      "producer": "Domaine Thibault Liger-Belair",
+      "printedReferences": [
+        "AN170",
+        "AN172"
+      ],
+      "predecessorReferences": {
+        "21714000AN0170": [
+          "21714000AN0292",
+          "21714000AN0293"
+        ],
+        "21714000AN0172": [
+          "21714000AN0294",
+          "21714000AN0295"
+        ]
+      },
+      "appNote": "Former AN170/AN172 (52 a 05 ca), let by the family GFA under a 2005 métayage and contributed to Domaine Thibault Liger-Belair in 2015. The term ran to end-2022; renewal and position after the April 2025 sale are unknown. Historical tenancy, not current farming.",
+      "dateSourceId": "ric-tlb-lease-contribution-2015",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -1389,7 +1487,7 @@
       "sourceIds": [
         "ric-winehog-history"
       ],
-      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season.",
+      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season. A separate 2015 filing names former AN170/AN172 (52 a 05 ca) under a métayage; the published total is not that crosswalk.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -1524,7 +1622,8 @@
     "U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168.",
     "Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.",
     "Winehog subscriber text was reviewed only from two authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.",
-    "The Winehog history article prints 18 August 2013 but no established update date; older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.",
+    "The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.",
+    "A supplementary pass screened 39 filings / 504 pages of eight related companies with no current Richebourg rights: Domaine Thibault Liger-Belair, its family holding, GFA Domaine Xavier Liger-Belair, Domaine A.F. Gros, Gros Frère et Sœur, SCEA Domaine de la Levrière (formed 2026), SCE du Domaine Leroy and SC Domaine Jean Grivot. Only the Liger-Belair filings name Richebourg references (former AN170/AN172). The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.",
     "Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. All 58 current farming identities remain unconfirmed."
   ],

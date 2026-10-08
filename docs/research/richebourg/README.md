@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-20–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 23; 5 deeds on current references, plus 2 deeds on historical references retained with original scope |
-| Parcels with holder or research leads | 25; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 33 |
+| Parcels with holder or research leads | 29; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 29 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1995, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 196,059 / 16,998 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 201,225 / 17,499 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the Richebourg selection contains 58 of
@@ -149,11 +149,28 @@ Eleven published holdings feed only the named-area census. Six official producer
 publications supplement the authorized Winehog history article. Area matches,
 historical ownership colours and a person’s name do not assign present parcels.
 Winehog’s 24 October 2025 article names four current references with matching
-combined areas, but leaves the new owner unnamed. The four parcels retain dated
-context and remain unresolved, with no candidate producer or farmer.
+combined areas, but leaves the new owner unnamed. That article names no candidate
+producer or farmer.
 
-Research leads rise from **0 to 25 of 58 parcels**. **33 remain without a named
-candidate**, including all 32 parcels without company rights and Grivot AN247.
+A supplementary pass then read the filings of eight related companies that hold
+no current Richebourg rights: 39 filings / 504 pages, every page OCR-screened,
+recorded in the [filing inventory](filings.md#supplementary-pass-related-company-filings).
+Only the Liger-Belair filings name Richebourg references. A 30 December 2015
+notarial contribution, filed in 2017, transfers to Domaine Thibault Liger-Belair
+(443134523) a métayage right under a 14 May 2005 lease, published at the Beaune
+land registry, by which GFA Domaine Xavier Liger-Belair (353575103), owner and
+lessor, let Richebourg AN170 (44 a 13 ca) and AN172 (7 a 92 ca) for 18 years from
+1 January 2005. Both areas equal the April 2025 cadastre, and DGFiP records the
+GFA as owner of both references from 2019 to 2025. These retired references were
+divided in 2025 into the four reported plots, AN292/293 and AN294/295, so the
+lease reaches them only through documented DFI lineage, as
+`filing-named-cadastral-reference` research. The term ran to the end of 2022; no
+renewal, and no position after the 3 April 2025 sale, is established. Winehog’s
+2013 map places the Liger-Belair plot here but prints no cadastral reference.
+This is a historical tenancy lead, not current farming.
+
+Research leads rise from **0 to 29 of 58 parcels**. **29 remain without a named
+candidate**: the other 28 parcels without company rights and Grivot AN247.
 The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
 | Recorded holder | Filings | Pages | Outcome |
@@ -181,7 +198,8 @@ changing their parcel research categories.
 - U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168.
 - Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.
 - Winehog subscriber text was reviewed only from two authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.
-- The Winehog history article prints 18 August 2013 but no established update date; older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.
+- The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.
+- A supplementary pass screened 39 filings / 504 pages of eight related companies with no current Richebourg rights: Domaine Thibault Liger-Belair, its family holding, GFA Domaine Xavier Liger-Belair, Domaine A.F. Gros, Gros Frère et Sœur, SCEA Domaine de la Levrière (formed 2026), SCE du Domaine Leroy and SC Domaine Jean Grivot. Only the Liger-Belair filings name Richebourg references (former AN170/AN172). The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.
 - Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. All 58 current farming identities remain unconfirmed.
 

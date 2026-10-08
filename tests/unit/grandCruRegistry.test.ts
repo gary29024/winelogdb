@@ -101,6 +101,10 @@ describe('Grand Cru registry',()=>{
   for(const n of [292,293,294,295]){
    const items=evidence.parcels[`21714000AN0${n}`];
    expect(items.some(i=>i.kind==='research'&&i.note?.includes('leaves the new owner unnamed'))).toBe(true);
+   // The 2005 lease names the retired reference, so it reaches the split parcel only through lineage.
+   const lease=items.find(i=>i.kind==='research'&&i.via===(n<294?'AN0170':'AN0172'));
+   expect(lease?.title).toMatch(/Thibault Liger-Belair: 2005 métayage/);
+   expect(lease?.note).toMatch(/not current farming/);
   }
   expect(Object.keys(evidence.tracing??{})).toHaveLength(58);
   expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer/);
