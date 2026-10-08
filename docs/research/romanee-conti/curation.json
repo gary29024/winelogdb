@@ -220,6 +220,40 @@
       "sha256": "3dd404c9f6c259e4a3f3cf92640305039de2f112db0ac5bbb187d7f12aaab58d",
       "bytes": 219286,
       "finding": "Undated estate page publishes 1.8140 ha and bottle counts from 1953. That figure equals the summed cadastral areas of AN 72 and AN 258 recorded to the DRC, but a published total is not a parcel assignment."
+    },
+    {
+      "id": "rc-winehog-drc-profile",
+      "title": "Winehog: Domaine de la Romanée-Conti – Producer Profile",
+      "url": "https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/",
+      "type": "critic-research",
+      "documentDate": "2012-09-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f59d705350f667241026335d650844067a2624ef85ffd63779e5c1b4860b5946",
+      "bytes": 2958029,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Producer profile of the DRC’s wines and style, naming Romanée-Conti and La Tâche as its two monopoles. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2012-11-02",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rc-winehog-vines",
+      "title": "Winehog: From Romanee-Conti to Vougeot in the vines",
+      "url": "https://winehog.org/from-romanee-conti-to-vougeot-in-the-vines-46975/",
+      "type": "critic-research",
+      "documentDate": "2021-04-25",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "7aaa646a47232f7d46a95ba118f269ea7d681b25f383f1e5f4389bfde52e3c5c",
+      "bytes": 3722516,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "A 24 April 2021 ride through the vines, with photographs looking over Romanée-Conti, La Romanée and Aux Reignots. It prints no area, owner, plot or cadastral reference."
     }
   ],
   "holders": [
@@ -320,7 +354,7 @@
     "Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.",
     "No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.",
     "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
-    "Winehog subscriber articles requested, not supplied: “Domaine de la Romanée-Conti – Producer Profile” (2012-09-27); “From Romanee-Conti to Vougeot in the vines” (2021-04-25). No paywalled text was accessed.",
+    "Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3."
   ],
   "unmatchedPrintedReferences": [],
