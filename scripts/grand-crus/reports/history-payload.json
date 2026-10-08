@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-A-YPT6B8.js"
+    "dist/client/assets/index-BDY17WJp.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-C_amKYPW.js",
-    "dist/client/assets/SectionLabel-DKQ1BczY.js",
-    "dist/client/assets/SparklingDetailsCard-BpVxDmZq.js",
-    "dist/client/assets/VillageMap-B-jk9RUc.js",
-    "dist/client/assets/burgundyAtlas-B7BQO5oO.js",
-    "dist/client/assets/index-A-YPT6B8.js",
-    "dist/client/assets/index-Bs74zrD9.js",
+    "dist/client/assets/FriendTagDialog-C2RLAwtE.js",
+    "dist/client/assets/SectionLabel-BqBA9QsI.js",
+    "dist/client/assets/SparklingDetailsCard-Dn1XEtBk.js",
+    "dist/client/assets/VillageMap-BuO5JPuo.js",
+    "dist/client/assets/burgundyAtlas-DENuPBKR.js",
+    "dist/client/assets/index-BDY17WJp.js",
+    "dist/client/assets/index-CSU7UQqN.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-DXvvJNG2.js",
-    "dist/client/assets/wineDetailCompact-CO7RnabD.js"
+    "dist/client/assets/useModalFocus-Qewzz7-f.js",
+    "dist/client/assets/wineDetailCompact-b34VaJUj.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5631235,
-  "evidenceGzipBytesTotal": 506033,
+  "evidenceBytesTotal": 5637379,
+  "evidenceGzipBytesTotal": 506646,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -119,10 +119,10 @@
     },
     {
       "cru": "clos-des-lambrays",
-      "file": "dist/client/assets/clos-des-lambrays.evidence-DdUGDUoR.js",
-      "sha256": "aaefde37e715daebea7c2961a28035ac41ea9f52cb025049b699a28d0e6ffebb",
-      "bytes": 53605,
-      "gzipBytes": 7991
+      "file": "dist/client/assets/clos-des-lambrays.evidence-B3AuwQk9.js",
+      "sha256": "b85d50fbadbb48825eba24811ca334e8f632a5ecfc08f0d77cfe3de861c1a3c5",
+      "bytes": 59749,
+      "gzipBytes": 8604
     },
     {
       "cru": "clos-saint-denis",

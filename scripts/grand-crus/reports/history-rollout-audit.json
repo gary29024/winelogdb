@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5631796,
-  "evidenceGzipBytesTotal": 499686,
+  "evidenceBytesTotal": 5638110,
+  "evidenceGzipBytesTotal": 500298,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -1142,10 +1142,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "9a102a77eac02f31989bb5f9b0e3ccd2b2238ba4f438ea54f943fc757c93b1a2",
-      "evidenceSha256": "85c7d9a54900564a53fba73177343868bf146c338607b92fef2db51fbb5c8c18",
-      "evidenceBytes": 54144,
-      "evidenceGzipBytes": 7864,
+      "registerSha256": "2c2d5fe1b6e3bbd3c06b348df51b494affc5e83ad78830658067990395d34e5d",
+      "evidenceSha256": "162248a0a1cea6272eb8c3febd13fb796517b725e946da098d6c5bd86a51f4c8",
+      "evidenceBytes": 60458,
+      "evidenceGzipBytes": 8476,
       "earliestRawEventSample": null
     },
     {

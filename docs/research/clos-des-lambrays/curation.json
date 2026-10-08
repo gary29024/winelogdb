@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-547",
-  "status": "tier-1-reviewed",
-  "scope": "All 22 mapped Clos des Lambrays parcels and 3 recorded legal-entity identifiers reviewed for Tier 1, including commune edges, cadastral named areas and the #461 historical extension. Both notice-index candidates were read from their page images; they are two publications of one application, which becomes one event on seven current parcels. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 22 mapped Clos des Lambrays parcels and three recorded holders reviewed through the shared table for Tier 2. One reviewed wine-company link and one company-record U-id crosswalk; no exact individual filing schedule or verified current farmer. Historical notice evidence and geometry retained.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -71,35 +71,96 @@
       "reviewMethod": "page-image",
       "access": "read",
       "finding": "The same 9 April 2021 letter for dossier 2021-061 is republished as act BFC-2021-04-09-00022. Retained as a second source occurrence, not a second parcel event."
+    },
+    {
+      "id": "cl-estate",
+      "title": "Domaine des Lambrays: Le Clos des Lambrays",
+      "url": "https://www.lambrays.com/en/le-clos-des-lambrays/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:31:40.754544+00:00",
+      "retrievedFrom": "https://www.lambrays.com/en/le-clos-des-lambrays/",
+      "sha256": "c0feec286f61a24892837332c215723ca6ca72a80d94d901c8397db372160a35",
+      "bytes": 113332,
+      "finding": "The undated estate page publishes 8.66 ha owned across the three named areas. A named-area census only, without individual parcel allocation."
+    },
+    {
+      "id": "cl-lvmh",
+      "title": "LVMH: Domaine des Lambrays",
+      "url": "https://www.lvmh.com/en/our-maisons/wines-spirits/domaine-des-lambrays",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:31:41.590969+00:00",
+      "retrievedFrom": "https://www.lvmh.com/en/our-maisons/wines-spirits/domaine-des-lambrays",
+      "sha256": "f0ac40dfae0ed3797cd5fc3201a666ff0825f197c1dac05de499b3a2645bd408",
+      "bytes": 2677678,
+      "finding": "The group page identifies the estate and dates its acquisition to 2014. Company-group context, not an exact parcel schedule or present operation finding."
+    },
+    {
+      "id": "cl-winehog",
+      "title": "Winehog: Clos des Lambrays – Monopole or not? – update",
+      "url": "https://winehog.org/clos-des-lambrays-close-monopole-19659/",
+      "type": "critic-research",
+      "documentDate": "2014-04-21",
+      "otherDocumentDates": [
+        {
+          "date": "2020-10-08",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "ba7d75b125a4e3d3d1174ead69238bf8972d65b0781252ece1e668c7bcc091bc",
+      "bytes": 2336838,
+      "retrievedAt": "2026-10-08T15:22:09.049289+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash identifies original archive bytes; all four attached maps reviewed. Archive, full text and images stay outside Git.",
+      "finding": "The 2014 article reports a 420 m2 Taupenot-Merme holding in Meix Rentier without an individual numbered reference. Its garden map labels 99/181/182 without individual areas; the suggested descent from 100 is speculative. No current parcel match is made."
     }
   ],
   "holders": [
     {
       "holderId": "410725691",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cl-rne-410725691",
+        "cl-lambrays-1996",
+        "cl-lambrays-2004",
+        "cl-lambrays-2005",
+        "cl-lambrays-2014",
+        "cl-lambrays-2018",
+        "cl-lambrays-2021"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The registered wine company, filed 2004 name change and 2018/2021 statutes establish Domaine des Lambrays corporate identity. The 2014 acquisition concerns company shares. Its referenced property annex is missing from the downloaded filing; no exact individual parcel schedule located."
     },
     {
       "holderId": "U21078600",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cl-rne-778237206",
+        "cl-merme-1997",
+        "cl-merme-1994"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The filed 1994 identity and explicit 1997 conversion crosswalk the recorded old Societe Civile d Exploitation Merme-Morizot to GFA Merme Morizot 778237206. The conversion recites long-term leases without identifying tenants or individual parcels. Shared Taupenot names do not establish a producer link."
     },
     {
       "holderId": "U21465754",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cl-rne-505373852",
+        "cl-sci-candidate-2008",
+        "cl-sci-candidate-2018"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Exact-name and local registry searches yielded Rennes SCI 21-23 as a candidate, but no company-record crosswalk to the three Morey parcels. Its formation and later statutes provide no exact references or areas. The local department-filter hit is a differently named company at a 21-23 street address, not this identity. No SIREN or producer link assigned."
     }
   ],
   "historyFindings": [],
@@ -127,12 +188,57 @@
   ],
   "externalResearch": [],
   "parcelFilings": [],
-  "producerHoldings": [],
+  "producerHoldings": [
+    {
+      "id": "cl-lambrays",
+      "producer": "Domaine des Lambrays",
+      "namedAreas": [
+        "LES LARRETS OU CLOS DES LAMBRAYS",
+        "LES BOUCHOTS",
+        "MEIX RENTIER"
+      ],
+      "publishedAreaHa": 8.66,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "cl-estate"
+      ],
+      "finding": "Published named-area census only. No assignment to individual current parcels, rights or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "cl-taupenot-merme",
+      "producer": "Domaine Taupenot-Merme",
+      "namedAreas": [
+        "MEIX RENTIER"
+      ],
+      "publishedAreaHa": 0.042,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "cl-winehog"
+      ],
+      "finding": "Published named-area census only. No assignment to individual current parcels, rights or present farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "Ten selected public company filings (148 pages) were fully OCR-screened at 150 dpi with RapidOCR and DirectML before negative findings. Six Domaine des Lambrays filings cover 75 pages, two Merme-Morizot filings 39 pages, and two Rennes SCI candidate filings 34 pages. This is a bounded selection, not every filing deposited.",
+    "The 2014 company-share sale refers to Annex 6 with property titles and cadastral extracts; that annex is absent from the downloaded 18-page filing. No exact current references and individual areas can be extracted from the selected Lambrays company records.",
+    "Merme-Morizot company identity is documented by the old legal name, SIREN and express GFA conversion. Its long-term leases are recited without a tenant or parcel schedule. A Taupenot-Merme company relation is not inferred from shared officers or the critic map.",
+    "SCI 21 23 U21465754 remains unresolved. Same-name Rennes company 505373852 lacks an independent Morey parcel/company-record crosswalk; it is a candidate, not an assigned SIREN. Name and local-address searches are not exhaustive proof of absence.",
+    "The supplied Winehog article is available in full and its maps were reviewed. Numbered garden references lack areas; the 420 m2 Taupenot-Merme description lacks a number and differs from current AP104 at 430 m2. No forced match or inferred successor.",
+    "The SCI candidate signed decision dates are 19/26 May 2018, while the free filing index describes 2019 decisions and the deposit is 29 May 2019. Source-date discrepancy retained, with operative dates taken from the signed pages.",
+    "Original property annexes, executed leases and renewals, paid SPF records and present-season confirmation remain unreviewed. Company identity, historical share sales and undated estate totals do not verify current farming."
   ],
   "noticeReview": [
     {
@@ -155,6 +261,30 @@
       ],
       "reviewMethod": "page-image",
       "finding": "The same 9 April 2021 letter for dossier 2021-061 is republished as act BFC-2021-04-09-00022. Retained as a second source occurrence, not a second parcel event."
+    }
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "cl-winehog",
+      "printedReference": "99, 181 and 182; no individual printed areas",
+      "parcelIds": [],
+      "limitation": "Both prose and the map label these references, but no individual area is supplied. No parcel match from location alone.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "cl-winehog",
+      "printedReference": "100, speculated predecessor of 181 and 182",
+      "parcelIds": [],
+      "limitation": "The article treats the subdivision as a possibility and provides no individual area. It is not an accepted successor crosswalk or independent DFI evidence.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "cl-winehog",
+      "printedReference": "unnumbered Taupenot-Merme plot: 420 m2",
+      "parcelIds": [],
+      "limitation": "The article and maps do not supply an individual numbered reference with that area. No match to current AP104 (430 m2) by map position, rounding or subtraction; the 420 m2 value remains a dated census only.",
+      "currentFarmer": null
     }
   ]
 }

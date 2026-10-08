@@ -44,7 +44,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-de-la-roche",name:"Clos de la Roche",parentFeatureId:"inao-denom-544",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-la-roche"],domaineGrouping:false},
  {slug:"clos-de-tart",name:"Clos de Tart",parentFeatureId:"inao-denom-545",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-tart"],domaineGrouping:true},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:true},
- {slug:"clos-des-lambrays",name:"Clos des Lambrays",parentFeatureId:"inao-denom-547",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-des-lambrays"],domaineGrouping:false},
+ {slug:"clos-des-lambrays",name:"Clos des Lambrays",parentFeatureId:"inao-denom-547",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-des-lambrays"],domaineGrouping:true},
  {slug:"clos-saint-denis",name:"Clos Saint-Denis",parentFeatureId:"inao-denom-548",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-saint-denis"],domaineGrouping:false},
  {slug:"corton",name:"Corton",parentFeatureId:"inao-denom-549",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton"],domaineGrouping:true},
  {slug:"corton-charlemagne",name:"Corton-Charlemagne",parentFeatureId:"inao-denom-550",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton-charlemagne"],domaineGrouping:false},

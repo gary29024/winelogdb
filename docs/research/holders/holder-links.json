@@ -7512,6 +7512,341 @@
       "sha256": "b0b134fa437a5176119adf55f00a9640f0fdf6fd806bee03d1957d84d57aa9a2",
       "bytes": 3573,
       "finding": "Exact registered denomination, SIREN and activity. Company identity alone establishes neither parcel tenancy nor present farming."
+    },
+    {
+      "id": "cl-lambrays-1996",
+      "title": "410725691: lambrays 1996",
+      "url": "https://actes.ccm2.net/acte/5356165",
+      "type": "company-filing",
+      "documentDate": "1996-12-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:09.409409+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356165",
+      "sha256": "cc3c9dd32c6f0da14c0aac127aa51751c6a59bd258c3fb931e5f6102bd4c7b43",
+      "bytes": 213965,
+      "finding": "Cash formation of Societe Nouvelle du Domaine des Lambrays. The object names acquisition and wine production at Clos des Lambrays, but no individual cadastral property schedule. The handwritten 11 December 1996 signature date and registry cover agree; January 1997 is the deposit.",
+      "filingDate": "1997-01-31",
+      "pageCount": 9,
+      "screenedPages": 9,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "imageReviewedPages": [
+        9
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-lambrays-2004",
+      "title": "410725691: lambrays 2004",
+      "url": "https://actes.ccm2.net/acte/5356160",
+      "type": "company-filing",
+      "documentDate": "2004-05-24",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:08.725462+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356160",
+      "sha256": "b04848e667bb780aee4687bd397d686ddca8e67a5e4bd184a73c5d87b2170491",
+      "bytes": 219552,
+      "finding": "The assembly removes Nouvelle from the company name, retaining SIREN 410725691, and recalls the earlier asset acquisition from a separate old company. No individual cadastral schedule or new parcel transfer.",
+      "filingDate": "2004-06-28",
+      "pageCount": 10,
+      "screenedPages": 10,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-lambrays-2005",
+      "title": "410725691: lambrays 2005",
+      "url": "https://actes.ccm2.net/acte/5356167",
+      "type": "company-filing",
+      "documentDate": "2005-07-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:08.862186+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356167",
+      "sha256": "9c11863ebfab3c280430c1e3eaf2e5cbd42dc532e4f552043f683739d3a7758c",
+      "bytes": 190756,
+      "finding": "Civil-company to SARL conversion effective 1 August 2005, with capital changes and generic authority for real-estate and lease transactions. No individually identified current property schedule or executed parcel lease.",
+      "filingDate": "2005-08-12",
+      "pageCount": 9,
+      "screenedPages": 9,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-lambrays-2014",
+      "title": "410725691: lambrays 2014",
+      "url": "https://actes.ccm2.net/acte/5356214",
+      "type": "company-filing",
+      "documentDate": "2014-04-14",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:08.862186+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356214",
+      "sha256": "0cb4ebee72187800f360ce076c5e8d463761930a5ef809c4ec4cbedebf4af0a5",
+      "bytes": 414052,
+      "finding": "Share acquisition by LVMH Finance 380097881, followed by the 17 April sole-shareholder decisions. Annex 6 is described as property titles and cadastral extracts, but is not present in the downloaded 18-page filing. Corporate share ownership does not supply exact parcel evidence.",
+      "filingDate": "2014-06-11",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        3,
+        6,
+        8,
+        10,
+        11,
+        13,
+        18
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-lambrays-2018",
+      "title": "410725691: lambrays 2018",
+      "url": "https://actes.ccm2.net/acte/5356169",
+      "type": "company-filing",
+      "documentDate": "2018-04-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:12.032314+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356169",
+      "sha256": "f7f86c491d9955f0bd8533c64449ab479dee30ae6c6605434bf494109bb3e7b8",
+      "bytes": 5633021,
+      "finding": "The sole shareholder converts the company into a SAS without a new legal person; the object explicitly names the Clos des Lambrays wine estate. No individual current cadastral schedule or parcel tenancy evidence.",
+      "filingDate": "2018-06-01",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-lambrays-2021",
+      "title": "410725691: lambrays 2021",
+      "url": "https://actes.ccm2.net/acte/5356127",
+      "type": "company-filing",
+      "documentDate": "2021-02-01",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:11.607770+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5356127",
+      "sha256": "60c09517f47c0ea3e4405b5904e850c5b0b35d5acb00a43c77d2644bbe54e666",
+      "bytes": 795808,
+      "finding": "Updated wine-company objects extend geographic scope and trading activity. The exact SIREN and denomination support the company identity; generic objects do not prove present parcel operation.",
+      "filingDate": "2021-03-05",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-merme-1997",
+      "title": "778237206: merme 1997",
+      "url": "https://actes.ccm2.net/acte/fb2a43b3-b470-4091-8972-4f5aeac1d18c",
+      "type": "company-filing",
+      "documentDate": "1997-05-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:11.453095+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fb2a43b3-b470-4091-8972-4f5aeac1d18c",
+      "sha256": "3c3945685f71f0bade3a1387af8d57b51a189a64cb1ddc5bb4cc6d5ae5eb9cce",
+      "bytes": 580468,
+      "finding": "The deed identifies the old Societe Civile d Exploitation du Domaine Merme Morizot, SIREN 778237206, and explicitly converts it into the non-operating GFA Merme Morizot. It recites existing long-term rural leases but names no tenant, parcel references or individual areas. No Taupenot-Merme producer link inferred from shareholders.",
+      "filingDate": "1997-06-12",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        19
+      ],
+      "imageReviewedPages": [
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-merme-1994",
+      "title": "778237206: merme 1994",
+      "url": "https://actes.ccm2.net/acte/df6d09bc-9d5c-4940-87af-ad457ea342ea",
+      "type": "company-filing",
+      "documentDate": "1994-01-25",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:11.827798+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/df6d09bc-9d5c-4940-87af-ad457ea342ea",
+      "sha256": "4ed007e3a68bf151388a1dfbe809764b72fd335ff84bfb13f9bcb235736d6e77",
+      "bytes": 727363,
+      "finding": "Share transfer and retained historical statutes identify Societe Civile d Exploitation Merme Morizot and SIREN 778237206. No AP96/103/104 individual schedule or independently identified tenant appears in the selected filing.",
+      "filingDate": "1994-03-14",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        13,
+        15,
+        16,
+        17,
+        19
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-sci-candidate-2008",
+      "title": "505373852: sci candidate 2008",
+      "url": "https://actes.ccm2.net/acte/07c94d3a-939a-46d1-a6e2-a7d391ac7e75",
+      "type": "company-filing",
+      "documentDate": "2008-07-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:13.688364+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/07c94d3a-939a-46d1-a6e2-a7d391ac7e75",
+      "sha256": "fb2e3753411c53bab4cce12c529b9f8aa46fd571712727426c48af9003a134ae",
+      "bytes": 392402,
+      "finding": "Rennes SCI 21-23 is a same-name candidate only. Cash formation and generic property-management objects contain no Morey AP178/180/182 schedule, former local identity or wine-producer relation. Signatures are dated 16 and 21 July 2008; the last date is retained.",
+      "filingDate": "2008-07-23",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        13,
+        14
+      ],
+      "imageReviewedPages": [
+        13
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-sci-candidate-2018",
+      "title": "505373852: sci candidate 2018",
+      "url": "https://actes.ccm2.net/acte/27aa7d26-d780-4529-b3e6-11c1139be06d",
+      "type": "company-filing",
+      "documentDate": "2018-05-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:30:14.152297+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/27aa7d26-d780-4529-b3e6-11c1139be06d",
+      "sha256": "ff76d157afcf42df73d964a6cc91b7053d70bac4436e0fe7fa4a5d26f3e96c8d",
+      "bytes": 665404,
+      "finding": "Voting and financial-rights changes signed 19 and 26 May 2018, deposited 29 May 2019. The free index calls the decisions 2019, contrary to the signed pages and statute cover. No exact Morey parcel identity or producer relationship; the Rennes company is not equated with the U-id.",
+      "filingDate": "2019-05-29",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        19,
+        20
+      ],
+      "imageReviewedPages": [
+        4,
+        5
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; identity conversion and ambiguous dates checked against page images."
+    },
+    {
+      "id": "cl-rne-410725691",
+      "title": "Company register: SOCIETE DU DOMAINE DES LAMBRAYS (410725691)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=410725691",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:27:32.840072+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=410725691",
+      "sha256": "043f81187fbc6c38687026aa6457a2fd9ab4205631b27124748b3a1a90704cdb",
+      "bytes": 3385,
+      "finding": "Exact registered company identity. The Rennes SCI is a candidate only and is not crosswalked to the recorded U-id; corporate identity alone is not current farming."
+    },
+    {
+      "id": "cl-rne-778237206",
+      "title": "Company register: GFA MERME MORIZOT (778237206)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778237206",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:27:35.499907+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778237206",
+      "sha256": "6a8c0e913c4e2ded55cdcaf238fe1d8663e883fb21ed3f47258b67550103685a",
+      "bytes": 3607,
+      "finding": "Exact registered company identity. The Rennes SCI is a candidate only and is not crosswalked to the recorded U-id; corporate identity alone is not current farming."
+    },
+    {
+      "id": "cl-rne-505373852",
+      "title": "Company register: SCI 21-23 (505373852)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=505373852",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T17:27:37.315468+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=505373852",
+      "sha256": "b24f46896b489949ee34791d35aa2e14ac2afd9f5e6fde421443610fe0978f89",
+      "bytes": 4615,
+      "finding": "Exact registered company identity. The Rennes SCI is a candidate only and is not crosswalked to the recorded U-id; corporate identity alone is not current farming."
     }
   ],
   "holders": {
@@ -9682,6 +10017,40 @@
         "filingsScreened": 3,
         "pagesRead": 68,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "410725691": {
+      "links": [
+        {
+          "id": "410725691/lambrays",
+          "domaine": "Domaine des Lambrays",
+          "relation": "owner-company",
+          "basis": "The registered wine company and filed statutes identify the Clos des Lambrays estate under the same SIREN, through the 2004 name change and later conversions. The 2021 wine-company objects confirm corporate identity, not current parcel operation.",
+          "sourceIds": [
+            "cl-rne-410725691",
+            "cl-lambrays-2004",
+            "cl-lambrays-2018",
+            "cl-lambrays-2021"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=410725691",
+            "https://entreprises.lefigaro.fr/societe-du-domaine-des-lambrays-21/entreprise-410725691"
+          ],
+          "outcome": "linked",
+          "note": "The registered wine company, filed 2004 name change and 2018/2021 statutes establish Domaine des Lambrays corporate identity. The 2014 acquisition concerns company shares. Its referenced property annex is missing from the downloaded filing; no exact individual parcel schedule located."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 6,
+        "pagesRead": 75,
+        "note": "All selected pages OCR-screened. Bounded source selection and candidate limits in Clos des Lambrays filings.md."
       }
     },
     "412618001": {
@@ -12912,6 +13281,34 @@
         "pagesRead": 25
       }
     },
+    "U21078600": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=778237206",
+            "https://entreprises.lefigaro.fr/gfa-merme-morizot-21/entreprise-778237206"
+          ],
+          "outcome": "no-link-found",
+          "note": "The filed 1994 identity and explicit 1997 conversion crosswalk the recorded old Societe Civile d Exploitation Merme-Morizot to GFA Merme Morizot 778237206. The conversion recites long-term leases without identifying tenants or individual parcels. Shared Taupenot names do not establish a producer link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 39,
+        "note": "All selected pages OCR-screened. Bounded source selection and candidate limits in Clos des Lambrays filings.md."
+      },
+      "identity": {
+        "companySiren": "778237206",
+        "sourceIds": [
+          "cl-rne-778237206",
+          "cl-merme-1994",
+          "cl-merme-1997"
+        ],
+        "limitation": "The company-record crosswalk is the expressly documented conversion of the recorded old exploitation company into GFA Merme Morizot, with unchanged SIREN. No independently named producer, current tenant or exact parcel schedule is established; shareholders are not a producer crosswalk."
+      }
+    },
     "U21117863": {
       "links": [],
       "searches": [
@@ -13149,6 +13546,26 @@
           "bm-bart-clair-2022"
         ],
         "limitation": "AB41/85 match exact individual areas, legal denomination and SIREN; no separate producer-company identity inferred."
+      }
+    },
+    "U21465754": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=505373852",
+            "https://entreprises.lefigaro.fr/sci-21-23-35/entreprise-505373852",
+            "https://recherche-entreprises.api.gouv.fr/search?q=SCI%2021%2023&departement=21&per_page=25"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact-name and local registry searches yielded Rennes SCI 21-23 as a candidate, but no company-record crosswalk to the three Morey parcels. Its formation and later statutes provide no exact references or areas. The local department-filter hit is a differently named company at a 21-23 street address, not this identity. No SIREN or producer link assigned."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 34,
+        "note": "All selected pages OCR-screened. Bounded source selection and candidate limits in Clos des Lambrays filings.md."
       }
     },
     "U21586080": {

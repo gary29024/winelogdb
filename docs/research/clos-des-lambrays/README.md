@@ -1,10 +1,10 @@
-# Clos des Lambrays parcels: Tier 1 (#388)
+# Clos des Lambrays parcels: Tier 2 (#434)
 
 Clos des Lambrays uses INAO `inao-denom-547`, appellation 163, and
-Morey-Saint-Denis commune 21442. Reviewed 7 October 2026 for season 2026 under the
+Morey-Saint-Denis commune 21442. Tier 1 reviewed 7 October; Tier 2 reviewed 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). Its shared Chambolle-Morey bundle
-also contains five other crus; this delivery enables only Clos des Lambrays.
+also contains five other crus; this delivery advances Clos des Lambrays to Tier 2.
 
 **No current farmer is verified.** Recorded rights, parcel filiation, deeds and
 administrative procedures are distinct evidence, and none establishes farming.
@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 7; one page-reviewed 2021 application receipt, published twice |
 | Parcels with sale records (DVF) | 1; 1 deed on a current reference |
-| Parcels with holder or research leads | 7; parcels named in the reviewed notice. A recorded legal holder alone is not a lead |
-| Parcels with no lead | 15 |
+| Parcels with holder or research leads | 8; Tier 1 had 7 notice leads; the company link covers 8 parcels, including those 7 |
+| Parcels with no lead | 14 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: the complete DFI member has no event for a current parcel, so tracing stops at its source boundary; all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 54,144 / 7,864 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 60,458 / 8,476 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos des Lambrays selection
@@ -96,10 +96,10 @@ retains the raw member identities and original acquisition timestamps.
 All rights join on complete parcel references. The 14 records are all code
 P (ownership), one per parcel, for three identifiers; recorded fiscal areas match
 the current cadastre's stated areas for all 14. Private-person rights are absent
-from this legal-entity dataset. Two provisional `U…` identifiers remain
-identifiers, not verified SIRENs or inferred persons. No holder-to-domaine
-crosswalk is established, so domaine grouping stays off. Producer research and
-company filings remain Tier 2; paid SPF copies and outreach remain Tier 3.
+from this legal-entity dataset. The provisional `U…` keys are retained. Company filings crosswalk the old
+Merme-Morizot exploitation company to GFA 778237206, without a producer link.
+SCI 21 23 remains unresolved. The Domaine des Lambrays company link enables
+grouping; paid SPF copies and present-season confirmation remain Tier 3.
 
 [Rights history](rights-history.json) finds no DFI event for any current parcel in
 the complete July 2026 department member, so every trace stops at the source
@@ -139,6 +139,42 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). Access failure 
 an unsearched interval is a gap, not absence of history. These shared gaps remain
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
+
+## Tier 2 holder and source review
+
+All three recorded holders have new entries and local research rows using the
+[shared holder table](../holders/holder-links.json). Domaine des Lambrays has a reviewed company
+link from its exact SIREN and filed wine-estate statutes. It covers eight mapped parcels, seven
+already carrying the Tier 1 application lead, so the union rises from seven to eight and fourteen
+parcels remain unresolved. A wine-company relationship is not proof of current parcel operation.
+
+The Merme-Morizot U-id has a company-record identity crosswalk to **778237206**: the 1994 filing
+identifies the old exploitation company, and the 1997 deed expressly converts it into the
+non-operating GFA Merme Morizot. The deed recites long-term leases but names no tenant or individual
+parcels. The Taupenot family names are not an independently documented producer-company relation.
+The SCI 21 23 U-id remains unresolved; same-name Rennes SCI 505373852 is retained as a candidate,
+without a Morey company-record or exact parcel crosswalk.
+
+The bounded selection screened **10 PDFs / 148 pages**: six Lambrays filings (75 pages), two
+Merme-Morizot filings (39 pages), and two SCI candidate filings (34 pages). Every page was OCR-screened
+at 150 dpi with RapidOCR and DirectML, and identity/date ambiguities were checked against images.
+No selected filing supplies a current reference, individual area and recorded holder together.
+The 2014 Lambrays share-sale document refers to property titles and cadastral extracts in Annex 6,
+but that annex is absent from the downloaded 18-page filing. Thus **exact filing matches remain zero**.
+The [filing log](filings.md) records dates, page counts, original-byte hashes and bounded gaps.
+
+The supplied Winehog article and all four maps were reviewed. References 99/181/182 have no
+individual areas; a suggested predecessor 100 is explicitly speculative. The unnumbered
+Taupenot-Merme plot is stated as 420 m², unlike current AP104 at 430 m², and no match is forced from
+map position or rounding. Three unmatched entries preserve these limits. The public estate page's
+8.66 ha across three named areas and Winehog's 0.042 ha Taupenot-Merme total in Meix Rentier are
+separate named-area census rows with no allocation to current parcels.
+
+Source dates remain distinct from filing dates. The SCI decision signatures say 19/26 May 2018,
+although the free index calls them 2019 and the deposit is 29 May 2019. The 1996 Lambrays formation
+was deposited in 1997. No present operation follows from company objects, historical share sales
+or undated estate totals. **Verified farming stays zero.** Raw PDFs, archives, OCR and images remain
+outside Git; missing annexes, original leases and present-season confirmation remain gaps.
 
 ## Reproduce and validate
 

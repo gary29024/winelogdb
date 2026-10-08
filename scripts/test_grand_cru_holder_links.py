@@ -698,5 +698,58 @@ class ClosDeTartTier2Tests(unittest.TestCase):
         self.assertEqual(self.table['holders']['U18178981']['effort']['pagesRead'], 471)
         self.assertEqual(self.table['holders']['U21388794']['effort']['pagesRead'], 133)
 
+
+class ClosDesLambraysTier2Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.table = read_json(HOLDER_LINKS)
+        cls.curation = read_json(ROOT / 'docs/research/clos-des-lambrays/curation.json')
+        cls.register = read_json(ROOT / 'docs/research/clos-des-lambrays/register.json')
+        cls.evidence = read_json(ROOT / 'src/lib/places/grandCruParcels/clos-des-lambrays.evidence.json')
+
+    def test_merme_conversion_is_identity_only_and_sci_candidate_stays_unresolved(self):
+        self.assertEqual(set(self.evidence['holderDomains']), {'410725691'})
+        merme = self.table['holders']['U21078600']
+        self.assertEqual(merme['identity']['companySiren'], '778237206')
+        self.assertIn('cl-merme-1997', merme['identity']['sourceIds'])
+        self.assertEqual(merme['links'], [])
+        sci = self.table['holders']['U21465754']
+        self.assertNotIn('identity', sci)
+        self.assertEqual(sci['links'], [])
+        self.assertTrue(sci['searches'])
+
+    def test_missing_annex_is_not_exact_property_or_operation_evidence(self):
+        self.assertEqual(self.curation['parcelFilings'], [])
+        self.assertEqual(self.curation['externalResearch'], [])
+        source = next(s for s in self.table['sources'] if s['id'] == 'cl-lambrays-2014')
+        self.assertIn('Annex 6', source['finding'])
+        self.assertIn('not present', source['finding'])
+        self.assertEqual(self.register['counts']['withParcelFiling'], 0)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_census_and_unmatched_critic_references_do_not_allocate_parcels(self):
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 3)
+        self.assertTrue(all(not x['parcelIds'] for x in self.curation['unmatchedPrintedReferences']))
+        census = {h['id']: h for h in self.curation['producerHoldings']}
+        self.assertEqual(census['cl-lambrays']['publishedAreaHa'], 8.66)
+        self.assertEqual(census['cl-taupenot-merme']['publishedAreaHa'], .042)
+        self.assertTrue(all('parcelIds' not in h for h in census.values()))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['historicalApplication'],
+                          self.register['counts']['unresolved']), (1, 7, 14))
+
+    def test_complete_selection_preserves_operating_and_deposit_dates(self):
+        sources = [s for s in self.table['sources'] if s['id'].startswith('cl-') and s['type'] == 'company-filing']
+        self.assertEqual((len(sources), sum(s['pageCount'] for s in sources)), (10, 148))
+        for source in sources:
+            self.assertEqual(source['screenedPages'], source['pageCount'])
+            self.assertRegex(source['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(source['bytes'] and source['reviewedPages'])
+        dated = {s['id']: s for s in sources}
+        self.assertEqual((dated['cl-lambrays-1996']['documentDate'], dated['cl-lambrays-1996']['filingDate']),
+                         ('1996-12-11', '1997-01-31'))
+        self.assertEqual((dated['cl-sci-candidate-2018']['documentDate'], dated['cl-sci-candidate-2018']['filingDate']),
+                         ('2018-05-26', '2019-05-29'))
+
 if __name__ == '__main__':
     unittest.main()
