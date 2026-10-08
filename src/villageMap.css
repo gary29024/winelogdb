@@ -46,10 +46,10 @@
 .map-swatch-village{border-color:#9c7629!important;background:none}
 .map-swatch-commune{border:1.5px dashed #7d899c!important;background:none}
 .map-swatch-named-plot{border:1.5px dashed #65533f!important;background:none}
-/* Parcel keys reuse the map's ink, the owner ochre and the wine's crimson. */
+/* Parcel keys reuse the map's ink, the owner gold and the wine's crimson. */
 .map-swatch-parcel{border-color:#26324a8c!important;background:none}
 .map-swatch-parcel-unrecorded{border-color:#26324a8c!important;background:repeating-linear-gradient(45deg,#59698373 0 1.5px,transparent 1.5px 4px)}
-.map-swatch-parcel-owner{border-color:#8a5a12!important;background:#8a5a12bf}
+.map-swatch-parcel-owner{border-color:#3d2800!important;background:#f5b800d9}
 .map-swatch-parcel-producer{border-color:#c51f45!important;background:#c51f45b8}
 .map-swatch-parcel-selected{border:2.5px solid #10182d!important;background:none}
 .village-map-legend-divider{width:1px;height:14px;background:var(--line)}
@@ -61,6 +61,11 @@
 .village-map-parcel-toggle input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--on-accent);box-shadow:0 1px 2px #10182d33;transition:left .15s}
 .village-map-parcel-toggle input:checked{background:var(--wine)}.village-map-parcel-toggle input:checked::after{left:21px}
 .village-map-parcel-toggle input:disabled{opacity:.5;cursor:default}
+/* A climat's own parcels or the whole cru: two halves, the pressed one washed like a chosen owner row. */
+.village-map-scope{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--line-strong);border-radius:var(--r-sm,7px);overflow:hidden;background:var(--line-strong)}
+.village-map-scope button{min-height:40px;padding:7px 10px;border:0;border-radius:0;background:var(--paper);color:var(--ink-4);font:inherit;font-size:.76rem;font-weight:650;cursor:pointer;overflow-wrap:anywhere}
+.village-map-scope button:hover:not([aria-pressed=true]){background:var(--ground);color:var(--ink)}
+.village-map-scope button[aria-pressed=true]{border:0;background:var(--warn-wash);color:var(--ink);box-shadow:inset 0 -2px 0 #c9a35a}
 .village-map-parcel-error p{margin:0 0 8px}.village-map-parcel-error button{min-height:44px;cursor:pointer}
 .village-map-producer{display:grid;gap:5px;padding:11px 12px;border:1.5px solid var(--wine);border-radius:var(--r-sm,7px);background:color-mix(in srgb,var(--wine) 8%,transparent);overflow-wrap:anywhere}
 /* History and evidence: dated records only. Neutral ink, so wine red stays the

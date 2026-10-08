@@ -1534,6 +1534,35 @@ for(const route of matrixRoutes){
  });
 }
 
+test('Corton Les Bressandes: a climat wine opens its own parcels, with the linked holder in gold, and widens to all of Corton',async({page},testInfo)=>{
+ test.setTimeout(60_000); // Corton's 728 parcels, as in the Grand Cru parcel journey.
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:390,height:844});
+ await setup(page,{appellation:'Corton',wineName:'Corton Les Bressandes',classification:'grand_cru',producer:'Tollot Beaut',producerId:'tollot'});
+ // The link was saved on Corton's panel; a climat shares its cru's links.
+ await page.route('**/api/parcel-producer-links?*',route=>{
+  expect(new URL(route.request().url()).searchParams.get('parent')).toBe('inao-denom-549');
+  return route.fulfill({json:{items:[{holderId:'440712529',producerId:'tollot',producerName:'Tollot Beaut',status:'manual',updatedAt:'2026-10-01'}]}});
+ });
+ await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Aloxe-Corton',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('switch',{name:'Parcel rights · Corton Les Bressandes'}).check();
+ const share=dialog.locator('.village-map-parcel-share');
+ await expect(share).toContainText('65 parcels in Corton Les Bressandes');
+ await expect(dialog.locator('.village-map-linked-producer')).toContainText('Domaine Tollot-Beaut');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath('corton-bressandes-linked-holder-mobile.png')});
+ await dialog.getByRole('button',{name:'All of Corton',exact:true}).click();
+ await expect(share).toContainText('728 parcels in Corton');
+ await expect(dialog.getByRole('switch',{name:'Parcel rights · Corton'})).toBeChecked();
+ await dialog.getByRole('button',{name:/^GFA Dom Corton Grancey/}).click();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await page.screenshot({path:testInfo.outputPath('corton-grancey-gold-mobile.png')});
+});
+
 matrixTest('Corton broad, mixed, unsupported and white records keep appellation scope',async({page})=>{
  for(const fields of [
   {wineName:'Corton'},

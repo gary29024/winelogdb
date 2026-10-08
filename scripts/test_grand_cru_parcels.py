@@ -64,6 +64,24 @@ class RightsJoinTests(unittest.TestCase):
         unreviewed = {key: value for key, value in cru.items() if key != 'communeAudit'}
         self.assertAlmostEqual(uncovered_area_limit(unreviewed, bundle, review['parentSourceSha256'], 511156.3651), 511.1563651)
 
+    def test_climat_parcels_match_the_committed_parcel_and_map_files(self):
+        # Stale climat files would show a Corton Les Bressandes wine another snapshot's parcels.
+        from build_grand_cru_climats import generate
+        generate(check=True)
+
+    def test_climat_edge_grazes_are_not_climat_parcels(self):
+        from build_grand_cru_climats import MINIMUM_CRU_SHARE
+        from grand_cru import APP_DIR, read_json
+        corton = read_json(APP_DIR / 'corton.climats.json')
+        bressandes = corton['climats']['inao-denom-2357']['parcels']
+        self.assertEqual(len(bressandes), 65)
+        self.assertGreater(corton['excludedEdgeContacts'], 0)
+        self.assertEqual(MINIMUM_CRU_SHARE, corton['minimumCruShare'])
+        # One Chablis parcel lies across Les Clos and Valmur and counts in both, each with its own area.
+        chablis = read_json(APP_DIR / 'chablis-grand-cru.climats.json')['climats']
+        split = [chablis[id]['parcels']['890680000A0652'][0] for id in ('inao-denom-443', 'inao-denom-445')]
+        self.assertGreater(min(split), 500)
+
     def test_padded_reference(self):
         self.assertEqual(parcel_id(row()), '212670000A0007')
         invalid = row()
