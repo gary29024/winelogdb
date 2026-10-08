@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-973",
   "appellationId": 211,
   "issue": 385,
-  "tier": 1,
+  "tier": 2,
   "bundle": "chambolle-morey",
   "villageMaps": [
     "chambolle-musigny"
@@ -27,8 +27,7 @@
   },
   "research": {
     "methodDoc": "docs/research/musigny/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/musigny/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/musigny",

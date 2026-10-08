@@ -2,28 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BdQki_dX.js"
+    "dist/client/assets/index-B57ioynH.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DDhQ9jFi.js",
-    "dist/client/assets/SectionLabel-BIRNGvN3.js",
-    "dist/client/assets/SparklingDetailsCard-Dafmxo0V.js",
-    "dist/client/assets/VillageMap-C0JxYxcB.js",
-    "dist/client/assets/api-ByLs0riv.js",
-    "dist/client/assets/burgundyAtlas-3UU3xSkJ.js",
-    "dist/client/assets/index-BdQki_dX.js",
-    "dist/client/assets/index-rujfTf8V.js",
+    "dist/client/assets/FriendTagDialog-CfRI0-45.js",
+    "dist/client/assets/SectionLabel-CCfJGeoS.js",
+    "dist/client/assets/SparklingDetailsCard-Bdy8eXBy.js",
+    "dist/client/assets/VillageMap-Cdk32qOk.js",
+    "dist/client/assets/burgundyAtlas-BOhP1AmR.js",
+    "dist/client/assets/index-B57ioynH.js",
+    "dist/client/assets/index-BLKoIuGT.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
-    "dist/client/assets/schemas-BTb3bBYT.js",
-    "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-QS-9VYWT.js",
-    "dist/client/assets/wineDetailCompact-Bwf0zvFs.js"
+    "dist/client/assets/schemas-r6ZUzAXA.js",
+    "dist/client/assets/sparklingDetails-CctvmUtd.js",
+    "dist/client/assets/useModalFocus-DaapVxoa.js",
+    "dist/client/assets/wineDetailCompact-DRk_b-9r.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5510064,
-  "evidenceGzipBytesTotal": 487319,
+  "evidenceBytesTotal": 5582097,
+  "evidenceGzipBytesTotal": 497743,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -113,10 +112,10 @@
     },
     {
       "cru": "clos-de-vougeot",
-      "file": "dist/client/assets/clos-de-vougeot.evidence-C2otGnwo.js",
-      "sha256": "b974c1d4ac0e212cbed4344b08b42e8768a760ce30581fd22f7da325195ace3f",
-      "bytes": 299941,
-      "gzipBytes": 31806
+      "file": "dist/client/assets/clos-de-vougeot.evidence-x6JQpcCJ.js",
+      "sha256": "4738abdc2dd68dfc590902c10819ad10412cf1e9ea272d7d0d54575d99b02319",
+      "bytes": 300269,
+      "gzipBytes": 31929
     },
     {
       "cru": "clos-des-lambrays",
@@ -225,17 +224,17 @@
     },
     {
       "cru": "musigny",
-      "file": "dist/client/assets/musigny.evidence-Dq6NZNin.js",
-      "sha256": "b4846f2b773872031bb4f65340526f2c462848ff826a46fcbfb781b3492d329d",
-      "bytes": 81259,
-      "gzipBytes": 10135
+      "file": "dist/client/assets/musigny.evidence-cxkHb-8R.js",
+      "sha256": "2f87de8ff0ab977e697cbfd444a2971fac269c56764a7345681f947691c335e0",
+      "bytes": 106851,
+      "gzipBytes": 14331
     },
     {
       "cru": "richebourg",
-      "file": "dist/client/assets/richebourg.evidence-DQOE6aG_.js",
-      "sha256": "14d632746fc713a5bdbadea47f419b0c2bf30983b1b8a395f6e5e449d8911b7f",
-      "bytes": 161369,
-      "gzipBytes": 12183
+      "file": "dist/client/assets/richebourg.evidence-DaQaBoCC.js",
+      "sha256": "b5057f02b2a515c61c9f9b9d0158b9b42654c71841bf8e03f34d5c3ea4ddc039",
+      "bytes": 207482,
+      "gzipBytes": 18288
     },
     {
       "cru": "romanee-conti",

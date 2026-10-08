@@ -449,5 +449,109 @@ class RichebourgTests(unittest.TestCase):
             self.assertNotRegex(d['name'] + d['note'], r'(?i)\bfarms\b|farmed by|is farming')
 
 
+
+class MusignyTier2Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.table = read_json(HOLDER_LINKS)
+        cls.curation = read_json(ROOT / 'docs/research/musigny/curation.json')
+        cls.register = read_json(ROOT / 'docs/research/musigny/register.json')
+        cls.evidence = read_json(ROOT / 'src/lib/places/grandCruParcels/musigny.evidence.json')
+
+    def test_all_holders_are_researched_without_name_only_crosswalks(self):
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        self.assertEqual(len(self.curation['holders']), 16)
+        for row in self.curation['holders']:
+            entry = self.table['holders'][row['holderId']]
+            self.assertTrue(entry.get('links') or entry.get('searches'))
+            self.assertFalse(row['parcelOperationConfirmed'])
+        for hid in ('794244434', '491471041', 'U18181478', 'U21200736', 'U23906784'):
+            self.assertEqual(self.table['holders'][hid]['links'], [])
+            self.assertNotIn(hid, self.evidence['holderDomains'])
+        for hid in ('U18181478', 'U21200736', 'U23906784'):
+            self.assertNotIn('identity', self.table['holders'][hid])
+
+    def test_sepv_crosswalk_and_exact_individual_areas(self):
+        entry = self.table['holders']['U21401984']
+        self.assertEqual(entry['identity']['companySiren'], '393095955')
+        self.assertEqual(entry['links'][0]['relation'], 'parent-group')
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'mus-sepv-1994')
+        self.assertEqual(filing['parcelAreasM2'], {'21133000AN0040': 180, '21133000AN0057': 210,
+                                                 '21133000AN0060': 850, '21133000AN0061': 5480})
+        self.assertEqual(filing['documentDate'], '1994-12-20')
+        self.assertEqual(filing['supportingSourceIds'], ['cm-sepv-1994-approval'])
+
+    def test_edge_parcel_filing_preserves_premier_cru_description(self):
+        entry = self.table['holders']['U21388794']
+        self.assertEqual(entry['identity']['companySiren'], '424223410')
+        self.assertEqual(entry['links'], [])
+        filing = next(f for f in self.curation['parcelFilings'] if f['id'] == 'mus-perrot-minot-1999')
+        self.assertEqual(filing['parcelAreasM2'], {'21133000AN0064': 4736})
+        self.assertIn('premier cru', filing['finding'])
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21133000AN0064')
+        self.assertEqual(row['cruOverlapM2'], 6.5163)
+        self.assertEqual(row['candidateLeads'], [])
+
+    def test_management_and_unnumbered_mandates_stay_limited(self):
+        link = self.table['holders']['814197737']['links'][0]
+        self.assertEqual(link['relation'], 'management')
+        self.assertEqual(self.evidence['holderDomains']['814197737']['basis'], 'management-only-lead')
+        exact = {pid for f in self.curation['parcelFilings'] for pid in f['parcelAreasM2']}
+        self.assertNotIn('21133000AN0045', exact)
+        self.assertNotIn('21133000AN0046', exact)
+        self.assertTrue(all(not f['leaseEvidence'] for f in self.curation['parcelFilings']))
+        self.assertEqual(self.table['holders']['381505338']['links'][0]['relation'], 'subsidiary')
+
+    def test_census_and_unmatched_claims_never_allocate_parcels(self):
+        self.assertEqual(len(self.curation['producerHoldings']), 10)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 6)
+        self.assertTrue(all(not r['parcelIds'] and r['currentFarmer'] is None
+                            for r in self.curation['unmatchedPrintedReferences']))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n in (17, 22, 23, 24, 35, 42, 55):
+            self.assertEqual(rows[f'21133000AN{n:04d}']['candidateLeads'], [])
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved'],
+                          self.register['counts']['withParcelFiling'], self.register['counts']['currentFarmerConfirmed']),
+                         (24, 27, 5, 0))
+
+    def test_number_and_area_matches_do_not_create_company_rights(self):
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n, name in ((34, 'Domaine de la Vougeraie'), (41, 'Domaine de la Vougeraie'),
+                        (43, 'Maison Louis Jadot')):
+            row = rows[f'21133000AN{n:04d}']
+            self.assertEqual(row['recordedRights'], [])
+            self.assertEqual([(x['name'], x['basis']) for x in row['candidateLeads']],
+                             [(name, 'critic-named-cadastral-reference')])
+        self.assertEqual(self.table['holders']['U21200736']['links'], [])
+        self.assertTrue(any(x['name'] == 'Domaine Leroy' for x in rows['21133000AN0058']['candidateLeads']))
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+        sources = [s for s in self.curation['sources'] if 'winehog' in s['id']]
+        self.assertEqual(len(sources), 13)
+        for s in sources:
+            self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(s['documentDate'] and s['bytes'] and s['retrievalNote'])
+
+    def test_prieur_reference_reaches_successors_only_through_dfi(self):
+        r = next(r for r in self.curation['externalResearch'] if r['id'] == 'mus-wh-prieur-15')
+        self.assertEqual(r['parcelIds'], [])
+        self.assertEqual(r['predecessorReferences'], {'21133000AN0015': ['21133000AN0077', '21133000AN0078']})
+        for n in (77, 78):
+            items = [i for i in self.evidence['parcels'][f'21133000AN{n:04d}']
+                     if i['kind'] == 'research' and i.get('via') == 'AN0015']
+            self.assertEqual(len(items), 1)
+            self.assertEqual(items[0]['originalReferenceId'], '21133000AN0015')
+
+    def test_new_selected_filings_have_complete_byte_and_page_provenance(self):
+        ids = {sid for row in self.curation['holders'] for sid in row['sourceIds']}
+        filings = [s for s in self.table['sources'] if s['id'].startswith('cm-')
+                   and s['id'] in ids and s['type'] == 'company-filing']
+        self.assertEqual((len(filings), sum(s['pageCount'] for s in filings)), (24, 586))
+        for source in filings:
+            self.assertEqual(source['screenedPages'], source['pageCount'])
+            self.assertRegex(source['sha256'], r'^[0-9a-f]{64}$')
+            self.assertTrue(source['bytes'] and source['documentDate'] and source['reviewedPages'])
+            self.assertIn('filingDate', source)
+
 if __name__ == '__main__':
     unittest.main()

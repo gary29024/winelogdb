@@ -4894,6 +4894,823 @@
       "pageCount": 3,
       "screenedPages": 3,
       "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "cm-cvvb-2002",
+      "title": "775567928: cvvb 2002",
+      "url": "https://actes.ccm2.net/acte/7d940a63-44cc-46a8-9d03-984a50b48655",
+      "type": "company-filing",
+      "documentDate": "2002-09-11",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:28.580716+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7d940a63-44cc-46a8-9d03-984a50b48655",
+      "sha256": "e055a52912f5fb2827f2e7f20220083d4ff4e3a65df9f4b4f1bac6338c139e9c",
+      "bytes": 371161,
+      "finding": "Transformation auditor’s report and financial schedules. No Musigny cadastral schedule.",
+      "filingDate": "2002-10-01",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "screenedPages": 15,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 15
+    },
+    {
+      "id": "cm-cvvb-2025",
+      "title": "775567928: cvvb 2025",
+      "url": "https://actes.ccm2.net/acte/65e922d4-bdef-4378-aa6d-aede2547d415",
+      "type": "company-filing",
+      "documentDate": "2025-12-26",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:25.736257+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/65e922d4-bdef-4378-aa6d-aede2547d415",
+      "sha256": "ac02c1fe7a5928133b6187bcaa4b085b265cdb3c2c04f78f0bf8b6f6c9b8eece",
+      "bytes": 1529797,
+      "finding": "Contribution of shares in Faiveley Puligny and another land company; general vineyard tenancy context without any Musigny parcel reference.",
+      "filingDate": "2026-01-16",
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "screenedPages": 15,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 15
+    },
+    {
+      "id": "cm-faiveley-musigny-2015-capital",
+      "title": "814197737: faiveley musigny 2015 capital",
+      "url": "https://actes.ccm2.net/acte/c6da8078-c194-445e-89f8-e4194eae6f4e",
+      "type": "company-filing",
+      "documentDate": "2015-11-10",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:53.127205+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c6da8078-c194-445e-89f8-e4194eae6f4e",
+      "sha256": "bdf3f7b4502ae6c3fcc11b64be57b53bf94d6c078577083851d2fc15b81606ed",
+      "bytes": 1603979,
+      "finding": "Capital increase and investor subscription; the acquisition mandate gives areas but no cadastral numbers. No exact AN45/46 filing match.",
+      "filingDate": "2015-12-07",
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7,
+        8,
+        30
+      ],
+      "screenedPages": 31,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 31
+    },
+    {
+      "id": "cm-faiveley-musigny-2015-formation",
+      "title": "814197737: faiveley musigny 2015 formation",
+      "url": "https://actes.ccm2.net/acte/c6ec5ec2-b0c0-4945-a427-f01fb4d456b4",
+      "type": "company-filing",
+      "documentDate": "2015",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:56.526683+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c6ec5ec2-b0c0-4945-a427-f01fb4d456b4",
+      "sha256": "4762f9e1d17199b7b5c9a4bb68b0d14f7fa4e90e71d55fe50d10e1301bd416cd",
+      "bytes": 1810420,
+      "finding": "Formation bundle and bank certificate dated 18 September 2015. The appended mandate names Musigny 980 m² and Les Argillières 220 m² without numbers. Exact statutes signing date is unresolved; only the year is assigned.",
+      "filingDate": "2015-10-21",
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        27,
+        28,
+        29,
+        31
+      ],
+      "screenedPages": 31,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 31
+    },
+    {
+      "id": "cm-faiveley-musigny-2019-management",
+      "title": "814197737: faiveley musigny 2019 management",
+      "url": "https://actes.ccm2.net/acte/4c572b68-c1b7-4170-b271-c774f986197b",
+      "type": "company-filing",
+      "documentDate": "2019-10-17",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:45.232671+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4c572b68-c1b7-4170-b271-c774f986197b",
+      "sha256": "5410ef4da6573fad571004d4e81424df52523a79348ff2f40af729bf84ee5e70",
+      "bytes": 557962,
+      "finding": "The shareholders appoint CVVB 775567928 president. Issarts Capital and Kemperten Capital are shareholders. This supports management only; the acquisition powers do not establish a parcel lease.",
+      "filingDate": "2021-05-07",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "screenedPages": 5,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 5
+    },
+    {
+      "id": "cm-faiveley-musigny-2019-statutes",
+      "title": "814197737: faiveley musigny 2019 statutes",
+      "url": "https://actes.ccm2.net/acte/4a0947e1-952e-47b3-875b-2c6f84e7db26",
+      "type": "company-filing",
+      "documentDate": "2019-06-28",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:49.572728+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4a0947e1-952e-47b3-875b-2c6f84e7db26",
+      "sha256": "87e1bdecf5da2ad5433b8f93f9e97d2d60b1c02c23987b413792501e86332d2a",
+      "bytes": 445774,
+      "finding": "Updated statutes repeat authority for a 980 m² Musigny and 220 m² Les Argillières acquisition from the Dufouleur indivision, without cadastral numbers. Area alone cannot assign AN45/46.",
+      "filingDate": "2020-02-27",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        24
+      ],
+      "screenedPages": 24,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 24
+    },
+    {
+      "id": "cm-jfcm-2013",
+      "title": "794244434: jfcm 2013",
+      "url": "https://actes.ccm2.net/acte/98f495dc-d5dc-4986-8a7e-5bbf9cec1b6f",
+      "type": "company-filing",
+      "documentDate": "2013-06-24",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:27.735547+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/98f495dc-d5dc-4986-8a7e-5bbf9cec1b6f",
+      "sha256": "397d65d53f9e39d29e7f38ff66d0d0720bcffe27dfa4dc74441ce2dd74c65518",
+      "bytes": 856230,
+      "finding": "JFCM formation: cash contributions and a mandate to acquire unspecified vineyard bare ownership in three communes. No cadastral schedule or executed parcel lease is printed.",
+      "filingDate": "2013-07-16",
+      "reviewedPages": [
+        2,
+        4,
+        5,
+        18,
+        19
+      ],
+      "screenedPages": 20,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 20
+    },
+    {
+      "id": "cm-mugnier-legal",
+      "title": "Domaine Jacques-Frédéric Mugnier: legal notice",
+      "url": "https://mugnier.fr/mentions-legales/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:13:43.662235+00:00",
+      "retrievedFrom": "https://mugnier.fr/mentions-legales/",
+      "sha256": "67f163380a3e8221ee1f6cdb13befc00f821098e4f10c264faa91e1d5c7dbaed",
+      "bytes": 79905,
+      "finding": "The estate publisher identifies SIRET 34193165700017. This is a different company from JFCM 794244434."
+    },
+    {
+      "id": "cm-perrot-minot-1999",
+      "title": "424223410: perrot minot 1999",
+      "url": "https://actes.ccm2.net/acte/8c30b202-ebed-456d-965d-c306bee7557d",
+      "type": "company-filing",
+      "documentDate": "1999-07-20",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:14:28.572414+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8c30b202-ebed-456d-965d-c306bee7557d",
+      "sha256": "b10aab7ade7d5376dd58db9b8e969fe1d1926df038ea5c6b2b8923bb8ac4a47f",
+      "bytes": 1330327,
+      "finding": "Notarial formation contributes Chambolle-Musigny AN64, La Combe d’Orveau, 47 a 36 ca, to GFA du Domaine Henri Perrot-Minot 424223410. It describes the land as premier cru. Its 6.5163 m² overlap with the mapped Musigny outline does not change that description.",
+      "filingDate": "1999-09-16",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        14,
+        18,
+        19,
+        20,
+        38
+      ],
+      "screenedPages": 39,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 39
+    },
+    {
+      "id": "cm-perrot-minot-2017",
+      "title": "424223410: perrot minot 2017",
+      "url": "https://actes.ccm2.net/acte/4a1583e9-c2e8-48c5-98bc-55d5a3237dd8",
+      "type": "company-filing",
+      "documentDate": "2017-04-12",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:14:32.391301+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4a1583e9-c2e8-48c5-98bc-55d5a3237dd8",
+      "sha256": "4343ec9ce797cfa4c5ef0e18e3f028b8a72626ac75c785e4502d8554bceda1b5",
+      "bytes": 3152476,
+      "finding": "Management, donation and statute bundle identifies the same GFA, SIREN and seat. No independently documented contemporary tenant is established by this selection.",
+      "filingDate": "2017-09-14",
+      "reviewedPages": [
+        1,
+        2,
+        4
+      ],
+      "screenedPages": 60,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 60
+    },
+    {
+      "id": "cm-perrot-minot-2023",
+      "title": "424223410: perrot minot 2023",
+      "url": "https://actes.ccm2.net/acte/c672cd89-a9ef-4b7b-bf81-8a2722ed5a0e",
+      "type": "company-filing",
+      "documentDate": "2023-08-29",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:14:36.615387+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c672cd89-a9ef-4b7b-bf81-8a2722ed5a0e",
+      "sha256": "028c7357dcae1f8863c633fdd470cd01746f15c5fbb9c67a73800184d9ac20eb",
+      "bytes": 1586205,
+      "finding": "Updated statutes repeat the AN64 contribution and exact area and identify SIREN 424223410. Deposit date is not printed in the downloaded copy or the free index.",
+      "filingDate": null,
+      "reviewedPages": [
+        1,
+        2,
+        12,
+        16,
+        19
+      ],
+      "screenedPages": 34,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 34
+    },
+    {
+      "id": "cm-ponsot-co-2006",
+      "title": "491471041: ponsot co 2006",
+      "url": "https://actes.ccm2.net/acte/ff2ba25f-4ee8-4bbc-9b8b-430c181f10e9",
+      "type": "company-filing",
+      "documentDate": "2006-07-19",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:21.425287+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ff2ba25f-4ee8-4bbc-9b8b-430c181f10e9",
+      "sha256": "2f1c6f3c309f7ef082a5b7d42296684f42921817fbf2413fe52679332f7ef375",
+      "bytes": 441000,
+      "finding": "Formation concerns a civil property company and Saint-Nicolas-lès-Cîteaux property; no Musigny or Bonnes-Mares parcel schedule.",
+      "filingDate": "2006-08-17",
+      "reviewedPages": [
+        1,
+        4
+      ],
+      "screenedPages": 14,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 14
+    },
+    {
+      "id": "cm-ponsot-co-2019-conversion",
+      "title": "491471041: ponsot co 2019 conversion",
+      "url": "https://actes.ccm2.net/acte/1c2c2a11-1232-45d4-bf57-62054c85dbd5",
+      "type": "company-filing",
+      "documentDate": "2019-02-26",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:16.350119+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1c2c2a11-1232-45d4-bf57-62054c85dbd5",
+      "sha256": "ee4a97cf94d0048fae1255f16bac8a121b500f0e0472c96afdfd414ff1969498",
+      "bytes": 1131551,
+      "finding": "Conversion from SCI to SCEA with a general agricultural object, not a Musigny parcel acquisition or tenancy record.",
+      "filingDate": "2019-07-01",
+      "reviewedPages": [
+        1,
+        7,
+        8,
+        11,
+        14
+      ],
+      "screenedPages": 23,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 23
+    },
+    {
+      "id": "cm-ponsot-co-2019-statutes",
+      "title": "491471041: ponsot co 2019 statutes",
+      "url": "https://actes.ccm2.net/acte/870aabdd-0e13-473c-856c-dad2494e65d9",
+      "type": "company-filing",
+      "documentDate": "2019-08-28",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:13.267046+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/870aabdd-0e13-473c-856c-dad2494e65d9",
+      "sha256": "4dfc38bb449dabdeac65b3ec80e7338fc3cb83c267e37ed4cda1a45ec7bb7dc2",
+      "bytes": 1249738,
+      "finding": "Updated SCEA statutes and agricultural object; no Musigny or Bonnes-Mares cadastral schedule or specific lease.",
+      "filingDate": "2019-09-20",
+      "reviewedPages": [
+        1,
+        2,
+        8
+      ],
+      "screenedPages": 15,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 15
+    },
+    {
+      "id": "cm-ponsot-co-2020",
+      "title": "491471041: ponsot co 2020",
+      "url": "https://actes.ccm2.net/acte/93e977cd-a69b-476e-9f2e-865a5e6444f5",
+      "type": "company-filing",
+      "documentDate": "2020-07-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:09.228830+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/93e977cd-a69b-476e-9f2e-865a5e6444f5",
+      "sha256": "add4107c57579fe9a849886e22a681a8763520f87d9f5b5a50c6c8f8e1256458",
+      "bytes": 964489,
+      "finding": "Contribution of Laurent Ponsot’s individual business and Gilly-lès-Cîteaux premises. Article 4 says no lease right is transferred. No Musigny AN74 or Bonnes-Mares cadastral schedule.",
+      "filingDate": "2020-09-24",
+      "reviewedPages": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        10,
+        22
+      ],
+      "screenedPages": 22,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 22
+    },
+    {
+      "id": "cm-ponsot-legal",
+      "title": "Laurent Ponsot: legal notice",
+      "url": "https://boutique.laurentponsot.com/mentions-legales/",
+      "type": "estate",
+      "documentDate": "2026-06-23",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:15.802283+00:00",
+      "retrievedFrom": "https://boutique.laurentponsot.com/mentions-legales/",
+      "sha256": "f1970c395faf95c87116bf5a9e4fac9d80cf90c748bc1c12a1ce0acdbc72c677",
+      "bytes": 109541,
+      "finding": "The producer site identifies Laurent Ponsot SAS, SIRET 80849907300035. Ponsot & Co 491471041 is a separate company."
+    },
+    {
+      "id": "cm-rne-212101331",
+      "title": "Official company registry: 212101331",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=212101331",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:11.764810+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=212101331",
+      "sha256": "52f6b0a64088f33b1933df854e240f3c7db39f64a27f89b0f243e4609f3e10e0",
+      "bytes": 4174,
+      "finding": "Commune de Chambolle-Musigny is a municipality. No producer relationship is established."
+    },
+    {
+      "id": "cm-rne-341931657",
+      "title": "Official company registry: 341931657",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=341931657",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:13:38.724626+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=341931657",
+      "sha256": "1e700fc57fa9f3986c2a9584e138ddfc0a5b44bbc3278d5374ff67a13d3561bf",
+      "bytes": 3716,
+      "finding": "Jacques Frédéric Mugnier estate company, consistent with the estate legal notice; no ownership relationship with JFCM is established by this registry record."
+    },
+    {
+      "id": "cm-rne-381505338",
+      "title": "Official company registry: 381505338",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=381505338",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:51.053728+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=381505338",
+      "sha256": "92b36de39d08dd6def855eb90c3581e6ee2469915a5592deb1dbbab000b667fe",
+      "bytes": 3423,
+      "finding": "SCI Tawse, formerly GFA du Domaine Maume; the registry names Domaine Tawse as a company partner."
+    },
+    {
+      "id": "cm-rne-393095955",
+      "title": "Official company registry: 393095955",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=393095955",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:41.184133+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=393095955",
+      "sha256": "6a0f34b73269bf05e44e6054f6a195bf57a0f1804d378ddbac6a3ecf8df7572c",
+      "bytes": 5121,
+      "finding": "Registered SEPV company identity. The 1994 contribution report and approval connect its exact legal name and SIREN with the four Musigny references held under U21401984."
+    },
+    {
+      "id": "cm-rne-424223410",
+      "title": "Official company registry: 424223410",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=424223410",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:11.637709+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=424223410",
+      "sha256": "f2413b37c0b437761c87f768b89bb9cbb81cad0d165d79f4ebd1629040635ac9",
+      "bytes": 3451,
+      "finding": "GFA du Domaine Henri Perrot-Minot is the exact company named in the 1999 formation deed; its AN64 schedule independently supports the U21388794 company crosswalk."
+    },
+    {
+      "id": "cm-rne-491471041",
+      "title": "Official company registry: 491471041",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=491471041",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:53.188498+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=491471041",
+      "sha256": "a6e504d0ba256810cd7405199a97eec3325619efe0fb1fad2f3df3f11d7b093a",
+      "bytes": 4054,
+      "finding": "Ponsot & Co is distinct from Laurent Ponsot SAS 808499073. The current registry shows Clément as manager; the shared surname and officers do not establish a domaine crosswalk."
+    },
+    {
+      "id": "cm-rne-515045292",
+      "title": "Official company registry: 515045292",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=515045292",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:11.764810+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=515045292",
+      "sha256": "0230d1b362e1bd809f15d1c02274b3473a8340bc81c5c9225e03dca912068889",
+      "bytes": 3268,
+      "finding": "Domaine Tawse company identity. It is the named majority shareholder in SCI Tawse’s 2017 statutes."
+    },
+    {
+      "id": "cm-rne-778173427",
+      "title": "Official company registry: 778173427",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778173427",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:47.131040+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778173427",
+      "sha256": "b5059c6fa9e40863b0869bc3e743651fd3fab487853939795fc0591793b83148",
+      "bytes": 3214,
+      "finding": "The registered company is Société d’exploitation du Domaine Georges Roumier et ses fils; the 2026 statutes identify the domaine company explicitly."
+    },
+    {
+      "id": "cm-rne-794244434",
+      "title": "Official company registry: 794244434",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=794244434",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:38.396037+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=794244434",
+      "sha256": "ee8c2c46f4911bcd1918a0144ee74125ad908ab0ff6ec701e2a40020f27767a9",
+      "bytes": 3583,
+      "finding": "JFCM is a civil property company. The separate Jacques Frédéric Mugnier estate company is 341931657; overlapping officers and seat alone do not prove a domaine link."
+    },
+    {
+      "id": "cm-rne-808499073",
+      "title": "Official company registry: 808499073",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=808499073",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:12.723627+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=808499073",
+      "sha256": "64e7d471f5d61b943a069c3f5e706d9dfcc4601084398ef2c78c18e0f57fb100",
+      "bytes": 3453,
+      "finding": "Laurent Ponsot SAS is the publisher identified by the producer’s legal notice, distinct from Ponsot & Co 491471041."
+    },
+    {
+      "id": "cm-rne-814197737",
+      "title": "Official company registry: 814197737",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=814197737",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:07:49.026406+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=814197737",
+      "sha256": "2408b5590c45a7d8352037574e06d7543e336ca37cacea44e8f29e032a84e3db",
+      "bytes": 3105,
+      "finding": "Faiveley Musigny has CVVB 775567928 as president. This establishes corporate management, not ownership of the company by the Faiveley domaine."
+    },
+    {
+      "id": "cm-rne-819550948",
+      "title": "Official company registry: 819550948",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=819550948",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:13:39.749286+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=819550948",
+      "sha256": "944f7fd35ecd9abaaaace18e6dd5b32f14d48688763a2e0b30ec9656bcfc073e",
+      "bytes": 2986,
+      "finding": "French registration of John Harris No.1 Estate Investments Limited, a Canadian foreign company. A same-name candidate alone does not establish the U23906784 identity or a domaine relationship."
+    },
+    {
+      "id": "cm-roumier-2003-minutes",
+      "title": "778173427: roumier 2003 minutes",
+      "url": "https://actes.ccm2.net/acte/c64c9764-5db7-4604-9219-461b8d676211",
+      "type": "company-filing",
+      "documentDate": "2003-05-12",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:39.495394+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c64c9764-5db7-4604-9219-461b8d676211",
+      "sha256": "b7d68403657700ab5664d45830cd4c88601e6db34f814590f440059fe6046ffb",
+      "bytes": 676671,
+      "finding": "May 2003 minutes authorize the proposed merger process and revise capital; the bundle retains statutes. No Musigny AN44/47 cadastral schedule is printed.",
+      "filingDate": "2003-10-06",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "screenedPages": 22,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 22
+    },
+    {
+      "id": "cm-roumier-2003-proposal",
+      "title": "778173427: roumier 2003 proposal",
+      "url": "https://actes.ccm2.net/acte/8aba0c3e-c327-4c78-b4f5-665d5df06011",
+      "type": "company-filing",
+      "documentDate": "2003-05-15",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:42.398000+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8aba0c3e-c327-4c78-b4f5-665d5df06011",
+      "sha256": "3e951f0bb729b1bedb92ee38a826474a793b28af9a3f24e58b40b1b3eb74a981",
+      "bytes": 618728,
+      "finding": "Proposed merger of Société Roumier Christophe into the domaine company. No Musigny AN44/47 parcel schedule.",
+      "filingDate": "2003-06-10",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "screenedPages": 16,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 16
+    },
+    {
+      "id": "cm-roumier-2026",
+      "title": "778173427: roumier 2026",
+      "url": "https://actes.ccm2.net/acte/5858c9d3-bc23-451a-9706-35d35093ec45",
+      "type": "company-filing",
+      "documentDate": "2026-03-24",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:36.184756+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5858c9d3-bc23-451a-9706-35d35093ec45",
+      "sha256": "ce9579867bbdbc1b1de9e43bde8ef8193befca180b1705b71182cac903a8f787",
+      "bytes": 592135,
+      "finding": "Statutes explicitly identify the Domaine Georges Roumier operating company and its SIREN. The historical merger and capital account contain no Musigny parcel schedule.",
+      "filingDate": "2026-05-26",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "screenedPages": 12,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 12
+    },
+    {
+      "id": "cm-sepv-1993",
+      "title": "393095955: sepv 1993",
+      "url": "https://actes.ccm2.net/acte/6424780b-679f-4c62-bf79-9ff92a444bc0",
+      "type": "company-filing",
+      "documentDate": "1993-11-15",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:31.386317+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6424780b-679f-4c62-bf79-9ff92a444bc0",
+      "sha256": "df0e6b6255a6a1e0ff1de48913fcdd1048e50e594c7579aea69d4a1e96b2ee79",
+      "bytes": 566130,
+      "finding": "Formation under the former name Société Evianaise de Participations; no Musigny cadastral schedule.",
+      "filingDate": "1993-11-26",
+      "reviewedPages": [
+        1,
+        13,
+        15
+      ],
+      "screenedPages": 21,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 21
+    },
+    {
+      "id": "cm-sepv-1994-approval",
+      "title": "393095955: sepv 1994 approval",
+      "url": "https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be",
+      "type": "company-filing",
+      "documentDate": "1994-12-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:14:24.993069+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be",
+      "sha256": "e55e002a0015247082d93ed60a10e3888435951b5188a7c35ca91f82ab35eafe",
+      "bytes": 1844576,
+      "finding": "The assembly approves the business contribution in resolutions 12–13, records satisfaction of the funding condition in resolution 43, and identifies Maison Joseph Drouhin 515620417 as its majority-held company. No new parcel schedule replaces the 20 December report.",
+      "filingDate": "1995-02-13",
+      "reviewedPages": [
+        1,
+        4,
+        21,
+        22,
+        34,
+        35,
+        36,
+        39
+      ],
+      "screenedPages": 54,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 54
+    },
+    {
+      "id": "cm-sepv-1994-name",
+      "title": "393095955: sepv 1994 name",
+      "url": "https://actes.ccm2.net/acte/e1354ec6-e985-40ed-9678-55beff3458eb",
+      "type": "company-filing",
+      "documentDate": "1994-10-21",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:33.259859+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/e1354ec6-e985-40ed-9678-55beff3458eb",
+      "sha256": "3b6617f64698b4647df214c033f6ae4c5cd2cbd793e2204b18bcf8f9b768677d",
+      "bytes": 49427,
+      "finding": "SEPV company-name change, with the unchanged SIREN 393095955. No parcel schedule.",
+      "filingDate": "1994-10-24",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "screenedPages": 2,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 2
+    },
+    {
+      "id": "cm-sepv-1994-report",
+      "title": "393095955: sepv 1994 report",
+      "url": "https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d",
+      "type": "company-filing",
+      "documentDate": "1994-12-20",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:14:21.609332+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d",
+      "sha256": "d5b123bcb2862567dbe2635f7fe14d59edc1c44b30fd064df5e05e9f6cf59c48",
+      "bytes": 495212,
+      "finding": "Contribution auditor’s report to SEPV lists Chambolle-Musigny AN40 (180 m²), AN57 (210 m²), AN60 (850 m²) and AN61 (5,480 m²) in the contributed individual wine business. These individual areas match current cadastre. The proposed contribution and later approval are separately dated.",
+      "filingDate": "1994-12-22",
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        24
+      ],
+      "screenedPages": 27,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 27
+    },
+    {
+      "id": "cm-tawse-2012-capital",
+      "title": "381505338: tawse 2012 capital",
+      "url": "https://actes.ccm2.net/acte/78e530d6-68aa-489d-8315-4bd69a9c8a6b",
+      "type": "company-filing",
+      "documentDate": "2012-01-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:05.265766+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/78e530d6-68aa-489d-8315-4bd69a9c8a6b",
+      "sha256": "a3d10b62443d6cc99d0c9c720ab6fa8013e515667551ef6c156ad3fe6418e4fb",
+      "bytes": 310250,
+      "finding": "Updated GFA Domaine Maume statutes retain the 1990 contributions and capital history; no Musigny AN20 schedule in this selected file.",
+      "filingDate": "2012-02-28",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "screenedPages": 26,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 26
+    },
+    {
+      "id": "cm-tawse-2012-transfer",
+      "title": "381505338: tawse 2012 transfer",
+      "url": "https://actes.ccm2.net/acte/0ae5b9a4-432f-4882-a8e4-9085921b1fb3",
+      "type": "company-filing",
+      "documentDate": "2012-01-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:11:02.571164+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0ae5b9a4-432f-4882-a8e4-9085921b1fb3",
+      "sha256": "2126b498df072ef66670e62e4405bce9afbda3277bc8faa4cd3f944eb6c71b19",
+      "bytes": 329043,
+      "finding": "GFA Domaine Maume statutes retain Gevrey schedules and the SCI Morgeot 09 share transfer; no Musigny AN20 schedule in this selected file.",
+      "filingDate": "2012-04-05",
+      "reviewedPages": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        14
+      ],
+      "screenedPages": 27,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 27
+    },
+    {
+      "id": "cm-tawse-2017",
+      "title": "381505338: tawse 2017",
+      "url": "https://actes.ccm2.net/acte/5b0273f8-2191-441b-9a3d-df9be8a3806c",
+      "type": "company-filing",
+      "documentDate": "2017-09-14",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:10:59.790888+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5b0273f8-2191-441b-9a3d-df9be8a3806c",
+      "sha256": "36543a08c9767ee38fbff588ea92002806f9b5cb79f26d9b7e6efbaae97e9778",
+      "bytes": 2003560,
+      "finding": "The GFA becomes SCI Tawse. Domaine Tawse holds 70,037 of 70,038 shares; Moray Tawse holds one. The historical land schedule is Gevrey-based and supplies no Musigny AN20 match.",
+      "filingDate": "2017-10-20",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        20
+      ],
+      "screenedPages": 31,
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Embedded text plus RapidOCR with DirectML at 150 dpi on every page; cited schedules checked against page images.",
+      "pageCount": 31
     }
   ],
   "holders": {
@@ -5079,6 +5896,24 @@
         "filingsScreened": 0,
         "pagesRead": 0,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "212101331": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=212101331"
+          ],
+          "outcome": "no-link-found",
+          "note": "Commune de Chambolle-Musigny is a municipality. No producer relationship is established."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Registry and public-source search; no matched filing reviewed."
       }
     },
     "212101869": {
@@ -5370,6 +6205,26 @@
         "filingsScreened": 5,
         "pagesRead": 144,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "318506367": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "no-link-found"
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 61,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
       }
     },
     "318520137": {
@@ -6452,6 +7307,39 @@
       "effort": {
         "filingsScreened": 2,
         "pagesRead": 18
+      }
+    },
+    "381505338": {
+      "links": [
+        {
+          "id": "381505338/domaine-tawse",
+          "domaine": "Domaine Tawse",
+          "relation": "subsidiary",
+          "basis": "Domaine Tawse holds 70,037 of SCI Tawse’s 70,038 shares in the 2017 statutes.",
+          "sourceIds": [
+            "cm-rne-381505338",
+            "cm-rne-515045292",
+            "cm-tawse-2017"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=381505338",
+            "https://entreprises.lefigaro.fr/sci-tawse-21/entreprise-381505338"
+          ],
+          "outcome": "linked",
+          "note": "The 2017 statutes explicitly establish majority company ownership."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 84,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
       }
     },
     "382058188": {
@@ -7668,6 +8556,25 @@
         "note": "pagesRead counts OCR-screened PDF pages; 2 cited pages checked against page images."
       }
     },
+    "491471041": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=491471041",
+            "https://entreprises.lefigaro.fr/ponsot-et-co-21/entreprise-491471041"
+          ],
+          "outcome": "no-link-found",
+          "note": "Four selected filings establish company history and a business contribution, without a producer-company ownership or parcel-tenancy crosswalk. Laurent Ponsot SAS remains distinct."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 74,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
+      }
+    },
     "494094675": {
       "links": [],
       "searches": [
@@ -8354,8 +9261,21 @@
             "recherche-entreprises.api.gouv.fr"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://entreprises.lefigaro.fr/consortium-viticole-vinicole-bourgogne-21/entreprise-775567928"
+          ],
+          "outcome": "linked",
+          "note": "Existing brand-identity link reused; two selected additional filings contain no Musigny schedule."
         }
-      ]
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 30,
+        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused."
+      }
     },
     "778159715": {
       "links": [
@@ -8418,6 +9338,38 @@
         "filingsScreened": 4,
         "pagesRead": 153,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "778173427": {
+      "links": [
+        {
+          "id": "778173427/georges-roumier",
+          "domaine": "Domaine Georges Roumier",
+          "relation": "owner-company",
+          "basis": "The 2026 statutes identify the domaine company, its legal name and SIREN.",
+          "sourceIds": [
+            "cm-rne-778173427",
+            "cm-roumier-2026"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=778173427",
+            "https://entreprises.lefigaro.fr/domaine-g-roumier-et-ses-fils-21/entreprise-778173427"
+          ],
+          "outcome": "linked",
+          "note": "The legal company is explicitly the Domaine Georges Roumier estate company."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 50,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
       }
     },
     "778179846": {
@@ -8682,6 +9634,25 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "794244434": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=794244434",
+            "https://entreprises.lefigaro.fr/jfcm-21/entreprise-794244434"
+          ],
+          "outcome": "no-link-found",
+          "note": "JFCM is a civil property company. The separate Jacques Frédéric Mugnier estate company is 341931657; overlapping officers and seat alone do not prove a domaine link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 1,
+        "pagesRead": 20,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
+      }
+    },
     "794416461": {
       "searches": [
         {
@@ -8763,6 +9734,40 @@
       "effort": {
         "filingsScreened": 1,
         "pagesRead": 18
+      }
+    },
+    "814197737": {
+      "links": [
+        {
+          "id": "814197737/faiveley-management",
+          "domaine": "Domaine Faiveley",
+          "relation": "management",
+          "basis": "Faiveley Musigny appoints CVVB, the company behind Domaine Faiveley, president. Shareholder ownership and parcel tenancy are not inferred.",
+          "sourceIds": [
+            "cm-rne-814197737",
+            "cm-faiveley-musigny-2019-management",
+            "faiveley-identity",
+            "rne-775567928"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=814197737",
+            "https://entreprises.lefigaro.fr/faiveley-musigny-21/entreprise-814197737"
+          ],
+          "outcome": "linked",
+          "note": "CVVB is president, supporting a management lead only."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 91,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
       }
     },
     "817533847": {
@@ -8966,6 +9971,44 @@
           "outcome": "linked"
         }
       ]
+    },
+    "885114322": {
+      "links": [
+        {
+          "id": "885114322/richebourg",
+          "domaine": "Domaine A.-F. Gros",
+          "relation": "lessor-per-filing",
+          "basis": "The GFA’s 1 July 2020 founding deed names SAS Domaine A.F Gros (383967346) as tenant of AN243 and AN245 under a recited 2018 lease. The original lease and current operation are unverified.",
+          "sourceIds": [
+            "rne-885114322",
+            "rne-383967346",
+            "ric-af-gros-formation-2020"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08",
+          "crus": [
+            "richebourg"
+          ],
+          "leaseStatus": "recited"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "recherche-entreprises.api.gouv.fr",
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net; all selected PDF pages OCR-screened",
+            "Richebourg official producer publications and authorized Winehog archives"
+          ],
+          "outcome": "linked"
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 110,
+        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
+      }
     },
     "885311902": {
       "searches": [
@@ -9654,6 +10697,25 @@
         "pagesRead": 121
       }
     },
+    "U18181478": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=GFA%20DES%20FOSSES",
+            "https://www.pappers.fr/recherche?q=GFA%20DES%20FOSSES"
+          ],
+          "outcome": "no-link-found",
+          "note": "Searches for GFA des Fossés find homonyms in Pogny and Huest, without a company-record connection to Chambolle-Musigny AN19. No SIREN or domaine assigned."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Registry and public-source search; no matched filing reviewed."
+      }
+    },
     "U18181717": {
       "searches": [
         {
@@ -9713,6 +10775,97 @@
       "effort": {
         "filingsScreened": 1,
         "pagesRead": 25
+      }
+    },
+    "U21200736": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=NOUVELLE%20ELVINA",
+            "https://recherche-entreprises.api.gouv.fr/search?q=ELVINA"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact-name searches did not establish a company identity for Nouvelle Elvina / établissements Leroy. The distinct recorded Leroy SA holder must not be collapsed into this U-id."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Registry and public-source search; no matched filing reviewed."
+      }
+    },
+    "U21388794": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=424223410",
+            "https://entreprises.lefigaro.fr/gfa-du-domaine-henri-perrot-minot-21/entreprise-424223410"
+          ],
+          "outcome": "no-link-found",
+          "note": "The company identity is supported by its exact AN64 contribution. A separate commercial domaine or current tenant crosswalk remains unproved."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 133,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
+      },
+      "identity": {
+        "companySiren": "424223410",
+        "sourceIds": [
+          "cm-rne-424223410",
+          "cm-perrot-minot-1999",
+          "cm-perrot-minot-2023"
+        ],
+        "limitation": "Exact legal denomination and SIREN in filed statutes, supported by the same AN64 reference and 4,736 m² area. This identifies the legal holder, not a present operator."
+      }
+    },
+    "U21401984": {
+      "links": [
+        {
+          "id": "U21401984/joseph-drouhin",
+          "domaine": "Maison Joseph Drouhin",
+          "relation": "parent-group",
+          "basis": "SEPV’s filed statutes name its majority participation in Maison Joseph Drouhin 515620417.",
+          "sourceIds": [
+            "cm-rne-393095955",
+            "cm-sepv-1994-report",
+            "cm-sepv-1994-approval",
+            "register-sepv",
+            "sepv-stat-ccm"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-08"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=393095955",
+            "https://entreprises.lefigaro.fr/societe-d-exploitation-et-participation-viti-vinicole-sepv-21/entreprise-393095955"
+          ],
+          "outcome": "linked",
+          "note": "The exact company name and four individually area-matched Musigny references support SEPV’s U-id crosswalk."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 104,
+        "note": "Selected free filings, every page OCR-screened; bounded scope and provenance in Musigny filings.md."
+      },
+      "identity": {
+        "companySiren": "393095955",
+        "sourceIds": [
+          "cm-rne-393095955",
+          "cm-sepv-1994-report",
+          "cm-sepv-1994-approval"
+        ],
+        "limitation": "Company-record identity is supported by the exact denomination and the four matching AN40/57/60/61 schedules. It does not verify a 2026 operator or establish ownership merely from a published producer area."
       }
     },
     "U21837853": {
@@ -10017,6 +11170,24 @@
         "pagesRead": 25
       }
     },
+    "U23906784": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-08",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=819550948"
+          ],
+          "outcome": "no-link-found",
+          "note": "The Canadian-company candidate 819550948 matches the name, but no independent AN20 company identity or producer relationship was established. MUSE HT’s individual officers are insufficient."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Registry and public-source search; no matched filing reviewed."
+      }
+    },
     "U32852627": {
       "identity": {
         "companySiren": "984543470",
@@ -10207,64 +11378,6 @@
           "outcome": "linked"
         }
       ]
-    },
-    "318506367": {
-      "links": [],
-      "searches": [
-        {
-          "at": "2026-10-08",
-          "where": [
-            "recherche-entreprises.api.gouv.fr",
-            "entreprises.lefigaro.fr free filing index",
-            "actes.ccm2.net; all selected PDF pages OCR-screened",
-            "Richebourg official producer publications and authorized Winehog archives"
-          ],
-          "outcome": "no-link-found"
-        }
-      ],
-      "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 61,
-        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
-      }
-    },
-    "885114322": {
-      "links": [
-        {
-          "id": "885114322/richebourg",
-          "domaine": "Domaine A.-F. Gros",
-          "relation": "lessor-per-filing",
-          "basis": "The GFA’s 1 July 2020 founding deed names SAS Domaine A.F Gros (383967346) as tenant of AN243 and AN245 under a recited 2018 lease. The original lease and current operation are unverified.",
-          "sourceIds": [
-            "rne-885114322",
-            "rne-383967346",
-            "ric-af-gros-formation-2020"
-          ],
-          "reviewStatus": "reviewed",
-          "reviewedAt": "2026-10-08",
-          "crus": [
-            "richebourg"
-          ],
-          "leaseStatus": "recited"
-        }
-      ],
-      "searches": [
-        {
-          "at": "2026-10-08",
-          "where": [
-            "recherche-entreprises.api.gouv.fr",
-            "entreprises.lefigaro.fr free filing index",
-            "actes.ccm2.net; all selected PDF pages OCR-screened",
-            "Richebourg official producer publications and authorized Winehog archives"
-          ],
-          "outcome": "linked"
-        }
-      ],
-      "effort": {
-        "filingsScreened": 2,
-        "pagesRead": 110,
-        "note": "Richebourg #425 pass; includes re-screened shared filings, not an additive lifetime total."
-      }
     }
   }
 }

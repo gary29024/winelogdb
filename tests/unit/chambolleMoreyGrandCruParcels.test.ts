@@ -14,17 +14,18 @@ const reviewed=[
  {slug:'clos-saint-denis',name:'Clos Saint-Denis',id:'inao-denom-548',maps:['morey-saint-denis']},
  {slug:'clos-de-la-roche',name:'Clos de la Roche',id:'inao-denom-544',maps:['morey-saint-denis']},
 ];
+const tier2=new Map([['musigny',9]]);
 const bundle=JSON.parse(readFileSync('scripts/grand-crus/bundles/chambolle-morey.json','utf8')) as {crus:string[];villageMap:string;additionalVillageMaps:string[]};
 const config=(slug:string)=>JSON.parse(readFileSync(`scripts/grand-crus/${slug}.json`,'utf8')) as {parentFeatureId:string;villageMaps:string[]};
 const red={country:'France',region:'Burgundy',classification:'grand_cru',colour:'red'};
 
-describe('Chambolle-Musigny and Morey-Saint-Denis Tier 1 crus',()=>{
- it('enables only reviewed crus, without domaine grouping or farming claims',async()=>{
+describe('Chambolle-Musigny and Morey-Saint-Denis reviewed crus',()=>{
+ it('enables reviewed crus with Tier 2 grouping only after holder research',async()=>{
   for(const cru of reviewed){
-   for(const map of cru.maps)expect(grandCruFor(cru.id,map)).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
+   for(const map of cru.maps)expect(grandCruFor(cru.id,map)).toMatchObject({slug:cru.slug,domaineGrouping:tier2.has(cru.slug),evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
    expect(evidence).not.toBeNull();
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(tier2.get(cru.slug)??0);
   }
   const hidden=bundle.crus.filter(slug=>!reviewed.some(cru=>cru.slug===slug));
   for(const slug of hidden)for(const map of config(slug).villageMaps)expect(grandCruFor(config(slug).parentFeatureId,map)).toBeUndefined();
