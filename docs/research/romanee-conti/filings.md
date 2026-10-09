@@ -1,10 +1,20 @@
 # Romanée-Conti: public company filings
 
-Reviewed 8 October 2026 for [Tier 2 issue #427](https://github.com/gary29024/winelogdb/issues/427), following the Richebourg (#530) and Romanée-Saint-Vivant (#426) passes. The one recorded holder, the Société Civile du Domaine de la Romanée-Conti (778269407), was searched in the official company API and the free entreprises.lefigaro.fr index. PDFs were downloaded from actes.ccm2.net; no paid land-register copies or outreach were used. data.inpi.fr and pappers.fr refuse cloud traffic and were not used; anything only they hold is a gap for local audit.
+Reviewed 8 October 2026 for [Tier 2 issue #427](https://github.com/gary29024/winelogdb/issues/427), following the Richebourg (#530) and Romanée-Saint-Vivant (#426) passes. The one recorded holder, the Société Civile du Domaine de la Romanée-Conti (778269407), was searched in the official company API and the free entreprises.lefigaro.fr index. PDFs were downloaded from actes.ccm2.net; no paid land-register copies or outreach were used. Local retries on 9 October 2026 returned HTTP 403 from data.inpi.fr and pappers.fr; material available only there remains an access gap.
 
 The bounded selection covers the 1974 statutes with their estate schedule, the 2003 recast statutes and the recent statutes. It is not an exhaustive download of the DRC’s filings, most of which are share donations. Each of the **7 files / 548 pages** was processed with PyMuPDF embedded-text extraction; every image page was then rendered at **150 dpi** and screened with RapidOCR (ONNX Runtime, CPU, `use_cls=False`). Pages with only a born-digital text layer were read from that layer. The cited schedule was checked against page images. A negative means no qualifying Romanée-Conti match in these selected files, not that no such document exists.
 
 Dates separate the deed/decision (`documentDate`) from its deposit (`filingDate`). Page numbers are PDF pages, including registry covers. Every source records the original URL, raw-byte SHA-256, byte count, retrieval time and page count in [curation](curation.json). PDFs, OCR text, article archives and full article text are not committed.
+
+## Local audit (Codex CLI, Windows, Python 3.12)
+
+On 9 October 2026 all **7 PDFs / 548 pages** were downloaded again; SHA-256, byte size and page count match every recorded source. Five files / 445 pages are byte-identical to the DRC files read in full during the Romanée-Saint-Vivant audit; that all-page review was reused, with the Romanée-Conti cited passages checked again. The additional 2003 first deposit (62 pages) and 2009 filing (41 pages) were read in full using RapidOCR/DirectML at 150 dpi. The 1974 schedules and deed date were checked as page images (PDF 36, 38–39, 74).
+
+The review confirms AN72 at 9 a 27 ca and retired AN73 at 1 ha 71 a 23 ca. AN258's 90 m² difference remains unresolved; only official DFI lineage connects it to the old schedule. Later filings add no cadastral schedule. The November 2024 management declaration is on PDF 41, separate from the 27 July 2024 statutes beginning on PDF 44; the source page list now includes both.
+
+The official estate page matches its recorded SHA-256 and prints 1.8140 ha. The official company API still identifies active company 778269407; its dynamic response bytes differ from the original snapshot without changing that identity. INPI/Pappers returned HTTP 403. Both Winehog archives are **not re-verified locally**, as instructed; prior cloud findings and original hashes are retained with this limitation.
+
+The audited Romanée-Saint-Vivant branch was merged first; conflicts in generated audit and payload reports were resolved by their builders. Exact-reference counts, the holder link, rights and geometry remain unchanged; verified farming remains zero. PR #537 records the checks and any platform exceptions.
 
 ## Exact references
 
@@ -62,7 +72,7 @@ SHA-256: `5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708`. Ret
 
 ### rc-drc-2024
 
-[DRC: 14 November 2024 management declaration and bundled share deeds](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 45, 46.
+[DRC: 14 November 2024 management declaration and bundled share deeds](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 41, 44, 45, 46.
 
 Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including “Romanée-Conti”. No cadastral reference or parcel schedule.
 
@@ -107,6 +117,6 @@ Neither article prints a Romanée-Conti area, plot or cadastral reference, so ne
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained. The prior cloud review found no Romanée-Conti area, plot or cadastral reference; that finding was not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
