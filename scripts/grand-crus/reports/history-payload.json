@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D7-BmUXn.js"
+    "dist/client/assets/index-Dib8qVW9.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-8usvLULn.js",
-    "dist/client/assets/SectionLabel-CbBQo0sq.js",
-    "dist/client/assets/SparklingDetailsCard-DYW7-76i.js",
-    "dist/client/assets/VillageMap-CV5Frk2d.js",
-    "dist/client/assets/burgundyAtlas-BgT4aIIY.js",
-    "dist/client/assets/index-D7-BmUXn.js",
-    "dist/client/assets/index-QfExsuIo.js",
+    "dist/client/assets/FriendTagDialog-CTYq_uXl.js",
+    "dist/client/assets/SectionLabel-CcGfW0_M.js",
+    "dist/client/assets/SparklingDetailsCard-C7DAgp2i.js",
+    "dist/client/assets/VillageMap-BoyYSHxx.js",
+    "dist/client/assets/burgundyAtlas-NrJPadkO.js",
+    "dist/client/assets/index-DJBedJAa.js",
+    "dist/client/assets/index-Dib8qVW9.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-hHzOdLLk.js",
-    "dist/client/assets/wineDetailCompact-CdNUcxbo.js"
+    "dist/client/assets/useModalFocus-Dzy1yps2.js",
+    "dist/client/assets/wineDetailCompact-M2ZShzM-.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5728427,
-  "evidenceGzipBytesTotal": 518735,
+  "evidenceBytesTotal": 5790961,
+  "evidenceGzipBytesTotal": 531677,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -175,24 +175,24 @@
     },
     {
       "cru": "la-grande-rue",
-      "file": "dist/client/assets/la-grande-rue.evidence-Ba2k7ThN.js",
-      "sha256": "acd82a5589f9c2275ce191954844e419099ba1ef9105ad0642645fc01b7ddf0b",
-      "bytes": 43444,
-      "gzipBytes": 7289
+      "file": "dist/client/assets/la-grande-rue.evidence-cLHqWXDa.js",
+      "sha256": "d2b93bf92a0583d885a8b37277722919bcee64c8bac05b19dcf56f86206d11c4",
+      "bytes": 52390,
+      "gzipBytes": 8883
     },
     {
       "cru": "la-romanee",
-      "file": "dist/client/assets/la-romanee.evidence-snbyVG7D.js",
-      "sha256": "bd8a54e62fb916d00357e564fffdc5d9d001629f6256a0f0be86195ffb93927b",
-      "bytes": 41504,
-      "gzipBytes": 6982
+      "file": "dist/client/assets/la-romanee.evidence-nTv34038.js",
+      "sha256": "99467aa41194629767337b350822d135f4d6ef52f2ebe25dd8f7a77ab30e66d8",
+      "bytes": 48316,
+      "gzipBytes": 8845
     },
     {
       "cru": "la-tache",
-      "file": "dist/client/assets/la-tache.evidence-C-p9JfuY.js",
-      "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
-      "bytes": 41798,
-      "gzipBytes": 7006
+      "file": "dist/client/assets/la-tache.evidence-Dne9ZwxP.js",
+      "sha256": "d9467c74197d6660089b0db640a26ab32a2dd40b1f2a2a8393b900e92784c12e",
+      "bytes": 45695,
+      "gzipBytes": 7953
     },
     {
       "cru": "latricieres-chambertin",
@@ -238,17 +238,17 @@
     },
     {
       "cru": "romanee-conti",
-      "file": "dist/client/assets/romanee-conti.evidence-ZajyZk14.js",
-      "sha256": "d42a804e795ea71be424ad7cface2a0b46979780e872fc0c94fd59173c60de6c",
-      "bytes": 43753,
-      "gzipBytes": 7679
+      "file": "dist/client/assets/romanee-conti.evidence-C4fINfmD.js",
+      "sha256": "3c69440472e5835b4d4b2541961ecaa8d0d539c95b546d10a91d6cc9f1b55e5a",
+      "bytes": 48569,
+      "gzipBytes": 8869
     },
     {
       "cru": "romanee-saint-vivant",
-      "file": "dist/client/assets/romanee-saint-vivant.evidence-DN-z5Uv5.js",
-      "sha256": "2b2bc6f64bbbd74d32f65723b4de6f573ab91b565551c900f7a36dc7424d37e3",
-      "bytes": 70879,
-      "gzipBytes": 9277
+      "file": "dist/client/assets/romanee-saint-vivant.evidence-BJdr4RT-.js",
+      "sha256": "b4501c73cbc02ed753374f61b1b49b141bd1ae45d29dbe785e15ebc484f9572b",
+      "bytes": 108942,
+      "gzipBytes": 16625
     },
     {
       "cru": "ruchottes-chambertin",
