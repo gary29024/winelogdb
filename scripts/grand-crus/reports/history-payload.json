@@ -2,28 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BdQki_dX.js"
+    "dist/client/assets/index-D2jJ0VfY.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DDhQ9jFi.js",
-    "dist/client/assets/SectionLabel-BIRNGvN3.js",
-    "dist/client/assets/SparklingDetailsCard-Dafmxo0V.js",
-    "dist/client/assets/VillageMap-C0JxYxcB.js",
-    "dist/client/assets/api-ByLs0riv.js",
-    "dist/client/assets/burgundyAtlas-3UU3xSkJ.js",
-    "dist/client/assets/index-BdQki_dX.js",
-    "dist/client/assets/index-rujfTf8V.js",
+    "dist/client/assets/FriendTagDialog-3z3eKOWq.js",
+    "dist/client/assets/SectionLabel-C_UIH56U.js",
+    "dist/client/assets/SparklingDetailsCard-Cs3i76Pa.js",
+    "dist/client/assets/VillageMap-D88d4cSL.js",
+    "dist/client/assets/burgundyAtlas-CMASH23q.js",
+    "dist/client/assets/index-D2jJ0VfY.js",
+    "dist/client/assets/index-JZlJYY5l.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
-    "dist/client/assets/schemas-BTb3bBYT.js",
-    "dist/client/assets/sparklingDetails-BGMgZkxa.js",
-    "dist/client/assets/useModalFocus-QS-9VYWT.js",
-    "dist/client/assets/wineDetailCompact-Bwf0zvFs.js"
+    "dist/client/assets/schemas-r6ZUzAXA.js",
+    "dist/client/assets/sparklingDetails-CctvmUtd.js",
+    "dist/client/assets/useModalFocus-CmDUpCKA.js",
+    "dist/client/assets/wineDetailCompact-BOjLjQm5.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5510064,
-  "evidenceGzipBytesTotal": 487319,
+  "evidenceBytesTotal": 5619039,
+  "evidenceGzipBytesTotal": 506489,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -113,10 +112,10 @@
     },
     {
       "cru": "clos-de-vougeot",
-      "file": "dist/client/assets/clos-de-vougeot.evidence-C2otGnwo.js",
-      "sha256": "b974c1d4ac0e212cbed4344b08b42e8768a760ce30581fd22f7da325195ace3f",
-      "bytes": 299941,
-      "gzipBytes": 31806
+      "file": "dist/client/assets/clos-de-vougeot.evidence-x6JQpcCJ.js",
+      "sha256": "4738abdc2dd68dfc590902c10819ad10412cf1e9ea272d7d0d54575d99b02319",
+      "bytes": 300269,
+      "gzipBytes": 31929
     },
     {
       "cru": "clos-des-lambrays",
@@ -176,24 +175,24 @@
     },
     {
       "cru": "la-grande-rue",
-      "file": "dist/client/assets/la-grande-rue.evidence-Ba2k7ThN.js",
-      "sha256": "acd82a5589f9c2275ce191954844e419099ba1ef9105ad0642645fc01b7ddf0b",
-      "bytes": 43444,
-      "gzipBytes": 7289
+      "file": "dist/client/assets/la-grande-rue.evidence-cLHqWXDa.js",
+      "sha256": "d2b93bf92a0583d885a8b37277722919bcee64c8bac05b19dcf56f86206d11c4",
+      "bytes": 52390,
+      "gzipBytes": 8883
     },
     {
       "cru": "la-romanee",
-      "file": "dist/client/assets/la-romanee.evidence-snbyVG7D.js",
-      "sha256": "bd8a54e62fb916d00357e564fffdc5d9d001629f6256a0f0be86195ffb93927b",
-      "bytes": 41504,
-      "gzipBytes": 6982
+      "file": "dist/client/assets/la-romanee.evidence-nTv34038.js",
+      "sha256": "99467aa41194629767337b350822d135f4d6ef52f2ebe25dd8f7a77ab30e66d8",
+      "bytes": 48316,
+      "gzipBytes": 8845
     },
     {
       "cru": "la-tache",
-      "file": "dist/client/assets/la-tache.evidence-C-p9JfuY.js",
-      "sha256": "363fe79041063a54d83d82f0e8576773e1bf28b14de617c37aa5a5c2a96a7c80",
-      "bytes": 41798,
-      "gzipBytes": 7006
+      "file": "dist/client/assets/la-tache.evidence-Dne9ZwxP.js",
+      "sha256": "d9467c74197d6660089b0db640a26ab32a2dd40b1f2a2a8393b900e92784c12e",
+      "bytes": 45695,
+      "gzipBytes": 7953
     },
     {
       "cru": "latricieres-chambertin",
@@ -232,24 +231,24 @@
     },
     {
       "cru": "richebourg",
-      "file": "dist/client/assets/richebourg.evidence-DQOE6aG_.js",
-      "sha256": "14d632746fc713a5bdbadea47f419b0c2bf30983b1b8a395f6e5e449d8911b7f",
-      "bytes": 161369,
-      "gzipBytes": 12183
+      "file": "dist/client/assets/richebourg.evidence-DaQaBoCC.js",
+      "sha256": "b5057f02b2a515c61c9f9b9d0158b9b42654c71841bf8e03f34d5c3ea4ddc039",
+      "bytes": 207482,
+      "gzipBytes": 18288
     },
     {
       "cru": "romanee-conti",
-      "file": "dist/client/assets/romanee-conti.evidence-ZajyZk14.js",
-      "sha256": "d42a804e795ea71be424ad7cface2a0b46979780e872fc0c94fd59173c60de6c",
-      "bytes": 43753,
-      "gzipBytes": 7679
+      "file": "dist/client/assets/romanee-conti.evidence-C4fINfmD.js",
+      "sha256": "3c69440472e5835b4d4b2541961ecaa8d0d539c95b546d10a91d6cc9f1b55e5a",
+      "bytes": 48569,
+      "gzipBytes": 8869
     },
     {
       "cru": "romanee-saint-vivant",
-      "file": "dist/client/assets/romanee-saint-vivant.evidence-DN-z5Uv5.js",
-      "sha256": "2b2bc6f64bbbd74d32f65723b4de6f573ab91b565551c900f7a36dc7424d37e3",
-      "bytes": 70879,
-      "gzipBytes": 9277
+      "file": "dist/client/assets/romanee-saint-vivant.evidence-BJdr4RT-.js",
+      "sha256": "b4501c73cbc02ed753374f61b1b49b141bd1ae45d29dbe785e15ebc484f9572b",
+      "bytes": 108942,
+      "gzipBytes": 16625
     },
     {
       "cru": "ruchottes-chambertin",
