@@ -76,3 +76,26 @@
   .scan-page .review{margin-top:10px;padding:12px}
   .scan-page .photo-source-card{padding:20px 15px}
 }
+
+/* Tap-to-open sections for what most bottles leave empty - occasion and place,
+   tags - drawn like Structure beside them so the form reads as one set. Inside
+   the experience card the occasion section drops its own border and sits under
+   a rule instead, so it is not a card inside a card. */
+.form-disclosure{min-width:0;margin:2px 0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper);overflow:hidden}
+.form-disclosure>summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;padding:10px 13px;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600}
+.form-disclosure>summary::-webkit-details-marker{display:none}
+.form-disclosure>summary small{margin-left:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;color:var(--ink-7)}
+.form-disclosure>summary::after{content:'Show';flex:0 0 auto;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;color:var(--ink-5)}
+.form-disclosure[open]>summary{border-bottom:1px solid var(--line)}
+.form-disclosure[open]>summary::after{content:'Hide'}
+.form-disclosure-body{display:grid;gap:8px;padding:8px 12px 11px}
+.form-disclosure-body>.full-field{margin:0}
+.experience-fields>.form-disclosure{margin:10px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}
+.experience-fields>.form-disclosure>summary{padding:10px 0 4px;font-size:1rem}
+.experience-fields>.form-disclosure[open]>summary{border-bottom:0}
+.experience-fields>.form-disclosure>.form-disclosure-body{padding:4px 0 0}
+@media(max-width:700px), (max-width:932px) and (orientation:landscape) and (pointer:coarse){
+  .form-disclosure>summary{padding:10px;font-size:1.08rem}
+  .form-disclosure-body{padding:7px 9px 9px}
+  .experience-fields>.form-disclosure>summary{padding:10px 0 4px;font-size:.98rem}
+}

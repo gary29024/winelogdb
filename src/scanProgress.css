@@ -1,0 +1,56 @@
+/* Scanning: a line sweeping down each label while recognition reads it, a bar
+   that keeps creeping forward, and a line saying what it is looking at. Before
+   this the bar parked at 60% for the whole wait and the page looked frozen. */
+.scan-stage{display:grid;gap:12px;margin:8px 0 4px;padding:14px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper)}
+.scan-stage-photos{display:flex;justify-content:center;gap:10px;overflow-x:auto;padding-bottom:2px}
+.scan-stage-photo{position:relative;flex:0 0 auto;width:min(150px,40vw);aspect-ratio:3/4;border-radius:var(--r-md);overflow:hidden;background:var(--sunken)}
+.scan-stage-photos.single .scan-stage-photo{width:min(220px,62vw)}
+.scan-stage-photo>img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* Viewfinder corners and a light dim, painted as background layers so the
+   whole effect is one element over the photo. */
+.scan-beam{--corner:18px;--stroke:2.5px;--inset:8px;--scan-delay:0s;position:absolute;inset:0;overflow:hidden;pointer-events:none;
+  background:
+    linear-gradient(#fff,#fff) top var(--inset) left var(--inset)/var(--corner) var(--stroke),
+    linear-gradient(#fff,#fff) top var(--inset) left var(--inset)/var(--stroke) var(--corner),
+    linear-gradient(#fff,#fff) top var(--inset) right var(--inset)/var(--corner) var(--stroke),
+    linear-gradient(#fff,#fff) top var(--inset) right var(--inset)/var(--stroke) var(--corner),
+    linear-gradient(#fff,#fff) bottom var(--inset) left var(--inset)/var(--corner) var(--stroke),
+    linear-gradient(#fff,#fff) bottom var(--inset) left var(--inset)/var(--stroke) var(--corner),
+    linear-gradient(#fff,#fff) bottom var(--inset) right var(--inset)/var(--corner) var(--stroke),
+    linear-gradient(#fff,#fff) bottom var(--inset) right var(--inset)/var(--stroke) var(--corner),
+    linear-gradient(#10182d26,#10182d26);
+  background-repeat:no-repeat;filter:drop-shadow(0 0 1px #10182d80)}
+/* The sweep: a bright line with a wine-coloured glow trailing above it. It
+   fades in at the top and out at the bottom, then starts again, as a scanner
+   does, so the trail is always on the side it has already read. */
+.scan-beam-line{position:absolute;left:0;right:0;top:0;height:2px;background:#fff;box-shadow:0 0 6px 1px #ffffffd0,0 0 18px 4px color-mix(in srgb,var(--wine) 65%,transparent);animation:scan-beam-sweep 2.4s cubic-bezier(.45,0,.55,1) var(--scan-delay) infinite both}
+.scan-beam-line::before{content:'';position:absolute;left:0;right:0;bottom:2px;height:56px;background:linear-gradient(to top,color-mix(in srgb,var(--wine) 34%,transparent),transparent)}
+@keyframes scan-beam-sweep{0%{top:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:100%;opacity:0}}
+
+.scan-progress{display:grid;gap:7px}
+.scan-progress-track{height:6px;border-radius:var(--r-pill);background:var(--line);overflow:hidden}
+.scan-progress-track>span{position:relative;display:block;height:100%;overflow:hidden;border-radius:inherit;background:var(--wine-fill);transition:width .3s linear}
+.scan-progress-track>span::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffff66,transparent);transform:translateX(-100%);animation:scan-bar-shimmer 1.4s linear infinite}
+@keyframes scan-bar-shimmer{to{transform:translateX(100%)}}
+.scan-progress-copy{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0;color:var(--ink-4);font-size:.88rem;font-weight:600}
+.scan-progress-step{animation:scan-step-in .35s ease-out}
+.scan-progress-clock{flex:0 0 auto;color:var(--ink-6);font-size:.78rem;font-weight:500;font-variant-numeric:tabular-nums}
+@keyframes scan-step-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+/* Group Photo: one wide photograph, so a slower sweep and larger corners. */
+.group-photo-stage>.scan-beam{--corner:28px;--stroke:3px;--inset:12px}
+.group-photo-stage>.scan-beam .scan-beam-line{animation-duration:3.2s}
+.group-scan-progress{margin:0 0 12px}
+
+@media(max-width:700px){
+  .scan-stage{padding:12px;gap:10px}
+  .scan-progress-copy{font-size:.84rem}
+}
+/* Still and quiet with reduced motion: the frame stays, the sweep and shimmer
+   go, and the bar steps rather than glides. */
+@media(prefers-reduced-motion:reduce){
+  .scan-beam-line{display:none}
+  .scan-progress-track>span{transition:none}
+  .scan-progress-track>span::after,.scan-progress-step{animation:none}
+}
