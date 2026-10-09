@@ -1429,5 +1429,65 @@ class ChevalierTierTwoTests(unittest.TestCase):
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 
 
+
+class BatardTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('batard-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_holder_links_keep_control_and_identity_distinct_from_operation(self):
+        self.assertEqual(len(self.curation['holders']), 28)
+        for h in self.curation['holders']:
+            self.assertTrue(self.table['holders'][h['holderId']]['searches'])
+            self.assertFalse(h['parcelOperationConfirmed'])
+        for hid in ('349583500', '490242302', '429705551', '411738669', '832401855', '889363610'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+        self.assertEqual(self.table['holders']['442440095']['links'][0]['relation'], 'common-ownership')
+        self.assertEqual(self.table['holders']['384800736']['links'][0]['domaine'], 'Maison Morey-Blanc')
+        self.assertEqual(self.table['holders']['U29945686']['identity']['companySiren'], '382485027')
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_exact_schedules_retain_whole_area_and_limited_property_interests(self):
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, {'21150000AE0046': 1746, '21512000AI0137': 916,
+            '21512000AI0138': 917, '21150000AE0038': 2433, '21150000AE0071': 886,
+            '21150000AE0157': 1304, '21512000AI0001': 3968,
+            '21512000AI0121': 1675, '21512000AI0002': 1377})
+        fs = {f['holderId']: f for f in self.curation['parcelFilings']}
+        self.assertIn('purchase mandate', fs['832401855']['appNote'])
+        self.assertIn('55.25%', fs['310370077']['appNote'])
+        self.assertIn('bare soil', fs['429240302']['appNote'])
+        self.assertEqual(fs['442440095']['leaseEvidence'][0]['effectiveTo'], '2022-09-15')
+        for f in self.curation['parcelFilings']:
+            for pid in f['parcelAreasM2']:
+                row = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+                self.assertIn(f['holderId'], {r['holderId'] for r in row['recordedRights']})
+
+    def test_retired_bavard_reference_reaches_ai170_only_through_dfi(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-bavard-ai124')
+        self.assertEqual(x['parcelIds'], [])
+        self.assertEqual(x['predecessorReferences'], {'21512000AI0124': ['21512000AI0170']})
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AI0170')
+        self.assertIn(x['id'], row['externalResearchIds'])
+        self.assertEqual(row['parcelFilingIds'], [])
+        self.assertIsNone(row['currentFarmer'])
+        prieur = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-prieur-brunet-ae57')
+        self.assertEqual(prieur['parcelIds'], ['21150000AE0057'])
+        self.assertNotIn('21150000AE0057', {p for f in self.curation['parcelFilings'] for p in f['parcelAreasM2']})
+
+    def test_winehog_requires_both_number_and_individual_area(self):
+        items = [x for x in self.curation['externalResearch'] if x['id'].startswith('bat-winehog-')]
+        self.assertEqual({p: a for x in items for p, a in x['parcelAreasM2'].items()},
+            {'21150000AE0046': 1746, '21150000AE0175': 1303, '21512000AI0144': 3508})
+        self.assertTrue(all(not x['parcelIds'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertEqual(len(self.curation['producerHoldings']), 6)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+
 if __name__ == '__main__':
     unittest.main()

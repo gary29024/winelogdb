@@ -9,9 +9,9 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 const tier2=[
  {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:32,unresolved:15,filings:6,groups:12,unlinked:['U18179542','U21850980']},
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:27,unresolved:17,filings:3,groups:12,unlinked:['349583500','212105126','751811472','752059824']},
+ {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89,leads:28,unresolved:60,filings:9,groups:22,unlinked:['349583500','490242302','429705551','411738669','832401855','889363610']},
 ];
 const tier1=[
- {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38},
  {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
 ];

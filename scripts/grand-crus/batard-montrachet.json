@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-273",
   "appellationId": 130,
   "issue": 402,
-  "tier": 1,
+  "tier": 2,
   "bundle": "montrachet",
   "villageMaps": [
     "chassagne-montrachet",
@@ -17,7 +17,8 @@
   "research": {
     "methodDoc": "docs/research/batard-montrachet/README.md",
     "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "producerResearch": "deferred-tier-2",
+    "filingsDoc": "docs/research/batard-montrachet/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-beaune/batard-montrachet",

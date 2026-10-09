@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-273",
-  "status": "tier-1-reviewed",
-  "scope": "All 89 mapped Bâtard-Montrachet parcels across both INAO communes independently reviewed for Tier 1 and #461. One page-image-reviewed refusal on an exact current reference. No current farmer verified; producer research remains Tier 2.",
+  "status": "tier-2-researched",
+  "scope": "All 89 mapped parcels retain their Tier 1 geometry, rights and historical events. Every recorded holder has a shared-table link or explicit search; exact filings, original-reference history and dated secondary research remain distinct. Verified current farming is zero.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -59,260 +59,498 @@
       "documentDate": "2019-02-07",
       "access": "read",
       "finding": "Page 46 Article 1 refuses the application for Puligny-Montrachet AI15, AK16, AM19 and AM11. Page 47 stamps 7 February 2019. Only AI15 is in this cru; no current farming conclusion follows."
+    },
+    {
+      "url": "https://www.leflaive.fr/en_US/wine/batard-montrachet",
+      "retrievedFrom": "https://www.leflaive.fr/en_US/wine/batard-montrachet",
+      "retrievedAt": "2026-10-09T15:01:49.646953+00:00",
+      "sha256": "c3e326887bf8720e899564388639ece8380d05d6b755f0fc5848021b70c73369",
+      "bytes": 42918,
+      "id": "bat-holding-leflaive",
+      "title": "Domaine Leflaive: Bâtard holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 1.73 ha; whole-cru named-area census only, without individual cadastral allocation."
+    },
+    {
+      "url": "https://domaine-faiveley.com/fiche-vin/batard-montrachet-grand-cru/",
+      "retrievedFrom": "https://domaine-faiveley.com/fiche-vin/batard-montrachet-grand-cru/",
+      "retrievedAt": "2026-10-09T15:01:49.647953+00:00",
+      "sha256": "17a87a4e5f93657c571f98847aaad9bc34f0aee21736a1bd872940808648e57e",
+      "bytes": 80145,
+      "id": "bat-holding-faiveley",
+      "title": "Domaine Faiveley: Bâtard holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.3508 ha; whole-cru named-area census only, without individual cadastral allocation."
+    },
+    {
+      "url": "https://www.morey-coffinet.com/en_US/wine/batard-montrachet-grand-cru/2022",
+      "retrievedFrom": "https://www.morey-coffinet.com/en_US/wine/batard-montrachet-grand-cru/2022",
+      "retrievedAt": "2026-10-09T15:01:49.647953+00:00",
+      "sha256": "a5f5827cdc0d9b499042bb1f7ea08615dc2f8adbe0c336ba7d458f59faeecaba",
+      "bytes": 26289,
+      "id": "bat-holding-morey-coffinet",
+      "title": "Domaine Morey-Coffinet: Bâtard holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.13 ha; whole-cru named-area census only, without individual cadastral allocation."
+    },
+    {
+      "id": "bat-winehog-41881",
+      "title": "Terroir Insight: Domaine de la Romanée-Conti Bâtard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-batard-montrachet-2-41881/",
+      "type": "critic",
+      "documentDate": "2020-11-02",
+      "modifiedAt": "2020-11-05T10:12:51+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.361530+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "afdb67823ff48ac8761796c3dcff3a50d17fc99cfde74758f8525754d84ba874",
+      "bytes": 3657459,
+      "finding": "Winehog (2020) names plot 46 and 0.1746 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:02 +0000",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/10/drcbatard-1024x742.jpg",
+        "https://winehog.org/wp-content/uploads/2020/10/09F05E8D-18A2-429E-BE8C-FB4FF4EBD431.png",
+        "https://winehog.org/wp-content/uploads/2020/10/686C2384-DC94-4AB2-A0DE-D03280B7B49C-660x1024.png",
+        "https://winehog.org/wp-content/uploads/2020/10/8FAAF6AD-6BD1-465D-8FFF-54C2A06ED79E-1024x492.png",
+        "https://winehog.org/wp-content/uploads/2017/11/59EFFDBB-2A9D-4A09-A9E3-B5B34B9BA852.jpeg"
+      ]
+    },
+    {
+      "id": "bat-winehog-41492",
+      "title": "Terroir Insight: Domaine Morey-Coffinet Bâtard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-morey-coffinet-batard-montrachet-41492/",
+      "type": "critic",
+      "documentDate": "2020-07-02",
+      "modifiedAt": "2020-07-03T08:05:24+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.418530+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "f7b11a5a3c16bc24dd6356bafc1507c2b2a9ae678db53f3fba54ef6dd0b13875",
+      "bytes": 2171095,
+      "finding": "Winehog (2020) names plot 175 and 0.1303 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:08 +0000",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/06/moreycoffinetbatard-copy-976x1024.jpg",
+        "https://winehog.org/wp-content/uploads/2020/06/moreycoff-1024x922.jpg",
+        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png"
+      ]
+    },
+    {
+      "id": "bat-winehog-41215",
+      "title": "Terroir Insight: Domaine Faiveley Batard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-faiveley-batard-montrachet-41215/",
+      "type": "critic",
+      "documentDate": "2020-06-19",
+      "modifiedAt": "2020-06-19T10:55:01+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.475528+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "d7ce97f9d34df31491652ee6d547c129a8c1b886eb81dfc8baaff32adf5fbfcf",
+      "bytes": 2310158,
+      "finding": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:15 +0000",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatard-copy-1-919x1024.jpg",
+        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatardbienvenue-copy-1-919x1024.jpg",
+        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+        "https://winehog.org/wp-content/uploads/2020/06/Batard-Montrachet-450x1024.jpg"
+      ]
     }
   ],
   "holders": [
     {
       "holderId": "200047827",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-200047827"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (0 filings / 0 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "302265186",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-302265186-1",
+        "bat-filing-302265186-4",
+        "bat-filing-302265186-9",
+        "bat-filing-302265186-12",
+        "bat-registry-302265186"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Matching statutes and registry identify Château de la Maltroye. No exact AE48 schedule accepted. A 2009 indexed document prints a different SIREN and is excluded from the identity crosswalk; company identity does not verify current farming."
     },
     {
       "holderId": "310370077",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-310370077-0",
+        "bat-filing-310370077-3",
+        "bat-filing-310370077-8",
+        "bat-filing-310370077-10",
+        "bat-registry-310370077",
+        "bat-filing-429240302-3"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2024 deed names AI1 (3968 m²), contributing a 55.25% undivided bare interest. Its original 2000–2018 lease is only recited. Separate May 2026 statutes record the merger into 429240302; the 2025 rights and unverified farming remain unchanged."
     },
     {
       "holderId": "319015269",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-319015269-1",
+        "bat-filing-319015269-2",
+        "bat-filing-319015269-14",
+        "bat-filing-319015269-18",
+        "bat-registry-319015269",
+        "bat-legal-morey-coffinet"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
     },
     {
       "holderId": "330713074",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "vougeraie-legal",
+        "rne-330713074"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (3 filings / 26 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "333145183",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-333145183-0",
+        "bat-filing-333145183-13",
+        "bat-filing-333145183-17",
+        "bat-registry-333145183"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
     },
     {
       "holderId": "349583500",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-349583500"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship."
     },
     {
       "holderId": "384800736",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-384800736-3",
+        "bat-filing-384800736-8",
+        "bat-filing-384800736-11",
+        "bat-filing-384800736-20",
+        "bat-registry-384800736",
+        "bat-legal-morey-blanc"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
     },
     {
       "holderId": "403784614",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-403784614-0",
+        "bat-filing-403784614-7",
+        "bat-filing-403784614-9",
+        "bat-filing-403784614-10",
+        "bat-filing-403784614-11",
+        "bat-filing-403784614-12",
+        "bat-registry-403784614",
+        "bat-legal-jouard"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Registry, statutes and estate legal notice identify Domaine Vincent et François Jouard. The acquired 2023 extract omits the individual real-estate schedules. No exact AE40/AE52 filing or current farming is established."
     },
     {
       "holderId": "408395309",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-408395309",
+        "mt-filing-408395309-1",
+        "mt-filing-408395309-5",
+        "mt-filing-408395309-9",
+        "mt-filing-408395309-6",
+        "mt-filing-408395309-3"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "23 June 2006 contribution conveys two half interests in each whole parcel. Individual complete areas 916 and 917 m² match the current Opale rights. No current operation claimed. Existing Opale-to-Olivier Leflaive Frères control link is reused unchanged."
     },
     {
       "holderId": "411738669",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-411738669-0",
+        "bat-filing-411738669-4",
+        "bat-filing-411738669-6",
+        "bat-registry-411738669"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The original 1997 contribution names AE71 (886 m²). Private family partners and general lease clauses do not identify a producer tenant. Historical property evidence only; current farming remains unverified."
     },
     {
       "holderId": "429240302",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-429240302-3",
+        "bat-filing-429240302-13",
+        "bat-filing-310370077-0",
+        "bat-registry-429240302"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1977 contribution names AI121 (1675 m²), as bare soil with plants reserved. May 2026 statutes record the merger and rename to Domaine Bachelet-Ramonet Père et Fils. The recorded 2025 rights remain unchanged; current farming is unverified."
     },
     {
       "holderId": "429705551",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-coombe-2025",
+        "bat-filing-coombe-2024",
+        "bat-registry-429705551"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "UK candidate-company accounts describe an unspecified vineyard but give no French SIREN crosswalk, AE54 or individual area. A director’s name does not establish producer control. No company link, exact parcel filing or current farming is accepted."
     },
     {
       "holderId": "440840049",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-440840049-0",
+        "bat-filing-440840049-4",
+        "bat-filing-440840049-9",
+        "bat-filing-440840049-16",
+        "bat-registry-440840049"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The same company was renamed Henri Boillot in 2025. Retained contributions of Maison Henri Boillot shares support a family-holding link to that Maison. No exact AI15 schedule or current operator is established; the 2019 refusal remains unchanged."
     },
     {
       "holderId": "442440095",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-442440095-0",
+        "bat-filing-442440095-1",
+        "bat-filing-442440095-2",
+        "bat-filing-442440095-3",
+        "bat-filing-442440095-11",
+        "bat-registry-442440095",
+        "bat-registry-328186416"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "KBMFI retains AE38 (2433 m²) in its 2022 withdrawal. Prior leases ended on 15 September 2022. ROMEFI’s documented corporate interests support common ownership with Domaine Bonneau du Martray, without establishing a current tenant or farming."
     },
     {
       "holderId": "484661939",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-484661939-2",
+        "bat-filing-484661939-3",
+        "bat-filing-484661939-4",
+        "bat-filing-484661939-8",
+        "bat-registry-484661939"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The company-record identity is reviewed. A 2019 deed names retired AI124 without an individual area; official 2021 DFI reaches AI170. This is dated historical context only, with current farming unverified."
     },
     {
       "holderId": "490242302",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-490242302-0",
+        "bat-filing-490242302-3",
+        "bat-filing-490242302-5",
+        "bat-filing-490242302-7",
+        "bat-filing-490242302-9",
+        "bat-registry-490242302"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Domaine GB’s corporate owner and other-parcel tenancy recitals do not establish a current producer relationship for AE65/AE177. No exact Bâtard schedule, producer link or current farming is accepted."
     },
     {
       "holderId": "515620193",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515620193",
+        "rne-338113954",
+        "rne-330713074",
+        "rne-433359320"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (2 filings / 33 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "515620417",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-515620417-1",
+        "bat-filing-515620417-10",
+        "bat-filing-515620417-17",
+        "bat-filing-515620417-22",
+        "bat-registry-515620417",
+        "bat-legal-drouhin"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
     },
     {
       "holderId": "751761933",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-751761933",
+        "mt-filing-751761933-1",
+        "mt-filing-751761933-21",
+        "mt-filing-751761933-20",
+        "mt-filing-751761933-7"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (4 filings / 59 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "775567928",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "faiveley-identity",
+        "rne-775567928"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (2 filings / 30 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "778245316",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778245316",
+        "mt-filing-778245316-28",
+        "mt-filing-778245316-35",
+        "mt-filing-778245316-29",
+        "mt-filing-778245316-30"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (4 filings / 111 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "778252445",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-778252445",
+        "bm-auvenay-2024"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the existing shared company link and search effort (3 filings / 113 screened pages). No new company relationship or current farming assertion."
     },
     {
       "holderId": "778253781",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-778253781-0",
+        "bat-filing-778253781-1",
+        "bat-filing-778253781-4",
+        "bat-filing-778253781-7",
+        "bat-registry-778253781"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The same company became Domaine Prieur-Brunet in 2022. Its 2017 share sale recites a 2015 lease including AE57 without an individual area. This remains historical external context; no exact filing or current farming is established."
     },
     {
       "holderId": "778269407",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "register-drc",
+        "mt-registry-778269407",
+        "mt-filing-778269407-1974",
+        "rne-778269407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "1974 filing schedule matches current AE46 and 1746 m². Historical company property only. Existing DRC link and prior effort are reused unchanged."
     },
     {
       "holderId": "832401855",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-832401855-0",
+        "bat-filing-832401855-1",
+        "bat-registry-832401855"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Formation identifies Hécate and authorizes purchase of Chassagne AE157 for 13a04ca. Exact reference and full area agree with the current bare-right holder. This is a purchase mandate, not the executed acquisition or an operating lease; Axam 2 and Eaque corporate partners do not establish a producer crosswalk."
     },
     {
       "holderId": "889363610",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-889363610-0",
+        "bat-filing-889363610-1",
+        "bat-registry-889363610"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Les Batard Montrachet company statutes and registry establish the legal entity and its financial-advisory shareholder. No AE160 land schedule or independently supported producer crosswalk in the acquired corpus. The company name is not a domaine identification."
     },
     {
       "holderId": "U29945686",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bat-filing-382485027-0",
+        "bat-filing-382485027-2",
+        "bat-filing-382485027-3",
+        "bat-filing-382485027-5",
+        "bat-filing-319864328-2",
+        "bat-filing-319864328-5",
+        "bat-registry-U29945686"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The AI2 schedule (1377 m²), completed 2018 merger and 2019 rename support U29945686 → Domaine Etienne Sauzet (382485027). The separate trading company and original rights identifier remain distinct; current farming is unverified."
     }
   ],
   "historyFindings": [],
@@ -332,15 +570,438 @@
       "appNote": "Application refused for Puligny-Montrachet AI15 (0.3223 ha). The four-parcel total is not assigned to AI15. GFA Domaine JOMAIN is dated context only; current farming unconfirmed."
     }
   ],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "bat-prieur-brunet-ae57",
+      "title": "DOMAINE PRIEUR-BRUNET: company filing 2017-07-17",
+      "parcelIds": [
+        "21150000AE0057"
+      ],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 2017 share sale recites a 2015 lease including AE57, without an individual area. Original-reference historical tenancy context only; no exact filing or current farming is accepted.",
+      "sourceIds": [
+        "bat-filing-778253781-4"
+      ],
+      "producer": "Domaine Prieur-Brunet",
+      "printedReferences": [
+        "AE57"
+      ],
+      "appNote": "The 2017 share sale recites a 2015 lease including AE57, without an individual area. Original-reference historical tenancy context only; no exact filing or current farming is accepted.",
+      "dateSourceId": "bat-filing-778253781-4",
+      "currentFarmer": null
+    },
+    {
+      "id": "bat-bavard-ai124",
+      "title": "DOMAINE BAVARD JEAN PAUL: company filing 2019-08-26",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 26 August 2019 deed describes AI124 among parcels then operated by the company, without an individual area. It reaches AI170 only through official DFI validated 21 June 2021. Dated historical context; no verified current farming.",
+      "sourceIds": [
+        "bat-filing-484661939-4",
+        "cadastre-history"
+      ],
+      "producer": "Domaine Bavard Jean Paul",
+      "printedReferences": [
+        "AI124"
+      ],
+      "appNote": "The 26 August 2019 deed describes AI124 among parcels then operated by the company, without an individual area. It reaches AI170 only through official DFI validated 21 June 2021. Dated historical context; no verified current farming.",
+      "dateSourceId": "bat-filing-484661939-4",
+      "currentFarmer": null,
+      "predecessorReferences": {
+        "21512000AI0124": [
+          "21512000AI0170"
+        ]
+      }
+    },
+    {
+      "id": "bat-winehog-41881",
+      "title": "Terroir Insight: Domaine de la Romanée-Conti Bâtard-Montrachet",
+      "parcelIds": [
+        "21150000AE0046"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0046": 1746
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names plot 46 and 0.1746 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "sourceIds": [
+        "bat-winehog-41881"
+      ],
+      "producer": "Domaine de la Romanée-Conti",
+      "printedReferences": [
+        "AE46"
+      ],
+      "appNote": "Winehog (2020) names plot 46 and 0.1746 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "dateSourceId": "bat-winehog-41881",
+      "currentFarmer": null
+    },
+    {
+      "id": "bat-winehog-41492",
+      "title": "Terroir Insight: Domaine Morey-Coffinet Bâtard-Montrachet",
+      "parcelIds": [
+        "21150000AE0175"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0175": 1303
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names plot 175 and 0.1303 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "sourceIds": [
+        "bat-winehog-41492"
+      ],
+      "producer": "Domaine Morey-Coffinet",
+      "printedReferences": [
+        "AE175"
+      ],
+      "appNote": "Winehog (2020) names plot 175 and 0.1303 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "dateSourceId": "bat-winehog-41492",
+      "currentFarmer": null
+    },
+    {
+      "id": "bat-winehog-41215",
+      "title": "Terroir Insight: Domaine Faiveley Batard-Montrachet",
+      "parcelIds": [
+        "21512000AI0144"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0144": 3508
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "sourceIds": [
+        "bat-winehog-41215"
+      ],
+      "producer": "Domaine Faiveley",
+      "printedReferences": [
+        "AI144"
+      ],
+      "appNote": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "dateSourceId": "bat-winehog-41215",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "bat-reused-drc",
+      "sourceId": "mt-filing-778269407-1974",
+      "title": "Domaine de la Romanée-Conti: selected filing 1974-12-21 (deposit 2002-07-31)",
+      "holderId": "778269407",
+      "companySiren": "778269407",
+      "documentDate": "1974-12-21",
+      "parcelAreasM2": {
+        "21150000AE0046": 1746
+      },
+      "pages": [
+        40,
+        83
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [],
+      "finding": "1974 filing schedule matches current AE46 and 1746 m². Historical company property only.",
+      "appNote": "1974 filing schedule matches current AE46 and 1746 m². Historical company property only."
+    },
+    {
+      "id": "bat-reused-opale",
+      "sourceId": "mt-filing-408395309-6",
+      "title": "Opale: selected filing 2006-06-23 (deposit 2006-11-06)",
+      "holderId": "408395309",
+      "companySiren": "408395309",
+      "documentDate": "2006-06-23",
+      "parcelAreasM2": {
+        "21512000AI0137": 916,
+        "21512000AI0138": 917
+      },
+      "pages": [
+        11,
+        12
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [],
+      "finding": "23 June 2006 contribution conveys two half interests in each whole parcel. Individual complete areas 916 and 917 m² match the current Opale rights. No current operation claimed.",
+      "appNote": "23 June 2006 contribution conveys two half interests in each whole parcel. Individual complete areas 916 and 917 m² match the current Opale rights. No current operation claimed."
+    },
+    {
+      "id": "bat-442440095-schedule",
+      "sourceId": "bat-filing-442440095-1",
+      "title": "KBMFI: company filing 2022-11-30",
+      "holderId": "442440095",
+      "companySiren": "442440095",
+      "documentDate": "2022-11-30",
+      "parcelAreasM2": {
+        "21150000AE0038": 2433
+      },
+      "pages": [
+        12,
+        13,
+        20
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [
+        {
+          "kind": "termination-recital",
+          "tenants": [],
+          "effectiveTo": "2022-09-15",
+          "sourceId": "bat-filing-442440095-1",
+          "pages": [
+            12,
+            13
+          ],
+          "limitation": "Recital of terminated prior leases; no current tenant or operation is inferred."
+        }
+      ],
+      "finding": "The 30 November 2022 withdrawal retains AE38 (2433 m²) while other property leaves KBMFI. Prior leases are recited as terminated effective 15 September 2022. Historical property evidence only; no current tenant or farming is established.",
+      "appNote": "The 30 November 2022 withdrawal retains AE38 (2433 m²) while other property leaves KBMFI. Prior leases are recited as terminated effective 15 September 2022. Historical property evidence only; no current tenant or farming is established."
+    },
+    {
+      "id": "bat-411738669-schedule",
+      "sourceId": "bat-filing-411738669-6",
+      "title": "HERITIERS ROUX COLIN: company filing 1997-01-31",
+      "holderId": "411738669",
+      "companySiren": "411738669",
+      "documentDate": "1997-01-31",
+      "parcelAreasM2": {
+        "21150000AE0071": 886
+      },
+      "pages": [
+        1,
+        25
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [],
+      "finding": "The 31 January 1997 contribution names AE71 (886 m²), matching the current holder and full area. Clean original used in preference to marked later reproductions. No named producer tenant or current farming is established.",
+      "appNote": "The 31 January 1997 contribution names AE71 (886 m²), matching the current holder and full area. Clean original used in preference to marked later reproductions. No named producer tenant or current farming is established."
+    },
+    {
+      "id": "bat-832401855-schedule",
+      "sourceId": "bat-filing-832401855-1",
+      "title": "HECATE: company filing 2017-09-07",
+      "holderId": "832401855",
+      "companySiren": "832401855",
+      "documentDate": "2017-09-07",
+      "parcelAreasM2": {
+        "21150000AE0157": 1304
+      },
+      "pages": [
+        2,
+        14
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [],
+      "finding": "The 7 September 2017 formation authorizes purchase of AE157 (1304 m²). This is a purchase mandate, not the completed acquisition or a lease. Current bare-ownership records do not establish current farming.",
+      "appNote": "The 7 September 2017 formation authorizes purchase of AE157 (1304 m²). This is a purchase mandate, not the completed acquisition or a lease. Current bare-ownership records do not establish current farming.",
+      "kind": "purchase-mandate"
+    },
+    {
+      "id": "bat-310370077-schedule",
+      "sourceId": "bat-filing-310370077-3",
+      "title": "DOMAINE BACHELET-RAMONET: company filing 2024-06-13",
+      "holderId": "310370077",
+      "companySiren": "310370077",
+      "documentDate": "2024-06-13",
+      "parcelAreasM2": {
+        "21512000AI0001": 3968
+      },
+      "pages": [
+        11,
+        15,
+        16,
+        19
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail rural",
+          "tenants": [
+            "Domaine Bachelet-Ramonet (310370077), company-use permission recited"
+          ],
+          "sourceId": "bat-filing-310370077-3",
+          "pages": [
+            15,
+            16,
+            19
+          ],
+          "limitation": "Original 2000–2018 term and company-use permission recited; no reviewed renewal or current performance."
+        }
+      ],
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare interest in AI1, whose whole area is 3968 m². The original 2000–2018 lease is recited only. INAO prose swaps AI1/AL83 labels; geometry and current farming remain unchanged.",
+      "appNote": "The 13 June 2024 deed contributes a 55.25% undivided bare interest in AI1, whose whole area is 3968 m². The original 2000–2018 lease is recited only. INAO prose swaps AI1/AL83 labels; geometry and current farming remain unchanged."
+    },
+    {
+      "id": "bat-429240302-schedule",
+      "sourceId": "bat-filing-429240302-13",
+      "title": "DOMAINE BACHELET MESNIL: company filing 1977-06-02",
+      "holderId": "429240302",
+      "companySiren": "429240302",
+      "documentDate": "1977-06-02",
+      "parcelAreasM2": {
+        "21512000AI0121": 1675
+      },
+      "pages": [
+        1,
+        15,
+        43
+      ],
+      "supportingSourceIds": [],
+      "leaseEvidence": [],
+      "finding": "The 2 June 1977 deed names AI121 (1675 m²), matching current Bachelet-Mesnil rights. It contributes bare soil with plants reserved. The 2026 rename/merger remains separate company history; no current farming is verified.",
+      "appNote": "The 2 June 1977 deed names AI121 (1675 m²), matching current Bachelet-Mesnil rights. It contributes bare soil with plants reserved. The 2026 rename/merger remains separate company history; no current farming is verified."
+    },
+    {
+      "id": "bat-sauzet-ai2",
+      "sourceId": "bat-filing-382485027-5",
+      "title": "ETIENNE SAUZET: company filing 2018-06-25",
+      "holderId": "U29945686",
+      "companySiren": "382485027",
+      "documentDate": "2018-06-25",
+      "parcelAreasM2": {
+        "21512000AI0002": 1377
+      },
+      "pages": [
+        5,
+        42
+      ],
+      "supportingSourceIds": [
+        "bat-filing-382485027-3",
+        "bat-filing-382485027-0",
+        "bat-registry-U29945686"
+      ],
+      "leaseEvidence": [],
+      "finding": "The 2018 merger annex lists AI2 (1377 m²); separate 3 August resolutions confirm completion and 2019 resolutions rename the survivor Domaine Etienne Sauzet. Original U identifier preserved; current farming is unverified.",
+      "appNote": "The 2018 merger annex lists AI2 (1377 m²); separate 3 August resolutions confirm completion and 2019 resolutions rename the survivor Domaine Etienne Sauzet. Original U identifier preserved; current farming is unverified."
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "bat-holding-leflaive",
+      "producer": "Domaine Leflaive",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 1.73,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-holding-leflaive"
+      ],
+      "finding": "Published whole-cru holding; no division between commune-specific cadastral names or individual parcels inferred.",
+      "producerHolderIds": [
+        "778245316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-holding-faiveley",
+      "producer": "Domaine Faiveley",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.3508,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-holding-faiveley"
+      ],
+      "finding": "Published whole-cru holding; no division between commune-specific cadastral names or individual parcels inferred.",
+      "producerHolderIds": [
+        "775567928"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-holding-morey-coffinet",
+      "producer": "Domaine Morey-Coffinet",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.13,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-holding-morey-coffinet"
+      ],
+      "finding": "Published whole-cru holding; no division between commune-specific cadastral names or individual parcels inferred.",
+      "producerHolderIds": [
+        "319015269"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-winehog-41881-holding",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "BATARD MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1746,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-winehog-41881"
+      ],
+      "finding": "Historical holding total as published in 2020; named-area census only, no current-season assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-winehog-41492-holding",
+      "producer": "Domaine Morey-Coffinet",
+      "namedAreas": [
+        "BATARD MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1303,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-winehog-41492"
+      ],
+      "finding": "Historical holding total as published in 2020; named-area census only, no current-season assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-winehog-41215-holding",
+      "producer": "Domaine Faiveley",
+      "namedAreas": [
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.3508,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-winehog-41215"
+      ],
+      "finding": "Historical holding total as published in 2020; named-area census only, no current-season assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
     "Cadastral named areas are reviewed; the whole-cru outline remains because the cru name also names a smaller constituent. No producer holding is inferred.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "INPI and Pappers each returned HTTP 403 on the first batch attempt; the shared gap is retained. Free official registry, public company filings and UK candidate-company accounts were used.",
+    "Bâtard screening adds 68 distinct company PDF byte hashes / 1936 pages: 66 French filings / 1916 pages and two UK candidate-company accounts / 20 pages. Every image page was OCR-screened at 150 dpi. One duplicate 88-page merger project is cited once; existing shared effort is reused unchanged.",
+    "Six holders have explicit no-link searches: Louis Violland, Domaine GB, Coombe Castle, Héritiers Roux-Colin, Hécate and Les Batard Montrachet. Equal names, director roles, family partners, co-recorded rights and statutory lease requirements are insufficient company/tenant crosswalks.",
+    "Jouard’s 2023 acquired extract omits its real-estate schedules. Maltroye’s 2009 indexed filing prints another SIREN (500363619); KBMFI’s old composite has an internal 312149081 identifier. Neither mismatch is used to establish holder identity.",
+    "Exact schedules cover nine current parcels, including Hécate’s purchase mandate and Bachelet-Ramonet’s fractional bare interest; neither is represented as a completed acquisition of full ownership or current farming. Original Prieur-Brunet AE57 lacks its individual area; Bavard AI124 reaches AI170 only through the official 2021 DFI and remains historical-only after the user resumed Tier 2.",
+    "All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.",
+    "Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season."
   ],
   "noticeReview": [
     {
@@ -357,6 +1018,23 @@
       ],
       "reviewMethod": "page-image",
       "finding": "Read all six indexed page images rendered by Poppler. Page 44 heading identifies the refusal; page 45 identifies the applicant and previous operator; page 46 Article 1 names 21512 AI15 (0 ha 32 a 23 ca), AK16, AM19 and AM11 and explicitly refuses cultivation; page 47 stamps 7 February 2019; page 48 is blank and page 49 starts an unrelated Haute-Saône act. Only AI15 is assigned within this cru. No authorisation, current farmer or outcome of a later appeal is inferred."
+    }
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "bat-winehog-41492",
+      "printedReference": "Coffinet-Duvernay 0.1304 ha; number unstated",
+      "parcelIds": [],
+      "limitation": "A neighbouring holding is described by area and location only. The close map was not embedded; no numbered parcel is inferred.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bat-winehog-41215",
+      "printedReference": "Monnot plot 145",
+      "parcelIds": [],
+      "limitation": "No individual area or identified purchaser is supplied. No current allocation or company link is inferred.",
+      "currentFarmer": null
     }
   ]
 }

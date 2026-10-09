@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5896592,
-  "evidenceGzipBytesTotal": 538135,
+  "evidenceBytesTotal": 5946385,
+  "evidenceGzipBytesTotal": 547797,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -2492,10 +2492,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "0e01eb8a256ab547eaa7f68236f8426c1215eff6ba36a97a321e2a83adb138cd",
-      "evidenceSha256": "4b69d75493df2f1e0984d1eecfa7ab4e6336190ae94bb605811eae1f5e010072",
-      "evidenceBytes": 143227,
-      "evidenceGzipBytes": 12427,
+      "registerSha256": "8a6a576ae32020a53e05d8351112cb76a813425a1a10bcb8c719429a425a54ce",
+      "evidenceSha256": "3c534ec022f0eac644914188aeb55a1bc1935eb13fca46f64dbd0ce772e13cae",
+      "evidenceBytes": 193020,
+      "evidenceGzipBytes": 22089,
       "earliestRawEventSample": {
         "id": "210:150:000:0000313:00001",
         "departmentCode": "210",
