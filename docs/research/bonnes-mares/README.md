@@ -29,11 +29,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-29. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 3; one page-reviewed 2022 application receipt |
 | Parcels with sale records (DVF) | 23; 7 deeds on current references, none on historical references |
-| Parcels with holder or research leads | 34; Tier 1 had 3 notice leads; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 96 |
+| Parcels with holder or research leads | 46; Tier 1 had 3 notice leads; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 84 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1990, all pinned geometry vintages of both communes and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 159,409 / 18,099 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 167,884 / 18,958 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Bonnes-Mares selection
@@ -174,11 +174,17 @@ Three supplied Winehog Bonnes-Mares articles and the supplied Vogue and Clos de 
 Arlaud AB76/121 and Groffier AB266 match both number and individual area. Drouhin's four-reference
 group total and Vogue's mismatched AB98 stay unmatched. The Bachus filing supports only historical
 external mandate evidence on exact AB304; AB438/440 have area discrepancies and are not renamed
-AB437/439. Eight producer totals are a named-area census, with no parcel allocation. Arlaud's
+AB437/439. Eleven producer totals are a named-area census, with no parcel allocation. Arlaud's
 published 0.2131 ha total differs from the two stated areas' 0.2081 ha sum, retained without correction.
 
-Six additional Bonnes-Mares Winehog subscriber articles remain unsupplied; their links are in the
-filing log. Public estate material was accessed directly. Downloads, archives, full article text,
+All six additional Bonnes-Mares Winehog WebArchives are now supplied and reviewed. They add
+14 individually matching current references and retired AB467 (1803 m²), linked only through
+the 2020 DFI split to AB481/482. The lead union rises from 34 to **46**, leaving **84 unresolved**.
+Roumier AB367 prints 1608 m² versus the cadastral 1618 m² and remains unmatched. Mugnier,
+Dujac's older group, and Vogüé AB98/99 give only combined areas; none is divided into individual
+matches. Roumier's unnamed-investor métayage account stays dated critic context without a
+company crosswalk. Conflicting published totals remain separately dated in the census.
+The [filing log](filings.md) records all original archive hashes and the historical-area check. Public estate material was accessed directly. Downloads, archives, full article text,
 page images and OCR remain outside Git. No geometry, rights, history or schema was changed.
 Original leases, renewals, paid SPF records and current-season confirmations remain unreviewed.
 **Verified farming stays zero.**
