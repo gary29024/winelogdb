@@ -527,7 +527,11 @@ class MusignyTier2Tests(unittest.TestCase):
         self.assertTrue(any(x['name'] == 'Domaine Leroy' for x in rows['21133000AN0058']['candidateLeads']))
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
         sources = [s for s in self.curation['sources'] if 'winehog' in s['id']]
-        self.assertEqual(len(sources), 13)
+        self.assertEqual(len(sources), 14)
+        full = next(s for s in sources if s['id'] == 'mus-winehog-faiveley-acquisition-archive')
+        self.assertEqual(full['sha256'], 'dca8fca45149733a1f80ac2172777b2c6811b408348630382afd5e4193ed4ae6')
+        self.assertIn('cannot establish', full['finding'])
+        self.assertFalse(any('remains unsupplied' in g for g in self.curation['accessGaps']))
         for s in sources:
             self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
             self.assertTrue(s['documentDate'] and s['bytes'] and s['retrievalNote'])
