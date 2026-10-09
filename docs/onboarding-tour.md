@@ -1,7 +1,7 @@
 # Onboarding tour for invited members
 
-Status: all four phases built; re-checked against main on 2026-10-09.
-Reviewed against `main` at `0be6581` (v1.4.0).
+Status: all four phases built; re-checked against main on 2026-10-10.
+Reviewed against `main` at `ca55ece` (v1.4.0).
 
 ## 1. Why this is needed now
 
@@ -270,7 +270,7 @@ All four phases are built:
 
 ## 8. Testing
 
-All green: 5676 unit tests across 350 files, plus 8 e2e tests.
+All green: 5697 unit tests across 352 files, plus 8 e2e tests.
 
 Unit:
 
@@ -323,6 +323,12 @@ lazily loaded page, and rings a section of it.
 One inaccuracy was there from the start and only surfaced now: the tour said
 "the Cellar tab" for a tab the app has always labelled **In cellar**. The new
 label guard is what would catch the next one.
+
+**2026-10-10.** One commit since (#552, scan progress animation and wine-form
+limits). All three guards pass untouched, and the scan sheet's four labels are
+unchanged. Nothing for the tour to say: a progress bar during a scan is
+feedback on something the reader already started, not a place they could fail
+to find.
 
 Two bugs the tests found during the original build, both of which would
 otherwise have shipped:
