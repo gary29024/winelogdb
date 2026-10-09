@@ -8,8 +8,8 @@
   "sharedBundles": 8,
   "distinctCurrentParcels": 2721,
   "currentFarmerConfirmed": 0,
-  "evidenceBytesTotal": 5713104,
-  "evidenceGzipBytesTotal": 510979,
+  "evidenceBytesTotal": 5721950,
+  "evidenceGzipBytesTotal": 511853,
   "deliveries": [
     {
       "cru": "echezeaux",
@@ -838,10 +838,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "620e6e02e9c1d59161a156e56cd453d6731b0c05c179645cf213eced53c6c074",
-      "evidenceSha256": "245dc61652db583792f80ef5bcf76e5045ff1f013203bac1d8140da4aab60be7",
-      "evidenceBytes": 107132,
-      "evidenceGzipBytes": 14094,
+      "registerSha256": "a50929820b1fb63aeeedb4e39ede87ccf754375f34b90e9df2d5300dc511d655",
+      "evidenceSha256": "fa75cb03409c0aef68c31b4d7235fbc18ede738ed4e2c222575761a2b0a999fe",
+      "evidenceBytes": 107503,
+      "evidenceGzipBytes": 14109,
       "earliestRawEventSample": {
         "id": "210:133:000:0000257:00001",
         "departmentCode": "210",
@@ -942,10 +942,10 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "15df08d60b72170233bb2cb569d4e169b3906f2644642a36eb9e269c54b6ddc8",
-      "evidenceSha256": "405788b407d3e63f0e8cc3617facc0ae474140fa9d3d2830873673fa0d1b267c",
-      "evidenceBytes": 159409,
-      "evidenceGzipBytes": 18099,
+      "registerSha256": "70a26dd84a5f834379bf58fd891328b321b5ec0dd884487d526e4696e376c8c3",
+      "evidenceSha256": "4b687e1abd3dd44a891f33189574f2bdd6b1966372e9228dbb2243e31cf2e726",
+      "evidenceBytes": 167884,
+      "evidenceGzipBytes": 18958,
       "earliestRawEventSample": {
         "id": "210:133:000:0000254:00002",
         "departmentCode": "210",
@@ -1309,7 +1309,7 @@
           "Before 2004: not searched"
         ]
       },
-      "registerSha256": "15e5abd0a663dbad242c46708b250c39b91c3aaf0a32e400c19b69a194af497d",
+      "registerSha256": "e95970d3179bda7b3d31e237b7ba16f14ae8b03003c70ad1fdea8cf918419f4f",
       "evidenceSha256": "1335ef7cc4e6450ebbc633c931868a19756843382185a16141c27a210ff60a7d",
       "evidenceBytes": 189119,
       "evidenceGzipBytes": 19068,

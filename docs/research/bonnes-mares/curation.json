@@ -192,6 +192,126 @@
       "retrievedAt": "2026-10-08T15:22:08.927076+00:00",
       "retrievalNote": "Authorized user-supplied MHTML. Hash covers original archive bytes; archive, full text and images stay outside Git.",
       "finding": "AB266 is 9748 m2, matching the current individual reference and area."
+    },
+    {
+      "id": "bm-winehog-mugnier",
+      "title": "Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/",
+      "type": "critic-research",
+      "documentDate": "2018-02-22",
+      "otherDocumentDates": [
+        {
+          "date": "2018-02-22",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "62e3cbb0f494fb5d136c24cfb5c62d0ac5fca15721139ce4d09f84ec0269d70e",
+      "bytes": 4514464,
+      "retrievedAt": "2026-10-09T05:15:15.654223+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB84/282/292/293/78 share a 0.36 ha total without individual areas. Drouhin AB83/114/305/306 likewise share 0.2298 ha. Historical family and lease narrative does not establish a current operator or a company crosswalk."
+    },
+    {
+      "id": "bm-winehog-dujac",
+      "title": "Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)",
+      "url": "https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/",
+      "type": "critic-research",
+      "documentDate": "2018-03-24",
+      "otherDocumentDates": [
+        {
+          "date": "2018-03-25",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "02c7bf168f0bf6a8505de991229758f22d3264060e8c2fe498d9e966595497aa",
+      "bytes": 3999928,
+      "retrievedAt": "2026-10-09T05:15:15.675485+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total and remain unmatched individually. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha."
+    },
+    {
+      "id": "bm-winehog-roumier",
+      "title": "Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/",
+      "type": "critic-research",
+      "documentDate": "2018-05-06",
+      "otherDocumentDates": [
+        {
+          "date": "2023-03-07",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "4baae097b02deeb43047ed294165e0055b5ef30578e5a62f982951d91adfff63",
+      "bytes": 4647623,
+      "retrievedAt": "2026-10-09T05:15:15.699218+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "Nine current references individually match. Retired Chambolle AB467 matches 1803 m2 in the 3 April 2018 cadastre and reaches AB481/482 only through the 9 November 2020 DFI division. AB367 prints 1608 m2 versus 1618 m2; AB65 is a conjectural portion; the soil paragraph also mentions AB349 without an area. The 2023 metadata modification does not date new observations."
+    },
+    {
+      "id": "bm-winehog-bertheau",
+      "title": "Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/",
+      "type": "critic-research",
+      "documentDate": "2018-04-27",
+      "otherDocumentDates": [
+        {
+          "date": "2018-04-27",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "8abf6a02704c77ea7f021544248ee591785c7ae5495cf327b453b7e378a2b34e",
+      "bytes": 3722581,
+      "retrievedAt": "2026-10-09T05:15:15.721544+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB119 (2417 m2) and AB79 (1027 m2) individually match. Total 0.3444 ha is named-area census only; suggested Trapet-family origins do not establish a parcel ownership chain."
+    },
+    {
+      "id": "bm-winehog-auvenay",
+      "title": "Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/",
+      "type": "critic-research",
+      "documentDate": "2018-05-03",
+      "otherDocumentDates": [
+        {
+          "date": "2018-05-12",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "0c0a7e6ed1f21aae73d12c50c8a08ecfe6b446e398dae296bb12e32eceaee0f6",
+      "bytes": 3737232,
+      "retrievedAt": "2026-10-09T05:15:15.791203+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB91 (700 m2) and AB90 (1898 m2) individually match. Total 0.2598 ha is named-area census only. The article explicitly lacks confirmed information on the previous owner; its Roumier-family hypothesis is not an accepted chain."
+    },
+    {
+      "id": "bm-winehog-vogue",
+      "title": "Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update",
+      "url": "https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/",
+      "type": "critic-research",
+      "documentDate": "2018-05-16",
+      "otherDocumentDates": [
+        {
+          "date": "2018-05-16",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "d523e35840d86e0f4104b9a2372d39e85532d9baa92888b4d76df56ef8af1927",
+      "bytes": 4443300,
+      "retrievedAt": "2026-10-09T05:15:15.814203+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "Total 2.669 ha and AB98/99 combined 473 m2; AB111 has no individual area. No individual parcel match. The combined 98/99 statement is retained alongside, not substituted for, the conflicting 2014 single-98 account."
     }
   ],
   "holders": [
@@ -667,6 +787,150 @@
       "dateSourceId": "cm-winehog-clos-tart",
       "appNote": "Winehog identifies AR64 (2780 m2) as part of Clos de Tart despite the Bonnes-Mares cadastral name. Historical critic context, not current farming verification.",
       "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-dujac",
+      "title": "Winehog: Domaine Dujac dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0096"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link.",
+      "sourceIds": [
+        "bm-winehog-dujac"
+      ],
+      "producer": "Domaine Dujac",
+      "printedReferences": [
+        "AB96"
+      ],
+      "printedAreasM2": {
+        "AB96": 1465
+      },
+      "dateSourceId": "bm-winehog-dujac",
+      "appNote": "Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-roumier",
+      "title": "Winehog: Domaine Georges Roumier dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0100",
+        "21133000AB0066",
+        "21133000AB0340",
+        "21133000AB0468",
+        "21133000AB0469",
+        "21133000AB0470",
+        "21133000AB0089",
+        "21133000AB0298",
+        "21133000AB0105"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-roumier"
+      ],
+      "producer": "Domaine Georges Roumier",
+      "printedReferences": [
+        "AB100",
+        "AB66",
+        "AB340",
+        "AB468",
+        "AB469",
+        "AB470",
+        "AB89",
+        "AB298",
+        "AB105"
+      ],
+      "printedAreasM2": {
+        "AB100": 2328,
+        "AB66": 1070,
+        "AB340": 1650,
+        "AB468": 1803,
+        "AB469": 1803,
+        "AB470": 1803,
+        "AB89": 3825,
+        "AB298": 493,
+        "AB105": 665
+      },
+      "dateSourceId": "bm-winehog-roumier",
+      "appNote": "Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-roumier-467",
+      "title": "Winehog: Roumier on former Chambolle AB467",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB467 at 1803 m2, matching the pinned 3 April 2018 cadastre. Only the documented 9 November 2020 DFI split reaches AB481/482, as historical context; it transfers no ownership or farming claim.",
+      "sourceIds": [
+        "bm-winehog-roumier"
+      ],
+      "producer": "Domaine Georges Roumier",
+      "printedReferences": [
+        "AB467"
+      ],
+      "printedAreasM2": {
+        "AB467": 1803
+      },
+      "predecessorReferences": {
+        "21133000AB0467": [
+          "21133000AB0481",
+          "21133000AB0482"
+        ]
+      },
+      "dateSourceId": "bm-winehog-roumier",
+      "appNote": "Winehog (2018) names former Chambolle AB467 (1803 m2). Reached through the 2020 DFI split; historical context only, not current ownership or farming.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-bertheau",
+      "title": "Winehog: Domaine Bertheau dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0119",
+        "21133000AB0079"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-bertheau"
+      ],
+      "producer": "Domaine Bertheau",
+      "printedReferences": [
+        "AB119",
+        "AB79"
+      ],
+      "printedAreasM2": {
+        "AB119": 2417,
+        "AB79": 1027
+      },
+      "dateSourceId": "bm-winehog-bertheau",
+      "appNote": "Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-auvenay",
+      "title": "Winehog: Domaine d'Auvenay dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0091",
+        "21133000AB0090"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-auvenay"
+      ],
+      "producer": "Domaine d'Auvenay",
+      "printedReferences": [
+        "AB91",
+        "AB90"
+      ],
+      "printedAreasM2": {
+        "AB91": 700,
+        "AB90": 1898
+      },
+      "dateSourceId": "bm-winehog-auvenay",
+      "appNote": "Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification.",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -877,13 +1141,20 @@
       "precision": "hundredth-hectare",
       "relation": "unstated",
       "sourceIds": [
-        "bm-winehog-vogue-history"
+        "bm-winehog-vogue-history",
+        "bm-winehog-vogue"
       ],
       "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        {
+          "areaHa": 2.669,
+          "sourceId": "bm-winehog-vogue",
+          "note": "2018 article total, distinct from the rounded 2014 2.70 ha figure."
+        }
+      ]
     },
     {
       "id": "bm-drouhin",
@@ -895,13 +1166,20 @@
       "precision": "hundredth-hectare",
       "relation": "unstated",
       "sourceIds": [
-        "bm-winehog-drouhin"
+        "bm-winehog-drouhin",
+        "bm-winehog-mugnier"
       ],
       "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.2298,
+          "sourceId": "bm-winehog-mugnier",
+          "note": "Combined four-reference total in Mugnier article; no individual areas."
+        }
+      ]
     },
     {
       "id": "bm-arlaud",
@@ -955,13 +1233,25 @@
       "precision": "square-metre",
       "relation": "unstated",
       "sourceIds": [
-        "bm-roumier-estate"
+        "bm-roumier-estate",
+        "bm-winehog-roumier"
       ],
       "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        {
+          "areaHa": 1.8902,
+          "sourceId": "bm-winehog-roumier",
+          "note": "2018 reported total including 0.4983 ha under reported metayage; distinct from the 1.3919 ha estate figure."
+        },
+        {
+          "areaHa": 1.3878,
+          "sourceId": "bm-winehog-roumier",
+          "note": "Sum of eight printed older plot areas; differs from 1.3919 ha. Includes the mismatching AB367 area and retired AB467; no reconciliation by adding an inferred AB65 portion."
+        }
+      ]
     },
     {
       "id": "bm-drouhin-laroze",
@@ -991,13 +1281,20 @@
       "precision": "square-metre",
       "relation": "unstated",
       "sourceIds": [
-        "bm-dujac-sheet"
+        "bm-dujac-sheet",
+        "bm-winehog-dujac"
       ],
       "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
-      "otherPublishedAreas": []
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.5715,
+          "sourceId": "bm-winehog-dujac",
+          "note": "2018 article total, distinct from the reviewed estate sheet at 0.5801 ha."
+        }
+      ]
     },
     {
       "id": "bm-hudelot-baillet",
@@ -1016,6 +1313,60 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-mugnier",
+      "producer": "Domaine Jacques-Frédéric Mugnier",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.36,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-mugnier"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-bertheau",
+      "producer": "Domaine Bertheau",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.3444,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-bertheau"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-auvenay",
+      "producer": "Domaine d'Auvenay",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.2598,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-auvenay"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -1026,10 +1377,11 @@
     "Tier 2 selected 46 free company filings (1788 pages), OCR-screening every page. This is a bounded selection of formation, contribution, transformation and recent statutes, not every filing ever deposited. Prior shared research is reused without rescanning old files.",
     "U21117863 cannot crosswalk to the separately recorded Dujac SIREN in this cru. Bachus, Veroilles and the two BND U-ids remain unresolved; names, officers and monopole reputation are insufficient.",
     "The GFA Grands Vins Fins lease names Domaine de Bauclair; an independent current company identity and renewal were not located. Jadot preference rights do not prove tenancy. Arlaud has a distinct similarly named registry entry 429825441, not equated with the exact-schedule company 444144190.",
-    "Six Bonnes-Mares Winehog subscriber continuations remain unsupplied: Vogue (2018-05-16), Roumier (2018-05-06), Auvenay (2018-05-03), Bertheau (2018-04-27), Dujac (2018-03-24), Mugnier (2018-02-22). Three supplied Bonnes-Mares archives and the supplied shared Vogue history were reviewed. No paywall bypass.",
+    "All six additional Bonnes-Mares Winehog subscriber articles were supplied as WebArchives and reviewed, alongside the original three MHTML articles and shared Vogue/Clos de Tart histories. No requested Bonnes-Mares article remains an access gap. Sources retain original-byte hashes and publication dates separately from page modifications.",
     "The CPGC page and Dujac technical sheet were readable through the public web reader but direct downloads returned HTTP 503. Their hash covers the saved extraction, not raw HTML/PDF bytes. The Bouchard sheet was not retained as census evidence after direct-download failure.",
     "Original leases, renewals, paid SPF copies and present-season outreach remain unreviewed. Historical lease recitals, transaction mandates, company identity and named-area census totals do not verify current farming.",
-    "The supplied Clos de Tart history article also covers shared AR64. Five additional company filings resolve the Maison Mommessin U-id through SIREN 686042409, name continuity and four exact property references; the earlier 685750598 candidate is distinct. The 2018 share transfer is not a new land conveyance and the 1932 origin recital is not a reviewed original deed."
+    "The supplied Clos de Tart history article also covers shared AR64. Five additional company filings resolve the Maison Mommessin U-id through SIREN 686042409, name continuity and four exact property references; the earlier 685750598 candidate is distinct. The 2018 share transfer is not a new land conveyance and the 1932 origin recital is not a reviewed original deed.",
+    "Supplemental articles add 14 exact current-reference-and-area matches and one retired reference reaching two current parcels through documented DFI ancestry. AB367 has a 10 m2 discrepancy; Mugnier and old Dujac groups and Vogue AB98/99 are aggregate-only. No area correction, holder identity or current farming is inferred."
   ],
   "noticeReview": [
     {
@@ -1071,6 +1423,48 @@
       "printedReference": "handwritten AB46; no individual area",
       "parcelIds": [],
       "limitation": "Mandate-only candidate reference; no exact current individual area or U-id crosswalk established.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-mugnier",
+      "printedReference": "AB84, AB282, AB292, AB293, AB78: combined 0.36 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas, including on the supplied cadastral map. No allocation from the aggregate or neighbouring parcels.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-mugnier",
+      "printedReference": "Drouhin AB83, AB114, AB305, AB306: combined 0.2298 ha",
+      "parcelIds": [],
+      "limitation": "Combined area only. The separate Drouhin article also lacks individual printed areas; neither supports an individual match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-dujac",
+      "printedReference": "AB321, AB322, AB358, AB360, AB72: combined 0.425 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas; do not divide the aggregate or infer from current cadastral areas.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-roumier",
+      "printedReference": "AB367: 0.1608 ha (1608 m2)",
+      "parcelIds": [],
+      "limitation": "Pinned 2018 and current cadastral areas are 1618 m2. No correction of the printed area or exact match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-roumier",
+      "printedReference": "AB65: conjectural portion under 0.01 ha; AB349: soil paragraph only",
+      "parcelIds": [],
+      "limitation": "No individual full-parcel areas. AB65 is explicitly conjectural; AB349 is not corrected into the AB340 listed elsewhere.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-vogue",
+      "printedReference": "AB98 and AB99: combined 0.0473 ha (473 m2); AB111: no area",
+      "parcelIds": [],
+      "limitation": "No individual printed areas. The 2014 account instead assigns 473 m2 to 98 alone; this later combined statement is retained separately and does not retroactively correct that claim.",
       "currentFarmer": null
     }
   ]

@@ -192,12 +192,17 @@ to Frederic Magnien and a 2022 rent amendment, distinct from old Michel Magnien 
 ends in 2019. Ponsot's explicit 2007 lease clause names the operating company, while a 2018 tax recital
 inconsistently names the GFA as tenant; that conflict and missing originals/renewals remain visible.
 
-Three supplied Winehog articles provide **15 matching individual references** and **seven named-area census
+Five supplied Winehog articles provide **15 matching individual references** and **nine named-area census
 rows**. Ponsot's 3960 m² portion of AB461 is excluded from whole-parcel matches (the full parcel is 27614 m²),
 but retained in the reported named-area total. Rousseau AB550/551 gain critic research without inventing
 legal-entity rights. Domaine Leroy's critic attribution stays separate from the recorded Maison Leroy company
 link. Some lazy-loaded producer maps are absent; all accepted numbers and areas come from explicit article text.
-The overview, Hubert Lignier and Dujac articles remain unsupplied paywall gaps. Public articles are accessed directly.
+The subsequently supplied overview and Hubert Lignier archives close two access gaps. The overview
+reproduces a decree dated 3 July 1944 with old section-A ranges and aggregate climat areas; it
+does not supply a current parcel crosswalk. Its suggested 1936 expansion and 1971 arithmetic
+remain unresolved. Hubert Lignier adds only 0.62 ha Monts Luisants and 0.28 ha Les Fremières
+census rows. Its 0.20 ha MCMLV cuvée is a subset, not an additional holding, and the locations
+are expressly approximate. The Dujac article remains a paywall gap. Public articles are accessed directly.
 
 Former Magnien AB162/500/502 have no documented ancestry or accepted successor into the current selection
 and remain unmatched. No geometry, rights or shared generator is changed. Original instruments, unresolved

@@ -101,6 +101,46 @@
       "retrievedAt": "2026-10-08T15:22:09.581029+00:00",
       "retrievalNote": "Authorized user-supplied MHTML, hashed as original bytes. Complete article text and available common climat map/images reviewed. Lazy-loaded producer maps are absent; matches use explicit printed reference and individual area. Raw files stay outside Git.",
       "finding": "Dated critic attribution with individually matching current references and areas; not legal ownership or current operation. Domaine Leroy attribution stays separate from the recorded Maison Leroy legal-company link."
+    },
+    {
+      "id": "cr-winehog-overview",
+      "title": "Winehog: Clos de la Roche – the core of Morey-Saint-Denis",
+      "url": "https://winehog.org/clos-de-la-roche-the-core-of-morey-saint-denis-24264/",
+      "type": "critic-research",
+      "documentDate": "2015-08-16",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata modification; not a new observation date"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "8eaa5d46fe23a831a74c4af252e21fc5ed9f801fa52e7bda0a1271ac4c91879b",
+      "bytes": 4585049,
+      "retrievedAt": "2026-10-09T05:15:15.746610+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article, available common maps and reproduced decree reviewed; Hubert Lignier approximate location map reviewed, but detailed MCMLV figure is absent. Archive, full text and images remain outside Git.",
+      "finding": "Appellation history and aggregate climat areas, not producer parcel evidence. The reproduced decree is dated 3 July 1944 (publication 26 July), while the prose says before 4 July. Old section-A reference ranges lack individual areas or documented links to the selected current parcels. The suggested 1936 expansion and 1971 arithmetic are not independently resolved."
+    },
+    {
+      "id": "cr-winehog-hubert-lignier",
+      "title": "Winehog: Terroir View: Hubert Lignier Clos de la Roche – a new cuvée",
+      "url": "https://winehog.org/clos-de-la-roche-hubert-lignier-37395/",
+      "type": "critic-research",
+      "documentDate": "2019-10-31",
+      "otherDocumentDates": [
+        {
+          "date": "2019-11-05",
+          "kind": "page metadata modification; not a new observation date"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "4922cd864ddb2546b990343e51e289b39ba95d960454e6e10f3dfebf4d78f54e",
+      "bytes": 4942023,
+      "retrievedAt": "2026-10-09T05:15:15.769952+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article, available common maps and reproduced decree reviewed; Hubert Lignier approximate location map reviewed, but detailed MCMLV figure is absent. Archive, full text and images remain outside Git.",
+      "finding": "The 2019 article reports 0.62 ha Monts Luisants and 0.28 ha Les Fremieres, and a 0.20 ha MCMLV subset of Monts Luisants (first vintage 2017). Locations are expressly approximate; no individual cadastral reference-and-area pairs. The 2006-2013 access interruption and 2014 return remain historical critic narrative without a current operator or company crosswalk."
     }
   ],
   "holders": [
@@ -1156,6 +1196,42 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "cr-hubert-lignier-monts",
+      "producer": "Domaine Hubert Lignier",
+      "namedAreas": [
+        "MONTS LUISANTS"
+      ],
+      "publishedAreaHa": 0.62,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "cr-winehog-hubert-lignier"
+      ],
+      "finding": "The reported 0.20 ha MCMLV cuvee is a subset of this 0.62 ha, not an additional holding. The 2019 account describes interrupted access in 2006-2013 and a 2014 return; no current scope is verified. Dated named-area census only; no parcel allocation, company identity or present farming claim.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "cr-hubert-lignier-fremieres",
+      "producer": "Domaine Hubert Lignier",
+      "namedAreas": [
+        "LES FREMIERES"
+      ],
+      "publishedAreaHa": 0.28,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "cr-winehog-hubert-lignier"
+      ],
+      "finding": "The article explicitly says precise plots remain under investigation; its map gives only an approximate location. Dated named-area census only; no parcel allocation, company identity or present farming claim.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -1168,8 +1244,8 @@
     "Historical leases are not current operators. Malauro names Laurent Lignier individually; Peirazeau divides portions between individuals; Boutieres changes from old Michel recitals to Frederic in a 2018 lease recited in 2022. No producer company is inferred from names, relatives or officers.",
     "The 2006 Feuillet deed attaches a 23 June 2004 CVI naming Truchot Martin Jacky on AB230/505 and expressly ends the Truchot lease on 11 January 2006. Retained as historical research with explicit user approval after the #364 pause; no verified farming or successor tenant is published.",
     "The reused 1998 Magnien contribution transfers plantations/business assets and excludes land. Saint Loup contributes only a half indivisible interest in AB460; its recited lease ends in September 2019. Ponsot 2018 tax language inconsistently names the GFA as tenant; the explicit 2007 recital is retained with that conflict.",
-    "Three supplied Winehog articles yield 15 individual exact-number-and-area critic references and seven named-area census rows. Ponsot AB461 is a partial area and remains unmatched; Domaine Leroy and Maison Leroy remain distinct. Some lazy-loaded producer maps are absent; only printed text establishes the accepted references.",
-    "Unsupplied paywalled Winehog: Hubert Lignier Clos de la Roche (2019-10-31, https://winehog.org/clos-de-la-roche-hubert-lignier-37395/); Clos de la Roche overview (2015-08-16, https://winehog.org/clos-de-la-roche-the-core-of-morey-saint-denis-24264/); Dujac Clos de la Roche (2018-03-10, https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/). Public content accessed directly; no login or paywall bypass.",
+    "Five supplied Winehog articles are reviewed. The original three yield 15 individual exact-number-and-area references; Hubert Lignier adds two named-area census rows (nine total), without parcel allocation. The overview adds historical context only. Ponsot AB461 remains a partial area and unmatched; Domaine Leroy and Maison Leroy remain distinct.",
+    "Unsupplied paywalled Winehog: Dujac Clos de la Roche (2018-03-10, https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/). The overview and Hubert Lignier WebArchives are now supplied and reviewed. Public content accessed directly; no login or paywall bypass.",
     "Original lease instruments, renewal evidence, unresolved company crosswalks, paid SPF copies and present-season confirmation remain gaps. Unmatched old references do not reach current parcels without documented ancestry or an accepted successor."
   ],
   "holderLinks": "shared",
@@ -1193,6 +1269,20 @@
       "printedReference": "AB162 161 m2; AB500 183 m2; AB502 746 m2",
       "parcelIds": [],
       "limitation": "Original references are outside the current selected parcels and have no documented DFI ancestry or accepted successor reaching this selection. No neighbouring-parcel allocation.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "cr-winehog-overview",
+      "printedReference": "1944 section A: 1802-1830; 1831-1854; 1855-1860; 1861-1876; Monts Luisants Bas grouped numbers including 1695 1/3; 1377-1401",
+      "parcelIds": [],
+      "limitation": "Climat aggregates in a reproduced historical decree; no individual areas, producer attribution, documented DFI ancestry or accepted successor mapping into current selection. No map-based allocation or geometry change.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "cr-winehog-hubert-lignier",
+      "printedReference": "Unnumbered 0.62 ha Monts Luisants and 0.28 ha Les Fremieres; 0.20 ha MCMLV subset",
+      "parcelIds": [],
+      "limitation": "No individual cadastral number-and-area pairs. Locations are explicitly approximate; the subset is not a separate cadastral parcel or an additional census total. No connection to a recorded Lignier company is inferred from the name.",
       "currentFarmer": null
     }
   ]
