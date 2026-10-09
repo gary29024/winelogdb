@@ -1,7 +1,7 @@
-# Chevalier-Montrachet parcels: Tier 1 (#401)
+# Chevalier-Montrachet parcels: Tier 2 (#447)
 
 Chevalier-Montrachet uses INAO `inao-denom-539`, appellation 157.
-Only Puligny-Montrachet (21512) is imported for this cru; Chassagne-Montrachet (21150) is a neighbour despite sharing the bundle. Reviewed 7 October 2026 for season 2026 under the
+Only Puligny-Montrachet (21512) is imported for this cru; Chassagne-Montrachet (21150) is a neighbour despite sharing the bundle. Tier 1 reviewed 7 October 2026; Tier 2 reviewed 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and [#461 history method](../grand-cru-history.md).
 
 **No current farmer is verified.** Recorded rights, filiation, deeds and
@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 1; 1 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 44 |
+| Parcels with holder or research leads | 27; supported shared holder links, distinct from current operation |
+| Parcels with no lead | 17 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1989-09-22, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 112,754 / 10,693 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 147,336 / 15,627 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 44 unique parcels.
@@ -62,8 +62,7 @@ retains original archive/member identities, licence labels and download provenan
 Exact full-reference joins preserve all holders/right codes and never suppress
 geometry for unknown rights. Missing legal-entity records do not establish
 private ownership or absence of an owner. Company continuity requires an
-unchanged valid SIREN. No holder-to-domaine crosswalk is established, so grouping
-stays off. Producer/company research remains Tier 2; paid SPF/outreach stays Tier 3.
+unchanged valid SIREN. The shared holder table supplies reviewed company relationships or explicit no-link searches for every holder. Research grouping is enabled; current operation remains unverified. Paid SPF/outreach stays Tier 3.
 
 [Rights history](rights-history.json) preserves complete mother/daughter sets,
 original validation dates and full ancestry paths. There are
@@ -91,27 +90,69 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). These shared ga
 remain under #461; unverified operation remains under #364. Access failure or
 an unsearched interval is a gap, not absence of history.
 
+## Tier 1 to Tier 2
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Research leads | 0 | 27 |
+| Unresolved parcels | 44 | 17 |
+| Reviewed holder links applicable to the cru | 0 | 12 |
+| Parcels with exact company filings | 0 | 3 |
+| Current farmers verified | 0 | 0 |
+
+[The filing inventory](filings.md) records 11 new distinct company filings / 152 pages, complete 150 dpi RapidOCR/DirectML screening, reused shared effort, acquisition hashes, exact-match limits and eight pending Winehog copies. Prieur AH8 and the Latour GFAs’ AH92/93 match reference, individual area and recorded holder. Opale’s retired AH150 reaches AH182/AH183 only through official DFI; its former AH151 holding remains historical context. Printed Prieur AH3 is not silently corrected to equal-area AH123.
+
+Five official estate holdings remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name, a shared manager or a similar area. Four holder identifiers remain explicit no-link searches: Louis Violland, the municipality, SCI Montille et Partners and GFV Le Chevalier de Puligny-Montrachet.
+
+## Holder research effort
+
+| Recorded holder | Shared effort reused | New filings / pages | Finding |
+| --- | ---: | ---: | --- |
+| MAISON BOUCHARD PERE ET FILS (`515420255`) | 7 / 166 | 0 / 0 | Reuses the reviewed Bouchard corporate-group link and the five-filings / 146-page Montrachet screening. No exact Chevalier parcel schedule accepted in this bounded corpus; the 2026 business contribution excludes vineyard property. |
+| SOC CIV DOMAINE HERITIERS LOUIS JADOT (`312990021`) | 5 / 86 | 0 / 0 | Reuses the reviewed Domaine des Héritiers Louis Jadot company identity and the prior five-filings / 86-page search. No new exact Chevalier schedule is asserted, and the bottling house is not substituted for this holder company. |
+| SOC CIV AGRIC  DOMAINE DE LA VOUGERAIE (`330713074`) | 3 / 26 | 0 / 0 | Reuses the reviewed Vougeraie brand/company identity from its legal notice and the prior three-filings / 26-page search. No new exact Chevalier schedule is asserted; the co-recorded Louis Violland identifier remains independently unresolved. |
+| DOMAINE LOUIS VIOLLAND (`349583500`) | 2 / 30 | 0 / 0 | Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk. |
+| DOMAINE DE LA POUSSE D'OR (`480400407`) | 5 / 76 | 0 / 0 | Reuses the reviewed Domaine de la Pousse d’Or company link and the four-filings / 91-page Montrachet screening. Opale’s former AH150/151 ownership is retained separately and does not establish Pousse tenancy or present operation. |
+| DOMAINE LEFLAIVE (`778245316`) | 4 / 111 | 0 / 0 | Reuses the reviewed Domaine Leflaive company identity and the four-filings / 111-page Montrachet screening. No exact AH77/AH148 schedule accepted. The company is distinct from the Leflaive GFA and a corporate identity does not establish present operation. |
+| SC DOM JACQUES PRIEUR (`U21845345`) | 4 / 97 | 0 / 0 | The reused Jacques Prieur statutes print current AH8 (724 m²), matching the recorded holder and cadastral area; the registry and estate legal notice identify company 778233098. Printed AH3 (641 m²) remains unmatched: equal area does not identify AH123, whose documented predecessor is H123. Current farming remains unverified. |
+| COMMUNE DE PULIGNY-MONTRACHET (`212105126`) | — | 0 / 0 | The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established. |
+| SCE DOMAINE OPALE (`408395309`) | 5 / 89 | 0 / 0 | Reuses the reviewed Opale-to-Olivier Leflaive Frères company-control link. The 2006 contribution prints retired AH150 (981 m²), reaching AH182/AH183 only through the official 2019 split. AH151 (1058 m²) is now recorded to Pousse d’Or. These are external historical contexts, not exact filings of today’s holders. |
+| DOMAINE HEITZ LOCHARDET (`420474645`) | 5 / 147 | 0 / 0 | Reuses the reviewed Domaine Heitz-Lochardet company link and the five-filings / 147-page Montrachet screening. No exact AH16 schedule accepted; the reviewed 2021 land contribution concerns other communes. |
+| DU DOMAINE BELGRAND LATOUR (`427468962`) | 4 / 116 | 0 / 0 | Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed. |
+| DOMAINE MARCHAL LATOUR (`427468988`) | 4 / 167 | 0 / 0 | Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed. |
+| DOMAINE DE MONTILLE (`483134516`) | 6 / 104 | 0 / 0 | Reuses the reviewed Domaine de Montille company identity and the prior six-filings / 104-page search. The distinct SCI Montille et Partners and GFV Le Chevalier de Puligny identifiers are not merged into this company by name or shared management. |
+| SCI MONTILLE ET PARTNERS (`751811472`) | — | 2 / 47 | Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted. |
+| LE CHEVALIER DE PULIGNY-MONTRACHET (`752059824`) | — | 9 / 105 | Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted. |
+| SCE DU DOMAINE D AUVENAY (`778252445`) | 3 / 113 | 0 / 0 | Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted. |
+
+## Parallel run and stack
+
+This cru follows Montrachet #446 and its PR targets `codex/446-montrachet-tier2`. Retarget only when the base is merged by a reviewer; neither PR is merged by this task. The Claude branches are untouched. Existing shared links, identities and effort are preserved; only sources and search records are added. At this boundary `origin/main` remains `0be65811`, so no main merge was needed.
+
 ## Reproduce and validate
 
 Use Python 3.12 with `scripts/burgundy-map-requirements.txt`:
 
 ```sh
-python scripts/download_grand_cru_sources.py --cru chevalier-montrachet
-python scripts/build_grand_cru_parcels.py --cru chevalier-montrachet --check
-python scripts/build_grand_cru_commune_audit.py --cru chevalier-montrachet --check
-python scripts/build_grand_cru_named_plots.py --cru chevalier-montrachet
-python scripts/build_grand_cru_parcel_named_areas.py --cru chevalier-montrachet --check
-python scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
-python scripts/build_grand_cru_research.py --all --check
-python scripts/build_grand_cru_app_registry.py --check
-python scripts/audit_grand_cru_history_rollout.py --check
-npm run build
-python scripts/measure_grand_cru_payload.py
-npm test
+py -3.12 scripts/download_grand_cru_sources.py --cru chevalier-montrachet
+py -3.12 scripts/build_grand_cru_parcels.py --cru chevalier-montrachet --check
+py -3.12 scripts/build_grand_cru_commune_audit.py --cru chevalier-montrachet --check
+py -3.12 scripts/build_grand_cru_named_plots.py --cru chevalier-montrachet
+py -3.12 scripts/build_grand_cru_parcel_named_areas.py --cru chevalier-montrachet --check
+py -3.12 scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
+py -3.12 scripts/build_grand_cru_research.py --all --check
+py -3.12 scripts/build_grand_cru_holder_links.py --check
+py -3.12 scripts/build_grand_cru_app_registry.py --check
+py -3.12 scripts/audit_grand_cru_history_rollout.py --check
+bun run lint
+bun run typecheck
+bun run build
+py -3.12 scripts/measure_grand_cru_payload.py
+bun run test
 ```
 
 The representative Chromium journey uses `WINELOG_E2E_CRU=chevalier-montrachet` with
 `burgundy-village-map.spec.ts` to check mobile width, keyboard toggling, retry,
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
-The cru issue and its #461 line are completed only after review and merge.
+Run the full CI Python unittest list from `scripts/`, full Vitest, and the Burgundy Playwright configuration with `WINELOG_E2E_CRU=chevalier-montrachet`. Record the known Windows locale and Corton rounding failures without changing them. No issue is closed or PR merged by this delivery.

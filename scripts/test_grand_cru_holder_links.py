@@ -1352,5 +1352,58 @@ class MontrachetTierTwoTests(unittest.TestCase):
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
 
+class ChevalierTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('chevalier-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_every_holder_is_reviewed_without_name_based_company_links(self):
+        self.assertEqual(len(self.curation['holders']), 16)
+        for h in self.curation['holders']:
+            self.assertTrue(self.table['holders'][h['holderId']]['searches'])
+            self.assertFalse(h['parcelOperationConfirmed'])
+        for hid in ('349583500', '212105126', '751811472', '752059824'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+        self.assertEqual(self.table['holders']['U21845345']['identity']['companySiren'], '778233098')
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_exact_schedules_keep_prieur_number_mismatch_unmatched(self):
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, {'21512000AH0008': 724, '21512000AH0092': 2538, '21512000AH0093': 2537})
+        row = next(x for x in self.curation['unmatchedPrintedReferences'] if 'AH3' in x['printedReference'])
+        self.assertEqual(row['parcelIds'], [])
+        current = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0123')
+        self.assertEqual(current['parcelFilingIds'], [])
+        self.assertNotIn('21512000AH0003', current['documentedAncestry']['ancestorIds'])
+
+    def test_opale_history_reaches_both_daughters_without_transferring_a_tenant(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'ch-opale-ah150-2006')
+        self.assertEqual(x['parcelIds'], [])
+        self.assertEqual(x['predecessorReferences'], {'21512000AH0150': ['21512000AH0182', '21512000AH0183']})
+        for pid in x['predecessorReferences']['21512000AH0150']:
+            row = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertIn(x['id'], row['externalResearchIds'])
+            self.assertEqual(row['parcelFilingIds'], [])
+            self.assertIsNone(row['currentFarmer'])
+        prior = next(x for x in self.curation['externalResearch'] if x['id'] == 'ch-opale-ah151-2006')
+        self.assertIsNone(prior['producer'])
+
+    def test_latour_recitals_and_estate_census_do_not_verify_current_operation(self):
+        filings = [f for f in self.curation['parcelFilings'] if f['holderId'] in ('427468962', '427468988')]
+        self.assertEqual(len(filings), 2)
+        for f in filings:
+            lease = f['leaseEvidence'][0]
+            self.assertEqual(lease['kind'], 'existing-lease-recital')
+            self.assertEqual(lease['effectiveTo'], '2026-11-10')
+            self.assertIn('Société Civile Domaine Louis Latour (778159715)', lease['tenants'])
+        for h in self.curation['producerHoldings']:
+            self.assertNotIn('parcelIds', h)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+
 if __name__ == '__main__':
     unittest.main()

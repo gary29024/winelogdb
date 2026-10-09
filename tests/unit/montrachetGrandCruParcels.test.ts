@@ -7,10 +7,10 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 
 // Extend Tier 2 only after committing each independent holder-research pass.
 const tier2=[
- {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
+ {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:29,unresolved:18,filings:6,groups:12,unlinked:['U18179542','U21850980']},
+ {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:27,unresolved:17,filings:3,groups:12,unlinked:['349583500','212105126','751811472','752059824']},
 ];
 const tier1=[
- {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38},
  {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
@@ -37,11 +37,10 @@ describe('Montrachet bundle reviewed crus',()=>{
   for(const cru of tier2){
    for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:true,evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(12);
-   expect(evidence.holderDomains).not.toHaveProperty('U18179542');
-   expect(evidence.holderDomains).not.toHaveProperty('U21850980');
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(cru.groups);
+   for(const hid of cru.unlinked)expect(evidence.holderDomains).not.toHaveProperty(hid);
    const register=read(`docs/research/${cru.slug}/register.json`);
-   expect(register.counts).toMatchObject({holderLead:29,unresolved:18,withParcelFiling:6,currentFarmerConfirmed:0});
+   expect(register.counts).toMatchObject({holderLead:cru.leads,unresolved:cru.unresolved,withParcelFiling:cru.filings,currentFarmerConfirmed:0});
    expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);
   }
  });

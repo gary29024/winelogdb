@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-539",
-  "status": "tier-1-reviewed",
-  "scope": "All 44 mapped Chevalier-Montrachet parcels in Puligny-Montrachet independently reviewed for Tier 1 and #461. Named areas and commune edges audited. Source-specific history, sales and notice coverage retained; no current farmer verified. Producer research remains Tier 2.",
+  "status": "tier-2-researched",
+  "scope": "All 44 Chevalier-Montrachet parcels retain their reviewed Tier 1 and history baseline. Every recorded holder has a shared-table link or explicit search. Exact filing matches, original-reference context and named-area holdings remain separate; no current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -50,6 +50,81 @@
       "documentDate": null,
       "access": "read",
       "finding": "A white Grand Cru in Puligny-Montrachet; the cadastre includes CHEVALIER MONTRACHET and LE CAILLERET constituents. Cadastral names are not declared separate official climats or holdings."
+    },
+    {
+      "url": "https://medias.bouchard-pereetfils.com/files/default/user-1/bpf-chevalier-montrachet-la-cabotte-fiche-technique-en-6750817e10008387150972.pdf",
+      "retrievedFrom": "https://medias.bouchard-pereetfils.com/files/default/user-1/bpf-chevalier-montrachet-la-cabotte-fiche-technique-en-6750817e10008387150972.pdf",
+      "retrievedAt": "2026-10-09T14:30:09.577288+00:00",
+      "sha256": "9a3d52ead00764b0a0bd151bbf2bfd6f1dd97d86aa50551e5f586625aa762537",
+      "bytes": 2063104,
+      "id": "ch-holding-cabotte-pdf",
+      "title": "Bouchard Père et Fils / La Cabotte: Chevalier holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.21 ha. Named-area census only. Published La Cabotte cuvée holding only, not Bouchard’s total Chevalier holding. The illustrated map has no cadastral reference crosswalk.",
+      "pageCount": 2,
+      "reviewedPages": [
+        1,
+        2
+      ]
+    },
+    {
+      "url": "https://m.louislatour.com/fr/vins/53/chevalier-montrachet-grand-cru-les-demoiselles/2016",
+      "retrievedFrom": "https://m.louislatour.com/fr/vins/53/chevalier-montrachet-grand-cru-les-demoiselles/2016",
+      "retrievedAt": "2026-10-09T14:28:58.833728+00:00",
+      "sha256": "70c45f9769b8bafde048b208df9b4875795c5a8e2121d8e737928b0dcec757c1",
+      "bytes": 85107,
+      "id": "ch-holding-latour",
+      "title": "Domaine Louis Latour: Chevalier holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.51 ha. Named-area census only. Published Les Demoiselles holding; the commercial name is not assigned to individual parcels or a separate cadastral outline."
+    },
+    {
+      "url": "https://www.leflaive.fr/en_US/wine/chevalier-montrachet",
+      "retrievedFrom": "https://www.leflaive.fr/en_US/wine/chevalier-montrachet",
+      "retrievedAt": "2026-10-09T14:28:55.965956+00:00",
+      "sha256": "b0fcfbe603c6f08e2558b052ca0fdac5bc76901e1a9b7089888c80c6bffb4550",
+      "bytes": 42893,
+      "id": "ch-holding-leflaive",
+      "title": "Domaine Leflaive: Chevalier holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 1.8 ha. Named-area census only. Published whole holding; no allocation among cadastral names inferred."
+    },
+    {
+      "url": "https://www.demontille.com/fr_FR/wine/chevalier-montrachet-grand-cru",
+      "retrievedFrom": "https://www.demontille.com/fr_FR/wine/chevalier-montrachet-grand-cru",
+      "retrievedAt": "2026-10-09T14:29:00.603738+00:00",
+      "sha256": "16228984165f7572e44645fa755c7828d11eb82da9b1f71220a61aa606509f4f",
+      "bytes": 34328,
+      "id": "ch-holding-montille",
+      "title": "Domaine de Montille: Chevalier holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.23 ha. Named-area census only. Published whole holding; distinct land-company holders are not inferred from this marketing page."
+    },
+    {
+      "url": "https://www.domainedelavougeraie.com/en/our-wines.r-693/chevalier-montrachet-grand-cru.v-18034.html?id_millesime=57",
+      "retrievedFrom": "https://www.domainedelavougeraie.com/en/our-wines.r-693/chevalier-montrachet-grand-cru.v-18034.html?id_millesime=57",
+      "retrievedAt": "2026-10-09T14:28:59.604428+00:00",
+      "sha256": "df1a88637c44805047a54b36658e852f9dd91f90c5ed1eb7138209eec4b04768",
+      "bytes": 22782,
+      "id": "ch-holding-vougeraie",
+      "title": "Domaine de la Vougeraie: Chevalier holding",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published 0.151 ha. Named-area census only. Published total of two estate plots, 0.056 and 0.095 ha; the estate plot numbers are not cadastral references."
     }
   ],
   "holders": [
@@ -57,157 +132,479 @@
       "holderId": "212105126",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ch-registry-212105126"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established."
     },
     {
       "holderId": "312990021",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-312990021"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine des Héritiers Louis Jadot company identity and the prior five-filings / 86-page search. No new exact Chevalier schedule is asserted, and the bottling house is not substituted for this holder company."
     },
     {
       "holderId": "330713074",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "vougeraie-legal",
+        "rne-330713074"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Vougeraie brand/company identity from its legal notice and the prior three-filings / 26-page search. No new exact Chevalier schedule is asserted; the co-recorded Louis Violland identifier remains independently unresolved."
     },
     {
       "holderId": "349583500",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-349583500"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk."
     },
     {
       "holderId": "408395309",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-408395309",
+        "mt-filing-408395309-1",
+        "mt-filing-408395309-5",
+        "mt-filing-408395309-9",
+        "mt-filing-408395309-6",
+        "mt-filing-408395309-3"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Opale-to-Olivier Leflaive Frères company-control link. The 2006 contribution prints retired AH150 (981 m²), reaching AH182/AH183 only through the official 2019 split. AH151 (1058 m²) is now recorded to Pousse d’Or. These are external historical contexts, not exact filings of today’s holders."
     },
     {
       "holderId": "420474645",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-420474645",
+        "mt-filing-420474645-10",
+        "mt-filing-420474645-8",
+        "mt-filing-420474645-5",
+        "mt-filing-420474645-2",
+        "mt-filing-420474645-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine Heitz-Lochardet company link and the five-filings / 147-page Montrachet screening. No exact AH16 schedule accepted; the reviewed 2021 land contribution concerns other communes."
     },
     {
       "holderId": "427468962",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "belgrand-latour-statutes",
+        "rne-427468962",
+        "rne-778159715"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed."
     },
     {
       "holderId": "427468988",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "marchal-latour-statutes",
+        "rne-427468988",
+        "rne-778159715"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed."
     },
     {
       "holderId": "480400407",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-480400407",
+        "bodacc-pousse-dor",
+        "mt-filing-480400407-22",
+        "mt-filing-480400407-19",
+        "mt-filing-480400407-14",
+        "mt-filing-480400407-1",
+        "mt-registry-480400407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine de la Pousse d’Or company link and the four-filings / 91-page Montrachet screening. Opale’s former AH150/151 ownership is retained separately and does not establish Pousse tenancy or present operation."
     },
     {
       "holderId": "483134516",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-483134516"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine de Montille company identity and the prior six-filings / 104-page search. The distinct SCI Montille et Partners and GFV Le Chevalier de Puligny identifiers are not merged into this company by name or shared management."
     },
     {
       "holderId": "515420255",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515420255",
+        "bodacc-bouchard-2026",
+        "rne-981574650",
+        "bouchard-legal",
+        "mt-filing-515420255-1",
+        "mt-filing-515420255-3",
+        "mt-filing-515420255-28",
+        "mt-filing-515420255-31",
+        "mt-filing-515420255-32",
+        "mt-registry-515420255"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Bouchard corporate-group link and the five-filings / 146-page Montrachet screening. No exact Chevalier parcel schedule accepted in this bounded corpus; the 2026 business contribution excludes vineyard property."
     },
     {
       "holderId": "751811472",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ch-registry-751811472",
+        "ch-filing-751811472-0",
+        "ch-filing-751811472-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
     },
     {
       "holderId": "752059824",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ch-registry-752059824",
+        "ch-filing-752059824-0",
+        "ch-filing-752059824-6",
+        "ch-filing-752059824-7",
+        "ch-filing-752059824-8",
+        "ch-filing-752059824-9",
+        "ch-filing-752059824-10",
+        "ch-filing-752059824-11",
+        "ch-filing-752059824-12",
+        "ch-filing-752059824-13"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
     },
     {
       "holderId": "778245316",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778245316",
+        "mt-filing-778245316-28",
+        "mt-filing-778245316-35",
+        "mt-filing-778245316-29",
+        "mt-filing-778245316-30"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine Leflaive company identity and the four-filings / 111-page Montrachet screening. No exact AH77/AH148 schedule accepted. The company is distinct from the Leflaive GFA and a corporate identity does not establish present operation."
     },
     {
       "holderId": "778252445",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-778252445",
+        "bm-auvenay-2024"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted."
     },
     {
       "holderId": "U21845345",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778233098",
+        "mt-filing-778233098-1",
+        "mt-prieur-legal",
+        "mt-filing-778233098-10",
+        "mt-filing-778233098-9",
+        "mt-filing-778233098-7"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The reused Jacques Prieur statutes print current AH8 (724 m²), matching the recorded holder and cadastral area; the registry and estate legal notice identify company 778233098. Printed AH3 (641 m²) remains unmatched: equal area does not identify AH123, whose documented predecessor is H123. Current farming remains unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "ch-opale-ah151-2006",
+      "title": "Opale: former AH151 ownership",
+      "parcelIds": [
+        "21512000AH0151"
+      ],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 23 June 2006 Opale contribution names AH151 with 1058 m², as two half interests in the same complete parcel. Today the recorded holder is Pousse d’Or, so this is external historical ownership context, not an exact filing of the current holder. No tenancy or current farming is inferred.",
+      "sourceIds": [
+        "mt-filing-408395309-6",
+        "dgfip-current"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AH151"
+      ],
+      "appNote": "Opale’s 2006 contribution names AH151 (1058 m²). The current recorded holder differs; historical company ownership only.",
+      "dateSourceId": "mt-filing-408395309-6",
+      "currentFarmer": null
+    },
+    {
+      "id": "ch-opale-ah150-2006",
+      "title": "Opale: retired AH150 and documented daughters",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 23 June 2006 Opale contribution names retired AH150 (981 m²). Official DFI document 210:512:000:0000463, validated 21 March 2019, divides it into AH182 (794 m²) and AH183 (187 m²). Both belong to this cru and retain the full event qualifications. The filing reaches them only through that documented path; no tenant or current farming is transferred.",
+      "sourceIds": [
+        "mt-filing-408395309-6",
+        "dgfip-history"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AH150"
+      ],
+      "predecessorReferences": {
+        "21512000AH0150": [
+          "21512000AH0182",
+          "21512000AH0183"
+        ]
+      },
+      "appNote": "Opale’s 2006 deed names retired AH150 (981 m²), linked to AH182/AH183 by official 2019 DFI. Historical ownership context, not an exact current-reference filing or current farming.",
+      "dateSourceId": "mt-filing-408395309-6",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "ch-prieur-ah8",
+      "sourceId": "mt-filing-778233098-1",
+      "title": "Domaine Jacques Prieur: selected filing 2021-06-21 (deposit 2021-08-06)",
+      "holderId": "U21845345",
+      "companySiren": "778233098",
+      "documentDate": "2021-06-21",
+      "parcelAreasM2": {
+        "21512000AH0008": 724
+      },
+      "leaseEvidence": [],
+      "finding": "The 2021 Prieur statutes print AH8 (724 m²), matching this current reference and recorded holder. Printed AH3 is unmatched and is not corrected to AH123. Company identity and historical property schedule only; current farming is unverified.",
+      "appNote": "The 2021 Prieur statutes print AH8 (724 m²), matching this current reference and recorded holder. Printed AH3 is unmatched and is not corrected to AH123. Company identity and historical property schedule only; current farming is unverified.",
+      "pages": [
+        9
+      ]
+    },
+    {
+      "id": "ch-427468962-schedule",
+      "sourceId": "belgrand-latour-statutes",
+      "title": "GFA Domaine Belgrand-Latour: statutes updated 17 May 2025",
+      "holderId": "427468962",
+      "companySiren": "427468962",
+      "documentDate": "1974-11",
+      "parcelAreasM2": {
+        "21512000AH0092": 2538
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail rural à long terme",
+          "tenants": [
+            "Société Civile Domaine Louis Latour (778159715)"
+          ],
+          "signedDates": [
+            "2001-12-06"
+          ],
+          "effectiveFrom": "2001-11-11",
+          "effectiveTo": "2026-11-10",
+          "pages": [
+            6
+          ],
+          "sourceId": "belgrand-latour-statutes",
+          "limitation": "Lease recital in updated statutes. Original instrument, later amendments and present performance not reviewed; no current farming claim."
+        }
+      ],
+      "finding": "Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed.",
+      "appNote": "Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed.",
+      "pages": [
+        4,
+        6
+      ]
+    },
+    {
+      "id": "ch-427468988-schedule",
+      "sourceId": "marchal-latour-statutes",
+      "title": "GFA Domaine Marchal-Latour: statutes updated 17 May 2025",
+      "holderId": "427468988",
+      "companySiren": "427468988",
+      "documentDate": "1975",
+      "parcelAreasM2": {
+        "21512000AH0093": 2537
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail rural à long terme",
+          "tenants": [
+            "Société Civile Domaine Louis Latour (778159715)"
+          ],
+          "signedDates": [
+            "2001-12-07"
+          ],
+          "effectiveFrom": "2001-11-11",
+          "effectiveTo": "2026-11-10",
+          "pages": [
+            5
+          ],
+          "sourceId": "marchal-latour-statutes",
+          "limitation": "Lease recital in updated statutes. Original instrument, later amendments and present performance not reviewed; no current farming claim."
+        }
+      ],
+      "finding": "Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed.",
+      "appNote": "Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed.",
+      "pages": [
+        3,
+        5
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "ch-holding-leflaive",
+      "producer": "Domaine Leflaive",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 1.8,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-holding-leflaive"
+      ],
+      "finding": "Published whole holding; no allocation among cadastral names inferred. Whole-cru census context, not an allocation between the two named areas or current farming evidence.",
+      "producerHolderIds": [
+        "778245316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-holding-latour",
+      "producer": "Domaine Louis Latour",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.51,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-holding-latour"
+      ],
+      "finding": "Published Les Demoiselles holding; the commercial name is not assigned to individual parcels or a separate cadastral outline. Whole-cru census context, not an allocation between the two named areas or current farming evidence.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-holding-vougeraie",
+      "producer": "Domaine de la Vougeraie",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.151,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-holding-vougeraie"
+      ],
+      "finding": "Published total of two estate plots, 0.056 and 0.095 ha; the estate plot numbers are not cadastral references. Whole-cru census context, not an allocation between the two named areas or current farming evidence.",
+      "producerHolderIds": [
+        "330713074"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-holding-montille",
+      "producer": "Domaine de Montille",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.23,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-holding-montille"
+      ],
+      "finding": "Published whole holding; distinct land-company holders are not inferred from this marketing page. Whole-cru census context, not an allocation between the two named areas or current farming evidence.",
+      "producerHolderIds": [
+        "483134516"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-holding-cabotte-pdf",
+      "producer": "Bouchard Père et Fils / La Cabotte",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.21,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-holding-cabotte-pdf"
+      ],
+      "finding": "Published La Cabotte cuvée holding only, not Bouchard’s total Chevalier holding. The illustrated map has no cadastral reference crosswalk. Whole-cru census context, not an allocation between the two named areas or current farming evidence.",
+      "producerHolderIds": [
+        "515420255"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
     "Cadastral named areas are reviewed. The cru name also identifies a smaller constituent, so white wines retain the whole-cru INAO outline. No producer holding is inferred.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "INPI and Pappers each returned HTTP 403 in the first batch attempt. The same shared access gap applies; public registry and actes.ccm2.net records were used.",
+    "New Chevalier company screening: 11 distinct filings / 152 pages, all OCR-screened at 150 dpi with RapidOCR and DirectML. Existing shared links, searches and effort were reused and remain unchanged; two cited Latour PDF hashes were reverified and relevant page images compared.",
+    "Louis Violland, the municipality, SCI Montille et Partners and GFV Le Chevalier de Puligny-Montrachet have explicit no-link searches. Similar names, individual managers and unnamed SCEA lease clauses do not establish a producer company relationship.",
+    "Three exact current-parcel matches are accepted: AH8, AH92 and AH93. Opale AH150/151 are external historical context. Printed Prieur AH3 remains unmatched to AH123 despite equal area.",
+    "The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.",
+    "Eight requested Chevalier Winehog subscriber copies remain unsupplied. Their public URLs and dates are listed in filings.md; acquired-copy SHA-256 is unavailable until supplied. No subscriber parcel matches accepted.",
+    "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it."
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "mt-filing-778233098-1",
+      "printedReference": "Puligny-Montrachet AH3 (641 m²)",
+      "parcelIds": [],
+      "limitation": "The printed number is AH3, visually verified on page 9. Current AH123 also measures 641 m², but its documented predecessor is H123, not AH3. Equal area is not a crosswalk; no current match or corrected number is asserted.",
+      "currentFarmer": null
+    }
   ]
 }

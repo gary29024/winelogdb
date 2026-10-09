@@ -12619,6 +12619,319 @@
       "reviewedAt": "2026-10-09",
       "access": "read",
       "finding": "The official legal notice identifies SCEA Domaine Jacques Prieur, SIREN 778233098."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d7a547bf-bc64-4b37-83ac-e589c1a9645c",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d7a547bf-bc64-4b37-83ac-e589c1a9645c",
+      "retrievedAt": "2026-10-09T14:23:36.456256+00:00",
+      "sha256": "0c4ef9ec83d5793169b7a6d0163f1451feb120c5e64e11bc9d701395c5003a8c",
+      "bytes": 590380,
+      "id": "ch-filing-751811472-0",
+      "title": "751811472: selected company filing 2013-07-19 (deposit 2013-07-29)",
+      "type": "company-filing",
+      "documentDate": "2013-07-19",
+      "filingDate": "2013-07-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 26,
+      "screenedPages": 26,
+      "reviewedPages": [
+        1,
+        3,
+        6,
+        8,
+        11,
+        25,
+        26
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/4ded603f-d068-422b-abf1-a9b1d4612ba5",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4ded603f-d068-422b-abf1-a9b1d4612ba5",
+      "retrievedAt": "2026-10-09T14:23:40.407086+00:00",
+      "sha256": "a581f758a668975e58a5f88089f0e0096c3bf3b3b32f19f272ad6adae36c5d54",
+      "bytes": 157615,
+      "id": "ch-filing-751811472-1",
+      "title": "751811472: selected company filing 2012-05-23 (deposit 2012-05-30)",
+      "type": "company-filing",
+      "documentDate": "2012-05-23",
+      "filingDate": "2012-05-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        2,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d1611e53-0fa3-4d22-9e53-42b45762a64b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d1611e53-0fa3-4d22-9e53-42b45762a64b",
+      "retrievedAt": "2026-10-09T14:23:44.034999+00:00",
+      "sha256": "41cddd4dcd5a139fe34c0690108d267fda6def833e9d306f72428a93e48c1e8d",
+      "bytes": 1037860,
+      "id": "ch-filing-752059824-0",
+      "title": "752059824: selected company filing 2021-12-01 (deposit 2022-05-04)",
+      "type": "company-filing",
+      "documentDate": "2021-12-01",
+      "filingDate": "2022-05-04",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 22,
+      "screenedPages": 22,
+      "reviewedPages": [
+        7,
+        8,
+        14,
+        15,
+        22
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d25626f8-f1f9-48cd-8982-b278b7e5d0e4",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d25626f8-f1f9-48cd-8982-b278b7e5d0e4",
+      "retrievedAt": "2026-10-09T14:23:58.898774+00:00",
+      "sha256": "379039d419d43fedea1d8dbc435da49600421246225fc941ff622f8d269bf06e",
+      "bytes": 157943,
+      "id": "ch-filing-752059824-6",
+      "title": "752059824: selected company filing 2012-06-27 (deposit 2012-08-03)",
+      "type": "company-filing",
+      "documentDate": "2012-06-27",
+      "filingDate": "2012-08-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2,
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/0a1bf824-b78b-458f-bf1f-bc40912c0d4b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0a1bf824-b78b-458f-bf1f-bc40912c0d4b",
+      "retrievedAt": "2026-10-09T14:24:01.936123+00:00",
+      "sha256": "ac6289821d6d272e98fa992c21abc8f0ce8f098d06f2697a57b5e7f0998617c5",
+      "bytes": 87836,
+      "id": "ch-filing-752059824-7",
+      "title": "752059824: selected company filing 2012-06-27 (deposit 2012-08-03)",
+      "type": "company-filing",
+      "documentDate": "2012-06-27",
+      "filingDate": "2012-08-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 8,
+      "screenedPages": 8,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/c2a70712-4502-403e-b2a5-ea27b1e7aeba",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c2a70712-4502-403e-b2a5-ea27b1e7aeba",
+      "retrievedAt": "2026-10-09T14:24:03.878676+00:00",
+      "sha256": "e33a5a79c04cd4116caa6e5dc319157960782e583f67605081dfa46e54f45264",
+      "bytes": 34527,
+      "id": "ch-filing-752059824-8",
+      "title": "752059824: selected company filing 2012-06-11 (deposit 2012-08-03)",
+      "type": "company-filing",
+      "documentDate": "2012-06-11",
+      "filingDate": "2012-08-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 4,
+      "screenedPages": 4,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/574a2fa8-d10a-45ce-b175-7a0e340d2fa8",
+      "retrievedFrom": "https://actes.ccm2.net/acte/574a2fa8-d10a-45ce-b175-7a0e340d2fa8",
+      "retrievedAt": "2026-10-09T14:24:10.607366+00:00",
+      "sha256": "38da52b0a68ab4623c20fce3b70e6af43bb19d36f75eb5925aa6df355c77f025",
+      "bytes": 6721,
+      "id": "ch-filing-752059824-9",
+      "title": "752059824: selected company filing 2012 (undated statement) (deposit 2012-08-03)",
+      "type": "company-filing",
+      "documentDate": "2012",
+      "filingDate": "2012-08-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 1,
+      "screenedPages": 1,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted.",
+      "dateNote": "Undated prior-seat statement: contents run through 26 June 2012 and the deposit is 3 August 2012. Only the bounded document year is assigned; no signing day or land-transfer date is inferred."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/2556e12a-b4d7-4751-9b7f-b7d4d6f33175",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2556e12a-b4d7-4751-9b7f-b7d4d6f33175",
+      "retrievedAt": "2026-10-09T14:24:12.159289+00:00",
+      "sha256": "95a6630938bc4dff71199d1ac972b7736eb5fcf138ac3b4adcc43c2eb01ea039",
+      "bytes": 1329808,
+      "id": "ch-filing-752059824-10",
+      "title": "752059824: selected company filing 2012-06-08 (deposit 2012-07-16)",
+      "type": "company-filing",
+      "documentDate": "2012-06-08",
+      "filingDate": "2012-07-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        10,
+        11,
+        20,
+        21
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/30e1cb3f-a4ea-488b-88bc-9a4961f9e8ef",
+      "retrievedFrom": "https://actes.ccm2.net/acte/30e1cb3f-a4ea-488b-88bc-9a4961f9e8ef",
+      "retrievedAt": "2026-10-09T14:24:15.634268+00:00",
+      "sha256": "c44c0e14be1ce8d8a817f538af295ead0e4d77191b2b11eed98cb696e5e2b167",
+      "bytes": 267770,
+      "id": "ch-filing-752059824-11",
+      "title": "752059824: selected company filing 2012-06-08 (deposit 2012-07-16)",
+      "type": "company-filing",
+      "documentDate": "2012-06-08",
+      "filingDate": "2012-07-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 6,
+      "screenedPages": 6,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/9413730b-a998-4fc5-9872-1d5d793c5f9d",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9413730b-a998-4fc5-9872-1d5d793c5f9d",
+      "retrievedAt": "2026-10-09T14:24:20.131611+00:00",
+      "sha256": "1506621551c5ce491206025989dbe456c0413f5f14088defd439e5fd2de74d04",
+      "bytes": 296673,
+      "id": "ch-filing-752059824-12",
+      "title": "752059824: selected company filing 2012-06-08 (deposit 2012-07-16)",
+      "type": "company-filing",
+      "documentDate": "2012-06-08",
+      "filingDate": "2012-07-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 6,
+      "screenedPages": 6,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/ebbd50d4-692d-4ea4-868d-016179ec10fb",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ebbd50d4-692d-4ea4-868d-016179ec10fb",
+      "retrievedAt": "2026-10-09T14:24:22.862304+00:00",
+      "sha256": "10f986332a4cf3618fda129de222dc86da44df37fd0c3a8e30f37786fabd91e8",
+      "bytes": 186608,
+      "id": "ch-filing-752059824-13",
+      "title": "752059824: selected company filing 2011-05-14 (deposit 2012-06-08)",
+      "type": "company-filing",
+      "documentDate": "2011-05-14",
+      "filingDate": "2012-06-08",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        2,
+        10,
+        11,
+        20,
+        21
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with RapidOCR and DirectML at 150 dpi; relevant clauses read from OCR and key dates checked against images.",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted.",
+      "dateNote": "The cover and signature page print 14 May 2011, but a clause mentions the 23 February 2012 BPCE promise and the deposit is 8 June 2012. The printed date is preserved; chronology remains unresolved and is not used as a land-transfer date."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=751811472&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=751811472&per_page=10",
+      "retrievedAt": "2026-10-09T14:22:41.948244+00:00",
+      "sha256": "d839c3d5bb3099b55494881ecae8a286958c6073ac4ec49e8b1ac657a21ba6f5",
+      "bytes": 3292,
+      "id": "ch-registry-751811472",
+      "title": "Official company registry: 751811472",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=752059824&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=752059824&per_page=10",
+      "retrievedAt": "2026-10-09T14:22:47.551009+00:00",
+      "sha256": "10868fd2bb592ac84a222b26a3a7e23daf47619a17ab8891fc9b19f0ea620967",
+      "bytes": 6083,
+      "id": "ch-registry-752059824",
+      "title": "Official company registry: 752059824",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=212105126&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=212105126&per_page=10",
+      "retrievedAt": "2026-10-09T14:22:50.259445+00:00",
+      "sha256": "778993b9427afe39bfc83a74c07239745533364a04f578cca1f0e9863c1963c9",
+      "bytes": 4235,
+      "id": "ch-registry-212105126",
+      "title": "Official company registry: 212105126",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established."
     }
   ],
   "holders": {
@@ -12895,6 +13208,23 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "212105126": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=212105126&per_page=10"
+          ],
+          "outcome": "no-link-found",
+          "note": "The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Distinct new PDF hashes in the Chevalier pass; all image pages OCR-screened. Registry-only municipality has no filing count."
+      }
+    },
     "222100018": {
       "links": [],
       "searches": [
@@ -13116,6 +13446,14 @@
             "actes.ccm2.net (5 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine des Héritiers Louis Jadot company identity and the prior five-filings / 86-page search. No new exact Chevalier schedule is asserted, and the bottling house is not substituted for this holder company."
         }
       ],
       "effort": {
@@ -13941,6 +14279,14 @@
             "actes.ccm2.net (3 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Vougeraie brand/company identity from its legal notice and the prior three-filings / 26-page search. No new exact Chevalier schedule is asserted; the co-recorded Louis Violland identifier remains independently unresolved."
         }
       ],
       "effort": {
@@ -14172,6 +14518,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Officers include SCA Domaine de la Vougeraie and SFG de la Vougeraie with the role “Autre”; the relation is not stated."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "no-link-found",
+          "note": "Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk."
         }
       ],
       "effort": {
@@ -15027,6 +15381,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 5 distinct filings / 89 pages. Formation, contribution, rename and share filings connect Opale to Olivier Leflaive Frères (332160092), holding 139077 of 139079 shares in the 2019 decision. The 2006 schedule names AH150/151 and AI137/138, not current Montrachet AH182. AH151 is now recorded to Pousse d’Or; historical ownership is kept separately."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Opale-to-Olivier Leflaive Frères company-control link. The 2006 contribution prints retired AH150 (981 m²), reaching AH182/AH183 only through the official 2019 split. AH151 (1058 m²) is now recorded to Pousse d’Or. These are external historical contexts, not exact filings of today’s holders."
         }
       ],
       "effort": {
@@ -15349,6 +15711,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 5 distinct filings / 147 pages. The official registry and five company filings identify Domaine Heitz-Lochardet. The 2021 property contribution concerns other communes; the 2024 contribution transfers company shares to Faciens Vinum. No qualifying current AH16 schedule found."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine Heitz-Lochardet company link and the five-filings / 147-page Montrachet screening. No exact AH16 schedule accepted; the reviewed 2021 land contribution concerns other communes."
         }
       ],
       "effort": {
@@ -15558,6 +15928,14 @@
             "actes.ccm2.net (4 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed."
         }
       ],
       "effort": {
@@ -15598,6 +15976,14 @@
             "actes.ccm2.net (4 filings OCR-screened)"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed."
         }
       ],
       "effort": {
@@ -16012,6 +16398,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 4 distinct filings / 91 pages. Four selected filings concern formation, transformation, property contribution and merger; no qualifying AH151 schedule found. Existing reviewed Pousse d’Or link is reused unchanged. Opale’s 2006 AH151 ownership recital remains external historical context."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine de la Pousse d’Or company link and the four-filings / 91-page Montrachet screening. Opale’s former AH150/151 ownership is retained separately and does not establish Pousse tenancy or present operation."
         }
       ],
       "effort": {
@@ -16144,6 +16538,14 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine de Montille company identity and the prior six-filings / 104-page search. The distinct SCI Montille et Partners and GFV Le Chevalier de Puligny identifiers are not merged into this company by name or shared management."
         }
       ],
       "effort": {
@@ -16482,6 +16884,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 5 distinct filings / 146 pages. Five selected filings cover transformation, merger and 2026 reorganisation; no current Montrachet reference with individual area found. Existing reviewed Bouchard group link is reused without alteration; the 2026 contribution excludes vineyard property from the transferred business."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Bouchard corporate-group link and the five-filings / 146-page Montrachet screening. No exact Chevalier parcel schedule accepted in this bounded corpus; the 2026 business contribution excludes vineyard property."
         }
       ],
       "effort": {
@@ -17039,6 +17449,44 @@
         "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
       }
     },
+    "751811472": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=751811472&per_page=10",
+            "Le Figaro public filing index",
+            "actes.ccm2.net; complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 47,
+        "note": "Distinct new PDF hashes in the Chevalier pass; all image pages OCR-screened. Registry-only municipality has no filing count."
+      }
+    },
+    "752059824": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=752059824&per_page=10",
+            "Le Figaro public filing index",
+            "actes.ccm2.net; complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 9,
+        "pagesRead": 105,
+        "note": "Distinct new PDF hashes in the Chevalier pass; all image pages OCR-screened. Registry-only municipality has no filing count."
+      }
+    },
     "775567928": {
       "links": [
         {
@@ -17313,6 +17761,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 4 distinct filings / 111 pages. Four selected filings distinguish Domaine Leflaive from the GFA: AE134 (821 m²) was withdrawn in 2009 and contributed to the GFA, its current recorded holder. No qualifying current AH77 schedule found. The July resolution mandates a future lease; it is not itself an executed lease."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine Leflaive company identity and the four-filings / 111-page Montrachet screening. No exact AH77/AH148 schedule accepted. The company is distinct from the Leflaive GFA and a corporate identity does not establish present operation."
         }
       ],
       "effort": {
@@ -17345,6 +17801,14 @@
           ],
           "outcome": "linked",
           "note": "The statutes and register explicitly identify the Domaine d Auvenay wine company. No exact AB90/91 schedule was located."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior cited filing corpus; Chevalier application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted."
         }
       ],
       "effort": {
@@ -19476,6 +19940,48 @@
           "outcome": "no-link-found"
         }
       ]
+    },
+    "U21845345": {
+      "links": [
+        {
+          "id": "U21845345/domaine-jacques-prieur",
+          "domaine": "Domaine Jacques Prieur",
+          "relation": "owner-company",
+          "basis": "The reused Jacques Prieur statutes print current AH8 (724 m²), matching the recorded holder and cadastral area; the registry and estate legal notice identify company 778233098. Printed AH3 (641 m²) remains unmatched: equal area does not identify AH123, whose documented predecessor is H123. Current farming remains unverified.",
+          "sourceIds": [
+            "mt-registry-778233098",
+            "mt-filing-778233098-1",
+            "mt-prieur-legal"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "identity": {
+        "companySiren": "778233098",
+        "sourceIds": [
+          "mt-registry-778233098",
+          "mt-filing-778233098-1",
+          "mt-prieur-legal"
+        ],
+        "limitation": "AH8 and its individual 724 m² area support the company crosswalk; AH3 is not silently corrected to AH123. The original DGFiP U identifier is preserved."
+      },
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Montrachet #446 shared Jacques Prieur filing corpus: 4 distinct filings / 97 OCR-screened pages",
+            "Official company registry and estate legal notice"
+          ],
+          "outcome": "linked",
+          "note": "The reused Jacques Prieur statutes print current AH8 (724 m²), matching the recorded holder and cadastral area; the registry and estate legal notice identify company 778233098. Printed AH3 (641 m²) remains unmatched: equal area does not identify AH123, whose documented predecessor is H123. Current farming remains unverified."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 97,
+        "note": "Reused once from the Montrachet company pass; no new download or OCR counted for the second recorded U identifier."
+      }
     },
     "U21845728": {
       "searches": [
