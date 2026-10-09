@@ -290,15 +290,15 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 
 | Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
 | --- | ---: | ---: | ---: | ---: |
-| Clos de la Roche | 19 (4.54 ha) | 3 (0.56 ha) | 1 (0.18 ha) | 2.69 ha |
+| Clos de la Roche | 19 (4.54 ha) | 3 (0.56 ha) | 1 (0.18 ha) | 3.27 ha |
 | LE VILLAGE (neighbouring lieu-dit; edge parcels) | 1 (0.00 ha) | 1 (0.00 ha) | 1 (0.00 ha) | 0.00 ha |
-| Les Chabiots | 13 (2.12 ha) | 9 (1.23 ha) | 9 (1.23 ha) | 0.00 ha |
+| Les Chabiots | 13 (2.12 ha) | 9 (1.23 ha) | 9 (1.23 ha) | 0.59 ha |
 | LES CHAFFOTS (cadastral; unreviewed) | 3 (0.08 ha) | 0 (0.00 ha) | 0 (0.00 ha) | 0.00 ha |
-| Les Fremières | 11 (2.27 ha) | 6 (0.73 ha) | 6 (0.73 ha) | 1.38 ha |
-| Les Froichots | 4 (0.64 ha) | 1 (0.06 ha) | 1 (0.06 ha) | 0.00 ha |
+| Les Fremières | 11 (2.27 ha) | 6 (0.73 ha) | 6 (0.73 ha) | 1.50 ha |
+| Les Froichots | 4 (0.64 ha) | 1 (0.06 ha) | 1 (0.06 ha) | 0.15 ha |
 | Les Genavrières | 8 (0.87 ha) | 0 (0.00 ha) | 0 (0.00 ha) | 0.00 ha |
 | Les Mochamps | 11 (2.55 ha) | 5 (1.42 ha) | 5 (1.42 ha) | 0.20 ha |
-| Monts Luisants | 42 (3.75 ha) | 14 (1.05 ha) | 14 (1.05 ha) | 2.18 ha |
+| Monts Luisants | 42 (3.75 ha) | 14 (1.05 ha) | 14 (1.05 ha) | 2.68 ha |
 
 **Published holdings by named area**
 
@@ -306,15 +306,22 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
   - Domaine Ponsot: 2.1244 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 2.12 ha beyond company records. Sum of six printed article areas. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Ponsot Clos de la Roche](https://winehog.org/terroir-insight-domaine-ponsot-clos-de-la-roche-53559/).
   - Domaine Armand Rousseau: 0.3845 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.38 ha beyond company records. Sum of two printed article areas. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Armand Rousseau Clos de la Roche (update)](https://winehog.org/terroir-insight-domaine-armand-rousseau-clos-de-la-roche-35067/).
   - Domaine Leroy: 0.1774 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.18 ha beyond company records. Printed article area. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Leroy Clos de la Roche](https://winehog.org/terroir-insight-domaine-leroy-clos-de-la-roche-33046/).
+  - Domaine Dujac: 0.5838 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.58 ha beyond company records. Sum of three individually printed areas. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
+- **Les Chabiots**
+  - Domaine Dujac: 0.5944 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.59 ha beyond company records. Sum of two individually printed areas. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
 - **Les Fremières**
   - Domaine Armand Rousseau: 1.0997 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 1.10 ha beyond company records. Printed article area. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Armand Rousseau Clos de la Roche (update)](https://winehog.org/terroir-insight-domaine-armand-rousseau-clos-de-la-roche-35067/).
   - Domaine Hubert Lignier: 0.28 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.28 ha beyond company records. The article explicitly says precise plots remain under investigation; its map gives only an approximate location. Dated named-area census only; no parcel allocation, company identity or present farming claim. [Winehog: Terroir View: Hubert Lignier Clos de la Roche – a new cuvée](https://winehog.org/clos-de-la-roche-hubert-lignier-37395/).
+  - Domaine Dujac: 0.1251 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.13 ha beyond company records. Printed individual article area. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
+- **Les Froichots**
+  - Domaine Dujac: 0.1455 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.15 ha beyond company records. Printed individual article area. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
 - **Les Mochamps**
   - Domaine Leroy: 0.2011 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.20 ha beyond company records. Printed article area. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Leroy Clos de la Roche](https://winehog.org/terroir-insight-domaine-leroy-clos-de-la-roche-33046/).
 - **Monts Luisants**
   - Domaine Ponsot: 1.2756 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 1.28 ha beyond company records. Sum of four printed article areas including only a 3960 m2 part of AB461. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Ponsot Clos de la Roche](https://winehog.org/terroir-insight-domaine-ponsot-clos-de-la-roche-53559/).
   - Domaine Leroy: 0.2865 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.29 ha beyond company records. Printed article area. Named-area census only, with no parcel allocation or current ownership/farming claim. [Winehog: Terroir Insight: Domaine Leroy Clos de la Roche](https://winehog.org/terroir-insight-domaine-leroy-clos-de-la-roche-33046/).
   - Domaine Hubert Lignier: 0.62 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.62 ha beyond company records. The reported 0.20 ha MCMLV cuvee is a subset of this 0.62 ha, not an additional holding. The 2019 account describes interrupted access in 2006-2013 and a 2014 return; no current scope is verified. Dated named-area census only; no parcel allocation, company identity or present farming claim. [Winehog: Terroir View: Hubert Lignier Clos de la Roche – a new cuvée](https://winehog.org/clos-de-la-roche-hubert-lignier-37395/).
+  - Domaine Dujac: 0.4984 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.50 ha beyond company records. Sum of two individually printed areas. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
 
 ## Every mapped parcel
 
@@ -337,7 +344,7 @@ All references are in commune 21442 (Morey-Saint-Denis). Full IDs and evidence l
 | AB 0181 | Monts Luisants | 449.17 | [819859885](#holder-819859885) | Unresolved | Unconfirmed |
 | AB 0182 | Monts Luisants | 421.83 | [819859885](#holder-819859885) | Unresolved | Unconfirmed |
 | AB 0184 | Monts Luisants | 149.08 | [411381908](#holder-411381908) | Domaine Ponsot (identity-only); Domaine Ponsot (critic-named-cadastral-reference) | Unconfirmed |
-| AB 0185 | Monts Luisants | 283.44 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0185 | Monts Luisants | 283.44 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0186 | Monts Luisants | 15.14 | [411381908](#holder-411381908) | Domaine Ponsot (identity-only) | Unconfirmed |
 | AB 0187 | Monts Luisants | 142.88 | None | Unresolved | Unconfirmed |
 | AB 0188 | Monts Luisants | 118.73 | [819859885](#holder-819859885) | Unresolved | Unconfirmed |
@@ -345,13 +352,13 @@ All references are in commune 21442 (Morey-Saint-Denis). Full IDs and evidence l
 | AB 0190 | Monts Luisants | 7.45 | None | Unresolved | Unconfirmed |
 | AB 0192 | Monts Luisants | 659.98 | [819859885](#holder-819859885) | Unresolved | Unconfirmed |
 | AB 0193 | Monts Luisants | 832.53 | [U21934169](#holder-u21934169) | Unresolved | Unconfirmed |
-| AB 0194 | Monts Luisants | 4721.67 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0194 | Monts Luisants | 4721.67 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0195 | Monts Luisants | 2854.35 | [515520385](#holder-515520385) | Maison Leroy (company-identity); Domaine Leroy (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0196 | Monts Luisants | 212.94 | [212104426](#holder-212104426) | Unresolved | Unconfirmed |
 | AB 0198 | Monts Luisants | 248.26 | [417882644](#holder-417882644) | Domaine Michel Magnien (company-identity) | Unconfirmed |
 | AB 0199 | Monts Luisants | 645.04 | None | Unresolved | Unconfirmed |
 | AB 0200 | Clos de la Roche | 8264.52 | [411381908](#holder-411381908) | Domaine Ponsot (identity-only); Domaine Ponsot (critic-named-cadastral-reference) | Unconfirmed |
-| AB 0201 | Clos de la Roche | 2327.64 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0201 | Clos de la Roche | 2327.64 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0206 | Clos de la Roche | 596.95 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
 | AB 0207 | Clos de la Roche | 1726.36 | [411381908](#holder-411381908) | Domaine Ponsot (identity-only); Domaine Ponsot (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0210 | Les Mochamps | 51.31 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
@@ -359,11 +366,11 @@ All references are in commune 21442 (Morey-Saint-Denis). Full IDs and evidence l
 | AB 0214 | Les Mochamps | 4129.81 | None | Unresolved | Unconfirmed |
 | AB 0215 | Les Mochamps | 2296.67 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
 | AB 0216 | Les Mochamps | 4603.50 | None | Unresolved | Unconfirmed |
-| AB 0218 | Les Froichots | 1456.47 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0218 | Les Froichots | 1456.47 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0219 | Les Froichots | 556.32 | None | Unresolved | Unconfirmed |
 | AB 0220 | Les Fremières | 1192.56 | None | Unresolved | Unconfirmed |
 | AB 0221 | Les Fremières | 1169.18 | None | Unresolved | Unconfirmed |
-| AB 0222 | Les Fremières | 1252.67 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0222 | Les Fremières | 1252.67 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0224 | Les Fremières | 1141.86 | None | Unresolved | Unconfirmed |
 | AB 0227 | Les Fremières | 459.80 | [U21367129](#holder-u21367129) | Unresolved | Unconfirmed |
 | AB 0228 | Les Fremières | 1837.03 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
@@ -393,7 +400,7 @@ All references are in commune 21442 (Morey-Saint-Denis). Full IDs and evidence l
 | AB 0420 | Les Genavrières | 9.83 | [427469572](#holder-427469572) | Unresolved | Unconfirmed |
 | AB 0421 | Monts Luisants | 66.83 | [427469572](#holder-427469572) | Unresolved | Unconfirmed |
 | AB 0440 | Les Chabiots | 1689.62 | None | Unresolved | Unconfirmed |
-| AB 0441 | Les Chabiots | 1661.60 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0441 | Les Chabiots | 1661.60 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0442 | Les Froichots | 2204.35 | [U13482493](#holder-u13482493) | Unresolved | Unconfirmed |
 | AB 0443 | Les Froichots | 2215.00 | [U13482493](#holder-u13482493) | Unresolved | Unconfirmed |
 | AB 0444 | Clos de la Roche | 3825.78 | [531940583](#holder-531940583) | SCEV Raphet Gérard (identity-only) | Unconfirmed |
@@ -410,12 +417,12 @@ All references are in commune 21442 (Morey-Saint-Denis). Full IDs and evidence l
 | AB 0466 | Clos de la Roche | 8361.23 | [411381908](#holder-411381908) | Domaine Ponsot (identity-only); Domaine Ponsot (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0467 | Les Fremières | 1808.79 | None | Unresolved | Unconfirmed |
 | AB 0468 | Les Chabiots | 675.59 | [U14137560](#holder-u14137560) | Domaine Marchand Freres (identity-only) | Unconfirmed |
-| AB 0469 | Les Chabiots | 4228.46 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0469 | Les Chabiots | 4228.46 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0474 | LES CHAFFOTS (cadastral; unreviewed) | 1.02 | [383521408](#holder-383521408), [417882644](#holder-417882644) | Domaine Michel Magnien (company-identity) | Unconfirmed |
 | AB 0503 | Clos de la Roche | 378.42 | [212104426](#holder-212104426) | Unresolved | Unconfirmed |
-| AB 0504 | Clos de la Roche | 23.87 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0504 | Clos de la Roche | 23.87 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0505 | Clos de la Roche | 3201.76 | [U21979030](#holder-u21979030) | Unresolved | Unconfirmed |
-| AB 0506 | Clos de la Roche | 3369.55 | [322396185](#holder-322396185) | Domaine Dujac (identity-only) | Unconfirmed |
+| AB 0506 | Clos de la Roche | 3369.55 | [322396185](#holder-322396185) | Domaine Dujac (identity-only); Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0507 | Clos de la Roche | 88.81 | [212104426](#holder-212104426) | Unresolved | Unconfirmed |
 | AB 0510 | Les Fremières | 792.09 | None | Unresolved | Unconfirmed |
 | AB 0511 | Les Fremières | 1185.19 | None | Unresolved | Unconfirmed |
@@ -464,6 +471,7 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Winehog: Domaine Ponsot dated parcel references** (AB 0207, AB 0466, AB 0311, AB 0446, AB 0445, AB 0200, AB 0463, AB 0178, AB 0184; critic-named-cadastral-reference). Dated critic attribution with individually matching current references and areas; not legal ownership or current operation. AB461 is only a reported 3960 m2 portion and fails the full-parcel area match; AB178 attribution does not establish a lease from SCI des Monts Luisants. Sources: [Winehog: Terroir Insight: Domaine Ponsot Clos de la Roche](https://winehog.org/terroir-insight-domaine-ponsot-clos-de-la-roche-53559/).
 - **Winehog: Domaine Armand Rousseau dated parcel references** (AB 0550, AB 0551, AB 0229; critic-named-cadastral-reference). Dated critic attribution with individually matching current references and areas; not legal ownership or current operation. AB550 and AB551 have no matching published legal-entity rights; critic research does not fill those rights. Sources: [Winehog: Terroir Insight: Domaine Armand Rousseau Clos de la Roche (update)](https://winehog.org/terroir-insight-domaine-armand-rousseau-clos-de-la-roche-35067/).
 - **Winehog: Domaine Leroy dated parcel references** (AB 0316, AB 0315, AB 0195; critic-named-cadastral-reference). Dated critic attribution with individually matching current references and areas; not legal ownership or current operation. Domaine Leroy attribution stays separate from the recorded Maison Leroy legal-company link. Sources: [Winehog: Terroir Insight: Domaine Leroy Clos de la Roche](https://winehog.org/terroir-insight-domaine-leroy-clos-de-la-roche-33046/).
+- **Winehog: Domaine Dujac dated parcel references** (AB 0201, AB 0504, AB 0506, AB 0218, AB 0222, AB 0185, AB 0194, AB 0441, AB 0469; critic-named-cadastral-reference). Winehog (2018) prints nine matching current references and individual areas, totaling 1.9472 ha (rounded 1.95 ha in the article). Dated critic attribution supplements the existing Dujac company lead without establishing current rights, a renewed lease or present farming. Sources: [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/).
 
 ## Rights history and parcel lineage
 
@@ -709,6 +717,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **cr-winehog-leroy** — [Winehog: Terroir Insight: Domaine Leroy Clos de la Roche](https://winehog.org/terroir-insight-domaine-leroy-clos-de-la-roche-33046/). critic-research; read; document date 2017-09-11. Dated critic attribution with individually matching current references and areas; not legal ownership or current operation. Domaine Leroy attribution stays separate from the recorded Maison Leroy legal-company link.
 - **cr-winehog-overview** — [Winehog: Clos de la Roche – the core of Morey-Saint-Denis](https://winehog.org/clos-de-la-roche-the-core-of-morey-saint-denis-24264/). critic-research; read; document date 2015-08-16. Appellation history and aggregate climat areas, not producer parcel evidence. The reproduced decree is dated 3 July 1944 (publication 26 July), while the prose says before 4 July. Old section-A reference ranges lack individual areas or documented links to the selected current parcels. The suggested 1936 expansion and 1971 arithmetic are not independently resolved.
 - **cr-winehog-hubert-lignier** — [Winehog: Terroir View: Hubert Lignier Clos de la Roche – a new cuvée](https://winehog.org/clos-de-la-roche-hubert-lignier-37395/). critic-research; read; document date 2019-10-31. The 2019 article reports 0.62 ha Monts Luisants and 0.28 ha Les Fremieres, and a 0.20 ha MCMLV subset of Monts Luisants (first vintage 2017). Locations are expressly approximate; no individual cadastral reference-and-area pairs. The 2006-2013 access interruption and 2014 return remain historical critic narrative without a current operator or company crosswalk.
+- **cr-winehog-dujac** — [Winehog: Terroir Insight: Domaine Dujac Clos de la Roche](https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/). critic-research; read; document date 2018-03-10. Nine printed current AB references and their individual areas match exactly. Their areas sum to 1.9472 ha across five named areas, consistent with the article rounded total 1.95 ha. Acquisitions described for 1967, 1970 and 1977 remain historical critic claims; no new company identity, lease or current operation is established.
 - **bodacc-pousse-dor** — [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution). registry; read; document date 2022-09-08. SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.
 - **rne-322396185** — [Company register: GFA DU DOMAINE DUJAC (322396185)](https://annuaire-entreprises.data.gouv.fr/entreprise/322396185). registry; read; document date not established. GFA DU DOMAINE DUJAC, land-holding GFA (activity 68.20B, letting of land), 7 rue de la Bussière, Morey-Saint-Denis, created 1967. The registered name names the domaine; a GFA owns land and need not farm it.
 - **rne-427469135** — [Company register: SCI DOMAINE LEROY (427469135)](https://annuaire-entreprises.data.gouv.fr/entreprise/427469135). registry; read; document date not established. SCI DOMAINE LEROY: registered office 15 Rue De La Fontaine 21700 Vosne-Romanee; activity 68.20A; created 1990-01-01; active. Company officers or partners: SA LEROY (515520385). Legal identity only; not farming evidence.
@@ -808,8 +817,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - Historical leases are not current operators. Malauro names Laurent Lignier individually; Peirazeau divides portions between individuals; Boutieres changes from old Michel recitals to Frederic in a 2018 lease recited in 2022. No producer company is inferred from names, relatives or officers.
 - The 2006 Feuillet deed attaches a 23 June 2004 CVI naming Truchot Martin Jacky on AB230/505 and expressly ends the Truchot lease on 11 January 2006. Retained as historical research with explicit user approval after the #364 pause; no verified farming or successor tenant is published.
 - The reused 1998 Magnien contribution transfers plantations/business assets and excludes land. Saint Loup contributes only a half indivisible interest in AB460; its recited lease ends in September 2019. Ponsot 2018 tax language inconsistently names the GFA as tenant; the explicit 2007 recital is retained with that conflict.
-- Five supplied Winehog articles are reviewed. The original three yield 15 individual exact-number-and-area references; Hubert Lignier adds two named-area census rows (nine total), without parcel allocation. The overview adds historical context only. Ponsot AB461 remains a partial area and unmatched; Domaine Leroy and Maison Leroy remain distinct.
-- Unsupplied paywalled Winehog: Dujac Clos de la Roche (2018-03-10, https://winehog.org/terroir-insight-domaine-dujac-clos-de-la-roche-34891/). The overview and Hubert Lignier WebArchives are now supplied and reviewed. Public content accessed directly; no login or paywall bypass.
+- Six supplied Winehog articles are reviewed. Four producer articles yield 24 individual exact-number-and-area references; the 14 named-area census rows include five from Dujac and two from Hubert Lignier. Ponsot AB461 remains a partial area and unmatched; Domaine Leroy and Maison Leroy remain distinct.
+- The Dujac Clos de la Roche WebArchive is now supplied and fully reviewed. No requested Clos de la Roche Winehog article remains an access gap. Public content was accessed directly; missing original instruments and uncertain historical scope remain evidence gaps.
 - Original lease instruments, renewal evidence, unresolved company crosswalks, paid SPF copies and present-season confirmation remain gaps. Unmatched old references do not reach current parcels without documented ancestry or an accepted successor.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D3T9PGvU.js"
+    "dist/client/assets/index-D7-BmUXn.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DcAFTtjJ.js",
-    "dist/client/assets/SectionLabel-BpmGrPFv.js",
-    "dist/client/assets/SparklingDetailsCard-tx_ji3By.js",
-    "dist/client/assets/VillageMap-CKJ0ZYSy.js",
-    "dist/client/assets/burgundyAtlas-BrcqaRcB.js",
-    "dist/client/assets/index-D3T9PGvU.js",
-    "dist/client/assets/index-Dqjeqy9n.js",
+    "dist/client/assets/FriendTagDialog-8usvLULn.js",
+    "dist/client/assets/SectionLabel-CbBQo0sq.js",
+    "dist/client/assets/SparklingDetailsCard-DYW7-76i.js",
+    "dist/client/assets/VillageMap-CV5Frk2d.js",
+    "dist/client/assets/burgundyAtlas-BgT4aIIY.js",
+    "dist/client/assets/index-D7-BmUXn.js",
+    "dist/client/assets/index-QfExsuIo.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-Aln1VzKa.js",
-    "dist/client/assets/wineDetailCompact-i9v54qcW.js"
+    "dist/client/assets/useModalFocus-hHzOdLLk.js",
+    "dist/client/assets/wineDetailCompact-CdNUcxbo.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5721231,
-  "evidenceGzipBytesTotal": 518269,
+  "evidenceBytesTotal": 5728427,
+  "evidenceGzipBytesTotal": 518735,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -98,10 +98,10 @@
     },
     {
       "cru": "clos-de-la-roche",
-      "file": "dist/client/assets/clos-de-la-roche.evidence-CtH2IGjA.js",
-      "sha256": "09c87e378bf436445d9616285d8020e2b97b0c98666eefd69e53a2c512030853",
-      "bytes": 189238,
-      "gzipBytes": 19303
+      "file": "dist/client/assets/clos-de-la-roche.evidence-DlPrnoGO.js",
+      "sha256": "38c9509e3b0d6d52bfc559cf7947cc5f7337f82a630dfe86913f9a7fbe64564d",
+      "bytes": 193424,
+      "gzipBytes": 19476
     },
     {
       "cru": "clos-de-tart",
@@ -126,10 +126,10 @@
     },
     {
       "cru": "clos-saint-denis",
-      "file": "dist/client/assets/clos-saint-denis.evidence-D1BG481U.js",
-      "sha256": "98cee5a7900de6198ec26c43f049ceee3d4543b4b2a5b34a774ffa7b085475ee",
-      "bytes": 110611,
-      "gzipBytes": 14241
+      "file": "dist/client/assets/clos-saint-denis.evidence-OBEWsri6.js",
+      "sha256": "cfd13fd9b28d8cb114effd55762a9b1665a80500a33f3cef886042a4b050b951",
+      "bytes": 113621,
+      "gzipBytes": 14534
     },
     {
       "cru": "corton",

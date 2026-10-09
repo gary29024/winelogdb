@@ -31,7 +31,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Parcels with no lead | 76 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 189,119 / 19,068 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 193,305 / 19,241 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos de la Roche selection
@@ -192,7 +192,7 @@ to Frederic Magnien and a 2022 rent amendment, distinct from old Michel Magnien 
 ends in 2019. Ponsot's explicit 2007 lease clause names the operating company, while a 2018 tax recital
 inconsistently names the GFA as tenant; that conflict and missing originals/renewals remain visible.
 
-Five supplied Winehog articles provide **15 matching individual references** and **nine named-area census
+Six supplied Winehog articles provide **24 matching individual references** and **14 named-area census
 rows**. Ponsot's 3960 m² portion of AB461 is excluded from whole-parcel matches (the full parcel is 27614 m²),
 but retained in the reported named-area total. Rousseau AB550/551 gain critic research without inventing
 legal-entity rights. Domaine Leroy's critic attribution stays separate from the recorded Maison Leroy company
@@ -202,7 +202,10 @@ reproduces a decree dated 3 July 1944 with old section-A ranges and aggregate cl
 does not supply a current parcel crosswalk. Its suggested 1936 expansion and 1971 arithmetic
 remain unresolved. Hubert Lignier adds only 0.62 ha Monts Luisants and 0.28 ha Les Fremières
 census rows. Its 0.20 ha MCMLV cuvée is a subset, not an additional holding, and the locations
-are expressly approximate. The Dujac article remains a paywall gap. Public articles are accessed directly.
+are expressly approximate. The supplied Dujac article now adds nine exact individual reference-and-area matches across five
+named areas. Their 1.9472 ha sum rounds to the article's 1.95 ha. These nine parcels already had
+company research leads, so the 36-parcel union remains unchanged. All requested Winehog articles
+are now supplied and reviewed. Public articles are accessed directly.
 
 Former Magnien AB162/500/502 have no documented ancestry or accepted successor into the current selection
 and remain unmatched. No geometry, rights or shared generator is changed. Original instruments, unresolved
