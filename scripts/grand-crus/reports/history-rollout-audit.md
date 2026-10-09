@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5646956 bytes raw / 501172 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5710242 bytes raw / 514113 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -14,11 +14,11 @@ Lazy evidence total: 5646956 bytes raw / 501172 bytes gzip. Each cru loads its o
 | [grands-echezeaux](../../../docs/research/grands-echezeaux/register.md) | 32 | 2019-03-12 → 2019-03-12 | 1 / 0 | 1 / 1 | 0 | 6 / 0 | 12972 |
 | [clos-de-vougeot](../../../docs/research/clos-de-vougeot/register.md) | 164 | 1989-04-20 → 2025-05-12 | 68 / 58 | 34 / 36 | 0 | 7 / 0 | 31723 |
 | [richebourg](../../../docs/research/richebourg/register.md) | 58 | 1995-09-18 → 2025-05-12 | 32 / 11 | 6 / 13 | 0 | 0 / 0 | 18058 |
-| [romanee-saint-vivant](../../../docs/research/romanee-saint-vivant/register.md) | 17 | 1990-01-18 → 2022-05-16 | 7 / 3 | 3 / 3 | 0 | 0 / 0 | 9071 |
-| [romanee-conti](../../../docs/research/romanee-conti/register.md) | 2 | 1994-05-30 → 1994-05-30 | 1 / 1 | 1 / 1 | 0 | 0 / 0 | 7526 |
-| [la-romanee](../../../docs/research/la-romanee/register.md) | 1 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 6861 |
-| [la-tache](../../../docs/research/la-tache/register.md) | 2 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 6884 |
-| [la-grande-rue](../../../docs/research/la-grande-rue/register.md) | 3 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 7164 |
+| [romanee-saint-vivant](../../../docs/research/romanee-saint-vivant/register.md) | 17 | 1990-01-18 → 2022-05-16 | 7 / 3 | 3 / 3 | 0 | 0 / 0 | 16430 |
+| [romanee-conti](../../../docs/research/romanee-conti/register.md) | 2 | 1994-05-30 → 1994-05-30 | 1 / 1 | 1 / 1 | 0 | 0 / 0 | 8717 |
+| [la-romanee](../../../docs/research/la-romanee/register.md) | 1 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 8716 |
+| [la-tache](../../../docs/research/la-tache/register.md) | 2 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 7830 |
+| [la-grande-rue](../../../docs/research/la-grande-rue/register.md) | 3 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 8754 |
 | [musigny](../../../docs/research/musigny/register.md) | 51 | 1994-02-15 → 2024-07-15 | 7 / 3 | 6 / 7 | 0 | 0 / 0 | 14109 |
 | [bonnes-mares](../../../docs/research/bonnes-mares/register.md) | 130 | 1990-01-10 → 2020-11-09 | 22 / 22 | 7 / 11 | 0 | 3 / 0 | 18958 |
 | [clos-de-tart](../../../docs/research/clos-de-tart/register.md) | 17 | 1989-04-18 → 2003-11-04 | 5 / 5 | 4 / 4 | 0 | 0 / 0 | 11396 |
