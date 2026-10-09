@@ -173,8 +173,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained. The prior cloud review found no Romanée-Conti area, plot or cadastral reference; that finding was not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.
