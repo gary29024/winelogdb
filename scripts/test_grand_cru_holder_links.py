@@ -527,7 +527,11 @@ class MusignyTier2Tests(unittest.TestCase):
         self.assertTrue(any(x['name'] == 'Domaine Leroy' for x in rows['21133000AN0058']['candidateLeads']))
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
         sources = [s for s in self.curation['sources'] if 'winehog' in s['id']]
-        self.assertEqual(len(sources), 13)
+        self.assertEqual(len(sources), 14)
+        full = next(s for s in sources if s['id'] == 'mus-winehog-faiveley-acquisition-archive')
+        self.assertEqual(full['sha256'], 'dca8fca45149733a1f80ac2172777b2c6811b408348630382afd5e4193ed4ae6')
+        self.assertIn('cannot establish', full['finding'])
+        self.assertFalse(any('remains unsupplied' in g for g in self.curation['accessGaps']))
         for s in sources:
             self.assertRegex(s['sha256'], r'^[0-9a-f]{64}$')
             self.assertTrue(s['documentDate'] and s['bytes'] and s['retrievalNote'])
@@ -610,14 +614,14 @@ class BonnesMaresTier2Tests(unittest.TestCase):
         ext = {x['id']: x for x in self.curation['externalResearch']}
         self.assertEqual(ext['bm-wh-arlaud']['parcelIds'], ['21133000AB0076', '21133000AB0121'])
         self.assertEqual(ext['bm-wh-groffier']['parcelIds'], ['21133000AB0266'])
-        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 4)
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 10)
         self.assertTrue(all(not r['parcelIds'] and r['currentFarmer'] is None
                             for r in self.curation['unmatchedPrintedReferences']))
-        self.assertEqual(len(self.curation['producerHoldings']), 8)
+        self.assertEqual(len(self.curation['producerHoldings']), 11)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         arlaud = next(h for h in self.curation['producerHoldings'] if h['id'] == 'bm-arlaud')
         self.assertEqual((arlaud['publishedAreaHa'], arlaud['otherPublishedAreas'][0]['areaHa']), (.2131, .2081))
-        self.assertEqual(self.register['counts']['unresolved'], 96)
+        self.assertEqual(self.register['counts']['unresolved'], 84)
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
@@ -632,6 +636,27 @@ class BonnesMaresTier2Tests(unittest.TestCase):
         self.assertEqual(row['cruOverlapM2'], 319.7561)
         self.assertIsNone(row['currentFarmer'])
 
+    def test_supplied_archives_preserve_area_rejections_and_documented_ancestry(self):
+        ext = {x['id']: x for x in self.curation['externalResearch']}
+        direct = [ext['bm-wh-' + name] for name in ('dujac', 'roumier', 'bertheau', 'auvenay')]
+        self.assertEqual(sum(len(x['parcelIds']) for x in direct), 14)
+        self.assertNotIn('21133000AB0367', ext['bm-wh-roumier']['parcelIds'])
+        retired = ext['bm-wh-roumier-467']
+        self.assertEqual(retired['parcelIds'], [])
+        self.assertEqual(retired['predecessorReferences'],
+                         {'21133000AB0467': ['21133000AB0481', '21133000AB0482']})
+        for n in (481, 482):
+            items = [x for x in self.evidence['parcels'][f'21133000AB{n:04d}']
+                     if x['kind'] == 'research' and x.get('via') == 'AB0467']
+            self.assertEqual(len(items), 1)
+            self.assertEqual(items[0]['originalReferenceId'], '21133000AB0467')
+        self.assertNotIn('bm-wh-mugnier', ext)
+        self.assertNotIn('bm-wh-vogue', ext)
+        sources = {s['id']: s for s in self.curation['sources']}
+        self.assertEqual(sources['bm-winehog-roumier']['documentDate'], '2018-05-06')
+        self.assertEqual(sources['bm-winehog-roumier']['otherDocumentDates'][0]['date'], '2023-03-07')
+        self.assertFalse(any('remain unsupplied' in g for g in self.curation['accessGaps']))
+
     def test_selected_filings_have_complete_screening_and_byte_provenance(self):
         sources = [s for s in self.table['sources'] if s['id'].startswith('bm-') and s['type'] == 'company-filing']
         self.assertEqual((len(sources), sum(s['pageCount'] for s in sources)), (46, 1788))
@@ -641,7 +666,7 @@ class BonnesMaresTier2Tests(unittest.TestCase):
             self.assertTrue(source['bytes'] and source['documentDate'] and source['reviewedPages'])
             self.assertIn('filingDate', source)
         archives = [s for s in self.curation['sources'] if 'winehog' in s['id']]
-        self.assertEqual(len(archives), 4)
+        self.assertEqual(len(archives), 10)
         self.assertTrue(all(s['bytes'] and s['sha256'] and s['retrievalNote'] for s in archives))
 
 if __name__ == '__main__':
