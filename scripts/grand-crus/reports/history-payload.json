@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-CIOnafPS.js"
+    "dist/client/assets/index-CZzV291Z.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-BccdAP0q.js",
-    "dist/client/assets/SectionLabel-CWm9zg1N.js",
-    "dist/client/assets/SparklingDetailsCard-BZzafJlk.js",
-    "dist/client/assets/VillageMap-DZZDPRQ6.js",
-    "dist/client/assets/burgundyAtlas-DJzuFQQw.js",
-    "dist/client/assets/index-CIOnafPS.js",
-    "dist/client/assets/index-CNF0UW4M.js",
+    "dist/client/assets/FriendTagDialog-p_j9fmFx.js",
+    "dist/client/assets/SectionLabel-CLvfD53f.js",
+    "dist/client/assets/SparklingDetailsCard-D7wiACg4.js",
+    "dist/client/assets/VillageMap-C_wg4U0X.js",
+    "dist/client/assets/burgundyAtlas-CaWHny9R.js",
+    "dist/client/assets/index-CZzV291Z.js",
+    "dist/client/assets/index-SdZGqfmE.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-Cw0lx0hZ.js",
-    "dist/client/assets/wineDetailCompact-CnmCDr9a.js"
+    "dist/client/assets/useModalFocus-Dzc4xnmL.js",
+    "dist/client/assets/wineDetailCompact-Bp4T_kfb.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5944698,
-  "evidenceGzipBytesTotal": 554374,
+  "evidenceBytesTotal": 5964123,
+  "evidenceGzipBytesTotal": 557796,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -35,10 +35,10 @@
     },
     {
       "cru": "bienvenues-batard-montrachet",
-      "file": "dist/client/assets/bienvenues-batard-montrachet.evidence-BKXNccnw.js",
-      "sha256": "598a69157b55af7384e7e0f202e003ab37a801d8abfd882f7d723ceea8b379d9",
-      "bytes": 96124,
-      "gzipBytes": 10271
+      "file": "dist/client/assets/bienvenues-batard-montrachet.evidence-B1CBcpjf.js",
+      "sha256": "e762dcd666390d34573c647a7735557f6af48b9dd02251a857e3b6c0b35d99cf",
+      "bytes": 115549,
+      "gzipBytes": 13693
     },
     {
       "cru": "bonnes-mares",

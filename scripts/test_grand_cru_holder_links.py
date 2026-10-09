@@ -1489,5 +1489,55 @@ class BatardTierTwoTests(unittest.TestCase):
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
 
+
+class BienvenuesTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('bienvenues-batard-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_bbm_individual_tenants_do_not_create_a_producer_company_link(self):
+        bbm = self.table['holders']['391949849']
+        self.assertFalse(bbm.get('links'))
+        self.assertEqual(bbm['effort']['filingsScreened'], 4)
+        self.assertEqual(bbm['effort']['pagesRead'], 141)
+        self.assertFalse(self.table['holders']['349583500'].get('links'))
+        f = next(x for x in self.curation['parcelFilings'] if x['holderId'] == '391949849')
+        self.assertEqual(f['parcelAreasM2'], {'21512000AI0130': 1844})
+        lease, mandate = f['leaseEvidence']
+        self.assertEqual(lease['tenants'], ['Franck Guillemard (individual)', 'Corinne Clerc (individual)'])
+        self.assertEqual(lease['effectiveTo'], '2011-10-31')
+        self.assertEqual(mandate['kind'], 'replacement-lease-mandate')
+        self.assertEqual(mandate['tenants'], [])
+
+    def test_boundary_parcels_keep_whole_cadastral_areas_and_recorded_holders(self):
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, {'21512000AI0001': 3968, '21512000AI0137': 916,
+            '21512000AI0138': 917, '21512000AI0121': 1675, '21512000AI0122': 1320,
+            '21512000AI0002': 1377, '21512000AI0026': 1162, '21512000AI0130': 1844})
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for f in self.curation['parcelFilings']:
+            for pid in f['parcelAreasM2']:
+                self.assertIn(f['holderId'], {r['holderId'] for r in rows[pid]['recordedRights']})
+        self.assertLess(rows['21512000AI0001']['cruOverlapM2'], actual['21512000AI0001'])
+        self.assertEqual(self.table['holders']['U29945686']['identity']['companySiren'], '382485027')
+        self.assertTrue(all(p['currentFarmer'] is None for p in rows.values()))
+
+    def test_aggregate_winehog_holdings_and_old_numbering_remain_unmatched(self):
+        current = [x for x in self.curation['externalResearch'] if x['id'].startswith('bien-winehog-')]
+        self.assertEqual({p: a for x in current for p, a in x['parcelAreasM2'].items()}, {'21512000AI0019': 5057})
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertEqual(len(unmatched), 3)
+        self.assertTrue(all(not x['parcelIds'] for x in unmatched))
+        self.assertTrue(any('0.4508' in x['printedReference'] for x in unmatched))
+        self.assertTrue(any('1.158' in x['printedReference'] for x in unmatched))
+        self.assertEqual(len(self.curation['producerHoldings']), 5)
+        self.assertTrue(all('parcelIds' not in x for x in self.curation['producerHoldings']))
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+
 if __name__ == '__main__':
     unittest.main()

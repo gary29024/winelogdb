@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-351",
   "appellationId": 135,
   "issue": 403,
-  "tier": 1,
+  "tier": 2,
   "bundle": "montrachet",
   "villageMaps": [
     "puligny-montrachet"
@@ -16,7 +16,8 @@
   "research": {
     "methodDoc": "docs/research/bienvenues-batard-montrachet/README.md",
     "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "producerResearch": "deferred-tier-2",
+    "filingsDoc": "docs/research/bienvenues-batard-montrachet/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-beaune/bienvenues-batard-montrachet",
