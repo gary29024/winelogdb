@@ -1060,7 +1060,7 @@
       "bytes": 6149104,
       "retrievedAt": "2026-10-08",
       "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
-      "finding": "Names cadastre no 325, printed as 0.170 ha, as the Domaine Dujac plot in the south-east corner, acquired in 2005 from the Thomas-Moillard estate. AL 325 measures 0.1656 ha, so the printed area does not match and the reference stays unmatched."
+      "finding": "Names cadastre no 325, printed as 0.170 ha, as the Domaine Dujac plot in the south-east corner, acquired in 2005 from the Thomas-Moillard estate. AL 325 measures 0.1656 ha, which the article’s own owner list gives as 0.17 ha; the number is accepted as a rounded area match."
     },
     {
       "id": "rsv-winehog-cathiard",
@@ -1102,7 +1102,7 @@
       "bytes": 6024713,
       "retrievedAt": "2026-10-08",
       "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
-      "finding": "Names two cadastre plots, 300 and 298, together 0.4982 ha, as the Domaine J.-J. Confuron holding, received from the Domaine Charles Noëllat estate in 1988. AC 298 and AC 300 measure 4,984 m² together, 2 m² more than printed, so the reference stays unmatched."
+      "finding": "Names two cadastre plots, 300 and 298, together 0.4982 ha, as the Domaine J.-J. Confuron holding, received from the Domaine Charles Noëllat estate in 1988. AC 298 and AC 300 measure 4,984 m² together, 2 m² more than printed; the difference is accepted as rounding."
     },
     {
       "id": "rsv-winehog-poisot-section",
@@ -1349,7 +1349,7 @@
         "rne-484070800"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Both filings (44 pages) show cash formation and a 2021 GFA requiring métayage, without AL325, a tenant or a domaine. Domaine Dujac publishes AL325’s area, but equal area is not a company crosswalk; no link asserted."
+      "finding": "Both filings (44 pages) show cash formation and a 2021 GFA requiring métayage, without AL325, a tenant or a domaine. Domaine Dujac publishes AL325’s area, but equal area is not a company crosswalk; no link asserted. Winehog’s cadastre 325 is a critic lead only."
     },
     {
       "holderId": "528291362",
@@ -1557,6 +1557,46 @@
       ],
       "appNote": "Winehog names cadastre 327 (0.345 ha, equal to this parcel) as the Domaine Arnoux-Lachaux plot. Not current farming.",
       "dateSourceId": "rsv-winehog-arnoux",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-dujac-325",
+      "title": "Winehog: Domaine Dujac plot, cadastre 325",
+      "parcelIds": [
+        "21714000AL0325"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (27 September 2018) names cadastre no 325 as the Domaine Dujac plot in the south-east corner, acquired in 2005 from the Thomas-Moillard estate. It prints 0.170 ha; AL 325 measures 0.1656 ha, which the same article’s owner list gives as 0.17 ha, so the number is accepted as a rounded area match. AL 325 is recorded to NICHOLEM, which no company record links to Domaine Dujac: a critic lead, not a company link. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-dujac"
+      ],
+      "producer": "Domaine Dujac",
+      "printedReferences": [
+        "325"
+      ],
+      "appNote": "Winehog (2018) names cadastre 325 as the Domaine Dujac plot (printed 0.170 ha; this parcel is 0.1656 ha). A critic lead, not a link to the recorded holder. Not current farming.",
+      "dateSourceId": "rsv-winehog-dujac",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-confuron-298-300",
+      "title": "Winehog: Domaine Jean-Jacques Confuron plots, cadastre 300 and 298",
+      "parcelIds": [
+        "21714000AC0298",
+        "21714000AC0300"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (15 October 2019) names cadastre plots 300 and 298, together 0.4982 ha, as the Domaine J.-J. Confuron holding, received from the Domaine Charles Noëllat estate in 1988. AC 298 and AC 300 measure 0.4984 ha together; the 2 m² difference is accepted as rounding. The 2024 Héritiers Confuron deed already names both references with exact areas. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-confuron"
+      ],
+      "producer": "Domaine Jean-Jacques Confuron",
+      "printedReferences": [
+        "300",
+        "298"
+      ],
+      "appNote": "Winehog (2019) names cadastre 300 and 298 (0.4982 ha together; the two parcels sum to 0.4984 ha) as the Domaine J.-J. Confuron holding. Not current farming.",
+      "dateSourceId": "rsv-winehog-confuron",
       "currentFarmer": null
     }
   ],
@@ -2037,7 +2077,7 @@
   "historicalOwnerLists": [],
   "accessGaps": [
     "All eleven holders’ free filing indexes and official registry records were checked; 45 selected filings were downloaded and all 1,686 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.",
-    "NICHOLEM (AL325): both filings name no parcel, tenant or domaine. Domaine Dujac publishes 16 a 56 ca, equal to AL325’s cadastral area, but equal area is not a company crosswalk; no link or candidate is asserted. Winehog’s 2018 Dujac article names cadastre 325 but prints 0.170 ha, so it stays an unmatched printed reference.",
+    "NICHOLEM (AL325): both filings name no parcel, tenant or domaine. Domaine Dujac publishes 16 a 56 ca, equal to AL325’s cadastral area, but equal area is not a company crosswalk; no company link is asserted. Winehog’s 2018 Dujac article names cadastre 325 as the Dujac plot, printed as 0.170 ha and accepted as a rounded match; that is a critic candidate for AL325, not a company link or farming evidence.",
     "AL329 has no legal-entity right; DFI places it with AL328 and AL330 in the 1990 division of AL2. Published Poisot (0.49 ha) and Follin-Arbelet (0.50 ha) totals name no parcel; private holdings are not researched.",
     "U14149307 to SCI Domaine Leroy 427469135 remains provisional on name and seat; no reviewed filing names AC299 or AC301. domaine-leroy.fr, reached by redirect from domaineleroy.com, publishes 0.9929 ha, but its provenance could not be verified (recently registered, no legal notice), so it is not used. Winehog’s 2015 article gives the same 0.9929 ha in two unnumbered plots; that feeds the census only.",
     "GFA Famille Cathiard to Domaine Sylvain Cathiard et Fils is a provisional family-holding lead on a shared recorded officer; no filing names a tenant for AL326.",
@@ -2045,24 +2085,9 @@
     "No DRC filing names AC230 or AC231; only the former owner Marey-Monge’s statutes do. The 26 December 1975 lease recited in the DRC’s 1998 minutes and the October 2017 sale deed (DVF publishes no parties) are unreviewed. Winehog’s 2017 history dates the DRC’s lease to 1966 and its purchase to 1988; those dates conflict with the filings and DVF and are not used.",
     "The Confuron, Poisot-Piguet, Corton-Grancey and Vignoble Latour leases are recited, not filed; original instruments, renewals and current seasons are unreviewed. How Mémoire de Vignes’ 2011 lease to an individual ended is not stated.",
     "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there (including deposit dates missing from the free index for the 2024 Mémoire de Vignes deeds) are pending local audit.",
-    "All 13 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Three print a plot number whose area matches (AL 1, AL 326, AL 327); two do not match (325; 298 and 300) and stay unmatched. Owner totals, maps and history are not parcel crosswalks.",
+    "All 13 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Five print plot numbers whose areas match the cadastre (AL 1, AL 325, AL 326, AL 327, AC 298 and AC 300), two of them after rounding: 325 is printed as 0.170 ha and 300/298 as 0.4982 ha. Owner totals, maps and history are not parcel crosswalks.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for every parcel; paid SPF copies and outreach remain Tier 3."
   ],
-  "unmatchedPrintedReferences": [
-    {
-      "sourceId": "rsv-winehog-dujac",
-      "printedReference": "cadastre no 325 (0.170 ha), Domaine Dujac",
-      "parcelIds": [],
-      "limitation": "AL 325 measures 1,656 m² (0.1656 ha) and is recorded to NICHOLEM, which no company record links to Domaine Dujac. The printed area does not match, so the number is not accepted. The same author’s 2019 owner list and the Dujac sheet give 0.1656 ha without a number, and equal area is not a crosswalk.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "rsv-winehog-confuron",
-      "printedReference": "cadastre plots 300 and 298 (0.4982 ha together), Domaine Jean-Jacques Confuron",
-      "parcelIds": [],
-      "limitation": "AC 298 and AC 300 measure 4,984 m² together, 2 m² more than printed, so the article is not counted as a match. The 2024 Héritiers Confuron deed already names both references with exact areas.",
-      "currentFarmer": null
-    }
-  ],
+  "unmatchedPrintedReferences": [],
   "holderLinks": "shared"
 }
