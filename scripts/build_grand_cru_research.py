@@ -4,7 +4,8 @@
   python scripts/build_grand_cru_research.py --cru echezeaux --check
   python scripts/build_grand_cru_research.py --all --check      # every configured cru, as CI runs it
 
-Reads docs/research/<slug>/curation.json and the generated rights history, sale records
+Reads docs/research/<slug>/curation.json, with domaine candidates from the shared
+docs/research/holders/holder-links.json, and the generated rights history, sale records
 and named areas in the same folder; writes the register (JSON and Markdown) there and the
 app's lazy evidence file to src/lib/places/grandCruParcels/<slug>.evidence.json.
 A cru without research configured yet only has its config and registry entry validated.
@@ -18,8 +19,9 @@ import re
 from collections import Counter
 
 from build_grand_cru_evidence import build_evidence
+from build_grand_cru_holder_links import generate as build_holder_links
 from grand_cru import (record_json, bundle_commune_names, command, cru_slugs, evidence_path, load_cru, load_manifest, parcel_asset,
-                       read_json, relative, require, research_path, sha256, ROOT)
+                       read_json, relative, require, research_path, resolve_curation, sha256, ROOT)
 
 
 class Context:
@@ -42,12 +44,13 @@ class Context:
 
 
 EVENT_KINDS = {'historical-application': 'Application received', 'authorisation': 'Authorisation decision',
-               'suspended-application': 'Application suspended'}
+               'suspended-application': 'Application suspended', 'refused-application': 'Application refused'}
 SALE_LABELS = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
 # A later holder may have received a contribution after the sale; it is not necessarily the buyer.
 LATER_HOLDER_CHANGES = {'record-appeared', 'holder-changed', 'unprovable-identifier-change'}
+# A company filing that names a parcel with no company record is research context, not a parcel filing of its holder.
 EXTERNAL_BASES = {'critic-named-cadastral-reference', 'critic-attribution-area-reconstructed', 'critic-holding-description',
-                  'estate-area-exact-match', 'estate-area-near-match', 'court-named-cadastral-reference'}
+                  'estate-area-exact-match', 'estate-area-near-match', 'court-named-cadastral-reference', 'filing-named-cadastral-reference'}
 HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
@@ -75,13 +78,9 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(h['parcelOperationConfirmed'] is False, 'Lead register cannot publish confirmed operation')
         require(set(h['sourceIds']) <= sources.keys(), 'Unknown holder source')
         require(not h['candidateNames'] or h['sourceIds'], 'Candidate requires a cited research source')
-        # A company-identity crosswalk annotates the provisional rights ID; it never replaces it.
-        crosswalk = h.get('legalIdentityCrosswalk')
-        if crosswalk:
-            siren = crosswalk['companySiren']
-            require(len(siren) == 9 and siren.isdigit() and siren not in holders, f"{h['holderId']}: invalid identity crosswalk")
-            require(crosswalk['sourceIds'] and set(crosswalk['sourceIds']) <= sources.keys(), 'Unknown crosswalk source')
-            require(crosswalk.get('limitation'), 'Identity crosswalk needs its limitation')
+        # Tier 3 placeholder: only the domaine's own dated reply can carry this basis.
+        require(h['basis'] != 'domaine-confirmed' or any(sources[s].get('type') == 'domaine-outreach' for s in h['sourceIds']),
+                'A domaine-confirmed holder needs a domaine-outreach source')
     require(history['inputs']['parcelSnapshotSha256'] == manifest['sha256'] and history['parentFeatureId'] == parent,
             'Rights history built from another snapshot')
     lineage = {r['parcelId']: r for r in history['parcels']}
@@ -90,18 +89,25 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(finding['parcelIds'] and set(finding['parcelIds']) <= ids, 'History finding outside research cru')
         require(finding['sourceIds'] and set(finding['sourceIds']) <= sources.keys(), 'Unknown history finding source')
         require(finding.get('currentFarmer') is None, 'Rights history cannot establish current farming')
-    # Only rule-accepted splits may carry evidence to today's parcels; rejected spatial candidates never do.
+    # Only rule-accepted splits or documented DFI ancestry may carry evidence to today's parcels; rejected spatial
+    # candidates never do.
     successors = {r['parcelId']: {s['parcelId'] for s in r['successors'] if s['accepted']} for r in history['retiredParcels']}
+    documented = {r['parcelId']: set(r['documentedAncestry']['ancestorIds']) for r in history['parcels'] if 'documentedAncestry' in r}
 
     def check_lineage(item, kind):
         for retired, current in item.get('predecessorReferences', {}).items():
-            require(retired in successors and set(current) <= successors[retired] & ids,
+            require(current and set(current) <= ids and
+                    all(pid in successors.get(retired, set()) or retired in documented.get(pid, set()) for pid in current),
                     f'{kind} predecessor reference without matching cadastral lineage')
     for event in curation['exactParcelEvents']:
         require(set(event['parcelIds']) <= ids, 'Event reference outside research cru')
         require(event['sourceId'] in sources, 'Unknown event source')
         require(event['kind'] in EVENT_KINDS, f"Unknown event kind: {event['kind']}")
         require(event['currentFarmer'] is None, 'Historical event cannot establish current farming')
+        if operation := event.get('operation'):
+            require(operation == 'aerial-spraying-derogation' and event['kind'] == 'authorisation'
+                    and event.get('indexedNotice') and event.get('applicantRole') and event['previousOperator'] is None,
+                    'A treatment derogation needs its indexed row and a requester role, never an operator')
         # A retired reference named in a notice reaches today's parcels only through recorded lineage.
         check_lineage(event, 'Event')
     for item in curation['externalResearch']:
@@ -205,9 +211,11 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         leads = [{'name': name, 'holderId': hid, 'basis': holders[hid]['basis'],
                   'sourceIds': holders[hid]['sourceIds']}
                  for hid in holder_ids for name in holders[hid]['candidateNames']]
-        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]} for e in events]
+        event_leads = [{'name': e['applicant'], 'basis': e['kind'], 'sourceIds': [e['sourceId']]} for e in events
+                       if e.get('operation') != 'aerial-spraying-derogation']
         event_leads += [{'name': e['applicant'], 'basis': f"{e['kind']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
-                         'sourceIds': [e['sourceId']]} for e, r in inherited]
+                         'sourceIds': [e['sourceId']]} for e, r in inherited
+                        if e.get('operation') != 'aerial-spraying-derogation']
         external_leads = [{'name': x['producer'], 'basis': x['basis'], 'sourceIds': x['sourceIds']}
                           for x in external if x.get('producer')]
         external_leads += [{'name': x['producer'], 'basis': f"{x['basis']} on predecessor {r[8:10].lstrip('0')}{r[10:]}",
@@ -250,10 +258,14 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
                               'holder-group-triage' if holder_ids else
                               'sale-record-reviewed' if sale_records else 'inventory-only'),
             'currentFarmer': None, 'verifiedAsOf': None, 'operationScope': 'unconfirmed',
-            'nextEvidenceNeeded': ('Confirm actual operation, scope and continuation since the decision.'
+            'nextEvidenceNeeded': ('Obtain independent parcel-specific operator evidence; the treatment requester is not an identified farmer.'
+                                   if events and all(e.get('operation') == 'aerial-spraying-derogation' for e in events) else
+                                   'Confirm actual operation, scope and continuation since the decision.'
                                    if any(e['kind'] == 'authorisation' for e in events) else
                                    'Check the decision after the suspension ends, and who farms meanwhile.'
                                    if any(e['kind'] == 'suspended-application' for e in events) else
+                                   'Check any later appeal or decision and obtain current operation evidence; this application was refused.'
+                                   if any(e['kind'] == 'refused-application' for e in events) else
                                    'Resolve application outcome, actual operation and cadastral continuity.'
                                    if events or inherited else 'Obtain dated parcel-specific operation evidence and scope.'
                                    if leads else 'Trace the co-sale and subsequent transfers; the later company holder is not necessarily the buyer. Obtain parcel-specific operation evidence.'
@@ -296,8 +308,9 @@ def build_census(rows, holdings, named_areas, holder_names):
     A holding is published by a producer for a whole named area. The census only compares areas;
     it never places a holding on particular parcels."""
     reviewed = {a['sourceName']: a['name'] for a in named_areas['parcels'].values()}
+    neighbouring = {a['sourceName'] for a in named_areas['parcels'].values() if a.get('neighbouringLieuDit')}
     census = []
-    for name in sorted({r['namedArea'] for r in rows}):
+    for name in sorted({r['namedArea'] for r in rows}, key=lambda n: (n is None, n or '')):
         here = [r for r in rows if r['namedArea'] == name]
         m2 = lambda items: round(sum(r['cruOverlapM2'] for r in items))
         entries, beyond_total = [], 0
@@ -321,7 +334,8 @@ def build_census(rows, holdings, named_areas, holder_names):
                             'owners': [holder_names[i] for i in h['ownerHolderIds']]})
         unrecorded = [r for r in here if not r['recordedRights']]
         census.append({
-            'sourceName': name, 'name': reviewed[name], 'parcels': len(here), 'areaM2': m2(here),
+            'sourceName': name, 'name': reviewed[name], **({'neighbouringLieuDit': True} if name in neighbouring else {}),
+            'parcels': len(here), 'areaM2': m2(here),
             'withoutCompanyRecord': len(unrecorded), 'withoutCompanyRecordM2': m2(unrecorded),
             'withoutCompanyRecordOrLead': sum(r['researchStatus'] == 'unresolved' for r in unrecorded),
             'withoutCompanyRecordOrLeadM2': m2([r for r in unrecorded if r['researchStatus'] == 'unresolved']),
@@ -356,6 +370,10 @@ def render_report(register, curation, history, context):
     counts = register['counts']
     sources = {s['id']: s for s in curation['sources']}
     name, research = context.cru['name'], context.cru['research']
+    has_treatments = any(e.get('operation') == 'aerial-spraying-derogation' for e in curation['exactParcelEvents'])
+    unresolved_label = 'a research lead' if has_treatments else 'a named candidate'
+    treatment_scope = (f" Treatment records name no operator candidate; {sum(not r['candidateLeads'] for r in register['parcels'])} parcels have no named candidate."
+                       if has_treatments else '')
     lines = [
         f'# {name} parcel farming research register', '',
         f"Reviewed {register['reviewedAt']}; target season {register['targetSeason']}.", '',
@@ -366,7 +384,7 @@ def render_report(register, curation, history, context):
         f"{counts['holderLead']} parcels have holder-derived or independent-research leads, {counts['historicalApplication']} have an "
         f"exact-reference application or suspended application, {counts['historicalAuthorisation']} have an authorisation decision, "
         f"{counts['saleLead']} have co-sale leads through a later company holder, and "
-        f"{counts['unresolved']} remain without a named candidate. These are mutually exclusive research categories, not farmer counts.", '',
+        f"{counts['unresolved']} remain without {unresolved_label}. These are mutually exclusive research categories, not farmer counts.{treatment_scope}", '',
         f"{sum(r['researchDepth'] == 'inventory-only' for r in register['parcels'])} parcels have inventory records only, not individual source investigations. "
         'Historical application references can also lack matched rights.', '',
               f"{counts['withParcelFiling']} parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. "
@@ -404,17 +422,22 @@ def render_report(register, curation, history, context):
     rows_by_id = {r['parcelId']: r for r in register['parcels']}
     ref = lambda pid: rows_by_id[pid]['reference'] if pid in rows_by_id else f"{pid[8:10].lstrip('0')} {pid[10:]}"
     lines += ['', '## Exact-reference administrative events', '',
+              ('Reviewed treatment derogations name a requester and printed cadastral references and areas. '
+               'The requester is not an identified owner or operator. A treatment authorisation does not establish '
+               'actual treatment or farming. References and footnotes were read from the page images.'
+               if curation['exactParcelEvents'] and all(e.get('operation') == 'aerial-spraying-derogation'
+                                                      for e in curation['exactParcelEvents']) else
               'Reviewed farm-structure notices name the applicant, the previous operator and the '
               'cadastral references. A receipt of a complete application explicitly does not authorise cultivation; an '
               'authorisation is a dated decision, not proof of actual or current operation. References were read from the '
-              'page image.' + other_cru_note(curation, context), '']
+              'page image.') + other_cru_note(curation, context), '']
     for e in sorted(curation['exactParcelEvents'], key=lambda e: e['documentDate']):
         refs = ', '.join(ref(i) for i in e['parcelIds'])
         via = '; '.join(f"{ref(r)} (retired) → {', '.join(ref(c) for c in cs)}"
                         for r, cs in e.get('predecessorReferences', {}).items())
-        label = EVENT_KINDS[e['kind']]
+        label = 'Aerial-spraying derogation' if e.get('operation') == 'aerial-spraying-derogation' else EVENT_KINDS[e['kind']]
         lines.append(f"- **{e['documentDate']} — {cell(e['applicant'])}.** {label}; previous operator "
-                     f"{cell(e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
+                     f"{cell('not stated' if e.get('operation') == 'aerial-spraying-derogation' else e['previousOperator'])}. Parcels: {refs}" + (f"; via lineage: {via}" if via else '') +
                      f". {e['summary']} [{cell(sources[e['sourceId']]['title'])}]({sources[e['sourceId']]['url']}).")
     lines += ['', '## Parcel-specific company filings', '',
               'Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates '
@@ -560,8 +583,12 @@ def render_history(register, curation, history, sources, context):
 
 
 def area_label(source_name, register):
-    reviewed = {a['sourceName']: a['name'] for a in register['namedAreaCensus']}
-    return reviewed[source_name] or f'{source_name} (cadastral; unreviewed)'
+    area = next(a for a in register['namedAreaCensus'] if a['sourceName'] == source_name)
+    if area.get('neighbouringLieuDit'):
+        return f'{source_name} (neighbouring lieu-dit; edge parcels)'
+    if source_name is None:  # Unreviewed crus label it; a reviewed parcel outside every lieu-dit has no name.
+        return area['name'] or 'No cadastral lieu-dit'
+    return area['name'] or f'{source_name} (cadastral; unreviewed)'
 
 
 def hectares(m2):
@@ -574,7 +601,14 @@ def render_census(register, curation, sources, context):
                 'Named-area and climat crosswalks remain unreviewed. The exact whole-cru INAO feature is preserved; '
                 'no cadastral name, internal subdivision or producer holding is assigned by this history delivery.', '']
     unresolved = context.cru['namedPlots']['unresolved']
-    crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." for u in unresolved)
+    crosswalks = ''.join(f" `{u['sourceCandidate']}` has no reviewed crosswalk to {u['name']}." if u['sourceCandidate'] is not None
+                         else f" {u['name']} has no cadastral lieu-dit inside the cru; parcels no lieu-dit touches are listed without one."
+                         for u in unresolved)
+    neighbouring = [n['sourceName'] for n in context.cru['namedPlots'].get('neighbouringLieuxDits', [])]
+    if neighbouring:
+        crosswalks += (f" {', '.join(f'`{n}`' for n in neighbouring)} {'holds' if len(neighbouring) == 1 else 'hold'} most of some parcels that "
+                       f"only touch the cru edge; {'it is a neighbouring lieu-dit' if len(neighbouring) == 1 else 'they are neighbouring lieux-dits'}, "
+                       f"not {context.cru['name']} climats.")
     printed = ''.join(f"; {u['name']} has no reviewed cadastral crosswalk" for u in unresolved)
     lines = ['## Named-area census', '',
              'Parcels are grouped by the cadastral lieu-dit holding most of their geometry. For each named area the census '
@@ -687,14 +721,28 @@ def render_evidence_coverage(register, context):
                       f"{audit['latestPublishedYearLocated']}. {audit['availabilityStatus']}. "
                       'Obtained index ranges: ' + cell(audit['obtainedIndexRanges']) + '.', '']
             lines += ['- ' + interval for interval in audit['unsearchedIntervals']]
-            lines += ['', f"Failed earlier PDF: [{department} official bulletin]({audit['failedPublishedPdf']['url']}). "
-                      + audit['failedPublishedPdf']['reason'] + '. These are coverage gaps, not absent notices.', '']
+            located = audit['failedPublishedPdf']
+            label = 'Earlier located PDF recovered' if located['status'] == 'obtained' else 'Failed earlier PDF'
+            lines += ['', f"{label}: [{department} official bulletin]({located['url']}). "
+                      + located['reason'] + '. Remaining coverage gaps do not establish absent notices.', '']
+            if retry := audit.get('acquisitionRetry'):
+                years = retry['publicationYearsRequested']
+                lines += [f"Acquisition retry {retry['checkedAt']} for publication years {years[0]}–{years[-1]}: "
+                          f"{retry['savedAnnualListings']} annual listings saved; {retry['downloadedPDFs']} PDFs obtained; "
+                          f"{retry['imageReviewedPages']} new pages image-reviewed. "
+                          f"[Dated acquisition report]({context.link(ROOT / retry['report'])}). "
+                          'Unattempted annual paths remain discovery targets, not confirmed publications.', '']
+            if retry := audit.get('archiveRetry'):
+                lines += [f"Archive retry {retry['checkedAt']}: {retry['missingURLsRechecked']} missing URLs rechecked; "
+                          f"{retry['recoveredURLs']} URLs recovered ({retry['newDistinctPDFs']} new distinct PDFs). "
+                          f"[Dated retry and index report]({context.link(ROOT / retry['report'])}).", '']
     return lines
 
 
 def load_inputs(context):
     manifest = load_manifest(context.bundle)
-    return {'manifest': manifest, 'asset': parcel_asset(manifest), 'curation': read_json(context.curation),
+    return {'manifest': manifest, 'asset': parcel_asset(manifest),
+            'curation': resolve_curation(read_json(context.curation), context.cru['slug']),
             'history': read_json(context.history), 'sales': read_json(context.sales), 'named_areas': read_json(context.named_areas),
             'notice_records': read_json(context.notices) if context.notices.exists() else None}
 
@@ -797,6 +845,9 @@ def main():
     args = parser.parse_args()
     for slug in cru_slugs() if args.all else [args.cru]:
         run(slug, args.check)
+    if args.all:
+        # The shared holder table is checked against every cru's recorded holders.
+        build_holder_links(args.check)
 
 
 if __name__ == '__main__':

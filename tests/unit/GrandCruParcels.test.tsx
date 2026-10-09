@@ -4,11 +4,14 @@ import {cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/r
 import {readFileSync} from 'node:fs';
 import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
+import {saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
 import {ownerName,possibleOwnerMatch} from '../../src/lib/places/parcelOwners';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 import vougeotManifest from '../../src/lib/places/grandCruParcels/vougeot.manifest.json';
+import gevreyManifest from '../../src/lib/places/grandCruParcels/gevrey-chambertin.manifest.json';
+import vosneManifest from '../../src/lib/places/grandCruParcels/vosne-romanee.manifest.json';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
-vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]}))}));
+vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(async()=>({items:[]})),saveParcelProducerLink:vi.fn(),removeParcelProducerLink:vi.fn()}));
 const evidenceLoad=vi.hoisted(()=>({fail:false,calls:0}));
 vi.mock('../../src/lib/places/grandCruParcels/evidence',async importOriginal=>{
  const real=await importOriginal<typeof import('../../src/lib/places/grandCruParcels/evidence')>();
@@ -26,21 +29,82 @@ const inEchezeaux=(f:Parcels['features'][number])=>f.properties.overlaps.some(o=
 const holds=(f:Parcels['features'][number],name:string)=>f.properties.recordedRights.some(r=>r.name===name);
 afterEach(()=>{cleanup();vi.unstubAllGlobals();evidenceLoad.fail=false;evidenceLoad.calls=0});
 describe('Cadastral parcel controls',()=>{
- it('keeps all 69 Vougeot legal holders searchable, both rights and unknown parcels without domaine crosswalks',async()=>{
+ it('keeps Richebourg’s ten holders and unknown parcels visible when domaine grouping is enabled',async()=>{
+  const vosne=JSON.parse(readFileSync('public'+vosneManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vosne)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-1083"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  const holders=await screen.findByRole('list',{name:'Recorded right holders by mapped area'});
+  // Always grouped by domaine: there is no legal-holder switch.
+  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
+  const expand=screen.queryByRole('button',{name:/Show all .* entries/});
+  if(expand)fireEvent.click(expand);
+  // Domaine research loads after the parcels; wait for its headings.
+  expect(await within(holders).findByRole('button',{name:/Domaine de la Romanée-Conti.*Company record/})).toBeTruthy();
+  expect(within(holders).getByRole('button',{name:/GFA Heritiers AF-Gros/i})).toBeTruthy();
+  expect(within(holders).queryByRole('button',{name:/^Domaine A\.-F\. Gros/})).toBeNull();
+  expect(within(holders).getByRole('button',{name:/identity by name and seat only/})).toBeTruthy();
+  // One line per name: no company names or per-row source links; strength shows as a seal check, with a key.
+  const drc=within(holders).getByRole('button',{name:/^Domaine de la Romanée-Conti/});
+  expect(drc.textContent).not.toMatch(/DOMAINE DE LA ROMANEE CONTI|Domaine de la Romanee Conti/);
+  expect(drc.querySelector('.village-map-seal.is-strong')).toBeTruthy();
+  // The reason is only in the seal’s tooltip and accessible name, not printed in the row.
+  const seal=within(drc).getByRole('img');
+  expect(seal.getAttribute('aria-label')).toMatch(/^Company record/);
+  expect(seal.getAttribute('title')).toBe(seal.getAttribute('aria-label'));
+  expect(drc.textContent).not.toMatch(/Company record/);
+  fireEvent.click(drc);
+  expect(drc.getAttribute('aria-pressed')).toBe('true');
+  expect(within(holders).queryAllByRole('link')).toHaveLength(0);
+  const key=screen.getByText('Link strength').parentElement!;
+  expect([...key.querySelectorAll('.village-map-seal-key-item')].map(b=>b.textContent)).toEqual(['Company record','Weak lead']);
+  expect(key.querySelector('.village-map-seal.is-weak')).toBeTruthy();
+  // The longer explanation lives under About this data; the list keeps one line and the key.
+  expect(screen.getByText('Areas show parcel coverage, not ownership shares.')).toBeTruthy();
+  expect(screen.queryByText(/Not farming verification/)).toBeNull();
+  expect(screen.getByText(/Domaine headings are research links, not proof of ownership/).textContent).toMatch(/groups 10 recorded legal holders into 10 rows.*cited sources for Richebourg.*none is recorded yet/);
+  // All ten legal holders keep a row, and a company name found only behind a heading is still searchable.
+  expect(screen.getByText('10',{selector:'.village-map-count'})).toBeTruthy();
+  expect(within(holders).getAllByRole('button')).toHaveLength(10);
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:'Frere et Soeurs'}});
+  const [lead]=within(holders).getAllByRole('button');
+  expect(within(holders).getAllByRole('button')).toHaveLength(1);
+  expect(lead.textContent).toMatch(/^Domaine Méo-Camuzet/);
+  expect(lead.querySelector('.village-map-seal.is-weak')).toBeTruthy();
+  const parcel=screen.getByLabelText('Cadastral parcel');
+  expect((parcel as unknown as HTMLSelectElement).options).toHaveLength(59);
+  fireEvent.change(parcel,{target:{value:'21714000AN0292'}});
+  expect(screen.getByText('No matched rights record')).toBeTruthy();
+  const panel=await screen.findByRole('region',{name:'History and evidence'});
+  expect(await within(panel).findByText(/leaves the new owner unnamed/)).toBeTruthy();
+  expect(screen.queryByText('Verified parcel links')).toBeNull();
+ });
+ it('keeps all 69 Vougeot legal holders searchable and groups only company-record links under a domaine',async()=>{
   const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
   render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
   fireEvent.click(screen.getByRole('switch'));
-  fireEvent.click(await screen.findByRole('button',{name:'Show all 69 right holders'}));
-  const holders=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
-  expect(within(holders).getAllByRole('button')).toHaveLength(69);
-  const named=vougeot.features.find(f=>f.properties.recordedRights.length)!.properties.recordedRights[0];
-  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:named.name}});
-  expect(within(holders).getByRole('button',{name:new RegExp(ownerName(named.name))})).toBeTruthy();
+  const holders=await screen.findByRole('list',{name:'Recorded right holders by mapped area'});
+  // Domaine view: a company-record link groups; a lease mandate and a name-only match stay legal-holder rows.
+  fireEvent.click(await screen.findByRole('button',{name:/Show all .* entries/}));
+  expect(await within(holders).findByRole('button',{name:/Château de la Tour.*Company record/})).toBeTruthy();
+  expect(within(holders).getByRole('button',{name:/GFA Misset Cheron/i})).toBeTruthy();
+  expect(within(holders).queryByRole('button',{name:/^Domaine du Couvent/})).toBeNull();
+  expect(within(holders).getAllByRole('button',{name:/identity by name and seat only/})).toHaveLength(2);
+  const rows=Number(screen.getByText(/^\d+$/,{selector:'.village-map-count'}).textContent);
+  expect(rows).toBeLessThan(69);
+  expect(screen.getByText(/Domaine headings are research links/).textContent).toContain(`groups 69 recorded legal holders into ${rows} rows`);
+  // Every legal holder's recorded name still finds its row, whether or not it sits under a domaine heading.
+  const search=screen.getByRole('searchbox',{name:'Search right holders'});
+  const legal=new Set(vougeot.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId==='inao-denom-546')).flatMap(f=>f.properties.recordedRights.map(r=>r.name)));
+  expect(legal.size).toBe(69);
+  for(const name of legal){
+   fireEvent.change(search,{target:{value:name}});
+   expect(within(holders).queryAllByRole('button').length,name).toBeGreaterThan(0);
+  }
   const parcel=screen.getByLabelText('Cadastral parcel');
   fireEvent.change(parcel,{target:{value:'217160000A0001'}});
   expect(await within(await screen.findByRole('region',{name:'History and evidence'})).findByText('Application suspended')).toBeTruthy();
-  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
   fireEvent.change(parcel,{target:{value:'217160000A0025'}});
   const details=screen.getByRole('heading',{name:'Parcel A 0025'}).closest('.village-map-parcel-details')! as HTMLElement;
   for(const right of vougeot.features.find(f=>f.properties.id==='217160000A0025')!.properties.recordedRights){
@@ -53,20 +117,20 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.queryByText('Verified parcel links')).toBeNull();
  });
  it('does not download a cru’s research for the holder list when it has no domaine research',async()=>{
-  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
-  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
-  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  const gevrey=JSON.parse(readFileSync('public'+gevreyManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(gevrey)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-447"/>);
   fireEvent.click(screen.getByRole('switch'));
-  expect(await screen.findByRole('button',{name:'Show all 69 right holders'})).toBeTruthy();
+  expect(await screen.findByRole('button',{name:'Show all 33 right holders'})).toBeTruthy();
   expect(evidenceLoad.calls).toBe(0);
  });
  it('never mentions domaine research for a cru that has none, even when its evidence fails to load',async()=>{
   evidenceLoad.fail=true;
-  const vougeot=JSON.parse(readFileSync('public'+vougeotManifest.dataUrl,'utf8')) as Parcels;
-  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(vougeot)));
-  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-546"/>);
+  const gevrey=JSON.parse(readFileSync('public'+gevreyManifest.dataUrl,'utf8')) as Parcels;
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(gevrey)));
+  render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-447"/>);
   fireEvent.click(screen.getByRole('switch'));
-  expect(await screen.findByRole('button',{name:'Show all 69 right holders'})).toBeTruthy();
+  expect(await screen.findByRole('button',{name:'Show all 33 right holders'})).toBeTruthy();
   await new Promise(resolve=>setTimeout(resolve,0));  // let the rejected evidence load settle
   expect(screen.queryByText(/domaine research/i)).toBeNull();
   expect(screen.queryByRole('button',{name:'Retry domaine research'})).toBeNull();
@@ -119,7 +183,8 @@ describe('Cadastral parcel controls',()=>{
   expect(view.container.innerHTML).toBe('');
  });
  it('downloads only on request, keeps record details folded, preserves both rights and cleans up the overlay',async()=>{
-  const sample=structuredClone(data),feature=sample.features.find(f=>f.properties.recordedRights.length&&inEchezeaux(f))!;
+  // A holder without domaine research keeps its own legal-name row.
+  const sample=structuredClone(data),feature=sample.features.find(f=>f.properties.recordedRights.length&&inEchezeaux(f)&&!(f.properties.recordedRights[0].holderId in evidence.holderDomains))!;
   const holder=feature.properties.recordedRights[0];
   const holdings=sample.features.filter(f=>inEchezeaux(f)&&f.properties.recordedRights.some(r=>r.holderId===holder.holderId));
   const expectedArea=holdings.reduce((sum,f)=>sum+f.properties.overlaps.find(o=>o.parentFeatureId==='inao-denom-565')!.areaM2,0);
@@ -129,10 +194,9 @@ describe('Cadastral parcel controls',()=>{
   expect(fetcher).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole('switch',{name:/Parcel rights/}));
   await screen.findByText('Recorded right holders by mapped area');
-  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
-  expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/% of the parcel area has recorded rights/);
-  expect(screen.getByRole('button',{name:/Domaine de la Romanee Conti/})).toBeTruthy();
-  fireEvent.click(screen.getByRole('button',{name:/Show all .* right holders/}));
+  expect(screen.getByText(/parcels in Échezeaux · \d+ with recorded rights$/)).toBeTruthy();
+  expect(await screen.findByRole('button',{name:/^Domaine de la Romanée-Conti/})).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:/Show all .* entries/}));
   const holderRow=within(screen.getByRole('list',{name:'Recorded right holders by mapped area'})).getByRole('button',{name:new RegExp(ownerName(holder.name))});
   expect(holderRow.textContent).toContain(`${(expectedArea/10000).toFixed(2)} ha · ${holdings.length}`);
   expect(screen.getByText(/Legal-entity rights recorded on 1 January 2025/)).toBeTruthy();
@@ -171,7 +235,7 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('switch'));
   expect(signal?.aborted).toBe(true);
  });
- it('shows a verified producer link, and name-only matches only on request',async()=>{
+ it('shows a verified producer link without a name-only guess',async()=>{
   const sample=structuredClone(data);
   const linked=sample.features.filter(f=>inEchezeaux(f)&&holds(f,'DOMAINE MONGEARD MUGNERET'));
   expect(linked.length).toBeGreaterThan(0);
@@ -185,39 +249,52 @@ describe('Cadastral parcel controls',()=>{
   expect(screen.getByText(`${linked.length} parcel${linked.length===1?'':'s'}`,{exact:false})).toBeTruthy();
   // The legend is reported by an effect that can trail the panel text under load.
   await waitFor(()=>expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified']));
-  const toggle=screen.getByLabelText(/Show possible matches for Mongeard-Mugneret/) as unknown as HTMLInputElement;
-  expect(toggle.checked).toBe(false);
-  expect(screen.queryByText('Possible match · name only')).toBeNull();
-  fireEvent.click(toggle);
-  expect(screen.getByText('Possible match · name only')).toBeTruthy();
-  const possibleCard=document.querySelector('.village-map-producer.is-possible')! as HTMLElement;
-  expect(within(possibleCard).getByText('GFA Mongeard Mugneret et Fils')).toBeTruthy();
-  // The verified right holder is never repeated as a mere possibility.
-  expect(within(possibleCard).queryByText('Domaine Mongeard Mugneret')).toBeNull();
-  expect(onLegend).toHaveBeenLastCalledWith(['recorded','unrecorded','verified','possible']);
+  expect(screen.queryByLabelText(/Show possible matches/)).toBeNull();
+  expect(screen.queryByText(/Looks like/)).toBeNull();
  });
- it('makes possible parcels visibly blue and zooms to them without asserting farming',async()=>{
+ it('suggests the producer’s row and links it in one tap, with no blue guess on the map',async()=>{
   vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  vi.mocked(saveParcelProducerLink).mockImplementation(async(_parent,holderId,producerId)=>({holderId,producerId,producerName:'Domaine Nicole Lamarche',status:'manual',updatedAt:'2026-10-08'}));
   const map=mapStub();
-  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Domaine Nicole Lamarche"/>);
+  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Domaine Nicole Lamarche" producerId="nicole"/>);
   fireEvent.click(screen.getByRole('switch'));
-  fireEvent.click(await screen.findByLabelText(/Show possible matches/));
-  expect(screen.getByText('3 parcels · 1.10 ha')).toBeTruthy();
-  expect(screen.getByRole('button',{name:'Link Nicole Lamarche to an app producer'})).toBeTruthy();
-  const fill=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible');
-  const line=map.addLayer.mock.calls.map(([layer])=>layer).find(layer=>layer.id==='cadastral-parcel-possible-line');
-  expect(fill.paint).toEqual({'fill-color':'#0067b1','fill-opacity':0.58});
-  expect(line.paint['line-dasharray']).toEqual([2,1.5]);
-  fireEvent.click(screen.getByRole('button',{name:'Show possible matches on map'}));
+  const card=await screen.findByRole('region',{name:'This wine’s producer'});
+  expect((await within(card).findByText(/Looks like/)).textContent).toBe('Looks like Domaine Nicole Lamarche · 1.10 ha');
+  expect(screen.queryByLabelText(/Show possible matches/)).toBeNull();
+  expect(map.addLayer.mock.calls.map(([layer])=>layer.id).filter(id=>id.includes('possible'))).toEqual([]);
+  fireEvent.click(within(card).getByRole('button',{name:'Link Domaine Nicole Lamarche to Domaine Nicole Lamarche'}));
+  expect(await within(card).findByText('Manual link · unverified')).toBeTruthy();
+  expect(saveParcelProducerLink).toHaveBeenCalledWith('inao-denom-565','397738634','nicole');
   expect(map.fitBounds).toHaveBeenCalled();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
-  // A selected possible parcel keeps the blue vocabulary; wine red is reserved for verified producers.
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
-  const detail=screen.getByText('Possible match, unverified');
-  expect(detail.classList.contains('is-possible')).toBe(true);
-  expect(detail.classList.contains('is-wine')).toBe(false);
+  expect(screen.queryByText(/Possible match/)).toBeNull();
  });
- it('keeps each parcel’s dated operator evidence when a right holder is selected, with unverified parcels still distinct',async()=>{
+ it('softens the parcel grid and hatching when zoomed out, never the chosen or producer parcels',async()=>{
+  vi.stubGlobal('fetch',vi.fn(async()=>Response.json(data)));
+  const map=mapStub();
+  render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565"/>);
+  fireEvent.click(screen.getByRole('switch'));
+  await screen.findByText('Recorded right holders by mapped area');
+  // The stub declares only the layer; MapLibre's second argument is the layer to draw beneath.
+  const added=map.addLayer.mock.calls.map(call=>({...call[0],before:(call as unknown[])[1]}));
+  const layer=(id:string)=>added.find(l=>l.id===id)!;
+  // Every zoomed paint is ['interpolate',['linear'],['zoom'],far zoom,far value,near zoom,near value].
+  const stops=(value:unknown[])=>{expect(value.slice(0,3)).toEqual(['interpolate',['linear'],['zoom']]);return {far:value[4],near:value[6],from:value[3] as number,to:value[5] as number}};
+  const opacity=stops(layer('cadastral-parcel-outline').paint['line-opacity']);
+  // case: dim, then an unmatched parcel, else (chosen, producer) full strength at both ends.
+  expect(opacity.far).toEqual(['case',['get','dim'],0.06,['==',['get','match'],''],0.14,1]);
+  expect(opacity.near).toEqual(['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1]);
+  expect(opacity.from).toBeLessThan(opacity.to);
+  const hatch=stops(layer('cadastral-parcel-hatch').paint['fill-opacity']),tint=stops(layer('cadastral-parcel-unrecorded-tint').paint['fill-opacity']);
+  expect([hatch.far,tint.near]).toEqual([0,0]);
+  expect([tint.from,tint.to]).toEqual([hatch.from,hatch.to]);
+  // The flat tint sits under the hatching, for the same parcels without a matched record.
+  expect(layer('cadastral-parcel-unrecorded-tint').before).toBe('cadastral-parcel-hatch');
+  expect(layer('cadastral-parcel-unrecorded-tint').filter).toEqual(layer('cadastral-parcel-hatch').filter);
+  expect(layer('cadastral-parcel-owner').paint['fill-opacity']).toBe(0.85);
+ });
+ it('keeps each parcel’s dated operator evidence when a right holder is selected',async()=>{
   const sample=structuredClone(data);
   const linked=sample.features.filter(f=>inEchezeaux(f)&&holds(f,'DOMAINE DE LA ROMANEE CONTI'));
   expect(linked.length).toBeGreaterThan(2);
@@ -228,16 +305,13 @@ describe('Cadastral parcel controls',()=>{
   fireEvent.click(screen.getByRole('switch'));
   await screen.findByText('THIS WINE’S PRODUCER');
   expect(screen.queryByRole('link',{name:/Evidence for parcel/})).toBeNull();
-  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
-  fireEvent.click(screen.getByRole('button',{name:/Domaine de la Romanee Conti/}));
+  fireEvent.click(await screen.findByRole('button',{name:/^Domaine de la Romanée-Conti/}));
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:linked[1].properties.id}});
   expect(screen.getByRole('link',{name:'Evidence for parcel 1'}).getAttribute('href')).toBe('https://example.test/parcel-1');
   expect(screen.queryByRole('link',{name:'Evidence for parcel 0'})).toBeNull();
   expect(screen.getByText(/Verified operator · effective 2025-01-01/)).toBeTruthy();
-  fireEvent.click(screen.getByLabelText(/Show possible matches/));
-  const card=within(document.querySelector('.village-map-producer.is-possible')! as HTMLElement);
-  expect(card.getByText('Domaine de la Romanee Conti')).toBeTruthy();
-  expect(card.getByText(new RegExp(`^${linked.length-2} parcels? ·`))).toBeTruthy();
+  // Verified links stand alone: no name-only suggestion for the rest of the holder's parcels.
+  expect(screen.queryByText(/Looks like/)).toBeNull();
  });
 });
 describe('Parcel owner names',()=>{

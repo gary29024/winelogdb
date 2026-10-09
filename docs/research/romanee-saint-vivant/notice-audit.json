@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-1085",
+  "inputs": {
+    "parcelSnapshotSha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+    "history": "docs/research/romanee-saint-vivant/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/romanee-saint-vivant/curation.json",
+        "sha256": "dd4ce8022fcab62606b458c1f2d5e5fab8c43ae9cd706d20b2a40d527dbf4ff9"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21714000AC0230",
+    "21714000AC0231",
+    "21714000AC0271",
+    "21714000AC0273",
+    "21714000AC0298",
+    "21714000AC0299",
+    "21714000AC0300",
+    "21714000AC0301",
+    "21714000AC0357",
+    "21714000AC0358",
+    "21714000AC0359",
+    "21714000AC0360",
+    "21714000AL0001",
+    "21714000AL0002",
+    "21714000AL0325",
+    "21714000AL0326",
+    "21714000AL0327",
+    "21714000AL0328",
+    "21714000AL0329",
+    "21714000AL0330"
+  ],
+  "reviewedMatches": 0,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [],
+  "rawOcrReferenceHintHits": [],
+  "finding": "No OCR reference hint in the three Côte-d'Or indexes matches any of the 20 current or reachable Romanée-Saint-Vivant references, and no farm-structure notice yields a candidate. The three reviewed Vosne-Romanée rows (AB 100, AN 112, AN 249) are outside this cru's reachable reference set and stay unassigned. No exact Romanée-Saint-Vivant event is supported; no page-image review is pending.",
+  "unassignedReviewedReferences": [
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21714",
+        "printedCommune": "VOSNE-ROMANEE",
+        "printedReference": "AN 112",
+        "reference": "AN0112",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "890a15e746cafa55333c5e91c4959b78bf6cbeeeb1509adf0ad099bf2d27190d:p71",
+        "actId": "21-2016-07-11-013",
+        "documentDate": "2016-07-11",
+        "applicant": "SCEA DOMAINE DE LA VOUGERAIE",
+        "previousOperator": null,
+        "communeCode": "21714",
+        "printedCommune": "VOSNE-ROMANEE",
+        "printedReference": "AN 249",
+        "reference": "AN0249",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          72,
+          73
+        ],
+        "reviewedAt": "2026-09-29",
+        "reviewMethod": "Visually read the cited evidence pages rendered by Poppler at 1800 pixels on the long edge; checked commune/reference grouping, Article 1 outcome and signature date.",
+        "currentFarmerVerified": false,
+        "note": "Total covers all three communes. Incumbent tenant is mentioned but not named."
+      },
+      "indexId": "departmental-cote-dor",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-005:p82:eugenie",
+        "actId": null,
+        "documentDate": "2009-12-24",
+        "printedDate": "24 décembre 2009",
+        "publicationDate": "2010-01-28",
+        "applicant": "SCEA DOMAINE EUGENIE",
+        "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+        "communeCode": "21714",
+        "printedCommune": "VOSNE ROMANEE",
+        "printedReference": "AB 100",
+        "reference": "AB0100",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          82
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    }
+  ],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

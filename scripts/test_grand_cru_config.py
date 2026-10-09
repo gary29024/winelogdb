@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest import mock
 
 import grand_cru
+from redact_grand_cru_html import GOOGLE_API_KEY, REPLACEMENT, redact_html
 from build_grand_cru_research import Context
 from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, bundle_commune_names, cadastre_sources, commune_audit_path,
                        named_plot_report_path, bundle_ids, bundle_parent_features, bundle_sources,
@@ -13,6 +14,92 @@ from grand_cru import (APP_DIR, app_cru_slugs, REPORT_DIR, RESEARCH_DIR, ROOT, b
 
 
 class ConfigTests(unittest.TestCase):
+    def test_parcels_without_lieu_dit_are_reviewed(self):
+        # A parcel outside every lieu-dit polygon gets no guessed name, and must be listed in its config.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            with self.subTest(cru=slug):
+                parcels = read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels']
+                outside = sorted(i for i, p in parcels.items() if p['sourceName'] is None)
+                self.assertEqual(outside, cru['namedPlots'].get('parcelsWithoutLieuDit', []))
+                self.assertTrue(all(parcels[i]['name'] is None and parcels[i]['share'] == 0 for i in outside))
+        self.assertEqual(load_cru('la-grande-rue')[0]['namedPlots']['parcelsWithoutLieuDit'], ['21714000AM0002', '21714000AM0008'])
+
+    def test_tier1_rechecks_match_pinned_source_availability(self):
+        from inventory_grand_cru_sources import rights_releases, dfi_releases, dfi_schema
+        reviewed = [slug for slug in cru_slugs() if (RESEARCH_DIR / slug / 'source-review.json').exists()]
+        self.assertIn('richebourg', reviewed)
+        self.assertIn('montrachet', reviewed)
+        self.assertIn('chablis-grand-cru', reviewed)
+        self.assertIn('chevalier-montrachet', reviewed)
+        self.assertIn('batard-montrachet', reviewed)
+        self.assertIn('bienvenues-batard-montrachet', reviewed)
+        self.assertIn('criots-batard-montrachet', reviewed)
+        for slug in reviewed:
+            with self.subTest(cru=slug):
+                cru, bundle = load_cru(slug)
+                departments = {code[:2] for code in communes(bundle)}
+                self.assertEqual(len(departments), 1)
+                department = next(iter(departments))
+                review = read_json(RESEARCH_DIR / slug / 'source-review.json')
+                self.assertEqual(review['parentFeatureId'], cru['parentFeatureId'])
+                for source in review['sources']:
+                    if 'snapshot' in source:
+                        raw = (ROOT / source['snapshot']).read_bytes()
+                        self.assertEqual(grand_cru.sha256(raw), source['sha256'])
+                        self.assertEqual(len(raw), source['size'])
+                        if source['snapshot'].endswith('.html'):
+                            # Never include a matching value in test failure output.
+                            self.assertFalse(bool(GOOGLE_API_KEY.search(raw)), source['snapshot'])
+                        if 'redaction' in source:
+                            redaction = source['redaction']
+                            self.assertEqual(redaction['method'], 'google-api-key-v1')
+                            self.assertEqual(redaction['replacement'], REPLACEMENT.decode('ascii'))
+                            self.assertGreater(redaction['occurrences'], 0)
+                            self.assertEqual(raw.count(REPLACEMENT), redaction['occurrences'])
+                            self.assertNotEqual(source['sha256'], redaction['originalSha256'])
+                            self.assertEqual(redaction['originalSize'] - source['size'],
+                                             redaction['occurrences'] * (39 - len(REPLACEMENT)))
+                            if source.get('httpContentEncoding') is None:
+                                self.assertEqual(redaction['originalSha256'], source['transportSha256'])
+                                self.assertEqual(redaction['originalSize'], source['transportSize'])
+                    self.assertTrue(source['retrievedAt'].endswith('Z'))
+                sources = {s['id']: s for s in review['sources']}
+                if 'namedPlots' in cru:
+                    self.assertEqual(cru['namedPlots']['nameSourceSha256'], sources['names']['sha256'])
+                self.assertEqual(review.get('department', '21'), department)
+                rights = rights_releases(read_json(ROOT / sources['rights']['snapshot']), department)
+                self.assertEqual(rights, review['rightsReleases'])
+                history = read_json(RESEARCH_DIR / slug / 'rights-history.json')['coverage']
+                self.assertEqual([r['asOf'] for r in rights], history['rightsImported'])
+                dfi = read_json(ROOT / sources['dfi']['snapshot'])
+                self.assertEqual(dfi_releases(dfi, department), review['dfiReleases'])
+                self.assertEqual(review['dfiReleases'][-1]['asOf'], history['dfiSources'][0]['asOf'])
+                self.assertEqual(dfi_schema(dfi)[0], history['dfiSchema'][0]['schemaVersion'])
+                for commune, geometry in history['geometry'].items():
+                    with self.subTest(commune=commune):
+                        self.assertEqual([d for d in review['geometryReleases'] if d <= geometry['pinnedCurrentGeometry']],
+                                         geometry['obtainedDates'])
+
+    def test_html_redaction_preserves_evidence_bytes_and_original_provenance(self):
+        # Synthetic value assembled to avoid committing even a key-shaped fixture.
+        fake_key = b'AIza' + b'X' * 35
+        before = b'<p>Lieu-dit: B\xe8ze</p>\r\n<script>key="'
+        after = b'";</script>\r\n'
+        original = before + fake_key + after
+        sanitized, metadata = redact_html(original)
+        self.assertEqual(sanitized, before + REPLACEMENT + after)
+        self.assertEqual(metadata['sha256'], grand_cru.sha256(sanitized))
+        self.assertEqual(metadata['size'], len(sanitized))
+        self.assertEqual(metadata['redaction']['originalSha256'], grand_cru.sha256(original))
+        self.assertEqual(metadata['redaction']['originalSize'], len(original))
+        self.assertEqual(metadata['redaction']['occurrences'], 1)
+        self.assertEqual(redact_html(original + original)[1]['redaction']['occurrences'], 2)
+        self.assertEqual(redact_html(sanitized), (sanitized, {
+            'sha256': grand_cru.sha256(sanitized), 'size': len(sanitized)}))
+
     def test_every_cru_and_bundle_agree(self):
         self.assertIn('echezeaux', cru_slugs())
         self.assertIn('grands-echezeaux', cru_slugs())
@@ -143,6 +230,8 @@ class ConfigTests(unittest.TestCase):
             report = read_json(path)
             pins = {insee: digest for insee, _, digest in cadastre_sources(bundle)}
             self.assertEqual({c['commune']: c['sha256'] for c in report['bundleCommunes']}, pins, f'{slug}: stale commune audit')
+            self.assertEqual(report.get('importedCommunes', sorted(pins)), sorted(report['inaoCommunes']),
+                             f'{slug}: other bundle communes must be neighbours, not imported coverage')
             review = cru.get('communeAudit', {}).get('reviewedUncoveredArea')
             self.assertEqual(report.get('reviewedUncoveredArea'), review, f'{slug}: rerun the commune audit after review')
             if review:
@@ -167,6 +256,54 @@ class ConfigTests(unittest.TestCase):
             used = {s['commune']: s['sha256'] for s in report['sources']} if 'sources' in report else {communes(bundle)[0]: report['source']['sha256']}
             self.assertEqual(used, {c: bundle['lieuxDits'][c]['sha256'] for c in communes(bundle)}, f'{slug}: stale named-area audit')
             self.assertEqual(report['parentSourceSha256'], village_map(bundle, cru['parentFeatureId'])[2], f'{slug}: INAO boundary changed')
+
+    def test_cross_commune_named_areas_list_every_commune(self):
+        # Bonnes-Mares: LES BONNES MARES is recorded in both communes and forms one reviewed named area.
+        plot = load_cru('bonnes-mares')[0]['namedPlots']['plots'][0]
+        self.assertEqual(plot['communes'], ['21133', '21442'])
+        # Clos de la Roche: Chambolle-Musigny has its own LES CHABIOTS and LES FREMIERES; only Morey's are used.
+        roche = {p['sourceName']: p.get('communes') for p in load_cru('clos-de-la-roche')[0]['namedPlots']['plots']}
+        self.assertEqual((roche['LES CHABIOTS'], roche['LES FREMIERES']), (['21442'], ['21442']))
+        report = read_json(named_plot_report_path(load_cru('bonnes-mares')[0]))
+        self.assertEqual(report['plots'][0]['sourceFeatures'], 2)
+        for slug in cru_slugs():
+            for entry in load_cru(slug)[0].get('namedPlots', {}).get('plots', []):
+                if 'communes' in entry:
+                    self.assertEqual(entry['communes'], sorted(set(entry['communes'])), slug)
+                    self.assertTrue(set(entry['communes']) <= set(communes(load_cru(slug)[1])), slug)
+
+    def test_overlapping_named_areas_need_a_reviewed_cap(self):
+        # Clos Saint-Denis: the cadastral CALOUERE and MAISON BRULEE overlap; both outlines are kept as published.
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            report = read_json(named_plot_report_path(cru))
+            reviews = cru['namedPlots'].get('reviewedOverlaps', [])
+            with self.subTest(cru=slug):
+                self.assertEqual(len(report.get('overlaps', [])), len(reviews))
+                for overlap, review in zip(report.get('overlaps', []), reviews):
+                    self.assertEqual(overlap['plots'], [f'{slug}-plot-{p}' for p in review['plots']])
+                    self.assertLessEqual(overlap['areaM2'], review['maximumAreaM2'])
+                    self.assertLess(review['maximumAreaM2'] - overlap['areaM2'], 0.1)
+        self.assertEqual(load_cru('clos-saint-denis')[0]['namedPlots']['reviewedOverlaps'][0]['plots'], ['calouere', 'maison-brulee'])
+
+    def test_edge_parcels_in_neighbouring_lieux_dits_are_declared(self):
+        # Musigny's edge parcels lie wholly in neighbouring lieux-dits such as Les Amoureuses; none is a Musigny climat.
+        checked = []
+        for slug in cru_slugs():
+            cru = load_cru(slug)[0]
+            if 'namedPlots' not in cru:
+                continue
+            config, rows = cru['namedPlots'], read_json(RESEARCH_DIR / slug / 'parcel-named-areas.json')['parcels'].values()
+            neighbouring = {n['sourceName'] for n in config.get('neighbouringLieuxDits', [])}
+            with self.subTest(cru=slug):
+                self.assertFalse(neighbouring & {p['sourceName'] for p in config['plots']})
+                self.assertEqual({r['sourceName'] for r in rows if r.get('neighbouringLieuDit')}, neighbouring)
+                self.assertTrue(all(r['name'] is None for r in rows if r.get('neighbouringLieuDit')))
+            if neighbouring:
+                checked.append(slug)
+        self.assertIn('musigny', checked)
 
     def test_generated_research_json_has_one_line_per_record(self):
         from grand_cru import record_json

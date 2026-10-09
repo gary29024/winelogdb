@@ -3,8 +3,10 @@ import {existsSync,readFileSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import { wine } from './fixtures/layoutWine';
 import {ownerName} from '../../src/lib/places/parcelOwners';
+import {groupParcelRightHolders,type HolderResearch} from '../../src/lib/places/parcelPresentation';
 import type {Parcels} from '../../src/features/vineyards/GrandCruParcels';
 import type {ParcelEvidenceData} from '../../src/features/vineyards/ParcelEvidence';
+import {unlistedRegionalMapIds} from '../../src/lib/places/unlistedRegionalMaps';
 
 const fullMapMatrix=process.env.WINELOG_E2E_EXHAUSTIVE_MAPS==='1';
 const losslessMaps=JSON.parse(readFileSync('src/lib/places/burgundyLosslessMapRegistry.json','utf8')) as Record<string,{brotliJsonUrl:string;gzipJsonUrl:string}>;
@@ -18,13 +20,24 @@ const auditedCru=(slug:string)=>existsSync(`scripts/grand-crus/reports/${slug}-c
 // White-only crus need a white wine for their village map to open.
 const whiteCru=(slug:string)=>/chablis|montrachet|charlemagne/.test(slug);
 // Cover each app-visible history bundle on a real map.
-for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).entries()){
+const historyCrus=[...new Set(['echezeaux','clos-de-vougeot',...(process.env.WINELOG_E2E_CRU?[process.env.WINELOG_E2E_CRU]:[])])];
+for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
  test(`Official history: ${slug} loads its own evidence and preserves dated source roles`,async({page},testInfo)=>{
   test.setTimeout(60_000); // Allow a cold local Vite/Worker startup before the real map assertions.
   const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
   const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;villageMaps:string[];evidenceFrom:string[]};
   const evidence=read(`src/lib/places/grandCruParcels/${slug}.evidence.json`) as ParcelEvidenceData;
-  const [parcelId,trace]=Object.entries(evidence.tracing!).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation')!;
+  const dfi=Object.entries(evidence.tracing??{}).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation');
+  // Some reviewed crus, including Lambrays, have no DFI event at the source boundary.
+  // Exercise an actual dated rights record in that case, without inventing parcel history.
+  const rights=Object.entries(evidence.parcels).flatMap(([parcelId,items])=>items
+   .filter(item=>item.dateRole==='1-january-rights-snapshot'&&item.date)
+   .map(item=>({parcelId,date:item.date!}))).sort((a,b)=>a.date.localeCompare(b.date));
+  const record=dfi?{parcelId:dfi[0],date:dfi[1].earliestSupportedEvent.date,group:'history',label:'DFI validation date'}
+   :rights.length?{...rights[0],group:'ownership',label:'1 January rights snapshot'}:undefined;
+  // A cru with neither (every parcel first seen in a cadastral release, no dated rights snapshot) has no dated record to show.
+  if(!record){test.skip(true,`${slug} has no DFI validation or dated rights record`);return;}
+  const {parcelId}=record;
   const villages=read('src/lib/places/burgundyVillageMapRegistry.json').villages as {id:string;name:string}[];
   const names=cru.villageMaps.map(id=>villages.find(v=>v.id===id)!.name);
   await page.emulateMedia({reducedMotion:'reduce'});
@@ -48,39 +61,34 @@ for(const [index,slug] of ['echezeaux','clos-de-vougeot'].filter(auditedCru).ent
   await dialog.getByLabel('Cadastral parcel').selectOption(parcelId);
   const panel=dialog.getByRole('region',{name:'History and evidence'});
   await expect(panel).toBeVisible();
-  const history=panel.locator('details.parcel-evidence-history');
+  const history=panel.locator(`details.parcel-evidence-${record.group}`);
   if(!await history.evaluate((el:HTMLDetailsElement)=>el.open))await history.locator('summary').click();
-  await expect(history.getByText('DFI validation date',{exact:true}).first()).toBeVisible();
-  await expect(history.locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`).first()).toBeVisible();
+  await expect(history.getByText(record.label,{exact:true}).first()).toBeVisible();
+  await expect(history.locator(`time[datetime="${record.date}"]`).first()).toBeVisible();
   await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
   expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
-  await panel.getByText('Source coverage and tracing',{exact:true}).click();
-  await expect(panel.locator('.parcel-evidence-tracing').getByText(/Earliest supported event:/).locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`)).toBeVisible();
-  if(slug==='chablis-grand-cru'){
-   await panel.getByText('Administrative notice coverage and gaps',{exact:true}).click();
-   await expect(panel.getByText(/All Yonne departmental notice publication years/)).toBeVisible();
-  }
+  // Source coverage and tracing stay in the research files; readers see the dated records only.
+  await expect(panel.getByText('Source coverage and tracing',{exact:true})).toHaveCount(0);
   expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
   await page.screenshot({path:testInfo.outputPath(`${slug}-official-history-mobile.png`)});
  });
 }
 
-test('Échezeaux: manually link a possible producer and retain it in owner and shared views',async({page},testInfo)=>{
+test('Échezeaux: link the wine’s producer in one tap and keep it in owner and shared views',async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
- await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche'});
- const producers=[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeLocality:'Vosne-Romanée'},
-  {id:'shared::friend::anne',canonicalName:'Domaine Anne Gros',homeLocality:'Vosne-Romanée',sharedOnly:true}];
- let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
- await page.route('**/api/producers',route=>route.fulfill({json:{items:producers}}));
+ await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Nicole Lamarche',producerId:'nicole'});
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[],catalogue=0;
+ // The map opens from the wine, so its producer is known: the catalogue is never needed.
+ await page.route('**/api/producers',route=>{catalogue++;return route.fulfill({json:{items:[]}})});
  await page.route('**/api/parcel-producer-links?*',async route=>{
   const request=route.request();
   if(request.method()==='PUT'){
-   const input=request.postDataJSON();const producer=producers.find(p=>p.id===input.producerId)!;
-   links=[{...input,producerName:producer.canonicalName,status:'manual',updatedAt:'2026-09-28'}];
-   return route.fulfill({json:links[0]});
+   const input=request.postDataJSON(),saved={...input,producerName:'Domaine Nicole Lamarche',status:'manual',updatedAt:'2026-10-08'};
+   links=[...links.filter(l=>l.holderId!==input.holderId),saved];
+   return route.fulfill({json:saved});
   }
-  if(request.method()==='DELETE'){links=[];return route.fulfill({json:{deleted:true}})}
+  if(request.method()==='DELETE'){const input=request.postDataJSON();links=links.filter(l=>l.holderId!==input.holderId);return route.fulfill({json:{deleted:true}})}
   return route.fulfill({json:{items:links}});
  });
  await page.setViewportSize({width:390,height:844});
@@ -91,44 +99,37 @@ test('Échezeaux: manually link a possible producer and retain it in owner and s
   await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();return dialog;
  };
  let dialog=await open('/wines/layout-wine');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('button',{name:'Show possible matches on map'}).click();
+ let card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText('Looks like Domaine Nicole Lamarche');
+ await expect(dialog.getByRole('checkbox',{name:/Show possible matches/})).toHaveCount(0);
+ await card.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
- await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
- await page.screenshot({path:testInfo.outputPath('possible-producer-blue-mobile.png')});
- await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
- await dialog.getByRole('searchbox',{name:'Search app producers'}).fill('Nicole');
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
- await page.screenshot({path:testInfo.outputPath('producer-link-editor-mobile.png')});
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
- await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toHaveAttribute('href','/producers/nicole');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await expect(dialog.getByLabel('Map legend')).not.toContainText('possible');
+ await page.screenshot({path:testInfo.outputPath('producer-suggestion-mobile.png')});
+ await card.getByRole('button',{name:'Link Domaine Nicole Lamarche to Domaine Nicole Lamarche',exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ expect(links.map(l=>[l.holderId,l.producerId])).toEqual([['397738634','nicole']]);
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  // A fresh shared-wine view reloads the saved account association.
  dialog=await open('/shared/layout-wine');
- await expect(dialog.getByRole('link',{name:'Domaine Nicole Lamarche',exact:true})).toBeVisible();
+ card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText('Linked to Domaine Nicole Lamarche');
  // The link for this wine's producer opens the map on that holder's parcels, not the whole cru.
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).uncheck();
- await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
- await dialog.getByRole('button',{name:'Show on map'}).click();
+ await card.getByRole('button',{name:'Show on map'}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.getByText('Verified parcel links')).toHaveCount(0);
- await dialog.getByRole('button',{name:'Change link'}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('shared::friend::anne');
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- // A deliberate reassignment stays saved, but must not appear on Nicole's wine.
- await expect(dialog.getByRole('link',{name:'Domaine Anne Gros',exact:true})).toHaveCount(0);
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
- expect(links[0].producerId).toBe('shared::friend::anne');
- await dialog.getByRole('checkbox',{name:/Show possible matches/}).check();
- await dialog.getByRole('button',{name:'Link Nicole Lamarche to an app producer',exact:true}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption('nicole');
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await dialog.getByRole('button',{name:'Remove link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ // The chosen row offers the same link: unlink it there, then link it again in one tap.
+ const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
+ await owners.getByRole('button',{name:'Unlink',exact:true}).click();
+ await expect(card).toContainText('Not linked to any parcels yet.');
+ expect(links).toEqual([]);
+ await owners.getByRole('button',{name:'Link to Domaine Nicole Lamarche',exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ await page.screenshot({path:testInfo.outputPath('producer-linked-row-mobile.png')});
+ expect(catalogue).toBe(0);
 });
 
 for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Échezeaux: the map stays in view while choosing an owner or parcel at ${viewport.width}px`,async({page})=>{
@@ -142,6 +143,8 @@ for(const viewport of [{width:390,height:844},{width:1280,height:800}])test(`Éc
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  await dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'}).check();
  const canvas=dialog.locator('.village-map-canvas'),owners=dialog.locator('ul.village-map-owners');
+ // The rows regroup once domaine research loads; wait for its key so the rows below stay attached.
+ await expect(dialog.getByText('Link strength',{exact:true})).toBeVisible();
  await expect(owners.locator('li').last()).toBeVisible();
  // Scroll down to the owner list: the map must still be on screen, under the header.
  await owners.locator('li').last().scrollIntoViewIfNeeded();
@@ -194,8 +197,9 @@ for(const route of allMapRoutes){
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(false);
   const toggle=dialog.getByRole('switch',{name:'Parcel rights · Échezeaux'});
   await toggle.check();
-  await dialog.getByLabel('Group right holders by').selectOption('holder');
   const owners=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
+  // Rows are grouped by researched domaine; there is no legal-holder switch.
+  await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
   await expect(owners.getByRole('button')).toHaveCount(6);
   // The reference finder stays folded; it is the keyboard route to any parcel.
   await dialog.getByText('Find a parcel by cadastral reference').click();
@@ -204,9 +208,10 @@ for(const route of allMapRoutes){
   expect(requests.some(url=>url.includes('echezeaux-parcels.'))).toBe(true);
   // One legend: the parcel keys join the cru keys under the map.
   await expect(dialog.getByLabel('Map legend')).toContainText('No matched rights');
-  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','false');
-  await dialog.getByRole('button',{name:/Domaine de la Romanee Conti/}).click();
-  await expect(dialog.getByRole('button',{name:/Domaine de la Romanee Conti/})).toHaveAttribute('aria-pressed','true');
+  const drc=owners.getByRole('button',{name:/^Domaine de la Romanée-Conti/});
+  await expect(drc).toHaveAttribute('aria-pressed','false');
+  await drc.click();
+  await expect(drc).toHaveAttribute('aria-pressed','true');
   await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
   const known=await parcel.locator('option',{hasText:'Domaine de la Romanee Conti'}).first().getAttribute('value');
   await parcel.selectOption(known!);
@@ -238,7 +243,7 @@ const parcelCru=(()=>{
  const slug=process.env.WINELOG_E2E_CRU??'grands-echezeaux';
  if(!auditedCru(slug))throw new Error(`${slug} is hidden from the app until its commune-edge audit is committed`);
  const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
- const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[]};
+ const cru=read(`scripts/grand-crus/${slug}.json`) as {slug:string;name:string;parentFeatureId:string;bundle:string;villageMaps:string[];evidenceFrom:string[];namedPlots?:{displayLayer?:boolean;plots:{id:string;name:string}[]}};
  const manifest=read(`src/lib/places/grandCruParcels/${cru.bundle}.manifest.json`) as {dataUrl:string;rightsAsOf:string};
  const features=(read(`public${manifest.dataUrl}`) as Parcels).features
   .filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===cru.parentFeatureId));
@@ -247,40 +252,56 @@ const parcelCru=(()=>{
  const evidenced=research.flatMap(source=>Object.keys(source.parcels)).filter(id=>parcels.includes(id)).sort();
  const hasDomaineLinks=research.some(source=>Object.keys(source.holderDomains).length>0);
  const holders=new Set(features.flatMap(f=>f.properties.recordedRights.map(r=>r.holderId))).size;
- const held=features.find(f=>f.properties.recordedRights.length)!;
+ // The holder list always groups by researched domaine, so the journey picks a row that stands for one legal holder.
+ const holderDomains:Record<string,HolderResearch>={};
+ for(const source of research)for(const [id,item] of Object.entries(source.holderDomains as Record<string,HolderResearch>))holderDomains[id]??=item;
+ const rows=groupParcelRightHolders(features,cru.parentFeatureId,holderDomains);
+ const row=rows.find(g=>g.holderIds.length===1&&rows.filter(o=>o.name===g.name).length===1)!;
  const unknown=features.find(f=>!f.properties.recordedRights.length);
  const multiple=features.find(f=>f.properties.recordedRights.length>1);
- const village=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.find(v=>v.id===cru.villageMaps[0])!;
- return {...cru,village:village.name,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,held,unknown,multiple};
+ // A cross-commune cru can open in a configured village other than the bundle's first one.
+ const villages=(read('src/lib/places/burgundyVillageMapRegistry.json') as {villages:{id:string;name:string}[]}).villages.filter(v=>cru.villageMaps.includes(v.id)).map(v=>v.name);
+ return {...cru,villages,dataUrl:manifest.dataUrl,rightsAsOf:manifest.rightsAsOf,parcels,evidenced,hasDomaineLinks,holders,rows:rows.length,row,unknown,multiple};
 })();
 
 test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped producer links from its config`,async({page},testInfo)=>{
+ test.setTimeout(60_000); // Corton's 728 parcels make this the longest journey under parallel workers.
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.setViewportSize({width:390,height:844});
- const producer={id:'parcel-test',canonicalName:'Parcel test producer'},other={id:'parcel-other',canonicalName:'Other test producer'};
+ const producer={id:'parcel-test',canonicalName:'Parcel test producer'};
  await setup(page,{appellation:parcelCru.name,wineName:parcelCru.name,classification:'grand_cru',producer:producer.canonicalName,producerId:producer.id,
   ...(whiteCru(parcelCru.slug)?{colour:'White',wineStyle:'white'}:{})});
- await page.route('**/api/producers',route=>route.fulfill({json:{items:[producer,other]}}));
- let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[];
+ let links:{holderId:string;producerId:string;producerName:string;status:string;updatedAt:string}[]=[],catalogue=0;
+ await page.route('**/api/producers',route=>{catalogue++;return route.fulfill({json:{items:[producer]}})});
  await page.route('**/api/parcel-producer-links?*',async route=>{
   const request=route.request(),query=new URL(request.url()).searchParams;
   expect(query.get('parent')).toBe(parcelCru.parentFeatureId);
   expect(query.get('snapshot')).toBe(parcelCru.rightsAsOf);
   if(request.method()==='PUT'){
-   const input=request.postDataJSON(),target=[producer,other].find(p=>p.id===input.producerId)!;
-   links=[{...input,producerName:target.canonicalName,status:'manual',updatedAt:'2026-10-01'}];
-   return route.fulfill({json:links[0]});
+   const input=request.postDataJSON(),saved={...input,producerName:producer.canonicalName,status:'manual',updatedAt:'2026-10-01'};
+   links=[...links.filter(l=>l.holderId!==input.holderId),saved];
+   return route.fulfill({json:saved});
   }
+  if(request.method()==='DELETE'){const input=request.postDataJSON();links=links.filter(l=>l.holderId!==input.holderId);return route.fulfill({json:{deleted:true}})}
   return route.fulfill({json:{items:links}});
  });
  let downloads=0;
  await page.route(`**${parcelCru.dataUrl}`,route=>++downloads===1?route.fulfill({status:503}):route.continue());
  await page.goto('/wines/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
- let dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ let dialog=page.getByRole('dialog');
+ await expect(dialog).toHaveAccessibleName(new RegExp(`^(${parcelCru.villages.join('|')})$`));
  await expect(dialog.getByRole('combobox',{name:'Explore a vineyard'})).toHaveValue(parcelCru.parentFeatureId);
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
  expect(downloads).toBe(0);
+ if(parcelCru.namedPlots&&parcelCru.namedPlots.displayLayer!==false){
+  const plot=parcelCru.namedPlots.plots[0];
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(`${parcelCru.slug}-plot-${plot.id}`);
+  await expect(dialog.getByRole('heading',{name:plot.name,exact:true})).toBeVisible();
+  await expect(dialog.getByText(`Cadastral named area within ${parcelCru.name} Grand Cru`,{exact:false})).toBeVisible();
+  await expect(dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`})).toBeVisible();
+  await dialog.getByRole('combobox',{name:'Explore a vineyard'}).selectOption(parcelCru.parentFeatureId);
+ }
  const toggle=dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`});
  await toggle.focus();await page.keyboard.press('Space');
  await expect(dialog.getByRole('alert')).toContainText('The cru map remains available');
@@ -288,18 +309,20 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  await dialog.getByRole('button',{name:'Retry parcels'}).click();
  await expect(dialog.getByText(`${parcelCru.parcels.length} parcels in ${parcelCru.name}`,{exact:false})).toBeVisible();
  expect(downloads).toBe(2);
- if(parcelCru.hasDomaineLinks){
-  await expect(dialog.getByLabel('Group right holders by')).toHaveValue('domaine');
-  await dialog.getByLabel('Group right holders by').selectOption('holder');
- }
+ await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
+ // The research explanation sits under the folded About this data.
+ if(parcelCru.hasDomaineLinks)await expect(dialog.getByText(/Domaine headings are research links/)).toBeAttached();
  await dialog.getByText('Find a parcel by cadastral reference').click();
  const parcel=dialog.getByRole('combobox',{name:'Cadastral parcel'});
  await expect(parcel.getByRole('option')).toHaveCount(parcelCru.parcels.length+1);
  await parcel.selectOption(parcelCru.evidenced[0]??parcelCru.parcels[0]);
  const details=dialog.locator('.village-map-parcel-details');
  if(parcelCru.evidenced.length)await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
- else await expect(details).toContainText('No dated records were found for this parcel.');
- if(!parcelCru.hasDomaineLinks)await expect(dialog.getByLabel('Group right holders by')).toHaveCount(0);
+ // Every parcel has #461 source coverage and tracing, so the region shows even without dated records.
+ else{
+  await expect(details.getByRole('region',{name:'History and evidence'})).toBeVisible();
+  await expect(details).toContainText('No matched dated rights, sale or notice records in the reviewed sources.');
+ }
  await expect(details.getByText('Verified operator')).toHaveCount(0);
  if(parcelCru.unknown){
   await parcel.selectOption(parcelCru.unknown.properties.id);
@@ -312,42 +335,44 @@ test(`Grand Cru parcels: ${parcelCru.name} gets rights, evidence and scoped prod
  }
  const holderSection=dialog.locator('.village-map-owner-section');
  if(!await holderSection.getByRole('list').isVisible())await holderSection.locator('summary').click();
- if(parcelCru.holders>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.holders} right holders`,exact:true}).click();
+ if(parcelCru.rows>6)await dialog.getByRole('button',{name:`Show all ${parcelCru.rows} ${parcelCru.hasDomaineLinks?'entries':'right holders'}`,exact:true}).click();
  const holderList=dialog.getByRole('list',{name:'Recorded right holders by mapped area'});
- await expect(holderList.getByRole('button')).toHaveCount(parcelCru.holders);
- const holder=parcelCru.held.properties.recordedRights[0];
- if(parcelCru.holders>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
- await holderList.getByRole('button').filter({hasText:ownerName(holder.name)}).click();
+ await expect(holderList.getByRole('button')).toHaveCount(parcelCru.rows);
+ await expect(holderSection.locator('.village-map-count')).toHaveText(`${parcelCru.rows}`);
+ const holder={holderId:parcelCru.row.holderIds[0],name:parcelCru.row.legalNames[0]};
+ if(parcelCru.rows>6)await dialog.getByRole('searchbox',{name:'Search right holders'}).fill(holder.name);
+ const rowName=new RegExp(`^${parcelCru.row.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\u00a0?$`);
+ await holderList.getByRole('button').filter({has:page.locator('.village-map-owner-name',{hasText:rowName})}).click();
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeInViewport();
  expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
  await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-holders-mobile.png`)});
- await dialog.getByRole('button',{name:'Link chosen right holder to an app producer',exact:true}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption(producer.id);
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toBeVisible();
- expect(links[0].holderId).toBe(holder.holderId);
+ // The wine's producer is known, so the chosen row links to it in one tap.
+ await holderList.getByRole('button',{name:`Link to ${producer.canonicalName}`,exact:true}).click();
+ await expect(holderList.getByText(`Linked to ${producer.canonicalName}`,{exact:true})).toBeVisible();
+ await expect(dialog.getByRole('region',{name:'This wine’s producer'}).getByText('Manual link · unverified',{exact:true})).toBeVisible();
+ expect(links.map(l=>[l.holderId,l.producerId])).toEqual([[holder.holderId,producer.id]]);
  await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View village map'}).click();
- dialog=page.getByRole('dialog',{name:parcelCru.village,exact:true});
+ dialog=page.getByRole('dialog');
+ await expect(dialog).toHaveAccessibleName(new RegExp(`^(${parcelCru.villages.join('|')})$`));
  await dialog.getByRole('switch',{name:`Parcel rights · ${parcelCru.name}`}).check();
- await expect(dialog.getByRole('link',{name:producer.canonicalName,exact:true})).toBeVisible();
+ const card=dialog.getByRole('region',{name:'This wine’s producer'});
+ await expect(card).toContainText(`Linked to ${parcelCru.row.name}`);
  await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
  await page.setViewportSize({width:1280,height:900});
  await expect(dialog.locator('.village-map-canvas')).toBeInViewport();
  await page.screenshot({path:testInfo.outputPath(`${parcelCru.bundle}-linked-shared-desktop.png`)});
- await dialog.getByRole('button',{name:'Change link'}).click();
- await dialog.getByRole('combobox',{name:'App producer'}).selectOption(other.id);
- await dialog.getByRole('button',{name:'Save producer link'}).click();
- await expect(dialog.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
- expect(links[0].producerId).toBe(other.id);
- await expect(dialog.getByRole('link',{name:other.canonicalName,exact:true})).toHaveCount(0);
+ await card.getByRole('button',{name:`Unlink ${parcelCru.row.name}`,exact:true}).click();
+ await expect(card.getByText('Manual link · unverified',{exact:true})).toHaveCount(0);
+ expect(links).toEqual([]);
+ expect(catalogue).toBe(0);
  await page.keyboard.press('Escape');
  await expect(page.getByRole('button',{name:'View village map'})).toBeFocused();
 });
 
-test('Échezeaux pilot: a verified producer link and opt-in name matches',async({page},testInfo)=>{
+test('Échezeaux pilot: a verified producer link with no name-only guess',async({page},testInfo)=>{
  await setup(page,{appellation:'Échezeaux',wineName:'Échezeaux',classification:'grand_cru',producer:'Domaine Mongeard-Mugneret'});
  // No verified links are published yet, so this adds one to a copy of the real data.
  await page.route('**/maps/echezeaux-parcels.*',async route=>{
@@ -366,12 +391,9 @@ test('Échezeaux pilot: a verified producer link and opt-in name matches',async(
  await expect(card).toContainText('THIS WINE’S PRODUCER');
  await expect(card).toContainText('Verified parcel links');
  await expect(dialog.getByLabel('Map legend')).toContainText('Producer · verified');
- const possible=dialog.getByRole('checkbox',{name:/Show possible matches/});
- await expect(possible).not.toBeChecked();
- await expect(dialog.getByText('Possible match · name only')).toHaveCount(0);
- await possible.check();
- await expect(dialog.locator('.village-map-producer.is-possible')).toContainText('GFA Mongeard Mugneret et Fils');
- await expect(dialog.getByLabel('Map legend')).toContainText('Producer · possible');
+ await expect(dialog.getByRole('checkbox',{name:/Show possible matches/})).toHaveCount(0);
+ await expect(dialog.getByText(/Looks like/)).toHaveCount(0);
+ await expect(dialog.getByLabel('Map legend')).not.toContainText('possible');
  await page.screenshot({path:testInfo.outputPath('echezeaux-producer-desktop.png')});
 });
 
@@ -980,7 +1002,8 @@ for(const [appellation,id] of [['Mâcon','macon'],['Mâcon-Villages','macon-vill
 });
 
 const regionalMaps=JSON.parse(readFileSync('src/lib/places/burgundyRegionalMapRegistry.json','utf8')) as {maps:{id:string;name:string;wineColours:string[];productStyle?:string}[]};
-const compactNetworkCases=regionalMaps.maps.map(m=>[m.name,m.id,800000,20000] as const);
+// Region-wide Bourgogne maps stay built but the wine page offers none.
+const compactNetworkCases=regionalMaps.maps.filter(m=>!unlistedRegionalMapIds.includes(m.id)).map(m=>[m.name,m.id,800000,20000] as const);
 // Exercise the largest actual payload on every run. Byte equality/size checks
 // cover every overview in unit tests; full throttled transfers run in the
 // scheduled/manual matrix or explicitly for a map being introduced/reviewed.
@@ -1014,195 +1037,60 @@ for(const [appellation,id,maxBytes,timeout] of compactNetworkCases.filter(([,id]
  await network.detach();
 });
 
-for(const [appellation,id,colour,wineStyle,note,invalidColours,count] of [
- ['Bourgogne Aligoté','bourgogne-aligote','White','white','white-wine production boundaries in 272 communes',['Red','Rosé'],272],
- ['Bourgogne Passe-tout-grains','bourgogne-passe-tout-grains','Red','red','Rhône/Beaujolais boundaries are missing',['White'],272],
- ['Bourgogne Mousseux','bourgogne-mousseux','Red','sparkling','red sparkling appellation',['White','Rosé'],272],
- ['Coteaux Bourguignons','coteaux-bourguignons','Red','red','Rhône/Beaujolais boundaries are missing',[],275],
-] as const)for(const route of allMapRoutes)test(`${appellation} ${route}: partial AOC and commune navigation`,async({page},testInfo)=>{
- await page.setViewportSize({width:320,height:900});
- await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,wineStyle,productSubtype:wineStyle==='sparkling'?'Sparkling':'Still',region:'Burgundy'});
- const downloads:string[]=[],errors:string[]=[];
+// Region-wide appellations cover most of Burgundy, so a highlight would not
+// locate the wine: none of them, nor a reviewed alias or split label, offers a map.
+for(const route of allMapRoutes)test(`Region-wide Bourgogne appellations ${route}: no map entry point`,async({page})=>{
+ const downloads:string[]=[];
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
- page.on('pageerror',error=>errors.push(error.message));
- await page.goto(route);expect(downloads).toEqual([]);
- await page.route(`**/maps/${id}.*.pbf.gz`,route=>route.fulfill({contentType:'application/gzip',path:`public/maps/${id}.2026-09-21.overview.pbf.gz`}));
- const opener=page.getByRole('button',{name:'View regional map'});
- await opener.click();
- const dialog=page.getByRole('dialog',{name:appellation,exact:true});
- await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
- await expect(dialog.locator('.village-map-description')).toHaveText(id==='coteaux-bourguignons'
-  ? 'Partial appellation overview across wine colours. The highlight does not show the full appellation or a colour-specific area; no single vineyard is identified.'
-  : 'Partial appellation overview. The highlight does not show the full appellation; no single vineyard is identified.');
- await expect(dialog.locator('.village-map-note').filter({hasText:note})).toBeVisible();
- await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
- await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
- const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
- await expect(communes.getByRole('option')).toHaveCount(count+1);
- const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
-  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
-  if(!canvas)return 0;
-  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
- });
- await expect.poll(visibleMarkers).toBe(Math.min(count,8));
- for(const label of (id==='coteaux-bourguignons'?['Joigny','Chânes','Chasselas','Crêches-sur-Saône','Romanèche-Thorins']:['Joigny','Boncourt-le-Bois','Prissé','Romanèche-Thorins'])){
-  await communes.selectOption({label});
-  await expect.poll(visibleMarkers).toBeLessThan(Math.min(count,8));
-  await expect(dialog.getByRole('heading',{name:appellation,exact:true})).toHaveCount(2);
- }
- await page.screenshot({path:testInfo.outputPath(`${id}-320.png`)});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await expect.poll(visibleMarkers).toBe(Math.min(count,8));
- expect([...new Set(downloads)]).toHaveLength(1);
- expect(downloads.every(url=>url.endsWith(`/maps/${id}.2026-09-21.overview.pbf.gz`))).toBe(true);
- expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
- await page.setViewportSize({width:1280,height:900});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await page.screenshot({path:testInfo.outputPath(`${id}-desktop.png`)});
- await page.keyboard.press('Escape');await expect(opener).toBeFocused();
- for(const colour of invalidColours){
-  await setup(page,{appellation,wineName:'Vieilles Vignes',classification:null,colour,productSubtype:wineStyle==='sparkling'?'Sparkling':'Still',wineStyle:wineStyle==='sparkling'?'sparkling':colour==='Red'?'red':colour==='White'?'white':'rose'});
+ for(const fields of [
+  {appellation:'Bourgogne',wineName:'Les Graviers',colour:'White',wineStyle:'white',region:'Burgundy'},
+  {appellation:'Bourgogne',wineName:'A cuvée',colour:'Red',wineStyle:'red',region:'Côte Chalonnaise'},
+  {appellation:'Bourgogne Aligoté',wineName:'Vieilles Vignes',colour:'White',wineStyle:'white'},
+  {appellation:'Bourgogne',wineName:'Aligoté',colour:'White',wineStyle:'white'},
+  {appellation:'Bourgogne Passe-tout-grains',wineName:'Vieilles Vignes',colour:'Red',wineStyle:'red'},
+  {appellation:'Bourgogne Rouge',wineName:'Passe-Tout-Grains',colour:'Red',wineStyle:'red'},
+  {appellation:'Bourgogne Mousseux',wineName:'Vieilles Vignes',colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'},
+  {appellation:'Coteaux Bourguignons',wineName:'Vieilles Vignes',colour:'Red',wineStyle:'red'},
+  {appellation:'Bourgogne Grand Ordinaire',wineName:'Les Champs',colour:'Rosé',wineStyle:'rose'},
+  {appellation:'Crémant de Bourgogne',wineName:'Blanc de Noirs',colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling'},
+ ]){
+  await setup(page,{classification:null,...fields});
   await page.goto(route);
-  await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
+  await expect(page.getByRole('heading',{name:fields.wineName,exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:/View (village|regional) map/})).toHaveCount(0);
  }
- expect(errors).toEqual([]);
+ expect(downloads).toEqual([]);
 });
 
-test('Crémant de Bourgogne: compact fallback without native gzip support',async({page})=>{
+test('Mâcon-Villages: compact fallback without native gzip support',async({page})=>{
  await page.addInitScript(()=>Object.defineProperty(globalThis,'DecompressionStream',{value:undefined,configurable:true}));
- await setup(page,{appellation:'Crémant de Bourgogne',wineName:'Brut',classification:null,colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling'});
+ await setup(page,{appellation:'Mâcon-Villages',wineName:'AIGAICIA',classification:null,region:'Saône-et-Loire',colour:'White',wineStyle:'white'});
  const downloads:string[]=[];
  page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
  await page.goto('/shared/layout-wine');
  await page.getByRole('button',{name:'View regional map'}).click();
  await expect(page.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
- expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.overview.pbf',page.url()).href]);
- await expect(page.getByRole('combobox',{name:'Zoom to a commune'}).getByRole('option')).toHaveCount(373);
-});
-
-for(const route of allMapRoutes)test(`Crémant de Bourgogne ${route}: complete source overview, Rhône navigation and sparkling guards`,async({page},testInfo)=>{
- const base={appellation:'Crémant de Bourgogne',wineName:'Blanc de Noirs',classification:null,colour:'White',wineStyle:'sparkling',productSubtype:'Sparkling',region:'Burgundy'};
- await page.setViewportSize({width:320,height:900});await setup(page,base);
- const downloads:string[]=[],errors:string[]=[];
- page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
- page.on('pageerror',e=>errors.push(e.message));
- await page.goto(route);expect(downloads).toEqual([]);
- await page.route('**/maps/cremant-de-bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/cremant-de-bourgogne.2026-09-21.overview.pbf.gz'}));
- const opener=page.getByRole('button',{name:'View regional map'});await opener.click();
- const dialog=page.getByRole('dialog',{name:'Crémant de Bourgogne',exact:true});
- await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
- await expect(dialog.locator('.village-map-description')).toHaveText('Denomination overview across wine colours; no colour-specific area or single vineyard is identified.');
- await expect(dialog.locator('.village-map-note').filter({hasText:'all 378 records'})).toBeVisible();
- await expect(dialog.locator('.village-map-commune-name')).toHaveCount(8);
- await expect(dialog.locator('.village-map-legend')).toHaveText('Appellation overview');
- await expect(dialog.locator('.village-map-overview-note')).toBeVisible();
- await expect.poll(()=>dialog.locator('.village-map-commune-name:visible').count()).toBeLessThanOrEqual(8);
- await expect(dialog.getByRole('combobox',{name:'Explore a mapped area'})).toHaveCount(0);
- const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
- await expect(communes.getByRole('option')).toHaveCount(373);
- const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
-  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();if(!canvas)return 0;
-  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
- });
- await expect.poll(visibleMarkers).toBe(8);
- for(const label of ['Joigny','Belan-sur-Ource','Chablis','Pruzilly','Marcy','Porte des Pierres Dorées']){
-  await communes.selectOption({label});await expect.poll(visibleMarkers).toBeLessThan(8);
- }
- await expect(communes).toHaveValue('69114');
- await page.screenshot({path:testInfo.outputPath('cremant-de-bourgogne-320.png')});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();await expect.poll(visibleMarkers).toBe(8);
- expect([...new Set(downloads)]).toEqual([new URL('/maps/cremant-de-bourgogne.2026-09-21.overview.pbf.gz',page.url()).href]);
- expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
- await page.setViewportSize({width:1280,height:900});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await page.screenshot({path:testInfo.outputPath('cremant-de-bourgogne-desktop.png')});
- await page.keyboard.press('Escape');await expect(opener).toBeFocused();
- await setup(page,{...base,appellation:'Crémant de Bourgogne Grand Éminent Rosé',wineName:'Les Champs',colour:'Rosé'});
- await page.goto(route);await opener.click();
- await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:15000});
- await page.keyboard.press('Escape');
- // The overlapping suffix "Bourgogne Aligoté" describes the grape here;
- // an explicitly repeated full AOC remains a conflict.
- await setup(page,{...base,appellation:'Crémant de Bourgogne Aligoté',wineName:'Vieilles Vignes'});
- await page.goto(route);
- await expect(page.getByRole('heading',{name:'Vieilles Vignes',exact:true})).toBeVisible();
- await expect(opener).toBeVisible();
- for(const fields of [{colour:'Red'},{wineStyle:'white',productSubtype:'Still'},{wineName:'Bourgogne Mousseux'},{wineName:'Morgon'},{wineName:'Blanc de Noirs',colour:'Rosé'}]){
-  const record={...base,wineName:'Les Champs',...fields};
-  await setup(page,record);await page.goto(route);
-  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
-  await expect(opener).toHaveCount(0);
- }
- expect(errors).toEqual([]);
-});
-
-for(const route of allMapRoutes)test(`Coteaux Bourguignons ${route}: traditional names, colours and primeur guards`,async({page})=>{
- for(const [appellation,colour,wineStyle] of [['Bourgogne Grand Ordinaire','Rosé','rose'],['Coteaux Bourguignons Blanc Primeur','White','white']] as const){
-  await setup(page,{appellation,colour,wineStyle,wineName:'Les Champs',classification:null});
-  await page.goto(route);await page.getByRole('button',{name:'View regional map'}).click();
-  const dialog=page.getByRole('dialog',{name:'Coteaux Bourguignons',exact:true});
-  await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled({timeout:10000});
-  await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
-  await page.keyboard.press('Escape');
- }
- for(const fields of [
-  {appellation:'Coteaux Bourguignons Nouveau',colour:'Red',wineStyle:'red'},
-  {appellation:'Coteaux Bourguignons',colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'},
-  {appellation:'Coteaux Bourguignons',wineName:'Bourgogne Aligoté',colour:'White',wineStyle:'white'},
- ]){
-  const record={wineName:'Les Champs',classification:null,...fields};
-  await setup(page,record);await page.goto(route);
-  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
- }
-});
-
-for(const route of allMapRoutes)test(`Bourgogne Mousseux ${route}: sparkling identity guards`,async({page})=>{
- const base={appellation:'Bourgogne Mousseux',wineName:'Vieilles Vignes',classification:null,colour:'Red',wineStyle:'sparkling',productSubtype:'Sparkling'};
- // A complete denomination in a split label works. Bare "Mousseux" is only
- // a wine-style description and must never infer this AOC over Crémant.
- await setup(page,{...base,appellation:'Bourgogne Rouge',wineName:'Bourgogne-Mousseux'});
- await page.goto(route);
- await page.getByRole('button',{name:'View regional map'}).click();
- await expect(page.getByRole('dialog',{name:'Bourgogne Mousseux',exact:true}).getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
- await page.keyboard.press('Escape');
- for(const fields of [
-  {productSubtype:'Still'},{wineStyle:'red'},{appellation:'Crémant de Bourgogne'},
-  {appellation:'Bourgogne',wineName:'Mousseux'},
-  {appellation:'Bourgogne',wineName:'Pinot Noir'},
-  {appellation:'Bourgogne Mousseux',wineName:'Bourgogne Aligoté'},
-  {appellation:'Bourgogne Passe-tout-grains'},
- ]){
-  const record={...base,...fields};
-  await setup(page,record);await page.goto(route);
-  await expect(page.getByRole('heading',{name:record.wineName,exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'View regional map'})).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'View village map'})).toHaveCount(0);
- }
+ expect([...new Set(downloads)]).toEqual([new URL('/maps/macon-villages.2026-09-21.overview.pbf',page.url()).href]);
 });
 
 for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet, separate AOCs and region scope`,async({page})=>{
  await page.setViewportSize({width:320,height:900});
  for(const [appellation,wineName,region,colour,expected] of ([
   ['Bourgogne Clairet','Montrecul','Côte d’Or','rose','Bourgogne Montrecul'],
-  ['Bourgogne','Kimméridgien','Chablis','white','Bourgogne'],
-  ['Bourgogne','Aligoté','Burgundy','white','Bourgogne Aligoté'],
-  ['Bourgogne Blanc Vieilles Vignes','Bourgogne-Aligoté','Burgundy','white','Bourgogne Aligoté'],
   ['Mâcon Lugny','Chardonnay avec Aligoté','Burgundy','white','Mâcon Lugny'],
-  ['Bourgogne Rouge','Passe-Tout-Grains','Burgundy','red','Bourgogne Passe-tout-grains'],
-  ['Bourgogne Rosé Vieilles Vignes','Passe-tous-grains','Burgundy','rose','Bourgogne Passe-tout-grains'],
- ] as const).filter((_,index)=>fullMapMatrix||[0,2,5].includes(index))){
+ ] as const).filter((_,index)=>fullMapMatrix||index===0)){
   await setup(page,{appellation,wineName,region,colour,wineStyle:colour,classification:null});
   await page.goto(route);
   await page.getByRole('button',{name:'View regional map'}).click();
   const dialog=page.getByRole('dialog',{name:expected,exact:true});
   await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
   await expect(dialog.getByRole('heading',{name:expected,exact:true})).toHaveCount(2);
-  if(expected==='Bourgogne')await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
   await page.keyboard.press('Escape');
  }
  for(const [appellation,wineName,region,colour] of [
+  ['Bourgogne','Kimméridgien','Chablis','white'],
+  ['Bourgogne Blanc Vieilles Vignes','Bourgogne-Aligoté','Burgundy','white'],
+  ['Bourgogne Rosé Vieilles Vignes','Passe-tous-grains','Burgundy','rose'],
   ['Bourgogne Rouge Vieilles Vignes','Aligoté','Burgundy','red'],
   ['Bourgogne Hautes Côtes de Nuits','Aligoté','Burgundy','white'],
   ['Bourgogne Vieilles Vignes','Aligoté Bouzeron','Burgundy','white'],
@@ -1218,53 +1106,6 @@ for(const route of allMapRoutes)test(`Bourgogne review labels ${route}: Clairet,
  }
 });
 
-for(const route of allMapRoutes)test(`Broad Bourgogne ${route}: partial overview and white-only sector`,async({page},testInfo)=>{
- await page.setViewportSize({width:320,height:900});
- await setup(page,{appellation:'Bourgogne',wineName:'Les Graviers',classification:null,colour:'White',wineStyle:'white',region:'Burgundy'});
- const downloads:string[]=[];page.on('request',r=>{if(r.url().includes('/maps/'))downloads.push(r.url())});
- await page.goto(route);expect(downloads).toEqual([]);
- // Exercise raw gzip decoding as well as the HTTP-decompressed slow-network case.
- await page.route('**/maps/bourgogne.*.pbf.gz',route=>route.fulfill({contentType:'application/gzip',path:'public/maps/bourgogne.2026-09-21.overview.pbf.gz'}));
- await page.getByRole('button',{name:'View regional map'}).click();
- const dialog=page.getByRole('dialog',{name:'Bourgogne',exact:true});
- await expect(dialog.getByRole('button',{name:'Region view',exact:true})).toBeEnabled();
- await expect(dialog.locator('.village-map-description')).toContainText('Partial appellation overview');
- await expect(dialog.locator('.village-map-note').filter({hasText:'not the complete appellation'})).toBeVisible();
- await expect(dialog.locator('.village-map-hint')).toContainText('Coverage of this appellation is incomplete');
- const areas=dialog.getByRole('combobox',{name:'Explore a mapped area'});
- await expect(areas).toHaveValue('inao-denom-362');
- await expect(areas.getByRole('option',{name:'Bourgogne (partial boundary)',exact:true})).toHaveCount(1);
- const communes=dialog.getByRole('combobox',{name:'Zoom to a commune'});
- await expect(communes.getByRole('option')).toHaveCount(265);
- const visibleMarkers=()=>dialog.locator('.village-map-commune-name').evaluateAll(elements=>{
-  const canvas=elements[0]?.closest('.village-map-canvas')?.getBoundingClientRect();
-  if(!canvas)return 0;
-  return elements.filter(el=>{const b=el.getBoundingClientRect();return b.x+b.width/2>=canvas.x&&b.x+b.width/2<=canvas.right&&b.y+b.height/2>=canvas.y&&b.y+b.height/2<=canvas.bottom}).length;
- });
- await expect.poll(visibleMarkers).toBe(8);
- for(const label of ['Joigny','Dijon','La Salle']){
-  await communes.selectOption({label});
-  await expect.poll(visibleMarkers).toBeLessThan(8);
-  await expect(areas).toHaveValue('inao-denom-362');
- }
- await areas.selectOption('inao-denom-362-white-only');
- await expect(dialog.locator('.village-map-description')).toContainText('Published white-only sector');
- await expect(dialog.locator('.village-map-overlap')).toContainText('not the whole white-wine area');
- await dialog.getByRole('button',{name:'Back to this wine'}).click();
- await expect(areas).toHaveValue('inao-denom-362');
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await expect.poll(visibleMarkers).toBe(8);
- expect([...new Set(downloads)]).toHaveLength(1);
- expect(downloads.every(url=>url.endsWith('.pbf.gz'))).toBe(true);
- expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
- await page.screenshot({path:testInfo.outputPath('bourgogne-320.png')});
- await page.setViewportSize({width:1280,height:900});
- await dialog.getByRole('button',{name:'Region view',exact:true}).click();
- await page.screenshot({path:testInfo.outputPath('bourgogne-desktop.png')});
- await page.keyboard.press('Escape');
- await expect(page.getByRole('button',{name:'View regional map'})).toBeFocused();
-});
-
 matrixTest('conflicting wine identities do not show a map entry point',async({page})=>{
  await setup(page,{identityMatchStatus:'conflict'});await page.goto('/wines/layout-wine');
  await expect(page.getByRole('heading',{name:'Les Cazetiers',exact:true})).toBeVisible();
@@ -1272,8 +1113,8 @@ matrixTest('conflicting wine identities do not show a map entry point',async({pa
 });
 
 for(const village of [
- {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:27,catalogue:'moreyVillageMapCatalogue'},
- {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:28,catalogue:'chambolleVillageMapCatalogue'},
+ {id:'morey-saint-denis',name:'Morey-Saint-Denis',cru:'Les Ruchots',featureId:'inao-denom-946',count:41,catalogue:'moreyVillageMapCatalogue',namedPlots:['clos-des-lambrays','clos-saint-denis','clos-de-la-roche']},
+ {id:'chambolle-musigny',name:'Chambolle-Musigny',cru:'Les Amoureuses',featureId:'inao-denom-455',count:30,catalogue:'chambolleVillageMapCatalogue',namedPlots:['musigny']},
 ].filter(village=>fullMapMatrix||village.id==='morey-saint-denis')){
  for(const route of matrixRoutes){
   test(`${village.name} ${route}: loads only its own map and explores shared Bonnes-Mares`,async({page},testInfo)=>{
@@ -1294,7 +1135,9 @@ for(const village of [
    await expect(dialog.locator('.village-map-selected-label')).toHaveText(village.cru);
    expect(requests.filter(url=>url.includes('/maps/')).length).toBeGreaterThan(0);
    expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).length).toBeGreaterThan(0);
-   expect(requests.filter(url=>url.includes('/maps/')).every(url=>url.includes(`/maps/${village.id}.`))).toBe(true);
+   // Only this village's map and the named-area layers of its reviewed crus load.
+   expect([...new Set(requests.filter(url=>url.includes('/maps/')).map(url=>new URL(url).pathname.split('.')[0]))].sort())
+    .toEqual([`/maps/${village.id}`,...village.namedPlots.map(slug=>`/maps/${slug}-named-plots`)].sort());
    expect(requests.filter(url=>url.includes('VillageMapCatalogue.json')).every(url=>url.includes(village.catalogue))).toBe(true);
    await selector.selectOption('inao-denom-361');
    await expect(dialog.locator('.village-map-selected-label')).toHaveText('Bonnes-Mares');
@@ -1701,6 +1544,35 @@ for(const route of matrixRoutes){
  });
 }
 
+test('Corton Les Bressandes: a climat wine opens its own parcels, with the linked holder in gold, and widens to all of Corton',async({page},testInfo)=>{
+ test.setTimeout(60_000); // Corton's 728 parcels, as in the Grand Cru parcel journey.
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:390,height:844});
+ await setup(page,{appellation:'Corton',wineName:'Corton Les Bressandes',classification:'grand_cru',producer:'Tollot Beaut',producerId:'tollot'});
+ // The link was saved on Corton's panel; a climat shares its cru's links.
+ await page.route('**/api/parcel-producer-links?*',route=>{
+  expect(new URL(route.request().url()).searchParams.get('parent')).toBe('inao-denom-549');
+  return route.fulfill({json:{items:[{holderId:'440712529',producerId:'tollot',producerName:'Tollot Beaut',status:'manual',updatedAt:'2026-10-01'}]}});
+ });
+ await page.goto('/wines/layout-wine');
+ await page.getByRole('button',{name:'View village map'}).click();
+ const dialog=page.getByRole('dialog',{name:'Aloxe-Corton',exact:true});
+ await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
+ await dialog.getByRole('switch',{name:'Parcel rights · Corton Les Bressandes'}).check();
+ const share=dialog.locator('.village-map-parcel-share');
+ await expect(share).toContainText('65 parcels in Corton Les Bressandes');
+ await expect(dialog.locator('.village-map-linked-producer')).toContainText('Domaine Tollot-Beaut');
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ expect(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath('corton-bressandes-linked-holder-mobile.png')});
+ await dialog.getByRole('button',{name:'All of Corton',exact:true}).click();
+ await expect(share).toContainText('728 parcels in Corton');
+ await expect(dialog.getByRole('switch',{name:'Parcel rights · Corton'})).toBeChecked();
+ await dialog.getByRole('button',{name:/^GFA Dom Corton Grancey/}).click();
+ await expect(dialog.getByLabel('Map legend')).toContainText('Chosen right holder');
+ await page.screenshot({path:testInfo.outputPath('corton-grancey-gold-mobile.png')});
+});
+
 matrixTest('Corton broad, mixed, unsupported and white records keep appellation scope',async({page})=>{
  for(const fields of [
   {wineName:'Corton'},
@@ -1843,9 +1715,10 @@ for(const route of matrixRoutes){
   await expect(dialog.getByRole('button',{name:'Village view',exact:true})).toBeEnabled();
   const selector=dialog.getByRole('combobox',{name:'Explore a vineyard'});
   await expect(selector).toHaveValue('inao-denom-1274');
-  await expect(selector.locator('optgroup:not([label="Échezeaux · cadastral named areas"]) option')).toHaveCount(24);
+  await expect(selector.locator('optgroup:not([label$=" · cadastral named areas"]) option')).toHaveCount(24);
   await expect(selector.locator('optgroup[label="Échezeaux · cadastral named areas"] option')).toHaveCount(10);
-  await expect(selector.locator('option')).toHaveCount(34);
+  await expect(selector.locator('optgroup[label="Richebourg · cadastral named areas"] option')).toHaveCount(2);
+  await expect(selector.locator('option')).toHaveCount(36);
   await expect(dialog.locator('.village-map-selected-label')).toHaveText('Les Petits Monts');
   await expect(dialog.locator('.village-map-context')).toContainText('8 Grand Crus · 14 Premier Cru climats');
   await expect(dialog.locator('.village-map-context')).toContainText('Vosne-Romanée & Flagey-Échezeaux');
@@ -1853,7 +1726,7 @@ for(const route of matrixRoutes){
   const boundaries=requests.filter(url=>url.includes('/maps/'));
   expect(catalogues.length).toBeGreaterThan(0);expect(boundaries.length).toBeGreaterThan(0);
   expect(catalogues.every(url=>url.includes('vosneVillageMapCatalogue'))).toBe(true);
-  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/vosne-romanee']);
+  expect([...new Set(boundaries.map(url=>new URL(url).pathname.split('.')[0]))].sort()).toEqual(['/maps/echezeaux-named-plots','/maps/richebourg-named-plots','/maps/vosne-romanee']);
   for(const [id,name] of [['inao-denom-565','Échezeaux'],['inao-denom-645','Grands-Échezeaux']]){
    await selector.selectOption(id);
    await dialog.getByRole('button',{name:'Zoom to selection'}).click();

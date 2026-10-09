@@ -99,7 +99,7 @@ describe('the AI spend card',()=>{
     // deep searches above nought grounded searches below is not a contradiction
     // - but only if the card says which is which.
     const page=await render(summary());
-    expect(page.querySelector('.journey-section-heading span')!.textContent).toBe('last 30 days');
+    expect(page.querySelector('.ai-spend-card .settings-card-head .settings-chip')!.textContent).toBe('Last 30 days');
     expect(page.querySelector('.ai-spend-month strong')!.textContent).toBe('This billing month');
   });
 

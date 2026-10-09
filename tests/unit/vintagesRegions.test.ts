@@ -1,7 +1,7 @@
 import { describe,expect,it } from 'vitest';
 import { villageForWine } from '../../src/features/vintages/data';
 import { grapeExpect,isRed,readNobleRot,type ConditionsReading } from '../../src/features/vintages/model';
-import { BORDEAUX,BURGUNDY,VINTAGE_REGIONS,harvestArea,pickGrape,regionById,regionOfVillage,villageGrapes } from '../../src/features/vintages/regions';
+import { BORDEAUX,BURGUNDY,CHAMPAGNE,VINTAGE_REGIONS,harvestArea,pickGrape,regionById,regionOfVillage,villageGrapes } from '../../src/features/vintages/regions';
 
 describe('vintage regions',()=>{
   it('keeps village ids unique across regions, so a village names its region',()=>{
@@ -85,5 +85,21 @@ describe('Bordeaux whites and Sauternes',()=>{
   });
   it('reads the white grapes as whites',()=>{
     for(const id of ['semillon','sauvignon-blanc','blend-white','blend-sweet'] as const)expect(isRed(id)).toBe(false);
+  });
+});
+
+describe('Champagne',()=>{
+  it('places a Champagne by its cru village',()=>{
+    const match=(appellation:string,wineName='')=>villageForWine({appellation,wineName},CHAMPAGNE.villages);
+    expect(match('Champagne Grand Cru','Bouzy Brut')).toBe('montagne-de-reims');
+    expect(match('Champagne','Blanc de Blancs Cramant')).toBe('cote-des-blancs');
+    expect(match('Champagne','Aÿ Grand Cru')).toBe('vallee-de-la-marne');
+    expect(match('Champagne','Brut Réserve')).toBeNull();
+    // A Burgundy list never borrows a Champagne cru.
+    expect(villageForWine({appellation:'Coteaux Champenois',wineName:'Bouzy Rouge'},BURGUNDY.villages)).toBeNull();
+  });
+  it('reads every Champagne grape for freshness, not colour',()=>{
+    expect(CHAMPAGNE.sparkling).toBe(true);
+    expect(CHAMPAGNE.grapes.map(item=>item.id)).toEqual(['blend','pinot-noir','meunier','chardonnay']);
   });
 });

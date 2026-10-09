@@ -20,6 +20,46 @@ function seed(database:ReturnType<typeof realD1>,targets:ResearchTarget[],owner=
 }
 
 describe('research survives promotion from names to entity IDs',()=>{
+  describe('vintage reports saved before style was part of the key',()=>{
+    const place={vintage:2024,country:'New Zealand',region:'Wairarapa',appellation:'Martinborough'};
+    const riesling={producer:'Dry River',wineName:'Craighall Riesling',wineStyle:'white',...place};
+    const pinot={producer:'Dry River',wineName:'Pinot Noir',wineStyle:'red',...place};
+    const pinotSeason='The 2024 season was warm and dry; producers reported outstanding purity in their Pinot Noirs.';
+    function seedOld(database:ReturnType<typeof realD1>,report:string){
+      database.sql.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)`)
+        .run('owner','vintage_context',JSON.stringify(['new zealand','wairarapa','martinborough','2024']),JSON.stringify({country:'New Zealand',region:'Wairarapa',appellation:'Martinborough',vintage:2024}),JSON.stringify({vintageQuality:report}),JSON.stringify([{title:'Region',url:'https://example.com/2024'}]),'{}','original-model',researchedAt,researchedAt,researchedAt);
+    }
+    function addWine(database:ReturnType<typeof realD1>,id:string,item:typeof riesling){
+      database.sql.prepare('INSERT INTO wines(id,owner_id,producer,wine_name,vintage,country,region,appellation,wine_style,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(id,'owner',item.producer,item.wineName,item.vintage,item.country,item.region,item.appellation,item.wineStyle,researchedAt,researchedAt);
+    }
+    const vintageOf=async(database:ReturnType<typeof realD1>,item:typeof riesling)=>(await loadWineResearchCache(database.db,'owner',buildResearchTargets(item),true)).get('vintage_context')?.payload.vintageQuality;
+
+    it('keeps showing the old report when no other style shares the place and year',async()=>{
+      const database=realD1();seedOld(database,'The 2024 season was cool and long.');addWine(database,'r',riesling);
+      expect(await vintageOf(database,riesling)).toBe('The 2024 season was cool and long.');
+    });
+
+    it('gives a red-grape report to the red wine only when both styles share it',async()=>{
+      const database=realD1();seedOld(database,pinotSeason);addWine(database,'r',riesling);addWine(database,'p',pinot);
+      expect(await vintageOf(database,riesling)).toBeUndefined();
+      expect(await vintageOf(database,pinot)).toBe(pinotSeason);
+    });
+
+    it('lends an ambiguous report to neither style',async()=>{
+      const database=realD1();seedOld(database,'The 2024 season was warm and dry.');addWine(database,'r',riesling);addWine(database,'p',pinot);
+      expect(await vintageOf(database,riesling)).toBeUndefined();
+      expect(await vintageOf(database,pinot)).toBeUndefined();
+    });
+
+    it('prefers research saved under the style key',async()=>{
+      const database=realD1();seedOld(database,pinotSeason);addWine(database,'r',riesling);addWine(database,'p',pinot);
+      const target=buildResearchTargets(riesling).find(item=>item.scope==='vintage_context')!;
+      database.sql.prepare(`INSERT INTO research_cache(owner_id,scope,cache_key,subject_json,result_json,sources_json,provenance_json,model,researched_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)`)
+        .run('owner','vintage_context',target.cacheKey,JSON.stringify(target.subject),JSON.stringify({vintageQuality:'A fine year for Riesling.'}),JSON.stringify([{title:'Region',url:'https://example.com/2024'}]),'{}','new-model',researchedAt,researchedAt,researchedAt);
+      expect(await vintageOf(database,riesling)).toBe('A fine year for Riesling.');
+    });
+  });
+
   it.each([false,true])('recovers the reported Moutonne report before another run (producer already linked: %s)',async linked=>{
     const database=realD1(),targets=buildResearchTargets(wine);
     seed(database,buildResearchTargets({...wine,producerId:linked?wine.producerId:null,cuveeId:null}));
@@ -96,13 +136,14 @@ describe('research survives promotion from names to entity IDs',()=>{
     expect([...other.keys()]).toEqual(['vintage_context']);
   });
 
-  it('restores lost evidence from matching snapshot text while retaining the quality gate',async()=>{
+  it('restores lost evidence only from matching snapshot text',async()=>{
     const database=realD1(),targets=buildResearchTargets(wine),payload={...payloads.wine_vintage,winemakingTechniques:technicalClaim};
     seed(database,buildResearchTargets({...wine,cuveeId:null}));
     database.sql.prepare("UPDATE research_cache SET result_json=? WHERE scope='wine_vintage'").run(JSON.stringify(payload));
     const snapshot={...payload,...payloads.producer,...payloads.terroir,...payloads.vintage_context,sources:[{title:'Estate',url:'https://example.com/wine'}],provenance:technicalProvenance,model:'original-model',researchedAt};
-    expect((await loadWineResearchCache(database.db,'owner',targets)).has('wine_vintage')).toBe(false);
-    expect((await loadWineResearchCache(database.db,'owner',targets,false,{...snapshot,summary:'A different wine report.'})).has('wine_vintage')).toBe(false);
+    // An uncited figure no longer hides the research; it loads without evidence.
+    expect((await loadWineResearchCache(database.db,'owner',targets)).get('wine_vintage')?.provenance).toBeUndefined();
+    expect((await loadWineResearchCache(database.db,'owner',targets,false,{...snapshot,summary:'A different wine report.'})).get('wine_vintage')?.provenance).toBeUndefined();
     const recovered=await loadWineResearchCache(database.db,'owner',targets,false,JSON.stringify(snapshot));
     expect(recovered.get('wine_vintage')).toMatchObject({payload,provenance:technicalProvenance});
     // Also repairs an existing current-key row whose merge lost its evidence.

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-08",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-1083",
-  "status": "historical-extension-inventory",
-  "scope": "All 58 mapped Richebourg parcels and 10 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 58 mapped Richebourg parcels and all 10 recorded holder identifiers reviewed for Tier 2 (#425) through the shared holder table; 36 filings / 1,454 pages screened, plus 39 filings / 504 pages of eight related companies that hold no current Richebourg rights. Exact schedules, historical leases, published holding totals and unnamed reports remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,120 +41,1778 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "ric-bichot-2022",
+      "title": "Bichot SA: 28 June 2022 governance and statutes",
+      "url": "https://actes.ccm2.net/acte/22570176#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-06-28",
+      "filingDate": "2022-07-27",
+      "access": "read",
+      "finding": "Governance and updated statutes; no exact Richebourg reference or parcel lease found.",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:09.113648+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570176",
+      "sha256": "383884876ab39260e10efec4bdbabf49263c6a99e043c2dc5dbda474f015b7c3",
+      "bytes": 278812,
+      "pageCount": 8,
+      "screenedPages": 8,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-bichot-2014",
+      "title": "Bichot SA: 28 August 2014 location-gérance termination",
+      "url": "https://actes.ccm2.net/acte/22570320#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-08-28",
+      "filingDate": "2014-11-07",
+      "access": "read",
+      "finding": "Termination of a location-gérance arrangement; no AN53 schedule or Richebourg parcel tenant identified.",
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        9
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:13.331872+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570320",
+      "sha256": "6ce243a2e112960de49860dd14b4720e74642cc7238fb1d066473ac31199098d",
+      "bytes": 1297628,
+      "pageCount": 14,
+      "screenedPages": 14,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-bichot-2007",
+      "title": "Bichot SA: 15 March 2007 merger project",
+      "url": "https://actes.ccm2.net/acte/22570244#page=1",
+      "type": "company-filing",
+      "documentDate": "2007-03-15",
+      "filingDate": "2007-06-19",
+      "access": "read",
+      "finding": "Merger project includes leases elsewhere; no exact Richebourg parcel reference or tenant found.",
+      "reviewedPages": [
+        1,
+        20
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:17.124449+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570244",
+      "sha256": "7fd51fdfc87736c5e24d0ab5721d1c4c80a7f3f051fc117cdec3fe837682d154",
+      "bytes": 2514196,
+      "pageCount": 58,
+      "screenedPages": 58,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-bichot-1995",
+      "title": "Bichot SA: 29 June 1995 governance and statutes",
+      "url": "https://actes.ccm2.net/acte/22570272#page=1",
+      "type": "company-filing",
+      "documentDate": "1995-06-29",
+      "filingDate": "1995-11-09",
+      "access": "read",
+      "finding": "Governance and statutes; no exact Richebourg reference or parcel lease found.",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:20.160208+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/22570272",
+      "sha256": "e5539f087b107c2c9e29f953398db38f7512ec0edc8d770e3314fba601fc336f",
+      "bytes": 523365,
+      "pageCount": 18,
+      "screenedPages": 18,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-grivot-2025",
+      "title": "GFA Jean Grivot: statutes updated 29 January 2025",
+      "url": "https://actes.ccm2.net/acte/260b4e13-ce3d-4c08-9909-19fec99a7cb9#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-01-29",
+      "filingDate": "2025-02-04",
+      "access": "read",
+      "finding": "GFA statutes reproduce cash formation and require long-term leasing, without AN247 or a named tenant.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:25.270210+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/260b4e13-ce3d-4c08-9909-19fec99a7cb9",
+      "sha256": "4f138095acdd3e6fa1315cc20e4def2305a5d0657a8a1861a33c3b6a4594e6c4",
+      "bytes": 1682423,
+      "pageCount": 22,
+      "screenedPages": 22,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-grivot-2011",
+      "title": "Jean Grivot: 12 March 2011 share donation",
+      "url": "https://actes.ccm2.net/acte/2781e896-2b03-40df-8b89-cfa70326ea5f#page=2",
+      "type": "company-filing",
+      "documentDate": "2011-03-12",
+      "filingDate": "2012-03-26",
+      "access": "read",
+      "finding": "Donation of company shares; no AN247 schedule or named parcel tenant found.",
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:27.853932+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2781e896-2b03-40df-8b89-cfa70326ea5f",
+      "sha256": "2847c2bb31a272721d84dc0f14b561eac4866c27a5b2ae0188e76b567a46ead4",
+      "bytes": 163365,
+      "pageCount": 11,
+      "screenedPages": 11,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-grivot-transformation-2024",
+      "title": "Jean Grivot: 31 January 2024 GFA transformation",
+      "url": "https://actes.ccm2.net/acte/2df01b5f-26a1-4a45-a3e5-5e3d6522a64e#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-01-31",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Transformation into a GFA; long-term leasing is a statutory requirement, not an executed lease. Deposit date is not printed in the index.",
+      "reviewedPages": [
+        1,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:31.024776+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2df01b5f-26a1-4a45-a3e5-5e3d6522a64e",
+      "sha256": "703f1b3f320cf9d1bfa600bf7d737e03b1c6aa08b8647ff3a9b01ddb3481e505",
+      "bytes": 316504,
+      "pageCount": 5,
+      "screenedPages": 5,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-grivot-statutes-2024",
+      "title": "GFA Jean Grivot: 31 January 2024 statutes",
+      "url": "https://actes.ccm2.net/acte/515d7f4c-32c3-49bd-84ad-b5e1119571c6#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-01-31",
+      "filingDate": null,
+      "access": "read",
+      "finding": "GFA statutes; no AN247 schedule or named tenant. Deposit date is not printed in the index.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:34.621722+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/515d7f4c-32c3-49bd-84ad-b5e1119571c6",
+      "sha256": "21b5218027270849505b3878535f15f194d9cd7a7385b1f91a1950738f27ac17",
+      "bytes": 1616284,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-transformation-2017",
+      "title": "Domaine Méo Camuzet: 21 July 2017 transformation and asset list",
+      "url": "https://actes.ccm2.net/acte/4a5bf72b-2d2e-4580-9a88-2a333b582f7e#page=2",
+      "type": "company-filing",
+      "documentDate": "2017-07-21",
+      "filingDate": "2017-10-30",
+      "access": "read",
+      "finding": "Transformation into an agricultural civil company. The asset list names usufructs of AN54 and AN59 but supplies no cadastral areas, so it is holder-level context only.",
+      "reviewedPages": [
+        2,
+        85
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:42.602003+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4a5bf72b-2d2e-4580-9a88-2a333b582f7e",
+      "sha256": "caef80d8c148ce911757977270d3676fd651df0774087683ebab0e110a6cd22f",
+      "bytes": 6424809,
+      "pageCount": 123,
+      "screenedPages": 123,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-statutes-2012",
+      "title": "GFA du Domaine Méo Camuzet: 20 December 2012 statutes",
+      "url": "https://actes.ccm2.net/acte/2d95e7e6-8831-4a7e-880c-4d1e9aa25f20#page=2",
+      "type": "company-filing",
+      "documentDate": "2012-12-20",
+      "filingDate": "2013-01-28",
+      "access": "read",
+      "finding": "Updated statutes repeat AN54 (3,061 m²), AN59 (462 m²), and the historical nine-year métayage from 11 November 1961; no current farming season established.",
+      "reviewedPages": [
+        2,
+        6,
+        15
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:51.112750+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2d95e7e6-8831-4a7e-880c-4d1e9aa25f20",
+      "sha256": "7be91196efe0d1fb9fdf0954301524536369cf3b559d68b7efd1893137ddbf53",
+      "bytes": 1300854,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-donation-1997",
+      "title": "GFA du Domaine Méo Camuzet: 12 April 1997 share donation and annexes",
+      "url": "https://actes.ccm2.net/acte/a00e2e27-6266-4c25-ae4b-c0c1de30d6cc#page=1",
+      "type": "company-filing",
+      "documentDate": "1997-04-12",
+      "filingDate": "1997-09-02",
+      "access": "read",
+      "finding": "Donation and annexed statutes repeat AN54 (3,061 m²), AN59 (462 m²), and the historical 1961 métayage. This predates creation of SAS Méo-Camuzet Frère et Sœurs.",
+      "reviewedPages": [
+        1,
+        35,
+        51
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:17:56.932986+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a00e2e27-6266-4c25-ae4b-c0c1de30d6cc",
+      "sha256": "de531fac7d37eadaf2f76fb2e5efa3905504a3fd0c5f8a5cbaf01d42c1bfd955",
+      "bytes": 2332909,
+      "pageCount": 73,
+      "screenedPages": 73,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-anne-gros-2022",
+      "title": "Anne Gros: 28 February 2022 transformation into a SAS",
+      "url": "https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-02-28",
+      "filingDate": "2022-04-05",
+      "access": "read",
+      "finding": "Transformation into a SAS; no additional Richebourg schedule or lease found.",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:01.234748+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0cb2af7f-63a9-4385-98e1-090357247271",
+      "sha256": "b39bebb6f970a0c891f9ba47c3745b421b2b76fa270216cdd4dcf65fc4aeb9e5",
+      "bytes": 1495634,
+      "pageCount": 30,
+      "screenedPages": 30,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-anne-gros-contribution-2019",
+      "title": "Anne Gros: 27 November 2019 contribution of bare and full ownership",
+      "url": "https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38#page=3",
+      "type": "company-filing",
+      "documentDate": "2019-11-27",
+      "filingDate": "2019-12-04",
+      "access": "read",
+      "finding": "Contribution of bare ownership of AN174 (4,384 m²) and AN236 (1,066 m²), and full ownership of AN180 (338 m²) and AN238 (214 m²). Recites 2013 leases to SARL Anne Gros; ownership and tenancy consolidate for AN180/238 at contribution.",
+      "reviewedPages": [
+        3,
+        9,
+        10,
+        11,
+        13,
+        14
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:05.435002+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/af5aa267-d231-4ca0-a66d-2ff68a677a38",
+      "sha256": "b8dc58de10557da901b6c746d698d887f3c19de7d7c7d9a42406b2af7a2757dd",
+      "bytes": 2110770,
+      "pageCount": 40,
+      "screenedPages": 40,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-anne-gros-2014",
+      "title": "Anne Gros: 31 January 2014 capital increase",
+      "url": "https://actes.ccm2.net/acte/7e3f47c5-5290-40c6-82dc-67f4db6b7740#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-01-31",
+      "filingDate": "2014-06-06",
+      "access": "read",
+      "finding": "Capital increase from reserves; no exact Richebourg schedule or parcel lease found.",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:08.502448+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7e3f47c5-5290-40c6-82dc-67f4db6b7740",
+      "sha256": "b563de722d7563f0b8311c5c5403eeb07ee2981e820f93d284dbd7e971c63c38",
+      "bytes": 428690,
+      "pageCount": 13,
+      "screenedPages": 13,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-anne-gros-1996",
+      "title": "Anne Gros: 28 August 1996 name change and statutes",
+      "url": "https://actes.ccm2.net/acte/7d38b907-63f5-4748-8db8-cd5c930ec693#page=1",
+      "type": "company-filing",
+      "documentDate": "1996-08-28",
+      "filingDate": "1996-10-30",
+      "access": "read",
+      "finding": "Renames SCE Domaine Anne et François Gros as Anne Gros; no exact Richebourg schedule or parcel lease found.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:12.294279+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7d38b907-63f5-4748-8db8-cd5c930ec693",
+      "sha256": "f9e292433071b4bab4c004ca58a9ede691e5d237dca7f4fb7c311d98fb06aa3b",
+      "bytes": 927872,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-hudelot-2025",
+      "title": "GFV Hudelot-Noëllat: statutes updated 31 March 2025",
+      "url": "https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-03-31",
+      "filingDate": "2025-05-05",
+      "access": "read",
+      "finding": "Updated statutes reproduce the original contribution of AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²). They do not print the current AN290/291 successors.",
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:19.250992+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09",
+      "sha256": "8b4666d6ace8f594a7ccd8a290f6e3b6747049ea27d036cd6861a75f5230918f",
+      "bytes": 6137682,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-hudelot-2021-contribution",
+      "title": "GFV Hudelot-Noëllat: 12 November 2021 contribution and statutes",
+      "url": "https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21#page=2",
+      "type": "company-filing",
+      "documentDate": "2021-11-12",
+      "filingDate": "2021-12-21",
+      "access": "read",
+      "finding": "Contribution deed and annexed statutes repeat AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²); no exact Richebourg tenant identified.",
+      "reviewedPages": [
+        2,
+        10,
+        36
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:24.069580+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21",
+      "sha256": "53fefeb7d83edf5c8fb62644030a8ddbc3641b473f3e8d026b74159bbd71fef4",
+      "bytes": 3001835,
+      "pageCount": 55,
+      "screenedPages": 55,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-hudelot-2021-donation",
+      "title": "GFV Hudelot-Noëllat: 19 March 2021 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9#page=3",
+      "type": "company-filing",
+      "documentDate": "2021-03-19",
+      "filingDate": "2021-04-20",
+      "access": "read",
+      "finding": "Share donation and statutes repeat the historical AN64/65/66 contribution; no current AN290/291 schedule or exact Richebourg tenant identified.",
+      "reviewedPages": [
+        3,
+        5,
+        27
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:28.675398+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9",
+      "sha256": "b8a6bb6689343fb0df298032fc1397be027c52a2e1f0521ab36840f04b65cf81",
+      "bytes": 2204673,
+      "pageCount": 45,
+      "screenedPages": 45,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-hudelot-2012",
+      "title": "GFV Hudelot-Noëllat: 11 June 2012 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f#page=3",
+      "type": "company-filing",
+      "documentDate": "2012-06-11",
+      "filingDate": "2015-03-27",
+      "access": "read",
+      "finding": "Share donation and statutes reproduce AN64/65/66. Historical leases elsewhere and general leasing clauses do not identify a Richebourg parcel tenant.",
+      "reviewedPages": [
+        3,
+        7,
+        11,
+        27
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:34.515242+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f",
+      "sha256": "f8d737a37918afa1625ac51bf6884cd98ffdc55bb4a645d71a8ff4b616331307",
+      "bytes": 2871321,
+      "pageCount": 44,
+      "screenedPages": 44,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-hudelot-formation-2001",
+      "title": "GFV Hudelot-Noëllat: 28 June 2001 founding contribution",
+      "url": "https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014#page=2",
+      "type": "company-filing",
+      "documentDate": "2001-06-28",
+      "filingDate": "2001-08-09",
+      "access": "read",
+      "finding": "Founding contribution prints AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²). Article 2 requires long-term letting, without a named executed Richebourg lease.",
+      "reviewedPages": [
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:37.686579+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014",
+      "sha256": "ab55eeb5b1b4d790260f0e9b91913834c647e872a1c846e6e1e0750dd3f265b1",
+      "bytes": 911376,
+      "pageCount": 21,
+      "screenedPages": 21,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-sas-2022",
+      "title": "Méo-Camuzet Frère et Sœurs: 15 November 2022 capital reduction",
+      "url": "https://actes.ccm2.net/acte/0b44fdea-e60a-4e7d-895b-686d08f666a2#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-11-15",
+      "filingDate": "2023-04-03",
+      "access": "read",
+      "finding": "Capital reduction and statutes; no exact Richebourg schedule or parcel tenant found.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:41.375881+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0b44fdea-e60a-4e7d-895b-686d08f666a2",
+      "sha256": "2e9676fcd9ffd443e00ec4a347d6de595c78b9dc87f2e9aa039dbeac1886f0e7",
+      "bytes": 1136491,
+      "pageCount": 15,
+      "screenedPages": 15,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-sas-2017",
+      "title": "Méo-Camuzet Frère et Sœurs: 25 August 2017 share contribution",
+      "url": "https://actes.ccm2.net/acte/5fc776e7-7f47-4192-9b3b-abd6089933ca#page=2",
+      "type": "company-filing",
+      "documentDate": "2017-08-25",
+      "filingDate": "2017-12-07",
+      "access": "read",
+      "finding": "Contribution of shares in Domaine Méo Camuzet; corporate relationship only, without an exact Richebourg land schedule or parcel tenant.",
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:45.070297+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5fc776e7-7f47-4192-9b3b-abd6089933ca",
+      "sha256": "6cb465e8fa5909a54533a11f6eb28fcfd634e5b8e6bdbef0139ee9c73740ba34",
+      "bytes": 911144,
+      "pageCount": 20,
+      "screenedPages": 20,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-sas-2012",
+      "title": "Méo-Camuzet Frère et Sœurs: 20 December 2012 decisions",
+      "url": "https://actes.ccm2.net/acte/3df01297-7f22-4814-8ec2-3e1c2b20ee6e#page=2",
+      "type": "company-filing",
+      "documentDate": "2012-12-20",
+      "filingDate": "2013-01-31",
+      "access": "read",
+      "finding": "Decision refers generally to acquisition of vines and removes a distribution requirement; no exact Richebourg reference or area.",
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:48.320950+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3df01297-7f22-4814-8ec2-3e1c2b20ee6e",
+      "sha256": "1ced3e65aa7b62332967f10f70f0e22bdd664747c6b4ed594ce7669fceb75b12",
+      "bytes": 628985,
+      "pageCount": 18,
+      "screenedPages": 18,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-meo-sas-formation-2003",
+      "title": "Méo-Camuzet Frère et Sœurs: 15 April 2003 formation",
+      "url": "https://actes.ccm2.net/acte/8a1e3870-0fa4-4778-bce6-ceacd0da2a42#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-04-15",
+      "filingDate": "2003-05-15",
+      "access": "read",
+      "finding": "Cash formation and subscribed capital; no exact Richebourg schedule or parcel tenant found.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:51.506871+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8a1e3870-0fa4-4778-bce6-ceacd0da2a42",
+      "sha256": "19cd39ba434a9ce456b74661347260a2ee0fa48fd14cbeb2ea9881d8e58c4af7",
+      "bytes": 627527,
+      "pageCount": 20,
+      "screenedPages": 20,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-drc-2024",
+      "title": "DRC: 14 November 2024 management declaration and bundled share deeds",
+      "url": "https://actes.ccm2.net/acte/34207319#page=6",
+      "type": "company-filing",
+      "documentDate": "2024-11-14",
+      "filingDate": "2024-11-14",
+      "access": "read",
+      "finding": "Management declaration concerning share transfers and statutes updated 27 July 2024; Richebourg labels and company history are not an exact parcel schedule.",
+      "reviewedPages": [
+        6,
+        41,
+        42,
+        44,
+        46,
+        103
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:18:58.475155+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
+      "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
+      "bytes": 8473781,
+      "pageCount": 135,
+      "screenedPages": 135,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-drc-2022",
+      "title": "DRC: 21 March 2022 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/5409233#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-03-21",
+      "filingDate": "2022-04-15",
+      "access": "read",
+      "finding": "Share donation and statutes reproduce Richebourg label wording, without an exact current cadastral schedule.",
+      "reviewedPages": [
+        2,
+        31,
+        32
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:02.981355+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409233",
+      "sha256": "5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708",
+      "bytes": 2655931,
+      "pageCount": 65,
+      "screenedPages": 65,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-drc-statutes-1974",
+      "title": "DRC: 21 December 1974 notarial statutes and estate schedule (filed 2002)",
+      "url": "https://actes.ccm2.net/acte/5409256#page=1",
+      "type": "company-filing",
+      "documentDate": "1974-12-21",
+      "filingDate": "2002-07-31",
+      "access": "read",
+      "finding": "The 21 December 1974 notarial statutes list the then estate, including AN56, AN60, AN68, AN69, AN71, AN169, AN171 and AN173 with individual areas matching today. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "reviewedPages": [
+        1,
+        36,
+        38,
+        39,
+        74
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:07.382879+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409256",
+      "sha256": "f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68",
+      "bytes": 3706675,
+      "pageCount": 125,
+      "screenedPages": 125,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-mongeard-2022",
+      "title": "GFA Mongeard-Mugneret: 25 May 2022 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-05-25",
+      "filingDate": "2022-06-17",
+      "access": "read",
+      "finding": "Share donation and statutes updated 30 May 2022; no exact AN248 schedule or named Richebourg tenant found.",
+      "reviewedPages": [
+        2,
+        12,
+        14
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:12.500955+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cd4e3ee0-5b96-49fe-ab25-fe4bdcf4c098",
+      "sha256": "36b403704aa63d30b73d968bbb89609b1cd67a4ba915fc88406fc192db2665e0",
+      "bytes": 2110638,
+      "pageCount": 31,
+      "screenedPages": 31,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-mongeard-2017",
+      "title": "GFA Mongeard-Mugneret: 20 March 2017 share and statutory changes",
+      "url": "https://actes.ccm2.net/acte/0fb79a93-c4a6-42ee-a72f-403c1c88cbcc#page=2",
+      "type": "company-filing",
+      "documentDate": "2017-03-20",
+      "filingDate": "2017-11-21",
+      "access": "read",
+      "finding": "Share and statutory changes; no exact AN248 schedule or named Richebourg tenant found.",
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:16.807832+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0fb79a93-c4a6-42ee-a72f-403c1c88cbcc",
+      "sha256": "a05e03b6ec118bc642102e0c13432a4329fc3e14120da951723d4a2a5e432396",
+      "bytes": 3215590,
+      "pageCount": 63,
+      "screenedPages": 63,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-af-gros-donation-2020",
+      "title": "GFA Héritiers AF-Gros: 22 July 2020 share donation",
+      "url": "https://actes.ccm2.net/acte/44e2969c-e634-44a3-85b5-b5376e45ca12#page=2",
+      "type": "company-filing",
+      "documentDate": "2020-07-22",
+      "filingDate": "2020-10-07",
+      "access": "read",
+      "finding": "Share donation reproduces the founding AN243/245 schedule and existing lease recital to Domaine A.F Gros; it is not a second land purchase.",
+      "reviewedPages": [
+        2,
+        37,
+        39,
+        40
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:26.636810+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/44e2969c-e634-44a3-85b5-b5376e45ca12",
+      "sha256": "7c91dae2e9ca52d3913b6a0d26e5c1b5337fbb261a3468045b7a2c35fd03379a",
+      "bytes": 3359951,
+      "pageCount": 61,
+      "screenedPages": 61,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-leroy-2024",
+      "title": "SCI Domaine Leroy: 3 June 2024 annual meeting",
+      "url": "https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-06-03",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Annual meeting and manager replacement; no parcel schedule. Deposit date is not established by the free index or PDF.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T16:19:47.463515+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf",
+      "sha256": "c1dc242187c3f0a08f0c25675cee53815048d6e52435a4c0897691131d91a196",
+      "bytes": 111546,
+      "pageCount": 3,
+      "screenedPages": 3,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR, ONNX Runtime DirectML, use_dml=True and Global.use_cls=False; three independent staggered shards. Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-tlb-lease-contribution-2015",
+      "title": "Domaine Thibault Liger-Belair: 30 December 2015 notarial contribution of lease rights (filed 2017)",
+      "url": "https://actes.ccm2.net/acte/2118907a-ffa5-4235-8242-fc415cbb75c3#page=4",
+      "type": "company-filing",
+      "documentDate": "2015-12-30",
+      "filingDate": "2017-05-17",
+      "access": "read",
+      "finding": "Contributes to the company Domaine Thibault Liger-Belair (443134523) a métayage right under a 14 May 2005 notarial lease, published at the Beaune land registry on 20 June 2005, by which GFA Domaine Xavier Liger-Belair (353575103), owner and lessor, let Richebourg AN170 (44 a 13 ca) and AN172 (7 a 92 ca), with other vines, for 18 years from 1 January 2005. The GFA intervenes to approve; the leases had been made available to the company since its formation. The lease instrument itself was not reviewed.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T00:18:36.621649+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2118907a-ffa5-4235-8242-fc415cbb75c3",
+      "sha256": "682d099d7fa4551c213f175c5818b80220f48678b574c3096eb7c48df11dcb8f",
+      "bytes": 1136504,
+      "pageCount": 25,
+      "screenedPages": 25,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU). Relevant schedules checked against page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2005-05-14",
+          "kind": "recited métayage lease"
+        },
+        {
+          "date": "2005-06-20",
+          "kind": "recited land-registry publication of the lease"
+        }
+      ]
+    },
+    {
+      "id": "ric-tlb-statutes-2025",
+      "title": "Domaine Thibault Liger-Belair: statutes updated after the 3 April 2025 decisions (filed July 2025)",
+      "url": "https://actes.ccm2.net/acte/ad237e6f-66db-4ae4-a17a-b2485263e6d2#page=3",
+      "type": "company-filing",
+      "documentDate": "2025-04-03",
+      "filingDate": "2025-07-07",
+      "access": "read",
+      "finding": "Article 6.3 still recites the 30 December 2015 contribution of the 2005 métayage right over Vosne-Romanée AN170 and AN172, among other parcels. This is capital history; it does not show the lease in force in 2025 or after the 3 April 2025 sale.",
+      "reviewedPages": [
+        1,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-07T23:50:26.111682+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ad237e6f-66db-4ae4-a17a-b2485263e6d2",
+      "sha256": "e86988e3fa9d2dabf109e05e4a630414c9dfcebed6907aff5df1f819058e877c",
+      "bytes": 487409,
+      "pageCount": 18,
+      "screenedPages": 18,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU). Relevant schedules checked against page images."
+    },
+    {
+      "id": "ric-anne-gros-richebourg",
+      "title": "Domaine Anne Gros: Richebourg",
+      "url": "https://www.anne-gros.com/products-category/richebourg-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:09.226262+00:00",
+      "retrievedFrom": "https://www.anne-gros.com/products-category/richebourg-grand-cru/",
+      "sha256": "0bca687eae07eedffd50be6fd862c8f3aae04d566fbfc5f2ff24c2973f1f588a",
+      "bytes": 31775,
+      "finding": "Official undated page publishes 0.60 ha in Les Verroilles; the contribution deed separately names parcels in both cadastral named areas."
+    },
+    {
+      "id": "ric-meo-richebourg-sheet",
+      "title": "Méo-Camuzet: Richebourg",
+      "url": "https://www.meo-camuzet.com/pdf/fr/richebourg-274.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:13.436686+00:00",
+      "retrievedFrom": "https://www.meo-camuzet.com/pdf/fr/richebourg-274.pdf",
+      "sha256": "2694664d4b2c0ee69e824214a2774ed527e7d1721b0102b53c08b5c8b5032fc5",
+      "bytes": 403261,
+      "finding": "Undated sheet describes slightly over 34 ares across both named areas, approximately seven ouvrées in Les Verroilles and one in Les Richebourgs; no parcel references.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "ric-mongeard-richebourg",
+      "title": "Mongeard-Mugneret: Richebourg",
+      "url": "https://mongeard.com/fr/vin/richebourg-grand-cru/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:17.417253+00:00",
+      "retrievedFrom": "https://mongeard.com/fr/vin/richebourg-grand-cru/",
+      "sha256": "957e96859efc78d22ec45d055a4b3c878ed9b383d3b2ade95d78a8397dcf06f4",
+      "bytes": 53057,
+      "finding": "Undated estate page gives 31 ares 12 ca in Les Richebourgs and acquisition in 1984. Area equality alone is not a cadastral crosswalk."
+    },
+    {
+      "id": "ric-drc-richebourg",
+      "title": "Domaine de la Romanée-Conti: Richebourg",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/6/richebourg",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:22.028455+00:00",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/6/richebourg",
+      "sha256": "89bd424728b8a55c34e780ee118f5061884383e2852c0f4a8e95debce57be089",
+      "bytes": 219846,
+      "finding": "Undated estate page publishes 3.5110 ha; no cadastral references or verified farming season."
+    },
+    {
+      "id": "ric-hudelot-richebourg-sheet",
+      "title": "Domaine Hudelot-Noëllat: Richebourg",
+      "url": "https://mobile.domaine-hudelot-noellat.com/assets/wine/Domaine_Hudelot-Noellat_Richebourg_Grand-Cru.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-07T16:19:27.141761+00:00",
+      "retrievedFrom": "https://mobile.domaine-hudelot-noellat.com/assets/wine/Domaine_Hudelot-Noellat_Richebourg_Grand-Cru.pdf",
+      "sha256": "829f7074b80cde73ca8b5faa65290587cc448cef7c4eb0e25a74dee9e8d5bfc1",
+      "bytes": 410952,
+      "finding": "Undated estate sheet publishes 0.29 ha. The bottle vintage does not date the document; Winehog’s older list gives 0.28 ha.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "ric-winehog-history",
+      "title": "Winehog: Richebourg – history, plots and owners – new update",
+      "url": "https://winehog.org/richebourg-history-plots-and-owners-10692/",
+      "type": "critic-research",
+      "documentDate": "2013-08-18",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f1d65b87d64864ae12e7a75cc1abd4d1a03e5c1d39a75cdafea094f6ef91ac87",
+      "bytes": 3498778,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Historical owner list gives eleven producer totals and named-area locations, including 0.55 ha for Thibault Liger-Belair in Les Richebourg with a first 2002 vintage after an earlier lease to another domaine. The printed publication date is 18 August 2013; page metadata records a last modification on 1 October 2017, which the text does not print. No map colour or holding total is used as a current parcel crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "ric-winehog-new-owner",
+      "title": "Winehog: New owner of Richebourg!",
+      "url": "https://winehog.org/new-owner-of-richebourg-70980/",
+      "type": "critic-research",
+      "documentDate": "2025-10-24",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "ff7632ac454272841cdc2095996c9f35db32d93c5d015aa1f906e4649f290dd9",
+      "bytes": 3722383,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Reports northern plots 292/294, 0.2167 ha, and southern plots 293/295, 0.3083 ha. Their present cadastral area sums agree. The article deliberately leaves the new owner unnamed; no producer or farming identity is inferred."
+    },
+    {
+      "id": "ric-winehog-grivot",
+      "title": "Winehog: Terroir Insight – Domaine Jean Grivot Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-jean-grivot-richebourg-28264/",
+      "type": "critic-research",
+      "documentDate": "2016-05-31",
+      "otherDocumentDates": [
+        {
+          "date": "2018-09-27",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "09d7c7705df9aa178fba610bcce979b3236bd105e7a8a14c9e19c1418129d276",
+      "bytes": 3545484,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names the Grivot holding as cadastre 247, 0.3199 ha, bought in 1984 from the Charles Viénot house, with a first 1984 vintage. Places Mongeard-Mugneret on 248 to the north and the Thibault Liger-Belair holdings on 172 and 170 to the south; its 2016 cadastral map shows the same numbers."
+    },
+    {
+      "id": "ric-winehog-mongeard",
+      "title": "Winehog: Terroir Insight – Domaine Mongeard-Mugneret Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-mongeard-mugneret-richebourg-36803/",
+      "type": "critic-research",
+      "documentDate": "2018-10-05",
+      "otherDocumentDates": [
+        {
+          "date": "2018-10-05",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "cdcc950a39455aecf43e3a6be9bd2d02ec00e05af901e5cb22b1c2076410c54d",
+      "bytes": 4980371,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names the Mongeard-Mugneret plot as cadastre 248, 0.3112 ha, the northern half of the former Charles Viénot plot, bought in 1984. Places Grivot on 247 and the Thibault Liger-Belair holdings on 172 and 170 to the south."
+    },
+    {
+      "id": "ric-winehog-leroy",
+      "title": "Winehog: Terroir Insight – Domaine Leroy Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-leroy-richebourg-25047/",
+      "type": "critic-research",
+      "documentDate": "2015-10-11",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "9fc812389374a66a759eef8b99b849ab2f3b5a13bb91e871fab5189ca3fa52b4",
+      "bytes": 4753205,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Names three Leroy plots: cadastre 57 (0.5522 ha), 61 (0.1321 ha) and a plot printed as 69 (0.0922 ha), 0.7765 ha in all, acquired with the Charles Noëllat estate in 1988. It names the domaine, not the DGFiP company identifier."
+    },
+    {
+      "id": "ric-winehog-meo",
+      "title": "Winehog: Terroir Insight – Domaine Méo-Camuzet Richebourg",
+      "url": "https://winehog.org/terroir-insight-domaine-meo-camuzet-richebourg-23896/",
+      "type": "critic-research",
+      "documentDate": "2015-06-28",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "7630ea959885c16678ddc18eb121f1dba6d5d5f9396877bb339965abe917c323",
+      "bytes": 3768037,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "finding": "Gives two plots, 0.0462 ha in Les Richebourg and 0.3061 ha in Les Verroilles ou Richebourg (0.3523 ha), without cadastral numbers, and reports that the family’s métayage of these vines ended in 1987, when they returned to the domaine."
     }
   ],
   "holders": [
     {
       "holderId": "036380046",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-bichot-2022",
+        "ric-bichot-2014",
+        "ric-bichot-2007",
+        "ric-bichot-1995",
+        "rne-036380046"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Bichot’s official sheet identifies the Clos Frantin label and 0.07 ha. Four filings (98 pages) yield no exact AN53 schedule or parcel lease. Published area remains census evidence; farming unverified."
     },
     {
       "holderId": "318506367",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-grivot-2025",
+        "ric-grivot-2011",
+        "ric-grivot-transformation-2024",
+        "ric-grivot-statutes-2024",
+        "rne-318506367",
+        "rne-353981475"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA Jean Grivot’s four filings (61 pages) show cash formation and compulsory long-term letting, without AN247 or a named tenant. Names and overlapping individual officers are insufficient for a domaine crosswalk; no link asserted."
     },
     {
       "holderId": "320926439",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-meo-transformation-2017",
+        "meo-gfa-withdrawal-2016",
+        "ric-meo-statutes-2012",
+        "ric-meo-donation-1997",
+        "rne-320926439"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2016 filing repeats AN54/59 with exact areas and a historical 1961 métayage; 2017 accounts name their usufruct without areas. Keep the older lease separate from the 2012 usufruct and current U rights; farming unverified."
     },
     {
       "holderId": "348024928",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-anne-gros-2022",
+        "ric-anne-gros-contribution-2019",
+        "ric-anne-gros-2014",
+        "ric-anne-gros-1996",
+        "rne-348024928"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2019 deed names AN174/236 in bare ownership and AN180/238 in full ownership with matching areas. It recites 2013 leases to Anne Gros; ownership and tenancy consolidate for AN180/238. No current farming season verified."
     },
     {
       "holderId": "438871279",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-hudelot-2025",
+        "ric-hudelot-2021-contribution",
+        "ric-hudelot-2021-donation",
+        "ric-hudelot-2012",
+        "ric-hudelot-formation-2001",
+        "rne-438871279"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Five filings repeat AN64/66 with matching areas and retired AN65. AN290/291 are not printed in those schedules. General long-term letting clauses do not name a Richebourg tenant; current farming unverified."
     },
     {
       "holderId": "448502708",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "management-only-lead",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-meo-sas-2022",
+        "ric-meo-sas-2017",
+        "ric-meo-sas-2012",
+        "ric-meo-sas-formation-2003",
+        "rne-448502708"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Four SAS filings show corporate/share changes and general vine acquisitions, without an exact Richebourg schedule. The GFA’s 2016 deed recites a separate 2012 usufruct over SAS-owned vines; N rights and management remain distinct from farming."
     },
     {
       "holderId": "778269407",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-drc-2024",
+        "ric-drc-2022",
+        "ric-drc-statutes-1974",
+        "rne-778269407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1974 notarial estate schedule names all eight current DRC Richebourg parcels with matching areas. Later share filings add no current parcel lease or farming season; legal company identity remains a research link."
     },
     {
       "holderId": "778269498",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-mongeard-2022",
+        "ric-mongeard-2017",
+        "mongeard-gfa-1964",
+        "rne-778269498"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Three filings (168 pages) contain no exact AN248 schedule or named Richebourg tenant. The estate publishes 0.3112 ha, but equal area is not a parcel crosswalk. Its GFA statutes require long-term letting; farming unverified."
     },
     {
       "holderId": "885114322",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-af-gros-donation-2020",
+        "ric-af-gros-formation-2020",
+        "rne-885114322"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2020 formation contributes AN243/245 with matching areas and recites a 2018 lease to SAS Domaine A.F Gros (383967346), 18 years from 11 November 2017. The tenant link is Richebourg-only; original lease and current farming unverified."
     },
     {
       "holderId": "U14149307",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "name-and-seat-crosswalk",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ric-leroy-representative-2006",
+        "sci-domaine-leroy-2001",
+        "ric-leroy-2024",
+        "rne-427469135"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Three SCI filings (49 pages) give no exact AN57/61/168 schedule. A 2006 resolution links the SCI and SCE through Leroy SA, but U14149307 to SCI 427469135 remains provisional on name and seat; farming unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "ric-wh-2025-north",
+      "title": "Winehog: unnamed ownership report, north plots",
+      "parcelIds": [
+        "21714000AN0292",
+        "21714000AN0294"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog’s 24 October 2025 article prints these north plots, together 2,167 m² (cadastral sum matches), but leaves the new owner unnamed. No producer or current farmer is identified.",
+      "sourceIds": [
+        "ric-winehog-new-owner"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "292",
+        "294"
+      ],
+      "appNote": "Winehog’s 24 October 2025 article prints these north plots, together 2,167 m² (cadastral sum matches), but leaves the new owner unnamed. No producer or current farmer is identified.",
+      "dateSourceId": "ric-winehog-new-owner",
+      "currentFarmer": null,
+      "evidenceSeason": "2025"
+    },
+    {
+      "id": "ric-wh-2025-south",
+      "title": "Winehog: unnamed ownership report, south plots",
+      "parcelIds": [
+        "21714000AN0293",
+        "21714000AN0295"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog’s 24 October 2025 article prints these south plots, together 3,083 m² (cadastral sum matches), but leaves the new owner unnamed. No producer or current farmer is identified.",
+      "sourceIds": [
+        "ric-winehog-new-owner"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "293",
+        "295"
+      ],
+      "appNote": "Winehog’s 24 October 2025 article prints these south plots, together 3,083 m² (cadastral sum matches), but leaves the new owner unnamed. No producer or current farmer is identified.",
+      "dateSourceId": "ric-winehog-new-owner",
+      "currentFarmer": null,
+      "evidenceSeason": "2025"
+    },
+    {
+      "id": "ric-tlb-metayage-2005",
+      "title": "Domaine Thibault Liger-Belair: 2005 métayage of former AN170/AN172",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "A 30 December 2015 notarial contribution, filed in 2017, transfers to Domaine Thibault Liger-Belair (443134523) a métayage right under a 14 May 2005 lease by which GFA Domaine Xavier Liger-Belair (353575103), owner and lessor, let Richebourg AN170 (44 a 13 ca) and AN172 (7 a 92 ca) for 18 years from 1 January 2005. Both areas equal the April 2025 cadastre, and DGFiP records the GFA as owner of both references in 2019–2025. A 2025 survey divided them into AN292/293 and AN294/295, which receive this evidence only through documented DFI lineage. The 2025 statutes still recite the contribution. The lease term ran to the end of 2022; no renewal, and no position after the 3 April 2025 sale, is established. Winehog’s 2013 map places the Liger-Belair plot here but prints no cadastral reference. Historical tenancy only; current farming is not established.",
+      "sourceIds": [
+        "ric-tlb-lease-contribution-2015",
+        "ric-tlb-statutes-2025",
+        "dgfip-history",
+        "cadastre-history",
+        "ric-winehog-history"
+      ],
+      "producer": "Domaine Thibault Liger-Belair",
+      "printedReferences": [
+        "AN170",
+        "AN172"
+      ],
+      "predecessorReferences": {
+        "21714000AN0170": [
+          "21714000AN0292",
+          "21714000AN0293"
+        ],
+        "21714000AN0172": [
+          "21714000AN0294",
+          "21714000AN0295"
+        ]
+      },
+      "appNote": "Former AN170/AN172 (52 a 05 ca), let by the family GFA under a 2005 métayage and contributed to Domaine Thibault Liger-Belair in 2015. The term ran to end-2022; renewal and position after the April 2025 sale are unknown. Historical tenancy, not current farming.",
+      "dateSourceId": "ric-tlb-lease-contribution-2015",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-grivot-247",
+      "title": "Winehog: Domaine Jean Grivot plot, cadastre 247",
+      "parcelIds": [
+        "21714000AN0247"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (31 May 2016; page edited 27 September 2018) names cadastre 247, 0.3199 ha, as the Domaine Jean Grivot Richebourg plot, bought in 1984 from the Charles Viénot house. The area equals AN247’s cadastral area. DGFiP records GFA Jean Grivot (318506367) as holder; the article does not identify that company, so no holder-to-domaine link is made. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-grivot"
+      ],
+      "producer": "Domaine Jean Grivot",
+      "printedReferences": [
+        "247"
+      ],
+      "appNote": "Winehog (2016) names cadastre 247 (0.3199 ha, equal to this parcel) as the Domaine Jean Grivot plot, bought in 1984. The recorded holder GFA Jean Grivot is not linked to the domaine by this article. Not current farming.",
+      "dateSourceId": "ric-winehog-grivot",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-mongeard-248",
+      "title": "Winehog: Domaine Mongeard-Mugneret plot, cadastre 248",
+      "parcelIds": [
+        "21714000AN0248"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (5 October 2018) names cadastre 248, 0.3112 ha, as the Mongeard-Mugneret Richebourg plot, bought in 1984 from the Charles Viénot house. The area equals AN248’s cadastral area and the estate’s published 0.3112 ha. It confirms the existing holder lead; it is not current farming.",
+      "sourceIds": [
+        "ric-winehog-mongeard"
+      ],
+      "producer": "Domaine Mongeard-Mugneret",
+      "printedReferences": [
+        "248"
+      ],
+      "appNote": "Winehog (2018) names cadastre 248 (0.3112 ha, equal to this parcel) as the Mongeard-Mugneret plot, bought in 1984. Not current farming.",
+      "dateSourceId": "ric-winehog-mongeard",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-tlb-170-172",
+      "title": "Winehog: Thibault Liger-Belair holdings, cadastre 170 and 172",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog’s Grivot (2016) and Mongeard-Mugneret (2018) articles place the Thibault Liger-Belair Richebourg holdings on cadastre 172 and 170, south of 247, and the 2016 cadastral map shows those numbers. This independently matches the 2005 métayage filing. Both references were divided in 2025 and reach AN292/293 and AN294/295 only through documented DFI lineage. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-grivot",
+        "ric-winehog-mongeard"
+      ],
+      "producer": "Domaine Thibault Liger-Belair",
+      "printedReferences": [
+        "170",
+        "172"
+      ],
+      "predecessorReferences": {
+        "21714000AN0170": [
+          "21714000AN0292",
+          "21714000AN0293"
+        ],
+        "21714000AN0172": [
+          "21714000AN0294",
+          "21714000AN0295"
+        ]
+      },
+      "appNote": "Winehog (2016, 2018) places the Thibault Liger-Belair holdings on former cadastre 170 and 172, matching the 2005 métayage filing. Divided in 2025; carried here by DFI lineage. Not current farming.",
+      "dateSourceId": "ric-winehog-grivot",
+      "currentFarmer": null
+    },
+    {
+      "id": "ric-wh-leroy-57-61",
+      "title": "Winehog: Domaine Leroy plots, cadastre 57 and 61",
+      "parcelIds": [
+        "21714000AN0057",
+        "21714000AN0061"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (11 October 2015; page edited 6 April 2016) names Leroy plots cadastre 57 (0.5522 ha) and 61 (0.1321 ha), equal to AN57 and AN61. Its third plot is printed as 69 (0.0922 ha) and stays unmatched. The article names the domaine, not the company behind provisional identifier U14149307, so the identity crosswalk stays provisional. Not current farming.",
+      "sourceIds": [
+        "ric-winehog-leroy"
+      ],
+      "producer": "Domaine Leroy",
+      "printedReferences": [
+        "57",
+        "61"
+      ],
+      "appNote": "Winehog (2015) names this parcel’s number and area as a Domaine Leroy plot. The DGFiP holder remains a provisional identifier; not current farming.",
+      "dateSourceId": "ric-winehog-leroy",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "ric-drc-1974",
+      "sourceId": "ric-drc-statutes-1974",
+      "title": "DRC: 1974 notarial estate schedule",
+      "holderId": "778269407",
+      "companySiren": "778269407",
+      "documentDate": "1974-12-21",
+      "parcelAreasM2": {
+        "21714000AN0056": 9370,
+        "21714000AN0060": 3195,
+        "21714000AN0068": 2245,
+        "21714000AN0069": 2144,
+        "21714000AN0071": 53,
+        "21714000AN0169": 9573,
+        "21714000AN0171": 792,
+        "21714000AN0173": 7738
+      },
+      "leaseEvidence": [],
+      "finding": "The 21 December 1974 notarial statutes list the then estate, including AN56, AN60, AN68, AN69, AN71, AN169, AN171 and AN173 with individual areas matching today. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "appNote": "The 1974 notarial statutes name this parcel and its exact cadastral area. Filed in 2002; this is historical estate evidence, not a 2002 acquisition or verified current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        36,
+        38,
+        39,
+        74
+      ],
+      "printedReferences": [
+        "AN56",
+        "AN60",
+        "AN68",
+        "AN69",
+        "AN71",
+        "AN169",
+        "AN171",
+        "AN173"
+      ]
+    },
+    {
+      "id": "ric-hudelot-2001",
+      "sourceId": "ric-hudelot-formation-2001",
+      "title": "GFV Hudelot-Noëllat: founding contribution",
+      "holderId": "438871279",
+      "companySiren": "438871279",
+      "documentDate": "2001-06-28",
+      "parcelAreasM2": {
+        "21714000AN0064": 1222,
+        "21714000AN0066": 808
+      },
+      "leaseEvidence": [],
+      "finding": "Founding contribution prints AN64 (1,222 m²), AN65 (787 m²; retired) and AN66 (808 m²). Article 2 requires long-term letting, without a named executed Richebourg lease.",
+      "appNote": "The 2001 contribution names this parcel with matching area. The statutes require long-term letting but identify no executed Richebourg lease or tenant; current farming unverified.",
+      "supportingSourceIds": [],
+      "pages": [
+        2,
+        3,
+        4
+      ],
+      "printedReferences": [
+        "AN64",
+        "AN66"
+      ]
+    },
+    {
+      "id": "ric-meo-1980-annex",
+      "sourceId": "meo-gfa-withdrawal-2016",
+      "title": "Méo-Camuzet: annexed 1980 schedule and historical lease",
+      "holderId": "320926439",
+      "companySiren": "320926439",
+      "documentDate": "2016-12-29",
+      "parcelAreasM2": {
+        "21714000AN0054": 3061,
+        "21714000AN0059": 462
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "métayage",
+          "tenants": [
+            "an individual"
+          ],
+          "signedDates": [
+            "1961-11-08",
+            "1961-11-19"
+          ],
+          "effectiveFrom": "1961-11-11",
+          "durationYears": 9,
+          "pages": [
+            33,
+            34
+          ],
+          "limitation": "Historical recital in annexed 1980 statutes; no original lease or renewal reviewed. Not the separate 2012 usufruct. Winehog (2015) reports a métayage ending in 1987, without citing this instrument."
+        }
+      ],
+      "finding": "The 2016 filing annexes the 22 December 1980 statutes: AN54/59 and individual areas match today. They recite a nine-year métayage signed 8 and 19 November 1961, effective 11 November 1961, to an individual. No reviewed renewal establishes a current season. Winehog (2015) separately reports that the family’s métayage of these vines ended in 1987; it does not cite the 1961 instrument.",
+      "appNote": "Annexed 1980 statutes name this parcel with matching area and recite a nine-year 1961 métayage to an individual. This historical lease is distinct from the separately recited 2012 usufruct; current farming unverified.",
+      "supportingSourceIds": [
+        "ric-winehog-meo"
+      ],
+      "pages": [
+        21,
+        24,
+        33,
+        34
+      ],
+      "printedReferences": [
+        "AN54",
+        "AN59"
+      ]
+    },
+    {
+      "id": "ric-anne-gros-2019",
+      "sourceId": "ric-anne-gros-contribution-2019",
+      "title": "Anne Gros: contribution of bare and full ownership",
+      "holderId": "348024928",
+      "companySiren": "348024928",
+      "documentDate": "2019-11-27",
+      "parcelAreasM2": {
+        "21714000AN0174": 4384,
+        "21714000AN0236": 1066,
+        "21714000AN0180": 338,
+        "21714000AN0238": 214
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "SARL Anne Gros"
+          ],
+          "tenantSiren": "348024928",
+          "signedDate": "2013-07-02",
+          "effectiveFrom": "2013-07-01",
+          "duration": "25 years and 5 months",
+          "pages": [
+            13,
+            14
+          ],
+          "parcelIds": [
+            "21714000AN0174",
+            "21714000AN0236"
+          ],
+          "combinedAreaM2": 5450,
+          "limitation": "Recited lease of the bare-ownership contributions; original lease and current farming season not reviewed."
+        },
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "SARL Anne Gros"
+          ],
+          "tenantSiren": "348024928",
+          "signedDate": "2013-07-02",
+          "effectiveFrom": "2013-07-01",
+          "duration": "25 years and 5 months",
+          "pages": [
+            13,
+            14
+          ],
+          "parcelIds": [
+            "21714000AN0180",
+            "21714000AN0238"
+          ],
+          "combinedAreaM2": 552,
+          "limitation": "The deed expressly consolidates ownership and tenancy at the 2019 contribution. Do not present this as a continuing separate lease."
+        }
+      ],
+      "finding": "Contribution of bare ownership of AN174 (4,384 m²) and AN236 (1,066 m²), and full ownership of AN180 (338 m²) and AN238 (214 m²). Recites 2013 leases to SARL Anne Gros; ownership and tenancy consolidate for AN180/238 at contribution.",
+      "appNote": "2019 contribution: AN174/236 in bare ownership; AN180/238 in full ownership, areas matching. It recites 2013 leases to Anne Gros, with ownership and tenancy consolidated for AN180/238. Current farming unverified.",
+      "supportingSourceIds": [],
+      "pages": [
+        9,
+        10,
+        11,
+        13,
+        14
+      ],
+      "printedReferences": [
+        "AN174",
+        "AN236",
+        "AN180",
+        "AN238"
+      ]
+    },
+    {
+      "id": "ric-af-gros-2020",
+      "sourceId": "ric-af-gros-formation-2020",
+      "title": "GFA Héritiers AF-Gros: contribution and recited lease",
+      "holderId": "885114322",
+      "companySiren": "885114322",
+      "documentDate": "2020-07-01",
+      "parcelAreasM2": {
+        "21714000AN0243": 949,
+        "21714000AN0245": 332
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "SAS Domaine A.F Gros"
+          ],
+          "tenantSiren": "383967346",
+          "signedDate": "2018-06-12",
+          "effectiveFrom": "2017-11-11",
+          "durationYears": 18,
+          "pages": [
+            8,
+            9
+          ],
+          "limitation": "The founding deed recites an existing executed lease; the original instrument and later amendments were not reviewed. No current farming confirmation."
+        }
+      ],
+      "finding": "Contributes AN243 (949 m²) and AN245 (332 m²), already let to SAS Domaine A.F Gros (383967346) for 18 years from 11 November 2017 under a notarial lease dated 12 June 2018. Only the recital, not the lease instrument, was reviewed.",
+      "appNote": "2020 contribution names this parcel with matching area and recites a lease to SAS Domaine A.F Gros (383967346), signed 12 June 2018 for 18 years from 11 November 2017. Original lease and current farming unverified.",
+      "supportingSourceIds": [],
+      "pages": [
+        6,
+        8,
+        9
+      ],
+      "printedReferences": [
+        "AN243",
+        "AN245"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "ric-drc",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LES RICHEBOURGS",
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 3.511,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-drc-richebourg"
+      ],
+      "finding": "Undated estate publication supplies the area; historical Winehog text supplies named-area context. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "778269407"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 3.51,
+          "sourceId": "ric-winehog-history",
+          "note": "Historical Winehog total; publication date 2013, update date not established."
+        }
+      ]
+    },
+    {
+      "id": "ric-leroy",
+      "producer": "Domaine Leroy",
+      "namedAreas": [
+        "LES RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.78,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "ric-winehog-history"
+      ],
+      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ric-gros-frere",
+      "producer": "Domaine Gros Frère et Sœur",
+      "namedAreas": [
+        "LES RICHEBOURGS",
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.69,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history"
+      ],
+      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ric-af-gros",
+      "producer": "Domaine A.-F. Gros",
+      "namedAreas": [
+        "LES RICHEBOURGS",
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.6,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history"
+      ],
+      "finding": "Winehog’s historical 0.60 ha total spans both named areas. The GFA’s later 1,281 m² contribution is only a separately documented part, not the whole holding.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ric-anne-gros",
+      "producer": "Domaine Anne Gros",
+      "namedAreas": [
+        "LES RICHEBOURGS",
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.6,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-anne-gros-richebourg"
+      ],
+      "finding": "Estate page places 0.60 ha in Les Verroilles, while Winehog and the 2019 deed support both named areas. Combined census scope preserves this location discrepancy.",
+      "producerHolderIds": [
+        "348024928"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [],
+      "locationStatus": "disputed"
+    },
+    {
+      "id": "ric-thibault-liger-belair",
+      "producer": "Domaine Thibault Liger-Belair",
+      "namedAreas": [
+        "LES RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.55,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "ric-winehog-history"
+      ],
+      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season. A separate 2015 filing names former AN170/AN172 (52 a 05 ca) under a métayage; the published total is not that crosswalk.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ric-meo",
+      "producer": "Domaine Méo-Camuzet",
+      "namedAreas": [
+        "LES RICHEBOURGS",
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.34,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-meo-richebourg-sheet",
+        "ric-winehog-meo"
+      ],
+      "finding": "Estate sheet says slightly over 34 ares across both named areas; 0.34 ha is approximate. Winehog lists 0.35 ha. No parcel assignment inferred. Winehog’s 2015 Méo article gives 0.0462 and 0.3061 ha, equal to the filed AN59 and AN54 areas, without cadastral numbers.",
+      "producerHolderIds": [
+        "320926439"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.35,
+          "sourceId": "ric-winehog-history",
+          "note": "Historical Winehog total; publication date 2013, update date not established."
+        }
+      ]
+    },
+    {
+      "id": "ric-grivot",
+      "producer": "Domaine Jean Grivot",
+      "namedAreas": [
+        "LES RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.32,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "ric-winehog-history"
+      ],
+      "finding": "Historical Winehog holding and location; no current parcel crosswalk or farming season.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ric-mongeard",
+      "producer": "Domaine Mongeard-Mugneret",
+      "namedAreas": [
+        "LES RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.3112,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-mongeard-richebourg"
+      ],
+      "finding": "Undated estate publication supplies the area; historical Winehog text supplies named-area context. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "778269498"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.31,
+          "sourceId": "ric-winehog-history",
+          "note": "Historical Winehog total; publication date 2013, update date not established."
+        }
+      ]
+    },
+    {
+      "id": "ric-hudelot",
+      "producer": "Domaine Hudelot-Noëllat",
+      "namedAreas": [
+        "LES RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.29,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-hudelot-richebourg-sheet"
+      ],
+      "finding": "Undated estate publication supplies the area; historical Winehog text supplies named-area context. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "438871279"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.28,
+          "sourceId": "ric-winehog-history",
+          "note": "Historical Winehog total; publication date 2013, update date not established."
+        }
+      ]
+    },
+    {
+      "id": "ric-frantin",
+      "producer": "Domaine du Clos Frantin / Albert Bichot",
+      "namedAreas": [
+        "LES VERROILLES OU RICHEBOURGS"
+      ],
+      "publishedAreaHa": 0.07,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ric-winehog-history",
+        "ric-bichot-richebourg-sheet"
+      ],
+      "finding": "Undated estate publication supplies the area; historical Winehog text supplies named-area context. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "036380046"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "All ten free filing indexes and official registry records were checked; 36 selected filings were downloaded and all 1,454 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.",
+    "Grivot AN247 has no accepted domaine crosswalk: overlapping individual names and management records are not sufficient. No exact AN53, AN247 or AN248 filing schedule was found in the selected files. Winehog names AN247 and AN248 by cadastral number; these are critic leads, not company crosswalks.",
+    "U14149307 to SCI Domaine Leroy 427469135 remains a provisional name-and-seat match; the three reviewed filings do not name AN57/61/168. Winehog names AN57 and AN61 as Leroy plots; its third printed number, 69 (0.0922 ha), stays unmatched.",
+    "Hudelot’s retired AN65 is not promoted into a filing match for AN290/291. The 2017 Méo asset list lacks parcel areas; the separate SAS files provide no exact Richebourg schedule.",
+    "Winehog subscriber text was reviewed only from six authorized user-supplied webarchives. The October 2025 article does not name the new owner of plots 292/293/294/295; colours and rumours are not an identity crosswalk.",
+    "The Winehog history article prints 18 August 2013; its page metadata gives a 1 October 2017 modification, not a printed update date. Older ownership maps and producer totals never override the 2025 rights snapshot or later deeds.",
+    "A supplementary pass screened 39 filings / 504 pages of eight related companies with no current Richebourg rights: Domaine Thibault Liger-Belair, its family holding, GFA Domaine Xavier Liger-Belair, Domaine A.F. Gros, Gros Frère et Sœur, SCEA Domaine de la Levrière (formed 2026), SCE du Domaine Leroy and SC Domaine Jean Grivot. Only the Liger-Belair filings name Richebourg references (former AN170/AN172). The 2005 métayage’s renewal after 2022, its position after the 3 April 2025 sale, the original lease and its land-registry copy remain unreviewed.",
+    "Deposit dates for two Grivot 2024 files and the Leroy 2024 minutes are not established. Original lease instruments, later renewals, paid SPF copies and outreach remain unreviewed; no access restriction was bypassed.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. All 58 current farming identities remain unconfirmed."
+  ],
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "ric-hudelot-formation-2001",
+      "printedReference": "Vosne-Romanée AN65 (787 m²)",
+      "parcelIds": [],
+      "limitation": "Retired reference. The current AN290/291 references are not printed in the reviewed filings; official filiation remains in rights history, not a new exact filing match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ric-winehog-leroy",
+      "printedReference": "cadastre no 69 (0.0922 ha), Leroy",
+      "parcelIds": [],
+      "limitation": "Printed as a Leroy plot. Today AN69 is a 2,144 m² parcel recorded to the DRC. AN168, recorded to the provisional Leroy identifier, measures 922 m², but equal area is not a crosswalk and the printed number is not corrected.",
+      "currentFarmer": null
+    }
+  ],
+  "holderLinks": "shared"
 }

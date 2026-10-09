@@ -1,6 +1,6 @@
 import { apiJson } from '../../lib/auth/api';
 
-export type FriendTag={id:string;display_name:string;defaultShare?:boolean};
+export type FriendTag={id:string;display_name:string;handle?:string|null;defaultShare?:boolean};
 
 export const listFriendTags=()=>apiJson<{items:FriendTag[]}>('/api/friends');
 

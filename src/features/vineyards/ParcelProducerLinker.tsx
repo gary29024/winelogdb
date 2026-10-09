@@ -1,96 +1,41 @@
-import {useEffect,useId,useMemo,useState} from 'react';
-import {matchesLinkedProducer} from '../../lib/places/parcelPresentation';
-import {listProducers,type ProducerSummary} from '../producers/api';
-import {ownerName} from '../../lib/places/parcelOwners';
-import {placeKey} from '../../lib/places/resolve';
-import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
-import {listParcelProducerLinks,removeParcelProducerLink,saveParcelProducerLink} from './parcelProducerApi';
+import {useMemo} from 'react';
+import type {HolderGroup} from '../../lib/places/parcelPresentation';
+import {possibleOwnerMatch} from '../../lib/places/parcelOwners';
+import type {ParcelProducerLinks} from './useParcelProducerLinks';
 
-type Holder={id:string;name:string};
-type Props={parentId:string;producer?:string|null;producerId?:string|null;holders:Holder[];editing:string;onEdit:(id:string)=>void;onShow:(id:string)=>void;onLinks?:(links:ParcelProducerLink[])=>void};
-export function ParcelProducerLinker({parentId,producer,producerId,holders,editing,onEdit,onShow,onLinks}:Props){
- const [links,setLinks]=useState<ParcelProducerLink[]>([]),[loadedParent,setLoadedParent]=useState(''),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
- const [removing,setRemoving]=useState(''),[notice,setNotice]=useState('');
- useEffect(()=>{
-  let active=true;
-  void listParcelProducerLinks(parentId).then(result=>{if(active){setLinks(result.items);setLoadedParent(parentId);setError('')}})
-   .catch(()=>{if(active)setError('Your producer links could not load. Parcel rights are still available.')});
-  return()=>{active=false};
- },[parentId,attempt]);
- const loaded=loadedParent===parentId;
- const visibleLinks=useMemo(()=>loaded?links.filter(link=>holders.some(h=>h.id===link.holderId)&&matchesLinkedProducer(link,producer,producerId)):[],[loaded,links,holders,producer,producerId]);
- useEffect(()=>{if(loaded)onLinks?.(visibleLinks)},[visibleLinks,loaded,onLinks]);
- const holder=holders.find(h=>h.id===editing);
- const remove=async(id:string)=>{
-  setRemoving(id);setError('');
-  try{await removeParcelProducerLink(parentId,id);setLinks(items=>items.filter(l=>l.holderId!==id))}
-  catch(e){setError((e as Error).message||'Could not remove the link')}
-  finally{setRemoving('')}
- };
- return <div className="village-map-producer-links" aria-label="Your producer links">
-  {notice&&<p className="village-map-link-notice" role="status">{notice}</p>}
-  {error&&<div role="alert"><p>{error}</p>{!loaded&&<button type="button" onClick={()=>setAttempt(n=>n+1)}>Retry producer links</button>}</div>}
-  {visibleLinks.length>0&&<>
-   <p className="village-map-parcel-label">Your linked producers</p>
-   <p className="village-map-note">Personal catalogue links. Highlighting shows the recorded right holder’s parcels.</p>
-   {visibleLinks.map(link=><div className="village-map-linked-producer" key={link.holderId}>
-    <div className="village-map-linked-names"><strong>{ownerName(holders.find(h=>h.id===link.holderId)?.name??link.holderId)}</strong><span aria-hidden="true">→</span>
-     <a href={`/producers/${encodeURIComponent(link.producerId)}`}>{link.producerName}</a>
-     <span className="village-map-badge is-manual">Manual link · unverified</span>
-    </div>
+const ha=(m2:number)=>`${(m2/10000).toFixed(2)} ha`;
+
+/** Whether this wine's producer is linked to any holder row, with a one-tap suggestion when it is not. */
+export function ProducerLinkCard({producer,rows,links,onShow}:{producer:string;rows:HolderGroup[];links:ParcelProducerLinks;onShow:(row:HolderGroup)=>void}){
+ const {loaded,error,busy,linked,hasProducer,canLink,retry,link,unlink}=links;
+ const linkedRows=rows.filter(row=>row.holderIds.some(id=>linked.has(id)));
+ // A name match is only a suggestion: nothing is saved until the reader taps Link.
+ const suggestions=useMemo(()=>rows.filter(row=>[row.name,...row.legalNames].some(name=>possibleOwnerMatch(producer,name))).slice(0,3),[rows,producer]);
+ // Without a catalogue producer there is nothing to link; only links saved under its name show.
+ if(!hasProducer&&!linkedRows.length)return null;
+ return <section className="village-map-producer" aria-label="This wine’s producer">
+  <p className="village-map-eyebrow is-wine">THIS WINE’S PRODUCER</p>
+  <strong>{producer}</strong>
+  {error&&<div role="alert"><p className="village-map-note">{error}</p>{!loaded&&<button type="button" className="village-map-link-button" onClick={retry}>Retry producer links</button>}</div>}
+  {!loaded&&!error&&<p className="village-map-note" role="status">Loading your producer links…</p>}
+  {linkedRows.map(row=><div key={row.id} className="village-map-linked-producer">
+   <span>Linked to <strong>{row.name}</strong> · {ha(row.areaM2)}</span>
+   <span className="village-map-badge is-manual">Manual link · unverified</span>
+   <div className="village-map-link-actions">
+    <button type="button" onClick={()=>onShow(row)}>Show on map</button>
+    <button type="button" disabled={Boolean(busy)} aria-label={`Unlink ${row.name}`} onClick={()=>void unlink(row)}>{busy===row.id?'Unlinking…':'Unlink'}</button>
+   </div>
+  </div>)}
+  {canLink&&!linkedRows.length&&<>
+   <p className="village-map-note">Not linked to any parcels yet.</p>
+   {suggestions.map(row=><div key={row.id} className="village-map-linked-producer">
+    <span>Looks like <strong>{row.name}</strong> · {ha(row.areaM2)}</span>
     <div className="village-map-link-actions">
-     <button type="button" onClick={()=>onShow(link.holderId)}>Show on map</button>
-     <button type="button" disabled={Boolean(removing)} onClick={()=>onEdit(link.holderId)}>Change link</button>
-     <button type="button" disabled={Boolean(removing)} onClick={()=>void remove(link.holderId)}>{removing===link.holderId?'Removing…':'Remove link'}</button>
+     <button type="button" onClick={()=>onShow(row)}>Show on map</button>
+     <button type="button" disabled={Boolean(busy)} aria-label={`Link ${row.name} to ${producer}`} onClick={()=>void link(row).then(()=>onShow(row))}>{busy===row.id?'Linking…':'Link'}</button>
     </div>
    </div>)}
+   <p className="village-map-note">{suggestions.length?'Not the right one? ':''}Choose its row in the list below to link it.</p>
   </>}
-  {holder&&loaded&&<LinkEditor key={holder.id} parentId={parentId} holder={holder} current={links.find(l=>l.holderId===holder.id)}
-   onCancel={()=>onEdit('')} onSaved={link=>{
-    setLinks(items=>[...items.filter(l=>l.holderId!==link.holderId),link]);onEdit('');setError('');
-    // A link for another producer is kept, but belongs on that producer's wines.
-    const here=matchesLinkedProducer(link,producer,producerId);
-    setNotice(here?'':`Link saved to ${link.producerName}. It isn’t shown on this ${producer?`${producer} `:''}wine because it names a different producer.`);
-    if(here)onShow(link.holderId);
-   }}/>}
-  {holder&&!loaded&&!error&&<p role="status">Loading your producer links…</p>}
- </div>;
-}
-
-function LinkEditor({parentId,holder,current,onSaved,onCancel}:{parentId:string;holder:Holder;current?:ParcelProducerLink;onSaved:(link:ParcelProducerLink)=>void;onCancel:()=>void}){
- const [producers,setProducers]=useState<ProducerSummary[]|null>(null),[query,setQuery]=useState(''),[chosen,setChosen]=useState(current?.producerId??'');
- const [error,setError]=useState(''),[attempt,setAttempt]=useState(0),[saving,setSaving]=useState(false);
- const searchId=useId(),selectId=useId(),titleId=useId();
- useEffect(()=>{
-  let active=true;
-  void listProducers().then(result=>{if(active){setProducers(result.items);setError('')}}).catch(()=>{if(active)setError('The producer catalogue could not load.')});
-  return()=>{active=false};
- },[attempt]);
- const needle=placeKey(query),options=producers?.filter(p=>p.id===chosen||!needle||placeKey(`${p.canonicalName} ${p.homeLocality??''}`).includes(needle))??[];
- const save=async()=>{
-  setSaving(true);setError('');
-  try{onSaved(await saveParcelProducerLink(parentId,holder.id,chosen))}
-  catch(e){setError((e as Error).message||'Could not save the link');setSaving(false)}
- };
- return <form className="village-map-link-editor" aria-labelledby={titleId} onSubmit={e=>{e.preventDefault();void save()}}>
-  <strong id={titleId}>Link {ownerName(holder.name)} to an app producer</strong>
-  <p className="village-map-note">Saved to your account for the 1 January 2025 rights snapshot. This links a recorded right holder to the catalogue; it is a personal note, not a verified record.</p>
-  {error&&<div role="alert">{error}{!producers&&<button type="button" onClick={()=>setAttempt(n=>n+1)}>Retry catalogue</button>}</div>}
-  {!producers&&!error&&<p role="status">Loading producers…</p>}
-  {producers?.length===0&&<p>No producers in your catalogue yet. Add a wine to create its producer, then return here.</p>}
-  {Boolean(producers?.length)&&<>
-   <label htmlFor={searchId}>Search app producers</label>
-   <input id={searchId} type="search" autoFocus value={query} disabled={saving} onChange={e=>setQuery(e.target.value)}/>
-   <label htmlFor={selectId}>App producer</label>
-   <select id={selectId} value={chosen} required disabled={saving} onChange={e=>setChosen(e.target.value)}>
-    <option value="">Choose a producer</option>
-    {options.map(p=><option key={p.id} value={p.id}>{p.canonicalName}{p.sharedOnly?' · shared':''}</option>)}
-   </select>
-   {!options.length&&<p>No matching producers. Try another name.</p>}
-  </>}
-  <div className="village-map-link-actions">
-   <button type="submit" disabled={saving||!producers?.some(p=>p.id===chosen)}>{saving?'Saving…':'Save producer link'}</button>
-   <button type="button" disabled={saving} onClick={onCancel}>Cancel</button>
-  </div>
- </form>;
+ </section>;
 }

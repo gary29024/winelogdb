@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Curated, image-reviewed Côte-d'Or farm-structure decisions from Internet Archive captures of 2004–2015 departmental bulletins. Input to scripts/build_earlier_bulletin_reviews.py, which expands reviewed-parcels.json.",
+  "reviewedAt": "2026-10-02",
+  "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+  "decisions": [
+    {
+      "noticeId": "cote-dor-2010-005:p82:bohrmann",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_005.pdf",
+      "sha256": "41a12c123830845f2b371244999b2f6f8c40632e621ccb0e3a93ee16a5db8e4b",
+      "bulletin": "RAA n° 5, 28 janvier 2010",
+      "publicationDate": "2010-01-28",
+      "noticePages": [82],
+      "evidencePages": [82],
+      "printedDate": "16 décembre 2009",
+      "documentDate": "2009-12-16",
+      "applicant": "SCEA DOMAINE BOHRMANN",
+      "previousOperator": null,
+      "status": "authorised",
+      "printedNoticeArea": "1 ha 65 a 18 ca",
+      "totalNoticeAreaHa": 1.6518,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21512", "printedCommune": "PULIGNY MOONTRACHET", "printedReferences": "AB 137, 138"},
+        {"communeCode": "21541", "printedCommune": "SAINT AUBIN", "printedReferences": "A 248, 1365/1366, 1819/1820; D 246/247, 291/292, 1509, 1952"}
+      ],
+      "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+    },
+    {
+      "noticeId": "cote-dor-2010-005:p82:eugenie",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_005.pdf",
+      "sha256": "41a12c123830845f2b371244999b2f6f8c40632e621ccb0e3a93ee16a5db8e4b",
+      "bulletin": "RAA n° 5, 28 janvier 2010",
+      "publicationDate": "2010-01-28",
+      "noticePages": [82],
+      "evidencePages": [82],
+      "printedDate": "24 décembre 2009",
+      "documentDate": "2009-12-24",
+      "applicant": "SCEA DOMAINE EUGENIE",
+      "previousOperator": "EARL DU COMTE LIGER-BELAIR à VOSNE ROMANEE",
+      "status": "authorised",
+      "printedNoticeArea": "0 ha 18 a 80 ca",
+      "totalNoticeAreaHa": 0.188,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21088", "printedCommune": "BONCOURT LE BOIS", "printedReferences": "A 212"},
+        {"communeCode": "21714", "printedCommune": "VOSNE ROMANEE", "printedReferences": "AB 100"}
+      ],
+      "note": "The 0.1880 ha total covers both communes; it is not the area of Vosne-Romanée AB 100."
+    },
+    {
+      "noticeId": "cote-dor-2010-022:p49:hospices-beaune",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+      "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+      "bulletin": "RAA n° 22, 1er juin 2010",
+      "publicationDate": "2010-06-01",
+      "noticePages": [49],
+      "evidencePages": [49],
+      "printedDate": "23 avril 2010",
+      "documentDate": "2010-04-23",
+      "applicant": "HOSPICES DE BEAUNE",
+      "previousOperator": null,
+      "operatorInPlace": "EARL CONFURON-COTETIDOT à VOSNE-ROMANEE",
+      "status": "refused",
+      "printedNoticeArea": "39 a 30 ca",
+      "totalNoticeAreaHa": 0.393,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21295", "printedCommune": "GEVREY-CHAMBERTIN", "printedReferences": "BN 40, 75", "printedAs": "BN 40-75"}
+      ],
+      "note": "Authorisation REFUSEE. Printed BN 40-75; this page uses hyphens as list separators (for example ZW 3-8-16-17-19-20), so it is read as BN 40 and BN 75, not a numeric range. The parcels are described as exploited by EARL CONFURON-COTETIDOT; the refusal does not establish a change of operator."
+    },
+    {
+      "noticeId": "cote-dor-2010-022:p49:hospices-nuits",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+      "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+      "bulletin": "RAA n° 22, 1er juin 2010",
+      "publicationDate": "2010-06-01",
+      "noticePages": [49, 50],
+      "evidencePages": [49, 50],
+      "printedDate": "23 avril 2010",
+      "documentDate": "2010-04-23",
+      "applicant": "HOSPICES DE NUITS SAINT GEORGES",
+      "previousOperator": "EARL CONFURON-COTETIDOT à VOSNE ROMANEE",
+      "status": "authorised",
+      "printedNoticeArea": "28 a 13 ca",
+      "totalNoticeAreaHa": 0.2813,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21295", "printedCommune": "GEVREY-CHAMBERTIN", "printedReferences": "BP 255, 258", "printedAs": "BP 255-258"}
+      ],
+      "note": "Printed BP 255-258, read as BP 255 and BP 258 under the page's hyphen-as-separator convention; a numeric range remains possible and is not asserted. Article 2 continues on page 50."
+    },
+    {
+      "noticeId": "cote-dor-2010-022:p50:bachelet",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/2010_raa_022.pdf",
+      "sha256": "088cb3cc0681aef4519bdcc2d1f6847fbc208222653b2494a226bda514413f44",
+      "bulletin": "RAA n° 22, 1er juin 2010",
+      "publicationDate": "2010-06-01",
+      "noticePages": [50, 51],
+      "evidencePages": [50, 51],
+      "printedDate": "28 avril 2010",
+      "documentDate": "2010-04-28",
+      "applicant": "EARL BACHELET Vincent",
+      "previousOperator": "DOMAINE René TARDY & Fils à NUITS-SAINT-GEORGES",
+      "status": "authorised",
+      "printedNoticeArea": "38,86 ares",
+      "totalNoticeAreaHa": 0.3886,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21512", "printedCommune": "PULIGNY-MONTRACHET", "printedReferences": "AP 145"}
+      ],
+      "note": "Heading on page 50, Article 1 on page 51. Single printed reference."
+    },
+    {
+      "noticeId": "cote-dor-2011-011:p55:cluny",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011.pdf",
+      "sha256": "a8dd9b630ca489a518a69e70700ef65c06bbc487b501b3b137bae333c1ce6bb7",
+      "bulletin": "RAA n° 11, 31 mars 2011",
+      "publicationDate": "2011-03-31",
+      "noticePages": [55],
+      "evidencePages": [55],
+      "printedDate": "21 février 2011",
+      "documentDate": "2011-02-21",
+      "applicant": "SARL CLUNY Hervé",
+      "previousOperator": "M. CLUNY Hervé à BROCHON",
+      "status": "authorised",
+      "printedNoticeArea": "5ha 93a",
+      "totalNoticeAreaHa": 5.93,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21110", "printedCommune": "BROCHON", "printedReferences": "AC 1, 2; AD 14, 34j, 38; AL 43, 116, 129, 153, 161; AM 39, 42, 80, 157, 160"},
+        {"communeCode": "21133", "printedCommune": "CHAMBOLLE MUSIGNY", "printedReferences": "AH 19, 241, 243"},
+        {"communeCode": "21295", "printedCommune": "GEVREY CHAMBERTIN", "printedReferences": "AD 8, 61, 62, 63, 107, 116, 121, 138; AK 106; BI 146; BR 134, 135, 152; AL 162"}
+      ],
+      "note": "Transfer from the individual holding to the applicant company. Brochon AD 34j is a lettered sub-parcel and stays unresolved as printed. The 5.93 ha total covers three communes."
+    },
+    {
+      "noticeId": "cote-dor-2013-011:p43:vigne-au-roy",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011-2.pdf",
+      "sha256": "73fc0216cd5921b63ff73091eac966474caa9ec831a67e7382083f69f352a14a",
+      "bulletin": "RAA n° 11, 2 avril 2013",
+      "publicationDate": "2013-04-02",
+      "noticePages": [43],
+      "evidencePages": [43],
+      "printedDate": "15 février 203",
+      "documentDate": null,
+      "applicant": "SCEA DOMAINE DE LA VIGNE AU ROY",
+      "previousOperator": "DOMAINE DU CHATEAU DE MEURSAULT à MEURSAULT",
+      "status": "authorised",
+      "printedNoticeArea": "16ha 42a 90ca",
+      "totalNoticeAreaHa": 16.429,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21480", "printedCommune": "PERNAND VERGELESSES", "printedReferences": "C 8, 16"},
+        {"communeCode": "21590", "printedCommune": "SAVIGNY LES BEAUNE", "printedReferences": "D 41, 147"}
+      ],
+      "note": "The decision year is printed 203. The bulletin is dated 2 April 2013 and the adjacent decisions February 2013, but the printed date is retained and the act date stays unresolved rather than corrected. Heading reads 'DOMAINE DE LA VIGNE AU ROY 6'; Article 1 names SCEA DOMAINE DE LA VIGNE au ROY. The 16.4290 ha total covers both communes and four printed references."
+    },
+    {
+      "noticeId": "cote-dor-2013-004:p60:eugenie",
+      "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_004-2.pdf",
+      "sha256": "2764d2ef68c50dd4fe2e3179aff5e17066245a3692c57cf684e4e85858128622",
+      "bulletin": "RAA n° 4, 31 janvier 2013",
+      "publicationDate": "2013-01-31",
+      "noticePages": [60],
+      "evidencePages": [60],
+      "printedDate": "3 décembre 2013",
+      "documentDate": null,
+      "applicant": "SCEA DOMAINE EUGENIE",
+      "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+      "status": "authorised",
+      "printedNoticeArea": "0ha 40a 56ca",
+      "totalNoticeAreaHa": 0.4056,
+      "landScope": "vineyard",
+      "operation": "takeover",
+      "parcelGroups": [
+        {"communeCode": "21150", "printedCommune": "CHASSAGNE MONTRACHET", "printedReferences": "AE 135, 172; AH 217, 218"},
+        {"communeCode": "21412", "printedCommune": "MEURSAULT", "printedReferences": "BN 5, 6"}
+      ],
+      "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+    }
+  ],
+  "communeLevelContext": {
+    "note": "Text-screened (not image-reviewed) 2004–2006 decisions whose land lies in a Grand Cru commune but prints no parcel reference. Kept for later producer research; never parcel evidence.",
+    "path": "commune-context.json",
+    "count": 12
+  }
+}

@@ -2,6 +2,7 @@ import { useEffect,useId,useRef,useState } from 'react';
 import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun,type UsageSummary } from './api';
 import '../../journey.css';
 import '../../aiSpend.css';
+import '../../settingsCards.css';
 
 /**
  * What the AI has cost, per run.
@@ -71,7 +72,7 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
       <div className="ai-spend-dialog-head">
         <div>
           {selected&&<button type="button" className="ai-spend-back" onClick={()=>setSelectedId(null)}>← All runs</button>}
-          <p className="section-label">AI spend</p>
+          <p className="ai-spend-dialog-eyebrow">AI spend</p>
           <h2 id={titleId}>{selected?runTitle(selected,label):label}</h2>
           <p>{selected?when(selected.createdAt):`Individual runs · last ${days} days`}</p>
         </div>
@@ -105,10 +106,14 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
         <div className="ai-spend-run-token-split">
           <span>Input {count(selected.promptTokens)}</span><span>Output + thinking {count(selected.outputTokens)}</span>
         </div>
+        {selected.parts.some(part=>part.step==='translation')&&<div className="ai-spend-run-token-split">
+          <span>Research {money(currency,selected.parts.filter(part=>part.step!=='translation').reduce((sum,part)=>sum+part.cost,0))}</span>
+          <span>Chinese translation {money(currency,selected.parts.filter(part=>part.step==='translation').reduce((sum,part)=>sum+part.cost,0))}</span>
+        </div>}
         <div className="ai-spend-run-parts">
           <h3>Request breakdown</h3>
           {selected.parts.map((part,index)=><article key={`${part.model}-${part.tier}-${part.createdAt}-${index}`}>
-            <div><strong>{part.model}</strong><small>{part.tier} tier · {when(part.createdAt)}</small></div>
+            <div><strong>{part.step==='translation'?'Chinese translation':part.model}</strong><small>{part.step==='translation'?`${part.model} · `:''}{part.tier} tier · {when(part.createdAt)}</small></div>
             <b>{money(currency,part.cost)}</b>
             <p>{count(part.requests)} request{part.requests===1?'':'s'} · {count(part.searchQueries)} search{part.searchQueries===1?'':'es'} · {count(part.promptTokens)} input · {count(part.outputTokens)} output/thinking</p>
           </article>)}
@@ -152,43 +157,14 @@ export function AiSpendCard(){
   // Insights is about the wine, not the bill: anything wrong here - a failed
   // request, a payload that is not a summary - leaves the page as it was.
   if(error||!spend||!Array.isArray(spend.kinds)||!spend.month)return null;
-  if(spend.empty)return <section className="journey-card ai-spend-card">
-    <div className="journey-section-heading"><div><p className="section-label">AI spend</p><h2>Nothing metered yet</h2></div></div>
-    <p className="journey-muted">Deep Search and label recognition record what they cost as they run. The first one will show up here.</p>
+  if(spend.empty)return <section className="settings-card ai-spend-card">
+    <div className="settings-card-head"><h2>Nothing metered yet</h2></div>
+    <p className="settings-hint">Deep Search and label recognition record what they cost as they run. The first one will show up here.</p>
   </section>;
 
   const {month}=spend;
   const selectedKindSpend=selectedKind?spend.kinds.find(kind=>kind.kind===selectedKind):null;
-  return <section className="journey-card ai-spend-card">
-    <div className="journey-section-heading">
-      <div><p className="section-label">AI spend</p><h2>What each run costs</h2></div>
-      <span>last {spend.days} days</span>
-    </div>
-    {/* Recognition is quoted per wine, research per run. A batch scan session
-        of a dozen bottles and a group photo of nine are not comparable to each
-        other, let alone to a producer Deep Search, until they are. */}
-    <div className="ai-spend-grid">{spend.kinds.map(kind=>{
-      const unit=kind.unit==='wine'?'wine':'run',count_=kind.unitCount??kind.runs;
-      const drillable=isDrilldownKind(kind.kind);
-      const open=()=>{if(isDrilldownKind(kind.kind))setSelectedKind(kind.kind)};
-      return <article key={kind.kind} className={drillable?'is-clickable':undefined}
-        role={drillable?'button':undefined} tabIndex={drillable?0:undefined} aria-haspopup={drillable?'dialog':undefined}
-        onClick={open} onKeyDown={event=>{if(!drillable)return;if(event.key==='Enter'||event.key===' '){event.preventDefault();open()}}}>
-        <div><strong>{kind.label}</strong><span>{count(count_)} {unit}{count_===1?'':'s'}</span></div>
-        <div><b>{money(spend.currency,kind.costPerUnit??kind.costPerRun)}</b><small>per {unit}</small></div>
-        <footer>
-          {money(spend.currency,kind.cost)} total · {count(kind.requests)} request{kind.requests===1?'':'s'}
-          {unit==='wine'&&kind.runs>0&&<> · {count(kind.runs)} run{kind.runs===1?'':'s'}</>}
-          {kind.searchQueries>0&&<> · {oneDecimal(kind.searchesPerRun)} searches/run</>}
-          {drillable&&<span className="ai-spend-view-runs">View runs ›</span>}
-        </footer>
-      </article>;
-    })}</div>
-    {/* Reported as: twenty producer runs at HK$2.54 is fifty dollars, and the
-        month says five. Both are right and neither said so. These figures are
-        marginal - what one more run would cost - so they price their searches
-        as if billable, while the allowance below means they are not. */}
-    {month.freeRemaining>0&&<p className="ai-spend-marginal">Each figure is what one more would cost, searches priced in. While the allowance below lasts, the searches are free and the month's bill is the tokens alone.</p>}
+  return <>
     {/* The free allowance resets monthly and is the reason the bill is a step
         function rather than a slope, so it is worth seeing before it runs out.
 
@@ -203,7 +179,7 @@ export function AiSpendCard(){
         width beneath it. Sharing a row with the amount left the facts a phone's
         half-width, where every one of them wrapped: three short lines became
         six, which is the opposite of a summary. */}
-    <div className={`ai-spend-month${month.freeRemaining===0?' is-billing':''}`}>
+    <section className={`settings-card ai-spend-month${month.freeRemaining===0?' is-billing':''}`} aria-label="This billing month">
       <strong>This billing month</strong>
       <b>{money(spend.currency,month.cost)}</b>
       <span>{count(month.searchQueries)} grounded searches · {month.freeRemaining>0
@@ -213,16 +189,47 @@ export function AiSpendCard(){
         ?`Tokens plus ${count(month.billableSearches)} billed searches`
         :'Tokens only — searches still free'}</span>
       {month.resetsAt&&<span>Allowance resets {resetLabel(month.resetsAt)}</span>}
+    </section>
+    <section className="settings-card ai-spend-card" aria-label="What each run costs">
+    <div className="settings-card-head">
+      <h2>What each run costs</h2>
+      <span className="settings-chip">Last {spend.days} days</span>
     </div>
-    <p className="journey-muted ai-spend-note">
+    {/* Recognition is quoted per wine, research per run. A batch scan session
+        of a dozen bottles and a group photo of nine are not comparable to each
+        other, let alone to a producer Deep Search, until they are. */}
+    <div className="ai-spend-grid">{spend.kinds.map(kind=>{
+      const unit=kind.unit==='wine'?'wine':'run',count_=kind.unitCount??kind.runs;
+      const drillable=isDrilldownKind(kind.kind);
+      const open=()=>{if(isDrilldownKind(kind.kind))setSelectedKind(kind.kind)};
+      return <article key={kind.kind} className={drillable?'is-clickable':undefined}
+        role={drillable?'button':undefined} tabIndex={drillable?0:undefined} aria-haspopup={drillable?'dialog':undefined}
+        onClick={open} onKeyDown={event=>{if(!drillable)return;if(event.key==='Enter'||event.key===' '){event.preventDefault();open()}}}>
+        <div><strong>{kind.label}</strong><span>{count(count_)} {unit}{count_===1?'':'s'}</span></div>
+        <div><b>{money(spend.currency,kind.costPerUnit??kind.costPerRun)}</b><small>per {unit}</small></div>
+        <p className="ai-spend-tile-foot">
+          <span>{money(spend.currency,kind.cost)} total · {count(kind.requests)} request{kind.requests===1?'':'s'}
+          {unit==='wine'&&kind.runs>0&&<> · {count(kind.runs)} run{kind.runs===1?'':'s'}</>}
+          {kind.searchQueries>0&&<> · {oneDecimal(kind.searchesPerRun)} searches/run</>}</span>
+          {drillable&&<span className="ai-spend-view-runs">View runs ›</span>}
+        </p>
+      </article>;
+    })}</div>
+    {/* Reported as: twenty producer runs at HK$2.54 is fifty dollars, and the
+        month says five. Both are right and neither said so. These figures are
+        marginal - what one more run would cost - so they price their searches
+        as if billable, while the allowance below means they are not. */}
+    {month.freeRemaining>0&&<p className="settings-hint ai-spend-marginal">Each figure is what one more would cost, searches priced in. While the allowance above lasts, the searches are free and the month's bill is the tokens alone.</p>}
+    <details className="settings-fold"><summary>How costs are worked out</summary><p className="settings-hint">
       Priced from the dated rates in the Worker configuration, each run at the price in force on the day it ran and the tier it
       was billed on - batch scans queue on the flex tier, at about half of standard. Grounding is billed per search the model
       runs, and is what dominates once the free allowance is gone; tokens are the rest, and until then all of it. A price that
       changes from a date leaves earlier runs at what they cost; correcting a rate that was always wrong reprices the history,
       as it should.
-    </p>
+    </p></details>
     {selectedKind&&selectedKindSpend&&<AiSpendRunDialog key={selectedKind} label={selectedKindSpend.label}
       runs={selectedRuns} totalRuns={selectedKindSpend.runs} currency={spend.currency} days={spend.days}
-      loading={runsLoading} error={runsError} onClose={()=>setSelectedKind(null)}/>} 
-  </section>;
+      loading={runsLoading} error={runsError} onClose={()=>setSelectedKind(null)}/>}
+  </section>
+  </>;
 }

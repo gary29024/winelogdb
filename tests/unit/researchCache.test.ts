@@ -15,12 +15,29 @@ describe('layered research identities',()=>{
     expect(a.get('wine_vintage')?.cacheKey).not.toBe(b.get('wine_vintage')?.cacheKey);
   });
 
-  it('reuses vintage context across producers in the same appellation and year',()=>{
-    const a=byScope(buildResearchTargets({producer:'Producer A',wineName:'Wine A',vintage:2021,country:'France',region:'Burgundy',appellation:'Vosne-Romanée'}));
-    const b=byScope(buildResearchTargets({producer:'Producer B',wineName:'Wine B',vintage:2021,country:'France',region:'Burgundy',appellation:'Vosne-Romanée'}));
+  it('reuses vintage context across producers in the same appellation, year and style',()=>{
+    const a=byScope(buildResearchTargets({producer:'Producer A',wineName:'Wine A',vintage:2021,country:'France',region:'Burgundy',appellation:'Vosne-Romanée',wineStyle:'red'}));
+    const b=byScope(buildResearchTargets({producer:'Producer B',wineName:'Wine B',vintage:2021,country:'France',region:'Burgundy',appellation:'Vosne-Romanée',wineStyle:'red'}));
     expect(a.get('producer')?.cacheKey).not.toBe(b.get('producer')?.cacheKey);
     expect(a.get('terroir')?.cacheKey).not.toBe(b.get('terroir')?.cacheKey);
     expect(a.get('vintage_context')?.cacheKey).toBe(b.get('vintage_context')?.cacheKey);
+  });
+
+  it('keeps vintage context apart for a different wine style',()=>{
+    const place={vintage:2024,country:'New Zealand',region:'Wairarapa',appellation:'Martinborough'};
+    const pinot=byScope(buildResearchTargets({producer:'Dry River',wineName:'Pinot Noir',wineStyle:'red',...place}));
+    const riesling=byScope(buildResearchTargets({producer:'Dry River',wineName:'Craighall Riesling',wineStyle:'white',...place}));
+    const otherWhite=byScope(buildResearchTargets({producer:'Ata Rangi',wineName:'Craighall Chardonnay',wineStyle:'White',...place}));
+    expect(riesling.get('vintage_context')?.cacheKey).not.toBe(pinot.get('vintage_context')?.cacheKey);
+    expect(riesling.get('vintage_context')?.cacheKey).toBe(otherWhite.get('vintage_context')?.cacheKey);
+    expect(riesling.get('vintage_context')?.subject.wineStyle).toBe('white');
+  });
+
+  it('does not lend vintage context between wines whose style is unknown',()=>{
+    const place={vintage:2024,country:'New Zealand',region:'Wairarapa',appellation:'Martinborough'};
+    const a=byScope(buildResearchTargets({producer:'Dry River',wineName:'Pinot Noir',...place}));
+    const b=byScope(buildResearchTargets({producer:'Dry River',wineName:'Craighall Riesling',...place}));
+    expect(a.get('vintage_context')?.cacheKey).not.toBe(b.get('vintage_context')?.cacheKey);
   });
 
   it('gives identical keys to the same wine and vintage',()=>{

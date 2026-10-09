@@ -285,6 +285,49 @@ def bundle_commune_names(bundle):
     return names
 
 
+HOLDER_LINKS = RESEARCH_DIR / 'holders/holder-links.json'
+ACTIVE_LINK_STATUSES = {'reviewed', 'provisional'}
+
+
+def active_holder_links(entry, slug):
+    """A holder's links that apply in this cru: reviewed or provisional, and unscoped or scoped to it."""
+    return [link for link in (entry or {}).get('links', [])
+            if link['reviewStatus'] in ACTIVE_LINK_STATUSES and slug in link.get('crus', [slug])]
+
+
+def resolve_curation(curation, slug, links=None):
+    """A cru's curation with candidate names drawn from the shared holder-to-domaine table.
+
+    Holder research is done once per legal holder in docs/research/holders/holder-links.json. A cru adopts it with
+    "holderLinks": "shared"; until then its holders keep no candidate. The cru's own basis, finding and sources stay;
+    link sources are appended, and every shared source the curation cites is added to its source list."""
+    links = read_json(HOLDER_LINKS) if links is None else links
+    require(curation.get('holderLinks') in (None, 'shared'), f'{slug}: unknown holderLinks mode')
+    require(not any('candidateNames' in h or 'legalIdentityCrosswalk' in h for h in curation['holders']),
+            f'{slug}: candidate names and identity crosswalks belong in {relative(HOLDER_LINKS)}')
+    shared = {s['id']: s for s in links['sources']}
+    clash = sorted(shared.keys() & {s['id'] for s in curation['sources']})
+    require(not clash, f'{slug}: source IDs also in the shared holder table: {", ".join(clash)}')
+    adopted = curation.get('holderLinks') == 'shared'
+    holders = []
+    for h in curation['holders']:
+        found = active_holder_links(links['holders'].get(h['holderId']), slug) if adopted else []
+        holders.append({**h, 'candidateNames': [link['domaine'] for link in found],
+                        'sourceIds': list(dict.fromkeys(h['sourceIds'] + [s for link in found for s in link['sourceIds']]))})
+
+    def strings(value):
+        if isinstance(value, str):
+            yield value
+        elif isinstance(value, dict):
+            for item in value.values():
+                yield from strings(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from strings(item)
+    cited = set(strings({**curation, 'holders': holders})) & shared.keys()
+    return {**curation, 'holders': holders, 'sources': curation['sources'] + [s for s in links['sources'] if s['id'] in cited]}
+
+
 def record_json(value):
     """Generated research JSON with one compact line per record, so a changed parcel is a one-line diff.
 

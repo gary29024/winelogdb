@@ -19,7 +19,10 @@ import { backTargetFromState,JOURNAL_BACK,readBackTarget,rememberBackTarget } fr
 import { GroupSourceImage } from '../uploads/GroupSourceImage';
 import { structureValueLabel } from '../../lib/wine/tastingStructure';
 import { DeepSources,ResearchText } from './ResearchPresentation';
-import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
+import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
+import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
+import { isUnverifiedPreciseFigure } from '../../lib/research/preciseFigures';
+import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
 import { experienceRows as buildExperienceRows } from '../../lib/wine/detailFields';
 import { FactList,WineDetailsSection,WineFactPills } from './WineFacts';
 import { PageHeader } from '../../components/PageHeader';
@@ -49,7 +52,8 @@ const qualityWarningLabel:Record<string,string>={
  'wrong-vintage-reference':'a year other than this vintage was asserted',
  'general-practice-presented-as-exact-vintage':'a general domaine habit was read as exact-vintage technique',
  'vintage-specific-detail-in-producer-scope':'a vintage-specific detail appeared in producer-wide practices',
- 'cross-source-technical-conflict':'sources disagree on an exact technical value'
+ 'cross-source-technical-conflict':'sources disagree on an exact technical value',
+ 'uncited-precise-figure':'a precise figure (highlighted) could not be tied to a cited source'
 };
 const qualityStatusLabel:Record<string,string>={verified:'Verified',mixed:'Mixed confidence',limited:'Limited confidence'};
 
@@ -64,7 +68,8 @@ function ResearchQuality({deep}:{deep:DeepSearchResult}){
 
 function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
  const evidence=deep.provenance?.fields[field];if(!evidence?.claims.length)return null;
- return <details className="claim-evidence"><summary>Evidence · {evidence.supportedCount} direct{evidence.conflictingCount?` · ${evidence.conflictingCount} disputed`:''}{evidence.partialCount?` · ${evidence.partialCount} partial`:''}{evidence.unsupportedCount?` · ${evidence.unsupportedCount} unsupported`:''}{evidence.uncertaintyCount?` · ${evidence.uncertaintyCount} uncertain`:''}</summary><ol>{evidence.claims.map((item,index)=><li key={`${field}-${index}`}><div className="claim-evidence-head"><span className={`claim-status ${item.supportStatus}`}>{claimStatusLabel[item.supportStatus]}</span>{item.sourceTier!=='none'&&<span className="claim-tier">{item.sourceTier}</span>}</div><p>{item.claim}</p>{item.sources.length>0&&<div className="claim-links">{item.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</li>)}</ol><small>Direct evidence means WineLog linked that claim to a cited source. “No direct citation” means the research may still be sourced overall, but that statement could not be tied to one specific citation. “Conflicting sources” means independent sources disagree, so WineLog preserves the dispute instead of choosing one figure.</small></details>;
+ const uncited=evidence.claims.filter(isUnverifiedPreciseFigure).length;
+ return <details className="claim-evidence"><summary>Evidence · {evidence.supportedCount} direct{evidence.conflictingCount?` · ${evidence.conflictingCount} disputed`:''}{evidence.partialCount?` · ${evidence.partialCount} partial`:''}{evidence.unsupportedCount?` · ${evidence.unsupportedCount} unsupported`:''}{evidence.uncertaintyCount?` · ${evidence.uncertaintyCount} uncertain`:''}{uncited?` · ${uncited} unverified figure${uncited===1?'':'s'}`:''}</summary><ol>{evidence.claims.map((item,index)=><li key={`${field}-${index}`}><div className="claim-evidence-head"><span className={`claim-status ${item.supportStatus}`}>{claimStatusLabel[item.supportStatus]}</span>{isUnverifiedPreciseFigure(item)&&<span className="claim-status uncited-figure-badge">Unverified figure</span>}{item.sourceTier!=='none'&&<span className="claim-tier">{item.sourceTier}</span>}</div><p>{item.claim}</p>{item.sources.length>0&&<div className="claim-links">{item.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title}</a>)}</div>}</li>)}</ol><small>Direct evidence means WineLog linked that claim to a cited source. “No direct citation” means the research may still be sourced overall, but that statement could not be tied to one specific citation. “Unverified figure” marks a precise number or date without a direct citation; it is kept but should be treated as unconfirmed. “Conflicting sources” means independent sources disagree, so WineLog preserves the dispute instead of choosing one figure.</small></details>;
 }
 
 
@@ -74,6 +79,8 @@ export function DetailPage(){
  const [deepChecking,setDeepChecking]=useState(false);
  const deepHeld=deepSearchHeld(deepRun);
  const photoInput=useRef<HTMLInputElement|null>(null);
+ const research=useResearchTranslation(deepResearchText(wine?.deepSearch));
+ const copy=RESEARCH_COPY[research.lang];
  const pollRef=useRef<Poller|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();pollRef.current=undefined}
  async function reloadWine(){const next=await getWine(id);setWine(next);return next}
@@ -239,30 +246,31 @@ export function DetailPage(){
   </section>
   <CellarStrip wineId={wine.id}/>
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined} trailing={deep?.quality?<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>:undefined}>Deep Search</SectionLabel></div>
+   <div className="deep-panel-head"><SectionLabel origin={deepComplete?'researched':undefined}>Deep Search</SectionLabel>{deep&&<div className="deep-panel-meta">{deep.quality&&<span className={`deep-quality-pill ${deep.quality.status}`}>{qualityStatusLabel[deep.quality.status]??deep.quality.status} · {deep.quality.score}/100</span>}<ResearchLanguageSwitch state={research}/></div>}</div>
    {deep?<>
     {!deepComplete&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
     {deep.quality&&(deep.quality.warnings.length>0||deep.quality.scoreNote)&&<ResearchQuality deep={deep}/>}
-    <div className="deep-summary"><ResearchText text={deep.summary}/><ClaimEvidence deep={deep} field="summary"/></div>
+    <ResearchLanguageStatus state={research}/>
+    <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',deep.summary)} flagged={research.lang==='en'?uncitedFigures(deep,'summary'):[]}/><ClaimEvidence deep={deep} field="summary"/></div>
     {sections.length>0&&<div className="deep-research-sections">
-     <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+     <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
      {sections.map(([label,field,value])=>{
       const open=openDeepFields.has(field),evidence=deep.provenance?.fields[field],panelId=`deep-section-${field}`;
       return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
        <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}>
-        <span className="deep-section-name">{label}</span>
+        <span className="deep-section-name">{research.lang==='zh'?DEEP_FIELD_LABELS_ZH[field]:label}</span>
         {Boolean(evidence?.claimCount)&&<span className="deep-section-meta">{evidence!.supportedCount} direct{evidence!.conflictingCount?` · ${evidence!.conflictingCount} disputed`:''}</span>}
         <span className="deep-chevron" aria-hidden="true"/>
        </button></h3>
-       <div className="deep-section-body" id={panelId} hidden={!open}>
-        <ResearchText text={value}/>
-        {field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}
+       <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}>
+        <ResearchText text={research.text(field,value)} flagged={research.lang==='en'?uncitedFigures(deep,field):[]}/>
+        {field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}
         <ClaimEvidence deep={deep} field={field}/>
        </div>
       </section>;
      })}
     </div>}
-    <DeepSources sources={deep.sources}/>
+    <DeepSources sources={deep.sources} lang={research.lang}/>
     <small>{technicalView?<>Latest research model: {deep.model} · </>:<>Research updated </>}{new Date(deep.researchedAt).toLocaleDateString()} · reusable research is stored permanently{isResearchStale(deep.oldestResearchedAt??deep.researchedAt)&&<> · ⚠ may be outdated</>}</small>
    </>:<p>Enrich this wine with grounded research. WineLog reuses stored producer practices, terroir and vintage research whenever the scope matches.</p>}
    {friendOperation&&<FriendResearchStatus operationId={friendOperation} onComplete={()=>void reloadWine()}/>}{deepNotice&&<p className="producer-notice" role="status">{deepNotice}</p>}{deepState==='idle'&&<button type="button" className="primary" onClick={()=>setDeepState('confirm-usage')}>{deepComplete?'Refresh vintage research':'Deep Search'}</button>}{deepState==='confirm-usage'&&<div className="deep-confirm"><p>{deepComplete?'This refresh keeps reusable producer and terroir research, and refreshes only the vintage-sensitive parts for this wine.':technicalView?'WineLog checks permanent caches first and queues grounded research only for missing research scopes.':'WineLog reuses saved research first and researches only what is missing.'} The background job continues even if you close WineLog. Continue?</p><button type="button" className="primary" onClick={runDeepSearch}>{deepComplete?'Queue vintage refresh':'Queue Deep Search'}</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Cancel</button></div>}{deepState==='running'&&<div className="deep-running" role="status"><span className="deep-spinner" aria-hidden="true"/><div><strong>{deepRun?deepStage[deepRun.stage]:'Queueing Deep Search…'}</strong><p>{technicalView?(deepRun?.message||'Preparing the background job.'):'WineLog is researching this wine in the background.'}</p><small>{deepRun?<><ElapsedSeconds startedAt={deepRun.startedAt}/> · {technicalView?'Request':'Support ID'} {deepRun.requestId}</>:'0s'}</small><p>You can leave this page or close WineLog. The background research continues and the saved result will appear when you return.</p><button type="button" className="secondary-danger" disabled={!deepRun||deepCancelling} onClick={cancelDeepSearch}>{deepCancelling?'Cancelling…':'Cancel Deep Search'}</button></div></div>}{deepState==='error'&&<div className="deep-error" role="alert"><strong>{deepHeld?'Deep Search needs review.':'Deep Search did not complete.'}</strong>{deepHeld?<><p>WineLog could not confirm the previous request’s outcome. Any saved research is kept. WineLog is checking for a saved result. Check status to look for a saved result, or stop waiting to release this request. · Support ID {deepRun?.requestId}</p>{deepRun?.recoveryDeadline&&<p>Automatic recovery is available until {new Date(deepRun.recoveryDeadline).toLocaleString()}. You can stop waiting sooner.</p>}{deepError&&<p>{deepError}</p>}<button type="button" disabled={deepChecking||deepCancelling} onClick={checkDeepSearch}>{deepChecking?'Checking…':'Check status'}</button><button type="button" className="secondary-danger" disabled={deepCancelling||deepChecking} onClick={cancelDeepSearch}>{deepCancelling?'Stopping…':'Stop waiting'}</button></>:<><p>{deepError||(technicalView?deepRun?.message:null)||memberResearchFailure(deepRun)}</p><button type="button" onClick={runDeepSearch}>Retry Deep Search</button><button type="button" className="secondary-danger" onClick={()=>setDeepState('idle')}>Close</button></>}</div>}

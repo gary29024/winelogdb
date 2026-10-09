@@ -16,7 +16,9 @@ import { hasTastingStructure,structureValueLabel,toggleStructure,type TastingStr
 import { TastingStructureFields } from './TastingStructureFields';
 import { DeepSources,ResearchText } from './ResearchPresentation';
 import { SharedDeepSearchControls } from './SharedDeepSearchControls';
-import { readOpenDeepFields,researchSections,type DeepField,writeOpenDeepFields } from './researchSections';
+import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
+import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
+import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
 import '../../favorites.css';
 import '../../wineDetailCompact.css';
 // The structure grid and the research panel are wine-detail markup whose rules
@@ -82,6 +84,8 @@ export function SharedWinesPage(){
   finally{setSaving(false)}
  }
 
+ const research=useResearchTranslation(deepResearchText(wine?.deepSearch));
+ const copy=RESEARCH_COPY[research.lang];
  if(error&&!wine)return <section className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><p role="alert">{error}</p></section>;
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
 
@@ -115,7 +119,7 @@ export function SharedWinesPage(){
   </section>
   <div className="wine-actions">
    <button type="button" className={`detail-favorite-button${wine.favorite?' active':''}`} aria-label={wine.favorite?'Favorite':'Add to favorites'} aria-pressed={wine.favorite} onClick={()=>void toggleFavorite()} disabled={favoriteBusy}><span className="heart" aria-hidden="true"><AppIcon kind={wine.favorite?'heart-filled':'heart'}/></span><span className="detail-favorite-label">{wine.favorite?'Favorite':'Add to favorites'}</span></button>
-   <WineSharing key={wine.id} ownerName={wine.ownerName}/>
+   <WineSharing key={wine.id} ownerName={wine.ownerHandle?`${wine.ownerName} (@${wine.ownerHandle})`:wine.ownerName}/>
    <a className="detail-wine-searcher-link" aria-label="Find on Wine-Searcher" href={wineSearcherUrl(wine.producer,wine.wineName,wine.vintage)} target="_blank" rel="noopener noreferrer"><span><span className="detail-search-prefix">Find on </span>Wine-Searcher</span><span aria-hidden="true">↗</span></a>
    {favoriteError&&<span className="shared-favorite-error" role="alert">{favoriteError}</span>}
   </div>
@@ -144,19 +148,20 @@ export function SharedWinesPage(){
    <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
   </section>}
   <section className="detail-section deep-search-panel">
-   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel></div>
+   <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel>{wine.deepSearch&&<div className="deep-panel-meta"><ResearchLanguageSwitch state={research}/></div>}</div>
    {/* The owner's page shows research while scopes are still missing, so this
        page does too, and says so the same way. */}
    {wine.deepSearch?<>{wine.deepSearch.complete===false&&<p>Partial research is available. Run Deep Search to research the missing sections while reusing the saved results.</p>}
-   <div className="deep-summary"><ResearchText text={wine.deepSearch.summary}/></div>
+   <ResearchLanguageStatus state={research}/>
+   <div className="deep-summary" lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text('summary',wine.deepSearch.summary)} flagged={research.lang==='en'?uncitedFigures(wine.deepSearch,'summary'):[]}/></div>
    {sections.length>0&&<div className="deep-research-sections">
-    <div className="deep-sections-head"><span>{sections.length} research section{sections.length===1?'':'s'}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?'Collapse all':'Expand all'}</button></div>
+    <div className="deep-sections-head"><span>{copy.sections(sections.length)}</span><button type="button" className="deep-toggle-all" onClick={()=>toggleAllDeepFields(sections.map(([,field])=>field))}>{sections.every(([,field])=>openDeepFields.has(field))?copy.collapseAll:copy.expandAll}</button></div>
     {sections.map(([label,field,value])=>{const open=openDeepFields.has(field),panelId=`shared-deep-section-${field}`;return <section className={`deep-research-section${open?'':' is-collapsed'}`} key={field}>
-     <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
-     <div className="deep-section-body" id={panelId} hidden={!open}><ResearchText text={value}/>{field==='producerWinemakingPractices'&&<small>General domaine context; not automatically treated as verified for this exact vintage.</small>}</div>
+     <h3><button type="button" className="deep-section-toggle" aria-expanded={open} aria-controls={panelId} onClick={()=>toggleDeepField(field)}><span className="deep-section-name">{research.lang==='zh'?DEEP_FIELD_LABELS_ZH[field]:label}</span><span className="deep-chevron" aria-hidden="true"/></button></h3>
+     <div className="deep-section-body" id={panelId} hidden={!open} lang={research.lang==='zh'?'zh-Hant-HK':undefined}><ResearchText text={research.text(field,value)} flagged={research.lang==='en'?uncitedFigures(wine.deepSearch,field):[]}/>{field==='producerWinemakingPractices'&&<small>{copy.domaineContext}</small>}</div>
     </section>})}
    </div>}
-   <DeepSources sources={wine.deepSearch.sources}/>
+   <DeepSources sources={wine.deepSearch.sources} lang={research.lang}/>
    {/* Research the reader ran is theirs. Anything else came with the bottle,
        so the line says so without naming the sharer, who is one press away on
        the tag button. */}

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-655",
-  "status": "historical-extension-inventory",
-  "scope": "All 1 mapped La Romanée parcels and 1 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "The one mapped La Romanée parcel and its one recorded holder identifier reviewed for Tier 2 (#428) through the shared holder table; 17 filings / 518 pages screened. The exact contribution, the 2021 lease schedule, the identity crosswalk, the family link and the published holding remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,30 +41,611 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "lr-chateau-2005",
+      "title": "GFV du Château de Vosne-Romanée: 9 February 2005 share transfer and donation, updated statutes",
+      "url": "https://actes.ccm2.net/acte/4effdc7b-ad44-4370-81d8-2f4fda70d09e#page=1",
+      "type": "company-filing",
+      "documentDate": "2005-02-09",
+      "filingDate": "2005-06-02",
+      "access": "read",
+      "finding": "Notarial share transfer and donation-partage of shares, with updated statutes whose history recites the 1967 constitution as SCI du Château de Vosne-Romanée and the 2003 transformation into the GFV (RCS 408 280 667). The statutes require long-term letting; no parcel schedule or tenant.",
+      "reviewedPages": [
+        1,
+        2,
+        4
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:45+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4effdc7b-ad44-4370-81d8-2f4fda70d09e",
+      "sha256": "b2f9fcab47e92eb268e653aa91c104e9875e3d56babf102fa0d425be6ae651c4",
+      "bytes": 1336154,
+      "pageCount": 43,
+      "screenedPages": 43,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:03:58.850453+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2005-10",
+      "title": "GFV du Château de Vosne-Romanée: 31 October 2005 share donations and meeting (filed 2007)",
+      "url": "https://actes.ccm2.net/acte/86decfe8-f0e5-492e-9bb1-05970b3aa367#page=1",
+      "type": "company-filing",
+      "documentDate": "2005-10-31",
+      "filingDate": "2007-02-15",
+      "access": "read",
+      "finding": "Share donations and the same day’s meeting amending the capital article, with updated statutes. PDF pages 16–17 recite three long leases to Louis Michel BOCQUILLON LIGER-BELAIR and the 31 October 2005 building amendment; these are recitals, not the lease instruments. Pages 18–19 schedule a Vosne residential parcel (AL 88, 186 m²) and property in Orbey and Strasbourg, outside La Romanée. No La Romanée cadastral reference is identified. The recital of the 8 November 2001 métayage prints a 3 January 2000–3 January 2018 term, inconsistent with the 1 November 2001–1 November 2019 term in the 2003 and 2021 filings; the discrepancy is retained, not used to change the AN 74 record.",
+      "reviewedPages": [
+        1,
+        2,
+        16,
+        17,
+        18,
+        19,
+        28
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:45+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/86decfe8-f0e5-492e-9bb1-05970b3aa367",
+      "sha256": "f94dc398cea3cf5259e68b75eb232fb8f29f395c24cb0c19b3b0821f450bd0e0",
+      "bytes": 1853962,
+      "pageCount": 55,
+      "screenedPages": 55,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:03:59.124070+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2016",
+      "title": "GFV du Château de Vosne-Romanée: 28 April 2016 meeting after a partner’s succession",
+      "url": "https://actes.ccm2.net/acte/83c4ca58-2490-442e-8f70-fd172b06069e#page=1",
+      "type": "company-filing",
+      "documentDate": "2016-04-28",
+      "filingDate": "2016-07-07",
+      "access": "read",
+      "finding": "Meeting amending the capital article after a partner’s succession, with updated statutes. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:46+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/83c4ca58-2490-442e-8f70-fd172b06069e",
+      "sha256": "3de629d122150ecb5cb76fc1e7847926486cfe9b1565c5c09610315c7c9650a1",
+      "bytes": 1309369,
+      "pageCount": 25,
+      "screenedPages": 25,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:03:59.335604+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2019",
+      "title": "GFV du Château de Vosne-Romanée: 3 May 2019 meeting appointing a corporate co-manager",
+      "url": "https://actes.ccm2.net/acte/609230a2-bfdc-49e4-8be1-0656ea08b5be#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-05-03",
+      "filingDate": "2019-07-29",
+      "access": "read",
+      "finding": "Meeting appointing CLB Participations co-manager and amending voting rules, with updated statutes. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:46+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/609230a2-bfdc-49e4-8be1-0656ea08b5be",
+      "sha256": "1b750080791f368f1040cd06b227d96f2305d3b720e926f55c4acda92a45d802",
+      "bytes": 875656,
+      "pageCount": 25,
+      "screenedPages": 25,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:01.373148+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2020",
+      "title": "GFV du Château de Vosne-Romanée: 3 June 2020 meeting rectifying the statutes",
+      "url": "https://actes.ccm2.net/acte/d76ae7ee-a00c-422d-b768-eac46ba489f5#page=1",
+      "type": "company-filing",
+      "documentDate": "2020-06-03",
+      "filingDate": "2020-06-11",
+      "access": "read",
+      "finding": "Meeting rectifying the capital article omitted after the December 2019 donation-partage. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:47+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d76ae7ee-a00c-422d-b768-eac46ba489f5",
+      "sha256": "8527f84e32ddca1808e4678ef7e6cb2029aefe3c937d42e50a05176821ad53b1",
+      "bytes": 1203875,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:01.800577+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2008",
+      "title": "GFV du Château de Vosne-Romanée: 30 June 2008 meeting after a partner’s departure (filed 2009)",
+      "url": "https://actes.ccm2.net/acte/f7ca432e-318f-4297-b0af-1d38aadb496d#page=1",
+      "type": "company-filing",
+      "documentDate": "2008-06-30",
+      "filingDate": "2009-03-17",
+      "access": "read",
+      "finding": "Meeting amending the capital article after a partner’s death in 2007. It recalls the existing voting rules for split ownership; it does not amend those rules. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        20
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T16:12:47+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f7ca432e-318f-4297-b0af-1d38aadb496d",
+      "sha256": "05b5cc25f2e0b676f2ceee76e0a7a79e5159b2f5630ea3f46f231f263c0b4b92",
+      "bytes": 753163,
+      "pageCount": 24,
+      "screenedPages": 24,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:03:59.037765+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2019-12",
+      "title": "GFV du Château de Vosne-Romanée: 20 December 2019 meeting appointing a co-manager",
+      "url": "https://actes.ccm2.net/acte/169ed24b-afb3-42b9-bfaa-91da9366cc16#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-12-20",
+      "filingDate": "2019-12-23",
+      "access": "read",
+      "finding": "Meeting appointing Louis-Michel BOCQUILLON LIGER-BELAIR co-manager alongside Anne BOCQUILLON LIGER-BELAIR and CLB Participations; the appointment is on PDF page 4, with signatures on page 5. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T16:12:30+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/169ed24b-afb3-42b9-bfaa-91da9366cc16",
+      "sha256": "0bc4f6579a49c3825bf3596aa2d04445f5dee91c3f0e96be6862f73089f0724b",
+      "bytes": 146961,
+      "pageCount": 6,
+      "screenedPages": 6,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:01.090128+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2022",
+      "title": "GFV du Château de Vosne-Romanée: 23 March 2022 meeting on a co-manager’s resignation",
+      "url": "https://actes.ccm2.net/acte/34c226bb-2222-4ece-8180-48594f61478b#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-03-23",
+      "filingDate": "2022-07-13",
+      "access": "read",
+      "finding": "Meeting noting Louis-Michel BOCQUILLON LIGER-BELAIR’s resignation effective 23 March 2022 (PDF page 4); Anne BOCQUILLON LIGER-BELAIR and CLB Participations remain from 24 March. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T16:11:58+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/34c226bb-2222-4ece-8180-48594f61478b",
+      "sha256": "8349afeedfdced554acca75df1c83e91f45abb6ed97bdb7dbcec06e53d6328a3",
+      "bytes": 151830,
+      "pageCount": 5,
+      "screenedPages": 5,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:01.456888+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-chateau-2023",
+      "title": "GFV du Château de Vosne-Romanée: 3 June 2023 meeting on CLB Participations’ resignation (filed 2024)",
+      "url": "https://actes.ccm2.net/acte/9b46ec23-53fc-45a6-911e-42f97224e308#page=1",
+      "type": "company-filing",
+      "documentDate": "2023-06-03",
+      "filingDate": "2024-09-23",
+      "access": "read",
+      "finding": "Meeting noting CLB Participations’ resignation as co-manager effective 3 June 2023, leaving Anne BOCQUILLON LIGER-BELAIR as sole manager from 4 June. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T16:12:14+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9b46ec23-53fc-45a6-911e-42f97224e308",
+      "sha256": "b506f33f30f8b8dae582dbcd6eb51f592d8dd92964d68eafba9300c9043eb8ee",
+      "bytes": 225516,
+      "pageCount": 4,
+      "screenedPages": 4,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:03.252631+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-dclb-2005",
+      "title": "EARL Domaine du Comte Liger-Belair: 6 January 2005 change of name and updated statutes",
+      "url": "https://actes.ccm2.net/acte/23672810#page=1",
+      "type": "company-filing",
+      "documentDate": "2005-01-06",
+      "filingDate": "2005-03-16",
+      "access": "read",
+      "finding": "Sole-partner decisions renaming the EARL Domaine du Vicomte Liger-Belair (429010846) as Domaine du Comte Liger-Belair, with updated statutes whose object includes taking land on lease and farming land its partners rent or own. No parcel, lease or lessor is named.",
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:47+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/23672810",
+      "sha256": "60f52a52c2761d8a0e31bed91df5b5934fecd366b8067bb870d4dc7e08f74410",
+      "bytes": 850429,
+      "pageCount": 29,
+      "screenedPages": 29,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:03.864230+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-dclb-2018",
+      "title": "Domaine du Comte Liger-Belair: 1 February 2018 transformation of the EARL into an SCEA",
+      "url": "https://actes.ccm2.net/acte/23672812#page=1",
+      "type": "company-filing",
+      "documentDate": "2018-02-01",
+      "filingDate": "2018-03-23",
+      "access": "read",
+      "finding": "Sole-partner decisions turning the EARL into a société civile d’exploitation agricole, with the same farming object. No parcel, lease or lessor is named.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/23672812",
+      "sha256": "48e59197547058047c39592623fcb8e20008d8737753ef35b872ab17db79aa76",
+      "bytes": 1440723,
+      "pageCount": 31,
+      "screenedPages": 31,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:04.174735+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-dclb-2023",
+      "title": "SCEA Domaine du Comte Liger-Belair: 11 January 2023 extraordinary meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/3156367#page=1",
+      "type": "company-filing",
+      "documentDate": "2023-01-11",
+      "filingDate": "2023-06-13",
+      "access": "read",
+      "finding": "Meeting changing how partners share profits and losses. The partners are Henry and Louis-Michel BOCQUILLON LIGER-BELAIR, CLB Participations, and SAS Bouchon Pourpre (one share); the prior summary omitted the last partner. No parcel, lease instrument or named lessor is identified.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        12
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3156367",
+      "sha256": "41a9fd29d3c74282aae10bf0602e50d6e3ce7813c32c5f106bb45505cde903db",
+      "bytes": 1975481,
+      "pageCount": 30,
+      "screenedPages": 30,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:04.822867+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-dclb-2025",
+      "title": "SCEA Domaine du Comte Liger-Belair: statutes updated after the 30 September 2025 meeting",
+      "url": "https://actes.ccm2.net/acte/40100996#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-09-30",
+      "filingDate": "2026-07-23",
+      "access": "read",
+      "finding": "Updated statutes recalling the EARL’s 7 January 2000 formation and 2018 transformation; the agricultural object is unchanged. Article 8 assigns 3,900 shares to CLB Participations, alongside the two family partners. No parcel, lease instrument or named lessor is identified.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/40100996",
+      "sha256": "9cd886606660181402e7efb43c50d8ef34d77e4cf38b14e18e30d059d8e4fece",
+      "bytes": 3676108,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, bytes and page count match; all pages read using embedded text or RapidOCR with ONNX Runtime DirectML at 150 dpi. Cited schedules and low-text pages checked as images.",
+      "retrievalNote": "Fresh download on 2026-10-09T02:04:06.191146+00:00 matched the recorded SHA-256, byte count and page count. Original acquisition metadata retained."
+    },
+    {
+      "id": "lr-liger-climats",
+      "title": "Domaine du Comte Liger-Belair: Our climats",
+      "url": "https://www.liger-belair.fr/en/our-climats/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09T03:02:46.874823+00:00",
+      "retrievedFrom": "https://www.liger-belair.fr/en/our-climats/",
+      "sha256": "3869055dddede377fd8f0ab24923e9d032aca55f9c00f84bd57a9aeda4930a2e",
+      "bytes": 755542,
+      "finding": "Undated climat page: “La Romanée, Grand Cru, Monopole — Surface: 0.8452 hectare”, with vine ages given “in 2017”. No cadastral reference or owner is printed.",
+      "retrievalNote": "Local audit 2026-10-09: HTML bytes changed from ee31ae23243b6ecc7fe84458255ab599d47f722975bc041e20ed27bb36f64335 / 757570 bytes / 2026-10-08T13:36:35Z. The published La Romanée area and history were re-read and agree with the recorded finding."
+    },
+    {
+      "id": "lr-liger-history",
+      "title": "Domaine du Comte Liger-Belair: history of the domaine",
+      "url": "https://www.liger-belair.fr/histoire-du-domaine-du-comte-liger-belair/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09T03:02:45.965966+00:00",
+      "retrievedFrom": "https://www.liger-belair.fr/histoire-du-domaine-du-comte-liger-belair/",
+      "sha256": "9fe13e2619f895f23e259d7b8335b53dff4d0cfe28b6effae0572e17c40fde6f",
+      "bytes": 45776,
+      "finding": "Undated history page: the domaine was created in 2000 to take back family vines into operation, and in 2002 added 1.6 ha including “La Romanée Grand Cru Monopole”. No cadastral reference, lessor or current season is given.",
+      "retrievalNote": "Local audit 2026-10-09: HTML bytes changed from 18c1e05384e7cccbb3e9868dee735ca913789d0041e0a19af826431c18551471 / 47862 bytes / 2026-10-08T13:36:38Z. The published La Romanée area and history were re-read and agree with the recorded finding."
+    },
+    {
+      "id": "lr-liger-legal",
+      "title": "Domaine du Comte Liger-Belair: legal notice",
+      "url": "https://www.liger-belair.fr/mentions-legales/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09T03:02:45.654390+00:00",
+      "retrievedFrom": "https://www.liger-belair.fr/mentions-legales/",
+      "sha256": "5403c0f86a840d62f653bdcfd5784d773283595577e92a78066c2f34bc168d23",
+      "bytes": 43391,
+      "finding": "The legal notice names SAS Comte Liger-Belair, Château de Vosne-Romanée, as publisher of liger-belair.fr. It does not print the publisher’s SIREN or identify SCEA Domaine du Comte Liger-Belair (429010846); the company filings and registry sources independently support that company’s identity.",
+      "retrievalNote": "Local audit 2026-10-09: HTML bytes changed from 7499540e3e39e812f8a54de3c60864d3a8a0076429e69306032b95d531af71a3 / 45477 bytes / 2026-10-08T16:01:26Z. The fresh legal notice explicitly names SAS Comte Liger-Belair, without its SIREN. Prior attribution was too broad and is corrected; the original HTML was unavailable for a textual diff. This page is not evidence identifying SCEA 429010846."
+    },
+    {
+      "id": "lr-winehog-essence",
+      "title": "Winehog: The Essence of La Romanee",
+      "url": "https://winehog.org/the-essence-of-la-romanee-23847/",
+      "type": "critic-research",
+      "documentDate": "2015-06-20",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "865cc694d5f321a2edcf0752857252b61816170233ca0004e9ba79276b8c86c1",
+      "bytes": 3146488,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Tasting essay after a 2002–2013 vertical of Domaine du Comte Liger-Belair’s La Romanée at an anniversary tasting, comparing the cru with its neighbours. It prints no area, owner, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-200-years",
+      "title": "Winehog: 200 years, 72 bottles of Domaine du Comte Liger-Belair",
+      "url": "https://winehog.org/200-years-72-bottles-of-domaine-du-comte-liger-belair-23767/",
+      "type": "critic-research",
+      "documentDate": "2015-06-12",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "4854fa158918c65141842739f659096c970409e345f2e1722479b81f505f0f8a",
+      "bytes": 3466045,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Report of an anniversary tasting of 72 bottles from Domaine du Comte Liger-Belair, including a 2002–2013 La Romanée vertical. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2015-06-14",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-hedonistic",
+      "title": "Winehog: La Romanée – a hedonistic treat",
+      "url": "https://winehog.org/on-the-table-in-la-romanee-2008-2-42558/",
+      "type": "critic-research",
+      "documentDate": "2020-08-05",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f6bd4a6e30d3a22ec73870f23023ef2b13858787e7b66f36ab3a5e5356d4a8d1",
+      "bytes": 3313100,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Tasting note on Domaine du Comte Liger-Belair’s La Romanée 2008. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2020-12-03",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lr-winehog-1928",
+      "title": "Winehog: A 1928 La Romanée From the Legendary La Rôtisserie de la Reine Pédauque",
+      "url": "https://winehog.org/a-1928-la-romanee-from-the-legendary-la-rotisserie-de-la-reine-pedauque-74420/",
+      "type": "critic-research",
+      "documentDate": "2026-06-10",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "8013b84c083e2c9bca3f123ed1a0f381cc799ed719dd37bcfa3434e136dc083b",
+      "bytes": 3044358,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Bottle history of a 1928 La Romanée bottled by a Paris restaurant. It gives La Romanée as a 0.85 ha monopole and says that before 1933 the wine was also sold under domaine and négociant labels. It prints no cadastral reference; the rounded total is not a parcel crosswalk."
     }
   ],
   "holders": [
     {
       "holderId": "U14132333",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "chateau-vosne-statutes-1998",
+        "chateau-vosne-gfa-2003",
+        "chateau-vosne-donation-2019",
+        "chateau-vosne-2021",
+        "lr-chateau-2005",
+        "lr-chateau-2005-10",
+        "lr-chateau-2016",
+        "lr-chateau-2019",
+        "lr-chateau-2020",
+        "lr-chateau-2008",
+        "lr-chateau-2019-12",
+        "lr-chateau-2022",
+        "lr-chateau-2023",
+        "lr-dclb-2005",
+        "lr-dclb-2018",
+        "lr-dclb-2023",
+        "lr-dclb-2025",
+        "rne-408280667",
+        "rne-429010846"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Company filings match U14132333 to GFV du Château de Vosne-Romanée (408280667): its statutes contribute AN74 and its 2021 deed lists AN74 under a 2001 métayage to a partner, with the land made available to SCEA Domaine du Comte Liger-Belair. Dated recital only; farming unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
   "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "parcelFilings": [
+    {
+      "id": "lr-chateau-1967",
+      "sourceId": "chateau-vosne-statutes-1998",
+      "title": "SCI du Château de Vosne-Romanée: 1967 contribution of AN 74",
+      "holderId": "U14132333",
+      "companySiren": "408280667",
+      "documentDate": "1998-12-15",
+      "parcelAreasM2": {
+        "21714000AN0074": 8452
+      },
+      "leaseEvidence": [],
+      "finding": "The company’s statutes, updated in 1998 and filed at its 2002 registration, reproduce the 3 July 1967 contribution of Vosne-Romanée AN 74, 84 a 52 ca, “La Romanée”, matching today’s area.",
+      "appNote": "Contributed in 1967 to the company recorded here (statutes filed 2002; area matches). Historical contribution; actual operation is not stated.",
+      "supportingSourceIds": [
+        "chateau-vosne-gfa-2003"
+      ],
+      "pages": [
+        11
+      ],
+      "printedReferences": [
+        "AN74"
+      ]
+    },
+    {
+      "id": "lr-chateau-2021",
+      "sourceId": "chateau-vosne-2021",
+      "title": "GFV du Château de Vosne-Romanée: 2021 lease schedule of AN 74",
+      "holderId": "U14132333",
+      "companySiren": "408280667",
+      "documentDate": "2021-04-14",
+      "parcelAreasM2": {
+        "21714000AN0074": 8452
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail à métayage",
+          "tenants": [
+            "a partner of the GFV, personally"
+          ],
+          "signedDates": [
+            "2001-11-08"
+          ],
+          "effectiveFrom": "2001-11-01",
+          "endsOn": "2019-11-01",
+          "renewal": "tacit, by nine-year periods",
+          "parcelAreasM2": {
+            "21714000AN0074": 8452
+          },
+          "pages": [
+            23
+          ],
+          "limitation": "Scheduled with AN 74 in the 2021 deed; 18 years to 1 November 2019, tacitly renewable by nine-year periods. The deed warrants the leases valid on 14 April 2021; the lease instrument itself is not included in this reviewed PDF."
+        },
+        {
+          "kind": "mise-a-disposition-declaration",
+          "beneficiaries": [
+            "Domaine du Comte Liger-Belair"
+          ],
+          "beneficiarySiren": "429010846",
+          "declaredOn": "2021-04-14",
+          "parcelAreasM2": {
+            "21714000AN0074": 8452
+          },
+          "pages": [
+            25
+          ],
+          "limitation": "The deed states that the tenant in place makes the leased land, except that added in 2005, available to this company with the lessor’s authorisation, and that rents are paid by the tenant or this company. A dated recital, not a verified current farming season; flagged for #364."
+        }
+      ],
+      "finding": "The 14 April 2021 deed schedules AN 74, La Romanée, 84 a 52 ca, under the 8 November 2001 métayage to a partner, tacitly renewable, and states that the leased land is made available to SCEA Domaine du Comte Liger-Belair (429010846) with the lessor’s authorisation. Area matches.",
+      "appNote": "A 2021 deed lists this parcel (area matches) under a 2001 métayage to a partner, tacitly renewable, and says the land is made available to Domaine du Comte Liger-Belair. Dated 2021; current operation is not verified.",
+      "supportingSourceIds": [
+        "chateau-vosne-donation-2019"
+      ],
+      "pages": [
+        11,
+        13,
+        23,
+        25
+      ],
+      "printedReferences": [
+        "AN74"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "lr-liger-belair",
+      "producer": "Domaine du Comte Liger-Belair",
+      "namedAreas": [
+        "LA ROMANEE"
+      ],
+      "publishedAreaHa": 0.8452,
+      "precision": "square-metre",
+      "relation": "farmer",
+      "sourceIds": [
+        "lr-liger-climats",
+        "lr-liger-history",
+        "lr-liger-legal"
+      ],
+      "finding": "Undated climat page gives La Romanée, monopole, 0.8452 ha, equal to AN 74’s cadastral area; the history page says the domaine took it into operation in 2002. Undated producer publication: census evidence only, not a verified farming season.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "Bounded filing review: 17 filings (518 pages) were screened — 13 of the 13 filings the free index lists for the GFV and 4 of the 9 for the SCEA. Unscreened filings are a bounded negative.",
+    "`U14132333` is matched to RCS 408280667 by the rights file’s name, the company’s 2002 registration filing (whose statutes contribute AN 74 with its exact area) and the 2003 renaming deed; the 2019 MAJIC code PBCLPZ stays an unprovable identifier change in the rights file.",
+    "The 2001 métayage over AN 74 is held by a partner personally; the 2021 deed states it is tacitly renewed and valid and that the land is made available to SCEA Domaine du Comte Liger-Belair. That dated recital (14 April 2021) is flagged for #364 as a candidate verified-operator record; it is not a current farming season, and verified farming stays 0. The lease deed and any later change are unreviewed.",
+    "CLB Participations was GFV co-manager from 3 May 2019 until its resignation effective 3 June 2023; Anne is sole manager from 4 June. The reviewed records support shared family partners and seat, not a current shared manager.",
+    "The domaine’s pages are undated producer publications. They give La Romanée’s area and a 2002 start of operation; they stay census evidence.",
+    "Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIRENs 408280667 and 429010846; all four requests returned HTTP 403. Records available only there remain unverified. The free index independently confirms the 23 September 2024 and 23 July 2026 deposits for the PDFs without registry covers.",
+    "All four Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained as prior cloud evidence. The prior findings of no cadastral reference and a rounded 0.85 ha cru total were not independently checked locally.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed; paid SPF copies and outreach remain Tier 3.",
+    "The 2021 deed’s PDF page 45 recites a 15 September 2006 supply agreement with SARL COMTE LIGER BELAIR for the GFV’s harvest share of La Romanée and Aux Reignots (2006–2015, tacit renewal). This is a commercial supply recital, distinct from the SCEA mise à disposition on page 25; the underlying supply and lease instruments are not included in this 81-page PDF. The page 27 SAFER undertaking is an obligation, not proof of later performance. The dated 2021 operator candidate remains deferred to #364 with the repository owner’s approval; verified farming remains 0."
+  ],
+  "unmatchedPrintedReferences": [],
+  "holderLinks": "shared"
 }

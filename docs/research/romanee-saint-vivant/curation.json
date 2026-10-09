@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-08",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-1085",
-  "status": "historical-extension-inventory",
-  "scope": "All 17 mapped Romanée-Saint-Vivant parcels and 11 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 17 mapped Romanée-Saint-Vivant parcels and all 11 recorded holder identifiers reviewed for Tier 2 (#426) through the shared holder table; 45 filings / 1,686 pages screened. Exact schedules, historical leases, published holding totals and retired references remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,130 +41,2080 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "rsv-nicholem-2005",
+      "title": "NICHOLEM: 8 July 2005 notarial formation",
+      "url": "https://actes.ccm2.net/acte/b6981ae6-b1fe-4bbf-9b96-fe339b78f5af#page=1",
+      "type": "company-filing",
+      "documentDate": "2005-07-08",
+      "filingDate": "2005-10-06",
+      "access": "read",
+      "finding": "Formation of a civil property company by two individuals with 1,500 euros in cash, to acquire and operate, directly or indirectly, vineyard estates in Vosne-Romanée. No parcel, contribution, lease or tenant is named.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T12:50:12+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b6981ae6-b1fe-4bbf-9b96-fe339b78f5af",
+      "sha256": "40540527dc60aad958baff0aaadf346795c2c205976a28c3334311a711ecbb6a",
+      "bytes": 351452,
+      "pageCount": 12,
+      "screenedPages": 12,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-nicholem-2021",
+      "title": "NICHOLEM: 5 November 2021 transformation into a GFA",
+      "url": "https://actes.ccm2.net/acte/db220aed-6d72-4b3a-8a88-659f145555be#page=2",
+      "type": "company-filing",
+      "documentDate": "2021-11-05",
+      "filingDate": "2021-12-08",
+      "access": "read",
+      "finding": "Unanimous decisions turn the SCI into a groupement foncier agricole; the recast statutes forbid direct farming and require letting by métayage. No parcel schedule, tenant or domaine is named.",
+      "reviewedPages": [
+        2,
+        3,
+        6
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:04:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/db220aed-6d72-4b3a-8a88-659f145555be",
+      "sha256": "41e2cf300709eaac74ed814aad8aa5cbf0787a4095a99d8087716634f6891949",
+      "bytes": 1102874,
+      "pageCount": 32,
+      "screenedPages": 32,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-mdv-formation-2024",
+      "title": "Mémoire de Vignes: 15 July 2024 GFV founding statutes",
+      "url": "https://actes.ccm2.net/acte/58034acf-fb09-42a5-a3fb-068b5b219de4#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-07-15",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Founding statutes of the GFV with 2,000 euros in cash from five family partners; no land. The index lists a second, byte-identical copy (same SHA-256), screened once. The index date (17 July 2024) precedes the later deeds and is not used as a deposit date.",
+      "reviewedPages": [
+        1,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T12:57:35+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/58034acf-fb09-42a5-a3fb-068b5b219de4",
+      "sha256": "e60f31bb529cfa64b960c96018ac16b9916d7371a7426881e8c1368133b8d6b3",
+      "bytes": 1185088,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-mdv-contribution-2024",
+      "title": "Mémoire de Vignes: 24 July 2024 notarial capital increase by contribution",
+      "url": "https://actes.ccm2.net/acte/42c11ddc-1f9c-4048-8d51-437e05ec93c2#page=6",
+      "type": "company-filing",
+      "documentDate": "2024-07-24",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Contributes Vosne-Romanée AL 330, Romanée Saint Vivant (0 ha 24 a 57 ca), among four parcels. It recites an 18-year-6-month rural lease of the contributed land to an individual, signed 21 April 2011 and running to 31 October 2029, and a new long-term lease to be signed immediately afterwards. AL 330 came from the 5 March 1990 partition of former AL 2.",
+      "reviewedPages": [
+        4,
+        6,
+        9,
+        10,
+        14,
+        15
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:03:00+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/42c11ddc-1f9c-4048-8d51-437e05ec93c2",
+      "sha256": "ed24c779c4c78632f4645f473bea5f910891760a1612c944882898eb8df7010d",
+      "bytes": 1282393,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-mdv-share-sale-2024",
+      "title": "Mémoire de Vignes: 24 July 2024 share transfer to LVMH Miscellanées",
+      "url": "https://actes.ccm2.net/acte/f96f7c20-077e-4cf1-9470-37cb21be6c34#page=8",
+      "type": "company-filing",
+      "documentDate": "2024-07-24",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Share transfer deed. It repeats AL 330 (0 ha 24 a 57 ca) among the company’s assets and states that they are let for 18 years to the Société Civile d’Exploitation Agricole du Domaine Poisot-Piguet by a deed signed just before. The lease deed itself is not filed. The SCEA (SIREN 384069985) also participates in the share-transfer deed as the tenant already in place and undertakes to preserve the viticultural use of the listed properties under the SAFER conditions (PDF 4, 21, 23–24). This is dated tenant evidence as of 24 July 2024; current operation is not established. Following the local audit pause and the repository owner’s instruction to continue on 9 October 2026, operator acceptance remains deferred to #364 and verified farming stays zero.",
+      "reviewedPages": [
+        4,
+        8,
+        10,
+        11,
+        21,
+        23,
+        24,
+        28,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:00:53+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f96f7c20-077e-4cf1-9470-37cb21be6c34",
+      "sha256": "9ab16473f379fd15ca4ee43ec472b6f436ac9244da490b29052233709bf553f3",
+      "bytes": 1598619,
+      "pageCount": 35,
+      "screenedPages": 35,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-formation-2001",
+      "title": "GFV Hudelot-Noëllat: 28 June 2001 founding contribution",
+      "url": "https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014#page=4",
+      "type": "company-filing",
+      "documentDate": "2001-06-28",
+      "filingDate": "2001-08-09",
+      "access": "read",
+      "finding": "The founding deed contributes, among other vines, Vosne-Romanée AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca), Romanée Saint Vivant. The statutes forbid direct farming and give the manager a mandate to grant 18-year leases; no tenant is named. Schedule checked against the page image.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        20
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:29:06+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0cd2477b-6c77-42d4-a9b2-1b4400611014",
+      "sha256": "ab55eeb5b1b4d790260f0e9b91913834c647e872a1c846e6e1e0750dd3f265b1",
+      "bytes": 911376,
+      "pageCount": 21,
+      "screenedPages": 21,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-2005",
+      "title": "GFV Hudelot-Noëllat: 19 December 2005 capital increase",
+      "url": "https://actes.ccm2.net/acte/c1cc0f4f-264c-4caf-9331-cc4b6de90c44#page=1",
+      "type": "company-filing",
+      "documentDate": "2005-12-19",
+      "filingDate": "2006-03-24",
+      "access": "read",
+      "finding": "Capital increase and updated statutes; the annexed statutes repeat the founding schedule with AC 271 and AC 273. PDF 7 names Alain Hudelot as tenant under unprinted agreements, but only for the 2005 contributions in Chambolle-Musigny, Gilly-lès-Cîteaux and Vougeot (PDF 5), not the Romanée-Saint-Vivant parcels repeated in the statutes.",
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7,
+        16
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:34:12+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c1cc0f4f-264c-4caf-9331-cc4b6de90c44",
+      "sha256": "5a7812ac39ec8ff153dbbf9dfbdf87858559d602483ea85fcf3ac898f57be7bd",
+      "bytes": 1126195,
+      "pageCount": 31,
+      "screenedPages": 31,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-2012",
+      "title": "GFV Hudelot-Noëllat: 11 June 2012 share donation-partage",
+      "url": "https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f#page=7",
+      "type": "company-filing",
+      "documentDate": "2012-06-11",
+      "filingDate": "2015-03-27",
+      "access": "read",
+      "finding": "Donation of shares; the recital of contributions repeats AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca). PDF 11–12 recite long-term leases of 1972, 2001 and 2005; the tax declaration on PDF 19 names Alain Hudelot as tenant of the GFV’s vineyard property under those leases. The lease instruments and their parcel allocations are not reproduced, and current operation is not established.",
+      "reviewedPages": [
+        7,
+        11,
+        12,
+        19
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:41:27+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6e7eded3-7acb-4f3f-829c-52e74d54819f",
+      "sha256": "f8d737a37918afa1625ac51bf6884cd98ffdc55bb4a645d71a8ff4b616331307",
+      "bytes": 2871321,
+      "pageCount": 44,
+      "screenedPages": 44,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-2025",
+      "title": "GFV Hudelot-Noëllat: statutes updated 31 March 2025",
+      "url": "https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09#page=1",
+      "type": "company-filing",
+      "documentDate": "2025-03-31",
+      "filingDate": "2025-05-05",
+      "access": "read",
+      "finding": "Updated statutes still recite the 2001 contribution of AC 271 and AC 273 with the same areas, although those references were divided in 2022. Long-term letting is required; no tenant named.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:19:32+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5ff9138f-e952-4667-96c1-7baf1d83fe09",
+      "sha256": "8b4666d6ace8f594a7ccd8a290f6e3b6747049ea27d036cd6861a75f5230918f",
+      "bytes": 6137682,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-notoriety-2024",
+      "title": "GFV Hudelot-Noëllat: 9 July 2024 notarial act of notoriety (filed 2025)",
+      "url": "https://actes.ccm2.net/acte/ff888784-5c03-4449-b845-941a0d2c4c95#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-07-09",
+      "filingDate": "2025-05-05",
+      "access": "read",
+      "finding": "Succession formalities affecting partners’ shares; no parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:24:32+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ff888784-5c03-4449-b845-941a0d2c4c95",
+      "sha256": "f56e795273cb61bb66e6a4db32d7ef353d03355bdc1161847fad728c732937d7",
+      "bytes": 4044789,
+      "pageCount": 20,
+      "screenedPages": 20,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-drc-statutes-1974",
+      "title": "DRC: 21 December 1974 notarial statutes and estate schedule (filed 2002)",
+      "url": "https://actes.ccm2.net/acte/5409256#page=15",
+      "type": "company-filing",
+      "documentDate": "1974-12-21",
+      "filingDate": "2002-07-31",
+      "access": "read",
+      "finding": "Romanée-Saint-Vivant review: the 1974 estate schedule names no Romanée-Saint-Vivant parcel. The bundled 14 December 1998 meeting minutes recite a long-term lease, concluded 26 December 1975, between GFA Marey-Monge Romanée Saint-Vivant and the DRC, without cadastral references.",
+      "reviewedPages": [
+        15,
+        36,
+        38,
+        39
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409256",
+      "sha256": "f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68",
+      "bytes": 3706675,
+      "pageCount": 125,
+      "screenedPages": 125,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "1998-12-14",
+          "kind": "general meeting minutes in the same deposit"
+        }
+      ]
+    },
+    {
+      "id": "rsv-drc-2018",
+      "title": "DRC: 26 January 2018 completion of the December 2017 capital increase",
+      "url": "https://actes.ccm2.net/acte/5409360#page=2",
+      "type": "company-filing",
+      "documentDate": "2018-01-26",
+      "filingDate": "2018-06-21",
+      "access": "read",
+      "finding": "Records the capital increase decided on 20 December 2017 (154,140 new parts with a 36.7 million euro premium) and updated statutes. No cadastral reference or Romanée-Saint-Vivant schedule.",
+      "reviewedPages": [
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:05+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409360",
+      "sha256": "1e587daa78a0c37ea9e71f7d8778cf83d94ed5b926b67d41e8edd29e1c80a51a",
+      "bytes": 2554683,
+      "pageCount": 57,
+      "screenedPages": 57,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-drc-2022",
+      "title": "DRC: 21 March 2022 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/5409233#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-03-21",
+      "filingDate": "2022-04-15",
+      "access": "read",
+      "finding": "Share donations, including parts of GFA de la Romanée Saint-Vivant Domaine Marey-Monge held by DRC partners, and updated statutes. No cadastral reference.",
+      "reviewedPages": [
+        2,
+        5,
+        31
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:32:21+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409233",
+      "sha256": "5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708",
+      "bytes": 2655931,
+      "pageCount": 65,
+      "screenedPages": 65,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-drc-2024",
+      "title": "DRC: 14 November 2024 management declaration and bundled share deeds",
+      "url": "https://actes.ccm2.net/acte/34207319#page=6",
+      "type": "company-filing",
+      "documentDate": "2024-11-14",
+      "filingDate": "2024-11-14",
+      "access": "read",
+      "finding": "Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole estate and its brands. No cadastral reference or Romanée-Saint-Vivant schedule.",
+      "reviewedPages": [
+        6,
+        45,
+        46
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:07:24+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
+      "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
+      "bytes": 8473781,
+      "pageCount": 135,
+      "screenedPages": 135,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-vignoble-latour-2011",
+      "title": "Vignoble Latour: 28 September 2011 notarial contribution by Maison Louis Latour",
+      "url": "https://actes.ccm2.net/acte/4a8f6bd4-ba8b-43f4-81d5-d843c58db695#page=7",
+      "type": "company-filing",
+      "documentDate": "2011-09-28",
+      "filingDate": "2011-12-30",
+      "access": "read",
+      "finding": "Maison Louis Latour contributes its undivided one-third of AL 1, Romanée Saint Vivant (76 a 30 ca), among other vines. The deed states the parcels are let to the Société Civile Domaine Louis Latour (778159715) by an oral lease since each acquisition, at 3.5 pièces per hectare from the 2008 harvest. Schedule checked against the page image. The SAFER notification repeats this oral-tenancy declaration (PDF 83); the response of 16 August 2011 records non-exercise of pre-emption (PDF 84), not execution of a lease or confirmation of current operation.",
+      "reviewedPages": [
+        2,
+        3,
+        6,
+        7,
+        13,
+        14,
+        83,
+        84
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:37+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4a8f6bd4-ba8b-43f4-81d5-d843c58db695",
+      "sha256": "b9be636eb95742f10eefe733bc756eac42a9ecfad77a8822e5d57e228fe6a73a",
+      "bytes": 2005862,
+      "pageCount": 92,
+      "screenedPages": 92,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-vignoble-latour-2010",
+      "title": "Vignoble Latour: 28 October 2010 founding statutes",
+      "url": "https://actes.ccm2.net/acte/b15187a6-37ae-4687-a3fc-e7abca8bb0f5#page=1",
+      "type": "company-filing",
+      "documentDate": "2010-10-28",
+      "filingDate": "2010-11-17",
+      "access": "read",
+      "finding": "Private-deed statutes of the civil property company formed by Maison Louis Latour and GFA du Domaine de Corton-Grancey to acquire vines and let them; no parcel is contributed.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:35+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b15187a6-37ae-4687-a3fc-e7abca8bb0f5",
+      "sha256": "3a94a467fa29f74f3980ad03d926abbc07bebd59aee47538edff0248d77468d8",
+      "bytes": 171190,
+      "pageCount": 20,
+      "screenedPages": 20,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-leroy-2024",
+      "title": "SCI Domaine Leroy: 3 June 2024 annual meeting",
+      "url": "https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf#page=1",
+      "type": "company-filing",
+      "documentDate": "2024-06-03",
+      "filingDate": null,
+      "access": "read",
+      "finding": "Annual meeting and manager replacement; no parcel schedule. Deposit date is not established by the free index or PDF.",
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:38+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a3452a10-c2a8-4f91-98cc-1b52889a43cf",
+      "sha256": "c1dc242187c3f0a08f0c25675cee53815048d6e52435a4c0897691131d91a196",
+      "bytes": 111546,
+      "pageCount": 3,
+      "screenedPages": 3,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-leroy-sce-2001",
+      "title": "SCE du Domaine Leroy: 1947 statutes and 10 December 2001 minutes (filed 2001)",
+      "url": "https://actes.ccm2.net/acte/e40cdccb-316c-448d-826c-850cb7e32137#page=2",
+      "type": "company-filing",
+      "documentDate": "2001-12-10",
+      "filingDate": "2001-12-27",
+      "access": "read",
+      "finding": "Registration bundle of the operating company: 31 December 1947 statutes (cash contributions by the Noëllat family; object to farm vineyards it leases or owns), statutes updated 10 December 2001 and minutes. No parcel schedule or named lease.",
+      "reviewedPages": [
+        2,
+        10,
+        11,
+        29
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:38+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/e40cdccb-316c-448d-826c-850cb7e32137",
+      "sha256": "84ccfda57c26d3ffe70b97300eb5c1265b7999b789c79f87bd70e0946c3d2739",
+      "bytes": 1556915,
+      "pageCount": 48,
+      "screenedPages": 48,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "1947-12-31",
+          "kind": "original statutes"
+        }
+      ]
+    },
+    {
+      "id": "rsv-leroy-sce-2023",
+      "title": "SCE du Domaine Leroy: 13 June 2023 annual meeting",
+      "url": "https://actes.ccm2.net/acte/69b6ee34-067b-4b38-9ce5-45af7754ccb2#page=1",
+      "type": "company-filing",
+      "documentDate": "2023-06-13",
+      "filingDate": "2023-07-17",
+      "access": "read",
+      "finding": "Annual meeting of the operating company held at Leroy SA’s seat; no parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:38+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/69b6ee34-067b-4b38-9ce5-45af7754ccb2",
+      "sha256": "30a3b258b85ce5a983bde71c6dce28592cef4cca3d5919c882482b309fc7cba8",
+      "bytes": 166975,
+      "pageCount": 5,
+      "screenedPages": 5,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-drc-2003",
+      "title": "DRC: 27 November 2003 meeting and recast statutes",
+      "url": "https://actes.ccm2.net/acte/5409358#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "filingDate": "2004-01-29",
+      "access": "read",
+      "finding": "Recast statutes reciting the 1942 contribution of the whole estate and its brands; no cadastral reference or Romanée-Saint-Vivant schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        32,
+        33
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409358",
+      "sha256": "8490ca607cdfb6ded3aae9dc22f92226f64ea6a7922d50d02590bf98aefb2c9e",
+      "bytes": 2082952,
+      "pageCount": 63,
+      "screenedPages": 63,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-arnoux-2000",
+      "title": "Domaine Robert Arnoux: 21 February 2000 capital increase (filed 2003)",
+      "url": "https://actes.ccm2.net/acte/9d187163-4625-49a9-9d50-e8eed96771c5#page=2",
+      "type": "company-filing",
+      "documentDate": "2000-02-21",
+      "filingDate": "2003-10-02",
+      "access": "read",
+      "finding": "Capital increase by incorporation of reserves and conversion to euros; the annexed statutes record cash contributions at formation. Article 49 (PDF pages 22–23) mandates Muriel Arnoux to take an 18-year rural lease for the company from the Arnoux-Truchetet couple, beginning 1 January 1984, over unnamed properties in six communes including Vosne-Romanée. This is a formation mandate, without a parcel schedule or executed lease; AL327 is not identified.",
+      "reviewedPages": [
+        2,
+        3,
+        6,
+        22,
+        23
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:40+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9d187163-4625-49a9-9d50-e8eed96771c5",
+      "sha256": "e55604a559f4a9cf8b7a39a72a5822baecbb268b6f2a2f0266f05adc25fd9c6b",
+      "bytes": 605671,
+      "pageCount": 23,
+      "screenedPages": 23,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-arnoux-2003",
+      "title": "Domaine Robert Arnoux: 1 July 2003 capital increase",
+      "url": "https://actes.ccm2.net/acte/bcbfb7fb-cba2-430e-a44e-8636ea860b2d#page=2",
+      "type": "company-filing",
+      "documentDate": "2003-07-01",
+      "filingDate": "2003-10-02",
+      "access": "read",
+      "finding": "Capital increase by incorporation of reserves; partners are a family member and Société Civile Familiale Lachaux. No parcel schedule or lease.",
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:40+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/bcbfb7fb-cba2-430e-a44e-8636ea860b2d",
+      "sha256": "46a0d23a5cc5c19634cbff92cdc0321d60cc131ed8593bdd4684e21c231329a1",
+      "bytes": 502464,
+      "pageCount": 22,
+      "screenedPages": 22,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-arnoux-2009",
+      "title": "Domaine Arnoux-Lachaux: 29 May 2009 change of name and updated statutes",
+      "url": "https://actes.ccm2.net/acte/fa5a91b2-5ea3-4d6b-a9fc-9a14a8a1ece7#page=1",
+      "type": "company-filing",
+      "documentDate": "2009-05-29",
+      "filingDate": "2009-07-15",
+      "access": "read",
+      "finding": "Renames Domaine Robert Arnoux as Domaine Arnoux-Lachaux; the updated statutes give an object of farming vineyard land it leases or may own and record only cash and capitalised reserves. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:40+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fa5a91b2-5ea3-4d6b-a9fc-9a14a8a1ece7",
+      "sha256": "4f563271ac27b7a57d42dae3c1dbf69811feaaaf1a02fe406b5ef2395a7bd91a",
+      "bytes": 501287,
+      "pageCount": 20,
+      "screenedPages": 20,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-arnoux-2018",
+      "title": "Domaine Arnoux-Lachaux: 27 December 2018 meeting and updated statutes (filed 2019)",
+      "url": "https://actes.ccm2.net/acte/418afa77-4d33-46b7-a892-17d6510c80fe#page=1",
+      "type": "company-filing",
+      "documentDate": "2018-12-27",
+      "filingDate": "2019-02-27",
+      "access": "read",
+      "finding": "Meeting records the partners’ shares after a usufruct ended, with updated statutes repeating the farming object and cash-and-reserves capital, and a 2018 succession notoriety act. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        10,
+        12,
+        13
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:41+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/418afa77-4d33-46b7-a892-17d6510c80fe",
+      "sha256": "3da0376c492fff7960447e87c2dfb4ed8f9f2f4467173c092b8948ab59228ee3",
+      "bytes": 1321605,
+      "pageCount": 29,
+      "screenedPages": 29,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2018-07-03",
+          "kind": "notoriety act"
+        }
+      ]
+    },
+    {
+      "id": "rsv-arnoux-2019",
+      "title": "Domaine Arnoux-Lachaux: 25 November 2019 partners’ decisions and updated statutes",
+      "url": "https://actes.ccm2.net/acte/5a29a89c-48c6-4ef4-9b25-45cce207c7a7#page=1",
+      "type": "company-filing",
+      "documentDate": "2019-11-25",
+      "filingDate": "2019-12-05",
+      "access": "read",
+      "finding": "Unanimous decisions on the management (31 October) and the registered office (25 November 2019), signed by partners including Société Familiale Lachaux (447844796), with updated statutes repeating the object of farming vineyard land the company leases or may own. No parcel schedule or lease.",
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        7,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:41+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5a29a89c-48c6-4ef4-9b25-45cce207c7a7",
+      "sha256": "e5a345dec95a9e6c6a98af8c50b3ff12ca0c38d4e3ecf53df360666229648b37",
+      "bytes": 809702,
+      "pageCount": 19,
+      "screenedPages": 19,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2019-10-31",
+          "kind": "unanimous partners’ decisions"
+        }
+      ]
+    },
+    {
+      "id": "rsv-marey-monge-2017",
+      "title": "SC de la Romanée Saint-Vivant – Domaine Marey-Monge: 28 October 2017 meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/56104469-4c17-4f1e-b6e9-874cadd12a7f#page=1",
+      "type": "company-filing",
+      "documentDate": "2017-10-28",
+      "filingDate": "2017-11-21",
+      "access": "read",
+      "finding": "The meeting adds a power to sell the company’s assets; the updated statutes reproduce the 1975 contribution to the former GFA of AC 230 (2 ha 21 a 65 ca) and AC 231 (3 ha 06 a 93 ca), to be let under long-term rural lease. No tenant or buyer is named.",
+      "reviewedPages": [
+        1,
+        2,
+        10,
+        11,
+        13
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/56104469-4c17-4f1e-b6e9-874cadd12a7f",
+      "sha256": "f599c3d62f24916087e861f61d6565f1aeaf7962c2a7397c23326b49ac0f2de3",
+      "bytes": 1648592,
+      "pageCount": 49,
+      "screenedPages": 49,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-marey-monge-reduction-2017",
+      "title": "SC Domaine Marey-Monge: 20 December 2017 capital reduction and updated statutes (filed 2018)",
+      "url": "https://actes.ccm2.net/acte/0536f146-ddf4-430b-ab62-97bfa6d40cde#page=1",
+      "type": "company-filing",
+      "documentDate": "2017-12-20",
+      "filingDate": "2018-05-17",
+      "access": "read",
+      "finding": "The capital reduction is repaid by handing partners part of the company’s vendor-credit claim on the Société Civile du Domaine de la Romanée-Conti, the balance payable by 31 January 2018; the updated statutes still reproduce the 1975 contribution of AC 230 and AC 231. The extract does not say which asset was sold.",
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        12,
+        14
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:43+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0536f146-ddf4-430b-ab62-97bfa6d40cde",
+      "sha256": "ce749ae56a981c58ba4e0d00be91dc412d1d349081f6158990324525cf705415",
+      "bytes": 1712307,
+      "pageCount": 35,
+      "screenedPages": 35,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-marey-monge-2014",
+      "title": "GFA Domaine Marey-Monge: 5 December 2014 transformation into a société civile (filed 2015)",
+      "url": "https://actes.ccm2.net/acte/62722e2a-3c17-4a0a-842f-dd58ec33de18#page=1",
+      "type": "company-filing",
+      "documentDate": "2014-12-05",
+      "filingDate": "2015-02-27",
+      "access": "read",
+      "finding": "Meeting turns the GFA into a société civile; the adopted statutes repeat the 1975 contribution of AC 230 (2 ha 21 a 65 ca) and AC 231 (3 ha 06 a 93 ca) and the object of letting them under long-term rural lease. No tenant is named.",
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        16,
+        17
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/62722e2a-3c17-4a0a-842f-dd58ec33de18",
+      "sha256": "698a831a3764333b0a7839a3fe71f1c2745ecf644e38aeaca780a1a75a11a0c5",
+      "bytes": 2146585,
+      "pageCount": 35,
+      "screenedPages": 35,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-marey-monge-1994",
+      "title": "GFA Domaine Marey-Monge: statutes updated 9 May 1994 at registration",
+      "url": "https://actes.ccm2.net/acte/662599dc-f64e-4cc3-a4c4-63a26a3ec331#page=1",
+      "type": "company-filing",
+      "documentDate": "1994-05-09",
+      "filingDate": "1994-06-20",
+      "access": "read",
+      "finding": "Statutes of the GFA formed in September 1975 and registered in May 1994. The 1975 contribution names AC 230, Romanée Saint-Vivant, 2 ha 21 a 65 ca, and AC 231, 3 ha 06 a 93 ca; the object is ownership and letting only, under long-term lease. PDF 39 grants Robert and François Neyrand authority to arrange a long-term farm lease of the contributed property to the Société Civile du Domaine de la Romanée-Conti, with duration and rent to be agreed by the agents. This names an intended tenant but is a mandate, not an executed lease or evidence of current operation.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        6,
+        39
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:44+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/662599dc-f64e-4cc3-a4c4-63a26a3ec331",
+      "sha256": "09d2498f151cf859790c1def4c6f512172ea6482b85e9f03c868ad8fa4b51846",
+      "bytes": 966310,
+      "pageCount": 42,
+      "screenedPages": 42,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-marey-monge-2022",
+      "title": "SC Domaine Marey-Monge: 2 December 2022 early dissolution",
+      "url": "https://actes.ccm2.net/acte/a6584627-7f1b-4b37-bcce-7060c5bc3de9#page=1",
+      "type": "company-filing",
+      "documentDate": "2022-12-02",
+      "filingDate": "2022-12-21",
+      "access": "read",
+      "finding": "Meeting decides the company’s early dissolution and amicable liquidation. The index lists a second, byte-identical copy (same SHA-256), screened once. No parcel or lease.",
+      "reviewedPages": [
+        1,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:43+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a6584627-7f1b-4b37-bcce-7060c5bc3de9",
+      "sha256": "e4c98f0213293dfa21873487e7b921b0298bc9eb363e15e96e4df755846fc86e",
+      "bytes": 109829,
+      "pageCount": 4,
+      "screenedPages": 4,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-cathiard-2001",
+      "title": "GFA Famille Cathiard: 6 April 2001 share transfer, share donation and manager change",
+      "url": "https://actes.ccm2.net/acte/8f80aad2-9b35-4a1f-a2de-ecd5728ba6fa#page=1",
+      "type": "company-filing",
+      "documentDate": "2001-04-06",
+      "filingDate": "2001-09-06",
+      "access": "read",
+      "finding": "Notarial share transfer among family members after a donation-partage of shares, with a change of manager and registered office. The restated asset list repeats article 9, Vosne-Romanée AL 326, Romanée Saint Vivant, 16 a 73 ca (page image checked), valued with regard to its rental situation; no tenant or lease is named.",
+      "reviewedPages": [
+        1,
+        3,
+        7,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:39+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8f80aad2-9b35-4a1f-a2de-ecd5728ba6fa",
+      "sha256": "c9cecf78c71be552dc785f6d923d27723a5eeaac27c2603361d5b8b6401f5813",
+      "bytes": 1257882,
+      "pageCount": 34,
+      "screenedPages": 34,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-cathiard-2015",
+      "title": "GFA Famille Cathiard: 1 July 2015 registered-office transfer with annexed statutes",
+      "url": "https://actes.ccm2.net/acte/39ac35d5-5cb9-4574-8801-b4100ad94f7e#page=1",
+      "type": "company-filing",
+      "documentDate": "2015-07-01",
+      "filingDate": "2015-12-11",
+      "access": "read",
+      "finding": "Extraordinary meeting moving the registered office. The annexed statutes repeat the 1996 contribution, article 9: Vosne-Romanée AL 326, Romanée Saint Vivant, 16 a 73 ca (page image checked), and require long-term letting; no tenant or lease is named.",
+      "reviewedPages": [
+        1,
+        2,
+        8,
+        12
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:39+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/39ac35d5-5cb9-4574-8801-b4100ad94f7e",
+      "sha256": "2ad45f789f7e2242d4b0e3dae82283e2402e2d624a6d2013054e44d9233c96c1",
+      "bytes": 1688784,
+      "pageCount": 32,
+      "screenedPages": 32,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-cathiard-2023",
+      "title": "GFA Famille Cathiard: statutes updated 26–27 June 2023 (filed 2024)",
+      "url": "https://actes.ccm2.net/acte/54a458e0-7446-45d8-9016-2942b55d6e4f#page=1",
+      "type": "company-filing",
+      "documentDate": "2023-06-27",
+      "filingDate": "2024-02-23",
+      "access": "read",
+      "finding": "Updated statutes after two June 2023 extraordinary meetings. Article 9 still lists Vosne-Romanée AL 326, Romanée Saint Vivant, 16 a 73 ca (page image checked), and article 3 forbids direct farming and requires long-term letting; no tenant or lease is named.",
+      "reviewedPages": [
+        1,
+        4,
+        8
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:39+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/54a458e0-7446-45d8-9016-2942b55d6e4f",
+      "sha256": "cc8f6e6c7f2d1adec5c0b8d9e8ce906ef69c8867dfd3204ef652e1d78b5c3639",
+      "bytes": 1463975,
+      "pageCount": 30,
+      "screenedPages": 30,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "otherDocumentDates": [
+        {
+          "date": "2023-06-26",
+          "kind": "extraordinary general meeting"
+        }
+      ]
+    },
+    {
+      "id": "rsv-hudelot-2021-donation",
+      "title": "GFV Hudelot-Noëllat: 18 June 2021 donation-partage of shares",
+      "url": "https://actes.ccm2.net/acte/607f48de-8386-4f48-aa87-9f4bfc02937e#page=1",
+      "type": "company-filing",
+      "documentDate": "2021-06-18",
+      "filingDate": "2021-08-10",
+      "access": "read",
+      "finding": "Notarial donation-partage of GFV shares. The asset list repeats retired AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca), Romanée Saint Vivant, and recites that the estate is let long-term under a 1972 métayage (extended, then tacitly renewed) and rural leases of 10 December 2001 and 19 December 2005. The tax declaration on PDF 22 names Alain Hudelot as tenant of the GFV’s agricultural property under those leases. The underlying lease instruments and their parcel allocations are not reproduced; this dated recital does not establish current operation.",
+      "reviewedPages": [
+        1,
+        2,
+        6,
+        14,
+        22
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:36+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/607f48de-8386-4f48-aa87-9f4bfc02937e",
+      "sha256": "79b8cc53359f9fb04e251de54b3356d623aea1283f4af19aa111cea34b8b7df6",
+      "bytes": 2718171,
+      "pageCount": 50,
+      "screenedPages": 50,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-hudelot-2021-contribution",
+      "title": "GFV Hudelot-Noëllat: 12 November 2021 contribution meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21#page=1",
+      "type": "company-filing",
+      "documentDate": "2021-11-12",
+      "filingDate": "2021-12-21",
+      "access": "read",
+      "finding": "The 12 November 2021 extraordinary meeting approves a contribution of Clos de Vougeot vines (outside this cru); the same filing contains the executed notarial contribution of 25 November 2021 (PDF 8, 20–21, 31) and statutes updated that day (PDF 33). The asset list repeats retired AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca), Romanée Saint Vivant; no tenant or lease is named for them.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        8,
+        10,
+        20,
+        21,
+        31,
+        33,
+        36
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:36+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5fabcf7e-46f5-4d8e-bc31-eaab70de6f21",
+      "sha256": "53fefeb7d83edf5c8fb62644030a8ddbc3641b473f3e8d026b74159bbd71fef4",
+      "bytes": 3001835,
+      "pageCount": 55,
+      "screenedPages": 55,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "dateNote": "documentDate is the 12 November 2021 meeting; the notarial contribution and updated statutes in the same filing are dated 25 November 2021."
+    },
+    {
+      "id": "rsv-hudelot-2021-capital",
+      "title": "GFV Hudelot-Noëllat: 19 March 2021 notarial capital increase by property contribution",
+      "url": "https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9#page=1",
+      "type": "company-filing",
+      "documentDate": "2021-03-19",
+      "filingDate": "2021-04-20",
+      "access": "read",
+      "finding": "Capital increase by contribution of Gilly-lès-Cîteaux vines and land, outside this cru. The annexed statutes repeat retired AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca), Romanée Saint Vivant; no tenant or lease is named for them.",
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        27
+      ],
+      "reviewedAt": "2026-10-08",
+      "retrievedAt": "2026-10-08T13:44:36+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1cf9b694-194a-41c0-a266-2b3e07fa69c9",
+      "sha256": "b8a6bb6689343fb0df298032fc1397be027c52a2e1f0521ab36840f04b65cf81",
+      "bytes": 2204673,
+      "pageCount": 45,
+      "screenedPages": 45,
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+    },
+    {
+      "id": "rsv-winehog-history",
+      "title": "Winehog: Romanee Saint-Vivant – history, plots and owners – new update",
+      "url": "https://winehog.org/romanee-saint-vivant-a-rising-star-in-vosne-romanee-9417/",
+      "type": "critic-research",
+      "documentDate": "2017-04-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "6172a8b0b8c55dd36fab4f0b257e04794117e75900f950a2d6087788a4b4c901",
+      "bytes": 4438487,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Section history and an owner list of ten holdings: DRC 5.2858 ha, Leroy 0.9925 ha, Louis Latour 0.7630 ha, J.-J. Confuron 0.4982 ha, Poisot 0.4899 ha, Hudelot-Noëllat 0.4777 ha, Arnoux-Lachaux 0.3450 ha, de l’Arlot 0.2518 ha, Cathiard 0.1673 ha and Dujac 0.1656 ha. It dates the DRC’s lease of the Marey-Monge section to 1966 and its purchase to 1988, whereas the filings recite a 1975 lease and DVF dates the sale of AC 230/231 to October 2017; the critic’s dates are not used. No cadastral number is printed, and map colours are not a parcel crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2021-12-30",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-winehog-wines",
+      "title": "Winehog: Romanee-Saint-Vivant – the wines, domaines and negociants",
+      "url": "https://winehog.org/romanee-saint-vivant-the-wines-the-domaines-and-the-negociants-9430/",
+      "type": "critic-research",
+      "documentDate": "2013-01-26",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "29feb35e668f65aca24cb00edfb4102cca6c1d9eeabbf985fefb17d39eef9a6e",
+      "bytes": 3006655,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Lists ten domaine bottlings with the historical section and first vintage of each, and négociant bottlings, several attributed to the Poisot plot. A bottling is not ownership or farming; no cadastral number or area is printed.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-winehog-poisot-2013",
+      "title": "Winehog: New producer on Romanee-Saint-Vivant – Domaine Poisot",
+      "url": "https://winehog.org/new-producer-on-romanee-saint-vivant-domaine-poisot-9617/",
+      "type": "critic-research",
+      "documentDate": "2013-02-10",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "b26525ba2e3bc35b546a3af6d87fd3096acefd1219b4c372c82ac6dd2d48ecee",
+      "bytes": 2935351,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Traces the Poisot holding to the 1902 inheritance division of Maison Louis Latour’s 1898 purchase (about 0.75 ha), part of which was sold to Domaine de l’Arlot in 1990, and gives 0.49 ha today; most of the crop was long sold to négociants and other domaines. No cadastral number is printed."
+    },
+    {
+      "id": "rsv-winehog-leroy",
+      "title": "Winehog: Terroir Insight: Domaine Leroy Romanee Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-domaine-leroy-romanee-saint-vivant-22642/",
+      "type": "critic-research",
+      "documentDate": "2015-02-01",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "c5249f0608004a974fe2307641ca25dc384f3702d5599d1e3eb92bff30567a20",
+      "bytes": 3537854,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Gives Domaine Leroy 0.9929 ha in two cadastral plots along the road to Les Suchots, from the 1988 purchase of the Domaine Charles Noëllat estate. No plot number is printed; the total equals AC 299 + AC 301, recorded to the provisional SCI Domaine Leroy identifier, but equal area is not a crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-winehog-hudelot",
+      "title": "Winehog: Terroir Insight: Domaine Hudelot-Noëllat Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-domaine-hudelot-noellat-romanee-saint-vivant-31744/",
+      "type": "critic-research",
+      "documentDate": "2017-04-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "c82894edddce5fffba103a56874bdf96e04cd78162833739d8520c97fa762253",
+      "bytes": 5913133,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Gives Domaine Hudelot-Noëllat 0.4777 ha in two cadastral plots between the DRC and Confuron holdings, received from the Domaine Charles Noëllat estate, presumably in 1977. No plot number is printed; the total equals the four GFV references descended from AC 271/273, but equal area is not a crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-winehog-arnoux",
+      "title": "Winehog: Terroir Insight: Arnoux-Lachaux, Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-arnoux-lachaux-romanee-saint-vivant-31954/",
+      "type": "critic-research",
+      "documentDate": "2017-05-28",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "ea6041fb5055798796ee557116556e59c3af8fb837577e17cfad11c6a047f642",
+      "bytes": 5950644,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Names cadastre no 327, 0.345 ha, as the Domaine Arnoux-Lachaux plot, bought in 1984 from the Thomas-Moillard estate after sharecropping the article dates to 1928. Number and area equal AL 327.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-winehog-latour",
+      "title": "Winehog: Terroir Insight: Louis Latour, Romanée Saint-Vivant Les Quatre Journaux",
+      "url": "https://winehog.org/terroir-insight-louis-latour-romanee-saint-vivant-35459/",
+      "type": "critic-research",
+      "documentDate": "2018-04-30",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "4392a3e12f470788e0a7b9b11d9885f0ef431723971c4686dd0e1667b713501f",
+      "bytes": 4977222,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Names cadastre AL 1, 0.7630 ha, as the Louis Latour plot (Les Quatre Journaux), bought in 1898 and unchanged since the 1902 division; number and area equal AL 1. It gives the other part of that division as 0.7417 ha, later split into the Poisot plots and the 0.2518 ha de l’Arlot plot bought in 1990."
+    },
+    {
+      "id": "rsv-winehog-dujac",
+      "title": "Winehog: Terroir Insight: Domaine Dujac, Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-dujac-romanee-saint-vivant-2-36765/",
+      "type": "critic-research",
+      "documentDate": "2018-09-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "49bbae6e37e4f06a5ab8f78e14c1783fe91bf83d1363551eeacb123e9b1d7caf",
+      "bytes": 6149104,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Names cadastre no 325, printed as 0.170 ha, as the Domaine Dujac plot in the south-east corner, acquired in 2005 from the Thomas-Moillard estate. AL 325 measures 0.1656 ha, which the article’s own owner list gives as 0.17 ha; the number is accepted as a rounded area match."
+    },
+    {
+      "id": "rsv-winehog-cathiard",
+      "title": "Winehog: Terroir Insight: Domaine Cathiard, Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-cathiard-romanee-saint-vivant-36832/",
+      "type": "critic-research",
+      "documentDate": "2018-10-11",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "2fcee32964b77cd6562422921802915e65e297cf7d7bda0da102a058e1a41b44",
+      "bytes": 6191871,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Names cadastre no 326, 0.1673 ha, as the Domaine Cathiard plot, bought in 1984 from the Thomas-Moillard estate after sharecropping the article dates to 1941. Number and area equal AL 326."
+    },
+    {
+      "id": "rsv-winehog-arlot",
+      "title": "Winehog: Terroir Insight: Domaine de l’Arlot, Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-domaine-larlot-romanee-saint-vivant-2-36918/",
+      "type": "critic-research",
+      "documentDate": "2018-10-26",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "deea0b77bfcdd04720e0a48dd6eb62f05131188f65fcb08d7b98c8fa158b5724",
+      "bytes": 4144293,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Gives the Domaine de l’Arlot plot as 0.2518 ha between the Poisot and Louis Latour plots, bought in 1990 out of the Poisot share. No plot number is printed; 0.2518 ha equals AL 328, but equal area is not a crosswalk."
+    },
+    {
+      "id": "rsv-winehog-confuron",
+      "title": "Winehog: Terroir Insight: Domaine Jean-Jacques Confuron Romanée-Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-domaine-jean-jacques-confuron-romanee-saint-vivant-38028/",
+      "type": "critic-research",
+      "documentDate": "2019-10-15",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "c3321bb761e4006f81932ec8f3c1c7ad52d2aef986ce9df7f7f636b6d770ce20",
+      "bytes": 6024713,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Names two cadastre plots, 300 and 298, together 0.4982 ha, as the Domaine J.-J. Confuron holding, received from the Domaine Charles Noëllat estate in 1988. AC 298 and AC 300 measure 4,984 m² together, 2 m² more than printed; the prior cloud pass accepted the discrepancy as a critic lead. This is not ordinary rounding at the four-decimal hectare precision of both recorded figures. The archive was not re-verified locally."
+    },
+    {
+      "id": "rsv-winehog-poisot-section",
+      "title": "Winehog: Terroir Insight: The Poisot section of Romanée Saint-Vivant",
+      "url": "https://winehog.org/terroir-insight-poisot-section-romanee-saint-vivant-38027/",
+      "type": "critic-research",
+      "documentDate": "2019-10-24",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "4f7a8ee9ed99deb21bc84471d23df5defdb8557dec02291318a6a83ece9f30c2",
+      "bytes": 3686755,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Gives the Poisot holding as 0.4899 ha in the south-west corner below Romanée-Conti and names Domaine Poisot and Domaine Follin-Arbelet as its two regular bottlers since 2010, without data on how the crop is shared. No plot number is printed."
+    },
+    {
+      "id": "rsv-winehog-drc-profile",
+      "title": "Winehog: Domaine de la Romanée-Conti – Producer Profile",
+      "url": "https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/",
+      "type": "critic-research",
+      "documentDate": "2012-09-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f59d705350f667241026335d650844067a2624ef85ffd63779e5c1b4860b5946",
+      "bytes": 2958029,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally; the repository owner elected to continue without providing an archive path.",
+      "finding": "Producer profile of the DRC’s wines and style; it prints no Romanée-Saint-Vivant area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2012-11-02",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "rsv-drc-estate",
+      "title": "Domaine de la Romanée-Conti: Romanée-Saint-Vivant",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/8/romanee-st-vivant",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:00:43Z",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/8/romanee-st-vivant",
+      "sha256": "b1655236a9b2a40af4cacfe7e71070f41bab6623b9025396f4fffe2e74e9b191",
+      "bytes": 223877,
+      "finding": "Undated estate page publishes 5.2858 ha and bottle counts from 1966. That figure equals the summed cadastral areas of AC 230 and AC 231 recorded to the DRC, but a published total is not a parcel assignment."
+    },
+    {
+      "id": "rsv-hudelot-sheet",
+      "title": "Domaine Hudelot-Noëllat: Romanée-Saint-Vivant sheet",
+      "url": "https://mobile.domaine-hudelot-noellat.com/assets/wine/Domaine_Hudelot-Noellat_Romanee-Saint-Vivant_Grand-Cru.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:21Z",
+      "retrievedFrom": "https://mobile.domaine-hudelot-noellat.com/assets/wine/Domaine_Hudelot-Noellat_Romanee-Saint-Vivant_Grand-Cru.pdf",
+      "sha256": "d96844419183e1c6d4bd46df796c6304a813e1bcec556a6080db3100fe73e6d2",
+      "bytes": 412103,
+      "finding": "Undated estate sheet (PDF metadata 2015) publishes 0.48 ha and 95-year-old vines; no cadastral references.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "rsv-latour-sheet",
+      "title": "Louis Latour: Romanée-Saint-Vivant Les Quatre Journaux sheet",
+      "url": "https://www.louislatour.com/pdf/en/romanee-saint-vivant-grand-cru-les-quatre-journaux-122.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:21Z",
+      "retrievedFrom": "https://www.louislatour.com/pdf/en/romanee-saint-vivant-grand-cru-les-quatre-journaux-122.pdf",
+      "sha256": "881599b823ce4447c3a94e83739a55e8d1c5de7bf13662f3aef0d0b72b89aa68",
+      "bytes": 807697,
+      "finding": "Undated sheet: Maison Louis Latour has owned the plot since December 1898, today 0.8 ha, after selling half of the original purchase years later. No cadastral references.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "rsv-poisot-page",
+      "title": "Poisot Père & Fils: Romanée-Saint-Vivant",
+      "url": "https://www.domaine-poisot.fr/grands-vins-de-bourgogne/romanee-saint-vivant-grand-cru.html",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:22Z",
+      "retrievedFrom": "https://www.domaine-poisot.fr/grands-vins-de-bourgogne/romanee-saint-vivant-grand-cru.html",
+      "sha256": "9ca12ba98b30d1d407980d0fdbaa8f3f6d49aea5c79034fafeab24b8b8802c84",
+      "bytes": 11241,
+      "finding": "Undated page publishes 0.49 ha; no cadastral reference or owning company."
+    },
+    {
+      "id": "rsv-dujac-sheet",
+      "title": "Domaine Dujac: Romanée-Saint-Vivant sheet",
+      "url": "https://www.dujac.com/en/pdf/36-romanee-saint-vivant-grand-cru.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:25Z",
+      "retrievedFrom": "https://www.dujac.com/en/pdf/36-romanee-saint-vivant-grand-cru.pdf",
+      "sha256": "91dcf8eb41b77d684afa1e50ed6a9fdab8094d4ed9c47fe5b7ad02cc4338787e",
+      "bytes": 1780597,
+      "finding": "Undated sheet publishes 16 a 56 ca (0.4 acre). It names no owner, lease or cadastral reference.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "rsv-follin-page",
+      "title": "Domaine Follin-Arbelet: Romanée-Saint-Vivant",
+      "url": "http://www.domaine-follin-arbelet.com/ROMANEE-SAINT-VIVANT-Grand-Cru.html",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:27Z",
+      "retrievedFrom": "http://www.domaine-follin-arbelet.com/ROMANEE-SAINT-VIVANT-Grand-Cru.html",
+      "sha256": "3240517119d8a129be351f75e4f221a8b05c466d9c72292b592f213b2776f4df",
+      "bytes": 9541,
+      "finding": "Undated page publishes 0.50 ha and says the domaine works and vinifies its wines; no cadastral reference or owner."
+    },
+    {
+      "id": "rsv-arlot-page",
+      "title": "Domaine de l'Arlot: Romanée-Saint-Vivant",
+      "url": "https://www.arlot.com/fr/vin/9/romanee-saint-vivant",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:36:28Z",
+      "retrievedFrom": "https://www.arlot.com/fr/vin/9/romanee-saint-vivant",
+      "sha256": "c6e6e49d0d33b299b28eac2645f3673ed6c87ab38eb3c3eabd8946c8ef7c57a5",
+      "bytes": 318714,
+      "finding": "Undated page: until 1990 the vines were worked by a grower from Aloxe-Corton; the first Domaine de l’Arlot vintage was 1991. No area or cadastral reference is printed."
+    },
+    {
+      "id": "rsv-bw-cathiard",
+      "title": "Becky Wasserman: Sylvain Cathiard Romanée-Saint-Vivant",
+      "url": "https://www.beckywasserman.com/domaines/sylvain-cathiard-et-fils/romanee-saint-vivant-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:37:08Z",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/sylvain-cathiard-et-fils/romanee-saint-vivant-grand-cru/",
+      "sha256": "277ad199490622cde808f54d279b1b06202bba0b8aa6f5f9eb940ab7684f9535",
+      "bytes": 51532,
+      "finding": "Exporter page publishes 0.16 ha, planted 1919. The producer has no own page; no cadastral reference."
+    },
+    {
+      "id": "rsv-bw-arnoux",
+      "title": "Becky Wasserman: Arnoux-Lachaux Romanée-Saint-Vivant",
+      "url": "https://www.beckywasserman.com/domaines/arnoux-lachaux/romanee-saint-vivant-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:37:09Z",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/arnoux-lachaux/romanee-saint-vivant-grand-cru/",
+      "sha256": "0a61e231b8189eb061a339c0dba6735b59a128b88ea1f7a9bd2207ddfa5a3a28",
+      "bytes": 58628,
+      "finding": "Exporter page publishes 0.3 ha, planted 1926. The producer site lists the wine without a sheet; no cadastral reference."
     }
   ],
   "holders": [
     {
       "holderId": "322235748",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "arlot-sci-minutes-1992",
+        "arlot-sce-2007",
+        "rne-322235748",
+        "rne-341179430"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Register and filings show AXA Millésimes as partner of the SCI and of the Domaine de l’Arlot operating company; the SCI’s 1992 minutes call that company its tenant and report the 1990 Romanée-Saint-Vivant purchase. No AL328 schedule; farming unverified."
     },
     {
       "holderId": "328972344",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rsv-arnoux-2000",
+        "rsv-arnoux-2003",
+        "rsv-arnoux-2009",
+        "rsv-arnoux-2018",
+        "rsv-arnoux-2019",
+        "rne-328972344"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "5 filings (113 pages) show cash and capitalised-reserves contributions. The formation statutes mandate an 18-year rural lease beginning in 1984 over unnamed properties, without an AL327 schedule or executed lease. Register identity only; farming unverified."
     },
     {
       "holderId": "405387101",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cathiard-gfa-1996",
+        "rsv-cathiard-2001",
+        "rsv-cathiard-2015",
+        "rsv-cathiard-2023",
+        "rne-405387101",
+        "rne-497497719"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1996 founding deed contributes AL326 with its exact area; filings of 2001, 2015 and 2024 repeat it. A partner is president of SAS Domaine Sylvain Cathiard et Fils; that provisional family link names no tenant. Farming unverified."
     },
     {
       "holderId": "438871279",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rsv-hudelot-formation-2001",
+        "rsv-hudelot-2005",
+        "rsv-hudelot-2012",
+        "rsv-hudelot-2025",
+        "rsv-hudelot-notoriety-2024",
+        "rsv-hudelot-2021-donation",
+        "rsv-hudelot-2021-contribution",
+        "rsv-hudelot-2021-capital",
+        "rne-438871279"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2001 contribution and later statutes name retired AC271 and AC273 with areas equal to today’s AC357/358 and AC359/360, which they reach only through the 2022 DFI division. The 2012 and 2021 share donations name Alain Hudelot in lease recitals; the underlying leases and current farming remain unverified."
     },
     {
       "holderId": "484070800",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rsv-nicholem-2005",
+        "rsv-nicholem-2021",
+        "rne-484070800"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Both filings (44 pages) show cash formation and a 2021 GFA requiring métayage, without AL325, a tenant or a domaine. Domaine Dujac publishes AL325’s area, but equal area is not a company crosswalk; no link asserted. Winehog’s cadastre 325 is a critic lead only."
     },
     {
       "holderId": "528291362",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rsv-vignoble-latour-2010",
+        "latour-immeubles-2011",
+        "rsv-vignoble-latour-2011",
+        "vignoble-latour-2011",
+        "rne-528291362"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2011 contribution names AL1 (76 a 30 ca) for its undivided third and recites an oral lease to the Société Civile Domaine Louis Latour. The holder is a Maison Louis Latour subsidiary; farming unverified."
     },
     {
       "holderId": "778269407",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rsv-drc-statutes-1974",
+        "rsv-drc-2018",
+        "rsv-drc-2022",
+        "rsv-drc-2024",
+        "rsv-drc-2003",
+        "rsv-marey-monge-2017",
+        "rsv-marey-monge-reduction-2017",
+        "rsv-marey-monge-2014",
+        "rsv-marey-monge-1994",
+        "rsv-marey-monge-2022",
+        "rne-778269407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "5 DRC filings give no Romanée-Saint-Vivant schedule; 1998 minutes recite a 1975 lease from GFA Marey-Monge. 5 Marey-Monge filings name AC230/231 with today’s areas and, in December 2017, a vendor-credit claim on the DRC; DVF dates a sale to October 2017. Farming unverified."
     },
     {
       "holderId": "931134381",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "memoire-de-vignes-2024",
+        "rsv-mdv-formation-2024",
+        "rsv-mdv-contribution-2024",
+        "rsv-mdv-share-sale-2024",
+        "rne-931134381"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2024 contribution names AL330 (24 a 57 ca) and the statutes an 18-year lease to SCEA du Domaine Poisot-Piguet signed the same day; a 2011 lease to an individual is also recited. Farming unverified."
     },
     {
       "holderId": "U14149307",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "name-and-seat-crosswalk",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "sci-domaine-leroy-2001",
+        "rsv-leroy-2024",
+        "rsv-leroy-sce-2001",
+        "rsv-leroy-sce-2023",
+        "rne-427469135"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Four SCI and SCE filings (99 pages) give no AC299/301 schedule; both companies were formed in 1947 by the Noëllat family and now share Leroy SA. U14149307 to SCI 427469135 stays provisional on name and seat; farming unverified."
     },
     {
       "holderId": "U21852238",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "corton-grancey-statutes",
+        "rne-427468970"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The statutes reproduce the 1972 contribution of two-thirds of AL1 (76 a 30 ca) and recite that all contributed land is let to the Société Civile Domaine Louis Latour, now to 2031. Farming unverified."
     },
     {
       "holderId": "U33201044",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "heritiers-confuron-statutes-2024",
+        "rne-934003641"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 27 September 2024 deed contributes AC298 and AC300 (areas match), subject to a 24-year lease signed that day to the SCE du Domaine Jean-Jacques Confuron (348024712). Actual operation is not stated."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "rsv-hudelot-2001-ac271-273",
+      "title": "GFV Hudelot-Noëllat: 2001 contribution of former AC 271/AC 273",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 28 June 2001 founding deed of GFV Hudelot-Noëllat, the recorded holder, contributes Romanée Saint Vivant AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca); 2005, 2012, 2021 and 2025 filings repeat them. A 2022 survey divided them into AC 357/358 and AC 359/360, whose areas sum to the printed ones; the filings name only the retired references. The 2012 and 2021 share donations name Alain Hudelot in long-term lease recitals; the underlying leases and their parcel allocations are not reproduced, and current farming is not established.",
+      "sourceIds": [
+        "rsv-hudelot-formation-2001",
+        "rsv-hudelot-2005",
+        "rsv-hudelot-2012",
+        "rsv-hudelot-2025",
+        "rsv-hudelot-2021-donation",
+        "rsv-hudelot-2021-contribution",
+        "rsv-hudelot-2021-capital",
+        "dgfip-history"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AC271",
+        "AC273"
+      ],
+      "predecessorReferences": {
+        "21714000AC0271": [
+          "21714000AC0357",
+          "21714000AC0358"
+        ],
+        "21714000AC0273": [
+          "21714000AC0359",
+          "21714000AC0360"
+        ]
+      },
+      "appNote": "Former AC 271 (17 a 84 ca) and AC 273 (29 a 93 ca) were contributed to GFV Hudelot-Noëllat in 2001; the 2022 division created today’s four references. Historical filing evidence via lineage, not current farming.",
+      "dateSourceId": "rsv-hudelot-formation-2001",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-marey-monge-ac230-231",
+      "title": "SC Domaine Marey-Monge: 1975 contribution of AC 230 and AC 231 (statutes filed 2017)",
+      "parcelIds": [
+        "21714000AC0230",
+        "21714000AC0231"
+      ],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "Updated statutes of SC de la Romanée Saint-Vivant – Domaine Marey-Monge (323426601), filed 21 November 2017, reproduce the 1975 contribution to the then GFA of AC 230 (2 ha 21 a 65 ca) and AC 231 (3 ha 06 a 93 ca), both equal to today’s areas, for letting under long-term rural lease. The DRC’s 1998 minutes recite a 26 December 1975 long-term lease from that GFA to the DRC. The 28 October 2017 meeting added a power to sell assets, and DVF records a sale of both references dated that day without parties; on 20 December 2017 the company held a vendor-credit claim on the DRC, without naming the asset sold. DGFiP lists the DRC as owner in every available year from 2019. Former owner and historical lease only; current farming is not established.",
+      "sourceIds": [
+        "rsv-marey-monge-2017",
+        "rsv-marey-monge-reduction-2017",
+        "rsv-marey-monge-2014",
+        "rsv-marey-monge-1994",
+        "rsv-marey-monge-2022",
+        "rsv-drc-statutes-1974",
+        "dvf-sales",
+        "dgfip-history"
+      ],
+      "producer": "Domaine de la Romanée-Conti",
+      "printedReferences": [
+        "AC230",
+        "AC231"
+      ],
+      "appNote": "Named with today’s area in the former owner Marey-Monge’s statutes (1975 contribution, filed 2017); the DRC’s 1998 minutes recite a 1975 long-term lease from that company. DVF dates a sale of the parcel to October 2017. Historical lease, not current farming.",
+      "dateSourceId": "rsv-marey-monge-2017",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-latour-al1",
+      "title": "Winehog: Maison Louis Latour plot, cadastre AL 1",
+      "parcelIds": [
+        "21714000AL0001"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (30 April 2018) names cadastre AL 1, 0.7630 ha, as the Maison Louis Latour plot of Les Quatre Journaux, bought in 1898. Number and area equal AL 1, which the Corton-Grancey and Vignoble Latour filings already name. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-latour"
+      ],
+      "producer": "Maison Louis Latour",
+      "printedReferences": [
+        "AL 1"
+      ],
+      "appNote": "Winehog names cadastre AL 1 (0.7630 ha, equal to this parcel) as the Maison Louis Latour plot. Not current farming.",
+      "dateSourceId": "rsv-winehog-latour",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-cathiard-326",
+      "title": "Winehog: Domaine Sylvain Cathiard et Fils plot, cadastre 326",
+      "parcelIds": [
+        "21714000AL0326"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (11 October 2018) names cadastre 326, 0.1673 ha, as the Domaine Sylvain Cathiard et Fils plot, bought in 1984 from the Thomas-Moillard estate after sharecropping the article dates to 1941. Number and area equal AL 326, which the GFA Famille Cathiard filings already name. Historical sharecropping only. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-cathiard"
+      ],
+      "producer": "Domaine Sylvain Cathiard et Fils",
+      "printedReferences": [
+        "326"
+      ],
+      "appNote": "Winehog names cadastre 326 (0.1673 ha, equal to this parcel) as the Domaine Sylvain Cathiard et Fils plot. Not current farming.",
+      "dateSourceId": "rsv-winehog-cathiard",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-arnoux-327",
+      "title": "Winehog: Domaine Arnoux-Lachaux plot, cadastre 327",
+      "parcelIds": [
+        "21714000AL0327"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (28 May 2017) names cadastre 327, 0.345 ha, as the Domaine Arnoux-Lachaux plot, bought in 1984 from the Thomas-Moillard estate after sharecropping the article dates to 1928. Number and area equal AL 327, recorded to the société civile Domaine Arnoux-Lachaux. Historical sharecropping only. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-arnoux"
+      ],
+      "producer": "Domaine Arnoux-Lachaux",
+      "printedReferences": [
+        "327"
+      ],
+      "appNote": "Winehog names cadastre 327 (0.345 ha, equal to this parcel) as the Domaine Arnoux-Lachaux plot. Not current farming.",
+      "dateSourceId": "rsv-winehog-arnoux",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-dujac-325",
+      "title": "Winehog: Domaine Dujac plot, cadastre 325",
+      "parcelIds": [
+        "21714000AL0325"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (27 September 2018) names cadastre no 325 as the Domaine Dujac plot in the south-east corner, acquired in 2005 from the Thomas-Moillard estate. It prints 0.170 ha; AL 325 measures 0.1656 ha, which the same article’s owner list gives as 0.17 ha, so the number is accepted as a rounded area match. AL 325 is recorded to NICHOLEM, which no company record links to Domaine Dujac: a critic lead, not a company link. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-dujac"
+      ],
+      "producer": "Domaine Dujac",
+      "printedReferences": [
+        "325"
+      ],
+      "appNote": "Winehog (2018) names cadastre 325 as the Domaine Dujac plot (printed 0.170 ha; this parcel is 0.1656 ha). A critic lead, not a link to the recorded holder. Not current farming.",
+      "dateSourceId": "rsv-winehog-dujac",
+      "currentFarmer": null
+    },
+    {
+      "id": "rsv-wh-confuron-298-300",
+      "title": "Winehog: Domaine Jean-Jacques Confuron plots, cadastre 300 and 298",
+      "parcelIds": [
+        "21714000AC0298",
+        "21714000AC0300"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (15 October 2019) names cadastre plots 300 and 298, together 0.4982 ha, as the Domaine J.-J. Confuron holding, received from the Domaine Charles Noëllat estate in 1988. AC 298 and AC 300 measure 0.4984 ha together; the prior cloud pass accepted the 2 m² discrepancy as a critic lead. This is not ordinary rounding at the recorded precision, and the archive was not re-verified locally. The 2024 Héritiers Confuron deed already names both references with exact areas. Not current farming.",
+      "sourceIds": [
+        "rsv-winehog-confuron"
+      ],
+      "producer": "Domaine Jean-Jacques Confuron",
+      "printedReferences": [
+        "300",
+        "298"
+      ],
+      "appNote": "Winehog (2019) names cadastre 300 and 298 (0.4982 ha together; the two parcels sum to 0.4984 ha) as the Domaine J.-J. Confuron holding. Not current farming.",
+      "dateSourceId": "rsv-winehog-confuron",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "rsv-confuron-2024",
+      "sourceId": "heritiers-confuron-statutes-2024",
+      "title": "Les Héritiers Confuron: 2024 contribution and lease",
+      "holderId": "U33201044",
+      "companySiren": "934003641",
+      "documentDate": "2024-09-27",
+      "parcelAreasM2": {
+        "21714000AC0298": 1718,
+        "21714000AC0300": 3266
+      },
+      "leaseEvidence": [
+        {
+          "kind": "executed-lease-recital",
+          "tenants": [
+            "SCE du Domaine Jean-Jacques Confuron"
+          ],
+          "tenantSiren": "348024712",
+          "signedDate": "2024-09-27",
+          "initialDurationYears": 24,
+          "pages": [
+            9,
+            10
+          ],
+          "limitation": "The lease is recited and was delivered to the GFV; its text was not reviewed."
+        }
+      ],
+      "finding": "The 27 September 2024 founding deed contributes AC 298 (17 a 18 ca) and AC 300 (32 a 66 ca), Romanée Saint Vivant (areas match), subject to the 24-year rural lease signed earlier that day to the SCE du Domaine Jean-Jacques Confuron (348024712). The deed matches the provisional rights identifier to SIREN 934003641.",
+      "appNote": "2024 deed contributes this parcel (area matches), subject to a 24-year lease signed that day to the SCE du Domaine Jean-Jacques Confuron. Actual operation is not stated.",
+      "supportingSourceIds": [],
+      "pages": [
+        5,
+        9,
+        10
+      ],
+      "printedReferences": [
+        "AC298",
+        "AC300"
+      ]
+    },
+    {
+      "id": "rsv-memoire-de-vignes-2024",
+      "sourceId": "memoire-de-vignes-2024",
+      "title": "Mémoire de Vignes: 2024 contribution and lease",
+      "holderId": "931134381",
+      "companySiren": "931134381",
+      "documentDate": "2024-07-24",
+      "parcelAreasM2": {
+        "21714000AL0330": 2457
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail à ferme",
+          "tenants": [
+            "an individual"
+          ],
+          "signedDates": [
+            "2011-04-21"
+          ],
+          "effectiveFrom": "2011-04-30",
+          "endsOn": "2029-10-31",
+          "pages": [
+            10
+          ],
+          "limitation": "Recited in the 24 July 2024 contribution deed as the lease then in place, to run to 31 October 2029; the deed does not say how it ended before the new lease."
+        },
+        {
+          "kind": "executed-lease-recital",
+          "tenants": [
+            "Société Civile d’Exploitation Agricole du Domaine Poisot-Piguet"
+          ],
+          "tenantSiren": "384069985",
+          "signedDate": "2024-07-24",
+          "initialDurationYears": 18,
+          "pages": [
+            2
+          ],
+          "limitation": "Defined in the statutes and recited in the same-day share transfer as signed just before; the lease deed itself is not filed."
+        }
+      ],
+      "finding": "The 24 July 2024 capital increase contributes AL 330 (24 a 57 ca; area matches). The contribution deed recites a 2011 lease of the land to an individual, to 31 October 2029, and a new long-term lease; the statutes define an 18-year lease of all the company’s parcels to SCEA du Domaine Poisot-Piguet (384069985), signed the same day.",
+      "appNote": "2024 statutes and deeds name this parcel (area matches) and an 18-year lease signed the same day to SCEA du Domaine Poisot-Piguet. Actual operation is not stated.",
+      "supportingSourceIds": [
+        "rsv-mdv-contribution-2024",
+        "rsv-mdv-share-sale-2024"
+      ],
+      "pages": [
+        2,
+        6,
+        7,
+        25
+      ],
+      "printedReferences": [
+        "AL330"
+      ]
+    },
+    {
+      "id": "rsv-cathiard-1996",
+      "sourceId": "cathiard-gfa-1996",
+      "title": "GFA Famille Cathiard: 1996 founding contribution",
+      "holderId": "405387101",
+      "companySiren": "405387101",
+      "documentDate": "1996-04-05",
+      "parcelAreasM2": {
+        "21714000AL0326": 1673
+      },
+      "leaseEvidence": [],
+      "finding": "The 5 April 1996 notarial founding deed contributes AL 326, Romanée Saint Vivant (16 a 73 ca; area matches). The statutes require long-term letting but name no tenant or lease.",
+      "appNote": "The 1996 founding deed names this parcel with its exact area. It names no tenant; current farming unverified.",
+      "supportingSourceIds": [
+        "rsv-cathiard-2001",
+        "rsv-cathiard-2015",
+        "rsv-cathiard-2023"
+      ],
+      "pages": [
+        9
+      ],
+      "printedReferences": [
+        "AL326"
+      ]
+    },
+    {
+      "id": "rsv-corton-grancey-1972",
+      "sourceId": "corton-grancey-statutes",
+      "title": "GFA du Domaine de Corton-Grancey: 1972 contribution of two-thirds",
+      "holderId": "U21852238",
+      "companySiren": "427468970",
+      "documentDate": "1972",
+      "parcelAreasM2": {
+        "21714000AL0001": 7630
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "signedDates": [
+            "1966-03-26"
+          ],
+          "effectiveFrom": "1966-01-01",
+          "durationYears": 25,
+          "pages": [
+            18,
+            19
+          ],
+          "limitation": "The statutes recite that all contributed land is let under the 1966 lease, renewed in 1998 and in 2013 to 31 October 2031; the renewal deeds are not filed. The GFA holds undivided two-thirds; the other third is Vignoble Latour’s."
+        }
+      ],
+      "finding": "The statutes reproduce the 1972 founding contribution of undivided two-thirds of AL 1, Romanée Saint Vivant (76 a 30 ca; area matches), and list it again in the current patrimony. All contributed land is recited as let to the Société Civile Domaine Louis Latour (778159715).",
+      "appNote": "The GFA’s statutes name this parcel with its exact area (two-thirds undivided, 1972) and recite a lease of all its land to the Société Civile Domaine Louis Latour. Actual operation is not stated.",
+      "supportingSourceIds": [],
+      "pages": [
+        7,
+        17,
+        18,
+        19
+      ],
+      "printedReferences": [
+        "AL1"
+      ]
+    },
+    {
+      "id": "rsv-vignoble-latour-2011",
+      "sourceId": "rsv-vignoble-latour-2011",
+      "title": "Vignoble Latour: 2011 contribution of one-third",
+      "holderId": "528291362",
+      "companySiren": "528291362",
+      "documentDate": "2011-09-28",
+      "parcelAreasM2": {
+        "21714000AL0001": 7630
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-oral-lease-recital",
+          "tenants": [
+            "Société Civile Domaine Louis Latour"
+          ],
+          "tenantSiren": "778159715",
+          "pages": [
+            14
+          ],
+          "limitation": "The deed recites an oral lease since each parcel’s acquisition; no written lease or current season is filed."
+        }
+      ],
+      "finding": "The 28 September 2011 deed contributes Maison Louis Latour’s undivided one-third of AL 1 (76 a 30 ca; area matches) to Vignoble Latour and recites an oral lease of the land to the Société Civile Domaine Louis Latour (778159715).",
+      "appNote": "The 2011 deed names this parcel with its exact area (one-third undivided) and recites an oral lease to the Société Civile Domaine Louis Latour. Actual operation is not stated.",
+      "supportingSourceIds": [
+        "vignoble-latour-2011"
+      ],
+      "pages": [
+        6,
+        7,
+        14
+      ],
+      "printedReferences": [
+        "AL1"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "rsv-drc",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 5.2858,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-drc-estate",
+        "rsv-winehog-history"
+      ],
+      "finding": "Undated estate page gives 5.2858 ha, equal to the summed cadastral areas of AC 230 and AC 231 recorded to the DRC. Census evidence only; no farming season inferred. Winehog’s 2017 owner list gives the same figure.",
+      "producerHolderIds": [
+        "778269407"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "rsv-leroy",
+      "producer": "Domaine Leroy",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.9929,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "rsv-winehog-leroy",
+        "rsv-winehog-history"
+      ],
+      "finding": "Winehog (2015) gives 0.9929 ha in two plots without numbers, from the 1988 purchase of the Domaine Charles Noëllat estate; its 2017 owner list gives 0.9925 ha. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "U14149307"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.9925,
+          "sourceId": "rsv-winehog-history",
+          "note": "Winehog 2017 owner list."
+        }
+      ]
+    },
+    {
+      "id": "rsv-hudelot",
+      "producer": "Domaine Hudelot-Noëllat",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.48,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-hudelot-sheet",
+        "rsv-winehog-hudelot"
+      ],
+      "finding": "Undated estate sheet gives 0.48 ha. The four GFV references descended from AC 271/273 measure 0.4777 ha; no parcel assignment inferred.",
+      "producerHolderIds": [
+        "438871279"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.4777,
+          "sourceId": "rsv-winehog-hudelot",
+          "note": "Winehog 2017; printed without plot numbers."
+        }
+      ]
+    },
+    {
+      "id": "rsv-latour",
+      "producer": "Maison Louis Latour",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.8,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "rsv-latour-sheet",
+        "rsv-winehog-latour"
+      ],
+      "finding": "Undated sheet: owned since 1898, today 0.8 ha (Les Quatre Journaux). AL 1 (0.7630 ha) is recorded to Vignoble Latour and the Corton-Grancey GFA jointly; the published total is not a parcel crosswalk.",
+      "producerHolderIds": [
+        "528291362",
+        "U21852238"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.763,
+          "sourceId": "rsv-winehog-latour",
+          "note": "Winehog 2018, printed with cadastre AL 1; the article disputes the house’s 0.80 ha."
+        }
+      ]
+    },
+    {
+      "id": "rsv-confuron",
+      "producer": "Domaine Jean-Jacques Confuron",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.4982,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-winehog-confuron",
+        "rsv-winehog-history"
+      ],
+      "finding": "Winehog (2019) gives 0.4982 ha in plots printed as 300 and 298 and says the domaine owns them; the 2024 deed records GFV Les Héritiers Confuron as owner and recites a lease to the SCE du Domaine Jean-Jacques Confuron, so the relation is left unstated. No parcel assignment or farming season inferred.",
+      "producerHolderIds": [
+        "U33201044"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "rsv-poisot",
+      "producer": "Poisot Père & Fils",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.49,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-poisot-page",
+        "rsv-winehog-poisot-section"
+      ],
+      "finding": "Undated estate page gives 0.49 ha. It names no company or parcel; the Mémoire de Vignes lease names a different company (SCEA du Domaine Poisot-Piguet), so no holder is tied to this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.4899,
+          "sourceId": "rsv-winehog-poisot-section",
+          "note": "Winehog 2019; printed without plot numbers."
+        }
+      ]
+    },
+    {
+      "id": "rsv-dujac",
+      "producer": "Domaine Dujac",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.1656,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-dujac-sheet",
+        "rsv-winehog-dujac"
+      ],
+      "finding": "Undated sheet gives 16 a 56 ca. That equals the cadastral area of AL 325, recorded to NICHOLEM, but equal area is not a parcel crosswalk and no company record or filing links NICHOLEM to Domaine Dujac.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.17,
+          "sourceId": "rsv-winehog-dujac",
+          "note": "Winehog 2018 prints 0.170 ha with cadastre no 325; its 2019 owner list gives 0.1656 ha."
+        }
+      ]
+    },
+    {
+      "id": "rsv-follin-arbelet",
+      "producer": "Domaine Follin-Arbelet",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.5,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-follin-page",
+        "rsv-winehog-poisot-section"
+      ],
+      "finding": "Undated estate page gives 0.50 ha and says the domaine works and vinifies its wines. No owner, company or parcel is named. Winehog (2019) names Follin-Arbelet as one of two regular bottlers from the 0.4899 ha Poisot plot, so this total may describe the same vines as the Poisot holding.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "rsv-arlot",
+      "producer": "Domaine de l'Arlot",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.2518,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-winehog-arlot",
+        "rsv-arlot-page",
+        "arlot-sci-minutes-1992"
+      ],
+      "finding": "Winehog (2018) gives 0.2518 ha, bought in 1990. The estate page gives no area; it says another grower worked the vines until 1990 and the first domaine vintage was 1991. The SCI’s 1992 minutes report the parcel’s purchase in 1990.",
+      "producerHolderIds": [
+        "322235748"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "rsv-cathiard",
+      "producer": "Domaine Sylvain Cathiard et Fils",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.16,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-bw-cathiard",
+        "rsv-winehog-cathiard"
+      ],
+      "finding": "Exporter page gives 0.16 ha (vines planted 1919); the GFA’s 1996 contribution of AL 326 is 16 a 73 ca. No parcel assignment inferred.",
+      "producerHolderIds": [
+        "405387101"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.1673,
+          "sourceId": "rsv-winehog-cathiard",
+          "note": "Winehog 2018, printed with cadastre no 326."
+        }
+      ]
+    },
+    {
+      "id": "rsv-arnoux-lachaux",
+      "producer": "Domaine Arnoux-Lachaux",
+      "namedAreas": [
+        "ROMANEE SAINT-VIVANT"
+      ],
+      "publishedAreaHa": 0.3,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "rsv-bw-arnoux",
+        "rsv-winehog-arnoux"
+      ],
+      "finding": "Exporter page gives 0.3 ha (vines planted 1926); AL 327 recorded to the société civile measures 0.3450 ha. No parcel assignment inferred.",
+      "producerHolderIds": [
+        "328972344"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.345,
+          "sourceId": "rsv-winehog-arnoux",
+          "note": "Winehog 2017, printed with cadastre no 327."
+        }
+      ]
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "All eleven holders’ free filing indexes and official registry records were checked; 45 selected filings were downloaded and all 1,686 pages screened. This is a bounded selection of formation, contribution, donation, transformation and recent statutes, not every filing ever deposited.",
+    "NICHOLEM (AL325): both filings name no parcel, tenant or domaine. Domaine Dujac publishes 16 a 56 ca, equal to AL325’s cadastral area, but equal area is not a company crosswalk; no company link is asserted. Winehog’s 2018 Dujac article names cadastre 325 as the Dujac plot, printed as 0.170 ha and accepted as a rounded match; that is a critic candidate for AL325, not a company link or farming evidence.",
+    "AL329 has no legal-entity right; DFI places it with AL328 and AL330 in the 1990 division of AL2. Published Poisot (0.49 ha) and Follin-Arbelet (0.50 ha) totals name no parcel; private holdings are not researched.",
+    "U14149307 to SCI Domaine Leroy 427469135 remains provisional on name and seat; no reviewed filing names AC299 or AC301. domaine-leroy.fr, reached by redirect from domaineleroy.com, publishes 0.9929 ha, but its provenance could not be verified (recently registered, no legal notice), so it is not used. Winehog’s 2015 article gives the same 0.9929 ha in two unnumbered plots; that feeds the census only.",
+    "GFA Famille Cathiard to Domaine Sylvain Cathiard et Fils is a provisional family-holding lead on a shared recorded officer; no filing names a tenant for AL326.",
+    "Hudelot’s AC271/AC273 reach AC357–AC360 only through the 2022 DFI division; no reviewed filing prints the current references, so they are not exact filing matches.",
+    "No DRC filing names AC230 or AC231; only the former owner Marey-Monge’s statutes do. The 26 December 1975 lease recited in the DRC’s 1998 minutes and the October 2017 sale deed (DVF publishes no parties) are unreviewed. Winehog’s 2017 history dates the DRC’s lease to 1966 and its purchase to 1988; those dates conflict with the filings and DVF and are not used.",
+    "The Confuron, Poisot-Piguet, Corton-Grancey and Vignoble Latour leases are recited, not filed; original instruments, renewals and current seasons are unreviewed. How Mémoire de Vignes’ 2011 lease to an individual ended is not stated.",
+    "Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for all eleven recorded holders; both returned HTTP 403. Filings or accounts available only there, including deposit dates missing from the free index for the 2024 Mémoire de Vignes deeds, remain unverified.",
+    "All 13 Winehog archives were reviewed in the prior cloud pass. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; the recorded archive hashes, printed numbers, areas and historical claims were not independently checked. Existing critic leads remain prior-pass findings. The recorded Confuron total (0.4982 ha) differs by 2 m² from the cadastral sum (0.4984 ha); this is not ordinary rounding at that precision. Owner totals, maps and history are not parcel crosswalks.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for every parcel; paid SPF copies and outreach remain Tier 3."
+  ],
+  "unmatchedPrintedReferences": [],
+  "holderLinks": "shared"
 }

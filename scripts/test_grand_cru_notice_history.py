@@ -1,12 +1,149 @@
 """A printed notice reference needs a unique commune/prefix match and dated scope."""
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
-from build_grand_cru_notice_history import match_printed_reference, normalized_reference, query_reviewed
+from build_grand_cru_notice_history import (covered_by_curated_review, curated_page_reviews, load_availability, match_printed_reference,
+                                            normalized_reference, query_reviewed)
 from grand_cru_filiation import parse_dfi, trace_ancestry
 from test_grand_cru_filiation import pair
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_rejected_ocr_hint_clears_only_the_reviewed_bytes_page_and_reference_without_an_event(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image',
+                  'rejectedReferenceHints': {reference: 'Printed BI158 belongs to Marsannay-la-Côte, not Gevrey BN58.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        reviews = curated_page_reviews(curation)
+        notice = {'bulletin': 'bfc-2021-006', 'firstPage': 43, 'lastPage': 45}
+        bulletin = {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, {'sha256': 'b' * 64}, [reference], reviews))
+        self.assertFalse(covered_by_curated_review({**notice, 'firstPage': 46, 'lastPage': 47}, bulletin, [reference], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, [reference, '21295000BN0059'], reviews))
+        self.assertEqual(curation['exactParcelEvents'], [])
+        self.assertEqual(reviews[0]['rejectedReferenceHints'], review['rejectedReferenceHints'])
+
+    def test_rejected_hints_require_explicit_image_review_and_cannot_also_be_assigned(self):
+        reference = '21295000BN0058'
+        review = {'sourceId': 'bouvier', 'bulletin': 'bfc-2021-006', 'sha256': 'a' * 64,
+                  'pages': [44], 'reviewMethod': 'page-image', 'rejectedReferenceHints': {reference: 'Wrong commune.'}}
+        curation = {'exactParcelEvents': [], 'noticeReview': [review],
+                    'sources': [{'id': 'bouvier', 'type': 'government-notice', 'url': 'https://example.gov/bulletin.pdf'}]}
+        for change in [{'reviewMethod': 'ocr'}, {'sha256': ''}, {'pages': []},
+                       {'rejectedReferenceHints': {'BN58': 'Wrong commune.'}}, {'rejectedReferenceHints': {reference: ' '}}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                curated_page_reviews({**curation, 'noticeReview': [{**review, **change}]})
+        with self.assertRaisesRegex(ValueError, 'both assigned and rejected'):
+            curated_page_reviews({**curation, 'exactParcelEvents': [{'sourceId': 'bouvier', 'parcelIds': [reference]}]})
+
+    def test_charmes_rejected_bouvier_ocr_never_becomes_a_reviewed_parcel_record(self):
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/charmes-chambertin/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-006:p43', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+        self.assertEqual({r['originalRecord']['status'] for r in history['reviewedMatches']}, {'refused'})
+        self.assertFalse(any('21295000BN0058' in r['matchedReferenceIds'] for r in history['reviewedMatches']))
+
+    def test_already_reviewed_notices_are_not_pending_review(self):
+        # Michel Gros (bfc-2022-101:p350) was image-reviewed; it must not also be listed as an unreviewed candidate.
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/echezeaux/notice-history.json').read_text(encoding='utf-8'))
+        reviewed = {m['originalRecord'].get('noticeId') for m in history['reviewedMatches']}
+        self.assertIn('bfc-2022-101:p350', reviewed)
+        self.assertIn('bfc-2022-101:p350', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertFalse({c['noticeId'] for c in history['unreviewedCandidates']} & reviewed)
+        self.assertEqual(history['coverage']['unreviewedSearchCandidates'], len(history['unreviewedCandidates']))
+
+    def test_cru_curation_page_review_covers_only_the_same_bulletin_page_and_references(self):
+        # Lambrays (bfc-2024-008:p82, pages 82–84) was image-reviewed on page 83 in the Clos de Vougeot curation.
+        review = {'bulletin': 'bfc-2024-008', 'sha256': 'a' * 64, 'pages': [83], 'references': {'217160000A0037'}}
+        notice = {'bulletin': 'bfc-2024-008', 'firstPage': 82, 'lastPage': 84}
+        bulletin = {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, ['217160000A0037'], [review]))
+        # Different bytes, no page overlap, an unassigned reference or an unpaged index stay pending review.
+        self.assertFalse(covered_by_curated_review(notice, {'sha256': 'b' * 64}, ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review({**notice, 'firstPage': 85, 'lastPage': 86}, bulletin,
+                                                   ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, ['217160000A0037', '217160000A0038'], [review]))
+        self.assertFalse(covered_by_curated_review({'bulletin': 'bfc-2024-008'}, bulletin, ['217160000A0037'], [review]))
+        self.assertFalse(covered_by_curated_review(notice, None, ['217160000A0037'], [review]))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/clos-de-vougeot/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2024-008:p82', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+
+    def test_page_review_can_reject_matched_references_without_an_event(self):
+        # Girard (bfc-2021-146:p36) prints Chambolle A139, retired by DFI in 1995: read, rejected, never an event.
+        curation = {'exactParcelEvents': [], 'sources': [{'id': 'girard-2021', 'type': 'government-event', 'url': 'https://example.test/b.pdf'}],
+                    'noticeReview': [
+            {'sourceId': 'girard-2021', 'bulletin': 'bfc-2021-146', 'sha256': 'a' * 64, 'pages': [37], 'reviewMethod': 'page-image',
+             'rejectedReferenceHints': {'211330000A0139': 'Retired by DFI in 1995.', '21133000AN0037': 'Printed under Savigny.'}}]}
+        reviews = curated_page_reviews(curation)
+        notice, bulletin = {'bulletin': 'bfc-2021-146', 'firstPage': 36, 'lastPage': 38}, {'sha256': 'a' * 64}
+        self.assertTrue(covered_by_curated_review(notice, bulletin, ['211330000A0139', '21133000AN0037'], reviews))
+        self.assertFalse(covered_by_curated_review(notice, bulletin, ['211330000A0139', '211330000A0140'], reviews))
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/musigny/notice-history.json').read_text(encoding='utf-8'))
+        self.assertIn('bfc-2021-146:p36', history['coverage']['searchMatchesAlreadyReviewed'])
+        self.assertEqual((history['unreviewedCandidates'], history['reviewedMatches']), ([], []))
+
+    def test_republished_act_is_covered_by_the_original_event(self):
+        # Lambrays dossier 2021-061 appears in bfc-2021-096 and again in bfc-2021-128 under another act ID.
+        curation = {'exactParcelEvents': [{'sourceId': 'first', 'parcelIds': ['21442000AP0105']}],
+                    'sources': [{'id': 'first'}, {'id': 'repeat'}], 'noticeReview': [
+            {'sourceId': 'first', 'bulletin': 'b1', 'sha256': 'a' * 64, 'pages': [258], 'reviewMethod': 'page-image'},
+            {'sourceId': 'repeat', 'repeatOf': 'first', 'bulletin': 'b2', 'sha256': 'b' * 64, 'pages': [139], 'reviewMethod': 'page-image'}]}
+        reviews = curated_page_reviews(curation)
+        self.assertTrue(covered_by_curated_review({'bulletin': 'b2', 'firstPage': 138, 'lastPage': 140}, {'sha256': 'b' * 64},
+                                                  ['21442000AP0105'], reviews))
+        with self.assertRaises(ValueError):  # a repeat must point at a reviewed act with an event
+            curated_page_reviews({**curation, 'noticeReview': [{**curation['noticeReview'][1], 'repeatOf': 'repeat'}]})
+        root = Path(__file__).resolve().parents[1]
+        history = json.loads((root / 'docs/research/clos-des-lambrays/notice-history.json').read_text(encoding='utf-8'))
+        self.assertEqual(sorted(history['coverage']['searchMatchesAlreadyReviewed']), ['bfc-2021-096:p257', 'bfc-2021-128:p138'])
+        self.assertEqual(history['unreviewedCandidates'], [])
+
+    def test_dated_retry_preserves_unsearched_years_and_requires_its_report_hash(self):
+        audit = load_availability()
+        self.assertEqual(audit['checkedAt'], '2026-10-04')
+        self.assertEqual(set(audit['departments']), {'21', '89'})
+        for department in audit['departments'].values():
+            retry = department['acquisitionRetry']
+            self.assertEqual(retry['downloadedPDFs'], 0)
+            self.assertEqual(retry['imageReviewedPages'], 0)
+            self.assertTrue(department['unsearchedIntervals'])
+        # The live retry obtained nothing; Yonne's index comes only from archived captures.
+        self.assertEqual([r['corpus'] for r in audit['departments']['89']['obtainedIndexRanges']], ['departmental-yonne-archive'])
+        for department in audit['departments'].values():
+            archive = department['archiveAcquisition']
+            self.assertTrue(any(year['noCapture'] for year in archive['publicationYears']))
+            self.assertIn('Internet Archive', archive['source'])
+        changed_retry = json.loads(json.dumps(audit))
+        changed_retry['departments']['21']['archiveRetry']['sha256'] = '0' * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'changed-retry.json'
+            path.write_text(json.dumps(changed_retry), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'acquisition report hash changed'):
+                load_availability(path)
+        changed = json.loads(json.dumps(audit))
+        changed['departments']['21']['archiveAcquisition']['sha256'] = '0' * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'changed-archive.json'
+            path.write_text(json.dumps(changed), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'acquisition report hash changed'):
+                load_availability(path)
+        audit['departments']['89']['acquisitionRetry']['sha256'] = '0' * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'changed-audit.json'
+            path.write_text(json.dumps(audit), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'acquisition report hash changed'):
+                load_availability(path)
+
     def test_normalization_preserves_section_identity_and_rejects_other_text(self):
         self.assertEqual(normalized_reference(' D 327'), '0D0327')
         self.assertEqual(normalized_reference('AB0001'), 'AB0001')
@@ -30,6 +167,20 @@ class NoticeHistoryTests(unittest.TestCase):
         self.assertEqual(result['contextPaths'][0]['referencePath'], ['212670000D0736', '212670000D0327'])
         self.assertIsNone(result['currentFarmer'])
         self.assertEqual(result['contextPaths'][0]['assignment'], 'unassigned-context')
+
+    def test_unresolved_act_date_withholds_direct_and_ancestor_assignment(self):
+        # RAA n° 4 of 31 January 2013 prints a decision dated "3 décembre 2013": no chronology check is possible.
+        parsed = parse_dfi(pair(196, [' D0327'], [' D0736', ' D0737'], '19910122'), department_code='210', insee_department='21')
+        ancestry = trace_ancestry(['212670000D0736'], parsed['events'], geometry_as_of='2026-06-01')
+        current = {'communeCode': '21267', 'reference': 'D0736', 'printedReference': 'D 736', 'documentDate': None}
+        result = query_reviewed(current, {'212670000D0736'}, {'212670000D0736'}, ancestry, parsed['events'])
+        self.assertEqual(result['directCurrentParcelIds'], [])
+        self.assertEqual(result['directMatchWithheld'], 'notice-act-date-unresolved')
+        former = {**current, 'reference': 'D0327', 'printedReference': 'D 327'}
+        result = query_reviewed(former, {'212670000D0327', '212670000D0736'}, {'212670000D0736'}, ancestry, parsed['events'])
+        self.assertEqual({p['assignment'] for p in result['contextPaths']}, {'unassigned-context'})
+        self.assertIn('notice-act-date-unresolved', result['contextPaths'][0]['qualifications'])
+        self.assertNotIn('directMatchWithheld', result)
 
     def test_collective_commune_table_does_not_assign_a_current_parcel(self):
         record = {'communeCode': '21267', 'reference': 'D0665', 'printedReference': 'D665',

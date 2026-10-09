@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-273",
+  "inputs": {
+    "parcelSnapshotSha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+    "history": "docs/research/batard-montrachet/rights-history.json",
+    "indexes": [
+      {
+        "path": "docs/research/bfc-bulletins/reviewed-parcels.json",
+        "sha256": "d56310e23980f3d0d2025b9f0f6e77de774530f2e72fdbd2eb11241bfc4979fe"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/notices.json",
+        "sha256": "92e225644bbe6a21b684cc4607886d461d84bca9b43b6a3d66c8d791cc261a06"
+      },
+      {
+        "path": "docs/research/bfc-bulletins/coverage.json",
+        "sha256": "445ea3682fb776e5338ee60165af8ccc008f6c1405dc3302670ec48d7641b11d"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/reviewed-parcels.json",
+        "sha256": "74476f9c4445fbd2e1a347f0c4027d8ba782d269e35b66c0a71d553eeb8cf1b6"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/notices.json",
+        "sha256": "3282f48528afaa6e182d9df95efe4088b233a048805397594875ca08cac3ea89"
+      },
+      {
+        "path": "docs/research/cote-dor-bulletins/index/coverage.json",
+        "sha256": "450dbab0abd77348ba82bef3cbd90c64fe0e323c90b3b35fdab0675ea1d28a34"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/reviewed-parcels.json",
+        "sha256": "02ee9df94a1fb4664b8d0b0c488c916162aa9dd50968b10832657f0296215a03"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/notices.json",
+        "sha256": "4274aca05d2fd516c25e1e97888c14c41c8ef2059036bab27a0f60d71526c374"
+      },
+      {
+        "path": "docs/research/earlier-bulletins/cote-dor/index/coverage.json",
+        "sha256": "5a522ba2851c3e8175ece1202f061f727b438bc0b10702bf5b632b846a653d54"
+      },
+      {
+        "path": "docs/research/batard-montrachet/curation.json",
+        "sha256": "3fe1881959ea4944addf34108b99ce26aacc9616553db76f52c1229f99c64ef0"
+      }
+    ]
+  },
+  "reachableReferencesQueried": [
+    "21150000AE0038",
+    "21150000AE0039",
+    "21150000AE0040",
+    "21150000AE0041",
+    "21150000AE0042",
+    "21150000AE0043",
+    "21150000AE0045",
+    "21150000AE0046",
+    "21150000AE0047",
+    "21150000AE0048",
+    "21150000AE0049",
+    "21150000AE0050",
+    "21150000AE0051",
+    "21150000AE0052",
+    "21150000AE0053",
+    "21150000AE0054",
+    "21150000AE0055",
+    "21150000AE0057",
+    "21150000AE0058",
+    "21150000AE0059",
+    "21150000AE0060",
+    "21150000AE0061",
+    "21150000AE0062",
+    "21150000AE0063",
+    "21150000AE0065",
+    "21150000AE0066",
+    "21150000AE0068",
+    "21150000AE0069",
+    "21150000AE0070",
+    "21150000AE0071",
+    "21150000AE0072",
+    "21150000AE0073",
+    "21150000AE0074",
+    "21150000AE0075",
+    "21150000AE0076",
+    "21150000AE0135",
+    "21150000AE0136",
+    "21150000AE0137",
+    "21150000AE0138",
+    "21150000AE0147",
+    "21150000AE0148",
+    "21150000AE0149",
+    "21150000AE0150",
+    "21150000AE0157",
+    "21150000AE0158",
+    "21150000AE0159",
+    "21150000AE0160",
+    "21150000AE0170",
+    "21150000AE0171",
+    "21150000AE0174",
+    "21150000AE0175",
+    "21150000AE0176",
+    "21150000AE0177",
+    "21150000AE0178",
+    "21150000AE0183",
+    "21150000AE0184",
+    "21150000AE0201",
+    "21150000AE0202",
+    "21150000AE0203",
+    "21150000AE0204",
+    "21150000AE0205",
+    "21150000AE0206",
+    "21150000AE0207",
+    "21512000AI0001",
+    "21512000AI0002",
+    "21512000AI0004",
+    "21512000AI0005",
+    "21512000AI0007",
+    "21512000AI0008",
+    "21512000AI0009",
+    "21512000AI0012",
+    "21512000AI0013",
+    "21512000AI0014",
+    "21512000AI0015",
+    "21512000AI0016",
+    "21512000AI0017",
+    "21512000AI0019",
+    "21512000AI0111",
+    "21512000AI0112",
+    "21512000AI0113",
+    "21512000AI0120",
+    "21512000AI0121",
+    "21512000AI0124",
+    "21512000AI0125",
+    "21512000AI0126",
+    "21512000AI0127",
+    "21512000AI0134",
+    "21512000AI0135",
+    "21512000AI0136",
+    "21512000AI0137",
+    "21512000AI0138",
+    "21512000AI0144",
+    "21512000AI0145",
+    "21512000AI0146",
+    "21512000AI0147",
+    "21512000AI0148",
+    "21512000AI0149",
+    "21512000AI0153",
+    "21512000AI0154",
+    "21512000AI0159",
+    "21512000AI0160",
+    "21512000AI0166",
+    "21512000AI0167",
+    "21512000AI0168",
+    "21512000AI0170"
+  ],
+  "reviewedMatches": 2,
+  "unreviewedSearchCandidates": 0,
+  "previouslyImageReviewedSearchMatches": [
+    "bfc-2019-013:p44"
+  ],
+  "rawOcrReferenceHintHits": [
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2019-013:p44",
+      "matchedReferenceSuffixes": [
+        "AI0015"
+      ],
+      "communesMentioned": [
+        "21231",
+        "21512",
+        "21712"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": true
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-084:p16",
+      "matchedReferenceSuffixes": [
+        "AE0043"
+      ],
+      "communesMentioned": [
+        "21037",
+        "21231",
+        "21412",
+        "21495"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2021-086:p67",
+      "matchedReferenceSuffixes": [
+        "AE0147"
+      ],
+      "communesMentioned": [
+        "21071",
+        "21231",
+        "21361"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-033:p82",
+      "matchedReferenceSuffixes": [
+        "AE0071"
+      ],
+      "communesMentioned": [
+        "21108",
+        "21122",
+        "21231",
+        "21257",
+        "21307",
+        "21431"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-101:p358",
+      "matchedReferenceSuffixes": [
+        "AE0049"
+      ],
+      "communesMentioned": [
+        "21054",
+        "21231",
+        "21412",
+        "21712"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    },
+    {
+      "indexId": "regional-bfc-cote-dor",
+      "noticeId": "bfc-2022-101:p364",
+      "matchedReferenceSuffixes": [
+        "AE0060"
+      ],
+      "communesMentioned": [
+        "21054",
+        "21231",
+        "21412",
+        "21641",
+        "21712"
+      ],
+      "farmStructures": true,
+      "mentionsCruCommune": false
+    }
+  ],
+  "pageImageReviews": [
+    {
+      "sourceId": "boillot-refusal-2019",
+      "bulletin": "bfc-2019-013",
+      "sha256": "8cec43b75540169a15bb88120a5ca44a16afe37ef015bcd2512dbcdb8b11a073",
+      "pages": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "reviewMethod": "page-image",
+      "finding": "Read all six indexed page images rendered by Poppler. Page 44 heading identifies the refusal; page 45 identifies the applicant and previous operator; page 46 Article 1 names 21512 AI15 (0 ha 32 a 23 ca), AK16, AM19 and AM11 and explicitly refuses cultivation; page 47 stamps 7 February 2019; page 48 is blank and page 49 starts an unrelated Haute-Saône act. Only AI15 is assigned within this cru. No authorisation, current farmer or outcome of a later appeal is inferred."
+    }
+  ],
+  "unassignedReviewedReferences": [
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-005:p82:bohrmann",
+        "actId": null,
+        "documentDate": "2009-12-16",
+        "printedDate": "16 décembre 2009",
+        "publicationDate": "2010-01-28",
+        "applicant": "SCEA DOMAINE BOHRMANN",
+        "previousOperator": null,
+        "communeCode": "21512",
+        "printedCommune": "PULIGNY MOONTRACHET",
+        "printedReference": "AB 137",
+        "reference": "AB0137",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          82
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-005:p82:bohrmann",
+        "actId": null,
+        "documentDate": "2009-12-16",
+        "printedDate": "16 décembre 2009",
+        "publicationDate": "2010-01-28",
+        "applicant": "SCEA DOMAINE BOHRMANN",
+        "previousOperator": null,
+        "communeCode": "21512",
+        "printedCommune": "PULIGNY MOONTRACHET",
+        "printedReference": "AB 138",
+        "reference": "AB0138",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          82
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Puligny is printed MOONTRACHET in Article 1 and correctly in the heading. Saint-Aubin numbers printed with a slash (for example 1365/1366) are kept as printed and not expanded. No previous operator is named."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2010-022:p50:bachelet",
+        "actId": null,
+        "documentDate": "2010-04-28",
+        "printedDate": "28 avril 2010",
+        "publicationDate": "2010-06-01",
+        "applicant": "EARL BACHELET Vincent",
+        "previousOperator": "DOMAINE René TARDY & Fils à NUITS-SAINT-GEORGES",
+        "communeCode": "21512",
+        "printedCommune": "PULIGNY-MONTRACHET",
+        "printedReference": "AP 145",
+        "reference": "AP0145",
+        "status": "authorised",
+        "areaHa": 0.3886,
+        "sourcePages": [
+          50,
+          51
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Heading on page 50, Article 1 on page 51. Single printed reference."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2013-004:p60:eugenie",
+        "actId": null,
+        "documentDate": null,
+        "printedDate": "3 décembre 2013",
+        "publicationDate": "2013-01-31",
+        "applicant": "SCEA DOMAINE EUGENIE",
+        "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+        "communeCode": "21150",
+        "printedCommune": "CHASSAGNE MONTRACHET",
+        "printedReference": "AE 172",
+        "reference": "AE0172",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          60
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2013-004:p60:eugenie",
+        "actId": null,
+        "documentDate": null,
+        "printedDate": "3 décembre 2013",
+        "publicationDate": "2013-01-31",
+        "applicant": "SCEA DOMAINE EUGENIE",
+        "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+        "communeCode": "21150",
+        "printedCommune": "CHASSAGNE MONTRACHET",
+        "printedReference": "AH 217",
+        "reference": "AH0217",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          60
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    },
+    {
+      "originalRecord": {
+        "noticeId": "cote-dor-2013-004:p60:eugenie",
+        "actId": null,
+        "documentDate": null,
+        "printedDate": "3 décembre 2013",
+        "publicationDate": "2013-01-31",
+        "applicant": "SCEA DOMAINE EUGENIE",
+        "previousOperator": "SCEA du DOMAINE du CHATEAU DE PULIGNY MONTRACHET à PULIGNY MONTRACHET",
+        "communeCode": "21150",
+        "printedCommune": "CHASSAGNE MONTRACHET",
+        "printedReference": "AH 218",
+        "reference": "AH0218",
+        "status": "authorised",
+        "areaHa": null,
+        "sourcePages": [
+          60
+        ],
+        "reviewedAt": "2026-10-02",
+        "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 130 dpi (about 1520 pixels on the long edge); checked the decision heading, commune/reference grouping, Article 1 outcome, area and bulletin date.",
+        "currentFarmerVerified": false,
+        "note": "Printed decision date 3 décembre 2013 is after the bulletin's own date of 31 January 2013, so it cannot be the signature date as printed; the act date stays unresolved (3 December 2012 is plausible but not asserted). The 0.4056 ha total covers six printed references in two communes."
+      },
+      "indexId": "departmental-cote-dor-earlier-archive",
+      "reason": "outside-reachable-reference-set",
+      "assignment": "unassigned"
+    }
+  ],
+  "availabilityAudit": "scripts/grand-crus/sources/notice-coverage-2026-10-04.json",
+  "currentFarmerConfirmed": 0
+}

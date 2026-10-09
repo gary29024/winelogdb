@@ -15,10 +15,116 @@
   "evidenceFrom": [
     "corton-charlemagne"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 4001.3,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "c47c0bfccb1d0b5a490e06efcaa15e90764b3628a4271536ed7f84bfcae461b6",
+      "cadastreSha256ByCommune": {
+        "21010": "94cd91e1840378554a0cf63751fc189272cbbf9b703c79fb40f2c2fa0e65b8f9",
+        "21480": "d824740a61b9b9c75b8e4be1acfbd4c5c017fb22a313e4d8bc7bcdf4f3c7d010",
+        "21606": "3278f4cdfe75ed0ff0a87ca73beb46859ce973927ebe2a9869db66a2e8861088"
+      },
+      "note": "The measured 4001.252178 m² remainder (0.5564%) was reviewed against the pinned INAO boundary and Aloxe-Corton and Pernand-Vergelesses and Ladoix-Serrigny cadastres. The cru outline has 8 separate parts across Aloxe-Corton, Ladoix-Serrigny and Pernand-Vergelesses and largely shares Corton's edges; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 39 pieces, with mean widths of 0.22–1.22 m for those of at least 1 m². 105.099365 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 4001.252178 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/corton-charlemagne/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-beaune/corton-charlemagne",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/corton-charlemagne,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjcyJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "9e7d255573cd84e6fcbf2a356e161f3fbac49ed8aa0fb03c1e04ecbe65ab44e5",
+    "coverageNote": "The official wine-board list names eight Corton-Charlemagne climats, and all match cadastral lieux-dits. The cru's Ladoix-Serrigny part also covers the cadastral LE ROGNET ET CORTON, which is not on that list. The same hill already shows Corton's official INAO climat outlines, so this cadastral audit adds no layer and the whole-cru outline is retained; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "basses-mourottes",
+        "name": "Basses Mourottes",
+        "sourceName": "BASSES MOUROTTES",
+        "aliases": []
+      },
+      {
+        "id": "en-charlemagne",
+        "name": "En Charlemagne",
+        "sourceName": "EN CHARLEMAGNE",
+        "aliases": []
+      },
+      {
+        "id": "hautes-mourottes",
+        "name": "Hautes Mourottes",
+        "sourceName": "HAUTES MOUROTTES",
+        "aliases": []
+      },
+      {
+        "id": "le-charlemagne",
+        "name": "Le Charlemagne",
+        "sourceName": "LE CHARLEMAGNE",
+        "aliases": []
+      },
+      {
+        "id": "le-corton",
+        "name": "Le Corton",
+        "sourceName": "LE CORTON",
+        "aliases": []
+      },
+      {
+        "id": "les-languettes",
+        "name": "Les Languettes",
+        "sourceName": "LES LANGUETTES",
+        "aliases": []
+      },
+      {
+        "id": "les-pougets",
+        "name": "Les Pougets",
+        "sourceName": "LES POUGETS",
+        "aliases": []
+      },
+      {
+        "id": "les-renardes",
+        "name": "Les Renardes",
+        "sourceName": "LES RENARDES",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "Corton-Charlemagne",
+        "sourceCandidate": "LE ROGNET ET CORTON",
+        "reason": "About 3.0 ha of the Corton-Charlemagne outline in Ladoix-Serrigny lies in the cadastral LE ROGNET ET CORTON, which the wine-board Corton-Charlemagne list does not name. Several parcels lie wholly inside the cru in it. No crosswalk is made; the parcels keep the cadastral name and the whole-cru outline."
+      }
+    ],
+    "reviewedOverlaps": [
+      {
+        "plots": [
+          "en-charlemagne",
+          "le-charlemagne"
+        ],
+        "maximumAreaM2": 83.4,
+        "reviewedAt": "2026-10-07",
+        "note": "The pinned cadastral lieux-dits EN CHARLEMAGNE (Pernand-Vergelesses) and LE CHARLEMAGNE (Aloxe-Corton) overlap by 83.365 m² inside the cru along the commune line. Both outlines are kept exactly as published; neither is clipped, and the overlap assigns no parcel to both."
+      }
+    ],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "BOIS DE CORTON",
+        "reason": "Not an official Corton-Charlemagne climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "BOIS DE NAGET",
+        "reason": "Not an official Corton-Charlemagne climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "EN CHAGNIARDS",
+        "reason": "Not an official Corton-Charlemagne climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES CARRIERES",
+        "reason": "Not an official Corton-Charlemagne climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ]
   }
 }

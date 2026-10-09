@@ -244,7 +244,9 @@ describe('village registry',()=>{
    const c=await loadVillageMapCatalogue(village.id);
    const {namedPlots,...canonical}=c;
    expect({...canonical,features:c.features.filter(f=>f.kind!=='named_plot')}).toEqual({...catalogues.find(expected=>expected.id===village.id),...losslessMaps[village.id as keyof typeof losslessMaps]});
-   if(village.id!=='vosne-romanee')expect(namedPlots).toBeUndefined();
+   for(const layer of namedPlots??[]){
+    expect(c.features.find(f=>f.id===layer.parentFeatureId)).toMatchObject({kind:'vineyard',tier:'grand_cru'});
+   }
    for(const target of registry.targets.filter(t=>t.villageId===village.id)){
     expect(c.features.find(f=>f.matchId===target.matchId)).toMatchObject({id:target.featureId,name:target.name,kind:target.scope});
    }

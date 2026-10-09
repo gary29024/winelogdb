@@ -1,0 +1,663 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "parentFeatureId": "inao-denom-439",
+  "department": "89",
+  "method": "Poppler 26.09.0 pdftoppm at 110 dpi; every listed image read. Page numbers are PDF page numbers. INSEE identities checked against the pinned geo.api.gouv.fr response before interpreting printed communes.",
+  "inputs": [
+    {
+      "path": "docs/research/earlier-bulletins/yonne/index/notices.json",
+      "sha256": "c0d95fb34bd9d92ad9fa70afc85fccba067047fda94a29dff7e008270ccb2087"
+    },
+    {
+      "path": "docs/research/earlier-bulletins/yonne/index/candidate-pages.json",
+      "sha256": "1a19cb6c88f0a4ed0e1a1075270507e0a6fb7d3bc01e3e2130dd5d8d701caaf0"
+    },
+    {
+      "path": "docs/research/earlier-bulletins/yonne/index/page-text.jsonl.gz",
+      "sha256": "daa904e672ef2f78b539c166ac3d2561d41b93fe7756022536e061ca8da61bbb"
+    },
+    {
+      "path": "docs/research/earlier-bulletins/yonne/reviewed-parcels.json",
+      "sha256": "ed503d1828de064495368786c11888f25c71b22ea360052e729744534bd979f6"
+    },
+    {
+      "path": "docs/research/earlier-bulletins/yonne/review-decisions.json",
+      "sha256": "9915551a2f03425d3b2739dc0432f9d6acb920d963c86288fec9f8fcbe5a7263"
+    }
+  ],
+  "reviewedMatchesBeforeCuration": 37,
+  "pendingReachableReferenceCandidates": 0,
+  "rawCommuneNoticeHits": 82,
+  "rawCommuneNoticeHitsWithReferenceHints": 3,
+  "candidatePageHits": 11,
+  "literalCodePageOccurrences": 29,
+  "uniqueLiteralCodePages": 26,
+  "pages": [
+    {
+      "sha256": "ecc492d974e7cb95f90e2a49930f62669cef365f7fd9430f7cb38e5303374d70",
+      "page": 38,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3882/24397/file/recueil%20%2010%202008%20-%2030%2005%202008.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "477dea0b0ab97d604c6bf164ec0c983e61aaff967d05fad45da3315ed247441e",
+      "page": 29,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3772/23851/file/Recueil+Nr+9+du++12+mai+2009.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "7e437aa788b4410bedbb71f64a3a6ef13675fd2a4d72808ea5cd03d1ad8dce76",
+      "page": 43,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3784/23899/file/Recueil%2018%20-%202009.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "d2743667a8c68877685614cee2645b097221eb7ba08f53fea858d1c390693b24",
+      "page": 153,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3513/22647/file/Recueil%20n%C2%B06%20du%2030%2003%202012.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "e9ea55d28e5c3f1faa7a1332efbc53d0cad3eea70694bbe1040d7260118ecaed",
+      "page": 56,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/10874/65379/file/recueil%20n%C2%B010.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune population/sector table, not parcel references."
+    },
+    {
+      "sha256": "9b470e43f71a58e8601658df098927cf3863c18fb846de3224a2ed01f33f2616",
+      "page": 104,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9258/56303/file/recueil%20n%C2%B02.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Nitrates vulnerable-zone commune list, not parcel references."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 213,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "065ac497bd246da797244b5fd40a8d190f19176c034f3e85d86f823c7e6e458c",
+      "page": 30,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/14816/105159/file/recueil%20n%C2%B012.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Urban electricity-aid regime commune list, not parcel references."
+    },
+    {
+      "sha256": "c902c789c025b68725a3cb92e6f47d5a06ceac880253837b556b2e43d8668224",
+      "page": 44,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/15241/107727/file/recueil%20n%C2%B02%20-%20partie%203.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "ec7a0874f7dc3757dbd9fe91dc190138976572da977dac740ba6688512007602",
+      "page": 64,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/16329/143657/file/recueil%20n%C2%B07%20-%20partie%203.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "f007dae164a88dd3764cf4ec9b5d3621bab61dfb8ac83e840d3253c357c20058",
+      "page": 4,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/16653/145991/file/Recueil%20sp%C3%A9cial%20n%C2%B051.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Surveillance-zone commune list, not parcel references."
+    },
+    {
+      "sha256": "fefb21c33416ffbd762bef04623f8b56ceee3a17f2a3a42ba747d6a129539111",
+      "page": 126,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/18317/156215/file/recueil%20n%C2%B02.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "2cc30bba9d6562f26ed0dfb8da23b1276039ee31799927fb91ce105f93267e9a",
+      "page": 80,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/18708/158988/file/recueil%20n%C2%B04.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "School staffing: 0890681G is a school identifier, not commune 89068 or a cadastral parcel."
+    },
+    {
+      "sha256": "db86285e4f54719d97cf5cb70ecb282fd2570d981df6724ee6dc87a396642b8f",
+      "page": 27,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/18866/160034/file/recueil%20n%C2%B05%20-%20partie%2010.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "3fd917883d549ea0599eb3dc518ead8d184ff491cacc131e7245762c74795f72",
+      "page": 46,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/20752/172850/file/Recueil%20n%C2%B019%20partie%203.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "School staffing: 0890681G is a school identifier, not commune 89068 or a cadastral parcel."
+    },
+    {
+      "sha256": "9d628e47583b4552aeff588e1ab628a0a426170bd4ea7ea49391773677d404a0",
+      "page": 76,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/24583/197075/file/recueil-89-2018-032-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "bd403f48631bf4136a667761b194800e224d343420b48bb14dc453a38a736fcb",
+      "page": 70,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/25800/204630/file/recueil-89-2018-084-recueil-des-actes-administratifs+partie+2.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "b81075dcf79ce27abfe2a68fbce6f9aa61e1424a043219180ebad9433fd7317f",
+      "page": 9,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/27189/212483/file/recueil-89-2019-022-recueil-des-actes-administratifs-special-2.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Chablis municipal risk-information form, no parcel reference."
+    },
+    {
+      "sha256": "0b62942e253f146be8933a6547242023273ff2f10b9b5691752f82371f244fde",
+      "page": 158,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/27274/212951/file/recueil-89-2019-028-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "40a7ad99bdd39cbbc36995e00308d4f02672e7835aed62b41b86288b50ae5cac",
+      "page": 99,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/28045/217692/file/recueil-89-2019-053-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Commune/INSEE-code list for administrative or ANAH housing zones; no cadastral parcel reference."
+    },
+    {
+      "sha256": "03a6a92bbaea0703a72b1313efb5c157b5bbd6b455b6a28b89a2b9f16b0d6b58",
+      "page": 15,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/28703/221682/file/recueil-89-2019-099-recueil-des-actes-administratifs-special.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Bark-beetle control commune list, no parcel reference."
+    },
+    {
+      "sha256": "2a120462c7728bad31252a67fa1c738289244093588a29ea4fbb19d29288740b",
+      "page": 96,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/28710/221721/file/recueil-89-2019-097-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Rural-commune classification list, no parcel reference."
+    },
+    {
+      "sha256": "84f437d95854e680437b86cb272c39be482f57fa3b1f26c0f5242f27581e2ebe",
+      "page": 26,
+      "reason": "literal-code-hit",
+      "extraction": "text-layer",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/37563/276268/file/recueil-89-2022-134-recueil-des-actes-administratifs-special.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Emergency medical transport coverage sectors, no parcel reference."
+    },
+    {
+      "sha256": "9044f8d4305e1cede4a4a2736dc699ddfb9859b319df9bdda5468bef78223e05",
+      "page": 75,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/38548/282277/file/recueil-89-2022-235-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Rural-commune classification list, no parcel reference."
+    },
+    {
+      "sha256": "d4d3c3c4131569c06812538cb6af9e5eaadc4b220e59c3680fc1737f44d618c6",
+      "page": 32,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/46143/366971/file/recueil-89-2025-114-recueil-des-actes-administratifs-special-1.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Drought-management zones: Chablis is in Serein; no parcel reference."
+    },
+    {
+      "sha256": "2f55383d77d295643032d091af46c3610b6c1adc6ee960cabd1d641d79f350ab",
+      "page": 22,
+      "reason": "literal-code-hit",
+      "extraction": "ocr",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/50979/397520/file/recueil-89-2026-277-recueil-des-actes-administratifs-special.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Drought-management zones: Chablis is in Serein; no parcel reference."
+    },
+    {
+      "sha256": "442ccc44f724ea6fa9963b385e88b454db651cc7092bbe292d7cd613259f74b7",
+      "page": 11,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3902/24499/file/recueil%20%2017%202008%20-%2017%2010%202008.pdf#page=11",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Bernard Lecuiller request accepted for 0 ha 22 a of vines in Chablis; Domaine Laroche is named as the farmer in place. No parcel identifiers, so commune-only context."
+    },
+    {
+      "sha256": "442ccc44f724ea6fa9963b385e88b454db651cc7092bbe292d7cd613259f74b7",
+      "page": 13,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3902/24499/file/recueil%20%2017%202008%20-%2017%2010%202008.pdf#page=13",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "The Roze/Garnier land is in Tanlay and Lézinnes; Chablis appears as an appellation of other vineyard land. ZL34, ZE6, ZR16, ZM23/24 and ZN41/42 are not Chablis references."
+    },
+    {
+      "sha256": "477dea0b0ab97d604c6bf164ec0c983e61aaff967d05fad45da3315ed247441e",
+      "page": 2,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3772/23851/file/Recueil+Nr+9+du++12+mai+2009.pdf#page=2",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Contents entry for inert-waste storage permission; no parcel evidence."
+    },
+    {
+      "sha256": "477dea0b0ab97d604c6bf164ec0c983e61aaff967d05fad45da3315ed247441e",
+      "page": 6,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3772/23851/file/Recueil+Nr+9+du++12+mai+2009.pdf#page=6",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Inert-waste storage facility permission in Chablis; not a vineyard farming notice and no parcel reference on the candidate page."
+    },
+    {
+      "sha256": "4f14287013e23aa87e73a94a4398b5456e9433aa0b91317bc08f1514541f72f4",
+      "page": 8,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3514/22651/file/recueil%20n%C2%B07.pdf#page=8",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Farm-structure equivalence-points table by appellation, no parcel or operator assignment."
+    },
+    {
+      "sha256": "dc38807d635444e08ba17c1c6f1c93b5760c6e96fbd480019729144df969630c",
+      "page": 5,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/7582/46581/file/recueil%20n%C2%B018.pdf#page=5",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Wind-development zone in Dyé; Chablis appears in an intercommunal institution name, not as parcel land."
+    },
+    {
+      "sha256": "f615b8955f0dae339d53efb8929972cbc3187c13a7d4a4fd9896d70a03d76f55",
+      "page": 17,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/7927/48926/file/recueil%20n%C2%B020.pdf#page=17",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "GAEC du domaine du Colombier permission for 6.21 ha across Chablis, Maligny and Fontenay-près-Chablis. No parcel identifiers; commune-only context."
+    },
+    {
+      "sha256": "d1f38e61bd12232635c6e1c43650bda6f42dd8ecefb25b9d7bf87354b8761c24",
+      "page": 48,
+      "reason": "commune-candidate-page",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/11078/66563/file/recueil%20n%C2%B011.pdf#page=48",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "EARL Allindre permission for land in Fontenay-près-Chablis, not Chablis; no parcel identifiers."
+    },
+    {
+      "sha256": "7660935cbfc77726e112048b276de666569c7cf710b64c1c62e58b7438a99df3",
+      "page": 90,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/16927/148090/file/recueil%20n%C2%B010.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "SAS William Fèvre address is Chablis, but the 28.01 ha of vines is in Viviers. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "2cc30bba9d6562f26ed0dfb8da23b1276039ee31799927fb91ce105f93267e9a",
+      "page": 47,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/18708/158988/file/recueil%20n%C2%B04.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Richard Rottiers/SCEA Domaine des Malandes permission for 33.35 ha of vines explicitly lists Beine, Chablis, La Chapelle-Vaupelteigne, Courgis, Saint-Cyr-les-Colons, Collan and Lignorelles. No parcel identifiers; correct the earlier text-screened claim that land communes were absent."
+    },
+    {
+      "sha256": "fd8036d655699d42e7f39918a44a663d317086461366a18ac95affff07577287",
+      "page": 66,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/19181/162151/file/recueil%20n%C2%B07.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "EARL Patrice permission for 34.50 ha across Beine, Chablis and Lignorelles; no parcel identifiers. Commune-only context."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 44,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 45,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 46,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 47,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 48,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 49,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 50,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 51,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 52,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 53,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "page": 54,
+      "reason": "raw-reference-hint",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Auxerre planning act and annex maps; UR3 is zoning. Route de Chablis is an Auxerre road. No Chablis parcel evidence."
+    },
+    {
+      "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+      "page": 3,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+      "page": 4,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+      "page": 5,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+      "page": 6,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 128,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 129,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 130,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 131,
+      "reason": "reviewed-match",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Confirmed aerial-spraying decision/annex. Original printed rows and area restrictions retained; current rows curated once, former references remain unassigned DFI context."
+    },
+    {
+      "sha256": "317d7ebb8924718cd7e65ac95bf13f6202f61cdfdd0bb8d6bbaa3970cf18d7e5",
+      "page": 65,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3885/24409/file/recueil%20%2013%202008%20-%2031%2007%202008.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Blanchot is a street address of an institution member, not a parcel reference."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 140,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "DDT/SEEP/2013/0012 grants temporary aerial-spraying derogation until 8 June 2013 but refers to an unpublished annex. No parcel can be assigned."
+    },
+    {
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "page": 141,
+      "reason": "commune-only-or-excluded-context",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "reviewMethod": "page-image",
+      "reviewedAt": "2026-10-07",
+      "finding": "Unrelated disability-rights commission order; confirms the preceding treatment order has no parcel annex here."
+    }
+  ],
+  "rawReferenceHints": [
+    {
+      "noticeId": "efcec0bd2cce808d3a24fb6d2d33e543a0d609e9ef2c25ad45326ccccd275d69:p44",
+      "url": "https://www.yonne.gouv.fr/content/download/26494/208912/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "pages": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "rejectedReferenceHints": {
+        "UR3": "Auxerre PLU zoning label, not Chablis parcel UR3."
+      }
+    },
+    {
+      "noticeId": "0f1bdbce21690e79f596219075ae4cd9046609dc346be7c16228d71ce1b4316a:p44",
+      "url": "https://www.yonne.gouv.fr/content/download/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "pages": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "rejectedReferenceHints": {
+        "UR3": "Auxerre PLU zoning label, not Chablis parcel UR3."
+      },
+      "repeatOf": "efcec0bd2cce808d3a24fb6d2d33e543a0d609e9ef2c25ad45326ccccd275d69:p44"
+    },
+    {
+      "noticeId": "752a0e49e3081db6081fd7e1b59112d3bc463c20b122a43d7f3b3d0465911806:p44",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/26526/209117/file/recueil-89-2018-116-recueil-des-actes-administratifs.pdf",
+      "sha256": "cdb4d244a2e33b762e29206506ac398a47d1a98ecb195b0eb6402cb0089333a8",
+      "pages": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "rejectedReferenceHints": {
+        "UR3": "Auxerre PLU zoning label, not Chablis parcel UR3."
+      },
+      "repeatOf": "efcec0bd2cce808d3a24fb6d2d33e543a0d609e9ef2c25ad45326ccccd275d69:p44"
+    }
+  ],
+  "limitation": "No Côte-d’Or notice index or date is used. Missing Yonne archives, unpublished annexes and unsearched intervals remain gaps, never absence of history."
+}

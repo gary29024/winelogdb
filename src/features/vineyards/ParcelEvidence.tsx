@@ -37,14 +37,6 @@ const choices=new Map<string,boolean>();
 const dateRoles:Record<string,string>={'dfi-validation':'DFI validation date','cadastral-observation':'Cadastral observation',
  'first-observed-cadastral-release':'First observed cadastral release','1-january-rights-snapshot':'1 January rights snapshot',
  'deed-date':'Deed date','notice-act-date':'Notice act date'};
-const stopReasons:Record<string,string>={
- 'source-boundary-or-unrecorded-event':'No earlier correspondence in the obtained DFI file',
- 'missing-document-for-observed-new-reference':'No DFI correspondence found for a reference first observed in a later vintage',
- 'non-cadastral-domain-origin':'Documented origin in the non-cadastral domain',
- 'dfi-source-not-obtained':'DFI source has not been obtained',
- 'unresolved-dfi-event':'Unresolved DFI event group',cycle:'Cyclic correspondence requires review',
- 'impossible-chronology':'Conflicting chronology requires review',
-};
 // The original record's scope stays visible, so a former parcel's record is never read as this parcel's.
 const scopes:Record<string,string>={'entire-printed-parcel-reference':'Scope: the whole former parcel as recorded',
  'complete-deed-parcel-group':'Scope: every parcel in the deed together',
@@ -53,11 +45,6 @@ const scopes:Record<string,string>={'entire-printed-parcel-reference':'Scope: th
 const methods:Record<NonNullable<EvidenceItem['method']>,string>={'documented-dfi':'Official DGFiP filiation record',
  'spatial-inference':'Inferred from map overlap, not an official record'};
 const shortRef=(id:string)=>`${id.slice(8,10).replace(/^0/,'')}${id.slice(10)}`;
-
-function EventDate({date}:{date:string}){
- const time=when({kind:'filiation',date,title:'',sources:[]});
- return time?<time dateTime={time.iso}>{time.text}</time>:<>{date}</>;
-}
 
 function Item({item,sources}:{item:EvidenceItem;sources:ParcelEvidenceData['sources']}){
  const time=when(item);
@@ -99,30 +86,16 @@ export function ParcelEvidence({parcelId,parentId}:{parcelId:string;parentId:str
   <button type="button" className="village-map-link-button" onClick={()=>setAttempt(n=>n+1)}>Retry evidence</button></div>;
  if(!data)return <p className="village-map-note parcel-evidence" role="status">Loading evidence records…</p>;
  const items=data.parcels[parcelId]??[];
- const tracing=data.tracing?.[parcelId],coverage=data.coverage?.[parentId];
+ const tracing=data.tracing?.[parcelId];
  if(!items.length&&!tracing)return <p className="village-map-note parcel-evidence">No matched records in the reviewed sources for this parcel.</p>;
  const shown=groups.map(group=>({...group,list:items.filter(i=>group.kinds.includes(i.kind))})).filter(group=>group.list.length>0);
  const firstId=shown[0]?.id;
  return <section className="parcel-evidence" aria-label="History and evidence">
   <h5>History and evidence</h5>
-  <p className="village-map-note">Dated notices, recorded rights, sales, company filings and published research.</p>
   {!items.length&&<p className="village-map-note">No matched dated rights, sale or notice records in the reviewed sources.</p>}
   {shown.map(group=><details key={group.id} className={`parcel-evidence-group parcel-evidence-${group.id}`} open={choices.get(group.id)??group.id===firstId}>
    <summary onClick={event=>{event.preventDefault();choices.set(group.id,!(choices.get(group.id)??group.id===firstId));bump()}}>{group.heading} <span>{group.list.length}</span></summary>
-   {group.id==='leads'&&<p className="village-map-note">Names and recorded rights context only.</p>}
    <ul>{group.list.map((item,index)=><Item key={`${item.kind}:${item.title}:${index}`} item={item} sources={data.sources}/>)}</ul>
   </details>)}
-  {tracing&&<details className="parcel-evidence-tracing"><summary>Source coverage and tracing</summary>
-   <p className="village-map-note">Earliest supported event: <EventDate date={tracing.earliestSupportedEvent.date}/> · {dateRoles[tracing.earliestSupportedEvent.dateRole]??tracing.earliestSupportedEvent.dateRole}. First observations do not establish creation or ownership.</p>
-   {coverage&&<p className="village-map-note">Rights snapshots imported: {coverage.rightsImported.map(d=>d.slice(0,4)).join(', ')}. {coverage.missingSources.length} failed source downloads.</p>}
-   {coverage?.sales&&<p className="village-map-note">Sale catalogue coverage: {coverage.sales.availableRange?.start??'not established'} to {coverage.sales.availableRange?.end??'not established'}. Observed commune deeds: {coverage.sales.observedCommuneRange?.join(' to ')??'none matched'}.</p>}
-   {coverage?.notices&&<details><summary>Administrative notice coverage and gaps</summary>{Object.entries(coverage.notices.availabilityAudit.departments).map(([department,audit])=><div key={department}>
-    <p className="village-map-note">Department {department}: published years located from {audit.earliestPublishedYearLocated} through {audit.latestPublishedYearLocated}. {audit.availabilityStatus}.</p>
-    <ul>{audit.unsearchedIntervals.map(interval=><li key={interval}>{interval}</li>)}</ul>
-   </div>)}<p className="village-map-note">An access failure or unsearched interval does not mean there is no historical record.</p></details>}
-   <details><summary>Where tracing stops ({tracing.terminals.length})</summary><ul>{tracing.terminals.map((terminal,index)=><li key={index}>
-    {terminal.referencePath.map(shortRef).join(' ← ')}: {stopReasons[terminal.reason]??terminal.reason.replaceAll('-',' ')}.
-   </li>)}</ul><p className="village-map-note">DFI begins with departmental computerisation. Rural consolidation correspondence is unavailable in this source. A tracing stop does not establish original ownership or uninterrupted continuity.</p></details>
-  </details>}
  </section>;
 }

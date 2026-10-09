@@ -14,9 +14,50 @@
     "criots-batard-montrachet"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/criots-batard-montrachet/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-beaune/criots-batard-montrachet",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/criots-batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzA0Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "385fcfe99e7b616c30943418103a3c358d99a09a95a91124704a581a30eaf070",
+    "coverageNote": "BIVB lists Criots-Bâtard-Montrachet as one white Grand Cru in Chassagne-Montrachet. LES CRIOTS is the main cadastral constituent and contains all eleven mapped parcels; BLANCHOT DESSUS contributes only a 40.907 m² boundary contact and names no mapped parcel. Both original intersections are audited, without claiming distinct official climats or holdings. The named-area display remains suppressed and white wines retain the whole INAO outline.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "les-criots",
+        "name": "Les Criots",
+        "sourceName": "LES CRIOTS",
+        "communes": [
+          "21150"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "blanchot-dessus",
+        "name": "Blanchot Dessus",
+        "sourceName": "BLANCHOT DESSUS",
+        "communes": [
+          "21150"
+        ],
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "parcelsWithoutLieuDit": []
+  },
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 279.2,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+      "cadastreSha256ByCommune": {
+        "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+        "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+      },
+      "note": "The 279.136890 m² remainder (1.775885%) is one connected strip along the northern and western INAO edges, tapering at the eastern corner. Its large enclosing rectangle reflects the bent edge, not a missing interior parcel. Visually inspected the overview and enlarged component. Only Chassagne counts as imported coverage; other bundle communes remain neighbours. The 279.2 m² source-hash-bound cap allows less than 0.064 m² above the measured difference. No geometry is clipped, buffered, filled or simplified."
+    }
   }
 }

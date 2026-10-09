@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-809",
-  "status": "historical-extension-inventory",
-  "scope": "All 157 mapped Mazoyères-Chambertin parcels and 40 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 157 mapped Mazoyères-Chambertin parcels and 40 recorded legal-entity holder identifiers reviewed for Tier 1, including commune edges, exact cadastral named areas, original-reference notices and the #461 historical extension. Parcels attach only to INAO feature 809, independently of the alternative Charmes label. No verified current farmer; producer/company research remains Tier 2.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,12 +41,20 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "bouvier-2020-ocr-review",
+      "title": "BFC 2021-006: EARL BOUVIER application receipt, 11 September 2020",
+      "url": "https://www.prefectures-regions.gouv.fr/irecontenu/telechargement/77220/499026/file/recueil-bfc-2021-006-recueil-des-actes-administratifs.pdf",
+      "type": "government-notice",
+      "documentDate": "2020-09-11",
+      "access": "read",
+      "finding": "Page-image review rejects the OCR BN58 hint: printed BI158 belongs to Marsannay-la-Côte. The Gevrey list does not include BN58. No parcel event is assigned."
     }
   ],
   "holders": [
     {
       "holderId": "212102958",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -56,7 +64,6 @@
     },
     {
       "holderId": "305242687",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -66,7 +73,6 @@
     },
     {
       "holderId": "307017962",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -76,7 +82,6 @@
     },
     {
       "holderId": "319027744",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -86,7 +91,6 @@
     },
     {
       "holderId": "321389942",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -96,7 +100,6 @@
     },
     {
       "holderId": "322746777",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -106,7 +109,6 @@
     },
     {
       "holderId": "327983458",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -116,7 +118,6 @@
     },
     {
       "holderId": "378512776",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -126,7 +127,6 @@
     },
     {
       "holderId": "379422678",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -136,7 +136,6 @@
     },
     {
       "holderId": "383406758",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -146,7 +145,6 @@
     },
     {
       "holderId": "400043923",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -156,7 +154,6 @@
     },
     {
       "holderId": "417688579",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -166,7 +163,6 @@
     },
     {
       "holderId": "418416830",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -176,7 +172,6 @@
     },
     {
       "holderId": "429822547",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -186,7 +181,6 @@
     },
     {
       "holderId": "439279498",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -196,7 +190,6 @@
     },
     {
       "holderId": "439629254",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -206,7 +199,6 @@
     },
     {
       "holderId": "450048244",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -216,7 +208,6 @@
     },
     {
       "holderId": "515620193",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -226,7 +217,6 @@
     },
     {
       "holderId": "519906606",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -236,7 +226,6 @@
     },
     {
       "holderId": "531940583",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -246,7 +235,6 @@
     },
     {
       "holderId": "778159731",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -256,7 +244,6 @@
     },
     {
       "holderId": "789059151",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -266,7 +253,6 @@
     },
     {
       "holderId": "802303297",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -276,7 +262,6 @@
     },
     {
       "holderId": "818134116",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -286,7 +271,6 @@
     },
     {
       "holderId": "883067134",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -296,7 +280,6 @@
     },
     {
       "holderId": "889624151",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -306,7 +289,6 @@
     },
     {
       "holderId": "U13482493",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -316,7 +298,6 @@
     },
     {
       "holderId": "U14137560",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -326,7 +307,6 @@
     },
     {
       "holderId": "U18178623",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -336,7 +316,6 @@
     },
     {
       "holderId": "U18178678",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -346,7 +325,6 @@
     },
     {
       "holderId": "U21094325",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -356,7 +334,6 @@
     },
     {
       "holderId": "U21117863",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -366,7 +343,6 @@
     },
     {
       "holderId": "U21367129",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -376,7 +352,6 @@
     },
     {
       "holderId": "U21388794",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -386,7 +361,6 @@
     },
     {
       "holderId": "U21581833",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -396,7 +370,6 @@
     },
     {
       "holderId": "U21585571",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -406,7 +379,6 @@
     },
     {
       "holderId": "U21586080",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -416,7 +388,6 @@
     },
     {
       "holderId": "U21591573",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -426,7 +397,6 @@
     },
     {
       "holderId": "U21979030",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -436,7 +406,6 @@
     },
     {
       "holderId": "U22077994",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -452,9 +421,37 @@
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "Ten CHAMPS-CHENYS edge-contact parcels retain their cadastral name without an inferred Mazoyères climat crosswalk (#344). AUX CHARMES and MAZOYERES OU CHARMES are audited with displayLayer false; alternative labels never determine parcel membership."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "bouvier-2020-ocr-review",
+      "bulletin": "bfc-2021-006",
+      "sha256": "4fbac81f668dea884d4b08c5b19f5e66adfbebf500a980aa145f5d70228da0d3",
+      "pages": [
+        44
+      ],
+      "reviewMethod": "page-image",
+      "renderMethod": "Poppler pdftoppm, page 44 rendered at 1600 pixels on the long edge; visually checked section/number and commune grouping, dated receipt and application scope.",
+      "printedDocumentDate": "2020-09-11",
+      "printedReferencesByCommune": {
+        "21295": [
+          "AE131",
+          "AK37",
+          "AM74",
+          "AH472",
+          "AI269",
+          "AM8",
+          "AM75"
+        ]
+      },
+      "rejectedReferenceHints": {
+        "21295000BN0058": "OCR BN58 is printed BI158 in the Marsannay-la-Côte group, not Gevrey-Chambertin BN0058. The seven printed Gevrey references contain no BN parcel."
+      },
+      "finding": "EARL BOUVIER dossier 2020-104 is an application dated 4 August, complete 25 August and receipted 11 September 2020, mentioning former Domaine Régis BOUVIER. None of the printed Gevrey references is in this cru's reachable set. Reject the OCR candidate without creating an event or assigning the notice's joint area."
+    }
   ]
 }

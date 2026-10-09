@@ -81,19 +81,25 @@ jobs:
         with:
           python-version: '3.12'
       # Loops over every scripts/grand-crus/<slug>.json; a cru without research yet has its config validated.
+      # Also checks the shared holder-to-domaine table against every cru's recorded holders.
       - name: Committed research outputs match every cru's curation
         if: needs.scope.outputs.research == 'true'
         run: python scripts/build_grand_cru_research.py --all --check
       - name: App registry matches every cru config
         if: needs.scope.outputs.research == 'true'
         run: python scripts/build_grand_cru_app_registry.py --check
+      - name: Earlier-bulletin reviewed rows match their curated decisions
+        if: needs.scope.outputs.research == 'true'
+        run: |
+          python scripts/build_earlier_bulletin_reviews.py --department cote-dor --check
+          python scripts/build_earlier_bulletin_reviews.py --department yonne --check
       - name: Install geometry packages
         if: needs.scope.outputs.research == 'true'
         run: python -m pip install -r scripts/burgundy-map-requirements.txt
       - name: Historical evidence and cru config regressions
         if: needs.scope.outputs.research == 'true'
         working-directory: scripts
-        run: python -m unittest test_grand_cru_research test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout
+        run: python -m unittest test_grand_cru_research test_grand_cru_holder_links test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins test_pull_commoncrawl_bulletins test_pull_grand_cru_notice_bulletins test_index_cotedor_bulletins
       - uses: ./.github/actions/test-setup
         if: needs.scope.outputs.quality == 'true'
       - name: Lint

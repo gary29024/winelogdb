@@ -50,7 +50,7 @@ describe('the one-time credits explanation',()=>{
   const {pending}=await priced();
   expect(dialogText()).toContain('3 credits');
   expect(dialogText()).toContain('Credits pay for the AI work');
-  expect(dialogText()).toContain('Account & friends');
+  expect(dialogText()).toContain('This week’s AI allowance');
   await press('Use 3 credits');
   await pending;
  });

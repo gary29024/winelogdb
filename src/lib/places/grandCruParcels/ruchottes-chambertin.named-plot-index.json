@@ -1,0 +1,15 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/ruchottes-chambertin",
+  "plots": [
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-bas",
+      "name": "Ruchottes du Bas",
+      "aliases": []
+    },
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-dessus",
+      "name": "Ruchottes du Dessus",
+      "aliases": []
+    }
+  ]
+}

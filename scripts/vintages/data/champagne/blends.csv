@@ -1,0 +1,8 @@
+# Planted mix, % of area, per Champagne sub-region (Union des Maisons de Champagne, "Aire
+# géographique", about 2022). The blend reading weights Pinot Noir, Meunier and Chardonnay by these
+# shares; other varieties (0.3 % of Champagne) are not modelled. Researched 5 October 2026.
+village,blend,pinot-noir,meunier,chardonnay,other,year,basis,source
+montagne-de-reims,blend,40.5,33.0,26.4,,2022,appellation,https://maisons-champagne.com/fr/appellation/aire-geographique/
+vallee-de-la-marne,blend,23.2,58.6,18.1,,2022,appellation,https://maisons-champagne.com/fr/appellation/aire-geographique/
+cote-des-blancs,blend,7.2,7.9,84.9,,2022,appellation,https://maisons-champagne.com/fr/appellation/aire-geographique/
+cote-des-bar,blend,83.9,3.2,11.6,,2022,appellation,https://maisons-champagne.com/fr/appellation/aire-geographique/

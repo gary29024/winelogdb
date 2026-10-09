@@ -17,7 +17,9 @@ export type SharedDeepSearch=Pick<DeepSearchResult,
   /** False when only some research scopes exist yet, as on the owner's page. */
   complete?:boolean;
   /** Who paid for the sections shown: the reader, partly the reader, or friends only. */
-  origin?:'yours'|'mixed'|'shared'};
+  origin?:'yours'|'mixed'|'shared';
+  /** Per research field, sentences with a precise figure no cited source backs. */
+  uncitedFigures?:Record<string,string[]>};
 
 export type SharedWineExperience={
  tastingNotes:string;
@@ -37,6 +39,7 @@ export type SharedWineExperience={
 export type SharedWine = SharedWineExperience&{
  id:string;
  ownerName:string;
+ ownerHandle?:string|null;
  producer:string;
  /**
   * The viewer's own producer row when one exists for the same match_key;

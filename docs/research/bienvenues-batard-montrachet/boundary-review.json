@@ -1,0 +1,37 @@
+{
+  "slug": "bienvenues-batard-montrachet",
+  "parentSourceSha256": "0051a97b96cdb8c6c5d694a390c1d92bce65c6d1e20277b53739903b57ebe868",
+  "cadastreSha256ByCommune": {
+    "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+    "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+  },
+  "boundaryAreaM2": 36890.86484353718,
+  "uncoveredM2": 157.01105303321015,
+  "sharePercent": 0.4256095748883386,
+  "componentCount": 1,
+  "components": [
+    {
+      "areaM2": 157.01105303321015,
+      "boundsEPSG2154": [
+        832480.5471723105,
+        6651041.903692208,
+        832616.22,
+        6651099.473999999
+      ],
+      "rectangleWidthM": 4.514440245055964,
+      "rectangleLengthM": 146.76809273272158,
+      "distanceToInaoBoundaryM": 0.0,
+      "adjacentParcels": [
+        "21512000AI0130",
+        "21512000AI0001"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "importedCommunes": [
+    "21512"
+  ],
+  "reviewMethod": "Projected pinned source polygons to EPSG:2154, measured the single connected remainder against only the INAO-listed commune, and inspected the complete overview and enlarged component.",
+  "finding": "The 157.011053 m² remainder (0.425610%) is one continuous strip along the northern INAO boundary, beside Puligny AI0001 and AI0130. Visually inspected the complete feature and enlarged component against the original source polygons. Only Puligny counts as imported coverage; other bundle communes remain neighbours. The 157.1 m² source-hash-bound cap allows less than 0.089 m² above the measured difference. No geometry is clipped, buffered, filled or simplified."
+}

@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-973",
   "appellationId": 211,
   "issue": 385,
-  "tier": 1,
+  "tier": 2,
   "bundle": "chambolle-morey",
   "villageMaps": [
     "chambolle-musigny"
@@ -13,10 +13,75 @@
   "evidenceFrom": [
     "musigny"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 491.7,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "d92753abee9b775b57c935391b49c9659b0351293ce6146c22da53b6e21feed9",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 491.630167 m² remainder (0.4519%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The cru outline has five separate parts; the remainder is narrow strips between the official line and the nearest cadastral parcels. It forms 10 pieces, with mean widths of 0.13–1.09 m for those of at least 1 m². All of it lies along the outline edge. It is not a missing INAO commune. Neighbouring Vougeot parcels account for 1.719153 m² of it. 489.911014 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/musigny/README.md",
+    "filingsDoc": "docs/research/musigny/filings.md"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/musigny",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/musigny,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzYwJnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "0dd03fc5dce9ec0cb40ed0aa459772555bcd02fea132961555bddfc3eade8234",
+    "coverageNote": "Les Musigny and Les Petits Musigny are cadastral named areas within Musigny. The official list also names La Combe d'Orveau, but no cadastral lieu-dit covers the cru's south-western part, so that part keeps the whole-cru outline. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings.",
+    "plots": [
+      {
+        "id": "les-musigny",
+        "name": "Les Musigny",
+        "sourceName": "LES MUSIGNY",
+        "aliases": []
+      },
+      {
+        "id": "les-petits-musigny",
+        "name": "Les Petits Musigny",
+        "sourceName": "LES PETITS MUSIGNY",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "La Combe d'Orveau",
+        "sourceCandidate": null,
+        "reason": "The official list names La Combe d'Orveau, but the pinned lieux-dits cover none of the cru's 0.77 ha south-western part, and the cadastral COMBE D'ORVEAU lieu-dit lies about 477 m outside the cru. The seven parcels there are listed in parcelsWithoutLieuDit and keep no cadastral name. Do not infer this identity from proximity or fill the gap."
+      }
+    ],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "LA TAUPE",
+        "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES AMOUREUSES",
+        "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES ARGILLERES",
+        "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES BORNIQUES",
+        "reason": "Not an official Musigny climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ],
+    "parcelsWithoutLieuDit": [
+      "21133000AN0064",
+      "21133000AN0065",
+      "21133000AN0070",
+      "21133000AN0075",
+      "21133000AN0076",
+      "21133000AN0077",
+      "21133000AN0078"
+    ]
   }
 }

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "parentFeatureId": "inao-denom-273",
+  "name": "Bâtard-Montrachet",
+  "inaoCommunes": [
+    "21150",
+    "21512"
+  ],
+  "bundleCommunes": [
+    {
+      "commune": "21150",
+      "name": "Chassagne-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21150/cadastre-21150-parcelles.json.gz",
+      "sha256": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9"
+    },
+    {
+      "commune": "21512",
+      "name": "Puligny-Montrachet",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21512/cadastre-21512-parcelles.json.gz",
+      "sha256": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+    }
+  ],
+  "boundaryAreaM2": 118554.7,
+  "coveredByBundleParcelsM2": 118042.9,
+  "notCoveredByBundleParcelsM2": 511.8,
+  "notCoveredByBundleParcels": {
+    "coveredByNeighbourParcelsM2": 0.0,
+    "coveredByNoParcelM2": 511.8
+  },
+  "neighbours": [
+    {
+      "commune": "21541",
+      "name": "Saint-Aubin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21541/cadastre-21541-parcelles.json.gz",
+      "sha256": "3f83619be0c35d570d71b6c7f92b795809935f907e309c4cd87004076268800c",
+      "contactAreaM2": 0,
+      "contactsOverMinimumOverlap": 0,
+      "maxParcelPercent": 0,
+      "contacts": []
+    }
+  ],
+  "excludedEdgeContacts": 0,
+  "note": "Only communes listed by INAO are imported. Neighbouring-commune contacts are where the INAO boundary and the cadastral commune line disagree; they are measured here and never added as parcels, whatever their area. Area not covered by bundle parcels is split into the part neighbouring parcels cover and the part no parcel covers (gaps between parcels, roads and paths).",
+  "reviewedUncoveredArea": {
+    "maximumAreaM2": 511.9,
+    "reviewedAt": "2026-10-07",
+    "parentSourceSha256": "2632c7e482f59155c66de64c69db095397c7ce2c256931406fdacc5cfbf2191d",
+    "cadastreSha256ByCommune": {
+      "21150": "88f4a5b76fa1ee77402c066f7c545fe08c6051c0fb0e64d94e18ed1a1f57e5d9",
+      "21512": "0b270bc1bf040f9108ff1fa9e9c2014937dc99a5999e7b068c616afbd25204c9"
+    },
+    "note": "The 511.849881 m² remainder (0.431741%) was measured against both INAO communes and visually reviewed in an overview and all seven component views. Six components touch the INAO boundary: narrow western and northern edge strips, a 48.896868 m² gap along the commune line and a 26.247291 m² southeastern edge wedge. The seventh is a 1.514982 m² interior strip at the commune line, 0.864 m from the INAO edge, with a 0.143 m enclosing-rectangle width. No missing commune or detached missing parcel was found. The 511.9 m² cap allows less than 0.051 m² above the measured gap and is tied to exact source hashes. No geometry is clipped, buffered, filled or simplified."
+  },
+  "crossCommuneCoverage": {
+    "coverageByCommuneM2": {
+      "21150": 57822.904291,
+      "21512": 60224.074035
+    },
+    "crossCommuneOverlaps": [
+      {
+        "communes": [
+          "21150",
+          "21512"
+        ],
+        "areaM2": 4.116028
+      }
+    ],
+    "unionCoverageM2": 118042.862298,
+    "note": "Full original parcel polygons are measured in EPSG:2154. Commune coverage can overlap; the union counts shared area once. Cru membership and the shared parcel asset are not split at the commune line."
+  }
+}

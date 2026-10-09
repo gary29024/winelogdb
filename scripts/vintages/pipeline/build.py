@@ -324,7 +324,7 @@ def anchor_sugar_curves(built: dict[str, tuple[dict, dict]], area_of: dict[str, 
             model = mean(curve_sugar(built[v][1][year][grape]['sugar']['values'], year, day) for v in villages)
             gaps.append((sugar - model) * plots)
             weights.append(plots)
-        if sum(weights) >= 3:
+        if sum(weights) >= REGION.get('measured_min_plots', 3):
             measured[(area, grape, year)] = sum(gaps) / sum(weights)
 
     stand_in: dict[str, list[str]] = REGION.get('sugar_stand_in', {})

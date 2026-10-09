@@ -48,11 +48,19 @@ def main():
     parent = shape(parent_feature['geometry'])
     project = Transformer.from_crs(4326, 2154, always_xy=True).transform
     area = lambda g: transform(project, g).area
-    features, metadata, diagnostics, geometries = [], [], [], []
+    features, metadata, diagnostics, geometries, overlaps = [], [], [], [], []
     for entry in config['plots']:
         found = [f for f in inputs if key(f['properties']['nom']) == key(entry['sourceName'])]
-        assert len(found) == 1, f"Missing or duplicate cadastral name: {entry['sourceName']}"
-        original = shape(found[0]['geometry'])
+        assert found, f"Missing cadastral name: {entry['sourceName']}"
+        # The cadastre can record one lieu-dit as separate same-name features in one commune
+        # (Romanée-Saint-Vivant); they form one named area. A name used in several communes needs a
+        # reviewed `communes` list: every commune of a lieu-dit that crosses the line (Bonnes-Mares),
+        # or the one commune meant when another commune has its own place of that name (Les Chabiots).
+        if 'communes' in entry:
+            found = [f for f in found if f['properties']['commune'] in entry['communes']]
+        found_communes = sorted({f['properties']['commune'] for f in found})
+        assert found_communes == entry.get('communes', found_communes[:1]), f"Cadastral name in unreviewed communes: {entry['sourceName']}"
+        original = shape(found[0]['geometry']) if len(found) == 1 else unary_union([shape(f['geometry']) for f in found])
         assert original.is_valid and original.geom_type in ('Polygon', 'MultiPolygon')
         clipped = original.intersection(parent)
         parts = polygons(clipped)
@@ -63,22 +71,30 @@ def main():
         # Keep all positive-area pieces and exclusions. No rounding, buffering,
         # snapping, sliver removal or gap filling is used to force coverage.
         assert abs(area(geometry) - area(clipped)) < 0.000001
-        for previous in geometries:
-            assert area(geometry.intersection(previous)) < 0.01, 'Overlapping named plots require review'
+        for previous_id, previous in zip([e['id'] for e in config['plots']], geometries):
+            # The lieux-dits layer itself can overlap (Calouère and Maison Brûlée). Both outlines are kept as
+            # published; a reviewed pair caps the shared area in m² and the report records the measurement.
+            shared = area(geometry.intersection(previous))
+            if shared < 0.01:
+                continue
+            review = next((r for r in config.get('reviewedOverlaps', []) if set(r['plots']) == {previous_id, entry['id']}), None)
+            assert review and shared <= review['maximumAreaM2'], f"Overlapping named plots require review: {previous_id}, {entry['id']}"
+            overlaps.append({'plots': [f'{cru["slug"]}-plot-{previous_id}', f'{cru["slug"]}-plot-{entry["id"]}'], 'areaM2': shared})
         geometries.append(geometry)
         point = max(parts, key=area).representative_point()
         properties = {
             'id': f'{cru["slug"]}-plot-' + entry['id'], 'name': entry['name'], 'kind': 'named_plot',
             'tier': 'grand_cru', 'appellationId': cru['appellationId'], 'denominationId': None,
             'parentFeatureId': cru['parentFeatureId'], 'parentAppellation': cru['name'],
-            'sourceName': entry['sourceName'], 'communes': [found[0]['properties']['commune']],
+            'sourceName': entry['sourceName'], 'communes': found_communes,
             'areaHa': round(area(geometry) / 10000, 6), 'matchId': '', 'atlasUrl': None,
             'bounds': list(geometry.bounds), 'labelPoint': [point.x, point.y],
         }
         features.append({'type': 'Feature', 'id': properties['id'], 'properties': properties, 'geometry': mapping(geometry)})
         metadata.append(properties)
         diagnostics.append({'id': properties['id'], 'sourceHa': area(original) / 10000, 'clippedHa': area(geometry) / 10000,
-                            'parts': len(parts), 'holes': sum(len(p.interiors) for p in parts)})
+                            'parts': len(parts), 'holes': sum(len(p.interiors) for p in parts),
+                            **({'sourceFeatures': len(found)} if len(found) > 1 else {})})
     if not display_layer:
         # Audit the same exact clipped polygons even when a whole-cru named area needs no duplicate app layer.
         write_json(named_plot_report_path(cru), {
@@ -90,7 +106,8 @@ def main():
             'parentSourceSha256': sha256(source_bytes), 'parentSources': catalogue['sources'],
             'parentHa': area(parent) / 10000, 'mappedHa': area(unary_union(geometries)) / 10000,
             'unmappedHa': area(parent.difference(unary_union(geometries))) / 10000,
-            'plots': diagnostics, 'unresolved': config['unresolved'],
+            'plots': diagnostics, **({'overlaps': overlaps} if overlaps else {}), 'unresolved': config['unresolved'],
+            **({'neighbouringLieuxDits': config['neighbouringLieuxDits']} if 'neighbouringLieuxDits' in config else {}),
         })
         print(f'{len(features)} named areas audited; whole-cru outline retained ({config["coverageNote"]})')
         return
@@ -119,7 +136,8 @@ def main():
         'dataUrl': data_url, 'sha256': sha256(payload), 'bytes': len(payload), 'gzipEquivalentBytes': len(gzip.compress(payload, mtime=0)),
         'parentHa': area(parent) / 10000, 'mappedHa': area(unary_union(geometries)) / 10000,
         'unmappedHa': area(parent.difference(unary_union(geometries))) / 10000,
-        'plots': diagnostics, 'unresolved': config['unresolved']})
+        'plots': diagnostics, **({'overlaps': overlaps} if overlaps else {}), 'unresolved': config['unresolved'],
+        **({'neighbouringLieuxDits': config['neighbouringLieuxDits']} if 'neighbouringLieuxDits' in config else {})})
     write_json(named_plot_report_path(cru), report)
     print(f'{len(features)} plots, {len(payload)} bytes, {len(gzip.compress(payload, mtime=0))} gzip-equivalent bytes')
 

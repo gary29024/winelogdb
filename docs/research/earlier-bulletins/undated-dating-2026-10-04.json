@@ -1,0 +1,599 @@
+{
+ "schemaVersion": 1,
+ "datedAt": "2026-10-04T02:37:24Z",
+ "pinnedCorporaCompared": [
+  "cote-dor-2016",
+  "cote-dor-2017",
+  "cote-dor-2018",
+  "cote-dor-2019",
+  "cote-dor-2020"
+ ],
+ "documents": [
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_001.pdf",
+   "downloadState": "downloaded",
+   "sha256": "3ea132b0150e32f6d16b8833f2fb35308c695f0827c8a14a7e4ef230021ea4a4",
+   "issueDate": "2011-01-03",
+   "publicationYear": 2011,
+   "coverEvidence": "du 3 janvier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_001_2016-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "2a8ad67e66d6364062a973d83008a34c911c2ce911031ce99743cf41944c8f72",
+   "issueDate": "2016-01-01",
+   "publicationYear": 2016,
+   "coverEvidence": "du 1er janvier 2016",
+   "basis": "byte-identical to a pinned corpus PDF; excluded",
+   "duplicateOf": "cote-dor-2016"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_002.pdf",
+   "downloadState": "downloaded",
+   "sha256": "4021afeeeae841e31e0828c3ae1a3eacf6d04dec4f33ad72eec8682283c90ddc",
+   "issueDate": "2011-01-10",
+   "publicationYear": 2011,
+   "coverEvidence": "du 10 janvier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_003-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "33a83ce3c15644fc2574557605e46df06494d3037c9894825f7475ccfda76e54",
+   "issueDate": "2013-01-17",
+   "publicationYear": 2013,
+   "coverEvidence": "du 17 janvier 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_004-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "2764d2ef68c50dd4fe2e3179aff5e17066245a3692c57cf684e4e85858128622",
+   "issueDate": "2013-01-31",
+   "publicationYear": 2013,
+   "coverEvidence": "du 31 janvier 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_004.pdf",
+   "downloadState": "downloaded",
+   "sha256": "731dfdf6db898be2f8653dab641e459821126dba87d09692fa0521fdc01cdb84",
+   "issueDate": "2011-01-24",
+   "publicationYear": 2011,
+   "coverEvidence": "du 24 janvier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_005-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "eb5400ae8d54539be28613a91b35ec9bfa4cfc645cfad6b061c6e7e71993119e",
+   "issueDate": "2013-02-13",
+   "publicationYear": 2013,
+   "coverEvidence": "du 13 fevrier 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_005.pdf",
+   "downloadState": "downloaded",
+   "sha256": "b9bbf4e6b28f9316d92bce3a5338fc732cd51786dc35328086c456602e2627bf",
+   "issueDate": "2011-01-31",
+   "publicationYear": 2011,
+   "coverEvidence": "du 31 janvier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_006.pdf",
+   "downloadState": "downloaded",
+   "sha256": "0ce00b7bdc8a68883b577d18d93315e4baeb5ba3b5fa9060a7e602ca32e52d1f",
+   "issueDate": "2011-02-01",
+   "publicationYear": 2011,
+   "coverEvidence": "du 1er fevrier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_007.pdf",
+   "downloadState": "downloaded",
+   "sha256": "7e947d5a78ebac39fc0b57fc60b436974a513ec03c64a2cdd326d0d5154dfa91",
+   "issueDate": "2011-02-16",
+   "publicationYear": 2011,
+   "coverEvidence": "du 16 fevrier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_008.pdf",
+   "downloadState": "downloaded",
+   "sha256": "482eef43901619c22918d1b19fb0e4edabdd728c58157b1620ddbde057b0566c",
+   "issueDate": "2011-02-28",
+   "publicationYear": 2011,
+   "coverEvidence": "du 28 fevrier 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_009.pdf",
+   "downloadState": "downloaded",
+   "sha256": "578c95561ea89d8af31157e675103d53f2e87681b460dc17d6e13702e0ac797c",
+   "issueDate": "2011-03-08",
+   "publicationYear": 2011,
+   "coverEvidence": "du 8 mars 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_010.pdf",
+   "downloadState": "downloaded",
+   "sha256": "4eb89171b63e2636d0b9d2f00caddbe069a5ebb32a4f6980953e2e336eb924ad",
+   "issueDate": "2011-03-16",
+   "publicationYear": 2011,
+   "coverEvidence": "du 16 mars 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "73fc0216cd5921b63ff73091eac966474caa9ec831a67e7382083f69f352a14a",
+   "issueDate": "2013-04-02",
+   "publicationYear": 2013,
+   "coverEvidence": "du 2 avril 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011.pdf",
+   "downloadState": "downloaded",
+   "sha256": "a8dd9b630ca489a518a69e70700ef65c06bbc487b501b3b137bae333c1ce6bb7",
+   "issueDate": "2011-03-31",
+   "publicationYear": 2011,
+   "coverEvidence": "du 31 mars 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_012-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "557cb01fcb187075b898f6e13ddb32ad507a7a1795795a982c2b5b961f1b3a8e",
+   "issueDate": "2013-04-05",
+   "publicationYear": 2013,
+   "coverEvidence": "du 5 avril 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_013-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "7d8b0c01914ac4ae4e9b3932b54100d7099bd64fa959d065b82be3efb36aa744",
+   "issueDate": "2013-04-11",
+   "publicationYear": 2013,
+   "coverEvidence": "du 11 avril 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_013.pdf",
+   "downloadState": "downloaded",
+   "sha256": "3e3ca5e92e1bea4e2373e6428eb44dc57ed50eee3883bbeb9db2f6f125692e7a",
+   "issueDate": "2011-04-18",
+   "publicationYear": 2011,
+   "coverEvidence": "du 18 avril 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_014-2.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_014.pdf",
+   "downloadState": "downloaded",
+   "sha256": "c979fb27df79b0964567c45e72930051c039056b0a348a741c8313723819bdd6",
+   "issueDate": "2011-04-29",
+   "publicationYear": 2011,
+   "coverEvidence": "du 29 avril 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_015.pdf",
+   "downloadState": "downloaded",
+   "sha256": "0d321aafc0ed3ccf00afefbdb180893fde42f58c490c0d7c912a75bca84d910b",
+   "issueDate": "2011-05-05",
+   "publicationYear": 2011,
+   "coverEvidence": "du 5 mai 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_016-2.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_016.pdf",
+   "downloadState": "downloaded",
+   "sha256": "6c9b9f8197efcf98e6bb473f3a01ffb6f70a0a0085308020022e131e1fdc8d27",
+   "issueDate": "2011-05-16",
+   "publicationYear": 2011,
+   "coverEvidence": "du 16 mai 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_017-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "05b6358887add99a8a6e680924a8c01d6f8cf4f662976d2c0223ee92487c89d2",
+   "issueDate": "2013-06-03",
+   "publicationYear": 2013,
+   "coverEvidence": "du 3 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_017.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_018-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "595df7b8cf8d8c4851d7fdea49f1a0240e678209e5e4a69816fdcca85289858f",
+   "issueDate": "2013-06-04",
+   "publicationYear": 2013,
+   "coverEvidence": "du 4 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_019-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "10a81b56cdf41b4e2622f3555c4a1cbea01304a15f6ab6fcd62688001522353e",
+   "issueDate": "2013-06-12",
+   "publicationYear": 2013,
+   "coverEvidence": "du 12 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_020-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "3bb7b2005edd4161a170c08161ef96b43d22746464bad3f751e4ee3894d2ac97",
+   "issueDate": "2013-06-13",
+   "publicationYear": 2013,
+   "coverEvidence": "du 13 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_020.pdf",
+   "downloadState": "downloaded",
+   "sha256": "1644f12915ce721191544e5ad3e78e841fc7731d5cdefd4251675bc483ccee9a",
+   "issueDate": "2011-06-09",
+   "publicationYear": 2011,
+   "coverEvidence": "du 9 juin 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_021-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "75a15509c6ed815784949498d548c05d196326fee264a25586dccca4535ad394",
+   "issueDate": "2013-06-17",
+   "publicationYear": 2013,
+   "coverEvidence": "du 17 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_021.pdf",
+   "downloadState": "downloaded",
+   "sha256": "8eb1313354642fbe427f063f7fd9d6b3ab60b96b7de461dedc421d3daef89025",
+   "issueDate": "2011-06-15",
+   "publicationYear": 2011,
+   "coverEvidence": "du 15 juin 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_024-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "1df2b19c6ae98bdf135dcbcf2decac0c0c10ae41e33bbdfcb1d515bdba6066af",
+   "issueDate": "2013-06-27",
+   "publicationYear": 2013,
+   "coverEvidence": "du 27 juin 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_024.pdf",
+   "downloadState": "downloaded",
+   "sha256": "9da39d710006531d1b4d7a440cf83615890c8e1a3dc2f8a00e3627620ee49edc",
+   "issueDate": "2011-07-18",
+   "publicationYear": 2011,
+   "coverEvidence": "du 18 juillet 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_025-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "f9c6c4ba0115796c9f4131218543922dc502ac66bb9d8b94b80907cf0604717c",
+   "issueDate": "2013-07-08",
+   "publicationYear": 2013,
+   "coverEvidence": "du 8 juillet 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_026.pdf",
+   "downloadState": "downloaded",
+   "sha256": "ce176984988b890b1ab75e1d927bf45137bb12043d8fdb38b63f82c51084cf97",
+   "issueDate": "2011-08-05",
+   "publicationYear": 2011,
+   "coverEvidence": "du 5 aout 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_026_2016.pdf",
+   "downloadState": "downloaded",
+   "sha256": "5a1942ce79738d3afd5322a624c85afe164d54d1b9284b657b22051d3b61c876",
+   "issueDate": "2016-05",
+   "publicationYear": 2016,
+   "coverEvidence": "mai 2016",
+   "basis": "byte-identical to a pinned corpus PDF; excluded",
+   "duplicateOf": "cote-dor-2016"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_027-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "6c3dfabf6675aa6ec25980762e3df9189b81e6e315ecbf64f425920bf721d4db",
+   "issueDate": "2013-07-19",
+   "publicationYear": 2013,
+   "coverEvidence": "du 19 juillet 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_027.pdf",
+   "downloadState": "downloaded",
+   "sha256": "50d76a9514db2eb94021c00cb464fb64ebf6cd6c6c17d8f27399e415901019b6",
+   "issueDate": "2011-08-18",
+   "publicationYear": 2011,
+   "coverEvidence": "du 18 aout 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_028-2.pdf",
+   "downloadState": "downloaded",
+   "sha256": "45fa48a7d7ca74c5416960262e3b8253b906c153d6a8cea450ee4322faa2aba2",
+   "issueDate": "2013-07-26",
+   "publicationYear": 2013,
+   "coverEvidence": "du 26 juillet 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_029-2.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_029.pdf",
+   "downloadState": "downloaded",
+   "sha256": "4766bcf080401805a3d4a09f0ac295fd1cf08b189454b8dd0bea2a8e0c647abf",
+   "issueDate": "2011-09-05",
+   "publicationYear": 2011,
+   "coverEvidence": "du 5 septembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_030.pdf",
+   "downloadState": "downloaded",
+   "sha256": "e6e3d76392538240053b0d9d579ffa12898cb1afb7279a3577b63039022240c4",
+   "issueDate": "2011-09-12",
+   "publicationYear": 2011,
+   "coverEvidence": "du 12 septembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_033.pdf",
+   "downloadState": "downloaded",
+   "sha256": "c52cdbf7bc41a9b717acc212cf7dd49fb94b2f882f009bb0fef73a961adff040",
+   "issueDate": "2011-10-06",
+   "publicationYear": 2011,
+   "coverEvidence": "du 6 octobre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_034_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_035.pdf",
+   "downloadState": "downloaded",
+   "sha256": "c4f8396f3f4ca1f1087892d8ce8c49a511c4176a46656a99e64606feb19bda7b",
+   "issueDate": "2011-10-18",
+   "publicationYear": 2011,
+   "coverEvidence": "du 18 octobre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_036.pdf",
+   "downloadState": "downloaded",
+   "sha256": "9aac654e45bf0cb1cfef10b095860127942b3b6dc6a422c4b523a74ea097b1c6",
+   "issueDate": "2011-10-26",
+   "publicationYear": 2011,
+   "coverEvidence": "du 26 octobre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_036_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_037.pdf",
+   "downloadState": "downloaded",
+   "sha256": "f8ac9468bd6b553e29bdd59540d00ae10e528c45a803a43155b8c0c8abe68267",
+   "issueDate": "2011-11-07",
+   "publicationYear": 2011,
+   "coverEvidence": "du 7 novembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_038.pdf",
+   "downloadState": "downloaded",
+   "sha256": "1e071e597740a72f9a6040e7a71ea52bea473f403f3bfa52551b44dc8867e976",
+   "issueDate": "2011-11-10",
+   "publicationYear": 2011,
+   "coverEvidence": "du 10 novembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_038_Special.pdf",
+   "downloadState": "downloaded",
+   "sha256": "532350ce9424c6c66cebdf10b6d638956b13711dc160349e9509f86549c0c111",
+   "issueDate": "2013-09",
+   "publicationYear": 2013,
+   "coverEvidence": "septembre 2013",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_039.pdf",
+   "downloadState": "downloaded",
+   "sha256": "bf7c11d944fcd74f42ac07fe79716319b4f438e1a0362cfd9fb970df9a029ee5",
+   "issueDate": "2011-11-22",
+   "publicationYear": 2011,
+   "coverEvidence": "du 22 novembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_041_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_043.pdf",
+   "downloadState": "downloaded",
+   "sha256": "20c8754a67283bda746eff845e867e810b948f8f3117abbb14cd03d9c3cccfa4",
+   "issueDate": "2011-12-08",
+   "publicationYear": 2011,
+   "coverEvidence": "du 8 decembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_044_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_046_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_047_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_048.pdf",
+   "downloadState": "downloaded",
+   "sha256": "1e292a4ae61cc8f23e9b1718328a645070eadd1dbaa32d06869caa7342e425bf",
+   "issueDate": "2011-12-22",
+   "publicationYear": 2011,
+   "coverEvidence": "du 22 decembre 2011",
+   "basis": "printed cover issue date (page 1 text)"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_049.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_050_2016.pdf",
+   "downloadState": "downloaded",
+   "sha256": "3bb8d25d502d213ebdcdbbc4f9e91a49dcd558b31d1e0ff441a6df3551ce686b",
+   "issueDate": "2016-10",
+   "publicationYear": 2016,
+   "coverEvidence": "octobre 2016",
+   "basis": "byte-identical to a pinned corpus PDF; excluded",
+   "duplicateOf": "cote-dor-2016"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_051_2016.pdf",
+   "downloadState": "downloaded",
+   "sha256": "64d1d56a416ccf4dbc42601d5aeb770cb191c481a03cf88236138ca27f7e826e",
+   "issueDate": "2016-10",
+   "publicationYear": 2016,
+   "coverEvidence": "octobre 2016",
+   "basis": "byte-identical to a pinned corpus PDF; excluded",
+   "duplicateOf": "cote-dor-2016"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_051_Special.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_052_2016.pdf",
+   "downloadState": "downloaded",
+   "sha256": "255e169ba1366e817f084b9337a0ff7b3a95acf9b332bdd84a2c8f8f68c35d65",
+   "issueDate": "2016-10",
+   "publicationYear": 2016,
+   "coverEvidence": "octobre 2016",
+   "basis": "byte-identical to a pinned corpus PDF; excluded",
+   "duplicateOf": "cote-dor-2016"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_054.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_055.pdf",
+   "downloadState": "unavailable"
+  },
+  {
+   "department": "21",
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_057_2015.pdf",
+   "downloadState": "downloaded",
+   "sha256": "ed6cc451696b4205bc2cec3e01250810b46de9ae4dc141cf5b94a0f1c5ce4df6",
+   "issueDate": "2015-12-23",
+   "publicationYear": 2015,
+   "coverEvidence": "du 23 decembre 2015",
+   "basis": "printed cover issue date (page 1 text)"
+  }
+ ],
+ "limitation": "A cover date dates the bulletin issue, not the acts it contains. Unresolved years stay undated."
+}

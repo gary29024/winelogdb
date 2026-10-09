@@ -1,0 +1,71 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Ruchottes-Chambertin boundary in WGS84; metric diagnostics in EPSG:2154.",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+    "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/ruchottes-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mzg2Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-communes.json.gz",
+      "sha256": "83ba2993416c65e4305ef183d258de1fdd6a80ec9ffd44577918742683ceeb52"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    }
+  ],
+  "dataUrl": "/maps/ruchottes-chambertin-named-plots.2026-06-01.74fd16687120.geojson",
+  "sha256": "74fd166871200f74e4ac52c708cb060adf7718b6b573ebcc334b8c140f430607",
+  "bytes": 6254,
+  "gzipEquivalentBytes": 2317,
+  "parentHa": 3.3107227641967714,
+  "mappedHa": 3.301705145041386,
+  "unmappedHa": 0.009017609848252348,
+  "plots": [
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-bas",
+      "sourceHa": 1.4458798929775365,
+      "clippedHa": 1.3109454011080097,
+      "parts": 3,
+      "holes": 0
+    },
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-dessus",
+      "sourceHa": 2.1009839713639415,
+      "clippedHa": 1.990759743933377,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "BEL-AIR",
+      "sourceCandidate": "BEL-AIR",
+      "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Ruchottes-Chambertin climat or extending the named areas."
+    },
+    {
+      "name": "LES MAZIS-HAUTS",
+      "sourceCandidate": "LES MAZIS-HAUTS",
+      "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Ruchottes-Chambertin climat or extending the named areas."
+    }
+  ]
+}

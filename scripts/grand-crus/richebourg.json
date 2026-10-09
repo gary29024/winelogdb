@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-1083",
   "appellationId": 221,
   "issue": 379,
-  "tier": 1,
+  "tier": 2,
   "bundle": "vosne-romanee",
   "villageMaps": [
     "vosne-romanee"
@@ -14,9 +14,29 @@
     "richebourg"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/richebourg/README.md",
+    "filingsDoc": "docs/research/richebourg/filings.md"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/richebourg",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/richebourg,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mzc5Jnw%3D",
+    "nameSourceChecked": "2026-10-06",
+    "nameSourceSha256": "af5de8414d85cbd5283a369cfc259d59092ece66dcfa1ed30f5dbddac4663fe9",
+    "coverageNote": "Les Richebourgs and Les Vérroilles ou Richebourgs are cadastral named areas within Richebourg. Their outlines follow the cadastre inside the official cru boundary, with small gaps retained; they do not show producer holdings.",
+    "plots": [
+      {
+        "id": "les-richebourgs",
+        "name": "Les Richebourgs",
+        "sourceName": "LES RICHEBOURGS",
+        "aliases": []
+      },
+      {
+        "id": "les-verroilles-ou-richebourgs",
+        "name": "Les Vérroilles ou Richebourgs",
+        "sourceName": "LES VERROILLES OU RICHEBOURGS",
+        "aliases": []
+      }
+    ],
+    "unresolved": []
   }
 }

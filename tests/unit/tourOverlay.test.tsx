@@ -84,7 +84,7 @@ describe('the first-run tour',()=>{
   await click('Next');
   expect(text()).toContain('Every wine you log');
   // The line the whole tour exists for.
-  expect(text()).toContain('Cellar tab');
+  expect(text()).toContain('In cellar tab');
   await click('Back');
   expect(text()).toContain('Your Passport');
   // Nothing to go back to on the first step, so no Back button is offered.

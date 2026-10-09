@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-547",
   "appellationId": 163,
   "issue": 388,
-  "tier": 1,
+  "tier": 2,
   "bundle": "chambolle-morey",
   "villageMaps": [
     "morey-saint-denis"
@@ -13,10 +13,58 @@
   "evidenceFrom": [
     "clos-des-lambrays"
   ],
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 435.8,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "1c35df97d71e231b9baa0ff07c5763293eb71e1976a425806ac5968fe8f84325",
+      "cadastreSha256ByCommune": {
+        "21133": "270a77936f8ee94e69a01ed9d12f20396fc7a3470ef9a8041266754a1cd2fe34",
+        "21442": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0"
+      },
+      "note": "The measured 435.799819 m² remainder (0.4958%) was reviewed against the pinned INAO boundary and Chambolle-Musigny and Morey-Saint-Denis cadastres. The largest piece is a 1.25 m strip along the cru's northern side; the rest are narrow strips at the eastern edge and between parcels. It forms 10 pieces, with mean widths of 0.05–1.25 m for those of at least 1 m². 62.592626 m² lies between parcels inside the outline and the rest along its edge. It is not a missing INAO commune. 435.799819 m² is covered by no audited parcel. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above this reviewed measurement; changed source hashes require another review."
+    }
+  },
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/clos-des-lambrays/README.md",
+    "filingsDoc": "docs/research/clos-des-lambrays/filings.md"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/clos-des-lambrays",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/clos-des-lambrays,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mjg4Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "5a0fa82eb55dbdcbc3188407d6beaf47d966ebb39bc74dd73fee673308e768a7",
+    "coverageNote": "Clos des Lambrays, Les Bouchots and Meix-Rentier are cadastral named areas within Clos des Lambrays; the cadastre records the first as LES LARRETS OU CLOS DES LAMBRAYS. Outlines follow the cadastre inside the official boundary, with small gaps retained; they do not show producer holdings. A label naming only the cru keeps the whole-cru outline.",
+    "plots": [
+      {
+        "id": "clos-des-lambrays",
+        "name": "Clos des Lambrays",
+        "sourceName": "LES LARRETS OU CLOS DES LAMBRAYS",
+        "aliases": []
+      },
+      {
+        "id": "les-bouchots",
+        "name": "Les Bouchots",
+        "sourceName": "LES BOUCHOTS",
+        "aliases": []
+      },
+      {
+        "id": "meix-rentier",
+        "name": "Meix-Rentier",
+        "sourceName": "MEIX RENTIER",
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "neighbouringLieuxDits": [
+      {
+        "sourceName": "LE VILLAGE",
+        "reason": "Not an official Clos des Lambrays climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      },
+      {
+        "sourceName": "LES LARRETS",
+        "reason": "Not an official Clos des Lambrays climat. It holds most of parcels that only touch the cru edge; they stay cru parcels for rights and history, with no named area."
+      }
+    ]
   }
 }

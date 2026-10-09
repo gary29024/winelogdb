@@ -74,9 +74,9 @@ describe('the group recognition handler, as it behaves today',()=>{
     const {stub}=await run();
     const writes=usageWrites(stub);
     expect(writes).toHaveLength(1);
-    // kind, run id, target, model, requests, searches, prompt, output, units
+    // id, owner, kind, run id, target, model, tier, requests, searches, prompt, output, units (11), created, step
     expect(writes[0].args[2]).toBe('scan_group');
-    expect(writes[0].args.at(-2)).toBe(2);
+    expect(writes[0].args[11]).toBe(2);
   });
 
   it('drops the response schema and retries when Gemini rejects it with a 400', async()=>{
@@ -115,7 +115,7 @@ describe('the group recognition handler, as it behaves today',()=>{
     expect(calls[1].url).toContain('gemini-3.8-flash');
     const writes=usageWrites(stub);
     expect(writes).toHaveLength(2);
-    expect(writes.map(write=>write.args.at(-2))).toEqual([2,0]);
+    expect(writes.map(write=>write.args[11])).toEqual([2,0]);
   });
 
   it('refuses anything but exactly one photo, and an unauthenticated caller', async()=>{
@@ -186,7 +186,7 @@ describe('accounting for unusable or rejected model answers',()=>{
     ]);
     const {response,stub}=await run();
     expect(((await response.json()) as {wines:unknown[]}).wines).toHaveLength(2);
-    expect(usageWrites(stub).map(write=>write.args.at(-2))).toEqual([2,0]);
+    expect(usageWrites(stub).map(write=>write.args[11])).toEqual([2,0]);
   });
   it('counts successful retry wines once and preserves failed attempt tokens',async()=>{
     stubGemini([()=>geminiReply('invalid'),()=>geminiReply({wines:[wine()],unresolvedCount:0})]);

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Curated, image-reviewed Yonne decisions that print Chablis parcel references, from Internet Archive captures of 2008–2026 departmental bulletins. Input to scripts/build_earlier_bulletin_reviews.py, which expands reviewed-parcels.json.",
+  "reviewedAt": "2026-10-02",
+  "reviewMethod": "Visually read each cited page rendered by Poppler pdftoppm at 120 dpi (about 1400 pixels on the long edge); checked the order number and date, Article 1 scope and period, annex footnotes, and that the annex rows parsed from the text layer reproduce the printed total.",
+  "decisions": [
+    {
+      "noticeId": "yonne-2012-special-017:p3:DDT-SEEP-2012-0018",
+      "actId": "DDT/SEEP/2012/0018",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/3570/22891/file/recueil%20special%20n%C2%B017.pdf",
+      "sha256": "a486be9b73b0605e422a802b4db85d78a0f90eeafa08522f63edfe60e585c5aa",
+      "bulletin": "Recueil spécial des actes administratifs n° 17/2012 du 16 mai 2012",
+      "publicationDate": "2012-05-16",
+      "noticePages": [3, 4, 5, 6],
+      "evidencePages": [3, 4, 5, 6],
+      "printedDate": "16 mai 2012",
+      "documentDate": "2012-05-16",
+      "applicant": "SOUFFLET VIGNE",
+      "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+      "previousOperator": null,
+      "status": "derogation-granted",
+      "operation": "aerial-spraying-derogation",
+      "landScope": "vineyard",
+      "validUntil": "2012-08-15",
+      "printedNoticeArea": "20.2443",
+      "totalNoticeAreaHa": 20.2443,
+      "parcelTable": {
+        "pages": [4, 5, 6],
+        "communes": {"Chablis": "89068", "Chablis Fyé": "89068", "Beines": "89034", "Chichée": "89104", "Maligny": "89242",
+                     "Lignorelles": "89226", "La Chapelle Vaupeilteigne": "89081", "Fontenay près de Chablis": "89175"},
+        "expectedRows": 76,
+        "printedTotalHa": 20.2443,
+        "footnotes": {
+          "(1)": "Only the parts of these parcels more than 50 m from the watercourse may be treated from the air.",
+          "(2)": "Of the La Prêle parcels, totalling 0.86 ha, only an 8-are zone benefits from the derogation."
+        }
+      },
+      "note": "Annex 1 lists parcels 'faisant l'objet de la demande de Soufflet Vigne pour lesquelles une dérogation est accordée'. Surfaces are printed per parcel without a unit; the 20.2443 total is read as hectares. The six Chablis Fyé La Prêle rows share one merged 0.08 cell and R 979 is printed twice; both are kept as printed. One Chichée-section row (C 1465) has a blank commune cell and stays unassigned. 'A2 555' is printed with section A2 and is not normalised. Chablis Fyé is an associated commune of Chablis (89068); the printed name is retained. A derogation records a treatment authorisation, not ownership, a lease or who farmed the parcel."
+    },
+    {
+      "noticeId": "yonne-2013-005:p128:DDT-SEEP-2013-0011",
+      "actId": "DDT/SEEP/2013/0011",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "sha256": "9296cce469d9ac2555d632a01eae60327b385a50dc7c6843d228ebc4e2e97386",
+      "bulletin": "Recueil des actes administratifs n° 5 du 31 mai 2013",
+      "publicationDate": "2013-05-31",
+      "noticePages": [128, 129, 130, 131],
+      "evidencePages": [128, 130, 131],
+      "printedDate": "22 mai 2013",
+      "documentDate": "2013-05-22",
+      "applicant": "SOCIETE SOUFFLET VIGNE",
+      "applicantRole": "Requester of the aerial-spraying derogation (donneur d'ordre); not stated to be an owner or operator of any parcel",
+      "previousOperator": null,
+      "status": "derogation-granted",
+      "operation": "aerial-spraying-derogation",
+      "landScope": "vineyard",
+      "validUntil": "2013-08-19",
+      "printedNoticeArea": "12.6036",
+      "totalNoticeAreaHa": 12.6036,
+      "parcelTable": {
+        "pages": [130, 131],
+        "communes": {"Chablis": "89068", "Chablis Fyé": "89068", "Beines": "89034", "Chichée": "89104", "Maligny": "89242",
+                     "Lignorelles": "89226"},
+        "expectedRows": 63,
+        "printedTotalHa": 12.6036,
+        "footnotes": {
+          "(1)": "Only the parts of these parcels more than 50 m from the watercourse may be treated from the air.",
+          "(2)": "Of the La Prêle parcels, totalling 0.86 ha, only an 8-are zone benefits from the derogation."
+        }
+      },
+      "note": "PDF page numbers are cited; the printed folios are one lower (PDF page 128 is printed 127). Article 1 names Beine, Chablis, Chichée, Lignorelles and Maligny. Compared with 2012 the annex omits A 11 and A 23 (Les Preuses) and adds A 95 (Les Vaudésirs, 1.4641); YN 101 Côte de Vaubarousse is printed under Chablis, whereas 2012 printed it under Fontenay près de Chablis. The five La Prêle rows share one merged 0.08 cell. A derogation records a treatment authorisation, not ownership, a lease or who farmed the parcel."
+    }
+  ],
+  "contextWithoutParcelRows": [
+    {
+      "actId": "DDT/SEEP/2013/0012",
+      "url": "https://www.yonne.gouv.fr/contenu/telechargement/9856/59623/file/recueil%20n%C2%B05.pdf",
+      "pages": [140],
+      "date": "2013-05-23",
+      "summary": "Temporary aerial-spraying derogation for Société Soufflet Vigne until 8 June 2013 on parcels whose waterlogged soil prevents ground machinery, 'listées en annexe'. The annex is not published in this bulletin (PDF page 141 is an unrelated order), so no parcel can be identified.",
+      "reviewStatus": "image-reviewed"
+    }
+  ],
+  "screenedNotEvidence": [
+    {"url": "https://www.yonne.gouv.fr/contenu/telechargement/3885/24409/file/recueil%20%2013%202008%20-%2031%2007%202008.pdf", "page": 65,
+     "reason": "Blanchot appears only in a member's street address ('14 rue de Blanchot – Fyé'); not parcel evidence."}
+  ]
+}

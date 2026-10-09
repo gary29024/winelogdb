@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-361",
-  "status": "historical-extension-inventory",
-  "scope": "All 130 mapped Bonnes-Mares parcels and 30 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 130 mapped Bonnes-Mares parcels and 30 recorded holders reviewed through the shared table for Tier 2. Historical filing schedules, company relations, reported tenancy and critic research remain separate. Tier 1 rights, geometry and history retained; no current farmer verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,320 +41,1436 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "eugenie-2022",
+      "title": "SCEA Domaine d'Eugénie application receipt, dossier 2022-217",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/104482/662548/file/recueil-bfc-2023-037-recueil-des-actes-administratifs-special.pdf#page=11",
+      "type": "government-event",
+      "documentDate": "2022-12-15",
+      "reviewedAt": "2026-10-07",
+      "sha256": "c0b7b3b5b341bcf02d99fe9c6d747e998e1700425c86bc64006c216f91d9fb59",
+      "reviewedPages": [
+        11
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "The receipt prints Chambolle-Musigny AB304, AB438 and AB440 separately from Gevrey-Chambertin BN34, AC6 and AC287–AC289; 0.6426 ha across both communes, previous operator Maison Bouchard Père et fils. The application was filed and complete on 24 November 2022; the letter is dated 15 December 2022, although its published act ID reads BFC-2023-12-15-00001. The receipt states it does not authorise cultivation."
+    },
+    {
+      "id": "bm-dujac-sheet",
+      "title": "Domaine Dujac: Bonnes Mares technical sheet",
+      "url": "https://www.dujac.com/en/pdf/8-bonnes-mares-grand-cru.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09",
+      "sha256": "70dd2cd156f7248e5fde741f3050379eab307a26ecf1b054853d77bcb25225a5",
+      "bytes": 7721,
+      "retrievalNote": "Hash covers the combined saved web-tool public text capture, not raw HTML or PDF bytes. Direct download returned HTTP 503.",
+      "finding": "The undated estate sheet reports 58 ares 01 ca (0.5801 ha). Named-area census only; no individual cadastral references."
+    },
+    {
+      "id": "bm-hudelot-wines",
+      "title": "Domaine Hudelot-Baillet: wines",
+      "url": "https://domainehudelotbaillet.com/nos-vins/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:33:39.872973+00:00",
+      "retrievedFrom": "https://domainehudelotbaillet.com/nos-vins/",
+      "sha256": "7f5e2c4c891316450c9b8c4d119e09fcc77588d0e24000af505df5a658a302a1",
+      "bytes": 111907,
+      "finding": "The estate reports 0.13 ha of Bonnes-Mares; named-area census only."
+    },
+    {
+      "id": "bm-roumier-estate",
+      "title": "Domaine Georges Roumier: Bonnes-Mares 2021",
+      "url": "https://www.roumier.com/fr_FR/vin/bonnes-mares/2021",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:22:37.657263+00:00",
+      "retrievedFrom": "https://www.roumier.com/fr_FR/vin/bonnes-mares/2021",
+      "sha256": "42530ae5c7b5510028adf74d788435f569493f6956f3eb04a79a34e4b2ff935e",
+      "bytes": 47914,
+      "finding": "The 2021 wine page reports 1.3919 ha; a dated vintage page, not proof of current parcel operation."
+    },
+    {
+      "id": "bm-drouhin-laroze-estate",
+      "title": "Drouhin-Laroze: Bonnes-Mares",
+      "url": "https://www.drouhin-laroze.com/en/our-wines/4/bonnes-mares",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:22:38.003699+00:00",
+      "retrievedFrom": "https://www.drouhin-laroze.com/en/our-wines/4/bonnes-mares",
+      "sha256": "88b2a04dd920884cab1a45fab0a32172289fd0678ee30bc5e4f723f7d7dacbad",
+      "bytes": 27832,
+      "finding": "The estate reports 1.5 ha; a rounded named-area total without individual cadastral references."
+    },
+    {
+      "id": "bm-winehog-vogue-history",
+      "title": "Winehog: Domaine Comte Georges de Vogüé – History and Vineyards",
+      "url": "https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/",
+      "type": "critic-research",
+      "documentDate": "2014-04-05",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "b609542cba7d1b8d0bb0108908731de35ced17e082341a446b1e2e11b3f751e7",
+      "bytes": 2957635,
+      "retrievedAt": "2026-10-08T15:22:08.135277+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash covers original archive bytes; archive, full text and images stay outside Git.",
+      "finding": "Historical total 2.70 ha; printed cadastre 98 is 473 m2, unlike current AB98 at 130 m2."
+    },
+    {
+      "id": "bm-winehog-drouhin",
+      "title": "Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/",
+      "type": "critic-research",
+      "documentDate": "2018-09-12",
+      "otherDocumentDates": [
+        {
+          "date": "2018-09-13",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "2def671776febf9b8fc8d0050f36e60d6756654f346ac8201825fbc5475a7437",
+      "bytes": 3221502,
+      "retrievedAt": "2026-10-08T15:22:08.797515+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash covers original archive bytes; archive, full text and images stay outside Git.",
+      "finding": "AB83/114/305/306 have only a combined 0.23 ha; no individual printed areas."
+    },
+    {
+      "id": "bm-winehog-arlaud",
+      "title": "Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/",
+      "type": "critic-research",
+      "documentDate": "2018-03-11",
+      "otherDocumentDates": [
+        {
+          "date": "2018-03-11",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "695c5d262aecb17269241175f8bf51c1f9373f17922fcbd2c91ead7b211e8831",
+      "bytes": 3016528,
+      "retrievedAt": "2026-10-08T15:22:08.860041+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash covers original archive bytes; archive, full text and images stay outside Git.",
+      "finding": "AB76 is 660 m2 and AB121 is 1421 m2. The claimed total 0.2131 ha differs from their 0.2081 ha sum."
+    },
+    {
+      "id": "bm-winehog-groffier",
+      "title": "Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/",
+      "type": "critic-research",
+      "documentDate": "2018-02-13",
+      "otherDocumentDates": [
+        {
+          "date": "2018-02-13",
+          "kind": "page metadata modification"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "cbd56b14276dabef9ad1f1bbb0979049e3467b6c22e3e33fea61c597e5886e8e",
+      "bytes": 3245034,
+      "retrievedAt": "2026-10-08T15:22:08.927076+00:00",
+      "retrievalNote": "Authorized user-supplied MHTML. Hash covers original archive bytes; archive, full text and images stay outside Git.",
+      "finding": "AB266 is 9748 m2, matching the current individual reference and area."
+    },
+    {
+      "id": "bm-winehog-mugnier",
+      "title": "Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/",
+      "type": "critic-research",
+      "documentDate": "2018-02-22",
+      "otherDocumentDates": [
+        {
+          "date": "2018-02-22",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "62e3cbb0f494fb5d136c24cfb5c62d0ac5fca15721139ce4d09f84ec0269d70e",
+      "bytes": 4514464,
+      "retrievedAt": "2026-10-09T05:15:15.654223+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB84/282/292/293/78 share a 0.36 ha total without individual areas. Drouhin AB83/114/305/306 likewise share 0.2298 ha. Historical family and lease narrative does not establish a current operator or a company crosswalk."
+    },
+    {
+      "id": "bm-winehog-dujac",
+      "title": "Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)",
+      "url": "https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/",
+      "type": "critic-research",
+      "documentDate": "2018-03-24",
+      "otherDocumentDates": [
+        {
+          "date": "2018-03-25",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "02c7bf168f0bf6a8505de991229758f22d3264060e8c2fe498d9e966595497aa",
+      "bytes": 3999928,
+      "retrievedAt": "2026-10-09T05:15:15.675485+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total and remain unmatched individually. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha."
+    },
+    {
+      "id": "bm-winehog-roumier",
+      "title": "Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/",
+      "type": "critic-research",
+      "documentDate": "2018-05-06",
+      "otherDocumentDates": [
+        {
+          "date": "2023-03-07",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "4baae097b02deeb43047ed294165e0055b5ef30578e5a62f982951d91adfff63",
+      "bytes": 4647623,
+      "retrievedAt": "2026-10-09T05:15:15.699218+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "Nine current references individually match. Retired Chambolle AB467 matches 1803 m2 in the 3 April 2018 cadastre and reaches AB481/482 only through the 9 November 2020 DFI division. AB367 prints 1608 m2 versus 1618 m2; AB65 is a conjectural portion; the soil paragraph also mentions AB349 without an area. The 2023 metadata modification does not date new observations."
+    },
+    {
+      "id": "bm-winehog-bertheau",
+      "title": "Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/",
+      "type": "critic-research",
+      "documentDate": "2018-04-27",
+      "otherDocumentDates": [
+        {
+          "date": "2018-04-27",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "8abf6a02704c77ea7f021544248ee591785c7ae5495cf327b453b7e378a2b34e",
+      "bytes": 3722581,
+      "retrievedAt": "2026-10-09T05:15:15.721544+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB119 (2417 m2) and AB79 (1027 m2) individually match. Total 0.3444 ha is named-area census only; suggested Trapet-family origins do not establish a parcel ownership chain."
+    },
+    {
+      "id": "bm-winehog-auvenay",
+      "title": "Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares",
+      "url": "https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/",
+      "type": "critic-research",
+      "documentDate": "2018-05-03",
+      "otherDocumentDates": [
+        {
+          "date": "2018-05-12",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "0c0a7e6ed1f21aae73d12c50c8a08ecfe6b446e398dae296bb12e32eceaee0f6",
+      "bytes": 3737232,
+      "retrievedAt": "2026-10-09T05:15:15.791203+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "AB91 (700 m2) and AB90 (1898 m2) individually match. Total 0.2598 ha is named-area census only. The article explicitly lacks confirmed information on the previous owner; its Roumier-family hypothesis is not an accepted chain."
+    },
+    {
+      "id": "bm-winehog-vogue",
+      "title": "Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update",
+      "url": "https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/",
+      "type": "critic-research",
+      "documentDate": "2018-05-16",
+      "otherDocumentDates": [
+        {
+          "date": "2018-05-16",
+          "kind": "page metadata modification; not a refreshed parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "d523e35840d86e0f4104b9a2372d39e85532d9baa92888b4d76df56ef8af1927",
+      "bytes": 4443300,
+      "retrievedAt": "2026-10-09T05:15:15.814203+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
+      "finding": "Total 2.669 ha and AB98/99 combined 473 m2; AB111 has no individual area. No individual parcel match. The combined 98/99 statement is retained alongside, not substituted for, the conflicting 2014 single-98 account."
     }
   ],
   "holders": [
     {
       "holderId": "212101331",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed."
     },
     {
       "holderId": "322396185",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "name-and-seat-crosswalk",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-322396185",
+        "bm-dujac-gfa-2000",
+        "bm-dujac-gfa-2018",
+        "bm-rne-322396185",
+        "bm-dujac-sa-1997",
+        "bm-dujac-sas-2007",
+        "bm-rne-413372608"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing provisional family-company lead retained. The 2000 conversion recites an 18-year metayage from 1997 to Domaine Dujac SA without an individual Bonnes-Mares schedule or renewal. Distinct operating-company filings also screened."
     },
     {
       "holderId": "326418761",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-bertheau-2020",
+        "bm-bertheau-2012",
+        "bm-bertheau-2024",
+        "bm-rne-326418761"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA statutes retain exact AB79/119 contributions. The family name alone does not establish a relationship to a separate producer company or current tenant."
     },
     {
       "holderId": "330763426",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-330763426",
+        "bm-groffier-2015",
+        "bm-groffier-2022",
+        "bm-groffier-2007"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Filed conversion and wine-business statutes identify Domaine Robert Groffier Pere et Fils. No exact AB266 filing was located."
     },
     {
       "holderId": "343567632",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "reported-operator-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-343567632",
+        "bm-cote-nuits-2015",
+        "bm-cpgc",
+        "bm-hudelot-history",
+        "bm-rne-451563118",
+        "bm-cote-nuits-1995"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The company register and statutes identify GFA Cote de Nuits. The fund reports a Chambolle-Musigny tenancy; the estate history identifies Hudelot-Baillet. Undated report, no executed parcel lease."
     },
     {
       "holderId": "350591319",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-350591319",
+        "rne-452219033",
+        "christian-confuron-2021"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "383339470",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-nabuca-2026",
+        "bm-nabuca-2014",
+        "bm-nabuca-2004",
+        "bm-rne-383339470"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2014 deed renames GFA Domaine Newman to GFA NabuCa without creating a new legal person. Its exact schedule matches three parcels. Individual managers and a mandate naming no tenant do not establish a current producer link."
     },
     {
       "holderId": "401584503",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-401584503",
+        "rne-398910034"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "429825250",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-lignier-2018",
+        "bm-lignier-2012",
+        "bm-lignier-1976",
+        "bm-rne-429825250"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "This legal holder is a GFA. Its 1976 schedule matches AB68/130, with historical fractional interests retained. Later future-lease authority does not prove the named operating company leases these parcels."
     },
     {
       "holderId": "480400407",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-480400407",
+        "bodacc-pousse-dor"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "482772282",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-bons-consorts-2018",
+        "bm-bons-consorts-2015",
+        "bm-bons-consorts-2005",
+        "bm-rne-482772282",
+        "bm-dujac-sa-1997",
+        "bm-dujac-sas-2007",
+        "bm-rne-413372608"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Cash formation, GFA conversion and family share donation do not establish a specific AB96 acquisition, producer-company relationship or executed tenancy."
     },
     {
       "holderId": "491471041",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed."
     },
     {
       "holderId": "515420255",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515420255",
+        "bodacc-bouchard-2026",
+        "rne-981574650",
+        "bouchard-legal"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "515620193",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515620193",
+        "rne-338113954",
+        "rne-330713074",
+        "rne-433359320"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "778173427",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-778173427",
+        "cm-roumier-2026"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "778252445",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-778252445",
+        "bm-auvenay-2024",
+        "bm-auvenay-2019",
+        "bm-auvenay-2001"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The statutes and register explicitly identify the Domaine d Auvenay wine company. No exact AB90/91 schedule was located."
     },
     {
       "holderId": "794244434",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed."
     },
     {
       "holderId": "818134116",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-vines-2017",
+        "bm-vines-2016-change",
+        "bm-vines-2016-formation",
+        "bm-rne-818134116"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "VINES cash capital and generic wine-business objects do not identify a separate domaine or individual Bonnes-Mares parcels."
     },
     {
       "holderId": "841127582",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-les-bonnes-mares-2018-capital",
+        "bm-les-bonnes-mares-2018-formation",
+        "bm-rne-841127582"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Cash formation and capital filings authorize a future Bonnes-Mares acquisition and an unnamed tenant. No individual current schedule or producer-company link."
     },
     {
       "holderId": "U18178981",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-mommessin-thorin-2004",
+        "bm-vins-vignobles-1997",
+        "bm-rne-685750598",
+        "bm-clos-tart-2017",
+        "bm-mommessin-2009",
+        "bm-mommessin-1998",
+        "bm-clos-tart-2022",
+        "bm-clos-tart-2018",
+        "bm-rne-686042409"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Filed name changes and the 2018 property schedule identify Societe du Clos de Tart 686042409. AR64 matches 2780 m2. The transaction transfers shares, not land; Winehog classifies AR64 as Clos de Tart. Current farming unverified."
     },
     {
       "holderId": "U21117863",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-dujac-gfa-2000",
+        "bm-dujac-gfa-2018",
+        "bm-rne-322396185",
+        "bm-dujac-sa-1997",
+        "bm-dujac-sas-2007",
+        "bm-rne-413372608"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 2000 conversion explains the old Dujac exploitation denomination, but SIREN 322396185 separately holds AB72 in this same cru. It cannot also crosswalk this U-id without resolving the two recorded identities."
     },
     {
       "holderId": "U21119406",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Exact-name searches for BND 133 AB0045 did not establish a legal company or producer. No U-id crosswalk assigned."
     },
     {
       "holderId": "U21119549",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Exact-name searches for BND 133 AB0132 did not establish a legal company or producer. No U-id crosswalk assigned."
     },
     {
       "holderId": "U21155571",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-377495288",
+        "bm-bussiere-2009",
+        "bm-bussiere-2026"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The exact GFA denomination and AB66 (1070 m2) schedule support the U-id company identity. The old usufruct contribution does not establish a producer link; the separate shared SIREN entry has only a provisional Roumier-family lead, not sufficient to copy to this U-id."
     },
     {
       "holderId": "U21197768",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-veroilles-2025",
+        "bm-rne-348999020"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA Veroilles candidate mentions AB46 in a handwritten acquisition mandate without an individual area. This does not establish the U-id identity, a completed purchase or a producer relationship."
     },
     {
       "holderId": "U21373997",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-bachus-2024",
+        "bm-bachus-1995",
+        "bm-rne-401538525"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA Bachus 21 is a same-name candidate, without an identity crosswalk for AB437/439. Its historical acquisition and lease mandates name different references AB438/440/304; two areas also differ from the current cadastre. No completed transaction inferred."
     },
     {
       "holderId": "U21401984",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-393095955",
+        "cm-sepv-1994-report",
+        "cm-sepv-1994-approval",
+        "register-sepv",
+        "sepv-stat-ccm"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation."
     },
     {
       "holderId": "U21459182",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-398367029",
+        "bm-bart-clair-2022",
+        "bm-bart-clair-1994",
+        "bm-rne-343043600"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Exact legal denomination, SIREN and individually matched AB41/85 schedules identify GFA Domaine Bart-Clair. SCEV du Domaine Bart 343043600 is separate; shared names and officers do not establish a producer relation."
     },
     {
       "holderId": "U21586080",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "filing-tenant-relationship",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-arlaud-gfa-2013",
+        "bm-rne-418411518",
+        "bm-rne-444144190",
+        "bm-rne-429825441"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA deed identifies SIREN 444144190 and exact AB76/121 contribution areas; it recites a 1998 lease of its property to SCEA Domaine Arlaud Pere et Fils 418411518. No original lease, duration or renewal reviewed. The separate registry entry 429825441 is not equated with 444144190."
     },
     {
       "holderId": "U21966026",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-483678264",
+        "bm-grands-vins-2024",
+        "bm-grands-vins-2005"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The exact legal name and four matching individual schedules support the provisional holder crosswalk. The old lease names Domaine de Bauclair; no independent modern identity or renewal was established. Jadot preference rights are not tenancy."
     }
   ],
   "historyFindings": [],
-  "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "21133000AB0304",
+        "21133000AB0438",
+        "21133000AB0440"
+      ],
+      "sourceId": "eugenie-2022",
+      "kind": "historical-application",
+      "applicant": "SCEA Domaine d'Eugénie",
+      "previousOperator": "Maison Bouchard Père et fils",
+      "documentDate": "2022-12-15",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Dossier 2022-217: Chambolle-Musigny AB304/AB438/AB440 are printed separately from the Gevrey-Chambertin references; 0.6426 ha across both communes; complete 24 November 2022. The receipt expressly does not authorise cultivation.",
+      "appNote": "Application complete 24 November 2022. Receipt is not an authorisation; outcome and actual operation unconfirmed."
+    }
+  ],
+  "externalResearch": [
+    {
+      "id": "bm-wh-arlaud",
+      "title": "Winehog: Domaine Arlaud Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0076",
+        "21133000AB0121"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) names AB76 (660 m2) and AB121 (1421 m2), matching both current reference and area. The article total differs from their sum; no correction or current farming inferred.",
+      "sourceIds": [
+        "bm-winehog-arlaud"
+      ],
+      "producer": "Domaine Arlaud",
+      "printedReferences": [
+        "AB 0076",
+        "AB 0121"
+      ],
+      "dateSourceId": "bm-winehog-arlaud",
+      "appNote": "Winehog (2018) names AB76 (660 m2) and AB121 (1421 m2), matching both current reference and area. The article total differs from their sum; no correction or current farming inferred.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-groffier",
+      "title": "Winehog: Domaine Robert Groffier Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0266"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB266 and 9748 m2, matching the current parcel. Historical critic evidence, not verified present farming.",
+      "sourceIds": [
+        "bm-winehog-groffier"
+      ],
+      "producer": "Domaine Robert Groffier",
+      "printedReferences": [
+        "AB 0266"
+      ],
+      "dateSourceId": "bm-winehog-groffier",
+      "appNote": "Winehog (2018) prints AB266 and 9748 m2, matching the current parcel. Historical critic evidence, not verified present farming.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-bachus-mandate-304",
+      "title": "Bachus 21: historical acquisition and lease mandate for AB304",
+      "parcelIds": [
+        "21133000AB0304"
+      ],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The original 1995 mandate, retained in 2024 statutes, names AB304 at 218 m2 and proposed tenant Domaine Drouhin-Laroze 398910034. The current holder is Bouchard, not Bachus; authorization to transact is not a completed transfer or executed lease. AB438/440 have area discrepancies and remain unmatched.",
+      "sourceIds": [
+        "bm-bachus-2024",
+        "bm-bachus-1995"
+      ],
+      "producer": "Domaine Drouhin-Laroze",
+      "printedReferences": [
+        "AB304"
+      ],
+      "dateSourceId": "bm-bachus-1995",
+      "appNote": "The 1995 Bachus statutes authorize acquisition and leasing of AB304. This is a mandate, not evidence of a completed transaction or current farming.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-clos-tart-64",
+      "title": "Winehog: AR64 is part of Clos de Tart",
+      "parcelIds": [
+        "21442000AR0064"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) names cadastre 64 at 2780 m2, matching current AR64, and identifies it as part of Clos de Tart after a reported 1966 inclusion. Its Bonnes-Mares cadastral name and small mapped overlap do not establish Bonnes-Mares production.",
+      "sourceIds": [
+        "cm-winehog-clos-tart"
+      ],
+      "producer": "Clos de Tart",
+      "printedReferences": [
+        "64"
+      ],
+      "dateSourceId": "cm-winehog-clos-tart",
+      "appNote": "Winehog identifies AR64 (2780 m2) as part of Clos de Tart despite the Bonnes-Mares cadastral name. Historical critic context, not current farming verification.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-dujac",
+      "title": "Winehog: Domaine Dujac dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0096"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link.",
+      "sourceIds": [
+        "bm-winehog-dujac"
+      ],
+      "producer": "Domaine Dujac",
+      "printedReferences": [
+        "AB96"
+      ],
+      "printedAreasM2": {
+        "AB96": 1465
+      },
+      "dateSourceId": "bm-winehog-dujac",
+      "appNote": "Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-roumier",
+      "title": "Winehog: Domaine Georges Roumier dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0100",
+        "21133000AB0066",
+        "21133000AB0340",
+        "21133000AB0468",
+        "21133000AB0469",
+        "21133000AB0470",
+        "21133000AB0089",
+        "21133000AB0298",
+        "21133000AB0105"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-roumier"
+      ],
+      "producer": "Domaine Georges Roumier",
+      "printedReferences": [
+        "AB100",
+        "AB66",
+        "AB340",
+        "AB468",
+        "AB469",
+        "AB470",
+        "AB89",
+        "AB298",
+        "AB105"
+      ],
+      "printedAreasM2": {
+        "AB100": 2328,
+        "AB66": 1070,
+        "AB340": 1650,
+        "AB468": 1803,
+        "AB469": 1803,
+        "AB470": 1803,
+        "AB89": 3825,
+        "AB298": 493,
+        "AB105": 665
+      },
+      "dateSourceId": "bm-winehog-roumier",
+      "appNote": "Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-roumier-467",
+      "title": "Winehog: Roumier on former Chambolle AB467",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB467 at 1803 m2, matching the pinned 3 April 2018 cadastre. Only the documented 9 November 2020 DFI split reaches AB481/482, as historical context; it transfers no ownership or farming claim.",
+      "sourceIds": [
+        "bm-winehog-roumier"
+      ],
+      "producer": "Domaine Georges Roumier",
+      "printedReferences": [
+        "AB467"
+      ],
+      "printedAreasM2": {
+        "AB467": 1803
+      },
+      "predecessorReferences": {
+        "21133000AB0467": [
+          "21133000AB0481",
+          "21133000AB0482"
+        ]
+      },
+      "dateSourceId": "bm-winehog-roumier",
+      "appNote": "Winehog (2018) names former Chambolle AB467 (1803 m2). Reached through the 2020 DFI split; historical context only, not current ownership or farming.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-bertheau",
+      "title": "Winehog: Domaine Bertheau dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0119",
+        "21133000AB0079"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-bertheau"
+      ],
+      "producer": "Domaine Bertheau",
+      "printedReferences": [
+        "AB119",
+        "AB79"
+      ],
+      "printedAreasM2": {
+        "AB119": 2417,
+        "AB79": 1027
+      },
+      "dateSourceId": "bm-winehog-bertheau",
+      "appNote": "Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification.",
+      "currentFarmer": null
+    },
+    {
+      "id": "bm-wh-auvenay",
+      "title": "Winehog: Domaine d'Auvenay dated Bonnes-Mares references",
+      "parcelIds": [
+        "21133000AB0091",
+        "21133000AB0090"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification.",
+      "sourceIds": [
+        "bm-winehog-auvenay"
+      ],
+      "producer": "Domaine d'Auvenay",
+      "printedReferences": [
+        "AB91",
+        "AB90"
+      ],
+      "printedAreasM2": {
+        "AB91": 700,
+        "AB90": 1898
+      },
+      "dateSourceId": "bm-winehog-auvenay",
+      "appNote": "Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification.",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "bm-grands-vins",
+      "sourceId": "bm-grands-vins-2024",
+      "title": "grands vins: historical Bonnes-Mares schedule",
+      "holderId": "U21966026",
+      "companySiren": "483678264",
+      "documentDate": "2024-12-17",
+      "parcelAreasM2": {
+        "21133000AB0134": 485,
+        "21442000AR0066": 9235,
+        "21442000AR0067": 1246,
+        "21442000AR0068": 955
+      },
+      "leaseEvidence": [],
+      "pages": [
+        1,
+        9,
+        10,
+        16
+      ],
+      "printedReferences": [
+        "AB 0134",
+        "AR 0066",
+        "AR 0067",
+        "AR 0068"
+      ],
+      "finding": "The updated statutes retain four individually area-matched contribution references. The old Bauclair lease is recited, not verified renewed; Jadot preference rights do not prove tenancy.",
+      "appNote": "The updated statutes retain four individually area-matched contribution references. The old Bauclair lease is recited, not verified renewed; Jadot preference rights do not prove tenancy. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-nabuca",
+      "sourceId": "bm-nabuca-2014",
+      "title": "nabuca: historical Bonnes-Mares schedule",
+      "holderId": "383339470",
+      "companySiren": "383339470",
+      "documentDate": "2014-05-12",
+      "parcelAreasM2": {
+        "21133000AB0082": 1530,
+        "21133000AB0097": 417,
+        "21133000AB0116": 1378
+      },
+      "leaseEvidence": [],
+      "pages": [
+        4,
+        5,
+        6,
+        8
+      ],
+      "printedReferences": [
+        "AB 0082",
+        "AB 0097",
+        "AB 0116"
+      ],
+      "finding": "The deed retains three exact property references and renames the GFA without a new legal person. Operative deed date is 12 May 2014; a certification footer prints 2013, a retained source discrepancy.",
+      "appNote": "The deed retains three exact property references and renames the GFA without a new legal person. Operative deed date is 12 May 2014; a certification footer prints 2013, a retained source discrepancy. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-bart-clair",
+      "sourceId": "bm-bart-clair-2022",
+      "title": "bart clair: historical Bonnes-Mares schedule",
+      "holderId": "U21459182",
+      "companySiren": "398367029",
+      "documentDate": "2022-05-10",
+      "parcelAreasM2": {
+        "21133000AB0041": 1490,
+        "21133000AB0085": 6690
+      },
+      "leaseEvidence": [],
+      "pages": [
+        17
+      ],
+      "printedReferences": [
+        "AB 0041",
+        "AB 0085"
+      ],
+      "finding": "The historical contribution schedule names AB41 and AB85 with matching individual areas. It describes AB41 as Chambolle-Musigny, including 350 m2 of lande; the mapped Bonnes-Mares overlap does not override that classification.",
+      "appNote": "The historical contribution schedule names AB41 and AB85 with matching individual areas. It describes AB41 as Chambolle-Musigny, including 350 m2 of lande; the mapped Bonnes-Mares overlap does not override that classification. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-arlaud",
+      "sourceId": "bm-arlaud-gfa-2013",
+      "title": "arlaud: historical Bonnes-Mares schedule",
+      "holderId": "U21586080",
+      "companySiren": "444144190",
+      "documentDate": "2013-04-26",
+      "parcelAreasM2": {
+        "21133000AB0076": 660,
+        "21133000AB0121": 1421
+      },
+      "leaseEvidence": [],
+      "pages": [
+        5,
+        35
+      ],
+      "printedReferences": [
+        "AB 0076",
+        "AB 0121"
+      ],
+      "finding": "The GFA deed retains exact AB76 and AB121 contribution areas and recites a 1998 lease to a distinct operating company. Its execution instrument, duration and renewal remain unreviewed.",
+      "appNote": "The GFA deed retains exact AB76 and AB121 contribution areas and recites a 1998 lease to a distinct operating company. Its execution instrument, duration and renewal remain unreviewed. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-bertheau",
+      "sourceId": "bm-bertheau-2012",
+      "title": "bertheau: historical Bonnes-Mares schedule",
+      "holderId": "326418761",
+      "companySiren": "326418761",
+      "documentDate": "2012-04-12",
+      "parcelAreasM2": {
+        "21133000AB0079": 1027,
+        "21133000AB0119": 2417
+      },
+      "leaseEvidence": [],
+      "pages": [
+        6
+      ],
+      "printedReferences": [
+        "AB 0079",
+        "AB 0119"
+      ],
+      "finding": "Updated GFA statutes retain the original 1982 contribution with exact AB79 and AB119 areas. No separate current producer-company relationship established.",
+      "appNote": "Updated GFA statutes retain the original 1982 contribution with exact AB79 and AB119 areas. No separate current producer-company relationship established. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-bussiere",
+      "sourceId": "bm-bussiere-2009",
+      "title": "bussiere: historical Bonnes-Mares schedule",
+      "holderId": "U21155571",
+      "companySiren": "377495288",
+      "documentDate": "2009-04-02",
+      "parcelAreasM2": {
+        "21133000AB0066": 1070
+      },
+      "leaseEvidence": [],
+      "pages": [
+        6
+      ],
+      "printedReferences": [
+        "AB 0066"
+      ],
+      "finding": "The filed schedule identifies AB66 and its individual area in the historical usufruct contribution. It supports legal-company identity, not a current producer crosswalk.",
+      "appNote": "The filed schedule identifies AB66 and its individual area in the historical usufruct contribution. It supports legal-company identity, not a current producer crosswalk. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-lignier",
+      "sourceId": "bm-lignier-1976",
+      "title": "lignier: historical Bonnes-Mares schedule",
+      "holderId": "429825250",
+      "companySiren": "429825250",
+      "documentDate": "1976-03-30",
+      "parcelAreasM2": {
+        "21133000AB0068": 525,
+        "21133000AB0130": 2335
+      },
+      "leaseEvidence": [],
+      "pages": [
+        15,
+        16,
+        20
+      ],
+      "printedReferences": [
+        "AB 0068",
+        "AB 0130"
+      ],
+      "finding": "The 1976 formation identifies AB68 and AB130 with matching areas. The deed records historical fractional interests; it does not establish a new full ownership claim or a current tenant.",
+      "appNote": "The 1976 formation identifies AB68 and AB130 with matching areas. The deed records historical fractional interests; it does not establish a new full ownership claim or a current tenant. Historical legal-holder evidence; current farming unverified."
+    },
+    {
+      "id": "bm-clos-tart-2018",
+      "sourceId": "bm-clos-tart-2018",
+      "title": "Societe du Clos de Tart: AR64 in the property annex",
+      "holderId": "U18178981",
+      "companySiren": "686042409",
+      "documentDate": "2018-04-05",
+      "parcelAreasM2": {
+        "21442000AR0064": 2780
+      },
+      "leaseEvidence": [],
+      "supportingSourceIds": [
+        "bm-mommessin-2009",
+        "bm-clos-tart-2017"
+      ],
+      "pages": [
+        1,
+        35,
+        217,
+        231,
+        232
+      ],
+      "printedReferences": [
+        "AR64"
+      ],
+      "finding": "The 2018 company-share transaction includes an ownership-origin annex with AR64 and its exact 2780 m2 area. It recites the 1932 land acquisition; the shares, not this parcel, are transferred in 2018. Its Bonnes-Mares cadastral name does not override the published Clos de Tart classification.",
+      "appNote": "AR64 (2780 m2) is named in the 2018 Clos de Tart company property annex. Its Bonnes-Mares map overlap is only 319.7561 m2; no new 2018 land transfer or current farming inferred."
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "bm-vogue",
+      "producer": "Domaine Comte Georges de Vogue",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 2.7,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-vogue-history",
+        "bm-winehog-vogue"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 2.669,
+          "sourceId": "bm-winehog-vogue",
+          "note": "2018 article total, distinct from the rounded 2014 2.70 ha figure."
+        }
+      ]
+    },
+    {
+      "id": "bm-drouhin",
+      "producer": "Maison Joseph Drouhin",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.23,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-drouhin",
+        "bm-winehog-mugnier"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.2298,
+          "sourceId": "bm-winehog-mugnier",
+          "note": "Combined four-reference total in Mugnier article; no individual areas."
+        }
+      ]
+    },
+    {
+      "id": "bm-arlaud",
+      "producer": "Domaine Arlaud",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.2131,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-arlaud"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.2081,
+          "sourceId": "bm-winehog-arlaud",
+          "note": "Sum of the two individually printed areas, unlike the article total; discrepancy retained."
+        }
+      ]
+    },
+    {
+      "id": "bm-groffier",
+      "producer": "Domaine Robert Groffier",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.9748,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-groffier"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-roumier",
+      "producer": "Domaine Georges Roumier",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 1.3919,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-roumier-estate",
+        "bm-winehog-roumier"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 1.8902,
+          "sourceId": "bm-winehog-roumier",
+          "note": "2018 reported total including 0.4983 ha under reported metayage; distinct from the 1.3919 ha estate figure."
+        },
+        {
+          "areaHa": 1.3878,
+          "sourceId": "bm-winehog-roumier",
+          "note": "Article-stated subtotal for eight older plots; their printed areas actually sum to 1.3868 ha. AB367 is printed 10 m2 below its cadastral area. Neither this arithmetic discrepancy nor the difference from the 1.3919 ha estate figure is silently corrected."
+        },
+        {
+          "areaHa": 1.3868,
+          "sourceId": "bm-winehog-roumier",
+          "note": "Calculated sum of the eight individually printed areas (including the mismatching AB367 and retired AB467), distinct from the article-stated 1.3878 ha subtotal. Census comparison only, not an extra holding."
+        }
+      ]
+    },
+    {
+      "id": "bm-drouhin-laroze",
+      "producer": "Domaine Drouhin-Laroze",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 1.5,
+      "precision": "approximate",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-drouhin-laroze-estate"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-dujac",
+      "producer": "Domaine Dujac",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.5801,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-dujac-sheet",
+        "bm-winehog-dujac"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.5715,
+          "sourceId": "bm-winehog-dujac",
+          "note": "2018 article total, distinct from the reviewed estate sheet at 0.5801 ha."
+        }
+      ]
+    },
+    {
+      "id": "bm-hudelot-baillet",
+      "producer": "Domaine Hudelot-Baillet",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.13,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-hudelot-wines"
+      ],
+      "finding": "Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-mugnier",
+      "producer": "Domaine Jacques-Frédéric Mugnier",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.36,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-mugnier"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-bertheau",
+      "producer": "Domaine Bertheau",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.3444,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-bertheau"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bm-auvenay",
+      "producer": "Domaine d'Auvenay",
+      "namedAreas": [
+        "LES BONNES MARES"
+      ],
+      "publishedAreaHa": 0.2598,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bm-winehog-auvenay"
+      ],
+      "finding": "Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "Tier 2 selected 46 free company filings (1788 pages), OCR-screening every page. This is a bounded selection of formation, contribution, transformation and recent statutes, not every filing ever deposited. Prior shared research is reused without rescanning old files.",
+    "U21117863 cannot crosswalk to the separately recorded Dujac SIREN in this cru. Bachus, Veroilles and the two BND U-ids remain unresolved; names, officers and monopole reputation are insufficient.",
+    "The GFA Grands Vins Fins lease names Domaine de Bauclair; an independent current company identity and renewal were not located. Jadot preference rights do not prove tenancy. Arlaud has a distinct similarly named registry entry 429825441, not equated with the exact-schedule company 444144190.",
+    "All six additional Bonnes-Mares Winehog subscriber articles were supplied as WebArchives and reviewed, alongside the original three MHTML articles and shared Vogue/Clos de Tart histories. No requested Bonnes-Mares article remains an access gap. Sources retain original-byte hashes and publication dates separately from page modifications.",
+    "The CPGC page and Dujac technical sheet were readable through the public web reader but direct downloads returned HTTP 503. Their hash covers the saved extraction, not raw HTML/PDF bytes. The Bouchard sheet was not retained as census evidence after direct-download failure.",
+    "Original leases, renewals, paid SPF copies and present-season outreach remain unreviewed. Historical lease recitals, transaction mandates, company identity and named-area census totals do not verify current farming.",
+    "The supplied Clos de Tart history article also covers shared AR64. Five additional company filings resolve the Maison Mommessin U-id through SIREN 686042409, name continuity and four exact property references; the earlier 685750598 candidate is distinct. The 2018 share transfer is not a new land conveyance and the 1932 origin recital is not a reviewed original deed.",
+    "Supplemental articles add 14 exact current-reference-and-area matches and one retired reference reaching two current parcels through documented DFI ancestry. AB367 has a 10 m2 discrepancy; Mugnier and old Dujac groups and Vogue AB98/99 are aggregate-only. No area correction, holder identity or current farming is inferred."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "eugenie-2022",
+      "bulletin": "bfc-2023-037",
+      "sha256": "c0b7b3b5b341bcf02d99fe9c6d747e998e1700425c86bc64006c216f91d9fb59",
+      "pages": [
+        11
+      ],
+      "reviewMethod": "page-image",
+      "finding": "The receipt prints Chambolle-Musigny AB304, AB438 and AB440 separately from Gevrey-Chambertin BN34, AC6 and AC287–AC289; 0.6426 ha across both communes, previous operator Maison Bouchard Père et fils. The application was filed and complete on 24 November 2022; the letter is dated 15 December 2022, although its published act ID reads BFC-2023-12-15-00001. The receipt states it does not authorise cultivation."
+    }
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "bm-winehog-drouhin",
+      "printedReference": "AB83, AB114, AB305, AB306: combined 0.23 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas; no match by subtracting cadastral areas from a total.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-vogue-history",
+      "printedReference": "cadastre 98: 473 m2",
+      "parcelIds": [],
+      "limitation": "Current AB98 is 130 m2. No lineage-supported individual area match established.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-bachus-2024",
+      "printedReference": "AB438: 362 m2; AB440: 1560 m2",
+      "parcelIds": [],
+      "limitation": "Current areas are 436 and 1741 m2. Do not rename them AB437/439 to fit the recorded Bachus U-id; no executed acquisition or lease established.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-veroilles-2025",
+      "printedReference": "handwritten AB46; no individual area",
+      "parcelIds": [],
+      "limitation": "Mandate-only candidate reference; no exact current individual area or U-id crosswalk established.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-mugnier",
+      "printedReference": "AB84, AB282, AB292, AB293, AB78: combined 0.36 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas, including on the supplied cadastral map. No allocation from the aggregate or neighbouring parcels.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-mugnier",
+      "printedReference": "Drouhin AB83, AB114, AB305, AB306: combined 0.2298 ha",
+      "parcelIds": [],
+      "limitation": "Combined area only. The separate Drouhin article also lacks individual printed areas; neither supports an individual match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-dujac",
+      "printedReference": "AB321, AB322, AB358, AB360, AB72: combined 0.425 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas; do not divide the aggregate or infer from current cadastral areas.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-roumier",
+      "printedReference": "AB367: 0.1608 ha (1608 m2)",
+      "parcelIds": [],
+      "limitation": "Pinned 2018 and current cadastral areas are 1618 m2. No correction of the printed area or exact match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-roumier",
+      "printedReference": "AB65: conjectural portion under 0.01 ha; AB349: soil paragraph only",
+      "parcelIds": [],
+      "limitation": "No individual full-parcel areas. AB65 is explicitly conjectural; AB349 is not corrected into the AB340 listed elsewhere.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-vogue",
+      "printedReference": "AB98 and AB99: combined 0.0473 ha (473 m2); AB111: no area",
+      "parcelIds": [],
+      "limitation": "No individual printed areas. The 2014 account instead assigns 473 m2 to 98 alone; this later combined statement is retained separately and does not retroactively correct that claim.",
+      "currentFarmer": null
+    }
   ]
 }

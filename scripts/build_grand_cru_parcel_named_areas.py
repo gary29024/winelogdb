@@ -3,7 +3,12 @@
 Uses the bundle's hash-pinned Etalab lieux-dits snapshots. Each parcel gets the lieu-dit
 holding most of its geometry; the builder fails if any parcel is split below 90%.
 Cadastral names without a reviewed crosswalk (the cru config's "unresolved") are kept
-as printed, with no name, and any other unreviewed name fails the build.
+as printed, with no name, and any other unreviewed name fails the build. A parcel that
+no lieu-dit polygon touches gets no name; it must be listed in "parcelsWithoutLieuDit". A
+parcel that only touches the cru edge can lie mostly in a neighbouring lieu-dit; the config
+lists those names in "neighbouringLieuxDits", and the build fails if one holds a parcel
+mostly inside the cru. An unresolved entry whose "sourceCandidate" is null is an official
+name with no cadastral candidate at all.
 
   python scripts/build_grand_cru_parcel_named_areas.py --cru echezeaux
   python scripts/build_grand_cru_parcel_named_areas.py --cru echezeaux --check
@@ -15,6 +20,7 @@ import gzip
 import json
 
 from shapely.geometry import shape
+from shapely.ops import unary_union
 
 from grand_cru import (record_json, communes, in_cru, lieux_dits_file, load_cru, load_manifest, parcel_asset, pinned, require,
                        research_path, source_dir, write_or_check)
@@ -25,10 +31,13 @@ MINIMUM_SHARE = 0.9
 def build(cru, bundle, manifest, directory):
     config = cru['namedPlots']
     asset = parcel_asset(manifest)
-    areas = []
+    by_name = {}
     for insee in communes(bundle):
         data = pinned(directory, lieux_dits_file(insee), bundle['lieuxDits'][insee]['sha256'])
-        areas += [(f['properties']['nom'], shape(f['geometry'])) for f in json.loads(gzip.decompress(data))['features']]
+        for f in json.loads(gzip.decompress(data))['features']:
+            by_name.setdefault(f['properties']['nom'], []).append(shape(f['geometry']))
+    # Same-name features (one lieu-dit recorded in pieces) form one named area.
+    areas = [(name, shapes[0] if len(shapes) == 1 else unary_union(shapes)) for name, shapes in by_name.items()]
     reviewed = {p['sourceName']: p['name'] for p in config['plots']}
     parcels = {}
     for feature in json.loads(asset)['features']:
@@ -37,10 +46,27 @@ def build(cru, bundle, manifest, directory):
             continue
         geometry = shape(feature['geometry'])
         share, name = max((geometry.intersection(area).area / geometry.area, name) for name, area in areas)
+        if share == 0:
+            # A hole in the lieu-dit layer: no cadastral name exists to assign, so none is guessed.
+            parcels[props['id']] = {'sourceName': None, 'name': None, 'share': 0}
+            continue
         require(share >= MINIMUM_SHARE, f"{props['id']} is split between named areas")
         parcels[props['id']] = {'sourceName': name, 'name': reviewed.get(name), 'share': round(share, 4)}
-    unreviewed = sorted({p['sourceName'] for p in parcels.values() if not p['name']})
-    require(unreviewed == [u['sourceCandidate'] for u in config['unresolved']], f'Unexpected unreviewed names: {unreviewed}')
+    outside = sorted(i for i, p in parcels.items() if p['sourceName'] is None)
+    require(outside == config.get('parcelsWithoutLieuDit', []), f'Unreviewed parcels outside every lieu-dit: {outside}')
+    neighbouring = {n['sourceName'] for n in config.get('neighbouringLieuxDits', [])}
+    require(not neighbouring & set(reviewed), 'A reviewed named area cannot also be a neighbouring lieu-dit')
+    for feature in json.loads(asset)['features']:
+        row = parcels.get(feature['properties']['id'])
+        if row and row['sourceName'] in neighbouring:
+            row['neighbouringLieuDit'] = True
+            overlap = next(o for o in feature['properties']['overlaps'] if o['parentFeatureId'] == cru['parentFeatureId'])
+            require(overlap['parcelPercent'] < 50, f"{feature['properties']['id']} lies mostly inside the cru, not on its edge")
+    require(neighbouring == {p['sourceName'] for p in parcels.values() if p.get('neighbouringLieuDit')},
+            'Every neighbouring lieu-dit must hold at least one edge parcel')
+    unreviewed = sorted({p['sourceName'] for p in parcels.values() if p['sourceName'] and not p['name'] and p['sourceName'] not in neighbouring})
+    require(unreviewed == [u['sourceCandidate'] for u in config['unresolved'] if u['sourceCandidate'] is not None],
+            f'Unexpected unreviewed names: {unreviewed}')
     inputs = {'parcelSnapshotSha256': manifest['sha256']}
     for index, insee in enumerate(communes(bundle)):
         suffix = '' if index == 0 else f'_{insee}'

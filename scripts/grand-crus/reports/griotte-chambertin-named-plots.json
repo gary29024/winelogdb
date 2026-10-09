@@ -1,0 +1,64 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Griotte-Chambertin boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The BIVB lists En Griotte as the single climat. EN GRIOTTE is audited against the unchanged INAO Griotte-Chambertin feature, with no duplicate selectable layer. EN LA CHAPELLE and AUX ETELOIS occur on edge-contact parcels and retain unresolved climat crosswalks. The official whole-cru outline remains the fallback; no producer holdings or label aliases are inferred.",
+  "sources": [
+    {
+      "commune": "21295",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+      "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/griotte-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE1Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-communes.json.gz",
+      "sha256": "83ba2993416c65e4305ef183d258de1fdd6a80ec9ffd44577918742683ceeb52"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-communes.json.gz",
+      "sha256": "122038a454fcc76ce88d6cffd3ddf9276b5f8a44fbe46fa70a5f50a0f774886e"
+    }
+  ],
+  "parentHa": 2.7130364309387383,
+  "mappedHa": 2.685752835168643,
+  "unmappedHa": 0.02728359595704657,
+  "plots": [
+    {
+      "id": "griotte-chambertin-plot-en-griotte",
+      "sourceHa": 2.81917479819195,
+      "clippedHa": 2.685752835168643,
+      "parts": 1,
+      "holes": 0
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "AUX ETELOIS",
+      "sourceCandidate": "AUX ETELOIS",
+      "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Griotte-Chambertin climat or extending the named area."
+    },
+    {
+      "name": "EN LA CHAPELLE",
+      "sourceCandidate": "EN LA CHAPELLE",
+      "reason": "Full cadastral parcels in this lieu-dit have only edge overlaps with the INAO feature. Retain the printed cadastral name without claiming it is a Griotte-Chambertin climat or extending the named area."
+    }
+  ]
+}

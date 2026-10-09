@@ -1,11 +1,10 @@
 // @vitest-environment jsdom
 import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
-import {act,cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/react';
+import {cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/react';
 import {readFileSync} from 'node:fs';
 import type {Map as MapLibreMap} from 'maplibre-gl';
 import {GrandCruParcels,type Parcels} from '../../src/features/vineyards/GrandCruParcels';
-import {ParcelProducerLinker} from '../../src/features/vineyards/ParcelProducerLinker';
-import {listParcelProducerLinks,saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
+import {listParcelProducerLinks,removeParcelProducerLink,saveParcelProducerLink} from '../../src/features/vineyards/parcelProducerApi';
 import {listProducers} from '../../src/features/producers/api';
 import manifest from '../../src/lib/places/grandCruParcels/flagey-echezeaux.manifest.json';
 vi.mock('../../src/features/vineyards/parcelProducerApi',()=>({listParcelProducerLinks:vi.fn(),saveParcelProducerLink:vi.fn(),removeParcelProducerLink:vi.fn()}));
@@ -31,57 +30,49 @@ describe('PR416 map feedback',()=>{
   const view=render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot" producerId="millot"/>);
   fireEvent.click(screen.getByRole('switch'));
   await waitFor(()=>expect(listParcelProducerLinks).toHaveBeenCalled());
-  const panel=screen.getByLabelText('Your producer links');
-  expect(within(panel).queryByRole('link',{name:'Domaine Nicole Lamarche'})).toBeNull();
+  const card=await screen.findByRole('region',{name:'This wine’s producer'});
+  expect(await within(card).findByText('Not linked to any parcels yet.')).toBeTruthy();
+  expect(within(card).queryByText(/Linked to/)).toBeNull();
   expect(map.fitBounds).not.toHaveBeenCalled();
   view.rerender(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
   expect(screen.getByRole('switch')).toHaveProperty('checked',false);
   fireEvent.click(screen.getByRole('switch'));
-  expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
+  expect(await within(await screen.findByRole('region',{name:'This wine’s producer'})).findByText(/Linked to/)).toBeTruthy();
   await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
  });
- it('keeps the manual highlight and selected parcel while suggestions are switched on and off',async()=>{
+ it('keeps the saved link’s highlight while a parcel is chosen, with no possible-match switch',async()=>{
   vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[link]});
   const map=mapStub();
   render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
   fireEvent.click(screen.getByRole('switch'));
-  await screen.findByRole('link',{name:'Domaine Nicole Lamarche'});
+  await screen.findByText(/Linked to/);
   await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
   fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0168'}});
-  const toggle=screen.getByLabelText(/Show possible matches/);
-  for(let i=0;i<4;i++){
-   fireEvent.click(toggle);
-   expect(map.match('212670000D0168')).toBe('owner');
-   expect(screen.getByLabelText('Cadastral parcel')).toHaveProperty('value','212670000D0168');
-  }
+  expect(map.match('212670000D0168')).toBe('owner');
+  expect(screen.getByLabelText('Cadastral parcel')).toHaveProperty('value','212670000D0168');
+  expect(screen.queryByLabelText(/Show possible matches/)).toBeNull();
   expect(saveParcelProducerLink).not.toHaveBeenCalled();
  });
- it('immediately highlights a newly saved matching link and preserves it when the preview is unchecked',async()=>{
-  vi.mocked(listProducers).mockResolvedValue({items:[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeCountry:'France',homeRegion:'Burgundy',homeLocality:'Vosne-Romanée',tastedCount:1,catalogCount:1,researchedAt:null}]});
-  vi.mocked(saveParcelProducerLink).mockResolvedValue(link);
+ it('links any chosen row to the wine’s producer in one tap, and unlinks it from the same place',async()=>{
+  vi.mocked(saveParcelProducerLink).mockImplementation(async(_parent,holderId,producerId)=>({...link,holderId,producerId}));
+  vi.mocked(removeParcelProducerLink).mockResolvedValue({deleted:true});
   const map=mapStub();
   render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Nicole Lamarche" producerId="nicole"/>);
   fireEvent.click(screen.getByRole('switch'));
-  fireEvent.click(await screen.findByLabelText(/Show possible matches/));
-  expect(map.match('212670000D0168')).toBe('possible');
-  fireEvent.click(screen.getByRole('button',{name:'Link Nicole Lamarche to an app producer'}));
-  fireEvent.change(await screen.findByLabelText('App producer'),{target:{value:'nicole'}});
-  fireEvent.click(screen.getByRole('button',{name:'Save producer link'}));
-  await screen.findByText('Manual link · unverified');
-  await waitFor(()=>expect(map.match('212670000D0168')).toBe('owner'));
-  fireEvent.click(screen.getByLabelText(/Show possible matches/));
+  const list=await screen.findByRole('list',{name:'Recorded right holders by mapped area'});
+  const row=await within(list).findByRole('button',{name:/^Domaine Nicole Lamarche/});
+  // Nothing to link until a row is chosen; the catalogue is never asked for.
+  expect(screen.queryByRole('button',{name:'Link to Nicole Lamarche'})).toBeNull();
+  fireEvent.click(row);
+  fireEvent.click(within(list).getByRole('button',{name:'Link to Nicole Lamarche'}));
+  expect(await within(list).findByText('Linked to Nicole Lamarche')).toBeTruthy();
+  expect(saveParcelProducerLink).toHaveBeenCalledWith('inao-denom-565','397738634','nicole');
+  expect(listProducers).not.toHaveBeenCalled();
   expect(map.match('212670000D0168')).toBe('owner');
- });
- it('says where a saved link for a different producer went instead of silently hiding it',async()=>{
-  vi.mocked(listProducers).mockResolvedValue({items:[{id:'nicole',canonicalName:'Domaine Nicole Lamarche',homeCountry:'France',homeRegion:'Burgundy',homeLocality:'Vosne-Romanée',tastedCount:1,catalogCount:1,researchedAt:null}]});
-  vi.mocked(saveParcelProducerLink).mockResolvedValue(link);
-  const onShow=vi.fn();
-  render(<ParcelProducerLinker parentId="inao-denom-565" producer="Jean-Marc Millot" producerId="millot" holders={[holder]} editing={holder.id} onEdit={vi.fn()} onShow={onShow}/>);
-  fireEvent.change(await screen.findByLabelText('App producer'),{target:{value:'nicole'}});
-  fireEvent.click(screen.getByRole('button',{name:'Save producer link'}));
-  expect(await screen.findByText('Link saved to Domaine Nicole Lamarche. It isn’t shown on this Jean-Marc Millot wine because it names a different producer.')).toBeTruthy();
-  expect(screen.queryByRole('link',{name:'Domaine Nicole Lamarche'})).toBeNull();
-  expect(onShow).not.toHaveBeenCalled();
+  expect(within(screen.getByRole('region',{name:'This wine’s producer'})).getByText(/Linked to/).textContent).toBe('Linked to Domaine Nicole Lamarche · 1.10 ha');
+  fireEvent.click(within(list).getByRole('button',{name:'Unlink'}));
+  expect(await within(list).findByRole('button',{name:'Link to Nicole Lamarche'})).toBeTruthy();
+  expect(removeParcelProducerLink).toHaveBeenCalledWith('inao-denom-565','397738634');
  });
  it('heads a weak lead with its domaine name as its own row, and keeps tenancy-based research under the legal holder name',async()=>{
   render(<GrandCruParcels map={mapStub() as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
@@ -89,44 +80,41 @@ describe('PR416 map feedback',()=>{
   fireEvent.click(await screen.findByRole('button',{name:/Show all \d+ entries/}));
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const office=await within(list).findByRole('button',{name:/^Domaine Méo-Camuzet/});
-  expect(office.textContent).toMatch(/GFV Grands Crus Investissement/);
+  // The row stays one name tall: the recorded company name is searchable, not shown.
+  expect(office.textContent).not.toMatch(/GFV Grands Crus Investissement/);
   expect(office.textContent).toMatch(/0.45 ha · 3/);
-  expect(office.textContent).toMatch(/Weak lead · office address only/);
+  expect(within(office).getByRole('img',{name:/Weak lead · office address only/})).toBeTruthy();
+  expect(office.textContent).not.toMatch(/Weak lead/);
+  expect(office.querySelector('.village-map-seal.is-weak')).toBeTruthy();
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:'Grands Crus Investissement'}});
+  expect(within(list).getAllByRole('button').map(b=>b.textContent)).toEqual([expect.stringMatching(/^Domaine Méo-Camuzet/)]);
+  fireEvent.change(screen.getByRole('searchbox',{name:'Search right holders'}),{target:{value:''}});
   expect(within(list).getByRole('button',{name:/SCI les Climats|SCI Les Climats/i}).textContent).not.toMatch(/Marsannay/);
   expect(within(list).queryByRole('button',{name:/^Domaine du Château de Marsannay/})).toBeNull();
  });
- it('does not show a stale response from another cru and uses exact IDs after a producer rename',async()=>{
-  let resolve!:(value:{items:typeof link[]})=>void;
-  vi.mocked(listParcelProducerLinks).mockReturnValueOnce(new Promise(done=>{resolve=done})).mockResolvedValue({items:[]});
-  const onLinks=vi.fn(),props={holders:[holder],editing:'',onEdit:vi.fn(),onShow:vi.fn(),onLinks};
-  const view=render(<ParcelProducerLinker {...props} parentId="old" producer="Nicole Lamarche" producerId="nicole"/>);
-  view.rerender(<ParcelProducerLinker {...props} parentId="new" producer="Jean-Marc Millot" producerId="millot"/>);
-  await act(async()=>resolve({items:[link]}));
-  expect(screen.queryByRole('link')).toBeNull();
-  expect(onLinks).not.toHaveBeenCalledWith([link]);
-  vi.mocked(listParcelProducerLinks).mockResolvedValue({items:[link]});
-  view.rerender(<ParcelProducerLinker {...props} parentId="renamed" producer="A renamed catalogue producer" producerId="nicole"/>);
-  expect(await screen.findByRole('link',{name:'Domaine Nicole Lamarche'})).toBeTruthy();
- });
- it('groups by sourced domaine names with legal identities underneath, and preserves highlighting when modes change',async()=>{
+ it('groups by sourced domaine names with legal identities searchable, not shown, and keeps highlighting when a parcel opens',async()=>{
   const map=mapStub();
   render(<GrandCruParcels map={map as unknown as MapLibreMap} parentId="inao-denom-565" producer="Jean-Marc Millot"/>);
   fireEvent.click(screen.getByRole('switch'));
-  await screen.findByLabelText('Group right holders by');
-  fireEvent.click(screen.getByRole('button',{name:/Show all \d+ entries/}));
+  fireEvent.click(await screen.findByRole('button',{name:/Show all \d+ entries/}));
+  expect(screen.queryByLabelText('Group right holders by')).toBeNull();
   const list=screen.getByRole('list',{name:'Recorded right holders by mapped area'});
   const faiveley=await within(list).findByRole('button',{name:/Domaine Faiveley/});
-  expect(faiveley.textContent).toMatch(/Consortium Viticole/);
-  expect(faiveley.textContent).toMatch(/Brand identity confirmed/);
+  expect(faiveley.textContent).not.toMatch(/Consortium Viticole/);
+  expect(within(faiveley).getByRole('img',{name:/^Estate or registry source: Brand identity confirmed/})).toBeTruthy();
+  expect(faiveley.querySelector('.village-map-seal.is-medium')).toBeTruthy();
   expect(screen.getByRole('region',{name:'Parcel rights'}).textContent).not.toMatch(/farming unverified|Current farming|tenant/i);
   fireEvent.change(screen.getByPlaceholderText('Search right holders'),{target:{value:'Consortium'}});
   expect(within(list).getByRole('button',{name:/Faiveley/})).toBeTruthy();
   fireEvent.click(faiveley);
   expect(map.match('212670000D0331')).toBe('owner');
-  expect(within(list).getAllByRole('link').length).toBeGreaterThan(0);
-  fireEvent.change(screen.getByLabelText('Group right holders by'),{target:{value:'holder'}});
+  // Sources are described once under About this data, not listed per row.
+  expect(within(list).queryAllByRole('link')).toHaveLength(0);
+  // The company name behind the heading shows in the parcel's details.
+  fireEvent.change(screen.getByLabelText('Cadastral parcel'),{target:{value:'212670000D0331'}});
   expect(map.match('212670000D0331')).toBe('owner');
-  expect(within(list).getByRole('button',{name:/Consortium Viticole/})).toHaveProperty('ariaPressed','true');
+  const details=document.querySelector('.village-map-parcel-details') as HTMLElement;
+  expect(within(details).getByText(/^Consortium Viticole/)).toBeTruthy();
   expect(screen.queryByText('Verified parcel links')).toBeNull();
  });
 });

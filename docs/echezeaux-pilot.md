@@ -112,14 +112,14 @@ link displays its own status, effective date and evidence, independently of
 the holder filter. Selecting a parcel or holder animates to it, capped at zoom 17, and
 does not animate when reduced motion is requested.
 
-**Possible matches** are an explicit, opt-in reading aid. They appear only when
-the wine has a producer field and every distinctive word of it (ignoring legal
-forms and words such as *domaine*, *fils* or *GFA*) occurs in a published
-right holder's name, with at least two such words or one of six letters or more. They
-are labelled “Possible match · name only”, are never shown as the operator, and
-never alter the bottle's map identity. Possible-match counts include only
-unverified parcels; another verified parcel held by the same entity does not
-verify the rest. Producer names alone never establish holdings or named areas.
+**Linking the wine's producer.** The map opens from a wine, so its producer is
+known. A *This wine's producer* card suggests the holder row whose domaine or
+company name contains every distinctive word of the producer's name (ignoring
+legal forms and words such as *domaine*, *fils* or *GFA*, with at least two such
+words or one of six letters or more). The suggestion is never saved by itself: the
+reader taps *Link*, or chooses any row and taps *Link to <producer>*. A saved link
+is a personal, unverified note, is never shown as the operator, and never alters the
+bottle's map identity. Producer names alone never establish holdings or named areas.
 
 ## Loading and size
 

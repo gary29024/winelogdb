@@ -1,0 +1,40 @@
+{
+  "parentMatchId": "france/burgundy/cote-de-nuits/clos-de-la-roche",
+  "plots": [
+    {
+      "id": "clos-de-la-roche-plot-clos-de-la-roche",
+      "name": "Clos de la Roche",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-chabiots",
+      "name": "Les Chabiots",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-fremieres",
+      "name": "Les Fremières",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-froichots",
+      "name": "Les Froichots",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-genavrieres",
+      "name": "Les Genavrières",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-les-mochamps",
+      "name": "Les Mochamps",
+      "aliases": []
+    },
+    {
+      "id": "clos-de-la-roche-plot-monts-luisants",
+      "name": "Monts Luisants",
+      "aliases": []
+    }
+  ]
+}

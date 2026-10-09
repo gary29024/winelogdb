@@ -379,5 +379,61 @@
     "communes": [
       "89068"
     ]
+  },
+  "auditCommunes": {
+    "89034": {
+      "name": "Beine",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89034/cadastre-89034-parcelles.json.gz",
+      "sha256": "a92de57e47aa01c6cc2a4aef00361efe7b826be98b6df80e32a1bdee09a07d54",
+      "cadastreDate": "2026-06-01"
+    },
+    "89081": {
+      "name": "La Chapelle-Vaupelteigne",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89081/cadastre-89081-parcelles.json.gz",
+      "sha256": "2441c49d2787d8242d464f96ee4c22f4016cc7196facb5a5b9c914f948e7f2b8",
+      "cadastreDate": "2026-06-01"
+    },
+    "89104": {
+      "name": "Chichée",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89104/cadastre-89104-parcelles.json.gz",
+      "sha256": "16dad1d72437af5ac5e86648c5c801ae5f18cf7e1790594c9b3e692b5bdc8c14",
+      "cadastreDate": "2026-06-01"
+    },
+    "89112": {
+      "name": "Collan",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89112/cadastre-89112-parcelles.json.gz",
+      "sha256": "3c4a0c473e85386b286bec0bc155f122f21ccf0527a967571914418d0892e21a",
+      "cadastreDate": "2026-06-01"
+    },
+    "89123": {
+      "name": "Courgis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89123/cadastre-89123-parcelles.json.gz",
+      "sha256": "9455dd54c4a1fb4d2eaeb94e524f8334d2d57d1d7006fce1bf7761e4d06de37e",
+      "cadastreDate": "2026-06-01"
+    },
+    "89168": {
+      "name": "Fleys",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89168/cadastre-89168-parcelles.json.gz",
+      "sha256": "4d44d9a1023d057e18e8e65359383bec7cf5d9e7eb85cdaeb8a3797116801f15",
+      "cadastreDate": "2026-06-01"
+    },
+    "89175": {
+      "name": "Fontenay-près-Chablis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89175/cadastre-89175-parcelles.json.gz",
+      "sha256": "072359c3e2cdb0412545e25da5c018f0e2a74bdeb2bb714b2c61793cfb0fe911",
+      "cadastreDate": "2026-06-01"
+    },
+    "89242": {
+      "name": "Maligny",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89242/cadastre-89242-parcelles.json.gz",
+      "sha256": "07b8a788c0e94ad38f27ed7a570ec20b6c68a223dbbc451bb2ae6a1a4969c51d",
+      "cadastreDate": "2026-06-01"
+    },
+    "89315": {
+      "name": "Préhy",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/89/89315/cadastre-89315-parcelles.json.gz",
+      "sha256": "77e9502694e7f8885e3d38d27f90f5fd82d0e10c88d3b21442ac7f3edbec4baf",
+      "cadastreDate": "2026-06-01"
+    }
   }
 }

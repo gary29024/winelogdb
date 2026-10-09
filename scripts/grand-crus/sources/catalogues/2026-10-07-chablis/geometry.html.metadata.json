@@ -1,0 +1,13 @@
+{
+  "id": "geometry",
+  "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+  "retrievedAt": "2026-10-07T08:25:34Z",
+  "status": "obtained",
+  "resolvedUrl": "https://files.data.gouv.fr/cadastre/etalab-cadastre/",
+  "httpContentEncoding": null,
+  "transportSha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+  "transportSize": 4271,
+  "sha256": "4facb91bd2c2b4a20d8d6d20bdd0bbbb4a68a72591d8855bae4377e098c50a47",
+  "size": 4271,
+  "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-chablis/geometry.html"
+}

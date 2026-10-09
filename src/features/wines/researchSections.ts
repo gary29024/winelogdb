@@ -1,5 +1,6 @@
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { accountStorageKey } from '../../lib/auth/client';
+import { isUnverifiedPreciseFigure } from '../../lib/research/preciseFigures';
 
 /**
  * Shape and ordering shared by both wine detail pages, so a friend's copy of a
@@ -81,4 +82,16 @@ export function sourceLinkLabel(source:{title:string;url:string},host:string){
   if(decoded)return decoded;
  }catch{/* fall through to host */}
  return host||title||source.url;
+}
+
+/** The English of every research section, summary included, keyed for translation. */
+export function deepResearchText(deep:(ResearchProse&{summary:string})|null|undefined):Record<DeepField,string>{
+ return Object.fromEntries(DEEP_FIELDS.map(field=>[field,deep?.[field]??''])) as Record<DeepField,string>;
+}
+
+/** The sentences of one research field to highlight as uncited precise figures. */
+export function uncitedFigures(deep:{provenance?:DeepSearchResult['provenance'];uncitedFigures?:Record<string,string[]>}|null|undefined,field:string):string[]{
+ if(deep?.uncitedFigures)return deep.uncitedFigures[field]??[];
+ const claims=deep?.provenance?.fields[field as keyof NonNullable<DeepSearchResult['provenance']>['fields']]?.claims??[];
+ return claims.filter(isUnverifiedPreciseFigure).map(item=>item.claim);
 }

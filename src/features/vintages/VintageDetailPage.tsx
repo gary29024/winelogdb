@@ -74,8 +74,8 @@ export function VintageDetailPage(){
     if(!reading||!grapeSeason||!data)return null;
     // The four ripening drivers are graded against the same reference seasons as everything else.
     const spread=ripeningSpread(data.years,reference!.harvest,grapeId,reference!.from,reference!.to);
-    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,pickSugar,minSugar,spread);
-  },[reading,season,data,reference,grapeId,year,pickSugar,minSugar]);
+    return readGrape(grapeId,year,grapeSeason,reference!.normal.grapes[grapeId],reading.harvest,pickSugar,minSugar,spread,grape.colour==='red'&&!region.sparkling);
+  },[reading,season,data,reference,grapeId,year,pickSugar,minSugar,grape.colour,region.sparkling]);
 
   if(!village||!Number.isInteger(year))return <Navigate to="/vintages" replace/>;
   const area=region.areas.find(item=>item.id===village.area);
@@ -92,7 +92,8 @@ export function VintageDetailPage(){
   // The weather is shared; what it means in the glass depends on the grape shown.
   // In Sauternes and Barsac the vintage turns on noble rot, whichever grape is shown.
   const nobleRot=grapes.some(item=>item.sweet)?readNobleRot(season,normal):null;
-  const expect=nobleRot?.expect??grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect);
+  const expect=nobleRot?.expect??(region.sparkling?grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect,'sparkling')
+    :grapeExpect(grapeId,grapeReading?.conditions??null,levels,shift,story.expect));
   const normalGrape=normal.grapes[grapeId];
   const grapeSeason=season.grapes[grapeId];
   // The quality outlook answers "how good": the conditions card below only explains why.
@@ -116,7 +117,7 @@ export function VintageDetailPage(){
   const blendMix=Object.entries(index.blends?.[village.id]?.[grapeId]??{}).sort((a,b)=>(b[1]??0)-(a[1]??0))
     .map(([id,share])=>`${Math.round((share??0)*100)}% ${region.grapes.find(item=>item.id===id)?.name??id}`).join(', ');
   // Where a place makes both colours, its red blend says so.
-  const grapeName=(item:typeof grape)=>item.id==='blend'&&grapes.some(other=>other.blend&&other.colour==='white')?'Red blend':item.name;
+  const grapeName=(item:typeof grape)=>item.id==='blend'&&grapes.some(other=>other.blend&&other.id!==item.id&&other.colour==='white')?'Red blend':item.name;
   const setGrape=(id:GrapeId)=>setParams(current=>{const next=new URLSearchParams(current);next.set('grape',id);return next},{replace:true});
 
   return <section className="vintages-page vintage-detail">
@@ -127,7 +128,7 @@ export function VintageDetailPage(){
       <div className="vintage-hero-head">
         <span className={`vintage-year-tile is-large tone-${shiftTone(shift)}`}><strong>{year}</strong><small>{harvest?<>harvest<br/>{shiftLabel(shift,'short')}</>:'harvest date unknown'}</small></span>
         <div>
-          <p className="vintage-kicker">{village.name} · {area?.name}</p>
+          <p className="vintage-kicker">{village.name}{area&&area.name!==village.name?` · ${area.name}`:''}</p>
           <h1>{seasonHeadline(levels,shift)}</h1>
           <span className="vintage-hero-score"><ScoreMeter score={reading.score}/>{SCORE_LABELS[reading.score]}</span>
         </div>

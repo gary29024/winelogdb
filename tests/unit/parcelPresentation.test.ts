@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {groupParcelRightHolders,matchesLinkedProducer,type HolderResearch} from '../../src/lib/places/parcelPresentation';
+import {confidenceLabels,confidenceOrder,groupParcelRightHolders,matchesLinkedProducer,type HolderResearch} from '../../src/lib/places/parcelPresentation';
 import evidence from '../../src/lib/places/grandCruParcels/echezeaux.evidence.json';
 const link={holderId:'holder',producerId:'nicole',producerName:'Domaine Nicole Lamarche',status:'manual' as const,updatedAt:'2026-09-30'};
 const context:HolderResearch={name:'Domaine Example',basis:'estate-context',note:'Unverified context',sources:['estate']};
@@ -40,6 +40,20 @@ describe('parcel presentation without identity or farming promotion',()=>{
   expect(tenant).toMatchObject({name:'GFA Tenant',domaine:false,basisLabel:'',sources:[]});
   expect(tenant).not.toHaveProperty('lead');
   expect(JSON.stringify(groups)).not.toMatch(/Domaine Tenant/);
+ });
+ it('ranks link strength from a domaine’s own confirmation down to a weak lead, and gives tenancy none',()=>{
+  const rows=['outreach','company','family','estate','registry','office','tenant'].map(id=>parcel(id,[id]));
+  const groups=groupParcelRightHolders(rows,'cru',{
+   outreach:{...context,name:'Domaine Confirmed',basis:'domaine-confirmed'},company:{...context,name:'Domaine Company',basis:'company-identity'},
+   family:{...context,name:'Domaine Family',basis:'family-company-record'},estate:context,registry:{...context,name:'Domaine Registry',basis:'identity-only'},
+   office:{...context,name:'Domaine Lead',basis:'registered-office-match'},tenant:{...context,name:'Domaine Tenant',basis:'filing-tenant-relationship'}});
+  const of=(id:string)=>groups.find(g=>g.holderIds.includes(id));
+  expect(of('outreach')).toMatchObject({confidence:'domaine',basisLabel:'Confirmed by domaine',domaine:true});
+  expect([of('company')?.confidence,of('family')?.confidence]).toEqual(['strong','strong']);
+  expect([of('estate')?.confidence,of('registry')?.confidence]).toEqual(['medium','medium']);
+  expect(of('office')).toMatchObject({confidence:'weak',domaine:false});
+  expect(of('tenant')).not.toHaveProperty('confidence');
+  expect(confidenceOrder.map(level=>confidenceLabels[level])).toEqual(['Confirmed by domaine','Company record','Estate or registry source','Weak lead']);
  });
  it('labels a parent-group estate link apart from a direct estate source',()=>{
   const groups=groupParcelRightHolders([parcel('p',['group'])],'cru',{group:{...context,name:'Domaine Group',basis:'group-and-estate-context'}});

@@ -38,7 +38,6 @@ describe('Grand Cru registry',()=>{
  it('finds a cru only on its own village map',()=>{
   expect(grandCruFor('inao-denom-645','vosne-romanee')?.name).toBe('Grands-Échezeaux');
   expect(grandCruFor('inao-denom-645','gevrey-chambertin')).toBeUndefined();
-  expect(grandCruFor('inao-denom-655')).toBeUndefined();  // La Romanée: history delivered, commune audit pending
   expect(grandCruFor('inao-denom-unknown')).toBeUndefined();
   const multiMapCru={...grandCrus[0],villageMaps:['chassagne-montrachet','puligny-montrachet']};
   expect(cruOnVillageMap(multiMapCru,'chassagne-montrachet')).toBe(true);
@@ -68,10 +67,13 @@ describe('Grand Cru registry',()=>{
   }
   const chablis=read<ParcelEvidenceData>('src/lib/places/grandCruParcels/chablis-grand-cru.evidence.json');
   expect(chablis.coverage?.['inao-denom-439'].dfiSources.map(s=>s.department)).toEqual(['89']);
-  expect(chablis.coverage?.['inao-denom-439'].notices?.missingDepartmentIndexes).toEqual(['89']);
+  // Chablis is searched only with Yonne's own (archived, partial) bulletin index.
+  const notices=chablis.coverage?.['inao-denom-439'].notices as {missingDepartmentIndexes:string[];indexes:{id:string;department:string}[]}|undefined;
+  expect(notices?.missingDepartmentIndexes).toEqual([]);
+  expect(notices?.indexes.map(i=>[i.id,i.department])).toEqual([['departmental-yonne-archive','89']]);
   expect(Object.keys(chablis.tracing??{}).every(id=>id.startsWith('89068'))).toBe(true);
  });
- it('loads Vougeot’s 69 holders and dated notices without inventing domaine research',async()=>{
+ it('loads Vougeot’s 69 holders, dated notices and its shared-table domaine research',async()=>{
   expect(grandCruFor('inao-denom-546','vougeot')?.slug).toBe('clos-de-vougeot');
   expect(grandCruFor('inao-denom-546','vosne-romanee')).toBeUndefined();
   const snapshot=parcelRightsSnapshot('inao-denom-546')!;
@@ -80,8 +82,34 @@ describe('Grand Cru registry',()=>{
   const evidence=await loadParcelEvidence('inao-denom-546');
   expect(evidence.parcels['217160000A0001'].map(i=>i.kind)).toContain('suspended');
   expect(evidence.parcels['217160000A0523'].map(i=>i.kind)).toContain('application');
-  expect(evidence.holderDomains).toEqual({});
+  // Tier 2 (#424): domaine headings come from the shared holder table, never for unlinked holders.
+  expect(evidence.holderDomains?.['423994045']).toMatchObject({name:'Château de la Tour',basis:'company-identity'});
+  expect(evidence.holderDomains?.['888079175']?.basis).toBe('filing-lease-mandate');
+  expect(evidence.holderDomains?.['318520137']).toBeUndefined();
+  expect(evidence.holderDomains?.['U18180763']).toBeUndefined();
+  expect(evidence.parcels['217160000A0372'].map(i=>i.kind)).toContain('research');
   expect(Object.keys(evidence.parcels).every(id=>id.startsWith('21716'))).toBe(true);
+ });
+ it('loads Richebourg research while keeping an unnamed owner report and weak holder links unverified',async()=>{
+  expect(grandCruFor('inao-denom-1083','vosne-romanee')?.domaineGrouping).toBe(true);
+  expect(parcelRightsSnapshot('inao-denom-1083')?.holderIds).toHaveLength(10);
+  const evidence=await loadParcelEvidence('inao-denom-1083');
+  expect(evidence.holderDomains?.['778269407']?.basis).toBe('company-identity');
+  expect(evidence.holderDomains?.['885114322']?.basis).toBe('filing-tenant-relationship');
+  expect(evidence.holderDomains?.['U14149307']?.basis).toBe('name-and-seat-crosswalk');
+  expect(evidence.holderDomains?.['318506367']).toBeUndefined();
+  for(const n of [292,293,294,295]){
+   const items=evidence.parcels[`21714000AN0${n}`];
+   expect(items.some(i=>i.kind==='research'&&i.note?.includes('leaves the new owner unnamed'))).toBe(true);
+   // The 2005 lease and the critic articles name the retired reference, so both reach the split parcel only through lineage.
+   const via=items.filter(i=>i.kind==='research'&&i.via===(n<294?'AN0170':'AN0172'));
+   expect(via.map(i=>i.title)).toEqual(expect.arrayContaining([expect.stringMatching(/Thibault Liger-Belair: 2005 métayage/),expect.stringMatching(/Thibault Liger-Belair holdings, cadastre 170 and 172/)]));
+   expect(via.every(i=>/[Nn]ot current farming/.test(i.note??''))).toBe(true);
+  }
+  expect(evidence.parcels['21714000AN0247'].some(i=>i.kind==='research'&&i.title.includes('Domaine Jean Grivot plot, cadastre 247'))).toBe(true);
+  expect(evidence.holderDomains?.['318506367']).toBeUndefined();
+  expect(Object.keys(evidence.tracing??{})).toHaveLength(58);
+  expect(JSON.stringify(evidence)).not.toMatch(/currentFarmer/);
  });
  it('merges several research files without dropping records or overriding the first domaine heading',()=>{
   const item=(title:string)=>({kind:'lead' as const,date:null,title,sources:[]});

@@ -1,0 +1,44 @@
+# Official harvest opening per sub-region: the earliest commune opening for any grape in the Comité
+# Champagne's yearly table of opening dates by commune and grape (the ban des vendanges), from
+# copies of the full table published by the Champagne press. Sub-region by commune: Montagne de
+# Reims the Grande and Petite Montagne; Vallée de la Marne the Marne valley, Aisne and
+# Seine-et-Marne; Côte des Blancs Chouilly to Vertus; Côte des Bar the Aube (less Montgueux and
+# Villenauxe-la-Grande). Kept by hand; champagne_must.py lets these win over the Champagne-wide
+# start. 2021 has no Aisne communes. Researched 5 October 2026.
+area,year,date,source
+cote-des-bar,2016,2016-09-10,http://www.bullosphere.fr/wp-content/uploads/2016/09/Dates_de_Vendanges_2016_BullOSphere.pdf
+cote-des-blancs,2016,2016-09-20,http://www.bullosphere.fr/wp-content/uploads/2016/09/Dates_de_Vendanges_2016_BullOSphere.pdf
+montagne-de-reims,2016,2016-09-14,http://www.bullosphere.fr/wp-content/uploads/2016/09/Dates_de_Vendanges_2016_BullOSphere.pdf
+vallee-de-la-marne,2016,2016-09-14,http://www.bullosphere.fr/wp-content/uploads/2016/09/Dates_de_Vendanges_2016_BullOSphere.pdf
+cote-des-bar,2018,2018-08-20,https://lachampagnedesophieclaeys.fr/toutes-les-dates-des-vendanges-en-champagne-ici/
+cote-des-blancs,2018,2018-08-27,https://lachampagnedesophieclaeys.fr/toutes-les-dates-des-vendanges-en-champagne-ici/
+montagne-de-reims,2018,2018-08-23,https://lachampagnedesophieclaeys.fr/toutes-les-dates-des-vendanges-en-champagne-ici/
+vallee-de-la-marne,2018,2018-08-23,https://lachampagnedesophieclaeys.fr/toutes-les-dates-des-vendanges-en-champagne-ici/
+cote-des-bar,2019,2019-09-02,http://www.champagnefm.com/upload/medias/vendanges%20dates.pdf
+cote-des-blancs,2019,2019-09-09,http://www.champagnefm.com/upload/medias/vendanges%20dates.pdf
+montagne-de-reims,2019,2019-09-06,http://www.champagnefm.com/upload/medias/vendanges%20dates.pdf
+vallee-de-la-marne,2019,2019-09-05,http://www.champagnefm.com/upload/medias/vendanges%20dates.pdf
+cote-des-bar,2020,2020-08-17,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2020/08/dates_de_vendanges-1.pdf
+cote-des-blancs,2020,2020-08-21,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2020/08/dates_de_vendanges-1.pdf
+montagne-de-reims,2020,2020-08-18,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2020/08/dates_de_vendanges-1.pdf
+vallee-de-la-marne,2020,2020-08-18,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2020/08/dates_de_vendanges-1.pdf
+cote-des-bar,2021,2021-09-06,https://france3-regions.franceinfo.fr/grand-est/vendanges-2021-les-dates-en-champagne-ardenne-2240833.html
+cote-des-blancs,2021,2021-09-15,https://france3-regions.franceinfo.fr/grand-est/vendanges-2021-les-dates-en-champagne-ardenne-2240833.html
+montagne-de-reims,2021,2021-09-09,https://france3-regions.franceinfo.fr/grand-est/vendanges-2021-les-dates-en-champagne-ardenne-2240833.html
+vallee-de-la-marne,2021,2021-09-09,https://france3-regions.franceinfo.fr/grand-est/vendanges-2021-les-dates-en-champagne-ardenne-2240833.html
+cote-des-bar,2022,2022-08-22,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2022/08/dates_de_vendanges.pdf
+cote-des-blancs,2022,2022-08-29,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2022/08/dates_de_vendanges.pdf
+montagne-de-reims,2022,2022-08-25,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2022/08/dates_de_vendanges.pdf
+vallee-de-la-marne,2022,2022-08-24,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2022/08/dates_de_vendanges.pdf
+cote-des-bar,2023,2023-09-04,https://lachampagneviticole.fr/en/ban-des-vendanges-2023-en-champagne-toutes-les-dates-douverture/
+cote-des-blancs,2023,2023-09-05,https://lachampagneviticole.fr/en/ban-des-vendanges-2023-en-champagne-toutes-les-dates-douverture/
+montagne-de-reims,2023,2023-09-05,https://lachampagneviticole.fr/en/ban-des-vendanges-2023-en-champagne-toutes-les-dates-douverture/
+vallee-de-la-marne,2023,2023-09-05,https://lachampagneviticole.fr/en/ban-des-vendanges-2023-en-champagne-toutes-les-dates-douverture/
+cote-des-bar,2024,2024-09-07,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2024/09/dates_de_vendanges.pdf
+cote-des-blancs,2024,2024-09-13,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2024/09/dates_de_vendanges.pdf
+montagne-de-reims,2024,2024-09-13,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2024/09/dates_de_vendanges.pdf
+vallee-de-la-marne,2024,2024-09-12,https://lachampagnedesophieclaeys.fr/wp-content/uploads/2024/09/dates_de_vendanges.pdf
+cote-des-bar,2025,2025-08-20,https://matot-braine.fr/IMG/pdf/dates_de_vendanges.pdf
+cote-des-blancs,2025,2025-08-25,https://matot-braine.fr/IMG/pdf/dates_de_vendanges.pdf
+montagne-de-reims,2025,2025-08-22,https://matot-braine.fr/IMG/pdf/dates_de_vendanges.pdf
+vallee-de-la-marne,2025,2025-08-23,https://matot-braine.fr/IMG/pdf/dates_de_vendanges.pdf

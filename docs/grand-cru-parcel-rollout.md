@@ -11,11 +11,12 @@ umbrella issues #344 (named areas) and #364 (rights and farming evidence).
 Shared historical extension: [#461](https://github.com/gary29024/winelogdb/issues/461)
 requires official evidence back to the earliest available records for all 33 crus.
 The shared acquisition/parser and historical backfills now cover all 33 crus.
-See the [history delivery and source gaps](research/grand-cru-history.md). The 30
-new cru registers supply the historical basis; their remaining Tier 1 commune-edge,
-named-area and producer reviews are still pending, so they stay off the app's maps
-until their commune-edge audit is committed. Earlier notice bulletins (Côte-d'Or
-2004–2015, every Yonne year) were located but not obtained; #461 stays open for them.
+See the [history delivery and source gaps](research/grand-cru-history.md). A cru's
+register supplies the historical basis, but the cru stays off the app's maps until
+its Tier 1 commune-edge audit is committed. Per-cru progress is tracked in the cru
+issues and the #461 checklist, not here. Earlier notice bulletins were partially
+recovered through archived copies; missing publications and unsearched intervals
+stay explicit in each cru's notice coverage.
 
 ## 1. What Échezeaux established
 
@@ -143,11 +144,81 @@ the historical extension for a cru.
 
 - Free company-filing mirrors: deeds, contributions, lease recitals.
 - Published producer holdings and independent articles (e.g. Winehog), facts only
-  with links; printed references kept separate from today's parcels.
+  with links; printed references kept separate from today's parcels. A printed
+  reference reaches a current parcel only through an accepted spatial successor or
+  documented DFI ancestry (`predecessorReferences`); otherwise it stays in
+  `unmatchedPrintedReferences`.
+
+#### Shared holder research
+
+Many legal holders have rights in several crus, so holder-to-domaine research is done
+once per holder in [`docs/research/holders/holder-links.json`](research/holders/holder-links.json),
+not in each cru's curation. Entries are keyed by the identifier the DGFiP rights file
+records (SIREN or provisional `U…`). The generated [holder report](research/holders/holders.md)
+lists every recorded holder by parcels held. It is the research queue and the coverage
+record.
+
+- **A link** names the domaine or producer, a `relation` and its `basis`, `sourceIds`,
+  `reviewStatus` and `reviewedAt`.
+  - Relations: `owner-company`, `family-holding`, `subsidiary`, `parent-group`,
+    `common-ownership`, `partner-company` (the domaine's company is a recorded partner
+    of the holder), `management`, `brand-identity`, `lessor-per-filing`,
+    `reported-tenancy`, `succession` and `shared-office`. None of them means farming.
+  - A lease or reported tenancy covers particular land. It lists the `crus` whose
+    parcels it names. A filing lease also records `leaseStatus`: `executed`, `recited`
+    or `mandate-only`.
+  - Any link may be limited to `crus` when the domaine label differs by village.
+- **Review status:** `provisional` marks a cited lead whose relation is not yet
+  established. A `retired` link keeps its `retiredReason` and is never shown.
+- **No link found:** a holder searched without finding one keeps a `searches` record,
+  so later crus don't repeat the search; an optional `note` says what was found instead.
+  Record `effort` (filings screened, pages read) as you go.
+- **Provisional `U…` identifiers** need an `identity` crosswalk to a SIREN, with sources
+  and its limitation, before they can be linked. The rights file keeps the provisional
+  identifier. The SIREN may be another table key only if the two record no parcels in
+  the same cru.
+- **Evidence:** family holdings and other corporate relations need a company record,
+  filing or legal notice. Never link from a similar name or monopole reputation.
+  An undated or older owner map never overrides the current rights file or a later
+  filing; use one only where nothing newer covers the parcel, and never record the
+  private owners it names.
+- **Scanned filings:** OCR every page before calling a screen negative; many deeds are
+  image-only. A filing that names a parcel with no company record is
+  `externalResearch` (`filing-named-cadastral-reference`), not a `parcelFilings` entry.
+- **Sources** live in the table: shared source IDs are unique across the table and every
+  curation. A filing records its deed date as `documentDate`, its raw-byte SHA-256 and the
+  pages read; a filing or deposit date is a separate field.
+
+A cru uses the table by setting `"holderLinks": "shared"` in its curation, in its Tier 2 PR.
+Its `holders[]` rows keep the cru's own `basis`, `finding` and `sourceIds`. Candidate
+names never appear inline: the research builder fills them from the links that apply to
+that cru and appends their sources. Exactly one applicable link gives the app's domaine
+heading (`holderDomains`, and with it domaine grouping); two or more stay listed leads.
+Only a company-record row `basis` groups (`company-identity`, `family-company-record`,
+`group-company-record` and the estate and identity bases); lease, mandate, management,
+succession and name-and-seat rows stay leads under the legal holder.
+The app marks each row with a link-strength seal check after the name: company record
+(strong, green), estate or registry source (medium, grey) and lead (weak, dashed amber
+with "?"), with `domaine-confirmed` reserved above them as the only solid seal (Tier 3).
+The reason shows in the seal's tooltip and accessible name, not as row text.
+The list is always grouped this way (there is no legal-holder switch). Rows show the
+research name only; recorded legal names stay searchable and appear in each parcel's details.
+The list keeps one note line and the seal key; "About this data" says the headings are
+research links, how many legal holders the rows group, and summarises the sources.
+Each parcel's evidence panel shows the dated records; source coverage and tracing stay
+in the research files and are not shown to readers.
+Unlinked holders keep their recorded name. `build_grand_cru_holder_links.py --check`,
+also run by `build_grand_cru_research.py --all --check`, fails on an unsourced link, an
+identifier no cru records, an unused source or a stale report.
 
 ### Tier 3 — deferred
 
 - Paid land-registry (SPF) copies, domaine or CVI outreach.
+- Placeholder for outreach: record a domaine's own dated reply as a `domaine-outreach` source.
+  Only then may a holder row use basis `domaine-confirmed` (the research build rejects it
+  otherwise), shown as the solid seal, "Confirmed by domaine". It confirms the
+  holder-to-domaine relation, not farming, which still needs the verified-operator gate.
+  Keep correspondence text and personal contact details out of the repository.
 
 ## 3. Make the pipeline generic first
 
@@ -201,12 +272,37 @@ Its Tier 1 research (#377) is in [docs/research/grands-echezeaux](research/grand
    feature can be explored) and `evidenceFrom`. Add
    `appellationId` and `namedPlots` once named areas are reviewed,
    `rightsHistoryPurpose` for the history, and `research` (method and filings docs)
-   once `docs/research/<slug>/curation.json` exists. The commune audit allows 0.1% of
+   once `docs/research/<slug>/curation.json` exists. A cru that is one whole-cru
+   named area sets `namedPlots.displayLayer` to false, so the map keeps the official
+   outline. So does a cru whose climats INAO already maps as denominations
+   (Corton): the cadastral areas are audited and crosswalked, never drawn twice. The named-area builders treat same-name lieu-dit features in one commune
+   as a single named area (as for Romanée-Saint-Vivant). A parcel that no lieu-dit
+   polygon touches gets no guessed name and must be listed in
+   `namedPlots.parcelsWithoutLieuDit` (as for La Grande Rue and Musigny). An official
+   climat with no cadastral candidate at all is an `unresolved` entry whose
+   `sourceCandidate` is null (Musigny's La Combe d'Orveau). Parcels that only touch the
+   cru edge can lie mostly in a neighbouring lieu-dit; list those names in
+   `namedPlots.neighbouringLieuxDits`, which the crosswalk accepts only for parcels
+   mostly outside the cru. A lieu-dit recorded on both sides of a commune line is one
+   named area only when its plot lists `communes` (Bonnes-Mares). Overlapping
+   lieux-dits keep their published outlines under a capped `reviewedOverlaps` pair
+   (Clos Saint-Denis). A plot named exactly like its cru is never matched from a wine
+   label, so the cru's own name keeps the whole-cru outline. The commune audit allows 0.1% of
    the INAO boundary to be uncovered by the cru's own parcels. A larger remainder needs
    a reviewed `communeAudit.reviewedUncoveredArea` (absolute cap in m², review date,
    explanation, and the exact INAO and cadastre hashes it was reviewed against), as in
    `clos-de-vougeot.json`; changed sources then fail until reviewed again. Never clip,
    buffer or fill geometry to pass the audit.
+   For a cross-commune cru, set `communeAudit.measureCrossCommuneOverlap` to true:
+   the commune audit publishes coverage for each commune, pairwise shared area
+   inside INAO and the union area counting that overlap once. Keep the shared
+   parcel set intact across commune lines. If the cru's name also identifies one
+   of several constituent lieux-dits, retain `namedPlots.displayLayer: false`.
+   Before enabling a selectable named-area layer for a white cru, test that its
+   white wines still resolve to the official INAO feature.
+   A shared download bundle can include communes that INAO does not list for
+   an individual cru. The audit counts only the listed communes as its coverage;
+   other bundle communes are measured as neighbours and never fill its gaps.
 3. **Build**, from the repository root:
 
    ```sh
@@ -233,14 +329,17 @@ evidence together with the history and coverage report.
    configs. List all of its `villageMaps` in the cru config. CI checks that the
    generated registry matches every config. The generator enables `domaineGrouping`
    only when the cru's research files contain holder-to-domaine links (`holderDomains`).
-   Otherwise the app shows legal holders without a grouping control or domaine-research
-   messages. Only crus with a committed commune-edge audit are wired into the app
+   Otherwise the app lists recorded legal holders without domaine-research messages. Only crus with a committed commune-edge audit are wired into the app
    (`app_cru_slugs` in `grand_cru.py`); `test_grand_cru_config` fails if a cru without
    one is anything but a pending historical-extension delivery. Components need no change.
+   If the cru is divided into INAO climats on its village maps (Corton Les Bressandes,
+   Chablis Les Clos), also run `python scripts/build_grand_cru_climats.py`. It measures
+   each parcel's area in each climat from the committed parcel file and village maps, so
+   a climat's wine opens the panel on its own parcels. `test_grand_cru_parcels` runs it
+   with `--check`, so a rebuilt parcel bundle fails CI until the climat files follow.
 5. **Method doc** `docs/research/<slug>/README.md`: the section 5 results table,
    method, sources and limitations. Commit every build report, including the
-   commune audit and the named-area audit. Historical-extension deliveries use
-   the shared method doc until these remaining per-cru Tier 1 reviews are completed.
+   commune audit and the named-area audit.
 
 Generated research JSON uses one compact line per record (`record_json` in `grand_cru.py`), so a changed parcel
 shows as a one-line diff.
@@ -332,16 +431,37 @@ tier and checklist come from there.
 
 | Step | Request |
 | --- | --- |
-| Shared history extension, first | "Implement the official acquisition/parser requirements in #461 using docs/grand-cru-parcel-rollout.md. Validate on Échezeaux, Grands-Échezeaux and Clos de Vougeot, then apply each bundle and publish per-cru coverage." |
-| Each cru, Tier 1 | "Start Grand Cru #378 (Clos de Vougeot), Tier 1, following docs/grand-cru-parcel-rollout.md and #461. Obtain official history to the earliest available records and report all source gaps." |
-| Optional Tier 2 | "Do Tier 2 research for #378." Attach or link any PDFs you want reviewed. |
-| Shared village | "Prepare the Gevrey-Chambertin bundle for #391–#399, then start #391, Tier 1." |
+| Each cru, Tier 1 | "Start Grand Cru #378 (Clos de Vougeot), Tier 1, following docs/grand-cru-parcel-rollout.md and #461." |
+| Shared village | "Start the Gevrey-Chambertin bundle, Tier 1: #391–#399, one PR per cru, following docs/grand-cru-parcel-rollout.md and #461." |
+| Backfill only | "Complete the #461 backfill for #378." For a cru whose legacy Tier 1 is already closed, as with #376 and #377. |
+| Optional Tier 2 | "Do Tier 2 research for #378." Attach or link any PDFs, filings or articles you want reviewed. |
 
-Each cru gets its own branch and PR, and the issue closes only after that PR is
-reviewed and merged. Suggested order: #377, #378, then one village bundle at a time
-(Vosne-Romanée, Morey-Saint-Denis and Chambolle-Musigny, Gevrey-Chambertin,
-Puligny/Chassagne, the Corton hill), and Chablis (#408) last.
+Append "stop before opening the PR" to review the changes first, or "in a worktree"
+to keep the main checkout free.
 
-Some government download sites may refuse connections from the cloud session. If
-a download is blocked, Claude reports it and gives the commands to run locally,
-as was done for earlier map batches.
+The shared #461 history pipeline is merged (#462, #463, #472, #491): all 33 crus
+already have rights history, notice history, sale records and lazy evidence. A
+Tier 1 run therefore:
+
+1. Reads the cru issue and its #461 checklist, and checks the generated files.
+   Looks up every commune code it will name (`bundle_commune_names` in
+   `grand_cru.py`, or geo.api.gouv.fr); a notice's printed commune is matched by
+   code, so a swapped code flips accept/reject decisions.
+2. Completes the remaining per-cru items: the commune-edge audit (which lets a
+   hidden cru appear on the maps), the named-area crosswalk, and page-image review
+   of any `unreviewedCandidates` in its `notice-history.json`. Record each read page
+   in the curation's `noticeReview`: confirmed rows become `exactParcelEvents`, and
+   matched references the page does not support go in `rejectedReferenceHints`,
+   each with its reason. A republished copy of the same act is reviewed with
+   `repeatOf`, not a second event.
+3. Regenerates outputs, updates the README results table and passes every `--check`.
+   Rebuild and measure under Python 3.12, as CI does. Python 3.14's zlib-ng gives
+   different gzip sizes, and Python 3.11's float `sum()` changes generated areas.
+4. Opens one PR per cru. After merge, the cru issue's #461 checklist is ticked with
+   its own evidence and links, the cru is ticked in #461, and the issue closes.
+
+Some government download sites may refuse connections. The Côte-d'Or and Yonne
+prefecture sites refused every connection in October 2026, so earlier bulletins
+came from Internet Archive and Common Crawl copies
+([earlier-bulletins README](research/earlier-bulletins/README.md)). If a download is
+blocked, Claude reports it, records the gap and gives the commands to run locally.

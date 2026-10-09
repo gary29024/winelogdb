@@ -29,7 +29,7 @@ describe('permanent friend codes and requests',()=>{
   const target=buildResearchTargets({producer:'Domaine Test',country:'France'}).find(t=>t.scope==='producer')!;
   await publishResearch(db.db,'alice',{target,payload:{producerDetails:'A documented Burgundy producer.',producerWinemakingPractices:'Practices vary by vintage; the cellar uses traditional barrels.'},sources:[{title:'Producer',url:'https://example.com/producer'}],model:'test',researchedAt:new Date().toISOString()});
   const {id}=await send();expect(edges()).toBe(0);expect((await loadResearchCache(db.db,'bob',[target],true)).size).toBe(0);
-  expect(await (await call('bob','requests'))!.json()).toEqual({incoming:[{id,display_name:'alice'}],outgoing:[]});
+  expect(await (await call('bob','requests'))!.json()).toEqual({incoming:[{id,display_name:'alice',handle:null}],outgoing:[]});
   expect(await (await call('carol','requests'))!.json()).toEqual({incoming:[],outgoing:[]});
   await expect(call('alice',`requests/${id}/accept`,'POST',{})).rejects.toMatchObject({status:403});
   await expect(call('carol',`requests/${id}/accept`,'POST',{})).rejects.toMatchObject({status:404});
@@ -39,7 +39,9 @@ describe('permanent friend codes and requests',()=>{
  it('normalizes pasted codes and rejects self, unknown, and already-connected accounts',async()=>{
   const formatted=code('bob').toLowerCase().match(/.{4}/g)!.join('-');const response=await call('alice','requests','POST',{code:` ${formatted} `});expect(response!.status).toBe(201);
   await expect(call('alice','requests','POST',{code:code('alice')})).rejects.toMatchObject({status:400});
-  await expect(call('alice','requests','POST',{code:'missing'})).rejects.toMatchObject({status:400});
+  // Text that is not a code is read as a handle, so an unknown one is not found rather than malformed.
+  await expect(call('alice','requests','POST',{code:'missing'})).rejects.toMatchObject({status:404});
+  await expect(call('alice','requests','POST',{code:'not a code!'})).rejects.toMatchObject({status:400});
   await expect(call('alice','requests','POST',{code:'000000000000'})).rejects.toMatchObject({status:404});
   const {id}=await response!.json() as {id:string};await call('bob',`requests/${id}/accept`,'POST',{});
   await expect(send()).rejects.toMatchObject({status:409});

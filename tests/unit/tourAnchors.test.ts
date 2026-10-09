@@ -79,6 +79,37 @@ describe('tour anchors',()=>{
  });
 });
 
+/**
+ * The copy does not only point at elements, it names labels on other screens:
+ * the In cellar tab, the four modes in the scan sheet, the allowance heading on
+ * Account. A renamed label leaves the tour giving directions to something that
+ * is not there - the same failure as a missing anchor, one level up, and just
+ * as quiet. Caught once already: the tour said "Cellar tab" for a tab the app
+ * calls "In cellar", and the account chip replaced the words "Account &
+ * friends" with a circle the copy had never described.
+ */
+describe('labels the copy sends people to',()=>{
+ const copy=[readFileSync(join(src,'features','onboarding','steps.ts'),'utf8'),
+             readFileSync(join(src,'features','auth','CreditConfirmation.tsx'),'utf8')].join('\n');
+ const labels=[
+  {phrase:'In cellar',file:join('features','wines','JournalScopeTabs.tsx')},
+  {phrase:'Single Wine',file:join('components','Layout.tsx')},
+  {phrase:'Group Photo',file:join('components','Layout.tsx')},
+  {phrase:'Batch Scan',file:join('components','Layout.tsx')},
+  {phrase:'Start Tasting',file:join('components','Layout.tsx')},
+  {phrase:'This week\u2019s AI allowance',file:join('features','auth','AccountPage.tsx')}
+ ];
+
+ it.each(labels)('$phrase is still what $file calls it',({phrase,file})=>{
+  expect(readFileSync(join(src,file),'utf8'),`${phrase} is no longer in ${file}`).toContain(phrase);
+ });
+
+ it('and every one of them is actually quoted by the tour, so the list cannot go stale',()=>{
+  const unused=labels.filter(label=>!copy.includes(label.phrase)).map(label=>label.phrase);
+  expect(unused).toEqual([]);
+ });
+});
+
 describe('who sees which step',()=>{
  it('gives the phone no Tastings step, because the tab bar has no Tastings slot',()=>{
   const ids=stepsFor(firstRunSteps,'member',true).map(step=>step.id);

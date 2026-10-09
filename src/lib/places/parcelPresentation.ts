@@ -4,20 +4,34 @@ import type {ParcelProducerLink} from './parcelProducerLinks';
 
 export type HolderResearch={name:string;basis:string;note:string;sources:string[]};
 type ParcelRow={properties:{id:string;recordedRights:{holderId:string;name:string}[];overlaps:{parentFeatureId:string;areaM2:number}[]}};
+/** How strong a holder-to-domaine link is, strongest first. None of them is a farming claim. */
+export type HolderConfidence='domaine'|'strong'|'medium'|'weak';
 export type HolderGroup={id:string;name:string;domaine:boolean;holderIds:string[];legalNames:string[];areaM2:number;count:number;sources:string[];
- basisLabel:string;lead?:{name:string;label:string}};
+ basisLabel:string;confidence?:HolderConfidence;lead?:{name:string;label:string}};
 
 // No current farmer is verified, so only identity/estate research may group
-// holders under a domaine. A weak lead names its own row (legal name beneath,
-// labelled as a lead) but never merges into, or adds area to, a domaine group.
-// Tenancy, lease and operator relationships are never shown in this list.
+// holders under a domaine. A weak lead names its own row (labelled as a lead)
+// but never merges into, or adds area to, a domaine group. Legal names stay
+// searchable rather than shown. Tenancy, lease and operator relationships are
+// never shown in this list.
 const headingLabels:Record<string,string>={
  'estate-context':'Estate source','secondary-estate-context':'Estate source','management-and-estate-context':'Estate source',
  'group-and-estate-context':'Estate source via group',
- 'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only'};
+ 'brand-identity-confirmed':'Brand identity confirmed','identity-only':'Registry identity only',
+ // Company-register or filing evidence for the relation, with no estate page needed.
+ 'company-identity':'Company record','family-company-record':'Family company record','group-company-record':'Group company record',
+ // Placeholder for Tier 3 outreach: the domaine's own dated reply. No research uses it yet.
+ 'domaine-confirmed':'Confirmed by domaine'};
 const leadLabels:Record<string,string>={
  'registered-office-match':'office address only','management-only-lead':'shared management only',
- 'succession-lead':'ownership succession lead','partial-succession-lead':'ownership succession lead'};
+ 'succession-lead':'ownership succession lead','partial-succession-lead':'ownership succession lead',
+ 'name-and-seat-crosswalk':'identity by name and seat only'};
+// Any other heading basis is an estate or registry source; every lead is weak.
+const strongerHeadings:Record<string,HolderConfidence>={'domaine-confirmed':'domaine',
+ 'company-identity':'strong','family-company-record':'strong','group-company-record':'strong'};
+export const confidenceLabels:Record<HolderConfidence,string>={domaine:'Confirmed by domaine',strong:'Company record',
+ medium:'Estate or registry source',weak:'Weak lead'};
+export const confidenceOrder:HolderConfidence[]=['domaine','strong','medium','weak'];
 
 // A saved catalogue identity is not a fuzzy producer-name suggestion.
 // Prefer the account's ID; only missing IDs use the complete normalized name.
@@ -45,8 +59,9 @@ export function groupParcelRightHolders(parcels:readonly ParcelRow[],parentId:st
    const id=context?`domaine:${placeKey(context.name)}`:right.holderId;
    let group=groups.get(id);
    if(!group){
+    const confidence:HolderConfidence|undefined=context?strongerHeadings[context.basis]??'medium':lead?'weak':undefined;
     group={id,name:context?.name??lead?.name??ownerName(right.name),domaine:Boolean(context),holderIds:[],legalNames:[],sources:[],areaM2:0,count:0,
-     basisLabel:context?headingLabels[context.basis]:'',lead,parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
+     basisLabel:context?headingLabels[context.basis]:'',...(confidence?{confidence}:{}),lead,parcels:new Set(),holders:new Set(),names:new Set(),sourceIds:new Set()};
     groups.set(id,group);
    }
    group.holders.add(right.holderId);group.names.add(ownerName(right.name));
@@ -57,5 +72,6 @@ export function groupParcelRightHolders(parcels:readonly ParcelRow[],parentId:st
   }
  }
  return [...groups.values()].map(g=>({id:g.id,name:g.name,domaine:g.domaine,holderIds:[...g.holders].sort(),legalNames:[...g.names].sort(),
-  sources:[...g.sourceIds].sort(),areaM2:g.areaM2,count:g.count,basisLabel:g.basisLabel,...(g.lead?{lead:g.lead}:{})})).sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
+  sources:[...g.sourceIds].sort(),areaM2:g.areaM2,count:g.count,basisLabel:g.basisLabel,...(g.confidence?{confidence:g.confidence}:{}),
+  ...(g.lead?{lead:g.lead}:{})})).sort((a,b)=>b.areaM2-a.areaM2||a.name.localeCompare(b.name));
 }

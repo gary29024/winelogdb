@@ -166,6 +166,8 @@ a.vintage-year-card:hover{border-color:var(--line-strong)}
 .vintage-noble-rot .is-hurts{background:var(--vt-hurts);border-color:var(--vt-hurts-line);color:var(--vt-hurts-ink)}
 .vintage-noble-rot .is-helps strong,.vintage-noble-rot .is-hurts strong{color:inherit}
 .vintage-region{margin-top:0;margin-bottom:12px}
+/* Three or more regions: buttons share the width and may shrink, so none spills past the bar. */
+.vintage-region button{min-width:0;padding:0 6px}
 
 /* At harvest */
 .vintage-harvest-boxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 6px}

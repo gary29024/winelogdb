@@ -21,8 +21,15 @@ import { assertCatalogTextQuality,extractOfficialContactCandidates,mergeCatalogR
 import { applyCatalogDecisions,listCatalogDecisions } from './catalogDecisions';
 import { producerRangeAllowed } from './rangeAccess';
 import { catalogNameInitial,stripProducerCatalogPrefix } from './catalogName';
+import { translateResearchAfterRun,type TranslationEnv } from '../research/translationService';
 
-type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA?:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
+/** The run is complete; make the profile's Chinese now so 中 needs no wait. Never throws. */
+async function translateFinished(env:Env,owner:string,producerId:string,requestId:string){
+  const row=await env.DB.prepare('SELECT profile,winemaking_practices FROM producers WHERE owner_id=? AND id=?').bind(owner,producerId).first<{profile:string|null;winemaking_practices:string|null}>().catch(()=>null);
+  if(row)await translateResearchAfterRun(env,owner,[row.profile,row.winemaking_practices],{kind:'producer_research',runId:requestId,targetId:producerId});
+}
+
+type Env=TranslationEnv&{CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA?:R2Bucket;GEMINI_API_KEY?:string;RESEARCH_QUEUE:Queue<unknown>;AI_USAGE?:AnalyticsSink};
 type CatalogCategory='red'|'white'|'rose'|'sparkling'|'dessert'|'fortified'|'orange'|'other';
 type ProfileResult={homeCountry:string;homeRegion:string;homeLocality:string;officialWebsiteUrl:string|null;instagramUrl:string|null;contactEmail:string|null;contactPhone:string|null;profile:string;winemakingPractices:string};
 type CatalogWine={name:string;category:CatalogCategory;appellation?:string|null;classification?:string|null;style?:string|null;notes?:string|null};
@@ -556,7 +563,7 @@ export async function pollProducerBatchResearch(env:Env,owner:string,producerId:
   const uniqueFailed=[...new Set(failed)];await finishResearchBatchJob(env.DB,owner,job.id,uniqueFailed.length?'failed':'complete',uniqueFailed.length?uniqueFailed.map(key=>errors.get(key)).filter(Boolean).join('; '):null);
   if(!uniqueFailed.length){
     if(!catalogSummary&&rangeRequested){await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'failed','failed',job.attempt,'Producer research ended without complete A–Z catalogue coverage; the previous visible catalogue was kept unchanged.');return}
-    const message=await completionMessage(env.DB,owner,producerId,job.keys.includes('profile'),rangeRequested);await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);await publishProducerResearch(env.DB,owner,producerId);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});return;
+    const message=await completionMessage(env.DB,owner,producerId,job.keys.includes('profile'),rangeRequested);await discardProducerCatalogStage(env.DB,owner,requestId).catch(()=>undefined);await setRunState(env.DB,owner,requestId,'complete','complete',job.attempt,message);await publishProducerResearch(env.DB,owner,producerId);log('log',{requestId,producerId,stage:'complete',attempt:job.attempt,catalogSummary});await translateFinished(env,owner,producerId,requestId);return;
   }
 
   if(job.attempt===1){try{await submitBatch(env,owner,producerId,requestId,2,FALLBACK_MODEL,uniqueFailed);return}catch(e){if(e instanceof ResearchPersistenceError)throw e;await failRun(env,owner,producerId,requestId,job,`Could not submit focused fallback for ${uniqueFailed.join(', ')}: ${(e as Error).message}`);return}}

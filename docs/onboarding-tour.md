@@ -1,7 +1,7 @@
 # Onboarding tour for invited members
 
-Status: all four phases built.
-Reviewed against `main` at `74350b8` (v1.3.0, 2026-10-05).
+Status: all four phases built; re-checked against main on 2026-10-09.
+Reviewed against `main` at `0be6581` (v1.4.0).
 
 ## 1. Why this is needed now
 
@@ -113,7 +113,7 @@ same breakpoint the CSS already uses. Role filtering works the same way off
 Per-user in the database, as decided. The clean insertion point already
 exists.
 
-Add migration `src/lib/db/migrations/0091_tour_state.sql`:
+Add migration `src/lib/db/migrations/0095_tour_state.sql`:
 
 ```sql
 ALTER TABLE app_users ADD COLUMN tour_state TEXT NOT NULL DEFAULT '{}';
@@ -222,7 +222,7 @@ Built:
 
 | File | Purpose |
 |------|---------|
-| `src/lib/db/migrations/0091_tour_state.sql` | The column |
+| `src/lib/db/migrations/0095_tour_state.sql` | The column |
 | `src/features/onboarding/steps.ts` | Step content as data, and the role/viewport filter |
 | `src/features/onboarding/useTour.ts` | Active step, anchor measurement, replay hook |
 | `src/features/onboarding/TourOverlay.tsx` | Spotlight, bubble, keyboard and focus |
@@ -231,6 +231,7 @@ Built:
 | `worker/multiUser/auth.ts` | `PATCH /api/me/tour` and its validator |
 | `worker/multiUser/common.ts`, `src/lib/auth/client.ts` | `tour_state` on the member/account types |
 | `src/components/Layout.tsx` | `data-tour` anchors; mounts `<TourOverlay/>` beside `<CreditConfirmation/>` |
+| `src/components/AccountChip.tsx` | The `nav-account` anchor, which lives on the chip |
 | `src/features/auth/AccountPage.tsx` | The tour list under Getting around |
 | `src/features/auth/CreditConfirmation.tsx` | The one-time credits panel |
 | `src/features/achievements/AchievementsPage.tsx` | The `collections` anchor |
@@ -259,7 +260,7 @@ taps a nav item mid-tour simply navigates and the next step is still on screen.
 
 All four phases are built:
 
-1. **Column and endpoint** — migration 0091, `PATCH /api/me/tour`, `tour_state`
+1. **Column and endpoint** — migration 0095, `PATCH /api/me/tour`, `tour_state`
    on the account types.
 2. **Engine and first-run tour** — overlay, hook, steps, anchors, mounted in
    `Layout`, plus the replay entry.
@@ -269,7 +270,7 @@ All four phases are built:
 
 ## 8. Testing
 
-All green: 5575 unit tests across 337 files, plus 8 e2e tests.
+All green: 5676 unit tests across 350 files, plus 8 e2e tests.
 
 Unit:
 
@@ -277,11 +278,13 @@ Unit:
   rejects a body that is not the expected shape, keeps only step ids the app
   could have issued, caps the list, and enforces the same-origin and session
   checks.
-- `tests/unit/tourAnchors.test.ts` (13) — two guards against silent rot, both
+- `tests/unit/tourAnchors.test.ts` (20) — three guards against silent rot, each
   verified by mutation: **every anchor in a step exists in the rendered app**
-  (deleting a `data-tour` fails it), and **every route a chapter navigates to is
-  a route `App.tsx` actually has** (renaming one fails it). Plus both navs still
-  carrying the shared anchors, the role/viewport filter, and distinct tour ids.
+  (deleting a `data-tour` fails it), **every route a chapter navigates to is a
+  route `App.tsx` actually has** (renaming one fails it), and **every UI label
+  the copy names is still what that screen calls it** (renaming the In cellar
+  tab fails it). Plus both navs still carrying the shared anchors, the
+  role/viewport filter, and distinct tour ids.
 - `tests/unit/tourOverlay.test.tsx` (15) — opens for a new member, stays away
   from one who finished or skipped, walks forward and back, writes exactly once
   and only at the end, Escape counts as a skip, replay reopens it, a step whose
@@ -298,7 +301,31 @@ gets 6 steps and the desktop 7; that the bubble stays inside the viewport at
 every step; and that a chapter started from Account navigates, waits for the
 lazily loaded page, and rings a section of it.
 
-Two bugs these found, both of which would otherwise have shipped:
+## 8a. What the 2026-10-09 re-check found
+
+228 commits had landed. Four things had drifted, three of them breakages:
+
+- **Migration number collision.** Main took `0091` for user handles while this
+  branch held `0091_tour_state.sql`. Renumbered to `0095`.
+- **The account anchor had moved.** `Account & friends` is now `<AccountChip/>`
+  — an avatar pill, and on a phone just a circle with the reader's initial. The
+  `nav-account` anchor went with the old link, so two steps would have silently
+  skipped. The anchor guard caught it; the anchor now lives on the chip, and
+  both steps name the circle, since the words are no longer on screen.
+- **Friends are added by user ID now.** Every account gets an `@handle` at
+  sign-in, and the add-friend field takes "@userid or code". The sharing chapter
+  said friend codes only.
+- **The member-facing word for AI access is allowance, not balance.** Account &
+  friends shows "This week's AI allowance" with actions marked Included or
+  counted in runs. The credits panel pointed at a balance that is not what a
+  member sees.
+
+One inaccuracy was there from the start and only surfaced now: the tour said
+"the Cellar tab" for a tab the app has always labelled **In cellar**. The new
+label guard is what would catch the next one.
+
+Two bugs the tests found during the original build, both of which would
+otherwise have shipped:
 
 - The step-skipping logic treated "not measured yet" and "measured and absent"
   as the same `null`, so **step one of every tour was skipped** — the tour

@@ -38,7 +38,7 @@ def main():
                      'url': 'https://www.data.gouv.fr/datasets/dvf-open-data', 'type': 'registry-dataset',
                      'documentDate': None, 'access': 'read', 'finding': 'Dated deed references, without prices or parties. Coverage is audited independently of DFI.'},
                 ],
-                'holders': [{'holderId': hid, 'candidateNames': [], 'basis': 'identity-only',
+                'holders': [{'holderId': hid, 'basis': 'identity-only',
                              'sourceIds': ['dgfip-current'], 'parcelOperationConfirmed': False,
                              'finding': 'Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.'}
                             for hid in holder_ids],

@@ -45,8 +45,8 @@ describe('Échezeaux named-area identity',()=>{
 describe('Pilot sources and geometry',()=>{
  it('loads the additional named layer only into the Vosne/Flagey catalogue and leaves official features unchanged',async()=>{
   const catalogue=await loadVillageMapCatalogue('vosne-romanee');
-  expect(catalogue.features.filter(f=>f.kind==='named_plot')).toEqual(namedCatalogue.features);
-  expect(catalogue.namedPlots?.source.sha256).toBe(namedReport.source.sha256);
+  expect(catalogue.features.filter(f=>f.kind==='named_plot'&&f.parentFeatureId==='inao-denom-565')).toEqual(namedCatalogue.features);
+  expect(catalogue.namedPlots?.find(layer=>layer.parentFeatureId==='inao-denom-565')?.source.sha256).toBe(namedReport.source.sha256);
   expect((await loadVillageMapCatalogue('vougeot')).namedPlots).toBeUndefined();
   expect(new Set(catalogue.features.map(f=>f.id)).size).toBe(catalogue.features.length);
   expect(namedCatalogue.features.every(f=>f.parentFeatureId==='inao-denom-565'&&f.denominationId===null&&f.atlasUrl===null)).toBe(true);
@@ -88,8 +88,8 @@ it('fetches the independent named layer lazily with the canonical map and preser
  const fetcher=vi.fn(async(url:string)=>Response.json(JSON.parse(readFileSync('public'+url,'utf8'))));
  vi.stubGlobal('fetch',fetcher);const controller=new AbortController();
  const data=await loadVillageMapData(catalogue,controller.signal) as {features:unknown[]};
- expect(data.features).toEqual([...JSON.parse(readFileSync('public'+catalogue.dataUrl,'utf8')).features,...JSON.parse(readFileSync('public'+namedCatalogue.dataUrl,'utf8')).features]);
- expect(fetcher.mock.calls.map(c=>c[0]).sort()).toEqual([catalogue.dataUrl,namedCatalogue.dataUrl].sort());
+ expect(data.features).toEqual([...JSON.parse(readFileSync('public'+catalogue.dataUrl,'utf8')).features,...catalogue.namedPlots!.flatMap(layer=>JSON.parse(readFileSync('public'+layer.dataUrl,'utf8')).features)]);
+ expect(fetcher.mock.calls.map(c=>c[0]).sort()).toEqual([catalogue.dataUrl,...catalogue.namedPlots!.map(layer=>layer.dataUrl)].sort());
  vi.stubGlobal('fetch',vi.fn(async()=>{controller.abort();return Response.json({type:'FeatureCollection',features:[]})}));
  await expect(loadVillageMapData(catalogue,controller.signal)).rejects.toMatchObject({name:'AbortError'});
 });

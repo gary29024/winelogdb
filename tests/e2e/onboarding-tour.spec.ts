@@ -73,7 +73,7 @@ test.describe('the first-run tour on a desktop',()=>{
   await rings(page,'nav-passport');
 
   await page.getByRole('button',{name:'Next'}).click();
-  await expect(bubble(page)).toContainText('Cellar tab');
+  await expect(bubble(page)).toContainText('In cellar tab');
   await rings(page,'nav-journal');
 
   for(const step of ['One button, four ways in','Tastings','Producers and Vintages','Friends and sharing','That is the tour']){
@@ -110,7 +110,7 @@ test.describe('the first-run tour on a phone',()=>{
   await expect(ringed).toBeVisible();
 
   await page.getByRole('button',{name:'Next'}).click();
-  await expect(bubble(page)).toContainText('Cellar tab');
+  await expect(bubble(page)).toContainText('In cellar tab');
   await rings(page,'nav-journal');
 
   await page.getByRole('button',{name:'Next'}).click();
@@ -164,7 +164,8 @@ test.describe('an optional chapter',()=>{
   await expect(bubble(page)).toContainText('Tastings · Step 1 of 3');
   // The chapter navigated: this page has no tab of its own on a phone.
   await expect(page).toHaveURL(/\/tastings$/);
-  await expect(page.getByRole('heading',{name:'Tastings'})).toBeVisible();
+  // Level 1: the page's own title, not the nav link or a section of the same name.
+  await expect(page.getByRole('heading',{name:'Tastings',level:1})).toBeVisible();
 
   await page.getByRole('button',{name:'Next'}).click();
   await expect(bubble(page)).toContainText('Scan Wine, then Start Tasting');

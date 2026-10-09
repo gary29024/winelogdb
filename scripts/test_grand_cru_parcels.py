@@ -11,6 +11,36 @@ def row(holder='123456789', right='P - Propriétaire', area='500'):
 
 
 class RightsJoinTests(unittest.TestCase):
+    def test_other_bundle_commune_cannot_fill_an_inao_commune_gap(self):
+        import gzip
+        import json
+        from unittest.mock import patch
+        from shapely.geometry import box, mapping
+        import build_grand_cru_commune_audit as audit
+        # Puligny is absent at the cru; Chassagne covers it, but is not an INAO commune.
+        boundary = mapping(box(4.75, 46.95, 4.751, 46.951))
+        parent = {'id': 'test-cru', 'geometry': boundary, 'properties': {'communes': ['21512']}}
+        raw = json.dumps({'features': [parent]}).encode()
+        own = gzip.compress(json.dumps({'features': [{'geometry': mapping(box(4.76, 46.96, 4.761, 46.961))}]}).encode())
+        neighbour = gzip.compress(json.dumps({'features': [{'geometry': boundary}]}).encode())
+        with patch.object(audit, 'village_map', return_value=({}, raw, 'boundary')), \
+             patch.object(audit, 'bundle_commune_names', return_value={}), \
+             patch.object(audit, 'cadastre_sources', return_value=[('21512', 'own', 'own'), ('21150', 'other', 'other')]), \
+             patch.object(audit, 'communes', return_value=['21512', '21150']), \
+             patch.object(audit, 'pinned', side_effect=lambda directory, name, digest: own if digest == 'own' else neighbour):
+            with self.assertRaisesRegex(ValueError, 'INAO communes leave .* uncovered'):
+                audit.build({'slug': 'test', 'parentFeatureId': 'test-cru'}, {}, None)
+
+    def test_cross_commune_coverage_counts_shared_ground_once(self):
+        from shapely.geometry import box
+        from build_grand_cru_commune_audit import cross_commune_coverage
+        result = cross_commune_coverage(box(0, 0, 10, 10), {
+            '21150': box(-2, 0, 6, 10), '21512': box(5, 0, 12, 10),
+        })
+        self.assertEqual(result['coverageByCommuneM2'], {'21150': 60, '21512': 50})
+        self.assertEqual(result['crossCommuneOverlaps'], [{'communes': ['21150', '21512'], 'areaM2': 10}])
+        self.assertEqual(result['unionCoverageM2'], 100)
+
     def test_evidence_references_keep_the_actual_cadastral_section(self):
         from build_grand_cru_evidence import short_reference
         self.assertEqual(short_reference('217160000A0523'), 'A0523')
@@ -33,6 +63,24 @@ class RightsJoinTests(unittest.TestCase):
             uncovered_area_limit(cru, changed, review['parentSourceSha256'], 511156.3651)
         unreviewed = {key: value for key, value in cru.items() if key != 'communeAudit'}
         self.assertAlmostEqual(uncovered_area_limit(unreviewed, bundle, review['parentSourceSha256'], 511156.3651), 511.1563651)
+
+    def test_climat_parcels_match_the_committed_parcel_and_map_files(self):
+        # Stale climat files would show a Corton Les Bressandes wine another snapshot's parcels.
+        from build_grand_cru_climats import generate
+        generate(check=True)
+
+    def test_climat_edge_grazes_are_not_climat_parcels(self):
+        from build_grand_cru_climats import MINIMUM_CRU_SHARE
+        from grand_cru import APP_DIR, read_json
+        corton = read_json(APP_DIR / 'corton.climats.json')
+        bressandes = corton['climats']['inao-denom-2357']['parcels']
+        self.assertEqual(len(bressandes), 65)
+        self.assertGreater(corton['excludedEdgeContacts'], 0)
+        self.assertEqual(MINIMUM_CRU_SHARE, corton['minimumCruShare'])
+        # One Chablis parcel lies across Les Clos and Valmur and counts in both, each with its own area.
+        chablis = read_json(APP_DIR / 'chablis-grand-cru.climats.json')['climats']
+        split = [chablis[id]['parcels']['890680000A0652'][0] for id in ('inao-denom-443', 'inao-denom-445')]
+        self.assertGreater(min(split), 500)
 
     def test_padded_reference(self):
         self.assertEqual(parcel_id(row()), '212670000A0007')

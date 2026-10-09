@@ -1,0 +1,13 @@
+{
+  "id": "sales-listing",
+  "url": "https://cerema.app.box.com/v/dvfplus-opendata",
+  "retrievedAt": "2026-10-07T08:25:34Z",
+  "status": "obtained",
+  "resolvedUrl": "https://cerema.app.box.com/v/dvfplus-opendata",
+  "httpContentEncoding": null,
+  "transportSha256": "00ffdc80dc4462ede81ce092e42f288329a2c9083ca40ff186369d103ab58d0a",
+  "transportSize": 36832,
+  "sha256": "00ffdc80dc4462ede81ce092e42f288329a2c9083ca40ff186369d103ab58d0a",
+  "size": 36832,
+  "snapshot": "scripts/grand-crus/sources/catalogues/2026-10-07-chablis/sales-listing.html"
+}

@@ -47,11 +47,11 @@ for(const role of ['owner','member'] as const){
   await page.getByLabel('Name',{exact:true}).fill('Unsaved name');
   await page.getByRole('button',{name:'Friends 1'}).click();
   await expect(page).toHaveURL(/section=friends/);
-  await expect(page.getByRole('heading',{name:'Friends',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Your friends',exact:true})).toBeVisible();
   await expect(page.getByText('Usage temporarily unavailable')).not.toBeVisible();
   await page.getByRole('button',{name:'Accept Alex'}).click();
   await expect(page.getByText('You and Alex are now friends.')).toBeVisible();
-  await page.getByLabel('Friend code',{exact:true}).fill('TEST-CODE');
+  await page.getByLabel('Friend code or user ID',{exact:true}).fill('TEST-CODE');
   await fits(page);await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:info.outputPath(`${role}-friends.png`),fullPage:true});
   await page.getByRole('button',{name:'AI usage',exact:true}).click();
   await expect(page.getByText('Usage temporarily unavailable')).toBeVisible();
@@ -59,24 +59,25 @@ for(const role of ['owner','member'] as const){
   await page.getByRole('button',{name:'Profile',exact:true}).click();
   await expect(page.getByLabel('Name',{exact:true})).toHaveValue('Unsaved name');
   await page.getByRole('button',{name:'Friends',exact:true}).click();
-  await expect(page.getByLabel('Friend code',{exact:true})).toHaveValue('TEST-CODE');
+  await expect(page.getByLabel('Friend code or user ID',{exact:true})).toHaveValue('TEST-CODE');
   await expect(page.getByRole('link',{name:'Owner tools →'})).toHaveCount(role==='owner'?1:0);
-  await page.getByText('Sharing options',{exact:true}).click();
+  await page.getByLabel('More options for Jamie',{exact:true}).click();
+  await expect(page.getByRole('button',{name:'Remove friend'})).toBeVisible();
   await expect(page.getByRole('button',{name:'Share all existing wines with Jamie'})).toHaveCount(role==='owner'?1:0);
   await fits(page);
  });
 }
 test('owner section links, drafts and maintenance',async({page},info)=>{
  await mock(page);await page.goto('/admin#member-usage');
- await expect(page.getByRole('heading',{name:'Member usage · 2026-09'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Members · 2026-09'})).toBeVisible();
  await page.getByRole('button',{name:'Access & budgets',exact:true}).click();
- await page.getByLabel('Member limit (owner excluded)',{exact:true}).fill('42');
- await page.getByRole('button',{name:'Members',exact:true}).click();
- await expect(page.getByRole('button',{name:'Create member invitation'})).toBeVisible();
+ await page.getByLabel('Member limit',{exact:true}).fill('42');
+ await page.getByRole('button',{name:'Members & usage',exact:true}).click();
+ await expect(page.getByText(/Sign-up is open/)).toBeVisible();
  await page.getByRole('button',{name:'Access & budgets',exact:true}).click();
- await expect(page.getByLabel('Member limit (owner excluded)',{exact:true})).toHaveValue('42');
+ await expect(page.getByLabel('Member limit',{exact:true})).toHaveValue('42');
  await page.getByRole('button',{name:'Maintenance',exact:true}).click();
- await expect(page.getByText('Background maintenance',{exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Background jobs',exact:true})).toBeVisible();
  await fits(page);await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:info.outputPath('maintenance.png'),fullPage:true});
 });
 test('Journal grid stays succinct and filters are removable',async({page},info)=>{
@@ -112,9 +113,9 @@ test('owner controls recover from an initial load failure',async({page})=>{
  await mock(page);let fail=true;
  await page.route('**/api/admin/overview',async route=>{if(fail)await route.fulfill({status:503,json:{error:'Owner data unavailable'}});else await route.fallback()});
  await page.goto('/admin');await expect(page.getByRole('alert')).toContainText('Owner data unavailable');
- await expect(page.getByRole('button',{name:'Create member invitation'})).not.toBeVisible();
+ await expect(page.getByText(/Sign-up is open/)).not.toBeVisible();
  fail=false;await page.getByRole('button',{name:'Retry owner controls'}).click();
- await expect(page.getByRole('button',{name:'Create member invitation'})).toBeVisible();
+ await expect(page.getByText(/Sign-up is open/)).toBeVisible();
 });
 
 test('owner budgets and review-count navigation stay contained',async({page})=>{
@@ -122,7 +123,7 @@ test('owner budgets and review-count navigation stay contained',async({page})=>{
  await page.route('**/api/admin/overview',route=>route.fulfill({json:{...overview,actionPolicies:[{action:'recognition',label:'Scan wine',accessMode:'allowance',weeklyLimit:5}]}}));
  await page.route('**/api/admin/rollout/status',route=>route.fulfill({json:{lwinCurrent:{total:500,automatic:260,manual:0,identityConflicts:240,fieldUpdates:0,needsReview:240,withoutLwin:0,optedOut:0},storage:{state:'not_started',objects:0},research:{state:'not_started',wines:{processed:0,total:0},producers:{processed:0,total:0}},lwin:{state:'not_started',total:0},lwinValidation:{state:'not_started',total:0,reviewItems:[]},lwinAi:{state:'not_started',total:0}}}));
  await page.goto('/admin?section=access');
- await expect(page.getByLabel('Total storage (bytes; 0 = unlimited)',{exact:true})).toHaveValue('8589934592');
+ await expect(page.getByLabel('Total storage (GB)',{exact:true})).toHaveValue('8');
  await expect(page.getByRole('button',{name:'Maintenance 240',exact:true})).toBeVisible();
  await fits(page);
  const overflow=await page.locator('.section-navigation button').evaluateAll(buttons=>buttons.flatMap(button=>{
@@ -136,7 +137,7 @@ test('owner budgets and review-count navigation stay contained',async({page})=>{
   return box.left<label.left||box.right>label.right||box.width>175||input.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)<textWidth+18;
  }).map(input=>input.closest('label')!.textContent))).toEqual([]);
  await checkNumbers();
- await page.getByRole('button',{name:'Members',exact:true}).click();
+ await page.getByRole('button',{name:'Members & usage',exact:true}).click();
  await expect(page.getByLabel('Extra successful runs this week')).toBeVisible();
  await fits(page);await checkNumbers();
 });

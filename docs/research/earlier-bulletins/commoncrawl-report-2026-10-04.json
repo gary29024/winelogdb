@@ -1,0 +1,947 @@
+{
+ "schemaVersion": 1,
+ "checkedAt": "2026-10-04",
+ "source": "Common Crawl public WARC archives (data.commoncrawl.org), read through each crawl's cluster.idx by byte-range requests; the index server timed out on prefix queries",
+ "surtPrefixes": [
+  "fr,gouv,yonne)/",
+  "fr,gouv,cote-dor)/",
+  "fr,gouv,pref,yonne)/ (crawls to 2016)",
+  "fr,gouv,pref,cote-dor)/ (crawls to 2016)"
+ ],
+ "lookups": 322,
+ "crawls": [
+  "CC-MAIN-2008-2009",
+  "CC-MAIN-2009-2010",
+  "CC-MAIN-2012",
+  "CC-MAIN-2013-20",
+  "CC-MAIN-2013-48",
+  "CC-MAIN-2014-10",
+  "CC-MAIN-2014-15",
+  "CC-MAIN-2014-23",
+  "CC-MAIN-2014-35",
+  "CC-MAIN-2014-41",
+  "CC-MAIN-2014-42",
+  "CC-MAIN-2014-49",
+  "CC-MAIN-2014-52",
+  "CC-MAIN-2015-06",
+  "CC-MAIN-2015-11",
+  "CC-MAIN-2015-14",
+  "CC-MAIN-2015-18",
+  "CC-MAIN-2015-22",
+  "CC-MAIN-2015-27",
+  "CC-MAIN-2015-32",
+  "CC-MAIN-2015-35",
+  "CC-MAIN-2015-40",
+  "CC-MAIN-2015-48",
+  "CC-MAIN-2016-07",
+  "CC-MAIN-2016-18",
+  "CC-MAIN-2016-22",
+  "CC-MAIN-2016-26",
+  "CC-MAIN-2016-30",
+  "CC-MAIN-2016-36",
+  "CC-MAIN-2016-40",
+  "CC-MAIN-2016-44",
+  "CC-MAIN-2016-50",
+  "CC-MAIN-2017-04",
+  "CC-MAIN-2017-09",
+  "CC-MAIN-2017-13",
+  "CC-MAIN-2017-17",
+  "CC-MAIN-2017-22",
+  "CC-MAIN-2017-26",
+  "CC-MAIN-2017-30",
+  "CC-MAIN-2017-34",
+  "CC-MAIN-2017-39",
+  "CC-MAIN-2017-43",
+  "CC-MAIN-2017-47",
+  "CC-MAIN-2017-51",
+  "CC-MAIN-2018-05",
+  "CC-MAIN-2018-09",
+  "CC-MAIN-2018-13",
+  "CC-MAIN-2018-17",
+  "CC-MAIN-2018-22",
+  "CC-MAIN-2018-26",
+  "CC-MAIN-2018-30",
+  "CC-MAIN-2018-34",
+  "CC-MAIN-2018-39",
+  "CC-MAIN-2018-43",
+  "CC-MAIN-2018-47",
+  "CC-MAIN-2018-51",
+  "CC-MAIN-2019-04",
+  "CC-MAIN-2019-09",
+  "CC-MAIN-2019-13",
+  "CC-MAIN-2019-18",
+  "CC-MAIN-2019-22",
+  "CC-MAIN-2019-26",
+  "CC-MAIN-2019-30",
+  "CC-MAIN-2019-35",
+  "CC-MAIN-2019-39",
+  "CC-MAIN-2019-43",
+  "CC-MAIN-2019-47",
+  "CC-MAIN-2019-51",
+  "CC-MAIN-2020-05",
+  "CC-MAIN-2020-10",
+  "CC-MAIN-2020-16",
+  "CC-MAIN-2020-24",
+  "CC-MAIN-2020-29",
+  "CC-MAIN-2020-34",
+  "CC-MAIN-2020-40",
+  "CC-MAIN-2020-45",
+  "CC-MAIN-2020-50",
+  "CC-MAIN-2021-04",
+  "CC-MAIN-2021-10",
+  "CC-MAIN-2021-17",
+  "CC-MAIN-2021-21",
+  "CC-MAIN-2021-25",
+  "CC-MAIN-2021-31",
+  "CC-MAIN-2021-39",
+  "CC-MAIN-2021-43",
+  "CC-MAIN-2021-49",
+  "CC-MAIN-2022-05",
+  "CC-MAIN-2022-21",
+  "CC-MAIN-2022-27",
+  "CC-MAIN-2022-33",
+  "CC-MAIN-2022-40",
+  "CC-MAIN-2022-49",
+  "CC-MAIN-2023-06",
+  "CC-MAIN-2023-14",
+  "CC-MAIN-2023-23",
+  "CC-MAIN-2023-40",
+  "CC-MAIN-2023-50",
+  "CC-MAIN-2024-10",
+  "CC-MAIN-2024-18",
+  "CC-MAIN-2024-22",
+  "CC-MAIN-2024-26",
+  "CC-MAIN-2024-30",
+  "CC-MAIN-2024-33",
+  "CC-MAIN-2024-38",
+  "CC-MAIN-2024-42",
+  "CC-MAIN-2024-46",
+  "CC-MAIN-2024-51",
+  "CC-MAIN-2025-05",
+  "CC-MAIN-2025-08",
+  "CC-MAIN-2025-13",
+  "CC-MAIN-2025-18",
+  "CC-MAIN-2025-21",
+  "CC-MAIN-2025-26",
+  "CC-MAIN-2025-30",
+  "CC-MAIN-2025-33",
+  "CC-MAIN-2025-38",
+  "CC-MAIN-2025-43",
+  "CC-MAIN-2025-47",
+  "CC-MAIN-2025-51",
+  "CC-MAIN-2026-04",
+  "CC-MAIN-2026-08",
+  "CC-MAIN-2026-12",
+  "CC-MAIN-2026-17",
+  "CC-MAIN-2026-21",
+  "CC-MAIN-2026-25",
+  "CC-MAIN-2026-30",
+  "CC-MAIN-2026-34",
+  "CC-MAIN-2026-39"
+ ],
+ "matching": "Listed official URL (scheme/www/encoding-insensitive) or the same publisher document ID pair. Filename-only matches are not used: Yonne names such as \"recueil n°4.pdf\" repeat every year.",
+ "recovered": [
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA31052005.pdf",
+   "corpus": "cote-dor-2005",
+   "commonCrawl": "CC-MAIN-2019-47",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2019-47/segments/1573496668765.35/warc/CC-MAIN-20191116204950-20191116232950-00326.warc.gz#offset=200574009&length=374942&record=<urn:uuid:93293ecb-37fb-4402-9e15-145b766b826c>",
+   "sha256": "67357ad4414a74514328bd3d506574ca1068bdeaa903b22cbabd56a9a6bfea96"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/20891/173818/file/recueil-89-2017-006-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00258.warc.gz#offset=634427780&length=323233&record=<urn:uuid:a2557555-c131-4b32-a2d7-bf4b83811f72>",
+   "sha256": "7ddfd728931453e59e6dcce888d7fb62da6a9c3a3b8f212112556b660215d48a"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21097/175241/file/recueil-89-2017-017-recueil-des-actes-administratifs-special-1.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00183.warc.gz#offset=610974575&length=516218&record=<urn:uuid:4d17071a-dd80-4542-835c-a654b3c7a401>",
+   "sha256": "230ebb426af0d7ef0804cf3af7272699e8a2ab86384e1996e6d39b1e149f7c58"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21202/175947/file/recueil-89-2017-021-recueil-des-actes-administratifs-special-1.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00405.warc.gz#offset=606632734&length=468823&record=<urn:uuid:2f3bfea0-bd61-4fff-8937-e82c97b87c3f>",
+   "sha256": "42d5ae36bcdffc3d850625767ee59d42d11175989290ac7c0f76432fc8bc9716"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21207/175978/file/recueil-89-2017-022-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00121.warc.gz#offset=611591038&length=471080&record=<urn:uuid:b6912f89-bbf9-47d3-9512-92e5966b9f04>",
+   "sha256": "ec9a9366b43edad26c2cb016d82d8cf0fe3f063f9faf66a7bb8aebdb2a8b2ee0"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21284/176459/file/recueil-89-2017-039-recueil-des-actes-administratifs-special-1.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00319.warc.gz#offset=606912520&length=71534&record=<urn:uuid:44304e8d-5c49-4257-8c33-2b559a710ca6>",
+   "sha256": "814744531661497534bac0493fe13a914f7fc75ff424993438d123ecaf79e3b9"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21356/176838/file/recueil-89-2017-041-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00675.warc.gz#offset=593390319&length=273914&record=<urn:uuid:99c2dda9-62f2-4828-a53c-5ec6f69f98f6>",
+   "sha256": "c4761b3737251b73147a216d27636de7dd87d7d0af1f5aeb4b9112c6d5d5155c"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21482/177575/file/recueil-89-2017-050-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00704.warc.gz#offset=648640836&length=209534&record=<urn:uuid:db550f9e-9911-4d7f-85f5-7f73a692d422>",
+   "sha256": "c4df6306a8f9281dc44ce3e87a8b56dd00b6ad9efd535d69424dcd92b7eee821"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22482/183949/file/recueil-89-2017-087-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00621.warc.gz#offset=621222773&length=957952&record=<urn:uuid:71117015-fbe1-44ac-a02c-6ee669883606>",
+   "sha256": "9864077936e59e46a243c5fbbee3263162bab441a14b0168385eb35ace1f8dcb"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/23680/191199/file/recueil-89-2017-152-recueil-des-actes-administratifs-special.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2018-34",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2018-34/segments/1534221210559.6/warc/CC-MAIN-20180816074040-20180816094040-00261.warc.gz#offset=610321327&length=61031&record=<urn:uuid:d0bf30c8-0426-4340-ad12-4c3a554d1e34>",
+   "sha256": "1c9960301fbcd165f6d474372f97376acc2ed55cb9b903eb86be502039ac9b3c"
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/index.php/content/download/23729/191488/file/recueil-89-2017-153-recueil-des-actes-administratifs-special-2.pdf",
+   "corpus": "yonne-2017",
+   "commonCrawl": "CC-MAIN-2019-43",
+   "record": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2019-43/segments/1570987773711.75/warc/CC-MAIN-20191021120639-20191021144139-00242.warc.gz#offset=352090899&length=924016&record=<urn:uuid:35773426-45f0-4129-ab94-e4d98d043369>",
+   "sha256": "3c501da931237d4e30a0307170d1938ec7fe7ef2626a7b5467ac915b72156d87"
+  }
+ ],
+ "truncatedOnly": [
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_014-2.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_016-2.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_017.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_029-2.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_034_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_036_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_041_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_044_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_046_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_047_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_049.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_051_Special.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_054.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_055.pdf",
+   "crawls": [
+    "CC-MAIN-2019-47"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21038/174846/file/recueil-89-2017-012-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21213/176013/file/recueil-89-2017-024-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21278/176435/file/recueil-89-2017-036-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/21279/176439/file/recueil-89-2017-035-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22551/184475/file/recueil-89-2017-088-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22616/184938/file/recueil-89-2017-090-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22647/185084/file/recueil-89-2017-091-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22785/186048/file/recueil-89-2017-097-recueil-des-actes-administratifs-special-2.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22879/186559/file/recueil-89-2017-100-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/22928/186851/file/recueil-89-2017-110-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-22",
+    "CC-MAIN-2018-34"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/25546/203318/file/recueil-89-2018-076-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/25822/204762/file/recueil-89-2018-087-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/25881/205273/file/recueil-89-2018-091-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/25933/205562/file/recueil-89-2018-093-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26207/207288/file/recueil-89-2018-102-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26217/207361/file/recueil-89-2018-104-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2018-47",
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26304/207847/file/recueil-89-2018-105-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26306/207855/file/recueil-89-2018-107-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26335/208046/file/recueil-89-2018-111-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26511/209024/file/recueil-89-2018-118-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/content/download/26513/209032/file/recueil-89-2018-120-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/10079/60867/file/recueil%20n%C2%B06.pdf",
+   "crawls": [
+    "CC-MAIN-2023-14"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/17921/154069/file/recueil%20n%C2%B01.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18322/156246/file/recueil%20sp%C3%A9cial%20n%C2%B018.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18456/157086/file/recueil%20n%C2%B03%20-%20partie%207.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18464/157118/file/recueil%20n%C2%B03%20-%20partie%2014.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18466/157126/file/recueil%20n%C2%B03%20-%20partie%2016.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/18487/157286/file/Recueil%20sp%C3%A9cial%20n%C2%B023.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19081/161484/file/recueil%20n%C2%B06%20-%20partie%203.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19084/161496/file/recueil%20n%C2%B06%20-%20partie%206.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19086/161504/file/recueil%20n%C2%B06%20-%20partie%208.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19180/162147/file/recueil%20sp%C3%A9cial%20n%C2%B047.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19335/163183/file/recueil%20n%C2%B09%20partie%202.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/19516/164272/file/recueil%20n%C2%B010.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20103/168019/file/recueil%20sp%C3%A9cial%20n%C2%B072.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20112/168077/file/recueil%20n%C2%B015.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20174/168500/file/Recueil%20n%C2%B016%20-%20partie%201.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20177/168523/file/Recueil%20n%C2%B016%20-%20partie%202.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20273/169116/file/recueil%20n%C2%B017%20-%20partie%202.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20560/171465/file/recueil%20n%C2%B018%20-%20partie%204.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20630/172003/file/recueil%20sp%C3%A9cial%20n%C2%B082.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20653/172177/file/recueil%20sp%C3%A9cial%20n%C2%B083.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/20663/172239/file/recueil%20sp%C3%A9cial%20n%C2%B084.pdf",
+   "crawls": [
+    "CC-MAIN-2022-49"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/26561/209313/file/recueil-89-2019-001-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/26661/209948/file/recueil-89-2019-007-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/27063/211854/file/recueil-89-2019-018-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/27188/212479/file/recueil-89-2019-021-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/27779/215973/file/recueil-89-2019-046-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28337/219448/file/recueil-89-2019-070-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28439/220076/file/recueil-89-2019-078-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28448/220145/file/recueil-89-2019-079-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28637/221192/file/recueil-89-2019-090-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28932/223097/file/recueil-89-2019-115-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/28954/223196/file/recueil-89-2019-116-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/29256/225271/file/recueil-89-2019-128-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/29257/225275/file/recueil-89-2019-129-recueil-des-actes-administratifs-2.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/29269/225323/file/recueil-89-2019-131-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/29602/227479/file/recueil-89-2019-141-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-10"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3550/22795/file/recueil%20special%20n%C2%B07%20partie%2015.pdf",
+   "crawls": [
+    "CC-MAIN-2023-40"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3558/22833/file/recueil%20special%20n%C2%B08.pdf",
+   "crawls": [
+    "CC-MAIN-2023-40"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3770/23843/file/Recueil+Nr+7+du++17+avril+2009.pdf",
+   "crawls": [
+    "CC-MAIN-2019-26",
+    "CC-MAIN-2023-06"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3776/23867/file/Recueil+Nr+12+du++30+juin+2009.pdf",
+   "crawls": [
+    "CC-MAIN-2019-26",
+    "CC-MAIN-2023-06"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3781/23887/file/Recueil%2017%20-%202009.pdf",
+   "crawls": [
+    "CC-MAIN-2019-26",
+    "CC-MAIN-2023-06"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39427/287559/file/recueil-89-2023-037-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2023-23"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/3945/24689/file/recueil%20%20special%20n%C2%B016.pdf",
+   "crawls": [
+    "CC-MAIN-2023-40"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39755/323331/file/recueil-89-2023-074-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2023-23"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39899/324492/file/recueil-89-2023-099-recueil-des-actes-administratifs-special-2.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39928/324692/file/recueil-89-2023-106-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39941/324779/file/recueil-89-2023-111-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/39943/324789/file/recueil-89-2023-113-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/40338/327378/file/recueil-89-2023-164-recueil-des-actes-administratifs-nominatifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/40500/328643/file/recueil-89-2023-195-recueil-des-actes-administratifs-nominatifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/40638/329621/file/recueil-89-2023-218-recueil-des-actes-administratifs-nominatifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/40736/330442/file/recueil-89-2023-233-recueil-des-actes-administratifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41096/332962/file/recueil-89-2023-284-recueil-des-actes-administratifs-special.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41201/333715/file/recueil-89-2023-303-recueil-des-actes-administratifs-special-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41233/333917/file/recueil-89-2023-308-recueil-des-actes-administratifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41678/337052/file/recueil-89-2023-357-recueil-des-actes-administratifs-nominatifs.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41725/337395/file/recueil-89-2023-365-recueil-des-actes-administratifs-nominatifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41738/337460/file/recueil-89-2023-374-recueil-des-actes-administratifs-nominatifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41843/338088/file/recueil-89-2023-384-recueil-des-actes-administratifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/41846/338103/file/recueil-89-2023-387-recueil-des-actes-administratifs-nominatifs-1.pdf",
+   "crawls": [
+    "CC-MAIN-2024-26"
+   ]
+  },
+  {
+   "url": "https://www.yonne.gouv.fr/contenu/telechargement/7280/44682/file/recueil%20special%20n%C2%B038.pdf",
+   "crawls": [
+    "CC-MAIN-2023-40"
+   ]
+  }
+ ],
+ "sameFilenameObtained": [
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/10221/93669/file/RAA_038_Special.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_038_Special.pdf",
+   "sha256": "532350ce9424c6c66cebdf10b6d638956b13711dc160349e9509f86549c0c111",
+   "coverEvidence": "septembre 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5879/71959/file/RAA_003-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_003-2.pdf",
+   "sha256": "33a83ce3c15644fc2574557605e46df06494d3037c9894825f7475ccfda76e54",
+   "coverEvidence": "du 17 janvier 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5880/71964/file/RAA_004-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_004-2.pdf",
+   "sha256": "2764d2ef68c50dd4fe2e3179aff5e17066245a3692c57cf684e4e85858128622",
+   "coverEvidence": "du 31 janvier 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5881/71969/file/RAA_005-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_005-2.pdf",
+   "sha256": "eb5400ae8d54539be28613a91b35ec9bfa4cfc645cfad6b061c6e7e71993119e",
+   "coverEvidence": "du 13 fevrier 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5890/72014/file/RAA_011-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_011-2.pdf",
+   "sha256": "73fc0216cd5921b63ff73091eac966474caa9ec831a67e7382083f69f352a14a",
+   "coverEvidence": "du 2 avril 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5891/72019/file/RAA_012-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_012-2.pdf",
+   "sha256": "557cb01fcb187075b898f6e13ddb32ad507a7a1795795a982c2b5b961f1b3a8e",
+   "coverEvidence": "du 5 avril 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5892/72024/file/RAA_013-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_013-2.pdf",
+   "sha256": "7d8b0c01914ac4ae4e9b3932b54100d7099bd64fa959d065b82be3efb36aa744",
+   "coverEvidence": "du 11 avril 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5913/72129/file/RAA_017-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_017-2.pdf",
+   "sha256": "05b6358887add99a8a6e680924a8c01d6f8cf4f662976d2c0223ee92487c89d2",
+   "coverEvidence": "du 3 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5914/72134/file/RAA_018-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_018-2.pdf",
+   "sha256": "595df7b8cf8d8c4851d7fdea49f1a0240e678209e5e4a69816fdcca85289858f",
+   "coverEvidence": "du 4 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5915/72139/file/RAA_019-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_019-2.pdf",
+   "sha256": "10a81b56cdf41b4e2622f3555c4a1cbea01304a15f6ab6fcd62688001522353e",
+   "coverEvidence": "du 12 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5916/72144/file/RAA_020-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_020-2.pdf",
+   "sha256": "3bb7b2005edd4161a170c08161ef96b43d22746464bad3f751e4ee3894d2ac97",
+   "coverEvidence": "du 13 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5917/72149/file/RAA_021-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_021-2.pdf",
+   "sha256": "75a15509c6ed815784949498d548c05d196326fee264a25586dccca4535ad394",
+   "coverEvidence": "du 17 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5920/72164/file/RAA_024-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_024-2.pdf",
+   "sha256": "1df2b19c6ae98bdf135dcbcf2decac0c0c10ae41e33bbdfcb1d515bdba6066af",
+   "coverEvidence": "du 27 juin 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5921/72169/file/RAA_025-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_025-2.pdf",
+   "sha256": "f9c6c4ba0115796c9f4131218543922dc502ac66bb9d8b94b80907cf0604717c",
+   "coverEvidence": "du 8 juillet 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5923/72179/file/RAA_027-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_027-2.pdf",
+   "sha256": "6c3dfabf6675aa6ec25980762e3df9189b81e6e315ecbf64f425920bf721d4db",
+   "coverEvidence": "du 19 juillet 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/5925/72189/file/RAA_028-2.pdf",
+   "corpus": "cote-dor-2013",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_028-2.pdf",
+   "sha256": "45fa48a7d7ca74c5416960262e3b8253b906c153d6a8cea450ee4322faa2aba2",
+   "coverEvidence": "du 26 juillet 2013"
+  },
+  {
+   "listedUrl": "https://www.cote-dor.gouv.fr/contenu/telechargement/10264/93884/file/RAA_057_2015.pdf",
+   "corpus": "cote-dor-2015",
+   "obtainedAs": "https://www.cote-dor.gouv.fr/IMG/pdf/RAA_057_2015.pdf",
+   "sha256": "ed6cc451696b4205bc2cec3e01250810b46de9ae4dc141cf5b94a0f1c5ce4df6",
+   "coverEvidence": "du 23 decembre 2015"
+  }
+ ],
+ "limitation": "Common Crawl truncated bodies at 1 MiB; older crawls did not flag it (Content-Length 1048576 with a larger X-Crawler-Content-Length). Truncated copies are rejected by the PDF EOF check and stay missing. A same-filename capture with a matching cover year is recorded as a probable copy of the listed bulletin, not a byte-verified one."
+}

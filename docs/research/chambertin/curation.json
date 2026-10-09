@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-07",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-447",
-  "status": "historical-extension-inventory",
-  "scope": "All 137 mapped Chambertin parcels and 33 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-1-reviewed",
+  "scope": "All 137 mapped Chambertin parcels and 33 recorded legal-entity holder identifiers reviewed for Tier 1: commune edges, cadastral named areas and the #461 historical extension. The INAO feature includes Clos de Bèze; geometry and identities are unchanged. One page-image-reviewed application names BN0034. Producer/company research remains Tier 2; no current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,12 +41,28 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "eugenie-2022",
+      "title": "Domaine Eugénie application receipt, dossier 2022-217",
+      "url": "https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/104482/662548/file/recueil-bfc-2023-037-recueil-des-actes-administratifs-special.pdf#page=11",
+      "type": "government-event",
+      "documentDate": "2022-12-15",
+      "reviewedAt": "2026-10-07",
+      "sha256": "c0b7b3b5b341bcf02d99fe9c6d747e998e1700425c86bc64006c216f91d9fb59",
+      "reviewedPages": [
+        1,
+        10,
+        11
+      ],
+      "reviewMethod": "page-image",
+      "access": "read",
+      "finding": "Page 11 explicitly groups BN34 under GEVREY-CHAMBERTIN. The letter is stamped 15 DEC. 2022; the cover was published 4 April 2023 and the printed act identifier says BFC-2023-12-15-00001. Retain that identifier, but use the stamped letter date. Application/completion date is 24 November 2022; 0.6426 ha is the combined area across both communes and is not assigned to BN34. The receipt expressly does not authorise cultivation."
     }
   ],
   "holders": [
     {
       "holderId": "036380046",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -56,7 +72,6 @@
     },
     {
       "holderId": "212102958",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -66,7 +81,6 @@
     },
     {
       "holderId": "303576094",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -76,7 +90,6 @@
     },
     {
       "holderId": "305242687",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -86,7 +99,6 @@
     },
     {
       "holderId": "307017962",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -96,7 +108,6 @@
     },
     {
       "holderId": "322746777",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -106,7 +117,6 @@
     },
     {
       "holderId": "323824649",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -116,7 +126,6 @@
     },
     {
       "holderId": "327503413",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -126,7 +135,6 @@
     },
     {
       "holderId": "327983458",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -136,7 +144,6 @@
     },
     {
       "holderId": "330763426",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -146,7 +153,6 @@
     },
     {
       "holderId": "378339089",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -156,7 +162,6 @@
     },
     {
       "holderId": "383339470",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -166,7 +171,6 @@
     },
     {
       "holderId": "401584503",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -176,7 +180,6 @@
     },
     {
       "holderId": "420812018",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -186,7 +189,6 @@
     },
     {
       "holderId": "440668499",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -196,7 +198,6 @@
     },
     {
       "holderId": "484394069",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -206,7 +207,6 @@
     },
     {
       "holderId": "499963155",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -216,7 +216,6 @@
     },
     {
       "holderId": "515420255",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -226,7 +225,6 @@
     },
     {
       "holderId": "515520385",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -236,7 +234,6 @@
     },
     {
       "holderId": "531940583",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -246,7 +243,6 @@
     },
     {
       "holderId": "775567928",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -256,7 +252,6 @@
     },
     {
       "holderId": "778221127",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -266,7 +261,6 @@
     },
     {
       "holderId": "778230359",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -276,7 +270,6 @@
     },
     {
       "holderId": "778233098",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -286,7 +279,6 @@
     },
     {
       "holderId": "778252445",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -296,7 +288,6 @@
     },
     {
       "holderId": "U21093424",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -306,7 +297,6 @@
     },
     {
       "holderId": "U21354525",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -316,7 +306,6 @@
     },
     {
       "holderId": "U21459182",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -326,7 +315,6 @@
     },
     {
       "holderId": "U21591573",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -336,7 +324,6 @@
     },
     {
       "holderId": "U21926310",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -346,7 +333,6 @@
     },
     {
       "holderId": "U21966026",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -356,7 +342,6 @@
     },
     {
       "holderId": "U31941542",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -366,7 +351,6 @@
     },
     {
       "holderId": "U31972036",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current"
@@ -376,15 +360,63 @@
     }
   ],
   "historyFindings": [],
-  "exactParcelEvents": [],
+  "exactParcelEvents": [
+    {
+      "parcelIds": [
+        "21295000BN0034"
+      ],
+      "sourceId": "eugenie-2022",
+      "kind": "historical-application",
+      "applicant": "SCEA DOMAINE d'EUGENIE",
+      "previousOperator": "Maison Bouchard Père et fils",
+      "documentDate": "2022-12-15",
+      "outcome": "unconfirmed",
+      "currentFarmer": null,
+      "summary": "Page 11 explicitly groups BN34 under GEVREY-CHAMBERTIN. The letter is stamped 15 DEC. 2022; the cover was published 4 April 2023 and the printed act identifier says BFC-2023-12-15-00001. Retain that identifier, but use the stamped letter date. Application/completion date is 24 November 2022; 0.6426 ha is the combined area across both communes and is not assigned to BN34. The receipt expressly does not authorise cultivation.",
+      "appNote": "Application received and complete 24 November 2022; letter dated 15 December 2022. The receipt does not authorise cultivation. Actual operation remains unconfirmed."
+    }
+  ],
   "externalResearch": [],
   "parcelFilings": [],
   "producerHoldings": [],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "BEL-AIR, LES MAZIS-HAUTS and MONTCHARMONT occur on edge-contact parcels; no Chambertin climat crosswalk is inferred (#344)."
+  ],
+  "noticeReview": [
+    {
+      "sourceId": "eugenie-2022",
+      "bulletin": "bfc-2023-037",
+      "sha256": "c0b7b3b5b341bcf02d99fe9c6d747e998e1700425c86bc64006c216f91d9fb59",
+      "pages": [
+        1,
+        10,
+        11
+      ],
+      "reviewMethod": "page-image",
+      "renderMethod": "Poppler pdftoppm: page 11 at 1800 pixels on the long edge, heading at 1200 and cover at 1000. Visually checked commune grouping, references, stamp, publication and no-permission clause.",
+      "actId": "BFC-2023-12-15-00001",
+      "indexedActDate": "2023-12-15",
+      "printedDocumentDate": "2022-12-15",
+      "publicationDate": "2023-04-04",
+      "printedReferencesByCommune": {
+        "21133": [
+          "AB304",
+          "AB438",
+          "AB440"
+        ],
+        "21295": [
+          "BN34",
+          "AC6",
+          "AC287",
+          "AC288",
+          "AC289"
+        ]
+      },
+      "finding": "Page 11 explicitly groups BN34 under GEVREY-CHAMBERTIN. The letter is stamped 15 DEC. 2022; the cover was published 4 April 2023 and the printed act identifier says BFC-2023-12-15-00001. Retain that identifier, but use the stamped letter date. Application/completion date is 24 November 2022; 0.6426 ha is the combined area across both communes and is not assigned to BN34. The receipt expressly does not authorise cultivation."
+    }
   ]
 }

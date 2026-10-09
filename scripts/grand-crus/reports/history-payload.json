@@ -2,60 +2,311 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-B_NwecUu.js"
+    "dist/client/assets/index-Dib8qVW9.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CuM7mlf5.js",
-    "dist/client/assets/SectionLabel-B5c2mcMd.js",
-    "dist/client/assets/SparklingDetailsCard-BOuz7-Hd.js",
-    "dist/client/assets/VillageMap-BjtEWwKn.js",
-    "dist/client/assets/api-DE4hbsyY.js",
-    "dist/client/assets/burgundyAtlas-BEAsDEzf.js",
-    "dist/client/assets/index-B_NwecUu.js",
-    "dist/client/assets/index-Be3v_EyQ.js",
+    "dist/client/assets/FriendTagDialog-CTYq_uXl.js",
+    "dist/client/assets/SectionLabel-CcGfW0_M.js",
+    "dist/client/assets/SparklingDetailsCard-C7DAgp2i.js",
+    "dist/client/assets/VillageMap-BoyYSHxx.js",
+    "dist/client/assets/burgundyAtlas-NrJPadkO.js",
+    "dist/client/assets/index-DJBedJAa.js",
+    "dist/client/assets/index-Dib8qVW9.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-CraNEuWm.js",
-    "dist/client/assets/wineDetailCompact-d6VNAMqb.js"
+    "dist/client/assets/useModalFocus-Dzy1yps2.js",
+    "dist/client/assets/wineDetailCompact-M2ZShzM-.js"
   ],
   "evidenceInMapStaticModules": 0,
-  "evidenceChunkCount": 3,
-  "evidenceBytesTotal": 669466,
-  "evidenceGzipBytesTotal": 62715,
-  "parcelBundleBytesTotal": 386740,
-  "parcelBundleGzipBytesTotal": 58961,
+  "evidenceChunkCount": 33,
+  "evidenceBytesTotal": 5790961,
+  "evidenceGzipBytesTotal": 531677,
+  "parcelBundleBytesTotal": 2479029,
+  "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
     {
+      "cru": "batard-montrachet",
+      "file": "dist/client/assets/batard-montrachet.evidence-BynlMaZP.js",
+      "sha256": "5308f039a0b8443f519a7893dd6f1ed5ecf942ad0e42a224454f86e33924ba87",
+      "bytes": 143354,
+      "gzipBytes": 12603
+    },
+    {
+      "cru": "bienvenues-batard-montrachet",
+      "file": "dist/client/assets/bienvenues-batard-montrachet.evidence-BKXNccnw.js",
+      "sha256": "598a69157b55af7384e7e0f202e003ab37a801d8abfd882f7d723ceea8b379d9",
+      "bytes": 96124,
+      "gzipBytes": 10271
+    },
+    {
+      "cru": "bonnes-mares",
+      "file": "dist/client/assets/bonnes-mares.evidence-CUjLdpz8.js",
+      "sha256": "8817280229d6b0ba22c82ebcd8bc3df2909d933da2292bddc7611524169354c2",
+      "bytes": 167973,
+      "gzipBytes": 19186
+    },
+    {
+      "cru": "chablis-grand-cru",
+      "file": "dist/client/assets/chablis-grand-cru.evidence-BmrIcSgl.js",
+      "sha256": "1b872a54086497e1280d96a1555f33f20fb7bc3ca5629f33ce78113adb14677f",
+      "bytes": 416449,
+      "gzipBytes": 26074
+    },
+    {
+      "cru": "chambertin",
+      "file": "dist/client/assets/chambertin.evidence-dSJGHgKc.js",
+      "sha256": "73fc401d9cdad49016863f20b32b6356b89dfd467e8cd45cb398d32211481800",
+      "bytes": 127252,
+      "gzipBytes": 12085
+    },
+    {
+      "cru": "chambertin-clos-de-beze",
+      "file": "dist/client/assets/chambertin-clos-de-beze.evidence-DmfkIpRE.js",
+      "sha256": "0fee451a4d19e245aefe55cddda35b03a4726e954e0fb668d9f22bd65dbc80a8",
+      "bytes": 78690,
+      "gzipBytes": 9745
+    },
+    {
+      "cru": "chapelle-chambertin",
+      "file": "dist/client/assets/chapelle-chambertin.evidence-CSGQscPB.js",
+      "sha256": "b5a552d03b2f32ef02be31c07bbe0cfc2d49d718dc458ee1bb7187e5255b17d0",
+      "bytes": 81573,
+      "gzipBytes": 9408
+    },
+    {
+      "cru": "charlemagne",
+      "file": "dist/client/assets/charlemagne.evidence-BsnZ5LO0.js",
+      "sha256": "a92add1afafd5a2eaa6d8b46faf87185cce06926e75e70e83d8d2b26634a6493",
+      "bytes": 373823,
+      "gzipBytes": 21633
+    },
+    {
+      "cru": "charmes-chambertin",
+      "file": "dist/client/assets/charmes-chambertin.evidence-B2O2Ed9l.js",
+      "sha256": "8ef549a2c5dc00cc6268c389562f2b115ccf07ba3ded304c1a776f7ebb5b33f9",
+      "bytes": 166242,
+      "gzipBytes": 13869
+    },
+    {
+      "cru": "chevalier-montrachet",
+      "file": "dist/client/assets/chevalier-montrachet.evidence-CVdDkKEa.js",
+      "sha256": "59a0c04106e9a083485bdfe308252e47d514334b1f76769061dcb9ee1de1b4d5",
+      "bytes": 112889,
+      "gzipBytes": 10899
+    },
+    {
+      "cru": "clos-de-la-roche",
+      "file": "dist/client/assets/clos-de-la-roche.evidence-DlPrnoGO.js",
+      "sha256": "38c9509e3b0d6d52bfc559cf7947cc5f7337f82a630dfe86913f9a7fbe64564d",
+      "bytes": 193424,
+      "gzipBytes": 19476
+    },
+    {
+      "cru": "clos-de-tart",
+      "file": "dist/client/assets/clos-de-tart.evidence-Bncv1T5P.js",
+      "sha256": "82953e9e0abe415a6409324684453e7eba4efa78bfb916d12eea23839f09183d",
+      "bytes": 124542,
+      "gzipBytes": 11640
+    },
+    {
       "cru": "clos-de-vougeot",
-      "file": "dist/client/assets/clos-de-vougeot.evidence-Bc0DCtW2.js",
-      "sha256": "dacad8f640bc5ad9d2fb78be7f0bbf85e57fb35efff6187bff611dcb56585c7c",
-      "bytes": 187425,
-      "gzipBytes": 14483
+      "file": "dist/client/assets/clos-de-vougeot.evidence-x6JQpcCJ.js",
+      "sha256": "4738abdc2dd68dfc590902c10819ad10412cf1e9ea272d7d0d54575d99b02319",
+      "bytes": 300269,
+      "gzipBytes": 31929
+    },
+    {
+      "cru": "clos-des-lambrays",
+      "file": "dist/client/assets/clos-des-lambrays.evidence-B3AuwQk9.js",
+      "sha256": "b85d50fbadbb48825eba24811ca334e8f632a5ecfc08f0d77cfe3de861c1a3c5",
+      "bytes": 59749,
+      "gzipBytes": 8604
+    },
+    {
+      "cru": "clos-saint-denis",
+      "file": "dist/client/assets/clos-saint-denis.evidence-OBEWsri6.js",
+      "sha256": "cfd13fd9b28d8cb114effd55762a9b1665a80500a33f3cef886042a4b050b951",
+      "bytes": 113621,
+      "gzipBytes": 14534
+    },
+    {
+      "cru": "corton",
+      "file": "dist/client/assets/corton.evidence-gayCp_GU.js",
+      "sha256": "1aaf1d5b41f3df7639a5e4a7b3533a53b64a6bb46be7724b52d54b83e37e966f",
+      "bytes": 1002433,
+      "gzipBytes": 67683
+    },
+    {
+      "cru": "corton-charlemagne",
+      "file": "dist/client/assets/corton-charlemagne.evidence-BkcMb2Fr.js",
+      "sha256": "353df45b8994c1b9d7a6737116d4c424a4d6c132ed61f7a72e0158d608d514d4",
+      "bytes": 415765,
+      "gzipBytes": 23642
+    },
+    {
+      "cru": "criots-batard-montrachet",
+      "file": "dist/client/assets/criots-batard-montrachet.evidence-B1Mjw28v.js",
+      "sha256": "576c71db83943b85e560eded9efb67d5be29c9728d4b141ae6ac37f29c5c0424",
+      "bytes": 51277,
+      "gzipBytes": 8183
     },
     {
       "cru": "echezeaux",
-      "file": "dist/client/assets/echezeaux.evidence-CfkEXvgK.js",
-      "sha256": "86f2d8fd442ff99425661ee53d509829e574ca3600d9c43eac74d24dcdcf4e97",
-      "bytes": 426169,
-      "gzipBytes": 36937
+      "file": "dist/client/assets/echezeaux.evidence-wBCgD-kU.js",
+      "sha256": "b52c4c49f873eb55e450414d7639adee0a1123cb2b063f6e32d66eae32e32e74",
+      "bytes": 459060,
+      "gzipBytes": 40321
     },
     {
       "cru": "grands-echezeaux",
-      "file": "dist/client/assets/grands-echezeaux.evidence-urPuz0ty.js",
-      "sha256": "5df6d754f6af4d6392788c63f64b0c4612fa7a01d6ad6aa83c16a90456e5dd22",
-      "bytes": 55872,
-      "gzipBytes": 11295
+      "file": "dist/client/assets/grands-echezeaux.evidence-DGdPwxMQ.js",
+      "sha256": "bbfb89d0afc889e53c07914872014f1f109ea895c1c6544f9502070169ffc044",
+      "bytes": 80820,
+      "gzipBytes": 13221
+    },
+    {
+      "cru": "griotte-chambertin",
+      "file": "dist/client/assets/griotte-chambertin.evidence-Czht9Sob.js",
+      "sha256": "b396640014bddd5c11aa848ccdfe6cab0ace673dcf8d581efe158e584e317c6d",
+      "bytes": 80632,
+      "gzipBytes": 9438
+    },
+    {
+      "cru": "la-grande-rue",
+      "file": "dist/client/assets/la-grande-rue.evidence-cLHqWXDa.js",
+      "sha256": "d2b93bf92a0583d885a8b37277722919bcee64c8bac05b19dcf56f86206d11c4",
+      "bytes": 52390,
+      "gzipBytes": 8883
+    },
+    {
+      "cru": "la-romanee",
+      "file": "dist/client/assets/la-romanee.evidence-nTv34038.js",
+      "sha256": "99467aa41194629767337b350822d135f4d6ef52f2ebe25dd8f7a77ab30e66d8",
+      "bytes": 48316,
+      "gzipBytes": 8845
+    },
+    {
+      "cru": "la-tache",
+      "file": "dist/client/assets/la-tache.evidence-Dne9ZwxP.js",
+      "sha256": "d9467c74197d6660089b0db640a26ab32a2dd40b1f2a2a8393b900e92784c12e",
+      "bytes": 45695,
+      "gzipBytes": 7953
+    },
+    {
+      "cru": "latricieres-chambertin",
+      "file": "dist/client/assets/latricieres-chambertin.evidence-DGehKALB.js",
+      "sha256": "b2406ab6ed21a2734e2628eeacf62610574f04dd79b409bd0f61f17a59f82202",
+      "bytes": 67851,
+      "gzipBytes": 8901
+    },
+    {
+      "cru": "mazis-chambertin",
+      "file": "dist/client/assets/mazis-chambertin.evidence-CTtOHVz9.js",
+      "sha256": "71c2e0cecdefacb05892716f435bd24ec04e384381f77455f8a2deaa1bc55c9f",
+      "bytes": 88052,
+      "gzipBytes": 10346
+    },
+    {
+      "cru": "mazoyeres-chambertin",
+      "file": "dist/client/assets/mazoyeres-chambertin.evidence-Cpmm20Pz.js",
+      "sha256": "42763762ae2a480edf44c1e3480e0b515ca51a9b7be333481c58188dbc2a3519",
+      "bytes": 166242,
+      "gzipBytes": 13869
+    },
+    {
+      "cru": "montrachet",
+      "file": "dist/client/assets/montrachet.evidence-BJnqo9SW.js",
+      "sha256": "ba6b0930c3eff3573321c0b5322352b1ea62c1b05c64b56b4c5add249ee4b31a",
+      "bytes": 143012,
+      "gzipBytes": 11436
+    },
+    {
+      "cru": "musigny",
+      "file": "dist/client/assets/musigny.evidence-DEyzFYMt.js",
+      "sha256": "7b1ed7f8d85c9bd7abb5b6e86e44396f1cb833c96775a2b7998a0dfcfacb713a",
+      "bytes": 107214,
+      "gzipBytes": 14341
+    },
+    {
+      "cru": "richebourg",
+      "file": "dist/client/assets/richebourg.evidence-DaQaBoCC.js",
+      "sha256": "b5057f02b2a515c61c9f9b9d0158b9b42654c71841bf8e03f34d5c3ea4ddc039",
+      "bytes": 207482,
+      "gzipBytes": 18288
+    },
+    {
+      "cru": "romanee-conti",
+      "file": "dist/client/assets/romanee-conti.evidence-C4fINfmD.js",
+      "sha256": "3c69440472e5835b4d4b2541961ecaa8d0d539c95b546d10a91d6cc9f1b55e5a",
+      "bytes": 48569,
+      "gzipBytes": 8869
+    },
+    {
+      "cru": "romanee-saint-vivant",
+      "file": "dist/client/assets/romanee-saint-vivant.evidence-BJdr4RT-.js",
+      "sha256": "b4501c73cbc02ed753374f61b1b49b141bd1ae45d29dbe785e15ebc484f9572b",
+      "bytes": 108942,
+      "gzipBytes": 16625
+    },
+    {
+      "cru": "ruchottes-chambertin",
+      "file": "dist/client/assets/ruchottes-chambertin.evidence-DM0Tgw5z.js",
+      "sha256": "a2ba6e739693c49de9e87fe2cd90e879ad2afc11a360fc90a422f6da443c6bdd",
+      "bytes": 61235,
+      "gzipBytes": 8877
     }
   ],
   "parcelBundles": [
+    {
+      "bundle": "chablis",
+      "dataUrl": "/maps/chablis-parcels.2026-06-01.56b25a5e7459.geojson",
+      "sha256": "56b25a5e7459cc0a0fc18fc56c179520902c53b4c3e4bf4619995f7d1c49b9d2",
+      "bytes": 366499,
+      "gzipBytes": 53055
+    },
+    {
+      "bundle": "chambolle-morey",
+      "dataUrl": "/maps/chambolle-morey-parcels.2026-06-01.86d6bad8f507.geojson",
+      "sha256": "86d6bad8f507da6a30a14405e5748f830506bc780cf34cb60af411790d553d2a",
+      "bytes": 346184,
+      "gzipBytes": 54353
+    },
+    {
+      "bundle": "corton",
+      "dataUrl": "/maps/corton-parcels.2026-06-01.d644b286b60b.geojson",
+      "sha256": "d644b286b60b00fe9c8e23e18b4ba3bf4f15b8ddcbbc7ab06eab0c6859f1b036",
+      "bytes": 704334,
+      "gzipBytes": 103159
+    },
     {
       "bundle": "flagey-echezeaux",
       "dataUrl": "/maps/echezeaux-parcels.2026-06-01.52a1fa3ce2df.geojson",
       "sha256": "52a1fa3ce2df1a479b0da94f110efad7acd7e1ed90f2c8a066a555f8dd826040",
       "bytes": 239882,
       "gzipBytes": 35324
+    },
+    {
+      "bundle": "gevrey-chambertin",
+      "dataUrl": "/maps/gevrey-chambertin-parcels.2026-06-01.ff650df461c3.geojson",
+      "sha256": "ff650df461c3dc49ee0b38673136664384ab6839ecada729de2e016a4da6f056",
+      "bytes": 420894,
+      "gzipBytes": 62023
+    },
+    {
+      "bundle": "montrachet",
+      "dataUrl": "/maps/montrachet-parcels.2026-06-01.772994c2e4a4.geojson",
+      "sha256": "772994c2e4a416d88a583f4a14a2bb0aa3949ab6ee898be5ce1cb6888243fee5",
+      "bytes": 177348,
+      "gzipBytes": 27064
+    },
+    {
+      "bundle": "vosne-romanee",
+      "dataUrl": "/maps/vosne-romanee-parcels.2026-06-01.ef82eec2364d.geojson",
+      "sha256": "ef82eec2364da8eec4533f78cb6a59c8ecc166ca4d2893ffd5b8b68b1c9ec1a0",
+      "bytes": 77030,
+      "gzipBytes": 12485
     },
     {
       "bundle": "vougeot",

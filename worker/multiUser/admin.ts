@@ -1,5 +1,5 @@
 import { CREDIT_ACTIONS,releaseHeldOperation } from './credits';
-import { ApiError,body,hash,json,ownerOnly,positive,randomToken,seconds,settings,stamp,textField,type IdentityEnv,type Member,type PilotSettings } from './common';
+import { ApiError,body,json,ownerOnly,positive,settings,stamp,textField,type IdentityEnv,type Member,type PilotSettings } from './common';
 import { MEMBER_AI_ACTIONS,memberAccessWeek,memberAiAccessForUsers,memberAiPolicies,type MemberAiAction } from './memberAccess';
 import { marginalCostUsd,monthGroundingUsd,readAiRates,tokenCostUsd,type AiRateEnv } from '../../src/lib/usage/rates';
 import { billingMonth } from '../../src/lib/usage/billingPeriod';
@@ -114,12 +114,8 @@ export async function adminRoute(request:Request,env:IdentityEnv&AiRateEnv,membe
   const saved=await env.DB.prepare('SELECT user_id,amount,reason FROM credit_ledger WHERE id=?').bind(id).first<{user_id:string;amount:number;reason:string}>();
   if(!saved||saved.user_id!==user||saved.amount!==amount||saved.reason!==reason)throw new ApiError(409,'Grant key already used');return json({ok:true});
  }
- if(path==='/api/admin/invitations'&&request.method==='POST'){
-  await settings(env.DB);const readiness=(await env.DB.prepare("SELECT name FROM rollout_state WHERE name IN ('storage_inventory','research_index') AND value='complete'").all()).results;
-  if(readiness.length!==2)throw new ApiError(409,'Complete storage inventory and research indexing before inviting members');
-  const b=await body(request),email=textField(b.email,254).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new ApiError(400,'Invalid email');
-  const token=randomToken();await env.DB.prepare('INSERT INTO member_invitations(token_hash,email,created_by,expires_at) VALUES(?,?,?,?)').bind(await hash(token),email,member.id,seconds()+7*86400).run();return json({url:`${env.APP_URL}/login?invitation=${token}`},201);
- }
+ // Sign-up is open to any Google account while the member limit has room, so invitations are retired.
+ if(path==='/api/admin/invitations')return json({error:'Invitations are no longer needed. Anyone can sign in with Google while WineLog has room.'},410);
  const memberRoute=path.match(/^\/api\/admin\/members\/([^/]+)$/);
  if(memberRoute&&request.method==='PATCH'){
   if(memberRoute[1]===member.id)throw new ApiError(400,'Cannot suspend the owner');const b=await body(request);if(!['active','suspended'].includes(String(b.status)))throw new ApiError(400,'Invalid status');

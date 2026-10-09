@@ -1,0 +1,54 @@
+{
+  "method": "Exact reviewed cadastral names intersected with the unchanged INAO Romanée-Saint-Vivant boundary; metric diagnostics in EPSG:2154.",
+  "displayLayer": false,
+  "coverageNote": "The official wine-board list names Romanée-Saint-Vivant as one whole-cru climat. The pinned cadastre records it as ROMANEE SAINT-VIVANT in two same-name pieces, treated as one named area. Producer holdings have no reviewed cadastral crosswalk, so the whole-cru outline is retained.",
+  "sources": [
+    {
+      "commune": "21714",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-lieux_dits.json.gz",
+      "sha256": "fd4b5f66d3e72298c3dc39fb492dbacd5fea5d581debd831cb40b22d87d1b993",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte / Open Licence"
+    }
+  ],
+  "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/romanee-saint-vivant,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9Mzg0Jnw%3D",
+  "nameSourceChecked": "2026-10-07",
+  "parentSourceSha256": "ffc8dc992ed4415f9104adcff45a71d6b95284f996d36b66a08f24b0038db879",
+  "parentSources": [
+    {
+      "name": "INAO",
+      "date": "2026-09-21",
+      "url": "https://static.data.gouv.fr/resources/delimitation-parcellaire-des-aoc-viticoles-de-linao/20260921-213954/2026-09-21-delim-parcellaire-aoc-shp.zip",
+      "sha256": "6f84e0622c2a27d35fc1ad7b39629856bc5038aa38b9d629758c2fb873801d81",
+      "license": "Licence Ouverte"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21714/cadastre-21714-communes.json.gz",
+      "sha256": "6eb11d5360ac38a3cb59194fd143d705e32986fe36ce4387d377cc3cb8e517c3"
+    },
+    {
+      "name": "Cadastre Etalab",
+      "date": "2026-06-01",
+      "license": "Licence Ouverte 2.0",
+      "url": "https://cadastre.data.gouv.fr/data/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-communes.json.gz",
+      "sha256": "900668aed2a5fcc479cf833d7050d96e9af239ea6aeff7d5ef49bee20a5eaf44"
+    }
+  ],
+  "parentHa": 9.442660674987673,
+  "mappedHa": 9.442606673362077,
+  "unmappedHa": 5.398201659692347e-05,
+  "plots": [
+    {
+      "id": "romanee-saint-vivant-plot-romanee-saint-vivant",
+      "sourceHa": 9.923185857901377,
+      "clippedHa": 9.442606673362077,
+      "parts": 3,
+      "holes": 0,
+      "sourceFeatures": 2
+    }
+  ],
+  "unresolved": []
+}

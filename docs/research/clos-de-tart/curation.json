@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-01",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-545",
-  "status": "historical-extension-inventory",
-  "scope": "All 17 mapped Clos de Tart parcels and 5 current legal-entity right-holder identifiers inventoried for #461. Named-area crosswalks, producer research and individual company investigations remain unreviewed. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 17 mapped Clos de Tart parcels and all five recorded holders reviewed through the shared table for Tier 2. Company identity, historical property schedules, critic references and named-area census remain distinct; Tier 1 rights and geometry are retained and no current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,70 +41,225 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "ct-estate",
+      "title": "Clos de Tart: estate",
+      "url": "https://www.clos-de-tart.com/en/",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:56:29.483906+00:00",
+      "retrievedFrom": "https://www.clos-de-tart.com/en/",
+      "sha256": "4e07e406e6be172a6828996096e12d8a70a3cc99ee144d039c219d8c6c474806",
+      "bytes": 186552,
+      "finding": "The estate publishes a 7.53 ha whole-cru total. Named-area census only; no individual parcel allocation."
+    },
+    {
+      "id": "ct-estate-history",
+      "title": "Clos de Tart: estate history",
+      "url": "https://www.clos-de-tart.com/en/history",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T16:56:27.306630+00:00",
+      "retrievedFrom": "https://www.clos-de-tart.com/en/history",
+      "sha256": "388551ca5aab06e3b500f1606ce81f29f59298b363f425296dc435cccf82f5d2",
+      "bytes": 193339,
+      "finding": "Estate history dates Mommessin ownership to 1932-2018 and the Pinault acquisition to 2018. Historical context only; the U-id identity is grounded in company filings."
     }
   ],
   "holders": [
     {
       "holderId": "330763426",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-330763426",
+        "bm-groffier-2015",
+        "bm-groffier-2022"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reused Groffier company statutes and registry crosswalk. AR70 and AR72 are small edge contacts; the company link does not establish a Clos de Tart wine holding, individual filing schedule or current operation."
     },
     {
       "holderId": "420933681",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ct-mabi-1998",
+        "ct-rne-420933681"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Cash formation and an unspecified acquisition and lease mandate do not identify AR139 or a producer. The family surname is insufficient for a domaine link."
     },
     {
       "holderId": "432273274",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "ct-rne-432273274",
+        "ct-perrot-scea-2000",
+        "ct-perrot-scea-2017",
+        "ct-perrot-scea-2007"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Filed SCEA statutes identify the wine-estate company and its agricultural production and harvest-sale objects; the exact SIREN also carries wine-growing activity in the registry. No individual AR147 contribution or lease was located. The distinct company 413728650 acquires shares in 2017, not the parcel."
     },
     {
       "holderId": "U18178981",
-      "candidateNames": [],
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "bm-rne-686042409",
+        "bm-mommessin-2009",
+        "bm-clos-tart-2017",
+        "bm-clos-tart-2018",
+        "bm-mommessin-1998",
+        "bm-clos-tart-2022"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reused Maison Mommessin to Famille Mommessin to Societe du Clos de Tart company-name continuity, SIREN 686042409, and the 2018 property annex matching AR60/64/148/149 and each individual area. The transaction transfers company shares; the annex recites a 1932 land acquisition. No present operation is established."
     },
     {
       "holderId": "U21388794",
-      "candidateNames": [],
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-424223410",
+        "cm-perrot-minot-1999",
+        "cm-perrot-minot-2023",
+        "cm-perrot-minot-2017"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Reused GFA du Domaine Henri Perrot-Minot identity 424223410 and prior 3-filing/133-page screen. Its 1999 schedule also matches AR146 (1537 m2), described as AOC Morey-Saint-Denis. No separate producer-company or contemporary tenant relation established."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "ct-wh-60-64",
+      "title": "Winehog: Clos de Tart references 60 and 64",
+      "parcelIds": [
+        "21442000AR0060",
+        "21442000AR0064"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "The supplied 2015 article prints cadastre 60 at 7.2548 ha and 64 at 0.2780 ha, matching current AR60 and AR64 individually. It reports a historical inclusion of the latter despite its Bonnes-Mares cadastral name. No cadastral-name crosswalk or present farming is inferred.",
+      "sourceIds": [
+        "cm-winehog-clos-tart"
+      ],
+      "producer": "Clos de Tart",
+      "printedReferences": [
+        "60",
+        "64"
+      ],
+      "dateSourceId": "cm-winehog-clos-tart",
+      "appNote": "Winehog (2015) names references 60 (72548 m2) and 64 (2780 m2) as Clos de Tart. Dated critic evidence; current farming unverified.",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "ct-clos-tart-2018",
+      "sourceId": "bm-clos-tart-2018",
+      "title": "clos tart 2018: historical property schedule",
+      "holderId": "U18178981",
+      "companySiren": "686042409",
+      "documentDate": "2018-04-05",
+      "parcelAreasM2": {
+        "21442000AR0060": 72548,
+        "21442000AR0064": 2780,
+        "21442000AR0148": 1596,
+        "21442000AR0149": 29
+      },
+      "leaseEvidence": [],
+      "pages": [
+        35,
+        217,
+        231,
+        232
+      ],
+      "printedReferences": [
+        "AR 0060",
+        "AR 0064",
+        "AR 0148",
+        "AR 0149"
+      ],
+      "finding": "The company-share transfer bundle names four exact references and individual areas in a property annex and preserves the company-name chain. The 2018 transaction transfers shares, not these parcels anew; the 1932 acquisition is recited, not an independently reviewed original deed.",
+      "appNote": "The company-share transfer bundle names four exact references and individual areas in a property annex and preserves the company-name chain. The 2018 transaction transfers shares, not these parcels anew; the 1932 acquisition is recited, not an independently reviewed original deed. Current farming remains unverified."
+    },
+    {
+      "id": "ct-perrot-gfa-1999",
+      "sourceId": "cm-perrot-minot-1999",
+      "title": "perrot gfa 1999: historical property schedule",
+      "holderId": "U21388794",
+      "companySiren": "424223410",
+      "documentDate": "1999-07-20",
+      "parcelAreasM2": {
+        "21442000AR0146": 1537
+      },
+      "leaseEvidence": [],
+      "pages": [
+        9
+      ],
+      "printedReferences": [
+        "AR 0146"
+      ],
+      "finding": "The historical GFA contribution names AR146 with an exact individual area of 1537 m2 and describes it as AOC Morey-Saint-Denis. Its 20.6304 m2 contact with the Clos de Tart outline does not override that classification or identify a current producer.",
+      "appNote": "The historical GFA contribution names AR146 with an exact individual area of 1537 m2 and describes it as AOC Morey-Saint-Denis. Its 20.6304 m2 contact with the Clos de Tart outline does not override that classification or identify a current producer. Current farming remains unverified."
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "ct-clos-tart-census",
+      "producer": "Clos de Tart",
+      "namedAreas": [
+        "CLOS DE TART"
+      ],
+      "publishedAreaHa": 7.53,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "cm-winehog-clos-tart",
+        "ct-estate"
+      ],
+      "finding": "Published whole-cru named-area census only. The source total includes AR64, whose cadastral LES BONNES MARES label remains unresolved in the named-area audit. No distribution across current parcels or cadastral geometries is inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Named-area/climat crosswalks are unreviewed; this delivery preserves the exact whole-cru INAO feature.",
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "Current farming remains unconfirmed for every parcel.",
+    "Two new holders were researched using four newly selected PDFs (48 pages); three holders reuse shared investigations. The five correct-company Clos de Tart filings (422 pages) were already screened in Bonnes-Mares. All nine current selection files (470 pages) were integrity-checked; shared effort is counted once.",
+    "GFA MABI has no established producer-company relation or AR139 schedule. The Perrot-Minot GFA identity is established, but no contemporary tenant or separate producer-company relation is documented. Shared surnames and officers are insufficient.",
+    "The SCEA Perrot-Minot and Groffier company links cover mapped edge contacts, not evidence of Clos de Tart production or a named-area holding. No exact individual AR147, AR70 or AR72 filing was located in the selected screens.",
+    "Winehog 2015 is supplied in full. Its expansion discussion prints 1966 in the decree account and 1965 in a later summary; the reported historical chronology is not treated as an independently verified decree or used to alter named-area geometry. Old reference 929 and unnumbered inferred expansions remain unmatched.",
+    "The 2018 bundle is a company-share transaction with an ownership-origin annex. The recited 1932 land deed and the original historical vigneronnage lease were not separately reviewed. Generic company objects, share ownership and historical lease recitals do not verify present parcel operation.",
+    "Paid SPF records, original leases and renewals, and present-season confirmation remain Tier 3. All farming links remain unverified; raw PDFs, OCR, images and user archives stay outside Git."
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "cm-winehog-clos-tart",
+      "printedReference": "1828 cadastre 929, approximately 0.25 ha",
+      "parcelIds": [],
+      "limitation": "Historical reference and approximate area have no documented DFI or accepted successor crosswalk to current parcels. No match from map resemblance.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "cm-winehog-clos-tart",
+      "printedReference": "two unnumbered expansion plots, 620 and 546 m2",
+      "parcelIds": [],
+      "limitation": "No individual cadastral references; the article treats the reconstruction as approximate. Not assigned to current parcels by area or position.",
+      "currentFarmer": null
+    }
   ]
 }

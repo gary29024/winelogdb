@@ -238,6 +238,12 @@ def build(cru, bundle, manifest, directory):
     if 'coverage' in result:
         result['coverage']['spatialCandidatesAccepted'] = sum(c['accepted'] for c in candidates)
         result['coverage']['spatialCandidatesRejected'] = sum(not c['accepted'] for c in candidates)
+        # The #411 next-vintage rule keeps its own accepted and rejected successors on each retired reference.
+        successors = [s for r in result['retiredParcels'] for s in r['successors']]
+        result['coverage']['nextVintageSuccessorsAccepted'] = sum(s['accepted'] for s in successors)
+        result['coverage']['nextVintageSuccessorsRejected'] = sum(not s['accepted'] for s in successors)
+        result['coverage']['spatialCountsNote'] = ('spatialCandidates* count the multi-vintage lineage candidates; '
+                                                   'nextVintageSuccessors* count the #411 successors under retiredParcels.')
         result['coverage']['spatialConflicts'] = conflicts
         result['coverage']['inferredOnlyCurrentParcels'] = sum(bool(r['inferredAncestry']['paths']) and not r['documentedAncestry']['ancestorIds']
                                                             for r in result['parcels'])

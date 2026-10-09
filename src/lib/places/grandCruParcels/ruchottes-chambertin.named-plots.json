@@ -1,0 +1,68 @@
+{
+  "dataUrl": "/maps/ruchottes-chambertin-named-plots.2026-06-01.74fd16687120.geojson",
+  "parentFeatureId": "inao-denom-1086",
+  "source": {
+    "name": "Cadastre Etalab lieux-dits",
+    "date": "2026-06-01",
+    "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-lieux_dits.json.gz",
+    "sha256": "fe057d7d53d9cc5b5dd0eee8f1f0a2a70629a215722b23239f8dcf47ce070fca",
+    "license": "Licence Ouverte / Open Licence"
+  },
+  "coverageNote": "Ruchottes du Bas and Ruchottes du Dessus are cadastral named areas within the official Ruchottes-Chambertin boundary. A broad or unmatched wine keeps the whole Grand Cru outline. These areas do not identify producer holdings.",
+  "features": [
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-bas",
+      "name": "Ruchottes du Bas",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 224,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-1086",
+      "parentAppellation": "Ruchottes-Chambertin",
+      "sourceName": "RUCHOTTES DU BAS",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.310945,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.964686586012851,
+        47.22007560061665,
+        4.966091819478412,
+        47.22185936411009
+      ],
+      "labelPoint": [
+        4.965265112434027,
+        47.22096039474193
+      ]
+    },
+    {
+      "id": "ruchottes-chambertin-plot-ruchottes-du-dessus",
+      "name": "Ruchottes du Dessus",
+      "kind": "named_plot",
+      "tier": "grand_cru",
+      "appellationId": 224,
+      "denominationId": null,
+      "parentFeatureId": "inao-denom-1086",
+      "parentAppellation": "Ruchottes-Chambertin",
+      "sourceName": "RUCHOTTES DU DESSUS",
+      "communes": [
+        "21295"
+      ],
+      "areaHa": 1.99076,
+      "matchId": "",
+      "atlasUrl": null,
+      "bounds": [
+        4.963291383937095,
+        47.21920242271838,
+        4.964762391629782,
+        47.22151136131589
+      ],
+      "labelPoint": [
+        4.964183757399195,
+        47.22036803264622
+      ]
+    }
+  ]
+}

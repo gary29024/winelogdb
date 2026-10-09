@@ -395,5 +395,21 @@
     "communes": [
       "21295"
     ]
+  },
+  "auditCommunes": {
+    "21110": {
+      "name": "Brochon",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21110/cadastre-21110-parcelles.json.gz",
+      "sha256": "9fbede1fe311110ee21d7430481f6420c1e4c5620b9667c65bc86983ec6595e2",
+      "retrievedAt": "2026-10-07T00:20:56Z",
+      "size": 153258
+    },
+    "21442": {
+      "name": "Morey-Saint-Denis",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21442/cadastre-21442-parcelles.json.gz",
+      "sha256": "7da5e27f998968cb305596f886e4d9b30ed7b026c6d64ebdd5331c3410b7a1a0",
+      "retrievedAt": "2026-10-01T09:39:28Z",
+      "size": 240702
+    }
   }
 }

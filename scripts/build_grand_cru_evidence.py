@@ -6,12 +6,14 @@ app can show "History and evidence" without reading the large research files.
 Every record is dated evidence; none states who farms a parcel today.
 """
 import re
+from build_grand_cru_notice_history import indexed_event_notice
 from grand_cru_filiation import historical_evidence_paths
 
 SCHEMA_VERSION = 2
 NOTE_LIMIT = 330
 KIND_ORDER = ['authorisation', 'suspended', 'application', 'notice', 'filing', 'research', 'ownership', 'sale', 'filiation', 'lineage', 'lead']
-EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application'}
+EVENT_KINDS = {'authorisation': 'authorisation', 'suspended-application': 'suspended', 'historical-application': 'application',
+               'refused-application': 'notice'}
 RESEARCH_LABELS = {
     'critic-named-cadastral-reference': 'Named by parcel number',
     'critic-attribution-area-reconstructed': 'Matched by area only',
@@ -19,6 +21,7 @@ RESEARCH_LABELS = {
     'estate-area-exact-match': 'Matched by exact area',
     'estate-area-near-match': 'Near-area reconstruction',
     'court-named-cadastral-reference': 'Named in a court ruling',
+    'filing-named-cadastral-reference': 'Named in a company filing',
 }
 LEAD_LABELS = {
     'brand-identity-confirmed': 'Brand identity confirmed',
@@ -38,6 +41,12 @@ LEAD_LABELS = {
     'filing-tenant-relationship': 'Dated lease relationship',
     'filing-lease-mandate': 'Named in a lease mandate',
     'filing-family-tenant-context': 'Named individual tenant',
+    'company-identity': 'Company record',
+    'family-company-record': 'Family company record',
+    'group-company-record': 'Group company record',
+    'name-and-seat-crosswalk': 'Identity by name and seat only',
+    # Tier 3 placeholder: the domaine's own dated reply, recorded as a domaine-outreach source.
+    'domaine-confirmed': 'Confirmed by the domaine',
 }
 OWNERSHIP_KINDS = {'record-appeared', 'holder-changed'}
 SALE_TITLES = {'sale': 'Sold', 'exchange': 'Exchanged', 'auction': 'Sold at auction', 'other': 'Transferred'}
@@ -79,7 +88,7 @@ def short_reference(parcel_id):
 SOURCE_KINDS = {
     'critic-research': 'research', 'registry-dataset': 'data', 'geometry': 'data', 'court-decision': 'official',
     'registry': 'company', 'registry-aggregator': 'company', 'company-filing': 'company', 'legal-notice-republisher': 'company',
-    'estate': 'estate', 'estate-hosted-press': 'estate', 'estate-visit-report': 'estate',
+    'estate': 'estate', 'estate-hosted-press': 'estate', 'estate-visit-report': 'estate', 'domaine-outreach': 'estate',
 }
 
 
@@ -92,6 +101,10 @@ def event_item(event, via=None):
     kind = EVENT_KINDS[event['kind']]
     item = {'kind': kind, 'date': event['documentDate'], 'title': event['applicant'], 'note': event['appNote'],
             'sources': [event['sourceId']]}
+    if event.get('operation') == 'aerial-spraying-derogation':
+        item['label'] = 'Aerial-spraying derogation'
+    if event['kind'] == 'refused-application':
+        item['label'] = 'Application refused'
     previous = event.get('previousOperator')
     if previous and previous != 'Not stated':
         item['detail'] = f'Previous operator named in notice: {previous}'
@@ -224,7 +237,13 @@ def build_evidence(register, curation, history, features):
                                 'sources': list(dict.fromkeys([filing['sourceId'], *filing.get('supportingSourceIds', [])]))})
         for event in curation['exactParcelEvents']:
             if parcel_id in event['parcelIds']:
-                add(parcel_id, event_item(event))
+                item = event_item(event)
+                if 'indexedNotice' in event:
+                    notice = indexed_event_notice(event, sources[event['sourceId']], row['reviewedNoticeReferences'])
+                    item.update(dateRole=notice['dateRole'], originalNoticeRecord=notice['originalRecord'],
+                                originalReferenceIds=notice['matchedReferenceIds'],
+                                originalScope='printed-notice-reference-and-area', contextPaths=notice['contextPaths'])
+                add(parcel_id, item)
             for retired, current in event.get('predecessorReferences', {}).items():
                 if parcel_id in current:
                     add(parcel_id, original_context(parcel_id, event_item(event, via=retired), retired, 'printed-notice-reference-and-area'))
@@ -254,9 +273,13 @@ def build_evidence(register, curation, history, features):
             if not url:
                 continue
             document_key = lambda value: value.split('/telechargement/')[-1].split('#')[0]
-            if any(e['documentDate'] == notice['originalDate'] and
+            if any((e.get('indexedNotice', {}).get('noticeId') == notice['originalRecord']['noticeId'] and
+                    e['indexedNotice']['indexId'] == notice['indexId'] and
+                    e['indexedNotice']['originalReferenceId'] in notice['matchedReferenceIds'])
+                   if 'indexedNotice' in e else
+                   (e['documentDate'] == notice['originalDate'] and
                    document_key(sources[e['sourceId']]['url']) == document_key(url) and
-                   (parcel_id in e['parcelIds'] or parcel_id in {p for ps in e.get('predecessorReferences', {}).values() for p in ps})
+                   (parcel_id in e['parcelIds'] or parcel_id in {p for ps in e.get('predecessorReferences', {}).values() for p in ps}))
                    for e in curation['exactParcelEvents']):
                 continue
             source_id = 'notice-history:' + notice['indexId'] + ':' + str(notice['originalRecord']['noticeId'])
@@ -264,7 +287,10 @@ def build_evidence(register, curation, history, features):
                                   'type': 'government-notice', 'documentDate': notice['originalDate']}
             add(parcel_id, {'kind': 'notice', 'date': notice['originalDate'], 'dateRole': notice['dateRole'],
                             'title': 'Reviewed notice reference: ' + (notice['originalPrintedReference'] or ', '.join(notice['matchedReferenceIds'])),
-                            'detail': 'Applicant: ' + (notice['originalRecord'].get('applicant') or 'not identified in this reading') +
+                            # A treatment derogation's requester is not a farm applicant or operator.
+                            'detail': ('Aerial-spraying derogation requested by ' if notice['originalRecord'].get('status') == 'derogation-granted'
+                                       else 'Applicant: ') +
+                                      (notice['originalRecord'].get('applicant') or 'not identified in this reading') +
                                       '; printed area: ' + str(notice['originalRecord'].get('areaHa', 'not recorded')) + ' ha',
                             'originalNoticeRecord': notice['originalRecord'],
                             'originalReferenceIds': notice['matchedReferenceIds'], 'originalScope': 'printed-notice-reference-and-area',

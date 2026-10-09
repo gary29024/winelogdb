@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-654",
   "appellationId": 189,
   "issue": 384,
-  "tier": 1,
+  "tier": 2,
   "bundle": "vosne-romanee",
   "villageMaps": [
     "vosne-romanee"
@@ -14,9 +14,28 @@
     "la-grande-rue"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/la-grande-rue/README.md",
+    "filingsDoc": "docs/research/la-grande-rue/filings.md"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/la-grande-rue",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/grande-rue-la,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MzE5Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "ad1fa02eff5687747417774d61bd391f19d74e90aa8919a268e902e9ee5b3feb",
+    "coverageNote": "The official wine-board list names La Grande Rue as the cru's only climat. The pinned cadastre's LA GRANDE RUE covers about 86% of the INAO outline; the rest lies in no cadastral lieu-dit polygon. The whole-cru outline is retained and no area is filled; producer holdings are not shown.",
+    "displayLayer": false,
+    "plots": [
+      {
+        "id": "la-grande-rue",
+        "name": "La Grande Rue",
+        "sourceName": "LA GRANDE RUE",
+        "aliases": []
+      }
+    ],
+    "unresolved": [],
+    "parcelsWithoutLieuDit": [
+      "21714000AM0002",
+      "21714000AM0008"
+    ]
   }
 }

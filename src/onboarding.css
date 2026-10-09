@@ -54,10 +54,11 @@
    app's own base tier already draws them, and repainting would have to restate
    its border and text colour to stay readable. */
 .tour-chapters{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:8px;max-width:460px}
-/* The seen column is reserved whether or not a row has a tag, so one ticked
-   chapter does not leave the list with one short button among the full-width
-   ones. */
-.tour-chapters li{display:grid;grid-template-columns:minmax(0,1fr) 42px;align-items:center;gap:10px}
+/* Once anything is ticked the seen column is reserved on every row, so one
+   ticked chapter does not leave a short button among full-width ones. With
+   nothing ticked there is no column to reserve and the buttons fill the card. */
+.tour-chapters li{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;gap:10px}
+.tour-chapters.has-seen li{grid-template-columns:minmax(0,1fr) 42px}
 .tour-chapters button{text-align:left;display:grid;gap:2px;padding:12px 14px}
 .tour-chapters strong{font-size:.98rem}
 .tour-chapters small{color:var(--ink-5);font-weight:500;line-height:1.4}

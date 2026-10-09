@@ -2,13 +2,15 @@ import {useCallback,useEffect,useId,useMemo,useRef,useState} from 'react';
 import type {Map as MapLibreMap,GeoJSONSource} from 'maplibre-gl';
 import type {Feature,FeatureCollection,Polygon,MultiPolygon} from 'geojson';
 import {placeKey} from '../../lib/places/resolve';
-import {ownerName,possibleOwnerMatch} from '../../lib/places/parcelOwners';
+import {ownerName} from '../../lib/places/parcelOwners';
 import {grandCruFor,parcelBundles,type GrandCru} from '../../lib/places/grandCruParcels/registry';
+import {climatParents,loadClimatParcels,type ClimatParcelFile} from '../../lib/places/grandCruParcels/climats';
 import {hasParcelEvidence,loadParcelEvidence,type ParcelEvidenceData} from '../../lib/places/grandCruParcels/evidence';
-import {ParcelProducerLinker} from './ParcelProducerLinker';
+import {ProducerLinkCard} from './ParcelProducerLinker';
+import {useParcelProducerLinks} from './useParcelProducerLinks';
 import type {ParcelProducerLink} from '../../lib/places/parcelProducerLinks';
 import {ParcelEvidence} from './ParcelEvidence';
-import {groupParcelRightHolders,matchesLinkedProducer,type HolderGroup} from '../../lib/places/parcelPresentation';
+import {confidenceLabels,confidenceOrder,groupParcelRightHolders,matchesLinkedProducer,type HolderConfidence,type HolderGroup} from '../../lib/places/parcelPresentation';
 
 type Right={holderId:string;siren:string|null;name:string;rightCode:string;rightLabel:string;legalForm:string;legalFormLabel:string};
 // producerNames are reviewed spellings of the producer field, as in
@@ -19,15 +21,19 @@ type Parcel={id:string;reference:string;commune:string;cadastreAreaM2:number;geo
  recordMatch:'unknown'|'reference-and-area'|'area-mismatch';recordAreasM2:number[];domaineLinks:DomaineLink[]};
 type Parcels=FeatureCollection<Polygon|MultiPolygon,Parcel>;
 type ParcelFeature=Feature<Polygon|MultiPolygon,Parcel>;
-type Match=''|'owner'|'verified'|'possible';
-export type ParcelLegendKey='recorded'|'unrecorded'|'owner'|'verified'|'possible'|'selected';
+type Match=''|'owner'|'verified';
+export type ParcelLegendKey='recorded'|'unrecorded'|'owner'|'verified'|'selected';
 
 const sourceId='cadastral-parcels',hatchId='cadastral-parcel-hatch';
-const layers=['cadastral-parcel-hatch','cadastral-parcel-owner','cadastral-parcel-producer','cadastral-parcel-possible','cadastral-parcel-outline',
- 'cadastral-parcel-possible-line','cadastral-parcel-selected-casing','cadastral-parcel-selected','cadastral-parcel-hit'];
-// Ink for the parcel grid, ochre for a chosen holder, crimson for the wine's
-// verified producer and blue/dashes for unverified name suggestions.
-const ink='#26324a',ochre='#8a5a12',crimson='#c51f45',possibleBlue='#0067b1';
+const layers=['cadastral-parcel-hatch','cadastral-parcel-owner','cadastral-parcel-producer','cadastral-parcel-outline',
+ 'cadastral-parcel-selected-casing','cadastral-parcel-selected','cadastral-parcel-hit','cadastral-parcel-unrecorded-tint'];
+// Ink for the parcel grid, gold edged in dark brown for a chosen holder (the Grand Cru browns
+// swallowed the old ochre) and crimson for the wine's verified producer.
+const ink='#26324a',gold='#f5b800',goldEdge='#3d2800',crimson='#c51f45',hatchInk='#596983';
+// Zoomed out, hundreds of outlines and their hatching merge into a dark mesh. The grid fades in as the
+// view nears one vineyard (about zoom 13-15 on a phone, 11.5 for a whole hill), and a parcel without a
+// matched record is a flat tint until its hatching takes over. Chosen and producer parcels never fade.
+const byZoom=(far:unknown,near:unknown,from:number,to:number)=>['interpolate',['linear'],['zoom'],from,far,to,near] as never;
 const ha=(m2:number)=>`${(m2/10000).toFixed(2)} ha`;
 const plural=(n:number,one:string,many=`${one}s`)=>`${n} ${n===1?one:many}`;
 // Snapshot dates come from the cru's bundle manifest, e.g. "1 January 2025" and "June 2026".
@@ -66,7 +72,7 @@ function union(features:ParcelFeature[]):[[number,number],[number,number]]|null{
 const swatches:Record<ParcelLegendKey,[string,string]>={
  recorded:['map-swatch-parcel','Recorded rights'],unrecorded:['map-swatch-parcel-unrecorded','No matched rights'],
  owner:['map-swatch-parcel-owner','Chosen right holder'],verified:['map-swatch-parcel-producer','Producer · verified'],
- possible:['map-swatch-parcel-possible','Producer · possible (unverified)'],selected:['map-swatch-parcel-selected','Selected parcel'],
+ selected:['map-swatch-parcel-selected','Selected parcel'],
 };
 /** Parcel keys join the map's single legend while the layer is on. */
 export function ParcelLegend({keys}:{keys:ParcelLegendKey[]}){
@@ -74,30 +80,55 @@ export function ParcelLegend({keys}:{keys:ParcelLegendKey[]}){
  return <><span className="village-map-legend-divider" aria-hidden="true"/>{keys.map(key=><span key={key}><i className={swatches[key][0]}/>{swatches[key][1]}</span>)}</>;
 }
 
-type Props={map:MapLibreMap|null;parentId:string;producer?:string|null;producerId?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void};
-/** Parcel rights for any cru in the registry; renders nothing for a feature without parcel data. */
+// A rosette seal per link strength, after the name like a profile check. Only a domaine's own
+// confirmation is solid; a weak lead carries "?" instead of a check. None of them verifies farming.
+const sealPath=(()=>{
+ const points=Array.from({length:24},(_,i)=>{const r=i%2?9.3:11,a=Math.PI*i/12-Math.PI/2;return `${(12+r*Math.cos(a)).toFixed(2)} ${(12+r*Math.sin(a)).toFixed(2)}`});
+ return `M${points.join('L')}Z`;
+})();
+function StrengthSeal({level}:{level:HolderConfidence}){
+ return <svg className={`village-map-seal is-${level}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path className="village-map-seal-shape" d={sealPath}/>
+  {level==='weak'?<><path className="village-map-seal-mark" d="M9.6 9.7a2.4 2.4 0 1 1 3.3 2.2c-.6.3-.9.8-.9 1.4v.5"/><circle className="village-map-seal-dot" cx="12" cy="16.6" r="1.05"/></>
+   :<path className="village-map-seal-mark" d="M8.1 12.3l2.7 2.7 5.1-5.5"/>}
+ </svg>;
+}
+// The specific reason stays in the tooltip and accessible name, prefixed by its strength when it does not name it.
+const sealLabel=(group:HolderGroup)=>{
+ const level=confidenceLabels[group.confidence!],reason=group.lead?`Weak lead · ${group.lead.label}`:group.basisLabel;
+ return reason.startsWith(level)?reason:`${level}: ${reason}`;
+};
+
+type Climat={id:string;name:string};
+type Props={map:MapLibreMap|null;parentId:string;climat?:Climat|null;producer?:string|null;producerId?:string|null;onLegend?:(keys:ParcelLegendKey[])=>void};
+const climatsOf=(parentId:string)=>Object.keys(climatParents).filter(id=>climatParents[id]===parentId);
+/** Parcel rights for any cru in the registry; renders nothing for a feature without parcel data.
+ * With a climat (Corton Les Bressandes), it starts on that climat's parcels; rights and links stay the cru's. */
 export function GrandCruParcels(props:Props){
  const cru=grandCruFor(props.parentId);
  if(!cru)return null;
  // A wine/producer or cru change must not inherit another view's links or selection.
  return <GrandCruParcelsView key={`${props.parentId}:${props.producerId??''}:${props.producer??''}`} {...props} cru={cru}/>;
 }
-function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Props&{cru:GrandCru}){
+function GrandCruParcelsView({map,parentId,climat,producer,producerId,onLegend,cru}:Props&{cru:GrandCru}){
  // The holder list needs research only for domaine headings; the evidence panel loads its own copy when a parcel opens.
  const manifest=parcelBundles[cru.bundle],withResearch=cru.domaineGrouping&&hasParcelEvidence(parentId);
  const [show,setShow]=useState(false),[data,setData]=useState<Parcels|null>(null),[error,setError]=useState(false),[attempt,setAttempt]=useState(0);
  const [owner,setOwner]=useState(''),[selectedId,setSelectedId]=useState(''),[allOwners,setAllOwners]=useState(false),[ownersOpen,setOwnersOpen]=useState(true),[query,setQuery]=useState('');
- const [showPossible,setShowPossible]=useState(false);
- const [groupByDomaine,setGroupByDomaine]=useState(true),[research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);
+ // Tapping another climat on the map keeps the layer on, but starts again on that climat's parcels.
+ const climatId=climat?.id??'',[wide,setWide]=useState(false),[shownClimat,setShownClimat]=useState(climatId);
+ if(climatId!==shownClimat){setShownClimat(climatId);setWide(false);setOwner('');setSelectedId('')}
+ const inClimat=Boolean(climat)&&!wide,scopeId=inClimat?climatId:parentId;
+ const [climatData,setClimatData]=useState<ClimatParcelFile|null>(null);
+ const [research,setResearch]=useState<ParcelEvidenceData|null>(null),[researchFailed,setResearchFailed]=useState(false);
  useEffect(()=>{
   if(!show||research||!withResearch)return;
   let active=true;
   void loadParcelEvidence(parentId).then(value=>{if(active){setResearch(value);setResearchFailed(false)}}).catch(()=>{if(active)setResearchFailed(true)});
   return()=>{active=false};
  },[show,parentId,withResearch,research,attempt]);
- const [linkingHolder,setLinkingHolder]=useState('');
  const autoFocused=useRef(false);
- const switchId=useId(),parcelId=useId(),searchId=useId(),possibleId=useId(),ownersId=useId();
+ const switchId=useId(),parcelId=useId(),searchId=useId(),ownersId=useId();
  useEffect(()=>{
   if(!show||data)return;
   const controller=new AbortController();let disposed=false;
@@ -111,33 +142,47 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
   }).catch(()=>{if(!disposed)setError(true)}).finally(()=>clearTimeout(timeout));
   return()=>{disposed=true;controller.abort();clearTimeout(timeout)};
  },[show,data,attempt,manifest]);
- const name=cru.name;
- const overlapOf=(f:ParcelFeature)=>overlapIn(f,parentId);
- const parcels=useMemo(()=>data?.features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===parentId))??[],[data,parentId]);
- const owners=useMemo(()=>rightHolders(parcels,parentId),[parcels,parentId]);
- const domaineOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId,research?.holderDomains),[parcels,parentId,research]);
- const legalOwners=useMemo(()=>groupParcelRightHolders(parcels,parentId),[parcels,parentId]);
+ // The climat file is checked against this parcel snapshot, so stale areas never reach the list.
+ useEffect(()=>{
+  if(!show||!climatId||climatData)return;
+  let active=true;
+  void loadClimatParcels(parentId).then(value=>{
+   if(!value||value.inputs.parcelSnapshotSha256!==manifest.sha256||!value.climats[climatId])throw new Error('Invalid climat parcels');
+   if(active)setClimatData(value);
+  }).catch(()=>{if(active)setError(true)});
+  return()=>{active=false};
+ },[show,climatId,climatData,parentId,manifest,attempt]);
+ const name=inClimat?climat!.name:cru.name;
+ // Each parcel's climat areas join its overlaps, so every total below follows the scope.
+ const features=useMemo(()=>{
+  if(!data||!climatData)return data?.features??[];
+  const extra=new Map<string,Parcel['overlaps']>();
+  for(const [id,entry] of Object.entries(climatData.climats))for(const [parcelId,[areaM2,parcelPercent]] of Object.entries(entry.parcels)){
+   extra.set(parcelId,[...extra.get(parcelId)??[],{parentFeatureId:id,name:entry.name,areaM2,parcelPercent}]);
+  }
+  return data.features.map(f=>{const more=extra.get(f.properties.id);return more?{...f,properties:{...f.properties,overlaps:[...f.properties.overlaps,...more]}}:f});
+ },[data,climatData]);
+ const ready=Boolean(data)&&(!inClimat||Boolean(climatData));
+ const overlapOf=(f:ParcelFeature)=>overlapIn(f,scopeId);
+ const parcels=useMemo(()=>ready?features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===scopeId)):[],[ready,features,scopeId]);
+ const owners=useMemo(()=>rightHolders(parcels,scopeId),[parcels,scopeId]);
+ // Rows are always grouped by researched domaine where a cru has research; recorded company names stay
+ // searchable and appear in each parcel's details. Without research every row is a legal holder.
+ const domaineOwners=useMemo(()=>groupParcelRightHolders(parcels,scopeId,research?.holderDomains),[parcels,scopeId,research]);
  const chosenHolders=useMemo(()=>new Set(domaineOwners.find(g=>g.id===owner)?.holderIds??(owners.some(h=>h.id===owner)?[owner]:[])),[domaineOwners,owners,owner]);
  const isChosen=(group:HolderGroup)=>group.holderIds.length===chosenHolders.size&&group.holderIds.every(id=>chosenHolders.has(id));
  const wineProducer=producer?.trim()??'';
  const verified=useMemo(()=>parcels.filter(f=>f.properties.domaineLinks.some(l=>producerIs(l,wineProducer))),[parcels,wineProducer]);
- // Possible matches come from the wine's own producer field, are off by
- // default and never enter the verified style or wording.
- const possibleOwners=useMemo(()=>wineProducer?rightHolders(parcels.filter(f=>!verified.includes(f)),parentId).filter(o=>possibleOwnerMatch(wineProducer,o.name)):[],[parcels,parentId,wineProducer,verified]);
- const possible=useMemo(()=>{
-  const ids=new Set(possibleOwners.map(o=>o.id));
-  return parcels.filter(f=>!verified.includes(f)&&f.properties.recordedRights.some(r=>ids.has(r.holderId)));
- },[parcels,possibleOwners,verified]);
+ const links=useParcelProducerLinks(parentId,wineProducer,producerId);
  const matches=useMemo(()=>new Map<string,Match>(parcels.map(f=>[f.properties.id,
-  chosenHolders.size>0&&f.properties.recordedRights.some(r=>chosenHolders.has(r.holderId))?'owner':verified.includes(f)?'verified':showPossible&&possible.includes(f)?'possible':''])),[parcels,chosenHolders,verified,possible,showPossible]);
+  chosenHolders.size>0&&f.properties.recordedRights.some(r=>chosenHolders.has(r.holderId))?'owner':verified.includes(f)?'verified':''])),[parcels,chosenHolders,verified]);
  const styled=useMemo<FeatureCollection>(()=>({type:'FeatureCollection',features:parcels.map(f=>{
   const match=matches.get(f.properties.id)??'';
   return {...f,properties:{id:f.properties.id,recorded:f.properties.recordedRights.length>0,match,dim:Boolean(owner)&&match===''}};
  })}),[parcels,matches,owner]);
  const selected=parcels.find(f=>f.properties.id===selectedId);
- const legend=useMemo<ParcelLegendKey[]>(()=>!show||!data?[]:[
-  'recorded','unrecorded',...(owner?['owner' as const]:[]),...(verified.length?['verified' as const]:[]),
-  ...([...matches.values()].includes('possible')?['possible' as const]:[]),...(selected?['selected' as const]:[])],[show,data,owner,verified,matches,selected]);
+ const legend=useMemo<ParcelLegendKey[]>(()=>!show||!ready?[]:[
+  'recorded','unrecorded',...(owner?['owner' as const]:[]),...(verified.length?['verified' as const]:[]),...(selected?['selected' as const]:[])],[show,ready,owner,verified,selected]);
  useEffect(()=>{onLegend?.(legend)},[legend,onLegend]);
  // A parcel picked from the finder at the foot of the panel, or tapped on the map, shows its details
  // above the owner list. Bring them into view below the pinned map (or beside it on a wide screen).
@@ -154,8 +199,12 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
   if(delta)dialog.scrollBy({top:delta,behavior:reducedMotion()?'instant':'smooth'});
  },[selectedId]);
  useEffect(()=>()=>onLegend?.([]),[onLegend]);
+ // The cru's tier fill fades by id, with its climats. Maps whose Grand Crus overlap (Corton's and
+ // Chablis's hills, Montrachet's) paint them as one merged fill (build_burgundy_village_map.py),
+ // which no cru id reaches, so that fill fades as a whole.
+ const fadeKey=[parentId,...climatsOf(parentId),'overview-grand_cru'].join(',');
  useEffect(()=>{
-  if(!map||!show||!data)return;
+  if(!map||!show||!ready)return;
   const faded=new Map<string,unknown>();
   const attach=()=>{
    if(!map.getStyle())return;
@@ -164,31 +213,30 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
    if(map.hasImage&&!map.hasImage(hatchId))map.addImage(hatchId,hatch());
    if(!map.getLayer(layers[0])){
     const dim=(on:number,off:number)=>['case',['get','dim'],off,on];
-    map.addLayer({id:layers[0],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-pattern':hatchId,'fill-opacity':dim(1,0.35) as never}});
-    map.addLayer({id:layers[1],type:'fill',source:sourceId,filter:['==',['get','match'],'owner'],paint:{'fill-color':ochre,'fill-opacity':0.75}});
+    map.addLayer({id:layers[0],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-pattern':hatchId,'fill-opacity':byZoom(0,dim(1,0.35),13.5,15)}});
+    map.addLayer({id:layers[7],type:'fill',source:sourceId,filter:['!',['get','recorded']],paint:{'fill-color':hatchInk,'fill-opacity':byZoom(dim(0.18,0.07),0,13.5,15)}},layers[0]);
+    map.addLayer({id:layers[1],type:'fill',source:sourceId,filter:['==',['get','match'],'owner'],paint:{'fill-color':gold,'fill-opacity':0.85}});
     map.addLayer({id:layers[2],type:'fill',source:sourceId,filter:['==',['get','match'],'verified'],paint:{'fill-color':crimson,'fill-opacity':0.72}});
-    map.addLayer({id:layers[3],type:'fill',source:sourceId,filter:['==',['get','match'],'possible'],paint:{'fill-color':possibleBlue,'fill-opacity':0.58}});
-    map.addLayer({id:layers[4],type:'line',source:sourceId,filter:['!=',['get','match'],'possible'],paint:{
-     'line-color':['match',['get','match'],'owner',ochre,'verified',crimson,ink],
-     'line-width':['match',['get','match'],'',0.6,1.1],
-     'line-opacity':['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1]}});
-    map.addLayer({id:layers[5],type:'line',source:sourceId,filter:['==',['get','match'],'possible'],paint:{'line-color':'#003e73','line-width':2.8,'line-dasharray':[2,1.5]}});
-    map.addLayer({id:layers[6],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':5}});
-    map.addLayer({id:layers[7],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#10182d','line-width':2.4}});
-    map.addLayer({id:layers[8],type:'fill',source:sourceId,paint:{'fill-opacity':0}});
+    map.addLayer({id:layers[3],type:'line',source:sourceId,paint:{
+     'line-color':['match',['get','match'],'owner',goldEdge,'verified',crimson,ink],
+     'line-width':byZoom(['match',['get','match'],'',0.3,'owner',1.8,1.1],['match',['get','match'],'',0.6,'owner',1.8,1.1],12.5,15.5),
+     'line-opacity':byZoom(['case',['get','dim'],0.06,['==',['get','match'],''],0.14,1],['case',['get','dim'],0.25,['==',['get','match'],''],0.55,1],12.5,15.5)}});
+    map.addLayer({id:layers[4],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#ffffff','line-width':5}});
+    map.addLayer({id:layers[5],type:'line',source:sourceId,filter:['==',['get','id'],''],paint:{'line-color':'#10182d','line-width':2.4}});
+    map.addLayer({id:layers[6],type:'fill',source:sourceId,paint:{'fill-opacity':0}});
    }
-   for(const id of [layers[6],layers[7]])map.setFilter(id,['==',['get','id'],selected?.properties.id??'']);
-   // The wine's crimson and this cru's tier fill fade while parcels are on,
-   // so the parcel grid and hatching stay legible. Other crus keep theirs.
+   for(const id of [layers[4],layers[5]])map.setFilter(id,['==',['get','id'],selected?.properties.id??'']);
+   // The wine's crimson and the drawn area's tier fill fade while parcels are on,
+   // so the parcel grid, hatching and gold stay legible. Other crus keep theirs.
    for(const [id,value] of fades)if(map.getLayer(id)&&map.getPaintProperty){
     if(!faded.has(id))faded.set(id,map.getPaintProperty(id,'fill-opacity'));
     map.setPaintProperty(id,'fill-opacity',value(faded.get(id)) as number);
    }
   };
-  const fades:[string,(original:unknown)=>unknown][]=[['selected-fill',()=>0.08],['vineyard-fill',original=>['case',['==',['get','id'],parentId],0.12,original]]];
+  const fades:[string,(original:unknown)=>unknown][]=[['selected-fill',()=>0.08],['vineyard-fill',original=>['case',['in',['get','id'],['literal',fadeKey.split(',')]],0.12,original]]];
   const click=(event:{point:{x:number;y:number}})=>{
-   if(!map.getLayer(layers[8]))return;
-   const hits=map.queryRenderedFeatures([event.point.x,event.point.y],{layers:[layers[8]]});
+   if(!map.getLayer(layers[6]))return;
+   const hits=map.queryRenderedFeatures([event.point.x,event.point.y],{layers:[layers[6]]});
    if(hits[0]?.properties.id)setSelectedId(hits[0].properties.id as string);
   };
   attach();map.on('style.load',attach);map.on('click',click);
@@ -201,7 +249,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     for(const [id,value] of faded)if(map.getLayer(id))map.setPaintProperty(id,'fill-opacity',value as number);
    }
   };
- },[map,show,data,styled,selected,parentId]);
+ },[map,show,ready,styled,selected,fadeKey]);
  const fit=(bounds:[[number,number],[number,number]]|null)=>{
   if(bounds&&map)map.fitBounds(bounds,{padding:70,maxZoom:17,duration:reducedMotion()?0:400});
  };
@@ -223,7 +271,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
   if(f)fit(union([f]));
  };
  const chooseOwner=(id:string)=>{
-  const group=domaineOwners.find(g=>g.id===id)??legalOwners.find(g=>g.id===id);
+  const group=domaineOwners.find(g=>g.id===id);
   if(!group)return;
   autoFocused.current=true;
   const next=isChosen(group)?'':id;setOwner(next);setSelectedId('');
@@ -231,37 +279,54 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
  };
  // A right holder linked to this wine's producer is the likeliest place for the wine, so the map
  // opens on that holder's parcels instead of the whole cru, once each time the layer is turned on.
- const focusLinked=useCallback((links:ParcelProducerLink[])=>{
+ const focusLinked=useCallback((saved:ParcelProducerLink[])=>{
   if(autoFocused.current||(!wineProducer&&!producerId))return;
-  const link=links.find(l=>matchesLinkedProducer(l,wineProducer,producerId));
+  const link=saved.find(l=>matchesLinkedProducer(l,wineProducer,producerId));
   const holderParcels=link?parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===link.holderId)):[];
   if(!link||!holderParcels.length)return;
   const bounds=union(holderParcels);
   autoFocused.current=true;setOwner(link.holderId);
   if(bounds&&map)map.fitBounds(bounds,{padding:70,maxZoom:17,duration:0});
  },[parcels,wineProducer,producerId,map]);
+ useEffect(()=>{if(links.loaded)focusLinked(links.mine)},[links.loaded,links.mine,focusLinked]);
+ const chooseScope=(next:boolean)=>{
+  if(next===wide)return;
+  setWide(next);setOwner('');setSelectedId('');
+  const id=next?parentId:climatId;
+  showOnMap(features.filter(f=>f.properties.overlaps.some(o=>o.parentFeatureId===id)));
+ };
+ const showRow=(row:HolderGroup)=>{
+  autoFocused.current=true;setOwner(row.id);setSelectedId('');
+  showOnMap(parcels.filter(f=>f.properties.recordedRights.some(r=>row.holderIds.includes(r.holderId))));
+ };
  const recorded=parcels.filter(f=>f.properties.recordedRights.length);
  const areaOf=(list:ParcelFeature[])=>list.reduce((sum,f)=>sum+(overlapOf(f)?.areaM2??0),0);
- const totalArea=areaOf(parcels),recordedArea=areaOf(recorded);
- // Known from the registry, so the control and its loading/failure notes appear only for crus with domaine research.
- const useDomaineGroups=cru.domaineGrouping&&groupByDomaine;
- const listed=useDomaineGroups?domaineOwners:legalOwners;
+ // cru.domaineGrouping comes from the registry, so research notes and the key appear only for crus with domaine research.
+ const listed=domaineOwners;
  const needle=placeKey(query);
  const shown=allOwners?listed.filter(o=>!needle||placeKey([o.name,...o.legalNames,o.lead?.name??''].join(' ')).includes(needle)):listed.slice(0,6);
  const largest=listed[0]?.areaM2||1;
+ // The key names only the link strengths this list uses, strongest first.
+ const strengths=cru.domaineGrouping?confidenceOrder.filter(level=>listed.some(o=>o.confidence===level)):[];
  const rights=selected?.properties.recordedRights??[];
  const overlap=selected&&overlapOf(selected);
- const selectedMatch=selected?matches.get(selected.properties.id)??'':'';
  return <section className="village-map-parcels" aria-label="Parcel rights">
   <label className="village-map-parcel-toggle" htmlFor={switchId}>
    <span>Parcel rights<small> · {name}</small></span>
-   <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setShowPossible(false);setError(false);setOwner('');setSelectedId('');autoFocused.current=false}}/>
+   <input id={switchId} type="checkbox" role="switch" checked={show} disabled={!map} onChange={event=>{setShow(event.target.checked);setError(false);setOwner('');setSelectedId('');autoFocused.current=false}}/>
   </label>
   <p className="village-map-note">Legal-entity rights recorded on {longDate(manifest.rightsAsOf)}. Shows who holds recorded rights, not who farms the vines.</p>
   {show&&<>
-   {!data&&!error&&<p className="village-map-note" role="status">Loading cadastral parcels…</p>}
+   {climat&&<>
+    <div className="village-map-scope" role="group" aria-label="Parcels shown">
+     <button type="button" aria-pressed={!wide} onClick={()=>chooseScope(false)}>{climat.name}</button>
+     <button type="button" aria-pressed={wide} onClick={()=>chooseScope(true)}>All of {cru.name}</button>
+    </div>
+    {inClimat&&<p className="village-map-note">Parcels inside the INAO boundary of {climat.name}; areas count only the part inside it. Rights and your producer links are shared across {cru.name}.</p>}
+   </>}
+   {!ready&&!error&&<p className="village-map-note" role="status">Loading cadastral parcels…</p>}
    {error&&<div className="village-map-parcel-error" role="alert"><p>Parcel data could not load. The cru map remains available.</p><button type="button" onClick={()=>{setError(false);setAttempt(a=>a+1)}}>Retry parcels</button></div>}
-   {data&&<>
+   {ready&&<>
     {verified.length>0&&<div className="village-map-producer">
      <p className="village-map-eyebrow is-wine">THIS WINE’S PRODUCER</p>
      <strong>{wineProducer}</strong>
@@ -270,32 +335,15 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
      <span className="village-map-note">Select a parcel for its farming evidence and effective date.</span>
      <button type="button" className="village-map-link-button" onClick={()=>{setOwner('');setSelectedId('');showOnMap(verified)}}>Show on map</button>
     </div>}
-    {possibleOwners.length>0&&<>
-     <label className="village-map-parcel-check" htmlFor={possibleId}><input id={possibleId} type="checkbox" checked={showPossible} onChange={event=>setShowPossible(event.target.checked)}/>Show possible matches for {wineProducer} (unverified)</label>
-     {showPossible&&<div className="village-map-producer is-possible">
-      <span className="village-map-badge is-possible">Possible match · name only</span>
-      {possibleOwners.map(o=><div key={o.id}><strong>{ownerName(o.name)}</strong><br/><span className="village-map-producer-meta">{plural(o.count,'parcel')} · {ha(o.areaM2)}</span>
-       <button type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(o.id)}>Link {ownerName(o.name)} to an app producer</button>
-      </div>)}
-      <p className="village-map-note">These recorded right holders’ names resemble the producer’s. A name match is not a verified link to {wineProducer}.</p>
-      <button type="button" className="village-map-link-button" onClick={()=>{setSelectedId('');showOnMap(possible)}}>Show possible matches on map</button>
-     </div>}
-    </>}
-    <ParcelProducerLinker parentId={parentId} producer={wineProducer} producerId={producerId} holders={owners} editing={linkingHolder} onEdit={setLinkingHolder} onLinks={focusLinked} onShow={id=>{autoFocused.current=true;setOwner(id);setSelectedId('');showOnMap(parcels.filter(f=>f.properties.recordedRights.some(r=>r.holderId===id)))}}/>
-    <div className="village-map-parcel-share">
-     <span><strong>{parcels.length}</strong> parcels in {name}</span>
-     <span className="village-map-parcel-bar" role="img" aria-label={`${Math.round(recordedArea/totalArea*100)}% of the parcel area has recorded rights`}><b style={{width:`${recordedArea/totalArea*100}%`}}/></span>
-     <span className="village-map-parcel-key"><span>{recorded.length} with recorded rights · {ha(recordedArea)}</span><span>{parcels.length-recorded.length} without a matched record</span></span>
-    </div>
+    {!verified.length&&wineProducer&&<ProducerLinkCard producer={wineProducer} rows={domaineOwners} links={links} onShow={showRow}/>}
+    <p className="village-map-parcel-share"><strong>{parcels.length}</strong> parcels in {name} · {recorded.length} with recorded rights</p>
     {selected&&<div className="village-map-parcel-details" aria-live="polite" ref={detailsRef}>
      <div className="village-map-parcel-head"><h4>Parcel {selected.properties.reference}</h4><button type="button" className="village-map-link-button" onClick={()=>setSelectedId('')}>Clear</button></div>
      <dl>
       <dt>Recorded rights</dt><dd>{rights.length?rights.map(r=><div key={`${r.holderId}:${r.rightCode}`}>{ownerName(r.name)} · {r.rightLabel}</div>):'No matched rights record'}</dd>
       <dt>Area</dt><dd>{ha(selected.properties.cadastreAreaM2)}{overlap&&overlap.parcelPercent<99?` · ${Math.round(overlap.parcelPercent)}% inside ${name}`:''}</dd>
-      {selectedMatch==='possible'&&<><dt>Producer</dt><dd className="is-possible">Possible match, unverified</dd></>}
      </dl>
      <ParcelEvidence parcelId={selected.properties.id} parentId={parentId}/>
-     {[...new Map(rights.map(r=>[r.holderId,r])).values()].map(r=><button key={r.holderId} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(r.holderId)}>Link {ownerName(r.name)} to an app producer</button>)}
      {selected.properties.domaineLinks.map((link,index)=><div key={`${link.producerId}:${index}`} className="village-map-note">
       <strong>{link.name}</strong> · {link.status==='verified'?'Verified operator':'Proposed operator (unverified)'} · effective {link.effectiveDate}
       <div>{link.evidence.map((e,i)=><span key={`${e.url}:${i}`}>{i>0&&' · '}<a href={e.url} target="_blank" rel="noopener noreferrer">{e.note}</a></span>)}</div>
@@ -307,18 +355,21 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
      </details>:<p className="village-map-note">No matching published legal-entity record was found. Coverage exclusions and parcel changes can leave gaps; this doesn’t mean the parcel has no owner.</p>}
     </div>}
     <div>
-     <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length===owners.length?listed.length:`${listed.length} listed · ${owners.length} legal holders`}</span></summary>
-     {cru.domaineGrouping&&<label className="village-map-grouping">Group right holders by<select value={groupByDomaine?'domaine':'holder'} onChange={event=>{setGroupByDomaine(event.target.value==='domaine');setQuery('')}}><option value="domaine">Domaine (research links)</option><option value="holder">Legal holder</option></select></label>}
-     <p className="village-map-note">{useDomaineGroups?'Domaine headings are research links, not proof of ownership. Each shows how the link was found; recorded legal holders remain underneath. ':''}A parcel can have several right holders. Areas show parcel coverage, not ownership shares.</p>
-     {useDomaineGroups&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
-     {useDomaineGroups&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing legal holders instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
+     <details className="village-map-owner-section" open={ownersOpen}><summary onClick={event=>{event.preventDefault();setOwnersOpen(!ownersOpen)}}><span className="village-map-parcel-label" id={ownersId}>Recorded right holders by mapped area</span><span className="village-map-count">{listed.length}</span></summary>
+     <p className="village-map-note">Areas show parcel coverage, not ownership shares.</p>
+     {strengths.length>0&&<p className="village-map-seal-key"><span>Link strength</span>{strengths.map(level=><span key={level} className="village-map-seal-key-item"><StrengthSeal level={level}/>{confidenceLabels[level]}</span>)}</p>}
+     {cru.domaineGrouping&&!research&&!researchFailed&&<p className="village-map-note" role="status">Loading domaine research…</p>}
+     {cru.domaineGrouping&&researchFailed&&<div role="alert"><p>Domaine research could not load. Showing recorded company names instead.</p><button type="button" className="village-map-link-button" onClick={()=>{setResearchFailed(false);setAttempt(n=>n+1)}}>Retry domaine research</button></div>}
      {allOwners&&<><label className="visually-hidden" htmlFor={searchId}>Search right holders</label><input id={searchId} type="search" placeholder="Search right holders" value={query} onChange={event=>setQuery(event.target.value)}/></>}
      <ul className="village-map-owners" aria-labelledby={ownersId}>{shown.map(o=><li key={o.id}><button type="button" aria-pressed={isChosen(o)} onClick={()=>chooseOwner(o.id)}>
-      <span className="village-map-owner-name">{o.name}{(o.domaine||o.lead)&&<small>{o.legalNames.join(' · ')}</small>}{(o.basisLabel||o.lead)&&<span className={`village-map-basis${o.lead?' is-lead':''}`}>{o.lead?`Weak lead · ${o.lead.label}`:o.basisLabel}</span>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
-     </button>{isChosen(o)&&o.sources.length>0&&<div className="village-map-group-sources">{o.sources.map(id=>{const source=research?.sources[id];return source?<a key={id} href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>:null})}</div>}</li>)}</ul>
+      <span className="village-map-owner-name">{o.name}{o.confidence&&<>{'\u00a0'}<span role="img" className="village-map-seal-label" aria-label={sealLabel(o)} title={sealLabel(o)}><StrengthSeal level={o.confidence}/></span></>}</span><span className="village-map-owner-qty">{ha(o.areaM2)} · {o.count}</span><span className="village-map-owner-bar" aria-hidden="true"><b style={{width:`${o.areaM2/largest*100}%`}}/></span>
+     </button>
+      {isChosen(o)&&links.canLink&&<div className="village-map-row-link">{o.holderIds.every(id=>links.linked.has(id))
+       ?<><span>Linked to {wineProducer}</span><button type="button" className="village-map-link-button" disabled={Boolean(links.busy)} onClick={()=>void links.unlink(o)}>{links.busy===o.id?'Unlinking…':'Unlink'}</button></>
+       :<button type="button" className="village-map-link-button" disabled={Boolean(links.busy)} onClick={()=>void links.link(o)}>{links.busy===o.id?'Linking…':`Link to ${wineProducer}`}</button>}</div>}
+     </li>)}</ul>
      <div className="village-map-link-actions">
-      {[...chosenHolders].map(id=><button key={id} type="button" className="village-map-link-button" onClick={()=>setLinkingHolder(id)}>{chosenHolders.size===1?'Link chosen right holder to an app producer':`Link ${ownerName(owners.find(h=>h.id===id)?.name??id)} to an app producer`}</button>)}
-      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${useDomaineGroups?'entries':'right holders'}`}</button>}
+      {listed.length>6&&<button type="button" className="village-map-link-button" onClick={()=>{setAllOwners(!allOwners);setQuery('')}}>{allOwners?'Show fewer':`Show all ${listed.length} ${cru.domaineGrouping?'entries':'right holders'}`}</button>}
      </div>
      </details>
     </div>
@@ -328,6 +379,7 @@ function GrandCruParcelsView({map,parentId,producer,producerId,onLegend,cru}:Pro
     </details>
     <details><summary>About this data</summary>
      <p><a href={manifest.sourceUrl} target="_blank" rel="noopener noreferrer">Cadastre Etalab</a>, {monthYear(manifest.cadastreDate)} (<a href={manifest.cadastreLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.cadastreLicence}</a>), and <a href={manifest.rightsUrl} target="_blank" rel="noopener noreferrer">DGFiP legal-entity rights</a> as of {longDate(manifest.rightsAsOf)} (<a href={manifest.rightsLicenceUrl} target="_blank" rel="noopener noreferrer">{manifest.rightsLicence}</a>). Private individuals and some businesses are not published. Full parcel outlines can extend past the cru boundary. Parcel IDs can change between snapshots.</p>
+     {cru.domaineGrouping&&research&&<p>Domaine headings are research links, not proof of ownership. The list groups {plural(owners.length,'recorded legal holder')} into {plural(listed.length,'row')}; company names stay searchable and appear in each parcel’s details. Headings and leads come from reviewed research: company registers and filings, estate publications and independent articles ({plural(Object.keys(research.sources).length,'cited source')} for {cru.name}). Seals rank each link from a company record down to a weak lead; “{confidenceLabels.domaine}” is kept for a domaine’s own dated confirmation{domaineOwners.some(o=>o.confidence==='domaine')?'':', and none is recorded yet'}. None of these sources shows who farms the vines.</p>}
     </details>
    </>}
   </>}

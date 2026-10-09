@@ -60,6 +60,35 @@
       "sha256": "ad9759b3d80eebe0e3b015a60648db90478300526c32a0c5a85d5403bb61a23a"
     }
   },
+  "auditCommunes": {
+    "21267": {
+      "name": "Flagey-Échezeaux",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21267/cadastre-21267-parcelles.json.gz",
+      "sha256": "8216b73437a1f789e4b5547176a7f35b74aa0d49829383f922a7efe5be2155e1",
+      "size": 130032,
+      "retrievedAt": "2026-10-07T00:01:45.202896Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21295": {
+      "name": "Gevrey-Chambertin",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21295/cadastre-21295-parcelles.json.gz",
+      "sha256": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e",
+      "size": 467552,
+      "retrievedAt": "2026-10-07T00:01:51.903851Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    },
+    "21716": {
+      "name": "Vougeot",
+      "url": "https://files.data.gouv.fr/cadastre/etalab-cadastre/2026-06-01/geojson/communes/21/21716/cadastre-21716-parcelles.json.gz",
+      "sha256": "2f9ae2731d8fb272ff98e3e3a43d6fabe574b7649d25c7c54ab3161449a219cd",
+      "size": 34471,
+      "retrievedAt": "2026-10-07T00:01:56.380036Z",
+      "date": "2026-06-01",
+      "licence": "Licence Ouverte / Open Licence"
+    }
+  },
   "rightsHistory": {
     "successorInsideShare": 0.95,
     "rights": [

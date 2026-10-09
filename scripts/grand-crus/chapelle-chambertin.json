@@ -14,9 +14,49 @@
     "chapelle-chambertin"
   ],
   "research": {
-    "delivery": "historical-extension",
-    "methodDoc": "docs/research/grand-cru-history.md",
-    "namedAreas": "unreviewed",
-    "producerResearch": "unreviewed"
+    "methodDoc": "docs/research/chapelle-chambertin/README.md",
+    "namedAreas": "reviewed",
+    "producerResearch": "deferred-tier-2"
+  },
+  "namedPlots": {
+    "parentMatchId": "france/burgundy/cote-de-nuits/chapelle-chambertin",
+    "nameSourceUrl": "https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/chapelle-chambertin,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjY5Jnw%3D",
+    "nameSourceChecked": "2026-10-07",
+    "nameSourceSha256": "4f8787af127408d064a54510c0f46f0304bd76b0c7e0555f5fb8834d52e06feb",
+    "coverageNote": "The BIVB lists En la Chapelle and Les Gémeaux. Their exact cadastral polygons are clipped to the unchanged INAO Chapelle-Chambertin feature, without filling gaps or inferring producer holdings. CHERBAUDES edge-contact parcels retain an unresolved climat crosswalk and the whole-cru fallback.",
+    "displayLayer": true,
+    "plots": [
+      {
+        "id": "en-la-chapelle",
+        "name": "En la Chapelle",
+        "sourceName": "EN LA CHAPELLE",
+        "aliases": []
+      },
+      {
+        "id": "les-gemeaux",
+        "name": "Les Gémeaux",
+        "sourceName": "LES GEMEAUX",
+        "aliases": []
+      }
+    ],
+    "unresolved": [
+      {
+        "name": "CHERBAUDES",
+        "sourceCandidate": "CHERBAUDES",
+        "reason": "Full cadastral parcels in CHERBAUDES have only edge overlaps with the INAO feature. Retain the printed name without claiming it is a Chapelle-Chambertin climat or extending the named areas."
+      }
+    ],
+    "parcelsWithoutLieuDit": []
+  },
+  "communeAudit": {
+    "reviewedUncoveredArea": {
+      "maximumAreaM2": 132.2,
+      "reviewedAt": "2026-10-07",
+      "parentSourceSha256": "658f005ae705d812ee77d2587538f9a0e8767f3f2a093c008dcf3277bbc898a4",
+      "cadastreSha256ByCommune": {
+        "21295": "a901396e886e85d54dabd2b4c66edea1a06a0e09aaa45e2aa7e54a842239c47e"
+      },
+      "note": "The measured 132.136019 m² remainder (0.2414%) was inspected in an EPSG:2154 overlay of the pinned INAO boundary and original commune parcels, with close views of its largest components. All five components touch the INAO boundary: 110.625903 m² follows the western boundary, with 14.241392, 3.844131, 2.950959 and 0.473634 m² on the eastern boundary. These are narrow cadastral/INAO boundary mismatches, not a missing commune. No geometry is added, clipped, buffered or filled. The absolute cap allows less than 0.1 m² above the reviewed measurement; changed source hashes require another review."
+    }
   }
 }

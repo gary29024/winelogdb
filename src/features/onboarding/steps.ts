@@ -60,7 +60,7 @@ export const firstRunSteps:TourStep[]=[
  {
   id:'nav-journal',anchor:'nav-journal',
   title:'Every wine you log',
-  body:'The Journal is the record of what you have tasted. Bottles you own but have not opened yet are also in here, under the Cellar tab at the top of the page - the cellar is not a separate section.'
+  body:'The Journal is the record of what you have tasted. Bottles you own but have not opened yet are also in here, under the In cellar tab at the top of the page - the cellar is not a separate section.'
  },
  {
   id:'scan',anchor:'scan-trigger',
@@ -80,7 +80,7 @@ export const firstRunSteps:TourStep[]=[
  {
   id:'nav-account',anchor:'nav-account',
   title:'Friends and sharing',
-  body:'Your account, your friends, and what you share with them. Sharing is per wine and separate from being friends: adding a friend does not hand over your Journal, and you choose which bottles they see.'
+  body:'The circle with your initial opens your account, your friends, and what you share with them. Sharing is per wine and separate from being friends: adding a friend does not hand over your Journal, and you choose which bottles they see.'
  },
  {
   id:'tour-done',
@@ -134,12 +134,12 @@ export const chapters:Tour[]=[
    {
     id:'sharing-account',anchor:'nav-account',route:'/account',
     title:'Friends live here',
-    body:'Account & friends is where you add people and see who you are connected to. On a phone it sits in the top bar rather than the tab bar.'
+    body:'The circle with your initial, top right, is Account & friends: where you add people and see who you are connected to. It sits in the top bar on every screen rather than in the tab bar.'
    },
    {
     id:'sharing-codes',route:'/account',
-    title:'Friend codes',
-    body:'You add someone by entering their friend code, and they confirm it. Being friends lets you reuse each other\u2019s factual research about producers and vintages. It does not hand over your Journal.'
+    title:'User IDs and friend codes',
+    body:'Every account has a user ID like @yourname, picked for you at sign-in and yours to change. You add someone by typing their user ID or their friend code, and they confirm it. Being friends lets you reuse each other\u2019s factual research about producers and vintages. It does not hand over your Journal.'
    },
    {
     id:'sharing-wines',route:'/account',
