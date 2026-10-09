@@ -183,21 +183,40 @@ Existing source objects, identities, links and effort are retained. Exact Cheval
 
 Five official estate sources are retained as a whole-cru named-area census: Leflaive 1.80 ha; Louis Latour Les Demoiselles 0.51 ha; Vougeraie 0.151 ha; Domaine de Montille 0.23 ha; Bouchard La Cabotte 0.21 ha. La Cabotte is only that cuvée, not Bouchard’s total Chevalier holding. The two accepted cadastral names are census scope, not an allocation of each holding between them. Estate plot numbers and illustrative maps are not cadastral crosswalks. The Prieur 2017 technical sheet supplies no area and is not converted into a census figure.
 
-## Winehog access gaps
+## Supplied Winehog copies
 
-Direct links were supplied to the user on 9 October 2026. The public article dates below were checked; subscriber copies remain unsupplied. Acquired-copy SHA-256 is **unavailable** for every entry. No subscriber parcel match is claimed. Supplied copies must be hashed, read with their maps, and matched only when both printed reference and individual area agree; otherwise retain an unmatched printed reference.
+All eight requested articles were supplied on 9 October 2026. Original archives, extracted text and images stay outside the repository. SHA-256 identifies each acquired MHTML. Available relevant maps were reviewed; missing embedded images remain explicit gaps.
 
-| Article | Public date | Copy SHA-256 / status |
-| --- | --- | --- |
+| Article | Published | Archive SHA-256 | Bytes |
+| --- | --- | --- | ---: |
+| [Terroir Insight: Bouchard Chevalier-Montrachet La Cabotte](https://winehog.org/terroir-insight-bouchard-chevalier-montrachet-la-cabotte-23668/) | 2015-08-24 | `59a979f52a986f7244ab2db58d4a77d581d73baa336101d9754226bf64fc600a` | 3,010,916 |
+| [Terroir Insight: Domaine Leflaive Chevalier-Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-26388/) | 2020-04-22 | `8f4daec47b188be35e22a414afddb9bc672011b9afec3bdbe92a7ae60b283e1c` | 2,529,085 |
+| [Terroir Insight: Bouchard Père et Fils Chevalier-Montrachet](https://winehog.org/terroir-insight-bouchard-pere-chevalier-montrachet-40965/) | 2020-05-28 | `de222451e68eeb843984bbdd3cded030633819b956eb43e43070b8a3e68c19f8` | 3,001,095 |
+| [Terroir Insight: Domaine Leflaive Chevalier-Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-2-41096/) | 2020-05-22 | `04335c900d4997ccdea986e18dc9a4c81a361cf35d21ff187c9fe1252ca83314` | 2,529,032 |
+| [Terroir Insight: Domaine Chartron, Chevalier-Montrachet](https://winehog.org/terroir-insight-domaine-charton-chevalier-montrachet-36080/) | 2018-09-21 | `04fb1305ae770e2ead9ffd3f8e0e1a1e8f81f47a86f95db24c05bf86ee3caccf` | 3,101,620 |
+| [Terroir Insight: Domaine d’Auvenay, Chevalier-Montrachet](https://winehog.org/terroir-insight-domaine-dauvenay-chevalier-montrachet-35640/) | 2018-06-18 | `a96aa7205bfefb5e991cd541dbb9a550483a2b833078c81af932ebd5cd1c0012` | 3,163,470 |
+| [Chevalier-Montrachet Les Demoiselles and the 1861 classification](https://winehog.org/chevalier-montrachet-les-demoiselles-and-the-1861-classification-22858/) | 2015-03-01 | `5bd3ef499059e149782faec50bee7f164f881bc37d52fa6b9353cac8de52b14f` | 2,712,634 |
+| [Les Demoiselles – Puligny 1er cru and part of Chevalier-Montrachet](https://winehog.org/puligny-montrachet-les-demoiselles-caillerets-chevalier-montrachet-18166/) | 2013-11-30 | `928a3c1b5d5ac5deeba80aa222c2aab2369cc84f95bae1c6d6fba592b58c4e5e` | 2,411,250 |
 
-| [Bouchard](https://winehog.org/terroir-insight-bouchard-pere-chevalier-montrachet-40965/) | 2020-05-28 | Unavailable; not supplied |
-| [Bouchard La Cabotte](https://winehog.org/terroir-insight-bouchard-chevalier-montrachet-la-cabotte-23668/) | 2015-08-24 | Unavailable; not supplied |
-| [Leflaive (May)](https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-2-41096/) | 2020-05-22 | Unavailable; not supplied |
-| [Leflaive (April)](https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-26388/) | 2020-04-22 | Unavailable; not supplied |
-| [Chartron](https://winehog.org/terroir-insight-domaine-charton-chevalier-montrachet-36080/) | 2018-09-21 | Unavailable; not supplied |
-| [d’Auvenay](https://winehog.org/terroir-insight-domaine-dauvenay-chevalier-montrachet-35640/) | 2018-06-18 | Unavailable; not supplied |
-| [Les Demoiselles and the 1861 classification](https://winehog.org/chevalier-montrachet-les-demoiselles-and-the-1861-classification-22858/) | 2015-03-01 | Unavailable; not supplied |
-| [Les Demoiselles: Puligny and Chevalier](https://winehog.org/puligny-montrachet-les-demoiselles-caillerets-chevalier-montrachet-18166/) | 2013-11-30 | Unavailable; not supplied |
+La Cabotte is given as 0.2104 ha, without a modern reference in this article. The 2020 Bouchard article supplies number 68 and the same area. Early ownership and inclusion in Vrai-Montrachet are hypotheses, not modern cadastral lineage.
+
+Leflaive’s 1.8273 ha is a six-parcel aggregate. The available map prints 77/131/132/147/148/149 but no individual areas, so no parcel match is accepted. The April and May articles contain substantially the same account and are not independent corroboration.
+
+La Cabotte number 68 and 0.2104 ha match AH68 at 2104 m². Regular Chevalier numbers 1/5/6/9/10/11/12/13/14/122 share a 2.3295 ha aggregate without individual areas; those references remain unmatched, including the partly road parcels 10 and 12.
+
+The May Leflaive article repeats the 1.8273 ha aggregate and six-parcel account in the April article. The maps give numbers but no individual areas. Both archives are retained with separate hashes, while the holding is counted once.
+
+Chartron AH140/AH141 have no individual areas and remain unmatched. The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.
+
+d’Auvenay AH126 and 0.1632 ha match the current 1632 m² parcel. The reported 1992 acquisition remains secondary history. Neighbouring Chartron AH140/AH141 have no individual areas; no match is inferred.
+
+The 1839/1861 numbers 13–19, including 18/19, are historical references without a reviewed modern cadastral crosswalk. The two 0.51 ha Demoiselles accounts are named-area census only; historical promotion does not define a new parcel boundary.
+
+Distinguishes Puligny premier-cru Les Demoiselles from Chevalier’s Les Demoiselles. The reported Jadot and Latour holdings are 0.51 ha each, without individual cadastral numbers and areas. Historical expansion in 1938/1939 and 1974 is secondary context only.
+
+All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.
+
+Six additional dated holding entries supplement the five estate publications; the two Leflaive articles support one entry. No supplied article alters the shared company links, the three exact company-filing parcels or verified farming.
 
 ## Remaining limits
 
@@ -217,6 +236,6 @@ Three exact current-parcel matches are accepted: AH8, AH92 and AH93. Opale AH150
 
 The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.
 
-Eight requested Chevalier Winehog subscriber copies remain unsupplied. Their public URLs and dates are listed in filings.md; acquired-copy SHA-256 is unavailable until supplied. No subscriber parcel matches accepted.
+All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.
 
 Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.

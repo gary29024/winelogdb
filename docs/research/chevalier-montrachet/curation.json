@@ -125,6 +125,166 @@
       "reviewedAt": "2026-10-09",
       "access": "read",
       "finding": "Published 0.151 ha. Named-area census only. Published total of two estate plots, 0.056 and 0.095 ha; the estate plot numbers are not cadastral references."
+    },
+    {
+      "id": "ch-winehog-23668",
+      "title": "Terroir Insight: Bouchard Chevalier-Montrachet La Cabotte",
+      "url": "https://winehog.org/terroir-insight-bouchard-chevalier-montrachet-la-cabotte-23668/",
+      "type": "critic",
+      "documentDate": "2015-08-24",
+      "modifiedAt": "2017-08-09T10:33:16+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.838020+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "59a979f52a986f7244ab2db58d4a77d581d73baa336101d9754226bf64fc600a",
+      "bytes": 3010916,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:12 +0000",
+      "finding": "La Cabotte is given as 0.2104 ha, without a modern reference in this article. The 2020 Bouchard article supplies number 68 and the same area. Early ownership and inclusion in Vrai-Montrachet are hypotheses, not modern cadastral lineage.",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "ch-winehog-26388",
+      "title": "Terroir Insight: Domaine Leflaive Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-26388/",
+      "type": "critic",
+      "documentDate": "2020-04-22",
+      "modifiedAt": "2020-05-22T10:41:44+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.896534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "8f4daec47b188be35e22a414afddb9bc672011b9afec3bdbe92a7ae60b283e1c",
+      "bytes": 2529085,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:29 +0000",
+      "finding": "Leflaive’s 1.8273 ha is a six-parcel aggregate. The available map prints 77/131/132/147/148/149 but no individual areas, so no parcel match is accepted. The April and May articles contain substantially the same account and are not independent corroboration.",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg"
+      ]
+    },
+    {
+      "id": "ch-winehog-40965",
+      "title": "Terroir Insight: Bouchard Père et Fils Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-bouchard-pere-chevalier-montrachet-40965/",
+      "type": "critic",
+      "documentDate": "2020-05-28",
+      "modifiedAt": "2020-05-30T09:54:26+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.964534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "de222451e68eeb843984bbdd3cded030633819b956eb43e43070b8a3e68c19f8",
+      "bytes": 3001095,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:51 +0000",
+      "finding": "La Cabotte number 68 and 0.2104 ha match AH68 at 2104 m². Regular Chevalier numbers 1/5/6/9/10/11/12/13/14/122 share a 2.3295 ha aggregate without individual areas; those references remain unmatched, including the partly road parcels 10 and 12.",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/05/C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
+        "https://winehog.org/wp-content/uploads/2020/05/1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
+        "https://winehog.org/wp-content/uploads/2020/05/1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
+        "https://winehog.org/wp-content/uploads/2016/03/img_2337-1024x377.jpg"
+      ]
+    },
+    {
+      "id": "ch-winehog-41096",
+      "title": "Terroir Insight: Domaine Leflaive Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-2-41096/",
+      "type": "critic",
+      "documentDate": "2020-05-22",
+      "modifiedAt": "2020-05-23T10:41:38+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.031534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "04335c900d4997ccdea986e18dc9a4c81a361cf35d21ff187c9fe1252ca83314",
+      "bytes": 2529032,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:12 +0000",
+      "finding": "The May Leflaive article repeats the 1.8273 ha aggregate and six-parcel account in the April article. The maps give numbers but no individual areas. Both archives are retained with separate hashes, while the holding is counted once.",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg"
+      ]
+    },
+    {
+      "id": "ch-winehog-36080",
+      "title": "Terroir Insight: Domaine Chartron, Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-charton-chevalier-montrachet-36080/",
+      "type": "critic",
+      "documentDate": "2018-09-21",
+      "modifiedAt": "2018-09-23T17:00:20+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.096533+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "04fb1305ae770e2ead9ffd3f8e0e1a1e8f81f47a86f95db24c05bf86ee3caccf",
+      "bytes": 3101620,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:17 +0000",
+      "finding": "Chartron AH140/AH141 have no individual areas and remain unmatched. The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2018/09/chevalierchartron.jpg",
+        "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
+        "https://winehog.org/wp-content/uploads/2018/09/chevalierlarge.jpg"
+      ]
+    },
+    {
+      "id": "ch-winehog-35640",
+      "title": "Terroir Insight: Domaine d’Auvenay, Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-dauvenay-chevalier-montrachet-35640/",
+      "type": "critic",
+      "documentDate": "2018-06-18",
+      "modifiedAt": "2018-09-19T12:01:53+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.161715+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "a96aa7205bfefb5e991cd541dbb9a550483a2b833078c81af932ebd5cd1c0012",
+      "bytes": 3163470,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:27 +0000",
+      "finding": "d’Auvenay AH126 and 0.1632 ha match the current 1632 m² parcel. The reported 1992 acquisition remains secondary history. Neighbouring Chartron AH140/AH141 have no individual areas; no match is inferred.",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
+        "https://winehog.org/wp-content/uploads/2018/06/C5F549F8-BB22-409E-B252-8A7E78B876CA.jpeg"
+      ]
+    },
+    {
+      "id": "ch-winehog-22858",
+      "title": "Chevalier-Montrachet Les Demoiselles and the 1861 classification",
+      "url": "https://winehog.org/chevalier-montrachet-les-demoiselles-and-the-1861-classification-22858/",
+      "type": "critic",
+      "documentDate": "2015-03-01",
+      "modifiedAt": "2017-10-01T13:31:32+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.222716+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "5bd3ef499059e149782faec50bee7f164f881bc37d52fa6b9353cac8de52b14f",
+      "bytes": 2712634,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:33 +0000",
+      "finding": "The 1839/1861 numbers 13–19, including 18/19, are historical references without a reviewed modern cadastral crosswalk. The two 0.51 ha Demoiselles accounts are named-area census only; historical promotion does not define a new parcel boundary.",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "ch-winehog-18166",
+      "title": "Les Demoiselles – Puligny 1er cru and part of Chevalier-Montrachet",
+      "url": "https://winehog.org/puligny-montrachet-les-demoiselles-caillerets-chevalier-montrachet-18166/",
+      "type": "critic",
+      "documentDate": "2013-11-30",
+      "modifiedAt": "2017-10-01T13:35:43+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.281528+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "928a3c1b5d5ac5deeba80aa222c2aab2369cc84f95bae1c6d6fba592b58c4e5e",
+      "bytes": 2411250,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:43 +0000",
+      "finding": "Distinguishes Puligny premier-cru Les Demoiselles from Chevalier’s Les Demoiselles. The reported Jadot and Latour holdings are 0.51 ha each, without individual cadastral numbers and areas. Historical expansion in 1938/1939 and 1974 is secondary context only.",
+      "missingEmbeddedImages": []
     }
   ],
   "holders": [
@@ -386,6 +546,52 @@
       "appNote": "Opale’s 2006 deed names retired AH150 (981 m²), linked to AH182/AH183 by official 2019 DFI. Historical ownership context, not an exact current-reference filing or current farming.",
       "dateSourceId": "mt-filing-408395309-6",
       "currentFarmer": null
+    },
+    {
+      "id": "ch-winehog-40965",
+      "title": "Terroir Insight: Bouchard Père et Fils Chevalier-Montrachet",
+      "parcelIds": [
+        "21512000AH0068"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0068": 2104
+      },
+      "printedReferences": [
+        "AH68"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) names La Cabotte as plot 68, 0.2104 ha, matching AH68. The 2015 article supplies the same holding area. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-40965",
+        "ch-winehog-23668"
+      ],
+      "producer": "Bouchard Père et Fils",
+      "appNote": "Winehog (2020) names La Cabotte as plot 68, 0.2104 ha, matching AH68. The 2015 article supplies the same holding area. Secondary attribution only; current farming remains unverified.",
+      "dateSourceId": "ch-winehog-40965",
+      "currentFarmer": null
+    },
+    {
+      "id": "ch-winehog-35640",
+      "title": "Terroir Insight: Domaine d’Auvenay, Chevalier-Montrachet",
+      "parcelIds": [
+        "21512000AH0126"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0126": 1632
+      },
+      "printedReferences": [
+        "AH126"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) names AH126, 0.1632 ha, in the d’Auvenay and Chartron accounts. Number and area match; the reported 1992 purchase is secondary history, with current farming unverified.",
+      "sourceIds": [
+        "ch-winehog-35640",
+        "ch-winehog-36080"
+      ],
+      "producer": "Domaine d’Auvenay",
+      "appNote": "Winehog (2018) names AH126, 0.1632 ha, in the d’Auvenay and Chartron accounts. Number and area match; the reported 1992 purchase is secondary history, with current farming unverified.",
+      "dateSourceId": "ch-winehog-35640",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -582,6 +788,125 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-cabotte",
+      "producer": "Bouchard Père et Fils / La Cabotte",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.2104,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-23668",
+        "ch-winehog-40965"
+      ],
+      "finding": "La Cabotte cuvée only, separate from regular Chevalier. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-bouchard",
+      "producer": "Bouchard Père et Fils",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 2.3295,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-40965"
+      ],
+      "finding": "Regular Chevalier total; excludes La Cabotte and includes two partly road parcels. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-leflaive",
+      "producer": "Domaine Leflaive",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 1.8273,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-26388",
+        "ch-winehog-41096"
+      ],
+      "finding": "Same six-parcel account in two supplied archives; one census entry. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-auvenay",
+      "producer": "Domaine d’Auvenay",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.1632,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-35640",
+        "ch-winehog-36080"
+      ],
+      "finding": "Historical holding as published in 2018. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-latour",
+      "producer": "Domaine Louis Latour / Les Demoiselles",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.51,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-22858",
+        "ch-winehog-18166"
+      ],
+      "finding": "Grand-cru Les Demoiselles holding, not the separate premier-cru use of that name. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-winehog-holding-jadot",
+      "producer": "Domaine Louis Jadot / Les Demoiselles",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.51,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-winehog-22858",
+        "ch-winehog-18166"
+      ],
+      "finding": "Grand-cru Les Demoiselles holding, not the separate premier-cru use of that name. Dated named-area census only, without allocation between cadastral names or a current farming assertion.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -594,8 +919,8 @@
     "Louis Violland, the municipality, SCI Montille et Partners and GFV Le Chevalier de Puligny-Montrachet have explicit no-link searches. Similar names, individual managers and unnamed SCEA lease clauses do not establish a producer company relationship.",
     "Three exact current-parcel matches are accepted: AH8, AH92 and AH93. Opale AH150/151 are external historical context. Printed Prieur AH3 remains unmatched to AH123 despite equal area.",
     "The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.",
-    "Eight requested Chevalier Winehog subscriber copies remain unsupplied. Their public URLs and dates are listed in filings.md; acquired-copy SHA-256 is unavailable until supplied. No subscriber parcel matches accepted.",
-    "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it."
+    "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.",
+    "All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
@@ -604,6 +929,55 @@
       "printedReference": "Puligny-Montrachet AH3 (641 m²)",
       "parcelIds": [],
       "limitation": "The printed number is AH3, visually verified on page 9. Current AH123 also measures 641 m², but its documented predecessor is H123, not AH3. Equal area is not a crosswalk; no current match or corrected number is asserted.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-26388",
+      "printedReference": "Leflaive 77/131/132/147/148/149: 1.8273 ha aggregate",
+      "parcelIds": [],
+      "limitation": "The map identifies numbers, but the article gives only a six-parcel total. Individual cadastral areas are not printed; the equal aggregate is not a match for each parcel.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-41096",
+      "printedReference": "Leflaive 77/131/132/147/148/149: 1.8273 ha aggregate",
+      "parcelIds": [],
+      "limitation": "Repeated account of the April article, with no individual areas. Two archives are not independent evidence and do not justify allocating the total.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-40965",
+      "printedReference": "Bouchard 1/5/6/9/10/11/12/13/14/122: 2.3295 ha aggregate",
+      "parcelIds": [],
+      "limitation": "The article gives a total for ten regular-Chevalier parcels, including partly road parcels 10 and 12. No individual areas are printed; no current parcel allocation is accepted.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-36080",
+      "printedReference": "Chartron AH140 and AH141",
+      "parcelIds": [],
+      "limitation": "Printed references lack individual areas. Three cited maps were not embedded in this archive. The article’s schematic expansion labels 1/2/3 are not current cadastral numbers.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-35640",
+      "printedReference": "Neighbouring Chartron AH140 and AH141",
+      "parcelIds": [],
+      "limitation": "The text identifies neighbouring parcels but gives no individual areas. The matching AH126 finding does not establish a match for its neighbours.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-22858",
+      "printedReference": "1839/1861 Les Caillerets 13–19, including 18 and 19",
+      "parcelIds": [],
+      "limitation": "Historical numbering is not a modern reference crosswalk. No official lineage was supplied by the article, and no current boundary or producer allocation is inferred.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "ch-winehog-18166",
+      "printedReference": "Les Demoiselles: Latour 0.51 ha and Jadot 0.51 ha",
+      "parcelIds": [],
+      "limitation": "Whole holdings without individual reference-area pairs. Premier-cru and grand-cru uses of Les Demoiselles remain distinct; no current parcel is assigned from a name or aerial outline.",
       "currentFarmer": null
     }
   ]

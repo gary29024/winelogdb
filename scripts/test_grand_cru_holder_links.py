@@ -1420,6 +1420,14 @@ class ChevalierTierTwoTests(unittest.TestCase):
             self.assertNotIn('parcelIds', h)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
+    def test_winehog_aggregate_totals_do_not_become_individual_matches(self):
+        items = [x for x in self.curation['externalResearch'] if x['id'].startswith('ch-winehog-')]
+        self.assertEqual({p for x in items for p in x['parcelIds']}, {'21512000AH0068', '21512000AH0126'})
+        self.assertTrue(any('2.3295' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertTrue(any('1.8273' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertEqual(len([x for x in self.curation['producerHoldings'] if x['id'] == 'ch-winehog-holding-leflaive']), 1)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
 
 if __name__ == '__main__':
     unittest.main()

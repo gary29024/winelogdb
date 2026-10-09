@@ -29,7 +29,7 @@ administrative procedures remain distinct evidence; none establishes current far
 | Parcels with no lead | 17 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1989-09-22, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 147,336 / 15,627 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 148,962 / 16,041 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 44 unique parcels.
@@ -100,7 +100,7 @@ an unsearched interval is a gap, not absence of history.
 | Parcels with exact company filings | 0 | 3 |
 | Current farmers verified | 0 | 0 |
 
-[The filing inventory](filings.md) records 11 new distinct company filings / 152 pages, complete 150 dpi RapidOCR/DirectML screening, reused shared effort, acquisition hashes, exact-match limits and eight pending Winehog copies. Prieur AH8 and the Latour GFAs’ AH92/93 match reference, individual area and recorded holder. Opale’s retired AH150 reaches AH182/AH183 only through official DFI; its former AH151 holding remains historical context. Printed Prieur AH3 is not silently corrected to equal-area AH123.
+[The filing inventory](filings.md) records 11 new distinct company filings / 152 pages, complete 150 dpi RapidOCR/DirectML screening, reused shared effort, acquisition hashes, exact-match limits and eight supplied and hashed Winehog copies. Prieur AH8 and the Latour GFAs’ AH92/93 match reference, individual area and recorded holder. Opale’s retired AH150 reaches AH182/AH183 only through official DFI; its former AH151 holding remains historical context. Printed Prieur AH3 is not silently corrected to equal-area AH123.
 
 Five official estate holdings remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name, a shared manager or a similar area. Four holder identifiers remain explicit no-link searches: Louis Violland, the municipality, SCI Montille et Partners and GFV Le Chevalier de Puligny-Montrachet.
 
@@ -156,3 +156,7 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=chevalier-montrachet` 
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 Run the full CI Python unittest list from `scripts/`, full Vitest, and the Burgundy Playwright configuration with `WINELOG_E2E_CRU=chevalier-montrachet`. Record the known Windows locale and Corton rounding failures without changing them. No issue is closed or PR merged by this delivery.
+
+### Supplied Winehog review
+
+All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched. The two current matches are secondary historical research. Six additional named-area census entries preserve the published scope and dates. Raw archives are not committed.
