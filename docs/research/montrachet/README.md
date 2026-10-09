@@ -1,7 +1,7 @@
-# Montrachet parcels: Tier 1 (#400)
+# Montrachet parcels: Tier 2 (#446)
 
 Montrachet uses INAO `inao-denom-927`, appellation 207, and both Chassagne-Montrachet
-(21150) and Puligny-Montrachet (21512). Reviewed 7 October 2026 for season 2026
+(21150) and Puligny-Montrachet (21512). Tier 1 reviewed 7 October 2026; Tier 2 reviewed 9 October 2026 for season 2026
 under the [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md).
 
@@ -26,16 +26,51 @@ procedures remain distinct evidence; none establishes current farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0; one reviewed match withheld because its act date is unresolved |
 | Parcels with sale records (DVF) | 1; 1 current-reference deed, 0 historical-reference deeds |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 47 |
+| Parcels with holder or research leads | 29; supported holder links, with historical-reference research kept distinct |
+| Parcels with no lead | 18; includes AH64, whose exact company filing identifies no supported producer link |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 142,877 / 11,263 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 194,275 / 17,813 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
 No named-area asset is loaded. Parcel geometry and evidence load only when
 Parcel rights is enabled. The production payload report checks compiled JS.
+
+## Tier 1 to Tier 2
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels / recorded holders | 47 / 15 | 47 / 15 |
+| Parcels with holder or research leads | 0 | 29 |
+| Parcels with no lead | 47 | 18 |
+| Applicable reviewed holder links | 0 | 12 |
+| Parcels with exact company filings | 0 | 6 |
+| Verified farming links | 0 | 0 |
+
+The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened.
+Every holder has a dated search record in the [shared table](../holders/holder-links.json).
+The Bouchard, Pousse d’Or and DRC links retain their earlier definitions and effort;
+this pass only adds source and search evidence. Shared holders will reuse this work
+in the later Montrachet-bundle PRs.
+
+Four exact filing entries cover AE30/31/33/129/134 and AH64. Colin’s 13 current
+references receive historical context through documented DFI ancestry; no current
+reference is substituted into its 2003 deed. Opale’s former AH151 ownership is
+external research because today’s recorded holder differs. Five estate publications
+supply only named-area census totals. Legal holder, individual tenant, company
+relationship and bottler remain distinct.
+
+Thenard’s provisional identifier has no accepted company-record crosswalk. The
+Laguiche crosswalk is established, but its lease names Jean de Laguiche personally,
+so no Drouhin tenant link is asserted. The municipal holder has no producer link.
+INPI/Pappers returned 403; one latest Leflaive PDF returned 408. Winehog subscriber
+copies are pending after one request; unsupplied articles are access gaps with no
+acquired-copy hash. The selected filings are a bounded review, not an exhaustive
+history, and no evidence establishes present-day farming.
+
+The parallel Claude batch is left untouched. No shared existing link was rewritten;
+future main changes will be merged only at the next cru boundary.
 
 ## Geometry and named areas
 
@@ -93,9 +128,9 @@ retains original member identities, licences and download provenance.
 
 Exact reference joins retain all holders and right codes. Missing legal-entity
 records never hide geometry and do not establish absence of an owner. Company
-continuity requires an unchanged valid SIREN. No holder-to-domaine crosswalk
-is established, so domaine grouping remains off. Producer/company research
-remains Tier 2; paid SPF copies and outreach remain Tier 3.
+continuity requires an unchanged valid SIREN. The shared holder table supplies reviewed company links for 12 holders.
+Domaine grouping remains a research aid, with farming unverified. Paid SPF
+copies and outreach remain Tier 3.
 
 [Rights history](rights-history.json) traces 20 current parcels to documented
 predecessors, including 6 with pre-2019 events, across 7 DFI documents and
@@ -134,18 +169,19 @@ an unsearched interval is a gap, not absence of history.
 Use Python 3.12 with `scripts/burgundy-map-requirements.txt`:
 
 ```sh
-python scripts/download_grand_cru_sources.py --cru montrachet
-python scripts/build_grand_cru_parcels.py --cru montrachet --check
-python scripts/build_grand_cru_commune_audit.py --cru montrachet --check
-python scripts/build_grand_cru_named_plots.py --cru montrachet
-python scripts/build_grand_cru_parcel_named_areas.py --cru montrachet --check
-python scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
-python scripts/build_grand_cru_research.py --all --check
-python scripts/build_grand_cru_app_registry.py --check
-python scripts/audit_grand_cru_history_rollout.py --check
-npm run build
-python scripts/measure_grand_cru_payload.py
-npm test
+py -3.12 scripts/download_grand_cru_sources.py --cru montrachet
+py -3.12 scripts/build_grand_cru_parcels.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_commune_audit.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_named_plots.py --cru montrachet
+py -3.12 scripts/build_grand_cru_parcel_named_areas.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
+py -3.12 scripts/build_grand_cru_holder_links.py --check
+py -3.12 scripts/build_grand_cru_research.py --all --check
+py -3.12 scripts/build_grand_cru_app_registry.py --check
+py -3.12 scripts/audit_grand_cru_history_rollout.py --check
+bun run build
+py -3.12 scripts/measure_grand_cru_payload.py
+bun run test
 ```
 
 The representative Chromium journey uses `WINELOG_E2E_CRU=montrachet` with
@@ -153,4 +189,4 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=montrachet` with
 download retry, unknown rights, holder search, scoped manual producer links,
 and owner/shared views without expanding the routine browser matrix.
 
-The cru issue and its #461 line are completed only after review and merge.
+This Tier 2 PR remains open and unmerged; it does not close the cru issue or #420.

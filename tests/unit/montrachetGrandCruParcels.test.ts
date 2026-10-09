@@ -5,21 +5,24 @@ import {loadVillageMapCatalogue} from '../../src/lib/places/loadVillageMapCatalo
 import {grandCruFor} from '../../src/lib/places/grandCruParcels/registry';
 import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence';
 
-// Extend only after committing each cru's independent Tier 1 audit.
-const reviewed=[
+// Extend Tier 2 only after committing each independent holder-research pass.
+const tier2=[
  {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
+];
+const tier1=[
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38},
  {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
 ];
+const reviewed=[...tier2,...tier1];
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
 const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};
 const config=(slug:string)=>read(`scripts/grand-crus/${slug}.json`) as {parentFeatureId:string;villageMaps:string[];namedPlots:{displayLayer:boolean;plots:{id:string;name:string;sourceName:string}[]}};
 
-describe('Montrachet bundle Tier 1 crus',()=>{
+describe('Montrachet bundle reviewed crus',()=>{
  it('enables each reviewed cru in every village context with its own evidence',async()=>{
-  for(const cru of reviewed){
+  for(const cru of tier1){
    for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
    expect(evidence).not.toBeNull();
@@ -28,6 +31,18 @@ describe('Montrachet bundle Tier 1 crus',()=>{
   for(const slug of bundle.crus.filter(slug=>!reviewed.some(cru=>cru.slug===slug))){
    const pending=config(slug);
    for(const village of pending.villageMaps)expect(grandCruFor(pending.parentFeatureId,village)).toBeUndefined();
+  }
+ });
+ it('enables Tier 2 research grouping while keeping every farming claim unverified',async()=>{
+  for(const cru of tier2){
+   for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:true,evidenceFrom:[cru.slug]});
+   const evidence=await loadParcelEvidence(cru.id);
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(12);
+   expect(evidence.holderDomains).not.toHaveProperty('U18179542');
+   expect(evidence.holderDomains).not.toHaveProperty('U21850980');
+   const register=read(`docs/research/${cru.slug}/register.json`);
+   expect(register.counts).toMatchObject({holderLead:29,unresolved:18,withParcelFiling:6,currentFarmerConfirmed:0});
+   expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);
   }
  });
  it('keeps Chassagne parcels outside Chevalier membership and measures them as neighbours',()=>{

@@ -1275,5 +1275,73 @@ class LaGrandeRueTests(unittest.TestCase):
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
 
+
+
+class MontrachetTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+
+    def test_all_holders_have_searches_without_invented_company_links(self):
+        self.assertEqual(len(self.curation['holders']), 15)
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        for holder in self.curation['holders']:
+            self.assertTrue(self.table['holders'][holder['holderId']]['searches'])
+            self.assertFalse(holder['parcelOperationConfirmed'])
+        for hid in ('212101505', 'U21850980', 'U18179542'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+            self.assertNotIn(hid, self.evidence['holderDomains'])
+        self.assertNotIn('identity', self.table['holders']['U21850980'])
+        self.assertEqual(self.table['holders']['U18179542']['identity']['companySiren'], '443494075')
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_original_colin_references_reach_daughters_only_through_dfi(self):
+        research = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-colin-retired-2003')
+        self.assertEqual(research['parcelIds'], [])
+        self.assertEqual(set(research['predecessorReferences']),
+                         {f'21150000AE{n:04}' for n in (27, 28, 161, 162)})
+        daughters = {p for ps in research['predecessorReferences'].values() for p in ps}
+        self.assertEqual(daughters, {f'21150000AE{n:04}' for n in range(208, 221)})
+        for row in self.register['parcels']:
+            if row['parcelId'] in daughters:
+                self.assertIn(research['id'], row['externalResearchIds'])
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIsNone(row['currentFarmer'])
+        link = self.table['holders']['U18179061']['links'][0]
+        self.assertEqual((link['relation'], link['leaseStatus'], link['crus']),
+                         ('lessor-per-filing', 'recited', ['montrachet']))
+
+    def test_exact_filings_require_current_holder_and_individual_area(self):
+        expected = {'21150000AE0030': 2090, '21150000AE0031': 3419,
+                    '21150000AE0033': 3773, '21150000AE0129': 1670,
+                    '21150000AE0134': 821, '21512000AH0064': 20625}
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, expected)
+        opale = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-opale-ah151-2006')
+        self.assertEqual(opale['parcelIds'], ['21512000AH0151'])
+        self.assertIsNone(opale['producer'])
+        self.assertNotIn('21512000AH0151', actual)
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for f in self.curation['parcelFilings']:
+            for p in f['parcelAreasM2']:
+                self.assertIn(f['holderId'], {r['holderId'] for r in rows[p]['recordedRights']})
+
+    def test_individual_and_company_tenants_remain_distinct(self):
+        fs = {f['id']: f for f in self.curation['parcelFilings']}
+        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['Jean de Laguiche (individual)'])
+        lease = fs['mt-leflaive-gfa-2009']['leaseEvidence'][0]
+        self.assertEqual((lease['tenants'], lease['effectiveFrom'], lease['effectiveTo']),
+                         (['Domaine Leflaive (778245316)'], '2009-07-04', '2033-11-11'))
+        self.assertEqual(self.table['holders']['519806384']['links'][0]['crus'], ['montrachet'])
+        for h in self.curation['producerHoldings']:
+            self.assertNotIn('parcelIds', h)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+
 if __name__ == '__main__':
     unittest.main()

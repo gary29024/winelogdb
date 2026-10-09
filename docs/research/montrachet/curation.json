@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-927",
-  "status": "tier-1-reviewed",
-  "scope": "All 47 mapped Montrachet parcels across Puligny-Montrachet and Chassagne-Montrachet independently reviewed for Tier 1 and #461. Named-area crosswalk and commune edges audited. Source-specific history, sales and reviewed notices retained; no current farmer verified. Producer research remains Tier 2.",
+  "status": "tier-2-researched",
+  "scope": "Tier 2 free company records, exact schedules, historical-reference research and named-area holdings; current farming remains unverified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -50,6 +50,80 @@
       "documentDate": null,
       "access": "read",
       "finding": "Montrachet is a white Grand Cru in Puligny-Montrachet and Chassagne-Montrachet. Cadastral MONTRACHET and LE MONTRACHET remain constituents of one INAO cru, not two appellations."
+    },
+    {
+      "url": "https://www.leflaive.fr/fr_FR/wine/montrachet",
+      "retrievedFrom": "https://www.leflaive.fr/fr_FR/wine/montrachet",
+      "retrievedAt": "2026-10-09T13:46:15.269950+00:00",
+      "sha256": "6ea920aae4812ff76232fcd87f37558cac59559d85433544c24ba8b8e76250b8",
+      "bytes": 43854,
+      "id": "mt-holding-leflaive",
+      "title": "Domaine Leflaive: Montrachet",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published Montrachet holding 0.08 ha; named-area census only. Publication date not stated; a wine vintage is not a publication date."
+    },
+    {
+      "url": "https://www.prieur.com/en/wine/2/montrachet/2013",
+      "retrievedFrom": "https://www.prieur.com/en/wine/2/montrachet/2013",
+      "retrievedAt": "2026-10-09T13:46:17.831737+00:00",
+      "sha256": "7a27d8038ada035b08105f5c910cef53573614d5c721a8d0be445c473a9a5a52",
+      "bytes": 247580,
+      "id": "mt-holding-prieur",
+      "title": "Domaine Jacques Prieur: Montrachet 2013",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published Montrachet holding 0.59 ha; named-area census only. Publication date not stated; a wine vintage is not a publication date."
+    },
+    {
+      "url": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru",
+      "retrievedFrom": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru",
+      "retrievedAt": "2026-10-09T13:46:21.732532+00:00",
+      "sha256": "c1051ce1bcaf80cefeafc8fc90acaf33d098c9fadb759f44e5edb5224ba1cd70",
+      "bytes": 135154,
+      "id": "mt-holding-drouhin",
+      "title": "Maison Joseph Drouhin: Montrachet Marquis de Laguiche",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published Montrachet holding 2.06 ha; named-area census only. Publication date not stated; a wine vintage is not a publication date."
+    },
+    {
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/3/montrachet",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/3/montrachet",
+      "retrievedAt": "2026-10-09T13:46:24.211968+00:00",
+      "sha256": "60f5ba08f6c19487f56c7c91fb8d954edbcb177fc2d49f21dfc332c35a5380c4",
+      "bytes": 217357,
+      "id": "mt-holding-drc",
+      "title": "DRC: Montrachet",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published Montrachet holding 0.6759 ha; named-area census only. Publication date not stated; a wine vintage is not a publication date."
+    },
+    {
+      "url": "https://medias.bouchard-pereetfils.com/files/default/user-1/bpf-tsheet-en-montrachet-67508730bc0db834008224.pdf",
+      "retrievedFrom": "https://medias.bouchard-pereetfils.com/files/default/user-1/bpf-tsheet-en-montrachet-67508730bc0db834008224.pdf",
+      "retrievedAt": "2026-10-09T13:46:27.040039+00:00",
+      "sha256": "3e245aa15e66094f0453ffc540ada92d07f7c2db4457fb5d85e29a2d565245b2",
+      "bytes": 1480866,
+      "id": "mt-holding-bouchard",
+      "title": "Bouchard: Montrachet technical sheet",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Published Montrachet holding 0.89 ha; named-area census only. Publication date not stated; a wine vintage is not a publication date.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
     }
   ],
   "holders": [
@@ -57,148 +131,532 @@
       "holderId": "212101505",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-212101505"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Official registry identifies the commune as a municipal authority. No producer relationship or parcel-specific tenancy found; legal rights alone are not a research link."
     },
     {
       "holderId": "408395309",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-408395309",
+        "mt-filing-408395309-9",
+        "mt-filing-408395309-6",
+        "mt-filing-408395309-5",
+        "mt-filing-408395309-3",
+        "mt-filing-408395309-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Opale is controlled by Olivier Leflaive Frères (139077 of 139079 shares in 2019). The 2006 schedule names AH150/151 and AI137/138, not current AH182. AH151 is now recorded to Pousse d’Or; historical ownership remains separate from current farming."
     },
     {
       "holderId": "411189830",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-411189830",
+        "mt-filing-411189830-10",
+        "mt-filing-411189830-9",
+        "mt-filing-411189830-8",
+        "mt-filing-411189830-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The official registry and four company filings identify the viticultural company Domaine Fontaine-Gagnard. Selected formation, contribution and capital filings give no qualifying AE133 schedule or parcel-specific current farming evidence."
     },
     {
       "holderId": "420474645",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-420474645",
+        "mt-filing-420474645-10",
+        "mt-filing-420474645-8",
+        "mt-filing-420474645-5",
+        "mt-filing-420474645-2",
+        "mt-filing-420474645-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The official registry and five company filings identify Domaine Heitz-Lochardet. The 2021 property contribution concerns other communes; the 2024 contribution transfers company shares to Faciens Vinum. No qualifying current AH16 schedule found."
     },
     {
       "holderId": "480400407",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-480400407",
+        "mt-filing-480400407-22",
+        "mt-filing-480400407-19",
+        "mt-filing-480400407-14",
+        "mt-filing-480400407-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Four selected filings concern formation, transformation, property contribution and merger; no qualifying AH151 schedule found. Existing reviewed Pousse d’Or link is reused unchanged. Opale’s 2006 AH151 ownership recital remains external historical context."
     },
     {
       "holderId": "515420255",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-515420255",
+        "mt-filing-515420255-1",
+        "mt-filing-515420255-3",
+        "mt-filing-515420255-28",
+        "mt-filing-515420255-31",
+        "mt-filing-515420255-32"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Five selected filings cover transformation, merger and 2026 reorganisation; no current Montrachet reference with individual area found. Existing reviewed Bouchard group link is reused without alteration; the 2026 contribution excludes vineyard property from the transferred business."
     },
     {
       "holderId": "519806384",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-519806384",
+        "mt-filing-519806384-32",
+        "mt-filing-519806384-31",
+        "mt-filing-519806384-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA contribution names AE134 (821 m²). A 2011 deed recites its 2009 lease to Domaine Leflaive, ending 11 November 2033. The original lease and current performance are unreviewed; the separate Verzé lease is not Montrachet evidence."
     },
     {
       "holderId": "751761933",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-751761933",
+        "mt-filing-751761933-21",
+        "mt-filing-751761933-20",
+        "mt-filing-751761933-7",
+        "mt-filing-751761933-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "H2O, formerly Moulin d’Eugénie, is controlled by Domaine d’Eugénie: the July 2026 statutes record 157899 of 188860 shares. Formation and contribution records do not give an exact AE172 schedule. Corporate control is not parcel tenancy or current farming."
     },
     {
       "holderId": "778232892",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778232892",
+        "mt-filing-778232892-24",
+        "mt-filing-778232892-21",
+        "mt-filing-778232892-20",
+        "mt-filing-778232892-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1994 decision transfers the operating branch to SARL Domaine des Comtes Lafon and retains the land company as a GFA. The 1996 donation recites estate leases; no AE37 schedule or current renewal is established. Corporate succession is not farming."
     },
     {
       "holderId": "778245316",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778245316",
+        "mt-filing-778245316-35",
+        "mt-filing-778245316-28",
+        "mt-filing-778245316-29",
+        "mt-filing-778245316-30"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The estate is distinct from its GFA: AE134 (821 m²) was withdrawn and contributed to the GFA in 2009. No qualifying current AH77 schedule found. The July resolution mandates a future lease; it is not an executed lease."
     },
     {
       "holderId": "778269407",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778269407",
+        "mt-filing-778269407-1974"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 21 December 1974 notarial estate schedule names AE31 (3419 m²) and AE129 (1670 m²), matching current recorded DRC rights. AE130 is not printed in that schedule. The 2002 deposit is not a 2002 land transfer. Existing reviewed company link is reused unchanged."
     },
     {
       "holderId": "U18179061",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-450222658",
+        "mt-filing-450222658-0"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Formation names retired AE27/28/161/162 (356/356/178/178 m²) and recites a 19 July 1996 lease to EARL Domaine Colin Marc et Fils. Current AE208–220 are reached only through official DFI ancestry; no current farming season established."
     },
     {
       "holderId": "U18179542",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-443494075",
+        "mt-filing-443494075-4",
+        "mt-filing-443494075-3",
+        "mt-filing-443494075-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "AH64 and its 20625 m² area establish the GFA de Laguiche identity. The 2002 donation names Jean de Laguiche personally as tenant. Drouhin’s published cultivation account does not establish a Drouhin company lease; current farming is unverified."
     },
     {
       "holderId": "U21850980",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778586172",
+        "mt-filing-778586172-29",
+        "mt-filing-778586172-28",
+        "mt-filing-778586172-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Three distinct selected files (31 pages) concern share succession and updated statutes, without AE32/34 and their individual areas. A company candidate exists, but the U21850980 identity crosswalk is not established by the reviewed company records; no domaine link asserted."
     },
     {
       "holderId": "U21874820",
-      "basis": "identity-only",
+      "basis": "company-record-research",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "mt-registry-778233098",
+        "mt-filing-778233098-10",
+        "mt-filing-778233098-9",
+        "mt-filing-778233098-7",
+        "mt-filing-778233098-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Company statutes repeat AE30 (2090 m²) and AE33 (3773 m²), plus Chevalier AH3/8. The current exact schedule and registry/official legal notice support U21874820 to SCEA Domaine Jacques Prieur (778233098). No parcel-specific farming season established."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "mt-colin-retired-2003",
+      "title": "Les Enfants Colin: retired references and historical lease",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 19 August 2003 formation names retired AE27/28/161/162 with individual areas 356/356/178/178 m² and recites a 19 July 1996 lease to EARL Domaine Colin Marc et Fils. The original references reach AE208–220 only through official DFI document 210:150:000:0000558 (27 February 2023), retaining the complete event groups and partial scope. Neither rights nor a tenant are automatically transferred to the daughters. No original lease, renewal or present farming season was reviewed.",
+      "sourceIds": [
+        "mt-filing-450222658-0",
+        "mt-registry-450222658",
+        "mt-registry-colin-tenant",
+        "dgfip-history",
+        "cadastre-history"
+      ],
+      "producer": "Domaine Colin Marc et Fils",
+      "printedReferences": [
+        "AE27",
+        "AE28",
+        "AE161",
+        "AE162"
+      ],
+      "predecessorReferences": {
+        "21150000AE0027": [
+          "21150000AE0208",
+          "21150000AE0209",
+          "21150000AE0210",
+          "21150000AE0211"
+        ],
+        "21150000AE0028": [
+          "21150000AE0212",
+          "21150000AE0213",
+          "21150000AE0214",
+          "21150000AE0215"
+        ],
+        "21150000AE0161": [
+          "21150000AE0216",
+          "21150000AE0217",
+          "21150000AE0218"
+        ],
+        "21150000AE0162": [
+          "21150000AE0219",
+          "21150000AE0220"
+        ]
+      },
+      "appNote": "The 2003 GFA filing names this parcel’s retired predecessor and recites a 1996 lease to Domaine Colin Marc et Fils. Reached through official 2023 DFI lineage; no present tenancy or farming inferred.",
+      "dateSourceId": "mt-filing-450222658-0",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-opale-ah151-2006",
+      "title": "Opale: former AH151 ownership",
+      "parcelIds": [
+        "21512000AH0151"
+      ],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 23 June 2006 Opale contribution names AH151 with 1058 m², as two half interests in the same complete parcel. Today the recorded holder is Pousse d’Or, so this is external historical ownership context, not an exact filing of the current holder. No tenancy or current farming is inferred.",
+      "sourceIds": [
+        "mt-filing-408395309-6",
+        "dgfip-current"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AH151"
+      ],
+      "appNote": "Opale’s 2006 contribution names AH151 (1058 m²). The current recorded holder differs; historical company ownership only.",
+      "dateSourceId": "mt-filing-408395309-6",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "mt-drc-1974",
+      "sourceId": "mt-filing-778269407-1974",
+      "title": "DRC: historical estate schedule",
+      "holderId": "778269407",
+      "companySiren": "778269407",
+      "documentDate": "1974-12-21",
+      "parcelAreasM2": {
+        "21150000AE0031": 3419,
+        "21150000AE0129": 1670
+      },
+      "leaseEvidence": [],
+      "finding": "The 1974 notarial statutes name AE31 and AE129 with matching individual areas. AE130 is not printed. Filed in a 2002 bundle; historical estate evidence, not a 2002 acquisition or current farming.",
+      "appNote": "The 1974 notarial statutes name AE31 and AE129 with matching individual areas. AE130 is not printed. Filed in a 2002 bundle; historical estate evidence, not a 2002 acquisition or current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        40,
+        74,
+        83
+      ],
+      "printedReferences": [
+        "AE31",
+        "AE129"
+      ]
+    },
+    {
+      "id": "mt-prieur-2021",
+      "sourceId": "mt-filing-778233098-1",
+      "title": "Jacques Prieur: retained property schedule",
+      "holderId": "U21874820",
+      "companySiren": "778233098",
+      "documentDate": "2021-06-21",
+      "parcelAreasM2": {
+        "21150000AE0030": 2090,
+        "21150000AE0033": 3773
+      },
+      "leaseEvidence": [],
+      "finding": "The 2021 statutes name both AE30 and AE33 with matching individual areas. The company identity crosswalk is supported by the schedule and official legal notice; current farming is unverified.",
+      "appNote": "The 2021 statutes name both AE30 and AE33 with matching individual areas. The company identity crosswalk is supported by the schedule and official legal notice; current farming is unverified.",
+      "supportingSourceIds": [
+        "mt-prieur-legal",
+        "mt-registry-778233098"
+      ],
+      "pages": [
+        1,
+        2,
+        8,
+        9
+      ],
+      "printedReferences": [
+        "AE30",
+        "AE33"
+      ]
+    },
+    {
+      "id": "mt-leflaive-gfa-2009",
+      "sourceId": "mt-filing-519806384-32",
+      "title": "GFA des Associés du Domaine Leflaive: contribution",
+      "holderId": "519806384",
+      "companySiren": "519806384",
+      "documentDate": "2009-12-12",
+      "parcelAreasM2": {
+        "21150000AE0134": 821
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail rural à long terme",
+          "tenants": [
+            "Domaine Leflaive (778245316)"
+          ],
+          "signedDates": [
+            "2009-12-12"
+          ],
+          "effectiveFrom": "2009-07-04",
+          "effectiveTo": "2033-11-11",
+          "pages": [
+            30
+          ],
+          "sourceId": "mt-filing-519806384-31",
+          "limitation": "Recital in the 14 June 2011 donation, filed in a 2017 bundle. Original instrument and later changes not reviewed. The formation’s future-lease clause and unrelated Verzé lease are kept distinct."
+        }
+      ],
+      "finding": "The GFA formation contributes AE134 (821 m²). A 2011 deed filed in 2017 recites a 2009 lease to Domaine Leflaive, ending 11 November 2033. The original lease and present performance were not reviewed; the separate Verzé lease does not apply here.",
+      "appNote": "The GFA contribution names AE134 (821 m²). A 2011 deed recites its 2009 lease to Domaine Leflaive, ending 11 November 2033. The original lease and current performance are unreviewed; the separate Verzé lease is not Montrachet evidence.",
+      "supportingSourceIds": [
+        "mt-filing-519806384-31",
+        "mt-filing-519806384-1"
+      ],
+      "pages": [
+        1,
+        12
+      ],
+      "printedReferences": [
+        "AE134"
+      ]
+    },
+    {
+      "id": "mt-laguiche-2002",
+      "sourceId": "mt-filing-443494075-4",
+      "title": "GFA de Laguiche: founding contribution",
+      "holderId": "U18179542",
+      "companySiren": "443494075",
+      "documentDate": "2002-06-04",
+      "parcelAreasM2": {
+        "21512000AH0064": 20625
+      },
+      "leaseEvidence": [
+        {
+          "kind": "existing-lease-recital",
+          "leaseType": "bail rural à long terme",
+          "tenants": [
+            "Jean de Laguiche (individual)"
+          ],
+          "signedDates": [
+            "2002-06-04"
+          ],
+          "pages": [
+            8
+          ],
+          "sourceId": "mt-filing-443494075-3",
+          "limitation": "The founding mandate proposed 18 years; the donation confirms a same-day executed lease, whose original instrument and renewals were not reviewed. The individual tenant is not a Drouhin company."
+        }
+      ],
+      "finding": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to Jean de Laguiche personally; it does not name Drouhin as tenant. No renewal or current farming season is established.",
+      "appNote": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to Jean de Laguiche personally; it does not name Drouhin as tenant. No renewal or current farming season is established.",
+      "supportingSourceIds": [
+        "mt-filing-443494075-3",
+        "mt-filing-443494075-1"
+      ],
+      "pages": [
+        2,
+        4,
+        5,
+        22
+      ],
+      "printedReferences": [
+        "AH64"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "mt-holding-leflaive",
+      "producer": "Domaine Leflaive",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.08,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-holding-leflaive"
+      ],
+      "finding": "Published whole holding, with no assignment to individual cadastral parcels. The total spans the cru census; no allocation between its two cadastral names is inferred.",
+      "producerHolderIds": [
+        "778245316"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-holding-prieur",
+      "producer": "Domaine Jacques Prieur",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.59,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-holding-prieur"
+      ],
+      "finding": "Published whole holding, with no assignment to individual cadastral parcels. The total spans the cru census; no allocation between its two cadastral names is inferred.",
+      "producerHolderIds": [
+        "U21874820"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-holding-drouhin",
+      "producer": "Maison Joseph Drouhin / Marquis de Laguiche",
+      "namedAreas": [
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 2.06,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-holding-drouhin"
+      ],
+      "finding": "Published whole holding, with no assignment to individual cadastral parcels. The estate explicitly locates this holding on the Puligny side.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-holding-drc",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.6759,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-holding-drc"
+      ],
+      "finding": "Published whole holding, with no assignment to individual cadastral parcels. The total spans the cru census; no allocation between its two cadastral names is inferred.",
+      "producerHolderIds": [
+        "778269407"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-holding-bouchard",
+      "producer": "Bouchard Père et Fils",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.89,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-holding-bouchard"
+      ],
+      "finding": "Published whole holding, with no assignment to individual cadastral parcels. The total spans the cru census; no allocation between its two cadastral names is inferred.",
+      "producerHolderIds": [
+        "515420255"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
     "Cadastral named areas are reviewed; the whole-cru INAO fallback is retained because the cru name also identifies a smaller constituent area. No producer holding is inferred.",
     "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
     "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "Current farming remains unconfirmed for every parcel.",
+    "INPI and Pappers were each tried once on the Leflaive company and returned HTTP 403 locally; free official company searches, Le Figaro indexes and actes.ccm2.net filings were used instead.",
+    "The bounded Montrachet pass screened 50 distinct PDF byte hashes / 1360 pages at 150 dpi with RapidOCR and DirectML. Two additional downloads were byte-identical copies (34 duplicate pages), not additional evidence; one Leflaive 2026 statutes request returned HTTP 408. This is not every filing ever deposited.",
+    "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.",
+    "Winehog subscriber copies were requested once. Direct article links were supplied on 9 October 2026; authorized copies remain pending. Unsupplied articles are access gaps, with no acquired-copy SHA-256 and no accepted parcel matches.",
+    "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified."
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": []
 }
