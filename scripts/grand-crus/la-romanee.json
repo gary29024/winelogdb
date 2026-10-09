@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-655",
   "appellationId": 190,
   "issue": 382,
-  "tier": 1,
+  "tier": 2,
   "bundle": "vosne-romanee",
   "villageMaps": [
     "vosne-romanee"
@@ -15,8 +15,7 @@
   ],
   "research": {
     "methodDoc": "docs/research/la-romanee/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/la-romanee/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/la-romanee",

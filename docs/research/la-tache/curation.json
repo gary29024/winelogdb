@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-09",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-656",
-  "status": "tier-1-reviewed",
-  "scope": "All 2 mapped La Tâche parcels and 1 recorded legal-entity identifier reviewed for Tier 1, including commune edges, both cadastral named areas and the #461 historical extension. The notice indexes contain no exact reachable-reference evidence and no pending candidates. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "Both mapped La Tâche parcels and the one recorded holder identifier reviewed for Tier 2 (#429) through the shared holder table; 7 DRC filings / 548 pages screened. The exact 1974 schedule and the published estate total remain distinct. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -41,28 +41,359 @@
       "documentDate": null,
       "access": "read",
       "finding": "Dated deed references, without prices or parties. Coverage is audited independently of DFI."
+    },
+    {
+      "id": "lt-drc-statutes-1974",
+      "title": "DRC: 21 December 1974 notarial statutes and estate schedule (filed 2002)",
+      "url": "https://actes.ccm2.net/acte/5409256#page=38",
+      "type": "company-filing",
+      "documentDate": "1974-12-21",
+      "filingDate": "2002-07-31",
+      "access": "read",
+      "finding": "La Tâche review: the 21 December 1974 notarial statutes describe the Domaine de la Romanée-Conti as then composed, including 20°) AM 9 “Les Gaudichots” or “La Tâche”, 4 ha 62 a 75 ca, and 22°) AM 16 “La Tâche”, 1 ha 43 a 45 ca, both matching today. Schedule checked against the page images. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "reviewedPages": [
+        36,
+        38,
+        39,
+        74
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409256",
+      "sha256": "f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68",
+      "bytes": 3706675,
+      "pageCount": 125,
+      "screenedPages": 125,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2003",
+      "title": "DRC: 27 November 2003 meeting and recast statutes",
+      "url": "https://actes.ccm2.net/acte/5409358#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "filingDate": "2004-01-29",
+      "access": "read",
+      "finding": "Recast statutes reciting the 1942 contribution of the whole estate and its brands, including the Clos de La Tâche label; no cadastral reference or La Tâche schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        32,
+        33
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:42+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409358",
+      "sha256": "8490ca607cdfb6ded3aae9dc22f92226f64ea6a7922d50d02590bf98aefb2c9e",
+      "bytes": 2082952,
+      "pageCount": 63,
+      "screenedPages": 63,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2003-first",
+      "title": "DRC: 27 November 2003 extraordinary meeting and updated statutes (first deposit)",
+      "url": "https://actes.ccm2.net/acte/5409357#page=1",
+      "type": "company-filing",
+      "documentDate": "2003-11-27",
+      "filingDate": "2003-12-02",
+      "access": "read",
+      "finding": "Meeting simplifying the statutes, with updated statutes reciting the 1942 contribution of the whole estate and its brands, including the Clos de La Tâche label. No cadastral reference or parcel schedule. The same meeting’s recast statutes were deposited again on 29 January 2004.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        32
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T15:15:01+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409357",
+      "sha256": "d0e1c017dc40652a98d1ee00d7626023bd5ff85c00199edee5460ecbdf70efc3",
+      "bytes": 2107504,
+      "pageCount": 62,
+      "screenedPages": 62,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2009",
+      "title": "DRC: 15 April 2009 extraordinary meeting and updated statutes",
+      "url": "https://actes.ccm2.net/acte/5409238#page=1",
+      "type": "company-filing",
+      "documentDate": "2009-04-15",
+      "filingDate": "2009-05-25",
+      "access": "read",
+      "finding": "Meeting changing the voting rights of usufructuaries and bare owners. The updated statutes recite the 1942 contribution of the whole estate and its brands, including the Clos de La Tâche label. No cadastral reference or parcel schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        7,
+        8
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T15:44:48+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409238",
+      "sha256": "dd0eeaa91e31c1766bdad78c0c1fb9f36caa621872c3f0782b195bcb0fcfec9d",
+      "bytes": 1103977,
+      "pageCount": 41,
+      "screenedPages": 41,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2018",
+      "title": "DRC: 26 January 2018 completion of the December 2017 capital increase",
+      "url": "https://actes.ccm2.net/acte/5409360#page=2",
+      "type": "company-filing",
+      "documentDate": "2018-01-26",
+      "filingDate": "2018-06-21",
+      "access": "read",
+      "finding": "Records the capital increase decided on 20 December 2017 and updated statutes. No cadastral reference or La Tâche schedule.",
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:44:05+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409360",
+      "sha256": "1e587daa78a0c37ea9e71f7d8778cf83d94ed5b926b67d41e8edd29e1c80a51a",
+      "bytes": 2554683,
+      "pageCount": 57,
+      "screenedPages": 57,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2022",
+      "title": "DRC: 21 March 2022 share donation and statutes",
+      "url": "https://actes.ccm2.net/acte/5409233#page=2",
+      "type": "company-filing",
+      "documentDate": "2022-03-21",
+      "filingDate": "2022-04-15",
+      "access": "read",
+      "finding": "Share donation and updated statutes reproducing the brand wording; no cadastral reference.",
+      "reviewedPages": [
+        1,
+        2,
+        31,
+        32
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:32:21+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5409233",
+      "sha256": "5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708",
+      "bytes": 2655931,
+      "pageCount": 65,
+      "screenedPages": 65,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked."
+    },
+    {
+      "id": "lt-drc-2024",
+      "title": "DRC: 14 November 2024 management declaration and bundled share deeds",
+      "url": "https://actes.ccm2.net/acte/34207319#page=6",
+      "type": "company-filing",
+      "documentDate": "2024-11-14",
+      "filingDate": "2024-11-14",
+      "access": "read",
+      "finding": "Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including the Clos de La Tâche label. No cadastral reference or parcel schedule.",
+      "reviewedPages": [
+        6,
+        41,
+        44,
+        45,
+        46
+      ],
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-08T13:07:24+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
+      "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
+      "bytes": 8473781,
+      "pageCount": 135,
+      "screenedPages": 135,
+      "screeningMethod": "Local audit 2026-10-09, Windows / Python 3.12: fresh PDF SHA-256, size and page count match. All pages match files already read in full during the Romanée-Saint-Vivant/Romanée-Conti local audits, using embedded text or RapidOCR/DirectML at 150 dpi. Cited pages re-read for La Tâche; schedule images rechecked.",
+      "dateNote": "The management declaration is dated 14 November 2024 on PDF page 41; the bundled statutes are dated 27 July 2024 on page 44. Neither date is a land-transfer date."
+    },
+    {
+      "id": "lt-drc-estate",
+      "title": "Domaine de la Romanée-Conti: La Tâche",
+      "url": "https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T13:00:45Z",
+      "retrievedFrom": "https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache",
+      "sha256": "5c0f0082226ddc97d7986cdd60711f9116f92c6893dfdcdde6cdf25cef2a0281",
+      "bytes": 214798,
+      "finding": "Undated estate page publishes 6.0620 ha and bottle counts. That figure equals the summed cadastral areas of AM 9 and AM 16 recorded to the DRC, but a published total is not a parcel assignment."
+    },
+    {
+      "id": "lt-winehog-drc-profile",
+      "title": "Winehog: Domaine de la Romanée-Conti – Producer Profile",
+      "url": "https://winehog.org/domaine-de-la-romanee-conti-producer-profile-7374/",
+      "type": "critic-research",
+      "documentDate": "2012-09-27",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f59d705350f667241026335d650844067a2624ef85ffd63779e5c1b4860b5946",
+      "bytes": 2958029,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Producer profile of the DRC’s wines and style, naming Romanée-Conti and La Tâche as its two monopoles. It prints no area, plot or cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2012-11-02",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-history",
+      "title": "Winehog: La Tâche – a historic view on a legendary grand cru",
+      "url": "https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/",
+      "type": "critic-research",
+      "documentDate": "2014-08-17",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "eb65580b74c550f5631e1f8b103c5ba8cd6bc3020edb037f37bcee293c304c96",
+      "bytes": 3467108,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Ownership history of La Tâche. The original climat, about 1.4 ha, was sold at a 1933 auction and merged with the DRC side’s Les Gaudichots holdings after a 1932 court ruling allowed most of Les Gaudichots to use the name. It gives the two parts as La Tâche (1.43 ha) and Les Gaudichots ou La Tâche (4.63 ha), 6.06 ha in all. No cadastral number is printed; rounded named-area totals are not a parcel crosswalk.",
+      "otherDocumentDates": [
+        {
+          "date": "2026-05-14",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-gaudichots",
+      "title": "Winehog: Vosne-Romanee Les Gaudichots – History, owners & wines – update",
+      "url": "https://winehog.org/vosne-romanee-les-gaudichots-16919/",
+      "type": "critic-research",
+      "documentDate": "2014-07-01",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "a9a884436f0fecc45310cc3b60e1c27f598c6118536a757f1723a2a2ff9d064f",
+      "bytes": 3396375,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "History and owners of Les Gaudichots: most of it became part of La Tâche after 1933, the remaining premier cru plots lie around La Tâche, and its plots inside La Grande Rue joined that grand cru in 1989. It repeats the 1.43 ha and 4.63 ha parts of La Tâche without cadastral numbers.",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
+    },
+    {
+      "id": "lt-winehog-1923",
+      "title": "Winehog: The Story Behind The 1923 La Tâche Bottled by Maison Nicolas",
+      "url": "https://winehog.org/the-story-behind-the-1923-la-tache-bottled-by-maison-nicolas-74167/",
+      "type": "critic-research",
+      "documentDate": "2026-05-28",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "43d777b4c62d555cf9faaea6a703a303247cac10b5daf78b75a90fd1e78d5695",
+      "bytes": 3287313,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; no archive path was supplied and no disk search was made.",
+      "finding": "Bottle history of a 1923 La Tâche bottled by Maison Nicolas and labelled as a Liger-Belair cuvée, which the article links to the original 1.4 ha La Tâche. It recounts the 1933 auction and the merger into the 6.06 ha monopole. No cadastral reference.",
+      "otherDocumentDates": [
+        {
+          "date": "2026-05-29",
+          "kind": "page metadata last modification; not printed in the article"
+        }
+      ]
     }
   ],
   "holders": [
     {
       "holderId": "778269407",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "lt-drc-statutes-1974",
+        "lt-drc-2003",
+        "lt-drc-2003-first",
+        "lt-drc-2009",
+        "lt-drc-2018",
+        "lt-drc-2022",
+        "lt-drc-2024",
+        "rne-778269407"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The 1974 notarial estate schedule names AM9 and AM16 with their exact areas. 6 later DRC filings add no cadastral schedule or lease; legal company identity remains a research link. Farming unverified."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
   "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "parcelFilings": [
+    {
+      "id": "lt-drc-1974",
+      "sourceId": "lt-drc-statutes-1974",
+      "title": "DRC: 1974 notarial estate schedule",
+      "holderId": "778269407",
+      "companySiren": "778269407",
+      "documentDate": "1974-12-21",
+      "parcelAreasM2": {
+        "21714000AM0009": 46275,
+        "21714000AM0016": 14345
+      },
+      "leaseEvidence": [],
+      "finding": "The 21 December 1974 notarial statutes list AM 9, “Les Gaudichots” or “La Tâche”, 4 ha 62 a 75 ca, and AM 16, “La Tâche”, 1 ha 43 a 45 ca, both matching today’s areas. The 2002 deposit bundles other decisions; it is not a 2002 land transfer.",
+      "appNote": "The 1974 notarial statutes name this parcel and its exact cadastral area. Filed in 2002; this is historical estate evidence, not a 2002 acquisition or verified current farming.",
+      "supportingSourceIds": [],
+      "pages": [
+        36,
+        38,
+        74
+      ],
+      "printedReferences": [
+        "AM9",
+        "AM16"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "lt-drc",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LES GAUDICHOTS OU LA TACHE",
+        "LA TACHE"
+      ],
+      "publishedAreaHa": 6.062,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "lt-drc-estate",
+        "lt-winehog-history"
+      ],
+      "finding": "Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. The prior cloud review records Winehog (2014), not re-verified locally, as giving 6.06 ha in two named parts. Census evidence only; no farming season inferred.",
+      "producerHolderIds": [
+        "778269407"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 6.06,
+          "sourceId": "lt-winehog-history",
+          "note": "Winehog 2014: La Tâche 1.43 ha and Les Gaudichots ou La Tâche 4.63 ha; no cadastral numbers. Not re-verified locally; prior cloud finding."
+        }
+      ]
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
-  ]
+    "Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.",
+    "The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.",
+    "Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.",
+    "All four Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, printed dates and hashes remain qualified prior cloud evidence; the recorded lack of cadastral numbers, named-area totals and historical account were not independently checked locally.",
+    "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3."
+  ],
+  "unmatchedPrintedReferences": [],
+  "holderLinks": "shared"
 }
