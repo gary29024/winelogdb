@@ -112,7 +112,7 @@ committed. Publication and page-modification dates remain distinct in curation.
 - **mus-winehog-prieur**: Names retired cadastre 15, 7,660 m², matching the pinned July 2019 cadastral record. It reaches current AN77/78 only through the 22 July 2019 DFI division.
 - **mus-winehog-ownership**: Public historical census across Les Musigny and Les Petits Musigny. The producer numbers on its diagrams are legend labels, not cadastral references.
 - **mus-winehog-roumier**: Public article names cadastre 44, 996 m², in Les Musigny. Its historical narrative and provisional neighbouring map labels do not establish present farming.
-- **mus-winehog-faiveley-acquisition**: Public portion names the acquired cadastre 45 (980 m²) and original cadastre 39 (338 m²). The subscriber historical continuation was not accessed.
+- **mus-winehog-faiveley-acquisition**: Public portion names the acquired cadastre 45 (980 m²) and original cadastre 39 (338 m²). This original public capture is retained separately from the subsequently supplied full WebArchive.
 
 ### Unmatched printed claims
 
@@ -123,7 +123,7 @@ committed. Publication and page-modification dates remain distinct in curation.
 - **mus-winehog-mugnier — four unnumbered plots; southern 0.7463 ha, northern 0.3895 ha**: The two group totals and aerial outlines do not give individual reference-and-area pairs. No inferred match to JFCM parcels.
 - **mus-winehog-vogue — six unnumbered plots; 4.1935 ha Les Petits Musigny and 2.9273 ha Les Musigny**: Named-area totals are census context. No cadastral number is inferred from the monopole description or current geometry.
 
-The additional 10 January 2016 Faiveley acquisition article has a gated historical continuation that remains unsupplied. Its public reference-and-area claims are distinguished from the unread section. All originally requested Musigny copies are supplied.
+The additional 10 January 2016 Faiveley acquisition article was supplied as a full WebArchive and reviewed on 9 October 2026. Original bytes: 3,557,358; SHA-256 `dca8fca45149733a1f80ac2172777b2c6811b408348630382afd5e4193ed4ae6`; source `mus-winehog-faiveley-acquisition-archive`. The full continuation leaves the Vienot/Belin-to-Dufouleur chain unresolved and describes its early acquisition dates as presumptions. The map numbers are producer labels, not cadastral references. All requested Musigny subscriber content is now supplied; the 24-parcel lead union is unchanged.
 
 ## Remaining boundaries
 

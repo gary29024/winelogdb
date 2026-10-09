@@ -31,7 +31,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Parcels with no lead | 27 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1994, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 107,132 / 14,094 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 107,503 / 14,109 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Musigny selection contains 51
@@ -204,9 +204,9 @@ Elvina and John Harris No.1 retain unresolved provisional identities.
 
 All ten requested Musigny subscriber archives, including the shared Vogüé
 history article, were supplied and reviewed. Two public articles were accessed
-directly. One additional linked Faiveley acquisition article has a subscriber
-continuation that remains unsupplied; its public portion supplies AN39/45 and
-their areas. [filings.md](filings.md) distinguishes archive hashes from public
+directly. The additional Faiveley acquisition WebArchive was subsequently supplied and fully
+reviewed. It confirms AN39/45 and their areas; its earlier ownership chain remains
+conjectural and creates no additional parcel match. [filings.md](filings.md) distinguishes archive hashes from public
 text-extraction hashes. Archives, article text and figures stay outside Git.
 
 Perrot-Minot’s estate website returned HTTP 503; the 2023 statutes deposit date

@@ -370,7 +370,27 @@
       "bytes": 4619,
       "retrievedAt": "2026-10-08",
       "retrievalNote": "Hash covers the saved public text extraction, not raw HTML. Subscriber continuation not accessed.",
-      "finding": "Public portion names the acquired cadastre 45 (980 m²) and original cadastre 39 (338 m²). The subscriber historical continuation was not accessed."
+      "finding": "Public portion names the acquired cadastre 45 (980 m²) and original cadastre 39 (338 m²). The subscriber historical continuation was not accessed. The subsequent full archive is separately recorded as mus-winehog-faiveley-acquisition-archive; this original public capture is preserved."
+    },
+    {
+      "id": "mus-winehog-faiveley-acquisition-archive",
+      "title": "Winehog: Domaine Faiveley acquire more Les Musigny",
+      "url": "https://winehog.org/domaine-faiveley-acquire-more-musigny-25554/",
+      "type": "critic-research",
+      "documentDate": "2016-01-10",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata modification; not a new observation date"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "dca8fca45149733a1f80ac2172777b2c6811b408348630382afd5e4193ed4ae6",
+      "bytes": 3557358,
+      "retrievedAt": "2026-10-09T05:15:15.632293+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive; hash covers original archive bytes. Article text and available relevant maps reviewed. Some lazy-loaded figures are absent. Archives, full text and images remain outside Git.",
+      "finding": "Full supplied archive confirms AN39 (338 m2) and AN45 (980 m2). The continuation only hypothesizes a 1912-1930 Dufouleur acquisition and cannot establish a Vienot/Belin-to-Dufouleur chain. Map numbers 1-10 are producer legend labels, not parcel references."
     }
   ],
   "holders": [
@@ -685,17 +705,18 @@
         "21133000AN0045"
       ],
       "basis": "critic-named-cadastral-reference",
-      "finding": "The public part of Winehog (2016) names cadastre 39 (338 m²) and 45 (980 m²). The latter is reported acquired from Dufouleur; the mandates remain non-exact filings because they omit numbers. No present farming verified.",
+      "finding": "Winehog (2016), now reviewed in the supplied full archive, names AN39 (338 m2) and AN45 (980 m2). The earlier acquisition chain remains conjectural. Separate corporate mandates omit parcel numbers and do not establish an executed lease or present farming.",
       "sourceIds": [
-        "mus-winehog-faiveley-acquisition"
+        "mus-winehog-faiveley-acquisition",
+        "mus-winehog-faiveley-acquisition-archive"
       ],
       "producer": "Domaine Faiveley",
       "printedReferences": [
         "39",
         "45"
       ],
-      "appNote": "The public part of Winehog (2016) names cadastre 39 (338 m²) and 45 (980 m²). The latter is reported acquired from Dufouleur; the mandates remain non-exact filings because they omit numbers. No present farming verified.",
-      "dateSourceId": "mus-winehog-faiveley-acquisition",
+      "appNote": "Winehog (2016), now reviewed in the supplied full archive, names AN39 (338 m2) and AN45 (980 m2). The earlier acquisition chain remains conjectural. Separate corporate mandates omit parcel numbers and do not establish an executed lease or present farming.",
+      "dateSourceId": "mus-winehog-faiveley-acquisition-archive",
       "currentFarmer": null
     },
     {
@@ -943,7 +964,8 @@
       "relation": "unstated",
       "sourceIds": [
         "mus-winehog-faiveley-acquisition",
-        "mus-winehog-ownership"
+        "mus-winehog-ownership",
+        "mus-winehog-faiveley-acquisition-archive"
       ],
       "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
       "producerHolderIds": [],
@@ -1011,8 +1033,8 @@
     "Perrot-Minot’s official website returned HTTP 503. The 2023 statutes deposit date and exact Faiveley Musigny founding-statutes signing date remain unresolved.",
     "Named-area holdings are published census context only. La Combe d’Orveau still lacks an accepted cadastral named-area outline, so Prieur’s published total is not assigned there or to individual parcels.",
     "Original leases, renewals, paid SPF copies and outreach remain unreviewed. Tier 1 history source boundaries and notice gaps remain. Current farming is unconfirmed for every parcel.",
-    "All ten requested Musigny subscriber archives were supplied and reviewed, including the shared Vogüé history article; two public articles were accessed directly. One additional Faiveley acquisition article was found through a public link. Its visible portion supplies AN39/45 and their areas; the gated historical continuation remains unsupplied.",
-    "Public text-capture hashes identify extracted text, not original HTML. Supplied-archive hashes cover original MHTML bytes. No archives, full article text or figures are committed.",
+    "All ten originally requested Musigny subscriber archives and the additional Faiveley acquisition WebArchive were supplied and reviewed; public articles were accessed directly. The full continuation leaves its earlier ownership chain uncertain, with no additional parcel match.",
+    "Public text-capture hashes identify extracted text; supplied MHTML and WebArchive hashes cover original archive bytes. The earlier Faiveley public capture remains separately identifiable. No archives, full article text or figures are committed.",
     "Winehog reference matches are historical critic leads, not company identity crosswalks. Group totals, map legend numbers and unnumbered outlines are not substituted for individual references and areas. The reported Jadot lease lacks an executed instrument and present-scope confirmation.",
     "Published holding totals vary by date and precision; those variations are retained. Incidental Roumier totals of 0.0966 ha in Tawse and 0.1669 ha in Faiveley do not override Roumier’s own 0.0996 ha sheet or its directly numbered critic account."
   ],
