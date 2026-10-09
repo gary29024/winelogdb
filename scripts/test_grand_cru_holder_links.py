@@ -1331,6 +1331,15 @@ class MontrachetTierTwoTests(unittest.TestCase):
             for p in f['parcelAreasM2']:
                 self.assertIn(f['holderId'], {r['holderId'] for r in rows[p]['recordedRights']})
 
+    def test_opale_retired_reference_uses_documented_lineage(self):
+        record = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-opale-ah150-2006')
+        self.assertEqual(record['parcelIds'], [])
+        self.assertEqual(record['predecessorReferences'], {'21512000AH0150': ['21512000AH0182']})
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0182')
+        self.assertIn(record['id'], row['externalResearchIds'])
+        self.assertEqual(row['parcelFilingIds'], [])
+        self.assertIsNone(row['currentFarmer'])
+
     def test_individual_and_company_tenants_remain_distinct(self):
         fs = {f['id']: f for f in self.curation['parcelFilings']}
         self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['Jean de Laguiche (individual)'])

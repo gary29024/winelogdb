@@ -30,7 +30,7 @@ procedures remain distinct evidence; none establishes current farming.
 | Parcels with no lead | 18; includes AH64, whose exact company filing identifies no supported producer link |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 194,275 / 17,813 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 195,247 / 17,934 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -163,6 +163,8 @@ See the [availability audit](../../../scripts/grand-crus/sources/notice-coverage
 and [earlier-bulletin research](../earlier-bulletins/README.md). These shared gaps
 remain under #461; unverified operation remains under #364. Access failure or
 an unsearched interval is a gap, not absence of history.
+
+Opale’s retired AH150 (981 m²) reaches AH182 through the official 21 March 2019 DFI split into AH182 and AH183. Only AH182 lies in this cru. This is external historical context; the deed does not print the current reference.
 
 ## Reproduce and validate
 

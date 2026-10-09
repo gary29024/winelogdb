@@ -471,3 +471,7 @@ Public title/date and subscription notices checked 9 October 2026; full authoriz
 | [Leflaive](https://winehog.org/terroir-insight-domaine-leflaive-montrachet-23762/) | 2015-06-14 | Unavailable — copy not supplied |
 | [Comtes Lafon](https://winehog.org/terroir-insight-domaine-des-comtes-lafon-le-montrachet-23710/) | 2015-06-07 | Unavailable — copy not supplied |
 | [Historic evidence and 1921 expansion](https://winehog.org/montrachet-historic-evidence-expansion-1921-32708/) | 2017-08-09 | Unavailable — copy not supplied |
+
+## Additional original-reference cross-check
+
+Opale’s 23 June 2006 contribution (pages 11–12) names AH150, 981 m², as two half interests in the complete parcel. Official DFI document `210:512:000:0000463`, validated 21 March 2019, divides it into AH182 (794 m²) and AH183 (187 m²). Only AH182 belongs to this cru; the complete event remains in rights history. The filing is retained as external research on AH150 with a documented path to AH182, never as an exact AH182 filing or a transfer of an operator. This adds no filing, page, research lead or verified farmer to the totals above.

@@ -397,6 +397,29 @@
       "appNote": "Opale’s 2006 contribution names AH151 (1058 m²). The current recorded holder differs; historical company ownership only.",
       "dateSourceId": "mt-filing-408395309-6",
       "currentFarmer": null
+    },
+    {
+      "id": "mt-opale-ah150-2006",
+      "title": "Opale: retired AH150 and documented daughters",
+      "parcelIds": [],
+      "basis": "filing-named-cadastral-reference",
+      "finding": "The 23 June 2006 Opale contribution names retired AH150 (981 m²), conveyed as two half interests in the complete parcel. Official DFI document 210:512:000:0000463, validated 21 March 2019, divides it into AH182 (794 m²) and AH183 (187 m²). Only AH182 belongs to the Montrachet research scope; the full event and both daughters remain in rights history. Historical ownership context reaches AH182 only through that lineage, without transferring a tenant or asserting present farming.",
+      "sourceIds": [
+        "mt-filing-408395309-6",
+        "dgfip-history"
+      ],
+      "producer": null,
+      "printedReferences": [
+        "AH150"
+      ],
+      "predecessorReferences": {
+        "21512000AH0150": [
+          "21512000AH0182"
+        ]
+      },
+      "appNote": "Opale’s 2006 contribution names retired AH150 (981 m²). Official 2019 DFI links it to AH182 and AH183; only AH182 is in this cru. Historical ownership context, not an exact current-reference filing or current farming.",
+      "dateSourceId": "mt-filing-408395309-6",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
