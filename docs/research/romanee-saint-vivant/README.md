@@ -1,7 +1,7 @@
 # Romanée-Saint-Vivant parcels: Tier 2 (#426)
 
 Romanée-Saint-Vivant uses INAO `inao-denom-1085`, appellation 223, and
-Vosne-Romanée commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed 8 October 2026 for season 2026 under the
+Vosne-Romanée commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed 8 October 2026 and locally audited 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only Romanée-Saint-Vivant.
@@ -31,7 +31,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Parcels with no lead | 1 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1990, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 108,641 / 16,266 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 109,295 / 16,430 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the Romanée-Saint-Vivant selection contains
@@ -138,7 +138,7 @@ GFV Hudelot-Noëllat’s 2001 founding deed and its later filings print retired 
 
 Two new links rest on company records. The register lists AXA Millésimes as a partner of both the SCI de l’Arlot and the Domaine de l’Arlot operating company, whose 2007 filing gives the SCI 2,550 of its 5,000 parts; the SCI’s 1992 minutes call that company its tenant and report buying the Romanée-Saint-Vivant parcel in 1990; the link is reviewed `common-ownership`. GFA Famille Cathiard has a recorded partner who presides SAS Domaine Sylvain Cathiard et Fils; with no filing naming a tenant, that `family-holding` link stays provisional. The Confuron lease link now also covers this cru. NICHOLEM’s filings name no parcel, tenant or domaine. Domaine Dujac publishes 16 a 56 ca, exactly AL325’s area, but an equal area is not a company crosswalk, so no company link is made and AL325 keeps its legal holder name.
 
-The repository owner supplied all 13 requested Winehog articles (see [filings](filings.md#winehog-articles)). Five print plot numbers whose areas match the cadastre: AL 1 (Louis Latour, 0.7630 ha), 326 (Cathiard, 0.1673 ha) and 327 (Arnoux-Lachaux, 0.345 ha) exactly, and, after rounding at the repository owner’s instruction, 325 (Dujac, printed 0.170 ha against AL325’s 0.1656 ha) and 300 and 298 (Confuron, printed 0.4982 ha against 0.4984 ha). They are `critic-named-cadastral-reference` research, not farming evidence. Only 325 adds a lead: AL325 now names Domaine Dujac as a critic candidate, while its recorded holder NICHOLEM stays unlinked. The history article’s 1966 lease and 1988 purchase dates for the DRC conflict with the filings and DVF and are not used.
+The repository owner supplied all 13 requested Winehog articles (see [filings](filings.md#winehog-articles)). The prior cloud review accepted five articles naming six parcels: AL 1 (Louis Latour, 0.7630 ha), 326 (Cathiard, 0.1673 ha) and 327 (Arnoux-Lachaux, 0.345 ha) exactly, and two prior accepted leads with differing areas: 325 (Dujac, recorded as 0.170 ha against AL325’s 0.1656 ha) and 300 and 298 (Confuron, recorded as 0.4982 ha against 0.4984 ha). The Confuron difference is 2 m², not ordinary rounding at the recorded precision. All 13 archives are not re-verified locally; these remain prior cloud findings. They are `critic-named-cadastral-reference` research, not farming evidence. Only 325 adds a lead: AL325 now names Domaine Dujac as a critic candidate, while its recorded holder NICHOLEM stays unlinked. The history article’s 1966 lease and 1988 purchase dates for the DRC conflict with the filings and DVF and are not used.
 
 11 published holdings feed only the named-area census, from seven official estate pages, two exporter pages and Winehog articles for Leroy and Confuron. The DRC’s 5.2858 ha equals the cadastral sum of AC230 and AC231. Leroy’s new website is still not used because it could not be verified as an official publication; Winehog gives the same 0.9929 ha. Winehog also gives de l’Arlot 0.2518 ha, where the estate page prints no area.
 
@@ -154,7 +154,7 @@ Research leads rise from **0 to 16 of 17 parcels**. **1 remains without a named 
 | Parcels with exact-reference company filings | 0 | 5 in 5 filing entries |
 | Parcels reached only through filing-named retired references | 0 | 4 |
 | Parcels named only in a former owner’s filing | 0 | 2 |
-| Parcels named by a critic with matching number and area (rounding accepted) | 0 | 6 |
+| Parcels with accepted critic number/area leads (prior cloud review) | 0 | 6 |
 | Published holdings in the named-area census | 0 | 11 |
 | Verified farming links | 0 | **0** |
 
@@ -163,12 +163,12 @@ Research leads rise from **0 to 16 of 17 parcels**. **1 remains without a named 
 | Recorded holder | Filings | Pages | Outcome |
 | --- | ---: | ---: | --- |
 | SCI de l’Arlot (`322235748`) | 2 | 58 | Register and filings show AXA Millésimes as partner of the SCI and of the Domaine de l’Arlot operating company; the SCI’s 1992 minutes call that company its tenant and report the 1990 Romanée-Saint-Vivant purchase. No AL328 schedule; farming unverified. |
-| Domaine Arnoux-Lachaux (`328972344`) | 5 | 113 | 5 filings (113 pages) show an operating company formed with cash and capitalised reserves, without an AL327 schedule or lease. Register identity only; farming unverified. |
+| Domaine Arnoux-Lachaux (`328972344`) | 5 | 113 | 5 filings (113 pages) show cash and capitalised-reserves contributions. The formation statutes mandate an 18-year rural lease beginning in 1984 over unnamed properties, without an AL327 schedule or executed lease. Register identity only; farming unverified. |
 | GFA Famille Cathiard (`405387101`) | 4 | 128 | The 1996 founding deed contributes AL326 with its exact area; filings of 2001, 2015 and 2024 repeat it. A partner is president of SAS Domaine Sylvain Cathiard et Fils; that provisional family link names no tenant. Farming unverified. |
-| GFV Hudelot-Noëllat (`438871279`) | 8 | 289 | The 2001 contribution and later statutes name retired AC271 and AC273 with areas equal to today’s AC357/358 and AC359/360, which they reach only through the 2022 DFI division. No tenant named; farming unverified. |
+| GFV Hudelot-Noëllat (`438871279`) | 8 | 289 | The 2001 contribution and later statutes name retired AC271 and AC273 with areas equal to today’s AC357/358 and AC359/360, which they reach only through the 2022 DFI division. The 2012 and 2021 share donations name Alain Hudelot in lease recitals; the underlying leases and current farming remain unverified. |
 | NICHOLEM (`484070800`) | 2 | 44 | Both filings (44 pages) show cash formation and a 2021 GFA requiring métayage, without AL325, a tenant or a domaine. Domaine Dujac publishes AL325’s area, but equal area is not a company crosswalk; no link asserted. Winehog’s cadastre 325 is a critic lead only. |
 | Vignoble Latour (`528291362`) | 4 | 156 | The 2011 contribution names AL1 (76 a 30 ca) for its undivided third and recites an oral lease to the Société Civile Domaine Louis Latour. The holder is a Maison Louis Latour subsidiary; farming unverified. |
-| Domaine de la Romanée-Conti (`778269407`) | 10 | 610 | 5 DRC filings give no Romanée-Saint-Vivant schedule; 1998 minutes recite a 1975 lease from GFA Marey-Monge. 5 Marey-Monge filings name AC230/231 with today’s areas and, in December 2017, a vendor-credit claim on the DRC; DVF dates a sale to October 2017. Farming unverified. |
+| Domaine de la Romanée-Conti (`778269407`) | 10 | 610 | 5 DRC filings give no Romanée-Saint-Vivant schedule; 1998 minutes recite a 1975 lease from GFA Marey-Monge. The GFA’s statutes filed in 1994 include a mandate to arrange a DRC lease, not an executed lease. 5 Marey-Monge filings name AC230/231 with today’s areas and, in December 2017, a vendor-credit claim on the DRC; DVF dates a sale to October 2017. Farming unverified. |
 | Mémoire de Vignes (`931134381`) | 4 | 117 | The 2024 contribution names AL330 (24 a 57 ca) and the statutes an 18-year lease to SCEA du Domaine Poisot-Piguet signed the same day; a 2011 lease to an individual is also recited. Farming unverified. |
 | SCI DOM LEROY (provisional) (`U14149307`) | 4 | 99 | Four SCI and SCE filings (99 pages) give no AC299/301 schedule; both companies were formed in 1947 by the Noëllat family and now share Leroy SA. U14149307 to SCI 427469135 stays provisional on name and seat; farming unverified. |
 | GFA Domaine de Corton-Grancey (`U21852238`) | 1 | 37 | The statutes reproduce the 1972 contribution of two-thirds of AL1 (76 a 30 ca) and recite that all contributed land is let to the Société Civile Domaine Louis Latour, now to 2031. Farming unverified. |
@@ -186,9 +186,13 @@ The counts above describe this pass, including re-screened shared files; earlier
 - Hudelot’s AC271/AC273 reach AC357–AC360 only through the 2022 DFI division; no reviewed filing prints the current references, so they are not exact filing matches.
 - No DRC filing names AC230 or AC231; only the former owner Marey-Monge’s statutes do. The 26 December 1975 lease recited in the DRC’s 1998 minutes and the October 2017 sale deed (DVF publishes no parties) are unreviewed. Winehog’s 2017 history dates the DRC’s lease to 1966 and its purchase to 1988; those dates conflict with the filings and DVF and are not used.
 - The Confuron, Poisot-Piguet, Corton-Grancey and Vignoble Latour leases are recited, not filed; original instruments, renewals and current seasons are unreviewed. How Mémoire de Vignes’ 2011 lease to an individual ended is not stated.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there (including deposit dates missing from the free index for the 2024 Mémoire de Vignes deeds) are pending local audit.
-- All 13 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Five print plot numbers whose areas match the cadastre (AL 1, AL 325, AL 326, AL 327, AC 298 and AC 300), two of them after rounding: 325 is printed as 0.170 ha and 300/298 as 0.4982 ha. Owner totals, maps and history are not parcel crosswalks.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for all eleven recorded holders; both returned HTTP 403. Filings or accounts available only there, including deposit dates missing from the free index for the 2024 Mémoire de Vignes deeds, remain unverified.
+- All 13 Winehog archives were reviewed in the prior cloud pass. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction; the recorded archive hashes, printed numbers, areas and historical claims were not independently checked. Existing critic leads remain prior-pass findings. The recorded Confuron total (0.4982 ha) differs by 2 m² from the cadastral sum (0.4984 ha); this is not ordinary rounding at that precision. Owner totals, maps and history are not parcel crosswalks.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for every parcel; paid SPF copies and outreach remain Tier 3.
+
+## Local audit
+
+The [Windows / Python 3.12 audit](filings.md#local-audit-codex-cli-windows-python-312) reverified 48 PDFs / 1,691 pages, including every page of the 45 selected filings. It corrected lease mandates, named-tenant recitals, deed dates and bounded negative findings. Parcel and holder-link counts are unchanged; verified farming remains zero. Dujac PDF bytes, two exporter-page byte checks, INPI/Pappers-only material and all thirteen Winehog archives remain qualified access gaps. PR #535 records the local checks and platform-specific failures.
 
 ## Reproduce and validate
 
