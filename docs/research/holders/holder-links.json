@@ -8571,6 +8571,1247 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Every page screened using RapidOCR with DirectML at 150 dpi; positive schedules checked against page images."
+    },
+    {
+      "id": "cr-malauro-formation-2016",
+      "title": "819859885: malauro formation 2016",
+      "url": "https://actes.ccm2.net/acte/175ecc43-0c97-4adc-aee4-d77eb63709e8",
+      "type": "company-filing",
+      "documentDate": "2016-04-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:09.657672+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/175ecc43-0c97-4adc-aee4-d77eb63709e8",
+      "sha256": "57d3afcd553e5b2b9d779998b79e5c148936388b658f67855474f9317af3d5f2",
+      "bytes": 4177740,
+      "finding": "Formation concluded 11 April 2016 (also signed 17 March) contributes eight current Monts Luisants parcels with exact individual areas. Recites a 10 January 2014 lease to Laurent Lignier for 18 years from 1 November 2013. Original lease and an independent producer-company crosswalk remain unreviewed.",
+      "filingDate": "2016-04-25",
+      "pageCount": 68,
+      "screenedPages": 68,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        6,
+        7,
+        11,
+        18
+      ],
+      "imageReviewedPages": [
+        6,
+        7,
+        11,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-malauro-donation-2018",
+      "title": "819859885: malauro donation 2018",
+      "url": "https://actes.ccm2.net/acte/65092612-9207-42c1-aa6a-abae408cedb9",
+      "type": "company-filing",
+      "documentDate": "2018-01-20",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:09.567888+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/65092612-9207-42c1-aa6a-abae408cedb9",
+      "sha256": "f4a8deaa89abed1922b8aebe47f6577547ba216996176691f0293c5eee3b9233",
+      "bytes": 3738560,
+      "finding": "2018 share donation deposited in 2019 repeats the contribution schedule. Share ownership and personal names do not establish a Domaine Hubert Lignier company link or present operation.",
+      "filingDate": "2019-01-29",
+      "pageCount": 67,
+      "screenedPages": 67,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        30,
+        35,
+        42
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-gfa-contribution-2007",
+      "title": "411381908: ponsot gfa contribution 2007",
+      "url": "https://actes.ccm2.net/acte/fde386af-9d39-4803-a83b-24f2526803f8",
+      "type": "company-filing",
+      "documentDate": "2007-01-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:09.316380+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fde386af-9d39-4803-a83b-24f2526803f8",
+      "sha256": "32bda36caab4f94df534a127a4bf912337f4e1ea10bd14bf56ecc8eb9df35e94",
+      "bytes": 1404233,
+      "finding": "Contribution to the registered GFA after loss of legal personality of the earlier unregistered group. Seven current references match individual areas. A 15 June 1999, 18-year lease to Societe Domaine Ponsot is recited; no original lease or renewal reviewed. AB461 is 27614 m2 in full, not a 3960 m2 full-parcel claim.",
+      "filingDate": "2007-03-21",
+      "pageCount": 45,
+      "screenedPages": 45,
+      "reviewedPages": [
+        1,
+        2,
+        6,
+        11,
+        12,
+        14,
+        42
+      ],
+      "imageReviewedPages": [
+        11,
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-gfa-statutes-2007",
+      "title": "411381908: ponsot gfa statutes 2007",
+      "url": "https://actes.ccm2.net/acte/6c17fcd5-0b18-46eb-8bb0-f06fcc21bfee",
+      "type": "company-filing",
+      "documentDate": "2007-03-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:08.321790+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6c17fcd5-0b18-46eb-8bb0-f06fcc21bfee",
+      "sha256": "27d82adc212f69f48907d70bb204aa27674a34af54d3595ee4b2b2511bf935ac",
+      "bytes": 1029647,
+      "finding": "Governance decisions and updated GFA statutes retain the 2007 contribution schedule; no new current operation evidence.",
+      "filingDate": "2007-08-24",
+      "pageCount": 34,
+      "screenedPages": 34,
+      "reviewedPages": [
+        1,
+        2,
+        13,
+        18,
+        32
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-gfa-notoriety-2017",
+      "title": "411381908: ponsot gfa notoriety 2017",
+      "url": "https://actes.ccm2.net/acte/b67dca22-cc54-421b-b31d-629551ebf96c",
+      "type": "company-filing",
+      "documentDate": "2017-10-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:11.111087+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b67dca22-cc54-421b-b31d-629551ebf96c",
+      "sha256": "588668493e3799af3c521f1e1d329a88c4252383ea706876d52ca5843d4dfc9a",
+      "bytes": 1995618,
+      "finding": "Succession and updated GFA statutes retain the historical property schedule. Share succession is not a cadastral transfer or present lease confirmation.",
+      "filingDate": "2019-04-05",
+      "pageCount": 54,
+      "screenedPages": 54,
+      "reviewedPages": [
+        1,
+        2,
+        23,
+        52
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-gfa-2018",
+      "title": "411381908: ponsot gfa 2018",
+      "url": "https://actes.ccm2.net/acte/f51cd6f1-b6ec-4f1c-aa73-2d4074b987ac",
+      "type": "company-filing",
+      "documentDate": "2018-12-01",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:12.377499+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f51cd6f1-b6ec-4f1c-aa73-2d4074b987ac",
+      "sha256": "f31f7e5f3beba0925cceb69e6d9ea2e124a76e799bf4413b484bd27124b7e7b4",
+      "bytes": 4048893,
+      "finding": "2018 decisions and bundled donations deposited in 2019 retain 2007 schedules. A tax recital inconsistently calls the GFA the tenant of the 1999 lease; rely on the explicit 2007 property clause and do not infer a renewal.",
+      "filingDate": "2019-04-05",
+      "pageCount": 100,
+      "screenedPages": 100,
+      "reviewedPages": [
+        1,
+        2,
+        22,
+        67,
+        98
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-gfa-2023",
+      "title": "411381908: ponsot gfa 2023",
+      "url": "https://actes.ccm2.net/acte/c0329e35-0305-46b1-b8f4-0f07c617eb96",
+      "type": "company-filing",
+      "documentDate": "2023-04-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:12.941657+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c0329e35-0305-46b1-b8f4-0f07c617eb96",
+      "sha256": "86ba784c72c111060a03e163ab318e4329c1c535afcb355a2b5c6d917161374f",
+      "bytes": 8646225,
+      "finding": "Share/governance update retains the expressly labelled January 2007 contribution annex; a 2023 cover does not redatestamp historic property or tenancy evidence.",
+      "filingDate": "2023-09-14",
+      "pageCount": 49,
+      "screenedPages": 49,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        47,
+        48
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-peirazeau-index-mismatch",
+      "title": "519906606: peirazeau index mismatch",
+      "url": "https://actes.ccm2.net/acte/c084dc64-21ca-45b2-8a96-e2a9403b8ec4",
+      "type": "company-filing",
+      "documentDate": "2010-01-06",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:11.928525+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c084dc64-21ca-45b2-8a96-e2a9403b8ec4",
+      "sha256": "0c5066ee472e4075ffafda047b85838ab12f3f2cba3540f86f6cbc05718b3e6b",
+      "bytes": 156250,
+      "finding": "Rejected index target: the purported Peirazeau formation download contains SCI ADH SEVIGNE, not GFA Domaine Peirazeau. Fully screened 16 pages but no identity, property or tenancy evidence accepted from this PDF.",
+      "filingDate": "2010-02-03",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2,
+        16
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-peirazeau-statutes-2011a",
+      "title": "519906606: peirazeau statutes 2011a",
+      "url": "https://actes.ccm2.net/acte/c5626b9d-4f31-441f-83bc-ba514b9ee872",
+      "type": "company-filing",
+      "documentDate": "2011-07-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:13.698562+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c5626b9d-4f31-441f-83bc-ba514b9ee872",
+      "sha256": "af392d1528dcc9469204bb2d8e35ea51b3de6a64fde7253be2bfa1f89dc9c565",
+      "bytes": 674428,
+      "finding": "Updated statutes retain the 2010 contribution and historical split leases; superseded by the December 2011 copy for exact schedule citation. No renewal or independent producer identity.",
+      "filingDate": "2011-10-03",
+      "pageCount": 31,
+      "screenedPages": 31,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        10,
+        11,
+        29
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-peirazeau-statutes-2011b",
+      "title": "519906606: peirazeau statutes 2011b",
+      "url": "https://actes.ccm2.net/acte/ad0f433d-e25d-4b63-b86e-69a0e3ff603d",
+      "type": "company-filing",
+      "documentDate": "2011-12-14",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:14.436123+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ad0f433d-e25d-4b63-b86e-69a0e3ff603d",
+      "sha256": "5c7d644ca4ef05ff6962c3fc233bc0710f9e657c686a4f2be25098452ee223e0",
+      "bytes": 676728,
+      "finding": "The retained 2010 formation schedule matches AB43/47/50/369 individually. AB43/47/369 are described as Morey premier cru, despite current edge overlap. Historical Catherine Peirazeau-Ferreira and Gerard Peirazeau leases split AB47/50; no whole-parcel tenant or renewal inferred.",
+      "filingDate": "2012-09-20",
+      "pageCount": 31,
+      "screenedPages": 31,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        9,
+        10
+      ],
+      "imageReviewedPages": [
+        1,
+        2,
+        4,
+        5,
+        9
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-peirazeau-donation-2012",
+      "title": "519906606: peirazeau donation 2012",
+      "url": "https://actes.ccm2.net/acte/d8d4e64e-d567-48ae-b885-77463a0e0abe",
+      "type": "company-filing",
+      "documentDate": "2012-04-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:15.115069+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d8d4e64e-d567-48ae-b885-77463a0e0abe",
+      "sha256": "f1e6a3fb18d8c8d4e17f2dfdf17cf29f32a488e3a133f9d7c0283c4fb031df5b",
+      "bytes": 1739425,
+      "finding": "Donation and retained statutes repeat individual property areas and old split-lease recitals, not renewed present operation.",
+      "filingDate": "2012-11-29",
+      "pageCount": 44,
+      "screenedPages": 44,
+      "reviewedPages": [
+        1,
+        2,
+        17,
+        18,
+        22,
+        23,
+        42
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-peirazeau-succession-2018",
+      "title": "519906606: peirazeau succession 2018",
+      "url": "https://actes.ccm2.net/acte/cf76b55f-5db1-4779-aba1-330fd192654d",
+      "type": "company-filing",
+      "documentDate": "2018-09-19",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:15.859010+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cf76b55f-5db1-4779-aba1-330fd192654d",
+      "sha256": "acc5c7f9b4625c8637d437152dfd6ba04a006066224a79867f35718078512f2a",
+      "bytes": 2892009,
+      "finding": "Succession deposited in 2020 repeats the original contribution and 1992/1994 lease recitals. Later deposit date does not renew expired terms.",
+      "filingDate": "2020-08-27",
+      "pageCount": 45,
+      "screenedPages": 45,
+      "reviewedPages": [
+        1,
+        2,
+        18,
+        19,
+        23,
+        24,
+        43
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-monts-luisants-original-statutes",
+      "title": "427469572: monts luisants original statutes",
+      "url": "https://actes.ccm2.net/acte/6d383c08-1088-4fbe-9cce-ccc87a1a9455",
+      "type": "company-filing",
+      "documentDate": "1965-04-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:16.142249+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6d383c08-1088-4fbe-9cce-ccc87a1a9455",
+      "sha256": "55a454187796db7a230a2c50aa2516a9cf5dc826ce78acbe0b76366681394d4a",
+      "bytes": 792972,
+      "finding": "2002 deposit contains original statutes signed 3 March and 22 April 1965, later governance and general property-company objects. No individual current parcel schedule or named executed tenant found; Dufouleur officers do not identify an operating domaine.",
+      "filingDate": "2002-10-31",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        9
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-monts-luisants-duration-2014",
+      "title": "427469572: monts luisants duration 2014",
+      "url": "https://actes.ccm2.net/acte/b66bb9cb-3ae8-4f43-a8a4-0979a6c17ca9",
+      "type": "company-filing",
+      "documentDate": "2014-02-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:17.087997+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b66bb9cb-3ae8-4f43-a8a4-0979a6c17ca9",
+      "sha256": "432ec2983eb6f8061aee2c57edf1d30e361b992340bd665b70cb26eef2fee3ef",
+      "bytes": 1249925,
+      "finding": "Duration extension and updated SCI statutes deposited in 2015. Property-company identity only; no individual Roche reference/area or independently named tenant.",
+      "filingDate": "2015-06-30",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-company-1997",
+      "title": "351648266: ponsot company 1997",
+      "url": "https://actes.ccm2.net/acte/5ae5bf9a-b83c-4365-b2ef-d36b9abc0bf7",
+      "type": "company-filing",
+      "documentDate": "1997-12-01",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:17.960684+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5ae5bf9a-b83c-4365-b2ef-d36b9abc0bf7",
+      "sha256": "950201a3b5a0a499e88cb58f76db7a83c4ef978d9a1a4a64300437b1e5383c44",
+      "bytes": 2515894,
+      "finding": "Donation and company statutes. Every page OCR-screened; no individually area-matched current Roche schedule. Corporate interests are not cadastral property transfers.",
+      "filingDate": "1998-08-31",
+      "pageCount": 78,
+      "screenedPages": 78,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-company-merger-1999",
+      "title": "351648266: ponsot company merger 1999",
+      "url": "https://actes.ccm2.net/acte/4e0f79a3-6266-4564-9f9e-bef664cc7129",
+      "type": "company-filing",
+      "documentDate": "1999-06-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:18.505571+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4e0f79a3-6266-4564-9f9e-bef664cc7129",
+      "sha256": "6f6212d4fccf89d29406f7ce41ec204f0b34b7c00db5bfa88366a7aec0a72420",
+      "bytes": 1332245,
+      "finding": "Merger of SCEA de L Eglantier into Domaine Ponsot; corporate wine-business evidence but no current individual Roche parcel-area schedule. The merger date alone does not establish an individual tenant.",
+      "filingDate": "1999-06-22",
+      "pageCount": 42,
+      "screenedPages": 42,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-company-capital-2018",
+      "title": "351648266: ponsot company capital 2018",
+      "url": "https://actes.ccm2.net/acte/ad8c7b90-6b1e-471d-8d70-be6d6b0209c5",
+      "type": "company-filing",
+      "documentDate": "2018-01-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:18.945709+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ad8c7b90-6b1e-471d-8d70-be6d6b0209c5",
+      "sha256": "50fc1b4b16417c52052f519fb3ec23906c11ebe46f0fb21398e32b1725185f88",
+      "bytes": 1638392,
+      "finding": "Capital reduction and updated statutes; no exact individual current Roche schedule in the fully screened filing.",
+      "filingDate": "2018-03-19",
+      "pageCount": 39,
+      "screenedPages": 39,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-company-2022",
+      "title": "351648266: ponsot company 2022",
+      "url": "https://actes.ccm2.net/acte/9854667a-bd73-44e8-8b92-946da33fc689",
+      "type": "company-filing",
+      "documentDate": "2022-10-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:19.525969+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9854667a-bd73-44e8-8b92-946da33fc689",
+      "sha256": "4ad5c492a6cc18c72a3a05f3014dd509f61c53ba0c4c71d0f88d29f9f5c56e45",
+      "bytes": 741430,
+      "finding": "Exact company SIREN and wine-production/sales objects support Domaine Ponsot wine-company identity. They do not establish actual current operation of individual Roche parcels.",
+      "filingDate": "2022-10-14",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-ponsot-company-2023",
+      "title": "351648266: ponsot company 2023",
+      "url": "https://actes.ccm2.net/acte/9c73f5c5-c9f9-4d16-98e6-9eef7de67b82",
+      "type": "company-filing",
+      "documentDate": "2023-09-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:20.445994+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9c73f5c5-c9f9-4d16-98e6-9eef7de67b82",
+      "sha256": "56a377bf0165c8a6a8698b7916034562d420699f2f8be26b3c3cc07c926dfd9a",
+      "bytes": 724394,
+      "finding": "Share transfer and governance evidence with no individual Roche schedule or independently confirmed current parcel operation.",
+      "filingDate": "2023-09-28",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-lignier-michelot-formation-1995",
+      "title": "401807748: lignier michelot formation 1995",
+      "url": "https://actes.ccm2.net/acte/be87d20a-9346-43f2-ae6c-c5bdc484a7b4",
+      "type": "company-filing",
+      "documentDate": "1995-06-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:21.179218+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/be87d20a-9346-43f2-ae6c-c5bdc484a7b4",
+      "sha256": "500d1d6a568188754cc8fa40ee5dfe4128d6d936d08c1c4cb0df3965ca5501ae",
+      "bytes": 917928,
+      "finding": "SCI formation identifies AB61 at 732 m2 exactly, but prints AB381 at 1172 m2 against the current 1173 m2. The latter remains an unmatched printed reference. The contribution is described as free of occupation; property objects and wine-bottle contributions do not establish a producer-company link.",
+      "filingDate": "1995-07-27",
+      "pageCount": 25,
+      "screenedPages": 25,
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7
+      ],
+      "imageReviewedPages": [
+        5,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-lignier-michelot-transfer-1995",
+      "title": "401807748: lignier michelot transfer 1995",
+      "url": "https://actes.ccm2.net/acte/5488a78d-a06f-4ec8-8a40-27e58558f0a5",
+      "type": "company-filing",
+      "documentDate": "1995-06-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:21.666732+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5488a78d-a06f-4ec8-8a40-27e58558f0a5",
+      "sha256": "8803824f5c2978595d81220d7b0f34f09dc819015435f8b9f816c7ac9089ea42",
+      "bytes": 1167984,
+      "finding": "Share cession and retained schedule confirm AB61 732 m2 and AB381 1172 m2. The current AB381 area differs by 1 m2; no exact match or producer inference.",
+      "filingDate": "1995-09-07",
+      "pageCount": 35,
+      "screenedPages": 35,
+      "reviewedPages": [
+        1,
+        2,
+        29,
+        31
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-lignier-michelot-transfer-2012",
+      "title": "401807748: lignier michelot transfer 2012",
+      "url": "https://actes.ccm2.net/acte/5a54b906-f5a1-45c2-81af-1dc175364022",
+      "type": "company-filing",
+      "documentDate": "2012-11-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:22.357728+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/5a54b906-f5a1-45c2-81af-1dc175364022",
+      "sha256": "cef0880b65383118cae447371f7a5ffa60e40bf85a15dfe1b72874068ace4135",
+      "bytes": 1208921,
+      "finding": "Share transfers to La Lauvie and updated statutes repeat the historical property schedule, including the AB381 area discrepancy. Officer and shareholder identities do not independently prove a domaine or tenant.",
+      "filingDate": "2013-01-28",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        1,
+        2,
+        13
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-rousseau-merger-1996",
+      "title": "307017962: rousseau merger 1996",
+      "url": "https://actes.ccm2.net/acte/79113989-4860-44dd-85d0-37c8472f7ad8",
+      "type": "company-filing",
+      "documentDate": "1996-04-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:22.954348+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/79113989-4860-44dd-85d0-37c8472f7ad8",
+      "sha256": "3a6baa815811206b46c5a1c64a7556c13538f808a12de00ceef2a4240385d8cf",
+      "bytes": 873829,
+      "finding": "Merger with La Toute Petite Auberge and corporate evidence; all 42 pages OCR-screened without an individually area-matched Roche schedule.",
+      "filingDate": "1996-06-06",
+      "pageCount": 42,
+      "screenedPages": 42,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-rousseau-name-2012",
+      "title": "307017962: rousseau name 2012",
+      "url": "https://actes.ccm2.net/acte/0e7d0080-9f75-4539-9a4f-28f9b50196fb",
+      "type": "company-filing",
+      "documentDate": "2012-07-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:23.633869+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0e7d0080-9f75-4539-9a4f-28f9b50196fb",
+      "sha256": "dcf960fc2cddbc7cb4e7174d2d25a334c4e2672c65b473675ec6675f9d7484ce",
+      "bytes": 742762,
+      "finding": "Filed name change from Domaines to Domaine Armand Rousseau, retaining the company SIREN. No exact Roche property schedule.",
+      "filingDate": "2012-10-05",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-rousseau-conversion-2021",
+      "title": "307017962: rousseau conversion 2021",
+      "url": "https://actes.ccm2.net/acte/fd482b3d-d645-4f52-a7f1-fc342593ef10",
+      "type": "company-filing",
+      "documentDate": "2021-02-18",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:24.158538+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/fd482b3d-d645-4f52-a7f1-fc342593ef10",
+      "sha256": "7683b1b9e1c3aab38cf2037c92bdc495b811e3866856741061cb41e70477f893",
+      "bytes": 1139113,
+      "finding": "SA to SAS conversion retains the same legal person. Wine-company identity evidence only; no individual Roche schedule.",
+      "filingDate": "2021-03-11",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-rousseau-statutes-2025",
+      "title": "307017962: rousseau statutes 2025",
+      "url": "https://actes.ccm2.net/acte/566631f0-8558-4aa2-9f7d-664392b2ff3a",
+      "type": "company-filing",
+      "documentDate": "2025-05-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:25.044970+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/566631f0-8558-4aa2-9f7d-664392b2ff3a",
+      "sha256": "1624ac9e65a567bf2d829d1a66efa6ae7421507ecd9753bbe39820e381896b66",
+      "bytes": 1695822,
+      "finding": "Updated filed statutes identify the exact company SIREN and agricultural activity. Supports the wine-company link with the register; no parcel-specific actual-operation evidence.",
+      "filingDate": "2025-06-03",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-boutieres-other-formation-1998",
+      "title": "418034823: boutieres other formation 1998",
+      "url": "https://actes.ccm2.net/acte/59ce662c-a049-4ddd-9d75-5a0d27cec89f",
+      "type": "company-filing",
+      "documentDate": "1998-02-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:29.339046+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/59ce662c-a049-4ddd-9d75-5a0d27cec89f",
+      "sha256": "96609cb1f2d26ab927112d398eec0ce70201366b1b08f15b91ace8697baf0012",
+      "bytes": 581424,
+      "finding": "Distinct GFA Les Boutieres candidate: cash formation associated with Robert Gibourg. Full-page screening yields no matching Roche parcel schedule; do not assign the U-id from the same company name.",
+      "filingDate": "1998-03-26",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-boutieres-other-seat-2019",
+      "title": "418034823: boutieres other seat 2019",
+      "url": "https://actes.ccm2.net/acte/103a6ce8-2a4a-40d6-977a-907d538240d5",
+      "type": "company-filing",
+      "documentDate": "2019-10-08",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:29.699479+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/103a6ce8-2a4a-40d6-977a-907d538240d5",
+      "sha256": "dc86ec01d16a9121d114b6f94e30a4ff154f9d75431bfbe5a03935449b0294d5",
+      "bytes": 1738576,
+      "finding": "Seat change and retained cash statutes for the separate 418034823 company. No exact Roche crosswalk; this is not the accepted GFA candidate.",
+      "filingDate": "2019-10-22",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-boutieres-formation-2003",
+      "title": "445342603: boutieres formation 2003",
+      "url": "https://actes.ccm2.net/acte/04720f84-921e-438f-bad9-51188899a965",
+      "type": "company-filing",
+      "documentDate": "2003-01-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:29.623241+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/04720f84-921e-438f-bad9-51188899a965",
+      "sha256": "d4177e11db495d32c47dfe063e958d1e3867f8a067ffa08abf7887b849d86246",
+      "bytes": 1234176,
+      "finding": "Filed GFA identity and AB227 446 m2, AB69 43 m2, AB99 227 m2 and AB371 50 m2 establish the U21367129 company crosswalk. AB99 and AB371 are described as Morey premier cru. Recites 1988 and 1995 leases to Michel Magnien individually, with old endpoints in 2006 and 2013, and a 2000 rent amendment. No producer-company identity inferred from his name.",
+      "filingDate": "2003-02-20",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        7,
+        8,
+        10,
+        11
+      ],
+      "imageReviewedPages": [
+        5,
+        7,
+        8
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-boutieres-donation-2022",
+      "title": "445342603: boutieres donation 2022",
+      "url": "https://actes.ccm2.net/acte/3791a6f4-8e40-427f-8abd-4a83ae11362e",
+      "type": "company-filing",
+      "documentDate": "2022-04-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:29.788478+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3791a6f4-8e40-427f-8abd-4a83ae11362e",
+      "sha256": "6408f3c68b1347f293bd6dc377d348cf90b4d26b3209cd18379821f0362c2f6f",
+      "bytes": 2418515,
+      "finding": "2022 share donation deposited in 2023 retains historical schedules. Page 16 separately recites a long-term lease to Frederic Magnien individually signed 18 October 2018, with a 10 March 2022 amendment. Original instruments, individual allocation, term and independent producer-company relationship remain unreviewed. Do not carry the old Michel tenant forward or substitute a Magnien company from officers.",
+      "filingDate": "2023-04-28",
+      "pageCount": 48,
+      "screenedPages": 48,
+      "reviewedPages": [
+        1,
+        2,
+        16,
+        27,
+        29,
+        30,
+        32,
+        33
+      ],
+      "imageReviewedPages": [
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-marchand-formation-2004",
+      "title": "477891048: marchand formation 2004",
+      "url": "https://actes.ccm2.net/acte/de0f5210-cf8e-4cc1-b59f-f319e4dae6fc",
+      "type": "company-filing",
+      "documentDate": "2004-05-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:32.209791+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/de0f5210-cf8e-4cc1-b59f-f319e4dae6fc",
+      "sha256": "6bf62fc95a622688fc0eaa11ee6f95e5a71b0b70aa6a2834a58c3edf9f6f47a4",
+      "bytes": 2115316,
+      "finding": "Formation and June share donation bundle identify AB456 412 m2 (described as Morey premier cru) and AB468 675 m2. Recites a 30 September 1999 lease to EARL Domaine Marchand Freres at 1 Place du Monument, capital EUR185700. Its official legal notice and government register independently identify SIREN 424187896. Original lease, term, renewal and actual operation unreviewed.",
+      "filingDate": "2004-07-21",
+      "pageCount": 62,
+      "screenedPages": 62,
+      "reviewedPages": [
+        1,
+        2,
+        8,
+        15,
+        17,
+        32,
+        39,
+        57
+      ],
+      "imageReviewedPages": [
+        8,
+        15
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-marchand-donation-2009",
+      "title": "477891048: marchand donation 2009",
+      "url": "https://actes.ccm2.net/acte/2a2173e0-58b4-4c10-9ad0-7f00a39b19c4",
+      "type": "company-filing",
+      "documentDate": "2009-03-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:32.373824+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2a2173e0-58b4-4c10-9ad0-7f00a39b19c4",
+      "sha256": "ec28d8d79d51826e442d294a15edd777258d96270af02a4e3bfdaf230b689322",
+      "bytes": 1335781,
+      "finding": "Share donation and retained statutes repeat both individual property references and the 1999 lease recital to EARL Domaine Marchand Freres. Later deposit is not a new lease or current-operation confirmation.",
+      "filingDate": "2009-04-21",
+      "pageCount": 41,
+      "screenedPages": 41,
+      "reviewedPages": [
+        1,
+        2,
+        11,
+        23,
+        30
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-marchand-statutes-2020",
+      "title": "477891048: marchand statutes 2020",
+      "url": "https://actes.ccm2.net/acte/c9b77639-aec1-4ddd-a2e8-cc4fdf5b0818",
+      "type": "company-filing",
+      "documentDate": "2020-11-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:32.655735+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c9b77639-aec1-4ddd-a2e8-cc4fdf5b0818",
+      "sha256": "f27ec76e5e453c28963775d5fecc74780078c84ff08c7d23f793486128e3284e",
+      "bytes": 1562527,
+      "finding": "Succession/governance decision and updated statutes retain the 2004 contribution schedule and 1999 lease language. Original term and renewal remain unreviewed; not a 2020 actual-operation claim.",
+      "filingDate": "2020-12-03",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        1,
+        2,
+        14,
+        21
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-feuillet-truchot-formation-1998",
+      "title": "420812018: feuillet truchot formation 1998",
+      "url": "https://actes.ccm2.net/acte/f11250c9-a54c-4a6f-a38e-741cc48a7715",
+      "type": "company-filing",
+      "documentDate": "1998-10-21",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:32.493823+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f11250c9-a54c-4a6f-a38e-741cc48a7715",
+      "sha256": "8ac8ecbbf5f700ca9f738b840b3ff0fee249721184aba4a7599cc36e5c9f7aed",
+      "bytes": 1052489,
+      "finding": "Original GFA Domaine Truchot-Martin formation names AB230 968 m2 and AB505 3133 m2; page 46 proposes an 18-year rural lease to the Truchot-Martin couple. Later 2006 filing recites its execution and termination. Keep separate from other Feuillet legal entities.",
+      "filingDate": "1998-11-20",
+      "pageCount": 49,
+      "screenedPages": 49,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        10,
+        46
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-feuillet-transfer-2006",
+      "title": "420812018: feuillet transfer 2006",
+      "url": "https://actes.ccm2.net/acte/83215095-ddb2-41d1-a772-02a21b542f95",
+      "type": "company-filing",
+      "documentDate": "2006-01-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:35.701783+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/83215095-ddb2-41d1-a772-02a21b542f95",
+      "sha256": "d5e85b728e4859799597385908ab9abd98312a2f27802884903244a20b9d5cd0",
+      "bytes": 2166890,
+      "finding": "Share transfer and name change from Domaine Truchot-Martin to Domaine Francois Feuillet retain SIREN 420812018 and the exact AB230/AB505 schedule. Page 6 ends the 21 October 1998 Truchot lease on 11 January 2006 and proposes an unspecified future lease. Page 5 dates an attached official CVI to 23 June 2004; page 26 names Truchot Martin Jacky and both exact parcels. Historical CVI/operation context is retained with explicit user approval as dated research only; verified farming stays zero and #364 adjudication remains separate. Do not infer a later Duband/Feuillet tenant.",
+      "filingDate": "2006-02-22",
+      "pageCount": 57,
+      "screenedPages": 57,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        6,
+        10,
+        26,
+        38,
+        47,
+        48
+      ],
+      "imageReviewedPages": [
+        5,
+        26
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-feuillet-statutes-2024",
+      "title": "420812018: feuillet statutes 2024",
+      "url": "https://actes.ccm2.net/acte/9855ea56-b8b8-4dfa-a68e-e0a14326a987",
+      "type": "company-filing",
+      "documentDate": "2024-06-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:49:35.772783+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9855ea56-b8b8-4dfa-a68e-e0a14326a987",
+      "sha256": "1419520960aa67e61f3e83b7f6c2996a0d2bf13dbc931566a3c8326d78162e08",
+      "bytes": 1366564,
+      "finding": "2024 governance amendment and retained contribution schedule name both exact parcels and preserve the ban on direct operation by this GFA. No successor tenant or fresh parcel-operation confirmation in the fully screened filing.",
+      "filingDate": "2024-07-03",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1,
+        2,
+        8,
+        9,
+        10
+      ],
+      "imageReviewedPages": [],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened using RapidOCR with DirectML at 150 dpi; selected schedules and lease clauses visually checked. Rotated CVI pages additionally OCR-screened in reading orientation."
+    },
+    {
+      "id": "cr-rne-819859885",
+      "title": "Company register: GFA MALAURO LIGNIER (819859885)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=819859885",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:45.389146+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=819859885",
+      "sha256": "53d9235e20a8c930bf55770e1c303ce55a6583d07150ae79ce782bbe5fe73f61",
+      "bytes": 3829,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-411381908",
+      "title": "Company register: GFA DOMAINE PONSOT (411381908)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=411381908",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:48.342453+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=411381908",
+      "sha256": "4d2440bf2426ec17a87541dd65d712fe1d8e63988f311626a17e1344256c858b",
+      "bytes": 3779,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-519906606",
+      "title": "Company register: G.F.A. DU DOMAINE PEIRAZEAU (519906606)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=519906606",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:49.986073+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=519906606",
+      "sha256": "55481e6c3ac0c39554f1bd96712c3133e09b43496c9bb5e9563697594504b22e",
+      "bytes": 3807,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-427469572",
+      "title": "Company register: SCI DU DOMAINE DES MONTS LUISANTS (427469572)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=427469572",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:52.476469+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=427469572",
+      "sha256": "5dd31c52ab28eb3b814170188c4796af1a854678d811e734f0ef91ca0139b2ce",
+      "bytes": 3173,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-351648266",
+      "title": "Company register: DOMAINE PONSOT (351648266)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=351648266",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:55.070512+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=351648266",
+      "sha256": "89030ad0cf8598fb4b9698b8cd46f11febcddd33b57fe4882d596f1c8dd3d232",
+      "bytes": 3198,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-401807748",
+      "title": "Company register: SCI LIGNIER MICHELOT (401807748)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=401807748",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:56.948463+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=401807748",
+      "sha256": "cc3a0a6d03c1bd38588d1b51226fd8120637e509fa4ce58941cf32901a34c8a1",
+      "bytes": 3366,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-307017962",
+      "title": "Company register: DOMAINE ARMAND ROUSSEAU (307017962)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=307017962",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:42:58.760554+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=307017962",
+      "sha256": "d59ac3aba14d7e3c38a2be3b57efa39c28f0630283a69fe1e26a9dace119b3f4",
+      "bytes": 3877,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-418034823",
+      "title": "Company register: GFA LES BOUTIERES (418034823)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=418034823",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:36.917221+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=418034823",
+      "sha256": "842a18cca738936828e3ac94c8959493d3d2522af783dcc75017fefe7fbdbbf5",
+      "bytes": 3412,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-445342603",
+      "title": "Company register: GFA LES BOUTIERES (445342603)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=445342603",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:38.689359+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=445342603",
+      "sha256": "b2abbb784d81991d6a84b3e9a419328e0414fc9109c352648de539d8dc8e195b",
+      "bytes": 4477,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-477891048",
+      "title": "Company register: GFA MARCHAND - VIRELY (477891048)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=477891048",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:40.932392+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=477891048",
+      "sha256": "f7e87cbf5f6632d37d115062e4ecf49551d2b1de57ab963dc17f558dac671562",
+      "bytes": 3582,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-420812018",
+      "title": "Company register: DOMAINE FRANCOIS FEUILLET (420812018)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=420812018",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:48:19.792389+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=420812018",
+      "sha256": "eef51966afdc77bffb35ab82df347414e47fb207adeb1cebd95c7748f89d7c8b",
+      "bytes": 3708,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-212104426",
+      "title": "Company register: COMMUNE DE MOREY SAINT DENIS (212104426)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=212104426",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:43:00.785611+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=212104426",
+      "sha256": "770475b61f4bbba1edbd7d474781c6f3851aa57545318a4959fe499a3c5a5b3a",
+      "bytes": 4585,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-454019639",
+      "title": "Company register: GFV FAMILLE LECHENEAUT (454019639)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=454019639",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:42.879773+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=454019639",
+      "sha256": "3a44f258b570254f9d3bfe9e13fb02092bdce521174a2d6c96df418162c92c09",
+      "bytes": 4064,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-200047827",
+      "title": "Company register: HOSPICES CIVILS DE BEAUNE (200047827)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=200047827",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:46.878281+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=200047827",
+      "sha256": "9dea68299dea1534936e9d435a310f187add12047a2503cb4048eea32c4a4641",
+      "bytes": 3191,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-262100068",
+      "title": "Company register: EPSM LA CHARTREUSE (262100068)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=262100068",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:54:17.815523+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=262100068",
+      "sha256": "b27f1458fcb9a1cbec299ea213c61993e954dc3943f39ff4a78d1898251bb5a2",
+      "bytes": 3001,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-382058188",
+      "title": "Company register: GFA FRANCOIS FEUILLET (382058188)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=382058188",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-08T23:47:44.593637+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=382058188",
+      "sha256": "df82ff6f6e0946e56b7321ea86cd07652a16cec380a004da705827016406375d",
+      "bytes": 3676,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-rne-424187896",
+      "title": "Company register: EARL DOMAINE MARCHAND FRERES (424187896)",
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=424187896",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09T00:06:00.516015+00:00",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=424187896",
+      "sha256": "6f6157e64087d1ecd4380f572b3e7625c5371732807a0d3f4ce9f5967ebcba5e",
+      "bytes": 3164,
+      "finding": "Exact candidate identity. A registered name, address or officer alone does not establish a substitute U-id crosswalk, producer relationship or current operation."
+    },
+    {
+      "id": "cr-marchand-legal",
+      "title": "Domaine Marchand Freres official legal notice",
+      "url": "https://www.domainemarchandfreres.fr/mentions-l%C3%A9gales",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "retrievedAt": "2026-10-09T00:06:02.900570+00:00",
+      "retrievedFrom": "https://www.domainemarchandfreres.fr/en/mentions-l%C3%A9gales",
+      "sha256": "6c130732ed725b84301d474789afdb7312aef6ab84d49dd554ca34fd8f94fe70",
+      "bytes": 585969,
+      "finding": "The official site identifies EARL Marchand Freres, SIREN 424187896, EUR185700 capital and 1 Place du Monument, matching the explicitly named tenant in the GFA deed. Company identity only."
     }
   ],
   "holders": {
@@ -8793,6 +10034,24 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "212104426": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=212104426"
+          ],
+          "outcome": "no-link-found",
+          "note": "Government register identifies Commune de Morey-Saint-Denis. Free company index returned HTTP410; bounded public search produced no individual lease or producer-company relationship. No PDF screened, and an access failure is not absence of evidence."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "212104806": {
       "searches": [
         {
@@ -8941,6 +10200,41 @@
       "effort": {
         "filingsScreened": 4,
         "pagesRead": 173
+      }
+    },
+    "307017962": {
+      "links": [
+        {
+          "id": "307017962/roche-owner-company",
+          "domaine": "Domaine Armand Rousseau",
+          "relation": "owner-company",
+          "basis": "Filed statutes, company conversion/name chain and registered vineyard activity identify Domaine Armand Rousseau. Four screened filings have no exact current Roche property schedule; Winehog supplies separate dated parcel research.",
+          "sourceIds": [
+            "cr-rne-307017962",
+            "cr-rousseau-statutes-2025"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=307017962",
+            "https://actes.ccm2.net/acte/79113989-4860-44dd-85d0-37c8472f7ad8",
+            "https://actes.ccm2.net/acte/0e7d0080-9f75-4539-9a4f-28f9b50196fb",
+            "https://actes.ccm2.net/acte/fd482b3d-d645-4f52-a7f1-fc342593ef10",
+            "https://actes.ccm2.net/acte/566631f0-8558-4aa2-9f7d-664392b2ff3a"
+          ],
+          "outcome": "linked",
+          "note": "Filed statutes, company conversion/name chain and registered vineyard activity identify Domaine Armand Rousseau. Four screened filings have no exact current Roche property schedule; Winehog supplies separate dated parcel research."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 98,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
       }
     },
     "309246015": {
@@ -10042,6 +11336,42 @@
         "pagesRead": 66
       }
     },
+    "351648266": {
+      "links": [
+        {
+          "id": "351648266/roche-owner-company",
+          "domaine": "Domaine Ponsot",
+          "relation": "owner-company",
+          "basis": "Filed Domaine Ponsot statutes and register establish the exact wine company. Five fully screened filings contain no exact individual current Roche schedule; wine-company identity does not establish operation.",
+          "sourceIds": [
+            "cr-rne-351648266",
+            "cr-ponsot-company-2022"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=351648266",
+            "https://actes.ccm2.net/acte/5ae5bf9a-b83c-4365-b2ef-d36b9abc0bf7",
+            "https://actes.ccm2.net/acte/4e0f79a3-6266-4564-9f9e-bef664cc7129",
+            "https://actes.ccm2.net/acte/ad8c7b90-6b1e-471d-8d70-be6d6b0209c5",
+            "https://actes.ccm2.net/acte/9854667a-bd73-44e8-8b92-946da33fc689",
+            "https://actes.ccm2.net/acte/9c73f5c5-c9f9-4d16-98e6-9eef7de67b82"
+          ],
+          "outcome": "linked",
+          "note": "Filed Domaine Ponsot statutes and register establish the exact wine company. Five fully screened filings contain no exact individual current Roche schedule; wine-company identity does not establish operation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 200,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "353575103": {
       "links": [
         {
@@ -10655,6 +11985,27 @@
         "pagesRead": 226
       }
     },
+    "401807748": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=401807748",
+            "https://actes.ccm2.net/acte/be87d20a-9346-43f2-ae6c-c5bdc484a7b4",
+            "https://actes.ccm2.net/acte/5488a78d-a06f-4ec8-8a40-27e58558f0a5",
+            "https://actes.ccm2.net/acte/5a54b906-f5a1-45c2-81af-1dc175364022"
+          ],
+          "outcome": "no-link-found",
+          "note": "SCI Lignier-Michelot contributes AB61 at 732 m2, but AB381 is printed at 1172 m2 against current 1173 m2. The latter fails the area test. Property objects, officers and wine-bottle contributions do not establish a producer-company relationship."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 93,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "402345144": {
       "searches": [
         {
@@ -10826,6 +12177,47 @@
         "filingsScreened": 6,
         "pagesRead": 75,
         "note": "All selected pages OCR-screened. Bounded source selection and candidate limits in Clos des Lambrays filings.md."
+      }
+    },
+    "411381908": {
+      "links": [
+        {
+          "id": "411381908/roche-lessor-per-filing",
+          "domaine": "Domaine Ponsot",
+          "relation": "lessor-per-filing",
+          "basis": "Seven exact GFA Ponsot references and areas in the 2007 contribution. Its explicit 1999 lease recital names Societe Domaine Ponsot, independently identified as 351648266. A later 2018 tax recital inconsistently calls the GFA the tenant; retain that discrepancy and do not infer renewal or operation.",
+          "sourceIds": [
+            "cr-ponsot-gfa-contribution-2007",
+            "cr-rne-351648266",
+            "cr-ponsot-company-2022"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "clos-de-la-roche"
+          ],
+          "leaseStatus": "recited"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=411381908",
+            "https://actes.ccm2.net/acte/fde386af-9d39-4803-a83b-24f2526803f8",
+            "https://actes.ccm2.net/acte/6c17fcd5-0b18-46eb-8bb0-f06fcc21bfee",
+            "https://actes.ccm2.net/acte/b67dca22-cc54-421b-b31d-629551ebf96c",
+            "https://actes.ccm2.net/acte/f51cd6f1-b6ec-4f1c-aa73-2d4074b987ac",
+            "https://actes.ccm2.net/acte/c0329e35-0305-46b1-b8f4-0f07c617eb96"
+          ],
+          "outcome": "linked",
+          "note": "Seven exact GFA Ponsot references and areas in the 2007 contribution. Its explicit 1999 lease recital names Societe Domaine Ponsot, independently identified as 351648266. A later 2018 tax recital inconsistently calls the GFA the tenant; retain that discrepancy and do not infer renewal or operation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 282,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
       }
     },
     "412618001": {
@@ -11186,6 +12578,26 @@
         "filingsScreened": 4,
         "pagesRead": 167,
         "note": "pagesRead counts OCR-screened PDF pages; 1 cited pages checked against page images."
+      }
+    },
+    "427469572": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=427469572",
+            "https://actes.ccm2.net/acte/6d383c08-1088-4fbe-9cce-ccc87a1a9455",
+            "https://actes.ccm2.net/acte/b66bb9cb-3ae8-4f43-a8a4-0979a6c17ca9"
+          ],
+          "outcome": "no-link-found",
+          "note": "SCI des Monts Luisants original and updated statutes identify a property company but no exact current Roche schedule or executed producer lease. Dufouleur officers and the critic attribution of AB178 to Ponsot do not establish a company-to-producer link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 35,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
       }
     },
     "428680011": {
@@ -12192,6 +13604,29 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "519906606": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=519906606",
+            "https://actes.ccm2.net/acte/c084dc64-21ca-45b2-8a96-e2a9403b8ec4",
+            "https://actes.ccm2.net/acte/c5626b9d-4f31-441f-83bc-ba514b9ee872",
+            "https://actes.ccm2.net/acte/ad0f433d-e25d-4b63-b86e-69a0e3ff603d",
+            "https://actes.ccm2.net/acte/d8d4e64e-d567-48ae-b885-77463a0e0abe",
+            "https://actes.ccm2.net/acte/cf76b55f-5db1-4779-aba1-330fd192654d"
+          ],
+          "outcome": "no-link-found",
+          "note": "Four exact references in the 2011 retained Peirazeau schedule. Historical individual leases divide AB47 and AB50 between Catherine Peirazeau-Ferreira and Gerard Peirazeau and spouse. No whole-parcel tenant or producer-company inference. One 16-page formation-index PDF actually belongs to SCI ADH Sevigne and is rejected."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 167,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "521056788": {
       "searches": [
         {
@@ -13047,6 +14482,26 @@
         "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
     },
+    "819859885": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=819859885",
+            "https://actes.ccm2.net/acte/175ecc43-0c97-4adc-aee4-d77eb63709e8",
+            "https://actes.ccm2.net/acte/65092612-9207-42c1-aa6a-abae408cedb9"
+          ],
+          "outcome": "no-link-found",
+          "note": "Eight exact parcels in the 2016 Malauro Lignier contribution. A 2014 lease to Laurent Lignier individually is recited; no independent Domaine Hubert Lignier company crosswalk or renewal reviewed."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 135,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "824253181": {
       "searches": [
         {
@@ -13638,6 +15093,73 @@
         "filingsScreened": 3,
         "pagesRead": 85,
         "note": "pagesRead counts OCR-screened PDF pages."
+      }
+    },
+    "U13482493": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=200047827"
+          ],
+          "outcome": "no-link-found",
+          "note": "Hospices Civils de Beaune is a registered candidate created in 2015, but no independently reviewed U-id crosswalk for AB442/443 or individual producer relation. Candidate 262100068 is EPSM La Chartreuse and is rejected. No downloadable company filing was available; this is a research gap."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
+    "U14137560": {
+      "links": [
+        {
+          "id": "U14137560/roche-lessor-per-filing",
+          "domaine": "Domaine Marchand Freres",
+          "relation": "lessor-per-filing",
+          "basis": "Filed GFA Marchand-Virely SIREN and exact AB456/468 areas establish the U-id crosswalk. Its 2004 deed names EARL Domaine Marchand Freres as tenant under a 1999 lease; official company/legal-notice evidence establishes tenant SIREN 424187896. Term, renewal and actual operation remain unverified.",
+          "sourceIds": [
+            "cr-marchand-formation-2004",
+            "cr-rne-424187896",
+            "cr-marchand-legal"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "clos-de-la-roche"
+          ],
+          "leaseStatus": "recited"
+        }
+      ],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=477891048",
+            "https://actes.ccm2.net/acte/de0f5210-cf8e-4cc1-b59f-f319e4dae6fc",
+            "https://actes.ccm2.net/acte/2a2173e0-58b4-4c10-9ad0-7f00a39b19c4",
+            "https://actes.ccm2.net/acte/c9b77639-aec1-4ddd-a2e8-cc4fdf5b0818"
+          ],
+          "outcome": "linked",
+          "note": "Filed GFA Marchand-Virely SIREN and exact AB456/468 areas establish the U-id crosswalk. Its 2004 deed names EARL Domaine Marchand Freres as tenant under a 1999 lease; official company/legal-notice evidence establishes tenant SIREN 424187896. Term, renewal and actual operation remain unverified."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 136,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      },
+      "identity": {
+        "companySiren": "477891048",
+        "sourceIds": [
+          "cr-rne-477891048",
+          "cr-marchand-formation-2004",
+          "cr-marchand-donation-2009",
+          "cr-marchand-statutes-2020"
+        ],
+        "limitation": "Filed GFA Marchand-Virely SIREN and exact AB456/468 areas establish the U-id crosswalk. Its 2004 deed names EARL Domaine Marchand Freres as tenant under a 1999 lease; official company/legal-notice evidence establishes tenant SIREN 424187896. Term, renewal and actual operation remain unverified."
       }
     },
     "U14137631": {
@@ -14275,6 +15797,37 @@
         "note": "Registry and public-source search; no matched filing reviewed."
       }
     },
+    "U21367129": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=445342603",
+            "https://actes.ccm2.net/acte/04720f84-921e-438f-bad9-51188899a965",
+            "https://actes.ccm2.net/acte/3791a6f4-8e40-427f-8abd-4a83ae11362e",
+            "https://actes.ccm2.net/acte/59ce662c-a049-4ddd-9d75-5a0d27cec89f",
+            "https://actes.ccm2.net/acte/103a6ce8-2a4a-40d6-977a-907d538240d5"
+          ],
+          "outcome": "no-link-found",
+          "note": "Filed GFA Les Boutieres identity and four exact parcel-area pairs crosswalk this U-id to 445342603. Candidate 418034823 is a separate same-name GFA. The 2003 file recites Michel Magnien individual leases; the 2022 donation recites a 2018 lease to Frederic Magnien and a 2022 rent amendment. No Magnien producer-company link is inferred from personal names."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 114,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      },
+      "identity": {
+        "companySiren": "445342603",
+        "sourceIds": [
+          "cr-rne-445342603",
+          "cr-boutieres-formation-2003",
+          "cr-boutieres-donation-2022"
+        ],
+        "limitation": "Filed GFA Les Boutieres identity and four exact parcel-area pairs crosswalk this U-id to 445342603. Candidate 418034823 is a separate same-name GFA. The 2003 file recites Michel Magnien individual leases; the 2022 donation recites a 2018 lease to Frederic Magnien and a 2022 rent amendment. No Magnien producer-company link is inferred from personal names."
+      }
+    },
     "U21373997": {
       "links": [],
       "searches": [
@@ -14467,6 +16020,22 @@
             "clos-saint-denis"
           ],
           "leaseStatus": "recited"
+        },
+        {
+          "id": "U21586080/roche-lessor-per-filing",
+          "domaine": "Domaine Arlaud",
+          "relation": "lessor-per-filing",
+          "basis": "The 2013 GFA deed retains AB303 at 4390 m2 and recites a 30 June 1998 lease to SCEA Domaine Arlaud Pere et Fils 418411518. Original term and renewal unreviewed; historical tenancy research only.",
+          "sourceIds": [
+            "bm-arlaud-gfa-2013",
+            "bm-rne-418411518"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09",
+          "crus": [
+            "clos-de-la-roche"
+          ],
+          "leaseStatus": "recited"
         }
       ],
       "searches": [
@@ -14607,6 +16176,24 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "U21934169": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=454019639"
+          ],
+          "outcome": "no-link-found",
+          "note": "Exact-name candidate GFV Famille Lecheneaut found, but no independently reviewed company-record parcel/area crosswalk for AB193. Free index lists no downloadable filings and Pappers returns HTTP403. Name alone cannot assign the U-id or a domaine."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 0,
+        "pagesRead": 0,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
     "U21940937": {
       "links": [],
       "searches": [
@@ -14673,6 +16260,37 @@
           "outcome": "no-link-found"
         }
       ]
+    },
+    "U21979030": {
+      "links": [],
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=420812018",
+            "https://actes.ccm2.net/acte/f11250c9-a54c-4a6f-a38e-741cc48a7715",
+            "https://actes.ccm2.net/acte/83215095-ddb2-41d1-a772-02a21b542f95",
+            "https://actes.ccm2.net/acte/9855ea56-b8b8-4dfa-a68e-e0a14326a987"
+          ],
+          "outcome": "no-link-found",
+          "note": "The filed Truchot-Martin to Domaine Francois Feuillet name chain, unchanged SIREN and exact AB230/505 areas establish this U-id crosswalk. Distinct Feuillet GFA 382058188 is not the same entity. The 2004 CVI and Truchot lease ended in January 2006 remain historical research with user approval. No successor tenant or producer-company assignment."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 130,
+        "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      },
+      "identity": {
+        "companySiren": "420812018",
+        "sourceIds": [
+          "cr-rne-420812018",
+          "cr-feuillet-truchot-formation-1998",
+          "cr-feuillet-transfer-2006",
+          "cr-feuillet-statutes-2024"
+        ],
+        "limitation": "The filed Truchot-Martin to Domaine Francois Feuillet name chain, unchanged SIREN and exact AB230/505 areas establish this U-id crosswalk. Distinct Feuillet GFA 382058188 is not the same entity. The 2004 CVI and Truchot lease ended in January 2006 remain historical research with user approval. No successor tenant or producer-company assignment."
+      }
     },
     "U22208861": {
       "identity": {

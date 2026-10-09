@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-WyTkjrbd.js"
+    "dist/client/assets/index-B_xx-5Fz.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-pPmTLcdA.js",
-    "dist/client/assets/SectionLabel-BHB3juxm.js",
-    "dist/client/assets/SparklingDetailsCard-DBwsxmrw.js",
-    "dist/client/assets/VillageMap-BGakWwtv.js",
-    "dist/client/assets/burgundyAtlas-DCEbDMgU.js",
-    "dist/client/assets/index-BrE9b1Y9.js",
-    "dist/client/assets/index-WyTkjrbd.js",
+    "dist/client/assets/FriendTagDialog-Bh1wsMZC.js",
+    "dist/client/assets/SectionLabel-DrBHDHMU.js",
+    "dist/client/assets/SparklingDetailsCard-DMLXhdqv.js",
+    "dist/client/assets/VillageMap-BigHp21P.js",
+    "dist/client/assets/burgundyAtlas-nj2ywwzq.js",
+    "dist/client/assets/index-B_xx-5Fz.js",
+    "dist/client/assets/index-Bgy5LSiX.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-CH-GwEKz.js",
-    "dist/client/assets/wineDetailCompact-CJtkcXHy.js"
+    "dist/client/assets/useModalFocus-nPHMUnCl.js",
+    "dist/client/assets/wineDetailCompact-CwKV8ebh.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5662357,
-  "evidenceGzipBytesTotal": 510732,
+  "evidenceBytesTotal": 5712393,
+  "evidenceGzipBytesTotal": 517404,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -98,10 +98,10 @@
     },
     {
       "cru": "clos-de-la-roche",
-      "file": "dist/client/assets/clos-de-la-roche.evidence-CybHdZ6Y.js",
-      "sha256": "4080348bb54bfc77d450b18f8238269129ecd97d98c87938a39c83a51b4e9a79",
-      "bytes": 139202,
-      "gzipBytes": 12631
+      "file": "dist/client/assets/clos-de-la-roche.evidence-CtH2IGjA.js",
+      "sha256": "09c87e378bf436445d9616285d8020e2b97b0c98666eefd69e53a2c512030853",
+      "bytes": 189238,
+      "gzipBytes": 19303
     },
     {
       "cru": "clos-de-tart",

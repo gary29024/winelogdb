@@ -816,5 +816,80 @@ class ClosSaintDenisTier2Tests(unittest.TestCase):
         self.assertIsNone(sources['csd-magnien-2024']['filingDate'])
         self.assertEqual(self.table['holders']['U21585571']['effort']['filingsScreened'], 0)
 
+
+class ClosDeLaRocheTier2Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.table = read_json(HOLDER_LINKS)
+        cls.curation = read_json(ROOT / 'docs/research/clos-de-la-roche/curation.json')
+        cls.register = read_json(ROOT / 'docs/research/clos-de-la-roche/register.json')
+        cls.evidence = read_json(ROOT / 'src/lib/places/grandCruParcels/clos-de-la-roche.evidence.json')
+
+    def test_identity_crosswalks_do_not_collapse_same_name_companies(self):
+        holders = self.table['holders']
+        for hid, sir in [('U21367129', '445342603'), ('U14137560', '477891048'),
+                         ('U21979030', '420812018')]:
+            self.assertEqual(holders[hid]['identity']['companySiren'], sir)
+        for hid in ['U13482493', 'U21934169']:
+            self.assertNotIn('identity', holders[hid])
+            self.assertEqual(holders[hid]['links'], [])
+        for hid in ['819859885', '519906606', '427469572', '401807748',
+                    'U21367129', 'U21979030', '383521408', '439629254']:
+            self.assertEqual(holders[hid]['links'], [])
+        self.assertEqual(set(self.evidence['holderDomains']),
+                         {'307017962', '322396185', '351648266', '411381908', '417882644',
+                          '480400407', '515520385', '531940583', 'U14137560', 'U21586080'})
+        for hid in ['411381908', 'U14137560']:
+            self.assertEqual(holders[hid]['links'][0]['crus'], ['clos-de-la-roche'])
+        arlaud = holders['U21586080']['links']
+        self.assertEqual({tuple(x['crus']) for x in arlaud},
+                         {('bonnes-mares',), ('clos-saint-denis',), ('clos-de-la-roche',)})
+
+    def test_historical_cvi_and_partial_leases_never_become_current_operation(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        feuillet = filings['cr-feuillet-2006']
+        self.assertEqual(feuillet['leaseEvidence'][0]['recitedEnd'], '2006-01-11')
+        self.assertIn('23 June 2004', feuillet['finding'])
+        self.assertEqual(feuillet['parcelAreasM2'], {'21442000AB0230': 968, '21442000AB0505': 3133})
+        peirazeau = filings['cr-peirazeau-2011']['leaseEvidence']
+        self.assertEqual(peirazeau[0]['partialParcelAreasM2']['21442000AB0047'], 2590)
+        self.assertEqual(peirazeau[1]['partialParcelAreasM2']['21442000AB0047'], 638)
+        self.assertNotIn('parcelAreasM2', peirazeau[0])
+        self.assertIn('excludes the underlying land', filings['cr-magnien-plantations-1998']['finding'])
+        self.assertIn('half indivisible interest', filings['cr-saint-loup-2001']['finding'])
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+        self.assertEqual((len(filings), self.register['counts']['withParcelFiling']), (12, 39))
+
+    def test_critic_portions_and_area_discrepancies_are_not_forced(self):
+        filings = {f['id']: f for f in self.curation['parcelFilings']}
+        self.assertEqual(filings['cr-lignier-michelot-1995']['parcelAreasM2'], {'21442000AB0061': 732})
+        ext = {e['id']: e for e in self.curation['externalResearch']}
+        self.assertNotIn('21442000AB0461', ext['cr-wh-ponsot']['parcelIds'])
+        self.assertEqual(filings['cr-ponsot-gfa-2007']['parcelAreasM2']['21442000AB0461'], 27614)
+        self.assertEqual(len(ext['cr-wh-ponsot']['parcelIds']), 9)
+        self.assertEqual(ext['cr-wh-leroy']['producer'], 'Domaine Leroy')
+        self.assertEqual(self.evidence['holderDomains']['515520385']['name'], 'Maison Leroy')
+        for pid in ['21442000AB0550', '21442000AB0551']:
+            parcel = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertEqual(parcel['recordedRights'], [])
+            self.assertIn('cr-wh-rousseau', parcel['externalResearchIds'])
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 3)
+        self.assertEqual(len(self.curation['producerHoldings']), 7)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (36, 76))
+
+    def test_rejected_document_counts_only_as_screening_effort(self):
+        sources = {s['id']: s for s in self.table['sources']}
+        selected = [s for sid, s in sources.items() if sid.startswith('cr-') and s['type'] == 'company-filing']
+        self.assertEqual((len(selected), sum(s['pageCount'] for s in selected)), (36, 1390))
+        self.assertTrue(all(s['screenedPages'] == s['pageCount'] for s in selected))
+        rejected = sources['cr-peirazeau-index-mismatch']
+        self.assertEqual(rejected['pageCount'], 16)
+        self.assertIn('ADH', rejected['finding'])
+        self.assertNotIn(rejected['id'], {f['sourceId'] for f in self.curation['parcelFilings']})
+        self.assertEqual(self.table['holders']['U21367129']['effort']['filingsScreened'], 4)
+        self.assertEqual(self.table['holders']['U13482493']['effort']['filingsScreened'], 0)
+
 if __name__ == '__main__':
     unittest.main()
