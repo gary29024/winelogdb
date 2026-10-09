@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-654",
   "appellationId": 189,
   "issue": 384,
-  "tier": 1,
+  "tier": 2,
   "bundle": "vosne-romanee",
   "villageMaps": [
     "vosne-romanee"
@@ -15,8 +15,7 @@
   ],
   "research": {
     "methodDoc": "docs/research/la-grande-rue/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/la-grande-rue/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/la-grande-rue",
