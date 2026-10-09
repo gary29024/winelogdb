@@ -41,7 +41,7 @@ describe('Montrachet bundle reviewed crus',()=>{
    expect(evidence.holderDomains).not.toHaveProperty('U18179542');
    expect(evidence.holderDomains).not.toHaveProperty('U21850980');
    const register=read(`docs/research/${cru.slug}/register.json`);
-   expect(register.counts).toMatchObject({holderLead:29,unresolved:18,withParcelFiling:6,currentFarmerConfirmed:0});
+   expect(register.counts).toMatchObject({holderLead:32,unresolved:15,withParcelFiling:6,currentFarmerConfirmed:0});
    expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);
   }
  });

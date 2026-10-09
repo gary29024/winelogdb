@@ -454,23 +454,37 @@ SHA-256 `f8fb4eaac7409838a0c7563da3df61544a39e9e641ae0f163b83ef97066cbe68`; 3,70
 - INPI and Pappers were each tried once on the Leflaive company and returned HTTP 403 locally; free official company searches, Le Figaro indexes and actes.ccm2.net filings were used instead.
 - The bounded Montrachet pass screened 50 distinct PDF byte hashes / 1360 pages at 150 dpi with RapidOCR and DirectML. Two additional downloads were byte-identical copies (34 duplicate pages), not additional evidence; one Leflaive 2026 statutes request returned HTTP 408. This is not every filing ever deposited.
 - No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.
-- Winehog subscriber copies were requested once. Direct article links were supplied on 9 October 2026; authorized copies remain pending. Unsupplied articles are access gaps, with no acquired-copy SHA-256 and no accepted parcel matches.
+- All six requested Winehog articles were supplied and reviewed as detailed below. Six images in the historical expansion article were not embedded; unmatched references and conflicts remain explicit.
 - Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified.
 
-Producer holdings come from five free estate publications and remain named-area census totals, with no cadastral allocation. Winehog subscriber copies are pending after the single batch request; no unsupplied article has an acquired-copy hash or accepted reference match.
+Producer holdings come from five free estate publications and five supplied Winehog accounts. They remain dated named-area census totals, with no cadastral allocation inferred from area alone.
 
-## Pending Winehog copies
+## Supplied Winehog copies
 
-Public title/date and subscription notices checked 9 October 2026; full authorized copies remain pending. SHA-256 is unavailable for every unsupplied copy. No paywall text or maps have been treated as reviewed evidence.
+All six articles were supplied on 9 October 2026. Original MHTML archives and extracted images remain outside the repository. SHA-256 identifies the exact acquired archive; publication dates are distinct from capture dates. Text and available relevant maps were reviewed; absent images were not treated as evidence.
 
-| Article | Published | Acquired-copy SHA-256 |
-| --- | --- | --- |
-| [Bouchard](https://winehog.org/terroir-insight-bouchard-pere-et-fils-montrachet-24329/) | 2015-08-24 | Unavailable — copy not supplied |
-| [DRC](https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-montrachet-24219/) | 2015-08-09 | Unavailable — copy not supplied |
-| [Ramonet](https://winehog.org/terroir-insight-domaine-ramonet-montrachet-24050/) | 2015-07-20 | Unavailable — copy not supplied |
-| [Leflaive](https://winehog.org/terroir-insight-domaine-leflaive-montrachet-23762/) | 2015-06-14 | Unavailable — copy not supplied |
-| [Comtes Lafon](https://winehog.org/terroir-insight-domaine-des-comtes-lafon-le-montrachet-23710/) | 2015-06-07 | Unavailable — copy not supplied |
-| [Historic evidence and 1921 expansion](https://winehog.org/montrachet-historic-evidence-expansion-1921-32708/) | 2017-08-09 | Unavailable — copy not supplied |
+| Article | Published | Archive SHA-256 | Bytes |
+| --- | --- | --- | ---: |
+| [Terroir Insight: Bouchard Pere et Fils Montrachet](https://winehog.org/terroir-insight-bouchard-pere-et-fils-montrachet-24329/) | 2015-08-24 | `250458b28fe0e67cac797a0f3ce0928ebe306a55bdc49ab0bd7e683a0309e829` | 3,407,407 |
+| [Terroir Insight: Domaine de la Romanee-Conti, Montrachet](https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-montrachet-24219/) | 2015-08-09 | `f7582430980415978f8914897668c570660941efe3106d642ff32e7d91199af7` | 3,896,554 |
+| [Terroir Insight: Domaine Ramonet Montrachet](https://winehog.org/terroir-insight-domaine-ramonet-montrachet-24050/) | 2015-07-20 | `33abc3633658717ee980986e77d1dfed08b6d91de58e7cabdefc3b0ddb6260a9` | 3,107,557 |
+| [Terroir Insight: Domaine Leflaive, Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-montrachet-23762/) | 2015-06-14 | `776c323a9494138213c05fd9a215838e46fb6ec063dce130f8248f1f90d4f226` | 3,687,006 |
+| [Terroir Insight: Domaine des Comtes Lafon, Le Montrachet](https://winehog.org/terroir-insight-domaine-des-comtes-lafon-le-montrachet-23710/) | 2015-06-07 | `49ddc278826d35813b64e0fd5be31aa380640fc199803df12cb24900d6cef3d5` | 3,071,436 |
+| [Montrachet – the historic evidence and the expansion in 1921](https://winehog.org/montrachet-historic-evidence-expansion-1921-32708/) | 2017-08-09 | `c52cb61cdf0993d94d32983a5db18457007f9fa0690178687fc50c7af1da36de` | 2,463,526 |
+
+Printed Puligny plot 67 and 0.8894 ha match current AH67 and 8894 m². The article’s proposed early ownership sequence and La Cabotte hypothesis remain conjectural.
+
+Printed Chassagne plots 31, 129 and 130 with 0.3419, 0.1670 and 0.1670 ha match current AE31, AE129 and AE130. The reported acquisitions in 1963, 1965 and 1980 are secondary historical claims, not current farming evidence.
+
+The single Ramonet plot is described as 0.2590 ha; the ownership discussion identifies number 66, alongside Bouchard 67 and the four Boillereault plots. Its number, area and illustrated Puligny location agree with AH66. Earlier ownership is explicitly hypothetical.
+
+Published holding 0.0821 ha and an aerial outline, without a printed cadastral number. No parcel match is accepted from equal area or location alone.
+
+Published holding 0.3182 ha and an aerial outline, without a printed cadastral number. No parcel match is accepted from equal area or location alone.
+
+The modern list matches Chassagne 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². The text conflicts between 34 and 24; neither is silently corrected. Old 1861/1921 numbering is not a current-reference crosswalk; six embedded maps were absent from the supplied archive.
+
+These secondary articles do not alter company links or exact company-filing counts. Five published holding totals supplement the named-area census. Every accepted reference has both its printed number and individual area; retired Colin references use the existing official DFI path.
 
 ## Additional original-reference cross-check
 
