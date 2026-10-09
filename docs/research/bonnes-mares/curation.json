@@ -1249,7 +1249,12 @@
         {
           "areaHa": 1.3878,
           "sourceId": "bm-winehog-roumier",
-          "note": "Sum of eight printed older plot areas; differs from 1.3919 ha. Includes the mismatching AB367 area and retired AB467; no reconciliation by adding an inferred AB65 portion."
+          "note": "Article-stated subtotal for eight older plots; their printed areas actually sum to 1.3868 ha. AB367 is printed 10 m2 below its cadastral area. Neither this arithmetic discrepancy nor the difference from the 1.3919 ha estate figure is silently corrected."
+        },
+        {
+          "areaHa": 1.3868,
+          "sourceId": "bm-winehog-roumier",
+          "note": "Calculated sum of the eight individually printed areas (including the mismatching AB367 and retired AB467), distinct from the article-stated 1.3878 ha subtotal. Census comparison only, not an extra holding."
         }
       ]
     },
