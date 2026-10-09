@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5966160 bytes raw / 551171 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5972340 bytes raw / 552523 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -38,7 +38,7 @@ Lazy evidence total: 5966160 bytes raw / 551171 bytes gzip. Each cru loads its o
 | [chevalier-montrachet](../../../docs/research/chevalier-montrachet/register.md) | 44 | 1989-09-22 → 2020-03-16 | 21 / 19 | 13 / 13 | 0 | 0 / 0 | 16041 |
 | [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 22089 |
 | [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 13480 |
-| [criots-batard-montrachet](../../../docs/research/criots-batard-montrachet/register.md) | 11 | 2001-03-15 → 2013-04-22 | 6 / 6 | 3 / 3 | 0 | 0 / 0 | 8028 |
+| [criots-batard-montrachet](../../../docs/research/criots-batard-montrachet/register.md) | 11 | 2001-03-15 → 2013-04-22 | 6 / 6 | 3 / 3 | 0 | 0 / 0 | 9380 |
 | [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 3 / 0 | 67432 |
 | [corton-charlemagne](../../../docs/research/corton-charlemagne/register.md) | 339 | 1990-01-10 → 2026-03-16 | 96 / 65 | 49 / 64 | 0 | 0 / 0 | 23450 |
 | [charlemagne](../../../docs/research/charlemagne/register.md) | 275 | 1990-01-10 → 2026-03-16 | 93 / 62 | 42 / 57 | 0 | 0 / 0 | 21441 |

@@ -1539,5 +1539,60 @@ class BienvenuesTierTwoTests(unittest.TestCase):
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 
 
+class CriotsTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('criots-batard-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_partner_company_is_distinct_from_holder_and_provisional_identity(self):
+        holders = self.table['holders']
+        self.assertEqual(holders['419971130']['links'][0]['relation'], 'owner-company')
+        partner = holders['778249052']['links'][0]
+        self.assertEqual(partner['domaine'], 'Maison Prosper Maufoux')
+        self.assertEqual(partner['relation'], 'partner-company')
+        self.assertIn('cri-filing-778249052-1', partner['sourceIds'])
+        self.assertIn('cri-legal-prosper', partner['sourceIds'])
+        for hid in ('324396639', 'U21930118'):
+            self.assertFalse(holders[hid].get('links'))
+            self.assertFalse(holders[hid].get('identity'))
+            self.assertTrue(holders[hid]['searches'])
+        # The separately established company must not identify the provisional holder by name.
+        self.assertTrue(holders['778252445']['links'])
+        self.assertEqual(holders['U21930118']['effort']['pagesRead'], 113)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_stock_and_other_section_references_do_not_create_parcel_filings(self):
+        self.assertEqual(self.curation['parcelFilings'], [])
+        self.assertEqual(self.curation['externalResearch'], [])
+        for row in self.register['parcels']:
+            self.assertEqual(row['parcelFilingIds'], [])
+            self.assertIsNone(row['currentFarmer'])
+        sources = {s['id']: s for s in self.table['sources']}
+        self.assertIn('wine stocks', sources['cri-filing-419971130-13']['finding'])
+        self.assertIn('AP91', sources['cri-filing-419971130-13']['finding'])
+        self.assertEqual(sources['cri-filing-419971130-15']['documentDate'], '2023-07-25')
+        self.assertIsNone(sources['cri-filing-419971130-15']['filingDate'])
+        self.assertEqual(sources['cri-filing-324396639-5']['documentDate'], '1990-11-26')
+        self.assertEqual(sources['cri-filing-324396639-5']['filingDate'], '2026-03-18')
+
+    def test_aggregate_winehog_and_named_area_census_never_allocate_parcels(self):
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertEqual(len(unmatched), 2)
+        self.assertTrue(all(not x['parcelIds'] for x in unmatched))
+        self.assertTrue(any('0.0637' in x['printedReference'] for x in unmatched))
+        holdings = self.curation['producerHoldings']
+        self.assertEqual({x['publishedAreaHa'] for x in holdings}, {0.0637, 0.05, 0.6})
+        self.assertTrue(all('parcelIds' not in x for x in holdings))
+        self.assertTrue(all(not x['ownerHolderIds'] for x in holdings))
+        auvenay = next(x for x in holdings if x['id'] == 'cri-winehog-auvenay-holding')
+        self.assertEqual(auvenay['producerHolderIds'], [])
+        self.assertEqual(self.register['counts']['holderLead'], 2)
+        self.assertEqual(self.register['counts']['unresolved'], 9)
+
+
 if __name__ == '__main__':
     unittest.main()

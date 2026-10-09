@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-564",
   "appellationId": 178,
   "issue": 404,
-  "tier": 1,
+  "tier": 2,
   "bundle": "montrachet",
   "villageMaps": [
     "chassagne-montrachet"
@@ -16,7 +16,8 @@
   "research": {
     "methodDoc": "docs/research/criots-batard-montrachet/README.md",
     "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "producerResearch": "deferred-tier-2",
+    "filingsDoc": "docs/research/criots-batard-montrachet/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-beaune/criots-batard-montrachet",
