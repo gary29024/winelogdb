@@ -6,9 +6,9 @@ Reviewed 2026-10-09; target season 2026.
 
 All 130 mapped Bonnes-Mares parcels and 30 recorded holders reviewed through the shared table for Tier 2. Historical filing schedules, company relations, reported tenancy and critic research remain separate. Tier 1 rights, geometry and history retained; no current farmer verified.
 
-Of 130 mapped parcels, 78 have recorded rights and 52 have no matched right holder. All 30 holder groups were triaged. 31 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 96 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 130 mapped parcels, 78 have recorded rights and 52 have no matched right holder. All 30 holder groups were triaged. 43 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 84 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-46 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+41 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 17 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
 
@@ -387,20 +387,23 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
 | --- | ---: | ---: | ---: | ---: |
 | EN LA RUE DE VERGY (neighbouring lieu-dit; edge parcels) | 3 (0.01 ha) | 3 (0.01 ha) | 3 (0.01 ha) | 0.00 ha |
-| Les Bonnes Mares | 105 (14.99 ha) | 44 (5.28 ha) | 44 (5.28 ha) | 7.72 ha |
+| Les Bonnes Mares | 105 (14.99 ha) | 44 (5.28 ha) | 39 (4.57 ha) | 8.68 ha |
 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 22 (0.04 ha) | 5 (0.01 ha) | 5 (0.01 ha) | 0.00 ha |
 
 **Published holdings by named area**
 
 - **Les Bonnes Mares**
-  - Domaine Comte Georges de Vogue: 2.7 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 2.70 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Domaine Comte Georges de Vogüé – History and Vineyards](https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/).
-  - Maison Joseph Drouhin: 0.23 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.23 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares](https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/).
+  - Domaine Comte Georges de Vogue: 2.7 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 2.70 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Domaine Comte Georges de Vogüé – History and Vineyards](https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/), [Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update](https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/).
+  - Maison Joseph Drouhin: 0.23 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.23 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares](https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/), [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/).
   - Domaine Arlaud: 0.2131 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.21 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares](https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/).
   - Domaine Robert Groffier: 0.9748 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.97 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/).
-  - Domaine Georges Roumier: 1.3919 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 1.39 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Georges Roumier: Bonnes-Mares 2021](https://www.roumier.com/fr_FR/vin/bonnes-mares/2021).
+  - Domaine Georges Roumier: 1.3919 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 1.39 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Georges Roumier: Bonnes-Mares 2021](https://www.roumier.com/fr_FR/vin/bonnes-mares/2021), [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
   - Domaine Drouhin-Laroze: 1.5 ha (approximate); tenure not stated; 0.00 ha recorded to linked company records here; 1.50 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Drouhin-Laroze: Bonnes-Mares](https://www.drouhin-laroze.com/en/our-wines/4/bonnes-mares).
-  - Domaine Dujac: 0.5801 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.58 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Dujac: Bonnes Mares technical sheet](https://www.dujac.com/en/pdf/8-bonnes-mares-grand-cru.pdf).
+  - Domaine Dujac: 0.5801 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.58 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Dujac: Bonnes Mares technical sheet](https://www.dujac.com/en/pdf/8-bonnes-mares-grand-cru.pdf), [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/).
   - Domaine Hudelot-Baillet: 0.13 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.13 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Hudelot-Baillet: wines](https://domainehudelotbaillet.com/nos-vins/).
+  - Domaine Jacques-Frédéric Mugnier: 0.36 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.36 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/).
+  - Domaine Bertheau: 0.3444 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.34 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/).
+  - Domaine d'Auvenay: 0.2598 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.26 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/).
 
 ## Every mapped parcel
 
@@ -420,7 +423,7 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0052 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.65 | [515620193](#holder-515620193) | Domaine de la Vougeraie (group-company-record) | Unconfirmed |
 | AB 0064 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 47.46 | [491471041](#holder-491471041) | Unresolved | Unconfirmed |
 | AB 0065 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 29.49 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
-| AB 0066 | Les Bonnes Mares | 1053.03 | [U21155571](#holder-u21155571) | Unresolved | Unconfirmed |
+| AB 0066 | Les Bonnes Mares | 1053.03 | [U21155571](#holder-u21155571) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0067 | Les Bonnes Mares | 1959.03 | [491471041](#holder-491471041) | Unresolved | Unconfirmed |
 | AB 0068 | Les Bonnes Mares | 504.49 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
 | AB 0069 | Les Bonnes Mares | 328.51 | None | Unresolved | Unconfirmed |
@@ -428,7 +431,7 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0076 | Les Bonnes Mares | 654.56 | [U21586080](#holder-u21586080) | Domaine Arlaud (filing-tenant-relationship); Domaine Arlaud (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0077 | Les Bonnes Mares | 911.20 | None | Unresolved | Unconfirmed |
 | AB 0078 | Les Bonnes Mares | 300.09 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
-| AB 0079 | Les Bonnes Mares | 1025.35 | [326418761](#holder-326418761) | Unresolved | Unconfirmed |
+| AB 0079 | Les Bonnes Mares | 1025.35 | [326418761](#holder-326418761) | Domaine Bertheau (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0081 | Les Bonnes Mares | 1244.96 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0082 | Les Bonnes Mares | 1530.60 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
 | AB 0083 | Les Bonnes Mares | 931.42 | None | Unresolved | Unconfirmed |
@@ -436,29 +439,29 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0085 | Les Bonnes Mares | 6619.97 | [U21459182](#holder-u21459182) | Unresolved | Unconfirmed |
 | AB 0086 | Les Bonnes Mares | 495.50 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0087 | Les Bonnes Mares | 1203.21 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
-| AB 0089 | Les Bonnes Mares | 3800.36 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
-| AB 0090 | Les Bonnes Mares | 1908.41 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity) | Unconfirmed |
-| AB 0091 | Les Bonnes Mares | 700.24 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity) | Unconfirmed |
+| AB 0089 | Les Bonnes Mares | 3800.36 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0090 | Les Bonnes Mares | 1908.41 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity); Domaine d'Auvenay (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0091 | Les Bonnes Mares | 700.24 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity); Domaine d'Auvenay (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0092 | Les Bonnes Mares | 101.38 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
 | AB 0093 | Les Bonnes Mares | 1158.67 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
 | AB 0094 | Les Bonnes Mares | 1098.06 | None | Unresolved | Unconfirmed |
 | AB 0095 | Les Bonnes Mares | 30.17 | None | Unresolved | Unconfirmed |
-| AB 0096 | Les Bonnes Mares | 1472.55 | [482772282](#holder-482772282) | Unresolved | Unconfirmed |
+| AB 0096 | Les Bonnes Mares | 1472.55 | [482772282](#holder-482772282) | Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0097 | Les Bonnes Mares | 434.05 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
 | AB 0098 | Les Bonnes Mares | 117.00 | None | Unresolved | Unconfirmed |
 | AB 0099 | Les Bonnes Mares | 307.41 | None | Unresolved | Unconfirmed |
-| AB 0100 | Les Bonnes Mares | 2209.29 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0100 | Les Bonnes Mares | 2209.29 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity); Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0101 | Les Bonnes Mares | 8539.87 | None | Unresolved | Unconfirmed |
 | AB 0102 | Les Bonnes Mares | 5953.32 | None | Unresolved | Unconfirmed |
 | AB 0104 | Les Bonnes Mares | 636.72 | None | Unresolved | Unconfirmed |
-| AB 0105 | Les Bonnes Mares | 669.73 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
+| AB 0105 | Les Bonnes Mares | 669.73 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0106 | Les Bonnes Mares | 641.91 | [350591319](#holder-350591319) | Château de la Crée (group-company-record) | Unconfirmed |
 | AB 0110 | Les Bonnes Mares | 1635.45 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (company-identity) | Unconfirmed |
 | AB 0111 | Les Bonnes Mares | 795.23 | None | Unresolved | Unconfirmed |
 | AB 0114 | Les Bonnes Mares | 763.81 | None | Unresolved | Unconfirmed |
 | AB 0115 | Les Bonnes Mares | 349.84 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0116 | Les Bonnes Mares | 1379.86 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
-| AB 0119 | Les Bonnes Mares | 2389.49 | [326418761](#holder-326418761) | Unresolved | Unconfirmed |
+| AB 0119 | Les Bonnes Mares | 2389.49 | [326418761](#holder-326418761) | Domaine Bertheau (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0120 | Les Bonnes Mares | 1795.40 | None | Unresolved | Unconfirmed |
 | AB 0121 | Les Bonnes Mares | 1448.67 | [U21586080](#holder-u21586080) | Domaine Arlaud (filing-tenant-relationship); Domaine Arlaud (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0122 | Les Bonnes Mares | 3849.00 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
@@ -495,7 +498,7 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0293 | Les Bonnes Mares | 468.68 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AB 0294 | Les Bonnes Mares | 530.79 | None | Unresolved | Unconfirmed |
 | AB 0297 | Les Bonnes Mares | 338.02 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
-| AB 0298 | Les Bonnes Mares | 492.18 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
+| AB 0298 | Les Bonnes Mares | 492.18 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0304 | Les Bonnes Mares | 216.27 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application); Domaine Drouhin-Laroze (filing-named-cadastral-reference) | Unconfirmed |
 | AB 0305 | Les Bonnes Mares | 416.10 | None | Unresolved | Unconfirmed |
 | AB 0306 | Les Bonnes Mares | 215.75 | None | Unresolved | Unconfirmed |
@@ -505,7 +508,7 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0328 | Les Bonnes Mares | 451.99 | None | Unresolved | Unconfirmed |
 | AB 0338 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 11.08 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
 | AB 0339 | Les Bonnes Mares | 880.78 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
-| AB 0340 | Les Bonnes Mares | 1675.15 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0340 | Les Bonnes Mares | 1675.15 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity); Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0356 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.47 | None | Unresolved | Unconfirmed |
 | AB 0357 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 29.59 | None | Unresolved | Unconfirmed |
 | AB 0358 | Les Bonnes Mares | 484.65 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
@@ -521,11 +524,11 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0438 | Les Bonnes Mares | 419.61 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
 | AB 0439 | Les Bonnes Mares | 1556.96 | [U21373997](#holder-u21373997) | Unresolved | Unconfirmed |
 | AB 0440 | Les Bonnes Mares | 1729.61 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
-| AB 0468 | Les Bonnes Mares | 1924.11 | None | Unresolved | Unconfirmed |
-| AB 0469 | Les Bonnes Mares | 1936.94 | None | Unresolved | Unconfirmed |
-| AB 0470 | Les Bonnes Mares | 1405.70 | None | Unresolved | Unconfirmed |
-| AB 0481 | Les Bonnes Mares | 951.30 | None | Unresolved | Unconfirmed |
-| AB 0482 | Les Bonnes Mares | 951.63 | None | Unresolved | Unconfirmed |
+| AB 0468 | Les Bonnes Mares | 1924.11 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0469 | Les Bonnes Mares | 1936.94 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0470 | Les Bonnes Mares | 1405.70 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0481 | Les Bonnes Mares | 951.30 | None | Domaine Georges Roumier (critic-named-cadastral-reference on predecessor AB0467) | Unconfirmed |
+| AB 0482 | Les Bonnes Mares | 951.63 | None | Domaine Georges Roumier (critic-named-cadastral-reference on predecessor AB0467) | Unconfirmed |
 | AR 0064 | Les Bonnes Mares | 319.76 | [U18178981](#holder-u18178981) | Clos de Tart (company-identity); Clos de Tart (critic-named-cadastral-reference) | Unconfirmed |
 | AR 0066 | Les Bonnes Mares | 9108.26 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
 | AR 0067 | Les Bonnes Mares | 1251.17 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
@@ -566,6 +569,11 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Winehog: Domaine Robert Groffier Bonnes-Mares references** (AB 0266; critic-named-cadastral-reference). Winehog (2018) prints AB266 and 9748 m2, matching the current parcel. Historical critic evidence, not verified present farming. Sources: [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/).
 - **Bachus 21: historical acquisition and lease mandate for AB304** (AB 0304; filing-named-cadastral-reference). The original 1995 mandate, retained in 2024 statutes, names AB304 at 218 m2 and proposed tenant Domaine Drouhin-Laroze 398910034. The current holder is Bouchard, not Bachus; authorization to transact is not a completed transfer or executed lease. AB438/440 have area discrepancies and remain unmatched. Sources: [401538525: bachus 2024](https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b), [401538525: bachus 1995](https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19).
 - **Winehog: AR64 is part of Clos de Tart** (AR 0064; critic-named-cadastral-reference). Winehog (2015) names cadastre 64 at 2780 m2, matching current AR64, and identifies it as part of Clos de Tart after a reported 1966 inclusion. Its Bonnes-Mares cadastral name and small mapped overlap do not establish Bonnes-Mares production. Sources: [Winehog: Clos de Tart – the Tête de Cuvée of Morey](https://winehog.org/clos-de-tart-the-tete-de-cuvee-of-morey-24696/).
+- **Winehog: Domaine Dujac dated Bonnes-Mares references** (AB 0096; critic-named-cadastral-reference). Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link. Sources: [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/).
+- **Winehog: Domaine Georges Roumier dated Bonnes-Mares references** (AB 0100, AB 0066, AB 0340, AB 0468, AB 0469, AB 0470, AB 0089, AB 0298, AB 0105; critic-named-cadastral-reference). Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
+- **Winehog: Roumier on former Chambolle AB467** (via lineage: AB 0467 (retired) → AB 0481, AB 0482; critic-named-cadastral-reference). Winehog (2018) prints AB467 at 1803 m2, matching the pinned 3 April 2018 cadastre. Only the documented 9 November 2020 DFI split reaches AB481/482, as historical context; it transfers no ownership or farming claim. Sources: [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
+- **Winehog: Domaine Bertheau dated Bonnes-Mares references** (AB 0119, AB 0079; critic-named-cadastral-reference). Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/).
+- **Winehog: Domaine d'Auvenay dated Bonnes-Mares references** (AB 0091, AB 0090; critic-named-cadastral-reference). Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/).
 
 ## Rights history and parcel lineage
 
@@ -835,6 +843,12 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **bm-winehog-drouhin** — [Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares](https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/). critic-research; read; document date 2018-09-12. AB83/114/305/306 have only a combined 0.23 ha; no individual printed areas.
 - **bm-winehog-arlaud** — [Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares](https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/). critic-research; read; document date 2018-03-11. AB76 is 660 m2 and AB121 is 1421 m2. The claimed total 0.2131 ha differs from their 0.2081 ha sum.
 - **bm-winehog-groffier** — [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/). critic-research; read; document date 2018-02-13. AB266 is 9748 m2, matching the current individual reference and area.
+- **bm-winehog-mugnier** — [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/). critic-research; read; document date 2018-02-22. AB84/282/292/293/78 share a 0.36 ha total without individual areas. Drouhin AB83/114/305/306 likewise share 0.2298 ha. Historical family and lease narrative does not establish a current operator or a company crosswalk.
+- **bm-winehog-dujac** — [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/). critic-research; read; document date 2018-03-24. AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total and remain unmatched individually. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha.
+- **bm-winehog-roumier** — [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/). critic-research; read; document date 2018-05-06. Nine current references individually match. Retired Chambolle AB467 matches 1803 m2 in the 3 April 2018 cadastre and reaches AB481/482 only through the 9 November 2020 DFI division. AB367 prints 1608 m2 versus 1618 m2; AB65 is a conjectural portion; the soil paragraph also mentions AB349 without an area. The 2023 metadata modification does not date new observations.
+- **bm-winehog-bertheau** — [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/). critic-research; read; document date 2018-04-27. AB119 (2417 m2) and AB79 (1027 m2) individually match. Total 0.3444 ha is named-area census only; suggested Trapet-family origins do not establish a parcel ownership chain.
+- **bm-winehog-auvenay** — [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/). critic-research; read; document date 2018-05-03. AB91 (700 m2) and AB90 (1898 m2) individually match. Total 0.2598 ha is named-area census only. The article explicitly lacks confirmed information on the previous owner; its Roumier-family hypothesis is not an accepted chain.
+- **bm-winehog-vogue** — [Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update](https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/). critic-research; read; document date 2018-05-16. Total 2.669 ha and AB98/99 combined 473 m2; AB111 has no individual area. No individual parcel match. The combined 98/99 statement is retained alongside, not substituted for, the conflicting 2014 single-98 account.
 - **bodacc-bouchard-2026** — [BODACC: Maison Bouchard Père et Fils partial asset contribution and renaming](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22515420255%22&order_by=dateparution+desc&limit=20). registry; read; document date 2026-04-10. Notice of 25 February 2026: Maison Bouchard Père et Fils (515420255) contributes a branch of activity to NOMINOE (981574650), receiving 3,142,126 of the 3,142,858 shares the beneficiary will then have. Notice of 10 April 2026: 515420255 is renamed Vignoble des Cabottes. The contributed assets are not itemised in the notice.
 - **bodacc-pousse-dor** — [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution). registry; read; document date 2022-09-08. SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.
 - **bouchard-legal** — [Bouchard Père & Fils: legal notices](https://www.bouchard-pereetfils.com/en/legal-notices). estate; read; document date not established. Publisher: Bouchard Père & Fils, rue Saint-Vincent, Savigny-lès-Beaune, RCS 981 574 650, capital €31,428,580.
@@ -939,9 +953,10 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - Tier 2 selected 46 free company filings (1788 pages), OCR-screening every page. This is a bounded selection of formation, contribution, transformation and recent statutes, not every filing ever deposited. Prior shared research is reused without rescanning old files.
 - U21117863 cannot crosswalk to the separately recorded Dujac SIREN in this cru. Bachus, Veroilles and the two BND U-ids remain unresolved; names, officers and monopole reputation are insufficient.
 - The GFA Grands Vins Fins lease names Domaine de Bauclair; an independent current company identity and renewal were not located. Jadot preference rights do not prove tenancy. Arlaud has a distinct similarly named registry entry 429825441, not equated with the exact-schedule company 444144190.
-- Six Bonnes-Mares Winehog subscriber continuations remain unsupplied: Vogue (2018-05-16), Roumier (2018-05-06), Auvenay (2018-05-03), Bertheau (2018-04-27), Dujac (2018-03-24), Mugnier (2018-02-22). Three supplied Bonnes-Mares archives and the supplied shared Vogue history were reviewed. No paywall bypass.
+- All six additional Bonnes-Mares Winehog subscriber articles were supplied as WebArchives and reviewed, alongside the original three MHTML articles and shared Vogue/Clos de Tart histories. No requested Bonnes-Mares article remains an access gap. Sources retain original-byte hashes and publication dates separately from page modifications.
 - The CPGC page and Dujac technical sheet were readable through the public web reader but direct downloads returned HTTP 503. Their hash covers the saved extraction, not raw HTML/PDF bytes. The Bouchard sheet was not retained as census evidence after direct-download failure.
 - Original leases, renewals, paid SPF copies and present-season outreach remain unreviewed. Historical lease recitals, transaction mandates, company identity and named-area census totals do not verify current farming.
 - The supplied Clos de Tart history article also covers shared AR64. Five additional company filings resolve the Maison Mommessin U-id through SIREN 686042409, name continuity and four exact property references; the earlier 685750598 candidate is distinct. The 2018 share transfer is not a new land conveyance and the 1932 origin recital is not a reviewed original deed.
+- Supplemental articles add 14 exact current-reference-and-area matches and one retired reference reaching two current parcels through documented DFI ancestry. AB367 has a 10 m2 discrepancy; Mugnier and old Dujac groups and Vogue AB98/99 are aggregate-only. No area correction, holder identity or current farming is inferred.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.
