@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DVx3BPQu.js"
+    "dist/client/assets/index-BbJGuQww.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CLbUBoWY.js",
-    "dist/client/assets/SectionLabel-Cm0ozH2u.js",
-    "dist/client/assets/SparklingDetailsCard-BHsmfTm7.js",
-    "dist/client/assets/VillageMap-BYD9aLUr.js",
-    "dist/client/assets/burgundyAtlas-DEgkxyWh.js",
-    "dist/client/assets/index-BM8vDjpx.js",
-    "dist/client/assets/index-DVx3BPQu.js",
+    "dist/client/assets/FriendTagDialog-BlkK-V8P.js",
+    "dist/client/assets/SectionLabel-vt2e7_ey.js",
+    "dist/client/assets/SparklingDetailsCard-8EjyrPsM.js",
+    "dist/client/assets/VillageMap-dRcAhUGC.js",
+    "dist/client/assets/burgundyAtlas-rtOHvKTz.js",
+    "dist/client/assets/index-BbJGuQww.js",
+    "dist/client/assets/index-DchOOmkm.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-Dn6T7T4I.js",
-    "dist/client/assets/wineDetailCompact-Bp3AWodu.js"
+    "dist/client/assets/useModalFocus-D97nlikJ.js",
+    "dist/client/assets/wineDetailCompact-DMPaB77O.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5617075,
-  "evidenceGzipBytesTotal": 506191,
+  "evidenceBytesTotal": 5617729,
+  "evidenceGzipBytesTotal": 506355,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -245,10 +245,10 @@
     },
     {
       "cru": "romanee-saint-vivant",
-      "file": "dist/client/assets/romanee-saint-vivant.evidence-BVeTzefl.js",
-      "sha256": "5f1d0395e06c3accb3dd762687960e2956d087c75d7d5b5456e6d97c8f2ce3cd",
-      "bytes": 108288,
-      "gzipBytes": 16461
+      "file": "dist/client/assets/romanee-saint-vivant.evidence-BJdr4RT-.js",
+      "sha256": "b4501c73cbc02ed753374f61b1b49b141bd1ae45d29dbe785e15ebc484f9572b",
+      "bytes": 108942,
+      "gzipBytes": 16625
     },
     {
       "cru": "ruchottes-chambertin",
