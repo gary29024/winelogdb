@@ -1,7 +1,8 @@
-# Romanée-Conti parcels: Tier 1 (#381)
+# Romanée-Conti parcels: Tier 2 (#427)
 
 Romanée-Conti uses INAO `inao-denom-1084`, appellation 222, and Vosne-Romanée
-commune 21714. Reviewed 7 October 2026 for season 2026 under the
+commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed
+8 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only Romanée-Conti.
@@ -27,11 +28,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-01-20–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 0; no deed on current or historical references |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 2 |
+| Parcels with holder or research leads | 2; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 0 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1994, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 43,700 / 7,526 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 48,686 / 8,717 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the Romanée-Conti selection contains 2 of
@@ -76,10 +77,11 @@ Both parcels (AN0072 and AN0258) join on complete references with matching fisca
 areas. Each has one code P (ownership) record for the same identifier,
 `778269407`, unchanged in every snapshot from 2019 to 2025. A single recorded
 owner is a rights fact only: it does not establish who farms the vineyard, and no
-monopoly or operator claim is inferred from the holder's name. No
-holder-to-domaine crosswalk is established, so domaine grouping stays off.
-Producer research and company filings remain Tier 2; paid SPF copies and outreach
-remain Tier 3.
+monopoly or operator claim is inferred from the holder's name. Tier 2 adopts
+the [shared holder table](../holders/holder-links.json), whose reviewed `owner-company`
+link names the holder as the Domaine de la Romanée-Conti company; the app groups both
+parcels under that heading and says **Research link · farming unverified**.
+Paid SPF copies and outreach remain Tier 3.
 
 [Rights history](rights-history.json) preserves one document and one complete
 analysis lot: AN0073 → AN0258, a *croquis de conservation* validated on
@@ -111,6 +113,48 @@ an unsearched interval is a gap, not absence of history. These shared gaps remai
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
 
+## Tier 2 holder and filing research
+
+The one recorded holder, `778269407`, was researched through the shared table. Its reviewed `owner-company` link to Domaine de la Romanée-Conti, recorded for Échezeaux and Grands-Échezeaux and re-checked for Richebourg and Romanée-Saint-Vivant, now applies here. The pass screened **7 DRC filings / 548 pages** with embedded text and OCR of every image page, then checked the cited schedule against page images. The [filing inventory](filings.md) records dates, references, page numbers, hashes, bounded negatives and effort.
+
+The 21 December 1974 notarial statutes, deposited in 2002, list the estate as then composed. Item 28 is AN 72, “La Romanée Conti”, 9 a 27 ca, the parcel’s current area, so it is an exact filing. Item 29 is AN 73 at 1 ha 71 a 23 ca. A 1994 *croquis de conservation* replaced AN 73 with AN 258, which measures 90 m² more; the filing never prints AN 258, so that evidence stays `filing-named-cadastral-reference` research reaching AN 258 only through documented DFI lineage. The 6 later filings, from 2003 to 2024, print no cadastral schedule; the 2003, 2009 and 2024 statutes recite the 1942 contribution of the whole estate and its brands.
+
+The DRC’s estate page publishes 1.8140 ha, equal to the summed cadastral areas of AN 72 and AN 258. It feeds only the named-area census; an equal total is not a parcel assignment.
+
+The prior cloud review of the two supplied Winehog articles reports no Romanée-Conti area, plot or cadastral reference (see [filings](filings.md#winehog-articles)). Both archives are not re-verified locally.
+
+Research leads rise from **0 to 2 of 2 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels with holder or research leads | 0 | 2 of 2 |
+| Parcels with no named candidate | 2 | 0 |
+| Holders with an applicable link | 0 | 1 of 1: reviewed `owner-company` |
+| Parcels with exact-reference company filings | 0 | 1 in 1 filing entry |
+| Parcels reached only through filing-named retired references | 0 | 1 |
+| Published holdings in the named-area census | 0 | 1 |
+| Verified farming links | 0 | **0** |
+
+### Effort per holder
+
+| Recorded holder | Filings | Pages | Outcome |
+| --- | ---: | ---: | --- |
+| Domaine de la Romanée-Conti (`778269407`) | 7 | 548 | The 1974 notarial estate schedule names AN72 with its exact area and retired AN73, which reaches AN258 only through the 1994 DFI croquis. 6 later DRC filings add no cadastral schedule or lease; legal company identity remains a research link. Farming unverified. |
+
+The counts above describe this pass, including DRC files re-screened after earlier crus; earlier totals remain in the table’s effort note.
+
+### Tier 2 access and evidence gaps
+
+- Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
+- No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained. The prior cloud review found no Romanée-Conti area, plot or cadastral reference; that finding was not independently checked locally.
+- Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
+
+## Local audit
+
+The [Windows / Python 3.12 audit](filings.md#local-audit-codex-cli-windows-python-312) reverified all 7 filing PDFs / 548 pages. Their hashes, sizes and page counts match; AN72’s exact match and AN73’s lineage-only treatment remain supported. The 2024 management-declaration page reference is corrected. INPI/Pappers remain inaccessible and both Winehog archives are not re-verified locally. PR #537 records validation results and the inherited platform exceptions.
+
 ## Reproduce and validate
 
 Use Python 3.12, as CI does, with
@@ -133,5 +177,5 @@ python scripts/measure_grand_cru_payload.py
 The browser journey uses `WINELOG_E2E_CRU=romanee-conti` with
 `burgundy-village-map.spec.ts`, without expanding the normal Chromium matrix.
 
-The cru issue remains open until this PR passes review and merges; only then are
-its acceptance boxes and the Romanée-Conti entry in #461 completed.
+This delivery references #427 and tracker #420 without closing them. Tier 1 history
+review remains separately tracked under #461; current farming remains under #364.
