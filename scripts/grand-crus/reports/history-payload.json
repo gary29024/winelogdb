@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-C85YZ2g8.js"
+    "dist/client/assets/index-CB145d2K.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CnZhn5fR.js",
-    "dist/client/assets/SectionLabel-uauaLnzR.js",
-    "dist/client/assets/SparklingDetailsCard-BoarLKIT.js",
-    "dist/client/assets/VillageMap-BLyUC7PL.js",
-    "dist/client/assets/burgundyAtlas-oJNJ7zmF.js",
-    "dist/client/assets/index-C85YZ2g8.js",
-    "dist/client/assets/index-Dq-zmch7.js",
+    "dist/client/assets/FriendTagDialog-Tm2wtX7S.js",
+    "dist/client/assets/SectionLabel-lurK6dax.js",
+    "dist/client/assets/SparklingDetailsCard-six6KCQC.js",
+    "dist/client/assets/VillageMap-DqqpdVaY.js",
+    "dist/client/assets/burgundyAtlas-6vR1GSNR.js",
+    "dist/client/assets/index-BmzcfTJv.js",
+    "dist/client/assets/index-CB145d2K.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-BO_ezeh_.js",
-    "dist/client/assets/wineDetailCompact-BFl-i5Wr.js"
+    "dist/client/assets/useModalFocus-F62YzdOn.js",
+    "dist/client/assets/wineDetailCompact-goJPOYgG.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
   "evidenceBytesTotal": 5606196,
-  "evidenceGzipBytesTotal": 503947,
+  "evidenceGzipBytesTotal": 503948,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -182,10 +182,10 @@
     },
     {
       "cru": "la-romanee",
-      "file": "dist/client/assets/la-romanee.evidence-lPMX-1Yz.js",
-      "sha256": "d8fd7f717129992ae6cad4113f5ead7dd2a09060ff94dd9d10ac6f29f023b1a7",
+      "file": "dist/client/assets/la-romanee.evidence-nTv34038.js",
+      "sha256": "99467aa41194629767337b350822d135f4d6ef52f2ebe25dd8f7a77ab30e66d8",
       "bytes": 48316,
-      "gzipBytes": 8844
+      "gzipBytes": 8845
     },
     {
       "cru": "la-tache",
