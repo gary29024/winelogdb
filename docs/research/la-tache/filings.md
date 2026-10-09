@@ -1,6 +1,6 @@
 # La Tâche: public company filings
 
-Reviewed 8 October 2026 for [Tier 2 issue #429](https://github.com/gary29024/winelogdb/issues/429), following the Richebourg (#530), Romanée-Saint-Vivant (#426) and Romanée-Conti (#427) passes. The one recorded holder, the Société Civile du Domaine de la Romanée-Conti (778269407), was searched in the official company API and the free entreprises.lefigaro.fr index. PDFs were downloaded from actes.ccm2.net; no paid land-register copies or outreach were used. data.inpi.fr and pappers.fr refuse cloud traffic and were not used; anything only they hold is a gap for local audit.
+Reviewed 8 October 2026 for [Tier 2 issue #429](https://github.com/gary29024/winelogdb/issues/429), following the Richebourg (#530), Romanée-Saint-Vivant (#426) and Romanée-Conti (#427) passes. The one recorded holder, the Société Civile du Domaine de la Romanée-Conti (778269407), was searched in the official company API and the free entreprises.lefigaro.fr index. PDFs were downloaded from actes.ccm2.net; no paid land-register copies or outreach were used. Local retries of data.inpi.fr and pappers.fr also returned HTTP 403; records available only there remain unverified.
 
 The bounded selection covers the 1974 statutes with their estate schedule, the 2003 recast statutes (deposited twice) and the later statutes. It is not an exhaustive download of the DRC’s filings, most of which are share donations. Each of the **7 files / 548 pages** was processed with PyMuPDF embedded-text extraction; every image page was then rendered at **150 dpi** and screened with RapidOCR (ONNX Runtime, CPU, `use_cls=False`). Pages with only a born-digital text layer were read from that layer. The cited schedule was checked against page images. A negative means no qualifying La Tâche match in these selected files, not that no such document exists.
 
@@ -58,7 +58,7 @@ SHA-256: `dd0eeaa91e31c1766bdad78c0c1fb9f36caa621872c3f0782b195bcb0fcfec9d`. Ret
 
 ### lt-drc-2018
 
-[DRC: 26 January 2018 completion of the December 2017 capital increase](https://actes.ccm2.net/acte/5409360#page=2) — 57 PDF pages, all screened. Deed/decision **2018-01-26**; deposit **2018-06-21**. Relevant pages: 2, 3, 4.
+[DRC: 26 January 2018 completion of the December 2017 capital increase](https://actes.ccm2.net/acte/5409360#page=2) — 57 PDF pages, all screened. Deed/decision **2018-01-26**; deposit **2018-06-21**. Relevant pages: 1, 2, 3, 4.
 
 Records the capital increase decided on 20 December 2017 and updated statutes. No cadastral reference or La Tâche schedule.
 
@@ -66,7 +66,7 @@ SHA-256: `1e587daa78a0c37ea9e71f7d8778cf83d94ed5b926b67d41e8edd29e1c80a51a`. Ret
 
 ### lt-drc-2022
 
-[DRC: 21 March 2022 share donation and statutes](https://actes.ccm2.net/acte/5409233#page=2) — 65 PDF pages, all screened. Deed/decision **2022-03-21**; deposit **2022-04-15**. Relevant pages: 2, 31, 32.
+[DRC: 21 March 2022 share donation and statutes](https://actes.ccm2.net/acte/5409233#page=2) — 65 PDF pages, all screened. Deed/decision **2022-03-21**; deposit **2022-04-15**. Relevant pages: 1, 2, 31, 32.
 
 Share donation and updated statutes reproducing the brand wording; no cadastral reference.
 
@@ -74,7 +74,7 @@ SHA-256: `5f0b832a6e2c6c1d7cb388b9a33fecdd84b407c6cee3ed91670f985130f79708`. Ret
 
 ### lt-drc-2024
 
-[DRC: 14 November 2024 management declaration and bundled share deeds](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 45, 46.
+[DRC: 14 November 2024 management declaration and bundled share deeds](https://actes.ccm2.net/acte/34207319#page=6) — 135 PDF pages, all screened. Deed/decision **2024-11-14**; deposit **2024-11-14**. Relevant pages: 6, 41, 44, 45, 46.
 
 Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including the Clos de La Tâche label. No cadastral reference or parcel schedule.
 
@@ -86,11 +86,11 @@ One producer holding is retained only in the named-area census; it names the who
 
 | Producer | Published area | Precision | Finding | Sources |
 | --- | --- | --- | --- | --- |
-| Domaine de la Romanée-Conti | 6.062 ha | square-metre | Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Winehog (2014) gives 6.06 ha in two named parts. Census evidence only; no farming season inferred. | [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/) |
+| Domaine de la Romanée-Conti | 6.062 ha | square-metre | Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. The prior cloud review records Winehog (2014), not re-verified locally, as giving 6.06 ha in two named parts. Census evidence only; no farming season inferred. | [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/) |
 
 ## Winehog articles
 
-The repository owner supplied all 4 requested Winehog subscriber articles as saved webarchives. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
+The prior cloud pass reviewed four Winehog subscriber archives supplied by the owner. All four are **not re-verified locally**, at the owner’s instruction; their hashes, printed dates, areas and findings were not independently checked. Each source records the article URL, its printed date (`documentDate`), any later page-metadata modification date, and the SHA-256 and byte count of the original archive; archives and article text are not committed. A printed plot number would count only if number and area both matched the pinned cadastre.
 
 | Article | Printed date | Printed reference | Result |
 | --- | --- | --- | --- |
@@ -99,12 +99,20 @@ The repository owner supplied all 4 requested Winehog subscriber articles as sav
 | [La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/) | 2014-08-17 (page modified 2026-05-14) | — | no cadastral number |
 | [The Story Behind The 1923 La Tâche Bottled by Maison Nicolas](https://winehog.org/the-story-behind-the-1923-la-tache-bottled-by-maison-nicolas-74167/) | 2026-05-28 (page modified 2026-05-29) | — | no cadastral number |
 
-The history articles give La Tâche’s two named parts as 1.43 ha and 4.63 ha (6.06 ha). Those rounded totals agree with the 1974 schedule and the estate page but print no cadastral number, so they stay census context and change no lead or filing. The ownership history is the critic’s account, not company evidence.
+The prior cloud review records the history articles as giving La Tâche’s two named parts as 1.43 ha and 4.63 ha (6.06 ha). Those rounded totals agree with the 1974 schedule and the estate page but print no cadastral number, so they stay census context and change no lead or filing. The ownership history is the critic’s account, not company evidence.
 
 ## Remaining gaps
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Tâche cadastral number; their 1.43 ha and 4.63 ha named-area totals are rounded and stay census context.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- All four Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, printed dates and hashes remain qualified prior cloud evidence; the recorded lack of cadastral numbers, named-area totals and historical account were not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
+
+## Local audit (Codex CLI, Windows, Python 3.12)
+
+On 9 October 2026, **7 PDFs / 548 pages** were freshly downloaded; every SHA-256, byte count and page count matches. The files also match the copies already read in full during the earlier local audits. That all-page reading was reused by exact hash, and all cited pages were re-read for La Tâche. PDF pages 38–39 were checked as images: AM 9 is 46,275 m² and AM 16 is 14,345 m²; AM 10 and AM 14 are separate, outside this cru. Both exact matches remain historical evidence, with no parcel-specific lease or current farming claim.
+
+The 2024 citation now includes PDF page 41 (14 November management declaration) and page 44 (statutes dated 27 July). The estate page’s 6.0620 ha and raw bytes match. The company API, cited under two source IDs, has changed response bytes but preserves SIREN 778269407, legal name, active status and Vosne-Romanée seat; it remains identity evidence only. Both INPI/Pappers retries returned HTTP 403. All four Winehog archives are **not re-verified locally**, at the owner’s instruction; their totals and historical claims remain qualified prior findings.
+
+Checks and remaining exceptions are recorded in [README](README.md#local-audit-codex-cli-windows-python-312).
