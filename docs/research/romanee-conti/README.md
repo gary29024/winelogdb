@@ -121,7 +121,7 @@ The 21 December 1974 notarial statutes, deposited in 2002, list the estate as th
 
 The DRC’s estate page publishes 1.8140 ha, equal to the summed cadastral areas of AN 72 and AN 258. It feeds only the named-area census; an equal total is not a parcel assignment.
 
-The repository owner supplied both requested Winehog articles (see [filings](filings.md#winehog-articles)); neither prints a Romanée-Conti area, plot or cadastral reference.
+The prior cloud review of the two supplied Winehog articles reports no Romanée-Conti area, plot or cadastral reference (see [filings](filings.md#winehog-articles)). Both archives are not re-verified locally.
 
 Research leads rise from **0 to 2 of 2 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
@@ -147,9 +147,13 @@ The counts above describe this pass, including DRC files re-screened after earli
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained. The prior cloud review found no Romanée-Conti area, plot or cadastral reference; that finding was not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
+
+## Local audit
+
+The [Windows / Python 3.12 audit](filings.md#local-audit-codex-cli-windows-python-312) reverified all 7 filing PDFs / 548 pages. Their hashes, sizes and page counts match; AN72’s exact match and AN73’s lineage-only treatment remain supported. The 2024 management-declaration page reference is corrected. INPI/Pappers remain inaccessible and both Winehog archives are not re-verified locally. PR #537 records validation results and the inherited platform exceptions.
 
 ## Reproduce and validate
 

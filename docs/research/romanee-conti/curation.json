@@ -147,17 +147,20 @@
       "finding": "Share deeds and statutes updated 27 July 2024, which recite the 1942 contribution of the whole Domaine de la Romanée-Conti and its brands, including “Romanée-Conti”. No cadastral reference or parcel schedule.",
       "reviewedPages": [
         6,
+        41,
+        44,
         45,
         46
       ],
-      "reviewedAt": "2026-10-08",
+      "reviewedAt": "2026-10-09",
       "retrievedAt": "2026-10-08T13:07:24+00:00",
       "retrievedFrom": "https://actes.ccm2.net/acte/34207319",
       "sha256": "f69a58a9d77a91e96a7dc6de3c803d3871c49d7766467a49238c1844dc8af0dc",
       "bytes": 8473781,
       "pageCount": 135,
       "screenedPages": 135,
-      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images."
+      "screeningMethod": "PyMuPDF embedded text, then every page rendered at 150 dpi and OCR with RapidOCR (ONNX Runtime, CPU, use_cls=False) in the cloud session; cited schedules and lease passages checked against the text and, for schedules, page images.",
+      "dateNote": "The management declaration is dated 14 November 2024 (PDF 41); bundled statutes are updated 27 July 2024 (PDF 44)."
     },
     {
       "id": "rc-drc-2003-first",
@@ -232,7 +235,7 @@
       "sha256": "f59d705350f667241026335d650844067a2624ef85ffd63779e5c1b4860b5946",
       "bytes": 2958029,
       "retrievedAt": "2026-10-08",
-      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction.",
       "finding": "Producer profile of the DRC’s wines and style, naming Romanée-Conti and La Tâche as its two monopoles. It prints no area, plot or cadastral reference.",
       "otherDocumentDates": [
         {
@@ -252,7 +255,7 @@
       "sha256": "7aaa646a47232f7d46a95ba118f269ea7d681b25f383f1e5f4389bfde52e3c5c",
       "bytes": 3722516,
       "retrievedAt": "2026-10-08",
-      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed.",
+      "retrievalNote": "Authorized article supplied by the repository owner as a saved webarchive. Hash covers the original archive bytes; archive and full article text are not committed. Local audit 2026-10-09: not re-verified locally, at the repository owner’s instruction.",
       "finding": "A 24 April 2021 ride through the vines, with photographs looking over Romanée-Conti, La Romanée and Aux Reignots. It prints no area, owner, plot or cadastral reference."
     }
   ],
@@ -353,8 +356,8 @@
   "accessGaps": [
     "Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.",
     "No screened filing prints AN 258. The 1974 schedule’s AN 73 reaches it only through the 1994 DFI croquis, and the 90 m² difference between the printed and current areas is not explained by any reviewed source.",
-    "data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.",
-    "Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a Romanée-Conti area, plot or cadastral reference.",
+    "Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.",
+    "Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes are retained. The prior cloud review found no Romanée-Conti area, plot or cadastral reference; that finding was not independently checked locally.",
     "Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3."
   ],
   "unmatchedPrintedReferences": [],
