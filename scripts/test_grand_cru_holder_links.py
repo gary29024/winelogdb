@@ -652,6 +652,8 @@ class BonnesMaresTier2Tests(unittest.TestCase):
             self.assertEqual(items[0]['originalReferenceId'], '21133000AB0467')
         self.assertNotIn('bm-wh-mugnier', ext)
         self.assertNotIn('bm-wh-vogue', ext)
+        roumier = next(h for h in self.curation['producerHoldings'] if h['id'] == 'bm-roumier')
+        self.assertTrue({1.3878, 1.3868}.issubset({x['areaHa'] for x in roumier['otherPublishedAreas']}))
         sources = {s['id']: s for s in self.curation['sources']}
         self.assertEqual(sources['bm-winehog-roumier']['documentDate'], '2018-05-06')
         self.assertEqual(sources['bm-winehog-roumier']['otherDocumentDates'][0]['date'], '2023-03-07')
