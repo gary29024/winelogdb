@@ -2,7 +2,7 @@
 
 La Tâche uses INAO `inao-denom-656`, appellation 191, and Vosne-Romanée commune
 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed
-8 October 2026 for season 2026 under the
+8 October 2026, locally audited 9 October 2026, for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only La Tâche.
@@ -130,7 +130,7 @@ The 21 December 1974 notarial statutes, deposited in 2002, list the estate as th
 
 The DRC’s estate page publishes 6.0620 ha, equal to the summed cadastral areas of AM 9 and AM 16. It feeds only the named-area census; an equal total is not a parcel assignment.
 
-The repository owner supplied all four requested Winehog articles (see [filings](filings.md#winehog-articles)). None prints a La Tâche cadastral number. Their 1.43 ha and 4.63 ha totals for the two named parts are rounded census context, and their account of the 1933 auction and merger is not company evidence.
+The prior cloud pass reviewed four user-supplied Winehog archives (see [filings](filings.md#winehog-articles)). They are **not re-verified locally**, as instructed. The prior findings of no cadastral number and rounded 1.43 ha / 4.63 ha totals remain qualified census context; the historical account remains critic evidence.
 
 Research leads rise from **0 to 2 of 2 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
@@ -155,9 +155,26 @@ The counts above describe this pass, including DRC files re-screened after earli
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Tâche cadastral number; their 1.43 ha and 4.63 ha named-area totals are rounded and stay census context.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- All four Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, printed dates and hashes remain qualified prior cloud evidence; the recorded lack of cadastral numbers, named-area totals and historical account were not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
+
+## Local audit (Codex CLI, Windows, Python 3.12)
+
+On 9 October 2026, **7 PDFs / 548 pages** were freshly downloaded; every SHA-256, byte count and page count matches. The files also match the copies already read in full during the earlier local audits. That all-page reading was reused by exact hash, and all cited pages were re-read for La Tâche. PDF pages 38–39 were checked as images: AM 9 is 46,275 m² and AM 16 is 14,345 m²; AM 10 and AM 14 are separate, outside this cru. Both exact matches remain historical evidence, with no parcel-specific lease or current farming claim.
+
+The 2024 citation now includes PDF page 41 (14 November management declaration) and page 44 (statutes dated 27 July). The estate page’s 6.0620 ha and raw bytes match. The company API, cited under two source IDs, has changed response bytes but preserves SIREN 778269407, legal name, active status and Vosne-Romanée seat; it remains identity evidence only. Both INPI/Pappers retries returned HTTP 403. All four Winehog archives are **not re-verified locally**, at the owner’s instruction; their totals and historical claims remain qualified prior findings.
+
+Validation:
+
+- Passed: research `--all --check`, holder links, app registry, independent rollout audit, lint, typecheck, production build, payload measurement and `git diff --check`.
+- Complete raw-source history rollout `--check`: passed.
+- Python CI list: **226 passed / 1 error (227 total)**, the established Windows Corton climat rounding difference (4603.0682 versus committed 4603.0683 m²).
+- Vitest: **5,626 passed / 1 failed**, the known `tasteSection` English-month expectation against Windows `2026年8月`.
+- Chromium and mobile WebKit: **43 passed / 3 skipped / 2 failed**. Both failures are `Official history: la-tache`: the shared test assumes a DFI-validation event exists, but neither parcel has one; it fails before browser interaction. Both La Tâche parcel journeys pass.
+- Production evidence: **33 chunks, 5,610,093 raw / 504,895 gzip bytes**; zero evidence modules in initial or map static module graphs. La Tâche evidence: **45,696 / 7,830 bytes**. Independent audit: 451 obtained and two documented missing resources, 33 crus, 2,721 parcels, zero verified farming.
+
+The platform and shared-test exceptions remain open; this is not an all-green local run.
 
 ## Reproduce and validate
 
