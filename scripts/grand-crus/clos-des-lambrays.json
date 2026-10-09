@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-547",
   "appellationId": 163,
   "issue": 388,
-  "tier": 1,
+  "tier": 2,
   "bundle": "chambolle-morey",
   "villageMaps": [
     "morey-saint-denis"
@@ -27,8 +27,7 @@
   },
   "research": {
     "methodDoc": "docs/research/clos-des-lambrays/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/clos-des-lambrays/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/clos-des-lambrays",

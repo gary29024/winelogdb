@@ -1,10 +1,10 @@
-# Clos de la Roche parcels: Tier 1 (#390)
+# Clos de la Roche parcels: Tier 2 (#436)
 
 Clos de la Roche uses INAO `inao-denom-544`, appellation 160, and
-Morey-Saint-Denis commune 21442. Reviewed 7 October 2026 for season 2026 under the
+Morey-Saint-Denis commune 21442. Tier 1 reviewed 7 October; Tier 2 reviewed 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). Its shared Chambolle-Morey bundle
-also contains five other crus; this delivery enables only Clos de la Roche.
+also contains five other crus; this delivery advances Clos de la Roche to Tier 2.
 
 **No current farmer is verified.** Recorded rights, parcel filiation, deeds and
 administrative procedures are distinct evidence, and none establishes farming.
@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 2; 3 deeds on current references, none on historical references |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 112 |
+| Parcels with holder or research leads | 36; Tier 1 had 0 |
+| Parcels with no lead | 76 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 139,067 / 12,431 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 193,305 / 19,241 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos de la Roche selection
@@ -105,10 +105,10 @@ P (ownership), N (bare ownership) and U (usufruct), including two parcels, AB041
 and AB0474, with split bare ownership and usufruct. Recorded fiscal areas match
 the current cadastre's stated areas for all 73 matched parcels. Private-person
 rights are absent from this legal-entity dataset. Six provisional `U…`
-identifiers remain identifiers, not verified SIRENs or inferred persons. No
-holder-to-domaine crosswalk is established, so domaine grouping stays off.
-Producer research and company filings remain Tier 2; paid SPF copies and outreach
-remain Tier 3.
+identifiers remain the recorded keys. Four have reviewed company-record identity
+crosswalks (including the reused Arlaud identity); Hospices and Lecheneaut remain
+unresolved. Ten holders have applicable research links, enabling domaine grouping.
+Paid SPF copies and present-season confirmation remain Tier 3.
 
 [Rights history](rights-history.json) preserves eight documents and 25 complete
 analysis lots. Fifteen merger lots on 14 April 1989 combined 2 to 12 references
@@ -152,6 +152,64 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). Access failure 
 an unsearched interval is a gap, not absence of history. These shared gaps remain
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
+
+## Tier 2 holder and source review
+
+All **22 recorded holders** now have Tier 2 rows using the [shared holder table](../holders/holder-links.json).
+Thirteen new holder entries are added and nine earlier entries/effort records are reused. Ten applicable
+links cover **33 parcels**: nine reviewed research links and the existing provisional Dujac family-company
+lead. Three more parcels receive critic leads, raising the union from **0 to 36**, with **76 unresolved**.
+Company identities, historical lessor relationships and dated producer attributions do not confirm current operation.
+
+The bounded new selection is **36 PDFs / 1390 pages**, all OCR-screened with RapidOCR and DirectML at
+150 dpi. It includes 35 relevant candidate-company PDFs / 1374 pages and **one rejected 16-page file**:
+the Peirazeau formation link actually opens SCI ADH Sevigne. Nine holders reuse **29 PDFs / 984 pages**
+of prior research without recounting that effort. The [filing log](filings.md) lists each document, deed and
+deposit date, page anchors, original-byte hashes and holder outcomes. Raw PDFs, OCR and archives stay outside Git.
+
+Twelve exact filing entries cover **39 current parcels**, requiring the current reference, individual area
+and recorded holder together. Historical transaction scope is retained: Saint Loup contributes half an
+indivisible interest in AB460; the Magnien business contribution transfers plantations and **excludes land**;
+Lignier schedules include fractional interests and AB419 as land. Peirazeau's two individual leases divide
+AB47 and AB50 into portions, so no entire parcel is assigned to either tenant. Lignier-Michelot AB381 is
+printed at 1172 m² versus the current 1173 m² and fails the exact-area test.
+
+Three U-id crosswalks are supported by filed identities and exact schedules: Boutieres **445342603**,
+Marchand-Virely **477891048**, and Feuillet **420812018**. The different same-name Boutieres 418034823
+and Feuillet 382058188 companies remain distinct. Hospices and Lecheneaut U-ids remain unresolved.
+No producer is inferred from the Lignier, Peirazeau, Magnien or Feuillet personal names and officers.
+Marchand's deed explicitly names EARL Domaine Marchand Freres; its official legal notice and government
+register independently establish the tenant company's identity. Its 1999 lease remains a historical recital.
+
+The 2006 Feuillet deed contains an official **23 June 2004 CVI** naming Truchot Martin Jacky against
+AB230 (968 m²) and AB505 (3133 m²). It also explicitly terminates the 1998 Truchot lease on **11 January 2006**;
+a successor lease is only proposed and its tenant is unnamed. After the explicit #364 pause, the user approved
+retaining this as historical research with **zero verified farming**. No later Duband or Feuillet operator is
+assigned. The 2024 GFA statutes retain the old contribution schedule and cannot refresh that historical evidence.
+
+Malauro recites a 2014 lease to Laurent Lignier individually. Boutieres' 2022 donation recites a 2018 lease
+to Frederic Magnien and a 2022 rent amendment, distinct from old Michel Magnien leases. Saint Loup's recital
+ends in 2019. Ponsot's explicit 2007 lease clause names the operating company, while a 2018 tax recital
+inconsistently names the GFA as tenant; that conflict and missing originals/renewals remain visible.
+
+Six supplied Winehog articles provide **24 matching individual references** and **14 named-area census
+rows**. Ponsot's 3960 m² portion of AB461 is excluded from whole-parcel matches (the full parcel is 27614 m²),
+but retained in the reported named-area total. Rousseau AB550/551 gain critic research without inventing
+legal-entity rights. Domaine Leroy's critic attribution stays separate from the recorded Maison Leroy company
+link. Some lazy-loaded producer maps are absent; all accepted numbers and areas come from explicit article text.
+The subsequently supplied overview and Hubert Lignier archives close two access gaps. The overview
+reproduces a decree dated 3 July 1944 with old section-A ranges and aggregate climat areas; it
+does not supply a current parcel crosswalk. Its suggested 1936 expansion and 1971 arithmetic
+remain unresolved. Hubert Lignier adds only 0.62 ha Monts Luisants and 0.28 ha Les Fremières
+census rows. Its 0.20 ha MCMLV cuvée is a subset, not an additional holding, and the locations
+are expressly approximate. The supplied Dujac article now adds nine exact individual reference-and-area matches across five
+named areas. Their 1.9472 ha sum rounds to the article's 1.95 ha. These nine parcels already had
+company research leads, so the 36-parcel union remains unchanged. All requested Winehog articles
+are now supplied and reviewed. Public articles are accessed directly.
+
+Former Magnien AB162/500/502 have no documented ancestry or accepted successor into the current selection
+and remain unmatched. No geometry, rights or shared generator is changed. Original instruments, unresolved
+identities, paid SPF copies and present-season confirmation remain open gaps. **Verified farming remains zero.**
 
 ## Reproduce and validate
 

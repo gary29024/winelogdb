@@ -1,12 +1,12 @@
-# Bonnes-Mares parcels: Tier 1 (#386)
+# Bonnes-Mares parcels: Tier 2 (#432)
 
 Bonnes-Mares uses INAO `inao-denom-361`, appellation 137, and crosses the
-Chambolle-Musigny (21133) and Morey-Saint-Denis (21442) commune line. Reviewed
-7 October 2026 for season 2026 under the
+Chambolle-Musigny (21133) and Morey-Saint-Denis (21442) commune line. Tier 1 reviewed 7 October; Tier 2 reviewed
+9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It appears on both village maps.
 Its shared Chambolle-Morey bundle also contains Musigny and four Morey-Saint-Denis
-crus; this delivery enables only Bonnes-Mares.
+crus; this delivery advances Bonnes-Mares to Tier 2.
 
 **No current farmer is verified.** Recorded rights, parcel filiation, deeds and
 administrative procedures are distinct evidence, and none establishes farming.
@@ -29,11 +29,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-29. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 3; one page-reviewed 2022 application receipt |
 | Parcels with sale records (DVF) | 23; 7 deeds on current references, none on historical references |
-| Parcels with holder or research leads | 3; parcels named in the reviewed notice. A recorded legal holder alone is not a lead |
-| Parcels with no lead | 127 |
+| Parcels with holder or research leads | 46; Tier 1 had 3 notice leads; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 84 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1990, all pinned geometry vintages of both communes and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 121,093 / 11,784 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 167,884 / 18,958 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Bonnes-Mares selection
@@ -151,6 +151,46 @@ an unsearched interval is a gap, not absence of history. These shared gaps remai
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
 
+## Tier 2 holder and source review
+
+All 30 recorded holders have a local research row using the [shared holder table](../holders/holder-links.json).
+Nineteen entries are new; eleven reuse prior links, searches and effort. Five new links cover the
+Groffier, Auvenay and Clos de Tart wine companies, an undated Hudelot-Baillet reported tenancy, and Arlaud's
+historically recited lease. The existing Dujac family-company lead remains provisional. Thirteen
+holders have applicable links; a lease or weak identity basis stays a lead rather than a company heading.
+
+The selected pass screened **46 filings / 1,788 pages**, with RapidOCR and DirectML at 150 dpi on
+every page, and image review of the positive schedules. Eight exact filing entries cover 17 current
+parcels. These match the recorded holder, reference and individual area; old usufruct, fractional
+interests and AB41's Chambolle-Musigny description remain qualified. The [filing log](filings.md)
+records source dates, deposit dates, page counts, raw-byte hashes and the bounded negative screens.
+
+Five U-id company identities are supported by exact schedules: Grands Vins Fins, Bart-Clair,
+Arlaud, Clos Bussiere and Maison Mommessin. The Dujac, Bachus, Veroilles and two BND identities remain
+unresolved. Individual officers and family names are not a producer-company crosswalk. The separate
+Arlaud registration 429825441 is not merged with the filed company 444144190.
+
+Three supplied Winehog Bonnes-Mares articles and the supplied Vogue and Clos de Tart histories were reviewed.
+Arlaud AB76/121 and Groffier AB266 match both number and individual area. Drouhin's four-reference
+group total and Vogue's mismatched AB98 stay unmatched. The Bachus filing supports only historical
+external mandate evidence on exact AB304; AB438/440 have area discrepancies and are not renamed
+AB437/439. Eleven producer totals are a named-area census, with no parcel allocation. Arlaud's
+published 0.2131 ha total differs from the two stated areas' 0.2081 ha sum, retained without correction.
+
+All six additional Bonnes-Mares Winehog WebArchives are now supplied and reviewed. They add
+14 individually matching current references and retired AB467 (1803 m²), linked only through
+the 2020 DFI split to AB481/482. The lead union rises from 34 to **46**, leaving **84 unresolved**.
+Roumier AB367 prints 1608 m² versus the cadastral 1618 m² and remains unmatched. Mugnier,
+Dujac's older group, and Vogüé AB98/99 give only combined areas; none is divided into individual
+matches. Roumier's unnamed-investor métayage account stays dated critic context without a
+company crosswalk. Conflicting published totals remain separately dated in the census.
+The [filing log](filings.md) records all original archive hashes and the historical-area check. Public estate material was accessed directly. Downloads, archives, full article text,
+page images and OCR remain outside Git. No geometry, rights, history or schema was changed.
+Original leases, renewals, paid SPF records and current-season confirmations remain unreviewed.
+**Verified farming stays zero.**
+
+AR64 also matches the Clos de Tart company property annex (2018) and Winehog history (2015). The filed Maison Mommessin to Famille Mommessin to Societe du Clos de Tart name chain and four individually matched references resolve the U-id. The 2018 event is a share transfer; the property annex recites a 1932 land acquisition. No new land conveyance or current farming is inferred.
+
 ## Reproduce and validate
 
 Use Python 3.12, as CI does, with
@@ -163,6 +203,7 @@ python scripts/build_grand_cru_commune_audit.py --cru bonnes-mares --check
 python scripts/build_grand_cru_named_plots.py --cru bonnes-mares
 python scripts/build_grand_cru_parcel_named_areas.py --cru bonnes-mares --check
 python scripts/build_grand_cru_history_rollout.py --bundle chambolle-morey --check
+python scripts/build_grand_cru_holder_links.py --check
 python scripts/build_grand_cru_research.py --all --check
 python scripts/build_grand_cru_app_registry.py --check
 python scripts/audit_grand_cru_history_rollout.py --check

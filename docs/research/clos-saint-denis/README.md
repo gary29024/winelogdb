@@ -1,10 +1,10 @@
-# Clos Saint-Denis parcels: Tier 1 (#389)
+# Clos Saint-Denis parcels: Tier 2 (#435)
 
 Clos Saint-Denis uses INAO `inao-denom-548`, appellation 164, and
-Morey-Saint-Denis commune 21442. Reviewed 7 October 2026 for season 2026 under the
+Morey-Saint-Denis commune 21442. Tier 1 reviewed 7 October; Tier 2 reviewed 9 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). Its shared Chambolle-Morey bundle
-also contains five other crus; this delivery enables only Clos Saint-Denis.
+also contains five other crus; this delivery advances Clos Saint-Denis to Tier 2.
 
 **No current farmer is verified.** Recorded rights, parcel filiation, deeds and
 administrative procedures are distinct evidence, and none establishes farming.
@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 1; 1 deed on a current reference |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 49 |
+| Parcels with holder or research leads | 17; Tier 1 had 0 |
+| Parcels with no lead | 32 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 85,838 / 9,945 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 113,806 / 14,285 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos Saint-Denis selection
@@ -102,11 +102,10 @@ All rights join on complete parcel references. The 35 records preserve codes
 P (ownership), N (bare ownership) and U (usufruct), including two parcels, AB0475
 and AB0476, with split bare ownership and usufruct. Recorded fiscal areas match
 the current cadastre's stated areas for all 33 matched parcels. Private-person
-rights are absent from this legal-entity dataset. Three provisional `U…`
-identifiers remain identifiers, not verified SIRENs or inferred persons. No
-holder-to-domaine crosswalk is established, so domaine grouping stays off.
-Producer research and company filings remain Tier 2; paid SPF copies and outreach
-remain Tier 3.
+rights are absent from this legal-entity dataset. The three provisional `U…` keys are retained. Arlaud and Saint Roch have
+company-record identity crosswalks; the separate Lignier U-id remains unresolved.
+Five holders have scoped or company research links, enabling domaine grouping.
+Paid SPF copies and present-season confirmation remain Tier 3.
 
 [Rights history](rights-history.json) preserves five documents and eleven complete
 analysis lots. On 14 April 1989 seven merger lots combined 2 to 11 references each
@@ -139,6 +138,57 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). Access failure 
 an unsearched interval is a gap, not absence of history. These shared gaps remain
 tracked in #461; unverified operation and unresolved name research stay under
 #364 and #344 respectively.
+
+## Tier 2 holder and source review
+
+All eleven recorded holders have research rows using the [shared holder table](../holders/holder-links.json).
+Seven new entries are added; four earlier holders and their source effort are reused. The five links are
+Bertagna (reviewed company), Dujac (existing provisional family-company lead), Domaine des Chezeaux
+(reviewed wine-company identity), Michel Magnien (reviewed wine-company identity), and Arlaud
+(a reviewed, Clos Saint-Denis-scoped historical lease recital). These cover twelve parcels; five further
+parcels receive exact-number-and-area critic leads. The union rises from **0 to 17**, leaving **32 unresolved**.
+A research link is not confirmation of current parcel operation.
+
+The bounded new selection is **21 PDFs / 718 pages**: Magnien 5/182, Saint Roch 2/62, Saint Loup 3/121,
+Chezeaux 4/108, Grains de Lune 4/165, and Le Clos Saint Denis 3/80. Every page was OCR-screened at
+150 dpi using RapidOCR and DirectML. Reused effort is Bertagna 5/72, Dujac 4/140, Georges Lignier 3/173,
+and Arlaud 1/55: **13 existing PDFs / 440 pages**, not new work or duplicate downloads. The unresolved
+Lignier U-id reuses the same candidate research with zero additional screening count. The distinct
+1990 deed inside the Lignier composite PDF has its own date/source record but adds no PDF or page effort.
+
+Six filing entries cover **16 current parcels**: Lignier's 1976 schedule (six), its 1990 contribution (two),
+Arlaud (two), Saint Roch (three), Saint Loup (two), and the Magnien historical business contribution (one).
+Exact reference, individual cadastral area and recorded holder are checked together. Land use and
+transaction scope remain explicit: Lignier AP22 is described as building/sol, while Magnien AB472 is
+5144 m² but only 310 m² is described as Clos Saint-Denis. The 1998 Magnien deed transfers plantations
+and business assets and **expressly excludes underlying land**. Its historical operation context is
+retained with the user's approval as dated Tier 2 research; operation adjudication under #364 remains separate.
+
+Saint Roch's U-id is crosswalked to **501519938** using the filed identity and exact AB494/AP230/AP232
+schedule. Its recited tenant is Philippe Jouan; the source says 18 years but prints 2004–2022 dates,
+which are preserved without correction or presumed renewal. Saint Loup recites Jean Paul Magnien's
+lease through September 2019. These names do not independently establish today's producer or a family
+succession. Grains de Lune and Le Clos Saint Denis similarly stay unlinked despite Magnien or Lignier
+shareholders. The separate Lignier U-id cannot be equated with 429825250, which already holds other rights here.
+
+The seven supplied Winehog articles add six critic research rows reaching **12 current parcels**. CLF's AB403 is
+printed at 504 m² versus today's 492 m², so only its AB405 passes. Twelve separate named-area census rows
+retain the printed totals without parcel allocation. Ponsot's attribution remains historical: the 2024
+article leaves later operator years uncertain, and the public 2025 Chezeaux article describes a separate
+estate from Hudelot-Noellat. All requested Winehog articles are now supplied and reviewed. Some lazy-loaded producer
+maps are absent from the supplied archives; accepted matches use explicit numbers and areas in the text.
+
+The Dujac (2017) and Arlaud (2024 publication) supplements contribute six exact individual matches.
+AB410 gains a Dujac critic lead without inventing missing legal-entity rights; the other five already
+had company research leads. Arlaud's map is labelled 2017 and its acquisition narrative is uncertain.
+The overview reproduces a 3 July 1944 decree with old section-A references. Its proposed 580 m²
+addition on part of AB433 in 1971 is conjectural and remains unmatched; no boundary is altered.
+
+A separate external-research row retains Lignier's **former AP26 (5586 m²)**. Existing official DFI ancestry
+carries it to AP232 and AP233, without assigning 1976 ownership to their current holders. AB251 and AB276
+lack a reviewed route to current parcels and remain unmatched. No geometry or rights record is changed.
+The [filing log](filings.md) gives sources, dates, page anchors, hashes, effort and gaps.
+**Verified farming remains zero.** PDFs, OCR, archives and images remain outside Git.
 
 ## Reproduce and validate
 

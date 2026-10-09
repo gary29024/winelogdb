@@ -1,16 +1,16 @@
 # Bonnes-Mares parcel farming research register
 
-Reviewed 2026-10-07; target season 2026.
+Reviewed 2026-10-09; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
-All 130 mapped Bonnes-Mares parcels and 30 recorded legal-entity identifiers reviewed for Tier 1, including commune edges in both communes, the cadastral named area and the #461 historical extension. The one notice-index candidate was read from its page image; it supports one application event on three current parcels. Producer/company research remains Tier 2. No current farmer is verified.
+All 130 mapped Bonnes-Mares parcels and 30 recorded holders reviewed through the shared table for Tier 2. Historical filing schedules, company relations, reported tenancy and critic research remain separate. Tier 1 rights, geometry and history retained; no current farmer verified.
 
-Of 130 mapped parcels, 78 have recorded rights and 52 have no matched right holder. All 30 holder groups were triaged. 0 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 127 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 130 mapped parcels, 78 have recorded rights and 52 have no matched right holder. All 30 holder groups were triaged. 43 parcels have holder-derived or independent-research leads, 3 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 84 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-46 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+41 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
-0 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
+17 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
 
 Candidate names below are hypotheses. Their basis ranges from estate context to a weak company-name or bottler connection. No confidence percentage is assigned; the stated evidence must be checked before accepting any relationship.
 
@@ -28,7 +28,7 @@ Parcels (1): AB 0044.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
 
@@ -38,11 +38,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AB 0072.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Dujac. **Basis:** name-and-seat-crosswalk. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Existing provisional family-company lead retained. The 2000 conversion recites an 18-year metayage from 1997 to Domaine Dujac SA without an individual Bonnes-Mares schedule or renewal. Distinct operating-company filings also screened.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA DU DOMAINE DUJAC (322396185)](https://annuaire-entreprises.data.gouv.fr/entreprise/322396185), [322396185: dujac gfa 2000](https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef), [322396185: dujac gfa 2018](https://actes.ccm2.net/acte/66933b15-daed-4bc3-a3bc-e0c24c268fd7), [Company register: GFA DU DOMAINE DUJAC (322396185)](https://recherche-entreprises.api.gouv.fr/search?q=322396185&per_page=10), [413372608: dujac sa 1997](https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d), [413372608: dujac sas 2007](https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68), [Company register: DOMAINE DUJAC (413372608)](https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10).
 
 <a id="holder-326418761"></a>
 
@@ -52,9 +52,9 @@ Parcels (2): AB 0079, AB 0119.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The GFA statutes retain exact AB79/119 contributions. The family name alone does not establish a relationship to a separate producer company or current tenant.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [326418761: bertheau 2020](https://actes.ccm2.net/acte/90fa8a30-cf0e-4a9a-be6c-0685d6974943), [326418761: bertheau 2012](https://actes.ccm2.net/acte/31e2f8a9-78d6-445d-80ef-0c54caa8849b), [326418761: bertheau 2024](https://actes.ccm2.net/acte/3b1fa017-3ea8-4bce-8d08-9bbbefe77308), [Company register: GFA BERTHEAU ET FILS (326418761)](https://recherche-entreprises.api.gouv.fr/search?q=326418761&per_page=10).
 
 <a id="holder-330763426"></a>
 
@@ -62,11 +62,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AB 0266.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Robert Groffier. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Filed conversion and wine-business statutes identify Domaine Robert Groffier Pere et Fils. No exact AB266 filing was located.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DOMAINE ROBERT GROFFIER PERE ET FILS (GROFFIER COLLECTION - DOMAINE DECELINE) (330763426)](https://recherche-entreprises.api.gouv.fr/search?q=330763426&per_page=10), [330763426: groffier 2015](https://actes.ccm2.net/acte/1cfb6849-7d72-45c3-9e20-b9f0f0863973), [330763426: groffier 2022](https://actes.ccm2.net/acte/780cedba-1b1c-4f98-9d82-33b96c3e9709), [330763426: groffier 2007](https://actes.ccm2.net/acte/7f58240a-1ac5-42b5-9620-a4f64f514f73).
 
 <a id="holder-343567632"></a>
 
@@ -74,11 +74,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (4): AB 0092, AB 0093, AB 0269, AB 0270.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Hudelot-Baillet. **Basis:** reported-operator-relationship. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The company register and statutes identify GFA Cote de Nuits. The fund reports a Chambolle-Musigny tenancy; the estate history identifies Hudelot-Baillet. Undated report, no executed parcel lease.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA COTE DE NUITS (343567632)](https://recherche-entreprises.api.gouv.fr/search?q=343567632&per_page=10), [343567632: cote nuits 2015](https://actes.ccm2.net/acte/a49f0b2a-e0a9-49fa-af51-ba19103058a8), [CPGC: GFA de la Cote de Nuits](https://www.cpgc.fr/domaine-cotes-de-nuits/), [Domaine Hudelot-Baillet: estate history](https://domainehudelotbaillet.com/en/our-story/), [Company register: DOMAINE HUDELOT BAILLET (451563118)](https://recherche-entreprises.api.gouv.fr/search?q=451563118), [343567632: cote nuits 1995](https://actes.ccm2.net/acte/425be87f-6775-4d1f-a1b1-2840effa7b37).
 
 <a id="holder-350591319"></a>
 
@@ -86,11 +86,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AB 0106.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Château de la Crée. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DE (350591319)](https://annuaire-entreprises.data.gouv.fr/entreprise/350591319), [Company register: CDLC (452219033)](https://annuaire-entreprises.data.gouv.fr/entreprise/452219033), [Domaine Christian Confuron et Fils: 2021 statutes and succession attestation](https://actes.ccm2.net/acte/3d38b4a9-0a6e-420f-ac91-a8f84946c1a7#page=1).
 
 <a id="holder-383339470"></a>
 
@@ -100,9 +100,9 @@ Parcels (3): AB 0082, AB 0097, AB 0116.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The 2014 deed renames GFA Domaine Newman to GFA NabuCa without creating a new legal person. Its exact schedule matches three parcels. Individual managers and a mandate naming no tenant do not establish a current producer link.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [383339470: nabuca 2026](https://actes.ccm2.net/acte/014b2169-36e3-418b-b645-0bbd14d8f0d0), [383339470: nabuca 2014](https://actes.ccm2.net/acte/2cdc80e0-34c9-4f41-9440-7fcb299845a3), [383339470: nabuca 2004](https://actes.ccm2.net/acte/9ed60b0a-1bfd-4354-9fea-a2bcc57ea660), [Company register: GFA NABUCA (383339470)](https://recherche-entreprises.api.gouv.fr/search?q=383339470&per_page=10).
 
 <a id="holder-401584503"></a>
 
@@ -110,11 +110,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (6): AB 0122, AB 0123, AB 0124, AB 0323, AB 0338, AB 0339.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Drouhin-Laroze. **Basis:** family-company-record. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DROUHIN-LAROZE (401584503)](https://annuaire-entreprises.data.gouv.fr/entreprise/401584503), [Company register: DOMAINE DROUHIN LAROZE (DOMAINE DROUHIN-LAROZE ET LAROZE DE DROUHIN) (398910034)](https://annuaire-entreprises.data.gouv.fr/entreprise/398910034).
 
 <a id="holder-429825250"></a>
 
@@ -124,9 +124,9 @@ Parcels (2): AB 0068, AB 0130.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+This legal holder is a GFA. Its 1976 schedule matches AB68/130, with historical fractional interests retained. Later future-lease authority does not prove the named operating company leases these parcels.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [429825250: lignier 2018](https://actes.ccm2.net/acte/9e4a024d-bd07-48bc-aede-529e438675fd), [429825250: lignier 2012](https://actes.ccm2.net/acte/d36c4be6-51df-475d-b64d-62bacdc04aa5), [429825250: lignier 1976](https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa), [Company register: DOMAINE GEORGES LIGNIER PERE ET FILS (429825250)](https://recherche-entreprises.api.gouv.fr/search?q=429825250&per_page=10).
 
 <a id="holder-480400407"></a>
 
@@ -134,11 +134,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AB 0110.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine de la Pousse d’Or. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: DOMAINE DE LA POUSSE D'OR (480400407)](https://annuaire-entreprises.data.gouv.fr/entreprise/480400407), [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution).
 
 <a id="holder-482772282"></a>
 
@@ -148,9 +148,9 @@ Parcels (1): AB 0096.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Cash formation, GFA conversion and family share donation do not establish a specific AB96 acquisition, producer-company relationship or executed tenancy.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [482772282: bons consorts 2018](https://actes.ccm2.net/acte/a582b8d3-4595-497d-8c61-0e427cb927d5), [482772282: bons consorts 2015](https://actes.ccm2.net/acte/71d1cd03-f3fa-4fab-a7dd-b1123f85c2f0), [482772282: bons consorts 2005](https://actes.ccm2.net/acte/a7790bf4-6a0b-411e-8b6f-17949121f53b), [Company register: LES BONS CONSORTS (SFV BONS CONSORTS) (482772282)](https://recherche-entreprises.api.gouv.fr/search?q=482772282&per_page=10), [413372608: dujac sa 1997](https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d), [413372608: dujac sas 2007](https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68), [Company register: DOMAINE DUJAC (413372608)](https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10).
 
 <a id="holder-491471041"></a>
 
@@ -160,7 +160,7 @@ Parcels (3): AB 0064, AB 0067, AB 0407.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
 
@@ -170,11 +170,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (3): AB 0304, AB 0438, AB 0440.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Bouchard Père & Fils. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: VIGNOBLE DES CABOTTES (515420255)](https://annuaire-entreprises.data.gouv.fr/entreprise/515420255), [BODACC: Maison Bouchard Père et Fils partial asset contribution and renaming](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22515420255%22&order_by=dateparution+desc&limit=20), [Company register: BOUCHARD PERE ET FILS (981574650)](https://annuaire-entreprises.data.gouv.fr/entreprise/981574650), [Bouchard Père & Fils: legal notices](https://www.bouchard-pereetfils.com/en/legal-notices).
 
 <a id="holder-515620193"></a>
 
@@ -182,11 +182,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (3): AB 0052, AB 0135, AB 0136.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine de la Vougeraie. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193), [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954), [Company register: SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE (330713074)](https://annuaire-entreprises.data.gouv.fr/entreprise/330713074), [Company register: SCI JEAN FAYE (433359320)](https://annuaire-entreprises.data.gouv.fr/entreprise/433359320).
 
 <a id="holder-778173427"></a>
 
@@ -194,11 +194,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (7): AB 0065, AB 0100, AB 0340, AB 0365, AB 0366, AB 0367, AB 0368.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Georges Roumier. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Official company registry: 778173427](https://recherche-entreprises.api.gouv.fr/search?q=778173427), [778173427: roumier 2026](https://actes.ccm2.net/acte/5858c9d3-bc23-451a-9706-35d35093ec45).
 
 <a id="holder-778252445"></a>
 
@@ -206,11 +206,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): AB 0090, AB 0091.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine d Auvenay. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The statutes and register explicitly identify the Domaine d Auvenay wine company. No exact AB90/91 schedule was located.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10), [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7), [778252445: auvenay 2019](https://actes.ccm2.net/acte/7fe94976-ca43-40ca-b699-eb67dffd9f6d), [778252445: auvenay 2001](https://actes.ccm2.net/acte/211c190d-e869-45ef-8160-338682de40e8).
 
 <a id="holder-794244434"></a>
 
@@ -220,7 +220,7 @@ Parcels (5): AB 0078, AB 0084, AB 0282, AB 0292, AB 0293.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table search reused; no company-to-producer relation established, and no current farming confirmed.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
 
@@ -232,9 +232,9 @@ Parcels (4): AB 0040, AB 0089, AB 0105, AB 0298.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+VINES cash capital and generic wine-business objects do not identify a separate domaine or individual Bonnes-Mares parcels.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [818134116: vines 2017](https://actes.ccm2.net/acte/d37ccb08-2e14-4c59-b6aa-e51c33a0b119), [818134116: vines 2016 change](https://actes.ccm2.net/acte/2b3717ee-f795-4f4f-8794-3319723dd44e), [818134116: vines 2016 formation](https://actes.ccm2.net/acte/b6587f8e-a343-4b72-bf80-1f17d64a58f7), [Company register: VINES (818134116)](https://recherche-entreprises.api.gouv.fr/search?q=818134116&per_page=10).
 
 <a id="holder-841127582"></a>
 
@@ -244,9 +244,9 @@ Parcels (5): AB 0081, AB 0086, AB 0087, AB 0115, AB 0297.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Cash formation and capital filings authorize a future Bonnes-Mares acquisition and an unnamed tenant. No individual current schedule or producer-company link.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [841127582: les bonnes mares 2018 capital](https://actes.ccm2.net/acte/38ac3cbc-75ff-4b76-a704-4481417e29f1), [841127582: les bonnes mares 2018 formation](https://actes.ccm2.net/acte/dde35736-4446-4065-aa0a-3ff0bd0d94ea), [Company register: LES BONNES MARES (841127582)](https://recherche-entreprises.api.gouv.fr/search?q=841127582&per_page=10).
 
 <a id="holder-u18178981"></a>
 
@@ -254,11 +254,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (1): AR 0064.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Clos de Tart. **Basis:** company-identity. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Filed name changes and the 2018 property schedule identify Societe du Clos de Tart 686042409. AR64 matches 2780 m2. The transaction transfers shares, not land; Winehog classifies AR64 as Clos de Tart. Current farming unverified.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [685750598: mommessin thorin 2004](https://actes.ccm2.net/acte/a64b848c-616b-4321-bc57-48668fbcfe0e), [685750598: vins vignobles 1997](https://actes.ccm2.net/acte/590b0871-84b1-4398-8c6c-32beee776cca), [Company register: MAISON MOMMESSIN ET THORIN (MMT) (685750598)](https://recherche-entreprises.api.gouv.fr/search?q=685750598&per_page=10), [686042409: clos tart 2017](https://actes.ccm2.net/acte/30227429), [686042409: mommessin 2009](https://actes.ccm2.net/acte/30227327), [686042409: mommessin 1998](https://actes.ccm2.net/acte/30227371), [686042409: clos tart 2022](https://actes.ccm2.net/acte/4337198), [686042409: clos tart 2018](https://actes.ccm2.net/acte/30227419), [Company register: Societe du Clos de Tart (686042409)](https://recherche-entreprises.api.gouv.fr/search?q=686042409).
 
 <a id="holder-u21117863"></a>
 
@@ -268,9 +268,9 @@ Parcels (6): AB 0129, AB 0321, AB 0322, AB 0358, AB 0359, AB 0360.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The 2000 conversion explains the old Dujac exploitation denomination, but SIREN 322396185 separately holds AB72 in this same cru. It cannot also crosswalk this U-id without resolving the two recorded identities.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [322396185: dujac gfa 2000](https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef), [322396185: dujac gfa 2018](https://actes.ccm2.net/acte/66933b15-daed-4bc3-a3bc-e0c24c268fd7), [Company register: GFA DU DOMAINE DUJAC (322396185)](https://recherche-entreprises.api.gouv.fr/search?q=322396185&per_page=10), [413372608: dujac sa 1997](https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d), [413372608: dujac sas 2007](https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68), [Company register: DOMAINE DUJAC (413372608)](https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10).
 
 <a id="holder-u21119406"></a>
 
@@ -280,7 +280,7 @@ Parcels (1): AB 0045.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Exact-name searches for BND 133 AB0045 did not establish a legal company or producer. No U-id crosswalk assigned.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
 
@@ -292,7 +292,7 @@ Parcels (1): AB 0132.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Exact-name searches for BND 133 AB0132 did not establish a legal company or producer. No U-id crosswalk assigned.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
 
@@ -304,9 +304,9 @@ Parcels (1): AB 0066.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The exact GFA denomination and AB66 (1070 m2) schedule support the U-id company identity. The old usufruct contribution does not establish a producer link; the separate shared SIREN entry has only a provisional Roumier-family lead, not sufficient to copy to this U-id.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA CLOS DE LA BUSSIERE (377495288)](https://recherche-entreprises.api.gouv.fr/search?q=377495288&per_page=10), [377495288: bussiere 2009](https://actes.ccm2.net/acte/0c67b3ee-1f4b-4eb4-a539-bc6d6984ca77), [377495288: bussiere 2026](https://actes.ccm2.net/acte/8e5f36f6-1b7e-44ab-9a79-a3e46d24ed98).
 
 <a id="holder-u21197768"></a>
 
@@ -316,9 +316,9 @@ Parcels (1): AB 0046.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The GFA Veroilles candidate mentions AB46 in a handwritten acquisition mandate without an individual area. This does not establish the U-id identity, a completed purchase or a producer relationship.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [348999020: veroilles 2025](https://actes.ccm2.net/acte/a4768e36-1bbf-4177-b811-305761677fc2), [Company register: GFA DES VEROILLES (348999020)](https://recherche-entreprises.api.gouv.fr/search?q=348999020&per_page=10).
 
 <a id="holder-u21373997"></a>
 
@@ -328,9 +328,9 @@ Parcels (2): AB 0437, AB 0439.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+GFA Bachus 21 is a same-name candidate, without an identity crosswalk for AB437/439. Its historical acquisition and lease mandates name different references AB438/440/304; two areas also differ from the current cadastre. No completed transaction inferred.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [401538525: bachus 2024](https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b), [401538525: bachus 1995](https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19), [Company register: GFA BACHUS 21 (401538525)](https://recherche-entreprises.api.gouv.fr/search?q=401538525&per_page=10).
 
 <a id="holder-u21401984"></a>
 
@@ -338,11 +338,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): AB 0049, AB 0050.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Maison Joseph Drouhin. **Basis:** group-company-record. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Prior shared-table links, searches and filing effort reused. Company relationship alone does not establish current parcel operation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Official company registry: 393095955](https://recherche-entreprises.api.gouv.fr/search?q=393095955), [393095955: sepv 1994 report](https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d), [393095955: sepv 1994 approval](https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be), [Official company search: Société d'Exploitation et Participation Viti-Vinicole (SEPV)](https://recherche-entreprises.api.gouv.fr/search?q=393095955), [SEPV: 2022 board minutes and updated statutes](https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb#page=3).
 
 <a id="holder-u21459182"></a>
 
@@ -352,9 +352,9 @@ Parcels (2): AB 0041, AB 0085.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+Exact legal denomination, SIREN and individually matched AB41/85 schedules identify GFA Domaine Bart-Clair. SCEV du Domaine Bart 343043600 is separate; shared names and officers do not establish a producer relation.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA DU DOMAINE BART CLAIR (398367029)](https://recherche-entreprises.api.gouv.fr/search?q=398367029&per_page=10), [398367029: bart clair 2022](https://actes.ccm2.net/acte/53e9e82f-1d7f-4d80-a1c1-4f054c6b4fa1), [398367029: bart clair 1994](https://actes.ccm2.net/acte/43893fc0-07ab-41e9-be2b-42e05bde84f6), [Company register: SCEV DU DOMAINE BART (343043600)](https://recherche-entreprises.api.gouv.fr/search?q=343043600).
 
 <a id="holder-u21586080"></a>
 
@@ -362,11 +362,11 @@ Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.econ
 
 Parcels (2): AB 0076, AB 0121.
 
-**Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
+**Candidate to investigate:** Domaine Arlaud. **Basis:** filing-tenant-relationship. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The GFA deed identifies SIREN 444144190 and exact AB76/121 contribution areas; it recites a 1998 lease of its property to SCEA Domaine Arlaud Pere et Fils 418411518. No original lease, duration or renewal reviewed. The separate registry entry 429825441 is not equated with 444144190.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [444144190: arlaud gfa 2013](https://actes.ccm2.net/acte/4d6f4544-61da-4c40-b4e6-2b1470bb3c20), [Company register: DOMAINE ARLAUD PERE ET FILS (418411518)](https://recherche-entreprises.api.gouv.fr/search?q=418411518), [Company register: GFA DU DOMAINE ARLAUD PERE ET FILS (444144190)](https://recherche-entreprises.api.gouv.fr/search?q=444144190&per_page=10), [Company register: GFA ARLAUD PERE ET FILS (429825441)](https://recherche-entreprises.api.gouv.fr/search?q=429825441).
 
 <a id="holder-u21966026"></a>
 
@@ -376,9 +376,9 @@ Parcels (4): AB 0134, AR 0066, AR 0067, AR 0068.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming.
+The exact legal name and four matching individual schedules support the provisional holder crosswalk. The old lease names Domaine de Bauclair; no independent modern identity or renewal was established. Jadot preference rights are not tenancy.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: GFA DES GRANDS VINS FINS (483678264)](https://recherche-entreprises.api.gouv.fr/search?q=483678264&per_page=10), [483678264: grands vins 2024](https://actes.ccm2.net/acte/310a455a-6b34-4e9a-86cd-0fa6ea5deacd), [483678264: grands vins 2005](https://actes.ccm2.net/acte/da09000a-ac9b-4bf6-a912-9a34d364dd53).
 
 ## Named-area census
 
@@ -387,11 +387,23 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
 | --- | ---: | ---: | ---: | ---: |
 | EN LA RUE DE VERGY (neighbouring lieu-dit; edge parcels) | 3 (0.01 ha) | 3 (0.01 ha) | 3 (0.01 ha) | 0.00 ha |
-| Les Bonnes Mares | 105 (14.99 ha) | 44 (5.28 ha) | 44 (5.28 ha) | 0.00 ha |
+| Les Bonnes Mares | 105 (14.99 ha) | 44 (5.28 ha) | 39 (4.57 ha) | 8.68 ha |
 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 22 (0.04 ha) | 5 (0.01 ha) | 5 (0.01 ha) | 0.00 ha |
 
 **Published holdings by named area**
 
+- **Les Bonnes Mares**
+  - Domaine Comte Georges de Vogue: 2.7 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 2.70 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Domaine Comte Georges de Vogüé – History and Vineyards](https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/), [Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update](https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/).
+  - Maison Joseph Drouhin: 0.23 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.23 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares](https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/), [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/).
+  - Domaine Arlaud: 0.2131 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.21 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares](https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/).
+  - Domaine Robert Groffier: 0.9748 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.97 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/).
+  - Domaine Georges Roumier: 1.3919 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 1.39 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Georges Roumier: Bonnes-Mares 2021](https://www.roumier.com/fr_FR/vin/bonnes-mares/2021), [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
+  - Domaine Drouhin-Laroze: 1.5 ha (approximate); tenure not stated; 0.00 ha recorded to linked company records here; 1.50 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Drouhin-Laroze: Bonnes-Mares](https://www.drouhin-laroze.com/en/our-wines/4/bonnes-mares).
+  - Domaine Dujac: 0.5801 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.58 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Dujac: Bonnes Mares technical sheet](https://www.dujac.com/en/pdf/8-bonnes-mares-grand-cru.pdf), [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/).
+  - Domaine Hudelot-Baillet: 0.13 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.13 ha beyond company records. Published named-area census only; no individual parcel allocation, rights assignment or present farming inferred. [Domaine Hudelot-Baillet: wines](https://domainehudelotbaillet.com/nos-vins/).
+  - Domaine Jacques-Frédéric Mugnier: 0.36 ha (hundredth-hectare); tenure not stated; 0.00 ha recorded to linked company records here; 0.36 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/).
+  - Domaine Bertheau: 0.3444 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.34 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/).
+  - Domaine d'Auvenay: 0.2598 ha (square-metre); tenure not stated; 0.00 ha recorded to linked company records here; 0.26 ha beyond company records. Dated published named-area census only; no parcel allocation, company identity, current rights or farming inferred. [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/).
 
 ## Every mapped parcel
 
@@ -405,21 +417,21 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0044 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 6.76 | [212101331](#holder-212101331) | Unresolved | Unconfirmed |
 | AB 0045 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 14.14 | [U21119406](#holder-u21119406) | Unresolved | Unconfirmed |
 | AB 0046 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.77 | [U21197768](#holder-u21197768) | Unresolved | Unconfirmed |
-| AB 0049 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 6.35 | [U21401984](#holder-u21401984) | Unresolved | Unconfirmed |
-| AB 0050 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 33.11 | [U21401984](#holder-u21401984) | Unresolved | Unconfirmed |
+| AB 0049 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 6.35 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
+| AB 0050 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 33.11 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
 | AB 0051 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 12.03 | None | Unresolved | Unconfirmed |
-| AB 0052 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.65 | [515620193](#holder-515620193) | Unresolved | Unconfirmed |
+| AB 0052 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.65 | [515620193](#holder-515620193) | Domaine de la Vougeraie (group-company-record) | Unconfirmed |
 | AB 0064 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 47.46 | [491471041](#holder-491471041) | Unresolved | Unconfirmed |
-| AB 0065 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 29.49 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
-| AB 0066 | Les Bonnes Mares | 1053.03 | [U21155571](#holder-u21155571) | Unresolved | Unconfirmed |
+| AB 0065 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 29.49 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0066 | Les Bonnes Mares | 1053.03 | [U21155571](#holder-u21155571) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0067 | Les Bonnes Mares | 1959.03 | [491471041](#holder-491471041) | Unresolved | Unconfirmed |
 | AB 0068 | Les Bonnes Mares | 504.49 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
 | AB 0069 | Les Bonnes Mares | 328.51 | None | Unresolved | Unconfirmed |
-| AB 0072 | Les Bonnes Mares | 98.65 | [322396185](#holder-322396185) | Unresolved | Unconfirmed |
-| AB 0076 | Les Bonnes Mares | 654.56 | [U21586080](#holder-u21586080) | Unresolved | Unconfirmed |
+| AB 0072 | Les Bonnes Mares | 98.65 | [322396185](#holder-322396185) | Domaine Dujac (name-and-seat-crosswalk) | Unconfirmed |
+| AB 0076 | Les Bonnes Mares | 654.56 | [U21586080](#holder-u21586080) | Domaine Arlaud (filing-tenant-relationship); Domaine Arlaud (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0077 | Les Bonnes Mares | 911.20 | None | Unresolved | Unconfirmed |
 | AB 0078 | Les Bonnes Mares | 300.09 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
-| AB 0079 | Les Bonnes Mares | 1025.35 | [326418761](#holder-326418761) | Unresolved | Unconfirmed |
+| AB 0079 | Les Bonnes Mares | 1025.35 | [326418761](#holder-326418761) | Domaine Bertheau (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0081 | Les Bonnes Mares | 1244.96 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0082 | Les Bonnes Mares | 1530.60 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
 | AB 0083 | Les Bonnes Mares | 931.42 | None | Unresolved | Unconfirmed |
@@ -427,45 +439,45 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0085 | Les Bonnes Mares | 6619.97 | [U21459182](#holder-u21459182) | Unresolved | Unconfirmed |
 | AB 0086 | Les Bonnes Mares | 495.50 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0087 | Les Bonnes Mares | 1203.21 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
-| AB 0089 | Les Bonnes Mares | 3800.36 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
-| AB 0090 | Les Bonnes Mares | 1908.41 | [778252445](#holder-778252445) | Unresolved | Unconfirmed |
-| AB 0091 | Les Bonnes Mares | 700.24 | [778252445](#holder-778252445) | Unresolved | Unconfirmed |
-| AB 0092 | Les Bonnes Mares | 101.38 | [343567632](#holder-343567632) | Unresolved | Unconfirmed |
-| AB 0093 | Les Bonnes Mares | 1158.67 | [343567632](#holder-343567632) | Unresolved | Unconfirmed |
+| AB 0089 | Les Bonnes Mares | 3800.36 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0090 | Les Bonnes Mares | 1908.41 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity); Domaine d'Auvenay (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0091 | Les Bonnes Mares | 700.24 | [778252445](#holder-778252445) | Domaine d Auvenay (company-identity); Domaine d'Auvenay (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0092 | Les Bonnes Mares | 101.38 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
+| AB 0093 | Les Bonnes Mares | 1158.67 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
 | AB 0094 | Les Bonnes Mares | 1098.06 | None | Unresolved | Unconfirmed |
 | AB 0095 | Les Bonnes Mares | 30.17 | None | Unresolved | Unconfirmed |
-| AB 0096 | Les Bonnes Mares | 1472.55 | [482772282](#holder-482772282) | Unresolved | Unconfirmed |
+| AB 0096 | Les Bonnes Mares | 1472.55 | [482772282](#holder-482772282) | Domaine Dujac (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0097 | Les Bonnes Mares | 434.05 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
 | AB 0098 | Les Bonnes Mares | 117.00 | None | Unresolved | Unconfirmed |
 | AB 0099 | Les Bonnes Mares | 307.41 | None | Unresolved | Unconfirmed |
-| AB 0100 | Les Bonnes Mares | 2209.29 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
+| AB 0100 | Les Bonnes Mares | 2209.29 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity); Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0101 | Les Bonnes Mares | 8539.87 | None | Unresolved | Unconfirmed |
 | AB 0102 | Les Bonnes Mares | 5953.32 | None | Unresolved | Unconfirmed |
 | AB 0104 | Les Bonnes Mares | 636.72 | None | Unresolved | Unconfirmed |
-| AB 0105 | Les Bonnes Mares | 669.73 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
-| AB 0106 | Les Bonnes Mares | 641.91 | [350591319](#holder-350591319) | Unresolved | Unconfirmed |
-| AB 0110 | Les Bonnes Mares | 1635.45 | [480400407](#holder-480400407) | Unresolved | Unconfirmed |
+| AB 0105 | Les Bonnes Mares | 669.73 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0106 | Les Bonnes Mares | 641.91 | [350591319](#holder-350591319) | Château de la Crée (group-company-record) | Unconfirmed |
+| AB 0110 | Les Bonnes Mares | 1635.45 | [480400407](#holder-480400407) | Domaine de la Pousse d’Or (company-identity) | Unconfirmed |
 | AB 0111 | Les Bonnes Mares | 795.23 | None | Unresolved | Unconfirmed |
 | AB 0114 | Les Bonnes Mares | 763.81 | None | Unresolved | Unconfirmed |
 | AB 0115 | Les Bonnes Mares | 349.84 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
 | AB 0116 | Les Bonnes Mares | 1379.86 | [383339470](#holder-383339470) | Unresolved | Unconfirmed |
-| AB 0119 | Les Bonnes Mares | 2389.49 | [326418761](#holder-326418761) | Unresolved | Unconfirmed |
+| AB 0119 | Les Bonnes Mares | 2389.49 | [326418761](#holder-326418761) | Domaine Bertheau (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0120 | Les Bonnes Mares | 1795.40 | None | Unresolved | Unconfirmed |
-| AB 0121 | Les Bonnes Mares | 1448.67 | [U21586080](#holder-u21586080) | Unresolved | Unconfirmed |
-| AB 0122 | Les Bonnes Mares | 3849.00 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
-| AB 0123 | Les Bonnes Mares | 3526.95 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
-| AB 0124 | Les Bonnes Mares | 945.72 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
+| AB 0121 | Les Bonnes Mares | 1448.67 | [U21586080](#holder-u21586080) | Domaine Arlaud (filing-tenant-relationship); Domaine Arlaud (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0122 | Les Bonnes Mares | 3849.00 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
+| AB 0123 | Les Bonnes Mares | 3526.95 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
+| AB 0124 | Les Bonnes Mares | 945.72 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
 | AB 0128 | Les Bonnes Mares | 648.28 | None | Unresolved | Unconfirmed |
 | AB 0129 | Les Bonnes Mares | 196.27 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
 | AB 0130 | Les Bonnes Mares | 2290.92 | [429825250](#holder-429825250) | Unresolved | Unconfirmed |
 | AB 0132 | Les Bonnes Mares | 533.16 | [U21119549](#holder-u21119549) | Unresolved | Unconfirmed |
 | AB 0134 | Les Bonnes Mares | 485.56 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
-| AB 0135 | Les Bonnes Mares | 5602.02 | [515620193](#holder-515620193) | Unresolved | Unconfirmed |
-| AB 0136 | Les Bonnes Mares | 642.03 | [515620193](#holder-515620193) | Unresolved | Unconfirmed |
-| AB 0266 | Les Bonnes Mares | 9703.86 | [330763426](#holder-330763426) | Unresolved | Unconfirmed |
+| AB 0135 | Les Bonnes Mares | 5602.02 | [515620193](#holder-515620193) | Domaine de la Vougeraie (group-company-record) | Unconfirmed |
+| AB 0136 | Les Bonnes Mares | 642.03 | [515620193](#holder-515620193) | Domaine de la Vougeraie (group-company-record) | Unconfirmed |
+| AB 0266 | Les Bonnes Mares | 9703.86 | [330763426](#holder-330763426) | Domaine Robert Groffier (company-identity); Domaine Robert Groffier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0267 | Les Bonnes Mares | 3932.15 | None | Unresolved | Unconfirmed |
-| AB 0269 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 8.57 | [343567632](#holder-343567632) | Unresolved | Unconfirmed |
-| AB 0270 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 11.55 | [343567632](#holder-343567632) | Unresolved | Unconfirmed |
+| AB 0269 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 8.57 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
+| AB 0270 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 11.55 | [343567632](#holder-343567632) | Domaine Hudelot-Baillet (reported-operator-relationship) | Unconfirmed |
 | AB 0275 | Les Bonnes Mares | 250.65 | None | Unresolved | Unconfirmed |
 | AB 0276 | Les Bonnes Mares | 256.81 | None | Unresolved | Unconfirmed |
 | AB 0277 | Les Bonnes Mares | 138.56 | None | Unresolved | Unconfirmed |
@@ -486,38 +498,38 @@ All references are in communes 21133 (Chambolle-Musigny), 21442 (Morey-Saint-Den
 | AB 0293 | Les Bonnes Mares | 468.68 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AB 0294 | Les Bonnes Mares | 530.79 | None | Unresolved | Unconfirmed |
 | AB 0297 | Les Bonnes Mares | 338.02 | [841127582](#holder-841127582) | Unresolved | Unconfirmed |
-| AB 0298 | Les Bonnes Mares | 492.18 | [818134116](#holder-818134116) | Unresolved | Unconfirmed |
-| AB 0304 | Les Bonnes Mares | 216.27 | [515420255](#holder-515420255) | SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
+| AB 0298 | Les Bonnes Mares | 492.18 | [818134116](#holder-818134116) | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0304 | Les Bonnes Mares | 216.27 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application); Domaine Drouhin-Laroze (filing-named-cadastral-reference) | Unconfirmed |
 | AB 0305 | Les Bonnes Mares | 416.10 | None | Unresolved | Unconfirmed |
 | AB 0306 | Les Bonnes Mares | 215.75 | None | Unresolved | Unconfirmed |
 | AB 0321 | Les Bonnes Mares | 491.62 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
 | AB 0322 | Les Bonnes Mares | 424.16 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
-| AB 0323 | Les Bonnes Mares | 3589.96 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
+| AB 0323 | Les Bonnes Mares | 3589.96 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
 | AB 0328 | Les Bonnes Mares | 451.99 | None | Unresolved | Unconfirmed |
-| AB 0338 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 11.08 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
-| AB 0339 | Les Bonnes Mares | 880.78 | [401584503](#holder-401584503) | Unresolved | Unconfirmed |
-| AB 0340 | Les Bonnes Mares | 1675.15 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
+| AB 0338 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 11.08 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
+| AB 0339 | Les Bonnes Mares | 880.78 | [401584503](#holder-401584503) | Domaine Drouhin-Laroze (family-company-record) | Unconfirmed |
+| AB 0340 | Les Bonnes Mares | 1675.15 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity); Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
 | AB 0356 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 3.47 | None | Unresolved | Unconfirmed |
 | AB 0357 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 29.59 | None | Unresolved | Unconfirmed |
 | AB 0358 | Les Bonnes Mares | 484.65 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
 | AB 0359 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 25.08 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
 | AB 0360 | Les Bonnes Mares | 2757.44 | [U21117863](#holder-u21117863) | Unresolved | Unconfirmed |
-| AB 0365 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 20.44 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
-| AB 0366 | Les Bonnes Mares | 108.16 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
-| AB 0367 | Les Bonnes Mares | 1617.94 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
-| AB 0368 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 19.11 | [778173427](#holder-778173427) | Unresolved | Unconfirmed |
+| AB 0365 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 20.44 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0366 | Les Bonnes Mares | 108.16 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0367 | Les Bonnes Mares | 1617.94 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
+| AB 0368 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 19.11 | [778173427](#holder-778173427) | Domaine Georges Roumier (company-identity) | Unconfirmed |
 | AB 0407 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 8.02 | [491471041](#holder-491471041) | Unresolved | Unconfirmed |
 | AB 0408 | LES VEROILLES (neighbouring lieu-dit; edge parcels) | 9.26 | None | Unresolved | Unconfirmed |
 | AB 0437 | Les Bonnes Mares | 653.29 | [U21373997](#holder-u21373997) | Unresolved | Unconfirmed |
-| AB 0438 | Les Bonnes Mares | 419.61 | [515420255](#holder-515420255) | SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
+| AB 0438 | Les Bonnes Mares | 419.61 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
 | AB 0439 | Les Bonnes Mares | 1556.96 | [U21373997](#holder-u21373997) | Unresolved | Unconfirmed |
-| AB 0440 | Les Bonnes Mares | 1729.61 | [515420255](#holder-515420255) | SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
-| AB 0468 | Les Bonnes Mares | 1924.11 | None | Unresolved | Unconfirmed |
-| AB 0469 | Les Bonnes Mares | 1936.94 | None | Unresolved | Unconfirmed |
-| AB 0470 | Les Bonnes Mares | 1405.70 | None | Unresolved | Unconfirmed |
-| AB 0481 | Les Bonnes Mares | 951.30 | None | Unresolved | Unconfirmed |
-| AB 0482 | Les Bonnes Mares | 951.63 | None | Unresolved | Unconfirmed |
-| AR 0064 | Les Bonnes Mares | 319.76 | [U18178981](#holder-u18178981) | Unresolved | Unconfirmed |
+| AB 0440 | Les Bonnes Mares | 1729.61 | [515420255](#holder-515420255) | Bouchard Père & Fils (group-company-record); SCEA Domaine d'Eugénie (historical-application) | Unconfirmed |
+| AB 0468 | Les Bonnes Mares | 1924.11 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0469 | Les Bonnes Mares | 1936.94 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0470 | Les Bonnes Mares | 1405.70 | None | Domaine Georges Roumier (critic-named-cadastral-reference) | Unconfirmed |
+| AB 0481 | Les Bonnes Mares | 951.30 | None | Domaine Georges Roumier (critic-named-cadastral-reference on predecessor AB0467) | Unconfirmed |
+| AB 0482 | Les Bonnes Mares | 951.63 | None | Domaine Georges Roumier (critic-named-cadastral-reference on predecessor AB0467) | Unconfirmed |
+| AR 0064 | Les Bonnes Mares | 319.76 | [U18178981](#holder-u18178981) | Clos de Tart (company-identity); Clos de Tart (critic-named-cadastral-reference) | Unconfirmed |
 | AR 0066 | Les Bonnes Mares | 9108.26 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
 | AR 0067 | Les Bonnes Mares | 1251.17 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
 | AR 0068 | Les Bonnes Mares | 885.98 | [U21966026](#holder-u21966026) | Unresolved | Unconfirmed |
@@ -538,13 +550,30 @@ Reviewed farm-structure notices name the applicant, the previous operator and th
 
 ## Parcel-specific company filings
 
-No company filings have been reviewed for this cru. Deeds, contributions and leases are Tier 2 research.
+Deed dates are separate from filing labels. Existing lease recitals, concurrent lease references and mandates are kept distinct; none proves current-season farming. See [the detailed reading and next source requests](filings.md).
 
+- **2024-12-17 - grands vins: historical Bonnes-Mares schedule**. AB 0134 (485 m²), AR 0066 (9235 m²), AR 0067 (1246 m²), AR 0068 (955 m²). The updated statutes retain four individually area-matched contribution references. The old Bauclair lease is recited, not verified renewed; Jadot preference rights do not prove tenancy. [483678264: grands vins 2024](https://actes.ccm2.net/acte/310a455a-6b34-4e9a-86cd-0fa6ea5deacd).
+- **2014-05-12 - nabuca: historical Bonnes-Mares schedule**. AB 0082 (1530 m²), AB 0097 (417 m²), AB 0116 (1378 m²). The deed retains three exact property references and renames the GFA without a new legal person. Operative deed date is 12 May 2014; a certification footer prints 2013, a retained source discrepancy. [383339470: nabuca 2014](https://actes.ccm2.net/acte/2cdc80e0-34c9-4f41-9440-7fcb299845a3).
+- **2022-05-10 - bart clair: historical Bonnes-Mares schedule**. AB 0041 (1490 m²), AB 0085 (6690 m²). The historical contribution schedule names AB41 and AB85 with matching individual areas. It describes AB41 as Chambolle-Musigny, including 350 m2 of lande; the mapped Bonnes-Mares overlap does not override that classification. [398367029: bart clair 2022](https://actes.ccm2.net/acte/53e9e82f-1d7f-4d80-a1c1-4f054c6b4fa1).
+- **2013-04-26 - arlaud: historical Bonnes-Mares schedule**. AB 0076 (660 m²), AB 0121 (1421 m²). The GFA deed retains exact AB76 and AB121 contribution areas and recites a 1998 lease to a distinct operating company. Its execution instrument, duration and renewal remain unreviewed. [444144190: arlaud gfa 2013](https://actes.ccm2.net/acte/4d6f4544-61da-4c40-b4e6-2b1470bb3c20).
+- **2012-04-12 - bertheau: historical Bonnes-Mares schedule**. AB 0079 (1027 m²), AB 0119 (2417 m²). Updated GFA statutes retain the original 1982 contribution with exact AB79 and AB119 areas. No separate current producer-company relationship established. [326418761: bertheau 2012](https://actes.ccm2.net/acte/31e2f8a9-78d6-445d-80ef-0c54caa8849b).
+- **2009-04-02 - bussiere: historical Bonnes-Mares schedule**. AB 0066 (1070 m²). The filed schedule identifies AB66 and its individual area in the historical usufruct contribution. It supports legal-company identity, not a current producer crosswalk. [377495288: bussiere 2009](https://actes.ccm2.net/acte/0c67b3ee-1f4b-4eb4-a539-bc6d6984ca77).
+- **1976-03-30 - lignier: historical Bonnes-Mares schedule**. AB 0068 (525 m²), AB 0130 (2335 m²). The 1976 formation identifies AB68 and AB130 with matching areas. The deed records historical fractional interests; it does not establish a new full ownership claim or a current tenant. [429825250: lignier 1976](https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa).
+- **2018-04-05 - Societe du Clos de Tart: AR64 in the property annex**. AR 0064 (2780 m²). The 2018 company-share transaction includes an ownership-origin annex with AR64 and its exact 2780 m2 area. It recites the 1932 land acquisition; the shares, not this parcel, are transferred in 2018. Its Bonnes-Mares cadastral name does not override the published Clos de Tart classification. [686042409: clos tart 2018](https://actes.ccm2.net/acte/30227419), [686042409: mommessin 2009](https://actes.ccm2.net/acte/30227327), [686042409: clos tart 2017](https://actes.ccm2.net/acte/30227429).
 
 ## Independent research
 
-No published vineyard research naming parcels has been reviewed for this cru (Tier 2).
+Published vineyard research can name cadastral references or describe holdings. It is dated secondary evidence of ownership or production, cross-checked here against the recorded rights; it never establishes current farming. Area reconstructions are inferences; exact and near-area matches are distinguished. The source itself does not name those parcels. Dates follow an explicitly selected research source, not another supporting registry record.
 
+- **Winehog: Domaine Arlaud Bonnes-Mares references** (AB 0076, AB 0121; critic-named-cadastral-reference). Winehog (2018) names AB76 (660 m2) and AB121 (1421 m2), matching both current reference and area. The article total differs from their sum; no correction or current farming inferred. Sources: [Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares](https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/).
+- **Winehog: Domaine Robert Groffier Bonnes-Mares references** (AB 0266; critic-named-cadastral-reference). Winehog (2018) prints AB266 and 9748 m2, matching the current parcel. Historical critic evidence, not verified present farming. Sources: [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/).
+- **Bachus 21: historical acquisition and lease mandate for AB304** (AB 0304; filing-named-cadastral-reference). The original 1995 mandate, retained in 2024 statutes, names AB304 at 218 m2 and proposed tenant Domaine Drouhin-Laroze 398910034. The current holder is Bouchard, not Bachus; authorization to transact is not a completed transfer or executed lease. AB438/440 have area discrepancies and remain unmatched. Sources: [401538525: bachus 2024](https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b), [401538525: bachus 1995](https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19).
+- **Winehog: AR64 is part of Clos de Tart** (AR 0064; critic-named-cadastral-reference). Winehog (2015) names cadastre 64 at 2780 m2, matching current AR64, and identifies it as part of Clos de Tart after a reported 1966 inclusion. Its Bonnes-Mares cadastral name and small mapped overlap do not establish Bonnes-Mares production. Sources: [Winehog: Clos de Tart – the Tête de Cuvée of Morey](https://winehog.org/clos-de-tart-the-tete-de-cuvee-of-morey-24696/).
+- **Winehog: Domaine Dujac dated Bonnes-Mares references** (AB 0096; critic-named-cadastral-reference). Winehog (2018) prints AB96 (1465 m2), matching the current parcel. Its other five references have only a combined area. Historical critic attribution does not confirm current farming or alter the provisional company link. Sources: [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/).
+- **Winehog: Domaine Georges Roumier dated Bonnes-Mares references** (AB 0100, AB 0066, AB 0340, AB 0468, AB 0469, AB 0470, AB 0089, AB 0298, AB 0105; critic-named-cadastral-reference). Winehog (2018) prints nine matching current references and individual areas. The reported metayage of AB89/298/105 from an unnamed investor is dated critic context, not an executed lease, a holder-company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
+- **Winehog: Roumier on former Chambolle AB467** (via lineage: AB 0467 (retired) → AB 0481, AB 0482; critic-named-cadastral-reference). Winehog (2018) prints AB467 at 1803 m2, matching the pinned 3 April 2018 cadastre. Only the documented 9 November 2020 DFI split reaches AB481/482, as historical context; it transfers no ownership or farming claim. Sources: [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/).
+- **Winehog: Domaine Bertheau dated Bonnes-Mares references** (AB 0119, AB 0079; critic-named-cadastral-reference). Winehog (2018) prints AB119 (2417 m2) and AB79 (1027 m2), matching current references and individual areas. Dated critic attribution only; no company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/).
+- **Winehog: Domaine d'Auvenay dated Bonnes-Mares references** (AB 0091, AB 0090; critic-named-cadastral-reference). Winehog (2018) prints AB91 (700 m2) and AB90 (1898 m2), matching current references and individual areas. The previous-owner story remains unconfirmed; no company crosswalk or present farming verification. Sources: [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/).
 
 ## Rights history and parcel lineage
 
@@ -806,11 +835,128 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **cadastre-history** — [Etalab available commune geometry vintages](https://files.data.gouv.fr/cadastre/etalab-cadastre/). geometry; read; document date not established. Full current geometry is preserved. Earlier observations support separately labelled spatial inference.
 - **dvf-sales** — [Cerema DVF+ open-data, Bourgogne-Franche-Comté](https://www.data.gouv.fr/datasets/dvf-open-data). registry-dataset; read; document date not established. Dated deed references, without prices or parties. Coverage is audited independently of DFI.
 - **eugenie-2022** — [SCEA Domaine d'Eugénie application receipt, dossier 2022-217](https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/irecontenu/telechargement/104482/662548/file/recueil-bfc-2023-037-recueil-des-actes-administratifs-special.pdf#page=11). government-event; read; document date 2022-12-15. The receipt prints Chambolle-Musigny AB304, AB438 and AB440 separately from Gevrey-Chambertin BN34, AC6 and AC287–AC289; 0.6426 ha across both communes, previous operator Maison Bouchard Père et fils. The application was filed and complete on 24 November 2022; the letter is dated 15 December 2022, although its published act ID reads BFC-2023-12-15-00001. The receipt states it does not authorise cultivation.
+- **bm-dujac-sheet** — [Domaine Dujac: Bonnes Mares technical sheet](https://www.dujac.com/en/pdf/8-bonnes-mares-grand-cru.pdf). estate; read; document date not established. The undated estate sheet reports 58 ares 01 ca (0.5801 ha). Named-area census only; no individual cadastral references.
+- **bm-hudelot-wines** — [Domaine Hudelot-Baillet: wines](https://domainehudelotbaillet.com/nos-vins/). estate; read; document date not established. The estate reports 0.13 ha of Bonnes-Mares; named-area census only.
+- **bm-roumier-estate** — [Domaine Georges Roumier: Bonnes-Mares 2021](https://www.roumier.com/fr_FR/vin/bonnes-mares/2021). estate; read; document date not established. The 2021 wine page reports 1.3919 ha; a dated vintage page, not proof of current parcel operation.
+- **bm-drouhin-laroze-estate** — [Drouhin-Laroze: Bonnes-Mares](https://www.drouhin-laroze.com/en/our-wines/4/bonnes-mares). estate; read; document date not established. The estate reports 1.5 ha; a rounded named-area total without individual cadastral references.
+- **bm-winehog-vogue-history** — [Winehog: Domaine Comte Georges de Vogüé – History and Vineyards](https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/). critic-research; read; document date 2014-04-05. Historical total 2.70 ha; printed cadastre 98 is 473 m2, unlike current AB98 at 130 m2.
+- **bm-winehog-drouhin** — [Winehog: Terroir Insight: Maison Joseph Drouhin, Bonnes Mares](https://winehog.org/terroir-insight-maison-drohin-bonnes-mares-36619/). critic-research; read; document date 2018-09-12. AB83/114/305/306 have only a combined 0.23 ha; no individual printed areas.
+- **bm-winehog-arlaud** — [Winehog: Terroir Insight: Domaine Arlaud Bonnes Mares](https://winehog.org/terroir-insight-domaine-arlaud-bonnes-mares-2-34914/). critic-research; read; document date 2018-03-11. AB76 is 660 m2 and AB121 is 1421 m2. The claimed total 0.2131 ha differs from their 0.2081 ha sum.
+- **bm-winehog-groffier** — [Winehog: Terroir Insight: Domaine Robert Groffier Bonnes Mares](https://winehog.org/terroir-insight-domaine-robert-groffier-bonnes-mares-33219/). critic-research; read; document date 2018-02-13. AB266 is 9748 m2, matching the current individual reference and area.
+- **bm-winehog-mugnier** — [Winehog: Terroir Insight: Domaine J.-F. Mugnier Bonnes Mares](https://winehog.org/terroir-insight-domaine-jf-mugnier-bonnes-mares-34668/). critic-research; read; document date 2018-02-22. AB84/282/292/293/78 share a 0.36 ha total without individual areas. Drouhin AB83/114/305/306 likewise share 0.2298 ha. Historical family and lease narrative does not establish a current operator or a company crosswalk.
+- **bm-winehog-dujac** — [Winehog: Terroir Insight: Domaine Dujac Bonnes Mares (update)](https://winehog.org/terroir-insight-domaine-dujac-bonnes-mares-34856/). critic-research; read; document date 2018-03-24. AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total and remain unmatched individually. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha.
+- **bm-winehog-roumier** — [Winehog: Terroir Insight: Domaine Georges Roumier, Bonnes Mares](https://winehog.org/terroir-insight-domaine-georges-roumier-bonnes-mares-35508/). critic-research; read; document date 2018-05-06. Nine current references individually match. Retired Chambolle AB467 matches 1803 m2 in the 3 April 2018 cadastre and reaches AB481/482 only through the 9 November 2020 DFI division. AB367 prints 1608 m2 versus 1618 m2; AB65 is a conjectural portion; the soil paragraph also mentions AB349 without an area. The 2023 metadata modification does not date new observations.
+- **bm-winehog-bertheau** — [Winehog: Terroir Insight: Domaine Bertheau, Bonnes Mares](https://winehog.org/terroir-insight-domaine-bertheau-bonnes-mares-2-35432/). critic-research; read; document date 2018-04-27. AB119 (2417 m2) and AB79 (1027 m2) individually match. Total 0.3444 ha is named-area census only; suggested Trapet-family origins do not establish a parcel ownership chain.
+- **bm-winehog-auvenay** — [Winehog: Terroir Insight: Domaine d’Auvenay, Bonnes Mares](https://winehog.org/terroir-insight-domaine-dauvenay-bonnes-mares-35456/). critic-research; read; document date 2018-05-03. AB91 (700 m2) and AB90 (1898 m2) individually match. Total 0.2598 ha is named-area census only. The article explicitly lacks confirmed information on the previous owner; its Roumier-family hypothesis is not an accepted chain.
+- **bm-winehog-vogue** — [Winehog: Terroir Insight: Domaine Comte Georges de Vogüé, Bonnes Mares – update](https://winehog.org/terroir-insight-domaine-comte-georges-de-vogue-bonnes-mares-2-26359/). critic-research; read; document date 2018-05-16. Total 2.669 ha and AB98/99 combined 473 m2; AB111 has no individual area. No individual parcel match. The combined 98/99 statement is retained alongside, not substituted for, the conflicting 2014 single-98 account.
+- **bodacc-bouchard-2026** — [BODACC: Maison Bouchard Père et Fils partial asset contribution and renaming](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22515420255%22&order_by=dateparution+desc&limit=20). registry; read; document date 2026-04-10. Notice of 25 February 2026: Maison Bouchard Père et Fils (515420255) contributes a branch of activity to NOMINOE (981574650), receiving 3,142,126 of the 3,142,858 shares the beneficiary will then have. Notice of 10 April 2026: 515420255 is renamed Vignoble des Cabottes. The contributed assets are not itemised in the notice.
+- **bodacc-pousse-dor** — [BODACC: Domaine de la Pousse d'Or notices](https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records?where=registre%3D%22480400407%22&order_by=dateparution). registry; read; document date 2022-09-08. SAS Domaine de la Pousse d'Or has its registered office at 217-219 rue du Faubourg Saint-Honoré, Paris, ORIGINE's address. In September 2022 the person named ORIGINE's manager was appointed its managing director.
+- **bouchard-legal** — [Bouchard Père & Fils: legal notices](https://www.bouchard-pereetfils.com/en/legal-notices). estate; read; document date not established. Publisher: Bouchard Père & Fils, rue Saint-Vincent, Savigny-lès-Beaune, RCS 981 574 650, capital €31,428,580.
+- **christian-confuron-2021** — [Domaine Christian Confuron et Fils: 2021 statutes and succession attestation](https://actes.ccm2.net/acte/3d38b4a9-0a6e-420f-ac91-a8f84946c1a7#page=1). company-filing; read; document date 2021-04-29. Société civile d’exploitation named Domaine Christian Confuron et Fils, formed 31 May 1989, seat moved within Vougeot. Names no cadastral reference or lease.
+- **register-sepv** — [Official company search: Société d'Exploitation et Participation Viti-Vinicole (SEPV)](https://recherche-entreprises.api.gouv.fr/search?q=393095955). registry; read; document date not established. Beaune company created 1993, activity 66.30Z (fund management); its board includes members of the Jousset-Drouhin family. Shared management is not evidence of who farms its land.
+- **rne-322396185** — [Company register: GFA DU DOMAINE DUJAC (322396185)](https://annuaire-entreprises.data.gouv.fr/entreprise/322396185). registry; read; document date not established. GFA DU DOMAINE DUJAC, land-holding GFA (activity 68.20B, letting of land), 7 rue de la Bussière, Morey-Saint-Denis, created 1967. The registered name names the domaine; a GFA owns land and need not farm it.
+- **rne-330713074** — [Company register: SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE (330713074)](https://annuaire-entreprises.data.gouv.fr/entreprise/330713074). registry; read; document date not established. SOC.CIV.AGRIC. DOMAINE DE LA VOUGERAIE: registered office Premeaux-Prissey 7 Rue De L'Eglise 21700 Premeaux-Prissey; activity 01.21Z; created 1984-09-21; active. Company officers or partners: DOMAINE BARBIER ET FILS (320281173), SOCIETE CIVILE D'EXPLOITATION VITICOLE DOMAINE LOUIS VIOLLAND (349583500). Legal identity only; not farming evidence.
+- **rne-338113954** — [Company register: SFG LA VOUGERAIE (338113954)](https://annuaire-entreprises.data.gouv.fr/entreprise/338113954). registry; read; document date not established. SFG LA VOUGERAIE: registered office 2 Passage Montgolfier 21700 Nuits-Saint-Georges; activity 64.30Z; created 1986-06-26; active. Company officers or partners: SEGUIN ET COMPAGNIE (845303650). Legal identity only; not farming evidence.
+- **rne-350591319** — [Company register: DE (350591319)](https://annuaire-entreprises.data.gouv.fr/entreprise/350591319). registry; read; document date not established. DE: registered office Chateau De La Cree 11 Rue Gaudin 21590 Santenay; activity 01.21Z; created 1989-04-18; active. Company officers or partners: SARL CHATEAU DE LA CREE (452219033). Legal identity only; not farming evidence.
+- **rne-398910034** — [Company register: DOMAINE DROUHIN LAROZE (DOMAINE DROUHIN-LAROZE ET LAROZE DE DROUHIN) (398910034)](https://annuaire-entreprises.data.gouv.fr/entreprise/398910034). registry; read; document date not established. DOMAINE DROUHIN LAROZE (DOMAINE DROUHIN-LAROZE ET LAROZE DE DROUHIN): registered office 20 Rue Du Gaizot 21220 Gevrey-Chambertin; activity 01.21Z; created 1994-11-01; active. Legal identity only; not farming evidence.
+- **rne-401584503** — [Company register: DROUHIN-LAROZE (401584503)](https://annuaire-entreprises.data.gouv.fr/entreprise/401584503). registry; read; document date not established. DROUHIN-LAROZE: registered office 20 Rue Du Gaizot 21220 Gevrey-Chambertin; activity 68.20B; created 1995-06-07; active. Legal identity only; not farming evidence.
+- **rne-433359320** — [Company register: SCI JEAN FAYE (433359320)](https://annuaire-entreprises.data.gouv.fr/entreprise/433359320). registry; read; document date not established. SCI JEAN FAYE: registered office La Vougeraie 21700 Premeaux-Prissey; activity 68.20B; created 2000-10-27; active. Company officers or partners: SOCIETE CIVILE AGRICOLE DOMAINE DE LA VOUGERAIE (330713074), SOCIETE FAMILIALE DE GESTION DE LA VOUGERAIE (338113954). Legal identity only; not farming evidence.
+- **rne-452219033** — [Company register: CDLC (452219033)](https://annuaire-entreprises.data.gouv.fr/entreprise/452219033). registry; read; document date not established. CDLC: registered office 11 Rue Chateau De La Cree 21590 Santenay; activity 01.21Z; created 2003-12-17; active. Legal identity only; not farming evidence.
+- **rne-480400407** — [Company register: DOMAINE DE LA POUSSE D'OR (480400407)](https://annuaire-entreprises.data.gouv.fr/entreprise/480400407). registry; read; document date not established. DOMAINE DE LA POUSSE D'OR, SAS, 217-219 217 Rue Du Faubourg Saint-Honore 75008 Paris, activity 70.10Z head-office activity, created 2004-12-23. Legal identity only.
+- **rne-515420255** — [Company register: VIGNOBLE DES CABOTTES (515420255)](https://annuaire-entreprises.data.gouv.fr/entreprise/515420255). registry; read; document date not established. VIGNOBLE DES CABOTTES: registered office 15 Rue Du Chateau 21200 Beaune; activity 46.34Z; created 1954-01-01; active. Company officers or partners: ARTEMIS DOMAINES (911907111). Legal identity only; not farming evidence.
+- **rne-515620193** — [Company register: LES PETITS FILS DE PIERRE PONNELLE (515620193)](https://annuaire-entreprises.data.gouv.fr/entreprise/515620193). registry; read; document date not established. LES PETITS FILS DE PIERRE PONNELLE: registered office 2 Rue Paradis 21200 Beaune; activity 46.34Z; created 1956-01-01; active. Company officers or partners: SFG LA VOUGERAIE (338113954). Legal identity only; not farming evidence.
+- **rne-981574650** — [Company register: BOUCHARD PERE ET FILS (981574650)](https://annuaire-entreprises.data.gouv.fr/entreprise/981574650). registry; read; document date not established. BOUCHARD PERE ET FILS, SAS, Rue Saint-Vincent 21420 Savigny-Les-Beaune, activity 01.21Z vine growing, created 2023-10-12. Corporate officers or partners: ARTEMIS DOMAINES (911907111). Formerly NOMINOE; beneficiary of the February 2026 partial asset contribution from 515420255. Legal identity only.
+- **sepv-stat-ccm** — [SEPV: 2022 board minutes and updated statutes](https://actes.ccm2.net/acte/81874e83-6d0e-46db-a084-b0fa72189ebb#page=3). company-filing; read; document date 2022-07-07. Article 2 names a majority participation in Maison Joseph Drouhin SA, SIREN 515620417. This is a documented corporate relationship, stronger than a shared surname; no Grands-Échezeaux parcel schedule or parcel-specific lease appears.
+- **cm-rne-393095955** — [Official company registry: 393095955](https://recherche-entreprises.api.gouv.fr/search?q=393095955). registry; read; document date not established. Registered SEPV company identity. The 1994 contribution report and approval connect its exact legal name and SIREN with the four Musigny references held under U21401984.
+- **cm-rne-778173427** — [Official company registry: 778173427](https://recherche-entreprises.api.gouv.fr/search?q=778173427). registry; read; document date not established. The registered company is Société d’exploitation du Domaine Georges Roumier et ses fils; the 2026 statutes identify the domaine company explicitly.
+- **cm-roumier-2026** — [778173427: roumier 2026](https://actes.ccm2.net/acte/5858c9d3-bc23-451a-9706-35d35093ec45). company-filing; read; document date 2026-03-24. Statutes explicitly identify the Domaine Georges Roumier operating company and its SIREN. The historical merger and capital account contain no Musigny parcel schedule.
+- **cm-sepv-1994-approval** — [393095955: sepv 1994 approval](https://actes.ccm2.net/acte/dbe6c1b8-34a2-44c4-8747-7180e02045be). company-filing; read; document date 1994-12-30. The assembly approves the business contribution in resolutions 12–13, records satisfaction of the funding condition in resolution 43, and identifies Maison Joseph Drouhin 515620417 as its majority-held company. No new parcel schedule replaces the 20 December report.
+- **cm-sepv-1994-report** — [393095955: sepv 1994 report](https://actes.ccm2.net/acte/00cdb597-0714-4661-af09-44b8d7e4ee1d). company-filing; read; document date 1994-12-20. Contribution auditor’s report to SEPV lists Chambolle-Musigny AN40 (180 m²), AN57 (210 m²), AN60 (850 m²) and AN61 (5,480 m²) in the contributed individual wine business. These individual areas match current cadastre. The proposed contribution and later approval are separately dated.
+- **bm-arlaud-gfa-2013** — [444144190: arlaud gfa 2013](https://actes.ccm2.net/acte/4d6f4544-61da-4c40-b4e6-2b1470bb3c20). company-filing; read; document date 2013-04-26. Donation deed identifies GFA du Domaine Arlaud Père et Fils 444144190 and separate producing SCEA 418411518. Attached historical statutes give Chambolle AB121 1,421 m² and AB76 660 m²; both match current U21586080. P5 recites a 30 June 1998 long-term lease of all GFA property to the named SCEA, without duration, original lease or current operation confirmation. The separate GFA registration 429825441 was also checked and is not equated with this exact-schedule legal company.
+- **bm-auvenay-2001** — [778252445: auvenay 2001](https://actes.ccm2.net/acte/211c190d-e869-45ef-8160-338682de40e8). company-filing; read; document date 2001-12-10. Registration bundle includes original 15 February 1960 statutes and 10 December 2001 updates identifying the wine company. No Bonnes-Mares reference-and-area schedule.
+- **bm-auvenay-2019** — [778252445: auvenay 2019](https://actes.ccm2.net/acte/7fe94976-ca43-40ca-b699-eb67dffd9f6d). company-filing; read; document date 2019-12-12. Capital and updated statutes identify SCEA du Domaine d Auvenay. No individual AB90/91 schedule located.
+- **bm-auvenay-2024** — [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7). company-filing; read; document date 2024-05-15. Current filed statutes identify the Domaine d Auvenay wine company; original property contributions concern other communes. No individual AB90/91 schedule.
+- **bm-bachus-1995** — [401538525: bachus 1995](https://actes.ccm2.net/acte/cac44734-fa08-4d77-9c20-3480058c7a19). company-filing; read; document date 1995-06-07. Original GFA Bachus 21 formation contains the acquisition/lease mandates repeated in the 2024 copy, without the U21373997 current AB437/439 references. A mandate is not an executed acquisition or lease.
+- **bm-bachus-2024** — [401538525: bachus 2024](https://actes.ccm2.net/acte/eb2b100e-3f5c-4b48-8bcd-869cf1ade44b). company-filing; read; document date 2024-12-10. GFA Bachus 21 statutes repeat mandates for acquisition and a lease to Domaine Drouhin-Laroze 398910034, naming AB438 362 m², AB440 1,560 m² and AB304 218 m². These are now recorded to Bouchard, not U21373997, whose parcels are AB437/439. No U-id identity established; original printed schedules may be external historical leads only, not current holder/tenancy assignments. Current AB438 is 436 m2 and AB440 is 1741 m2, unlike printed 362 and 1560. AB304 matches 218 m2 but is recorded to Bouchard, not this GFA. The printed sum also differs from the margin total; no corrections or reassignment to AB437/439.
+- **bm-bart-clair-1994** — [398367029: bart clair 1994](https://actes.ccm2.net/acte/43893fc0-07ab-41e9-be2b-42e05bde84f6). company-filing; read; document date 1994-07-15. Founding GFA statutes repeat the AB41 1,490 m² and AB85 6,690 m² contribution, with generic long-term leasing obligations. Identity/property evidence, without an independent link to SCEV du Domaine Bart 343043600. Original date and schedule images pending.
+- **bm-bart-clair-2022** — [398367029: bart clair 2022](https://actes.ccm2.net/acte/53e9e82f-1d7f-4d80-a1c1-4f054c6b4fa1). company-filing; read; document date 2022-05-10. Updated statutes identify GFA du Domaine Bart-Clair 398367029 and repeat contribution schedule AB41 1,490 m², including 350 m² of lande, and AB85 6,690 m². Both references and full areas match current U21459182. AB41 is described as Chambolle-Musigny rather than Bonnes-Mares; preserve partial overlap and source description. No named producer-company lease in selected bundle.
+- **bm-bertheau-2012** — [326418761: bertheau 2012](https://actes.ccm2.net/acte/31e2f8a9-78d6-445d-80ef-0c54caa8849b). company-filing; read; document date 2012-04-12. Statutes updated 12 April 2012 reproduce the 20 November 1982 founding contribution: Chambolle-Musigny AB119 (2,417 m²) and AB79 (1,027 m²). This is holder/property evidence; the general leasing object does not name a current tenant.
+- **bm-bertheau-2020** — [326418761: bertheau 2020](https://actes.ccm2.net/acte/90fa8a30-cf0e-4a9a-be6c-0685d6974943). company-filing; read; document date 2020-07-17. Donation bundle repeats GFA Bertheau et Fils’ original contributions, including Chambolle AB119 (2,417 m²) and AB79 (1,027 m²). Original contribution date and current copy date kept distinct. No named tenant in the reviewed selected bundle; family officers alone do not identify a separate producing business. Copy deed date still to verify.
+- **bm-bertheau-2024** — [326418761: bertheau 2024](https://actes.ccm2.net/acte/3b1fa017-3ea8-4bce-8d08-9bbbefe77308). company-filing; read; document date 2024-05-16. Two-page minutes name a new co-manager and amend the management article. The free index calls this updated statutes but the actual document is an extract of minutes. No parcel schedule; deposit date unavailable in the free index.
+- **bm-bons-consorts-2005** — [482772282: bons consorts 2005](https://actes.ccm2.net/acte/a7790bf4-6a0b-411e-8b6f-17949121f53b). company-filing; read; document date 2005-05-10. Formation of Les Bons Consorts, cash contributions and general property powers. No AB96 schedule or named tenant.
+- **bm-bons-consorts-2015** — [482772282: bons consorts 2015](https://actes.ccm2.net/acte/71d1cd03-f3fa-4fab-a7dd-b1123f85c2f0). company-filing; read; document date 2015-02-16. Conversion from civil company to GFA without a new legal person; no AB96 schedule or tenant identified.
+- **bm-bons-consorts-2018** — [482772282: bons consorts 2018](https://actes.ccm2.net/acte/a582b8d3-4595-497d-8c61-0e427cb927d5). company-filing; read; document date 2018-10-29. Donation of shares in distinct Seysses-family companies. No AB96 schedule or explicit lessor/operator relation established; common family participation alone is not a producer-company link.
+- **bm-bussiere-2009** — [377495288: bussiere 2009](https://actes.ccm2.net/acte/0c67b3ee-1f4b-4eb4-a539-bc6d6984ca77). company-filing; read; document date 2009-04-02. Statutes updated 2 April 2009, deposited 2012, give Chambolle AB66 1,070 m² in the GFA's original contribution. This matches U21155571's current reference and full area and supports a legal-holder identity crosswalk. No named lessee found; schedule image pending.
+- **bm-bussiere-2026** — [377495288: bussiere 2026](https://actes.ccm2.net/acte/8e5f36f6-1b7e-44ab-9a79-a3e46d24ed98). company-filing; read; document date 2026-03-24. Updated statutes identify GFA Clos de la Bussière 377495288 and retain the 22 December 1989 original contribution. OCR of older pages poor; exact AB66 schedule readable in 2009 copy. Shareholders and manager alone do not establish a separate Roumier producer-company relationship.
+- **bm-cote-nuits-1995** — [343567632: cote nuits 1995](https://actes.ccm2.net/acte/425be87f-6775-4d1f-a1b1-2840effa7b37). company-filing; read; document date 1995-03-15. A one-page attestation changes the management company’s representative. It identifies the same GFA; no property schedule or producer-company relation.
+- **bm-cote-nuits-2015** — [343567632: cote nuits 2015](https://actes.ccm2.net/acte/a49f0b2a-e0a9-49fa-af51-ba19103058a8). company-filing; read; document date 2015-12-18. Statutes identify GFA de la Côte de Nuits 343567632 and management by La Française Real Estate Managers 399922699, effective registered-office move 1 January 2016. Cash capital and a general long-term leasing object; no named producer, Bonnes-Mares schedule or specific tenant.
+- **bm-cpgc** — [CPGC: GFA de la Cote de Nuits](https://www.cpgc.fr/domaine-cotes-de-nuits/). estate; read; document date not established. The fund describes its Chambolle-Musigny holdings, including Bonnes-Mares, and names Joel Hudelot followed by Dominique Le Guen and his wife. Undated commune-level reported tenancy; no individual references or current-season confirmation.
+- **bm-dujac-gfa-2000** — [322396185: dujac gfa 2000](https://actes.ccm2.net/acte/f4e74da2-ace1-410b-83ae-9e44a45a7aef). company-filing; read; document date 2000-05-31. The 31 May 2000 notarial deposit incorporates the 25 March 2000 conversion of Société Civile d’Exploitation du Domaine Dujac into GFA du Domaine Dujac, unchanged SIREN 322396185. Minutes p19 recite an eighteen-year métayage of all built and unbuilt property to Domaine Dujac SA from 1 July 1997. No individual Bonnes-Mares schedule or renewal is printed. Historical denomination suggests a candidate for U21117863, but no exact current parcel identity crosswalk establishes it; 322396185 is separately recorded in this same cru.
+- **bm-dujac-gfa-2018** — [322396185: dujac gfa 2018](https://actes.ccm2.net/acte/66933b15-daed-4bc3-a3bc-e0c24c268fd7). company-filing; read; document date 2018-10-29. Donation and updated statutes distinguish GFA du Domaine Dujac 322396185, Domaine Dujac SAS 413372608 and Les Bons Consorts 482772282. Shared family share transfers do not independently establish a parcel-specific tenancy. No Bonnes-Mares cadastral schedule was located in the selected bundle.
+- **bm-dujac-sa-1997** — [413372608: dujac sa 1997](https://actes.ccm2.net/acte/6b0a4fc9-a431-427a-9f1b-cdfbe9731b1d). company-filing; read; document date 1997-07-10. Formation identifies the producing Domaine Dujac SA 413372608, distinct from holder GFA 322396185. Cash subscriptions and wine-business object, without an individual Bonnes-Mares schedule.
+- **bm-dujac-sas-2007** — [413372608: dujac sas 2007](https://actes.ccm2.net/acte/cd8b3cda-3dff-4a25-922f-2731f3398c68). company-filing; read; document date 2007-12-03. Conversion of Domaine Dujac SA to SAS, unchanged SIREN 413372608. No individual Bonnes-Mares schedule; corroborates operating-company identity only.
+- **bm-grands-vins-2005** — [483678264: grands vins 2005](https://actes.ccm2.net/acte/da09000a-ac9b-4bf6-a912-9a34d364dd53). company-filing; read; document date 2005-07-27. Original formation deed prints the same four Bonnes-Mares references and areas, with a historical Domaine de Bauclair lease recital. Exact schedule corroborated by the image-reviewed 2024 copy; original images still to review.
+- **bm-grands-vins-2024** — [483678264: grands vins 2024](https://actes.ccm2.net/acte/310a455a-6b34-4e9a-86cd-0fa6ea5deacd). company-filing; read; document date 2024-12-17. Updated statutes retain 27 July 2005 property contributions: Chambolle AB134 485 m² and Morey AR66 9,235 m², AR67 1,246 m², AR68 955 m². All four match current references, areas and holder denomination, supporting U21966026 -> 483678264. The schedule recites a 19 February 1986 lease to Domaine de Bauclair, 30 years from 1 January 1986, without renewal or an established producer-company crosswalk. The adjacent Jadot preference right concerns disposal, not tenancy.
+- **bm-groffier-2007** — [330763426: groffier 2007](https://actes.ccm2.net/acte/7f58240a-1ac5-42b5-9620-a4f64f514f73). company-filing; read; document date 2007-07-03. Donation of shares in Groffier Robert Père et Fils 330763426 with original cash-funded company statutes, not a donation of Bonnes-Mares land. No exact AB266 schedule.
+- **bm-groffier-2015** — [330763426: groffier 2015](https://actes.ccm2.net/acte/1cfb6849-7d72-45c3-9e20-b9f0f0863973). company-filing; read; document date 2015-12-31. Conversion and renaming statutes identify the Groffier wine company and its business object, supporting company identity. No AB266 parcel schedule or individual lease; general long-term leasing language is not parcel-level evidence.
+- **bm-groffier-2022** — [330763426: groffier 2022](https://actes.ccm2.net/acte/780cedba-1b1c-4f98-9d82-33b96c3e9709). company-filing; read; document date 2022-08-31. Capital reduction and updated statutes identify Domaine Robert Groffier Père et Fils 330763426 as the wine business. Its object expressly covers the Domaine Groffier business and wine sales. No AB266 property schedule; exact signing dates to verify.
+- **bm-hudelot-history** — [Domaine Hudelot-Baillet: estate history](https://domainehudelotbaillet.com/en/our-story/). estate; read; document date not established. The estate identifies Joel Hudelot as its founder and Dominique Le Guen as his successor. This identifies the domaine named indirectly by the fund; no cadastral assignment is inferred.
+- **bm-les-bonnes-mares-2018-capital** — [841127582: les bonnes mares 2018 capital](https://actes.ccm2.net/acte/38ac3cbc-75ff-4b76-a704-4481417e29f1). company-filing; read; document date 2018-07-26. Cash-funded capital increase and updated GFA statutes permit Bonnes-Mares acquisitions and a future lease to an unnamed vigneron. No individual references, areas, executed lease or producer-company crosswalk.
+- **bm-les-bonnes-mares-2018-formation** — [841127582: les bonnes mares 2018 formation](https://actes.ccm2.net/acte/dde35736-4446-4065-aa0a-3ff0bd0d94ea). company-filing; read; document date 2018-07-10. Formation authorizes future acquisitions and a fermage lease to a vigneron yet to be selected. No individual schedule or named producer. Exact handwritten signing date on p15 pending.
+- **bm-lignier-1976** — [429825250: lignier 1976](https://actes.ccm2.net/acte/99c5ae50-3fa7-4fa3-b08b-cdf58b6857fa). company-filing; read; document date 1976-03-30. The formation schedule names AB68 (525 m2) and AB130 (2335 m2); historical fractional interests are retained. A later 21 December 1990 contribution contains authority for a future lease to EARL Lignier Georges et Fils, not proof that an executed lease covers these Bonnes-Mares parcels.
+- **bm-lignier-2012** — [429825250: lignier 2012](https://actes.ccm2.net/acte/d36c4be6-51df-475d-b64d-62bacdc04aa5). company-filing; read; document date 2012-12-21. Capital increase and updated statutes retain historic general authority to sign a lease, without an individual Bonnes-Mares lease instrument.
+- **bm-lignier-2018** — [429825250: lignier 2018](https://actes.ccm2.net/acte/9e4a024d-bd07-48bc-aede-529e438675fd). company-filing; read; document date 2018-07-11. Management and updated GFA statutes. No individual Bonnes-Mares schedule in this selected bundle.
+- **bm-mommessin-thorin-2004** — [685750598: mommessin thorin 2004](https://actes.ccm2.net/acte/a64b848c-616b-4321-bc57-48668fbcfe0e). company-filing; read; document date 2004-11-15. Vins et Vignobles 685750598 renamed Maison Mommessin et Thorin. No Morey AR64 parcel or independent identity crosswalk to recorded U18178981 Maison Mommessin; historical names must not be conflated.
+- **bm-nabuca-2004** — [383339470: nabuca 2004](https://actes.ccm2.net/acte/9ed60b0a-1bfd-4354-9fea-a2bcc57ea660). company-filing; read; document date 2004-07-12. GFA Domaine Newman capital contribution concerns Beaune CX336/CZ483 premises, not a Bonnes-Mares acquisition or named tenant. Exact deed date pending.
+- **bm-nabuca-2014** — [383339470: nabuca 2014](https://actes.ccm2.net/acte/2cdc80e0-34c9-4f41-9440-7fcb299845a3). company-filing; read; document date 2014-05-12. Share transfer and renaming of GFA Domaine Newman to GFA Nabuca retain SIREN 383339470. Property schedule p8 gives AB82 1,530 m², AB97 417 m² and AB116 1,378 m², matching the current holder and individual areas. Powers to consent to 25-year métayage do not name the tenants or show execution. The authentic-copy footer p41 prints 12/05/2013, conflicting with the operative deed p6 and resolutions p3 dated 12 May 2014; retain this discrepancy.
+- **bm-nabuca-2026** — [383339470: nabuca 2026](https://actes.ccm2.net/acte/014b2169-36e3-418b-b645-0bbd14d8f0d0). company-filing; read; document date 2026-03-30. Updated statutes identify GFA Nabuca 383339470 and private shareholders, with a general leasing object and no individual schedule or named tenant. Manager Arnaud Mortet alone is insufficient to link a producing domaine.
+- **bm-rne-322396185** — [Company register: GFA DU DOMAINE DUJAC (322396185)](https://recherche-entreprises.api.gouv.fr/search?q=322396185&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-326418761** — [Company register: GFA BERTHEAU ET FILS (326418761)](https://recherche-entreprises.api.gouv.fr/search?q=326418761&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-330763426** — [Company register: DOMAINE ROBERT GROFFIER PERE ET FILS (GROFFIER COLLECTION - DOMAINE DECELINE) (330763426)](https://recherche-entreprises.api.gouv.fr/search?q=330763426&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-343043600** — [Company register: SCEV DU DOMAINE BART (343043600)](https://recherche-entreprises.api.gouv.fr/search?q=343043600). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-343567632** — [Company register: GFA COTE DE NUITS (343567632)](https://recherche-entreprises.api.gouv.fr/search?q=343567632&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-348999020** — [Company register: GFA DES VEROILLES (348999020)](https://recherche-entreprises.api.gouv.fr/search?q=348999020&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-377495288** — [Company register: GFA CLOS DE LA BUSSIERE (377495288)](https://recherche-entreprises.api.gouv.fr/search?q=377495288&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-383339470** — [Company register: GFA NABUCA (383339470)](https://recherche-entreprises.api.gouv.fr/search?q=383339470&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-398367029** — [Company register: GFA DU DOMAINE BART CLAIR (398367029)](https://recherche-entreprises.api.gouv.fr/search?q=398367029&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-401538525** — [Company register: GFA BACHUS 21 (401538525)](https://recherche-entreprises.api.gouv.fr/search?q=401538525&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-413372608** — [Company register: DOMAINE DUJAC (413372608)](https://recherche-entreprises.api.gouv.fr/search?q=413372608&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-418411518** — [Company register: DOMAINE ARLAUD PERE ET FILS (418411518)](https://recherche-entreprises.api.gouv.fr/search?q=418411518). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-429825250** — [Company register: DOMAINE GEORGES LIGNIER PERE ET FILS (429825250)](https://recherche-entreprises.api.gouv.fr/search?q=429825250&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-429825441** — [Company register: GFA ARLAUD PERE ET FILS (429825441)](https://recherche-entreprises.api.gouv.fr/search?q=429825441). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-444144190** — [Company register: GFA DU DOMAINE ARLAUD PERE ET FILS (444144190)](https://recherche-entreprises.api.gouv.fr/search?q=444144190&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-451563118** — [Company register: DOMAINE HUDELOT BAILLET (451563118)](https://recherche-entreprises.api.gouv.fr/search?q=451563118). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-482772282** — [Company register: LES BONS CONSORTS (SFV BONS CONSORTS) (482772282)](https://recherche-entreprises.api.gouv.fr/search?q=482772282&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-483678264** — [Company register: GFA DES GRANDS VINS FINS (483678264)](https://recherche-entreprises.api.gouv.fr/search?q=483678264&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-685750598** — [Company register: MAISON MOMMESSIN ET THORIN (MMT) (685750598)](https://recherche-entreprises.api.gouv.fr/search?q=685750598&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-778252445** — [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-818134116** — [Company register: VINES (818134116)](https://recherche-entreprises.api.gouv.fr/search?q=818134116&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-rne-841127582** — [Company register: LES BONNES MARES (841127582)](https://recherche-entreprises.api.gouv.fr/search?q=841127582&per_page=10). registry; read; document date not established. Exact SIREN and registered legal denomination. Corporate identity alone establishes neither a parcel tenancy nor current farming.
+- **bm-veroilles-2025** — [348999020: veroilles 2025](https://actes.ccm2.net/acte/a4768e36-1bbf-4177-b811-305761677fc2). company-filing; read; document date 2024-07-11. Updated GFA des Véroilles 348999020 statutes retain 24 September 1988 formation. Article 17bis mandates acquisition of Chambolle AB59 (689 m²), with handwritten additions 45,46,56,60,42,43 without individual areas. AB46 is not an exact filing match; mandate does not establish execution, tenant or a distinct U21197768 company crosswalk. Update date on cover to verify. Cover date 11 July 2024 is partly overlaid by the certification signature; original statutes dated 24 September 1988.
+- **bm-vines-2016-change** — [818134116: vines 2016 change](https://actes.ccm2.net/acte/2b3717ee-f795-4f4f-8794-3319723dd44e). company-filing; read; document date 2016-05-18. Office and president change; selected filed statutes provide no Bonnes-Mares schedule or named external producer. Officer identities alone do not establish a domaine link.
+- **bm-vines-2016-formation** — [818134116: vines 2016 formation](https://actes.ccm2.net/acte/b6587f8e-a343-4b72-bf80-1f17d64a58f7). company-filing; read; document date 2016. Cash-funded VINES company formation with generic vineyard operating powers; no individual Bonnes-Mares schedule or producer-company relation. Exact signing date pending.
+- **bm-vines-2017** — [818134116: vines 2017](https://actes.ccm2.net/acte/d37ccb08-2e14-4c59-b6aa-e51c33a0b119). company-filing; read; document date 2017-11-16. Capitalization and general agricultural object; no Bonnes-Mares reference, named producer-company relation or parcel lease.
+- **bm-vins-vignobles-1997** — [685750598: vins vignobles 1997](https://actes.ccm2.net/acte/590b0871-84b1-4398-8c6c-32beee776cca). company-filing; read; document date 1997-03-17. Corporate governance/year-end change of Vins et Vignobles; no Bonnes-Mares schedule, lease or U18178981 identity evidence.
+- **bm-clos-tart-2017** — [686042409: clos tart 2017](https://actes.ccm2.net/acte/30227429). company-filing; read; document date 2017-11-16. The filed statutes identify Societe du Clos de Tart SIREN 686042409, preserve company continuity from the 1931 incorporation, and state the 16 November 2017 conversion from SA into SCEA. Wine-estate business object; no individual property schedule in this 18-page selection.
+- **bm-mommessin-2009** — [686042409: mommessin 2009](https://actes.ccm2.net/acte/30227327). company-filing; read; document date 2009-06-13. The assembly renames Maison Mommessin to Famille Mommessin with unchanged SIREN 686042409. This is distinct from Maison Mommessin et Thorin 685750598. No individual cadastral schedule in this 28-page selection.
+- **bm-mommessin-1998** — [686042409: mommessin 1998](https://actes.ccm2.net/acte/30227371). company-filing; read; document date 1998-12-12. The assembly approves contribution of agricultural business assets of the Mommessin-Bellenand indivision to Maison Mommessin 686042409. The indivision previously held the Clos de Tart business under a vigneronnage lease from the company. The contribution concerns business assets; it does not provide an exact individual cadastral schedule or verify present operation.
+- **bm-clos-tart-2022** — [686042409: clos tart 2022](https://actes.ccm2.net/acte/4337198). company-filing; read; document date 2022-09-30. The 2022 assembly and updated statutes identify the same SCEA and an Artemis group share contribution and manager change. A corporate transaction does not establish a current parcel operator. No individual property schedule in this selection.
+- **bm-clos-tart-2018** — [686042409: clos tart 2018](https://actes.ccm2.net/acte/30227419). company-filing; read; document date 2018-04-05. The 5 April 2018 share-transfer bundle includes an annex naming Societe du Clos de Tart as owner of Morey AR60 (72548 m2), AR64 (2780 m2), AR148 (1596 m2) and AR149 (29 m2), all matching the current Maison Mommessin U-id. It recites a 7 December 1932 acquisition and the 2003 division of AR62; the 2018 transaction transfers shares, not these parcels anew. The annex also documents the 2017 Famille Mommessin to Societe du Clos de Tart renaming without a new legal person. No present farming verification.
+- **bm-rne-686042409** — [Company register: Societe du Clos de Tart (686042409)](https://recherche-entreprises.api.gouv.fr/search?q=686042409). registry; read; document date not established. Current registered SCEA identity. Earlier filed names Maison Mommessin and Famille Mommessin share this SIREN; distinct from Maison Mommessin et Thorin 685750598.
+- **cm-winehog-clos-tart** — [Winehog: Clos de Tart – the Tête de Cuvée of Morey](https://winehog.org/clos-de-tart-the-tete-de-cuvee-of-morey-24696/). critic-research; read; document date 2015-09-14. Names cadastre 60 at 7.2548 ha and 64 at 0.2780 ha as Clos de Tart. It reports that the latter retained the Bonnes-Mares cadastral name after its 1966 inclusion in Clos de Tart. Historical references and classification, not present farming.
 
 ## Remaining evidence and access gaps
 
 - Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.
 - Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.
 - Current farming remains unconfirmed for every parcel.
+- Tier 2 selected 46 free company filings (1788 pages), OCR-screening every page. This is a bounded selection of formation, contribution, transformation and recent statutes, not every filing ever deposited. Prior shared research is reused without rescanning old files.
+- U21117863 cannot crosswalk to the separately recorded Dujac SIREN in this cru. Bachus, Veroilles and the two BND U-ids remain unresolved; names, officers and monopole reputation are insufficient.
+- The GFA Grands Vins Fins lease names Domaine de Bauclair; an independent current company identity and renewal were not located. Jadot preference rights do not prove tenancy. Arlaud has a distinct similarly named registry entry 429825441, not equated with the exact-schedule company 444144190.
+- All six additional Bonnes-Mares Winehog subscriber articles were supplied as WebArchives and reviewed, alongside the original three MHTML articles and shared Vogue/Clos de Tart histories. No requested Bonnes-Mares article remains an access gap. Sources retain original-byte hashes and publication dates separately from page modifications.
+- The CPGC page and Dujac technical sheet were readable through the public web reader but direct downloads returned HTTP 503. Their hash covers the saved extraction, not raw HTML/PDF bytes. The Bouchard sheet was not retained as census evidence after direct-download failure.
+- Original leases, renewals, paid SPF copies and present-season outreach remain unreviewed. Historical lease recitals, transaction mandates, company identity and named-area census totals do not verify current farming.
+- The supplied Clos de Tart history article also covers shared AR64. Five additional company filings resolve the Maison Mommessin U-id through SIREN 686042409, name continuity and four exact property references; the earlier 685750598 candidate is distinct. The 2018 share transfer is not a new land conveyance and the 1932 origin recital is not a reviewed original deed.
+- Supplemental articles add 14 exact current-reference-and-area matches and one retired reference reaching two current parcels through documented DFI ancestry. AB367 has a 10 m2 discrepancy; Mugnier and old Dujac groups and Vogue AB98/99 are aggregate-only. No area correction, holder identity or current farming is inferred.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

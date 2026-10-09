@@ -28,9 +28,16 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
   const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;villageMaps:string[];evidenceFrom:string[]};
   const evidence=read(`src/lib/places/grandCruParcels/${slug}.evidence.json`) as ParcelEvidenceData;
   const dfi=Object.entries(evidence.tracing??{}).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation');
-  // A cru whose parcels were all first seen in a cadastral release has no DFI-dated history to show.
-  test.skip(!dfi,`${slug} has no parcel whose earliest supported event is a DFI validation`);
-  const [parcelId,trace]=dfi!;
+  // Some reviewed crus, including Lambrays, have no DFI event at the source boundary.
+  // Exercise an actual dated rights record in that case, without inventing parcel history.
+  const rights=Object.entries(evidence.parcels).flatMap(([parcelId,items])=>items
+   .filter(item=>item.dateRole==='1-january-rights-snapshot'&&item.date)
+   .map(item=>({parcelId,date:item.date!}))).sort((a,b)=>a.date.localeCompare(b.date));
+  const record=dfi?{parcelId:dfi[0],date:dfi[1].earliestSupportedEvent.date,group:'history',label:'DFI validation date'}
+   :rights.length?{...rights[0],group:'ownership',label:'1 January rights snapshot'}:undefined;
+  // A cru with neither (every parcel first seen in a cadastral release, no dated rights snapshot) has no dated record to show.
+  if(!record){test.skip(true,`${slug} has no DFI validation or dated rights record`);return;}
+  const {parcelId}=record;
   const villages=read('src/lib/places/burgundyVillageMapRegistry.json').villages as {id:string;name:string}[];
   const names=cru.villageMaps.map(id=>villages.find(v=>v.id===id)!.name);
   await page.emulateMedia({reducedMotion:'reduce'});
@@ -54,10 +61,10 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
   await dialog.getByLabel('Cadastral parcel').selectOption(parcelId);
   const panel=dialog.getByRole('region',{name:'History and evidence'});
   await expect(panel).toBeVisible();
-  const history=panel.locator('details.parcel-evidence-history');
+  const history=panel.locator(`details.parcel-evidence-${record.group}`);
   if(!await history.evaluate((el:HTMLDetailsElement)=>el.open))await history.locator('summary').click();
-  await expect(history.getByText('DFI validation date',{exact:true}).first()).toBeVisible();
-  await expect(history.locator(`time[datetime="${trace.earliestSupportedEvent.date}"]`).first()).toBeVisible();
+  await expect(history.getByText(record.label,{exact:true}).first()).toBeVisible();
+  await expect(history.locator(`time[datetime="${record.date}"]`).first()).toBeVisible();
   await expect(panel.getByText('Verified operator',{exact:true})).toHaveCount(0);
   expect([...loaded].sort()).toEqual([...cru.evidenceFrom].sort());
   // Source coverage and tracing stay in the research files; readers see the dated records only.

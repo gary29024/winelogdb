@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-07",
+  "reviewedAt": "2026-10-08",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-973",
-  "status": "tier-1-reviewed",
-  "scope": "All 51 mapped Musigny parcels and 16 recorded legal-entity identifiers reviewed for Tier 1, including commune edges, cadastral named areas and the #461 historical extension. The one notice-index candidate was read from its page image and rejected; no exact notice event is assigned. Producer/company research remains Tier 2. No current farmer is verified.",
+  "status": "tier-2-reviewed",
+  "scope": "All 51 mapped Musigny parcels and 16 recorded holders reviewed through the shared holder table for Tier 2. Company relationships, historical filings, published named-area holdings and unresolved identities stay distinct. Tier 1 rights, geometry and history are retained. No current farmer is verified.",
   "sources": [
     {
       "id": "dgfip-current",
@@ -56,107 +56,480 @@
       "reviewMethod": "page-image",
       "access": "read",
       "finding": "The receipt (dossier 2021-122, EARL Domaine Philippe Girard, previous operator Domaine Roux Père et Fils) prints Chambolle-Musigny A139. The DFI retired A0139 on 9 November 1995, so a 2021 reference to it is not joined to its descendant A0301; AN37 is printed under Savigny-lès-Beaune. No Musigny parcel event is assigned."
+    },
+    {
+      "id": "mus-guildsomm-2020",
+      "title": "Bryce Wiatrak, GuildSomm: Musigny",
+      "url": "https://www.guildsomm.com/public_content/features/articles/b/bryce-wiatrak/posts/musigny",
+      "type": "critic-research",
+      "documentDate": "2020-10-14",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:28:47.128064+00:00",
+      "retrievedFrom": "https://www.guildsomm.com/public_content/features/articles/b/bryce-wiatrak/posts/musigny",
+      "sha256": "68739c338c817f70bd8617be7da2a52d4e422e746d39bb8acfdc0775e1fc0ba5",
+      "bytes": 129843,
+      "finding": "The public feature distinguishes Les Musigny (Grand Musigny), Les Petits Musigny and the Prieur section of La Combe d’Orveau. It reports the Vogüé total across the first two named areas; no cadastral numbers are supplied."
+    },
+    {
+      "id": "mus-monocepage",
+      "title": "Monocépage: GC Musigny et Bonnes Mares, revised December 2022",
+      "url": "https://monocepage.com/le-musigny-et-les-bonnes-mares/",
+      "type": "critic-research",
+      "documentDate": "2022-12",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:28:45.750002+00:00",
+      "retrievedFrom": "https://monocepage.com/le-musigny-et-les-bonnes-mares/",
+      "sha256": "368d724ec9ca7b1c53b47c58bffd59a3593560d70535a54357c9c5a6f05e6898",
+      "bytes": 148063,
+      "finding": "Published producer totals and named-area context. The printed 10.86 ha beside Les Musigny is not adopted as that lieu-dit’s area; the census uses only explicitly qualified producer totals."
+    },
+    {
+      "id": "mus-mugnier-sheet",
+      "title": "Domaine Jacques-Frédéric Mugnier: Musigny sheet",
+      "url": "https://mugnier.fr/wp-content/uploads/2024/04/musigny.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:15.452598+00:00",
+      "retrievedFrom": "https://mugnier.fr/wp-content/uploads/2024/04/musigny.pdf",
+      "sha256": "b5d10bf4efc48e173d636c849346340b240b460781776693e0bb24e5243cb53d",
+      "bytes": 559103,
+      "finding": "The estate reports 1.14 ha entirely in Grand-Musigny. This is named-area census evidence; it supplies no cadastral number and cannot link JFCM.",
+      "pageCount": 1
+    },
+    {
+      "id": "mus-roumier-sheet",
+      "title": "Domaine Georges Roumier: Musigny sheet",
+      "url": "https://www.roumier.com/fr_FR/winepdf/musigny",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:16.808607+00:00",
+      "retrievedFrom": "https://www.roumier.com/fr_FR/winepdf/musigny",
+      "sha256": "c621a5fbc743cee31c5c9d2e2933ff01fc2f9f09bf79880d4c3fe7835a516858",
+      "bytes": 438029,
+      "finding": "The estate reports 0.0996 ha at the northern end of Musigny. It supplies no cadastral number or company-rights crosswalk.",
+      "pageCount": 1
+    },
+    {
+      "id": "mus-drouhin-laroze-sheet",
+      "title": "Drouhin-Laroze: Musigny sheet",
+      "url": "https://m.drouhin-laroze.com/pdf/en/musigny-21.pdf",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "retrievedAt": "2026-10-08T14:27:18.005188+00:00",
+      "retrievedFrom": "https://m.drouhin-laroze.com/pdf/en/musigny-21.pdf",
+      "sha256": "cbf07753327c9bd54ee7a35da1d5d4548905507c89c8c35ce342a4aa357e2ac0",
+      "bytes": 219048,
+      "finding": "The estate reports 0.12 ha of Musigny. It supplies no cadastral number and does not establish a present farmer.",
+      "pageCount": 1
+    },
+    {
+      "id": "cm-winehog-vogue-history",
+      "title": "Winehog: Domaine Comte Georges de Vogüé – History and Vineyards",
+      "url": "https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/",
+      "type": "critic-research",
+      "documentDate": "2014-04-05",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "b609542cba7d1b8d0bb0108908731de35ced17e082341a446b1e2e11b3f751e7",
+      "bytes": 2957635,
+      "retrievedAt": "2026-10-08T15:22:08.135277+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Historical estate overview and named-area totals; no individual Musigny reference-and-area pairs. Bonnes-Mares cadastre 98 is reserved for that cru review."
+    },
+    {
+      "id": "mus-winehog-vougeraie",
+      "title": "Winehog: Terroir Insight: Domaine de la Vougeraie, Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-de-la-vougeraie-musigny-36986/",
+      "type": "critic-research",
+      "documentDate": "2018-11-13",
+      "otherDocumentDates": [
+        {
+          "date": "2018-11-15",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "5b7440090a3dca9142867eca17851589b65fffee32aadc7c90aa6c611fbd13e3",
+      "bytes": 2845261,
+      "retrievedAt": "2026-10-08T15:22:08.198267+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names AN34 (682 m²) and AN41 (452 m²). AN22/23 share a 970 m² total without individual printed areas; the southern cultivation arrangement differs from cadastral outlines."
+    },
+    {
+      "id": "mus-winehog-mugnier",
+      "title": "Winehog: Terroir Insight: Domaine J.-F. Mugnier Musigny (update)",
+      "url": "https://winehog.org/terroir-insight-domaine-j-f-mugnier-musigny-21095/",
+      "type": "critic-research",
+      "documentDate": "2018-04-06",
+      "otherDocumentDates": [
+        {
+          "date": "2018-04-06",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "0e692d564f9f0c603dcee6f4d4ffc35fca5a68b6c1808ea28ee58f332de79f35",
+      "bytes": 3783674,
+      "retrievedAt": "2026-10-08T15:22:08.273331+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Four plots total 1.1358 ha, split into two combined blocks; no individual reference-and-area pairs. The southern block follows an informal cultivation arrangement rather than cadastral boundaries."
+    },
+    {
+      "id": "mus-winehog-drouhin",
+      "title": "Winehog: Terroir Insight: Joseph Drouhin Musigny",
+      "url": "https://winehog.org/terroir-insight-joseph-drouhin-musigny-35121/",
+      "type": "critic-research",
+      "documentDate": "2018-04-03",
+      "otherDocumentDates": [
+        {
+          "date": "2018-04-03",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "2c99b80a6984c043103d0dcb87b485385bdd1b93f0e4335b974c01cc5dd8fb21",
+      "bytes": 3012640,
+      "retrievedAt": "2026-10-08T15:22:08.337883+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names AN61/40 with a combined 5,660 m² and AN60/57 with 1,060 m². No individual areas are printed; the separate SEPV filing supplies the exact individual matches."
+    },
+    {
+      "id": "mus-winehog-jadot",
+      "title": "Winehog: Terroir Insight: Maison Louis Jadot, Musigny",
+      "url": "https://winehog.org/terroir-insight-louis-jadot-musigny-29069/",
+      "type": "critic-research",
+      "documentDate": "2016-08-08",
+      "otherDocumentDates": [
+        {
+          "date": "2016-08-10",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "69d24e01b39cce8fdc508548533d6ffe9c7ecb9245952c08b243d746d1cd6d83",
+      "bytes": 2733094,
+      "retrievedAt": "2026-10-08T15:22:08.397882+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names cadastre 43, 1,665 m². Reports a presumed Trinquier lease from 1985 to 2035, not an executed lease instrument or verified present operator."
+    },
+    {
+      "id": "mus-winehog-tawse",
+      "title": "Winehog: Terroir Insight: Domaine Tawse Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-tawse-musigny-28140/",
+      "type": "critic-research",
+      "documentDate": "2016-05-24",
+      "otherDocumentDates": [
+        {
+          "date": "2016-06-08",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "ad956bf9571162c9b8be855aa14aaf97ecb0ca940c61fd70f8a3fba12962d88a",
+      "bytes": 2692609,
+      "retrievedAt": "2026-10-08T15:22:08.455098+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names cadastre 19 (760 m²) and 20 (156 m²), with historical acquisition accounts. Individual investors do not identify the recorded U-id companies. Its incidental Roumier total differs from Roumier’s own sheet."
+    },
+    {
+      "id": "mus-winehog-leroy",
+      "title": "Winehog: Terroir Insight: Domaine Leroy Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-leroy-musigny-26286/",
+      "type": "critic-research",
+      "documentDate": "2016-02-09",
+      "otherDocumentDates": [
+        {
+          "date": "2017-10-01",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "b08c95c5d3bcde9711507fe0ac59170893a3671b7f48ddb5794c77a13fc4608f",
+      "bytes": 3208552,
+      "retrievedAt": "2026-10-08T15:22:08.525371+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names cadastre 29 (495 m²), 30 (1,405 m²), 58 (390 m²) and 59 (410 m²). Cadastre 27 is mentioned without an area. This critic account cannot resolve Nouvelle Elvina’s legal identity."
+    },
+    {
+      "id": "mus-winehog-faiveley",
+      "title": "Winehog: Terroir Insight: Domaine Faiveley Musigny – a minuscule cuvée",
+      "url": "https://winehog.org/terroir-insight-domaine-faiveley-musigny-a-minuscule-cuvee-25312/",
+      "type": "critic-research",
+      "documentDate": "2015-11-01",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f844abb9b8eaa8ec071d7c5ee866d3241f7aabfb5750238ed1ce8aadc78a7a74",
+      "bytes": 2776241,
+      "retrievedAt": "2026-10-08T15:22:08.584663+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Gives the old Faiveley holding as 338 m² without a cadastral number. The separately accessed 2016 public article identifies 39. Its incidental Roumier area is not adopted."
+    },
+    {
+      "id": "mus-winehog-vogue",
+      "title": "Winehog: Terroir Insight: Domaine Comte Georges de Vogüé Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-georges-de-vogue-musigny-21246/",
+      "type": "critic-research",
+      "documentDate": "2014-10-04",
+      "otherDocumentDates": [
+        {
+          "date": "2018-07-06",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "01c1221928fd8b5575271bf123454a6256114a5241afa8760a92e4b98aa9b9e7",
+      "bytes": 3190903,
+      "retrievedAt": "2026-10-08T15:22:08.653663+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Gives 7.1208 ha across six plots, including 4.1935 ha in Les Petits Musigny and 2.9273 ha in Les Musigny; no individual cadastral numbers are printed."
+    },
+    {
+      "id": "mus-winehog-prieur",
+      "title": "Winehog: Terroir Insight: Domaine Jacques Prieur Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-jacques-prieur-musigny-21216/",
+      "type": "critic-research",
+      "documentDate": "2014-09-27",
+      "otherDocumentDates": [
+        {
+          "date": "2018-04-18",
+          "kind": "page metadata modification; distinct from publication"
+        }
+      ],
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "87597ef700409dc92a59e4042d9e56e1aaf8c53254200793bf3789c8e310f914",
+      "bytes": 3448817,
+      "retrievedAt": "2026-10-08T15:22:08.725541+00:00",
+      "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
+      "finding": "Names retired cadastre 15, 7,660 m², matching the pinned July 2019 cadastral record. It reaches current AN77/78 only through the 22 July 2019 DFI division."
+    },
+    {
+      "id": "mus-winehog-ownership",
+      "title": "Winehog: Vineyard Insight – Musigny ownership maps",
+      "url": "https://winehog.org/musigny-ownership-maps-26216/",
+      "type": "critic-research",
+      "documentDate": "2016-01-31",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "5773fdc5b2caab502d742ccd79ac916a0e6e709e49b7d8908f9ba14f04c8d69f",
+      "bytes": 6166,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Hash covers the saved public text extraction, not raw HTML. Public article accessed without login.",
+      "finding": "Public historical census across Les Musigny and Les Petits Musigny. The producer numbers on its diagrams are legend labels, not cadastral references."
+    },
+    {
+      "id": "mus-winehog-roumier",
+      "title": "Winehog: Terroir Insight – Domaine Georges Roumier Musigny",
+      "url": "https://winehog.org/terroir-insight-domaine-georges-roumier-musigny-23941/",
+      "type": "critic-research",
+      "documentDate": "2015-07-05",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "f2bcdea92a04e73f139c4ad60078c2e6049b269b888b7d0e8d740ac89aef2bbf",
+      "bytes": 9617,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Hash covers the saved public text extraction, not raw HTML. Public article accessed without login.",
+      "finding": "Public article names cadastre 44, 996 m², in Les Musigny. Its historical narrative and provisional neighbouring map labels do not establish present farming."
+    },
+    {
+      "id": "mus-winehog-faiveley-acquisition",
+      "title": "Winehog: Domaine Faiveley acquire more Les Musigny",
+      "url": "https://winehog.org/domaine-faiveley-acquire-more-musigny-25554/",
+      "type": "critic-research",
+      "documentDate": "2016-01-10",
+      "reviewedAt": "2026-10-08",
+      "access": "read",
+      "sha256": "47c5d133cd676d585cad7760daf7512246410441e33805732696daa4e037a4fe",
+      "bytes": 4619,
+      "retrievedAt": "2026-10-08",
+      "retrievalNote": "Hash covers the saved public text extraction, not raw HTML. Subscriber continuation not accessed.",
+      "finding": "Public portion names the acquired cadastre 45 (980 m²) and original cadastre 39 (338 m²). The subscriber historical continuation was not accessed. The subsequent full archive is separately recorded as mus-winehog-faiveley-acquisition-archive; this original public capture is preserved."
+    },
+    {
+      "id": "mus-winehog-faiveley-acquisition-archive",
+      "title": "Winehog: Domaine Faiveley acquire more Les Musigny",
+      "url": "https://winehog.org/domaine-faiveley-acquire-more-musigny-25554/",
+      "type": "critic-research",
+      "documentDate": "2016-01-10",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata modification; not a new observation date"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "dca8fca45149733a1f80ac2172777b2c6811b408348630382afd5e4193ed4ae6",
+      "bytes": 3557358,
+      "retrievedAt": "2026-10-09T05:15:15.632293+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive; hash covers original archive bytes. Article text and available relevant maps reviewed. Some lazy-loaded figures are absent. Archives, full text and images remain outside Git.",
+      "finding": "Full supplied archive confirms AN39 (338 m2) and AN45 (980 m2). The continuation only hypothesizes a 1912-1930 Dufouleur acquisition and cannot establish a Vienot/Belin-to-Dufouleur chain. Map numbers 1-10 are producer legend labels, not parcel references."
     }
   ],
   "holders": [
     {
       "holderId": "037180015",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-037180015"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing reviewed Domaine Bertagna company identity, searches and filing effort reused. No new Musigny AN26 parcel schedule reviewed in this pass."
     },
     {
       "holderId": "212101331",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-212101331"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Municipal holder confirmed by the company register. No producer link or parcel operation is established."
     },
     {
       "holderId": "381505338",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-381505338",
+        "cm-rne-515045292",
+        "cm-tawse-2017",
+        "cm-tawse-2012-transfer",
+        "cm-tawse-2012-capital"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Domaine Tawse’s 70,037 of 70,038 shares establish the company relationship. Three selected filings contain no Musigny AN20 schedule; no current farming confirmed."
     },
     {
       "holderId": "401584503",
-      "basis": "identity-only",
+      "basis": "family-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-401584503",
+        "rne-398910034"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing reviewed Drouhin-Laroze family-company relationship and filing effort reused. Company relationship alone does not establish current operation of AN27."
     },
     {
       "holderId": "491471041",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-ponsot-co-2020",
+        "cm-ponsot-co-2019-statutes",
+        "cm-ponsot-co-2019-conversion",
+        "cm-ponsot-co-2006",
+        "cm-rne-491471041",
+        "cm-rne-808499073",
+        "cm-ponsot-legal"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Four filings distinguish Ponsot & Co from Laurent Ponsot SAS. The 2020 contribution transfers no lease right and names no Musigny AN74 schedule. No domaine link inferred from officers."
     },
     {
       "holderId": "515520385",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-515520385",
+        "rne-427469135"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing reviewed Maison Leroy company link and effort reused. It stays distinct from the unresolved Nouvelle Elvina U-id; no current farming of AN29/30 established."
     },
     {
       "holderId": "775567928",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "faiveley-identity",
+        "rne-775567928",
+        "cm-cvvb-2025",
+        "cm-cvvb-2002"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing Domaine Faiveley brand-identity link reused. Two further filings contain no AN39/76/77 schedule; the company link is not current farming."
     },
     {
       "holderId": "778173427",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-778173427",
+        "cm-roumier-2026",
+        "cm-roumier-2003-minutes",
+        "cm-roumier-2003-proposal"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Registry and 2026 statutes identify the Domaine Georges Roumier company. Three selected filings contain no AN44/47 schedule; company identity does not establish farming."
     },
     {
       "holderId": "778233098",
-      "basis": "identity-only",
+      "basis": "company-identity",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "rne-778233098"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Existing reviewed Domaine Jacques Prieur company link reused. No new parcel-specific filing or current farming evidence reviewed for AN75/78."
     },
     {
       "holderId": "794244434",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-jfcm-2013",
+        "cm-rne-794244434",
+        "cm-rne-341931657",
+        "cm-mugnier-legal"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "One formation deed (20 pages) authorizes an unspecified acquisition. Shared officers with the Mugnier estate company do not establish a domaine crosswalk; AN24/35/42/55 remain unlinked."
     },
     {
       "holderId": "814197737",
-      "basis": "identity-only",
+      "basis": "management-only-lead",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-814197737",
+        "cm-faiveley-musigny-2019-management",
+        "faiveley-identity",
+        "rne-775567928",
+        "cm-faiveley-musigny-2019-statutes",
+        "cm-faiveley-musigny-2015-capital",
+        "cm-faiveley-musigny-2015-formation"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "CVVB’s presidency supports a Faiveley management lead. A mandate gives 980 m² and 220 m² without cadastral numbers; it cannot assign AN45/46 or prove an executed lease."
     },
     {
       "holderId": "U18181478",
@@ -165,7 +538,7 @@
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "GFA des Fossés homonyms do not establish this holder’s SIREN. No company-record or domaine crosswalk for AN19."
     },
     {
       "holderId": "U21200736",
@@ -174,46 +547,496 @@
         "dgfip-current"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "Nouvelle Elvina / établissements Leroy remains an unresolved provisional identity. The separate Leroy SA record is not a crosswalk."
     },
     {
       "holderId": "U21388794",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-424223410",
+        "cm-perrot-minot-1999",
+        "cm-perrot-minot-2023",
+        "cm-perrot-minot-2017"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "The GFA’s 1999 contribution matches AN64 and 4,736 m². It calls the parcel premier cru; only 6.5163 m² overlaps Musigny. Legal identity is resolved, but no current operator is verified."
     },
     {
       "holderId": "U21401984",
-      "basis": "identity-only",
+      "basis": "group-company-record",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-393095955",
+        "cm-sepv-1994-report",
+        "cm-sepv-1994-approval",
+        "register-sepv",
+        "sepv-stat-ccm",
+        "cm-sepv-1993",
+        "cm-sepv-1994-name"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "SEPV’s 1994 company filings name AN40/57/60/61 with matching areas and a majority interest in Maison Joseph Drouhin. The contribution dates are historical; no 2026 farming confirmed."
     },
     {
       "holderId": "U23906784",
       "basis": "identity-only",
       "sourceIds": [
-        "dgfip-current"
+        "dgfip-current",
+        "cm-rne-819550948"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Recorded legal-entity identifier and right codes retained. No independently reviewed domaine or operator crosswalk; identity alone does not establish farming."
+      "finding": "John Harris No.1 Estate Investments Limited 819550948 is a same-name candidate only. No independent AN20 identity crosswalk or producer relationship was established."
     }
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
-  "parcelFilings": [],
-  "producerHoldings": [],
+  "externalResearch": [
+    {
+      "id": "mus-wh-vougeraie",
+      "title": "Winehog: Domaine de la Vougeraie Musigny references",
+      "parcelIds": [
+        "21133000AN0034",
+        "21133000AN0041"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) prints AN34 (682 m²) and AN41 (452 m²), matching both current references and cadastral areas. No company right or current farming is inferred.",
+      "sourceIds": [
+        "mus-winehog-vougeraie"
+      ],
+      "producer": "Domaine de la Vougeraie",
+      "printedReferences": [
+        "34",
+        "41"
+      ],
+      "appNote": "Winehog (2018) prints AN34 (682 m²) and AN41 (452 m²), matching both current references and cadastral areas. No company right or current farming is inferred.",
+      "dateSourceId": "mus-winehog-vougeraie",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-roumier",
+      "title": "Winehog: Domaine Georges Roumier Musigny references",
+      "parcelIds": [
+        "21133000AN0044"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) prints cadastre 44, 996 m², matching the current parcel. Historical critic evidence; current farming unverified.",
+      "sourceIds": [
+        "mus-winehog-roumier"
+      ],
+      "producer": "Domaine Georges Roumier",
+      "printedReferences": [
+        "44"
+      ],
+      "appNote": "Winehog (2015) prints cadastre 44, 996 m², matching the current parcel. Historical critic evidence; current farming unverified.",
+      "dateSourceId": "mus-winehog-roumier",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-jadot",
+      "title": "Winehog: Maison Louis Jadot Musigny references",
+      "parcelIds": [
+        "21133000AN0043"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2016) prints cadastre 43, 1,665 m². Its presumed 1985–2035 lease is a historical report, not an executed instrument or proof of present farming.",
+      "sourceIds": [
+        "mus-winehog-jadot"
+      ],
+      "producer": "Maison Louis Jadot",
+      "printedReferences": [
+        "43"
+      ],
+      "appNote": "Winehog (2016) prints cadastre 43, 1,665 m². Its presumed 1985–2035 lease is a historical report, not an executed instrument or proof of present farming.",
+      "dateSourceId": "mus-winehog-jadot",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-tawse",
+      "title": "Winehog: Domaine Tawse Musigny references",
+      "parcelIds": [
+        "21133000AN0019",
+        "21133000AN0020"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2016) prints cadastre 19 (760 m²) and 20 (156 m²), matching current references and areas. It does not resolve GFA des Fossés or the John Harris U-id company; current farming remains unverified.",
+      "sourceIds": [
+        "mus-winehog-tawse"
+      ],
+      "producer": "Domaine Tawse",
+      "printedReferences": [
+        "19",
+        "20"
+      ],
+      "appNote": "Winehog (2016) prints cadastre 19 (760 m²) and 20 (156 m²), matching current references and areas. It does not resolve GFA des Fossés or the John Harris U-id company; current farming remains unverified.",
+      "dateSourceId": "mus-winehog-tawse",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-leroy",
+      "title": "Winehog: Domaine Leroy Musigny references",
+      "parcelIds": [
+        "21133000AN0029",
+        "21133000AN0030",
+        "21133000AN0058",
+        "21133000AN0059"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2016) prints cadastre 29 (495 m²), 30 (1,405 m²), 58 (390 m²) and 59 (410 m²). Nouvelle Elvina remains unresolved; this critic evidence does not replace the separate Maison Leroy company link or verify present farming.",
+      "sourceIds": [
+        "mus-winehog-leroy"
+      ],
+      "producer": "Domaine Leroy",
+      "printedReferences": [
+        "29",
+        "30",
+        "58",
+        "59"
+      ],
+      "appNote": "Winehog (2016) prints cadastre 29 (495 m²), 30 (1,405 m²), 58 (390 m²) and 59 (410 m²). Nouvelle Elvina remains unresolved; this critic evidence does not replace the separate Maison Leroy company link or verify present farming.",
+      "dateSourceId": "mus-winehog-leroy",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-faiveley-acquisition",
+      "title": "Winehog: Domaine Faiveley Musigny references",
+      "parcelIds": [
+        "21133000AN0039",
+        "21133000AN0045"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2016), now reviewed in the supplied full archive, names AN39 (338 m2) and AN45 (980 m2). The earlier acquisition chain remains conjectural. Separate corporate mandates omit parcel numbers and do not establish an executed lease or present farming.",
+      "sourceIds": [
+        "mus-winehog-faiveley-acquisition",
+        "mus-winehog-faiveley-acquisition-archive"
+      ],
+      "producer": "Domaine Faiveley",
+      "printedReferences": [
+        "39",
+        "45"
+      ],
+      "appNote": "Winehog (2016), now reviewed in the supplied full archive, names AN39 (338 m2) and AN45 (980 m2). The earlier acquisition chain remains conjectural. Separate corporate mandates omit parcel numbers and do not establish an executed lease or present farming.",
+      "dateSourceId": "mus-winehog-faiveley-acquisition-archive",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-wh-prieur-15",
+      "title": "Winehog: Prieur on former AN15",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2014) names AN15 (7,660 m²), matching the pinned July 2019 cadastral contenance. The 22 July 2019 DFI split reaches AN77/78 as historical context only, without transferring ownership or farming.",
+      "sourceIds": [
+        "mus-winehog-prieur"
+      ],
+      "producer": "Domaine Jacques Prieur",
+      "printedReferences": [
+        "15"
+      ],
+      "predecessorReferences": {
+        "21133000AN0015": [
+          "21133000AN0077",
+          "21133000AN0078"
+        ]
+      },
+      "appNote": "Winehog (2014) names former AN15 (7,660 m²). Reached through the 2019 DFI split; historical context, not current ownership or farming.",
+      "dateSourceId": "mus-winehog-prieur",
+      "currentFarmer": null
+    }
+  ],
+  "parcelFilings": [
+    {
+      "id": "mus-sepv-1994",
+      "sourceId": "cm-sepv-1994-report",
+      "title": "SEPV: historical Musigny contribution schedule",
+      "holderId": "U21401984",
+      "companySiren": "393095955",
+      "documentDate": "1994-12-20",
+      "parcelAreasM2": {
+        "21133000AN0040": 180,
+        "21133000AN0057": 210,
+        "21133000AN0060": 850,
+        "21133000AN0061": 5480
+      },
+      "leaseEvidence": [],
+      "finding": "The contribution report names four current references with individual areas matching the cadastre. The 30 December assembly approves the business contribution and records satisfaction of its funding condition. The report and approval retain distinct dates.",
+      "appNote": "The 1994 contribution report names this reference and its individual area; the later assembly approves the contribution. Historical company evidence, not verified present farming.",
+      "supportingSourceIds": [
+        "cm-sepv-1994-approval"
+      ],
+      "pages": [
+        1,
+        4,
+        24
+      ],
+      "printedReferences": [
+        "AN40",
+        "AN57",
+        "AN60",
+        "AN61"
+      ]
+    },
+    {
+      "id": "mus-perrot-minot-1999",
+      "sourceId": "cm-perrot-minot-1999",
+      "title": "GFA Perrot-Minot: AN64 contribution, premier-cru description retained",
+      "holderId": "U21388794",
+      "companySiren": "424223410",
+      "documentDate": "1999-07-20",
+      "parcelAreasM2": {
+        "21133000AN0064": 4736
+      },
+      "leaseEvidence": [],
+      "finding": "The notarial formation contributes AN64 with its exact 4,736 m² area. The deed calls it Chambolle-Musigny premier cru, La Combe d’Orveau; the mapped Musigny outline touches just 6.5163 m². No appellation change or current farming is inferred.",
+      "appNote": "The 1999 GFA contribution identifies AN64 (4,736 m²) as premier cru. Only a small edge overlaps Musigny’s mapped outline; this is historical legal-holder evidence, not a Musigny holding or current farming verification.",
+      "supportingSourceIds": [
+        "cm-perrot-minot-2023"
+      ],
+      "pages": [
+        1,
+        2,
+        14
+      ],
+      "printedReferences": [
+        "AN64"
+      ]
+    }
+  ],
+  "producerHoldings": [
+    {
+      "id": "mus-vogue",
+      "producer": "Domaine Comte Georges de Vogüé",
+      "namedAreas": [
+        "LES MUSIGNY",
+        "LES PETITS MUSIGNY"
+      ],
+      "publishedAreaHa": 7.1208,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-vogue",
+        "mus-winehog-ownership",
+        "mus-guildsomm-2020"
+      ],
+      "finding": "The 2014 article explicitly divides 7.1208 ha into Les Musigny and Les Petits Musigny. These totals are census context and do not allocate individual parcels.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 7.12,
+          "sourceId": "mus-guildsomm-2020",
+          "note": "Rounded published total."
+        }
+      ]
+    },
+    {
+      "id": "mus-mugnier",
+      "producer": "Domaine Jacques-Frédéric Mugnier",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 1.14,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-mugnier-sheet",
+        "mus-winehog-mugnier",
+        "mus-winehog-ownership"
+      ],
+      "finding": "The estate and critic place the holding in Les Musigny. The southern cultivation arrangement and the absence of individual reference-and-area pairs preclude parcel assignment or a JFCM crosswalk.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 1.1358,
+          "sourceId": "mus-winehog-mugnier",
+          "note": "2018 four-plot total; two combined blocks, not four individual cadastral matches."
+        }
+      ]
+    },
+    {
+      "id": "mus-roumier",
+      "producer": "Domaine Georges Roumier",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.0996,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-roumier-sheet",
+        "mus-winehog-roumier",
+        "mus-winehog-ownership"
+      ],
+      "finding": "The public 2015 article explicitly locates the holding in Les Musigny. Its separate AN44 reference match is curated as external research; this census row itself allocates no parcel.",
+      "producerHolderIds": [
+        "778173427"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mus-drouhin",
+      "producer": "Maison Joseph Drouhin",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.672,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-drouhin",
+        "mus-winehog-ownership"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mus-leroy",
+      "producer": "Domaine Leroy",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.27,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-leroy",
+        "mus-winehog-ownership"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mus-vougeraie",
+      "producer": "Domaine de la Vougeraie",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.2104,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-vougeraie",
+        "mus-winehog-ownership"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mus-jadot",
+      "producer": "Maison Louis Jadot",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.1665,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-jadot",
+        "mus-winehog-ownership"
+      ],
+      "finding": "The article describes a presumed lease, despite the overview using an ownership heading. Tenure is left unstated; only the historical named-area census is retained.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mus-faiveley",
+      "producer": "Domaine Faiveley",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.1318,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-faiveley-acquisition",
+        "mus-winehog-ownership",
+        "mus-winehog-faiveley-acquisition-archive"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.0338,
+          "sourceId": "mus-winehog-faiveley",
+          "note": "2015 total before the separately reported acquisition."
+        }
+      ]
+    },
+    {
+      "id": "mus-drouhin-laroze",
+      "producer": "Domaine Drouhin-Laroze",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.12,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-drouhin-laroze-sheet",
+        "mus-winehog-ownership"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "areaHa": 0.1193,
+          "sourceId": "mus-winehog-ownership",
+          "note": "2016 historical census total."
+        }
+      ]
+    },
+    {
+      "id": "mus-tawse",
+      "producer": "Domaine Tawse",
+      "namedAreas": [
+        "LES MUSIGNY"
+      ],
+      "publishedAreaHa": 0.0916,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mus-winehog-tawse",
+        "mus-winehog-ownership"
+      ],
+      "finding": "Historical published holding and named-area context only; no parcel allocation or present farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    }
+  ],
   "historicalOwnerLists": [],
   "accessGaps": [
-    "Producer and company-filing investigations remain Tier 2. Paid SPF copies and outreach remain Tier 3.",
-    "Source boundaries, failed notice downloads and unsearched intervals are reported in the history coverage; none means no historical record.",
-    "Current farming remains unconfirmed for every parcel."
+    "The selected free-source pass screened 24 filings, every page using RapidOCR with DirectML at 150 dpi. Selection covers formation, contribution, transformation, mergers and recent statutes; it is not every filing ever deposited. Prior shared links, searches and effort are reused without claiming the old PDFs were re-screened.",
+    "JFCM and Ponsot & Co remain unlinked: common surnames, individual officers and addresses do not establish the required company-to-domaine relationship. Ponsot & Co is distinct from Laurent Ponsot SAS.",
+    "GFA des Fossés, Nouvelle Elvina and John Harris No.1 Estate Investments Limited retain unresolved U-id company crosswalks. Perrot-Minot’s legal identity is supported by its exact AN64 filing, but no producer or contemporary tenant crosswalk is asserted.",
+    "Faiveley Musigny’s 980 m² and 220 m² acquisition mandates lack cadastral numbers. They are not corrected into AN45/46 by matching area and do not prove an executed tenancy.",
+    "Perrot-Minot’s official website returned HTTP 503. The 2023 statutes deposit date and exact Faiveley Musigny founding-statutes signing date remain unresolved.",
+    "Named-area holdings are published census context only. La Combe d’Orveau still lacks an accepted cadastral named-area outline, so Prieur’s published total is not assigned there or to individual parcels.",
+    "Original leases, renewals, paid SPF copies and outreach remain unreviewed. Tier 1 history source boundaries and notice gaps remain. Current farming is unconfirmed for every parcel.",
+    "All ten originally requested Musigny subscriber archives and the additional Faiveley acquisition WebArchive were supplied and reviewed; public articles were accessed directly. The full continuation leaves its earlier ownership chain uncertain, with no additional parcel match.",
+    "Public text-capture hashes identify extracted text; supplied MHTML and WebArchive hashes cover original archive bytes. The earlier Faiveley public capture remains separately identifiable. No archives, full article text or figures are committed.",
+    "Winehog reference matches are historical critic leads, not company identity crosswalks. Group totals, map legend numbers and unnumbered outlines are not substituted for individual references and areas. The reported Jadot lease lacks an executed instrument and present-scope confirmation.",
+    "Published holding totals vary by date and precision; those variations are retained. Incidental Roumier totals of 0.0966 ha in Tawse and 0.1669 ha in Faiveley do not override Roumier’s own 0.0996 ha sheet or its directly numbered critic account."
   ],
   "noticeReview": [
     {
@@ -229,6 +1052,51 @@
         "21133000AN0037": "The OCR hint AN37 is printed under Savigny-lès-Beaune, not Chambolle-Musigny."
       },
       "finding": "The receipt (dossier 2021-122, EARL Domaine Philippe Girard, previous operator Domaine Roux Père et Fils) prints Chambolle-Musigny A139. The DFI retired A0139 on 9 November 1995, so a 2021 reference to it is not joined to its descendant A0301; AN37 is printed under Savigny-lès-Beaune. No Musigny parcel event is assigned."
+    }
+  ],
+  "holderLinks": "shared",
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "mus-winehog-vougeraie",
+      "printedReference": "AN22 and AN23, combined 0.0970 ha",
+      "parcelIds": [],
+      "limitation": "Combined area equals the two current areas summed, but neither individual area is printed. No individual match is made; the cultivation arrangement is also described as differing from cadastral boundaries.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mus-winehog-drouhin",
+      "printedReference": "cadastre 61 and 40, combined 0.5660 ha",
+      "parcelIds": [],
+      "limitation": "Combined area only; no individual critic match. The separate SEPV filing has independently matched individual areas.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mus-winehog-drouhin",
+      "printedReference": "cadastre 60 and 57, combined 0.1060 ha",
+      "parcelIds": [],
+      "limitation": "Combined area only; no individual critic match. The separate SEPV filing has independently matched individual areas.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mus-winehog-leroy",
+      "printedReference": "cadastre 27, area unstated",
+      "parcelIds": [],
+      "limitation": "Number without a printed area is not matched from the neighbouring plots or the census total.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mus-winehog-mugnier",
+      "printedReference": "four unnumbered plots; southern 0.7463 ha, northern 0.3895 ha",
+      "parcelIds": [],
+      "limitation": "The two group totals and aerial outlines do not give individual reference-and-area pairs. No inferred match to JFCM parcels.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mus-winehog-vogue",
+      "printedReference": "six unnumbered plots; 4.1935 ha Les Petits Musigny and 2.9273 ha Les Musigny",
+      "parcelIds": [],
+      "limitation": "Named-area totals are census context. No cadastral number is inferred from the monopole description or current geometry.",
+      "currentFarmer": null
     }
   ]
 }

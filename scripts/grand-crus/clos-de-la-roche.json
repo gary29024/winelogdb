@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-544",
   "appellationId": 160,
   "issue": 390,
-  "tier": 1,
+  "tier": 2,
   "bundle": "chambolle-morey",
   "villageMaps": [
     "morey-saint-denis"
@@ -27,8 +27,7 @@
   },
   "research": {
     "methodDoc": "docs/research/clos-de-la-roche/README.md",
-    "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "filingsDoc": "docs/research/clos-de-la-roche/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-nuits/clos-de-la-roche",
