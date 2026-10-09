@@ -97,15 +97,29 @@ describe('labels the copy sends people to',()=>{
   {phrase:'Group Photo',file:join('components','Layout.tsx')},
   {phrase:'Batch Scan',file:join('components','Layout.tsx')},
   {phrase:'Start Tasting',file:join('components','Layout.tsx')},
-  {phrase:'This week\u2019s AI allowance',file:join('features','auth','AccountPage.tsx')}
+  {phrase:'This week\u2019s AI allowance',file:join('features','auth','AccountPage.tsx')},
+  {phrase:'Tasted',file:join('features','wines','JournalScopeTabs.tsx')},
+  {phrase:'Smart search',file:join('features','wines','JournalSearchInput.tsx')},
+  {phrase:'Clear filters',file:join('features','wines','LibraryPage.tsx')},
+  {phrase:'years at a glance',file:join('features','vintages','VintagesPage.tsx')},
+  {phrase:'Warmth',file:join('features','vintages','VintagesPage.tsx')},
+  {phrase:'How unusual',file:join('features','vintages','VintagesPage.tsx')},
+  {phrase:'Compare with',file:join('features','vintages','VintageParts.tsx')}
  ];
 
  it.each(labels)('$phrase is still what $file calls it',({phrase,file})=>{
   expect(readFileSync(join(src,file),'utf8'),`${phrase} is no longer in ${file}`).toContain(phrase);
  });
 
+ /**
+  * Case-insensitive on this half only. A step title legitimately capitalises a
+  * phrase the screen writes in a sentence - "Years at a glance" over the app's
+  * "{n} years at a glance" - and that is not drift. The check above stays
+  * exact, so a real rename is still caught.
+  */
  it('and every one of them is actually quoted by the tour, so the list cannot go stale',()=>{
-  const unused=labels.filter(label=>!copy.includes(label.phrase)).map(label=>label.phrase);
+  const quoted=copy.toLowerCase();
+  const unused=labels.filter(label=>!quoted.includes(label.phrase.toLowerCase())).map(label=>label.phrase);
   expect(unused).toEqual([]);
  });
 });

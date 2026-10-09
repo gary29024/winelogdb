@@ -75,7 +75,7 @@ export const firstRunSteps:TourStep[]=[
  {
   id:'nav-producers',anchor:'nav-producers',
   title:'Producers and Vintages',
-  body:'Background on who made the wine and how a given year turned out. Both build themselves from your Journal, so they grow as you log - there is nothing to fill in.'
+  body:'Producers builds itself from your Journal - everyone whose wine you log appears, and you never add one by hand. Vintages is the other way round: a season-by-season record of each village that is already complete, with your own bottles marked on it.'
  },
  {
   id:'nav-account',anchor:'nav-account',
@@ -125,6 +125,51 @@ export const chapters:Tour[]=[
     id:'tastings-live',
     title:'While it is running',
     body:'A strip appears at the top of every page, and every wine you log joins the open tasting by itself. You never have to attach bottles to an evening one at a time.'
+   }
+  ]
+ },
+ {
+  id:'chapter-journal',label:'The Journal',blurb:'Scopes, searching, and working on several wines at once.',
+  steps:[
+   {
+    id:'journal-scopes',route:'/journal',anchor:'journal-scopes',
+    title:'One page, three scopes',
+    body:'Tasted is what you have drunk, In cellar is what you still hold, and Favorites is what you starred. The page shows one at a time on purpose: a bottle in the cellar is not a tasting note until you open it.'
+   },
+   {
+    id:'journal-search',route:'/journal',anchor:'journal-search',
+    title:'Two kinds of search',
+    body:'A few words match names, producers and regions as you type, and costs nothing. Describe a wine instead - a rounded red for a cold evening - and a Smart search button appears. That one matches on meaning rather than spelling, so it waits until you press it or hit Enter.'
+   },
+   {
+    id:'journal-filters',route:'/journal',anchor:'journal-filters',
+    title:'Narrowing down',
+    body:'Country, producer, vintage, style, score, month, the tasting it came from, and whether it has been researched. They stack, so you can ask for 2016 Burgundy you rated above 90. Clear filters puts it all back.'
+   },
+   {
+    id:'journal-select',route:'/journal',anchor:'journal-select',
+    title:'Several wines at once',
+    body:'Select turns the list into checkboxes. From there you can tag a friend on a whole evening, build a share card from the bottles you choose, or set the event and venue for all of them in one go.'
+   }
+  ]
+ },
+ {
+  id:'chapter-vintages',label:'Vintages',blurb:'Reading a season, village by village.',
+  steps:[
+   {
+    id:'vintages-page',route:'/vintages',anchor:'vintage-village',
+    title:'A record of the seasons',
+    body:'Unlike the rest of the app, this page does not wait for you: the weather of each village is already here. Pick a region and a village, and it shows how every year since the 1990s actually went.'
+   },
+   {
+    id:'vintages-strip',route:'/vintages',anchor:'vintage-strip',
+    title:'Years at a glance',
+    body:'One tile per year, shaded by when picking started - warm early seasons at one end, cool late ones at the other. A small glass marks the years you own wine from. Tap any tile to read that season.'
+   },
+   {
+    id:'vintages-key',route:'/vintages',anchor:'vintage-key',
+    title:'What the marks mean',
+    body:'Warmth, Rain and Nights each carry an arrow for how far the year sat from normal, and How unusual says how far that is overall. Compare with lets you judge a year against its own era or against a fixed standard, which matters once decades of warming are in the picture.'
    }
   ]
  },

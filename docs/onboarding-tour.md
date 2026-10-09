@@ -173,7 +173,7 @@ cannot tell the two copies apart.
 
 ### Optional chapters
 
-Offered from Account & friends, three of them, three steps each. A chapter
+Offered from Account & friends, five of them. A chapter
 **navigates to the page it is about** before talking; the first-run tour never
 does, because the chrome it describes is on every screen already. Each is about
 somewhere a phone cannot reach from the tab bar, which is the whole reason they
@@ -182,6 +182,13 @@ exist.
 - **Tastings** — takes you to `/tastings`, then points at Scan Wine for how to
   start one, then explains that logged wines join the open evening by
   themselves.
+- **The Journal** (4 steps) — the three scopes, the two kinds of search, the
+  filter stack, and what Select unlocks. Every step stays on `/journal`; the
+  controls it points at are all on screen before a single wine is logged, which
+  the e2e checks on an empty account.
+- **Vintages** (3 steps) — picking a region and village, reading the
+  years-at-a-glance strip, and what the Warmth / Rain / Nights marks and the
+  Compare with toggle mean.
 - **Friends and sharing** — takes you to `/account`, then friend codes, then
   that sharing is per wine and separate from friendship.
 - **Stamps and collections** — the Passport's counters, then across to
@@ -270,7 +277,7 @@ All four phases are built:
 
 ## 8. Testing
 
-All green: 5697 unit tests across 352 files, plus 8 e2e tests.
+All green: 5707 unit tests across 352 files, plus 10 e2e tests.
 
 Unit:
 
@@ -323,6 +330,18 @@ lazily loaded page, and rings a section of it.
 One inaccuracy was there from the start and only surfaced now: the tour said
 "the Cellar tab" for a tab the app has always labelled **In cellar**. The new
 label guard is what would catch the next one.
+
+**2026-10-10, second pass.** Two chapters added for the Journal and Vintages,
+and a correction they turned up: the first-run tour said Producers *and*
+Vintages "build themselves from your Journal". Producers does. Vintages does
+not — it is a reference atlas of each village's seasons, complete before you
+log anything, with your own bottles marked on it as a small glass count. The
+step now says so, and a unit test holds the Vintages chapter to it.
+
+The new chapters also exposed a flake that was already in the e2e file: `saved`
+was module-level while the config runs tests fully parallel, and the assertions
+read it before the fire-and-forget write had landed. It is now one array per
+test, polled rather than assumed. 40/40 over four repeats.
 
 **2026-10-10.** One commit since (#552, scan progress animation and wine-form
 limits). All three guards pass untouched, and the scan sheet's four labels are

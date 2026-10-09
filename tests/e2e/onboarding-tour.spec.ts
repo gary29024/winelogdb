@@ -9,8 +9,6 @@ import { test,expect,type Page } from '@playwright/test';
  * tell the two apart; only a real browser can say whether the ring ended up
  * around the item the user can see.
  */
-const saved:Array<Record<string,unknown>>=[];
-
 /** An untouched journal - which is exactly what a newly invited member has. */
 const emptyJourney={
  summary:{totalWines:0,producers:0,countries:0,regions:0,appellations:0,vintages:0,favorites:0,averageRating:null,ratedWines:0,pricedWines:0,structuredTastings:0},
@@ -19,7 +17,9 @@ const emptyJourney={
  months:[],classifications:[],drinkingAges:[],recentTastings:[]
 };
 
+/** Signs a reader in, and hands back the writes this page makes to /api/me/tour. */
 async function signedIn(page:Page,tourState='{}'){
+ const saved:Array<Record<string,unknown>>=[];
  await page.route('**/api/**',async route=>{
   const path=new URL(route.request().url()).pathname;
   if(path==='/api/me/tour'){saved.push(JSON.parse(route.request().postData()??'{}'));await route.fulfill({json:{user:{id:'reader',tour_state:'{}'}}});return}
@@ -34,6 +34,7 @@ async function signedIn(page:Page,tourState='{}'){
    :{items:[],holdings:[],total:0};
   await route.fulfill({json:data});
  });
+ return saved;
 }
 const bubble=(page:Page)=>page.getByRole('dialog');
 const spotlight=(page:Page)=>page.locator('.tour-spotlight');
@@ -66,8 +67,7 @@ test.describe('the first-run tour on a desktop',()=>{
  test.use({viewport:{width:1280,height:900}});
 
  test('rings the top bar, walks seven steps, and records the finish',async({page})=>{
-  saved.length=0;
-  await signedIn(page);
+  const saved=await signedIn(page);
   await page.goto('/');
   await expect(bubble(page)).toContainText('Step 1 of 7');
   await rings(page,'nav-passport');
@@ -84,7 +84,7 @@ test.describe('the first-run tour on a desktop',()=>{
   await expect(spotlight(page)).toHaveCount(0);
   await page.getByRole('button',{name:'Done'}).click();
   await expect(bubble(page)).toHaveCount(0);
-  expect(saved).toEqual([{completed:['first-run'],skipped:false}]);
+  await expect.poll(()=>saved).toEqual([{completed:['first-run'],skipped:false}]);
  });
 
  test('stays away from someone who has already seen it',async({page})=>{
@@ -99,7 +99,6 @@ test.describe('the first-run tour on a phone',()=>{
  test.use({viewport:{width:390,height:844}});
 
  test('rings the tab bar instead, and drops the step the tab bar has no room for',async({page})=>{
-  saved.length=0;
   await signedIn(page);
   await page.goto('/');
   // Six, not seven: there is no Tastings tab to point at on a phone.
@@ -136,12 +135,11 @@ test.describe('the first-run tour on a phone',()=>{
  });
 
  test('can be skipped, and does not come back',async({page})=>{
-  saved.length=0;
-  await signedIn(page);
+  const saved=await signedIn(page);
   await page.goto('/');
   await page.getByRole('button',{name:'Skip tour'}).click();
   await expect(bubble(page)).toHaveCount(0);
-  expect(saved).toEqual([{completed:[],skipped:true}]);
+  await expect.poll(()=>saved).toEqual([{completed:[],skipped:true}]);
  });
 });
 
@@ -155,8 +153,7 @@ test.describe('an optional chapter',()=>{
  test.use({viewport:{width:390,height:844}});
 
  test('is started from Account & friends and takes you to the page it is about',async({page})=>{
-  saved.length=0;
-  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  const saved=await signedIn(page,'{"completed":["first-run"],"skipped":false}');
   await page.goto('/account');
   await expect(bubble(page)).toHaveCount(0);
 
@@ -173,7 +170,7 @@ test.describe('an optional chapter',()=>{
 
   await page.getByRole('button',{name:'Next'}).click();
   await page.getByRole('button',{name:'Done'}).click();
-  expect(saved).toEqual([{completed:['first-run','chapter-tastings'],skipped:false}]);
+  await expect.poll(()=>saved).toEqual([{completed:['first-run','chapter-tastings'],skipped:false}]);
  });
 
  test('waits for a lazily loaded page before pointing at something on it',async({page})=>{
@@ -192,13 +189,68 @@ test.describe('an optional chapter',()=>{
  });
 
  test('leaves no mark when it is closed part-way',async({page})=>{
-  saved.length=0;
-  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  const saved=await signedIn(page,'{"completed":["first-run"],"skipped":false}');
   await page.goto('/account');
   await page.getByRole('button',{name:/Friends and sharing/}).click();
   await expect(bubble(page)).toContainText('Friends live here');
   await page.getByRole('button',{name:'Skip tour'}).click();
   await expect(bubble(page)).toHaveCount(0);
+  // Nothing to poll for: proving a write never happens needs a pause long
+  // enough that one would have arrived. The positive cases above land well
+  // inside this.
+  await page.waitForTimeout(1200);
   expect(saved,'closing a chapter is not a refusal of every tour').toEqual([]);
+ });
+});
+
+/**
+ * The two page chapters, which are the ones that rely on anchors inside a
+ * lazily loaded route rather than on the chrome. A new member's Journal is
+ * empty, so these also prove the controls the steps point at are on screen
+ * before there is a single wine to use them on.
+ */
+test.describe('the page chapters',()=>{
+ test.use({viewport:{width:390,height:844}});
+
+ test('walks the Journal with nothing logged yet',async({page})=>{
+  const saved=await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await page.getByRole('button',{name:/The Journal/}).click();
+
+  await expect(bubble(page)).toContainText('The Journal \u00b7 Step 1 of 4');
+  await expect(page).toHaveURL(/\/journal$/);
+  await rings(page,'journal-scopes');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await expect(bubble(page)).toContainText('Smart search');
+  await rings(page,'journal-search');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await rings(page,'journal-filters');
+
+  // Select is disabled on an empty Journal but still drawn, so the step holds.
+  await page.getByRole('button',{name:'Next'}).click();
+  await expect(bubble(page)).toContainText('Several wines at once');
+  await rings(page,'journal-select');
+
+  await page.getByRole('button',{name:'Done'}).click();
+  await expect.poll(()=>saved).toEqual([{completed:['first-run','chapter-journal'],skipped:false}]);
+ });
+
+ test('walks Vintages, which is populated before anything is logged',async({page})=>{
+  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await page.getByRole('button',{name:/^Vintages/}).click();
+
+  await expect(bubble(page)).toContainText('Vintages \u00b7 Step 1 of 3');
+  await expect(page).toHaveURL(/\/vintages$/);
+  await rings(page,'vintage-village');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await expect(bubble(page)).toContainText('Years at a glance');
+  await rings(page,'vintage-strip');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await rings(page,'vintage-key');
  });
 });

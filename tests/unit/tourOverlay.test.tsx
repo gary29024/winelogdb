@@ -6,6 +6,7 @@ import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
 import { bootstrapAccount,clearSession } from '../../src/lib/auth/client';
 import { TourOverlay } from '../../src/features/onboarding/TourOverlay';
 import { requestTour } from '../../src/features/onboarding/useTour';
+import { chapters,firstRun } from '../../src/features/onboarding/steps';
 
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
@@ -168,6 +169,27 @@ describe('the optional chapters',()=>{
   await click('Next');await click('Next');
   await click('Done');
   expect(saved).toEqual([{completed:['first-run','chapter-progress'],skipped:false}]);
+ });
+
+ it('offers six tours from Account: the first run and five chapters',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  expect([firstRun,...chapters].map(tour=>tour.id)).toEqual(
+   ['first-run','chapter-tastings','chapter-journal','chapter-vintages','chapter-sharing','chapter-progress']);
+ });
+
+ it('runs the Journal chapter, which stays on one page throughout',async()=>{
+  await mount('{"completed":["first-run"],"skipped":false}');
+  await act(async()=>{requestTour('chapter-journal')});
+  expect(text()).toContain('The Journal · Step 1 of 4');
+  expect(chapters.find(tour=>tour.id==='chapter-journal')!.steps.every(step=>step.route==='/journal')).toBe(true);
+ });
+
+ /** Vintages is reference data, so its chapter must not promise it will grow. */
+ it('does not tell anyone the vintage record builds from their Journal',async()=>{
+  const vintages=chapters.find(tour=>tour.id==='chapter-vintages')!;
+  const words=vintages.steps.map(step=>step.body).join(' ').toLowerCase();
+  expect(words).toContain('already here');
+  expect(words).not.toContain('grows as you log');
  });
 
  it('ignores a tour id it does not know',async()=>{
