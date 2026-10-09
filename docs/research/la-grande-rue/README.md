@@ -2,7 +2,7 @@
 
 La Grande Rue uses INAO `inao-denom-654`, appellation 189, and Vosne-Romanée
 commune 21714. Tier 1 history reviewed 7 October 2026; Tier 2 research reviewed
-8 October 2026 for season 2026 under the
+8 October 2026, locally audited 9 October 2026, for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md). It shares the Vosne bundle with
 five other crus; this delivery enables only La Grande Rue.
@@ -32,7 +32,7 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Parcels with no lead | 0 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: the complete DFI member contains no event for AM0001, AM0002 or AM0008, so tracing stops at the source boundary; all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 51,219 / 8,623 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 77,030 / 12,485 bytes. Evidence: 52,559 / 8,754 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 83-parcel Vosne bundle; the La Grande Rue selection contains 3 of
@@ -127,11 +127,15 @@ tracked in #461; unverified operation and unresolved name research stay under
 
 The one recorded holder, `397738634`, was researched through the shared table. Its reviewed `owner-company` link to Domaine Nicole Lamarche, recorded for Échezeaux, now applies here. The pass screened **17 of the company’s 17 indexed filings / 591 pages** with embedded text and OCR of every image page. The [filing inventory](filings.md) records dates, page numbers, hashes, bounded negatives and effort.
 
-No filing prints AM 1, AM 2 or AM 8. The GFA Domaine François Lamarche was formed in 1994 and received the whole vineyard business by an 11 August 1994 notarial deed that later statutes recite by value only; that deed is not in the free index. In 2001 the GFA authorised a long-term lease of its land to a family member, to be made available to the operating SARL; in 2019 it absorbed that SARL and became SAS Nicole Lamarche, which also absorbed EARL Nicole Lamarche in 2022. These filings explain the rights file’s 2022 change of recorded name for the same identifier but are not parcel-specific operation evidence.
+The executed 29 November 2001 rural lease is reproduced on PDF pages 15–29 of the 2010 donation. Its page 16 lists **AM 1: 14,207 m²; AM 2: 2,096 m²; AM 8: 222 m²**. All three current references and individual cadastral areas match, for **16,525 m²** in total. The lessor is GFV Domaine François Lamarche, SIREN 397738634, the same legal entity now recorded as SAS Nicole Lamarche. These are three parcel matches from one filing. The source is dated 2010, the annexed instrument 2001; neither date is treated as an acquisition date.
 
-The domaine’s own La Grande Rue page, captured by the Internet Archive in November 2022, gives the monopole as 1 ha 65 a, consistent with the three parcels’ 16,525 m². It feeds only the named-area census; the domain now serves unrelated content.
+The GFA was formed on 15 June 1994. Pages 18–19 of the annexed lease recite the 11 August 1994 contribution of these parcels, published at Beaune on 21 October 1994, volume 1994P no. 4330. The 23,514,000-franc property value is distinct from the 26,387,000-franc whole fixed-asset contribution recalled in the statutes. The original contribution instrument is not included in the reviewed files.
 
-The repository owner supplied both requested Winehog articles (see [filings](filings.md#winehog-articles)). Both give 1.65 ha and neither prints a cadastral number. They link the former Gaudichots part to the 1989 promotion and to a 1959 exchange of plots with the DRC respectively; its 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
+The July 2001 meeting merely authorised a lease. The executed 29 November lease names François Lamarche and Marie-Blanche Cebe, spouse Lamarche, as personal tenants for 1 January 2001–31 December 2018; page 24 authorises mise à disposition to operating SARL 353336068 and the 2010 donation says it occurred. The 2019 treaty names Nicole personally as tenant and the June resolutions complete the SARL merger and SAS transformation. The 2022 treaty states that the SAS became direct operator of its own vines and that the EARL/SAS lease ended on 7 November 2019; its annexes are not appended and it gives no parcel schedule. The 2022 merger completes on 16 March, deposited 3 May. These distinct historical and company-level operator records remain deferred to #364 with the owner’s approval; **verified current farming remains 0**.
+
+The domaine’s own La Grande Rue page, captured by the Internet Archive in November 2022, gives the monopole as 1 ha 65 a, consistent with the three parcels’ 16,525 m². It feeds only the named-area census; the prior observation of unrelated content on the current domain was not rechecked locally.
+
+The prior cloud pass reviewed two user-supplied Winehog archives (see [filings](filings.md#winehog-articles)); both are **not re-verified locally**, at the owner’s instruction. The following article findings remain qualified prior evidence. Both give 1.65 ha and neither prints a cadastral number. They link the former Gaudichots part to the 1989 promotion and to a 1959 exchange of plots with the DRC respectively; its 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
 
 Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry counts are unchanged; verified farming remains **0**.
 
@@ -140,7 +144,7 @@ Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry 
 | Parcels with holder or research leads | 0 | 3 of 3 |
 | Parcels with no named candidate | 3 | 0 |
 | Holders with an applicable link | 0 | 1 of 1: reviewed `owner-company` |
-| Parcels with exact-reference company filings | 0 | 0 |
+| Parcels with exact-reference company filings | 0 | 3 from one filing |
 | Published holdings in the named-area census | 0 | 1 |
 | Verified farming links | 0 | **0** |
 
@@ -148,17 +152,34 @@ Research leads rise from **0 to 3 of 3 parcels**. The legal-rights and geometry 
 
 | Recorded holder | Filings | Pages | Outcome |
 | --- | ---: | ---: | --- |
-| Nicole Lamarche (`397738634`) | 17 | 591 | Filings trace the 1994 GFA, which received the whole Lamarche vineyard business by an unfiled 1994 deed, to SAS Nicole Lamarche after its 2019 merger with the operating company. No filing prints AM1, AM2 or AM8; the company link is reviewed. Farming unverified. |
+| Nicole Lamarche (`397738634`) | 17 | 591 | GFA/GFV Domaine François Lamarche became SAS Nicole Lamarche under SIREN 397738634. The 2001 lease annexed to the 2010 donation names AM 1, AM 2 and AM 8 with exact cadastral areas. Owner-company link reviewed; dated operator evidence deferred to #364. Current farming unverified. |
 
 ### Tier 2 access and evidence gaps
 
-- Bounded filing review: 17 of the 17 filings the free index lists for 397738634 were screened (591 pages); the rest are listed below as not screened. None prints AM 1, AM 2 or AM 8.
-- The 11 August 1994 notarial deed that contributed the Lamarche vineyard business to the GFA is recited by value only and is not in the free index; its parcel list would need a paid land-register copy (Tier 3).
-- The 2001 lease authorisation, the 29 November 2001 rural lease recited in 2010 (to 31 December 2018, land in four communes) and the 2019 merger treaty describe leases to family members and mises à disposition to the operating company without parcel lists; they are not parcel-specific operation evidence.
-- The domaine’s current website domain hosts unrelated content; the published 1 ha 65 a comes from a November 2022 archive capture.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- Both requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. Neither prints a cadastral number. The 2014 article links the former Gaudichots part to the 1989 promotion and the 2018 article to a 1959 exchange with the DRC; the 2018 article’s 0.2318 ha equals AM 2 + AM 8 by area only, which is not a crosswalk.
+- Local audit: all 17 PDFs in the recorded free-index inventory, 591 pages, were freshly downloaded and read in full; every PDF hash, byte count and page count matches. One file reproduces the executed 2001 lease with exact AM 1, AM 2 and AM 8 schedules; the other 16 contain no qualifying current-reference schedule.
+- The original 11 August 1994 contribution instrument is not included among the reviewed files. The 2001 lease annexed to the 2010 donation identifies AM 1, AM 2 and AM 8 and cites publication at Beaune on 21 October 1994, volume 1994P no. 4330. It is not an unfiled deed: a separate original SPF copy remains Tier 3.
+- The 2001 mandate, executed lease, 2010 mise à disposition recital, 2019 treaty naming Nicole Lamarche personally as tenant, and 2022 account of direct SAS operation are distinct evidence. The 2022 treaty says the EARL/SAS lease ended on 7 November 2019, but includes no parcel schedule or termination instrument. With the repository owner’s approval, operator acceptance is deferred to #364 and verified farming remains 0.
+- The published 1 ha 65 a was rechecked in the November 2022 Internet Archive capture. The prior observation of unrelated content on the current domaine domain was not rechecked locally.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 397738634; both returned HTTP 403. Records available only there remain unverified.
+- Both Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, dates and archive hashes remain as prior cloud evidence. The prior 0.2318 ha comparison with AM 2 + AM 8 is area-only, not a cadastral crosswalk; the exact legal matches come from the lease schedule.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for all three parcels; paid SPF copies and outreach remain Tier 3.
+
+## Local audit (Codex CLI, Windows, Python 3.12)
+
+On 9 October 2026, **17 PDFs / 591 pages** were freshly downloaded and read in full. Every PDF hash, byte count and page count matches. Pixel-identical duplicate pages were reused only after full reading of the matching page; cited schedules and low-text pages were checked as images. The free-index page still displays the same 17 filing entries. The archived estate page and official company API changed bytes, but their area and identity findings remain supported; fresh retrieval details are in [filings](filings.md#local-audit-codex-cli-windows-python-312).
+
+The prior blanket negative missed the executed 2001 lease annexed to the 2010 donation. Three exact current-reference and individual-area matches are now recorded. The 1994 publication reference, personal tenants, separate operating SARL, 2019 named tenant and 2022 operation/termination recital are distinguished. With the repository owner’s approval, operator acceptance remains deferred to #364 and verified farming remains **0**. No shared holder link, builder, schema, geometry or rights data was changed by this local correction.
+
+INPI and Pappers were retried and both returned HTTP 403. Both Winehog archives are **not re-verified locally**, at the owner’s instruction; no disk search was made. The original 1994 instrument, underlying later lease/termination records, INPI/Pappers-only records, paid SPF copies and outreach remain open.
+
+- Passed: research `--all --check`, holder links, app registry, independent rollout audit, lint, typecheck, production build, payload measurement and `git diff --check`. Named-area regeneration is unchanged; parcel, commune and named-area crosswalk checks pass.
+- Complete raw-source history rollout `--check`: passed after all OCR stopped.
+- Python CI list: **229 passed / 1 error (230 total)**, the established Windows Corton climat rounding difference (4603.0682 versus committed 4603.0683 m²).
+- Vitest: **5,626 passed / 1 failed**, the known `tasteSection` English-month expectation against Windows `2026年8月`. No timed-out files.
+- Chromium and mobile WebKit: **43 passed / 3 skipped / 2 failed**. Both failures are `Official history: la-grande-rue`: the shared test requires a DFI-validation event, but these parcels have none and it fails before browser interaction. Both La Grande Rue parcel journeys pass.
+- Production evidence: **33 chunks, 5,619,039 raw / 506,489 gzip bytes**; zero evidence modules in initial or map static module graphs. La Grande Rue evidence: **52,559 / 8,754 bytes**. Independent audit: 451 obtained and two documented missing resources, 33 crus, 2,721 parcels, zero verified farming.
+
+The platform and shared-test exceptions remain open; this is not an all-green local run.
 
 ## Reproduce and validate
 

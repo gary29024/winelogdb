@@ -722,7 +722,7 @@ class LaTacheTests(unittest.TestCase):
 
 
 class LaGrandeRueTests(unittest.TestCase):
-    """A reviewed company link groups the parcels without any parcel schedule or farming claim."""
+    """Historical lease matches remain distinct from the company link and current farming."""
 
     @classmethod
     def setUpClass(cls):
@@ -742,13 +742,21 @@ class LaGrandeRueTests(unittest.TestCase):
         self.assertEqual(self.curation['unmatchedPrintedReferences'], [])
         self.assertFalse(any('not supplied' in g for g in self.curation['accessGaps']))
 
-    def test_the_existing_company_link_applies_without_parcel_filings(self):
+    def test_exact_lease_schedule_keeps_the_company_link_and_farming_separate(self):
         self.assertEqual((self.context.cru['tier'], self.curation['holderLinks']), (2, 'shared'))
         link = self.table['holders']['397738634']['links'][0]
         self.assertEqual((link['relation'], link['reviewStatus']), ('owner-company', 'reviewed'))
         self.assertEqual(self.evidence['holderDomains']['397738634']['basis'], 'company-identity')
-        self.assertEqual((self.curation['parcelFilings'], self.curation['externalResearch']), ([], []))
-        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['withParcelFiling']), (3, 0))
+        self.assertEqual(self.curation['externalResearch'], [])
+        [filing] = self.curation['parcelFilings']
+        self.assertEqual(filing['parcelAreasM2'], {
+            '21714000AM0001': 14207, '21714000AM0002': 2096, '21714000AM0008': 222})
+        self.assertEqual((filing['holderId'], filing['companySiren']), ('397738634', '397738634'))
+        self.assertEqual(filing['documentDate'], '2010-10-05')
+        lease, disposal = filing['leaseEvidence']
+        self.assertEqual((lease['signedDates'], lease['endsOn']), (['2001-11-29'], '2018-12-31'))
+        self.assertEqual(disposal['beneficiarySiren'], '353336068')
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['withParcelFiling']), (3, 3))
         self.assertIn('effort', self.table['holders']['397738634'])
 
     def test_the_archived_estate_area_stays_census_and_farming_unverified(self):

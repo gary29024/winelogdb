@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-CB8FbIEv.js"
+    "dist/client/assets/index-D2jJ0VfY.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CC3_n-F6.js",
-    "dist/client/assets/SectionLabel-DrtdO--9.js",
-    "dist/client/assets/SparklingDetailsCard-B9XolITW.js",
-    "dist/client/assets/VillageMap-Dm3qEfnB.js",
-    "dist/client/assets/burgundyAtlas-CHhgA1uP.js",
-    "dist/client/assets/index-C-RDs5S4.js",
-    "dist/client/assets/index-CB8FbIEv.js",
+    "dist/client/assets/FriendTagDialog-3z3eKOWq.js",
+    "dist/client/assets/SectionLabel-C_UIH56U.js",
+    "dist/client/assets/SparklingDetailsCard-Cs3i76Pa.js",
+    "dist/client/assets/VillageMap-D88d4cSL.js",
+    "dist/client/assets/burgundyAtlas-CMASH23q.js",
+    "dist/client/assets/index-D2jJ0VfY.js",
+    "dist/client/assets/index-JZlJYY5l.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-B7MvqTe8.js",
-    "dist/client/assets/wineDetailCompact-CDbRmClM.js"
+    "dist/client/assets/useModalFocus-CmDUpCKA.js",
+    "dist/client/assets/wineDetailCompact-BOjLjQm5.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5617729,
-  "evidenceGzipBytesTotal": 506356,
+  "evidenceBytesTotal": 5619039,
+  "evidenceGzipBytesTotal": 506489,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -175,10 +175,10 @@
     },
     {
       "cru": "la-grande-rue",
-      "file": "dist/client/assets/la-grande-rue.evidence-2thah-5i.js",
-      "sha256": "f726e73e36ee77138abdc06d60e4dc2782b8c5125bc99ce0116a6e6cc371eb5f",
-      "bytes": 51080,
-      "gzipBytes": 8750
+      "file": "dist/client/assets/la-grande-rue.evidence-cLHqWXDa.js",
+      "sha256": "d2b93bf92a0583d885a8b37277722919bcee64c8bac05b19dcf56f86206d11c4",
+      "bytes": 52390,
+      "gzipBytes": 8883
     },
     {
       "cru": "la-romanee",
