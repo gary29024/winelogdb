@@ -27,7 +27,10 @@ for(const [index,slug] of historyCrus.filter(auditedCru).entries()){
   const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
   const cru=read(`scripts/grand-crus/${slug}.json`) as {name:string;parentFeatureId:string;villageMaps:string[];evidenceFrom:string[]};
   const evidence=read(`src/lib/places/grandCruParcels/${slug}.evidence.json`) as ParcelEvidenceData;
-  const [parcelId,trace]=Object.entries(evidence.tracing!).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation')!;
+  const dfi=Object.entries(evidence.tracing??{}).find(([,t])=>t.earliestSupportedEvent.dateRole==='dfi-validation');
+  // A cru whose parcels were all first seen in a cadastral release has no DFI-dated history to show.
+  test.skip(!dfi,`${slug} has no parcel whose earliest supported event is a DFI validation`);
+  const [parcelId,trace]=dfi!;
   const villages=read('src/lib/places/burgundyVillageMapRegistry.json').villages as {id:string;name:string}[];
   const names=cru.villageMaps.map(id=>villages.find(v=>v.id===id)!.name);
   await page.emulateMedia({reducedMotion:'reduce'});
