@@ -1,6 +1,6 @@
 # La Tâche parcel farming research register
 
-Reviewed 2026-10-08; target season 2026.
+Reviewed 2026-10-09; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
@@ -44,9 +44,9 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 **Published holdings by named area**
 
 - **La Tâche**
-  - Domaine de la Romanée-Conti: 6.062 ha (square-metre); tenure not stated; total also covers Les Gaudichots ou La Tâche; 1.45 ha recorded to linked company records here. Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Winehog (2014) gives 6.06 ha in two named parts. Census evidence only; no farming season inferred. [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/).
+  - Domaine de la Romanée-Conti: 6.062 ha (square-metre); tenure not stated; total also covers Les Gaudichots ou La Tâche; 1.45 ha recorded to linked company records here. Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. The prior cloud review records Winehog (2014), not re-verified locally, as giving 6.06 ha in two named parts. Census evidence only; no farming season inferred. [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/).
 - **Les Gaudichots ou La Tâche**
-  - Domaine de la Romanée-Conti: 6.062 ha (square-metre); tenure not stated; total also covers La Tâche; 4.60 ha recorded to linked company records here. Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. Winehog (2014) gives 6.06 ha in two named parts. Census evidence only; no farming season inferred. [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/).
+  - Domaine de la Romanée-Conti: 6.062 ha (square-metre); tenure not stated; total also covers La Tâche; 4.60 ha recorded to linked company records here. Undated estate page gives 6.0620 ha, equal to the summed cadastral areas of AM 9 (46,275 m²) and AM 16 (14,345 m²) recorded to the DRC. The prior cloud review records Winehog (2014), not re-verified locally, as giving 6.06 ha in two named parts. Census evidence only; no farming season inferred. [Domaine de la Romanée-Conti: La Tâche](https://www.romanee-conti.fr/fr/9-grand-crus/5/la-tache), [Winehog: La Tâche – a historic view on a legendary grand cru](https://winehog.org/la-tache-historic-view-legendary-grand-cru-20756/).
 
 ## Every mapped parcel
 
@@ -176,8 +176,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 
 - Bounded filing review: 7 DRC filings (548 pages) were screened, chosen for statutes and estate schedules. The free index lists 55 DRC filings, mostly share donations and management changes; unscreened filings are a bounded negative, not proof that no later schedule exists.
 - The 1974 schedule is historical estate evidence: no screened filing records a later lease, operator or farming season for AM 9 or AM 16. The same schedule’s AM 10 and AM 14 (Les Gaudichots) lie outside this cru.
-- data.inpi.fr and pappers.fr refuse this cloud environment: filings or accounts available only there are pending local audit.
-- All 4 requested Winehog articles were supplied by the repository owner as saved webarchives and reviewed; URLs, printed dates and archive hashes are recorded, and archives and article text are not committed. None prints a La Tâche cadastral number; their 1.43 ha and 4.63 ha named-area totals are rounded and stay census context.
+- Local audit 2026-10-09 retried data.inpi.fr and pappers.fr for SIREN 778269407; both returned HTTP 403. Filings or accounts available only there remain unverified.
+- All four Winehog archives are not re-verified locally, at the repository owner’s instruction. Original URLs, printed dates and hashes remain qualified prior cloud evidence; the recorded lack of cadastral numbers, named-area totals and historical account were not independently checked locally.
 - Source boundaries, failed notice downloads and unsearched historical intervals remain in the Tier 1 coverage. Current farming remains unconfirmed for both parcels; paid SPF copies and outreach remain Tier 3.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.
