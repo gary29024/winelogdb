@@ -124,6 +124,121 @@
       "reviewedPages": [
         1
       ]
+    },
+    {
+      "id": "mt-winehog-24329",
+      "title": "Terroir Insight: Bouchard Pere et Fils Montrachet",
+      "url": "https://winehog.org/terroir-insight-bouchard-pere-et-fils-montrachet-24329/",
+      "type": "critic",
+      "documentDate": "2015-08-24",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.435020+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "250458b28fe0e67cac797a0f3ce0928ebe306a55bdc49ab0bd7e683a0309e829",
+      "bytes": 3407407,
+      "finding": "Printed Puligny plot 67 and 0.8894 ha match current AH67 and 8894 m². The article’s proposed early ownership sequence and La Cabotte hypothesis remain conjectural.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:26:59 +0000",
+      "modifiedAt": "2016-02-21T14:44:00+00:00",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "mt-winehog-24219",
+      "title": "Terroir Insight: Domaine de la Romanee-Conti, Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-de-la-romanee-conti-montrachet-24219/",
+      "type": "critic",
+      "documentDate": "2015-08-09",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.511020+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "f7582430980415978f8914897668c570660941efe3106d642ff32e7d91199af7",
+      "bytes": 3896554,
+      "finding": "Printed Chassagne plots 31, 129 and 130 with 0.3419, 0.1670 and 0.1670 ha match current AE31, AE129 and AE130. The reported acquisitions in 1963, 1965 and 1980 are secondary historical claims, not current farming evidence.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:05 +0000",
+      "modifiedAt": "2020-10-30T14:02:06+00:00",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "mt-winehog-24050",
+      "title": "Terroir Insight: Domaine Ramonet Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-ramonet-montrachet-24050/",
+      "type": "critic",
+      "documentDate": "2015-07-20",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.575021+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "33abc3633658717ee980986e77d1dfed08b6d91de58e7cabdefc3b0ddb6260a9",
+      "bytes": 3107557,
+      "finding": "The single Ramonet plot is described as 0.2590 ha; the ownership discussion identifies number 66, alongside Bouchard 67 and the four Boillereault plots. Its number, area and illustrated Puligny location agree with AH66. Earlier ownership is explicitly hypothetical.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:10 +0000",
+      "modifiedAt": "2016-04-06T16:18:25+00:00",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "mt-winehog-23762",
+      "title": "Terroir Insight: Domaine Leflaive, Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-montrachet-23762/",
+      "type": "critic",
+      "documentDate": "2015-06-14",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.647019+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "776c323a9494138213c05fd9a215838e46fb6ec063dce130f8248f1f90d4f226",
+      "bytes": 3687006,
+      "finding": "Published holding 0.0821 ha and an aerial outline, without a printed cadastral number. No parcel match is accepted from equal area or location alone.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:17 +0000",
+      "modifiedAt": "2016-04-06T16:18:40+00:00",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "mt-winehog-23710",
+      "title": "Terroir Insight: Domaine des Comtes Lafon, Le Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-des-comtes-lafon-le-montrachet-23710/",
+      "type": "critic",
+      "documentDate": "2015-06-07",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.710021+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "49ddc278826d35813b64e0fd5be31aa380640fc199803df12cb24900d6cef3d5",
+      "bytes": 3071436,
+      "finding": "Published holding 0.3182 ha and an aerial outline, without a printed cadastral number. No parcel match is accepted from equal area or location alone.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:22 +0000",
+      "modifiedAt": "2016-04-06T16:18:54+00:00",
+      "missingEmbeddedImages": []
+    },
+    {
+      "id": "mt-winehog-32708",
+      "title": "Montrachet – the historic evidence and the expansion in 1921",
+      "url": "https://winehog.org/montrachet-historic-evidence-expansion-1921-32708/",
+      "type": "critic",
+      "documentDate": "2017-08-09",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.773019+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "c52cb61cdf0993d94d32983a5db18457007f9fa0690178687fc50c7af1da36de",
+      "bytes": 2463526,
+      "finding": "The modern list matches Chassagne 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². The text conflicts between 34 and 24; neither is silently corrected. Old 1861/1921 numbering is not a current-reference crosswalk; six embedded maps were absent from the supplied archive.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:26 +0000",
+      "modifiedAt": "2017-10-01T13:28:58+00:00",
+      "missingEmbeddedImages": [
+        "https://winehog.org/wp-content/uploads/2017/08/IMG_4887.jpg",
+        "https://winehog.org/wp-content/uploads/2017/08/IMG_4889.jpg",
+        "https://winehog.org/wp-content/uploads/2017/08/IMG_4890.jpg",
+        "https://winehog.org/wp-content/uploads/2017/08/IMG_4891.jpg",
+        "https://winehog.org/wp-content/uploads/2017/08/montrachetold.jpg",
+        "https://winehog.org/wp-content/uploads/2017/08/monradny.jpg"
+      ]
     }
   ],
   "holders": [
@@ -420,6 +535,154 @@
       "appNote": "Opale’s 2006 contribution names retired AH150 (981 m²). Official 2019 DFI links it to AH182 and AH183; only AH182 is in this cru. Historical ownership context, not an exact current-reference filing or current farming.",
       "dateSourceId": "mt-filing-408395309-6",
       "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-24329-bouchard",
+      "title": "Terroir Insight: Bouchard Pere et Fils Montrachet",
+      "parcelIds": [
+        "21512000AH0067"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) names plot 67 and 0.8894 ha, matching AH67. Secondary historical attribution only; no current farming is verified.",
+      "sourceIds": [
+        "mt-winehog-24329"
+      ],
+      "producer": "Bouchard Père et Fils",
+      "printedReferences": [
+        "AH67"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0067": 8894
+      },
+      "appNote": "Winehog (2015) names plot 67 and 0.8894 ha, matching AH67. Secondary historical attribution only; no current farming is verified.",
+      "dateSourceId": "mt-winehog-24329",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-24219-drc",
+      "title": "Terroir Insight: Domaine de la Romanee-Conti, Montrachet",
+      "parcelIds": [
+        "21150000AE0031",
+        "21150000AE0129",
+        "21150000AE0130"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) names plots 31, 129 and 130 with matching individual areas. Its acquisition history is secondary evidence; no current farming is verified.",
+      "sourceIds": [
+        "mt-winehog-24219"
+      ],
+      "producer": "Domaine de la Romanée-Conti",
+      "printedReferences": [
+        "AE31",
+        "AE129",
+        "AE130"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0031": 3419,
+        "21150000AE0129": 1670,
+        "21150000AE0130": 1670
+      },
+      "appNote": "Winehog (2015) names plots 31, 129 and 130 with matching individual areas. Its acquisition history is secondary evidence; no current farming is verified.",
+      "dateSourceId": "mt-winehog-24219",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-24050-ramonet",
+      "title": "Terroir Insight: Domaine Ramonet Montrachet",
+      "parcelIds": [
+        "21512000AH0066"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) describes Ramonet’s 0.2590 ha plot and identifies number 66 in its ownership discussion. Number, area and Puligny location match AH66; no current farming is verified.",
+      "sourceIds": [
+        "mt-winehog-24050"
+      ],
+      "producer": "Domaine Ramonet",
+      "printedReferences": [
+        "AH66"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0066": 2590
+      },
+      "appNote": "Winehog (2015) describes Ramonet’s 0.2590 ha plot and identifies number 66 in its ownership discussion. Number, area and Puligny location match AH66; no current farming is verified.",
+      "dateSourceId": "mt-winehog-24050",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-32708-amiot",
+      "title": "Montrachet – the historic evidence and the expansion in 1921",
+      "parcelIds": [
+        "21150000AE0025",
+        "21150000AE0029"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2017) attributes plots 25 (635 m²) and 29 (275 m²) to Guy Amiot. Both numbers and areas match; secondary historical context only, with current farming unverified.",
+      "sourceIds": [
+        "mt-winehog-32708"
+      ],
+      "producer": "Domaine Guy Amiot",
+      "printedReferences": [
+        "AE25",
+        "AE29"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0025": 635,
+        "21150000AE0029": 275
+      },
+      "appNote": "Winehog (2017) attributes plots 25 (635 m²) and 29 (275 m²) to Guy Amiot. Both numbers and areas match; secondary historical context only, with current farming unverified.",
+      "dateSourceId": "mt-winehog-32708",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-32708-colin",
+      "title": "Montrachet – the historic evidence and the expansion in 1921",
+      "parcelIds": [],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2017) names former plots 27/28/161/162 and their individual areas. Context reaches AE208–220 only through the official 2023 DFI already recorded; no operator is transferred.",
+      "sourceIds": [
+        "mt-winehog-32708",
+        "cadastre-history"
+      ],
+      "producer": "Domaine Marc Colin",
+      "printedReferences": [
+        "AE27",
+        "AE28",
+        "AE161",
+        "AE162"
+      ],
+      "parcelAreasM2": {},
+      "appNote": "Winehog (2017) names former plots 27/28/161/162 and their individual areas. Context reaches AE208–220 only through the official 2023 DFI already recorded; no operator is transferred.",
+      "dateSourceId": "mt-winehog-32708",
+      "currentFarmer": null,
+      "predecessorReferences": {
+        "21150000AE0027": [
+          "21150000AE0208",
+          "21150000AE0209",
+          "21150000AE0210",
+          "21150000AE0211"
+        ],
+        "21150000AE0028": [
+          "21150000AE0212",
+          "21150000AE0213",
+          "21150000AE0214",
+          "21150000AE0215"
+        ],
+        "21150000AE0161": [
+          "21150000AE0216",
+          "21150000AE0217",
+          "21150000AE0218"
+        ],
+        "21150000AE0162": [
+          "21150000AE0219",
+          "21150000AE0220"
+        ]
+      },
+      "printedAreasM2": {
+        "AE27": 356,
+        "AE28": 356,
+        "AE161": 178,
+        "AE162": 178
+      }
     }
   ],
   "parcelFilings": [
@@ -666,6 +929,96 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-24329",
+      "producer": "Bouchard Père et Fils",
+      "namedAreas": [
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.8894,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-24329"
+      ],
+      "finding": "Historical holding total as published in 2015; named-area census only, with no current-season assertion or cadastral allocation from this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-24219",
+      "producer": "Domaine de la Romanée-Conti",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.6759,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-24219"
+      ],
+      "finding": "Historical holding total as published in 2015; named-area census only, with no current-season assertion or cadastral allocation from this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-24050",
+      "producer": "Domaine Ramonet",
+      "namedAreas": [
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.259,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-24050"
+      ],
+      "finding": "Historical holding total as published in 2015; named-area census only, with no current-season assertion or cadastral allocation from this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-23762",
+      "producer": "Domaine Leflaive",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0821,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-23762"
+      ],
+      "finding": "Historical holding total as published in 2015; named-area census only, with no current-season assertion or cadastral allocation from this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-23710",
+      "producer": "Domaine des Comtes Lafon",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.3182,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-23710"
+      ],
+      "finding": "Historical holding total as published in 2015; named-area census only, with no current-season assertion or cadastral allocation from this total.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -677,9 +1030,52 @@
     "INPI and Pappers were each tried once on the Leflaive company and returned HTTP 403 locally; free official company searches, Le Figaro indexes and actes.ccm2.net filings were used instead.",
     "The bounded Montrachet pass screened 50 distinct PDF byte hashes / 1360 pages at 150 dpi with RapidOCR and DirectML. Two additional downloads were byte-identical copies (34 duplicate pages), not additional evidence; one Leflaive 2026 statutes request returned HTTP 408. This is not every filing ever deposited.",
     "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.",
-    "Winehog subscriber copies were requested once. Direct article links were supplied on 9 October 2026; authorized copies remain pending. Unsupplied articles are access gaps, with no acquired-copy SHA-256 and no accepted parcel matches.",
-    "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified."
+    "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified.",
+    "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. Six images referenced by the 1921 history article are absent from its archive and remain unreviewed. Leflaive/Lafon lack printed numbers; Prieur’s area and 34/24 numbering conflict remain unmatched."
   ],
   "holderLinks": "shared",
-  "unmatchedPrintedReferences": []
+  "unmatchedPrintedReferences": [
+    {
+      "sourceId": "mt-winehog-23762",
+      "printedReference": "Leflaive Montrachet: 0.0821 ha, cadastral number unstated",
+      "parcelIds": [],
+      "limitation": "The supplied text and aerial outlines do not print the number. An equal 821 m² cadastral area cannot independently establish a match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-winehog-23710",
+      "printedReference": "Comtes Lafon Montrachet: 0.3182 ha, cadastral number unstated",
+      "parcelIds": [],
+      "limitation": "The supplied text and aerial outlines do not print the number. An equal 3182 m² cadastral area cannot independently establish a match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-winehog-32708",
+      "printedReference": "Chassagne plot 30: 0.2009 ha",
+      "parcelIds": [],
+      "limitation": "Current AE30 and the accepted company filing give 2090 m². The article prints 2009 m²; it is preserved without correction and receives no match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-winehog-32708",
+      "printedReference": "Chassagne 34 in paragraph / 24 (0.0542 ha) in list",
+      "parcelIds": [],
+      "limitation": "The article contains conflicting reference numbers. Missing embedded contemporary maps cannot resolve this; no match is accepted for either reference.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-winehog-32708",
+      "printedReference": "1861 Chassagne section A 29–48; Puligny 1–44; 1921 Dent de Chien 21/22/23/27/28",
+      "parcelIds": [],
+      "limitation": "Historical numbering and classifications are not an official modern cadastral crosswalk. No current references are assigned from these maps or the article’s inferred boundary history.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-winehog-24329",
+      "printedReference": "Puligny 118/119/120/121; hypothetical earlier 65",
+      "parcelIds": [],
+      "limitation": "The 0.80 ha is an aggregate, without individual areas. The predecessor 65 and early ownership are conjectures, not documented lineage; no current parcel match.",
+      "currentFarmer": null
+    }
+  ]
 }

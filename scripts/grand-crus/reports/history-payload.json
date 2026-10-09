@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D44Oi4ln.js"
+    "dist/client/assets/index-BE65HYA6.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-CX0CpjsX.js",
-    "dist/client/assets/SectionLabel-yX6LbuK8.js",
-    "dist/client/assets/SparklingDetailsCard-CNk2hQLt.js",
-    "dist/client/assets/VillageMap-Dy6jDl34.js",
-    "dist/client/assets/burgundyAtlas-rHoICKuU.js",
-    "dist/client/assets/index-Csy7gwRv.js",
-    "dist/client/assets/index-D44Oi4ln.js",
+    "dist/client/assets/FriendTagDialog-DKocNHA4.js",
+    "dist/client/assets/SectionLabel--Ww1flxt.js",
+    "dist/client/assets/SparklingDetailsCard-DdyTb1cz.js",
+    "dist/client/assets/VillageMap-C0y6fFpS.js",
+    "dist/client/assets/burgundyAtlas-CJdRMWld.js",
+    "dist/client/assets/index-BE65HYA6.js",
+    "dist/client/assets/index-CoGJ0T6K.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-ENWhds_k.js",
-    "dist/client/assets/wineDetailCompact-DwmK1YAz.js"
+    "dist/client/assets/useModalFocus-D-hy4YCo.js",
+    "dist/client/assets/wineDetailCompact-B7iLpDji.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5877841,
-  "evidenceGzipBytesTotal": 543362,
+  "evidenceBytesTotal": 5893407,
+  "evidenceGzipBytesTotal": 544214,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -217,10 +217,10 @@
     },
     {
       "cru": "montrachet",
-      "file": "dist/client/assets/montrachet.evidence-CucR7vEe.js",
-      "sha256": "13a6015597d9f9e641ffc7709ac0b08613e2378d6f39a74560dd15fa631759e4",
-      "bytes": 195346,
-      "gzipBytes": 18152
+      "file": "dist/client/assets/montrachet.evidence-DZZFGxgT.js",
+      "sha256": "6be98a2c6bc7599c8548438724aea085ac83325e6bc5ecffb98078d404dd8d38",
+      "bytes": 210912,
+      "gzipBytes": 19004
     },
     {
       "cru": "musigny",

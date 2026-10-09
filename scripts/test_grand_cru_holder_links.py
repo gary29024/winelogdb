@@ -1340,6 +1340,22 @@ class MontrachetTierTwoTests(unittest.TestCase):
         self.assertEqual(row['parcelFilingIds'], [])
         self.assertIsNone(row['currentFarmer'])
 
+    def test_supplied_winehog_preserves_area_conflicts_and_unnumbered_holdings(self):
+        records = [x for x in self.curation['externalResearch'] if x['id'].startswith('mt-winehog-')]
+        direct = {p for x in records for p in x['parcelIds']}
+        self.assertEqual(direct, {'21512000AH0067', '21512000AH0066', '21150000AE0031',
+                                  '21150000AE0129', '21150000AE0130', '21150000AE0025', '21150000AE0029'})
+        for pid in ('21150000AE0030', '21150000AE0037', '21150000AE0134', '21150000AE0024'):
+            self.assertNotIn(pid, direct)
+        colin = next(x for x in records if x['id'].endswith('-colin'))
+        self.assertEqual(colin['parcelIds'], [])
+        self.assertEqual(set(colin['predecessorReferences']),
+                         {'21150000AE0027', '21150000AE0028', '21150000AE0161', '21150000AE0162'})
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertTrue(any('0.2009' in x['printedReference'] for x in unmatched))
+        self.assertTrue(all(not x['parcelIds'] for x in unmatched))
+        self.assertEqual(len([x for x in self.curation['sources'] if x['id'].startswith('mt-winehog-')]), 6)
+
     def test_individual_and_company_tenants_remain_distinct(self):
         fs = {f['id']: f for f in self.curation['parcelFilings']}
         self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['Jean de Laguiche (individual)'])

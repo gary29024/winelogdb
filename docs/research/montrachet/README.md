@@ -26,11 +26,11 @@ procedures remain distinct evidence; none establishes current farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0; one reviewed match withheld because its act date is unresolved |
 | Parcels with sale records (DVF) | 1; 1 current-reference deed, 0 historical-reference deeds |
-| Parcels with holder or research leads | 29; supported holder links, with historical-reference research kept distinct |
-| Parcels with no lead | 18; includes AH64, whose exact company filing identifies no supported producer link |
+| Parcels with holder or research leads | 32; supported holder links and dated secondary research, with historical-reference context kept distinct |
+| Parcels with no lead | 15; includes AH64, whose exact company filing identifies no supported producer link |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 195,247 / 17,934 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 210,813 / 18,787 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -42,8 +42,8 @@ Parcel rights is enabled. The production payload report checks compiled JS.
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
 | Parcels / recorded holders | 47 / 15 | 47 / 15 |
-| Parcels with holder or research leads | 0 | 29 |
-| Parcels with no lead | 47 | 18 |
+| Parcels with holder or research leads | 0 | 32 |
+| Parcels with no lead | 47 | 15 |
 | Applicable reviewed holder links | 0 | 12 |
 | Parcels with exact company filings | 0 | 6 |
 | Verified farming links | 0 | 0 |
@@ -57,16 +57,18 @@ in the later Montrachet-bundle PRs.
 Four exact filing entries cover AE30/31/33/129/134 and AH64. Colin’s 13 current
 references receive historical context through documented DFI ancestry; no current
 reference is substituted into its 2003 deed. Opale’s former AH151 ownership is
-external research because today’s recorded holder differs. Five estate publications
-supply only named-area census totals. Legal holder, individual tenant, company
+external research because today’s recorded holder differs. Five estate publications and five supplied Winehog accounts
+supply named-area census totals. Seven current references have matching Winehog
+numbers and individual areas; retired Colin references use official DFI ancestry. Legal holder, individual tenant, company
 relationship and bottler remain distinct.
 
 Thenard’s provisional identifier has no accepted company-record crosswalk. The
 Laguiche crosswalk is established, but its lease names Jean de Laguiche personally,
 so no Drouhin tenant link is asserted. The municipal holder has no producer link.
 INPI/Pappers returned 403; one latest Leflaive PDF returned 408. Winehog subscriber
-copies are pending after one request; unsupplied articles are access gaps with no
-acquired-copy hash. The selected filings are a bounded review, not an exhaustive
+copies were supplied on 9 October: all six are hashed and reviewed. Six maps were
+not embedded in the historical expansion article. Unnumbered Leflaive/Lafon areas,
+Prieur’s conflicting area and the article’s 34/24 discrepancy remain unmatched. The selected filings are a bounded review, not an exhaustive
 history, and no evidence establishes present-day farming.
 
 The parallel Claude batch is left untouched. No shared existing link was rewritten;
