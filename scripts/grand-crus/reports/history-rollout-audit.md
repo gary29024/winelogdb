@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5671898 bytes raw / 505216 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5674924 bytes raw / 505512 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -23,7 +23,7 @@ Lazy evidence total: 5671898 bytes raw / 505216 bytes gzip. Each cru loads its o
 | [bonnes-mares](../../../docs/research/bonnes-mares/register.md) | 130 | 1990-01-10 → 2020-11-09 | 22 / 22 | 7 / 11 | 0 | 3 / 0 | 18958 |
 | [clos-de-tart](../../../docs/research/clos-de-tart/register.md) | 17 | 1989-04-18 → 2003-11-04 | 5 / 5 | 4 / 4 | 0 | 0 / 0 | 11396 |
 | [clos-des-lambrays](../../../docs/research/clos-des-lambrays/register.md) | 22 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 7 / 0 | 8476 |
-| [clos-saint-denis](../../../docs/research/clos-saint-denis/register.md) | 49 | 1989-04-14 → 1995-12-05 | 14 / 14 | 5 / 11 | 0 | 0 / 0 | 13989 |
+| [clos-saint-denis](../../../docs/research/clos-saint-denis/register.md) | 49 | 1989-04-14 → 1995-12-05 | 14 / 14 | 5 / 11 | 0 | 0 / 0 | 14285 |
 | [clos-de-la-roche](../../../docs/research/clos-de-la-roche/register.md) | 112 | 1989-04-14 → 2025-03-03 | 34 / 28 | 8 / 25 | 0 | 0 / 0 | 12431 |
 | [chambertin](../../../docs/research/chambertin/register.md) | 137 | 1989-04-17 → 2024-11-04 | 34 / 32 | 10 / 14 | 0 | 1 / 0 | 11882 |
 | [chambertin-clos-de-beze](../../../docs/research/chambertin-clos-de-beze/register.md) | 56 | 1989-04-17 → 2024-11-04 | 11 / 9 | 6 / 6 | 0 | 0 / 0 | 9553 |

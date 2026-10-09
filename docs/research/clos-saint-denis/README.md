@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 1; 1 deed on a current reference |
-| Parcels with holder or research leads | 16; Tier 1 had 0 |
-| Parcels with no lead | 33 |
+| Parcels with holder or research leads | 17; Tier 1 had 0 |
+| Parcels with no lead | 32 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1989, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 110,780 / 13,989 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 113,806 / 14,285 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Clos Saint-Denis selection
@@ -145,8 +145,8 @@ All eleven recorded holders have research rows using the [shared holder table](.
 Seven new entries are added; four earlier holders and their source effort are reused. The five links are
 Bertagna (reviewed company), Dujac (existing provisional family-company lead), Domaine des Chezeaux
 (reviewed wine-company identity), Michel Magnien (reviewed wine-company identity), and Arlaud
-(a reviewed, Clos Saint-Denis-scoped historical lease recital). These cover twelve parcels; four further
-parcels receive exact-number-and-area critic leads. The union rises from **0 to 16**, leaving **33 unresolved**.
+(a reviewed, Clos Saint-Denis-scoped historical lease recital). These cover twelve parcels; five further
+parcels receive exact-number-and-area critic leads. The union rises from **0 to 17**, leaving **32 unresolved**.
 A research link is not confirmation of current parcel operation.
 
 The bounded new selection is **21 PDFs / 718 pages**: Magnien 5/182, Saint Roch 2/62, Saint Loup 3/121,
@@ -171,14 +171,20 @@ lease through September 2019. These names do not independently establish today's
 succession. Grains de Lune and Le Clos Saint Denis similarly stay unlinked despite Magnien or Lignier
 shareholders. The separate Lignier U-id cannot be equated with 429825250, which already holds other rights here.
 
-The four supplied Winehog texts add four research rows reaching **six current parcels**. CLF's AB403 is
-printed at 504 m² versus today's 492 m², so only its AB405 passes. Seven separate named-area census rows
+The seven supplied Winehog articles add six critic research rows reaching **12 current parcels**. CLF's AB403 is
+printed at 504 m² versus today's 492 m², so only its AB405 passes. Twelve separate named-area census rows
 retain the printed totals without parcel allocation. Ponsot's attribution remains historical: the 2024
 article leaves later operator years uncertain, and the public 2025 Chezeaux article describes a separate
-estate from Hudelot-Noellat. Three unsupplied paywalled articles remain gaps. Some lazy-loaded producer
+estate from Hudelot-Noellat. All requested Winehog articles are now supplied and reviewed. Some lazy-loaded producer
 maps are absent from the supplied archives; accepted matches use explicit numbers and areas in the text.
 
-A fifth external-research row retains Lignier's **former AP26 (5586 m²)**. Existing official DFI ancestry
+The Dujac (2017) and Arlaud (2024 publication) supplements contribute six exact individual matches.
+AB410 gains a Dujac critic lead without inventing missing legal-entity rights; the other five already
+had company research leads. Arlaud's map is labelled 2017 and its acquisition narrative is uncertain.
+The overview reproduces a 3 July 1944 decree with old section-A references. Its proposed 580 m²
+addition on part of AB433 in 1971 is conjectural and remains unmatched; no boundary is altered.
+
+A separate external-research row retains Lignier's **former AP26 (5586 m²)**. Existing official DFI ancestry
 carries it to AP232 and AP233, without assigning 1976 ownership to their current holders. AB251 and AB276
 lack a reviewed route to current parcels and remain unmatched. No geometry or rights record is changed.
 The [filing log](filings.md) gives sources, dates, page anchors, hashes, effort and gaps.

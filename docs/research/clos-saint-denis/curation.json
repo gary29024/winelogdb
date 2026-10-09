@@ -135,6 +135,66 @@
       "bytes": 36063,
       "representation": "web-tool public rendered text (navigation omitted)",
       "finding": "The public full text describes the 2021 Van Canneyt acquisition and a Chezeaux estate separate from Hudelot-Noellat. Hash identifies the saved public rendered-text capture, not raw HTML; no exact individual parcel schedule or current lease established."
+    },
+    {
+      "id": "csd-winehog-dujac",
+      "title": "Winehog: Terroir Insight: Domaine Dujac Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-dujac-clos-saint-denis-32844/",
+      "type": "critic-research",
+      "documentDate": "2017-08-23",
+      "otherDocumentDates": [
+        {
+          "date": "2017-08-23",
+          "kind": "page metadata modification; not a new parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "75233e4d64dc7875c17467a4b95f9e28e7d6b0c7dbac415dcb5e937759f6bcba",
+      "bytes": 5045132,
+      "retrievedAt": "2026-10-09T05:57:53.848586+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive; hash covers original archive bytes. Complete article text and available relevant maps reviewed. Some lazy-loaded producer maps are absent; accepted matches use explicit printed reference and individual area. Archive, full text and figures remain outside Git.",
+      "finding": "AB409 (10062 m2), AB410 (700 m2), AB248 (2727 m2) and AB253 (850 m2) individually match. The article splits its 1.4339 ha total across Calouere, the original Clos Saint-Denis and Les Chaffots. Reported 1967/1977 acquisitions remain critic history, not reviewed conveyances or proof of present farming."
+    },
+    {
+      "id": "csd-winehog-arlaud",
+      "title": "Winehog: Terroir Insight: Domaine Arlaud Clos Saint-Denis",
+      "url": "https://winehog.org/terroir-insight-domaine-arlaud-clos-saint-denis-2-33130/",
+      "type": "critic-research",
+      "documentDate": "2024-09-24",
+      "otherDocumentDates": [
+        {
+          "date": "2024-09-24",
+          "kind": "page metadata modification; not a new parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "6ed92f9700772d4a96ef24beaba1c579ff0fbb6812067805e21c734e6555b577",
+      "bytes": 6643157,
+      "retrievedAt": "2026-10-09T05:57:53.873585+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive; hash covers original archive bytes. Complete article text and available relevant maps reviewed. Some lazy-loaded producer maps are absent; accepted matches use explicit printed reference and individual area. Archive, full text and figures remain outside Git.",
+      "finding": "AB305 (1264 m2) and AB306 (504 m2) individually match; total 0.1768 ha. Published 24 September 2024, with a map labelled 2017. The Moine de Morey versus Amiot origin and possible later addition are expressly unresolved; no acquisition date or ownership chain is asserted."
+    },
+    {
+      "id": "csd-winehog-overview",
+      "title": "Winehog: Vineyard Insight: Clos Saint-Denis – the queen of Morey",
+      "url": "https://winehog.org/vineyard-insight-clos-saint-denis-the-queen-of-morey-24456/",
+      "type": "critic-research",
+      "documentDate": "2015-08-30",
+      "otherDocumentDates": [
+        {
+          "date": "2016-04-06",
+          "kind": "page metadata modification; not a new parcel observation"
+        }
+      ],
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "sha256": "f07ac5496832a58c79bb7addadcbf48b52a00b947420f86e0b59026734c5a33a",
+      "bytes": 4969433,
+      "retrievedAt": "2026-10-09T05:57:53.918588+00:00",
+      "retrievalNote": "Authorized user-supplied WebArchive; hash covers original archive bytes. Complete article text and available relevant maps reviewed. Some lazy-loaded producer maps are absent; accepted matches use explicit printed reference and individual area. Archive, full text and figures remain outside Git.",
+      "finding": "Reproduces a decree dated 3 July 1944 (published 26 July) showing 6.5620 ha. Its four later climat areas sum to 6.6200 ha; the suggested 0.058 ha addition on part of AB433 and 1971 timing are conjectural. Old section-A references have no accepted path to current parcels. No producer attribution or boundary correction is inferred."
     }
   ],
   "holders": [
@@ -407,6 +467,62 @@
         14
       ],
       "appNote": "1976 GFA contribution on former AP26 (5586 m2), inherited as research through official DFI ancestry only. It does not identify the current owner or farmer.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-wh-dujac",
+      "title": "Winehog: Domaine Dujac dated parcel references",
+      "parcelIds": [
+        "21442000AB0409",
+        "21442000AB0410",
+        "21442000AB0248",
+        "21442000AB0253"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2017) prints AB409 (10062 m2), AB410 (700 m2), AB248 (2727 m2) and AB253 (850 m2), each matching the current cadastre. Dated critic attribution only; AB410 gains no invented legal rights, and the existing company lead is not upgraded to current farming.",
+      "sourceIds": [
+        "csd-winehog-dujac"
+      ],
+      "producer": "Domaine Dujac",
+      "printedReferences": [
+        "AB409",
+        "AB410",
+        "AB248",
+        "AB253"
+      ],
+      "printedAreasM2": {
+        "AB409": 10062,
+        "AB410": 700,
+        "AB248": 2727,
+        "AB253": 850
+      },
+      "dateSourceId": "csd-winehog-dujac",
+      "appNote": "Winehog (2017) prints AB409 (10062 m2), AB410 (700 m2), AB248 (2727 m2) and AB253 (850 m2), each matching the current cadastre. Dated critic attribution only; AB410 gains no invented legal rights, and the existing company lead is not upgraded to current farming.",
+      "currentFarmer": null
+    },
+    {
+      "id": "csd-wh-arlaud",
+      "title": "Winehog: Domaine Arlaud dated parcel references",
+      "parcelIds": [
+        "21442000AB0305",
+        "21442000AB0306"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2024 publication) prints AB305 (1264 m2) and AB306 (504 m2), matching individually. Its earlier ownership narrative remains uncertain and its map is dated 2017. Critic evidence does not refresh the historical lease or verify present farming.",
+      "sourceIds": [
+        "csd-winehog-arlaud"
+      ],
+      "producer": "Domaine Arlaud",
+      "printedReferences": [
+        "AB305",
+        "AB306"
+      ],
+      "printedAreasM2": {
+        "AB305": 1264,
+        "AB306": 504
+      },
+      "dateSourceId": "csd-winehog-arlaud",
+      "appNote": "Winehog (2024 publication) prints AB305 (1264 m2) and AB306 (504 m2), matching individually. Its earlier ownership narrative remains uncertain and its map is dated 2017. Critic evidence does not refresh the historical lease or verify present farming.",
       "currentFarmer": null
     }
   ],
@@ -770,6 +886,96 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-dujac-calouere",
+      "producer": "Domaine Dujac",
+      "namedAreas": [
+        "CALOUERE"
+      ],
+      "publishedAreaHa": 1.0762,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-dujac"
+      ],
+      "finding": "Sum of two printed individual areas in the 2017 article. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-dujac-core",
+      "producer": "Domaine Dujac",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.2727,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-dujac"
+      ],
+      "finding": "Printed 2017 article area. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-dujac-chaffots",
+      "producer": "Domaine Dujac",
+      "namedAreas": [
+        "LES CHAFFOTS"
+      ],
+      "publishedAreaHa": 0.085,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-dujac"
+      ],
+      "finding": "Printed 2017 article area. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-arlaud-core",
+      "producer": "Domaine Arlaud",
+      "namedAreas": [
+        "CLOS SAINT-DENIS"
+      ],
+      "publishedAreaHa": 0.1264,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-arlaud"
+      ],
+      "finding": "Area printed in the 2024 publication; uncertain earlier acquisition narrative is not resolved. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "csd-arlaud-chaffots",
+      "producer": "Domaine Arlaud",
+      "namedAreas": [
+        "LES CHAFFOTS"
+      ],
+      "publishedAreaHa": 0.0504,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "csd-winehog-arlaud"
+      ],
+      "finding": "Area printed in the 2024 publication; uncertain earlier acquisition narrative is not resolved. Dated named-area census only; no parcel allocation, company identity, current rights or farming inferred.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -781,8 +987,8 @@
     "Saint Roch U21940937 is crosswalked through company records and three exact schedules. U21585571 remains unresolved: SIREN 429825250 already has separate rights in this cru and cannot be assigned from a matching name. No current producer is inferred from Jouan, Magnien or Lignier relatives/shareholders.",
     "Saint Loup recites a Jean Paul Magnien lease ending September 2019. Saint Roch prints an 18-year lease effective January 2004 but ending December 2022; the inconsistent duration/dates are retained, and no renewal is presumed. The Arlaud and Dujac original leases and current renewals remain unreviewed.",
     "The Magnien deed is dated 18 December 1998, deposited in a composite 2005 filing. It transfers plantations/business assets, expressly excludes underlying land and describes only 310 m2 of AB472 as Grand Cru. Historical operation context is retained with explicit user approval; adjudication under #364 and current operation remain separate.",
-    "Four supplied Winehog texts were reviewed. Attached common maps add context but some lazy-loaded producer maps are absent. Text supplies all accepted numbers/areas; CLF AB403 has an area mismatch. No map-only allocation or correction is made.",
-    "Unsupplied paywalled Winehog: Clos Saint-Denis overview (2015-08-30, https://winehog.org/vineyard-insight-clos-saint-denis-the-queen-of-morey-24456/); Domaine Arlaud (2024-09-24, https://winehog.org/terroir-insight-domaine-arlaud-clos-saint-denis-2-33130/); Domaine Dujac (2017-08-23, https://winehog.org/terroir-insight-domaine-dujac-clos-saint-denis-32844/). Only available public text is used; no login or paywall bypass.",
+    "Seven supplied Winehog articles are reviewed, plus the public Chezeaux article accessed directly. Six critic research entries give 12 individual exact-number-and-area matches and 12 named-area census rows. CLF AB403 remains an area mismatch. Some lazy-loaded producer maps are absent; no map-only allocation or correction is made.",
+    "The Clos Saint-Denis overview, Arlaud and Dujac WebArchives are now supplied and fully reviewed. No requested Clos Saint-Denis Winehog article remains an access gap. The overview AB433/1971 expansion hypothesis and Arlaud acquisition history remain unresolved evidence, not parcel facts.",
     "The public 2025 Chezeaux article distinguishes the new estate from Hudelot-Noellat. The supplied 2024 Ponsot article leaves recent operator years uncertain. Neither article assigns a current tenant to AB246/255.",
     "Former AP26 reaches AP232/AP233 through existing official DFI ancestry, without current ownership allocation. Other unmatched old references remain unresolved. Original property/lease instruments, paid SPF copies and present-season confirmation remain gaps."
   ],
@@ -800,6 +1006,20 @@
       "printedReference": "AB251, 5817 m2; AB276, 924 m2",
       "parcelIds": [],
       "limitation": "These original historical references are not current mapped parcels and no documented DFI ancestry or accepted successor reaches the present selection. They are not forced onto nearby AB438 or other parcels.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "csd-winehog-overview",
+      "printedReference": "AB433: conjectural 0.058 ha portion, possibly added in 1971",
+      "parcelIds": [],
+      "limitation": "The article explicitly proposes this as an unconfirmed explanation of a whole-cru area difference. Current AB433 is 854 m2, not a confirmed 580 m2 parcel; no accepted partition, ownership or appellation-boundary correction is inferred.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "csd-winehog-overview",
+      "printedReference": "1944 section A: 1402 (2.1420 ha); 1403-1410 and 1414-1421; 1422-1428; grouped and partial Les Chaffots references beginning 1429-1435",
+      "parcelIds": [],
+      "limitation": "A1402 and the grouped or fractional old section-A references lack documented DFI ancestry or an accepted successor into the current selection. The reproduced classification decree is not producer or current ownership evidence.",
       "currentFarmer": null
     }
   ]

@@ -826,9 +826,29 @@ class ClosSaintDenisTier2Tests(unittest.TestCase):
             self.assertIn(old['id'], parcel['externalResearchIds'])
         self.assertEqual(ext['csd-wh-clf']['parcelIds'], ['21442000AB0405'])
         self.assertIn('492', self.curation['unmatchedPrintedReferences'][0]['limitation'])
-        self.assertEqual(len(self.curation['producerHoldings']), 7)
+        self.assertEqual(len(self.curation['producerHoldings']), 12)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
-        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (16, 33))
+        self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved']), (17, 32))
+
+    def test_final_archives_do_not_invent_rights_or_confirm_expansion(self):
+        ext = {x['id']: x for x in self.curation['externalResearch']}
+        self.assertEqual(ext['csd-wh-dujac']['printedAreasM2'],
+                         {'AB409': 10062, 'AB410': 700, 'AB248': 2727, 'AB253': 850})
+        self.assertEqual(ext['csd-wh-arlaud']['printedAreasM2'], {'AB305': 1264, 'AB306': 504})
+        parcel = next(p for p in self.register['parcels'] if p['parcelId'] == '21442000AB0410')
+        self.assertEqual(parcel['recordedRights'], [])
+        self.assertEqual([(x['name'], x['basis']) for x in parcel['candidateLeads']],
+                         [('Domaine Dujac', 'critic-named-cadastral-reference')])
+        self.assertFalse(any('21442000AB0433' in x['parcelIds'] for x in ext.values()))
+        rejected = [x for x in self.curation['unmatchedPrintedReferences']
+                    if x['sourceId'] == 'csd-winehog-overview']
+        self.assertEqual(len(rejected), 2)
+        self.assertTrue(all(not x['parcelIds'] and x['currentFarmer'] is None for x in rejected))
+        self.assertIn('unconfirmed', rejected[0]['limitation'])
+        sources = {x['id']: x for x in self.curation['sources']}
+        self.assertEqual(sources['csd-winehog-arlaud']['documentDate'], '2024-09-24')
+        self.assertIn('map labelled 2017', sources['csd-winehog-arlaud']['finding'])
+        self.assertFalse(any(x.startswith('Unsupplied paywalled') for x in self.curation['accessGaps']))
 
     def test_new_screening_and_reused_bundled_deed_are_not_double_counted(self):
         sources = {s['id']: s for s in self.table['sources']}
