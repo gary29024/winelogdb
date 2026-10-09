@@ -11,10 +11,13 @@ import { prepareRecognitionImage } from './prepareImage';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { AppIcon } from '../../components/AppIcons';
 import { stripAiTransportMetadata } from '../../lib/credits/response';
+import { ScanBeam,ScanProgress } from '../../components/ScanProgress';
 
 type Item={file:File;recognitionFile?:File;preview:string;status:string;progress:number;error?:string;metadata?:PhotoMetadata;width?:number;height?:number};
 type RecognitionErrorBody={error?:unknown;requestId?:unknown};
 type LightboxPhoto={src:string;alt:string};
+/** What recognition reads off a label, roughly in the order it matters. */
+const SCAN_STEPS=['Reading the label…','Finding the producer…','Checking the vintage…','Placing the region and appellation…','Noting grapes and style…','Putting it all together…'] as const;
 const readError=(value:unknown)=>{
   const body=typeof value==='object'&&value!==null?value as RecognitionErrorBody:{};
   const message=typeof body.error==='string'?body.error:'Request failed';
@@ -27,7 +30,7 @@ async function readResponse(response:Response){
 }
 
 export function UploadPage(){
-  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState(''),[identifying,setIdentifying]=useState(false),[lightbox,setLightbox]=useState<LightboxPhoto|null>(null);
+  const [items,setItems]=useState<Item[]>([]),[review,setReview]=useState<RecognitionResult>(),[scanError,setScanError]=useState(''),[identifying,setIdentifying]=useState(false),[scanStartedAt,setScanStartedAt]=useState<number|null>(null),[lightbox,setLightbox]=useState<LightboxPhoto|null>(null);
   const input=useRef<HTMLInputElement>(null);
   const navigate=useNavigate();
   function failAll(message:string){setItems(xs=>xs.map(x=>({...x,status:'failed',progress:0,error:message})));setScanError(message);setIdentifying(false)}
@@ -47,17 +50,15 @@ export function UploadPage(){
 
   async function identify(){
     if(review||identifying)return;
-    let slowTimer:number|undefined;
     try{
       setScanError('');setReview(undefined);setLightbox(null);
       if(items.some(x=>!x.recognitionFile||!x.width||!x.height)){failAll('One or more photos are not ready. Choose the photos again.');return}
-      setIdentifying(true);
-      setItems(xs=>xs.map(x=>({...x,status:'recognizing together',progress:60,error:undefined})));
-      slowTimer=window.setTimeout(()=>setItems(xs=>xs.map(x=>({...x,status:'still identifying — taking longer than usual',progress:75}))),30_000);
+      setIdentifying(true);setScanStartedAt(null);
+      setItems(xs=>xs.map(x=>({...x,status:'identifying',progress:60,error:undefined})));
       const fd=new FormData();
       items.forEach(x=>fd.append('images',x.recognitionFile!));
       fd.append('metadata',JSON.stringify(items.map(x=>x.metadata??{capturedAt:null,latitude:null,longitude:null,source:'none'})));
-      const rr=await apiFetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd});
+      const rr=await apiFetch('/api/recognition',{method:'POST',headers:authHeaders(),body:fd},{onRunStart:()=>setScanStartedAt(Date.now())});
       const response=await readResponse(rr);
       if(rr.status===401){clearSession();navigate('/login',{replace:true});return}
       if(!rr.ok){failAll(readError(response));return}
@@ -65,7 +66,7 @@ export function UploadPage(){
       setItems(xs=>xs.map(x=>({...x,status:'Successfully identified',progress:100,error:undefined})));
       setReview(result);
     }catch(e){failAll((e as Error).message||'Recognition failed unexpectedly')}
-    finally{if(slowTimer!==undefined)window.clearTimeout(slowTimer);setIdentifying(false)}
+    finally{setIdentifying(false)}
   }
 
   const photos=items.filter(x=>x.width&&x.height).map(x=>({file:x.file,metadata:x.metadata,width:x.width!,height:x.height!}));
@@ -79,7 +80,7 @@ export function UploadPage(){
       <button type="button" className="scan-button primary" onClick={()=>input.current?.click()}>Scan Wine</button>
       <input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/>
     </div>}
-    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>{review?'Identification completed · tap a photo to enlarge it':scanError?'Identification failed':identifying?'Identifying your wine…':items.some(x=>x.status==='preparing')?'Preparing photos…':'Ready to identify'}</span></div>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}<ul className="upload-list" aria-live="polite">{items.map((x,i)=>{const alt=`Wine label ${i+1}`;return <li key={x.preview}>{review?<button type="button" className="photo-lightbox-trigger" onClick={()=>setLightbox({src:x.preview,alt})} aria-label={`Enlarge ${alt}`}><img src={x.preview} alt={alt}/></button>:<img src={x.preview} alt={alt}/>}<div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}</span><progress value={x.progress} max="100">{x.progress}%</progress></div></li>})}</ul><button className="wide-action primary" onClick={identify} disabled={Boolean(review)||identifying||items.some(x=>x.status==='preparing')}>{review?'Identification completed':identifying?'Identifying…':'Identify this wine'}</button><button type="button" className="rescan-link" disabled={identifying} onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
+    {items.length>0&&<><div className="scan-summary"><strong>{items.length} photo{items.length===1?'':'s'} selected</strong><span>{review?'Identification completed · tap a photo to enlarge it':scanError?'Identification failed':identifying?'Identifying your wine…':items.some(x=>x.status==='preparing')?'Preparing photos…':'Ready to identify'}</span></div>{scanError&&<p role="alert" className="scan-error">{scanError}</p>}{identifying?<div className="scan-stage"><div className={`scan-stage-photos${items.length===1?' single':''}`}>{items.map((x,i)=><div className="scan-stage-photo" key={x.preview}><img src={x.preview} alt={`Wine label ${i+1}`}/><ScanBeam delay={i*0.45}/></div>)}</div><ScanProgress startedAt={scanStartedAt} steps={SCAN_STEPS} slowStep="Still reading — some labels take a little longer…" label="Identifying your wine"/></div>:<ul className="upload-list" aria-live="polite">{items.map((x,i)=>{const alt=`Wine label ${i+1}`;return <li key={x.preview}>{review?<button type="button" className="photo-lightbox-trigger" onClick={()=>setLightbox({src:x.preview,alt})} aria-label={`Enlarge ${alt}`}><img src={x.preview} alt={alt}/></button>:<img src={x.preview} alt={alt}/>}<div><strong>{i===0?'Primary label':`Additional label ${i+1}`}</strong><span>{x.status}</span><progress value={x.progress} max="100">{x.progress}%</progress></div></li>})}</ul>}<button className="wide-action primary" onClick={identify} disabled={Boolean(review)||identifying||items.some(x=>x.status==='preparing')}>{review?'Identification completed':identifying?'Identifying…':'Identify this wine'}</button><button type="button" className="rescan-link" disabled={identifying} onClick={()=>input.current?.click()}>Choose different photos</button><input ref={input} className="visually-hidden" type="file" accept="image/*" multiple onChange={e=>void choose(Array.from(e.target.files??[]))}/></>}
     {review&&<div className="review"><p className="eyebrow">REVIEW</p><h2>Identification Results</h2><WineForm photos={photos} initial={{producer:review.producer??'',wineName:review.wineName??'',vintage:review.vintage,recognizedProducer:review.recognizedProducer,recognizedWineName:review.recognizedWineName,recognizedVintageText:review.recognizedVintageText,vintageKind:review.vintageKind,releaseDesignation:review.releaseDesignation,country:review.country,region:review.region,appellation:review.appellation,recognizedRegion:review.recognizedRegion,recognizedAppellation:review.recognizedAppellation,grapes:review.grapes,grapeBlend:review.grapeBlend,wineStyle:review.style,alcoholPercentage:review.alcoholPercentage,sparklingDetails:review.sparklingDetails,tastingDate:review.tastingDate,locationName:review.locationName,latitude:review.latitude,longitude:review.longitude,tags:derivedTags({country:review.country,region:review.region,appellation:review.appellation,grapes:review.grapes,style:review.style}),recognitionConfidence:review.confidence,recognitionStatus:'review'}}/></div>}
     {lightbox&&<ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={()=>setLightbox(null)}/>} 
   </section>;
