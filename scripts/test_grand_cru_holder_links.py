@@ -1316,7 +1316,7 @@ class MontrachetTierTwoTests(unittest.TestCase):
         for holder in self.curation['holders']:
             self.assertTrue(self.table['holders'][holder['holderId']]['searches'])
             self.assertFalse(holder['parcelOperationConfirmed'])
-        for hid in ('212101505', 'U21850980', 'U18179542'):
+        for hid in ('212101505', 'U21850980'):
             self.assertFalse(self.table['holders'][hid].get('links'))
             self.assertNotIn(hid, self.evidence['holderDomains'])
         self.assertNotIn('identity', self.table['holders']['U21850980'])
@@ -1367,8 +1367,9 @@ class MontrachetTierTwoTests(unittest.TestCase):
         records = [x for x in self.curation['externalResearch'] if x['id'].startswith('mt-winehog-')]
         direct = {p for x in records for p in x['parcelIds']}
         self.assertEqual(direct, {'21512000AH0067', '21512000AH0066', '21150000AE0031',
-                                  '21150000AE0129', '21150000AE0130', '21150000AE0025', '21150000AE0029'})
-        for pid in ('21150000AE0030', '21150000AE0037', '21150000AE0134', '21150000AE0024'):
+                                  '21150000AE0129', '21150000AE0130', '21150000AE0025', '21150000AE0029',
+                                  '21150000AE0024', '21150000AE0173'})
+        for pid in ('21150000AE0030', '21150000AE0037', '21150000AE0134'):
             self.assertNotIn(pid, direct)
         colin = next(x for x in records if x['id'].endswith('-colin'))
         self.assertEqual(colin['parcelIds'], [])
@@ -1377,7 +1378,7 @@ class MontrachetTierTwoTests(unittest.TestCase):
         unmatched = self.curation['unmatchedPrintedReferences']
         self.assertTrue(any('0.2009' in x['printedReference'] for x in unmatched))
         self.assertTrue(all(not x['parcelIds'] for x in unmatched))
-        self.assertEqual(len([x for x in self.curation['sources'] if x['id'].startswith('mt-winehog-')]), 6)
+        self.assertEqual(len([x for x in self.curation['sources'] if x['id'].startswith('mt-winehog-')]), 9)
 
     def test_individual_and_company_tenants_remain_distinct(self):
         fs = {f['id']: f for f in self.curation['parcelFilings']}
@@ -1389,6 +1390,53 @@ class MontrachetTierTwoTests(unittest.TestCase):
         for h in self.curation['producerHoldings']:
             self.assertNotIn('parcelIds', h)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_printed_group_totals_name_parcels_only_when_today_sums_exactly(self):
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: v['parcelIds'] for k, v in groups.items()}, {
+            'mt-group-leflaive-chevalier': ['21512000AH0077', '21512000AH0131', '21512000AH0149'],
+            'mt-group-bouchard-chevalier': ['21512000AH0011']})
+        for item in groups.values():
+            group = item['areaEvidence']['groupParcelAreasM2']
+            self.assertEqual(sum(group.values()), item['areaEvidence']['printedTotalM2'])
+            self.assertTrue(set(item['parcelIds']) <= set(group))
+            self.assertIsNone(item['currentFarmer'])
+        # Puligny 118-121 prints 0.8 ha against 7,998 m² today: a rounded total names no parcel.
+        self.assertTrue(any(x['printedReference'].startswith('Puligny 118/119/120/121')
+                            for x in self.curation['unmatchedPrintedReferences']))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n in (118, 119, 120, 121):
+            self.assertEqual(rows[f'21512000AH{n:04}']['researchStatus'], 'unresolved')
+
+    def test_laguiche_reaches_drouhin_only_as_a_provisional_reported_tenancy(self):
+        links = self.table['holders']['U18179542']['links']
+        self.assertEqual([(x['domaine'], x['relation'], x['crus'], x['reviewStatus']) for x in links],
+                         [('Maison Joseph Drouhin', 'reported-tenancy', ['montrachet'], 'provisional')])
+        holder = next(h for h in self.curation['holders'] if h['holderId'] == 'U18179542')
+        self.assertEqual(holder['basis'], 'reported-operator-relationship')
+        self.assertFalse(holder['parcelOperationConfirmed'])
+        lease = next(f for f in self.curation['parcelFilings'] if f['id'] == 'mt-laguiche-2002')['leaseEvidence'][0]
+        self.assertNotIn('Drouhin', ' '.join(lease['tenants']))
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0064')
+        self.assertEqual(row['researchStatus'], 'holder-lead')
+        self.assertIsNone(row['currentFarmer'])
+
+    def test_map_readings_stay_labelled_by_how_they_were_matched(self):
+        research = {x['id']: x for x in self.curation['externalResearch']}
+        lamy = research['mt-winehog-32708-lamy-pillot']
+        self.assertEqual((lamy['basis'], lamy['printedReferences'], lamy['parcelAreasM2']),
+                         ('critic-named-cadastral-reference', ['AE24'], {'21150000AE0024': 542}))
+        fleurot = research['mt-winehog-29563-fleurot']
+        self.assertEqual((fleurot['basis'], fleurot['printedReferences'], fleurot['parcelAreasM2']),
+                         ('critic-attribution-area-reconstructed', [], {'21150000AE0173': 405}))
+        self.assertFalse(any('34/24' in x['printedReference'] or 'Chassagne 34' in x['printedReference']
+                             for x in self.curation['unmatchedPrintedReferences']))
+        supplied = [s for s in self.curation['sources'] if s.get('suppliedImages')]
+        self.assertTrue(supplied)
+        for source in supplied:
+            for image in source['suppliedImages']:
+                self.assertRegex(image['sha256'], r'^[0-9a-f]{64}$')
 
 
 if __name__ == '__main__':

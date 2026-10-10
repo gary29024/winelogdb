@@ -37,11 +37,12 @@ describe('Montrachet bundle reviewed crus',()=>{
   for(const cru of tier2){
    for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:true,evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(12);
-   expect(evidence.holderDomains).not.toHaveProperty('U18179542');
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(13);
+   // The Laguiche GFA reaches Drouhin only as a reported arrangement, never as a filed lease.
+   expect(evidence.holderDomains?.U18179542).toMatchObject({name:'Maison Joseph Drouhin',basis:'reported-operator-relationship'});
    expect(evidence.holderDomains).not.toHaveProperty('U21850980');
    const register=read(`docs/research/${cru.slug}/register.json`);
-   expect(register.counts).toMatchObject({holderLead:32,unresolved:15,withParcelFiling:6,currentFarmerConfirmed:0});
+   expect(register.counts).toMatchObject({holderLead:37,unresolved:10,withParcelFiling:6,currentFarmerConfirmed:0});
    expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);
   }
  });
