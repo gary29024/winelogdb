@@ -8,6 +8,9 @@ import '../../settingsCards.css';
 import { bootstrapAccount,getAccount,logout,setFriendRequestCount } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
 import { setDefaultFriendShare,shareAllExistingWines } from '../wines/friendTags';
+import { requestTour } from '../onboarding/useTour';
+import { chapters,firstRun } from '../onboarding/steps';
+import { currentTourState } from '../onboarding/api';
 
 type Friend={id:string;display_name:string;handle?:string|null;defaultShare?:boolean;since?:string};
 type HandleCheck={state:'idle'|'checking'|'available'|'unavailable';message?:string};
@@ -20,6 +23,7 @@ const formatReset=(value:string)=>{const date=new Date(value);return Number.isNa
 const sections=[{id:'profile',label:'Profile'},{id:'friends',label:'Friends'},{id:'usage',label:'AI usage'}];
 export function AccountPage(){
  const [section,selectSection]=usePageSection(sections,'profile');
+ const seenTours=currentTourState().completed;
  const [friends,setFriends]=useState<Friend[]>([]),[access,setAccess]=useState<AccessSummary>({balance:0,reserved:0,available:0,sponsoredAi:true,actionAccess:null});
  const [requests,setRequests]=useState<Requests>({incoming:[],outgoing:[]});
  const [usage,setUsage]=useState<UsageSummary>({days:30,kinds:[],empty:true});
@@ -99,7 +103,23 @@ export function AccountPage(){
       <p className="settings-hint" id="handle-hint">Your name can be anything. Your user ID is unique, so friends can tell two people with the same name apart and find you by typing @{handle||'userid'}. 3–20 characters: lowercase letters, numbers, dots and underscores.</p>
       <div><button type="submit" className="settings-primary" disabled={busy||!name.trim()||!handle.trim()||handleCheck.state==='unavailable'||handleCheck.state==='checking'}>Save profile</button></div>
      </form>
+     {/* The closing step of the first-run tour promises this is here, so it has
+         to be. The overlay is mounted by Layout, which wraps this page, so
+         starting a tour from here spotlights the chrome around it - and a
+         chapter navigates away to the page it is about. Seen chapters are
+         ticked rather than hidden: they are worth re-reading, and a list that
+         empties itself as you use it stops being somewhere to look things up. */}
+     <div className="settings-card">
+      <div className="settings-card-head"><h2>Getting around</h2><small>Short walkthroughs of where everything lives.</small></div>
+      <ul className={`tour-chapters${seenTours.length?' has-seen':''}`}>
+       {[firstRun,...chapters].map(item=><li key={item.id}>
+        <button type="button" onClick={()=>requestTour(item.id)}><strong>{item.label}</strong><small>{item.blurb}</small></button>
+        {seenTours.includes(item.id)&&<span className="tour-chapter-seen" aria-label="Already seen">Seen</span>}
+       </li>)}
+      </ul>
+     </div>
      <div className="settings-card settings-split"><div><strong>Signed in</strong><span className="settings-hint">{account?.email}</span></div><button type="button" onClick={()=>void logout()}>Sign out</button></div>
+
     </section>
     <section hidden={section!=='friends'} aria-label="Friends settings">
      {resourceStatus(['friends','requests','code'])}
