@@ -1287,6 +1287,29 @@ class MontrachetTierTwoTests(unittest.TestCase):
         cls.table = read_json(HOLDER_LINKS)
         cls.evidence = json.loads(cls.files[cls.context.evidence])
 
+    def test_thenard_historical_aggregate_does_not_become_a_current_parcel_or_identity(self):
+        source = next(s for s in self.table['sources'] if s['id'] == 'mt-pappers-thenard-1920')
+        self.assertEqual((source['documentDate'], source['filingDate']), ('1920-01-03', '2002-10-17'))
+        self.assertEqual((source['pageCount'], source['screenedPages']), (55, 55))
+        holding = next(h for h in self.curation['producerHoldings'] if h['id'] == 'mt-thenard-1920-historical')
+        self.assertIsNone(holding['publishedAreaHa'])
+        self.assertEqual(holding['otherPublishedAreas'][0]['publishedAreaHa'], 1.7976)
+        self.assertEqual(holding['producerHolderIds'] + holding['ownerHolderIds'], [])
+        self.assertNotIn('parcelIds', holding)
+        census = [h for a in self.register['namedAreaCensus'] for h in a['holdings']
+                  if h['holdingId'] == holding['id']]
+        self.assertTrue(census)
+        self.assertTrue(all(h['beyondCompanyRecordsM2'] is None for h in census))
+        printed = next(x for x in self.curation['unmatchedPrintedReferences'] if x['sourceId'] == source['id'])
+        self.assertEqual(printed['parcelIds'], [])
+        self.assertIn('list ordinal', printed['limitation'])
+        self.assertFalse(self.table['holders']['U21850980'].get('identity'))
+        self.assertEqual(self.table['holders']['U21850980']['effort']['pagesRead'], 31)
+        for row in self.register['parcels']:
+            if row['parcelId'] in ('21150000AE0032', '21150000AE0034'):
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIsNone(row['currentFarmer'])
+
     def test_all_holders_have_searches_without_invented_company_links(self):
         self.assertEqual(len(self.curation['holders']), 15)
         self.assertEqual(self.curation['holderLinks'], 'shared')

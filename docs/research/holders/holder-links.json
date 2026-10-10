@@ -12619,6 +12619,40 @@
       "reviewedAt": "2026-10-09",
       "access": "read",
       "finding": "The official legal notice identifies SCEA Domaine Jacques Prieur, SIREN 778233098."
+    },
+    {
+      "url": "https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172",
+      "retrievedFrom": "User-supplied Pappers PDF",
+      "retrievedAt": "2026-10-10T00:46:08.609392+00:00",
+      "sha256": "a9a4d05f83f5d4d5e1df5d57b89ce987ad2cd314909e30ec7f0f7934fa2723e0",
+      "bytes": 2004690,
+      "filingDate": "2002-10-17",
+      "pageCount": 55,
+      "id": "mt-pappers-thenard-1920",
+      "title": "Domaine Thenard: 1920 formation in the 2002 deposit",
+      "type": "company-filing",
+      "documentDate": "1920-01-03",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "screenedPages": 55,
+      "reviewedPages": [
+        1,
+        10,
+        36,
+        41,
+        55
+      ],
+      "imageReviewedPages": [
+        1,
+        10,
+        36,
+        41,
+        55
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
+      "finding": "The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels.",
+      "dateNote": "The 2002 filing date is not a land-transfer date. The typed copy repeats the 1920 contribution; no modern reference is supplied."
     }
   ],
   "holders": {
@@ -19505,6 +19539,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Montrachet #446 pass: 3 distinct filings / 31 pages. Three distinct selected files (31 pages) concern share succession and updated statutes, without AE32/34 and their individual areas. A company candidate exists, but the U21850980 identity crosswalk is not established by the reviewed company records; no domaine link asserted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Supplemental review of mt-pappers-thenard-1920: one additional distinct PDF / 55 pages, separate from the preserved original 3-file / 31-page effort. The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels."
         }
       ],
       "effort": {
