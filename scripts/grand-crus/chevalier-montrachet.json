@@ -4,7 +4,7 @@
   "parentFeatureId": "inao-denom-539",
   "appellationId": 157,
   "issue": 401,
-  "tier": 1,
+  "tier": 2,
   "bundle": "montrachet",
   "villageMaps": [
     "puligny-montrachet"
@@ -16,7 +16,8 @@
   "research": {
     "methodDoc": "docs/research/chevalier-montrachet/README.md",
     "namedAreas": "reviewed",
-    "producerResearch": "deferred-tier-2"
+    "producerResearch": "deferred-tier-2",
+    "filingsDoc": "docs/research/chevalier-montrachet/filings.md"
   },
   "namedPlots": {
     "parentMatchId": "france/burgundy/cote-de-beaune/chevalier-montrachet",

@@ -40,7 +40,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"chapelle-chambertin",name:"Chapelle-Chambertin",parentFeatureId:"inao-denom-475",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chapelle-chambertin"],domaineGrouping:false},
  {slug:"charlemagne",name:"Charlemagne",parentFeatureId:"inao-denom-476",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["charlemagne"],domaineGrouping:false},
  {slug:"charmes-chambertin",name:"Charmes-Chambertin",parentFeatureId:"inao-denom-477",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["charmes-chambertin"],domaineGrouping:false},
- {slug:"chevalier-montrachet",name:"Chevalier-Montrachet",parentFeatureId:"inao-denom-539",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["chevalier-montrachet"],domaineGrouping:false},
+ {slug:"chevalier-montrachet",name:"Chevalier-Montrachet",parentFeatureId:"inao-denom-539",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["chevalier-montrachet"],domaineGrouping:true},
  {slug:"clos-de-la-roche",name:"Clos de la Roche",parentFeatureId:"inao-denom-544",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-la-roche"],domaineGrouping:true},
  {slug:"clos-de-tart",name:"Clos de Tart",parentFeatureId:"inao-denom-545",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-de-tart"],domaineGrouping:true},
  {slug:"clos-de-vougeot",name:"Clos de Vougeot",parentFeatureId:"inao-denom-546",villageMaps:["vougeot"],bundle:"vougeot",evidenceFrom:["clos-de-vougeot"],domaineGrouping:true},

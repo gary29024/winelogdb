@@ -156,7 +156,10 @@ the historical extension for a cru.
   without its final zero (Winehog prints both 4.7750 ha and 4.775 ha) may print 1.158 ha for
   1.1580 ha; such a three-decimal total counts only when the entry records
   `trailingZeroDropped` and today's sum matches it exactly. A rounded or partial total stays
-  in `unmatchedPrintedReferences`.
+  in `unmatchedPrintedReferences`. When one source prints the
+  numbers and another source about the same holding prints the total (for example a critic's
+  map and the estate's own area table), the entry records both (`referencesSourceId`,
+  `totalSourceId`, which must differ) and the same exact-sum check applies.
 
 #### Shared holder research
 

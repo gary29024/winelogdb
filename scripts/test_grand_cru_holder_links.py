@@ -1479,5 +1479,111 @@ class MontrachetTierTwoTests(unittest.TestCase):
                 self.assertRegex(image['sha256'], r'^[0-9a-f]{64}$')
 
 
+class ChevalierTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('chevalier-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_supplied_violland_enclosure_and_auvenay_cash_increase_add_no_parcel_links(self):
+        sources = {s['id']: s for s in self.table['sources']}
+        violland = sources['ch-pappers-violland-1996']
+        self.assertEqual((violland['documentDate'], violland['filingDate']), ('1996-10-08', '1996-11-06'))
+        self.assertIn('349583500', violland['finding'])
+        self.assertIn('515420305', violland['finding'])
+        self.assertFalse(self.table['holders']['349583500'].get('links'))
+        self.assertEqual(self.table['holders']['349583500']['effort']['pagesRead'], 30)
+        auvenay = sources['ch-pappers-auvenay-2012']
+        self.assertEqual((auvenay['documentDate'], auvenay['filingDate']), ('2012-10-29', '2013-01-14'))
+        self.assertEqual((auvenay['pageCount'], auvenay['screenedPages']), (31, 31))
+        self.assertEqual(self.table['holders']['778252445']['effort']['pagesRead'], 113)
+        ids = {violland['id'], auvenay['id']}
+        self.assertFalse(any(f['sourceId'] in ids for f in self.curation['parcelFilings']))
+        self.assertEqual(self.register['counts']['withParcelFiling'], 3)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_every_holder_is_reviewed_without_name_based_company_links(self):
+        self.assertEqual(len(self.curation['holders']), 16)
+        for h in self.curation['holders']:
+            self.assertTrue(self.table['holders'][h['holderId']]['searches'])
+            self.assertFalse(h['parcelOperationConfirmed'])
+        for hid in ('349583500', '212105126', '752059824'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+        self.assertEqual(self.table['holders']['U21845345']['identity']['companySiren'], '778233098')
+
+    def test_montille_partners_reach_montille_only_through_shared_management(self):
+        links = self.table['holders']['751811472']['links']
+        self.assertEqual([(x['domaine'], x['relation'], x['reviewStatus']) for x in links],
+                         [('Domaine de Montille', 'management', 'reviewed')])
+        sources = {s['id']: s for s in self.table['sources']}
+        self.assertTrue(all(sources[s]['type'] == 'registry' for s in links[0]['sourceIds']))
+        holder = next(h for h in self.curation['holders'] if h['holderId'] == '751811472')
+        self.assertEqual(holder['basis'], 'management-only-lead')
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0169')
+        self.assertEqual((row['researchStatus'], row['parcelFilingIds'], row['currentFarmer']), ('holder-lead', [], None))
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_exact_schedules_keep_prieur_number_mismatch_unmatched(self):
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, {'21512000AH0008': 724, '21512000AH0092': 2538, '21512000AH0093': 2537})
+        row = next(x for x in self.curation['unmatchedPrintedReferences'] if 'AH3' in x['printedReference'])
+        self.assertEqual(row['parcelIds'], [])
+        current = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0123')
+        self.assertEqual(current['parcelFilingIds'], [])
+        self.assertNotIn('21512000AH0003', current['documentedAncestry']['ancestorIds'])
+
+    def test_opale_history_reaches_both_daughters_without_transferring_a_tenant(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'ch-opale-ah150-2006')
+        self.assertEqual(x['parcelIds'], [])
+        self.assertEqual(x['predecessorReferences'], {'21512000AH0150': ['21512000AH0182', '21512000AH0183']})
+        for pid in x['predecessorReferences']['21512000AH0150']:
+            row = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+            self.assertIn(x['id'], row['externalResearchIds'])
+            self.assertEqual(row['parcelFilingIds'], [])
+            self.assertIsNone(row['currentFarmer'])
+        prior = next(x for x in self.curation['externalResearch'] if x['id'] == 'ch-opale-ah151-2006')
+        self.assertIsNone(prior['producer'])
+
+    def test_latour_recitals_and_estate_census_do_not_verify_current_operation(self):
+        filings = [f for f in self.curation['parcelFilings'] if f['holderId'] in ('427468962', '427468988')]
+        self.assertEqual(len(filings), 2)
+        for f in filings:
+            lease = f['leaseEvidence'][0]
+            self.assertEqual(lease['kind'], 'existing-lease-recital')
+            self.assertEqual(lease['effectiveTo'], '2026-11-10')
+            self.assertIn('Société Civile Domaine Louis Latour (778159715)', lease['tenants'])
+        for h in self.curation['producerHoldings']:
+            self.assertNotIn('parcelIds', h)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_winehog_aggregate_totals_name_parcels_only_through_exact_group_sums(self):
+        items = [x for x in self.curation['externalResearch'] if x['id'].startswith('ch-winehog-')]
+        self.assertEqual({p for x in items for p in x['parcelIds']}, {'21512000AH0068', '21512000AH0126'})
+        self.assertFalse(any('2.3295' in x['printedReference'] or '1.8273' in x['printedReference']
+                             for x in self.curation['unmatchedPrintedReferences']))
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual(sorted(groups), ['ch-group-bouchard-chevalier', 'ch-group-chartron-chevalier',
+                                          'ch-group-leflaive-chevalier'])
+        for item in groups.values():
+            evidence = item['areaEvidence']
+            self.assertEqual(sum(evidence['groupParcelAreasM2'].values()), evidence['printedTotalM2'])
+            self.assertEqual(set(item['parcelIds']), set(evidence['groupParcelAreasM2']))
+            self.assertIsNone(item['currentFarmer'])
+        self.assertEqual(groups['ch-group-leflaive-chevalier']['areaEvidence']['printedTotalM2'], 18273)
+        self.assertEqual(groups['ch-group-bouchard-chevalier']['areaEvidence']['printedTotalM2'], 23295)
+        # Chartron's numbers come from Winehog and its total from the estate's own table; both are cited.
+        chartron = groups['ch-group-chartron-chevalier']
+        self.assertEqual((chartron['areaEvidence']['referencesSourceId'], chartron['areaEvidence']['totalSourceId']),
+                         ('ch-winehog-36080', 'ch-chartron-surfaces-2021'))
+        self.assertEqual(chartron['parcelAreasM2'], {'21512000AH0140': 2778, '21512000AH0141': 2753})
+        self.assertFalse(any('Chartron' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertEqual(len([x for x in self.curation['producerHoldings'] if x['id'] == 'ch-winehog-holding-leflaive']), 1)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+
 if __name__ == '__main__':
     unittest.main()

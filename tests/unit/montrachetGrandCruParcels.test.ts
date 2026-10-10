@@ -7,10 +7,10 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 
 // Extend Tier 2 only after committing each independent holder-research pass.
 const tier2=[
- {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47},
+ {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:37,unresolved:10,filings:6,groups:13,unlinked:['U21850980']},
+ {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:34,unresolved:10,filings:3,groups:13,unlinked:['349583500','212105126','752059824']},
 ];
 const tier1=[
- {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44},
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38},
  {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
@@ -37,12 +37,12 @@ describe('Montrachet bundle reviewed crus',()=>{
   for(const cru of tier2){
    for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:true,evidenceFrom:[cru.slug]});
    const evidence=await loadParcelEvidence(cru.id);
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(13);
+   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(cru.groups);
+   for(const hid of cru.unlinked)expect(evidence.holderDomains).not.toHaveProperty(hid);
    // The Laguiche GFA reaches Drouhin only as a reported arrangement, never as a filed lease.
-   expect(evidence.holderDomains?.U18179542).toMatchObject({name:'Maison Joseph Drouhin',basis:'reported-operator-relationship'});
-   expect(evidence.holderDomains).not.toHaveProperty('U21850980');
+   if(cru.slug==='montrachet')expect(evidence.holderDomains?.U18179542).toMatchObject({name:'Maison Joseph Drouhin',basis:'reported-operator-relationship'});
    const register=read(`docs/research/${cru.slug}/register.json`);
-   expect(register.counts).toMatchObject({holderLead:37,unresolved:10,withParcelFiling:6,currentFarmerConfirmed:0});
+   expect(register.counts).toMatchObject({holderLead:cru.leads,unresolved:cru.unresolved,withParcelFiling:cru.filings,currentFarmerConfirmed:0});
    expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);
   }
  });

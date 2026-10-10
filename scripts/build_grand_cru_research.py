@@ -91,6 +91,10 @@ def check_group_total(item, snapshot_areas):
     require(item['parcelIds'] and set(item['parcelIds']) <= set(group) and
             item.get('parcelAreasM2', {}) == {pid: group[pid] for pid in item['parcelIds']},
             'Group research names only parcels of its printed group, with their cadastral areas')
+    # When one source prints the numbers and another, about the same holding, prints the total, both are cited.
+    split = [evidence[k] for k in ('referencesSourceId', 'totalSourceId') if k in evidence]
+    require(len(split) in (0, 2) and len(set(split)) == len(split) and set(split) <= set(item['sourceIds']),
+            'A group total from a second source names both the reference and the total source')
 
 
 def build_register(manifest, asset, curation, history, sales, named_areas, context, notice_records=None):
