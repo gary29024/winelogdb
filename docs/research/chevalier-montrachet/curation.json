@@ -375,6 +375,76 @@
       "reviewedPages": [
         1
       ]
+    },
+    {
+      "id": "census-ch-bcolin-weibel",
+      "title": "Weibel Weine (CH): Bruno Colin Chevalier-Montrachet Grand Cru 2023",
+      "url": "https://weibel.inteco.ch/en/shop/chevalier-montrachet-grand-cru-aoc_5047",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:19:59+00:00",
+      "retrievedFrom": "https://weibel.inteco.ch/en/shop/chevalier-montrachet-grand-cru-aoc_5047",
+      "sha256": "8b91a6987faa28dbbd1204f8a6d29df39641cb7b093d29fa0c2fb61f60408dbe",
+      "bytes": 138369,
+      "finding": "An importer page gives Domaine Bruno Colin 0.04 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-ch-dancer-ifw",
+      "title": "International Fine Wines (AU): Domaine Vincent Dancer Grand Cru Chevalier-Montrachet 2023",
+      "url": "https://www.internationalfinewines.com.au/products/domaine-vincent-dancer-grand-cru-chevalier-montrachet-2023",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:23:31+00:00",
+      "retrievedFrom": "https://www.internationalfinewines.com.au/products/domaine-vincent-dancer-grand-cru-chevalier-montrachet-2023",
+      "sha256": "6c7a27c5e58befaaabafeb0aae4e987d62e239599301dd36d7d33389988fdccf",
+      "bytes": 759070,
+      "finding": "A merchant page gives Domaine Vincent Dancer 0.1 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-ch-dancer-hedonism",
+      "title": "Hedonism Wines: Chevalier-Montrachet, Vincent Dancer 2012",
+      "url": "https://hedonism.co.uk/product/chevalier-montrachet-vincent-dancer-2012",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:23:32+00:00",
+      "retrievedFrom": "https://hedonism.co.uk/product/chevalier-montrachet-vincent-dancer-2012",
+      "sha256": "02480a3d491132f9d5f25dd88bcaa55b1b19f2ea8fc2411b23ece798bfd1eab8",
+      "bytes": 641609,
+      "finding": "A merchant page gives Domaine Vincent Dancer 0.096 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-ch-niellon-hedonism",
+      "title": "Hedonism Wines: Chevalier-Montrachet, Michel Niellon 1993",
+      "url": "https://hedonism.co.uk/product/chevalier-montrachet-michel-niellon-1993",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:23:34+00:00",
+      "retrievedFrom": "https://hedonism.co.uk/product/chevalier-montrachet-michel-niellon-1993",
+      "sha256": "447c83a814f27a5ee4b00f3eacea5cbce386492327a1e7d628101a62b1b9c878",
+      "bytes": 623467,
+      "finding": "A merchant page gives Domaine Michel Niellon 0.23 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-ch-pcolin-hachette",
+      "title": "Guide Hachette des Vins: SARL Philippe Colin producer page (Chevalier-Montrachet review)",
+      "url": "https://www.hachette-vins.com/guide-vins/producteurs/51091/sarl-philippe-colin",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:23:33+00:00",
+      "retrievedFrom": "https://www.hachette-vins.com/guide-vins/producteurs/51091/sarl-philippe-colin",
+      "sha256": "f46bddce1648250f42ca07d7353e99fb9fec256fc4f6cdcb87ecc7df29f741ce",
+      "bytes": 299287,
+      "finding": "A free wine-guide page gives Domaine Philippe Colin 0.24 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
     }
   ],
   "holders": [
@@ -1173,6 +1243,89 @@
         "ch-chartron-surfaces-2021"
       ],
       "finding": "Published « Clos des Chevaliers » monopole, 55 a 31 ca. Whole-holding census context; the parcel reading is a separate research entry, and neither establishes current farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-census-domaine-bruno-colin",
+      "producer": "Domaine Bruno Colin",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.04,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-ch-bcolin-weibel"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-census-domaine-vincent-dancer",
+      "producer": "Domaine Vincent Dancer",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.1,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-ch-dancer-ifw"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.096,
+          "precision": "approximate",
+          "sourceId": "census-ch-dancer-hedonism",
+          "context": "Second published figure for the same holding."
+        }
+      ]
+    },
+    {
+      "id": "ch-census-domaine-michel-niellon",
+      "producer": "Domaine Michel Niellon",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.23,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-ch-niellon-hedonism"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-census-domaine-philippe-colin",
+      "producer": "Domaine Philippe Colin",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET",
+        "LE CAILLERET"
+      ],
+      "publishedAreaHa": 0.24,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-ch-pcolin-hachette"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
