@@ -223,6 +223,13 @@ class FarmingResearchTests(unittest.TestCase):
             self.build(research(exact, parcel_ids=(first, outside)))
         with self.assertRaisesRegex(ValueError, 'two or more parcels'):
             self.build(research(group[first], group_areas={first: group[first]}))
+        # One source can print the numbers and another, about the same holding, the total; both must be cited.
+        split = research(exact)
+        split['externalResearch'][-1]['areaEvidence'].update(referencesSourceId=source, totalSourceId='uncited-total')
+        with self.assertRaisesRegex(ValueError, 'names both the reference and the total source'):
+            self.build(split)
+        split['externalResearch'][-1]['areaEvidence']['totalSourceId'] = source
+        self.assertIn('test-group', next(p for p in self.build(split)['parcels'] if p['parcelId'] == first)['externalResearchIds'])
 
     def test_printed_references_reach_parcels_through_documented_dfi_lineage(self):
         # Corton's Le Corton plots 8 and 9 were merged and re-divided by DFI events; their spatial successors were rejected.

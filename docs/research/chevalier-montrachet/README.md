@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 1; 1 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 32; supported shared holder links and dated secondary research, distinct from current operation |
-| Parcels with no lead | 12; includes Chartron’s AH140 and AH141, printed without individual areas |
+| Parcels with holder or research leads | 34; supported shared holder links and dated secondary research, distinct from current operation |
+| Parcels with no lead | 10 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1989-09-22, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 158,219 / 17,210 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 159,330 / 17,425 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 44 unique parcels.
@@ -94,8 +94,8 @@ an unsearched interval is a gap, not absence of history.
 
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
-| Research leads | 0 | 32 |
-| Unresolved parcels | 44 | 12 |
+| Research leads | 0 | 34 |
+| Unresolved parcels | 44 | 10 |
 | Reviewed holder links applicable to the cru | 0 | 13 |
 | Parcels with exact company filings | 0 | 3 |
 | Current farmers verified | 0 | 0 |
@@ -164,7 +164,7 @@ All eight requested Chevalier Winehog articles were supplied as MHTML and review
 ## Owner decisions applied: 10 October 2026
 
 The owner reviewed the Montrachet stack on 10 October 2026. Two decisions add five
-Chevalier parcels with leads (27 to 32). Current farming stays unverified everywhere.
+Chevalier parcels with leads (27 to 32); the Chartron reading below adds two more. Current farming stays unverified everywhere.
 
 - **Printed group totals.** A source that prints several current numbers with one
   total area now names each parcel when today’s cadastral areas add up to that total
@@ -181,7 +181,13 @@ Chevalier parcels with leads (27 to 32). Current farming stays unverified everyw
   domaine heading. Management is not a lease.
 - **Supplied images.** The owner supplied 8 of the 9 missing images (`photos.zip`). They
   are hashed on their sources. They confirm the Leflaive and Bouchard readings and
-  outline Chartron’s AH140 and AH141, which still have no individual areas.
+  outline Chartron’s AH140 and AH141.
+- **Chartron: two sources combined (for owner review).** Winehog names Chartron’s
+  Clos des Chevaliers as AH140 and AH141 without areas. The estate’s own 2021 area table
+  gives the monopole as 55 a 31 ca without numbers. Today’s areas, 2,778 and 2,753 m²,
+  add up exactly to 5,531 m², so both parcels are named. The entry records which source
+  gives the numbers and which the total. This extends the rule to two sources, adding
+  two more parcels (32 to 34). It is a separate commit so it can be reverted alone.
 
 ## Supplemental Pappers review: 10 October 2026
 

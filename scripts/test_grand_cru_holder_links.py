@@ -1526,7 +1526,8 @@ class ChevalierTierTwoTests(unittest.TestCase):
                              for x in self.curation['unmatchedPrintedReferences']))
         groups = {x['id']: x for x in self.curation['externalResearch']
                   if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
-        self.assertEqual(sorted(groups), ['ch-group-bouchard-chevalier', 'ch-group-leflaive-chevalier'])
+        self.assertEqual(sorted(groups), ['ch-group-bouchard-chevalier', 'ch-group-chartron-chevalier',
+                                          'ch-group-leflaive-chevalier'])
         for item in groups.values():
             evidence = item['areaEvidence']
             self.assertEqual(sum(evidence['groupParcelAreasM2'].values()), evidence['printedTotalM2'])
@@ -1534,6 +1535,12 @@ class ChevalierTierTwoTests(unittest.TestCase):
             self.assertIsNone(item['currentFarmer'])
         self.assertEqual(groups['ch-group-leflaive-chevalier']['areaEvidence']['printedTotalM2'], 18273)
         self.assertEqual(groups['ch-group-bouchard-chevalier']['areaEvidence']['printedTotalM2'], 23295)
+        # Chartron's numbers come from Winehog and its total from the estate's own table; both are cited.
+        chartron = groups['ch-group-chartron-chevalier']
+        self.assertEqual((chartron['areaEvidence']['referencesSourceId'], chartron['areaEvidence']['totalSourceId']),
+                         ('ch-winehog-36080', 'ch-chartron-surfaces-2021'))
+        self.assertEqual(chartron['parcelAreasM2'], {'21512000AH0140': 2778, '21512000AH0141': 2753})
+        self.assertFalse(any('Chartron' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
         self.assertEqual(len([x for x in self.curation['producerHoldings'] if x['id'] == 'ch-winehog-holding-leflaive']), 1)
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 

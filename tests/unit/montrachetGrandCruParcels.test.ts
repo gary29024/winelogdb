@@ -8,7 +8,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 // Extend Tier 2 only after committing each independent holder-research pass.
 const tier2=[
  {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:37,unresolved:10,filings:6,groups:13,unlinked:['U21850980']},
- {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:32,unresolved:12,filings:3,groups:13,unlinked:['349583500','212105126','752059824']},
+ {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:34,unresolved:10,filings:3,groups:13,unlinked:['349583500','212105126','752059824']},
 ];
 const tier1=[
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89},

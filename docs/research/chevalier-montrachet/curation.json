@@ -264,7 +264,7 @@
       "bytes": 3101620,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:17 +0000",
-      "finding": "Chartron AH140/AH141 are printed, and outlined on the three maps supplied by the owner on 10 October 2026, but without individual areas, so this article alone matches neither. The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.",
+      "finding": "Chartron AH140/AH141 are printed, and outlined on the three maps supplied by the owner on 10 October 2026, without individual areas; the estate’s own table supplies their 55 a 31 ca total (see the Chartron group entry). The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.",
       "suppliedImages": [
         {
           "url": "https://winehog.org/wp-content/uploads/2018/09/chevalierchartron.jpg",
@@ -307,7 +307,7 @@
       "bytes": 3163470,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:27 +0000",
-      "finding": "d’Auvenay AH126 and 0.1632 ha match the current 1632 m² parcel. The reported 1992 acquisition remains secondary history. Neighbouring Chartron AH140/AH141 have no individual areas; no match is inferred.",
+      "finding": "d’Auvenay AH126 and 0.1632 ha match the current 1632 m² parcel. The reported 1992 acquisition remains secondary history. Neighbouring Chartron AH140/AH141 are named here without areas; their match rests on the Chartron article and the estate’s own total.",
       "missingEmbeddedImages": [
         "https://winehog.org/wp-content/uploads/2018/06/C5F549F8-BB22-409E-B252-8A7E78B876CA.jpeg"
       ],
@@ -357,6 +357,24 @@
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:43 +0000",
       "finding": "Distinguishes Puligny premier-cru Les Demoiselles from Chevalier’s Les Demoiselles. The reported Jadot and Latour holdings are 0.51 ha each, without individual cadastral numbers and areas. Historical expansion in 1938/1939 and 1974 is secondary context only.",
       "missingEmbeddedImages": []
+    },
+    {
+      "url": "https://www.bourgogne-chartron.com/wp-content/uploads/2021/12/surface-et-superficie.pdf",
+      "retrievedFrom": "https://www.bourgogne-chartron.com/nos-terroirs/ (linked as ‘Superficie et années de plantation de nos appellations’)",
+      "retrievedAt": "2026-10-10T05:05:06Z",
+      "sha256": "49c2dd9abf775a89ff76fcde9412b1353573319a60bad693e477dd364c2fd2a7",
+      "bytes": 280797,
+      "id": "ch-chartron-surfaces-2021",
+      "title": "Domaine Jean Chartron: area and planting years of its appellations",
+      "type": "estate",
+      "documentDate": "2021-12-21",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "The estate’s own one-page table gives Chevalier-Montrachet « Clos des Chevaliers » Grand Cru Monopole as 55 a 31 ca (5,531 m², planted 1947/1986). It names no parcel. The PDF was created on 21 December 2021; its text was confirmed on a rendered page.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
     }
   ],
   "holders": [
@@ -787,6 +805,45 @@
       "appNote": "Winehog prints AH1, AH5, AH6, AH9, AH10, AH11, AH12, AH13, AH14, AH122 with 2.3295 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
       "dateSourceId": "ch-winehog-40965",
       "currentFarmer": null
+    },
+    {
+      "id": "ch-group-chartron-chevalier",
+      "title": "Winehog and Chartron: the Clos des Chevaliers as AH140 and AH141",
+      "parcelIds": [
+        "21512000AH0140",
+        "21512000AH0141"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0140": 2778,
+        "21512000AH0141": 2753
+      },
+      "printedReferences": [
+        "AH140",
+        "AH141"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "55 a 31 ca",
+        "printedTotalM2": 5531,
+        "groupParcelAreasM2": {
+          "21512000AH0140": 2778,
+          "21512000AH0141": 2753
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "referencesSourceId": "ch-winehog-36080",
+        "totalSourceId": "ch-chartron-surfaces-2021",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) names Chartron’s Clos des Chevaliers as AH140 and AH141 and outlines both on its supplied map, without areas. The estate’s own 2021 table gives the monopole as 55 a 31 ca. Today’s cadastral areas, 2,778 and 2,753 m², add up exactly to 5,531 m². Two sources combined; secondary attribution only, and current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-36080",
+        "ch-chartron-surfaces-2021"
+      ],
+      "producer": "Domaine Jean Chartron",
+      "appNote": "Winehog names AH140 and AH141 for Chartron’s Clos des Chevaliers; the estate gives 55 a 31 ca, and today’s two cadastral areas add up exactly. Two sources combined; secondary attribution, current farming unverified.",
+      "dateSourceId": "ch-winehog-36080",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -1102,6 +1159,24 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "ch-holding-chartron",
+      "producer": "Domaine Jean Chartron",
+      "namedAreas": [
+        "CHEVALIER MONTRACHET"
+      ],
+      "publishedAreaHa": 0.5531,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "ch-chartron-surfaces-2021"
+      ],
+      "finding": "Published « Clos des Chevaliers » monopole, 55 a 31 ca. Whole-holding census context; the parcel reading is a separate research entry, and neither establishes current farming.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -1126,20 +1201,6 @@
       "printedReference": "Puligny-Montrachet AH3 (641 m²)",
       "parcelIds": [],
       "limitation": "The printed number is AH3, visually verified on page 9. Current AH123 also measures 641 m², but its documented predecessor is H123, not AH3. Equal area is not a crosswalk; no current match or corrected number is asserted.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "ch-winehog-36080",
-      "printedReference": "Chartron AH140 and AH141",
-      "parcelIds": [],
-      "limitation": "Printed references lack individual areas. The three maps, supplied by the owner on 10 October 2026, outline both plots but print no areas. The article’s schematic expansion labels 1/2/3 are not current cadastral numbers.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "ch-winehog-35640",
-      "printedReference": "Neighbouring Chartron AH140 and AH141",
-      "parcelIds": [],
-      "limitation": "The text identifies neighbouring parcels but gives no individual areas. The matching AH126 finding does not establish a match for its neighbours.",
       "currentFarmer": null
     },
     {

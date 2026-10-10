@@ -279,3 +279,10 @@ filing totals are unchanged.
 - The owner supplied 8 of the 9 missing images (`photos.zip`, SHA-256
   `22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd`). Their hashes are recorded on each
   source. One d’Auvenay image remains unreviewed.
+- Chartron’s Clos des Chevaliers is named as AH140 and AH141 by combining two sources. Winehog prints the numbers
+  without areas. The estate’s own area table (PDF created 2021-12-21; SHA-256
+  `49c2dd9abf775a89ff76fcde9412b1353573319a60bad693e477dd364c2fd2a7`, 280,797 bytes, 2026-10-10T05:05:06Z) gives
+  55 a 31 ca without numbers. Today’s cadastral areas add up exactly. Domaine Jean Chartron’s own filings
+  (330629635; 4 filings / 166 pages screened in this session) print a lease mandate over family-owned land and a
+  fermage expense. They name no AH reference, lessor or area, so they add no parcel match. These filings are not added
+  to the filing totals above, because none supports a parcel.
