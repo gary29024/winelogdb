@@ -20,7 +20,7 @@ export function AccountChip(){
  },[]);
  const name=account?.display_name?.trim()||'Account';
  const label=`Account & friends${requests?`, ${requests} friend request${requests===1?'':'s'} waiting`:''}`;
- return <NavLink className="account-link" to="/account" aria-label={label} title={account?.handle?`${name} · @${account.handle}`:name}>
+ return <NavLink className="account-link" data-tour="nav-account" to="/account" aria-label={label} title={account?.handle?`${name} · @${account.handle}`:name}>
   <span className="account-link-avatar" aria-hidden="true">{name.charAt(0)}{requests>0&&<span className="account-link-dot"/>}</span>
   <span className="account-link-name" aria-hidden="true">{name}</span>
  </NavLink>;
