@@ -12934,6 +12934,2008 @@
       "finding": "The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established."
     },
     {
+      "url": "https://actes.ccm2.net/acte/ab4ebd50-2d9e-4bef-b4f3-e38afb3ca3da",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ab4ebd50-2d9e-4bef-b4f3-e38afb3ca3da",
+      "retrievedAt": "2026-10-09T14:58:28.490505+00:00",
+      "sha256": "b524a59693e0047768d23d1039afb4365bf056a050ee38a54d8b04ada9663680",
+      "bytes": 1760530,
+      "id": "bat-filing-403784614-0",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2025-12-26",
+      "type": "company-filing",
+      "documentDate": "2025-12-26",
+      "filingDate": "2026-03-06",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1,
+        4,
+        24
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming.",
+      "dateNote": "Cover updated for donations of 26 December 2025; incorporated signature page retains adoption date 18 December 2025. Latest update is not a land transfer."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/ba0c002c-fdf5-4c6f-a31d-584bc65a6de5",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ba0c002c-fdf5-4c6f-a31d-584bc65a6de5",
+      "retrievedAt": "2026-10-09T14:58:28.490505+00:00",
+      "sha256": "5e961f5526f36611f7b8b06e930007140a58f85df458ff8b1fd2c2175251e171",
+      "bytes": 1587147,
+      "id": "bat-filing-403784614-7",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2024-12-31",
+      "type": "company-filing",
+      "documentDate": "2024-12-31",
+      "filingDate": "2025-01-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1,
+        24
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/6b762355-c8bc-4d95-8c3c-0f9568272e53",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6b762355-c8bc-4d95-8c3c-0f9568272e53",
+      "retrievedAt": "2026-10-09T14:58:28.490505+00:00",
+      "sha256": "2b678c869209685507cf673d0024a3aa92d11d274b78820ed350053e3cb732ae",
+      "bytes": 736005,
+      "id": "bat-filing-403784614-9",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2001-07-23",
+      "type": "company-filing",
+      "documentDate": "2001-07-23",
+      "filingDate": "2001-08-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 23,
+      "screenedPages": 23,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/89e50641-43bc-4383-8eed-1005dfe30ee5",
+      "retrievedFrom": "https://actes.ccm2.net/acte/89e50641-43bc-4383-8eed-1005dfe30ee5",
+      "retrievedAt": "2026-10-09T14:58:28.491504+00:00",
+      "sha256": "ce4418704881550915d1ee02eb045858843a5db2ff2fb7b46694be4f9fc46213",
+      "bytes": 646445,
+      "id": "bat-filing-403784614-10",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 1996-01-08",
+      "type": "company-filing",
+      "documentDate": "1996-01-08",
+      "filingDate": "1996-02-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        1,
+        25,
+        27
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d8b54b30-78b3-4e13-8a4d-864b98b99364",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d8b54b30-78b3-4e13-8a4d-864b98b99364",
+      "retrievedAt": "2026-10-09T14:58:32.729536+00:00",
+      "sha256": "7cf26cb31dff554458446c6a450aefe88ddee46d4776b19877e4931b1c2481e1",
+      "bytes": 1924830,
+      "id": "bat-filing-403784614-11",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2023-07-21",
+      "type": "company-filing",
+      "documentDate": "2023-07-21",
+      "filingDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        4,
+        6,
+        7,
+        8,
+        9,
+        19,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming.",
+      "dateNote": "The public index supplies no deposit date for this extract. Document date comes from the 21 July 2023 deed and signatures."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/8f0d947a-ac6b-4ce6-a86d-9a0a834ea5af",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8f0d947a-ac6b-4ce6-a86d-9a0a834ea5af",
+      "retrievedAt": "2026-10-09T14:58:32.855912+00:00",
+      "sha256": "69e7d0ca9a0a3ac44c5de518cc8181bbeef7469b407adcb2feb97ffd5c3fd9d3",
+      "bytes": 604011,
+      "id": "bat-filing-403784614-12",
+      "title": "DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2023-07-21",
+      "type": "company-filing",
+      "documentDate": "2023-07-21",
+      "filingDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/19b5e037-74b7-47c4-907b-1ae8c237c4b6",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19b5e037-74b7-47c4-907b-1ae8c237c4b6",
+      "retrievedAt": "2026-10-09T14:58:32.994925+00:00",
+      "sha256": "1bdf304a5436ea808e5f37f6a3c1f4a05e4350291108bc9ab7a0eb44c6976ad7",
+      "bytes": 2485359,
+      "id": "bat-filing-490242302-0",
+      "title": "DOMAINE GB: company filing 2022-10-28",
+      "type": "company-filing",
+      "documentDate": "2022-10-28",
+      "filingDate": "2022-11-29",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 49,
+      "screenedPages": 49,
+      "reviewedPages": [
+        2,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        20,
+        21,
+        25,
+        28,
+        30,
+        32
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d9402978-2ecc-4247-a2ea-fc94e94e16d5",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d9402978-2ecc-4247-a2ea-fc94e94e16d5",
+      "retrievedAt": "2026-10-09T14:58:33.070247+00:00",
+      "sha256": "92386c12263960e090d9a134a6fbefa74e6e3f09ef9c9b3cbde140d8a23dece7",
+      "bytes": 2129309,
+      "id": "bat-filing-490242302-3",
+      "title": "DOMAINE GB: company filing 2019-08-01",
+      "type": "company-filing",
+      "documentDate": "2019-08-01",
+      "filingDate": "2019-09-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 41,
+      "screenedPages": 41,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        19
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus.",
+      "dateNote": "Composite deposit includes 24 July 2019 share transfers and 1 August 2019 capital decisions; retained source date is the latter, not the 23 September deposit."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/deb54065-f5f2-487b-aa91-b7b7b16c8f9b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/deb54065-f5f2-487b-aa91-b7b7b16c8f9b",
+      "retrievedAt": "2026-10-09T14:58:35.852669+00:00",
+      "sha256": "732012fc178eb3621a7b2ccae2881bebcd9430cba06d83b0593aa6b812c36ff7",
+      "bytes": 2076779,
+      "id": "bat-filing-490242302-5",
+      "title": "DOMAINE GB: company filing 2015-03-16",
+      "type": "company-filing",
+      "documentDate": "2015-03-16",
+      "filingDate": "2015-04-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        3,
+        4,
+        29
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/64db25da-4311-4cac-8b25-a7b29f0c922c",
+      "retrievedFrom": "https://actes.ccm2.net/acte/64db25da-4311-4cac-8b25-a7b29f0c922c",
+      "retrievedAt": "2026-10-09T14:58:36.119667+00:00",
+      "sha256": "80f11b8e4fd7554bc3a2ebd92fe40326b2d2b32d88e1a29063852938face08fa",
+      "bytes": 795931,
+      "id": "bat-filing-490242302-7",
+      "title": "DOMAINE GB: company filing 2006-04-27",
+      "type": "company-filing",
+      "documentDate": "2006-04-27",
+      "filingDate": "2006-06-01",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        2,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/f349398b-581c-4c6e-a1c1-f05c0157b673",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f349398b-581c-4c6e-a1c1-f05c0157b673",
+      "retrievedAt": "2026-10-09T14:58:36.313764+00:00",
+      "sha256": "89027fc0721c34e8d1d246e29ed12a4e8438d1883a068b658a97faa4b7b61c9d",
+      "bytes": 379906,
+      "id": "bat-filing-490242302-9",
+      "title": "DOMAINE GB: company filing 2023-12-28",
+      "type": "company-filing",
+      "documentDate": "2023-12-28",
+      "filingDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 11,
+      "screenedPages": 11,
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus.",
+      "dateNote": "Undated public-index row; document cover explicitly dates the update 28 December 2023."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/212adb20-0503-49e9-a1ef-7c4c9fe56bfc",
+      "retrievedFrom": "https://actes.ccm2.net/acte/212adb20-0503-49e9-a1ef-7c4c9fe56bfc",
+      "retrievedAt": "2026-10-09T14:58:36.766402+00:00",
+      "sha256": "53916970635f2b000f2127fbc3d236af3ea355f9d9d36a8a971f6b30d490e5a1",
+      "bytes": 1054193,
+      "id": "bat-filing-515620417-1",
+      "title": "SA MAISON JOSEPH DROUHIN: company filing 2025-06-30",
+      "type": "company-filing",
+      "documentDate": "2025-06-30",
+      "filingDate": "2026-03-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/0e5e67cb-f886-40c4-b265-02145a0a07f7",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0e5e67cb-f886-40c4-b265-02145a0a07f7",
+      "retrievedAt": "2026-10-09T14:58:38.992652+00:00",
+      "sha256": "406b54fc6d83e6799618a8d2bf9b9f85ba042de29394700373a556b145f9c00b",
+      "bytes": 985099,
+      "id": "bat-filing-515620417-10",
+      "title": "SA MAISON JOSEPH DROUHIN: company filing 2008-06-20",
+      "type": "company-filing",
+      "documentDate": "2008-06-20",
+      "filingDate": "2008-10-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 27,
+      "screenedPages": 27,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/75d26ac7-3959-447a-bf10-f26fadb454a8",
+      "retrievedFrom": "https://actes.ccm2.net/acte/75d26ac7-3959-447a-bf10-f26fadb454a8",
+      "retrievedAt": "2026-10-09T14:58:39.137164+00:00",
+      "sha256": "a1052da3590bbfa1765cd5dfb1d1094f0a312e82c85408f59776284f7a47abc5",
+      "bytes": 135598,
+      "id": "bat-filing-515620417-17",
+      "title": "SA MAISON JOSEPH DROUHIN: company filing 2001-12-21",
+      "type": "company-filing",
+      "documentDate": "2001-12-21",
+      "filingDate": "2002-01-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 5,
+      "screenedPages": 5,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/cd1b5f18-e26a-4766-adb8-d49a4a5f239d",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cd1b5f18-e26a-4766-adb8-d49a4a5f239d",
+      "retrievedAt": "2026-10-09T14:58:39.316583+00:00",
+      "sha256": "8bb61131fd03ad19f0ed91ad6e88fe4fabe695c3ff00b94c82927d566ea65a27",
+      "bytes": 696427,
+      "id": "bat-filing-515620417-22",
+      "title": "SA MAISON JOSEPH DROUHIN: company filing 1995-12-21",
+      "type": "company-filing",
+      "documentDate": "1995-12-21",
+      "filingDate": "1996-02-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/bd7287ea-009a-476e-8d4c-703860fb9b38",
+      "retrievedFrom": "https://actes.ccm2.net/acte/bd7287ea-009a-476e-8d4c-703860fb9b38",
+      "retrievedAt": "2026-10-09T14:58:40.031195+00:00",
+      "sha256": "05f6e2073aa877282e45bcd037b50ecb5c648f2e571187312c4e46770e2de833",
+      "bytes": 802244,
+      "id": "bat-filing-442440095-0",
+      "title": "KBMFI: company filing 2022-12-22",
+      "type": "company-filing",
+      "documentDate": "2022-12-22",
+      "filingDate": "2023-01-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        2,
+        3,
+        12
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/d54d7bf3-c2db-4ae2-ab77-5779c495ca22",
+      "retrievedFrom": "https://actes.ccm2.net/acte/d54d7bf3-c2db-4ae2-ab77-5779c495ca22",
+      "retrievedAt": "2026-10-09T14:58:41.283596+00:00",
+      "sha256": "2d20e222c8a5a9f5a6004e7d46f57717598fd3cd0d137f735704ca0bcd1f72b1",
+      "bytes": 2512715,
+      "id": "bat-filing-442440095-1",
+      "title": "KBMFI: company filing 2022-11-30",
+      "type": "company-filing",
+      "documentDate": "2022-11-30",
+      "filingDate": "2023-01-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        3,
+        9,
+        12,
+        13,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/53f043c3-8c6d-4955-b80c-f56f22cc325f",
+      "retrievedFrom": "https://actes.ccm2.net/acte/53f043c3-8c6d-4955-b80c-f56f22cc325f",
+      "retrievedAt": "2026-10-09T14:58:42.143634+00:00",
+      "sha256": "3e614946f6d63322b33622bb9f3401b5cace124c38e9651d9ce28dd7722f1045",
+      "bytes": 3824586,
+      "id": "bat-filing-442440095-2",
+      "title": "KBMFI: company filing 2022-10-26",
+      "type": "company-filing",
+      "documentDate": "2022-10-26",
+      "filingDate": "2023-01-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 75,
+      "screenedPages": 75,
+      "reviewedPages": [
+        3,
+        12,
+        15,
+        16,
+        17,
+        28,
+        44,
+        66
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/4a137ff6-13dd-432a-94be-61d1d696b4b0",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4a137ff6-13dd-432a-94be-61d1d696b4b0",
+      "retrievedAt": "2026-10-09T14:58:42.363696+00:00",
+      "sha256": "e9ec9bc4789fdfed0591aac466a80479a43508d11e17a41a7e024fbceae5b9d2",
+      "bytes": 1290471,
+      "id": "bat-filing-442440095-3",
+      "title": "KBMFI: company filing 2022-09-30",
+      "type": "company-filing",
+      "documentDate": "2022-09-30",
+      "filingDate": "2022-12-08",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        3,
+        6,
+        11,
+        15
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/57c11b12-8b91-424a-9db1-795b35344e3f",
+      "retrievedFrom": "https://actes.ccm2.net/acte/57c11b12-8b91-424a-9db1-795b35344e3f",
+      "retrievedAt": "2026-10-09T14:58:43.735756+00:00",
+      "sha256": "4f7a40996eacd6f9a89eb99afe4a3e5274383b5f7f15831dd210975c69cc3d0f",
+      "bytes": 2136509,
+      "id": "bat-filing-442440095-11",
+      "title": "KBMFI: company filing 1974-08-30",
+      "type": "company-filing",
+      "documentDate": "1974-08-30",
+      "filingDate": "2002-10-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 58,
+      "screenedPages": 58,
+      "reviewedPages": [
+        1,
+        2,
+        33
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link.",
+      "dateNote": "Composite 2002 registration deposit contains the 30 August 1974 formation and updated statutes. An internal historical sheet prints a different SIREN (312149081); the current company crosswalk instead rests on the matching 2022 deeds and 442440095 registry/receipt."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/69bdabb1-75a5-4e2b-8c02-1ffdaef4c0db",
+      "retrievedFrom": "https://actes.ccm2.net/acte/69bdabb1-75a5-4e2b-8c02-1ffdaef4c0db",
+      "retrievedAt": "2026-10-09T14:58:46.413404+00:00",
+      "sha256": "343cc198372144f80a794af73bfc2bbea533cb0651274b0ea7a9d702f568c9cd",
+      "bytes": 1400836,
+      "id": "bat-filing-302265186-1",
+      "title": "SCE CHATEAU DE MALTROYE: company filing 2024-07-12",
+      "type": "company-filing",
+      "documentDate": "2024-07-12",
+      "filingDate": "2025-06-03",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a1ab667f-73a1-4538-845f-a431b90bce0c",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a1ab667f-73a1-4538-845f-a431b90bce0c",
+      "retrievedAt": "2026-10-09T14:58:46.776211+00:00",
+      "sha256": "bbd7d2100566d3429a2c4ec52259150c38f90152136f1b1ec1512bae9bda24a9",
+      "bytes": 1463755,
+      "id": "bat-filing-302265186-4",
+      "title": "SCE CHATEAU DE MALTROYE: company filing 2021-07-15",
+      "type": "company-filing",
+      "documentDate": "2021-07-15",
+      "filingDate": "2021-08-06",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 27,
+      "screenedPages": 27,
+      "reviewedPages": [
+        6,
+        25,
+        26,
+        27
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence.",
+      "dateNote": "15 July 2021 incorporation/signature; incorporated contribution agreement is dated 15 June 2021."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/32f4c8e2-e308-41dc-bb70-d6a0ffa3e967",
+      "retrievedFrom": "https://actes.ccm2.net/acte/32f4c8e2-e308-41dc-bb70-d6a0ffa3e967",
+      "retrievedAt": "2026-10-09T14:58:50.124815+00:00",
+      "sha256": "cc61de7c8b2efa573142ce1ac022f8a312b172e1ad188c94414609b6b54816f5",
+      "bytes": 282984,
+      "id": "bat-filing-302265186-9",
+      "title": "SCE CHATEAU DE MALTROYE: company filing 2009-12-18",
+      "type": "company-filing",
+      "documentDate": "2009-12-18",
+      "filingDate": "2011-01-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a0909c9a-4bf4-462b-a312-328181278bf9",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a0909c9a-4bf4-462b-a312-328181278bf9",
+      "retrievedAt": "2026-10-09T14:58:52.690156+00:00",
+      "sha256": "8da95c5dd8d98372d8af8db8f7bc7d92acfad546fc6c0e9547e71cc7e08dc66d",
+      "bytes": 559526,
+      "id": "bat-filing-302265186-12",
+      "title": "SCE CHATEAU DE MALTROYE: company filing 2002-10-24",
+      "type": "company-filing",
+      "documentDate": "2002-10-24",
+      "filingDate": "2002-10-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 22,
+      "screenedPages": 22,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence.",
+      "dateNote": "24 October 2002 registration attestation in a composite historical bundle; formation is dated 6 April 1974 and updated statutes 20 October 2002."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a000b2b6-bc89-4ba8-8c72-cc51ea5d7d2d",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a000b2b6-bc89-4ba8-8c72-cc51ea5d7d2d",
+      "retrievedAt": "2026-10-09T14:58:52.803150+00:00",
+      "sha256": "d43c8d3e3038af62aeb1d7e6a33c5aee6dda06d5981bb744959a8f1582979444",
+      "bytes": 842020,
+      "id": "bat-filing-778253781-0",
+      "title": "DOMAINE PRIEUR-BRUNET: company filing 2022-02-23",
+      "type": "company-filing",
+      "documentDate": "2022-02-23",
+      "filingDate": "2022-03-16",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/78b5be24-5cd5-4910-a0fa-2adf5b004604",
+      "retrievedFrom": "https://actes.ccm2.net/acte/78b5be24-5cd5-4910-a0fa-2adf5b004604",
+      "retrievedAt": "2026-10-09T14:58:53.620027+00:00",
+      "sha256": "08e91bc2fae3c887fd4ac29f3d4975b3a9bd255082d5e2c5b6ab3351fce3a8c6",
+      "bytes": 969202,
+      "id": "bat-filing-778253781-1",
+      "title": "DOMAINE PRIEUR-BRUNET: company filing 2020-12-23",
+      "type": "company-filing",
+      "documentDate": "2020-12-23",
+      "filingDate": "2021-04-06",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/522bf367-a75f-4082-bdb7-6e20acdb5379",
+      "retrievedFrom": "https://actes.ccm2.net/acte/522bf367-a75f-4082-bdb7-6e20acdb5379",
+      "retrievedAt": "2026-10-09T14:58:56.480436+00:00",
+      "sha256": "2b9e36c2c16a68a8006d319256a1107690c499bf16167e09a01ce61d95ac41ce",
+      "bytes": 2102363,
+      "id": "bat-filing-778253781-4",
+      "title": "DOMAINE PRIEUR-BRUNET: company filing 2017-07-17",
+      "type": "company-filing",
+      "documentDate": "2017-07-17",
+      "filingDate": "2017-08-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 34,
+      "screenedPages": 34,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        14,
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/6a2af678-2132-4044-92e6-5aef52078470",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6a2af678-2132-4044-92e6-5aef52078470",
+      "retrievedAt": "2026-10-09T14:58:57.501961+00:00",
+      "sha256": "5f6de69e208e2155aa80c1fe3eb8c9bda531b547950819c7c505e3a14abded6f",
+      "bytes": 1682800,
+      "id": "bat-filing-778253781-7",
+      "title": "DOMAINE PRIEUR-BRUNET: company filing 2001-10-16",
+      "type": "company-filing",
+      "documentDate": "2001-10-16",
+      "filingDate": "2002-05-22",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 43,
+      "screenedPages": 43,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        30,
+        31
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule.",
+      "dateNote": "Updated statutes 16 October 2001 in 22 May 2002 deposit; bundle also includes 17 August 1964 formation and 1995 decisions."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/3c3d0d83-ebf6-410d-b886-1a51dc9e1427",
+      "retrievedFrom": "https://actes.ccm2.net/acte/3c3d0d83-ebf6-410d-b886-1a51dc9e1427",
+      "retrievedAt": "2026-10-09T14:58:57.932179+00:00",
+      "sha256": "dd8f1b794d3191d8ba85b2950dcd1157ebe41e68114b3eb27e7c69b29e3722e4",
+      "bytes": 1504866,
+      "id": "bat-filing-411738669-0",
+      "title": "HERITIERS ROUX COLIN: company filing 2026-03-02",
+      "type": "company-filing",
+      "documentDate": "2026-03-02",
+      "filingDate": "2026-04-01",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 27,
+      "screenedPages": 27,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        23,
+        27
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The original 31 January 1997 GFA contribution names Chassagne AE71 at 886 m², matching current recorded rights and full cadastral area. Later 2019 and 2026 copies retain the same text with horizontal reproduction marks; the clean original is used for the historical contribution. Private family partners and a general obligation to lease do not identify a producer or current operator.",
+      "dateNote": "Cover refers to a 1 March 2026 assembly; signed updated statutes dated 2 March 2026 on page 27."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/f5b78e46-dc2e-40f7-918d-9a2203ed1321",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f5b78e46-dc2e-40f7-918d-9a2203ed1321",
+      "retrievedAt": "2026-10-09T14:58:59.336236+00:00",
+      "sha256": "48d68ce4da6e311effc14cb70f7a56c0a33a89b2386a3bbbbc6fbc0837ea0b04",
+      "bytes": 1802389,
+      "id": "bat-filing-411738669-4",
+      "title": "HERITIERS ROUX COLIN: company filing 2019-07-03",
+      "type": "company-filing",
+      "documentDate": "2019-07-03",
+      "filingDate": "2019-09-30",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 35,
+      "screenedPages": 35,
+      "reviewedPages": [
+        1,
+        2,
+        8,
+        30
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The original 31 January 1997 GFA contribution names Chassagne AE71 at 886 m², matching current recorded rights and full cadastral area. Later 2019 and 2026 copies retain the same text with horizontal reproduction marks; the clean original is used for the historical contribution. Private family partners and a general obligation to lease do not identify a producer or current operator."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/83d46848-0806-4501-98bd-eaa571a9ddd7",
+      "retrievedFrom": "https://actes.ccm2.net/acte/83d46848-0806-4501-98bd-eaa571a9ddd7",
+      "retrievedAt": "2026-10-09T14:59:01.051032+00:00",
+      "sha256": "9c1f8c9e5adf1862b5499b458c64013ed0bfdf446d462af03b0298a93211947f",
+      "bytes": 934931,
+      "id": "bat-filing-411738669-6",
+      "title": "HERITIERS ROUX COLIN: company filing 1997-01-31",
+      "type": "company-filing",
+      "documentDate": "1997-01-31",
+      "filingDate": "1997-04-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        1,
+        25
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The original 31 January 1997 GFA contribution names Chassagne AE71 at 886 m², matching current recorded rights and full cadastral area. Later 2019 and 2026 copies retain the same text with horizontal reproduction marks; the clean original is used for the historical contribution. Private family partners and a general obligation to lease do not identify a producer or current operator."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/b52877b7-153d-48a8-b368-4666930e522d",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b52877b7-153d-48a8-b368-4666930e522d",
+      "retrievedAt": "2026-10-09T14:59:01.292955+00:00",
+      "sha256": "13245d6bca16c3a2c9770621cea6d6a5dfd36e0f59672589900f71d58a4e5a24",
+      "bytes": 53129,
+      "id": "bat-filing-832401855-0",
+      "title": "HECATE: company filing 2020-11-14",
+      "type": "company-filing",
+      "documentDate": "2020-11-14",
+      "filingDate": "2020-12-11",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 4,
+      "screenedPages": 4,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Formation identifies Hécate and authorizes purchase of Chassagne AE157 for 13a04ca. Exact reference and full area agree with the current bare-right holder. This is a purchase mandate, not the executed acquisition or an operating lease; Axam 2 and Eaque corporate partners do not establish a producer crosswalk."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1e44619a-d3f0-4800-b9fd-bcad6d2417ce",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1e44619a-d3f0-4800-b9fd-bcad6d2417ce",
+      "retrievedAt": "2026-10-09T14:59:01.817463+00:00",
+      "sha256": "d8d32b4dad1c12439cca7f2aee56d00fb165cf51812e7294226c8fe2ced87d99",
+      "bytes": 207490,
+      "id": "bat-filing-832401855-1",
+      "title": "HECATE: company filing 2017-09-07",
+      "type": "company-filing",
+      "documentDate": "2017-09-07",
+      "filingDate": "2017-10-05",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        2,
+        4,
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Formation identifies Hécate and authorizes purchase of Chassagne AE157 for 13a04ca. Exact reference and full area agree with the current bare-right holder. This is a purchase mandate, not the executed acquisition or an operating lease; Axam 2 and Eaque corporate partners do not establish a producer crosswalk."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/c28150d3-8881-4df8-b03c-2a367aa66702",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c28150d3-8881-4df8-b03c-2a367aa66702",
+      "retrievedAt": "2026-10-09T14:59:03.081024+00:00",
+      "sha256": "7a18b9f4eac2a64193f996416712808cc2c2d84071ef923175180c483a16342f",
+      "bytes": 880399,
+      "id": "bat-filing-889363610-0",
+      "title": "LES BATARD MONTRACHET: company filing 2024-09-10",
+      "type": "company-filing",
+      "documentDate": "2024-09-10",
+      "filingDate": "2024-09-25",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Les Batard Montrachet company statutes and registry establish the legal entity and its financial-advisory shareholder. No AE160 land schedule or independently supported producer crosswalk in the acquired corpus. The company name is not a domaine identification."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/c7be4559-cdac-437e-a0f5-dfdaee02c0c8",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c7be4559-cdac-437e-a0f5-dfdaee02c0c8",
+      "retrievedAt": "2026-10-09T14:59:04.222660+00:00",
+      "sha256": "293afcb3bff7d3668942a4450b2975b5862bbde48a4f281bf202c25cb3528cfd",
+      "bytes": 948358,
+      "id": "bat-filing-889363610-1",
+      "title": "LES BATARD MONTRACHET: company filing 2020-09-04",
+      "type": "company-filing",
+      "documentDate": "2020-09-04",
+      "filingDate": "2020-09-25",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1,
+        2,
+        17
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Les Batard Montrachet company statutes and registry establish the legal entity and its financial-advisory shareholder. No AE160 land schedule or independently supported producer crosswalk in the acquired corpus. The company name is not a domaine identification."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/2a4445b3-9ae9-4ff8-b809-6cd2dc980e88",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2a4445b3-9ae9-4ff8-b809-6cd2dc980e88",
+      "retrievedAt": "2026-10-09T14:59:04.303137+00:00",
+      "sha256": "de96e7bca02dbc795eb54ebde58bfca5d27587f284419cc6d954d68411724cc0",
+      "bytes": 1233882,
+      "id": "bat-filing-319015269-1",
+      "title": "SCE MOREY COFFINET: company filing 2025-06-15",
+      "type": "company-filing",
+      "documentDate": "2025-06-15",
+      "filingDate": "2025-07-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/cce84b3e-06be-4a08-bf3c-cfc474a89e2b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/cce84b3e-06be-4a08-bf3c-cfc474a89e2b",
+      "retrievedAt": "2026-10-09T14:59:04.517770+00:00",
+      "sha256": "267c75b7065763137947b7c7ee490576b742b0054ae40695d5b51122a147d2df",
+      "bytes": 1766938,
+      "id": "bat-filing-319015269-2",
+      "title": "SCE MOREY COFFINET: company filing 2021-07-20",
+      "type": "company-filing",
+      "documentDate": "2021-07-20",
+      "filingDate": "2021-08-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 41,
+      "screenedPages": 41,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only.",
+      "dateNote": "20 July 2021 approval of a share contribution dated 1 July 2021; not a parcel transfer."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/512f5305-16e3-4047-9250-83d7a85264be",
+      "retrievedFrom": "https://actes.ccm2.net/acte/512f5305-16e3-4047-9250-83d7a85264be",
+      "retrievedAt": "2026-10-09T14:59:07.132091+00:00",
+      "sha256": "36c5cd79194355088ad2d51bdf18488a0c6e95970b51a36993837622bf7d8cdf",
+      "bytes": 3522312,
+      "id": "bat-filing-319015269-14",
+      "title": "SCE MOREY COFFINET: company filing 2020-12-28",
+      "type": "company-filing",
+      "documentDate": "2020-12-28",
+      "filingDate": "2021-01-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 75,
+      "screenedPages": 75,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a8fcc085-7e37-4d4b-9401-d2be313e527b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a8fcc085-7e37-4d4b-9401-d2be313e527b",
+      "retrievedAt": "2026-10-09T14:59:07.633153+00:00",
+      "sha256": "ad258ba554a6a63d5cbb83be0edf6fe34cccd46eba56f95fe58807ee9c7721f1",
+      "bytes": 667785,
+      "id": "bat-filing-319015269-18",
+      "title": "SCE MOREY COFFINET: company filing 2001-07-23",
+      "type": "company-filing",
+      "documentDate": "2001-07-23",
+      "filingDate": "2001-08-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 26,
+      "screenedPages": 26,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/39471616",
+      "retrievedFrom": "https://actes.ccm2.net/acte/39471616",
+      "retrievedAt": "2026-10-09T14:59:07.718956+00:00",
+      "sha256": "722f7fc1bac201204811ea19c5a3d7acc0bc63b241737f57bf6c1954044198a7",
+      "bytes": 6143114,
+      "id": "bat-filing-310370077-0",
+      "title": "DOMAINE BACHELET-RAMONET: company filing 2026-05-18",
+      "type": "company-filing",
+      "documentDate": "2026-05-18",
+      "filingDate": "2026-05-19",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 88,
+      "screenedPages": 88,
+      "reviewedPages": [
+        1,
+        87
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights.",
+      "dateNote": "18 May 2026 merger project replacing the 11 May project; completion not established by this source."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/33964127",
+      "retrievedFrom": "https://actes.ccm2.net/acte/33964127",
+      "retrievedAt": "2026-10-09T14:59:08.282969+00:00",
+      "sha256": "4ded8b943a9b24b6d41ba7f8baacd7a988ff3f28e3e0166eb4729b9434b9018f",
+      "bytes": 3929928,
+      "id": "bat-filing-310370077-3",
+      "title": "DOMAINE BACHELET-RAMONET: company filing 2024-06-13",
+      "type": "company-filing",
+      "documentDate": "2024-06-13",
+      "filingDate": "2024-10-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        1,
+        2,
+        11,
+        12,
+        15,
+        16,
+        19
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/19411130",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19411130",
+      "retrievedAt": "2026-10-09T14:59:10.558620+00:00",
+      "sha256": "77b43d6882f99e4180e7358fbc3bef9e47bd976affeab9b60063b0765bd4ddb8",
+      "bytes": 429051,
+      "id": "bat-filing-310370077-8",
+      "title": "DOMAINE BACHELET-RAMONET: company filing 2002-12-30",
+      "type": "company-filing",
+      "documentDate": "2002-12-30",
+      "filingDate": "2003-03-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/19411128",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19411128",
+      "retrievedAt": "2026-10-09T14:59:10.634112+00:00",
+      "sha256": "8f1da19d91595fbfd10ebd448d40d2dc32313c5a756821f886f6c6ac3b6c5229",
+      "bytes": 264044,
+      "id": "bat-filing-310370077-10",
+      "title": "DOMAINE BACHELET-RAMONET: company filing 1993-02-26",
+      "type": "company-filing",
+      "documentDate": "1993-02-26",
+      "filingDate": "1993-03-20",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 10,
+      "screenedPages": 10,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/f5435ad4-b033-465b-bfb5-6da2fd64ec52",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f5435ad4-b033-465b-bfb5-6da2fd64ec52",
+      "retrievedAt": "2026-10-09T14:59:11.601561+00:00",
+      "sha256": "aff991f7372e5deddcecfb5f510617a1df407759acdb2e2b02940a7fad80c699",
+      "bytes": 1968845,
+      "id": "bat-filing-382485027-0",
+      "title": "ETIENNE SAUZET: company filing 2019-03-22",
+      "type": "company-filing",
+      "documentDate": "2019-03-22",
+      "filingDate": "2019-05-20",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 36,
+      "screenedPages": 36,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        15,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/dd525b12-f9ac-4efa-818b-7b5fb2595052",
+      "retrievedFrom": "https://actes.ccm2.net/acte/dd525b12-f9ac-4efa-818b-7b5fb2595052",
+      "retrievedAt": "2026-10-09T14:59:11.918558+00:00",
+      "sha256": "f014d0a7d8aaee1780e282c52b6ce9b61946f4553b279c2b2d8c1e2c96f4e58c",
+      "bytes": 2228916,
+      "id": "bat-filing-382485027-2",
+      "title": "ETIENNE SAUZET: company filing 2019-01-31",
+      "type": "company-filing",
+      "documentDate": "2019-01-31",
+      "filingDate": "2019-02-07",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 39,
+      "screenedPages": 39,
+      "reviewedPages": [
+        1,
+        2,
+        5
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/43cd99bb-c650-47a2-a717-eca6ec1c44bb",
+      "retrievedFrom": "https://actes.ccm2.net/acte/43cd99bb-c650-47a2-a717-eca6ec1c44bb",
+      "retrievedAt": "2026-10-09T14:59:14.119917+00:00",
+      "sha256": "f28bd1647be170499250efea09ecf92fc76063c722b922696a6578886233e271",
+      "bytes": 1498697,
+      "id": "bat-filing-382485027-3",
+      "title": "ETIENNE SAUZET: company filing 2018-08-03",
+      "type": "company-filing",
+      "documentDate": "2018-08-03",
+      "filingDate": "2018-10-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        2,
+        4,
+        6,
+        15
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/e8635416-60ce-4214-8db7-5e82947e0d5b",
+      "retrievedFrom": "https://actes.ccm2.net/acte/e8635416-60ce-4214-8db7-5e82947e0d5b",
+      "retrievedAt": "2026-10-09T14:59:15.226486+00:00",
+      "sha256": "73189d08d12459a690195733f58b2610a601c3af84fdaa926b09e3be27837884",
+      "bytes": 3146358,
+      "id": "bat-filing-382485027-5",
+      "title": "ETIENNE SAUZET: company filing 2018-06-25",
+      "type": "company-filing",
+      "documentDate": "2018-06-25",
+      "filingDate": "2018-06-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 44,
+      "screenedPages": 44,
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        8,
+        42,
+        44
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a9914752-1c74-4a25-9483-3e7bd13e7c0e",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a9914752-1c74-4a25-9483-3e7bd13e7c0e",
+      "retrievedAt": "2026-10-09T14:59:15.929893+00:00",
+      "sha256": "ba6e452c7167344644f16438212de3951ece714cd2a68f9e13ff16fed8a04cf6",
+      "bytes": 1851725,
+      "id": "bat-filing-319864328-2",
+      "title": "ETIENNE SAUZET: company filing 2018-03-09",
+      "type": "company-filing",
+      "documentDate": "2018-03-09",
+      "filingDate": "2018-05-15",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 21,
+      "screenedPages": 21,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/8cd91dcd-3b79-4271-9817-f668f237a5e5",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8cd91dcd-3b79-4271-9817-f668f237a5e5",
+      "retrievedAt": "2026-10-09T14:59:17.271296+00:00",
+      "sha256": "08d78c51c9cff9795ec3372341262d0f5d99c5c77eecac07dd1c5b1a256cf58b",
+      "bytes": 302523,
+      "id": "bat-filing-319864328-5",
+      "title": "ETIENNE SAUZET: company filing 2008-03-17",
+      "type": "company-filing",
+      "documentDate": "2008-03-17",
+      "filingDate": "2011-05-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file.",
+      "dateNote": "Statutes updated for capital deed of 13 and 17 March 2008; latest deed date retained, separate from deposit."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/39bc9fc2-298e-4a41-90db-0960875883eb",
+      "retrievedFrom": "https://actes.ccm2.net/acte/39bc9fc2-298e-4a41-90db-0960875883eb",
+      "retrievedAt": "2026-10-09T14:59:18.083000+00:00",
+      "sha256": "9ae21624b2a1fecfd90685f7eebab5ed70c1fd8a744c048309fba26e12fc7a75",
+      "bytes": 1060214,
+      "id": "bat-filing-440840049-0",
+      "title": "GUILLAUME BOILLOT: company filing 2025-06-30",
+      "type": "company-filing",
+      "documentDate": "2025-06-30",
+      "filingDate": "2026-02-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/0e36fe5a-8aaa-498c-818d-4cc9f5e8af92",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0e36fe5a-8aaa-498c-818d-4cc9f5e8af92",
+      "retrievedAt": "2026-10-09T14:59:19.993937+00:00",
+      "sha256": "f01906e4538f03986a020bc87204dbc5f7c478930ed6b8b49256646bb24dc05d",
+      "bytes": 629605,
+      "id": "bat-filing-440840049-4",
+      "title": "GUILLAUME BOILLOT: company filing 2025-07-24",
+      "type": "company-filing",
+      "documentDate": "2025-07-24",
+      "filingDate": "2026-02-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1f1427ab-b931-4ca3-9d03-61f30019c50e",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1f1427ab-b931-4ca3-9d03-61f30019c50e",
+      "retrievedAt": "2026-10-09T14:59:21.072060+00:00",
+      "sha256": "bb2586692440f7054a692ddefb70b4e46f1930db69075399d78f94542891f672",
+      "bytes": 152860,
+      "id": "bat-filing-440840049-9",
+      "title": "GUILLAUME BOILLOT: company filing 2010-12-20",
+      "type": "company-filing",
+      "documentDate": "2010-12-20",
+      "filingDate": "2011-01-28",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/f208e67b-6944-4c61-af36-897a24ac7274",
+      "retrievedFrom": "https://actes.ccm2.net/acte/f208e67b-6944-4c61-af36-897a24ac7274",
+      "retrievedAt": "2026-10-09T14:59:21.962598+00:00",
+      "sha256": "e12369b2790f0501886340e14732fb9afe54101576d4f7e74379011c7e45ee8e",
+      "bytes": 462721,
+      "id": "bat-filing-440840049-16",
+      "title": "GUILLAUME BOILLOT: company filing 2002-01-02",
+      "type": "company-filing",
+      "documentDate": "2002-01-02",
+      "filingDate": "2002-02-12",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 18,
+      "screenedPages": 18,
+      "reviewedPages": [
+        1,
+        17,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged.",
+      "dateNote": "Signed statutes page 17 date formation 2 January 2002; receipt labels the act 2 February 2002. Preserve the signed date and the conflict."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/9c0a19ed-24bd-46ec-ad80-b21d53a5fd19",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9c0a19ed-24bd-46ec-ad80-b21d53a5fd19",
+      "retrievedAt": "2026-10-09T14:59:23.444752+00:00",
+      "sha256": "53d7165b4ea658875be26ee2833adeb11ebce8c98ca36db6519577a014f1642a",
+      "bytes": 1787003,
+      "id": "bat-filing-429240302-3",
+      "title": "DOMAINE BACHELET MESNIL: company filing 2026-05-20",
+      "type": "company-filing",
+      "documentDate": "2026-05-20",
+      "filingDate": "2026-06-04",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 22,
+      "screenedPages": 22,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/83963abc-c26d-466f-889f-da396bca89ea",
+      "retrievedFrom": "https://actes.ccm2.net/acte/83963abc-c26d-466f-889f-da396bca89ea",
+      "retrievedAt": "2026-10-09T14:59:24.641162+00:00",
+      "sha256": "cd6f913698e453d8539377a5497217d1507e79b6aa350d578fb74132122664b7",
+      "bytes": 2625571,
+      "id": "bat-filing-429240302-13",
+      "title": "DOMAINE BACHELET MESNIL: company filing 1977-06-02",
+      "type": "company-filing",
+      "documentDate": "1977-06-02",
+      "filingDate": "2002-10-31",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 81,
+      "screenedPages": 81,
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        15,
+        43,
+        44,
+        54
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope.",
+      "dateNote": "Composite 2002 registration includes the signed 2 June 1977 contribution and 8 January 1996 updated statutes; source date identifies the original deed."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/20693720",
+      "retrievedFrom": "https://actes.ccm2.net/acte/20693720",
+      "retrievedAt": "2026-10-09T14:59:25.863307+00:00",
+      "sha256": "438fbd8e30745848e3b7d105d0bb3ec187be35216d4fa6cc7ddc7c0c645c9f42",
+      "bytes": 551749,
+      "id": "bat-filing-333145183-0",
+      "title": "DOMAINE RAMONET: company filing 2012-10-19",
+      "type": "company-filing",
+      "documentDate": "2012-10-19",
+      "filingDate": "2012-11-20",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 17,
+      "screenedPages": 17,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/20693718",
+      "retrievedFrom": "https://actes.ccm2.net/acte/20693718",
+      "retrievedAt": "2026-10-09T14:59:26.619363+00:00",
+      "sha256": "d29a87b1f678cf4922ed3f9a6d965713c2e9ddedc838b3b22cf88a44f1143507",
+      "bytes": 841053,
+      "id": "bat-filing-333145183-13",
+      "title": "DOMAINE RAMONET: company filing 1995-01-19",
+      "type": "company-filing",
+      "documentDate": "1995-01-19",
+      "filingDate": "1995-02-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation.",
+      "dateNote": "Composite 1995 deposit includes 21 November 1994 merger proposal and 19 January 1995 approval/updated statutes; latest resolution date retained."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/33851300",
+      "retrievedFrom": "https://actes.ccm2.net/acte/33851300",
+      "retrievedAt": "2026-10-09T14:59:28.896653+00:00",
+      "sha256": "08ca113917523325e6fa99383a5bcafc4ff6eee9edca901574d7c2bcca56c164",
+      "bytes": 522472,
+      "id": "bat-filing-333145183-17",
+      "title": "DOMAINE RAMONET: company filing 2024-06-26",
+      "type": "company-filing",
+      "documentDate": "2024-06-26",
+      "filingDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation.",
+      "dateNote": "Undated public-index row; updated-statutes date printed 26 June 2024 on the cover."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1dae9b18-c748-4be7-af23-287703880914",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1dae9b18-c748-4be7-af23-287703880914",
+      "retrievedAt": "2026-10-09T14:59:30.119953+00:00",
+      "sha256": "e4608227b8d1d446ca69c3c914704d4ae2331c9a178438dc2a20b8c5d889f928",
+      "bytes": 1459929,
+      "id": "bat-filing-384800736-3",
+      "title": "MOREY-BLANC: company filing 2021-04-30",
+      "type": "company-filing",
+      "documentDate": "2021-04-30",
+      "filingDate": "2021-05-26",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 55,
+      "screenedPages": 55,
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/2f231ebd-f079-4cbf-8f5d-8089800c5607",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2f231ebd-f079-4cbf-8f5d-8089800c5607",
+      "retrievedAt": "2026-10-09T14:59:30.324477+00:00",
+      "sha256": "a074c8db4510c84004315a9ffb573af46d02a43239dd1a2fc04d17aba19a5862",
+      "bytes": 1969260,
+      "id": "bat-filing-384800736-8",
+      "title": "MOREY-BLANC: company filing 2014-02-21",
+      "type": "company-filing",
+      "documentDate": "2014-02-21",
+      "filingDate": "2014-07-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 30,
+      "screenedPages": 30,
+      "reviewedPages": [
+        1,
+        3,
+        4
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/0ced784d-d44f-4fc3-9fa1-d9c906876cf0",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0ced784d-d44f-4fc3-9fa1-d9c906876cf0",
+      "retrievedAt": "2026-10-09T14:59:30.337634+00:00",
+      "sha256": "a380176fb1d1048b2fb955394f031b8cac5aae510e99b9f040946b42bc553719",
+      "bytes": 1323188,
+      "id": "bat-filing-384800736-11",
+      "title": "MOREY-BLANC: company filing 2013-02-28",
+      "type": "company-filing",
+      "documentDate": "2013-02-28",
+      "filingDate": "2013-05-02",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/2120f7e6-a830-46cb-a22c-50edcb6f281a",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2120f7e6-a830-46cb-a22c-50edcb6f281a",
+      "retrievedAt": "2026-10-09T14:59:32.118059+00:00",
+      "sha256": "70ace21c3463f3ea37b100c49bccede792b9098fb22a822694a98fa4e1364147",
+      "bytes": 836831,
+      "id": "bat-filing-384800736-20",
+      "title": "MOREY-BLANC: company filing 2000-08-31",
+      "type": "company-filing",
+      "documentDate": "2000-08-31",
+      "filingDate": "2000-10-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/8fcc4ca0-7ff1-421c-8813-e07ae163984e",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8fcc4ca0-7ff1-421c-8813-e07ae163984e",
+      "retrievedAt": "2026-10-09T14:59:35.141785+00:00",
+      "sha256": "26595722909b75e9b26a2c180d93b5978d05e0a18414da56526e18b967aad56e",
+      "bytes": 831813,
+      "id": "bat-filing-484661939-2",
+      "title": "DOMAINE BAVARD JEAN PAUL: company filing 2025-12-12",
+      "type": "company-filing",
+      "documentDate": "2025-12-12",
+      "filingDate": "2025-12-23",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 15,
+      "screenedPages": 15,
+      "reviewedPages": [
+        1,
+        3,
+        4
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/8f45d86b-631b-44b0-a056-634cf2129ad3",
+      "retrievedFrom": "https://actes.ccm2.net/acte/8f45d86b-631b-44b0-a056-634cf2129ad3",
+      "retrievedAt": "2026-10-09T14:59:35.665297+00:00",
+      "sha256": "3c9a558358c77459c7b30f69f243338f5614820ff0ff0141c44edb223e1442be",
+      "bytes": 1192582,
+      "id": "bat-filing-484661939-3",
+      "title": "DOMAINE BAVARD JEAN PAUL: company filing 2022-09-14",
+      "type": "company-filing",
+      "documentDate": "2022-09-14",
+      "filingDate": "2022-11-04",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 32,
+      "screenedPages": 32,
+      "reviewedPages": [
+        1,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/7cd71b83-219d-4b7f-8ec7-c0a65f9f05f4",
+      "retrievedFrom": "https://actes.ccm2.net/acte/7cd71b83-219d-4b7f-8ec7-c0a65f9f05f4",
+      "retrievedAt": "2026-10-09T14:59:36.699235+00:00",
+      "sha256": "b746d018b912876144ead227bdbc8f449f4bed1f7c3f420e17aef5fc11bfd33b",
+      "bytes": 1568984,
+      "id": "bat-filing-484661939-4",
+      "title": "DOMAINE BAVARD JEAN PAUL: company filing 2019-08-26",
+      "type": "company-filing",
+      "documentDate": "2019-08-26",
+      "filingDate": "2019-10-24",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 35,
+      "screenedPages": 35,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        9,
+        10,
+        11,
+        18,
+        19
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/c9177207-9dc4-4840-bb65-585c60675123",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c9177207-9dc4-4840-bb65-585c60675123",
+      "retrievedAt": "2026-10-09T14:59:37.122777+00:00",
+      "sha256": "55dae49d2a797da89e5e704348ebe049dc81fee2e8feff6dda0b41fc5e9cb350",
+      "bytes": 876906,
+      "id": "bat-filing-484661939-8",
+      "title": "DOMAINE BAVARD JEAN PAUL: company filing 2005-09-07",
+      "type": "company-filing",
+      "documentDate": "2005-09-07",
+      "filingDate": "2005-10-27",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+    },
+    {
+      "url": "https://find-and-update.company-information.service.gov.uk/company/01916348/filing-history/MzUxMDk5MDc3NmFkaXF6a2N4/document?format=pdf&download=0",
+      "retrievedAt": "2026-10-09T15:00:29.774833+00:00",
+      "sha256": "ce3e46e66a9564c44c963a1dac1eb0c2652ad00bd71a4efd10b5eb8d1939454b",
+      "bytes": 172145,
+      "id": "bat-filing-coombe-2025",
+      "title": "Coombe Castle Fine Wines Limited (UK 01916348): accounts 2025",
+      "retrievedFrom": "https://find-and-update.company-information.service.gov.uk/company/01916348/filing-history/MzUxMDk5MDc3NmFkaXF6a2N4/document?format=pdf&download=0",
+      "type": "company-filing",
+      "documentDate": "2026-03-16",
+      "filingDate": "2026-03-17",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 10,
+      "screenedPages": 10,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; board approval date visually checked.",
+      "finding": "French registry identifies a foreign legal entity; the French public index supplies no filings. Two UK candidate-company accounts (01916348), approved 16 March 2026 and 10 March 2025, describe an unspecified freehold vineyard and Wardsend Limited’s 90% shareholding, but print no AE54, individual area, French SIREN crosswalk, named parcel lease or producer-company control. B Leroux’s director role is not a producer crosswalk. No domaine link or exact parcel filing is accepted.",
+      "limitation": "UK company remains a bounded candidate, not a proved French SIREN identity. Sources use stable Companies House URLs; expiring signed redirect query strings must not be committed."
+    },
+    {
+      "url": "https://find-and-update.company-information.service.gov.uk/company/01916348/filing-history/MzQ1Nzg0MjE5NGFkaXF6a2N4/document?format=pdf&download=0",
+      "retrievedAt": "2026-10-09T15:00:33.126542+00:00",
+      "sha256": "2b12bb8d1e4f17bb23430924e2c279d6f2f770828e3af054818301b225aa966b",
+      "bytes": 173741,
+      "id": "bat-filing-coombe-2024",
+      "title": "Coombe Castle Fine Wines Limited (UK 01916348): accounts 2024",
+      "retrievedFrom": "https://find-and-update.company-information.service.gov.uk/company/01916348/filing-history/MzQ1Nzg0MjE5NGFkaXF6a2N4/document?format=pdf&download=0",
+      "type": "company-filing",
+      "documentDate": "2025-03-10",
+      "filingDate": "2025-03-10",
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "pageCount": 10,
+      "screenedPages": 10,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; board approval date visually checked.",
+      "finding": "French registry identifies a foreign legal entity; the French public index supplies no filings. Two UK candidate-company accounts (01916348), approved 16 March 2026 and 10 March 2025, describe an unspecified freehold vineyard and Wardsend Limited’s 90% shareholding, but print no AE54, individual area, French SIREN crosswalk, named parcel lease or producer-company control. B Leroux’s director role is not a producer crosswalk. No domaine link or exact parcel filing is accepted.",
+      "limitation": "UK company remains a bounded candidate, not a proved French SIREN identity. Sources use stable Companies House URLs; expiring signed redirect query strings must not be committed."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=302265186&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=302265186&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:28.443561+00:00",
+      "sha256": "c91e47e1e4ddba389de3249c94cf7137ebb1ca757609f8412349f5060cea98fd",
+      "bytes": 3551,
+      "id": "bat-registry-302265186",
+      "title": "Official company registry: 302265186",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=310370077&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=310370077&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:29.758637+00:00",
+      "sha256": "dad3329420ff1a8b7e2360c7f4fa6dd23efa5019c3f24bc9b2be43760c3abe63",
+      "bytes": 3427,
+      "id": "bat-registry-310370077",
+      "title": "Official company registry: 310370077",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=319015269&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=319015269&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:29.625638+00:00",
+      "sha256": "7c41dd25573d4b020115c47a041441ecd4f48b62e70c7d595eddd3ea0c08caa4",
+      "bytes": 3756,
+      "id": "bat-registry-319015269",
+      "title": "Official company registry: 319015269",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=333145183&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=333145183&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:30.877908+00:00",
+      "sha256": "35a00b6094d0824c0a205cb84c12804ceb4a99c972eb8c2a8d9971e00b03891e",
+      "bytes": 4052,
+      "id": "bat-registry-333145183",
+      "title": "Official company registry: 333145183",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=384800736&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=384800736&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:31.887019+00:00",
+      "sha256": "4f9540d9d0e71397023dc66a1848350a6cdb0967d37b79f02cba1ad901a22cb7",
+      "bytes": 3197,
+      "id": "bat-registry-384800736",
+      "title": "Official company registry: 384800736",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=403784614&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=403784614&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:26.442474+00:00",
+      "sha256": "a02d474ae6a2e092a6a8db1298f80c5426136dcb9beb83093a025df871763753",
+      "bytes": 4217,
+      "id": "bat-registry-403784614",
+      "title": "Official company registry: 403784614",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=411738669&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=411738669&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:28.650563+00:00",
+      "sha256": "d41454a7e1a7c3ff8892bde47c6de32e03a5fd2ed88534cc6351402f6d628b78",
+      "bytes": 3421,
+      "id": "bat-registry-411738669",
+      "title": "Official company registry: 411738669",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The original 31 January 1997 GFA contribution names Chassagne AE71 at 886 m², matching current recorded rights and full cadastral area. Later 2019 and 2026 copies retain the same text with horizontal reproduction marks; the clean original is used for the historical contribution. Private family partners and a general obligation to lease do not identify a producer or current operator."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=429240302&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=429240302&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:30.742909+00:00",
+      "sha256": "a98bd1eb7174c4e3cef32237159f3f2595b1bbfa6ce57c84dc01616a83c1d3b0",
+      "bytes": 3412,
+      "id": "bat-registry-429240302",
+      "title": "Official company registry: 429240302",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=429705551&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=429705551&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:28.514563+00:00",
+      "sha256": "2d1a1209b3c87dc29f011b6df4f7ce8acd62e7f10377465a0f8c39f49564083b",
+      "bytes": 2939,
+      "id": "bat-registry-429705551",
+      "title": "Official company registry: 429705551",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "French registry identifies a foreign legal entity; the French public index supplies no filings. Two UK candidate-company accounts (01916348), approved 16 March 2026 and 10 March 2025, describe an unspecified freehold vineyard and Wardsend Limited’s 90% shareholding, but print no AE54, individual area, French SIREN crosswalk, named parcel lease or producer-company control. B Leroux’s director role is not a producer crosswalk. No domaine link or exact parcel filing is accepted."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=440840049&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=440840049&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:30.741909+00:00",
+      "sha256": "667e7b328bf72a353eb889551fb22cba01b70842a717dd7c84bd98c117e4f10e",
+      "bytes": 3302,
+      "id": "bat-registry-440840049",
+      "title": "Official company registry: 440840049",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=442440095&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=442440095&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:26.443473+00:00",
+      "sha256": "20bd98419abaef769c981c218b7a81231bee0bc965016596ba4b44b3837046ad",
+      "bytes": 3062,
+      "id": "bat-registry-442440095",
+      "title": "Official company registry: 442440095",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=484661939&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=484661939&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:31.954021+00:00",
+      "sha256": "f0731a159e4cfa7ad370ea0017a94f2628f025a5ee01c65fcbe8399adeb3cf32",
+      "bytes": 3328,
+      "id": "bat-registry-484661939",
+      "title": "Official company registry: 484661939",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=490242302&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=490242302&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:26.442474+00:00",
+      "sha256": "792a639558f164fb0331d0a92d1818005e010360c123564831bc340f81419986",
+      "bytes": 3085,
+      "id": "bat-registry-490242302",
+      "title": "Official company registry: 490242302",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=515620417&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=515620417&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:26.443473+00:00",
+      "sha256": "9bac0bbe37a64f50c00c82d07982dd4012f49c8dad4b458f9e3a22544abf25db",
+      "bytes": 4886,
+      "id": "bat-registry-515620417",
+      "title": "Official company registry: 515620417",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778253781&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778253781&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:28.516563+00:00",
+      "sha256": "ce3b1cff8d16cd9d8c4fa162a3ee193c46f0f3b3ca33d00247424a0d8a596d8c",
+      "bytes": 3269,
+      "id": "bat-registry-778253781",
+      "title": "Official company registry: 778253781",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=832401855&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=832401855&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:29.552638+00:00",
+      "sha256": "60ae05e814b68d9f79ec289833d64a405b77a3e07f7c0cf529e46cc04f1bb864",
+      "bytes": 3104,
+      "id": "bat-registry-832401855",
+      "title": "Official company registry: 832401855",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Formation identifies Hécate and authorizes purchase of Chassagne AE157 for 13a04ca. Exact reference and full area agree with the current bare-right holder. This is a purchase mandate, not the executed acquisition or an operating lease; Axam 2 and Eaque corporate partners do not establish a producer crosswalk."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=889363610&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=889363610&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:29.624638+00:00",
+      "sha256": "b092a5ea24f4bbd17088f9e166cd5bc507de0b8bf56cea76286c4b92eef8c14b",
+      "bytes": 3183,
+      "id": "bat-registry-889363610",
+      "title": "Official company registry: 889363610",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Les Batard Montrachet company statutes and registry establish the legal entity and its financial-advisory shareholder. No AE160 land schedule or independently supported producer crosswalk in the acquired corpus. The company name is not a domaine identification."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=ETIENNE%20SAUZET&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=ETIENNE%20SAUZET&per_page=10",
+      "retrievedAt": "2026-10-09T14:56:30.670907+00:00",
+      "sha256": "ee4f87b610cbaa4a3d0fa3929552d66ff5f865fbe39f07046034956f5da35441",
+      "bytes": 42303,
+      "id": "bat-registry-U29945686",
+      "title": "Official company registry: U29945686",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+    },
+    {
+      "url": "https://www.vf-jouard.com/fr_FR/mentions-legales",
+      "retrievedFrom": "https://www.vf-jouard.com/fr_FR/mentions-legales",
+      "retrievedAt": "2026-10-09T15:01:49.647953+00:00",
+      "sha256": "69907a286be2676de55e618219bdfdb490bfc776ab39cb70e1db4e7cdac3f5d1",
+      "bytes": 98345,
+      "id": "bat-legal-jouard",
+      "title": "Domaine Vincent et François Jouard legal notice",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+    },
+    {
+      "url": "https://www.drouhin.com/en_US/confidentialite",
+      "retrievedFrom": "https://www.drouhin.com/en_US/confidentialite",
+      "retrievedAt": "2026-10-09T15:07:27.622046+00:00",
+      "sha256": "397da3a363b3ec112050b4a6d58826002c48f132492bf7b9ae01d5aca2015161",
+      "bytes": 115689,
+      "id": "bat-legal-drouhin",
+      "title": "Maison Joseph Drouhin legal notice",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+    },
+    {
+      "url": "https://www.morey-coffinet.com/en_US/legal-notice",
+      "retrievedFrom": "https://www.morey-coffinet.com/en_US/legal-notice",
+      "retrievedAt": "2026-10-09T15:01:51.891989+00:00",
+      "sha256": "90ef0567ccac1f130ab99757346b2ed45d3f6697a2c6649511829827fae3b8bb",
+      "bytes": 21603,
+      "id": "bat-legal-morey-coffinet",
+      "title": "Morey-Coffinet legal notice",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+    },
+    {
+      "url": "https://www.morey-meursault.fr/en/legal-notice/",
+      "retrievedFrom": "https://www.morey-meursault.fr/en/legal-notice/",
+      "retrievedAt": "2026-10-09T15:08:30.474942+00:00",
+      "sha256": "a0b44b8e6429e273e64f5e990a851884c833011d48e730c7d1ffad8ca86e18c6",
+      "bytes": 19850,
+      "id": "bat-legal-morey-blanc",
+      "title": "Morey-Blanc / Pierre Morey legal notice",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=328186416&per_page=10",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=328186416&per_page=10",
+      "retrievedAt": "2026-10-09T15:07:26.541327+00:00",
+      "sha256": "9784b7b8dd13171f7a9d6898faa8610c4731d98aee44f7ce04e634e355c40c25",
+      "bytes": 3312,
+      "id": "bat-registry-328186416",
+      "title": "Official registry: Domaine Bonneau du Martray",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-09",
+      "access": "read",
+      "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+    },
+    {
       "url": "https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172",
       "retrievedFrom": "User-supplied Pappers PDF",
       "retrievedAt": "2026-10-10T00:46:08.609392+00:00",
@@ -13313,6 +15315,14 @@
             "recherche-entreprises.api.gouv.fr"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (0 filings / 0 screened pages). No new company relationship or current farming assertion."
         }
       ]
     },
@@ -13487,6 +15497,38 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "302265186": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=302265186&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 81,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "302265186/ch-teau-de-la-maltroye",
+          "domaine": "Château de la Maltroye",
+          "relation": "owner-company",
+          "basis": "Matching 2024 statutes and registry establish Château de la Maltroye (302265186). No AE48 schedule in the bounded OCR corpus. The 2021 filing concerns Holding Cournut shares, not a land conveyance. The 2009 document cover prints distinct SIREN 500363619 despite appearing in this index: screened but not used for holder identity or exact parcel evidence.",
+          "sourceIds": [
+            "bat-registry-302265186",
+            "bat-filing-302265186-1"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "302572094": {
       "links": [
         {
@@ -13637,6 +15679,39 @@
         "pagesRead": 246
       }
     },
+    "310370077": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=310370077&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 168,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "310370077/domaine-bachelet-ramonet",
+          "domaine": "Domaine Bachelet-Ramonet",
+          "relation": "owner-company",
+          "basis": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights.",
+          "sourceIds": [
+            "bat-registry-310370077",
+            "bat-filing-310370077-3",
+            "bat-filing-429240302-3"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "312990021": {
       "links": [
         {
@@ -13770,6 +15845,39 @@
             "actes.ccm2.net"
           ],
           "outcome": "no-link-found"
+        }
+      ]
+    },
+    "319015269": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=319015269&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 161,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "319015269/domaine-morey-coffinet",
+          "domaine": "Domaine Morey-Coffinet",
+          "relation": "owner-company",
+          "basis": "Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only.",
+          "sourceIds": [
+            "bat-registry-319015269",
+            "bat-filing-319015269-1",
+            "bat-legal-morey-coffinet"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
         }
       ]
     },
@@ -14501,6 +16609,14 @@
           ],
           "outcome": "linked",
           "note": "Reuses the reviewed Vougeraie brand/company identity from its legal notice and the prior three-filings / 26-page search. No new exact Chevalier schedule is asserted; the co-recorded Louis Violland identifier remains independently unresolved."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (3 filings / 26 screened pages). No new company relationship or current farming assertion."
         }
       ],
       "effort": {
@@ -14573,6 +16689,48 @@
         "filingsScreened": 2,
         "pagesRead": 39
       }
+    },
+    "333145183": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=333145183&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=ramonet&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 4 more filings / 98 pages (2003 capital, 2007 statutes, 2011 statutes and share contributions). The company takes land on lease; its capital is movables and shares. No lease schedule; AH66, AI17 and AI123 are never named. The 2013 family operating companies were formed in cash."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 7,
+        "pagesRead": 162,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 4 more distinct filings / 98 pages."
+      },
+      "links": [
+        {
+          "id": "333145183/domaine-ramonet",
+          "domaine": "Domaine Ramonet",
+          "relation": "owner-company",
+          "basis": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation.",
+          "sourceIds": [
+            "bat-registry-333145183",
+            "bat-filing-333145183-17"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
     },
     "333321446": {
       "links": [],
@@ -14740,6 +16898,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "no-link-found",
+          "note": "Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship."
         },
         {
           "at": "2026-10-10",
@@ -15208,6 +17374,39 @@
         }
       ]
     },
+    "384800736": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=384800736&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 133,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "384800736/maison-morey-blanc",
+          "domaine": "Maison Morey-Blanc",
+          "relation": "owner-company",
+          "basis": "The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus.",
+          "sourceIds": [
+            "bat-registry-384800736",
+            "bat-filing-384800736-3",
+            "bat-legal-morey-blanc"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "388212649": {
       "links": [
         {
@@ -15511,6 +17710,47 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "403784614": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=403784614&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "linked",
+          "note": "The user-supplied 20 November 2023 Pappers deposit is byte-identical to bat-filing-403784614-11 (21 pages; deed 21 July 2023). All 21 pages were re-screened. The authentic extract still omits the individual real-estate schedules on pages 6-9; no exact AE40/AE52 match is established. This is zero additional distinct PDFs or pages in the corpus. Original 6-file / 137-page effort, link and source metadata are preserved."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 6,
+        "pagesRead": 137,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "403784614/domaine-vincent-et-fran-ois-jouard",
+          "domaine": "Domaine Vincent et François Jouard",
+          "relation": "owner-company",
+          "basis": "Official registry, statutes and estate legal notice identify Domaine Vincent et François Jouard (403784614). The 2023 capital contribution states real-estate contributions but the acquired authentic extract omits the individual schedules (pages 6–9; page 6 visually verified). No exact AE40/AE52 match is supported. The 1996 formation recites prior métayage without a cadastral schedule. Neither recital nor corporate identity establishes current farming.",
+          "sourceIds": [
+            "bat-registry-403784614",
+            "bat-filing-403784614-11",
+            "bat-legal-jouard"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "405387101": {
       "links": [
         {
@@ -15611,6 +17851,14 @@
           ],
           "outcome": "linked",
           "note": "Reuses the reviewed Opale-to-Olivier Leflaive Frères company-control link. The 2006 contribution prints retired AH150 (981 m²), reaching AH182/AH183 only through the official 2019 split. AH151 (1058 m²) is now recorded to Pousse d’Or. These are external historical contexts, not exact filings of today’s holders."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "23 June 2006 contribution conveys two half interests in each whole parcel. Individual complete areas 916 and 917 m² match the current Opale rights. No current operation claimed. Existing Opale-to-Olivier Leflaive Frères control link is reused unchanged."
         }
       ],
       "effort": {
@@ -15795,6 +18043,24 @@
         "filingsScreened": 5,
         "pagesRead": 282,
         "note": "Bounded selection; every selected PDF page OCR-screened. Counts include rejected candidates: Boutieres two separate GFAs, Peirazeau one misindexed 16-page PDF. Zero means no accessible selected PDF, not no historical evidence."
+      }
+    },
+    "411738669": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=411738669&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "no-link-found",
+          "note": "The original 31 January 1997 GFA contribution names Chassagne AE71 at 886 m², matching current recorded rights and full cadastral area. Later 2019 and 2026 copies retain the same text with horizontal reproduction marks; the clean original is used for the historical contribution. Private family partners and a general obligation to lease do not identify a producer or current operator."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 92,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
       }
     },
     "412618001": {
@@ -16253,6 +18519,57 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "429240302": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=429240302&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 103,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. The 88-page merger project is reused from 310370077 and excluded from this holder’s new-file/page count."
+      },
+      "links": [
+        {
+          "id": "429240302/domaine-bachelet-ramonet-p-re-et-fils",
+          "domaine": "Domaine Bachelet-Ramonet Père et Fils",
+          "relation": "owner-company",
+          "basis": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope.",
+          "sourceIds": [
+            "bat-registry-429240302",
+            "bat-filing-429240302-3"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
+    "429705551": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=429705551&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi",
+            "UK Companies House company 01916348 accounts; unproved candidate identity"
+          ],
+          "outcome": "no-link-found",
+          "note": "French registry identifies a foreign legal entity; the French public index supplies no filings. Two UK candidate-company accounts (01916348), approved 16 March 2026 and 10 March 2025, describe an unspecified freehold vineyard and Wardsend Limited’s 90% shareholding, but print no AE54, individual area, French SIREN crosswalk, named parcel lease or producer-company control. B Leroux’s director role is not a producer crosswalk. No domaine link or exact parcel filing is accepted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 20,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      }
+    },
     "429825250": {
       "links": [],
       "searches": [
@@ -16431,6 +18748,38 @@
         "note": "pagesRead counts OCR-screened PDF pages."
       }
     },
+    "440840049": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=440840049&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 72,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "440840049/maison-henri-boillot",
+          "domaine": "Maison Henri Boillot",
+          "relation": "family-holding",
+          "basis": "The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged.",
+          "sourceIds": [
+            "bat-registry-440840049",
+            "bat-filing-440840049-4"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "442062527": {
       "searches": [
         {
@@ -16449,6 +18798,39 @@
         "pagesRead": 110,
         "note": "pagesRead counts OCR-screened PDF pages."
       }
+    },
+    "442440095": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=442440095&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 5,
+        "pagesRead": 235,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "442440095/domaine-bonneau-du-martray",
+          "domaine": "Domaine Bonneau du Martray",
+          "relation": "common-ownership",
+          "basis": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link.",
+          "sourceIds": [
+            "bat-registry-442440095",
+            "bat-filing-442440095-0",
+            "bat-registry-328186416"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
     },
     "443958350": {
       "searches": [
@@ -16795,6 +19177,38 @@
         "note": "Romanée-Saint-Vivant #426 pass; includes re-screened shared filings, not an additive lifetime total."
       }
     },
+    "484661939": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=484661939&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 102,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "484661939/domaine-bavard-jean-paul",
+          "domaine": "Domaine Bavard Jean Paul",
+          "relation": "owner-company",
+          "basis": "Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted.",
+          "sourceIds": [
+            "bat-registry-484661939",
+            "bat-filing-484661939-3"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
+    },
     "485329171": {
       "links": [
         {
@@ -16864,6 +19278,36 @@
         "filingsScreened": 1,
         "pagesRead": 34,
         "note": "pagesRead counts OCR-screened PDF pages; 2 cited pages checked against page images."
+      }
+    },
+    "490242302": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=490242302&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "no-link-found",
+          "note": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=490242302",
+            "https://recherche-entreprises.api.gouv.fr/search?q=851404954",
+            "https://recherche-entreprises.api.gouv.fr/search?q=CFI%20BEAUNE&per_page=5"
+          ],
+          "outcome": "no-link-found",
+          "note": "Owner-requested search on 10 October 2026: 3 more filings / 44 pages (2019 and 2020 decisions and statutes) print no parcel. The partners are Côte d’Or Vineyards (851404954), whose sole shareholder is Cloud Vineyards Limited of Hong Kong, and Compagnie Foncière et Immobilière de Beaune (851751149), co-manager in 2020. No producer is named; the Beaune company is a possible lead only."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 8,
+        "pagesRead": 194,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 3 more distinct filings / 44 pages."
       }
     },
     "491471041": {
@@ -17229,12 +19673,53 @@
             "actes.ccm2.net"
           ],
           "outcome": "linked"
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (2 filings / 33 screened pages). No new company relationship or current farming assertion."
         }
       ],
       "effort": {
         "filingsScreened": 2,
         "pagesRead": 33
       }
+    },
+    "515620417": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=515620417&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 68,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "515620417/maison-joseph-drouhin",
+          "domaine": "Maison Joseph Drouhin",
+          "relation": "owner-company",
+          "basis": "Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation.",
+          "sourceIds": [
+            "bat-registry-515620417",
+            "bat-filing-515620417-1",
+            "bat-legal-drouhin"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
     },
     "515620466": {
       "links": [
@@ -17663,6 +20148,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 4 distinct filings / 59 pages. H2O, formerly Moulin d’Eugénie, is controlled by Domaine d’Eugénie: the July 2026 statutes record 157899 of 188860 shares. Formation and contribution records do not give an exact AE172 schedule. Corporate control is not parcel tenancy or current farming."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (4 filings / 59 screened pages). No new company relationship or current farming assertion."
         }
       ],
       "effort": {
@@ -17764,12 +20257,30 @@
           ],
           "outcome": "linked",
           "note": "Existing brand-identity link reused; two selected additional filings contain no Musigny schedule."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (2 filings / 30 screened pages). No new company relationship or current farming assertion."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=faiveley&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 1 more filing / 13 pages. A December 2025 contribution report says the Faiveley family land companies lease their Puligny and Gevrey vineyards long-term to CVVB, without a parcel list. Faiveley’s published Bâtard and Bienvenues areas equal AI144 and AI19, which CVVB already holds."
         }
       ],
       "effort": {
-        "filingsScreened": 2,
-        "pagesRead": 30,
-        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused."
+        "filingsScreened": 3,
+        "pagesRead": 43,
+        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused. 10 October 2026: 1 more distinct filings / 13 pages."
       }
     },
     "778159715": {
@@ -18046,6 +20557,14 @@
           "note": "Reuses the reviewed Domaine Leflaive company identity and the four-filings / 111-page Montrachet screening. No exact AH77/AH148 schedule accepted. The company is distinct from the Leflaive GFA and a corporate identity does not establish present operation."
         },
         {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (4 filings / 111 screened pages). No new company relationship or current farming assertion."
+        },
+        {
           "at": "2026-10-10",
           "where": [
             "entreprises.lefigaro.fr free filing index",
@@ -18097,6 +20616,14 @@
           "note": "Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted."
         },
         {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "Reuses the existing shared company link and search effort (3 filings / 113 screened pages). No new company relationship or current farming assertion."
+        },
+        {
           "at": "2026-10-10",
           "where": [
             "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
@@ -18110,6 +20637,38 @@
         "pagesRead": 113,
         "note": "All selected PDF pages OCR-screened; bounded review, not every filing ever deposited. See Bonnes-Mares filings.md."
       }
+    },
+    "778253781": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=778253781&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 110,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "778253781/domaine-prieur-brunet",
+          "domaine": "Domaine Prieur-Brunet",
+          "relation": "owner-company",
+          "basis": "The 2022 decision renames the same company Domaine Prieur-Brunet. The 2017 share sale to HVB recites a 23 December 2015 lease including Chassagne AE57, without its individual area. Retain original-reference external research, not an exact filing. SAFER describes tenancy as of that transaction; neither a complete executed lease nor current actual cultivation is established. The 1964 contribution in the older bundle includes Bâtard wine stocks, not a Bâtard land schedule.",
+          "sourceIds": [
+            "bat-registry-778253781",
+            "bat-filing-778253781-0"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ]
     },
     "778256123": {
       "links": [
@@ -18215,6 +20774,14 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 1 distinct filings / 125 pages. The 21 December 1974 notarial estate schedule names AE31 (3419 m²) and AE129 (1670 m²), matching current recorded DRC rights. AE130 is not printed in that schedule. The 2002 deposit is not a 2002 land transfer. Existing reviewed company link is reused unchanged."
+        },
+        {
+          "at": "2026-10-09",
+          "where": [
+            "Shared holder table and prior reviewed source corpus; Bâtard application review"
+          ],
+          "outcome": "linked",
+          "note": "1974 filing schedule matches current AE46 and 1746 m². Historical company property only. Existing DRC link and prior effort are reused unchanged."
         }
       ],
       "effort": {
@@ -18581,6 +21148,24 @@
         "note": "pagesRead counts OCR-screened PDF pages; 1 cited pages checked against page images."
       }
     },
+    "832401855": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=832401855&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "no-link-found",
+          "note": "Formation identifies Hécate and authorizes purchase of Chassagne AE157 for 13a04ca. Exact reference and full area agree with the current bare-right holder. This is a purchase mandate, not the executed acquisition or an operating lease; Axam 2 and Eaque corporate partners do not establish a producer crosswalk."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 18,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      }
+    },
     "833027865": {
       "searches": [
         {
@@ -18854,6 +21439,24 @@
       "effort": {
         "filingsScreened": 8,
         "pagesRead": 201
+      }
+    },
+    "889363610": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=889363610&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "no-link-found",
+          "note": "Les Batard Montrachet company statutes and registry establish the legal entity and its financial-advisory shareholder. No AE160 land schedule or independently supported producer crosswalk in the acquired corpus. The company name is not a domaine identification."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 2,
+        "pagesRead": 34,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
       }
     },
     "891743239": {
@@ -20790,6 +23393,50 @@
         "filingsScreened": 0,
         "pagesRead": 0,
         "note": "Registry and public-source search; no matched filing reviewed."
+      }
+    },
+    "U29945686": {
+      "searches": [
+        {
+          "at": "2026-10-09",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=ETIENNE%20SAUZET&per_page=10",
+            "Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi"
+          ],
+          "outcome": "linked",
+          "note": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 6,
+        "pagesRead": 188,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "U29945686/domaine-etienne-sauzet",
+          "domaine": "Domaine Etienne Sauzet",
+          "relation": "owner-company",
+          "basis": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file.",
+          "sourceIds": [
+            "bat-registry-U29945686",
+            "bat-filing-382485027-5",
+            "bat-filing-382485027-3",
+            "bat-filing-382485027-0"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-09"
+        }
+      ],
+      "identity": {
+        "companySiren": "382485027",
+        "sourceIds": [
+          "bat-registry-U29945686",
+          "bat-filing-382485027-5",
+          "bat-filing-382485027-3",
+          "bat-filing-382485027-0"
+        ],
+        "limitation": "Printed AI2 (1377 m²), the completed 2018 merger and 2019 rename support this company-record crosswalk. The separate trading company and original DGFiP U identifier remain distinct; no rights file is rewritten."
       }
     },
     "U32852627": {

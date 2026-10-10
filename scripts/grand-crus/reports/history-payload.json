@@ -2,36 +2,36 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-B5-0niIP.js"
+    "dist/client/assets/index-CjgJNRud.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-MeQvAjNp.js",
-    "dist/client/assets/SectionLabel-BfpVRPot.js",
-    "dist/client/assets/SparklingDetailsCard-x_y8fvaF.js",
-    "dist/client/assets/VillageMap-BuxaG8pH.js",
-    "dist/client/assets/burgundyAtlas-B-IBMouq.js",
-    "dist/client/assets/index-B5-0niIP.js",
-    "dist/client/assets/index-B5E9IpGs.js",
+    "dist/client/assets/FriendTagDialog-tfI_2O-s.js",
+    "dist/client/assets/SectionLabel-zSmZvGMA.js",
+    "dist/client/assets/SparklingDetailsCard-Cf440S6r.js",
+    "dist/client/assets/VillageMap-DnKUc2jT.js",
+    "dist/client/assets/burgundyAtlas-pB-iOewT.js",
+    "dist/client/assets/index-CjgJNRud.js",
+    "dist/client/assets/index-Fcd5ijeS.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-p4FgVSbI.js",
-    "dist/client/assets/wineDetailCompact-Dsn4HURT.js"
+    "dist/client/assets/useModalFocus-hQ5IksA5.js",
+    "dist/client/assets/wineDetailCompact-DvPqvtho.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5916947,
-  "evidenceGzipBytesTotal": 547968,
+  "evidenceBytesTotal": 5968800,
+  "evidenceGzipBytesTotal": 558434,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
     {
       "cru": "batard-montrachet",
-      "file": "dist/client/assets/batard-montrachet.evidence-BynlMaZP.js",
-      "sha256": "5308f039a0b8443f519a7893dd6f1ed5ecf942ad0e42a224454f86e33924ba87",
-      "bytes": 143354,
-      "gzipBytes": 12603
+      "file": "dist/client/assets/batard-montrachet.evidence-B19vPiDT.js",
+      "sha256": "005d3e8cd8176ba648cb2f8ab5131d74aac8d6d47d20096ecf8f794e19d748c0",
+      "bytes": 195207,
+      "gzipBytes": 23069
     },
     {
       "cru": "bienvenues-batard-montrachet",

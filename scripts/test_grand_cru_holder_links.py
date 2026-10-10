@@ -1585,5 +1585,102 @@ class ChevalierTierTwoTests(unittest.TestCase):
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 
 
+
+class BatardTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('batard-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_supplied_jouard_duplicate_does_not_inflate_sources_or_fill_omitted_schedules(self):
+        matches = [s for s in self.table['sources']
+                   if s.get('sha256') == '7cf26cb31dff554458446c6a450aefe88ddee46d4776b19877e4931b1c2481e1']
+        self.assertEqual([s['id'] for s in matches], ['bat-filing-403784614-11'])
+        self.assertEqual(self.table['holders']['403784614']['effort']['filingsScreened'], 6)
+        self.assertEqual(self.table['holders']['403784614']['effort']['pagesRead'], 137)
+        for row in self.register['parcels']:
+            if row['parcelId'] in ('21150000AE0040', '21150000AE0052'):
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIsNone(row['currentFarmer'])
+
+    def test_holder_links_keep_control_and_identity_distinct_from_operation(self):
+        self.assertEqual(len(self.curation['holders']), 28)
+        for h in self.curation['holders']:
+            self.assertTrue(self.table['holders'][h['holderId']]['searches'])
+            self.assertFalse(h['parcelOperationConfirmed'])
+        for hid in ('349583500', '490242302', '429705551', '411738669', '832401855', '889363610'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+        self.assertEqual(self.table['holders']['442440095']['links'][0]['relation'], 'common-ownership')
+        self.assertEqual(self.table['holders']['384800736']['links'][0]['domaine'], 'Maison Morey-Blanc')
+        self.assertEqual(self.table['holders']['U29945686']['identity']['companySiren'], '382485027')
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_exact_schedules_retain_whole_area_and_limited_property_interests(self):
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, {'21150000AE0046': 1746, '21512000AI0137': 916,
+            '21512000AI0138': 917, '21150000AE0038': 2433, '21150000AE0071': 886,
+            '21150000AE0157': 1304, '21512000AI0001': 3968,
+            '21512000AI0121': 1675, '21512000AI0002': 1377})
+        fs = {f['holderId']: f for f in self.curation['parcelFilings']}
+        self.assertIn('purchase mandate', fs['832401855']['appNote'])
+        self.assertIn('55.25%', fs['310370077']['appNote'])
+        self.assertIn('bare soil', fs['429240302']['appNote'])
+        self.assertEqual(fs['442440095']['leaseEvidence'][0]['effectiveTo'], '2022-09-15')
+        for f in self.curation['parcelFilings']:
+            for pid in f['parcelAreasM2']:
+                row = next(p for p in self.register['parcels'] if p['parcelId'] == pid)
+                self.assertIn(f['holderId'], {r['holderId'] for r in row['recordedRights']})
+
+    def test_retired_bavard_reference_reaches_ai170_only_through_dfi(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-bavard-ai124')
+        self.assertEqual(x['parcelIds'], [])
+        self.assertEqual(x['predecessorReferences'], {'21512000AI0124': ['21512000AI0170']})
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AI0170')
+        self.assertIn(x['id'], row['externalResearchIds'])
+        self.assertEqual(row['parcelFilingIds'], [])
+        self.assertIsNone(row['currentFarmer'])
+        prieur = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-prieur-brunet-ae57')
+        self.assertEqual(prieur['parcelIds'], ['21150000AE0057'])
+        self.assertNotIn('21150000AE0057', {p for f in self.curation['parcelFilings'] for p in f['parcelAreasM2']})
+
+    def test_winehog_requires_both_number_and_individual_area(self):
+        items = [x for x in self.curation['externalResearch']
+                 if x['id'].startswith('bat-winehog-') and x['basis'] == 'critic-named-cadastral-reference']
+        self.assertEqual({p: a for x in items for p, a in x['parcelAreasM2'].items()},
+            {'21150000AE0046': 1746, '21150000AE0175': 1303, '21512000AI0144': 3508})
+        self.assertTrue(all(not x['parcelIds'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertEqual(len(self.curation['producerHoldings']), 22)
+        self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_coffinet_duvernay_is_matched_by_stated_side_and_exact_area_only(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-winehog-41492-coffinet-duvernay')
+        self.assertEqual((x['basis'], x['printedReferences'], x['parcelAreasM2']),
+                         ('critic-attribution-area-reconstructed', [], {'21150000AE0176': 1304}))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        self.assertEqual(rows['21150000AE0176']['recordedRights'], [])
+        self.assertEqual(rows['21150000AE0176']['researchStatus'], 'holder-lead')
+        # The equal-area southern neighbour keeps its own filing and is not reassigned.
+        self.assertNotIn(x['id'], rows['21150000AE0157']['externalResearchIds'])
+        self.assertFalse(any('Coffinet-Duvernay' in u['printedReference'] for u in self.curation['unmatchedPrintedReferences']))
+
+    def test_bienvenues_group_totals_reach_batard_edge_parcels(self):
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: v['parcelIds'] for k, v in groups.items()},
+                         {'bat-group-ramonet-bienvenues': ['21512000AI0017'],
+                          'bat-group-leflaive-bienvenues': ['21512000AI0111']})
+        for item in groups.values():
+            self.assertEqual(sum(item['areaEvidence']['groupParcelAreasM2'].values()), item['areaEvidence']['printedTotalM2'])
+        # Leflaive's 1.158 ha counts only as an owner-accepted dropped final zero (1.1580 ha).
+        self.assertTrue(groups['bat-group-leflaive-bienvenues']['areaEvidence']['trailingZeroDropped'])
+        self.assertNotIn('trailingZeroDropped', groups['bat-group-ramonet-bienvenues']['areaEvidence'])
+        self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
+                          self.register['counts']['unresolved']), (32, 57))
+
+
 if __name__ == '__main__':
     unittest.main()
