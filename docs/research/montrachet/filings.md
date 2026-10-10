@@ -501,3 +501,57 @@ The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 
 The 2002 filing date is not a land-transfer date. The typed copy repeats the 1920 contribution; no modern reference is supplied.
 
 Page images checked: 1, 10, 36, 41, 55 (one-based PDF). SHA-256 `a9a4d05f83f5d4d5e1df5d57b89ce987ad2cd314909e30ec7f0f7934fa2723e0`; 2,004,690 bytes; received 2026-10-10T00:46:08.609392+00:00. No PDF or OCR is committed.
+
+## Owner decisions: 10 October 2026
+
+This section supersedes the earlier statements above.
+
+- **Plot 24.** The 34/24 conflict in the 1921 expansion article is settled by the map, which the owner supplied
+  on 10 October. The map outlines 24, so AE24 (542 m²) is named for the René Lamy-Pillot family.
+- **Fleurot.** The unnumbered 2016 six-domaine map places Fleurot’s 0.0405 ha on AE173 (405 m²), directly above
+  Leflaive’s AE134. This is labelled as matched by map position and area, not by a printed number.
+- **Group totals.** The Leflaive and Bouchard Chevalier aggregates name AH77, AH131, AH149 and AH11 here. Today’s
+  cadastral areas add up exactly to each printed total.
+- **No change.** Leflaive’s and Lafon’s published holdings, and Prieur’s 30, stay unmatched as described above.
+
+## Producer-filing search: 10 October 2026
+
+The owner asked for a further search of producer filings. It adds **4 distinct GFA du Domaine des Comtes Lafon
+filings / 66 pages**, for 55 distinct filings / 1,481 pages in all. The operating company, Domaine des Comtes
+Lafon (393418744), is not a recorded holder. Its own 6 filings / 111 pages were also screened, but they are not
+counted in the holder totals. They show cash formation, a 1994 transfer of the operating branch that excludes
+land, and later statutes, with no lease schedule.
+
+### mt-filing-778232892-2022-lease
+
+[GFA du Domaine des Comtes Lafon: notarial share donation-partage](https://actes.ccm2.net/acte/19fca7ec-1bbe-4a42-a4f2-f2994dfb8f96#page=17) — document **2022-10-01**, deposit **2024-10-10**; **24 pages**, all screened.
+
+The deed recites the GFA’s long-term rural lease to SARL Domaine des Comtes Lafon (393418744). The lease ran from
+18 April 1994, with a complementary lease of 27 April 1996, an amendment of 1 April 2005 and a complementary lease
+of 30 March 2018. Page 18 states that all the GFA’s parcels are covered by that lease. No parcel list is printed.
+AE37 (3,182 m²) is the GFA’s only parcel in the five crus. This supports a recited-lease link, scoped to
+Montrachet, but not an exact parcel filing.
+
+SHA-256 `695aefcf17f6931c62a14068a7a9d400cd0d50bd421ff5e4ce2fc214ac25df8c`; 456,262 bytes; retrieved 2026-10-10T07:46:49+00:00.
+
+### mt-filing-778232892-2025-lease
+
+[GFA du Domaine des Comtes Lafon: notarial donation-partage](https://actes.ccm2.net/acte/0c05173f-7b24-4562-a8e2-50edeaee8fae#page=20) — document **2025-02-17**, deposit **2025-10-20**; **28 pages**, all OCR-screened.
+
+The deed repeats the same lease chain to 393418744. The 2018 complementary lease was published as 2018P no. 1483,
+corrected 2019P no. 522. No parcel list is printed.
+
+SHA-256 `c644e563c5079550b9b436c94f567313ab22c27f85c746489cd58ad719b05896`; 2,052,180 bytes; retrieved 2026-10-10T07:35:53+00:00.
+
+### mt-filing-778232892-1996-lease
+
+[GFA du Domaine des Comtes Lafon: notarial share donation-partage](https://actes.ccm2.net/acte/491306bc-2ae6-4f44-85f1-342d629e8956#page=3) — document **1996-06-15**, deposit **1996-07-03**; **9 pages**, all OCR-screened.
+
+The deed recites the 18 April 1994 lease of all the GFA’s property to the SARL for 18 years from 1 January 1994,
+published as 1994P no. 2367. No Montrachet parcel is listed.
+
+SHA-256 `3a9d7a752ccc88e55b25ffac727de6feeb022bd6b87b5240bb427cd461bd2d53`; 262,906 bytes; retrieved 2026-10-10T07:11:36+00:00.
+
+A sibling 1996 usufruct donation (5 pages; SHA-256 `19e3a05624f074339556888b8763c9d29ae682ffc427b566a604b15b121542f7`)
+was also screened. It recites only the formation and the 1994 conversion, so it is counted in the effort but not
+cited. The lease deeds themselves are held by the land-registry service. They are unacquired Tier 3 leads.

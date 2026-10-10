@@ -312,7 +312,8 @@ def resolve_curation(curation, slug, links=None):
     holders = []
     for h in curation['holders']:
         found = active_holder_links(links['holders'].get(h['holderId']), slug) if adopted else []
-        holders.append({**h, 'candidateNames': [link['domaine'] for link in found],
+        # Two links can reach the same domaine (a succession and a recited lease); it is one candidate.
+        holders.append({**h, 'candidateNames': list(dict.fromkeys(link['domaine'] for link in found)),
                         'sourceIds': list(dict.fromkeys(h['sourceIds'] + [s for link in found for s in link['sourceIds']]))})
 
     def strings(value):

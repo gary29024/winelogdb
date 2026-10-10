@@ -261,3 +261,28 @@ The supplied 31-page filing records the 29 October 2012 capital increase, deposi
 The meeting heading and updated statutes state 29 October 2012. The inserted article on PDF page 4 instead says 26 October 2012; this internal discrepancy is preserved. Neither date is used as a land-transfer date.
 
 Page images checked: 2, 3, 4, 6, 13, 14 (one-based PDF). SHA-256 `b52567bf3bcf6b2852628d7b5305bb7066f231105c893dc689805eb829d49027`; 1,123,281 bytes; received 2026-10-10T00:46:08.615392+00:00. No PDF or OCR is committed.
+
+## Owner decisions: 10 October 2026
+
+This section supersedes the earlier statements above. Those statements say the Leflaive and Bouchard aggregates
+remain unmatched, and that SCI Montille et Partners has no link. No new company filing was screened. The
+filing totals are unchanged.
+
+- The Leflaive (1.8273 ha) and Bouchard (2.3295 ha) aggregates now name each printed parcel. Today’s cadastral
+  areas add up to each printed total exactly, to the square metre (the printed-group-total rule).
+- SCI Montille et Partners (`751811472`) has a reviewed `management` link to Domaine de Montille. The register
+  names E.M. Conseil (439237900) as its manager and fully liable partner. E.M. Conseil also presides SAS
+  Domaine de Montille and the SCI’s other partner, Bourgogne Investissement (892694258; register response SHA-256
+  `4659c96024d8ea9b711bb316c844a74bbd8557d24a685fd455d6ed00bf3e7937`, 3,133 bytes, 2026-10-10T05:06:05Z).
+  The 751811472 register response is byte-identical to the 9 October copy (`ch-registry-751811472`). Shared
+  management is not a lease, and no AH169 schedule is accepted.
+- The owner supplied 8 of the 9 missing images (`photos.zip`, SHA-256
+  `22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd`). Their hashes are recorded on each
+  source. One d’Auvenay image remains unreviewed.
+- Chartron’s Clos des Chevaliers is named as AH140 and AH141 by combining two sources. Winehog prints the numbers
+  without areas. The estate’s own area table (PDF created 2021-12-21; SHA-256
+  `49c2dd9abf775a89ff76fcde9412b1353573319a60bad693e477dd364c2fd2a7`, 280,797 bytes, 2026-10-10T05:05:06Z) gives
+  55 a 31 ca without numbers. Today’s cadastral areas add up exactly. Domaine Jean Chartron’s own filings
+  (330629635; 4 filings / 166 pages screened in this session) print a lease mandate over family-owned land and a
+  fermage expense. They name no AH reference, lessor or area, so they add no parcel match. These filings are not added
+  to the filing totals above, because none supports a parcel.
