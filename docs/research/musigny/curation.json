@@ -168,7 +168,7 @@
       "bytes": 2845261,
       "retrievedAt": "2026-10-08T15:22:08.198267+00:00",
       "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
-      "finding": "Names AN34 (682 m²) and AN41 (452 m²). AN22/23 share a 970 m² total without individual printed areas; the southern cultivation arrangement differs from cadastral outlines."
+      "finding": "Names AN34 (682 m²) and AN41 (452 m²). AN22/23 share a 970 m² total without individual printed areas; today’s two cadastral areas add up exactly, so both are named under the printed-group-total rule. The southern cultivation arrangement differs from cadastral outlines."
     },
     {
       "id": "mus-winehog-mugnier",
@@ -208,7 +208,7 @@
       "bytes": 3012640,
       "retrievedAt": "2026-10-08T15:22:08.337883+00:00",
       "retrievalNote": "Authorized MHTML supplied by the repository owner. SHA-256 covers the original archive; archive, article text and figures remain outside Git.",
-      "finding": "Names AN61/40 with a combined 5,660 m² and AN60/57 with 1,060 m². No individual areas are printed; the separate SEPV filing supplies the exact individual matches."
+      "finding": "Names AN61/40 with a combined 5,660 m² and AN60/57 with 1,060 m². No individual areas are printed; today’s cadastral areas add up exactly to each total (printed-group-total rule), agreeing with the separate SEPV filing’s exact individual matches."
     },
     {
       "id": "mus-winehog-jadot",
@@ -741,6 +741,114 @@
       "appNote": "Winehog (2014) names former AN15 (7,660 m²). Reached through the 2019 DFI split; historical context, not current ownership or farming.",
       "dateSourceId": "mus-winehog-prieur",
       "currentFarmer": null
+    },
+    {
+      "id": "mus-group-vougeraie-an22-an23",
+      "title": "Winehog: Vougeraie’s AN22 and AN23 in Musigny",
+      "parcelIds": [
+        "21133000AN0022",
+        "21133000AN0023"
+      ],
+      "parcelAreasM2": {
+        "21133000AN0022": 778,
+        "21133000AN0023": 192
+      },
+      "printedReferences": [
+        "AN22",
+        "AN23"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.0970 ha",
+        "printedTotalM2": 970,
+        "groupParcelAreasM2": {
+          "21133000AN0022": 778,
+          "21133000AN0023": 192
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) gives Vougeraie’s AN22 and AN23 as 0.0970 ha combined, without individual areas. Today’s cadastral areas, 778 and 192 m², add up exactly to 970 m², so both are named under the printed-group-total rule. The article’s account of the southern cultivation arrangement is not a cadastral claim. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "mus-winehog-vougeraie"
+      ],
+      "producer": "Domaine de la Vougeraie",
+      "appNote": "Winehog prints AN22, AN23 with 0.0970 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "mus-winehog-vougeraie",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-group-drouhin-an61-an40",
+      "title": "Winehog: Drouhin’s AN61 and AN40 in Musigny",
+      "parcelIds": [
+        "21133000AN0061",
+        "21133000AN0040"
+      ],
+      "parcelAreasM2": {
+        "21133000AN0061": 5480,
+        "21133000AN0040": 180
+      },
+      "printedReferences": [
+        "AN61",
+        "AN40"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.5660 ha",
+        "printedTotalM2": 5660,
+        "groupParcelAreasM2": {
+          "21133000AN0061": 5480,
+          "21133000AN0040": 180
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) gives Drouhin’s plots 61 and 40 as 0.5660 ha combined. Today’s cadastral areas, 5,480 and 180 m², add up exactly to 5,660 m². This critic reading agrees with the separate SEPV filing, which already prints both individual areas. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "mus-winehog-drouhin"
+      ],
+      "producer": "Maison Joseph Drouhin",
+      "appNote": "Winehog prints AN61, AN40 with 0.5660 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "mus-winehog-drouhin",
+      "currentFarmer": null
+    },
+    {
+      "id": "mus-group-drouhin-an60-an57",
+      "title": "Winehog: Drouhin’s AN60 and AN57 in Musigny",
+      "parcelIds": [
+        "21133000AN0060",
+        "21133000AN0057"
+      ],
+      "parcelAreasM2": {
+        "21133000AN0060": 850,
+        "21133000AN0057": 210
+      },
+      "printedReferences": [
+        "AN60",
+        "AN57"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.1060 ha",
+        "printedTotalM2": 1060,
+        "groupParcelAreasM2": {
+          "21133000AN0060": 850,
+          "21133000AN0057": 210
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2018) gives Drouhin’s plots 60 and 57 as 0.1060 ha combined. Today’s cadastral areas, 850 and 210 m², add up exactly to 1,060 m². This critic reading agrees with the separate SEPV filing, which already prints both individual areas. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "mus-winehog-drouhin"
+      ],
+      "producer": "Maison Joseph Drouhin",
+      "appNote": "Winehog prints AN60, AN57 with 0.1060 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "mus-winehog-drouhin",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -1056,27 +1164,6 @@
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
-    {
-      "sourceId": "mus-winehog-vougeraie",
-      "printedReference": "AN22 and AN23, combined 0.0970 ha",
-      "parcelIds": [],
-      "limitation": "Combined area equals the two current areas summed, but neither individual area is printed. No individual match is made; the cultivation arrangement is also described as differing from cadastral boundaries.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "mus-winehog-drouhin",
-      "printedReference": "cadastre 61 and 40, combined 0.5660 ha",
-      "parcelIds": [],
-      "limitation": "Combined area only; no individual critic match. The separate SEPV filing has independently matched individual areas.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "mus-winehog-drouhin",
-      "printedReference": "cadastre 60 and 57, combined 0.1060 ha",
-      "parcelIds": [],
-      "limitation": "Combined area only; no individual critic match. The separate SEPV filing has independently matched individual areas.",
-      "currentFarmer": null
-    },
     {
       "sourceId": "mus-winehog-leroy",
       "printedReference": "cadastre 27, area unstated",

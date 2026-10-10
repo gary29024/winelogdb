@@ -196,6 +196,10 @@ class CortonGroupingTests(unittest.TestCase):
         cls.register = build_cru_register(i['manifest'], i['asset'], i['curation'], i['history'], i['sales'], i['named_areas'],
                                           context, i['notice_records'])
         cls.evidence = build_evidence(cls.register, i['curation'], i['history'], json.loads(i['asset'])['features'])
+        cls.context = context
+
+    def test_config_tier_matches_the_reviewed_tier_2_research(self):
+        self.assertEqual((self.context.cru['tier'], self.register['status']), (2, 'tier-2-reviewed'))
 
     def test_grouping_only_for_linked_holders(self):
         linked = {h['holderId'] for h in self.curation['holders'] if len(h['candidateNames']) == 1}
@@ -504,15 +508,24 @@ class MusignyTier2Tests(unittest.TestCase):
     def test_census_and_unmatched_claims_never_allocate_parcels(self):
         self.assertEqual(len(self.curation['producerHoldings']), 10)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
-        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 6)
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 3)
         self.assertTrue(all(not r['parcelIds'] and r['currentFarmer'] is None
                             for r in self.curation['unmatchedPrintedReferences']))
         rows = {p['parcelId']: p for p in self.register['parcels']}
-        for n in (17, 22, 23, 24, 35, 42, 55):
+        for n in (17, 24, 35, 42, 55):
             self.assertEqual(rows[f'21133000AN{n:04d}']['candidateLeads'], [])
+        # A printed pair names its parcels only because today's two areas add up to the total exactly.
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: (sorted(v['parcelIds']), v['areaEvidence']['printedTotalM2']) for k, v in groups.items()}, {
+            'mus-group-vougeraie-an22-an23': (['21133000AN0022', '21133000AN0023'], 970),
+            'mus-group-drouhin-an61-an40': (['21133000AN0040', '21133000AN0061'], 5660),
+            'mus-group-drouhin-an60-an57': (['21133000AN0057', '21133000AN0060'], 1060)})
+        for n in (22, 23):
+            self.assertEqual([x['name'] for x in rows[f'21133000AN{n:04d}']['candidateLeads']], ['Domaine de la Vougeraie'])
         self.assertEqual((self.register['counts']['holderLead'], self.register['counts']['unresolved'],
                           self.register['counts']['withParcelFiling'], self.register['counts']['currentFarmerConfirmed']),
-                         (24, 27, 5, 0))
+                         (26, 25, 5, 0))
 
     def test_number_and_area_matches_do_not_create_company_rights(self):
         rows = {p['parcelId']: p for p in self.register['parcels']}
@@ -613,14 +626,25 @@ class BonnesMaresTier2Tests(unittest.TestCase):
         ext = {x['id']: x for x in self.curation['externalResearch']}
         self.assertEqual(ext['bm-wh-arlaud']['parcelIds'], ['21133000AB0076', '21133000AB0121'])
         self.assertEqual(ext['bm-wh-groffier']['parcelIds'], ['21133000AB0266'])
-        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 10)
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 9)
         self.assertTrue(all(not r['parcelIds'] and r['currentFarmer'] is None
                             for r in self.curation['unmatchedPrintedReferences']))
+        # Vogüé's 473 m² and Dujac's 0.425 ha (an owner-accepted dropped final zero, 0.4250 ha) name their parcels;
+        # Drouhin's 0.2298 ha (2,300 m² today) is not exact, so it names none.
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: sorted(v['parcelIds']) for k, v in groups.items()}, {
+            'bm-group-dujac-five-parcels': [f'21133000AB{n:04d}' for n in (72, 321, 322, 358, 360)],
+            'bm-group-vogue-ab98-ab99': ['21133000AB0098', '21133000AB0099']})
+        self.assertTrue(groups['bm-group-dujac-five-parcels']['areaEvidence']['trailingZeroDropped'])
+        self.assertNotIn('trailingZeroDropped', groups['bm-group-vogue-ab98-ab99']['areaEvidence'])
+        self.assertTrue(any('0.2298' in r['printedReference'] for r in self.curation['unmatchedPrintedReferences']))
+        self.assertFalse(self.table['holders']['U21117863'].get('identity'))
         self.assertEqual(len(self.curation['producerHoldings']), 11)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         arlaud = next(h for h in self.curation['producerHoldings'] if h['id'] == 'bm-arlaud')
         self.assertEqual((arlaud['publishedAreaHa'], arlaud['otherPublishedAreas'][0]['areaHa']), (.2131, .2081))
-        self.assertEqual(self.register['counts']['unresolved'], 84)
+        self.assertEqual(self.register['counts']['unresolved'], 78)
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
