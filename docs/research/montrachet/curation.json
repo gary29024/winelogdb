@@ -434,6 +434,62 @@
       "finding": "Tasting note. It describes the wine but gives no parcel, area or account of the Laguiche–Drouhin arrangement, so it adds nothing to the reported-tenancy link.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Sat, 10 Oct 2026 07:22:42 +0000"
+    },
+    {
+      "id": "census-blain-gagnard-langtons",
+      "title": "Langtons: Blain-Gagnard Grand Cru Bâtard-Montrachet 2023 (producer profile)",
+      "url": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:07:17+00:00",
+      "retrievedFrom": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "sha256": "729540f4050fea00152a9ca1fa07693d152c59054291214f3233bf3e41d72130",
+      "bytes": 274295,
+      "finding": "A merchant page gives Domaine Blain-Gagnard 0.08 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-fontaine-gagnard-estate",
+      "title": "Domaine Fontaine-Gagnard website wine sheets (fiche-vin.html data script js/app.min.03f1e7e4.js)",
+      "url": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:10:30+00:00",
+      "retrievedFrom": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "sha256": "ab2d04569c52ee3025bd854accea92090bd17951d9f412f312c60d416d6d9298",
+      "bytes": 187231,
+      "finding": "The estate’s own page gives Domaine Fontaine-Gagnard 0.0781 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-mt-amiot-kermitlynch",
+      "title": "Kermit Lynch Wine Merchant: Domaine Guy Amiot producer sheet (PDF)",
+      "url": "https://kermitlynch.com/files/AMIOT.pdf",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:19:35+00:00",
+      "retrievedFrom": "https://kermitlynch.com/files/AMIOT.pdf",
+      "sha256": "141f433c7c894c6db775da9008809d6e0c099be28f81646f8eee72db8ce3a9db",
+      "bytes": 414929,
+      "finding": "An importer page gives Domaine Guy Amiot et Fils 0.1 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-mt-lamy-pillot-hachette",
+      "title": "Guide Hachette des Vins: Domaine Lamy-Pillot producer page (Le Montrachet 2003 review)",
+      "url": "https://www.hachette-vins.com/guide-vins/producteurs/1648/scea-dom-lamy-pillot",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:21:05+00:00",
+      "retrievedFrom": "https://www.hachette-vins.com/guide-vins/producteurs/1648/scea-dom-lamy-pillot",
+      "sha256": "80469f6051d7ec76edd34b741f588af624fb6e143e7edab3b7d846562f86005a",
+      "bytes": 561060,
+      "finding": "A free Guide Hachette producer page (Le Montrachet 2003 review) describes a 5 a 42 ca parcel in the Dents-de-Chien, brought into Montrachet by the 1921 judgment, worked by Lamy-Pillot en métayage since 1988. It prints no cadastral number. The owner it names is a private individual and is not recorded here. Undated guide text; current farming is unverified."
     }
   ],
   "holders": [
@@ -992,12 +1048,13 @@
         "AE24"
       ],
       "basis": "critic-named-cadastral-reference",
-      "finding": "Winehog lists plot 24 at 0.0542 ha among the Dent de Chien plots added to Montrachet in 1921, attributed to the René Lamy-Pillot family. A paragraph prints 34, but the article's map, supplied by the owner on 10 October 2026, outlines 24 and leaves the large plot 34 outside. Current AE24 measures 542 m². Secondary attribution only; current farming remains unverified.",
+      "finding": "Winehog lists plot 24 at 0.0542 ha among the Dent de Chien plots added to Montrachet in 1921, attributed to the René Lamy-Pillot family. A paragraph prints 34, but the article's map, supplied by the owner on 10 October 2026, outlines 24 and leaves the large plot 34 outside. Current AE24 measures 542 m². A free Guide Hachette page separately describes a 5 a 42 ca Dents-de-Chien parcel worked by Lamy-Pillot en métayage since 1988, so the domaine is a sharecropper, not the owner. Secondary attribution only; current farming remains unverified.",
       "sourceIds": [
-        "mt-winehog-32708"
+        "mt-winehog-32708",
+        "census-mt-lamy-pillot-hachette"
       ],
       "producer": "Domaine René Lamy-Pillot",
-      "appNote": "Winehog lists plot 24, 0.0542 ha, for the René Lamy-Pillot family; its map confirms 24 rather than 34. Current AE24 is 542 m². Secondary attribution; current farming unverified.",
+      "appNote": "Winehog lists plot 24, 0.0542 ha, for the Lamy-Pillot family; its map confirms 24 rather than 34. A guide describes 5 a 42 ca there en métayage (sharecropping) since 1988. Current AE24 is 542 m². Current farming unverified.",
       "dateSourceId": "mt-winehog-32708",
       "currentFarmer": null
     },
@@ -1432,6 +1489,84 @@
         "mt-winehog-29563"
       ],
       "finding": "Winehog (2016) six-domaine list; equals the 1921 article’s plots 25 and 29 together. Named-area census only.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-blain-gagnard",
+      "producer": "Domaine Blain-Gagnard",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.08,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-blain-gagnard-langtons"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-fontaine-gagnard",
+      "producer": "Domaine Fontaine-Gagnard",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0781,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-fontaine-gagnard-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [
+        "411189830"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-guy-amiot-et-fils",
+      "producer": "Domaine Guy Amiot et Fils",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-mt-amiot-kermitlynch"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-lamy-pillot",
+      "producer": "Domaine Lamy-Pillot",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0542,
+      "precision": "square-metre",
+      "relation": "metayer",
+      "sourceIds": [
+        "census-mt-lamy-pillot-hachette"
+      ],
+      "finding": "Published whole holding, worked en métayage since 1988 by the source’s account. Census context only: no parcel is assigned, and current farming is unverified.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,

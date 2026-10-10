@@ -555,3 +555,18 @@ SHA-256 `3a9d7a752ccc88e55b25ffac727de6feeb022bd6b87b5240bb427cd461bd2d53`; 262,
 A sibling 1996 usufruct donation (5 pages; SHA-256 `19e3a05624f074339556888b8763c9d29ae682ffc427b566a604b15b121542f7`)
 was also screened. It recites only the formation and the 1994 conversion, so it is counted in the effort but not
 cited. The lease deeds themselves are held by the land-registry service. They are unacquired Tier 3 leads.
+
+### Domaine Leflaive: further search
+
+The owner also asked why AH131, AI108 and AI112 changed recorded rights between the 2024 and 2025 snapshots. That
+search screened **15 more Domaine Leflaive (778245316) filings / 410 pages**. It also screened 10 filings /
+378 pages of its holding company, LEFLAIVE SAS (884378621). That company is not a recorded holder, so its filings
+are not counted in the totals above. No filing names those parcels or the change.
+
+- From 2016 the statutes say the vines belong to family members, directly or through the GFA, and are leased to
+  the company.
+- A deed of 16 February 2016 recites a 23 June 2012 agreement by which the company will buy leased vines on
+  request. That fits the company appearing as a recorded owner, but no parcel is named.
+
+A sale or partition would be a notarial deed at the land registry, not a company filing; it stays a Tier 3
+lead. With the Lafon and Leflaive searches, this filing review totals 70 distinct filings / 1,891 pages.

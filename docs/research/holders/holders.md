@@ -119,7 +119,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | 417882644 | MAGNIEN MICHEL ET FILS | 2 | 7 | Domaine Michel Magnien (owner-company; reviewed) | — | 5 filings, 182 pages | 2026-10-09 |
 | 480400407 | DOMAINE DE LA POUSSE D'OR | 5 | 7 | Domaine de la Pousse d’Or (owner-company; reviewed) | — | 5 filings, 76 pages | 2026-10-09 |
 | 519906606 | G F A  DU DOMAINE PEIRAZEAU | 3 | 7 | No link found | — | 5 filings, 167 pages | 2026-10-09 |
-| 778245316 | DOMAINE LEFLAIVE | 4 | 7 | Domaine Leflaive (owner-company; reviewed) | — | 4 filings, 111 pages | 2026-10-09 |
+| 778245316 | DOMAINE LEFLAIVE | 4 | 7 | Domaine Leflaive (owner-company; reviewed) | — | 19 filings, 521 pages | 2026-10-10 |
 | U14137631 | GFA DOM RAVAUT PERE ET FILS | 2 | 7 | Domaine Gaston et Pierre Ravaut (family-holding; provisional) | 348852237 | 1 filings, 46 pages | 2026-10-07 |
 | U14149307 | SCI DOM LEROY | 3 | 7 | Domaine Leroy (common-ownership; provisional) | 427469135 | 4 filings, 99 pages | 2026-10-08 |
 | 322463894 | DOMAINE PAVELOT | 3 | 6 | Domaine Pavelot (Pernand-Vergelesses) (family-holding; provisional) | — | 2 filings, 40 pages | 2026-10-07 |

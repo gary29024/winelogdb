@@ -30,7 +30,7 @@ procedures remain distinct evidence; none establishes current farming.
 | Parcels with no lead | 10; includes AH118–121, whose printed 0.8 ha total is 2 m² above today’s 7,998 m² sum |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 216,782 / 20,095 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 217,107 / 20,263 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -49,7 +49,7 @@ Parcel rights is enabled. The production payload report checks compiled JS.
 | Parcels with exact company filings | 0 | 6 |
 | Verified farming links | 0 | 0 |
 
-The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened. Two 10 October supplements bring this to 55 distinct filings / 1,481 pages.
+The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened. Three 10 October supplements bring this to 70 distinct filings / 1,891 pages.
 Every holder has a dated search record in the [shared table](../holders/holder-links.json).
 The Bouchard, Pousse d’Or and DRC links retain their earlier definitions and effort;
 this pass only adds source and search evidence. Shared holders will reuse this work
@@ -228,6 +228,16 @@ they add five parcels with leads (32 to 37). Current farming stays unverified ev
   in the five crus. The Lafon holder now has a reviewed `lessor-per-filing` link (lease
   recited), scoped to Montrachet. No schedule prints AE37, so it is not an exact filing.
   Where two links reach the same domaine in one cru, the builder now shows one candidate.
+- **Web census.** Four producer holdings from hashed estate, importer and guide pages join the
+  named-area census: Blain-Gagnard 0.08 ha, Fontaine-Gagnard 7 a 81 ca, Guy Amiot 0.10 ha
+  and Lamy-Pillot 5 a 42 ca. A Guide Hachette page says Lamy-Pillot has worked that
+  Dents-de-Chien parcel en métayage (sharecropping) since 1988. Its area equals AE24, so
+  it is cited on the AE24 entry, which now names Lamy-Pillot as a sharecropper, not owner.
+  Holdings never name parcels.
+- **Leflaive search.** 15 more Domaine Leflaive filings (410 pages) were screened for the 2024
+  to 2025 rights change on AH131, AI108 and AI112. Since 2016 the statutes say the family’s
+  vines are leased to the company. A 2012 agreement commits the company to buy leased vines
+  on request. No filing names those parcels, so nothing changes.
 
 Images and archives are hashed in the curation and stay outside the repository. The
 full raw-source history audit was not rerun in this cloud session; only its
