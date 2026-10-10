@@ -55,12 +55,16 @@ HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
-def printed_square_metres(text):
+def printed_square_metres(text, trailing_zero_dropped=False):
     """The square metres a printed total states, or None when it is not printed to the square metre.
 
-    '1.8273 ha' and '55 a 31 ca' state square metres; '1.158 ha' (to 10 m²) and '0.8 ha' do not."""
+    '1.8273 ha' and '55 a 31 ca' state square metres; '0.8 ha' does not. A source that elsewhere writes the same
+    four-decimal figure both ways ('4.7750 ha' and '4.775 ha') may print '1.158 ha' for 1.1580 ha: such a total
+    counts only when the entry records trailingZeroDropped."""
     if m := re.fullmatch(r'(\d+)\.(\d{4}) ha', text):
         return int(m[1]) * 10000 + int(m[2])
+    if trailing_zero_dropped and (m := re.fullmatch(r'(\d+)\.(\d{3}) ha', text)):
+        return int(m[1]) * 10000 + int(m[2]) * 10
     if m := re.fullmatch(r'(\d+) a (\d{2}) ca', text):
         return int(m[1]) * 100 + int(m[2])
     if m := re.fullmatch(r'(\d[\d,]*) m²', text):
@@ -78,7 +82,10 @@ def check_group_total(item, snapshot_areas):
             'A printed group total needs two or more parcels and pinned cadastral areas')
     require(all(snapshot_areas.get(pid) == area for pid, area in group.items()),
             'Group parcel area differs from the pinned cadastral snapshot')
-    require(printed_square_metres(evidence['printedTotal']) == evidence['printedTotalM2'],
+    dropped = evidence.get('trailingZeroDropped', False)
+    require(not dropped or re.fullmatch(r'\d+\.\d{3} ha', evidence['printedTotal']),
+            'trailingZeroDropped applies only to a total printed with three hectare decimals')
+    require(printed_square_metres(evidence['printedTotal'], dropped) == evidence['printedTotalM2'],
             'A printed group total must be stated to the square metre')
     require(sum(group.values()) == evidence['printedTotalM2'], 'Printed group total differs from the cadastral sum')
     require(item['parcelIds'] and set(item['parcelIds']) <= set(group) and
