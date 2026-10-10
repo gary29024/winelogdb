@@ -188,6 +188,10 @@ Chevalier parcels with leads (27 to 32); the Chartron reading below adds two mor
   add up exactly to 5,531 m², so both parcels are named. The entry records which source
   gives the numbers and which the total. This extends the rule to two sources, adding
   two more parcels (32 to 34). It is a separate commit so it can be reverted alone.
+- **Web census.** Four more producer holdings from hashed importer, merchant and free-guide pages
+  join the named-area census: Bruno Colin 0.04 ha, Vincent Dancer 0.10 ha (0.096 ha in a second
+  source), Michel Niellon 0.23 ha and Philippe Colin 24 ares. Holdings never name parcels, and
+  none adds a lead.
 
 ## Supplemental Pappers review: 10 October 2026
 
