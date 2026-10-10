@@ -29,7 +29,7 @@ administrative procedures remain distinct evidence; none establishes current far
 | Parcels with no lead | 60 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1993-12-09, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 193,020 / 22,089 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 193,535 / 22,387 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 89 unique parcels.
@@ -160,3 +160,9 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=batard-montrachet` wit
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.

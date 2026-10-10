@@ -134,3 +134,9 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=criots-batard-montrach
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 reuses ch-pappers-auvenay-2012 (31 pages), first counted at Chevalier. Criots remains 18 new distinct PDFs / 564 pages. U21930118 still lacks a company-record identity crosswalk or individual AE92/AE93 schedule. The 28 April 1989 contribution is a targeted unacquired deed lead.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.

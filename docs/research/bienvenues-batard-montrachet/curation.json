@@ -216,10 +216,11 @@
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current",
-        "rne-349583500"
+        "rne-349583500",
+        "ch-pappers-violland-1996"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship."
+      "finding": "No supported producer link. The 1996 deposit cover names holder 349583500, but its enclosed Boisset transfer concerns Maison Leon Violland (515420305). Co-recorded Vougeraie rights and corporate officers do not resolve the mismatch."
     },
     {
       "holderId": "391949849",
@@ -614,7 +615,8 @@
     "INPI/Pappers each returned HTTP 403 on the first batch attempt. Public filing mirrors provide a bounded corpus, not complete corporate history.",
     "Eight current parcels have exact full-reference, whole-area and recorded-holder company evidence. Several parcels only contact this cru at the boundary: full cadastral areas are not assigned as Bienvenues holding areas. Fractional bare interest, bare-soil contributions and original historical terms remain qualified.",
     "All four requested Bienvenues Winehog articles were supplied and hashed; six referenced image occurrences were not embedded. Only AI19 has both individual number and area. Ramonet/Leflaive aggregates and historical classification numbers remain unmatched. The Bâtard AI144 article is reused for neighbouring boundary context only.",
-    "Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified."
+    "Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified.",
+    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [

@@ -259,3 +259,11 @@ Both requested Criots Winehog archives were supplied and hashed; all nine refere
 Three Winehog/trade/critic figures are named-area census only. The Lamy official site gives 18.5 ha for the whole estate, while Prosper Maufoux product text gives 1.57 ha for the whole appellation; neither is imported as a Criots estate holding. The public Hachette text was read through the web tool, but local acquisition failed with a TLS error.
 
 INPI/Pappers returned HTTP 403 on the recorded first batch attempts. Free filing indexes are a bounded corpus, not complete corporate history. Newer unacquired listings, executed leases, subsequent amendments and current performance remain gaps; verified farming stays zero.
+
+## Supplemental Pappers review: 10 October 2026
+
+Reused [Chevalier supplemental source](../chevalier-montrachet/filings.md#supplemental-pappers-review-10-october-2026), `ch-pappers-auvenay-2012` (31 pages).
+
+The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
+
+Across the five-cru batch, the supplied four files comprise **3 additional distinct PDFs / 92 pages**, plus **1 byte-identical 21-page Jouard duplicate**. All 113 supplied pages were OCR-screened. The cumulative distinct new corpus is **154 PDFs / 4245 pages**, compared with 151 / 4153 before this supplement.

@@ -172,10 +172,11 @@
         "bm-auvenay-2001",
         "bm-auvenay-2019",
         "bm-auvenay-2024",
-        "bm-rne-778252445"
+        "bm-rne-778252445",
+        "ch-pappers-auvenay-2012"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Three reused d’Auvenay company filings give no individual AE92/AE93 schedule supporting U21930118. Winehog’s 0.0637 ha is a combined holding. No company-record identity crosswalk, producer link or current farming is accepted."
+      "finding": "The supplied 2012 d Auvenay filing concerns debt conversion and gives no individual AE92/AE93 schedule. The provisional holder still lacks a company-record identity crosswalk. The separate 778252445 identity and Winehog aggregate cannot identify it."
     }
   ],
   "historyFindings": [],
@@ -251,7 +252,8 @@
     "Maison Prosper Maufoux is a partner-company relationship through 395115447, distinct from holder 778249052. The 2021 approved merger and later company decisions are not evidence of current parcel cultivation.",
     "Both requested Criots Winehog archives were supplied and hashed; all nine referenced images were embedded and reviewed where relevant. Neither article supplies individual number-and-area matches. The d’Auvenay two-parcel 0.0637 ha total remains unallocated.",
     "Three Winehog/trade/critic figures are named-area census only. The Lamy official site gives 18.5 ha for the whole estate, while Prosper Maufoux product text gives 1.57 ha for the whole appellation; neither is imported as a Criots estate holding. The public Hachette text was read through the web tool, but local acquisition failed with a TLS error.",
-    "INPI/Pappers returned HTTP 403 on the recorded first batch attempts. Free filing indexes are a bounded corpus, not complete corporate history. Newer unacquired listings, executed leases, subsequent amendments and current performance remain gaps; verified farming stays zero."
+    "INPI/Pappers returned HTTP 403 on the recorded first batch attempts. Free filing indexes are a bounded corpus, not complete corporate history. Newer unacquired listings, executed leases, subsequent amendments and current performance remain gaps; verified farming stays zero.",
+    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-auvenay-2012 (31 pages), first counted at Chevalier. Criots remains 18 new distinct PDFs / 564 pages. U21930118 still lacks a company-record identity crosswalk or individual AE92/AE93 schedule. The 28 April 1989 contribution is a targeted unacquired deed lead."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [

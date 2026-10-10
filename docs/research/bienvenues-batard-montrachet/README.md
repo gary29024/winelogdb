@@ -139,3 +139,9 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=bienvenues-batard-mont
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.
