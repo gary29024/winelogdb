@@ -1275,5 +1275,185 @@ class LaGrandeRueTests(unittest.TestCase):
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
 
+
+
+class MontrachetTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+        cls.evidence = json.loads(cls.files[cls.context.evidence])
+
+    def test_thenard_historical_aggregate_does_not_become_a_current_parcel_or_identity(self):
+        source = next(s for s in self.table['sources'] if s['id'] == 'mt-pappers-thenard-1920')
+        self.assertEqual((source['documentDate'], source['filingDate']), ('1920-01-03', '2002-10-17'))
+        self.assertEqual((source['pageCount'], source['screenedPages']), (55, 55))
+        holding = next(h for h in self.curation['producerHoldings'] if h['id'] == 'mt-thenard-1920-historical')
+        self.assertIsNone(holding['publishedAreaHa'])
+        self.assertEqual(holding['otherPublishedAreas'][0]['publishedAreaHa'], 1.7976)
+        self.assertEqual(holding['producerHolderIds'] + holding['ownerHolderIds'], [])
+        self.assertNotIn('parcelIds', holding)
+        census = [h for a in self.register['namedAreaCensus'] for h in a['holdings']
+                  if h['holdingId'] == holding['id']]
+        self.assertTrue(census)
+        self.assertTrue(all(h['beyondCompanyRecordsM2'] is None for h in census))
+        printed = next(x for x in self.curation['unmatchedPrintedReferences'] if x['sourceId'] == source['id'])
+        self.assertEqual(printed['parcelIds'], [])
+        self.assertIn('list ordinal', printed['limitation'])
+        self.assertFalse(self.table['holders']['U21850980'].get('identity'))
+        self.assertEqual(self.table['holders']['U21850980']['effort']['pagesRead'], 31)
+        for row in self.register['parcels']:
+            if row['parcelId'] in ('21150000AE0032', '21150000AE0034'):
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIsNone(row['currentFarmer'])
+
+    def test_all_holders_have_searches_without_invented_company_links(self):
+        self.assertEqual(len(self.curation['holders']), 15)
+        self.assertEqual(self.curation['holderLinks'], 'shared')
+        for holder in self.curation['holders']:
+            self.assertTrue(self.table['holders'][holder['holderId']]['searches'])
+            self.assertFalse(holder['parcelOperationConfirmed'])
+        for hid in ('212101505', 'U21850980'):
+            self.assertFalse(self.table['holders'][hid].get('links'))
+            self.assertNotIn(hid, self.evidence['holderDomains'])
+        self.assertNotIn('identity', self.table['holders']['U21850980'])
+        self.assertEqual(self.table['holders']['U18179542']['identity']['companySiren'], '443494075')
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_original_colin_references_reach_daughters_only_through_dfi(self):
+        research = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-colin-retired-2003')
+        self.assertEqual(research['parcelIds'], [])
+        self.assertEqual(set(research['predecessorReferences']),
+                         {f'21150000AE{n:04}' for n in (27, 28, 161, 162)})
+        daughters = {p for ps in research['predecessorReferences'].values() for p in ps}
+        self.assertEqual(daughters, {f'21150000AE{n:04}' for n in range(208, 221)})
+        for row in self.register['parcels']:
+            if row['parcelId'] in daughters:
+                self.assertIn(research['id'], row['externalResearchIds'])
+                self.assertEqual(row['parcelFilingIds'], [])
+                self.assertIsNone(row['currentFarmer'])
+        link = self.table['holders']['U18179061']['links'][0]
+        self.assertEqual((link['relation'], link['leaseStatus'], link['crus']),
+                         ('lessor-per-filing', 'recited', ['montrachet']))
+
+    def test_exact_filings_require_current_holder_and_individual_area(self):
+        expected = {'21150000AE0030': 2090, '21150000AE0031': 3419,
+                    '21150000AE0033': 3773, '21150000AE0129': 1670,
+                    '21150000AE0134': 821, '21512000AH0064': 20625}
+        actual = {p: a for f in self.curation['parcelFilings'] for p, a in f['parcelAreasM2'].items()}
+        self.assertEqual(actual, expected)
+        opale = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-opale-ah151-2006')
+        self.assertEqual(opale['parcelIds'], ['21512000AH0151'])
+        self.assertIsNone(opale['producer'])
+        self.assertNotIn('21512000AH0151', actual)
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for f in self.curation['parcelFilings']:
+            for p in f['parcelAreasM2']:
+                self.assertIn(f['holderId'], {r['holderId'] for r in rows[p]['recordedRights']})
+
+    def test_opale_retired_reference_uses_documented_lineage(self):
+        record = next(x for x in self.curation['externalResearch'] if x['id'] == 'mt-opale-ah150-2006')
+        self.assertEqual(record['parcelIds'], [])
+        self.assertEqual(record['predecessorReferences'], {'21512000AH0150': ['21512000AH0182']})
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0182')
+        self.assertIn(record['id'], row['externalResearchIds'])
+        self.assertEqual(row['parcelFilingIds'], [])
+        self.assertIsNone(row['currentFarmer'])
+
+    def test_supplied_winehog_preserves_area_conflicts_and_unnumbered_holdings(self):
+        records = [x for x in self.curation['externalResearch'] if x['id'].startswith('mt-winehog-')]
+        direct = {p for x in records for p in x['parcelIds']}
+        self.assertEqual(direct, {'21512000AH0067', '21512000AH0066', '21150000AE0031',
+                                  '21150000AE0129', '21150000AE0130', '21150000AE0025', '21150000AE0029',
+                                  '21150000AE0024', '21150000AE0173'})
+        for pid in ('21150000AE0030', '21150000AE0037', '21150000AE0134'):
+            self.assertNotIn(pid, direct)
+        colin = next(x for x in records if x['id'].endswith('-colin'))
+        self.assertEqual(colin['parcelIds'], [])
+        self.assertEqual(set(colin['predecessorReferences']),
+                         {'21150000AE0027', '21150000AE0028', '21150000AE0161', '21150000AE0162'})
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertTrue(any('0.2009' in x['printedReference'] for x in unmatched))
+        self.assertTrue(all(not x['parcelIds'] for x in unmatched))
+        self.assertEqual(len([x for x in self.curation['sources'] if x['id'].startswith('mt-winehog-')]), 9)
+
+    def test_individual_and_company_tenants_remain_distinct(self):
+        fs = {f['id']: f for f in self.curation['parcelFilings']}
+        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['An individual (Laguiche family)'])
+        lease = fs['mt-leflaive-gfa-2009']['leaseEvidence'][0]
+        self.assertEqual((lease['tenants'], lease['effectiveFrom'], lease['effectiveTo']),
+                         (['Domaine Leflaive (778245316)'], '2009-07-04', '2033-11-11'))
+        self.assertEqual(self.table['holders']['519806384']['links'][0]['crus'], ['montrachet'])
+        for h in self.curation['producerHoldings']:
+            self.assertNotIn('parcelIds', h)
+        self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_printed_group_totals_name_parcels_only_when_today_sums_exactly(self):
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: v['parcelIds'] for k, v in groups.items()}, {
+            'mt-group-leflaive-chevalier': ['21512000AH0077', '21512000AH0131', '21512000AH0149'],
+            'mt-group-bouchard-chevalier': ['21512000AH0011']})
+        for item in groups.values():
+            group = item['areaEvidence']['groupParcelAreasM2']
+            self.assertEqual(sum(group.values()), item['areaEvidence']['printedTotalM2'])
+            self.assertTrue(set(item['parcelIds']) <= set(group))
+            self.assertIsNone(item['currentFarmer'])
+        # Puligny 118-121 prints 0.8 ha against 7,998 m² today: a rounded total names no parcel.
+        self.assertTrue(any(x['printedReference'].startswith('Puligny 118/119/120/121')
+                            for x in self.curation['unmatchedPrintedReferences']))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        for n in (118, 119, 120, 121):
+            self.assertEqual(rows[f'21512000AH{n:04}']['researchStatus'], 'unresolved')
+
+    def test_laguiche_reaches_drouhin_only_as_a_provisional_reported_tenancy(self):
+        links = self.table['holders']['U18179542']['links']
+        self.assertEqual([(x['domaine'], x['relation'], x['crus'], x['reviewStatus']) for x in links],
+                         [('Maison Joseph Drouhin', 'reported-tenancy', ['montrachet'], 'provisional')])
+        holder = next(h for h in self.curation['holders'] if h['holderId'] == 'U18179542')
+        self.assertEqual(holder['basis'], 'reported-operator-relationship')
+        self.assertFalse(holder['parcelOperationConfirmed'])
+        lease = next(f for f in self.curation['parcelFilings'] if f['id'] == 'mt-laguiche-2002')['leaseEvidence'][0]
+        self.assertNotIn('Drouhin', ' '.join(lease['tenants']))
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0064')
+        self.assertEqual(row['researchStatus'], 'holder-lead')
+        self.assertIsNone(row['currentFarmer'])
+
+    def test_lafon_recited_lease_covers_all_gfa_parcels_without_a_schedule(self):
+        links = {x['relation']: x for x in self.table['holders']['778232892']['links']}
+        lease = links['lessor-per-filing']
+        self.assertEqual((lease['domaine'], lease['leaseStatus'], lease['crus']),
+                         ('Domaine des Comtes Lafon', 'recited', ['montrachet']))
+        self.assertIn('succession', links)
+        # Two links to the same domaine remain one candidate and one domaine heading.
+        self.assertEqual(self.evidence['holderDomains']['778232892']['name'], 'Domaine des Comtes Lafon')
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21150000AE0037')
+        self.assertEqual([c['name'] for c in row['candidateLeads']], ['Domaine des Comtes Lafon'])
+        self.assertEqual((row['parcelFilingIds'], row['currentFarmer']), ([], None))
+
+    def test_map_readings_stay_labelled_by_how_they_were_matched(self):
+        research = {x['id']: x for x in self.curation['externalResearch']}
+        lamy = research['mt-winehog-32708-lamy-pillot']
+        self.assertEqual((lamy['basis'], lamy['printedReferences'], lamy['parcelAreasM2']),
+                         ('critic-named-cadastral-reference', ['AE24'], {'21150000AE0024': 542}))
+        # The guide's 5 a 42 ca en métayage corroborates the number; the domaine is a sharecropper, not the owner.
+        self.assertEqual(lamy['sourceIds'], ['mt-winehog-32708', 'census-mt-lamy-pillot-hachette'])
+        census = {h['id']: h for h in self.curation['producerHoldings'] if h['id'].startswith('mt-census-')}
+        self.assertEqual(census['mt-census-domaine-lamy-pillot']['relation'], 'metayer')
+        fleurot = research['mt-winehog-29563-fleurot']
+        self.assertEqual((fleurot['basis'], fleurot['printedReferences'], fleurot['parcelAreasM2']),
+                         ('critic-attribution-area-reconstructed', [], {'21150000AE0173': 405}))
+        self.assertFalse(any('34/24' in x['printedReference'] or 'Chassagne 34' in x['printedReference']
+                             for x in self.curation['unmatchedPrintedReferences']))
+        supplied = [s for s in self.curation['sources'] if s.get('suppliedImages')]
+        self.assertTrue(supplied)
+        for source in supplied:
+            for image in source['suppliedImages']:
+                self.assertRegex(image['sha256'], r'^[0-9a-f]{64}$')
+
+
 if __name__ == '__main__':
     unittest.main()

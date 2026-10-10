@@ -58,7 +58,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"latricieres-chambertin",name:"Latricières-Chambertin",parentFeatureId:"inao-denom-666",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["latricieres-chambertin"],domaineGrouping:false},
  {slug:"mazis-chambertin",name:"Mazis-Chambertin",parentFeatureId:"inao-denom-808",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazis-chambertin"],domaineGrouping:false},
  {slug:"mazoyeres-chambertin",name:"Mazoyères-Chambertin",parentFeatureId:"inao-denom-809",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["mazoyeres-chambertin"],domaineGrouping:false},
- {slug:"montrachet",name:"Montrachet",parentFeatureId:"inao-denom-927",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["montrachet"],domaineGrouping:false},
+ {slug:"montrachet",name:"Montrachet",parentFeatureId:"inao-denom-927",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["montrachet"],domaineGrouping:true},
  {slug:"musigny",name:"Musigny",parentFeatureId:"inao-denom-973",villageMaps:["chambolle-musigny"],bundle:"chambolle-morey",evidenceFrom:["musigny"],domaineGrouping:true},
  {slug:"richebourg",name:"Richebourg",parentFeatureId:"inao-denom-1083",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["richebourg"],domaineGrouping:true},
  {slug:"romanee-conti",name:"Romanée-Conti",parentFeatureId:"inao-denom-1084",villageMaps:["vosne-romanee"],bundle:"vosne-romanee",evidenceFrom:["romanee-conti"],domaineGrouping:true},

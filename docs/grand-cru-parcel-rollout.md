@@ -148,6 +148,15 @@ the historical extension for a cru.
   reference reaches a current parcel only through an accepted spatial successor or
   documented DFI ancestry (`predecessorReferences`); otherwise it stays in
   `unmatchedPrintedReferences`.
+- A source that prints several current numbers with one total area names each of those
+  parcels only when today's individual cadastral areas add up to that total exactly, to
+  the square metre (`areaEvidence` of kind `printed-group-total`, checked by the research
+  build). The printed total must itself state square metres: four hectare decimals, ares
+  and centiares, or m². A source that writes the same four-decimal figure both with and
+  without its final zero (Winehog prints both 4.7750 ha and 4.775 ha) may print 1.158 ha for
+  1.1580 ha; such a three-decimal total counts only when the entry records
+  `trailingZeroDropped` and today's sum matches it exactly. A rounded or partial total stays
+  in `unmatchedPrintedReferences`.
 
 #### Shared holder research
 

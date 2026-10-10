@@ -1,7 +1,7 @@
-# Montrachet parcels: Tier 1 (#400)
+# Montrachet parcels: Tier 2 (#446)
 
 Montrachet uses INAO `inao-denom-927`, appellation 207, and both Chassagne-Montrachet
-(21150) and Puligny-Montrachet (21512). Reviewed 7 October 2026 for season 2026
+(21150) and Puligny-Montrachet (21512). Tier 1 reviewed 7 October 2026; Tier 2 reviewed 9 October 2026 for season 2026
 under the [rollout playbook](../../grand-cru-parcel-rollout.md) and
 [#461 history method](../grand-cru-history.md).
 
@@ -26,16 +26,56 @@ procedures remain distinct evidence; none establishes current farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0; one reviewed match withheld because its act date is unresolved |
 | Parcels with sale records (DVF) | 1; 1 current-reference deed, 0 historical-reference deeds |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 47 |
+| Parcels with holder or research leads | 37; supported holder links, one provisional reported tenancy (AH64) and dated secondary research, with historical-reference context kept distinct |
+| Parcels with no lead | 10; includes AH118–121, whose printed 0.8 ha total is 2 m² above today’s 7,998 m² sum |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 142,877 / 11,263 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 217,135 / 20,269 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
 No named-area asset is loaded. Parcel geometry and evidence load only when
 Parcel rights is enabled. The production payload report checks compiled JS.
+
+## Tier 1 to Tier 2
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels / recorded holders | 47 / 15 | 47 / 15 |
+| Parcels with holder or research leads | 0 | 37 |
+| Parcels with no lead | 47 | 10 |
+| Applicable reviewed holder links | 0 | 13 (12 holders) |
+| Provisional reported-tenancy links | 0 | 1 |
+| Parcels with exact company filings | 0 | 6 |
+| Verified farming links | 0 | 0 |
+
+The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened. Three 10 October supplements bring this to 70 distinct filings / 1,891 pages.
+Every holder has a dated search record in the [shared table](../holders/holder-links.json).
+The Bouchard, Pousse d’Or and DRC links retain their earlier definitions and effort;
+this pass only adds source and search evidence. Shared holders will reuse this work
+in the later Montrachet-bundle PRs.
+
+Four exact filing entries cover AE30/31/33/129/134 and AH64. Colin’s 13 current
+references receive historical context through documented DFI ancestry; no current
+reference is substituted into its 2003 deed. Opale’s former AH151 ownership is
+external research because today’s recorded holder differs. Five estate publications and five supplied Winehog accounts
+supply named-area census totals. Seven current references have matching Winehog
+numbers and individual areas; retired Colin references use official DFI ancestry. Legal holder, individual tenant, company
+relationship and bottler remain distinct.
+
+Thenard’s provisional identifier has no accepted company-record crosswalk. The
+Laguiche crosswalk is established; its 2002 lease names an individual tenant, so the
+Drouhin link added on 10 October stays a provisional reported tenancy (see below).
+The municipal holder has no producer link. INPI/Pappers returned 403; one latest
+Leflaive PDF returned 408. Winehog subscriber copies were supplied on 9 October and
+three more on 10 October: all nine are hashed and reviewed. The six maps missing from
+the historical expansion article were supplied on 10 October and settle its 34/24
+discrepancy as 24. Unnumbered Leflaive/Lafon areas, Prieur’s conflicting area and the
+rounded Puligny 118–121 total remain unmatched. The selected filings are a bounded
+review, not an exhaustive history, and no evidence establishes present-day farming.
+
+The parallel Claude batch is left untouched. No shared existing link was rewritten;
+future main changes will be merged only at the next cru boundary.
 
 ## Geometry and named areas
 
@@ -93,9 +133,9 @@ retains original member identities, licences and download provenance.
 
 Exact reference joins retain all holders and right codes. Missing legal-entity
 records never hide geometry and do not establish absence of an owner. Company
-continuity requires an unchanged valid SIREN. No holder-to-domaine crosswalk
-is established, so domaine grouping remains off. Producer/company research
-remains Tier 2; paid SPF copies and outreach remain Tier 3.
+continuity requires an unchanged valid SIREN. The shared holder table supplies reviewed company links for 12 holders.
+Domaine grouping remains a research aid, with farming unverified. Paid SPF
+copies and outreach remain Tier 3.
 
 [Rights history](rights-history.json) traces 20 current parcels to documented
 predecessors, including 6 with pre-2019 events, across 7 DFI documents and
@@ -129,23 +169,26 @@ and [earlier-bulletin research](../earlier-bulletins/README.md). These shared ga
 remain under #461; unverified operation remains under #364. Access failure or
 an unsearched interval is a gap, not absence of history.
 
+Opale’s retired AH150 (981 m²) reaches AH182 through the official 21 March 2019 DFI split into AH182 and AH183. Only AH182 lies in this cru. This is external historical context; the deed does not print the current reference.
+
 ## Reproduce and validate
 
 Use Python 3.12 with `scripts/burgundy-map-requirements.txt`:
 
 ```sh
-python scripts/download_grand_cru_sources.py --cru montrachet
-python scripts/build_grand_cru_parcels.py --cru montrachet --check
-python scripts/build_grand_cru_commune_audit.py --cru montrachet --check
-python scripts/build_grand_cru_named_plots.py --cru montrachet
-python scripts/build_grand_cru_parcel_named_areas.py --cru montrachet --check
-python scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
-python scripts/build_grand_cru_research.py --all --check
-python scripts/build_grand_cru_app_registry.py --check
-python scripts/audit_grand_cru_history_rollout.py --check
-npm run build
-python scripts/measure_grand_cru_payload.py
-npm test
+py -3.12 scripts/download_grand_cru_sources.py --cru montrachet
+py -3.12 scripts/build_grand_cru_parcels.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_commune_audit.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_named_plots.py --cru montrachet
+py -3.12 scripts/build_grand_cru_parcel_named_areas.py --cru montrachet --check
+py -3.12 scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
+py -3.12 scripts/build_grand_cru_holder_links.py --check
+py -3.12 scripts/build_grand_cru_research.py --all --check
+py -3.12 scripts/build_grand_cru_app_registry.py --check
+py -3.12 scripts/audit_grand_cru_history_rollout.py --check
+bun run build
+py -3.12 scripts/measure_grand_cru_payload.py
+bun run test
 ```
 
 The representative Chromium journey uses `WINELOG_E2E_CRU=montrachet` with
@@ -153,4 +196,62 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=montrachet` with
 download retry, unknown rights, holder search, scoped manual producer links,
 and owner/shared views without expanding the routine browser matrix.
 
-The cru issue and its #461 line are completed only after review and merge.
+This Tier 2 PR remains open and unmerged; it does not close the cru issue or #420.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed this cru on 10 October 2026 and approved four changes. Together
+they add five parcels with leads (32 to 37). Current farming stays unverified everywhere.
+
+- **Printed group totals.** A source that prints several current numbers with one
+  total area now names each parcel when today’s cadastral areas add up to that total
+  exactly, to the square metre. The research build checks the sum. Two Chevalier
+  groups touch this cru: Leflaive’s six plots (1.8273 ha = 18,273 m²) and Bouchard’s ten
+  plots (2.3295 ha = 23,295 m²). Their parcels lie in Chevalier; AH77, AH131, AH149 and
+  AH11 only touch the Montrachet outline (8, 16, 4 and 54 m² of overlap), as edge parcels
+  of the shared bundle. The research build now also requires the printed total to be
+  stated to the square metre. A three-decimal hectare total counts only where the owner
+  accepts it as a dropped final zero (Winehog writes both 4.7750 ha and 4.775 ha).
+  Puligny 118–121 is printed as 0.8 ha against 7,998 m² today, so it stays unmatched.
+- **Laguiche and Drouhin.** Drouhin’s own 2023 page says its family cultivates and
+  vinifies the Laguiche Montrachet. U18179542 (GFA de Laguiche, AH64) now has a
+  provisional `reported-tenancy` link to Maison Joseph Drouhin, limited to Montrachet.
+  The 2002 deed still names an individual tenant, so this is not a filed lease.
+- **Supplied maps.** The owner supplied the missing Winehog images (`photos.zip`).
+  The 1921 map outlines plot 24, not 34, so AE24 (542 m², 0.0542 ha) is named. The
+  article lists it for a private owner, with Lamy-Pillot as producer.
+- **Six-domaine map.** The 2016 map numbers six Chassagne holdings without cadastral
+  numbers. Fleurot’s 0.0405 ha (holding 6) is a narrow strip in the block whose bottom
+  strip is Leflaive’s AE134 (holding 4; 821 m², matching its filing). AE132 and AE133 lie
+  between them, and the strip above AE132 is AE173, exactly 405 m²; its neighbour AE172 is
+  428 m². This is recorded as `critic-attribution-area-reconstructed`, labelled “Matched
+  by area only”.
+- **Lafon.** Lafon’s printed 0.3182 ha equals AE37 (3,182 m²), whose recorded holder is
+  already the Lafon GFA. No new lead results, so the source stays unmatched.
+- **Producer-filing search.** Four more GFA Lafon filings (66 pages) were screened. Share
+  donations of 2022 and 2025 recite the GFA’s long-term lease to SARL Domaine des Comtes
+  Lafon (393418744) and state that all its parcels are covered. AE37 is its only parcel
+  in the five crus. The Lafon holder now has a reviewed `lessor-per-filing` link (lease
+  recited), scoped to Montrachet. No schedule prints AE37, so it is not an exact filing.
+  Where two links reach the same domaine in one cru, the builder now shows one candidate.
+- **Web census.** Four producer holdings from hashed estate, importer and guide pages join the
+  named-area census: Blain-Gagnard 0.08 ha, Fontaine-Gagnard 7 a 81 ca, Guy Amiot 0.10 ha
+  and Lamy-Pillot 5 a 42 ca. A Guide Hachette page says Lamy-Pillot has worked that
+  Dents-de-Chien parcel en métayage (sharecropping) since 1988 (an undated review of the
+  2003 vintage). Its area equals AE24, so it is cited on the AE24 entry, which describes
+  Lamy-Pillot as a sharecropper on that account, not the owner.
+  Holdings never name parcels.
+- **Leflaive search.** 15 more Domaine Leflaive filings (410 pages) were screened for the 2024
+  to 2025 rights change on AH131, AI108 and AI112. Since 2016 the statutes say the family’s
+  vines are leased to the company. A 2012 agreement commits the company to buy leased vines
+  on request. No filing names those parcels, so nothing changes.
+
+Images and archives are hashed in the curation and stay outside the repository. The
+full raw-source history audit was not rerun in this cloud session; only its
+file-derived hashes and sizes were refreshed.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.

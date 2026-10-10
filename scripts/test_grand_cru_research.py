@@ -187,6 +187,61 @@ class FarmingResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unknown external research source'):
             self.build(curation)
 
+    def test_a_printed_group_total_names_parcels_only_when_it_sums_exactly(self):
+        # Three real Échezeaux parcels stand in for a source printing their numbers with one total area.
+        areas = {f['properties']['id']: f['properties']['cadastreAreaM2'] for f in json.loads(self.asset)['features']}
+        rows = [p for p in self.build()['parcels']][:3]
+        group = {p['parcelId']: areas[p['parcelId']] for p in rows}
+        first = rows[0]['parcelId']
+        source = self.curation['sources'][0]['id']
+
+        def research(total, parcel_ids=(first,), group_areas=None, printed=None):
+            curation = copy.deepcopy(self.curation)
+            areas_used = group_areas or group
+            curation['externalResearch'].append({
+                'id': 'test-group', 'title': 'Printed group', 'parcelIds': list(parcel_ids),
+                'parcelAreasM2': {pid: areas_used.get(pid, 0) for pid in parcel_ids},
+                'areaEvidence': {'kind': 'printed-group-total', 'printedTotal': printed or f'{total:,} m²',
+                                 'printedTotalM2': total,
+                                 'groupParcelAreasM2': areas_used, 'individualAreasSource': 'pinned-cadastral-snapshot'},
+                'basis': 'critic-named-cadastral-reference', 'finding': 'Test.', 'appNote': 'Test.',
+                'sourceIds': [source], 'dateSourceId': source, 'producer': 'Test Producer', 'currentFarmer': None})
+            return curation
+        exact = sum(group.values())
+        row = next(p for p in self.build(research(exact))['parcels'] if p['parcelId'] == first)
+        self.assertIn('test-group', row['externalResearchIds'])
+        self.assertIn('Test Producer', {c['name'] for c in row['candidateLeads']})
+        self.assertIsNone(row['currentFarmer'])
+        # A total printed to the nearest hundredth of a hectare is not an exact square-metre match.
+        rounded = round(exact / 100) * 100 + (100 if exact % 100 == 0 else 0)
+        with self.assertRaisesRegex(ValueError, 'Printed group total differs from the cadastral sum'):
+            self.build(research(rounded))
+        changed = {**group, first: group[first] + 1}
+        with self.assertRaisesRegex(ValueError, 'Group parcel area differs from the pinned cadastral snapshot'):
+            self.build(research(exact + 1, group_areas=changed))
+        outside = next(p['parcelId'] for p in self.build()['parcels'] if p['parcelId'] not in group)
+        with self.assertRaisesRegex(ValueError, 'Group research names only parcels of its printed group'):
+            self.build(research(exact, parcel_ids=(first, outside)))
+        with self.assertRaisesRegex(ValueError, 'two or more parcels'):
+            self.build(research(group[first], group_areas={first: group[first]}))
+        # A total printed to 10 m² (like '1.158 ha') does not state square metres, even when the digits agree.
+        self.assertEqual(self.build(research(exact, printed=f'{exact // 10000}.{exact % 10000:04d} ha'))['counts'],
+                         self.build(research(exact))['counts'])
+        with self.assertRaisesRegex(ValueError, 'stated to the square metre'):
+            self.build(research(exact, printed=f'{exact / 10000:.3f} ha'))
+        # A three-decimal total counts only when its dropped final zero is recorded, and only if the sum ends in zero.
+        three = f'{exact // 10000}.{(exact % 10000) // 10:03d} ha'
+        dropped = research(exact, printed=three)
+        dropped['externalResearch'][-1]['areaEvidence']['trailingZeroDropped'] = True
+        if exact % 10 == 0:
+            self.assertIn('test-group', next(p for p in self.build(dropped)['parcels'] if p['parcelId'] == first)['externalResearchIds'])
+        else:
+            with self.assertRaisesRegex(ValueError, 'stated to the square metre'):
+                self.build(dropped)
+        dropped['externalResearch'][-1]['areaEvidence']['printedTotal'] = f'{exact:,} m²'
+        with self.assertRaisesRegex(ValueError, 'only to a total printed with three hectare decimals'):
+            self.build(dropped)
+
     def test_printed_references_reach_parcels_through_documented_dfi_lineage(self):
         # Corton's Le Corton plots 8 and 9 were merged and re-divided by DFI events; their spatial successors were rejected.
         context = Context(*load_cru('corton'))
