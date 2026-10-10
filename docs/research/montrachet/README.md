@@ -210,7 +210,8 @@ they add five parcels with leads (32 to 37). Current farming stays unverified ev
   plots (2.3295 ha = 23,295 m²). Their parcels lie in Chevalier; AH77, AH131, AH149 and
   AH11 only touch the Montrachet outline (8, 16, 4 and 54 m² of overlap), as edge parcels
   of the shared bundle. The research build now also requires the printed total to be
-  stated to the square metre.
+  stated to the square metre. A three-decimal hectare total counts only where the owner
+  accepts it as a dropped final zero (Winehog writes both 4.7750 ha and 4.775 ha).
   Puligny 118–121 is printed as 0.8 ha against 7,998 m² today, so it stays unmatched.
 - **Laguiche and Drouhin.** Drouhin’s own 2023 page says its family cultivates and
   vinifies the Laguiche Montrachet. U18179542 (GFA de Laguiche, AH64) now has a

@@ -152,8 +152,11 @@ the historical extension for a cru.
   parcels only when today's individual cadastral areas add up to that total exactly, to
   the square metre (`areaEvidence` of kind `printed-group-total`, checked by the research
   build). The printed total must itself state square metres: four hectare decimals, ares
-  and centiares, or m². A rounded or partial total, or one printed to 10 m² such as
-  1.158 ha, stays in `unmatchedPrintedReferences`. When one source prints the
+  and centiares, or m². A source that writes the same four-decimal figure both with and
+  without its final zero (Winehog prints both 4.7750 ha and 4.775 ha) may print 1.158 ha for
+  1.1580 ha; such a three-decimal total counts only when the entry records
+  `trailingZeroDropped` and today's sum matches it exactly. A rounded or partial total stays
+  in `unmatchedPrintedReferences`. When one source prints the
   numbers and another source about the same holding prints the total (for example a critic's
   map and the estate's own area table), the entry records both (`referencesSourceId`,
   `totalSourceId`, which must differ) and the same exact-sum check applies.
