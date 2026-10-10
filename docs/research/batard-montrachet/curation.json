@@ -115,13 +115,10 @@
       "retrievedFrom": "User-supplied MHTML archive",
       "sha256": "afdb67823ff48ac8761796c3dcff3a50d17fc99cfde74758f8525754d84ba874",
       "bytes": 3657459,
-      "finding": "Winehog (2020) names plot 46 and 0.1746 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "finding": "Winehog (2020) names plot 46 and 0.1746 ha, matching the number and full cadastral area. The supplied book pages (Lavalle 1855; Danguy & Aubertin 1892) support the article’s suggested historical chain through the Drapier estate, which the author calls unconfirmed; they print no cadastral numbers. Secondary historical attribution only; no current farming is verified.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:02 +0000",
       "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/10/09F05E8D-18A2-429E-BE8C-FB4FF4EBD431.png",
-        "https://winehog.org/wp-content/uploads/2020/10/686C2384-DC94-4AB2-A0DE-D03280B7B49C-660x1024.png",
-        "https://winehog.org/wp-content/uploads/2020/10/8FAAF6AD-6BD1-465D-8FFF-54C2A06ED79E-1024x492.png",
         "https://winehog.org/wp-content/uploads/2017/11/59EFFDBB-2A9D-4A09-A9E3-B5B34B9BA852.jpeg"
       ],
       "suppliedImages": [
@@ -132,8 +129,36 @@
           "bytes": 196087,
           "suppliedAt": "2026-10-10",
           "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/10/09F05E8D-18A2-429E-BE8C-FB4FF4EBD431.png",
+          "file": "09F05E8D-18A2-429E-BE8C-FB4FF4EBD431.png",
+          "sha256": "3d010d63146a1784dfa6703edd0e09e2004efd643e9e12b8baa309a44f6ca803",
+          "bytes": 522670,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "chat upload (PNG copy; size matches the linked image)",
+          "shows": "Danguy & Aubertin (1892), page 23: principal owners of Bâtard-Montrachet, Chassagne side. Private owners of 1892, no cadastral numbers or areas."
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/10/686C2384-DC94-4AB2-A0DE-D03280B7B49C-660x1024.png",
+          "file": "686C2384-DC94-4AB2-A0DE-D03280B7B49C-660x1024.png",
+          "sha256": "e58029566ca39a1f492d0f2a6d7ceb3f7b7e7cae04a309ce78b742b793f40a6b",
+          "bytes": 873210,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "chat upload (PNG copy; size matches the linked image)",
+          "shows": "Danguy & Aubertin (1892), page 60: the Drapier estate, formerly the Courtivron property, lists Bâtards-Montrachet and Le Montrachet among its Chassagne climats. No cadastral numbers or areas."
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/10/8FAAF6AD-6BD1-465D-8FFF-54C2A06ED79E-1024x492.png",
+          "file": "8FAAF6AD-6BD1-465D-8FFF-54C2A06ED79E-1024x492.png",
+          "sha256": "b4914adb8f827bcf96e42a4876ced3a29a92de576a202dacc803a3b26657dd83",
+          "bytes": 444719,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "chat upload (PNG copy; size matches the linked image)",
+          "shows": "Lavalle (1855), page 155: Le Montrachet (Puligny), 3 ha 95 a 30 ca, with six named owners of 1855. No cadastral numbers."
         }
-      ]
+      ],
+      "imageNotes": "The owner reports (10 October 2026) that the one image still missing (59EFFDBB) is a photograph with no parcel information."
     },
     {
       "id": "bat-winehog-41492",
@@ -1707,7 +1732,7 @@
     "All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.",
     "Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season.",
     "Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps.",
-    "Supplied by the owner on 10 October 2026 and reviewed: Winehog articles 47634 (d’Auvenay, Les Enseignères) and the owner-supplied images for the Morey-Coffinet, Faiveley and DRC Bâtard articles. The Morey-Coffinet maps outline AE175; the article’s statement that Coffinet-Duvernay holds the 0.1304 ha plot just north of it names AE176 by position and exact area. Four DRC photos were not in the archive and remain unreviewed. Images and archives stay outside the repository.",
+    "Supplied by the owner on 10 October 2026 and reviewed: Winehog articles 47634 (d’Auvenay, Les Enseignères) and the owner-supplied images for the Morey-Coffinet, Faiveley and DRC Bâtard articles. The Morey-Coffinet maps outline AE175; the article’s statement that Coffinet-Duvernay holds the 0.1304 ha plot just north of it names AE176 by position and exact area. Three of the four missing DRC images (Lavalle 1855 p. 155; Danguy & Aubertin 1892 pp. 23 and 60) were supplied later that day and reviewed; they give no cadastral numbers or areas. The owner reports the fourth is a photograph. Images and archives stay outside the repository.",
     "Domaine GB (490242302): three more filings (44 pages) and the register name Côte d’Or Vineyards (851404954) and Compagnie Foncière et Immobilière de Beaune (851751149) as its partners; the latter signed in 2020 as co-manager. Côte d’Or Vineyards’ sole shareholder is Cloud Vineyards Limited, Hong Kong (no. 2839847). No filing names a producer or a parcel, so no link is made; the Beaune company is only a possible lead. The 2019–2020 recorded holder of AE65/AE177, GFV B.E.O (529595050), ceased on 30 November 2019 after selling all its land; its filings name no buyer or parcel."
   ],
   "noticeReview": [

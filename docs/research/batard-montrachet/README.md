@@ -177,7 +177,7 @@ Two parcels gain leads (29 to 31). Current farming stays unverified everywhere.
   side as well as the area. It is labelled “Matched by area only” and replaces the
   unmatched entry.
 - **Supplied images.** The Morey-Coffinet and Faiveley maps were supplied and are hashed
-  on their sources. Four DRC photos were not in the archive.
+  on their sources. Three of the four missing DRC images (book pages from Lavalle 1855 and Danguy & Aubertin 1892) were supplied later and print no cadastral numbers; the fourth is a photograph.
 - **Census.** Sixteen producer holdings join the named-area census: Domaine Jean Chartron’s
   own table (12 a 84 ca), plus fifteen hashed estate, importer, merchant and guide pages.
   Area coincidences (Vougeraie with AE53, AE70 and AE178; Henri Boillot with AI15) fall on
