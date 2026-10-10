@@ -194,3 +194,9 @@ download retry, unknown rights, holder search, scoped manual producer links,
 and owner/shared views without expanding the routine browser matrix.
 
 This Tier 2 PR remains open and unmerged; it does not close the cru issue or #420.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.

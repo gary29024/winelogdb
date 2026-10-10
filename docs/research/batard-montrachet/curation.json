@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-09",
+  "reviewedAt": "2026-10-10",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-273",
   "status": "tier-2-researched",
@@ -258,10 +258,11 @@
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current",
-        "rne-349583500"
+        "rne-349583500",
+        "ch-pappers-violland-1996"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship."
+      "finding": "No supported producer link. The 1996 deposit cover names holder 349583500, but its enclosed Boisset transfer concerns Maison Leon Violland (515420305). Co-recorded Vougeraie rights and corporate officers do not resolve the mismatch."
     },
     {
       "holderId": "384800736",
@@ -293,7 +294,7 @@
         "bat-legal-jouard"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Registry, statutes and estate legal notice identify Domaine Vincent et François Jouard. The acquired 2023 extract omits the individual real-estate schedules. No exact AE40/AE52 filing or current farming is established."
+      "finding": "The supplied 2023 Jouard PDF is byte-identical to the reviewed extract and still omits individual property schedules. No exact AE40/AE52 match. The existing company identity is retained; a prior metayage recital does not establish current farming."
     },
     {
       "holderId": "408395309",
@@ -480,10 +481,11 @@
       "sourceIds": [
         "dgfip-current",
         "bm-rne-778252445",
-        "bm-auvenay-2024"
+        "bm-auvenay-2024",
+        "ch-pappers-auvenay-2012"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Reuses the existing shared company link and search effort (3 filings / 113 screened pages). No new company relationship or current farming assertion."
+      "finding": "Reviewed Domaine d Auvenay company identity reused. The supplied 2012 increase converts a shareholder receivable to capital; it adds no qualifying individual parcel schedule. Prior effort is preserved; no current farming is established."
     },
     {
       "holderId": "778253781",
@@ -1001,7 +1003,8 @@
     "Jouard’s 2023 acquired extract omits its real-estate schedules. Maltroye’s 2009 indexed filing prints another SIREN (500363619); KBMFI’s old composite has an internal 312149081 identifier. Neither mismatch is used to establish holder identity.",
     "Exact schedules cover nine current parcels, including Hécate’s purchase mandate and Bachelet-Ramonet’s fractional bare interest; neither is represented as a completed acquisition of full ownership or current farming. Original Prieur-Brunet AE57 lacks its individual area; Bavard AI124 reaches AI170 only through the official 2021 DFI and remains historical-only after the user resumed Tier 2.",
     "All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.",
-    "Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season."
+    "Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season.",
+    "Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps."
   ],
   "noticeReview": [
     {

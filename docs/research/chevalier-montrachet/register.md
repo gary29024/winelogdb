@@ -1,6 +1,6 @@
 # Chevalier-Montrachet parcel farming research register
 
-Reviewed 2026-10-09; target season 2026.
+Reviewed 2026-10-10; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
@@ -64,9 +64,9 @@ Parcels (2): AH 0004, AH 0007.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk.
+No supported producer link. The 1996 deposit cover names holder 349583500, but its enclosed Boisset transfer concerns Maison Leon Violland (515420305). Co-recorded Vougeraie rights and corporate officers do not resolve the mismatch.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCEV DOMAINE LOUIS VIOLLAND (349583500)](https://annuaire-entreprises.data.gouv.fr/entreprise/349583500).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCEV DOMAINE LOUIS VIOLLAND (349583500)](https://annuaire-entreprises.data.gouv.fr/entreprise/349583500), [Louis Violland filing cover with Maison Leon Violland enclosure](https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500).
 
 <a id="holder-408395309"></a>
 
@@ -196,9 +196,9 @@ Parcels (1): AH 0126.
 
 **Candidate to investigate:** Domaine d Auvenay. **Basis:** company-record-research. **Current farming:** unconfirmed.
 
-Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted.
+Reviewed Domaine d Auvenay company identity reused. The supplied 2012 increase converts a shareholder receivable to capital; it adds no qualifying individual parcel schedule. Prior effort is preserved; no current farming is established.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10), [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10), [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7), [Domaine d Auvenay: 2012 debt-funded capital increase](https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445).
 
 <a id="holder-u21845345"></a>
 
@@ -562,6 +562,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **ch-registry-751811472** — [Official company registry: 751811472](https://recherche-entreprises.api.gouv.fr/search?q=751811472&per_page=10). registry; read; document date not established. Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted.
 - **ch-registry-752059824** — [Official company registry: 752059824](https://recherche-entreprises.api.gouv.fr/search?q=752059824&per_page=10). registry; read; document date not established. Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted.
 - **ch-registry-212105126** — [Official company registry: 212105126](https://recherche-entreprises.api.gouv.fr/search?q=212105126&per_page=10). registry; read; document date not established. The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established.
+- **ch-pappers-violland-1996** — [Louis Violland filing cover with Maison Leon Violland enclosure](https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500). company-filing; read; document date 1996-10-08. The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
+- **ch-pappers-auvenay-2012** — [Domaine d Auvenay: 2012 debt-funded capital increase](https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445). company-filing; read; document date 2012-10-29. The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
 
 ## Remaining evidence and access gaps
 
@@ -575,5 +577,6 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.
 - Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.
 - All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.
+- Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

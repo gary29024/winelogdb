@@ -239,3 +239,25 @@ The GFV formation copy prints 14 May 2011 but references a February 2012 promise
 All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.
 
 Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.
+
+## Supplemental Pappers review: 10 October 2026
+
+### ch-pappers-violland-1996
+
+[Louis Violland filing cover with Maison Leon Violland enclosure](https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500) - document **1996-10-08**, deposit **1996-11-06**; **6 pages**, all OCR-screened. User-supplied authorized PDF; Pappers company page retained as its provenance link.
+
+The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
+
+8 October 1996 is the signed transfer date; its effective date is 1 January 1996. The cover and enclosure identify different companies, so the transfer is not applied to 349583500.
+
+Page images checked: 1, 2, 3 (one-based PDF). SHA-256 `ac50734657a1d237f7357f8856ef7d9356b4d741435778b9f0e52c722f201343`; 140,929 bytes; received 2026-10-10T00:46:08.585393+00:00. No PDF or OCR is committed.
+
+### ch-pappers-auvenay-2012
+
+[Domaine d Auvenay: 2012 debt-funded capital increase](https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445) - document **2012-10-29**, deposit **2013-01-14**; **31 pages**, all OCR-screened. User-supplied authorized PDF; Pappers company page retained as its provenance link.
+
+The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
+
+The meeting heading and updated statutes state 29 October 2012. The inserted article on PDF page 4 instead says 26 October 2012; this internal discrepancy is preserved. Neither date is used as a land-transfer date.
+
+Page images checked: 2, 3, 4, 6, 13, 14 (one-based PDF). SHA-256 `b52567bf3bcf6b2852628d7b5305bb7066f231105c893dc689805eb829d49027`; 1,123,281 bytes; received 2026-10-10T00:46:08.615392+00:00. No PDF or OCR is committed.
