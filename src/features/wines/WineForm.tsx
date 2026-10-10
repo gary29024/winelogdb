@@ -31,6 +31,26 @@ function parseBlend(value:string):GrapeBlendEntry[]{
     return match?{grape:match[1].trim(),percentage:Number(match[2])}:{grape:part,percentage:null};
   });
 }
+/**
+ * The oldest vintage the form takes. The server's guard is a corruption check
+ * (1000); this is the oldest bottle anyone is plausibly pouring - an
+ * eighteenth-century Madeira - so a misread "201" or "19" is caught at the field.
+ */
+const OLDEST_VINTAGE=1700;
+/**
+ * What native constraints cannot say about a blend: one grape over the whole,
+ * or a blend over 100%. A point of slack covers labels that round each part.
+ */
+function blendProblem(blend:GrapeBlendEntry[]){
+  if(blend.some(x=>x.percentage!=null&&x.percentage>100))return 'A grape cannot be more than 100% of the blend.';
+  const total=blend.reduce((sum,x)=>sum+(x.percentage??0),0);
+  return total>101?`These percentages add up to ${Math.round(total)}%. A blend can be at most 100%.`:'';
+}
+function tagProblem(tags:string[]){
+  if(tags.length>50)return 'Use at most 50 tags.';
+  const long=tags.find(tag=>tag.length>50);
+  return long?`“${long.slice(0,24)}…” is too long for a tag. Keep each tag under 50 characters.`:'';
+}
 function blendText(initial?:Partial<WineInput>){
   if(initial?.grapeBlend?.length)return initial.grapeBlend.map(x=>`${x.grape}${x.percentage!=null?` ${x.percentage}%`:''}`).join(', ');
   return initial?.grapes?.join(', ')??'';
@@ -68,6 +88,10 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   const [wineName,setWineName]=useState(String(initial?.wineName??'')),[appellation,setAppellation]=useState(String(initial?.appellation??'')),[wineStyle,setWineStyle]=useState(String(initial?.wineStyle??''));
   const [cruOverride,setCruOverride]=useState(String(initial?.classificationOverride??''));
   const [blend,setBlend]=useState(()=>blendText(initial));
+  // A reported blend problem is retracted by any change to the blend, typed or
+  // picked from a suggestion; left in place it would block the next save.
+  const blendInput=useRef<HTMLInputElement>(null);
+  useEffect(()=>{blendInput.current?.setCustomValidity('')},[blend]);
   /** The half-typed grape after the last comma, without any percentage on it. */
   const typedGrape=blend.split(',').at(-1)?.replace(/\d+(\.\d+)?\s*%?\s*$/,'').trim()??'';
   const grapeHints=useMemo(()=>{
@@ -102,6 +126,16 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   const [venue,setVenue]=useState(String(initial?.venue??''));
   const [tastingDate,setTastingDate]=useState(String(initial?.tastingDate??''));
   const {tasting:activeTasting,loading:tastingLoading}=useActiveTasting();
+  /**
+   * Where and with whom, folded away until it has something in it.
+   *
+   * A wine logged at home on its own has nothing to put here, and the four
+   * fields with their help text were most of the experience section. Anything
+   * already filled - a tasting, a venue, a place read off the photo - opens it,
+   * so nothing the form was handed is hidden.
+   */
+  const [occasionOpen,setOccasionOpen]=useState(()=>[initial?.tastingName,initial?.venue,initial?.locationName].some(x=>String(x??'').trim())||(initial?.latitude!=null&&initial?.longitude!=null));
+  const [tagsOpen,setTagsOpen]=useState(false);
   const prefilled=useRef(false);
   /**
    * The wine in tonight's lineup that this photograph is probably of.
@@ -176,6 +210,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   useEffect(()=>{
     if(id||prefilled.current||!activeTasting)return;
     prefilled.current=true;
+    setOccasionOpen(true);
     setTastingName(current=>current||activeTasting.name);
     setVenue(current=>current||activeTasting.venue||'');
     if(activeTasting.tastingDate)setTastingDate(activeTasting.tastingDate);
@@ -237,6 +272,17 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     const referenceChoice=submitter instanceof HTMLButtonElement&&submitter.name==='referenceDecision'?submitter.value:'';
     const producer=String(fd.get('producer')||'').trim(),wineName=String(fd.get('wineName')||'').trim();
     if(!producer||!wineName){setError('Producer and wine name are required.');setBusy(false);return}
+    const form=e.currentTarget;
+    const reportAt=(name:string,message:string)=>{
+      const control=form.elements.namedItem(name);
+      if(!(control instanceof HTMLInputElement))return false;
+      control.setCustomValidity(message);control.reportValidity();
+      setBusy(false);return true;
+    };
+    const blendIssue=blendProblem(parseBlend(String(fd.get('grapeBlend')||'')));
+    if(blendIssue&&reportAt('grapeBlend',blendIssue))return;
+    const tagIssue=tagProblem(String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean));
+    if(tagIssue&&reportAt('tags',tagIssue))return;
     const grapeBlend=parseBlend(String(fd.get('grapeBlend')||'')),currency=String(fd.get('currency')||'').trim().toUpperCase(),tastingStructure=hasTastingStructure(structure)?structure:null;
     const country=String(fd.get('country')||'').trim()||null,region=String(fd.get('region')||'').trim()||null,appellation=String(fd.get('appellation')||'').trim()||null;
     // Region and appellation are one normalized place pair. Once either part is
@@ -351,7 +397,17 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     if(values.classificationOverride!==undefined)setCruOverride(values.classificationOverride);
     setDirty(true);
   }
-  const field=(name:string,label:string,type='text',step?:string,required=false)=><label>{label}<input name={name} type={type} step={step} required={required} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
+  const field=(name:string,label:string,type='text',step?:string,limits:{min?:number;max?:number}={})=><label>{label}<input name={name} type={type} step={step} min={limits.min} max={limits.max} inputMode={type==='number'?'decimal':undefined} defaultValue={String(initial?.[name as keyof WineInput]??'')}/></label>;
+  // Read at render rather than at module load, so a tab left open over New
+  // Year takes the new vintage.
+  const latestVintage=new Date().getFullYear();
+  /**
+   * Year status and edition, shown only where they can say something: with a
+   * year typed the status is fixed at Vintage and the select is disabled. An
+   * edition already filled in stays, whatever the year.
+   */
+  const showYearDetails=!vintageInput.trim()||Boolean(releaseDesignation.trim());
+  const occasionSummary=[tastingName.trim(),venue.trim()].filter(Boolean).join(' · ');
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <>
     {!memberView&&referenceWine&&onReferenceUpdated&&<>
@@ -370,7 +426,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       </div>
     </div>}
     <h2 className="form-section-heading" id="wine-fields">Wine identity</h2>
-    <div className="producer-field"><label>Producer *<input name="producer" type="text" required value={producer} onChange={e=>setProducer(e.target.value)}/></label>
+    <div className="producer-field"><label>Producer *<input name="producer" type="text" required maxLength={200} value={producer} onChange={e=>setProducer(e.target.value)}/></label>
       {adoptedProducer&&producer===adoptedProducer&&<p className="producer-adopted">Saved under the name your library uses. Type over it to keep what the label said.</p>}
       {suggestion&&<div className="producer-resolution producer-suggestion">
         <span>Did you mean <strong>{suggestion.canonicalName}</strong>? {suggestion.tastedCount} wine{suggestion.tastedCount===1?'':'s'} {suggestion.sharedOnly?'shared by a friend':'logged'}.</span>
@@ -378,12 +434,12 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       </div>}
       {producer.trim()&&(resolvingProducer?<div className="producer-resolution matched"><span>Checking producer library…</span></div>:matched?<details className="producer-resolution matched compact-resolution"><summary>✓ Existing producer · {matched.canonicalName}</summary><div className="compact-resolution-body"><span>{matched.matchType==='alias'?`Matched via known alias “${matched.matchedName}” → `:''}{matched.canonicalName}</span><small>{matched.tastedCount} tasted{!memberView?` · ${matched.catalogCount} wines in researched range`:''}{matched.researchedAt?' · producer research available':''}{matched.sharedOnly?' · shared by a friend':''}</small><Link to={`/producers/${matched.id}`}>View producer profile</Link></div></details>:<div className="producer-resolution new"><strong>○ New producer</strong><span>No existing producer identity matches this name. A new profile will be created when the wine is saved.</span></div>)}
     </div>
-    <div className="cuvee-field"><label>Wine name *<input name="wineName" type="text" required value={wineName} onChange={e=>setWineName(e.target.value)}/></label>
+    <div className="cuvee-field"><label>Wine name *<input name="wineName" type="text" required maxLength={200} value={wineName} onChange={e=>setWineName(e.target.value)}/></label>
       {matched&&!matched.sharedOnly&&wineName.trim()&&(resolvingCuvee?<div className="producer-resolution cuvee-resolution matched"><span>Checking this producer’s cuvées…</span></div>:matchedCuvee?<><details className="producer-resolution cuvee-resolution matched compact-resolution"><summary>✓ Existing cuvée · {matchedCuvee.canonicalName}</summary><div className="compact-resolution-body"><span>{wineName.trim()===matchedCuvee.canonicalName?matchedCuvee.canonicalName:`${wineName.trim()} → ${matchedCuvee.canonicalName}`}</span><small>{matchedCuvee.matchType==='structured'?'Matched by stable producer + appellation/cuvée identity':matchedCuvee.matchType==='alias'?'Matched via a known cuvée name':'Same canonical cuvée identity'}{matchedCuvee.catalogBacked?' · producer catalogue-backed':''}{matchedCuvee.vintages.length?` · tasted vintages ${matchedCuvee.vintages.join(', ')}`:''}</small></div></details>{canPreferPrimary&&<label className="cuvee-primary-choice"><input type="checkbox" checked={preferCuveePrimaryName} onChange={e=>setPreferCuveePrimaryName(e.target.checked)}/><span>Use “{wineName.trim()}” as the primary cuvée name when saving</span><small>The cuvée ID stays the same; the old wording remains a searchable alias for every vintage.</small></label>}</>:<div className="producer-resolution cuvee-resolution new"><strong>○ New cuvée</strong><span>No existing cuvée identity for this producer matches this wine. WineLog will create one when saved.</span></div>)}
     </div>
 
-    <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1')}</div>
-    <div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small>}</label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
+    <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" inputMode="numeric" min={OLDEST_VINTAGE} max={latestVintage} step="1" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1',{min:0,max:70})}</div>
+    {showYearDetails&&<div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small>}</label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>}
     <h2 className="form-section-heading">Bottle facts</h2>
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
@@ -401,7 +457,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
         is a local table - no request, no debounce - and it offers only the name
         a grape is filed under, because that is what pressing it will store. */}
     <label className="full-field">Grapes / blend
-      <input name="grapeBlend" value={blend} onChange={e=>setBlend(e.target.value)} placeholder="Merlot 95%, Cabernet Franc 5%"/>
+      <input ref={blendInput} name="grapeBlend" value={blend} onChange={e=>setBlend(e.target.value)} placeholder="Merlot 95%, Cabernet Franc 5%"/>
       {grapeHints.length>0&&<span className="grape-hints" role="group" aria-label="Grape suggestions">
         {grapeHints.map(name=><button type="button" key={name} className="grape-hint" onClick={()=>completeGrape(name)}>{name}</button>)}
       </span>}
@@ -414,21 +470,33 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
 
     <h2 className="form-section-heading" id="tasting-fields">Your experience</h2>
 
-    <label className="full-field">Tasting notes<textarea name="tastingNotes" rows={4} defaultValue={initial?.tastingNotes}/></label>
+    <label className="full-field">Tasting notes<textarea name="tastingNotes" rows={4} maxLength={10000} defaultValue={initial?.tastingNotes}/></label>
 
     <fieldset className="experience-fields"><legend>This drinking / tasting</legend>
-      <div className="wine-compact-row three"><label>Drinking date<input name="tastingDate" type="date" value={tastingDate} onChange={e=>setTastingDate(e.target.value)}/></label>{field('rating','Rating / 100','number','0.5')}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
-      <label className="full-field">Tasting / event group<input name="tastingName" type="text" value={tastingName} onChange={e=>setTastingName(e.target.value)}/></label>
+      <div className="wine-compact-row three"><label>Drinking date<input name="tastingDate" type="date" value={tastingDate} onChange={e=>setTastingDate(e.target.value)}/></label>{field('rating','Rating / 100','number','0.5',{min:0,max:100})}<label>Price<div className="price-currency-inputs"><input name="currency" type="text" inputMode="text" maxLength={3} pattern="[A-Za-z]{3}" title="Three letters, such as HKD, USD or EUR" autoCapitalize="characters" defaultValue={String(initial?.currency??'')} placeholder="HKD" aria-label="Currency"/><input name="price" type="number" inputMode="decimal" min="0" step="0.01" defaultValue={String(initial?.price??'')} placeholder="0" aria-label="Price"/></div></label></div>
       {!id&&activeTasting&&<p className="tasting-prefill-note">Prefilled from your open tasting — <strong>{activeTasting.name}</strong>. Change any of these to log this bottle outside it.</p>}
-      <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&!memberView&&<small>Suggested from the photo location data. Verify or edit this approximation before saving.</small>}</label></div>
-      {hasGps&&!memberView&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
-      {!memberView&&<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>}
+      <details className="form-disclosure occasion-disclosure" open={occasionOpen} onToggle={e=>setOccasionOpen(e.currentTarget.open)}>
+        <summary><span>Occasion &amp; place</span><small>{occasionSummary||'Optional'}</small></summary>
+        <div className="form-disclosure-body">
+          <label className="full-field">Tasting / event group<input name="tastingName" type="text" value={tastingName} onChange={e=>setTastingName(e.target.value)}/></label>
+          <div className="wine-compact-row two"><label>Venue<input name="venue" type="text" value={venue} onChange={e=>setVenue(e.target.value)}/></label><label>{hasGps?'Approximate place':'Place name'}<input name="locationName" type="text" defaultValue={String(initial?.locationName??'')}/>{hasEstimatedPlace&&!memberView&&<small>Suggested from the photo location data. Verify or edit this approximation before saving.</small>}</label></div>
+          {hasGps&&!memberView&&<div className="gps-readout"><strong>Photo GPS</strong><span>{Number(initial?.latitude).toFixed(6)}, {Number(initial?.longitude).toFixed(6)}</span><small>These coordinates are read directly from EXIF and stored exactly. The place name above is only an approximate interpretation.</small></div>}
+          {!memberView&&<small>Use “Tasting / event group” to group wines from the same dinner, trip, class or formal tasting. Exact GPS remains attached even if you edit or clear the approximate place name.</small>}
+        </div>
+      </details>
     </fieldset>
 
     <TastingStructureFields structure={structure} open={structureOpen} onToggle={setStructureOpen} onChoose={chooseStructure}/>
 
-    <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''}/>
-      {!memberView&&<small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small>}</label>
+    {/* Tags are mostly derived - place, grapes, style - and corrected with the
+        wine on save, so typing here is the exception. */}
+    <details className="form-disclosure tags-disclosure" open={tagsOpen} onToggle={e=>setTagsOpen(e.currentTarget.open)}>
+      <summary><span>Tags</span><small>Optional</small></summary>
+      <div className="form-disclosure-body">
+        <label className="full-field">Tags (comma separated)<input name="tags" defaultValue={initial?.tags?.join(', ')??''} onInput={e=>e.currentTarget.setCustomValidity('')}/>
+          {!memberView&&<small>Tags for the place, the grapes and the style follow the wine: correct a field above and the tag it put there is corrected with it. Anything you typed is left alone.</small>}</label>
+      </div>
+    </details>
     {photos.length>0&&<p className="form-note">{photos.length} photo{photos.length===1?'':'s'} will be saved permanently only after this wine is successfully logged.</p>}
     {allowFriendTagging&&<div className="form-note"><button type="button" onClick={()=>{setTagDraft(tagSelected);setTagError('');setTagOpen(true)}}>Tag friends{tagSelected.length?` · ${tagSelected.length} selected`:''}</button>{!memberView&&<span> Optional — choose who should receive this wine when it is saved.</span>}</div>}
     <FriendTagDialog open={tagOpen} title="Tag friends when saved" description="Choose friends for this wine. Your account defaults are preselected; changing this selection affects only this wine." friends={tagFriends} selected={tagDraft} error={tagError} onSelectedChange={setTagDraft} onConfirm={()=>{setTagSelected(tagDraft);setTagTouched(true);setTagOpen(false)}} onClose={()=>setTagOpen(false)}/>

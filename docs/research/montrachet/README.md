@@ -26,11 +26,11 @@ procedures remain distinct evidence; none establishes current farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03–2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0; one reviewed match withheld because its act date is unresolved |
 | Parcels with sale records (DVF) | 1; 1 current-reference deed, 0 historical-reference deeds |
-| Parcels with holder or research leads | 32; supported holder links and dated secondary research, with historical-reference context kept distinct |
-| Parcels with no lead | 15; includes AH64, whose exact company filing identifies no supported producer link |
+| Parcels with holder or research leads | 37; supported holder links, one provisional reported tenancy (AH64) and dated secondary research, with historical-reference context kept distinct |
+| Parcels with no lead | 10; includes AH118–121, whose printed 0.8 ha total is 2 m² above today’s 7,998 m² sum |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 210,813 / 18,787 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 215,487 / 19,805 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -42,9 +42,10 @@ Parcel rights is enabled. The production payload report checks compiled JS.
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
 | Parcels / recorded holders | 47 / 15 | 47 / 15 |
-| Parcels with holder or research leads | 0 | 32 |
-| Parcels with no lead | 47 | 15 |
+| Parcels with holder or research leads | 0 | 37 |
+| Parcels with no lead | 47 | 10 |
 | Applicable reviewed holder links | 0 | 12 |
+| Provisional reported-tenancy links | 0 | 1 |
 | Parcels with exact company filings | 0 | 6 |
 | Verified farming links | 0 | 0 |
 
@@ -63,13 +64,15 @@ numbers and individual areas; retired Colin references use official DFI ancestry
 relationship and bottler remain distinct.
 
 Thenard’s provisional identifier has no accepted company-record crosswalk. The
-Laguiche crosswalk is established, but its lease names Jean de Laguiche personally,
-so no Drouhin tenant link is asserted. The municipal holder has no producer link.
-INPI/Pappers returned 403; one latest Leflaive PDF returned 408. Winehog subscriber
-copies were supplied on 9 October: all six are hashed and reviewed. Six maps were
-not embedded in the historical expansion article. Unnumbered Leflaive/Lafon areas,
-Prieur’s conflicting area and the article’s 34/24 discrepancy remain unmatched. The selected filings are a bounded review, not an exhaustive
-history, and no evidence establishes present-day farming.
+Laguiche crosswalk is established; its 2002 lease names an individual tenant, so the
+Drouhin link added on 10 October stays a provisional reported tenancy (see below).
+The municipal holder has no producer link. INPI/Pappers returned 403; one latest
+Leflaive PDF returned 408. Winehog subscriber copies were supplied on 9 October and
+three more on 10 October: all nine are hashed and reviewed. The six maps missing from
+the historical expansion article were supplied on 10 October and settle its 34/24
+discrepancy as 24. Unnumbered Leflaive/Lafon areas, Prieur’s conflicting area and the
+rounded Puligny 118–121 total remain unmatched. The selected filings are a bounded
+review, not an exhaustive history, and no evidence establishes present-day farming.
 
 The parallel Claude batch is left untouched. No shared existing link was rewritten;
 future main changes will be merged only at the next cru boundary.
@@ -194,6 +197,35 @@ download retry, unknown rights, holder search, scoped manual producer links,
 and owner/shared views without expanding the routine browser matrix.
 
 This Tier 2 PR remains open and unmerged; it does not close the cru issue or #420.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed this cru on 10 October 2026 and approved four changes. Together
+they add five parcels with leads (32 to 37). Current farming stays unverified everywhere.
+
+- **Printed group totals.** A source that prints several current numbers with one
+  total area now names each parcel when today’s cadastral areas add up to that total
+  exactly, to the square metre. The research build checks the sum. Two Chevalier
+  groups reach this cru: Leflaive’s six plots (1.8273 ha = 18,273 m²; AH77, AH131 and
+  AH149 lie here) and Bouchard’s ten plots (2.3295 ha = 23,295 m²; AH11 lies here).
+  Puligny 118–121 is printed as 0.8 ha against 7,998 m² today, so it stays unmatched.
+- **Laguiche and Drouhin.** Drouhin’s own 2023 page says its family cultivates and
+  vinifies the Laguiche Montrachet. U18179542 (GFA de Laguiche, AH64) now has a
+  provisional `reported-tenancy` link to Maison Joseph Drouhin, limited to Montrachet.
+  The 2002 deed still names an individual tenant, so this is not a filed lease.
+- **Supplied maps.** The owner supplied the missing Winehog images (`photos.zip`).
+  The 1921 map outlines plot 24, not 34, so AE24 (542 m², 0.0542 ha) is named for the
+  René Lamy-Pillot family.
+- **Six-domaine map.** The 2016 map numbers six Chassagne holdings without cadastral
+  numbers. Fleurot’s 0.0405 ha strip sits directly above Leflaive’s AE134 (821 m²,
+  0.0821 ha, matching its filing). That strip is AE173, exactly 405 m². This is
+  recorded as `critic-attribution-area-reconstructed`, labelled “Matched by area only”.
+- **Lafon.** Lafon’s printed 0.3182 ha equals AE37 (3,182 m²), whose recorded holder is
+  already the Lafon GFA. No new lead results, so the source stays unmatched.
+
+Images and archives are hashed in the curation and stay outside the repository. The
+full raw-source history audit was not rerun in this cloud session; only its
+file-derived hashes and sizes were refreshed.
 
 ## Supplemental Pappers review: 10 October 2026
 

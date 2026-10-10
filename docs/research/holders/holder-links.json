@@ -13032,6 +13032,20 @@
       "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
       "finding": "The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.",
       "dateNote": "The meeting heading and updated statutes state 29 October 2012. The inserted article on PDF page 4 instead says 26 October 2012; this internal discrepancy is preserved. Neither date is used as a land-transfer date."
+    },
+    {
+      "id": "drouhin-laguiche-2023",
+      "title": "Maison Joseph Drouhin: Montrachet Marquis de Laguiche Grand Cru (2023 vintage page)",
+      "url": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru/2023",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:03:00Z",
+      "retrievedFrom": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru/2023",
+      "sha256": "f59efbbb81eebadd9d32d2e0fe05591e8df825c570b39f7450d27a69c95de1aa",
+      "bytes": 135194,
+      "finding": "Drouhin’s own page says the 2.06 ha property has been held by the Laguiche family since 1776 and that the Drouhin family is in charge of its cultivation and vinification, entirely on the Puligny side. Its linked 2023 technical sheet repeats the text. It names no lease, contract type or contracting company. Publication date not stated."
     }
   ],
   "holders": {
@@ -19390,6 +19404,22 @@
         ],
         "limitation": "Formation and 2019 company schedule name AH64 and its exact 20625 m² area, matching this recorded U holder. Identity does not establish a Drouhin tenant link."
       },
+      "links": [
+        {
+          "id": "U18179542/maison-joseph-drouhin",
+          "domaine": "Maison Joseph Drouhin",
+          "relation": "reported-tenancy",
+          "crus": [
+            "montrachet"
+          ],
+          "basis": "Drouhin’s own page reports that the Drouhin family is in charge of cultivating and vinifying the Laguiche family’s 2.06 ha Montrachet. It names no lease or contracting company, and the GFA’s 2002 deed recites a lease to an individual; this stays a reported arrangement.",
+          "sourceIds": [
+            "drouhin-laguiche-2023"
+          ],
+          "reviewStatus": "provisional",
+          "reviewedAt": "2026-10-10"
+        }
+      ],
       "searches": [
         {
           "at": "2026-10-09",
@@ -19400,6 +19430,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Montrachet #446 pass: 3 distinct filings / 66 pages. The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to Jean de Laguiche personally. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "drouhin.com Montrachet Marquis de Laguiche page and 2023 technical sheet"
+          ],
+          "outcome": "linked",
+          "note": "Owner decision of 10 October 2026: Drouhin’s own published account supports a provisional reported-tenancy link, as for Duband (382058188). No lease filing names a Drouhin company."
         }
       ],
       "effort": {

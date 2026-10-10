@@ -130,6 +130,29 @@ describe('the single wine page',()=>{
     expect(producer.value).toBe('Domaine Dujac');
   });
 
+  it('shows the labels being scanned while it waits, then puts the list back',async()=>{
+    await render();
+    await pick('front.jpg','back.jpg');
+    let answer:(response:Response)=>void=()=>{};
+    const fetchMock=globalThis.fetch as ReturnType<typeof vi.fn>;
+    const passThrough=fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation(async(url:string,init?:RequestInit)=>String(url)==='/api/recognition'
+      ?new Promise<Response>(resolve=>{answer=resolve}):passThrough(url,init));
+    await act(async()=>{button('Identify this wine')!.click()});
+
+    // While it is out: both labels under a sweep, a moving bar, and no list.
+    expect(host!.querySelectorAll('.scan-stage-photo')).toHaveLength(2);
+    expect(host!.querySelectorAll('.scan-stage .scan-beam')).toHaveLength(2);
+    expect(host!.querySelector('.scan-stage [role=progressbar]')).toBeTruthy();
+    expect(host!.querySelector('.scan-progress-step')?.textContent).toBe('Reading the label…');
+    expect(host!.querySelector('.upload-list')).toBeNull();
+
+    await act(async()=>{answer(new Response(JSON.stringify(recognized),{status:200,headers:{'content-type':'application/json'}}))});
+    await waitFor(()=>expect(host!.querySelector('.review h2')?.textContent).toBe('Identification Results'));
+    expect(host!.querySelector('.scan-stage')).toBeNull();
+    expect(host!.querySelectorAll('.upload-list li')).toHaveLength(2);
+  });
+
   it('ignores WineLog credit transport metadata on a member recognition response',async()=>{
     await render(undefined,{...recognized,creditOperationId:'operation-1',creditSettlement:{status:'complete',captured:0,reserved:0}});
     await pick('front.jpg','back.jpg');

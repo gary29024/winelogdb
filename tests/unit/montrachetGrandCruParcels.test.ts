@@ -7,7 +7,7 @@ import {loadParcelEvidence} from '../../src/lib/places/grandCruParcels/evidence'
 
 // Extend Tier 2 only after committing each independent holder-research pass.
 const tier2=[
- {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:32,unresolved:15,filings:6,groups:12,unlinked:['U18179542','U21850980']},
+ {slug:'montrachet',name:'Montrachet',id:'inao-denom-927',villages:['chassagne-montrachet','puligny-montrachet'],parcels:47,leads:37,unresolved:10,filings:6,groups:13,unlinked:['U21850980']},
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:27,unresolved:17,filings:3,groups:12,unlinked:['349583500','212105126','751811472','752059824']},
 ];
 const tier1=[
@@ -39,6 +39,8 @@ describe('Montrachet bundle reviewed crus',()=>{
    const evidence=await loadParcelEvidence(cru.id);
    expect(Object.keys(evidence.holderDomains??{})).toHaveLength(cru.groups);
    for(const hid of cru.unlinked)expect(evidence.holderDomains).not.toHaveProperty(hid);
+   // The Laguiche GFA reaches Drouhin only as a reported arrangement, never as a filed lease.
+   if(cru.slug==='montrachet')expect(evidence.holderDomains?.U18179542).toMatchObject({name:'Maison Joseph Drouhin',basis:'reported-operator-relationship'});
    const register=read(`docs/research/${cru.slug}/register.json`);
    expect(register.counts).toMatchObject({holderLead:cru.leads,unresolved:cru.unresolved,withParcelFiling:cru.filings,currentFarmerConfirmed:0});
    expect(register.parcels.every((p:{currentFarmer:unknown})=>p.currentFarmer===null)).toBe(true);

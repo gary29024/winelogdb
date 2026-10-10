@@ -29,8 +29,11 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     await page.locator('input[name=appellation]').fill('Clos de la Roche');
     await page.locator('select[name=wineStyle]').selectOption('red');
     await page.getByLabel('Tasting notes', { exact: true }).fill('OWNER_SECRET_NOTES');
+    // A bottle with no tasting or photo place keeps these folded until opened.
+    await page.locator('summary', { hasText: 'Occasion & place' }).click();
     await page.getByLabel('Venue', { exact: true }).fill('OWNER_SECRET_VENUE');
     await page.getByLabel('Place name', { exact: true }).fill('OWNER_SECRET_LOCATION');
+    await page.locator('summary', { hasText: 'Tags' }).click();
     await page.getByLabel('Tags (comma separated)', { exact: false }).fill('OWNER_SECRET_TAG');
     await page.getByLabel('Rating / 100', { exact: true }).fill('91');
     await page.getByLabel('Price', { exact: true }).fill('123');
