@@ -12667,6 +12667,92 @@
       "sha256": "f59efbbb81eebadd9d32d2e0fe05591e8df825c570b39f7450d27a69c95de1aa",
       "bytes": 135194,
       "finding": "Drouhin’s own page says the 2.06 ha property has been held by the Laguiche family since 1776 and that the Drouhin family is in charge of its cultivation and vinification, entirely on the Puligny side. Its linked 2023 technical sheet repeats the text. It names no lease, contract type or contracting company. Publication date not stated."
+    },
+    {
+      "id": "mt-filing-778232892-2022-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial share donation-partage of 1 October 2022 (deposited 10 October 2024)",
+      "url": "https://actes.ccm2.net/acte/19fca7ec-1bbe-4a42-a4f2-f2994dfb8f96#page=17",
+      "type": "company-filing",
+      "documentDate": "2022-10-01",
+      "filingDate": "2024-10-10",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:46:49+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19fca7ec-1bbe-4a42-a4f2-f2994dfb8f96",
+      "sha256": "695aefcf17f6931c62a14068a7a9d400cd0d50bd421ff5e4ce2fc214ac25df8c",
+      "bytes": 456262,
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        3,
+        17,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Recites that the GFA’s land is let on a long-term rural lease to SARL Domaine des Comtes Lafon (393418744): lease of 18 April 1994, complementary lease of 27 April 1996, amendment of 1 April 2005 and complementary lease of 30 March 2018. Page 18 states that all the GFA’s parcels are covered by that lease. No parcel list is printed.",
+      "dateNote": "1 October 2022 is the deed date; 10 October 2024 is the deposit. Neither is a lease date."
+    },
+    {
+      "id": "mt-filing-778232892-2025-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial donation-partage of 17 February 2025 (deposited 20 October 2025)",
+      "url": "https://actes.ccm2.net/acte/0c05173f-7b24-4562-a8e2-50edeaee8fae#page=20",
+      "type": "company-filing",
+      "documentDate": "2025-02-17",
+      "filingDate": "2025-10-20",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:35:53+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0c05173f-7b24-4562-a8e2-50edeaee8fae",
+      "sha256": "c644e563c5079550b9b436c94f567313ab22c27f85c746489cd58ad719b05896",
+      "bytes": 2052180,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "reviewedPages": [
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Repeats the GFA’s lease chain to SARL Domaine des Comtes Lafon (393418744): 18 April 1994, 27 April 1996, 1 April 2005 and 30 March 2018 (published 2018P no. 1483, corrected 2019P no. 522). Separate Mâconnais leases of another family GFA are also recited. No parcel list is printed.",
+      "dateNote": "17 February 2025 is the deed date; 20 October 2025 is the deposit."
+    },
+    {
+      "id": "mt-filing-778232892-1996-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial share donation-partage of 15 June 1996",
+      "url": "https://actes.ccm2.net/acte/491306bc-2ae6-4f44-85f1-342d629e8956#page=3",
+      "type": "company-filing",
+      "documentDate": "1996-06-15",
+      "filingDate": "1996-07-03",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:11:36+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/491306bc-2ae6-4f44-85f1-342d629e8956",
+      "sha256": "3a9d7a752ccc88e55b25ffac727de6feeb022bd6b87b5240bb427cd461bd2d53",
+      "bytes": 262906,
+      "pageCount": 9,
+      "screenedPages": 9,
+      "reviewedPages": [
+        3,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Recites the notarial long-term rural lease of 18 April 1994 (published 16 June 1994, 1994P no. 2367) letting all the GFA’s property to SARL Domaine des Comtes Lafon for 18 years from 1 January 1994. A 27 April 1996 lease covers one Meursault parcel. No Montrachet parcel list is printed.",
+      "dateNote": "15 June 1996 is the deed date; 3 July 1996 is the deposit."
+    },
+    {
+      "id": "mt-registry-393418744",
+      "title": "Company register search: Comtes Lafon (393418744)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/393418744",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:03:18Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=comtes%20lafon&per_page=25",
+      "sha256": "cdb83c56ebf2704f0e9dc3014d4810b49509b1538033cabb5e4ac18df8125572",
+      "bytes": 19278,
+      "finding": "Lists SAS Domaine des Comtes Lafon (393418744, created 23 December 1993, the operating company at Meursault), GFA du Domaine des Comtes Lafon (778232892) and a separate Mâconnais family GFA. Legal identity only; not farming evidence."
     }
   ],
   "holders": {
@@ -17292,6 +17378,24 @@
           ],
           "reviewStatus": "reviewed",
           "reviewedAt": "2026-10-09"
+        },
+        {
+          "id": "778232892/domaine-des-comtes-lafon-lease",
+          "domaine": "Domaine des Comtes Lafon",
+          "relation": "lessor-per-filing",
+          "leaseStatus": "recited",
+          "crus": [
+            "montrachet"
+          ],
+          "basis": "Share donations of 2022 and 2025 recite the GFA’s long-term rural lease to SARL Domaine des Comtes Lafon (393418744), from 18 April 1994 with 1996, 2005 and 2018 additions, and state that all the GFA’s parcels are covered. No parcel list is printed; the lease deeds are not filed.",
+          "sourceIds": [
+            "mt-filing-778232892-2022-lease",
+            "mt-filing-778232892-2025-lease",
+            "mt-filing-778232892-1996-lease",
+            "mt-registry-393418744"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
         }
       ],
       "searches": [
@@ -17304,12 +17408,22 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 4 distinct filings / 80 pages. The 18 April 1994 decision transfers the operating branch to SARL Domaine des Comtes Lafon and converts the continuing land company to a GFA. The 1996 donation recites estate leases, but no exact AE37 schedule or current renewal is established. Corporate succession is distinct from current farming."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=comtes%20lafon&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Producer-filing search requested by the owner on 10 October 2026: 4 more GFA filings / 66 pages. The 2022 and 2025 share donations recite that all GFA parcels are leased to SARL Domaine des Comtes Lafon (393418744). AE37 is the GFA’s only parcel in the five crus, but no schedule prints it. The operating company’s own 6 filings / 111 pages give no lease schedule."
         }
       ],
       "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 80,
-        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
+        "filingsScreened": 8,
+        "pagesRead": 146,
+        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch. 10 October 2026: four more distinct GFA filings / 66 pages."
       }
     },
     "778233098": {

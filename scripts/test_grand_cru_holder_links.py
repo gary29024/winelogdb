@@ -1422,6 +1422,18 @@ class MontrachetTierTwoTests(unittest.TestCase):
         self.assertEqual(row['researchStatus'], 'holder-lead')
         self.assertIsNone(row['currentFarmer'])
 
+    def test_lafon_recited_lease_covers_all_gfa_parcels_without_a_schedule(self):
+        links = {x['relation']: x for x in self.table['holders']['778232892']['links']}
+        lease = links['lessor-per-filing']
+        self.assertEqual((lease['domaine'], lease['leaseStatus'], lease['crus']),
+                         ('Domaine des Comtes Lafon', 'recited', ['montrachet']))
+        self.assertIn('succession', links)
+        # Two links to the same domaine remain one candidate and one domaine heading.
+        self.assertEqual(self.evidence['holderDomains']['778232892']['name'], 'Domaine des Comtes Lafon')
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21150000AE0037')
+        self.assertEqual([c['name'] for c in row['candidateLeads']], ['Domaine des Comtes Lafon'])
+        self.assertEqual((row['parcelFilingIds'], row['currentFarmer']), ([], None))
+
     def test_map_readings_stay_labelled_by_how_they_were_matched(self):
         research = {x['id']: x for x in self.curation['externalResearch']}
         lamy = research['mt-winehog-32708-lamy-pillot']
