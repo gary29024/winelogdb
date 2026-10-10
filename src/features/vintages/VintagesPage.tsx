@@ -76,7 +76,7 @@ export function VintagesPage(){
       <span>Region</span>
       {VINTAGE_REGIONS.map(item=><button type="button" key={item.id} className={item.id===region.id?'active':undefined} aria-pressed={item.id===region.id} onClick={()=>chooseRegion(item.id)}>{item.name}</button>)}
     </div>}
-    <div className="vintage-controls">
+    <div className="vintage-controls" data-tour="vintage-village">
       <label>
         <span>Village</span>
         <select value={villageId} onChange={event=>chooseVillage(event.target.value)}>
@@ -93,7 +93,7 @@ export function VintagesPage(){
     {!error&&!readings.length&&<p className="vintage-loading" aria-live="polite">Reading the seasons…</p>}
 
     {readings.length>0&&<>
-      <section className="vintage-card vintage-strip-card" aria-labelledby="vintage-strip-title">
+      <section className="vintage-card vintage-strip-card" data-tour="vintage-strip" aria-labelledby="vintage-strip-title">
         <div className="vintage-card-head"><h2 id="vintage-strip-title">{readings.length} years at a glance</h2><span>harvest start vs typical</span></div>
         <div className="vintage-strip">{decades.map(decade=><div className="vintage-strip-row" key={decade}>
           <span className="vintage-strip-decade">{decade}s</span>
@@ -110,7 +110,7 @@ export function VintagesPage(){
         <div className="vintage-strip-legend" aria-hidden="true"><span>Early · warm</span><span className="vintage-strip-scale">{['early-3','early-2','early-1','typical','late-1','late-2','late-3'].map(tone=><span key={tone} className={`tone-${tone}`}/>)}</span><span>Late · cool</span></div>
       </section>
 
-      <div className="vintage-key" aria-hidden="true">
+      <div className="vintage-key" data-tour="vintage-key" aria-hidden="true">
         <span className="is-warmth"><VintageIcon kind="sun" size={14}/>Warmth</span>
         <span className="is-rain"><VintageIcon kind="drop" size={14}/>Rain</span>
         <span className="is-nights"><VintageIcon kind="moon" size={14}/>Nights</span>
