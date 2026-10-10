@@ -29,11 +29,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-02-14–2025-12-29. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 3; one page-reviewed 2022 application receipt |
 | Parcels with sale records (DVF) | 23; 7 deeds on current references, none on historical references |
-| Parcels with holder or research leads | 48; Tier 1 had 3 notice leads; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 82 |
+| Parcels with holder or research leads | 52; Tier 1 had 3 notice leads; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 78 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1990, all pinned geometry vintages of both communes and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 168,858 / 19,124 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 170,849 / 19,226 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Bonnes-Mares selection
@@ -195,21 +195,24 @@ AR64 also matches the Clos de Tart company property annex (2018) and Winehog his
 
 The owner approved a rule in the Montrachet review (#548): a source that prints several current numbers with one
 total area names each parcel when today’s cadastral areas add up to that total exactly, to the square metre. The
-research build checks the sum, and the printed total must itself state square metres. One
-Bonnes-Mares entry qualifies:
+research build checks the sum, and the printed total must itself state square metres. Two
+Bonnes-Mares entries qualify:
 
+- **Dujac.** AB321, AB322, AB358, AB360 and AB72 are printed as 0.425 ha. Winehog drops final
+  zeros elsewhere (it writes both 4.7750 and 4.775 ha), and the owner accepted reading this as
+  0.4250 ha; the entry records `trailingZeroDropped`. Today’s areas are
+  492 + 424 + 478 + 2,758 + 98 = 4,250 m². Four of them are recorded to provisional holder
+  U21117863; this is critic research, not a crosswalk for that identifier.
 - **Vogüé.** AB98 and AB99 are printed as 473 m² in the 2018 update. Today’s areas are
   130 + 343 = 473 m². The 2014 history article gives 473 m² to 98 alone; that conflict is kept.
   AB111, printed without an area, stays unmatched.
 
-Four totals do not qualify and stay unmatched:
-- Dujac AB321, AB322, AB358, AB360 and AB72: printed 0.425 ha, only to 10 m². Today’s areas
-  add up to 4,250 m², which is consistent, but not stated to the square metre.
+Three totals do not qualify and stay unmatched:
 - Drouhin AB83, AB114, AB305 and AB306: printed 0.2298 ha, today 2,300 m².
 - The same Drouhin group: printed 0.23 ha, which is rounded.
 - Mugnier’s five parcels: printed 0.36 ha, today 3,631 m².
 
-Leads rise from 46 to 48 parcels. Current farming stays unverified.
+Leads rise from 46 to 52 parcels. Current farming stays unverified.
 
 ## Reproduce and validate
 

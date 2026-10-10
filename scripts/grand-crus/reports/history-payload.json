@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DKSKLYSp.js"
+    "dist/client/assets/index-BZTsu_t2.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DrpNBQ9r.js",
-    "dist/client/assets/SectionLabel-CBNlhcbw.js",
-    "dist/client/assets/SparklingDetailsCard-ND6byNcx.js",
-    "dist/client/assets/VillageMap-6E6G2-3A.js",
-    "dist/client/assets/burgundyAtlas-DI9Uivle.js",
-    "dist/client/assets/index-DKSKLYSp.js",
-    "dist/client/assets/index-E5T4CRju.js",
+    "dist/client/assets/FriendTagDialog-Cw1t9EyO.js",
+    "dist/client/assets/SectionLabel-C6T5iuCE.js",
+    "dist/client/assets/SparklingDetailsCard-CnGhZqsG.js",
+    "dist/client/assets/VillageMap-DPJ-Qz82.js",
+    "dist/client/assets/burgundyAtlas-ClMqIBzr.js",
+    "dist/client/assets/index-BZTsu_t2.js",
+    "dist/client/assets/index-CyNO6pUH.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-Bw7xOiPV.js",
-    "dist/client/assets/wineDetailCompact-BOvK5VFy.js"
+    "dist/client/assets/useModalFocus-BeileQfB.js",
+    "dist/client/assets/wineDetailCompact-BjJf7fyc.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5868426,
-  "evidenceGzipBytesTotal": 541107,
+  "evidenceBytesTotal": 5870417,
+  "evidenceGzipBytesTotal": 541209,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -42,10 +42,10 @@
     },
     {
       "cru": "bonnes-mares",
-      "file": "dist/client/assets/bonnes-mares.evidence-Dl6KY2so.js",
-      "sha256": "0a6f0f3f8e22ea68f70d73c4019ae326324f085975fe04dd07b77f66be7ceb03",
-      "bytes": 168947,
-      "gzipBytes": 19353
+      "file": "dist/client/assets/bonnes-mares.evidence-CDZRmJX9.js",
+      "sha256": "6c948a7ce43690b885d53b0a059ee73795299416d59b8f2ec790ac81aa87812e",
+      "bytes": 170938,
+      "gzipBytes": 19455
     },
     {
       "cru": "chablis-grand-cru",
