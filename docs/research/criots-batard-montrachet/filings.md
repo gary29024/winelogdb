@@ -8,7 +8,7 @@ Domaine Hubert Lamy is linked to its own company, 419971130, through the officia
 
 Holder 778249052 has a **partner-company** relationship to Maison Prosper Maufoux: the 16 September 2026 decision explicitly names Maison des Grands Crus (395115447) as a partner, and the official Prosper Maufoux legal notice identifies that company as its publisher. The 2021 completed absorption of GFA Domaine Prosper Maufoux and later company decisions contain no individual AE90/504 m² schedule. Corporate ownership does not establish parcel operation.
 
-GFA Saint-Joseph’s statutes authorise acquisition in Les Criots without number or area. They do not support an exact AE97/6120 m² filing. Two copies dated 2 April 2026 have different partner lists and are retained as deposited: the May deposit names Edouard Guerrand and Roger Belland; the April deposit names Marie and Roger Belland. Private partners and general lease provisions do not establish a producer company or actual tenant.
+GFA Saint-Joseph’s statutes authorise acquisition in Les Criots without number or area. They do not support an exact AE97/6120 m² filing. Two copies dated 2 April 2026 have different partner lists and are retained as deposited; the individual partners are not recorded here. Private partners and general lease provisions do not establish a producer company or actual tenant.
 
 Provisional U21930118 is not identified with the separate company 778252445 by name, reputation or a two-parcel aggregate. Three existing company filings were rechecked in full, with no AE92/AE93 schedule supporting a company-record crosswalk. The 778252445 shared identity, links and effort remain unchanged.
 
@@ -20,7 +20,7 @@ Reused effort is not additional unique filing research and is not added to the 1
 
 | Recorded holder | Shared effort reused | New filings / pages | Finding |
 | --- | ---: | ---: | --- |
-| SAINT JOSEPH (`324396639`) | — | 4 / 81 | The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted. |
+| SAINT JOSEPH (`324396639`) | — | 4 / 81 | The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted. |
 | DOMAINE HUBERT LAMY (`419971130`) | — | 6 / 300 | The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation. |
 | DOMAINE DU CHATEAU DE SAINT AUBIN (`778249052`) | — | 8 / 183 | The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule. |
 | SC DOMAINE D AUVENAY (`U21930118`) | 3 / 113 | 0 / 0 | The provisional U21930118 identifier has no accepted company-record crosswalk. Three existing 778252445 d’Auvenay filings (2001, 2019 and 2024; 113 pages) were reacquired with unchanged hashes and fully OCR-screened for Criots. They contain no AE92/AE93 reference with individual areas supporting the identity. Winehog prints only their combined 0.0637 ha. The shared 778252445 company identity cannot be transferred to this U identifier by name or aggregate area. |
@@ -183,7 +183,7 @@ Document dates identify the acts, with later deposits separate. Page references 
 - Document date: 2026-04-02; deposit: 2026-05-15.
 - SHA-256: `8f1724d28800b7143bb5be72f18b81067a6fdca73bb325a522cf3b00523a1b2a`; bytes: 1,401,044; pages screened: 20.
 - Acquired: 2026-10-09T15:51:34.913448+00:00; examined pages: 1, 5, 20.
-- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
+- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
 - Limitation: Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.
 
 ### cri-filing-324396639-3
@@ -193,7 +193,7 @@ Document dates identify the acts, with later deposits separate. Page references 
 - Document date: 2026-04-02; deposit: 2026-04-30.
 - SHA-256: `a3d75b9cfb79c576400b51de250196ce6e28513e55cf65a78f1fc150f28362ea`; bytes: 1,276,485; pages screened: 20.
 - Acquired: 2026-10-09T15:51:35.641293+00:00; examined pages: 1, 5, 20.
-- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
+- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
 - Limitation: Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.
 
 ### cri-filing-324396639-5
@@ -203,7 +203,7 @@ Document dates identify the acts, with later deposits separate. Page references 
 - Document date: 1990-11-26; deposit: 2026-03-18.
 - SHA-256: `50fa90574fc31c4875ab467da071f8591a38e30ab3c18e3c2b6697df26adebde`; bytes: 675,975; pages screened: 40.
 - Acquired: 2026-10-09T15:51:35.715843+00:00; examined pages: 1, 3, 5, 39.
-- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
+- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
 - Limitation: Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.
 - Date / scan qualification: The modern 18 March 2026 index date is the deposit date. PDF page 3 identifies the 1 April 1982 original statutes as amended 26 November 1990.
 
@@ -214,7 +214,7 @@ Document dates identify the acts, with later deposits separate. Page references 
 - Document date: 2007-07-13; deposit: 2010-05-28.
 - SHA-256: `146bdf8f765053bbcca0942b688057e3eeef8c477682751c4432d2c3e5b862c9`; bytes: 25,513; pages screened: 1.
 - Acquired: 2026-10-09T15:51:36.127838+00:00; examined pages: 1.
-- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
+- Finding: The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.
 - Limitation: Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.
 - Date / scan qualification: The one-page court order is dated 13 July 2007, despite its 28 May 2010 deposit.
 
@@ -267,3 +267,12 @@ Reused [Chevalier supplemental source](../chevalier-montrachet/filings.md#supple
 The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
 
 Across the five-cru batch, the supplied four files comprise **3 additional distinct PDFs / 92 pages**, plus **1 byte-identical 21-page Jouard duplicate**. All 113 supplied pages were OCR-screened. The cumulative distinct new corpus is **154 PDFs / 4245 pages**, compared with 151 / 4153 before this supplement.
+
+## Owner decisions: 10 October 2026
+
+This section supersedes the earlier statements above. d’Auvenay’s AE92 + AE93 (0.0637 ha) are named, because
+today’s cadastral areas add up to the printed total exactly. GFA Saint-Joseph (`324396639`) gains 4 distinct
+filings / 32 pages: a 1982 statutes copy and three 2026 minutes. They give only the general duty to lease and the
+Les Criots acquisition power, and name no lessee. Its effort is now 8 filings / 113 pages. The EARL Roger Belland
+(482807369), which is not a recorded holder, was also screened. Its executed 2005 lease from individuals covers no
+Criots parcel. Earlier notes named the GFA’s individual partners; those names are replaced by neutral wording.

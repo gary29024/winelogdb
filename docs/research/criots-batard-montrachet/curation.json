@@ -85,7 +85,7 @@
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:56 +0000",
       "missingEmbeddedImages": [],
-      "finding": "Dated secondary research; reviewed text and embedded maps do not supply both an individual current number and area. No parcel match or current operation inferred."
+      "finding": "Dated secondary research. AE92 and AE93 are printed with 0.0637 ha combined but no individual areas; today’s cadastral areas add up exactly to 637 m² (printed-group-total rule). No current operation or company-record crosswalk inferred."
     },
     {
       "url": "https://www.4couleurs.fr/domaine-hubert-lamy/",
@@ -111,6 +111,51 @@
       "access": "read",
       "accessMethod": "Public text retrieved through web search/open; local raw-byte request failed with a TLS error.",
       "finding": "The Guide 2012 note for the 2009 wine publishes a 60-are Roger Belland holding. Dated named-area census only; no GFA Saint-Joseph company crosswalk or current parcel allocation."
+    },
+    {
+      "id": "census-blain-gagnard-langtons",
+      "title": "Langtons: Blain-Gagnard Grand Cru Bâtard-Montrachet 2023 (producer profile)",
+      "url": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:07:17+00:00",
+      "retrievedFrom": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "sha256": "729540f4050fea00152a9ca1fa07693d152c59054291214f3233bf3e41d72130",
+      "bytes": 274295,
+      "finding": "A merchant page gives Domaine Blain-Gagnard 0.21 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-fontaine-gagnard-estate",
+      "title": "Domaine Fontaine-Gagnard website wine sheets (fiche-vin.html data script js/app.min.03f1e7e4.js)",
+      "url": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:10:30+00:00",
+      "retrievedFrom": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "sha256": "ab2d04569c52ee3025bd854accea92090bd17951d9f412f312c60d416d6d9298",
+      "bytes": 187231,
+      "finding": "The estate’s own page gives Domaine Fontaine-Gagnard 0.3313 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "cri-winehog-71536",
+      "title": "Terroir in focus – Blanchot Dessous",
+      "url": "https://winehog.org/terroir-in-focus-chassagne-blanchot-dessous-2-71536/",
+      "type": "critic",
+      "documentDate": "2025-11-21",
+      "modifiedAt": "2025-11-21T10:47:07+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "c712eeba52b6e86c9b7690bdec05f9af3a78e314c615b955cbaa8a10b68431e7",
+      "bytes": 4994625,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:32 +0000",
+      "finding": "An article on Chassagne’s Blanchot-Dessous, the premier cru below Criots. It prints no Criots number or area. Reviewed; no reference in this cru."
     }
   ],
   "holders": [
@@ -126,7 +171,7 @@
         "cri-registry-324396639"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "The GFA statutes authorise acquisition in Les Criots without a number or area. Private Belland/Guerrand shareholdings and a general duty to lease do not identify a producer company. No AE97 schedule or current farming is verified."
+      "finding": "The GFA statutes authorise acquisition in Les Criots without a number or area. Private family shareholdings and a general duty to lease do not identify a producer company. No AE97 schedule or current farming is verified."
     },
     {
       "holderId": "419971130",
@@ -181,7 +226,44 @@
   ],
   "historyFindings": [],
   "exactParcelEvents": [],
-  "externalResearch": [],
+  "externalResearch": [
+    {
+      "id": "cri-group-auvenay-criots",
+      "title": "Winehog: d’Auvenay’s two-parcel Criots-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21150000AE0092",
+        "21150000AE0093"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0092": 370,
+        "21150000AE0093": 267
+      },
+      "printedReferences": [
+        "AE92",
+        "AE93"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.0637 ha",
+        "printedTotalM2": 637,
+        "groupParcelAreasM2": {
+          "21150000AE0092": 370,
+          "21150000AE0093": 267
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2015) gives d’Auvenay’s Criots-Bâtard-Montrachet as AE92 and AE93, 0.0637 ha combined, without individual areas. Today’s cadastral areas add up exactly to 637 m², so both are named under the printed-group-total rule. This is critic research, not a company-record crosswalk for the provisional holder identifier; current farming remains unverified.",
+      "sourceIds": [
+        "cri-winehog-25688"
+      ],
+      "producer": "Domaine d’Auvenay",
+      "appNote": "Winehog prints AE92, AE93 with 0.0637 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "cri-winehog-25688",
+      "currentFarmer": null
+    }
+  ],
   "parcelFilings": [],
   "producerHoldings": [
     {
@@ -239,6 +321,42 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "cri-census-domaine-blain-gagnard",
+      "producer": "Domaine Blain-Gagnard",
+      "namedAreas": [
+        "LES CRIOTS"
+      ],
+      "publishedAreaHa": 0.21,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-blain-gagnard-langtons"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "cri-census-domaine-fontaine-gagnard",
+      "producer": "Domaine Fontaine-Gagnard",
+      "namedAreas": [
+        "LES CRIOTS"
+      ],
+      "publishedAreaHa": 0.3313,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-fontaine-gagnard-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -253,7 +371,8 @@
     "Both requested Criots Winehog archives were supplied and hashed; all nine referenced images were embedded and reviewed where relevant. Neither article supplies individual number-and-area matches. The d’Auvenay two-parcel 0.0637 ha total remains unallocated.",
     "Three Winehog/trade/critic figures are named-area census only. The Lamy official site gives 18.5 ha for the whole estate, while Prosper Maufoux product text gives 1.57 ha for the whole appellation; neither is imported as a Criots estate holding. The public Hachette text was read through the web tool, but local acquisition failed with a TLS error.",
     "INPI/Pappers returned HTTP 403 on the recorded first batch attempts. Free filing indexes are a bounded corpus, not complete corporate history. Newer unacquired listings, executed leases, subsequent amendments and current performance remain gaps; verified farming stays zero.",
-    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-auvenay-2012 (31 pages), first counted at Chevalier. Criots remains 18 new distinct PDFs / 564 pages. U21930118 still lacks a company-record identity crosswalk or individual AE92/AE93 schedule. The 28 April 1989 contribution is a targeted unacquired deed lead."
+    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-auvenay-2012 (31 pages), first counted at Chevalier. Criots remains 18 new distinct PDFs / 564 pages. U21930118 still lacks a company-record identity crosswalk or individual AE92/AE93 schedule. The 28 April 1989 contribution is a targeted unacquired deed lead.",
+    "Supplied by the owner on 10 October 2026 and reviewed: Winehog article 71536 (Blanchot-Dessous), with no Criots reference. GFA Saint-Joseph (324396639): four more filings (32 pages) give only the general duty to lease and the Les Criots acquisition power, naming no lessee. The EARL Roger Belland’s 2005 formation contains an executed long-term lease from individuals, but it covers only Santenay, Chassagne AD65 and Puligny AE26–29; Criots appears only as wine stock. No lease from the GFA to a Belland company is filed; any lease would be a land-registry deed."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
@@ -262,13 +381,6 @@
       "printedReference": "Unnumbered Hubert Lamy Criots holding",
       "parcelIds": [],
       "limitation": "Text and embedded maps do not print an individual cadastral number and area. Historical acquisition/lease narratives cannot allocate current parcels or prove current operation.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "cri-winehog-25688",
-      "printedReference": "AE92 + AE93; 0.0637 ha combined",
-      "parcelIds": [],
-      "limitation": "The two-parcel combined holding supplies no individual areas. It cannot establish a current exact match or a company-record crosswalk for provisional U21930118.",
       "currentFarmer": null
     }
   ]

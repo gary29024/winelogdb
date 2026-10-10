@@ -15448,7 +15448,7 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
-      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
       "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation."
     },
     {
@@ -15473,7 +15473,7 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
-      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
       "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation."
     },
     {
@@ -15499,7 +15499,7 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
-      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
       "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.",
       "dateNote": "The modern 18 March 2026 index date is the deposit date. PDF page 3 identifies the 1 April 1982 original statutes as amended 26 November 1990."
     },
@@ -15523,7 +15523,7 @@
       ],
       "pageNumbering": "one-based PDF",
       "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
-      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
       "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.",
       "dateNote": "The one-page court order is dated 13 July 2007, despite its 28 May 2010 deposit."
     },
@@ -16852,13 +16852,23 @@
             "Free Le Figaro filing index / actes.ccm2.net; complete selected corpus including all image pages"
           ],
           "outcome": "no-link-found",
-          "note": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted."
+          "note": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=belland&departement=21&per_page=25"
+          ],
+          "outcome": "no-link-found",
+          "note": "Owner-requested Belland lease search on 10 October 2026: 4 more GFA filings / 32 pages (1982 statutes copy, three 2026 minutes) give only the general duty to lease and the Les Criots acquisition power, with no lessee. The EARL Roger Belland’s 2005 executed lease from individuals covers Santenay, Chassagne AD65 and Puligny AE26–29 only. No producer link is made."
         }
       ],
       "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 81,
-        "note": "Distinct new PDF hashes in the Criots review; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+        "filingsScreened": 8,
+        "pagesRead": 113,
+        "note": "Distinct new PDF hashes in the Criots review; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 4 more distinct filings / 32 pages."
       }
     },
     "324989359": {

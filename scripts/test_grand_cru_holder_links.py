@@ -1742,7 +1742,8 @@ class CriotsTierTwoTests(unittest.TestCase):
 
     def test_stock_and_other_section_references_do_not_create_parcel_filings(self):
         self.assertEqual(self.curation['parcelFilings'], [])
-        self.assertEqual(self.curation['externalResearch'], [])
+        # Only the owner-approved exact group total is research; stock and other-section references never are.
+        self.assertEqual([x['id'] for x in self.curation['externalResearch']], ['cri-group-auvenay-criots'])
         for row in self.register['parcels']:
             self.assertEqual(row['parcelFilingIds'], [])
             self.assertIsNone(row['currentFarmer'])
@@ -1754,19 +1755,26 @@ class CriotsTierTwoTests(unittest.TestCase):
         self.assertEqual(sources['cri-filing-324396639-5']['documentDate'], '1990-11-26')
         self.assertEqual(sources['cri-filing-324396639-5']['filingDate'], '2026-03-18')
 
-    def test_aggregate_winehog_and_named_area_census_never_allocate_parcels(self):
+    def test_exact_group_total_names_auvenay_parcels_and_census_never_allocates(self):
         unmatched = self.curation['unmatchedPrintedReferences']
-        self.assertEqual(len(unmatched), 2)
+        self.assertEqual(len(unmatched), 1)
         self.assertTrue(all(not x['parcelIds'] for x in unmatched))
-        self.assertTrue(any('0.0637' in x['printedReference'] for x in unmatched))
+        self.assertFalse(any('0.0637' in x['printedReference'] for x in unmatched))
+        group = next(x for x in self.curation['externalResearch'] if x['id'] == 'cri-group-auvenay-criots')
+        self.assertEqual(group['parcelAreasM2'], {'21150000AE0092': 370, '21150000AE0093': 267})
+        self.assertEqual(group['areaEvidence']['printedTotalM2'], 637)
+        # A critic's group total is not a company-record crosswalk for the provisional identifier.
+        self.assertFalse(self.table['holders']['U21930118'].get('identity'))
         holdings = self.curation['producerHoldings']
-        self.assertEqual({x['publishedAreaHa'] for x in holdings}, {0.0637, 0.05, 0.6})
+        self.assertEqual({x['publishedAreaHa'] for x in holdings}, {0.0637, 0.05, 0.6, 0.21, 0.3313})
         self.assertTrue(all('parcelIds' not in x for x in holdings))
         self.assertTrue(all(not x['ownerHolderIds'] for x in holdings))
         auvenay = next(x for x in holdings if x['id'] == 'cri-winehog-auvenay-holding')
         self.assertEqual(auvenay['producerHolderIds'], [])
-        self.assertEqual(self.register['counts']['holderLead'], 2)
-        self.assertEqual(self.register['counts']['unresolved'], 9)
+        self.assertEqual(self.register['counts']['holderLead'], 4)
+        self.assertEqual(self.register['counts']['unresolved'], 7)
+        for text in (str(self.curation), str(self.table['holders']['324396639'])):
+            self.assertNotIn('Guerrand', text)
 
 
 if __name__ == '__main__':

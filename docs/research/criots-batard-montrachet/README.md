@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; observed commune deeds 2014-01-08 to 2025-12-12. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 2; 2 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 2; recorded holders without a reviewed producer relationship remain separate |
-| Parcels with no lead | 9 |
+| Parcels with holder or research leads | 4; recorded holders without a reviewed producer relationship remain separate |
+| Parcels with no lead | 7 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 2001-03-15, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 57,806 / 9,380 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 58,775 / 9,626 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 11 unique parcels.
@@ -40,8 +40,8 @@ rights is enabled; the production payload report checks compiled JS.
 
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
-| Parcels with research leads | 0 | 2 |
-| Unresolved parcels | 11 | 9 |
+| Parcels with research leads | 0 | 4 |
+| Unresolved parcels | 11 | 7 |
 | Reviewed holder links applicable to the cru | 0 | 2 |
 | Parcels with exact company filings | 0 | 0 |
 | Current farmers verified | 0 | 0 |
@@ -50,7 +50,7 @@ rights is enabled; the production payload report checks compiled JS.
 
 | Recorded holder | Shared effort reused | New filings / pages | Finding |
 | --- | ---: | ---: | --- |
-| SAINT JOSEPH (`324396639`) | — | 4 / 81 | The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names Edouard Guerrand and Roger Belland, while the earlier deposit names Marie and Roger Belland. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted. |
+| SAINT JOSEPH (`324396639`) | — | 4 / 81 | The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted. |
 | DOMAINE HUBERT LAMY (`419971130`) | — | 6 / 300 | The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation. |
 | DOMAINE DU CHATEAU DE SAINT AUBIN (`778249052`) | — | 8 / 183 | The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule. |
 | SC DOMAINE D AUVENAY (`U21930118`) | 3 / 113 | 0 / 0 | The provisional U21930118 identifier has no accepted company-record crosswalk. Three existing 778252445 d’Auvenay filings (2001, 2019 and 2024; 113 pages) were reacquired with unchanged hashes and fully OCR-screened for Criots. They contain no AE92/AE93 reference with individual areas supporting the identity. Winehog prints only their combined 0.0637 ha. The shared 778252445 company identity cannot be transferred to this U identifier by name or aggregate area. |
@@ -134,6 +134,25 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=criots-batard-montrach
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed the Montrachet stack on 10 October 2026. The printed-group-total rule adds
+two Criots parcels with leads (2 to 4). Current farming stays unverified.
+
+- **d’Auvenay.** AE92 and AE93 are printed as 0.0637 ha combined. Today’s cadastral areas add
+  up to exactly 637 m², so both are named. This is critic research, not a company-record
+  crosswalk for the provisional holder identifier U21930118.
+- **Census.** Two producer holdings join the census: Blain-Gagnard 0.21 ha and Fontaine-Gagnard
+  33 a 13 ca. Fontaine-Gagnard’s area equals two different parcel combinations (AE191 + AE192, and
+  AE179 + AE189 + AE190), so nothing is inferred.
+- **Belland.** Four more GFA Saint-Joseph filings (32 pages) name no lessee. The EARL Roger
+  Belland’s 2005 lease from individuals covers no Criots parcel; Criots appears only as wine
+  stock. AE97 stays without a producer link.
+- **Blanchot-Dessous.** A supplied article on the premier cru below Criots was reviewed. It
+  prints no Criots reference.
+- **Privacy.** Earlier notes named the GFA’s individual partners. Those names are replaced by
+  neutral wording.
 
 ## Supplemental Pappers review: 10 October 2026
 
