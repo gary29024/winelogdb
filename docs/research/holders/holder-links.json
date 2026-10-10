@@ -14936,6 +14936,136 @@
       "finding": "KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link."
     },
     {
+      "url": "https://actes.ccm2.net/acte/b94bd6c6-bff6-4938-a86c-3a0297db4949",
+      "retrievedFrom": "https://actes.ccm2.net/acte/b94bd6c6-bff6-4938-a86c-3a0297db4949",
+      "retrievedAt": "2026-10-09T15:51:18.505504+00:00",
+      "sha256": "da9d45800a5ae0f844781c543f181b6bf069c2d3cf72e50a24a8c03b2ddf9ca6",
+      "bytes": 172716,
+      "id": "bien-filing-391949849-0",
+      "title": "GFA BBM: company filing 2012-07-21",
+      "type": "company-filing",
+      "documentDate": "2012-07-21",
+      "filingDate": "2013-06-06",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 5,
+      "screenedPages": 5,
+      "reviewedPages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedule, lease recital and dates checked against page images.",
+      "finding": "The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted.",
+      "limitation": "Individual tenants and minority private shareholders are not substituted by a similarly named domaine company. The 1993 formation mandates an 1844 m² acquisition without the cadastral number and is not independently an exact filing."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1eb8bd91-cf38-42ae-8c1d-0b50cbd51a04",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1eb8bd91-cf38-42ae-8c1d-0b50cbd51a04",
+      "retrievedAt": "2026-10-09T15:51:18.505504+00:00",
+      "sha256": "4a46936e0af0c83215f2b8ea89b61b9b30a615b6aab6e04396d5a2b78b41a430",
+      "bytes": 1052036,
+      "id": "bien-filing-391949849-1",
+      "title": "GFA BBM: company filing 2008-07-23",
+      "type": "company-filing",
+      "documentDate": "2008-07-23",
+      "filingDate": "2008-10-09",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        1,
+        2,
+        5,
+        7,
+        8,
+        26,
+        27,
+        29
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedule, lease recital and dates checked against page images.",
+      "finding": "The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted.",
+      "limitation": "Individual tenants and minority private shareholders are not substituted by a similarly named domaine company. The 1993 formation mandates an 1844 m² acquisition without the cadastral number and is not independently an exact filing."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/9c9d1a1f-a8c8-4032-b809-ca3bebc24673",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9c9d1a1f-a8c8-4032-b809-ca3bebc24673",
+      "retrievedAt": "2026-10-09T15:51:18.506503+00:00",
+      "sha256": "a419920b59ae87bf42bd300eedb975e0ea153d6589a00b9f598f06975b1d2b78",
+      "bytes": 2872672,
+      "id": "bien-filing-391949849-2",
+      "title": "GFA BBM: company filing 2008-01-31",
+      "type": "company-filing",
+      "documentDate": "2008-01-31",
+      "filingDate": "2008-04-01",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 84,
+      "screenedPages": 84,
+      "reviewedPages": [
+        14,
+        25,
+        26,
+        27,
+        28,
+        29,
+        49,
+        58,
+        60,
+        61,
+        84
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedule, lease recital and dates checked against page images.",
+      "finding": "The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted.",
+      "limitation": "Individual tenants and minority private shareholders are not substituted by a similarly named domaine company. The 1993 formation mandates an 1844 m² acquisition without the cadastral number and is not independently an exact filing."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/6d318134-22a3-4b59-98e4-240af61d9ac0",
+      "retrievedFrom": "https://actes.ccm2.net/acte/6d318134-22a3-4b59-98e4-240af61d9ac0",
+      "retrievedAt": "2026-10-09T15:51:18.506503+00:00",
+      "sha256": "294916a5794c583270c0ead1bd50dbf49f8973c3564c3b6144ca2f4764a5d921",
+      "bytes": 418798,
+      "id": "bien-filing-391949849-3",
+      "title": "GFA BBM: company filing 1993-06-18",
+      "type": "company-filing",
+      "documentDate": "1993-06-18",
+      "filingDate": "1993-07-30",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 19,
+      "screenedPages": 19,
+      "reviewedPages": [
+        1,
+        4,
+        18,
+        19
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedule, lease recital and dates checked against page images.",
+      "finding": "The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted.",
+      "limitation": "Individual tenants and minority private shareholders are not substituted by a similarly named domaine company. The 1993 formation mandates an 1844 m² acquisition without the cadastral number and is not independently an exact filing."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=391949849&per_page=1",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=391949849&per_page=1",
+      "retrievedAt": "2026-10-09T15:50:45.919303+00:00",
+      "sha256": "955eeeb41b2f8436f3f6367391050d4b713da73db3623dfad3a37e4c643b0a7a",
+      "bytes": 10194,
+      "id": "bien-registry-391949849",
+      "title": "Official company registry: GFA BBM (391949849)",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "Official identity of GFA BBM, distinct from the named individuals and any producer company."
+    },
+    {
       "url": "https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172",
       "retrievedFrom": "User-supplied Pappers PDF",
       "retrievedAt": "2026-10-10T00:46:08.609392+00:00",
@@ -15689,6 +15819,14 @@
           ],
           "outcome": "linked",
           "note": "The 13 June 2024 deed contributes a 55.25% undivided bare-ownership interest in Puligny AI1, whole parcel 3968 m², to 310370077. The exact company/reference/whole-area match supports a filing entry. The lease is only recited (2000–2018 original term and a permission for company use); no current actual-operation conclusion. A May 2026 merger document is explicitly a project and cannot alone prove completed succession. The deed’s INAO prose swaps the appellation labels of AI1 and AL83; retain that inconsistency without changing geometry. Separately acquired 20 May 2026 statutes of 429240302 recite the merger approved 19 May 2026; keep that successor evidence distinct from the unchanged 2025 rights."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (4 filings / 168 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap."
         }
       ],
       "effort": {
@@ -16617,6 +16755,14 @@
           ],
           "outcome": "linked",
           "note": "Reuses the existing shared company link and search effort (3 filings / 26 screened pages). No new company relationship or current farming assertion."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (3 filings / 26 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap."
         }
       ],
       "effort": {
@@ -16906,6 +17052,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "no-link-found",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 30 pages), without rewriting earlier research. Co-recorded Vougeraie usufruct is not a company or producer crosswalk."
         },
         {
           "at": "2026-10-10",
@@ -17467,6 +17621,24 @@
         }
       ]
     },
+    "391949849": {
+      "searches": [
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=391949849&per_page=1",
+            "Free Le Figaro filing index / actes.ccm2.net; complete four-file OCR corpus"
+          ],
+          "outcome": "no-link-found",
+          "note": "The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 4,
+        "pagesRead": 141,
+        "note": "Four distinct new PDF hashes; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. Individual historical tenants do not identify a producer-company relationship."
+      }
+    },
     "392477600": {
       "links": [
         {
@@ -17859,6 +18031,14 @@
           ],
           "outcome": "linked",
           "note": "23 June 2006 contribution conveys two half interests in each whole parcel. Individual complete areas 916 and 917 m² match the current Opale rights. No current operation claimed. Existing Opale-to-Olivier Leflaive Frères control link is reused unchanged."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (5 filings / 89 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap."
         }
       ],
       "effort": {
@@ -18529,6 +18709,14 @@
           ],
           "outcome": "linked",
           "note": "The original 2 June 1977 contribution prints Puligny AI121 at 1675 m² and Bienvenues AI122 at 1320 m². Current 2025 Bachelet-Mesnil rights match AI121. The 20 May 2026 statutes explicitly recite absorption of 310370077 approved 19 May, transformation to SAS, and the name Domaine Bachelet-Ramonet Père et Fils. This establishes legal-company continuity without replacing the 2025 rights snapshot or asserting current operation. The 1977 deed specifies that the contribution of vineyard land concerns bare soil, with the plants reserved by contributors; preserve that scope."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 103 pages), without rewriting earlier research. The same 1977 bare-soil schedule includes AI122 (1320 m²), alongside the shared AI121 edge parcel."
         }
       ],
       "effort": {
@@ -20269,6 +20457,14 @@
         {
           "at": "2026-10-10",
           "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 30 pages), without rewriting earlier research. The supplied Faiveley article matches AI19 (5057 m²). AI144 is neighbouring Bâtard context intersecting the cru edge."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
             "entreprises.lefigaro.fr free filing index",
             "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
             "https://recherche-entreprises.api.gouv.fr/search?q=faiveley&departement=21&per_page=25"
@@ -20563,6 +20759,14 @@
           ],
           "outcome": "linked",
           "note": "Reuses the existing shared company link and search effort (4 filings / 111 screened pages). No new company relationship or current farming assertion."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (4 filings / 111 pages), without rewriting earlier research. No individual schedule for AI110/AI136/AI139 in the reused bounded corpus. Estate and Winehog totals remain census."
         },
         {
           "at": "2026-10-10",
@@ -23405,6 +23609,14 @@
           ],
           "outcome": "linked",
           "note": "The merger annex prints Puligny AI2 at 1377 m² (and Bienvenues AI26 at 1162 m²) as land contributed by 319864328 to 382485027. The 3 August 2018 resolutions explicitly approve and complete the merger; the 2019 resolutions rename the surviving company Domaine Etienne Sauzet while transferring the trading business to separate 842745762. Together with the official registry and exact cadastral match this supports a reviewed U29945686-to-382485027 crosswalk, not a SIREN correction in the rights file."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "Shared holder table; prior Bâtard/Montrachet filing corpus and Bienvenues application review"
+          ],
+          "outcome": "linked",
+          "note": "Bienvenues reuses the existing shared link or no-link search and effort (6 filings / 188 pages), without rewriting earlier research. The completed 2018 merger annex names AI26 (1162 m²), alongside AI2. The reviewed 382485027 crosswalk is reused unchanged."
         }
       ],
       "effort": {

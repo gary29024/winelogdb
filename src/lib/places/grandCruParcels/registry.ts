@@ -32,7 +32,7 @@ export type GrandCru={
 // Components look crus up here; they never name a cru or INAO feature themselves.
 export const grandCrus:readonly GrandCru[]=[
  {slug:"batard-montrachet",name:"Bâtard-Montrachet",parentFeatureId:"inao-denom-273",villageMaps:["chassagne-montrachet", "puligny-montrachet"],bundle:"montrachet",evidenceFrom:["batard-montrachet"],domaineGrouping:true},
- {slug:"bienvenues-batard-montrachet",name:"Bienvenues-Bâtard-Montrachet",parentFeatureId:"inao-denom-351",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["bienvenues-batard-montrachet"],domaineGrouping:false},
+ {slug:"bienvenues-batard-montrachet",name:"Bienvenues-Bâtard-Montrachet",parentFeatureId:"inao-denom-351",villageMaps:["puligny-montrachet"],bundle:"montrachet",evidenceFrom:["bienvenues-batard-montrachet"],domaineGrouping:true},
  {slug:"bonnes-mares",name:"Bonnes-Mares",parentFeatureId:"inao-denom-361",villageMaps:["chambolle-musigny", "morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["bonnes-mares"],domaineGrouping:true},
  {slug:"chablis-grand-cru",name:"Chablis Grand Cru",parentFeatureId:"inao-denom-439",villageMaps:["chablis"],bundle:"chablis",evidenceFrom:["chablis-grand-cru"],domaineGrouping:false},
  {slug:"chambertin",name:"Chambertin",parentFeatureId:"inao-denom-447",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["chambertin"],domaineGrouping:false},

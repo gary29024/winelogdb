@@ -1,7 +1,7 @@
-# Bienvenues-Bâtard-Montrachet parcels: Tier 1 (#403)
+# Bienvenues-Bâtard-Montrachet parcels: Tier 2 (#449)
 
 Bienvenues-Bâtard-Montrachet uses INAO `inao-denom-351`, appellation 135.
-Only Puligny-Montrachet (21512) is imported. Chassagne-Montrachet shares the source bundle but remains an audited neighbour for this cru. Reviewed 7 October 2026 for season 2026 under the
+Only Puligny-Montrachet (21512) is imported. Chassagne-Montrachet shares the source bundle but remains an audited neighbour for this cru. Tier 1 reviewed 7 October 2026; Tier 2 reviewed 10 October 2026 for season 2026 under the
 [rollout playbook](../../grand-cru-parcel-rollout.md) and [#461 history method](../grand-cru-history.md).
 
 **No current farmer is verified.** Recorded rights, filiation, deeds and
@@ -25,16 +25,40 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 2; 2 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 0; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 38 |
+| Parcels with holder or research leads | 19; recorded holders without a reviewed producer relationship remain separate |
+| Parcels with no lead | 19 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1993-10-04, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 95,989 / 10,106 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 119,509 / 13,745 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 38 unique parcels.
 No named-area asset loads. Parcel geometry and evidence load only after Parcel
 rights is enabled; the production payload report checks compiled JS.
+
+## Tier 1 to Tier 2
+
+| Measure | Tier 1 | Tier 2 |
+| --- | ---: | ---: |
+| Parcels with research leads | 0 | 19 |
+| Unresolved parcels | 38 | 19 |
+| Reviewed holder links applicable to the cru | 0 | 7 |
+| Parcels with exact company filings | 0 | 8 |
+| Current farmers verified | 0 | 0 |
+
+[The filing inventory](filings.md) records four new distinct PDFs / 141 pages for BBM, eight holders’ reused shared effort, exact-filing qualifications and four supplied Winehog archives. BBM’s historical individual tenants are not converted into a producer-company link. Whole cadastral areas on boundary parcels are not allocated as Bienvenues holdings. Aggregate Winehog areas remain unmatched to individual parcels.
+
+| Recorded holder | Shared effort reused | New filings / pages | Finding |
+| --- | ---: | ---: | --- |
+| DOMAINE BACHELET-RAMONET (`310370077`) | 4 / 168 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (4 filings / 168 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap. |
+| SOC CIV AGRIC  DOMAINE DE LA VOUGERAIE (`330713074`) | 3 / 26 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (3 filings / 26 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap. |
+| DOMAINE LOUIS VIOLLAND (`349583500`) | 2 / 30 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 30 pages), without rewriting earlier research. Co-recorded Vougeraie usufruct is not a company or producer crosswalk. |
+| BBM (`391949849`) | — | 4 / 141 | The 31 January 2008 notarial share sale identifies SCA NOE, renamed GFA BBM with unchanged legal personality effective 1 February 2008. It prints AI130 at 1844 m² and recites its 1993 purchase plus a lease to Franck Guillemard and Corinne Clerc as individuals, from 5 August 1993 to 31 October 2011. The same-day resolution authorizes replacement by a 25-year fermage, but the executed replacement and a producer-company tenant are not supplied. The 2012 minutes discuss rent and wine distributions without establishing a current parcel operator. No company producer link or current farming is accepted. |
+| SCE DOMAINE OPALE (`408395309`) | 5 / 89 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (5 filings / 89 pages), without rewriting earlier research. Shared edge parcels retain full cadastral areas, not the smaller INAO overlap. |
+| DOMAINE BACHELET MESNIL (`429240302`) | 2 / 103 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 103 pages), without rewriting earlier research. The same 1977 bare-soil schedule includes AI122 (1320 m²), alongside the shared AI121 edge parcel. |
+| CONSORTIUM VITICOLE VINICOLE BOURGOGNE (`775567928`) | 2 / 30 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 30 pages), without rewriting earlier research. The supplied Faiveley article matches AI19 (5057 m²). AI144 is neighbouring Bâtard context intersecting the cru edge. |
+| DOMAINE LEFLAIVE (`778245316`) | 4 / 111 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (4 filings / 111 pages), without rewriting earlier research. No individual schedule for AI110/AI136/AI139 in the reused bounded corpus. Estate and Winehog totals remain census. |
+| ETIENNE SAUZET (`U29945686`) | 6 / 188 | 0 / 0 | Bienvenues reuses the existing shared link or no-link search and effort (6 filings / 188 pages), without rewriting earlier research. The completed 2018 merger annex names AI26 (1162 m²), alongside AI2. The reviewed 382485027 crosswalk is reused unchanged. |
 
 ## Geometry and named areas
 
@@ -62,8 +86,8 @@ retains original archive/member identities, licence labels and download provenan
 Exact full-reference joins preserve all holders/right codes and never suppress
 geometry for unknown rights. Missing legal-entity records do not establish
 private ownership or absence of an owner. Company continuity requires an
-unchanged valid SIREN. No holder-to-domaine crosswalk is established, so grouping
-stays off. Producer/company research remains Tier 2; paid SPF/outreach stays Tier 3.
+unchanged valid SIREN. Reviewed holder-to-domaine crosswalks enable research grouping. Company identity,
+property evidence and dated tenancy remain distinct from farming. Paid SPF/outreach stays Tier 3.
 
 [Rights history](rights-history.json) preserves complete mother/daughter sets,
 original validation dates and full ancestry paths. There are
@@ -105,9 +129,9 @@ python scripts/build_grand_cru_history_rollout.py --bundle montrachet --check
 python scripts/build_grand_cru_research.py --all --check
 python scripts/build_grand_cru_app_registry.py --check
 python scripts/audit_grand_cru_history_rollout.py --check
-npm run build
+bun run build
 python scripts/measure_grand_cru_payload.py
-npm test
+bun run test
 ```
 
 The representative Chromium journey uses `WINELOG_E2E_CRU=bienvenues-batard-montrachet` with
@@ -115,3 +139,31 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=bienvenues-batard-mont
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed the Montrachet stack on 10 October 2026. The printed-group-total rule
+adds six Bienvenues parcels with leads (13 to 19). Current farming stays unverified.
+
+- **Ramonet.** AI17 and AI123 are printed as 0.4508 ha combined. Today’s areas add up to
+  exactly 4,508 m².
+- **Leflaive.** AI111, AI110, AI141, AI140, AI139 and AI108 are printed as 1.158 ha. Winehog
+  drops final zeros elsewhere (it writes both 4.7750 and 4.775 ha), and the owner accepted
+  reading this as 1.1580 ha. Today’s six areas add up to exactly 11,580 m², so all six are
+  named; the entry records `trailingZeroDropped`.
+- **Supplied images.** The missing Faiveley and Bienvenues-history images were supplied and
+  are hashed on their sources. The 1839/1861 numbering stays historical only.
+- **Census.** Three producer holdings from hashed estate and merchant pages join the
+  census: Paul Pernot 0.37 ha, Vougeraie 0.4602 ha and Jacques Carillon 0.12 ha. Vougeraie’s
+  area equals AI131 (4,602 m²), which already leads to Vougeraie, so nothing new is
+  inferred.
+- **Enseignères.** Three supplied articles on the village lieu-dit below Bienvenues were
+  reviewed. They print no Bienvenues reference.
+- **Searches.** The shared Ramonet, CVVB and Leflaive records gain the 10 October producer
+  searches (see #548 and #550). None prints a Bienvenues schedule.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.
