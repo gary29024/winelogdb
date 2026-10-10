@@ -15164,6 +15164,120 @@
       "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
       "finding": "The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.",
       "dateNote": "The meeting heading and updated statutes state 29 October 2012. The inserted article on PDF page 4 instead says 26 October 2012; this internal discrepancy is preserved. Neither date is used as a land-transfer date."
+    },
+    {
+      "id": "drouhin-laguiche-2023",
+      "title": "Maison Joseph Drouhin: Montrachet Marquis de Laguiche Grand Cru (2023 vintage page)",
+      "url": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru/2023",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:03:00Z",
+      "retrievedFrom": "https://www.drouhin.com/en_US/wine/montrachet-marquis-de-laguiche-grand-cru/2023",
+      "sha256": "f59efbbb81eebadd9d32d2e0fe05591e8df825c570b39f7450d27a69c95de1aa",
+      "bytes": 135194,
+      "finding": "Drouhin’s own page says the 2.06 ha property has been held by the Laguiche family since 1776 and that the Drouhin family is in charge of its cultivation and vinification, entirely on the Puligny side. Its linked 2023 technical sheet repeats the text. It names no lease, contract type or contracting company. Publication date not stated."
+    },
+    {
+      "id": "rne-892694258",
+      "title": "Company register: BOURGOGNE INVESTISSEMENT (892694258)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/892694258",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:06:05Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=892694258&per_page=5",
+      "sha256": "4659c96024d8ea9b711bb316c844a74bbd8557d24a685fd455d6ed00bf3e7937",
+      "bytes": 3133,
+      "finding": "BOURGOGNE INVESTISSEMENT: SAS created 2020-12-09, registered office Rue du Pied de la Vallée, Volnay; activity 64.30Z; active. Its recorded president is E.M. CONSEIL (439237900). Legal identity only; not farming evidence."
+    },
+    {
+      "id": "mt-filing-778232892-2022-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial share donation-partage of 1 October 2022 (deposited 10 October 2024)",
+      "url": "https://actes.ccm2.net/acte/19fca7ec-1bbe-4a42-a4f2-f2994dfb8f96#page=17",
+      "type": "company-filing",
+      "documentDate": "2022-10-01",
+      "filingDate": "2024-10-10",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:46:49+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/19fca7ec-1bbe-4a42-a4f2-f2994dfb8f96",
+      "sha256": "695aefcf17f6931c62a14068a7a9d400cd0d50bd421ff5e4ce2fc214ac25df8c",
+      "bytes": 456262,
+      "pageCount": 24,
+      "screenedPages": 24,
+      "reviewedPages": [
+        3,
+        17,
+        18
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Recites that the GFA’s land is let on a long-term rural lease to SARL Domaine des Comtes Lafon (393418744): lease of 18 April 1994, complementary lease of 27 April 1996, amendment of 1 April 2005 and complementary lease of 30 March 2018. Page 18 states that all the GFA’s parcels are covered by that lease. No parcel list is printed.",
+      "dateNote": "1 October 2022 is the deed date; 10 October 2024 is the deposit. Neither is a lease date."
+    },
+    {
+      "id": "mt-filing-778232892-2025-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial donation-partage of 17 February 2025 (deposited 20 October 2025)",
+      "url": "https://actes.ccm2.net/acte/0c05173f-7b24-4562-a8e2-50edeaee8fae#page=20",
+      "type": "company-filing",
+      "documentDate": "2025-02-17",
+      "filingDate": "2025-10-20",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:35:53+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0c05173f-7b24-4562-a8e2-50edeaee8fae",
+      "sha256": "c644e563c5079550b9b436c94f567313ab22c27f85c746489cd58ad719b05896",
+      "bytes": 2052180,
+      "pageCount": 28,
+      "screenedPages": 28,
+      "reviewedPages": [
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Repeats the GFA’s lease chain to SARL Domaine des Comtes Lafon (393418744): 18 April 1994, 27 April 1996, 1 April 2005 and 30 March 2018 (published 2018P no. 1483, corrected 2019P no. 522). Separate Mâconnais leases of another family GFA are also recited. No parcel list is printed.",
+      "dateNote": "17 February 2025 is the deed date; 20 October 2025 is the deposit."
+    },
+    {
+      "id": "mt-filing-778232892-1996-lease",
+      "title": "GFA du Domaine des Comtes Lafon: notarial share donation-partage of 15 June 1996",
+      "url": "https://actes.ccm2.net/acte/491306bc-2ae6-4f44-85f1-342d629e8956#page=3",
+      "type": "company-filing",
+      "documentDate": "1996-06-15",
+      "filingDate": "1996-07-03",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T07:11:36+00:00",
+      "retrievedFrom": "https://actes.ccm2.net/acte/491306bc-2ae6-4f44-85f1-342d629e8956",
+      "sha256": "3a9d7a752ccc88e55b25ffac727de6feeb022bd6b87b5240bb427cd461bd2d53",
+      "bytes": 262906,
+      "pageCount": 9,
+      "screenedPages": 9,
+      "reviewedPages": [
+        3,
+        7
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page screened with embedded text or RapidOCR at 150 dpi; the lease recital was read in the page text.",
+      "finding": "Recites the notarial long-term rural lease of 18 April 1994 (published 16 June 1994, 1994P no. 2367) letting all the GFA’s property to SARL Domaine des Comtes Lafon for 18 years from 1 January 1994. A 27 April 1996 lease covers one Meursault parcel. No Montrachet parcel list is printed.",
+      "dateNote": "15 June 1996 is the deed date; 3 July 1996 is the deposit."
+    },
+    {
+      "id": "mt-registry-393418744",
+      "title": "Company register search: Comtes Lafon (393418744)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/393418744",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:03:18Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=comtes%20lafon&per_page=25",
+      "sha256": "cdb83c56ebf2704f0e9dc3014d4810b49509b1538033cabb5e4ac18df8125572",
+      "bytes": 19278,
+      "finding": "Lists SAS Domaine des Comtes Lafon (393418744, created 23 December 1993, the operating company at Meursault), GFA du Domaine des Comtes Lafon (778232892) and a separate Mâconnais family GFA. Legal identity only; not farming evidence."
     }
   ],
   "holders": {
@@ -16732,12 +16846,22 @@
           ],
           "outcome": "linked",
           "note": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=ramonet&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 4 more filings / 98 pages (2003 capital, 2007 statutes, 2011 statutes and share contributions). The company takes land on lease; its capital is movables and shares. No lease schedule; AH66, AI17 and AI123 are never named. The 2013 family operating companies were formed in cash."
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 64,
-        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+        "filingsScreened": 7,
+        "pagesRead": 162,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 4 more distinct filings / 98 pages."
       },
       "links": [
         {
@@ -19354,12 +19478,24 @@
           ],
           "outcome": "no-link-found",
           "note": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=490242302",
+            "https://recherche-entreprises.api.gouv.fr/search?q=851404954",
+            "https://recherche-entreprises.api.gouv.fr/search?q=CFI%20BEAUNE&per_page=5"
+          ],
+          "outcome": "no-link-found",
+          "note": "Owner-requested search on 10 October 2026: 3 more filings / 44 pages (2019 and 2020 decisions and statutes) print no parcel. The partners are Côte d’Or Vineyards (851404954), whose sole shareholder is Cloud Vineyards Limited of Hong Kong, and Compagnie Foncière et Immobilière de Beaune (851751149), co-manager in 2020. No producer is named; the Beaune company is a possible lead only."
         }
       ],
       "effort": {
-        "filingsScreened": 5,
-        "pagesRead": 150,
-        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+        "filingsScreened": 8,
+        "pagesRead": 194,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 3 more distinct filings / 44 pages."
       }
     },
     "491471041": {
@@ -20217,6 +20353,22 @@
       }
     },
     "751811472": {
+      "links": [
+        {
+          "id": "751811472/domaine-de-montille",
+          "domaine": "Domaine de Montille",
+          "relation": "management",
+          "basis": "The register names E.M. Conseil (439237900), president of SAS Domaine de Montille, as manager and fully liable partner of SCI Montille et Partners. Its other fully liable partner, Bourgogne Investissement (892694258), is also presided by E.M. Conseil. Shared management is not a lease.",
+          "sourceIds": [
+            "ch-registry-751811472",
+            "rne-892694258",
+            "rne-439237900",
+            "rne-483134516"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
+        }
+      ],
       "searches": [
         {
           "at": "2026-10-09",
@@ -20227,6 +20379,15 @@
           ],
           "outcome": "no-link-found",
           "note": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=751811472",
+            "https://recherche-entreprises.api.gouv.fr/search?q=892694258&per_page=5"
+          ],
+          "outcome": "linked",
+          "note": "Owner decision of 10 October 2026: the register officers support a management link to Domaine de Montille. Both corporate partners are E.M. Conseil or presided by it. No lease, AH169 schedule or current farming is established."
         }
       ],
       "effort": {
@@ -20300,12 +20461,22 @@
           ],
           "outcome": "linked",
           "note": "Bienvenues reuses the existing shared link or no-link search and effort (2 filings / 30 pages), without rewriting earlier research. The supplied Faiveley article matches AI19 (5057 m²). AI144 is neighbouring Bâtard context intersecting the cru edge."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=faiveley&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 1 more filing / 13 pages. A December 2025 contribution report says the Faiveley family land companies lease their Puligny and Gevrey vineyards long-term to CVVB, without a parcel list. Faiveley’s published Bâtard and Bienvenues areas equal AI144 and AI19, which CVVB already holds."
         }
       ],
       "effort": {
-        "filingsScreened": 2,
-        "pagesRead": 30,
-        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused."
+        "filingsScreened": 3,
+        "pagesRead": 43,
+        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused. 10 October 2026: 1 more distinct filings / 13 pages."
       }
     },
     "778159715": {
@@ -20475,6 +20646,24 @@
           ],
           "reviewStatus": "reviewed",
           "reviewedAt": "2026-10-09"
+        },
+        {
+          "id": "778232892/domaine-des-comtes-lafon-lease",
+          "domaine": "Domaine des Comtes Lafon",
+          "relation": "lessor-per-filing",
+          "leaseStatus": "recited",
+          "crus": [
+            "montrachet"
+          ],
+          "basis": "Share donations of 2022 and 2025 recite the GFA’s long-term rural lease to SARL Domaine des Comtes Lafon (393418744), from 18 April 1994 with 1996, 2005 and 2018 additions, and state that all the GFA’s parcels are covered. No parcel list is printed; the lease deeds are not filed.",
+          "sourceIds": [
+            "mt-filing-778232892-2022-lease",
+            "mt-filing-778232892-2025-lease",
+            "mt-filing-778232892-1996-lease",
+            "mt-registry-393418744"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
         }
       ],
       "searches": [
@@ -20487,12 +20676,22 @@
           ],
           "outcome": "linked",
           "note": "Montrachet #446 pass: 4 distinct filings / 80 pages. The 18 April 1994 decision transfers the operating branch to SARL Domaine des Comtes Lafon and converts the continuing land company to a GFA. The 1996 donation recites estate leases, but no exact AE37 schedule or current renewal is established. Corporate succession is distinct from current farming."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=comtes%20lafon&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Producer-filing search requested by the owner on 10 October 2026: 4 more GFA filings / 66 pages. The 2022 and 2025 share donations recite that all GFA parcels are leased to SARL Domaine des Comtes Lafon (393418744). AE37 is the GFA’s only parcel in the five crus, but no schedule prints it. The operating company’s own 6 filings / 111 pages give no lease schedule."
         }
       ],
       "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 80,
-        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
+        "filingsScreened": 8,
+        "pagesRead": 146,
+        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch. 10 October 2026: four more distinct GFA filings / 66 pages."
       }
     },
     "778233098": {
@@ -20568,12 +20767,23 @@
           ],
           "outcome": "linked",
           "note": "Bienvenues reuses the existing shared link or no-link search and effort (4 filings / 111 pages), without rewriting earlier research. No individual schedule for AI110/AI136/AI139 in the reused bounded corpus. Estate and Winehog totals remain census."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=778245316&per_page=10",
+            "https://recherche-entreprises.api.gouv.fr/search?q=884378621&per_page=10"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested search on 10 October 2026: 15 more filings / 410 pages. From 2016 the statutes say the vines belong to family members, directly or through the GFA, and are leased to the company; a recited 23 June 2012 agreement commits it to buy leased vines on request. No filing names AH131, AI108, AI112 or the 2024 to 2025 rights change. Holding company LEFLAIVE SAS (884378621; 10 filings / 378 pages) holds company shares, not land."
         }
       ],
       "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 111,
-        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
+        "filingsScreened": 19,
+        "pagesRead": 521,
+        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch. 10 October 2026: 15 more distinct filings / 410 pages."
       }
     },
     "778252445": {
@@ -22165,6 +22375,22 @@
         ],
         "limitation": "Formation and 2019 company schedule name AH64 and its exact 20625 m² area, matching this recorded U holder. Identity does not establish a Drouhin tenant link."
       },
+      "links": [
+        {
+          "id": "U18179542/maison-joseph-drouhin",
+          "domaine": "Maison Joseph Drouhin",
+          "relation": "reported-tenancy",
+          "crus": [
+            "montrachet"
+          ],
+          "basis": "Drouhin’s own page reports that the Drouhin family is in charge of cultivating and vinifying the Laguiche family’s 2.06 ha Montrachet. It names no lease or contracting company, and the GFA’s 2002 deed recites a lease to an individual; this stays a reported arrangement.",
+          "sourceIds": [
+            "drouhin-laguiche-2023"
+          ],
+          "reviewStatus": "provisional",
+          "reviewedAt": "2026-10-10"
+        }
+      ],
       "searches": [
         {
           "at": "2026-10-09",
@@ -22175,6 +22401,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Montrachet #446 pass: 3 distinct filings / 66 pages. The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to Jean de Laguiche personally. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "drouhin.com Montrachet Marquis de Laguiche page and 2023 technical sheet"
+          ],
+          "outcome": "linked",
+          "note": "Owner decision of 10 October 2026: Drouhin’s own published account supports a provisional reported-tenancy link, as for Duband (382058188). No lease filing names a Drouhin company."
         }
       ],
       "effort": {

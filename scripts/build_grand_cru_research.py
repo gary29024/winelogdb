@@ -55,6 +55,26 @@ HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
+def check_group_total(item, snapshot_areas):
+    """A source that prints several current numbers with one total area names each of them only when today's
+    individual cadastral areas add up to that total exactly, to the square metre. A rounded or partial total
+    stays an unmatched printed reference."""
+    evidence = item['areaEvidence']
+    group = evidence['groupParcelAreasM2']
+    require(len(group) >= 2 and evidence.get('individualAreasSource') == 'pinned-cadastral-snapshot',
+            'A printed group total needs two or more parcels and pinned cadastral areas')
+    require(all(snapshot_areas.get(pid) == area for pid, area in group.items()),
+            'Group parcel area differs from the pinned cadastral snapshot')
+    require(sum(group.values()) == evidence['printedTotalM2'], 'Printed group total differs from the cadastral sum')
+    require(item['parcelIds'] and set(item['parcelIds']) <= set(group) and
+            item.get('parcelAreasM2', {}) == {pid: group[pid] for pid in item['parcelIds']},
+            'Group research names only parcels of its printed group, with their cadastral areas')
+    # When one source prints the numbers and another, about the same holding, prints the total, both are cited.
+    split = [evidence[k] for k in ('referencesSourceId', 'totalSourceId') if k in evidence]
+    require(len(split) in (0, 2) and set(split) <= set(item['sourceIds']),
+            'A group total from a second source names both the reference and the total source')
+
+
 def build_register(manifest, asset, curation, history, sales, named_areas, context, notice_records=None):
     # Git autocrlf changes the final newline in a Windows checkout. Match the
     # canonical LF bytes hashed by build_grand_cru_parcels.py, without reserialising.
@@ -63,7 +83,9 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
     require(curation['parentFeatureId'] == context.cru['parentFeatureId'], 'Curation belongs to another cru')
     parent = curation['parentFeatureId']
     require(parent in manifest['parentFeatureIds'], 'Research cru absent from snapshot')
-    parcels = sorted((f['properties'] for f in json.loads(asset)['features']
+    features = json.loads(asset)['features']
+    snapshot_areas = {f['properties']['id']: f['properties']['cadastreAreaM2'] for f in features}
+    parcels = sorted((f['properties'] for f in features
                       if any(o['parentFeatureId'] == parent for o in f['properties']['overlaps'])),
                      key=lambda p: p['id'])
     ids = {p['id'] for p in parcels}
@@ -116,6 +138,8 @@ def build_register(manifest, asset, curation, history, sales, named_areas, conte
         require(item['basis'] in EXTERNAL_BASES, f"Unknown external research basis: {item['basis']}")
         require(item.get('currentFarmer') is None, 'External research cannot establish current farming')
         require(item.get('dateSourceId') in item['sourceIds'], 'Research needs an explicit date source')
+        if item.get('areaEvidence', {}).get('kind') == 'printed-group-total':
+            check_group_total(item, snapshot_areas)
         check_lineage(item, 'External research')
     filings = curation['parcelFilings']
     require(len({f['id'] for f in filings}) == len(filings), 'Duplicate filing ID')

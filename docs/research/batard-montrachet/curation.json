@@ -119,11 +119,20 @@
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:02 +0000",
       "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/10/drcbatard-1024x742.jpg",
         "https://winehog.org/wp-content/uploads/2020/10/09F05E8D-18A2-429E-BE8C-FB4FF4EBD431.png",
         "https://winehog.org/wp-content/uploads/2020/10/686C2384-DC94-4AB2-A0DE-D03280B7B49C-660x1024.png",
         "https://winehog.org/wp-content/uploads/2020/10/8FAAF6AD-6BD1-465D-8FFF-54C2A06ED79E-1024x492.png",
         "https://winehog.org/wp-content/uploads/2017/11/59EFFDBB-2A9D-4A09-A9E3-B5B34B9BA852.jpeg"
+      ],
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/10/drcbatard-1024x742.jpg",
+          "file": "drcbatard-1024x742.jpg",
+          "sha256": "57f13d5ed02543a585e26b2a65255cb88e08557ed509cf099b0127df531e8fcd",
+          "bytes": 196087,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -139,14 +148,42 @@
       "retrievedFrom": "User-supplied MHTML archive",
       "sha256": "f7b11a5a3c16bc24dd6356bafc1507c2b2a9ae678db53f3fba54ef6dd0b13875",
       "bytes": 2171095,
-      "finding": "Winehog (2020) names plot 175 and 0.1303 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
+      "finding": "Winehog (2020) names plot 175 and 0.1303 ha, matching the number and full cadastral area. It says the original Coffinet holding was divided and that Domaine Coffinet-Duvernay has the 0.1304 ha plot just north of it. The owner-supplied maps (10 October 2026) outline 175. Secondary historical attribution only; no current farming is verified.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:08 +0000",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/06/moreycoffinetbatard-copy-976x1024.jpg",
-        "https://winehog.org/wp-content/uploads/2020/06/moreycoff-1024x922.jpg",
-        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
-        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png"
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/moreycoffinetbatard-copy-976x1024.jpg",
+          "file": "moreycoffinetbatard-copy-976x1024.jpg",
+          "sha256": "9f08fe48aa733ac5d1703f93896587320a73f5f1866c801e8862d3b0c72641fc",
+          "bytes": 290608,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/moreycoff-1024x922.jpg",
+          "file": "moreycoff-1024x922.jpg",
+          "sha256": "3c81424a978aa7a1e8e511654de9524bfe23e1bb02a43d9bceaf812d34bcb4b2",
+          "bytes": 273649,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "file": "E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "sha256": "96e1e9e2b69c33bf04f0e1ac9df59a6f6f1e3b8cdf5326cc6ac0beffec350aab",
+          "bytes": 426222,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "file": "D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "sha256": "e3c01e2df913da25d7135662406dbfce2cedb5fc62da3f5a024fb8eb78cf095a",
+          "bytes": 440415,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -165,13 +202,329 @@
       "finding": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:15 +0000",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatard-copy-1-919x1024.jpg",
-        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatardbienvenue-copy-1-919x1024.jpg",
-        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
-        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
-        "https://winehog.org/wp-content/uploads/2020/06/Batard-Montrachet-450x1024.jpg"
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/faiveleybatard-copy-1-919x1024.jpg",
+          "file": "faiveleybatard-copy-1-919x1024.jpg",
+          "sha256": "0985427a7300b01ddd76da0510aacadea2c3de6b124d66b64ddc1a561966de74",
+          "bytes": 277632,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/faiveleybatardbienvenue-copy-1-919x1024.jpg",
+          "file": "faiveleybatardbienvenue-copy-1-919x1024.jpg",
+          "sha256": "6848bc2ee7a065c030dae65e5eb7cc0fd897c6f9ae89a79e7a01408418ac417d",
+          "bytes": 276423,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "file": "E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "sha256": "96e1e9e2b69c33bf04f0e1ac9df59a6f6f1e3b8cdf5326cc6ac0beffec350aab",
+          "bytes": 426222,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "file": "D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "sha256": "e3c01e2df913da25d7135662406dbfce2cedb5fc62da3f5a024fb8eb78cf095a",
+          "bytes": 440415,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/Batard-Montrachet-450x1024.jpg",
+          "file": "Batard-Montrachet-450x1024.jpg",
+          "sha256": "751a310509dcc552bb4d1dc3135c2127f9ec4b29be20347ce27f91af5a0e5b11",
+          "bytes": 48861,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
+    },
+    {
+      "id": "bien-winehog-40782",
+      "title": "Terroir Insight: Domaine Ramonet Bienvenues-Bâtard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-ramonet-bienvenues-batard-montrachet-40782/",
+      "type": "critic",
+      "documentDate": "2020-05-18",
+      "modifiedAt": "2020-05-20T10:13:09+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-09T15:32:54.601825+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "7db501f4b16439bcc201a62e93a4aa25ea5f068a2dba754990a0f9ab59188515",
+      "bytes": 3219061,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:29 +0000",
+      "missingEmbeddedImages": [],
+      "finding": "Dated secondary research. Ramonet’s AI17 and AI123 are printed with 0.4508 ha combined; today’s cadastral areas add up exactly to 4,508 m² (printed-group-total rule). Historical classifications remain unallocated."
+    },
+    {
+      "id": "bien-winehog-40775",
+      "title": "Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/",
+      "type": "critic",
+      "documentDate": "2020-05-09",
+      "modifiedAt": "2020-05-09T08:25:12+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-09T15:32:54.659965+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "5ba57ea1690d099ddf29e0559e6a2497bb476431075afe1e14985ca6dfc6e01c",
+      "bytes": 2590348,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:36 +0000",
+      "missingEmbeddedImages": [],
+      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule). Historical classifications remain unallocated."
+    },
+    {
+      "url": "https://www.bourgogne-chartron.com/wp-content/uploads/2021/12/surface-et-superficie.pdf",
+      "retrievedFrom": "https://www.bourgogne-chartron.com/nos-terroirs/ (linked as ‘Superficie et années de plantation de nos appellations’)",
+      "retrievedAt": "2026-10-10T05:05:06Z",
+      "sha256": "49c2dd9abf775a89ff76fcde9412b1353573319a60bad693e477dd364c2fd2a7",
+      "bytes": 280797,
+      "id": "bat-chartron-surfaces-2021",
+      "title": "Domaine Jean Chartron: area and planting years of its appellations",
+      "type": "estate",
+      "documentDate": "2021-12-21",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "The estate’s own one-page table gives Bâtard-Montrachet Grand Cru as 12 a 84 ca (1,284 m², planted 1960). It names no parcel.",
+      "pageCount": 1,
+      "reviewedPages": [
+        1
+      ]
+    },
+    {
+      "id": "bat-winehog-47634",
+      "title": "Terroir Insight: Domaine d’Auvenay Puligny-Montrachet Les Enseignères",
+      "url": "https://winehog.org/terroir-insight-domaine-dauvenay-puligny-montrachet-ensignieres-2-47634/",
+      "type": "critic",
+      "documentDate": "2021-09-07",
+      "modifiedAt": "2021-09-14T08:03:36+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "7a827231b47d228b17bad5734d43ac3e60cd1be0941e457027b93529cdf4e35b",
+      "bytes": 2250862,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:22 +0000",
+      "finding": "A village Les Enseignères article. It says d’Auvenay bought its Enseignères plot in 2011–2012 from Domaine Bavard, and also a Bâtard-Montrachet parcel from the same estate. It prints no Bâtard number or area, so it is historical context only."
+    },
+    {
+      "id": "census-bat-pmorey-wasserman",
+      "title": "Becky Wasserman Selections: Pierre Morey & Morey-Blanc, Bâtard-Montrachet Grand Cru (PM)",
+      "url": "https://www.beckywasserman.com/domaines/pierre-morey-et-morey-blanc/batard-montrachet-grand-cru-pm/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:03:15+00:00",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/pierre-morey-et-morey-blanc/batard-montrachet-grand-cru-pm/",
+      "sha256": "dcc882f45645044c60eaa508e0adb51d773e2fa97c4d02f1feb5e8bbd99b3f6a",
+      "bytes": 51147,
+      "finding": "An importer page gives Domaine Pierre Morey 0.49 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-jngagnard-wasserman",
+      "title": "Becky Wasserman Selections: Jean-Noël Gagnard, Bâtard-Montrachet Grand Cru",
+      "url": "https://www.beckywasserman.com/domaines/jean-noel-gagnard/batard-montrachet-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:04:04+00:00",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/jean-noel-gagnard/batard-montrachet-grand-cru/",
+      "sha256": "37e576b012d6e2936ee8b52e215fa932ec49f4fe0e860f90daf69870baec4f7e",
+      "bytes": 51909,
+      "finding": "An importer page gives Domaine Jean-Noël Gagnard 0.36 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-leroux-wasserman",
+      "title": "Becky Wasserman Selections: Benjamin Leroux, Bâtard-Montrachet Grand Cru",
+      "url": "https://www.beckywasserman.com/domaines/benjamin-leroux/batard-montrachet-grand-cru/",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:04:05+00:00",
+      "retrievedFrom": "https://www.beckywasserman.com/domaines/benjamin-leroux/batard-montrachet-grand-cru/",
+      "sha256": "316279a1b3608917135834df7a03a24114db42efb506582776b0c926bbbf9983",
+      "bytes": 66393,
+      "finding": "An importer page gives Benjamin Leroux 0.16 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-blain-gagnard-langtons",
+      "title": "Langtons: Blain-Gagnard Grand Cru Bâtard-Montrachet 2023 (producer profile)",
+      "url": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:07:17+00:00",
+      "retrievedFrom": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "sha256": "729540f4050fea00152a9ca1fa07693d152c59054291214f3233bf3e41d72130",
+      "bytes": 274295,
+      "finding": "A merchant page gives Domaine Blain-Gagnard 0.46 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-blain-gagnard-winebow",
+      "title": "Winebow: Blain-Gagnard Bâtard-Montrachet 2024",
+      "url": "https://www.winebow.com/our-brands/domaine-blain-gagnard/blain-gagnard-batard-montrachet/2024",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:06:51+00:00",
+      "retrievedFrom": "https://www.winebow.com/our-brands/domaine-blain-gagnard/blain-gagnard-batard-montrachet/2024",
+      "sha256": "b096c5e461ddb2461a6c056211103797df11349bea41028ebabb0da3c03a9a24",
+      "bytes": 99671,
+      "finding": "An importer page gives Domaine Blain-Gagnard 0.45 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-fontaine-gagnard-estate",
+      "title": "Domaine Fontaine-Gagnard website wine sheets (fiche-vin.html data script js/app.min.03f1e7e4.js)",
+      "url": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:10:30+00:00",
+      "retrievedFrom": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "sha256": "ab2d04569c52ee3025bd854accea92090bd17951d9f412f312c60d416d6d9298",
+      "bytes": 187231,
+      "finding": "The estate’s own page gives Domaine Fontaine-Gagnard 0.4311 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-henri-boillot-estate",
+      "title": "Domaine Henri Boillot website wine sheets (wines/batard-montrachet data script js/app.min.413181c2.js)",
+      "url": "http://www.henri-boillot.com/js/app.min.413181c2.js",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:11:15+00:00",
+      "retrievedFrom": "http://www.henri-boillot.com/js/app.min.413181c2.js",
+      "sha256": "ddc15eaf8480c7a0384f2d22b962e1ea668ae87aa2acd873eabc7f5deb6ae518",
+      "bytes": 436115,
+      "finding": "The estate’s own page gives Domaine Henri Boillot 0.3223 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-pernot-dandm",
+      "title": "D&M Wines: Paul Pernot Puligny-Montrachet 2024 (producer notes)",
+      "url": "https://dandm.com/products/paul-pernot-puligny-montrachet-2024",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:08:11+00:00",
+      "retrievedFrom": "https://dandm.com/products/paul-pernot-puligny-montrachet-2024",
+      "sha256": "4d6b4ab26536fc665f164a24cf5262fc0cdb295a66484b96765915c95c31d4f4",
+      "bytes": 169383,
+      "finding": "A merchant page gives Domaine Paul Pernot et ses Fils 0.61 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-tmorey-roberson",
+      "title": "Roberson Wine: Domaine Thomas Morey Bâtard-Montrachet Grand Cru",
+      "url": "https://robersonwine.com/products/domaine-thomas-morey-batard-montrachet-grand-cru-4",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:06:42+00:00",
+      "retrievedFrom": "https://robersonwine.com/products/domaine-thomas-morey-batard-montrachet-grand-cru-4",
+      "sha256": "c39cfc48b8d1472e54c822268b5a3a60411651661c59e60ba366df83ae967e37",
+      "bytes": 180915,
+      "finding": "A merchant page gives Domaine Thomas Morey 0.14 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-bachelet-monnot-ifw",
+      "title": "International Fine Wines (AU): Bachelet-Monnot Grand Cru Bâtard-Montrachet 2024",
+      "url": "https://www.internationalfinewines.com.au/products/bachelet-monnot-grand-cru-batard-montrachet-2024",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:08:12+00:00",
+      "retrievedFrom": "https://www.internationalfinewines.com.au/products/bachelet-monnot-grand-cru-batard-montrachet-2024",
+      "sha256": "0f843d3d93af85d805c2439a451c168eddc0cf89811e98dc6b137d2f6f18e14e",
+      "bytes": 760968,
+      "finding": "A merchant page gives Domaine Bachelet-Monnot 0.14 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-sauzet-hedonism",
+      "title": "Hedonism Wines: Bâtard-Montrachet, Etienne Sauzet 1996",
+      "url": "https://hedonism.co.uk/product/batard-montrachet-etienne-sauzet-1996",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:07:39+00:00",
+      "retrievedFrom": "https://hedonism.co.uk/product/batard-montrachet-etienne-sauzet-1996",
+      "sha256": "032e0a6fff584b9a0c0862005ea16405446a0b9e714dffe6b69fab6ec4630045",
+      "bytes": 628184,
+      "finding": "A merchant page gives Domaine Etienne Sauzet 0.14 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-pgirardin-closcachet",
+      "title": "Clos Cachet (AU importer): Pierre Girardin Bâtard-Montrachet",
+      "url": "https://closcachet.com.au/products/pierre-girardin-batard-montrachet",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:06:07+00:00",
+      "retrievedFrom": "https://closcachet.com.au/products/pierre-girardin-batard-montrachet",
+      "sha256": "413c03f2ef4d0c7c89513908d399b019e32b564fbfb2500e0b43e8d73873b3a0",
+      "bytes": 205898,
+      "finding": "An importer page gives Pierre Girardin 0.1286 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-marc-morey-granchateaux",
+      "title": "Gran Chateaux (CH): Bâtard-Montrachet Grand Cru Marc Morey 2024",
+      "url": "https://www.granchateaux.ch/fr/france/bourgogne-blanc/marc-morey/batard-montrachet-grand-cru-marc-morey-2024.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:20:19+00:00",
+      "retrievedFrom": "https://www.granchateaux.ch/fr/france/bourgogne-blanc/marc-morey/batard-montrachet-grand-cru-marc-morey-2024.html",
+      "sha256": "b6abf6874c4e68656feb995b8dcc3fed8c3d95471e4c5062bdc81cb0ad2402a9",
+      "bytes": 566410,
+      "finding": "A merchant page gives Domaine Marc Morey et Fils 0.13 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-vougeraie-estate",
+      "title": "Domaine de la Vougeraie: Bâtard-Montrachet Grand Cru (estate wine page)",
+      "url": "https://www.domainedelavougeraie.com/en/our-wines.r-693/grands-crus.r-703/batard-montrachet-grand-cru.v-17142.html?id_millesime=57",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:18:08+00:00",
+      "retrievedFrom": "https://www.domainedelavougeraie.com/en/our-wines.r-693/grands-crus.r-703/batard-montrachet-grand-cru.v-17142.html?id_millesime=57",
+      "sha256": "5fc22b8e3c082b442a34d70f187fab5895ef8f24576d9beee62c4ee3ee13cd5f",
+      "bytes": 23147,
+      "finding": "The estate’s own page gives Domaine de la Vougeraie 0.3823 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bat-caillot-hachette",
+      "title": "Guide Hachette des Vins 2013: Domaine Michel Caillot 2009 Bâtard-Montrachet",
+      "url": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-michel-caillot-2009-2013/20131464/",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:20:22+00:00",
+      "retrievedFrom": "https://www.hachette-vins.com/guide-vins/les-vins/domaine-michel-caillot-2009-2013/20131464/",
+      "sha256": "6190e0971fa09dc1df3bfacca138739de475f7adc1dc12b96b2659aa295ff93a",
+      "bytes": 552982,
+      "finding": "A free wine-guide page gives Domaine Michel Caillot 0.67 ha and Olivier Leflaive 0.18 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
     }
   ],
   "holders": [
@@ -680,6 +1033,102 @@
       "appNote": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
       "dateSourceId": "bat-winehog-41215",
       "currentFarmer": null
+    },
+    {
+      "id": "bat-group-ramonet-bienvenues",
+      "title": "Winehog: Ramonet’s two-parcel Bienvenues-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21512000AI0017"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0017": 3188
+      },
+      "printedReferences": [
+        "AI17",
+        "AI123"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.4508 ha",
+        "printedTotalM2": 4508,
+        "groupParcelAreasM2": {
+          "21512000AI0017": 3188,
+          "21512000AI0123": 1320
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Ramonet’s Bienvenues-Bâtard-Montrachet as AI17 and AI123, 0.4508 ha combined, without individual areas. Today’s cadastral areas add up exactly to 4,508 m², so both are named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40782"
+      ],
+      "producer": "Domaine Ramonet",
+      "appNote": "Winehog prints AI17, AI123 with 0.4508 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40782",
+      "currentFarmer": null
+    },
+    {
+      "id": "bat-group-leflaive-bienvenues",
+      "title": "Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21512000AI0111"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0111": 2572
+      },
+      "printedReferences": [
+        "AI111",
+        "AI110",
+        "AI141",
+        "AI140",
+        "AI139",
+        "AI108"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.158 ha",
+        "printedTotalM2": 11580,
+        "groupParcelAreasM2": {
+          "21512000AI0111": 2572,
+          "21512000AI0110": 2583,
+          "21512000AI0141": 1095,
+          "21512000AI0140": 1023,
+          "21512000AI0139": 1090,
+          "21512000AI0108": 3217
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40775"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AI111, AI110, AI141, AI140, AI139, AI108 with 1.158 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40775",
+      "currentFarmer": null
+    },
+    {
+      "id": "bat-winehog-41492-coffinet-duvernay",
+      "title": "Winehog: the Coffinet-Duvernay half of the old Coffinet holding",
+      "parcelIds": [
+        "21150000AE0176"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0176": 1304
+      },
+      "printedReferences": [],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog (2020) says the old Coffinet holding was divided and that Domaine Coffinet-Duvernay has the 0.1304 ha plot just north of Morey-Coffinet’s AE175. The parcel along AE175’s north side is AE176, exactly 1,304 m², with no recorded company holder. AE157 on the south side has the same area, so the match rests on the stated side as well as the area. Secondary attribution only; current farming unverified.",
+      "sourceIds": [
+        "bat-winehog-41492"
+      ],
+      "producer": "Domaine Coffinet-Duvernay",
+      "appNote": "Winehog (2020) places Coffinet-Duvernay’s 0.1304 ha just north of Morey-Coffinet’s AE175. That is AE176, exactly 1,304 m². Matched by stated position and area, not a printed number; current farming unverified.",
+      "dateSourceId": "bat-winehog-41492",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -990,6 +1439,319 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-holding-chartron",
+      "producer": "Domaine Jean Chartron",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1284,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "bat-chartron-surfaces-2021"
+      ],
+      "finding": "Published whole holding, 12 a 84 ca. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-pierre-morey",
+      "producer": "Domaine Pierre Morey",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.49,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-pmorey-wasserman"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-jean-noel-gagnard",
+      "producer": "Domaine Jean-Noël Gagnard",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.36,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-jngagnard-wasserman"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-benjamin-leroux",
+      "producer": "Benjamin Leroux",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.16,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "census-bat-leroux-wasserman"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-blain-gagnard",
+      "producer": "Domaine Blain-Gagnard",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.46,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-blain-gagnard-langtons"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.45,
+          "precision": "approximate",
+          "sourceId": "census-bat-blain-gagnard-winebow",
+          "context": "Second published figure for the same holding."
+        }
+      ]
+    },
+    {
+      "id": "bat-census-domaine-fontaine-gagnard",
+      "producer": "Domaine Fontaine-Gagnard",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.4311,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-fontaine-gagnard-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-henri-boillot",
+      "producer": "Domaine Henri Boillot",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.3223,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-henri-boillot-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-paul-pernot-et-ses-fils",
+      "producer": "Domaine Paul Pernot et ses Fils",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.61,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-pernot-dandm"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-thomas-morey",
+      "producer": "Domaine Thomas Morey",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.14,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-tmorey-roberson"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-bachelet-monnot",
+      "producer": "Domaine Bachelet-Monnot",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.14,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-bachelet-monnot-ifw"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-etienne-sauzet",
+      "producer": "Domaine Etienne Sauzet",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.14,
+      "precision": "hundredth-hectare",
+      "relation": "owner",
+      "sourceIds": [
+        "census-bat-sauzet-hedonism"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-pierre-girardin",
+      "producer": "Pierre Girardin",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1286,
+      "precision": "approximate",
+      "relation": "owner",
+      "sourceIds": [
+        "census-bat-pgirardin-closcachet"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-marc-morey-et-fils",
+      "producer": "Domaine Marc Morey et Fils",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.13,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-marc-morey-granchateaux"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-de-la-vougeraie",
+      "producer": "Domaine de la Vougeraie",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.3823,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-vougeraie-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [
+        "330713074"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-domaine-michel-caillot",
+      "producer": "Domaine Michel Caillot",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.67,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-caillot-hachette"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bat-census-olivier-leflaive",
+      "producer": "Olivier Leflaive",
+      "namedAreas": [
+        "BATARD MONTRACHET",
+        "BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.18,
+      "precision": "are",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bat-caillot-hachette"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -1004,7 +1766,9 @@
     "Exact schedules cover nine current parcels, including Hécate’s purchase mandate and Bachelet-Ramonet’s fractional bare interest; neither is represented as a completed acquisition of full ownership or current farming. Original Prieur-Brunet AE57 lacks its individual area; Bavard AI124 reaches AI170 only through the official 2021 DFI and remains historical-only after the user resumed Tier 2.",
     "All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.",
     "Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season.",
-    "Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps."
+    "Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps.",
+    "Supplied by the owner on 10 October 2026 and reviewed: Winehog articles 47634 (d’Auvenay, Les Enseignères) and the owner-supplied images for the Morey-Coffinet, Faiveley and DRC Bâtard articles. The Morey-Coffinet maps outline AE175; the article’s statement that Coffinet-Duvernay holds the 0.1304 ha plot just north of it names AE176 by position and exact area. Four DRC photos were not in the archive and remain unreviewed. Images and archives stay outside the repository.",
+    "Domaine GB (490242302): three more filings (44 pages) and the register name Côte d’Or Vineyards (851404954) and Compagnie Foncière et Immobilière de Beaune (851751149) as its partners; the latter signed in 2020 as co-manager. Côte d’Or Vineyards’ sole shareholder is Cloud Vineyards Limited, Hong Kong (no. 2839847). No filing names a producer or a parcel, so no link is made; the Beaune company is only a possible lead. The 2019–2020 recorded holder of AE65/AE177, GFV B.E.O (529595050), ceased on 30 November 2019 after selling all its land; its filings name no buyer or parcel."
   ],
   "noticeReview": [
     {
@@ -1025,13 +1789,6 @@
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
-    {
-      "sourceId": "bat-winehog-41492",
-      "printedReference": "Coffinet-Duvernay 0.1304 ha; number unstated",
-      "parcelIds": [],
-      "limitation": "A neighbouring holding is described by area and location only. The close map was not embedded; no numbered parcel is inferred.",
-      "currentFarmer": null
-    },
     {
       "sourceId": "bat-winehog-41215",
       "printedReference": "Monnot plot 145",

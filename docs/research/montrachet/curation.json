@@ -227,18 +227,269 @@
       "retrievedFrom": "User-supplied MHTML archive",
       "sha256": "c52cb61cdf0993d94d32983a5db18457007f9fa0690178687fc50c7af1da36de",
       "bytes": 2463526,
-      "finding": "The modern list matches Chassagne 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². The text conflicts between 34 and 24; neither is silently corrected. Old 1861/1921 numbering is not a current-reference crosswalk; six embedded maps were absent from the supplied archive.",
+      "finding": "The modern list matches Chassagne 24 (542 m²), attributed to the René Lamy-Pillot family, and 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. One paragraph prints 34 where the list prints 24; the owner-supplied map (10 October 2026) outlines 24 among the plots added in 1921 and leaves the large plot 34 outside, so 24 is accepted. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². Old 1861/1921 numbering is not a current-reference crosswalk.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:26 +0000",
       "modifiedAt": "2017-10-01T13:28:58+00:00",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2017/08/IMG_4887.jpg",
-        "https://winehog.org/wp-content/uploads/2017/08/IMG_4889.jpg",
-        "https://winehog.org/wp-content/uploads/2017/08/IMG_4890.jpg",
-        "https://winehog.org/wp-content/uploads/2017/08/IMG_4891.jpg",
-        "https://winehog.org/wp-content/uploads/2017/08/montrachetold.jpg",
-        "https://winehog.org/wp-content/uploads/2017/08/monradny.jpg"
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/IMG_4887.jpg",
+          "file": "IMG_4887.jpg",
+          "sha256": "b709d4d2fe15740d167acaa12e21e18af229ac3975a033f9357b861e844d92be",
+          "bytes": 384808,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/IMG_4889.jpg",
+          "file": "IMG_4889.jpg",
+          "sha256": "c3c936f695be9a2e1e59f449e103aa63b76ba1a6fc7574fedb876ebaa6b92122",
+          "bytes": 310900,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/IMG_4890.jpg",
+          "file": "IMG_4890.jpg",
+          "sha256": "9b8ceaa1c60127231f2854dae558b9fe5dfba2b2ece61a6393accd245c910212",
+          "bytes": 263232,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/IMG_4891.jpg",
+          "file": "IMG_4891.jpg",
+          "sha256": "ee3e3835664814b82a342e28b1262f613419f0f72a303c2b297e68a2025a8aee",
+          "bytes": 282164,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/montrachetold.jpg",
+          "file": "montrachetold.jpg",
+          "sha256": "bd70034801f730496b3f6cd58a5f1468e51e79c36f2fa9908c042b564aed1775",
+          "bytes": 1126970,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2017/08/monradny.jpg",
+          "file": "monradny.jpg",
+          "sha256": "1874f4aeb26136cbae66024d31fe23a7f0bf73cbbbfcb141f29e2f276123c6e6",
+          "bytes": 944954,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
+    },
+    {
+      "id": "ch-winehog-26388",
+      "title": "Terroir Insight: Domaine Leflaive Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-26388/",
+      "type": "critic",
+      "documentDate": "2020-04-22",
+      "modifiedAt": "2020-05-22T10:41:44+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.896534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "8f4daec47b188be35e22a414afddb9bc672011b9afec3bdbe92a7ae60b283e1c",
+      "bytes": 2529085,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:29 +0000",
+      "finding": "Leflaive’s 1.8273 ha is printed for the six plots 77/131/132/147/148/149 on the map, without individual areas. Today’s six cadastral areas add up exactly to 18,273 m², so each parcel is named under the printed-group-total rule. The April and May articles contain substantially the same account and are not independent corroboration.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg",
+          "file": "leflaivechevaln3-copy-1024x1001.jpg",
+          "sha256": "193a3036fae2e6d6b3bdacd46ba515cfec4a1ae353827b6a8a6a124af1cc8461",
+          "bytes": 230854,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
+      ]
+    },
+    {
+      "id": "ch-winehog-41096",
+      "title": "Terroir Insight: Domaine Leflaive Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-chevalier-montrachet-2-41096/",
+      "type": "critic",
+      "documentDate": "2020-05-22",
+      "modifiedAt": "2020-05-23T10:41:38+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:54.031534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "04335c900d4997ccdea986e18dc9a4c81a361cf35d21ff187c9fe1252ca83314",
+      "bytes": 2529032,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:12 +0000",
+      "finding": "The May Leflaive article repeats the 1.8273 ha aggregate and six-parcel account in the April article. The maps give numbers but no individual areas. Both archives are retained with separate hashes, while the holding and its group match are counted once.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg",
+          "file": "leflaivechevaln3-copy-1024x1001.jpg",
+          "sha256": "193a3036fae2e6d6b3bdacd46ba515cfec4a1ae353827b6a8a6a124af1cc8461",
+          "bytes": 230854,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
+      ]
+    },
+    {
+      "id": "ch-winehog-40965",
+      "title": "Terroir Insight: Bouchard Père et Fils Chevalier-Montrachet",
+      "url": "https://winehog.org/terroir-insight-bouchard-pere-chevalier-montrachet-40965/",
+      "type": "critic",
+      "documentDate": "2020-05-28",
+      "modifiedAt": "2020-05-30T09:54:26+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-09",
+      "retrievedAt": "2026-10-09T15:32:53.964534+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "de222451e68eeb843984bbdd3cded030633819b956eb43e43070b8a3e68c19f8",
+      "bytes": 3001095,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:51 +0000",
+      "finding": "La Cabotte number 68 and 0.2104 ha match AH68 at 2104 m². Regular Chevalier numbers 1/5/6/9/10/11/12/13/14/122 share a 2.3295 ha aggregate without individual areas; today’s ten cadastral areas, including the partly road parcels 10 and 12, add up exactly to 23,295 m², so each is named under the printed-group-total rule.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
+          "file": "C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
+          "sha256": "4658eed6fca1bac396f66a72c524b82a49ad4a4fd87c52e09416af47112e73db",
+          "bytes": 690038,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
+          "file": "1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
+          "sha256": "10acf457f8e242ab0fda7b6a61964711dafdf59490fc7635bc7263bbb10e29f0",
+          "bytes": 747550,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
+          "file": "1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
+          "sha256": "b5bb585afe7fbfe1cce66cdc09a0ea45e2e5bdc319836cef317af5263324edc2",
+          "bytes": 259784,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2016/03/img_2337-1024x377.jpg",
+          "file": "img_2337-1024x377.jpg",
+          "sha256": "75985d6f0786787ea9668e55f8c3d7df255bc168dd8fbf4ab72c509883cba7a0",
+          "bytes": 55962,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
+      ]
+    },
+    {
+      "id": "mt-winehog-29563",
+      "title": "Le Montrachet Six – A Historic Wine",
+      "url": "https://winehog.org/le-montrachet-six-historic-wine-29563/",
+      "type": "critic",
+      "documentDate": "2016-10-12",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "7ee6be411c76d4deea90103ab116589547ad6d386efe7a926bc5d09571952aea",
+      "bytes": 2994039,
+      "finding": "Lists six Chassagne-side holdings (DRC 0.6759, Comte Lafon 0.3182, Guy Amiot 0.0910, Leflaive 0.0821, Lamy-Pillot 0.0542 and Fleurot 0.0405 ha) and numbers them 1–6 on an aerial map without cadastral numbers. Against the pinned cadastre the Leflaive strip is AE134 (821 m²) and the Fleurot strip directly above it is AE173 (405 m²).",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:22:46 +0000"
+    },
+    {
+      "id": "mt-winehog-29546",
+      "title": "One Montrachet from six Domaines",
+      "url": "https://winehog.org/one-montrachet-from-six-domaines-29546/",
+      "type": "critic",
+      "documentDate": "2016-10-05",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "acd791e4832e5af3234a53984a1defe8b13e8884c4dcf105dfaaca661654ece4",
+      "bytes": 2521984,
+      "finding": "News item: after the April 2016 frost the six Chassagne-side owners made one shared cuvée, vinified by Domaine Leflaive’s négociant business. It names the six estates but no parcel or area.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:13 +0000"
+    },
+    {
+      "id": "mt-winehog-35102",
+      "title": "Maison Joseph Drouhin, Le Montrachet Marquis de Laguiche 2015",
+      "url": "https://winehog.org/maison-joseph-drouhin-le-montrachet-marquis-laguiche-2015-2-35102/",
+      "type": "critic",
+      "documentDate": "2018-03-30",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "9de551cc68c4b3ea535271a2397f6450380b777f2355b1542f637e478dca7cb7",
+      "bytes": 2174163,
+      "finding": "Tasting note. It describes the wine but gives no parcel, area or account of the Laguiche–Drouhin arrangement, so it adds nothing to the reported-tenancy link.",
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:22:42 +0000"
+    },
+    {
+      "id": "census-blain-gagnard-langtons",
+      "title": "Langtons: Blain-Gagnard Grand Cru Bâtard-Montrachet 2023 (producer profile)",
+      "url": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:07:17+00:00",
+      "retrievedFrom": "https://www.langtons.com.au/p/blain-gagnard-grand-cru--batard-montrachet-2023-bottle/783-2023-1.html",
+      "sha256": "729540f4050fea00152a9ca1fa07693d152c59054291214f3233bf3e41d72130",
+      "bytes": 274295,
+      "finding": "A merchant page gives Domaine Blain-Gagnard 0.08 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-fontaine-gagnard-estate",
+      "title": "Domaine Fontaine-Gagnard website wine sheets (fiche-vin.html data script js/app.min.03f1e7e4.js)",
+      "url": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:10:30+00:00",
+      "retrievedFrom": "https://www.domaine-fontaine-gagnard.com/js/app.min.03f1e7e4.js",
+      "sha256": "ab2d04569c52ee3025bd854accea92090bd17951d9f412f312c60d416d6d9298",
+      "bytes": 187231,
+      "finding": "The estate’s own page gives Domaine Fontaine-Gagnard 0.0781 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-mt-amiot-kermitlynch",
+      "title": "Kermit Lynch Wine Merchant: Domaine Guy Amiot producer sheet (PDF)",
+      "url": "https://kermitlynch.com/files/AMIOT.pdf",
+      "type": "importer",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:19:35+00:00",
+      "retrievedFrom": "https://kermitlynch.com/files/AMIOT.pdf",
+      "sha256": "141f433c7c894c6db775da9008809d6e0c099be28f81646f8eee72db8ce3a9db",
+      "bytes": 414929,
+      "finding": "An importer page gives Domaine Guy Amiot et Fils 0.1 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-mt-lamy-pillot-hachette",
+      "title": "Guide Hachette des Vins: Domaine Lamy-Pillot producer page (Le Montrachet 2003 review)",
+      "url": "https://www.hachette-vins.com/guide-vins/producteurs/1648/scea-dom-lamy-pillot",
+      "type": "press",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:21:05+00:00",
+      "retrievedFrom": "https://www.hachette-vins.com/guide-vins/producteurs/1648/scea-dom-lamy-pillot",
+      "sha256": "80469f6051d7ec76edd34b741f588af624fb6e143e7edab3b7d846562f86005a",
+      "bytes": 561060,
+      "finding": "A free Guide Hachette producer page (Le Montrachet 2003 review) describes a 5 a 42 ca parcel in the Dents-de-Chien, brought into Montrachet by the 1921 judgment, worked by Lamy-Pillot en métayage since 1988. It prints no cadastral number. The owner it names is a private individual and is not recorded here. Undated guide text; current farming is unverified."
     }
   ],
   "holders": [
@@ -361,10 +612,12 @@
         "mt-filing-778232892-24",
         "mt-filing-778232892-21",
         "mt-filing-778232892-20",
-        "mt-filing-778232892-1"
+        "mt-filing-778232892-1",
+        "mt-filing-778232892-2022-lease",
+        "mt-filing-778232892-2025-lease"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "The 1994 decision transfers the operating branch to SARL Domaine des Comtes Lafon and retains the land company as a GFA. The 1996 donation recites estate leases; no AE37 schedule or current renewal is established. Corporate succession is not farming."
+      "finding": "The 1994 decision moves the operating branch to SARL Domaine des Comtes Lafon. Share donations of 2022 and 2025 recite the GFA’s long-term lease to that company and say all its parcels are covered; AE37 is its only parcel here, but no schedule prints it. A recited lease is not farming."
     },
     {
       "holderId": "778245316",
@@ -404,7 +657,7 @@
     },
     {
       "holderId": "U18179542",
-      "basis": "identity-only",
+      "basis": "reported-operator-relationship",
       "sourceIds": [
         "dgfip-current",
         "mt-registry-443494075",
@@ -413,7 +666,7 @@
         "mt-filing-443494075-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "AH64 and its 20625 m² area establish the GFA de Laguiche identity. The 2002 donation names Jean de Laguiche personally as tenant. Drouhin’s published cultivation account does not establish a Drouhin company lease; current farming is unverified."
+      "finding": "AH64 and its 20625 m² area establish the GFA de Laguiche identity; the 2002 donation names an individual tenant. Drouhin’s own page reports that its family is in charge of cultivation and vinification: a reported arrangement, not a filed Drouhin lease. Current farming is unverified."
     },
     {
       "holderId": "U21850980",
@@ -684,6 +937,146 @@
         "AE161": 178,
         "AE162": 178
       }
+    },
+    {
+      "id": "mt-group-leflaive-chevalier",
+      "title": "Winehog: Leflaive’s six-parcel Chevalier-Montrachet holding",
+      "parcelIds": [
+        "21512000AH0077",
+        "21512000AH0131",
+        "21512000AH0149"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0077": 5074,
+        "21512000AH0131": 5072,
+        "21512000AH0149": 920
+      },
+      "printedReferences": [
+        "AH77",
+        "AH131",
+        "AH132",
+        "AH147",
+        "AH148",
+        "AH149"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.8273 ha",
+        "printedTotalM2": 18273,
+        "groupParcelAreasM2": {
+          "21512000AH0077": 5074,
+          "21512000AH0131": 5072,
+          "21512000AH0132": 5087,
+          "21512000AH0147": 1179,
+          "21512000AH0148": 941,
+          "21512000AH0149": 920
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) maps Leflaive’s Chevalier-Montrachet as cadastre plots 77, 131, 132, 147, 148 and 149, 1.8273 ha in six plots confirmed by the domaine, without individual areas. Today’s cadastral areas of the six parcels add up exactly to 18,273 m², so each is named under the printed-group-total rule. Secondary attribution only; the May article repeats the same account; current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-26388",
+        "ch-winehog-41096"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AH77, AH131, AH132, AH147, AH148, AH149 with 1.8273 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "ch-winehog-26388",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-group-bouchard-chevalier",
+      "title": "Winehog: Bouchard’s ten-parcel Chevalier-Montrachet holding",
+      "parcelIds": [
+        "21512000AH0011"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0011": 9513
+      },
+      "printedReferences": [
+        "AH1",
+        "AH5",
+        "AH6",
+        "AH9",
+        "AH10",
+        "AH11",
+        "AH12",
+        "AH13",
+        "AH14",
+        "AH122"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "2.3295 ha",
+        "printedTotalM2": 23295,
+        "groupParcelAreasM2": {
+          "21512000AH0001": 1213,
+          "21512000AH0005": 1096,
+          "21512000AH0006": 2275,
+          "21512000AH0009": 705,
+          "21512000AH0010": 472,
+          "21512000AH0011": 9513,
+          "21512000AH0012": 762,
+          "21512000AH0013": 3772,
+          "21512000AH0014": 3150,
+          "21512000AH0122": 337
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Bouchard’s regular Chevalier-Montrachet as plots 1, 5, 6, 9, 10, 11, 12, 13, 14 and 122, 2.3295 ha in total, without individual areas. Today’s ten cadastral areas, including the partly road parcels 10 and 12, add up exactly to 23,295 m², so each is named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-40965"
+      ],
+      "producer": "Bouchard Père et Fils",
+      "appNote": "Winehog prints AH1, AH5, AH6, AH9, AH10, AH11, AH12, AH13, AH14, AH122 with 2.3295 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "ch-winehog-40965",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-32708-lamy-pillot",
+      "title": "Winehog: plot 24 in the 1921 Montrachet expansion",
+      "parcelIds": [
+        "21150000AE0024"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0024": 542
+      },
+      "printedReferences": [
+        "AE24"
+      ],
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog lists plot 24 at 0.0542 ha among the Dent de Chien plots added to Montrachet in 1921, attributed to the René Lamy-Pillot family. A paragraph prints 34, but the article's map, supplied by the owner on 10 October 2026, outlines 24 and leaves the large plot 34 outside. Current AE24 measures 542 m². A free Guide Hachette page separately describes a 5 a 42 ca Dents-de-Chien parcel worked by Lamy-Pillot en métayage since 1988, so the domaine is a sharecropper, not the owner. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "mt-winehog-32708",
+        "census-mt-lamy-pillot-hachette"
+      ],
+      "producer": "Domaine René Lamy-Pillot",
+      "appNote": "Winehog lists plot 24, 0.0542 ha, for the Lamy-Pillot family; its map confirms 24 rather than 34. A guide describes 5 a 42 ca there en métayage (sharecropping) since 1988. Current AE24 is 542 m². Current farming unverified.",
+      "dateSourceId": "mt-winehog-32708",
+      "currentFarmer": null
+    },
+    {
+      "id": "mt-winehog-29563-fleurot",
+      "title": "Winehog: the Fleurot strip of the 2016 six-domaine map",
+      "parcelIds": [
+        "21150000AE0173"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0173": 405
+      },
+      "printedReferences": [],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog (2016) gives Domaine Fleurot 0.0405 ha in the Chassagne part of Montrachet and outlines it as holding 6 on an unnumbered aerial map: the top strip of the block whose bottom strip is Leflaive’s AE134 (821 m², matching Leflaive’s 0.0821 ha). That strip is AE173, whose cadastral area is exactly 405 m². Matched by map position and area, not by a printed number; secondary attribution only and current farming unverified.",
+      "sourceIds": [
+        "mt-winehog-29563"
+      ],
+      "producer": "Domaine Fleurot",
+      "appNote": "Winehog (2016) maps Fleurot’s 0.0405 ha as the strip above Leflaive’s AE134; that strip is AE173, exactly 405 m². Matched by map position and area, not a printed number; current farming unverified.",
+      "dateSourceId": "mt-winehog-29563",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -1046,6 +1439,138 @@
           "context": "3 January 1920 contribution, item 43; reproduced in the 17 October 2002 deposit (PDF pages 10 and 41)."
         }
       ]
+    },
+    {
+      "id": "mt-winehog-holding-29563-fleurot",
+      "producer": "Domaine Fleurot",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0405,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-29563"
+      ],
+      "finding": "Winehog (2016) six-domaine list; Chassagne side of Montrachet. Named-area census only.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-29563-lamy-pillot",
+      "producer": "Domaine Lamy-Pillot",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0542,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-29563"
+      ],
+      "finding": "Winehog (2016) six-domaine list; equals the 1921 article’s plot 24 area. Named-area census only.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-winehog-holding-29563-amiot",
+      "producer": "Domaine Guy Amiot",
+      "namedAreas": [
+        "LE MONTRACHET"
+      ],
+      "publishedAreaHa": 0.091,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "mt-winehog-29563"
+      ],
+      "finding": "Winehog (2016) six-domaine list; equals the 1921 article’s plots 25 and 29 together. Named-area census only.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-blain-gagnard",
+      "producer": "Domaine Blain-Gagnard",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.08,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-blain-gagnard-langtons"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-fontaine-gagnard",
+      "producer": "Domaine Fontaine-Gagnard",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0781,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-fontaine-gagnard-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [
+        "411189830"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-guy-amiot-et-fils",
+      "producer": "Domaine Guy Amiot et Fils",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.1,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-mt-amiot-kermitlynch"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-census-domaine-lamy-pillot",
+      "producer": "Domaine Lamy-Pillot",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": 0.0542,
+      "precision": "square-metre",
+      "relation": "metayer",
+      "sourceIds": [
+        "census-mt-lamy-pillot-hachette"
+      ],
+      "finding": "Published whole holding, worked en métayage since 1988 by the source’s account. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -1059,7 +1584,9 @@
     "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.",
     "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified.",
     "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. Six images referenced by the 1921 history article are absent from its archive and remain unreviewed. Leflaive/Lafon lack printed numbers; Prieur’s area and 34/24 numbering conflict remain unmatched.",
-    "Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved."
+    "Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved.",
+    "Owner-supplied images (10 October 2026, photos.zip): the six maps missing from the 1921 article archive, and the Leflaive and Bouchard Chevalier maps, were supplied and reviewed; file names, SHA-256 hashes and sizes are recorded on each source. The five re-uploaded Chevalier and Montrachet archives are byte-identical to the 9 October copies. Images and archives stay outside the repository.",
+    "Supplied by the owner on 10 October 2026 and reviewed: Winehog articles 29563 (Le Montrachet Six), 29546 (One Montrachet from six Domaines), 35102 (Drouhin, Montrachet Marquis de Laguiche 2015) and 71536 (Chassagne Blanchot-Dessous, recorded with Criots). Only 29563 adds a parcel, by map position and exact area (AE173); none adds a printed current reference or a lease."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
@@ -1082,13 +1609,6 @@
       "printedReference": "Chassagne plot 30: 0.2009 ha",
       "parcelIds": [],
       "limitation": "Current AE30 and the accepted company filing give 2090 m². The article prints 2009 m²; it is preserved without correction and receives no match.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "mt-winehog-32708",
-      "printedReference": "Chassagne 34 in paragraph / 24 (0.0542 ha) in list",
-      "parcelIds": [],
-      "limitation": "The article contains conflicting reference numbers. Missing embedded contemporary maps cannot resolve this; no match is accepted for either reference.",
       "currentFarmer": null
     },
     {
