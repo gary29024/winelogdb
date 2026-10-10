@@ -182,12 +182,12 @@ Chevalier parcels with leads (27 to 32); the Chartron reading below adds two mor
 - **Supplied images.** The owner supplied 8 of the 9 missing images (`photos.zip`). They
   are hashed on their sources. They confirm the Leflaive and Bouchard readings and
   outline Chartron’s AH140 and AH141.
-- **Chartron: two sources combined (for owner review).** Winehog names Chartron’s
+- **Chartron: two sources combined (approved by the owner on 10 October).** Winehog names Chartron’s
   Clos des Chevaliers as AH140 and AH141 without areas. The estate’s own 2021 area table
   gives the monopole as 55 a 31 ca without numbers. Today’s areas, 2,778 and 2,753 m²,
   add up exactly to 5,531 m², so both parcels are named. The entry records which source
   gives the numbers and which the total. This extends the rule to two sources, adding
-  two more parcels (32 to 34). It is a separate commit so it can be reverted alone.
+  two more parcels (32 to 34). The owner approved it after checking the Winehog account.
 - **Web census.** Four more producer holdings from hashed importer, merchant and free-guide pages
   join the named-area census: Bruno Colin 0.04 ha, Vincent Dancer 0.10 ha (0.096 ha in a second
   source), Michel Niellon 0.23 ha and Philippe Colin 24 ares. Holdings never name parcels, and

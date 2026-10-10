@@ -320,7 +320,8 @@
           "suppliedAt": "2026-10-10",
           "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
         }
-      ]
+      ],
+      "imageNotes": "The owner reports (10 October 2026) that the one image still missing is a photograph with no parcel information."
     },
     {
       "id": "ch-winehog-22858",
@@ -902,7 +903,8 @@
         "individualAreasSource": "pinned-cadastral-snapshot",
         "referencesSourceId": "ch-winehog-36080",
         "totalSourceId": "ch-chartron-surfaces-2021",
-        "decidedAt": "2026-10-10"
+        "decidedAt": "2026-10-10",
+        "ownerApproved": true
       },
       "basis": "critic-named-cadastral-reference",
       "finding": "Winehog (2018) names Chartron’s Clos des Chevaliers as AH140 and AH141 and outlines both on its supplied map, without areas. The estate’s own 2021 table gives the monopole as 55 a 31 ca. Today’s cadastral areas, 2,778 and 2,753 m², add up exactly to 5,531 m². Two sources combined; secondary attribution only, and current farming remains unverified.",
@@ -1345,7 +1347,7 @@
     "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.",
     "All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed; 8 of the 9 missing images were supplied on 10 October 2026. The Leflaive pair repeats one account. AH68 and AH126 match individual numbers and areas. The Leflaive (1.8273 ha) and Bouchard (2.3295 ha) aggregates name their parcels under the printed-group-total rule, and Chartron’s AH140/AH141 are named from the estate’s own total. Historical numbering remains unmatched. Raw archives are not committed.",
     "Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved.",
-    "Owner-supplied images (10 October 2026, photos.zip): 8 of the 9 distinct images missing from the Chevalier Winehog archives were supplied and reviewed; file names, SHA-256 hashes and sizes are recorded on each source. One d’Auvenay image (C5F549F8) was not in the archive and remains unreviewed. Images and archives stay outside the repository."
+    "Owner-supplied images (10 October 2026, photos.zip): 8 of the 9 distinct images missing from the Chevalier Winehog archives were supplied and reviewed; file names, SHA-256 hashes and sizes are recorded on each source. One d’Auvenay image (C5F549F8) was not in the archive; the owner reports it is a photograph with no parcel information. Images and archives stay outside the repository."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
