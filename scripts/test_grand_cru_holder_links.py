@@ -1743,5 +1743,68 @@ class BienvenuesTierTwoTests(unittest.TestCase):
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 
 
+class CriotsTierTwoTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from build_grand_cru_research import outputs
+        cls.context = Context(*load_cru('criots-batard-montrachet'))
+        cls.files, cls.register = outputs(cls.context)
+        cls.curation = read_json(cls.context.curation)
+        cls.table = read_json(HOLDER_LINKS)
+
+    def test_partner_company_is_distinct_from_holder_and_provisional_identity(self):
+        holders = self.table['holders']
+        self.assertEqual(holders['419971130']['links'][0]['relation'], 'owner-company')
+        partner = holders['778249052']['links'][0]
+        self.assertEqual(partner['domaine'], 'Maison Prosper Maufoux')
+        self.assertEqual(partner['relation'], 'partner-company')
+        self.assertIn('cri-filing-778249052-1', partner['sourceIds'])
+        self.assertIn('cri-legal-prosper', partner['sourceIds'])
+        for hid in ('324396639', 'U21930118'):
+            self.assertFalse(holders[hid].get('links'))
+            self.assertFalse(holders[hid].get('identity'))
+            self.assertTrue(holders[hid]['searches'])
+        # The separately established company must not identify the provisional holder by name.
+        self.assertTrue(holders['778252445']['links'])
+        self.assertEqual(holders['U21930118']['effort']['pagesRead'], 113)
+        self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
+
+    def test_stock_and_other_section_references_do_not_create_parcel_filings(self):
+        self.assertEqual(self.curation['parcelFilings'], [])
+        # Only the owner-approved exact group total is research; stock and other-section references never are.
+        self.assertEqual([x['id'] for x in self.curation['externalResearch']], ['cri-group-auvenay-criots'])
+        for row in self.register['parcels']:
+            self.assertEqual(row['parcelFilingIds'], [])
+            self.assertIsNone(row['currentFarmer'])
+        sources = {s['id']: s for s in self.table['sources']}
+        self.assertIn('wine stocks', sources['cri-filing-419971130-13']['finding'])
+        self.assertIn('AP91', sources['cri-filing-419971130-13']['finding'])
+        self.assertEqual(sources['cri-filing-419971130-15']['documentDate'], '2023-07-25')
+        self.assertIsNone(sources['cri-filing-419971130-15']['filingDate'])
+        self.assertEqual(sources['cri-filing-324396639-5']['documentDate'], '1990-11-26')
+        self.assertEqual(sources['cri-filing-324396639-5']['filingDate'], '2026-03-18')
+
+    def test_exact_group_total_names_auvenay_parcels_and_census_never_allocates(self):
+        unmatched = self.curation['unmatchedPrintedReferences']
+        self.assertEqual(len(unmatched), 1)
+        self.assertTrue(all(not x['parcelIds'] for x in unmatched))
+        self.assertFalse(any('0.0637' in x['printedReference'] for x in unmatched))
+        group = next(x for x in self.curation['externalResearch'] if x['id'] == 'cri-group-auvenay-criots')
+        self.assertEqual(group['parcelAreasM2'], {'21150000AE0092': 370, '21150000AE0093': 267})
+        self.assertEqual(group['areaEvidence']['printedTotalM2'], 637)
+        # A critic's group total is not a company-record crosswalk for the provisional identifier.
+        self.assertFalse(self.table['holders']['U21930118'].get('identity'))
+        holdings = self.curation['producerHoldings']
+        self.assertEqual({x['publishedAreaHa'] for x in holdings}, {0.0637, 0.05, 0.6, 0.21, 0.3313})
+        self.assertTrue(all('parcelIds' not in x for x in holdings))
+        self.assertTrue(all(not x['ownerHolderIds'] for x in holdings))
+        auvenay = next(x for x in holdings if x['id'] == 'cri-winehog-auvenay-holding')
+        self.assertEqual(auvenay['producerHolderIds'], [])
+        self.assertEqual(self.register['counts']['holderLead'], 4)
+        self.assertEqual(self.register['counts']['unresolved'], 7)
+        for text in (str(self.curation), str(self.table['holders']['324396639'])):
+            self.assertNotIn('Guerrand', text)
+
+
 if __name__ == '__main__':
     unittest.main()

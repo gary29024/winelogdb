@@ -11,27 +11,16 @@ const tier2=[
  {slug:'chevalier-montrachet',name:'Chevalier-Montrachet',id:'inao-denom-539',villages:['puligny-montrachet'],parcels:44,leads:34,unresolved:10,filings:3,groups:13,unlinked:['349583500','212105126','752059824']},
  {slug:'batard-montrachet',name:'Bâtard-Montrachet',id:'inao-denom-273',villages:['chassagne-montrachet','puligny-montrachet'],parcels:89,leads:31,unresolved:57,filings:9,groups:22,unlinked:['349583500','490242302','429705551','411738669','832401855','889363610']},
  {slug:'bienvenues-batard-montrachet',name:'Bienvenues-Bâtard-Montrachet',id:'inao-denom-351',villages:['puligny-montrachet'],parcels:38,leads:19,unresolved:19,filings:8,groups:7,unlinked:['349583500','391949849']},
+ {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11,leads:4,unresolved:7,filings:0,groups:2,unlinked:['324396639','U21930118']},
 ];
-const tier1=[
- {slug:'criots-batard-montrachet',name:'Criots-Bâtard-Montrachet',id:'inao-denom-564',villages:['chassagne-montrachet'],parcels:11},
-];
-const reviewed=[...tier2,...tier1];
+const reviewed=tier2;
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8'));
 const bundle=read('scripts/grand-crus/bundles/montrachet.json') as {crus:string[]};
 const config=(slug:string)=>read(`scripts/grand-crus/${slug}.json`) as {parentFeatureId:string;villageMaps:string[];namedPlots:{displayLayer:boolean;plots:{id:string;name:string;sourceName:string}[]}};
 
 describe('Montrachet bundle reviewed crus',()=>{
- it('enables each reviewed cru in every village context with its own evidence',async()=>{
-  for(const cru of tier1){
-   for(const village of cru.villages)expect(grandCruFor(cru.id,village)).toMatchObject({slug:cru.slug,domaineGrouping:false,evidenceFrom:[cru.slug]});
-   const evidence=await loadParcelEvidence(cru.id);
-   expect(evidence).not.toBeNull();
-   expect(Object.keys(evidence.holderDomains??{})).toHaveLength(0);
-  }
-  for(const slug of bundle.crus.filter(slug=>!reviewed.some(cru=>cru.slug===slug))){
-   const pending=config(slug);
-   for(const village of pending.villageMaps)expect(grandCruFor(pending.parentFeatureId,village)).toBeUndefined();
-  }
+ it('covers every cru in the shared bundle with a reviewed Tier 2 entry',()=>{
+  expect([...bundle.crus].sort()).toEqual(reviewed.map(cru=>cru.slug).sort());
  });
  it('enables Tier 2 research grouping while keeping every farming claim unverified',async()=>{
   for(const cru of tier2){

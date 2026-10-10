@@ -15066,6 +15066,538 @@
       "finding": "Official identity of GFA BBM, distinct from the named individuals and any producer company."
     },
     {
+      "url": "https://actes.ccm2.net/acte/9d20e3a2-f2f9-4cc9-8bda-1bc0ecdb3fea",
+      "retrievedFrom": "https://actes.ccm2.net/acte/9d20e3a2-f2f9-4cc9-8bda-1bc0ecdb3fea",
+      "retrievedAt": "2026-10-09T15:51:22.515531+00:00",
+      "sha256": "c996a61c9a5ab8376a007b0062a6ea0b693821f51a8ed7fc4a748633ed43a795",
+      "bytes": 1089544,
+      "id": "cri-filing-778249052-0",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2026-09-16",
+      "type": "company-filing",
+      "documentDate": "2026-09-16",
+      "filingDate": "2026-09-17",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1,
+        4,
+        13,
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation.",
+      "dateNote": "Signed updated statutes, with date/signatures on PDF page 13; preserve the index label as provenance, not the document status."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/72a3f29e-b8d0-4b5a-86bd-10c1f67d0457",
+      "retrievedFrom": "https://actes.ccm2.net/acte/72a3f29e-b8d0-4b5a-86bd-10c1f67d0457",
+      "retrievedAt": "2026-10-09T15:51:22.709919+00:00",
+      "sha256": "0f2a68e91163491f6107ebe541473434a71c677df668ed25c2d3c39ae6606f94",
+      "bytes": 81060,
+      "id": "cri-filing-778249052-1",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2026-09-16",
+      "type": "company-filing",
+      "documentDate": "2026-09-16",
+      "filingDate": "2026-09-17",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 2,
+      "screenedPages": 2,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/ed82326b-58ee-48ca-a3e2-d29e3ccc0cd9",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ed82326b-58ee-48ca-a3e2-d29e3ccc0cd9",
+      "retrievedAt": "2026-10-09T15:51:23.541436+00:00",
+      "sha256": "95ee628ecc19b30339a366ad8420113797a9539278f3d0c403d75c7ca7306106",
+      "bytes": 1090430,
+      "id": "cri-filing-778249052-2",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2022-07-13",
+      "type": "company-filing",
+      "documentDate": "2022-07-13",
+      "filingDate": "2022-07-19",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 29,
+      "screenedPages": 29,
+      "reviewedPages": [
+        2,
+        5,
+        16
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation.",
+      "dateNote": "Bundle includes an April 2022 promise and June 2022 share transfer; the collective decision and updated statutes are dated 13 July 2022."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/385f52a2-a474-4211-9268-80e5f3b2d953",
+      "retrievedFrom": "https://actes.ccm2.net/acte/385f52a2-a474-4211-9268-80e5f3b2d953",
+      "retrievedAt": "2026-10-09T15:51:23.937180+00:00",
+      "sha256": "d07a341dfc735a3c5da32a83833385489ad9810ed38f43fd1b80f1002314e1c4",
+      "bytes": 1478893,
+      "id": "cri-filing-778249052-3",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2021-06-30",
+      "type": "company-filing",
+      "documentDate": "2021-06-30",
+      "filingDate": "2021-09-07",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        2,
+        3,
+        4
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/a12f76d3-ff23-44e9-b8c5-200d0970df14",
+      "retrievedFrom": "https://actes.ccm2.net/acte/a12f76d3-ff23-44e9-b8c5-200d0970df14",
+      "retrievedAt": "2026-10-09T15:51:24.810709+00:00",
+      "sha256": "f28b16503fd34cacf544ebc53ee9cf225f05cf38cfe9c147003089960e313c33",
+      "bytes": 1303307,
+      "id": "cri-filing-778249052-5",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2017-12-22",
+      "type": "company-filing",
+      "documentDate": "2017-12-22",
+      "filingDate": "2018-02-06",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 33,
+      "screenedPages": 33,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        24,
+        33
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images. All 33 pages additionally OCR-screened at 180 degrees for inverted scans.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation.",
+      "dateNote": "Notarial deposit 22 December 2017 of the 21 December capital decisions. All 33 pages also screened at 180 degrees and 150 dpi to read inverted originals."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/c978faf2-9a3c-423e-b6e2-0201c393cd4c",
+      "retrievedFrom": "https://actes.ccm2.net/acte/c978faf2-9a3c-423e-b6e2-0201c393cd4c",
+      "retrievedAt": "2026-10-09T15:51:26.694299+00:00",
+      "sha256": "ce940be2956ccc036644540c91a6ae68c147d90ab5b12d3c00b6fbfc5cb0a6d4",
+      "bytes": 1125033,
+      "id": "cri-filing-778249052-6",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2016-12-22",
+      "type": "company-filing",
+      "documentDate": "2016-12-22",
+      "filingDate": "2017-11-09",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 23,
+      "screenedPages": 23,
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation.",
+      "dateNote": "Notarial deposit 22 December 2016 of the 15 December capital decisions."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/efb8f539-bcff-455e-bd65-bbe35a5b0ea6",
+      "retrievedFrom": "https://actes.ccm2.net/acte/efb8f539-bcff-455e-bd65-bbe35a5b0ea6",
+      "retrievedAt": "2026-10-09T15:51:27.980466+00:00",
+      "sha256": "4d39afe014faf8d5004fc415dd0e618095c242c38bdbdd31b0bab3fdb55031b8",
+      "bytes": 2617952,
+      "id": "cri-filing-778249052-17",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2014-12-17",
+      "type": "company-filing",
+      "documentDate": "2014-12-17",
+      "filingDate": "2015-03-16",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 35,
+      "screenedPages": 35,
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/201afe20-d78b-4703-911d-7328f27ecc17",
+      "retrievedFrom": "https://actes.ccm2.net/acte/201afe20-d78b-4703-911d-7328f27ecc17",
+      "retrievedAt": "2026-10-09T15:51:28.390614+00:00",
+      "sha256": "46b6c5cfb8ed959c49f856e3ef7a4ae3aab384ffd204f5504646ab1496f822af",
+      "bytes": 615683,
+      "id": "cri-filing-778249052-18",
+      "title": "DOMAINE DU CHATEAU DE SAINT AUBIN: company filing 2001-07-11",
+      "type": "company-filing",
+      "documentDate": "2001-07-11",
+      "filingDate": "2002-07-22",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+      "limitation": "The September 2026 statutes are signed despite the public index calling them a project. The 2014 transaction transfers company shares; the 2016/2017 acts concern capital. Corporate changes do not prove a specific parcel lease or current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/51658300-2b7d-4314-9308-00ab397a0711",
+      "retrievedFrom": "https://actes.ccm2.net/acte/51658300-2b7d-4314-9308-00ab397a0711",
+      "retrievedAt": "2026-10-09T15:51:29.804725+00:00",
+      "sha256": "a4e5d333b6ac7a9604770802fa53f58589c2dbee86aacab30695588263b6bd04",
+      "bytes": 238409,
+      "id": "cri-filing-419971130-0",
+      "title": "DOMAINE HUBERT LAMY: company filing 2012-03-01",
+      "type": "company-filing",
+      "documentDate": "2012-03-01",
+      "filingDate": "2012-03-27",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/0af9013a-66db-4a90-bb1d-91a972b5b985",
+      "retrievedFrom": "https://actes.ccm2.net/acte/0af9013a-66db-4a90-bb1d-91a972b5b985",
+      "retrievedAt": "2026-10-09T15:51:30.696239+00:00",
+      "sha256": "7f18c36be4fc8f950d6ca75573f27de3c120b48c752a1878a8bab1b89c7806b3",
+      "bytes": 242714,
+      "id": "cri-filing-419971130-2",
+      "title": "DOMAINE HUBERT LAMY: company filing 2012-02-16",
+      "type": "company-filing",
+      "documentDate": "2012-02-16",
+      "filingDate": "2012-03-15",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 16,
+      "screenedPages": 16,
+      "reviewedPages": [
+        1,
+        2
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/2ad57a4e-bcaf-4894-817c-86e43eeb69da",
+      "retrievedFrom": "https://actes.ccm2.net/acte/2ad57a4e-bcaf-4894-817c-86e43eeb69da",
+      "retrievedAt": "2026-10-09T15:51:31.268717+00:00",
+      "sha256": "5a76fa078d35ceecf09aeb9dd52fbb4169318b10b668c904b03abd49f7949dc4",
+      "bytes": 4533680,
+      "id": "cri-filing-419971130-8",
+      "title": "DOMAINE HUBERT LAMY: company filing 2006-09-20",
+      "type": "company-filing",
+      "documentDate": "2006-09-20",
+      "filingDate": "2006-11-08",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 141,
+      "screenedPages": 141,
+      "reviewedPages": [
+        3,
+        50,
+        71,
+        117
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date.",
+      "dateNote": "The bundle includes 2 August 2006 updated statutes and older 1998 formation/lease annexes; the notarial donation date is 20 September 2006 (PDF page 117)."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/ba8d81e6-54ab-495e-9c1d-b0c66ed67269",
+      "retrievedFrom": "https://actes.ccm2.net/acte/ba8d81e6-54ab-495e-9c1d-b0c66ed67269",
+      "retrievedAt": "2026-10-09T15:51:32.216836+00:00",
+      "sha256": "d6b0ea84af51c9c74bdc0bf50a000e354d921da5e62ae687cd2a1d9f7b4d5a78",
+      "bytes": 3631605,
+      "id": "cri-filing-419971130-13",
+      "title": "DOMAINE HUBERT LAMY: company filing 1998-08-20",
+      "type": "company-filing",
+      "documentDate": "1998-08-20",
+      "filingDate": "1998-09-01",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 107,
+      "screenedPages": 107,
+      "reviewedPages": [
+        2,
+        4,
+        31,
+        42,
+        62
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1b8ab98c-30db-4b75-8b8a-09ed28228476",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1b8ab98c-30db-4b75-8b8a-09ed28228476",
+      "retrievedAt": "2026-10-09T15:51:33.112574+00:00",
+      "sha256": "36dcfeb7dd033180f830b1ada5cc72634afcd143266bad8c78f6493a8d72f813",
+      "bytes": 695703,
+      "id": "cri-filing-419971130-15",
+      "title": "DOMAINE HUBERT LAMY: company filing 2023-07-25",
+      "type": "company-filing",
+      "documentDate": "2023-07-25",
+      "filingDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 14,
+      "screenedPages": 14,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date.",
+      "dateNote": "No deposit date is printed in the public index; the document itself prints 25 July 2023, not 2026."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/4e44e2b5-066a-42b2-99f6-cc81f04e64ce",
+      "retrievedFrom": "https://actes.ccm2.net/acte/4e44e2b5-066a-42b2-99f6-cc81f04e64ce",
+      "retrievedAt": "2026-10-09T15:51:33.277758+00:00",
+      "sha256": "8ec3e90cafc7ac51067fdfedb5d6ff4f3145f88c07a17672b584365c4eb3e6d9",
+      "bytes": 168811,
+      "id": "cri-filing-419971130-16",
+      "title": "DOMAINE HUBERT LAMY: company filing 2023-07-25",
+      "type": "company-filing",
+      "documentDate": "2023-07-25",
+      "filingDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 6,
+      "screenedPages": 6,
+      "reviewedPages": [
+        1,
+        2,
+        6
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+      "limitation": "The selected free corpus is bounded. The two undated index entries actually contain July 2023 documents. The 2023 recap says 16 January 2012 for transformation, while the separately indexed older statutes print 16 February 2012; this discrepancy is not resolved by substituting a date.",
+      "dateNote": "No deposit date is printed in the public index; the document itself prints 25 July 2023, not 2026."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/1367c4f9-7439-4014-86ba-37e180a7a714",
+      "retrievedFrom": "https://actes.ccm2.net/acte/1367c4f9-7439-4014-86ba-37e180a7a714",
+      "retrievedAt": "2026-10-09T15:51:34.913448+00:00",
+      "sha256": "8f1724d28800b7143bb5be72f18b81067a6fdca73bb325a522cf3b00523a1b2a",
+      "bytes": 1401044,
+      "id": "cri-filing-324396639-0",
+      "title": "SAINT JOSEPH: company filing 2026-04-02",
+      "type": "company-filing",
+      "documentDate": "2026-04-02",
+      "filingDate": "2026-05-15",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        5,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/77dca7c0-8805-4084-8a45-dd63cffffa6c",
+      "retrievedFrom": "https://actes.ccm2.net/acte/77dca7c0-8805-4084-8a45-dd63cffffa6c",
+      "retrievedAt": "2026-10-09T15:51:35.641293+00:00",
+      "sha256": "a3d75b9cfb79c576400b51de250196ce6e28513e55cf65a78f1fc150f28362ea",
+      "bytes": 1276485,
+      "id": "cri-filing-324396639-3",
+      "title": "SAINT JOSEPH: company filing 2026-04-02",
+      "type": "company-filing",
+      "documentDate": "2026-04-02",
+      "filingDate": "2026-04-30",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 20,
+      "screenedPages": 20,
+      "reviewedPages": [
+        1,
+        5,
+        20
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/38186a01-d356-4584-b053-2e2599c5f723",
+      "retrievedFrom": "https://actes.ccm2.net/acte/38186a01-d356-4584-b053-2e2599c5f723",
+      "retrievedAt": "2026-10-09T15:51:35.715843+00:00",
+      "sha256": "50fa90574fc31c4875ab467da071f8591a38e30ab3c18e3c2b6697df26adebde",
+      "bytes": 675975,
+      "id": "cri-filing-324396639-5",
+      "title": "SAINT JOSEPH: company filing 1990-11-26",
+      "type": "company-filing",
+      "documentDate": "1990-11-26",
+      "filingDate": "2026-03-18",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 40,
+      "screenedPages": 40,
+      "reviewedPages": [
+        1,
+        3,
+        5,
+        39
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.",
+      "dateNote": "The modern 18 March 2026 index date is the deposit date. PDF page 3 identifies the 1 April 1982 original statutes as amended 26 November 1990."
+    },
+    {
+      "url": "https://actes.ccm2.net/acte/269e4602-4d56-455a-8c21-0afdb382423a",
+      "retrievedFrom": "https://actes.ccm2.net/acte/269e4602-4d56-455a-8c21-0afdb382423a",
+      "retrievedAt": "2026-10-09T15:51:36.127838+00:00",
+      "sha256": "146bdf8f765053bbcca0942b688057e3eeef8c477682751c4432d2c3e5b862c9",
+      "bytes": 25513,
+      "id": "cri-filing-324396639-7",
+      "title": "SAINT JOSEPH: company filing 2007-07-13",
+      "type": "company-filing",
+      "documentDate": "2007-07-13",
+      "filingDate": "2010-05-28",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "pageCount": 1,
+      "screenedPages": 1,
+      "reviewedPages": [
+        1
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR and DirectML at 150 dpi; relevant schedules and dates checked against page images.",
+      "finding": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted.",
+      "limitation": "Distinct as-deposited versions are preserved, without reconstructing an unsupported share-transfer date. A purchase mandate is not an executed deed or evidence of current operation.",
+      "dateNote": "The one-page court order is dated 13 July 2007, despite its 28 May 2010 deposit."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=324396639&per_page=1",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=324396639&per_page=1",
+      "retrievedAt": "2026-10-09T15:50:45.920304+00:00",
+      "sha256": "697c8dda087076286cbadf3c8e5c23ba745fb865dd1ba72815a04ffa566b6614",
+      "bytes": 3510,
+      "id": "cri-registry-324396639",
+      "title": "Official company registry: SAINT JOSEPH",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "Official company identity; no parcel operation inferred."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=419971130&per_page=1",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=419971130&per_page=1",
+      "retrievedAt": "2026-10-09T15:50:45.920304+00:00",
+      "sha256": "f580634d24b3f29905cdbdfa147431a9f5ef3f98ab98851bda5ba583b7e30554",
+      "bytes": 3659,
+      "id": "cri-registry-419971130",
+      "title": "Official company registry: DOMAINE HUBERT LAMY",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "Official company identity; no parcel operation inferred."
+    },
+    {
+      "url": "https://recherche-entreprises.api.gouv.fr/search?q=778249052&per_page=1",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=778249052&per_page=1",
+      "retrievedAt": "2026-10-09T15:50:45.919303+00:00",
+      "sha256": "d0c77ad9fdf210d7c4a760db40b55f365c3d2c9040662e585db93acd86d5c63c",
+      "bytes": 3306,
+      "id": "cri-registry-778249052",
+      "title": "Official company registry: DOMAINE DU CHATEAU DE SAINT AUBIN",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "Official company identity; no parcel operation inferred."
+    },
+    {
+      "url": "https://prosper-maufoux.com/fr/mentions-legales",
+      "retrievedFrom": "https://prosper-maufoux.com/fr/mentions-legales",
+      "retrievedAt": "2026-10-09T16:12:47.508292+00:00",
+      "sha256": "3e7556bbfa94d15cffa4d8b63a14bcc2641218a5fbb1b91c0add959bb0b70ba7",
+      "bytes": 116554,
+      "id": "cri-legal-prosper",
+      "title": "Maison Prosper Maufoux: official legal notice",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "The official Prosper Maufoux site identifies Maison des Grands Crus (395115447) as its publisher. The holder 778249052 is a different company; its filings explicitly name 395115447 as a partner."
+    },
+    {
+      "url": "https://www.domainehubertlamy.com/",
+      "retrievedFrom": "https://www.domainehubertlamy.com/",
+      "retrievedAt": "2026-10-09T16:28:30.533843+00:00",
+      "sha256": "b7a02d9fc5224ba06d436dd1b66eaf37f4c464597030677d9af95a53360ce350",
+      "bytes": 20038,
+      "id": "cri-estate-lamy",
+      "title": "Domaine Hubert Lamy: official estate and wine range",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "finding": "Official estate page identifies Domaine Hubert Lamy and lists Criots Grand Cru Haute Densité. Its 18.5 ha is the whole estate, not a Criots holding or parcel schedule."
+    },
+    {
       "url": "https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172",
       "retrievedFrom": "User-supplied Pappers PDF",
       "retrievedAt": "2026-10-10T00:46:08.609392+00:00",
@@ -16309,6 +16841,34 @@
         "filingsScreened": 4,
         "pagesRead": 108,
         "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
+      }
+    },
+    "324396639": {
+      "searches": [
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=324396639&per_page=1",
+            "Free Le Figaro filing index / actes.ccm2.net; complete selected corpus including all image pages"
+          ],
+          "outcome": "no-link-found",
+          "note": "The GFA Saint-Joseph statutes retain an authority to acquire land in Les Criots, without a cadastral number or individual area. The two copies dated 2 April 2026 differ: the later deposit names a different pair of individual partners from the earlier deposit. These private partners and a general obligation to lease do not identify a producer company or a parcel tenant. No AE97/6120 m² schedule is found in the bounded four-PDF corpus; no producer link is accepted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=belland&departement=21&per_page=25"
+          ],
+          "outcome": "no-link-found",
+          "note": "Owner-requested Belland lease search on 10 October 2026: 4 more GFA filings / 32 pages (1982 statutes copy, three 2026 minutes) give only the general duty to lease and the Les Criots acquisition power, with no lessee. The EARL Roger Belland’s 2005 executed lease from individuals covers Santenay, Chassagne AD65 and Puligny AE26–29 only. No producer link is made."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 8,
+        "pagesRead": 113,
+        "note": "Distinct new PDF hashes in the Criots review; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 4 more distinct filings / 32 pages."
       }
     },
     "324989359": {
@@ -18322,6 +18882,39 @@
         "pagesRead": 182,
         "note": "All selected pages OCR-screened; bounded selection in Clos Saint-Denis filings.md. Reuse this research in Clos de la Roche."
       }
+    },
+    "419971130": {
+      "searches": [
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://www.domainehubertlamy.com/",
+            "Free Le Figaro filing index / actes.ccm2.net; complete selected corpus including all image pages"
+          ],
+          "outcome": "linked",
+          "note": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 6,
+        "pagesRead": 300,
+        "note": "Distinct new PDF hashes in the Criots review; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "419971130/domaine-hubert-lamy",
+          "domaine": "Domaine Hubert Lamy",
+          "relation": "owner-company",
+          "basis": "The official registry and 25 July 2023 statutes identify Domaine Hubert Lamy (419971130), supporting the domaine company link. In the older formation/donation bundles, Criots entries are wine stocks, not land schedules. The lease schedule names Chassagne AM132/AM133 and Puligny AP91 (8985 m²), not Chassagne AE91 (465 m²). No exact current Criots schedule is found in the six-file corpus; company identity and historic leases do not establish current parcel operation.",
+          "sourceIds": [
+            "cri-registry-419971130",
+            "cri-filing-419971130-15",
+            "cri-estate-lamy"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
+        }
+      ]
     },
     "420088387": {
       "links": [
@@ -20785,6 +21378,39 @@
         "pagesRead": 521,
         "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch. 10 October 2026: 15 more distinct filings / 410 pages."
       }
+    },
+    "778249052": {
+      "searches": [
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://prosper-maufoux.com/fr/mentions-legales",
+            "Free Le Figaro filing index / actes.ccm2.net; complete selected corpus including all image pages"
+          ],
+          "outcome": "linked",
+          "note": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 8,
+        "pagesRead": 183,
+        "note": "Distinct new PDF hashes in the Criots review; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+      },
+      "links": [
+        {
+          "id": "778249052/maison-prosper-maufoux",
+          "domaine": "Maison Prosper Maufoux",
+          "relation": "partner-company",
+          "basis": "The 16 September 2026 collective decision names Maison des Grands Crus (395115447) as a partner of Domaine du Chateau de Saint Aubin (778249052). Prosper Maufoux’s official legal notice identifies that same 395115447 company as its publisher. This supports a partner-company relationship to Maison Prosper Maufoux, not substitution of the holder or a farming claim. The 2021 resolutions approve absorption of GFA Domaine Prosper Maufoux (431087675); the selected eight-PDF corpus supplies no individual AE90/504 m² schedule.",
+          "sourceIds": [
+            "cri-registry-778249052",
+            "cri-filing-778249052-1",
+            "cri-legal-prosper"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
+        }
+      ]
     },
     "778252445": {
       "links": [
@@ -23286,6 +23912,32 @@
         "filingsScreened": 4,
         "pagesRead": 97,
         "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
+      }
+    },
+    "U21930118": {
+      "searches": [
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10",
+            "Free Le Figaro filing index / actes.ccm2.net; complete selected corpus including all image pages"
+          ],
+          "outcome": "no-link-found",
+          "note": "The provisional U21930118 identifier has no accepted company-record crosswalk. Three existing 778252445 d’Auvenay filings (2001, 2019 and 2024; 113 pages) were reacquired with unchanged hashes and fully OCR-screened for Criots. They contain no AE92/AE93 reference with individual areas supporting the identity. Winehog prints only their combined 0.0637 ha. The shared 778252445 company identity cannot be transferred to this U identifier by name or aggregate area."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Supplemental reuse of ch-pappers-auvenay-2012 (31 fully screened pages), first counted at Chevalier. Original 3-file / 113-page effort is preserved. The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details."
+        }
+      ],
+      "effort": {
+        "filingsScreened": 3,
+        "pagesRead": 113,
+        "note": "Three existing PDF hashes / 113 pages reused and rechecked at 150 dpi for this provisional identity; no new distinct PDFs. Existing 778252445 identity/link/effort remain unchanged."
       }
     },
     "U21934169": {

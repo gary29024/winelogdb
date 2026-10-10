@@ -48,7 +48,7 @@ export const grandCrus:readonly GrandCru[]=[
  {slug:"clos-saint-denis",name:"Clos Saint-Denis",parentFeatureId:"inao-denom-548",villageMaps:["morey-saint-denis"],bundle:"chambolle-morey",evidenceFrom:["clos-saint-denis"],domaineGrouping:true},
  {slug:"corton",name:"Corton",parentFeatureId:"inao-denom-549",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton"],domaineGrouping:true},
  {slug:"corton-charlemagne",name:"Corton-Charlemagne",parentFeatureId:"inao-denom-550",villageMaps:["aloxe-corton", "ladoix", "pernand-vergelesses"],bundle:"corton",evidenceFrom:["corton-charlemagne"],domaineGrouping:false},
- {slug:"criots-batard-montrachet",name:"Criots-Bâtard-Montrachet",parentFeatureId:"inao-denom-564",villageMaps:["chassagne-montrachet"],bundle:"montrachet",evidenceFrom:["criots-batard-montrachet"],domaineGrouping:false},
+ {slug:"criots-batard-montrachet",name:"Criots-Bâtard-Montrachet",parentFeatureId:"inao-denom-564",villageMaps:["chassagne-montrachet"],bundle:"montrachet",evidenceFrom:["criots-batard-montrachet"],domaineGrouping:true},
  {slug:"echezeaux",name:"Échezeaux",parentFeatureId:"inao-denom-565",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["echezeaux"],domaineGrouping:true},
  {slug:"grands-echezeaux",name:"Grands-Échezeaux",parentFeatureId:"inao-denom-645",villageMaps:["vosne-romanee"],bundle:"flagey-echezeaux",evidenceFrom:["grands-echezeaux"],domaineGrouping:true},
  {slug:"griotte-chambertin",name:"Griotte-Chambertin",parentFeatureId:"inao-denom-646",villageMaps:["gevrey-chambertin"],bundle:"gevrey-chambertin",evidenceFrom:["griotte-chambertin"],domaineGrouping:false},

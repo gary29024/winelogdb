@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-BOxmgTS4.js"
+    "dist/client/assets/index-Ciq7P2r9.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-BFLfVS0L.js",
-    "dist/client/assets/SectionLabel-BmrtQ40z.js",
-    "dist/client/assets/SparklingDetailsCard-C3uUwlEi.js",
-    "dist/client/assets/VillageMap-DOd5Tfky.js",
-    "dist/client/assets/burgundyAtlas-B3u-jXjn.js",
-    "dist/client/assets/index-BOxmgTS4.js",
-    "dist/client/assets/index-DhR0_Zvt.js",
+    "dist/client/assets/FriendTagDialog-Brxl5PBw.js",
+    "dist/client/assets/SectionLabel-DW2Abm5Z.js",
+    "dist/client/assets/SparklingDetailsCard-rhlQLBcs.js",
+    "dist/client/assets/VillageMap-jcN5Yevc.js",
+    "dist/client/assets/burgundyAtlas-DQQy7CPw.js",
+    "dist/client/assets/index-Ciq7P2r9.js",
+    "dist/client/assets/index-tForh8xA.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-n7gJmQI8.js",
-    "dist/client/assets/wineDetailCompact-C7kqAztH.js"
+    "dist/client/assets/useModalFocus-CKOxxJPn.js",
+    "dist/client/assets/wineDetailCompact-rOmatAV6.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5991954,
-  "evidenceGzipBytesTotal": 562119,
+  "evidenceBytesTotal": 5998875,
+  "evidenceGzipBytesTotal": 563715,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -147,10 +147,10 @@
     },
     {
       "cru": "criots-batard-montrachet",
-      "file": "dist/client/assets/criots-batard-montrachet.evidence-B1Mjw28v.js",
-      "sha256": "576c71db83943b85e560eded9efb67d5be29c9728d4b141ae6ac37f29c5c0424",
-      "bytes": 51277,
-      "gzipBytes": 8183
+      "file": "dist/client/assets/criots-batard-montrachet.evidence-Cw9bFRPk.js",
+      "sha256": "593214a5fac243b33897f7624d3908d5a75de9616d952845066eaf9094f5625d",
+      "bytes": 58198,
+      "gzipBytes": 9779
     },
     {
       "cru": "echezeaux",
