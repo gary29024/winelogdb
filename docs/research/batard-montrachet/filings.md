@@ -718,3 +718,14 @@ Exact schedules cover nine current parcels, including Hécate’s purchase manda
 All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.
 
 Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season.
+
+## Supplemental Pappers review: 10 October 2026
+
+The [supplied Jouard deposit](https://www.pappers.fr/entreprise/domaine-vincent-et-francois-jouard-403784614) confirms The user-supplied 20 November 2023 Pappers deposit is byte-identical to bat-filing-403784614-11 (21 pages; deed 21 July 2023). All 21 pages were re-screened. The authentic extract still omits the individual real-estate schedules on pages 6-9; no exact AE40/AE52 match is established. This is zero additional distinct PDFs or pages in the corpus.
+
+SHA-256 `7cf26cb31dff554458446c6a450aefe88ddee46d4776b19877e4931b1c2481e1`; 1,924,830 bytes; received 2026-10-10T00:46:08.600392+00:00. The filename/index identifies the deposit as 20 November 2023; the deed is 21 July 2023. This supplemental provenance does not replace the original source record.
+
+Reused [Chevalier supplemental sources](../chevalier-montrachet/filings.md#supplemental-pappers-review-10-october-2026):
+
+- `ch-pappers-violland-1996` (6 pages): The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
+- `ch-pappers-auvenay-2012` (31 pages): The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.

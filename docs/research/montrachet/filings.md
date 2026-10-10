@@ -489,3 +489,15 @@ These secondary articles do not alter company links or exact company-filing coun
 ## Additional original-reference cross-check
 
 Opale’s 23 June 2006 contribution (pages 11–12) names AH150, 981 m², as two half interests in the complete parcel. Official DFI document `210:512:000:0000463`, validated 21 March 2019, divides it into AH182 (794 m²) and AH183 (187 m²). Only AH182 belongs to this cru; the complete event remains in rights history. The filing is retained as external research on AH150 with a documented path to AH182, never as an exact AH182 filing or a transfer of an operator. This adds no filing, page, research lead or verified farmer to the totals above.
+
+## Supplemental Pappers review: 10 October 2026
+
+### mt-pappers-thenard-1920
+
+[Domaine Thenard: 1920 formation in the 2002 deposit](https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172) - document **1920-01-03**, deposit **2002-10-17**; **55 pages**, all OCR-screened. User-supplied authorized PDF; Pappers company page retained as its provenance link.
+
+The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels.
+
+The 2002 filing date is not a land-transfer date. The typed copy repeats the 1920 contribution; no modern reference is supplied.
+
+Page images checked: 1, 10, 36, 41, 55 (one-based PDF). SHA-256 `a9a4d05f83f5d4d5e1df5d57b89ce987ad2cd314909e30ec7f0f7934fa2723e0`; 2,004,690 bytes; received 2026-10-10T00:46:08.609392+00:00. No PDF or OCR is committed.

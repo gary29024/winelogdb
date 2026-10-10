@@ -1,6 +1,6 @@
 # Bâtard-Montrachet parcel farming research register
 
-Reviewed 2026-10-09; target season 2026.
+Reviewed 2026-10-10; target season 2026.
 
 **Current farmer identification remains incomplete: no parcel has confirmed current-operation evidence.**
 
@@ -100,9 +100,9 @@ Parcels (1): AE 0053.
 
 **Candidate to investigate:** Unresolved. **Basis:** identity-only. **Current farming:** unconfirmed.
 
-Reuses the existing two-filings / 30-page no-link search. Co-recorded Vougeraie usufruct and individual corporate officers do not establish this company’s producer relationship.
+No supported producer link. The 1996 deposit cover names holder 349583500, but its enclosed Boisset transfer concerns Maison Leon Violland (515420305). Co-recorded Vougeraie rights and corporate officers do not resolve the mismatch.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCEV DOMAINE LOUIS VIOLLAND (349583500)](https://annuaire-entreprises.data.gouv.fr/entreprise/349583500).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCEV DOMAINE LOUIS VIOLLAND (349583500)](https://annuaire-entreprises.data.gouv.fr/entreprise/349583500), [Louis Violland filing cover with Maison Leon Violland enclosure](https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500).
 
 <a id="holder-384800736"></a>
 
@@ -124,7 +124,7 @@ Parcels (2): AE 0040, AE 0052.
 
 **Candidate to investigate:** Domaine Vincent et François Jouard. **Basis:** company-record-research. **Current farming:** unconfirmed.
 
-Registry, statutes and estate legal notice identify Domaine Vincent et François Jouard. The acquired 2023 extract omits the individual real-estate schedules. No exact AE40/AE52 filing or current farming is established.
+The supplied 2023 Jouard PDF is byte-identical to the reviewed extract and still omits individual property schedules. No exact AE40/AE52 match. The existing company identity is retained; a prior metayage recital does not establish current farming.
 
 Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2025-12-26](https://actes.ccm2.net/acte/ab4ebd50-2d9e-4bef-b4f3-e38afb3ca3da), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2024-12-31](https://actes.ccm2.net/acte/ba0c002c-fdf5-4c6f-a31d-584bc65a6de5), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2001-07-23](https://actes.ccm2.net/acte/6b762355-c8bc-4d95-8c3c-0f9568272e53), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 1996-01-08](https://actes.ccm2.net/acte/89e50641-43bc-4383-8eed-1005dfe30ee5), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2023-07-21](https://actes.ccm2.net/acte/d8b54b30-78b3-4e13-8a4d-864b98b99364), [DOMAINE VINCENT ET FRANCOIS JOUARD: company filing 2023-07-21](https://actes.ccm2.net/acte/8f0d947a-ac6b-4ce6-a86d-9a0a834ea5af), [Official company registry: 403784614](https://recherche-entreprises.api.gouv.fr/search?q=403784614&per_page=10), [Domaine Vincent et François Jouard legal notice](https://www.vf-jouard.com/fr_FR/mentions-legales).
 
@@ -292,9 +292,9 @@ Parcels (1): AI 0013.
 
 **Candidate to investigate:** Domaine d Auvenay. **Basis:** company-record-research. **Current farming:** unconfirmed.
 
-Reuses the existing shared company link and search effort (3 filings / 113 screened pages). No new company relationship or current farming assertion.
+Reviewed Domaine d Auvenay company identity reused. The supplied 2012 increase converts a shareholder receivable to capital; it adds no qualifying individual parcel schedule. Prior effort is preserved; no current farming is established.
 
-Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10), [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7).
+Sources: [DGFiP department 21 legal-entity rights, 2025-01-01](https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/fichiers-des-locaux-et-des-parcelles-des-personnes-morales/attachments/fichier_des_parcelles_situation_2025_dpts_01_a_56_zip), [Company register: SCE DU DOMAINE D AUVENAY (778252445)](https://recherche-entreprises.api.gouv.fr/search?q=778252445&per_page=10), [778252445: auvenay 2024](https://actes.ccm2.net/acte/bfc3f51a-07e7-41f7-a2fc-32e7bc2a46b7), [Domaine d Auvenay: 2012 debt-funded capital increase](https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445).
 
 <a id="holder-778253781"></a>
 
@@ -855,6 +855,8 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **bat-legal-morey-coffinet** — [Morey-Coffinet legal notice](https://www.morey-coffinet.com/en_US/legal-notice). estate; read; document date not established. Company filings identify SCE Michel Morey-Coffinet (319015269), distinct from the separate trading company. Share contributions to Holding du Clos St Jean and family share donations do not supply an AE175 cadastral schedule. The estate 0.13 ha Bâtard holding remains named-area census only.
 - **bat-legal-morey-blanc** — [Morey-Blanc / Pierre Morey legal notice](https://www.morey-meursault.fr/en/legal-notice/). estate; read; document date not established. The official estate legal notice explicitly distinguishes Maison Morey-Blanc (384800736) from Domaine Pierre Morey (398077834). Matching company filings support the Maison identity, not substitution of Pierre Morey as holder. No exact AI154 schedule found in the complete OCR corpus.
 - **bat-registry-328186416** — [Official registry: Domaine Bonneau du Martray](https://recherche-entreprises.api.gouv.fr/search?q=328186416&per_page=10). registry; read; document date not established. KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link.
+- **ch-pappers-violland-1996** — [Louis Violland filing cover with Maison Leon Violland enclosure](https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500). company-filing; read; document date 1996-10-08. The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
+- **ch-pappers-auvenay-2012** — [Domaine d Auvenay: 2012 debt-funded capital increase](https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445). company-filing; read; document date 2012-10-29. The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
 
 ## Remaining evidence and access gaps
 
@@ -868,5 +870,6 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - Exact schedules cover nine current parcels, including Hécate’s purchase mandate and Bachelet-Ramonet’s fractional bare interest; neither is represented as a completed acquisition of full ownership or current farming. Original Prieur-Brunet AE57 lacks its individual area; Bavard AI124 reaches AI170 only through the official 2021 DFI and remains historical-only after the user resumed Tier 2.
 - All three requested Bâtard Winehog articles were supplied and hashed. Fourteen referenced image occurrences were not embedded in their archives. Matching AE46, AE175 and AI144 rely on explicit individual numbers and areas. The 2020 DRC article dates the linked AE129 Montrachet acquisition to 1966 whereas the 2015 Montrachet article says 1965; no reconciled acquisition date is asserted.
 - Holdings from three official estate pages and three supplied Winehog articles remain a dated named-area census. A source’s historical ownership or lease statement does not prove a current farming season.
+- Supplemental Pappers review on 10 October 2026 reuses the two new Chevalier sources (37 pages) and confirms the supplied Jouard file is byte-identical to the existing 21-page extract. Batard remains 68 new distinct PDFs / 1936 pages; the duplicate and reused sources are not counted again. Missing Jouard schedules and the Violland company mismatch remain explicit gaps.
 
 For each proposed farmer, request a dated, shareable confirmation naming the exact cadastral IDs, whole/partial scope, season and operating entity; check any cadastral splits or merges. An appropriately shared CVI extract or parcel-specific lease plus evidence of actual operation may resolve the join. Do not publish private records without permission. No outreach has been sent.

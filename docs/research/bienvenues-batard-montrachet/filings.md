@@ -113,3 +113,9 @@ Eight current parcels have exact full-reference, whole-area and recorded-holder 
 All four requested Bienvenues Winehog articles were supplied and hashed; six referenced image occurrences were not embedded. Only AI19 has both individual number and area. Ramonet/Leflaive aggregates and historical classification numbers remain unmatched. The Bâtard AI144 article is reused for neighbouring boundary context only.
 
 Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified.
+
+## Supplemental Pappers review: 10 October 2026
+
+Reused [Chevalier supplemental source](../chevalier-montrachet/filings.md#supplemental-pappers-review-10-october-2026), `ch-pappers-violland-1996` (6 pages).
+
+The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.

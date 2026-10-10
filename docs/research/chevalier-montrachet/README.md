@@ -29,7 +29,7 @@ administrative procedures remain distinct evidence; none establishes current far
 | Parcels with no lead | 17 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1989-09-22, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 148,962 / 16,041 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 149,327 / 16,169 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 44 unique parcels.
@@ -160,3 +160,9 @@ Run the full CI Python unittest list from `scripts/`, full Vitest, and the Burgu
 ### Supplied Winehog review
 
 All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched. The two current matches are secondary historical research. Six additional named-area census entries preserve the published scope and dates. Raw archives are not committed.
+
+## Supplemental Pappers review: 10 October 2026
+
+Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved.
+
+Key findings and source hashes are in the [supplemental filing review](filings.md#supplemental-pappers-review-10-october-2026). Exact parcel coverage, supported holder links and verified farming counts do not change.

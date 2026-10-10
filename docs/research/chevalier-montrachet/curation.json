@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-09",
+  "reviewedAt": "2026-10-10",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-539",
   "status": "tier-2-researched",
@@ -324,10 +324,11 @@
       "basis": "identity-only",
       "sourceIds": [
         "dgfip-current",
-        "rne-349583500"
+        "rne-349583500",
+        "ch-pappers-violland-1996"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk."
+      "finding": "No supported producer link. The 1996 deposit cover names holder 349583500, but its enclosed Boisset transfer concerns Maison Leon Violland (515420305). Co-recorded Vougeraie rights and corporate officers do not resolve the mismatch."
     },
     {
       "holderId": "408395309",
@@ -479,10 +480,11 @@
       "sourceIds": [
         "dgfip-current",
         "bm-rne-778252445",
-        "bm-auvenay-2024"
+        "bm-auvenay-2024",
+        "ch-pappers-auvenay-2012"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted."
+      "finding": "Reviewed Domaine d Auvenay company identity reused. The supplied 2012 increase converts a shareholder receivable to capital; it adds no qualifying individual parcel schedule. Prior effort is preserved; no current farming is established."
     },
     {
       "holderId": "U21845345",
@@ -920,7 +922,8 @@
     "Three exact current-parcel matches are accepted: AH8, AH92 and AH93. Opale AH150/151 are external historical context. Printed Prieur AH3 remains unmatched to AH123 despite equal area.",
     "The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.",
     "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.",
-    "All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched."
+    "All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.",
+    "Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
