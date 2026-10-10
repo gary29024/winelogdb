@@ -1470,9 +1470,20 @@ class ChevalierTierTwoTests(unittest.TestCase):
         for h in self.curation['holders']:
             self.assertTrue(self.table['holders'][h['holderId']]['searches'])
             self.assertFalse(h['parcelOperationConfirmed'])
-        for hid in ('349583500', '212105126', '751811472', '752059824'):
+        for hid in ('349583500', '212105126', '752059824'):
             self.assertFalse(self.table['holders'][hid].get('links'))
         self.assertEqual(self.table['holders']['U21845345']['identity']['companySiren'], '778233098')
+
+    def test_montille_partners_reach_montille_only_through_shared_management(self):
+        links = self.table['holders']['751811472']['links']
+        self.assertEqual([(x['domaine'], x['relation'], x['reviewStatus']) for x in links],
+                         [('Domaine de Montille', 'management', 'reviewed')])
+        sources = {s['id']: s for s in self.table['sources']}
+        self.assertTrue(all(sources[s]['type'] == 'registry' for s in links[0]['sourceIds']))
+        holder = next(h for h in self.curation['holders'] if h['holderId'] == '751811472')
+        self.assertEqual(holder['basis'], 'management-only-lead')
+        row = next(p for p in self.register['parcels'] if p['parcelId'] == '21512000AH0169')
+        self.assertEqual((row['researchStatus'], row['parcelFilingIds'], row['currentFarmer']), ('holder-lead', [], None))
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 
     def test_exact_schedules_keep_prieur_number_mismatch_unmatched(self):
@@ -1508,11 +1519,21 @@ class ChevalierTierTwoTests(unittest.TestCase):
             self.assertNotIn('parcelIds', h)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
-    def test_winehog_aggregate_totals_do_not_become_individual_matches(self):
+    def test_winehog_aggregate_totals_name_parcels_only_through_exact_group_sums(self):
         items = [x for x in self.curation['externalResearch'] if x['id'].startswith('ch-winehog-')]
         self.assertEqual({p for x in items for p in x['parcelIds']}, {'21512000AH0068', '21512000AH0126'})
-        self.assertTrue(any('2.3295' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
-        self.assertTrue(any('1.8273' in x['printedReference'] for x in self.curation['unmatchedPrintedReferences']))
+        self.assertFalse(any('2.3295' in x['printedReference'] or '1.8273' in x['printedReference']
+                             for x in self.curation['unmatchedPrintedReferences']))
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual(sorted(groups), ['ch-group-bouchard-chevalier', 'ch-group-leflaive-chevalier'])
+        for item in groups.values():
+            evidence = item['areaEvidence']
+            self.assertEqual(sum(evidence['groupParcelAreasM2'].values()), evidence['printedTotalM2'])
+            self.assertEqual(set(item['parcelIds']), set(evidence['groupParcelAreasM2']))
+            self.assertIsNone(item['currentFarmer'])
+        self.assertEqual(groups['ch-group-leflaive-chevalier']['areaEvidence']['printedTotalM2'], 18273)
+        self.assertEqual(groups['ch-group-bouchard-chevalier']['areaEvidence']['printedTotalM2'], 23295)
         self.assertEqual(len([x for x in self.curation['producerHoldings'] if x['id'] == 'ch-winehog-holding-leflaive']), 1)
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 

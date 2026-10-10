@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 1; 1 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 27; supported shared holder links, distinct from current operation |
-| Parcels with no lead | 17 |
+| Parcels with holder or research leads | 32; supported shared holder links and dated secondary research, distinct from current operation |
+| Parcels with no lead | 12; includes Chartron’s AH140 and AH141, printed without individual areas |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1989-09-22, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 149,327 / 16,169 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 158,219 / 17,210 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 44 unique parcels.
@@ -94,15 +94,15 @@ an unsearched interval is a gap, not absence of history.
 
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
-| Research leads | 0 | 27 |
-| Unresolved parcels | 44 | 17 |
-| Reviewed holder links applicable to the cru | 0 | 12 |
+| Research leads | 0 | 32 |
+| Unresolved parcels | 44 | 12 |
+| Reviewed holder links applicable to the cru | 0 | 13 |
 | Parcels with exact company filings | 0 | 3 |
 | Current farmers verified | 0 | 0 |
 
 [The filing inventory](filings.md) records 11 new distinct company filings / 152 pages, complete 150 dpi RapidOCR/DirectML screening, reused shared effort, acquisition hashes, exact-match limits and eight supplied and hashed Winehog copies. Prieur AH8 and the Latour GFAs’ AH92/93 match reference, individual area and recorded holder. Opale’s retired AH150 reaches AH182/AH183 only through official DFI; its former AH151 holding remains historical context. Printed Prieur AH3 is not silently corrected to equal-area AH123.
 
-Five official estate holdings remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name, a shared manager or a similar area. Four holder identifiers remain explicit no-link searches: Louis Violland, the municipality, SCI Montille et Partners and GFV Le Chevalier de Puligny-Montrachet.
+Five official estate holdings remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name, a shared manager or a similar area. Three holder identifiers remain explicit no-link searches: Louis Violland, the municipality and GFV Le Chevalier de Puligny-Montrachet. SCI Montille et Partners has a management link since 10 October (below).
 
 ## Holder research effort
 
@@ -121,7 +121,7 @@ Five official estate holdings remain a whole-cru named-area census. No parcel is
 | DU DOMAINE BELGRAND LATOUR (`427468962`) | 4 / 116 | 0 / 0 | Reuses the reviewed GFA Belgrand-Latour link and prior effort. Its existing cited statutes print AH92 (2538 m²), and recite the 6 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed. |
 | DOMAINE MARCHAL LATOUR (`427468988`) | 4 / 167 | 0 / 0 | Reuses the reviewed GFA Marchal-Latour link and prior effort. Its existing cited statutes print AH93 (2537 m²), and recite the 7 December 2001 lease to Société Civile Domaine Louis Latour from 11 November 2001 to 10 November 2026. Original lease and current performance remain unreviewed. |
 | DOMAINE DE MONTILLE (`483134516`) | 6 / 104 | 0 / 0 | Reuses the reviewed Domaine de Montille company identity and the prior six-filings / 104-page search. The distinct SCI Montille et Partners and GFV Le Chevalier de Puligny identifiers are not merged into this company by name or shared management. |
-| SCI MONTILLE ET PARTNERS (`751811472`) | — | 2 / 47 | Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted. |
+| SCI MONTILLE ET PARTNERS (`751811472`) | — | 2 / 47 | Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. On 10 October the register officers support a reviewed management link to Domaine de Montille: E.M. Conseil manages the SCI and presides both Domaine de Montille and Bourgogne Investissement. Management is not a lease, and no exact AH169 filing is accepted. |
 | LE CHEVALIER DE PULIGNY-MONTRACHET (`752059824`) | — | 9 / 105 | Nine filings / 105 pages identify the GFV and describe long-term leases to unnamed SCEA companies. The governance clauses and individual founder do not identify a tenant company. The formation mandate concerns a BPCE/SAFER transaction without an individual AH171 schedule. No producer link or exact current-parcel filing is accepted. |
 | SCE DU DOMAINE D AUVENAY (`778252445`) | 3 / 113 | 0 / 0 | Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted. |
 
@@ -159,7 +159,29 @@ Run the full CI Python unittest list from `scripts/`, full Vitest, and the Burgu
 
 ### Supplied Winehog review
 
-All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched. The two current matches are secondary historical research. Six additional named-area census entries preserve the published scope and dates. Raw archives are not committed.
+All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded; the owner supplied 8 of the 9 on 10 October, leaving one d’Auvenay image unreviewed. The Leflaive pair repeats one account. AH68 and AH126 have matching individual numbers and areas. The Leflaive and Bouchard aggregates now name their parcels under the exact group-total rule (below); historical numbering remains unmatched. The two current matches are secondary historical research. Six additional named-area census entries preserve the published scope and dates. Raw archives are not committed.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed the Montrachet stack on 10 October 2026. Two decisions add five
+Chevalier parcels with leads (27 to 32). Current farming stays unverified everywhere.
+
+- **Printed group totals.** A source that prints several current numbers with one
+  total area now names each parcel when today’s cadastral areas add up to that total
+  exactly, to the square metre. The research build checks the sum.
+  - Leflaive: AH77, AH131, AH132, AH147, AH148 and AH149, printed as 1.8273 ha, add
+    up to exactly 18,273 m². AH131, AH132, AH147 and AH149 gain their first lead.
+  - Bouchard: AH1, AH5, AH6, AH9, AH10, AH11, AH12, AH13, AH14 and AH122, printed as
+    2.3295 ha, add up to exactly 23,295 m², including the partly road parcels 10 and 12.
+    These parcels already had Bouchard holder leads.
+- **SCI Montille et Partners.** The register names E.M. Conseil, president of SAS
+  Domaine de Montille, as the SCI’s manager and fully liable partner. Its other partner,
+  Bourgogne Investissement, is also presided by E.M. Conseil. This supports a reviewed
+  `management` link to Domaine de Montille. The app shows it as a lead for AH169, not a
+  domaine heading. Management is not a lease.
+- **Supplied images.** The owner supplied 8 of the 9 missing images (`photos.zip`). They
+  are hashed on their sources. They confirm the Leflaive and Bouchard readings and
+  outline Chartron’s AH140 and AH141, which still have no individual areas.
 
 ## Supplemental Pappers review: 10 October 2026
 

@@ -159,9 +159,16 @@
       "bytes": 2529085,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:29 +0000",
-      "finding": "Leflaive’s 1.8273 ha is a six-parcel aggregate. The available map prints 77/131/132/147/148/149 but no individual areas, so no parcel match is accepted. The April and May articles contain substantially the same account and are not independent corroboration.",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg"
+      "finding": "Leflaive’s 1.8273 ha is printed for the six plots 77/131/132/147/148/149 on the map, without individual areas. Today’s six cadastral areas add up exactly to 18,273 m², so each parcel is named under the printed-group-total rule. The April and May articles contain substantially the same account and are not independent corroboration.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg",
+          "file": "leflaivechevaln3-copy-1024x1001.jpg",
+          "sha256": "193a3036fae2e6d6b3bdacd46ba515cfec4a1ae353827b6a8a6a124af1cc8461",
+          "bytes": 230854,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -179,12 +186,40 @@
       "bytes": 3001095,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:28:51 +0000",
-      "finding": "La Cabotte number 68 and 0.2104 ha match AH68 at 2104 m². Regular Chevalier numbers 1/5/6/9/10/11/12/13/14/122 share a 2.3295 ha aggregate without individual areas; those references remain unmatched, including the partly road parcels 10 and 12.",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/05/C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
-        "https://winehog.org/wp-content/uploads/2020/05/1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
-        "https://winehog.org/wp-content/uploads/2020/05/1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
-        "https://winehog.org/wp-content/uploads/2016/03/img_2337-1024x377.jpg"
+      "finding": "La Cabotte number 68 and 0.2104 ha match AH68 at 2104 m². Regular Chevalier numbers 1/5/6/9/10/11/12/13/14/122 share a 2.3295 ha aggregate without individual areas; today’s ten cadastral areas, including the partly road parcels 10 and 12, add up exactly to 23,295 m², so each is named under the printed-group-total rule.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
+          "file": "C48C9A5D-A6EF-44A1-9A8A-F9E1DC86BDEE-1024x708.png",
+          "sha256": "4658eed6fca1bac396f66a72c524b82a49ad4a4fd87c52e09416af47112e73db",
+          "bytes": 690038,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
+          "file": "1E216ED8-C9D2-40FD-AC98-0ADEC9A9D302.png",
+          "sha256": "10acf457f8e242ab0fda7b6a61964711dafdf59490fc7635bc7263bbb10e29f0",
+          "bytes": 747550,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
+          "file": "1620BB49-48EE-4D5A-A290-0924CE0BBEBF-1024x388.png",
+          "sha256": "b5bb585afe7fbfe1cce66cdc09a0ea45e2e5bdc319836cef317af5263324edc2",
+          "bytes": 259784,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2016/03/img_2337-1024x377.jpg",
+          "file": "img_2337-1024x377.jpg",
+          "sha256": "75985d6f0786787ea9668e55f8c3d7df255bc168dd8fbf4ab72c509883cba7a0",
+          "bytes": 55962,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -202,9 +237,16 @@
       "bytes": 2529032,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:12 +0000",
-      "finding": "The May Leflaive article repeats the 1.8273 ha aggregate and six-parcel account in the April article. The maps give numbers but no individual areas. Both archives are retained with separate hashes, while the holding is counted once.",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg"
+      "finding": "The May Leflaive article repeats the 1.8273 ha aggregate and six-parcel account in the April article. The maps give numbers but no individual areas. Both archives are retained with separate hashes, while the holding and its group match are counted once.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/leflaivechevaln3-copy-1024x1001.jpg",
+          "file": "leflaivechevaln3-copy-1024x1001.jpg",
+          "sha256": "193a3036fae2e6d6b3bdacd46ba515cfec4a1ae353827b6a8a6a124af1cc8461",
+          "bytes": 230854,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -222,11 +264,32 @@
       "bytes": 3101620,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:17 +0000",
-      "finding": "Chartron AH140/AH141 have no individual areas and remain unmatched. The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2018/09/chevalierchartron.jpg",
-        "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
-        "https://winehog.org/wp-content/uploads/2018/09/chevalierlarge.jpg"
+      "finding": "Chartron AH140/AH141 are printed, and outlined on the three maps supplied by the owner on 10 October 2026, but without individual areas, so this article alone matches neither. The historical d’Auvenay acquisition identifies AH126 and 0.1632 ha, matching that parcel. Schematic expansion labels 1/2/3 are not cadastral references.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2018/09/chevalierchartron.jpg",
+          "file": "chevalierchartron.jpg",
+          "sha256": "7361875e14655f3a3a141055f020445f1466cd870be3f9a8574aa95e094e512a",
+          "bytes": 1865171,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
+          "file": "chevalierdauvenay.jpg",
+          "sha256": "9fac171a49034faf64c241726e47d8d28e4330967900b4f1d3301cea034a5d03",
+          "bytes": 1861163,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2018/09/chevalierlarge.jpg",
+          "file": "chevalierlarge.jpg",
+          "sha256": "f3e94fac5f201e0fe9e6a78d4870092b2f4987c2a1357741964d8ed032f2b82f",
+          "bytes": 745142,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -246,8 +309,17 @@
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:29:27 +0000",
       "finding": "d’Auvenay AH126 and 0.1632 ha match the current 1632 m² parcel. The reported 1992 acquisition remains secondary history. Neighbouring Chartron AH140/AH141 have no individual areas; no match is inferred.",
       "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
         "https://winehog.org/wp-content/uploads/2018/06/C5F549F8-BB22-409E-B252-8A7E78B876CA.jpeg"
+      ],
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2018/06/chevalierdauvenay.jpg",
+          "file": "chevalierdauvenay.jpg",
+          "sha256": "9fac171a49034faf64c241726e47d8d28e4330967900b4f1d3301cea034a5d03",
+          "bytes": 1861163,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -431,7 +503,7 @@
     },
     {
       "holderId": "751811472",
-      "basis": "identity-only",
+      "basis": "management-only-lead",
       "sourceIds": [
         "dgfip-current",
         "ch-registry-751811472",
@@ -439,7 +511,7 @@
         "ch-filing-751811472-1"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+      "finding": "Shares its manager with Domaine de Montille: E.M. Conseil, president of SAS Domaine de Montille, manages SCI Montille et Partners, and presides its other partner. Two filings / 47 pages give no AH169 schedule or named tenant. Management is not a lease; current farming is unverified."
     },
     {
       "holderId": "752059824",
@@ -593,6 +665,127 @@
       "producer": "Domaine d’Auvenay",
       "appNote": "Winehog (2018) names AH126, 0.1632 ha, in the d’Auvenay and Chartron accounts. Number and area match; the reported 1992 purchase is secondary history, with current farming unverified.",
       "dateSourceId": "ch-winehog-35640",
+      "currentFarmer": null
+    },
+    {
+      "id": "ch-group-leflaive-chevalier",
+      "title": "Winehog: Leflaive’s six-parcel Chevalier-Montrachet holding",
+      "parcelIds": [
+        "21512000AH0077",
+        "21512000AH0131",
+        "21512000AH0132",
+        "21512000AH0147",
+        "21512000AH0148",
+        "21512000AH0149"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0077": 5074,
+        "21512000AH0131": 5072,
+        "21512000AH0132": 5087,
+        "21512000AH0147": 1179,
+        "21512000AH0148": 941,
+        "21512000AH0149": 920
+      },
+      "printedReferences": [
+        "AH77",
+        "AH131",
+        "AH132",
+        "AH147",
+        "AH148",
+        "AH149"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.8273 ha",
+        "printedTotalM2": 18273,
+        "groupParcelAreasM2": {
+          "21512000AH0077": 5074,
+          "21512000AH0131": 5072,
+          "21512000AH0132": 5087,
+          "21512000AH0147": 1179,
+          "21512000AH0148": 941,
+          "21512000AH0149": 920
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) maps Leflaive’s Chevalier-Montrachet as cadastre plots 77, 131, 132, 147, 148 and 149, 1.8273 ha in six plots confirmed by the domaine, without individual areas. Today’s cadastral areas of the six parcels add up exactly to 18,273 m², so each is named under the printed-group-total rule. Secondary attribution only; the May article repeats the same account; current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-26388",
+        "ch-winehog-41096"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AH77, AH131, AH132, AH147, AH148, AH149 with 1.8273 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "ch-winehog-26388",
+      "currentFarmer": null
+    },
+    {
+      "id": "ch-group-bouchard-chevalier",
+      "title": "Winehog: Bouchard’s ten-parcel Chevalier-Montrachet holding",
+      "parcelIds": [
+        "21512000AH0001",
+        "21512000AH0005",
+        "21512000AH0006",
+        "21512000AH0009",
+        "21512000AH0010",
+        "21512000AH0011",
+        "21512000AH0012",
+        "21512000AH0013",
+        "21512000AH0014",
+        "21512000AH0122"
+      ],
+      "parcelAreasM2": {
+        "21512000AH0001": 1213,
+        "21512000AH0005": 1096,
+        "21512000AH0006": 2275,
+        "21512000AH0009": 705,
+        "21512000AH0010": 472,
+        "21512000AH0011": 9513,
+        "21512000AH0012": 762,
+        "21512000AH0013": 3772,
+        "21512000AH0014": 3150,
+        "21512000AH0122": 337
+      },
+      "printedReferences": [
+        "AH1",
+        "AH5",
+        "AH6",
+        "AH9",
+        "AH10",
+        "AH11",
+        "AH12",
+        "AH13",
+        "AH14",
+        "AH122"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "2.3295 ha",
+        "printedTotalM2": 23295,
+        "groupParcelAreasM2": {
+          "21512000AH0001": 1213,
+          "21512000AH0005": 1096,
+          "21512000AH0006": 2275,
+          "21512000AH0009": 705,
+          "21512000AH0010": 472,
+          "21512000AH0011": 9513,
+          "21512000AH0012": 762,
+          "21512000AH0013": 3772,
+          "21512000AH0014": 3150,
+          "21512000AH0122": 337
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Bouchard’s regular Chevalier-Montrachet as plots 1, 5, 6, 9, 10, 11, 12, 13, 14 and 122, 2.3295 ha in total, without individual areas. Today’s ten cadastral areas, including the partly road parcels 10 and 12, add up exactly to 23,295 m², so each is named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "ch-winehog-40965"
+      ],
+      "producer": "Bouchard Père et Fils",
+      "appNote": "Winehog prints AH1, AH5, AH6, AH9, AH10, AH11, AH12, AH13, AH14, AH122 with 2.3295 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "ch-winehog-40965",
       "currentFarmer": null
     }
   ],
@@ -923,7 +1116,8 @@
     "The GFV formation copy prints 14 May 2011 but references a February 2012 promise and was deposited June 2012; the date conflict remains unresolved and is not used as a land-transfer date.",
     "Bouchard’s HTML holding pages returned HTTP 500; the freely available La Cabotte technical sheet was obtained. The Prieur 2017 technical sheet was reviewed but gives no holding area, so no census figure is inferred from it.",
     "All eight requested Chevalier Winehog articles were supplied as MHTML and reviewed. 11 referenced image occurrences (9 distinct URLs) were not embedded and remain unreviewed. The Leflaive pair repeats one account. Only AH68 and AH126 have matching individual numbers and areas; aggregate holdings and historical numbering remain unmatched.",
-    "Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved."
+    "Supplemental Pappers review on 10 October 2026 adds two distinct PDFs / 37 pages: 13 new PDFs / 189 pages including the original Chevalier pass. Violland has a conflicting-company enclosure; Auvenay is debt conversion without a qualifying land schedule. Existing links, identities and original effort are preserved.",
+    "Owner-supplied images (10 October 2026, photos.zip): 8 of the 9 distinct images missing from the Chevalier Winehog archives were supplied and reviewed; file names, SHA-256 hashes and sizes are recorded on each source. One d’Auvenay image (C5F549F8) was not in the archive and remains unreviewed. Images and archives stay outside the repository."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
@@ -935,31 +1129,10 @@
       "currentFarmer": null
     },
     {
-      "sourceId": "ch-winehog-26388",
-      "printedReference": "Leflaive 77/131/132/147/148/149: 1.8273 ha aggregate",
-      "parcelIds": [],
-      "limitation": "The map identifies numbers, but the article gives only a six-parcel total. Individual cadastral areas are not printed; the equal aggregate is not a match for each parcel.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "ch-winehog-41096",
-      "printedReference": "Leflaive 77/131/132/147/148/149: 1.8273 ha aggregate",
-      "parcelIds": [],
-      "limitation": "Repeated account of the April article, with no individual areas. Two archives are not independent evidence and do not justify allocating the total.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "ch-winehog-40965",
-      "printedReference": "Bouchard 1/5/6/9/10/11/12/13/14/122: 2.3295 ha aggregate",
-      "parcelIds": [],
-      "limitation": "The article gives a total for ten regular-Chevalier parcels, including partly road parcels 10 and 12. No individual areas are printed; no current parcel allocation is accepted.",
-      "currentFarmer": null
-    },
-    {
       "sourceId": "ch-winehog-36080",
       "printedReference": "Chartron AH140 and AH141",
       "parcelIds": [],
-      "limitation": "Printed references lack individual areas. Three cited maps were not embedded in this archive. The article’s schematic expansion labels 1/2/3 are not current cadastral numbers.",
+      "limitation": "Printed references lack individual areas. The three maps, supplied by the owner on 10 October 2026, outline both plots but print no areas. The article’s schematic expansion labels 1/2/3 are not current cadastral numbers.",
       "currentFarmer": null
     },
     {

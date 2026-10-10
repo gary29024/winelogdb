@@ -13046,6 +13046,20 @@
       "sha256": "f59efbbb81eebadd9d32d2e0fe05591e8df825c570b39f7450d27a69c95de1aa",
       "bytes": 135194,
       "finding": "Drouhin’s own page says the 2.06 ha property has been held by the Laguiche family since 1776 and that the Drouhin family is in charge of its cultivation and vinification, entirely on the Puligny side. Its linked 2023 technical sheet repeats the text. It names no lease, contract type or contracting company. Publication date not stated."
+    },
+    {
+      "id": "rne-892694258",
+      "title": "Company register: BOURGOGNE INVESTISSEMENT (892694258)",
+      "url": "https://annuaire-entreprises.data.gouv.fr/entreprise/892694258",
+      "type": "registry",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:06:05Z",
+      "retrievedFrom": "https://recherche-entreprises.api.gouv.fr/search?q=892694258&per_page=5",
+      "sha256": "4659c96024d8ea9b711bb316c844a74bbd8557d24a685fd455d6ed00bf3e7937",
+      "bytes": 3133,
+      "finding": "BOURGOGNE INVESTISSEMENT: SAS created 2020-12-09, registered office Rue du Pied de la Vallée, Volnay; activity 64.30Z; active. Its recorded president is E.M. CONSEIL (439237900). Legal identity only; not farming evidence."
     }
   ],
   "holders": {
@@ -17572,6 +17586,22 @@
       }
     },
     "751811472": {
+      "links": [
+        {
+          "id": "751811472/domaine-de-montille",
+          "domaine": "Domaine de Montille",
+          "relation": "management",
+          "basis": "The register names E.M. Conseil (439237900), president of SAS Domaine de Montille, as manager and fully liable partner of SCI Montille et Partners. Its other fully liable partner, Bourgogne Investissement (892694258), is also presided by E.M. Conseil. Shared management is not a lease.",
+          "sourceIds": [
+            "ch-registry-751811472",
+            "rne-892694258",
+            "rne-439237900",
+            "rne-483134516"
+          ],
+          "reviewStatus": "reviewed",
+          "reviewedAt": "2026-10-10"
+        }
+      ],
       "searches": [
         {
           "at": "2026-10-09",
@@ -17582,6 +17612,15 @@
           ],
           "outcome": "no-link-found",
           "note": "Two filings / 47 pages identify SCI Montille et Partners and its capital held predominantly by Bourgogne Investissement. The formation authorises a SAFER substitution under a BPCE Domaine promise, without an individual vineyard schedule or a named operating-company tenant. A shared manager with a producer is not a tenancy or control crosswalk; no domaine link or exact AH169 filing is accepted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "https://recherche-entreprises.api.gouv.fr/search?q=751811472",
+            "https://recherche-entreprises.api.gouv.fr/search?q=892694258&per_page=5"
+          ],
+          "outcome": "linked",
+          "note": "Owner decision of 10 October 2026: the register officers support a management link to Domaine de Montille. Both corporate partners are E.M. Conseil or presided by it. No lease, AH169 schedule or current farming is established."
         }
       ],
       "effort": {
