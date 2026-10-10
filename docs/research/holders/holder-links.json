@@ -16700,12 +16700,22 @@
           ],
           "outcome": "linked",
           "note": "Official registry and matching statutes establish Domaine Ramonet (333145183). The selected merger and capital/statute filings give no exact AI125 schedule. Family corporate partners remain corporate context, not proof of parcel operation."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=ramonet&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 4 more filings / 98 pages (2003 capital, 2007 statutes, 2011 statutes and share contributions). The company takes land on lease; its capital is movables and shares. No lease schedule; AH66, AI17 and AI123 are never named. The 2013 family operating companies were formed in cash."
         }
       ],
       "effort": {
-        "filingsScreened": 3,
-        "pagesRead": 64,
-        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+        "filingsScreened": 7,
+        "pagesRead": 162,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 4 more distinct filings / 98 pages."
       },
       "links": [
         {
@@ -19280,12 +19290,24 @@
           ],
           "outcome": "no-link-found",
           "note": "Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=490242302",
+            "https://recherche-entreprises.api.gouv.fr/search?q=851404954",
+            "https://recherche-entreprises.api.gouv.fr/search?q=CFI%20BEAUNE&per_page=5"
+          ],
+          "outcome": "no-link-found",
+          "note": "Owner-requested search on 10 October 2026: 3 more filings / 44 pages (2019 and 2020 decisions and statutes) print no parcel. The partners are Côte d’Or Vineyards (851404954), whose sole shareholder is Cloud Vineyards Limited of Hong Kong, and Compagnie Foncière et Immobilière de Beaune (851751149), co-manager in 2020. No producer is named; the Beaune company is a possible lead only."
         }
       ],
       "effort": {
-        "filingsScreened": 5,
-        "pagesRead": 150,
-        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi."
+        "filingsScreened": 8,
+        "pagesRead": 194,
+        "note": "Distinct new PDF byte hashes in the Bâtard pass; every image page OCR-screened with RapidOCR/DirectML at 150 dpi. 10 October 2026: 3 more distinct filings / 44 pages."
       }
     },
     "491471041": {
@@ -20243,12 +20265,22 @@
           ],
           "outcome": "linked",
           "note": "Reuses the existing shared company link and search effort (2 filings / 30 screened pages). No new company relationship or current farming assertion."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=faiveley&departement=21&per_page=25"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested producer search on 10 October 2026: 1 more filing / 13 pages. A December 2025 contribution report says the Faiveley family land companies lease their Puligny and Gevrey vineyards long-term to CVVB, without a parcel list. Faiveley’s published Bâtard and Bienvenues areas equal AI144 and AI19, which CVVB already holds."
         }
       ],
       "effort": {
-        "filingsScreened": 2,
-        "pagesRead": 30,
-        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused."
+        "filingsScreened": 3,
+        "pagesRead": 43,
+        "note": "Two selected filings screened for Musigny; the existing company and estate identity evidence is reused. 10 October 2026: 1 more distinct filings / 13 pages."
       }
     },
     "778159715": {

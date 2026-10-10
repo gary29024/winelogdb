@@ -729,3 +729,24 @@ Reused [Chevalier supplemental sources](../chevalier-montrachet/filings.md#suppl
 
 - `ch-pappers-violland-1996` (6 pages): The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
 - `ch-pappers-auvenay-2012` (31 pages): The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.
+
+## Owner decisions and further searches: 10 October 2026
+
+This section supersedes the earlier statements above where they differ. The filing totals for recorded holders
+rise by 8 filings / 155 pages:
+
+| Holder | Filings / pages | Finding |
+| --- | ---: | --- |
+| Domaine Ramonet (`333145183`) | 4 / 98 | A lease-taking company with no lease schedule. |
+| CVVB (`775567928`) | 1 / 13 | A December 2025 report says the Faiveley family land companies lease to CVVB, without a parcel list. |
+| Domaine GB (`490242302`) | 3 / 44 | Partners are Côte d’Or Vineyards, whose sole shareholder is Cloud Vineyards Limited of Hong Kong (no. 2839847), and CFI Beaune, co-manager in 2020. No producer is named. |
+
+The census agent also screened 26 filings / 696 pages of producers with no recorded company holding in the five
+crus: Pernot, Pierre Morey, Blain-Gagnard, Jean-Noël Gagnard, Leroux, Thomas Morey, Bachelet-Monnot, Pierre
+Girardin, Marc Morey and Caillot. Every operating company was formed with cash or movables, and none files a lease
+schedule. Caillot’s 1994 plantation schedule prints “AI40” without a commune; it is not a current parcel of these
+crus. These filings are listed in the session’s research notes and are not counted here.
+
+GFV B.E.O (529595050), the 2019–2020 recorded holder of AE65/AE177, was screened: 5 filings / 71 pages. It
+ceased on 30 November 2019 after disposing of all its land, and names no buyer, parcel or lessee. It is no longer
+a recorded holder, so its effort is reported here only.

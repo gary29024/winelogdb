@@ -59,7 +59,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | 424718583 | DOMAINE DE CHATEAU GRENOUILLE | 1 | 32 | — | — | — | — |
 | 425720703 | SOC EXPLOIT DOMAINES ALEXANDRE MOREAU | 1 | 32 | — | — | — | — |
 | U22199826 | GROUPEMENT FONCIER VITICOLE WILLIAM FEVRE | 1 | 30 | — | — | — | — |
-| 775567928 | CONSORTIUM VITICOLE VINICOLE BOURGOGNE | 13 | 27 | Domaine Faiveley (brand-identity; reviewed) | — | 2 filings, 30 pages | 2026-10-09 |
+| 775567928 | CONSORTIUM VITICOLE VINICOLE BOURGOGNE | 13 | 27 | Domaine Faiveley (brand-identity; reviewed) | — | 3 filings, 43 pages | 2026-10-10 |
 | 515620466 | SARL CAPITAIN GAGNEROT | 5 | 26 | Domaine Capitain-Gagnerot (owner-company; reviewed) | — | — | 2026-10-07 |
 | 315432823 | GFA CHATEAU LONG-DEPAQUIT | 1 | 21 | — | — | — | — |
 | 429825250 | DOMAINE GEORGES LIGNIER PERE ET FILS | 3 | 21 | No link found | — | 3 filings, 173 pages | 2026-10-09 |
@@ -258,7 +258,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | 478499098 | GFA LE CLOS DE LA BARRE | 1 | 2 | No link found | — | 3 filings, 47 pages | 2026-10-07 |
 | 484394069 | JUMEAUX | 2 | 2 | — | — | — | — |
 | 485329171 | ETIENNE ET PARTNERS | 1 | 2 | Domaine de Montille (management; reviewed) | — | 1 filings, 8 pages | 2026-10-07 |
-| 490242302 | DOMAINE GB | 1 | 2 | No link found | — | 5 filings, 150 pages | 2026-10-09 |
+| 490242302 | DOMAINE GB | 1 | 2 | No link found | — | 8 filings, 194 pages | 2026-10-10 |
 | 510368210 | DES BEAUMONTS | 1 | 2 | Domaine Maillard Père et Fils (lessor-per-filing, recited; reviewed; corton) | — | 2 filings, 111 pages | 2026-10-07 |
 | 515045292 | DOMAINE TAWSE | 3 | 2 | Domaine Tawse (owner-company; reviewed) | — | 4 filings, 54 pages | 2026-10-07 |
 | 515620417 | SA MAISON JOSEPH DROUHIN | 1 | 2 | Maison Joseph Drouhin (owner-company; reviewed) | — | 4 filings, 68 pages | 2026-10-09 |
@@ -311,7 +311,7 @@ Research queue, most parcels first. Relation, review status and scope are per li
 | 326791548 | GFA JAVILLIER | 3 | 1 | Domaine Patrick Javillier (owner-company; reviewed) | — | 5 filings, 167 pages | 2026-10-07 |
 | 327949061 | DOMAINE DU COLOMBIER | 1 | 1 | — | — | — | — |
 | 330345414 | SCEA DES COTEAUX DORES | 1 | 1 | Sylvain Loichet (management; reviewed) | — | 5 filings, 174 pages | 2026-10-07 |
-| 333145183 | DOMAINE RAMONET | 1 | 1 | Domaine Ramonet (owner-company; reviewed) | — | 3 filings, 64 pages | 2026-10-09 |
+| 333145183 | DOMAINE RAMONET | 1 | 1 | Domaine Ramonet (owner-company; reviewed) | — | 7 filings, 162 pages | 2026-10-10 |
 | 333321446 | SCEA DES BEAUX MONTS | 1 | 1 | No link found | — | — | 2026-10-07 |
 | 353575103 | GFA DOMAINE XAVIER LIGER BELAIR | 1 | 1 | Domaine Thibault Liger-Belair (family-holding; reviewed) | — | 1 filings, 30 pages | 2026-10-07 |
 | 353981475 | SOCIETE CIVILE DOMAINE JEAN GRIVOT | 1 | 1 | Domaine Jean Grivot (owner-company; reviewed) | — | 4 filings, 84 pages | 2026-10-07 |
@@ -623,6 +623,7 @@ Each link with its basis and sources. Retired links stay listed with their reaso
 - **478499098** — searched 2026-10-07 in recherche-entreprises.api.gouv.fr, entreprises.lefigaro.fr free filing index (3 filings listed), actes.ccm2.net (3 filings OCR-screened); no link found. Coupet family GFA at Volnay; no tenant named.
 - **485329171/domaine-de-montille** — Domaine de Montille; management (shared management only); reviewed 2026-10-07. Etienne & Partners is managed by the de Montille manager of E.M Conseil (439237900), which presides SAS Domaine de Montille; both are at rue de But, Puligny-Montrachet. Sources: rne-485329171, rne-439237900, rne-483134516.
 - **490242302** — searched 2026-10-09 in https://recherche-entreprises.api.gouv.fr/search?q=490242302&per_page=10, Le Figaro free filing index and actes.ccm2.net; all image pages OCR-screened at 150 dpi; no link found. Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus.
+- **490242302** — searched 2026-10-10 in entreprises.lefigaro.fr free filing index, actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi), https://recherche-entreprises.api.gouv.fr/search?q=490242302, https://recherche-entreprises.api.gouv.fr/search?q=851404954, https://recherche-entreprises.api.gouv.fr/search?q=CFI%20BEAUNE&per_page=5; no link found. Owner-requested search on 10 October 2026: 3 more filings / 44 pages (2019 and 2020 decisions and statutes) print no parcel. The partners are Côte d’Or Vineyards (851404954), whose sole shareholder is Cloud Vineyards Limited of Hong Kong, and Compagnie Foncière et Immobilière de Beaune (851751149), co-manager in 2020. No producer is named; the Beaune company is a possible lead only.
 - **510368210/domaine-maillard-pere-et-fils** — Domaine Maillard Père et Fils; lessor-per-filing (a filing names the domaine side as tenant or intended tenant); reviewed 2026-10-07. Limited to corton. Lease: recited. The GFA’s 21 November 2008 founding deed recites that AK 47 (1982 lease, prolonged to 31 December 2008) and AK 49 (lease of 12 December 1996, to 10 November 2014) are let to S.A.R.L. Domaine Maillard Père et Fils. The GFA’s office is that company’s registered address. Sources: beaumonts-gfa-2008, rne-314637141.
 - **515045292/domaine-tawse** — Domaine Tawse; owner-company (the holder is the domaine's own company); reviewed 2026-10-07. The recorded holder is Domaine Tawse, Beaune. Sources: rne-515045292.
 - **515620417/maison-joseph-drouhin** — Maison Joseph Drouhin; owner-company (the holder is the domaine's own company); reviewed 2026-10-09. Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation. Sources: bat-registry-515620417, bat-filing-515620417-1, bat-legal-drouhin.

@@ -1623,13 +1623,36 @@ class BatardTierTwoTests(unittest.TestCase):
         self.assertNotIn('21150000AE0057', {p for f in self.curation['parcelFilings'] for p in f['parcelAreasM2']})
 
     def test_winehog_requires_both_number_and_individual_area(self):
-        items = [x for x in self.curation['externalResearch'] if x['id'].startswith('bat-winehog-')]
+        items = [x for x in self.curation['externalResearch']
+                 if x['id'].startswith('bat-winehog-') and x['basis'] == 'critic-named-cadastral-reference']
         self.assertEqual({p: a for x in items for p, a in x['parcelAreasM2'].items()},
             {'21150000AE0046': 1746, '21150000AE0175': 1303, '21512000AI0144': 3508})
         self.assertTrue(all(not x['parcelIds'] for x in self.curation['unmatchedPrintedReferences']))
-        self.assertEqual(len(self.curation['producerHoldings']), 6)
+        self.assertEqual(len(self.curation['producerHoldings']), 22)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
+
+    def test_coffinet_duvernay_is_matched_by_stated_side_and_exact_area_only(self):
+        x = next(x for x in self.curation['externalResearch'] if x['id'] == 'bat-winehog-41492-coffinet-duvernay')
+        self.assertEqual((x['basis'], x['printedReferences'], x['parcelAreasM2']),
+                         ('critic-attribution-area-reconstructed', [], {'21150000AE0176': 1304}))
+        rows = {p['parcelId']: p for p in self.register['parcels']}
+        self.assertEqual(rows['21150000AE0176']['recordedRights'], [])
+        self.assertEqual(rows['21150000AE0176']['researchStatus'], 'holder-lead')
+        # The equal-area southern neighbour keeps its own filing and is not reassigned.
+        self.assertNotIn(x['id'], rows['21150000AE0157']['externalResearchIds'])
+        self.assertFalse(any('Coffinet-Duvernay' in u['printedReference'] for u in self.curation['unmatchedPrintedReferences']))
+
+    def test_bienvenues_group_totals_reach_batard_edge_parcels(self):
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: v['parcelIds'] for k, v in groups.items()},
+                         {'bat-group-ramonet-bienvenues': ['21512000AI0017'],
+                          'bat-group-leflaive-bienvenues': ['21512000AI0111']})
+        for item in groups.values():
+            self.assertEqual(sum(item['areaEvidence']['groupParcelAreasM2'].values()), item['areaEvidence']['printedTotalM2'])
+        self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
+                          self.register['counts']['unresolved']), (32, 57))
 
 
 if __name__ == '__main__':
