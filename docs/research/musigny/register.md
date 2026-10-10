@@ -6,9 +6,9 @@ Reviewed 2026-10-08; target season 2026.
 
 All 51 mapped Musigny parcels and 16 recorded holders reviewed through the shared holder table for Tier 2. Company relationships, historical filings, published named-area holdings and unresolved identities stay distinct. Tier 1 rights, geometry and history are retained. No current farmer is verified.
 
-Of 51 mapped parcels, 30 have recorded rights and 21 have no matched right holder. All 16 holder groups were triaged. 24 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 27 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 51 mapped parcels, 30 have recorded rights and 21 have no matched right holder. All 16 holder groups were triaged. 26 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 25 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-18 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+16 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 5 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
 
@@ -222,7 +222,7 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | LES AMOUREUSES (neighbouring lieu-dit; edge parcels) | 2 (0.01 ha) | 2 (0.01 ha) | 2 (0.01 ha) | 0.00 ha |
 | LES ARGILLERES (neighbouring lieu-dit; edge parcels) | 6 (0.02 ha) | 3 (0.02 ha) | 3 (0.02 ha) | 0.00 ha |
 | LES BORNIQUES (neighbouring lieu-dit; edge parcels) | 2 (0.01 ha) | 1 (0.00 ha) | 1 (0.00 ha) | 0.00 ha |
-| Les Musigny | 32 (5.89 ha) | 12 (3.31 ha) | 9 (3.03 ha) | 2.80 ha |
+| Les Musigny | 32 (5.89 ha) | 12 (3.31 ha) | 7 (2.93 ha) | 2.80 ha |
 | Les Petits Musigny | 1 (4.15 ha) | 1 (4.15 ha) | 1 (4.15 ha) | 0.00 ha |
 | No cadastral lieu-dit | 7 (0.75 ha) | 2 (0.00 ha) | 2 (0.00 ha) | 0.00 ha |
 
@@ -257,8 +257,8 @@ All references are in commune 21133 (Chambolle-Musigny). Full IDs and evidence l
 | AN 0018 | Les Musigny | 200.48 | None | Unresolved | Unconfirmed |
 | AN 0019 | Les Musigny | 749.64 | [U18181478](#holder-u18181478) | Domaine Tawse (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0020 | Les Musigny | 140.77 | [381505338](#holder-381505338), [U23906784](#holder-u23906784) | Domaine Tawse (group-company-record); Domaine Tawse (critic-named-cadastral-reference) | Unconfirmed |
-| AN 0022 | Les Musigny | 772.47 | None | Unresolved | Unconfirmed |
-| AN 0023 | Les Musigny | 193.44 | None | Unresolved | Unconfirmed |
+| AN 0022 | Les Musigny | 772.47 | None | Domaine de la Vougeraie (critic-named-cadastral-reference) | Unconfirmed |
+| AN 0023 | Les Musigny | 193.44 | None | Domaine de la Vougeraie (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0024 | Les Musigny | 6823.92 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AN 0025 | Les Musigny | 9936.07 | None | Unresolved | Unconfirmed |
 | AN 0026 | Les Musigny | 192.96 | [037180015](#holder-037180015) | Domaine Bertagna (company-identity) | Unconfirmed |
@@ -273,7 +273,7 @@ All references are in commune 21133 (Chambolle-Musigny). Full IDs and evidence l
 | AN 0035 | Les Musigny | 3488.53 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AN 0037 | Les Musigny | 247.44 | [212101331](#holder-212101331) | Unresolved | Unconfirmed |
 | AN 0039 | Les Musigny | 355.03 | [775567928](#holder-775567928) | Domaine Faiveley (company-identity); Domaine Faiveley (critic-named-cadastral-reference) | Unconfirmed |
-| AN 0040 | Les Musigny | 185.85 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
+| AN 0040 | Les Musigny | 185.85 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record); Maison Joseph Drouhin (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0041 | Les Musigny | 468.11 | None | Domaine de la Vougeraie (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0042 | Les Musigny | 443.89 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AN 0043 | Les Musigny | 1670.06 | None | Maison Louis Jadot (critic-named-cadastral-reference) | Unconfirmed |
@@ -286,11 +286,11 @@ All references are in commune 21133 (Chambolle-Musigny). Full IDs and evidence l
 | AN 0053 | LES ARGILLERES (neighbouring lieu-dit; edge parcels) | 47.33 | None | Unresolved | Unconfirmed |
 | AN 0055 | Les Musigny | 649.26 | [794244434](#holder-794244434) | Unresolved | Unconfirmed |
 | AN 0056 | Les Musigny | 4342.56 | None | Unresolved | Unconfirmed |
-| AN 0057 | Les Musigny | 228.18 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
+| AN 0057 | Les Musigny | 228.18 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record); Maison Joseph Drouhin (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0058 | Les Musigny | 403.10 | [U21200736](#holder-u21200736) | Domaine Leroy (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0059 | Les Musigny | 391.89 | [U21200736](#holder-u21200736) | Domaine Leroy (critic-named-cadastral-reference) | Unconfirmed |
-| AN 0060 | Les Musigny | 825.96 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
-| AN 0061 | Les Musigny | 5509.01 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record) | Unconfirmed |
+| AN 0060 | Les Musigny | 825.96 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record); Maison Joseph Drouhin (critic-named-cadastral-reference) | Unconfirmed |
+| AN 0061 | Les Musigny | 5509.01 | [U21401984](#holder-u21401984) | Maison Joseph Drouhin (group-company-record); Maison Joseph Drouhin (critic-named-cadastral-reference) | Unconfirmed |
 | AN 0064 | No cadastral lieu-dit | 6.52 | [U21388794](#holder-u21388794) | Unresolved | Unconfirmed |
 | AN 0065 | No cadastral lieu-dit | 10.73 | None | Unresolved | Unconfirmed |
 | AN 0070 | No cadastral lieu-dit | 10.70 | None | Unresolved | Unconfirmed |
@@ -323,6 +323,9 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Winehog: Domaine Leroy Musigny references** (AN 0029, AN 0030, AN 0058, AN 0059; critic-named-cadastral-reference). Winehog (2016) prints cadastre 29 (495 m²), 30 (1,405 m²), 58 (390 m²) and 59 (410 m²). Nouvelle Elvina remains unresolved; this critic evidence does not replace the separate Maison Leroy company link or verify present farming. Sources: [Winehog: Terroir Insight: Domaine Leroy Musigny](https://winehog.org/terroir-insight-domaine-leroy-musigny-26286/).
 - **Winehog: Domaine Faiveley Musigny references** (AN 0039, AN 0045; critic-named-cadastral-reference). Winehog (2016), now reviewed in the supplied full archive, names AN39 (338 m2) and AN45 (980 m2). The earlier acquisition chain remains conjectural. Separate corporate mandates omit parcel numbers and do not establish an executed lease or present farming. Sources: [Winehog: Domaine Faiveley acquire more Les Musigny](https://winehog.org/domaine-faiveley-acquire-more-musigny-25554/), [Winehog: Domaine Faiveley acquire more Les Musigny](https://winehog.org/domaine-faiveley-acquire-more-musigny-25554/).
 - **Winehog: Prieur on former AN15** (via lineage: AN 0015 (retired) → AN 0077, AN 0078; critic-named-cadastral-reference). Winehog (2014) names AN15 (7,660 m²), matching the pinned July 2019 cadastral contenance. The 22 July 2019 DFI split reaches AN77/78 as historical context only, without transferring ownership or farming. Sources: [Winehog: Terroir Insight: Domaine Jacques Prieur Musigny](https://winehog.org/terroir-insight-domaine-jacques-prieur-musigny-21216/).
+- **Winehog: Vougeraie’s AN22 and AN23 in Musigny** (AN 0022, AN 0023; critic-named-cadastral-reference). Winehog (2018) gives Vougeraie’s AN22 and AN23 as 0.0970 ha combined, without individual areas. Today’s cadastral areas, 778 and 192 m², add up exactly to 970 m², so both are named under the printed-group-total rule. The article’s account of the southern cultivation arrangement is not a cadastral claim. Secondary attribution only; current farming remains unverified. Sources: [Winehog: Terroir Insight: Domaine de la Vougeraie, Musigny](https://winehog.org/terroir-insight-domaine-de-la-vougeraie-musigny-36986/).
+- **Winehog: Drouhin’s AN61 and AN40 in Musigny** (AN 0061, AN 0040; critic-named-cadastral-reference). Winehog (2018) gives Drouhin’s plots 61 and 40 as 0.5660 ha combined. Today’s cadastral areas, 5,480 and 180 m², add up exactly to 5,660 m². This critic reading agrees with the separate SEPV filing, which already prints both individual areas. Secondary attribution only; current farming remains unverified. Sources: [Winehog: Terroir Insight: Joseph Drouhin Musigny](https://winehog.org/terroir-insight-joseph-drouhin-musigny-35121/).
+- **Winehog: Drouhin’s AN60 and AN57 in Musigny** (AN 0060, AN 0057; critic-named-cadastral-reference). Winehog (2018) gives Drouhin’s plots 60 and 57 as 0.1060 ha combined. Today’s cadastral areas, 850 and 210 m², add up exactly to 1,060 m². This critic reading agrees with the separate SEPV filing, which already prints both individual areas. Secondary attribution only; current farming remains unverified. Sources: [Winehog: Terroir Insight: Joseph Drouhin Musigny](https://winehog.org/terroir-insight-joseph-drouhin-musigny-35121/).
 
 ## Rights history and parcel lineage
 
@@ -494,9 +497,9 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **mus-roumier-sheet** — [Domaine Georges Roumier: Musigny sheet](https://www.roumier.com/fr_FR/winepdf/musigny). estate; read; document date not established. The estate reports 0.0996 ha at the northern end of Musigny. It supplies no cadastral number or company-rights crosswalk.
 - **mus-drouhin-laroze-sheet** — [Drouhin-Laroze: Musigny sheet](https://m.drouhin-laroze.com/pdf/en/musigny-21.pdf). estate; read; document date not established. The estate reports 0.12 ha of Musigny. It supplies no cadastral number and does not establish a present farmer.
 - **cm-winehog-vogue-history** — [Winehog: Domaine Comte Georges de Vogüé – History and Vineyards](https://winehog.org/domaine-comte-georges-de-vogue-history-vineyards-2-19521/). critic-research; read; document date 2014-04-05. Historical estate overview and named-area totals; no individual Musigny reference-and-area pairs. Bonnes-Mares cadastre 98 is reserved for that cru review.
-- **mus-winehog-vougeraie** — [Winehog: Terroir Insight: Domaine de la Vougeraie, Musigny](https://winehog.org/terroir-insight-domaine-de-la-vougeraie-musigny-36986/). critic-research; read; document date 2018-11-13. Names AN34 (682 m²) and AN41 (452 m²). AN22/23 share a 970 m² total without individual printed areas; the southern cultivation arrangement differs from cadastral outlines.
+- **mus-winehog-vougeraie** — [Winehog: Terroir Insight: Domaine de la Vougeraie, Musigny](https://winehog.org/terroir-insight-domaine-de-la-vougeraie-musigny-36986/). critic-research; read; document date 2018-11-13. Names AN34 (682 m²) and AN41 (452 m²). AN22/23 share a 970 m² total without individual printed areas; today’s two cadastral areas add up exactly, so both are named under the printed-group-total rule. The southern cultivation arrangement differs from cadastral outlines.
 - **mus-winehog-mugnier** — [Winehog: Terroir Insight: Domaine J.-F. Mugnier Musigny (update)](https://winehog.org/terroir-insight-domaine-j-f-mugnier-musigny-21095/). critic-research; read; document date 2018-04-06. Four plots total 1.1358 ha, split into two combined blocks; no individual reference-and-area pairs. The southern block follows an informal cultivation arrangement rather than cadastral boundaries.
-- **mus-winehog-drouhin** — [Winehog: Terroir Insight: Joseph Drouhin Musigny](https://winehog.org/terroir-insight-joseph-drouhin-musigny-35121/). critic-research; read; document date 2018-04-03. Names AN61/40 with a combined 5,660 m² and AN60/57 with 1,060 m². No individual areas are printed; the separate SEPV filing supplies the exact individual matches.
+- **mus-winehog-drouhin** — [Winehog: Terroir Insight: Joseph Drouhin Musigny](https://winehog.org/terroir-insight-joseph-drouhin-musigny-35121/). critic-research; read; document date 2018-04-03. Names AN61/40 with a combined 5,660 m² and AN60/57 with 1,060 m². No individual areas are printed; today’s cadastral areas add up exactly to each total (printed-group-total rule), agreeing with the separate SEPV filing’s exact individual matches.
 - **mus-winehog-jadot** — [Winehog: Terroir Insight: Maison Louis Jadot, Musigny](https://winehog.org/terroir-insight-louis-jadot-musigny-29069/). critic-research; read; document date 2016-08-08. Names cadastre 43, 1,665 m². Reports a presumed Trinquier lease from 1985 to 2035, not an executed lease instrument or verified present operator.
 - **mus-winehog-tawse** — [Winehog: Terroir Insight: Domaine Tawse Musigny](https://winehog.org/terroir-insight-domaine-tawse-musigny-28140/). critic-research; read; document date 2016-05-24. Names cadastre 19 (760 m²) and 20 (156 m²), with historical acquisition accounts. Individual investors do not identify the recorded U-id companies. Its incidental Roumier total differs from Roumier’s own sheet.
 - **mus-winehog-leroy** — [Winehog: Terroir Insight: Domaine Leroy Musigny](https://winehog.org/terroir-insight-domaine-leroy-musigny-26286/). critic-research; read; document date 2016-02-09. Names cadastre 29 (495 m²), 30 (1,405 m²), 58 (390 m²) and 59 (410 m²). Cadastre 27 is mentioned without an area. This critic account cannot resolve Nouvelle Elvina’s legal identity.
