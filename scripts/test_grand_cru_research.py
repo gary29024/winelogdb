@@ -195,13 +195,14 @@ class FarmingResearchTests(unittest.TestCase):
         first = rows[0]['parcelId']
         source = self.curation['sources'][0]['id']
 
-        def research(total, parcel_ids=(first,), group_areas=None):
+        def research(total, parcel_ids=(first,), group_areas=None, printed=None):
             curation = copy.deepcopy(self.curation)
             areas_used = group_areas or group
             curation['externalResearch'].append({
                 'id': 'test-group', 'title': 'Printed group', 'parcelIds': list(parcel_ids),
                 'parcelAreasM2': {pid: areas_used.get(pid, 0) for pid in parcel_ids},
-                'areaEvidence': {'kind': 'printed-group-total', 'printedTotalM2': total,
+                'areaEvidence': {'kind': 'printed-group-total', 'printedTotal': printed or f'{total:,} m²',
+                                 'printedTotalM2': total,
                                  'groupParcelAreasM2': areas_used, 'individualAreasSource': 'pinned-cadastral-snapshot'},
                 'basis': 'critic-named-cadastral-reference', 'finding': 'Test.', 'appNote': 'Test.',
                 'sourceIds': [source], 'dateSourceId': source, 'producer': 'Test Producer', 'currentFarmer': None})
@@ -223,12 +224,22 @@ class FarmingResearchTests(unittest.TestCase):
             self.build(research(exact, parcel_ids=(first, outside)))
         with self.assertRaisesRegex(ValueError, 'two or more parcels'):
             self.build(research(group[first], group_areas={first: group[first]}))
+        # A total printed to 10 m² (like '1.158 ha') does not state square metres, even when the digits agree.
+        self.assertEqual(self.build(research(exact, printed=f'{exact // 10000}.{exact % 10000:04d} ha'))['counts'],
+                         self.build(research(exact))['counts'])
+        with self.assertRaisesRegex(ValueError, 'stated to the square metre'):
+            self.build(research(exact, printed=f'{exact / 10000:.3f} ha'))
         # One source can print the numbers and another, about the same holding, the total; both must be cited.
         split = research(exact)
         split['externalResearch'][-1]['areaEvidence'].update(referencesSourceId=source, totalSourceId='uncited-total')
         with self.assertRaisesRegex(ValueError, 'names both the reference and the total source'):
             self.build(split)
         split['externalResearch'][-1]['areaEvidence']['totalSourceId'] = source
+        with self.assertRaisesRegex(ValueError, 'names both the reference and the total source'):
+            self.build(split)  # the same source cannot be both
+        total_source = self.curation['sources'][1]['id']
+        split['externalResearch'][-1]['areaEvidence']['totalSourceId'] = total_source
+        split['externalResearch'][-1]['sourceIds'].append(total_source)
         self.assertIn('test-group', next(p for p in self.build(split)['parcels'] if p['parcelId'] == first)['externalResearchIds'])
 
     def test_printed_references_reach_parcels_through_documented_dfi_lineage(self):

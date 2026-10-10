@@ -1382,7 +1382,7 @@ class MontrachetTierTwoTests(unittest.TestCase):
 
     def test_individual_and_company_tenants_remain_distinct(self):
         fs = {f['id']: f for f in self.curation['parcelFilings']}
-        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['Jean de Laguiche (individual)'])
+        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['An individual (Laguiche family)'])
         lease = fs['mt-leflaive-gfa-2009']['leaseEvidence'][0]
         self.assertEqual((lease['tenants'], lease['effectiveFrom'], lease['effectiveTo']),
                          (['Domaine Leflaive (778245316)'], '2009-07-04', '2033-11-11'))
