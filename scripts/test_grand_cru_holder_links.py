@@ -1692,15 +1692,24 @@ class BienvenuesTierTwoTests(unittest.TestCase):
         self.assertEqual(self.table['holders']['U29945686']['identity']['companySiren'], '382485027')
         self.assertTrue(all(p['currentFarmer'] is None for p in rows.values()))
 
-    def test_aggregate_winehog_holdings_and_old_numbering_remain_unmatched(self):
+    def test_group_totals_name_parcels_only_when_exact_and_old_numbering_stays_unmatched(self):
         current = [x for x in self.curation['externalResearch'] if x['id'].startswith('bien-winehog-')]
         self.assertEqual({p: a for x in current for p, a in x['parcelAreasM2'].items()}, {'21512000AI0019': 5057})
+        groups = {x['id']: x for x in self.curation['externalResearch']
+                  if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
+        self.assertEqual({k: sorted(v['parcelIds']) for k, v in groups.items()}, {
+            'bien-group-ramonet-bienvenues': ['21512000AI0017', '21512000AI0123'],
+            'bien-group-leflaive-bienvenues': [f'21512000AI{n:04}' for n in (108, 110, 111, 139, 140, 141)]})
+        for item in groups.values():
+            self.assertEqual(sum(item['areaEvidence']['groupParcelAreasM2'].values()), item['areaEvidence']['printedTotalM2'])
+            self.assertIsNone(item['currentFarmer'])
         unmatched = self.curation['unmatchedPrintedReferences']
-        self.assertEqual(len(unmatched), 3)
+        self.assertEqual(len(unmatched), 1)
         self.assertTrue(all(not x['parcelIds'] for x in unmatched))
-        self.assertTrue(any('0.4508' in x['printedReference'] for x in unmatched))
-        self.assertTrue(any('1.158' in x['printedReference'] for x in unmatched))
-        self.assertEqual(len(self.curation['producerHoldings']), 5)
+        self.assertIn('1839/1861', unmatched[0]['printedReference'])
+        self.assertEqual(len(self.curation['producerHoldings']), 8)
+        self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
+                          self.register['counts']['unresolved']), (19, 19))
         self.assertTrue(all('parcelIds' not in x for x in self.curation['producerHoldings']))
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 

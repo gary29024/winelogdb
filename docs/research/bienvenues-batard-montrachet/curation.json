@@ -66,11 +66,25 @@
       "bytes": 2561096,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:22 +0000",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
-        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png"
-      ],
-      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated."
+      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "file": "E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "sha256": "96e1e9e2b69c33bf04f0e1ac9df59a6f6f1e3b8cdf5326cc6ac0beffec350aab",
+          "bytes": 426222,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "file": "D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "sha256": "e3c01e2df913da25d7135662406dbfce2cedb5fc62da3f5a024fb8eb78cf095a",
+          "bytes": 440415,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
+      ]
     },
     {
       "id": "bien-winehog-40782",
@@ -88,7 +102,7 @@
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:29 +0000",
       "missingEmbeddedImages": [],
-      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated."
+      "finding": "Dated secondary research. Ramonet’s AI17 and AI123 are printed with 0.4508 ha combined; today’s cadastral areas add up exactly to 4,508 m² (printed-group-total rule). Historical classifications remain unallocated."
     },
     {
       "id": "bien-winehog-40775",
@@ -106,7 +120,7 @@
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:36 +0000",
       "missingEmbeddedImages": [],
-      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated."
+      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule). Historical classifications remain unallocated."
     },
     {
       "id": "bien-winehog-40828",
@@ -123,13 +137,41 @@
       "bytes": 4179896,
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:43 +0000",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/05/DB631096-C8A0-43F3-BA9A-54FE157B55E4-1024x690.png",
-        "https://winehog.org/wp-content/uploads/2020/05/91987F0A-50ED-4917-90F2-153C2E0C215A-1024x796.jpeg",
-        "https://winehog.org/wp-content/uploads/2020/05/9E523238-4A9F-47B9-BCB9-315350C065B6-1015x1024.png",
-        "https://winehog.org/wp-content/uploads/2020/05/batardbienvenue-1024x732.jpg"
-      ],
-      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated."
+      "finding": "Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated.",
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/DB631096-C8A0-43F3-BA9A-54FE157B55E4-1024x690.png",
+          "file": "DB631096-C8A0-43F3-BA9A-54FE157B55E4-1024x690.png",
+          "sha256": "790fedf8571b4d5cc46e65485f63e31619200a89f75feddc4c38904467ab0872",
+          "bytes": 833441,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/91987F0A-50ED-4917-90F2-153C2E0C215A-1024x796.jpeg",
+          "file": "91987F0A-50ED-4917-90F2-153C2E0C215A-1024x796.jpeg",
+          "sha256": "708640785d06ff8c2e94b2ed0357ac1ea339eb9e77be0578c9b54e5578e59a30",
+          "bytes": 160816,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/9E523238-4A9F-47B9-BCB9-315350C065B6-1015x1024.png",
+          "file": "9E523238-4A9F-47B9-BCB9-315350C065B6-1015x1024.png",
+          "sha256": "99b33341d7d303f378576302cbd17821b0f2f795255365d8fb4971f1f3df4a66",
+          "bytes": 1353305,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/batardbienvenue-1024x732.jpg",
+          "file": "batardbienvenue-1024x732.jpg",
+          "sha256": "25bde5d0dc1e85066dd5bd01ccbfc994124d4f8d2e0ea5742d673b782b802f91",
+          "bytes": 94234,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
+      ]
     },
     {
       "id": "bat-winehog-41215",
@@ -147,12 +189,47 @@
       "finding": "Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:15 +0000",
-      "missingEmbeddedImages": [
-        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatard-copy-1-919x1024.jpg",
-        "https://winehog.org/wp-content/uploads/2020/06/faiveleybatardbienvenue-copy-1-919x1024.jpg",
-        "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
-        "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
-        "https://winehog.org/wp-content/uploads/2020/06/Batard-Montrachet-450x1024.jpg"
+      "suppliedImages": [
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/faiveleybatard-copy-1-919x1024.jpg",
+          "file": "faiveleybatard-copy-1-919x1024.jpg",
+          "sha256": "0985427a7300b01ddd76da0510aacadea2c3de6b124d66b64ddc1a561966de74",
+          "bytes": 277632,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/faiveleybatardbienvenue-copy-1-919x1024.jpg",
+          "file": "faiveleybatardbienvenue-copy-1-919x1024.jpg",
+          "sha256": "6848bc2ee7a065c030dae65e5eb7cc0fd897c6f9ae89a79e7a01408418ac417d",
+          "bytes": 276423,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "file": "E533C31B-4377-44BB-87A6-171F222516F1-1024x548.png",
+          "sha256": "96e1e9e2b69c33bf04f0e1ac9df59a6f6f1e3b8cdf5326cc6ac0beffec350aab",
+          "bytes": 426222,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/05/D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "file": "D7A60BAF-4BE3-45E4-A52E-5299695AE761-1024x582.png",
+          "sha256": "e3c01e2df913da25d7135662406dbfce2cedb5fc62da3f5a024fb8eb78cf095a",
+          "bytes": 440415,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        },
+        {
+          "url": "https://winehog.org/wp-content/uploads/2020/06/Batard-Montrachet-450x1024.jpg",
+          "file": "Batard-Montrachet-450x1024.jpg",
+          "sha256": "751a310509dcc552bb4d1dc3135c2127f9ec4b29be20347ce27f91af5a0e5b11",
+          "bytes": 48861,
+          "suppliedAt": "2026-10-10",
+          "suppliedIn": "photos.zip (SHA-256 22460fc6050781c096030a727240850c1939c7015756be125558dea632e619cd)"
+        }
       ]
     },
     {
@@ -182,6 +259,113 @@
       "reviewedAt": "2026-10-10",
       "access": "read",
       "finding": "Official estate page states 1.16 ha; named-area census without individual parcel allocation."
+    },
+    {
+      "id": "census-pernot-dandm",
+      "title": "D&M Wines: Paul Pernot Puligny-Montrachet 2024 (producer notes)",
+      "url": "https://dandm.com/products/paul-pernot-puligny-montrachet-2024",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:08:11+00:00",
+      "retrievedFrom": "https://dandm.com/products/paul-pernot-puligny-montrachet-2024",
+      "sha256": "4d6b4ab26536fc665f164a24cf5262fc0cdb295a66484b96765915c95c31d4f4",
+      "bytes": 169383,
+      "finding": "A merchant page gives Domaine Paul Pernot et ses Fils 0.37 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bien-pernot-farr",
+      "title": "Farr Vintners: Bienvenue Bâtard Montrachet, Domaine Paul Pernot 2018",
+      "url": "https://www.farrvintners.com/wine.php?wine=86793",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:08:12+00:00",
+      "retrievedFrom": "https://www.farrvintners.com/wine.php?wine=86793",
+      "sha256": "c376350b9e687da9033f6df0cd93d93eac5f38be777668814b18cb104c567625",
+      "bytes": 39310,
+      "finding": "A merchant page gives Domaine Paul Pernot et ses Fils 0.37 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bien-vougeraie-estate",
+      "title": "Domaine de la Vougeraie: Bienvenues-Bâtard-Montrachet Grand Cru (estate wine page)",
+      "url": "https://www.domainedelavougeraie.com/en/our-wines.r-693/grands-crus.r-703/bienvenues-batard-montrachet-grand-cru.v-18033.html?id_millesime=57",
+      "type": "estate",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:18:08+00:00",
+      "retrievedFrom": "https://www.domainedelavougeraie.com/en/our-wines.r-693/grands-crus.r-703/bienvenues-batard-montrachet-grand-cru.v-18033.html?id_millesime=57",
+      "sha256": "b158e6d5cc48bc42a1f258c5c7fb928809dadad50eed3f1113ce8e1cd4404e98",
+      "bytes": 23207,
+      "finding": "The estate’s own page gives Domaine de la Vougeraie 0.4602 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "census-bien-jcarillon-flatiron",
+      "title": "Flatiron Wines (SF): Domaine Jacques Carillon Bienvenues-Bâtard-Montrachet 2024",
+      "url": "https://sf.flatiron-wines.com/products/domaine-jacques-carillon-bienvenues-batard-montrachet-2024-750ml",
+      "type": "merchant",
+      "documentDate": null,
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "retrievedAt": "2026-10-10T05:17:48+00:00",
+      "retrievedFrom": "https://sf.flatiron-wines.com/products/domaine-jacques-carillon-bienvenues-batard-montrachet-2024-750ml",
+      "sha256": "2341bddcef9f1a65a5ddfb5f243061216cf5a9ad490f7bde397af09be4856094",
+      "bytes": 808959,
+      "finding": "A merchant page gives Domaine Jacques Carillon 0.12 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "bien-winehog-37857",
+      "title": "Puligny Les Enseignères: Just below the grands crus",
+      "url": "https://winehog.org/puligny-les-enseigneres-just-below-the-grands-crus-37857/",
+      "type": "critic",
+      "documentDate": "2019-08-21",
+      "modifiedAt": "2021-05-31T06:47:49+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "f592c5d7f27690b9ce11774bb03c8cbfe660410818cc84f868bfbf8133bf259c",
+      "bytes": 3619347,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:17 +0000",
+      "finding": "A village Les Enseignères article. It describes the lieu-dit directly below Bienvenues and lists its owners, but prints no Bienvenues number or area. Reviewed; no reference in this cru."
+    },
+    {
+      "id": "bien-winehog-47634",
+      "title": "Terroir Insight: Domaine d’Auvenay Puligny-Montrachet Les Enseignères",
+      "url": "https://winehog.org/terroir-insight-domaine-dauvenay-puligny-montrachet-ensignieres-2-47634/",
+      "type": "critic",
+      "documentDate": "2021-09-07",
+      "modifiedAt": "2021-09-14T08:03:36+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "7a827231b47d228b17bad5734d43ac3e60cd1be0941e457027b93529cdf4e35b",
+      "bytes": 2250862,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:22 +0000",
+      "finding": "A village Les Enseignères article about d’Auvenay’s 0.6261 ha plot there, bought from Domaine Bavard in 2011–2012. It prints no Bienvenues number or area. Reviewed; no reference in this cru."
+    },
+    {
+      "id": "bien-winehog-49264",
+      "title": "Terroir Insight: Domaine Thomas-Collardot Puligny-Montrachet Les Enseignères",
+      "url": "https://winehog.org/terroir-insight-domaine-thomas-collardot-puligny-montrachet-ensignieres-49264/",
+      "type": "critic",
+      "documentDate": "2021-09-14",
+      "modifiedAt": "2021-09-14T08:11:17+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-10T07:30:00+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "29430d34f664db2d29064d64d3721dc268ca8c2db6d8d16620087b3184a2736c",
+      "bytes": 3583308,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Sat, 10 Oct 2026 07:23:26 +0000",
+      "finding": "A village Les Enseignères article about Thomas-Collardot’s plot there. It prints no Bienvenues number or area. Reviewed; no reference in this cru."
     }
   ],
   "holders": [
@@ -351,6 +535,94 @@
       ],
       "appNote": "The supplied Bâtard article (2020) names AI144 (3508 m²). The complete parcel touches the Bienvenues boundary; this is neighbouring historical context, not a holding-area allocation or current farming.",
       "dateSourceId": "bat-winehog-41215",
+      "currentFarmer": null
+    },
+    {
+      "id": "bien-group-ramonet-bienvenues",
+      "title": "Winehog: Ramonet’s two-parcel Bienvenues-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21512000AI0017",
+        "21512000AI0123"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0017": 3188,
+        "21512000AI0123": 1320
+      },
+      "printedReferences": [
+        "AI17",
+        "AI123"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "0.4508 ha",
+        "printedTotalM2": 4508,
+        "groupParcelAreasM2": {
+          "21512000AI0017": 3188,
+          "21512000AI0123": 1320
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Ramonet’s Bienvenues-Bâtard-Montrachet as AI17 and AI123, 0.4508 ha combined, without individual areas. Today’s cadastral areas add up exactly to 4,508 m², so both are named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40782"
+      ],
+      "producer": "Domaine Ramonet",
+      "appNote": "Winehog prints AI17, AI123 with 0.4508 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40782",
+      "currentFarmer": null
+    },
+    {
+      "id": "bien-group-leflaive-bienvenues",
+      "title": "Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21512000AI0111",
+        "21512000AI0110",
+        "21512000AI0141",
+        "21512000AI0140",
+        "21512000AI0139",
+        "21512000AI0108"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0111": 2572,
+        "21512000AI0110": 2583,
+        "21512000AI0141": 1095,
+        "21512000AI0140": 1023,
+        "21512000AI0139": 1090,
+        "21512000AI0108": 3217
+      },
+      "printedReferences": [
+        "AI111",
+        "AI110",
+        "AI141",
+        "AI140",
+        "AI139",
+        "AI108"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.158 ha",
+        "printedTotalM2": 11580,
+        "groupParcelAreasM2": {
+          "21512000AI0111": 2572,
+          "21512000AI0110": 2583,
+          "21512000AI0141": 1095,
+          "21512000AI0140": 1023,
+          "21512000AI0139": 1090,
+          "21512000AI0108": 3217
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10"
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40775"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AI111, AI110, AI141, AI140, AI139, AI108 with 1.158 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40775",
       "currentFarmer": null
     }
   ],
@@ -603,6 +875,69 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "bien-census-domaine-paul-pernot-et-ses-fils",
+      "producer": "Domaine Paul Pernot et ses Fils",
+      "namedAreas": [
+        "BIENVENUES BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.37,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-pernot-dandm"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 0.37,
+          "precision": "hundredth-hectare",
+          "sourceId": "census-bien-pernot-farr",
+          "context": "Second published figure for the same holding."
+        }
+      ]
+    },
+    {
+      "id": "bien-census-domaine-de-la-vougeraie",
+      "producer": "Domaine de la Vougeraie",
+      "namedAreas": [
+        "BIENVENUES BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.4602,
+      "precision": "square-metre",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bien-vougeraie-estate"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [
+        "330713074"
+      ],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
+    },
+    {
+      "id": "bien-census-domaine-jacques-carillon",
+      "producer": "Domaine Jacques Carillon",
+      "namedAreas": [
+        "BIENVENUES BATARD-MONTRACHET"
+      ],
+      "publishedAreaHa": 0.12,
+      "precision": "hundredth-hectare",
+      "relation": "unstated",
+      "sourceIds": [
+        "census-bien-jcarillon-flatiron"
+      ],
+      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": []
     }
   ],
   "historicalOwnerLists": [],
@@ -616,24 +951,11 @@
     "Eight current parcels have exact full-reference, whole-area and recorded-holder company evidence. Several parcels only contact this cru at the boundary: full cadastral areas are not assigned as Bienvenues holding areas. Fractional bare interest, bare-soil contributions and original historical terms remain qualified.",
     "All four requested Bienvenues Winehog articles were supplied and hashed; six referenced image occurrences were not embedded. Only AI19 has both individual number and area. Ramonet/Leflaive aggregates and historical classification numbers remain unmatched. The Bâtard AI144 article is reused for neighbouring boundary context only.",
     "Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified.",
-    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link."
+    "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link.",
+    "Supplied by the owner on 10 October 2026 and reviewed: three Winehog articles on the neighbouring village lieu-dit Les Enseignères (37857, 47634, 49264). They describe land below Bienvenues and print no Bienvenues number or area. The owner also supplied the missing images for the Faiveley and Bienvenues history articles; their hashes are recorded on each source. Images and archives stay outside the repository."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
-    {
-      "sourceId": "bien-winehog-40782",
-      "printedReference": "AI17 + AI123; 0.4508 ha combined",
-      "parcelIds": [],
-      "limitation": "The individual areas are not printed; no split from the cadastral dataset is imposed on this aggregate source.",
-      "currentFarmer": null
-    },
-    {
-      "sourceId": "bien-winehog-40775",
-      "printedReference": "AI111, AI110, AI141, AI140, AI139 and AI108; 1.158 ha combined",
-      "parcelIds": [],
-      "limitation": "Six-parcel aggregate only. No individual parcel area is printed; no exact reference match is accepted.",
-      "currentFarmer": null
-    },
     {
       "sourceId": "bien-winehog-40828",
       "printedReference": "Historical 1839/1861 numbered areas 2–7, 10, 11, 16, 17 and 18",
