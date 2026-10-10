@@ -30,7 +30,7 @@ procedures remain distinct evidence; none establishes current farming.
 | Parcels with no lead | 10; includes AH118–121, whose printed 0.8 ha total is 2 m² above today’s 7,998 m² sum |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 215,487 / 19,805 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 216,782 / 20,095 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -49,7 +49,7 @@ Parcel rights is enabled. The production payload report checks compiled JS.
 | Parcels with exact company filings | 0 | 6 |
 | Verified farming links | 0 | 0 |
 
-The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened.
+The [filing review](filings.md) records 50 distinct filings and 1,360 pages screened. Two 10 October supplements bring this to 55 distinct filings / 1,481 pages.
 Every holder has a dated search record in the [shared table](../holders/holder-links.json).
 The Bouchard, Pousse d’Or and DRC links retain their earlier definitions and effort;
 this pass only adds source and search evidence. Shared holders will reuse this work
@@ -222,6 +222,12 @@ they add five parcels with leads (32 to 37). Current farming stays unverified ev
   recorded as `critic-attribution-area-reconstructed`, labelled “Matched by area only”.
 - **Lafon.** Lafon’s printed 0.3182 ha equals AE37 (3,182 m²), whose recorded holder is
   already the Lafon GFA. No new lead results, so the source stays unmatched.
+- **Producer-filing search.** Four more GFA Lafon filings (66 pages) were screened. Share
+  donations of 2022 and 2025 recite the GFA’s long-term lease to SARL Domaine des Comtes
+  Lafon (393418744) and state that all its parcels are covered. AE37 is its only parcel
+  in the five crus. The Lafon holder now has a reviewed `lessor-per-filing` link (lease
+  recited), scoped to Montrachet. No schedule prints AE37, so it is not an exact filing.
+  Where two links reach the same domaine in one cru, the builder now shows one candidate.
 
 Images and archives are hashed in the curation and stay outside the repository. The
 full raw-source history audit was not rerun in this cloud session; only its
