@@ -64,6 +64,6 @@ export function AchievementsPage(){
     <section className="collection-library-section"><div className="collection-library-heading"><div><p className="achievements-eyebrow">YOUR CHECKLISTS</p><h2>My collections</h2></div><span>{mine.length}</span></div>
       {mine.length?<CollectionCards items={mine}/>:<Link className="collection-empty-builder" to="/achievements/new"><span className="collection-empty-icon">＋</span><div><strong>Create a catalogue-driven collection</strong><small>Track every wine from a producer, every producer in an appellation or region, or build a fixed checklist from canonical WineLog identities.</small></div><b>›</b></Link>}
     </section>
-    <section className="collection-library-section"><div className="collection-library-heading"><div><p className="achievements-eyebrow">WINELOG EDITIONS</p><h2>Curated collections</h2></div><span>{curated.length}</span></div><CollectionCards items={curated}/></section>
+    <section className="collection-library-section" data-tour="collections"><div className="collection-library-heading"><div><p className="achievements-eyebrow">WINELOG EDITIONS</p><h2>Curated collections</h2></div><span>{curated.length}</span></div><CollectionCards items={curated}/></section>
   </section>;
 }

@@ -25,6 +25,18 @@ function profileName(value:unknown){
  return name;
 }
 /**
+ * The stored onboarding state, rebuilt from the request rather than trusted.
+ *
+ * This column is read straight back out as part of /api/me, so an unbounded
+ * body here would become part of every account payload for the life of the
+ * account. Only step ids the app could have issued survive, and the cap is well
+ * above the number of steps the tour defines.
+ */
+function tourState(data:Record<string,unknown>){
+ const ids=Array.isArray(data.completed)?data.completed.filter((id):id is string=>typeof id==='string'&&/^[a-z][a-z0-9-]{0,39}$/.test(id)):[];
+ return JSON.stringify({completed:[...new Set(ids)].slice(0,40),skipped:data.skipped===true});
+}
+/**
  * Whether this sign-in is the owner claiming their own account.
  *
  * OWNER_GOOGLE_SUB is exact and is honoured whenever it is set, but it asks the
@@ -134,6 +146,10 @@ export async function authRoute(request:Request,env:IdentityEnv):Promise<Respons
   try{await env.DB.prepare('UPDATE app_users SET display_name=?,handle=? WHERE id=?').bind(display_name,handle,member.id).run()}
   catch(error){if(/UNIQUE/i.test(String((error as Error).message)))throw new ApiError(409,'That user ID is taken');throw error}
   return json({user:{...member,display_name,handle}});
+ }
+ if(url.pathname==='/api/me/tour'&&request.method==='PATCH'){
+  verifyOrigin(request,env);const member=await authenticate(request,env),tour_state=tourState(await body(request));
+  await env.DB.prepare('UPDATE app_users SET tour_state=? WHERE id=?').bind(tour_state,member.id).run();return json({user:{...member,tour_state}});
  }
  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){verifyOrigin(request,env);const member=await authenticate(request,env);await body(request);await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id=?').bind(member.id).run();return json({ok:true},200,{'Set-Cookie':setCookie(SESSION,'',0)})}
  if(url.pathname.startsWith('/api/auth/'))return json({error:'Unknown authentication endpoint'},404);

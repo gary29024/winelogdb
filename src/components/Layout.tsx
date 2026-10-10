@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AppIcon } from './AppIcons';
 import { AccountChip } from './AccountChip';
 import { LiveTastingStrip } from '../features/tastings/LiveTastingStrip';
+import { TourOverlay } from '../features/onboarding/TourOverlay';
 import { StartTastingSheet } from '../features/tastings/StartTastingSheet';
 import { useActiveTasting } from '../features/tastings/useActiveTasting';
 import '../scanSheet.css';
@@ -104,17 +105,18 @@ export function Layout(){
         nobody visits daily in the middle of the ones they do. */}
     <header className="topbar">
       <NavLink className="brand" to="/">WineLog</NavLink>
-      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/vintages" onPointerEnter={preloadVintages} onFocus={preloadVintages}>Vintages</NavLink></nav>
-      <div className="topbar-end"><AccountChip/><button type="button" className="top-scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
+      <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end data-tour="nav-passport" onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" data-tour="nav-journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" data-tour="nav-tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" data-tour="nav-producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/vintages" onPointerEnter={preloadVintages} onFocus={preloadVintages}>Vintages</NavLink></nav>
+      {/* nav-account rides on the chip itself, which renders the link now. */}
+      <div className="topbar-end"><AccountChip/><button type="button" className="top-scan-trigger" data-tour="scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
-    <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/>
+    <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/><TourOverlay/>
     <footer>Your private tasting notebook</footer>
 
     <nav className="mobile-nav" aria-label="Mobile navigation">
-      <NavLink to="/" end onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon"><AppIcon kind="passport"/></span><span className="nav-label">Passport</span></NavLink>
-      <NavLink to="/journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon"><AppIcon kind="journal"/></span><span className="nav-label">Journal</span></NavLink>
-      <button ref={scanTrigger} type="button" className="scan-nav" onClick={openScanSheet} aria-haspopup="dialog" aria-expanded={scanSheetOpen}><span className="scan-plus"><AppIcon kind="scan"/></span><span className="nav-label">Scan Wine</span></button>
-      <NavLink to="/producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon"><AppIcon kind="producers"/></span><span className="nav-label">Producers</span></NavLink>
+      <NavLink to="/" end data-tour="nav-passport" onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon"><AppIcon kind="passport"/></span><span className="nav-label">Passport</span></NavLink>
+      <NavLink to="/journal" data-tour="nav-journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon"><AppIcon kind="journal"/></span><span className="nav-label">Journal</span></NavLink>
+      <button ref={scanTrigger} type="button" className="scan-nav" data-tour="scan-trigger" onClick={openScanSheet} aria-haspopup="dialog" aria-expanded={scanSheetOpen}><span className="scan-plus"><AppIcon kind="scan"/></span><span className="nav-label">Scan Wine</span></button>
+      <NavLink to="/producers" data-tour="nav-producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon"><AppIcon kind="producers"/></span><span className="nav-label">Producers</span></NavLink>
       <NavLink to="/vintages" onPointerDown={preloadVintages} onFocus={preloadVintages}><span className="nav-icon"><AppIcon kind="vintages"/></span><span className="nav-label">Vintages</span></NavLink>
     </nav>
 

@@ -34,7 +34,7 @@ export function JournalScopeTabs({scope}:{scope:JournalScope}){
   const tab=(value:JournalScope,label:string)=>
     <button type="button" role="tab" aria-selected={scope===value} className={scope===value?'active':''}
       onPointerDown={warm(value)} onFocus={warm(value)} onClick={()=>select(value)}>{label}</button>;
-  return <div className="journal-scope-tabs" role="tablist" aria-label="Journal scope">
+  return <div className="journal-scope-tabs" data-tour="journal-scopes" role="tablist" aria-label="Journal scope">
     {tab('tasted','Tasted')}{tab('cellar','In cellar')}{tab('favorites','\u2665 Favorites')}
   </div>;
 }

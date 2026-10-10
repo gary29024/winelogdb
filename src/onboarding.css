@@ -1,0 +1,68 @@
+/* The guided first-run tour.
+   Layered at 85/86: above the top bar (20) and the tab bar (40) so the dim
+   covers them, and below the scan sheet (90) so a sheet opened mid-tour still
+   comes out on top rather than under a dim layer.
+
+   No button here paints a surface of its own: the bubble uses the app's
+   existing base and .primary tiers, so the tour cannot drift away from how
+   every other pair of actions in the app looks. */
+
+/* A transparent window in a dimmed page. One box-shadow spread does the whole
+   dim, which keeps the undimmed hole exactly the element's own box - four
+   panels around it would need the same four numbers kept in sync. Pointer
+   events pass straight through: the tour explains, it does not trap. */
+.tour-spotlight{position:fixed;z-index:85;border-radius:var(--r-md);box-shadow:0 0 0 9999px #10182d70;pointer-events:none;transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease}
+
+.tour-scrim{position:fixed;inset:0;z-index:85;background:#10182d70;pointer-events:none}
+
+.tour-bubble{position:fixed;z-index:86;width:340px;max-width:calc(100vw - 32px);background:var(--paper);color:var(--ink);border-radius:var(--r-lg);padding:18px 20px 16px;box-shadow:0 18px 50px #10182d33;animation:tour-bubble-in .18s ease-out}
+/* Focused on open so the step is announced, but it is a tabindex=-1 container
+   rather than something you act on, so a ring around it says nothing - the same
+   reasoning as .scan-sheet. */
+.tour-bubble:focus,.tour-bubble:focus-visible{outline:none}
+.tour-bubble h2{font-size:1.3rem;margin:.1rem 0 .5rem}
+/* The closing card points at nothing, so it sits in the middle of the screen. */
+.tour-bubble-centred{top:50%;left:50%;transform:translate(-50%,-50%)}
+
+.tour-progress{margin:0;color:var(--muted);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tour-body{margin:0 0 16px;color:var(--ink-4);line-height:1.55;font-size:.95rem}
+.tour-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tour-actions-end{display:flex;align-items:center;gap:8px}
+
+@keyframes tour-bubble-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* The centred card is held in place by a transform, so it cannot borrow the
+   keyframes above - they would animate it back out of its own centring. */
+.tour-bubble-centred{animation-name:tour-bubble-fade}
+@keyframes tour-bubble-fade{from{opacity:0}to{opacity:1}}
+
+@media(prefers-reduced-motion:reduce){
+  .tour-spotlight{transition:none}
+  .tour-bubble{animation:none}
+}
+
+/* Only type and padding change on a phone. The horizontal placement is already
+   computed against the real viewport - the bubble's width is capped at the
+   screen less both gutters, and its left edge is clamped to keep them - so
+   pinning left and right here would fight numbers that are already correct. */
+@media(max-width:700px), (max-width:932px) and (orientation:landscape) and (pointer:coarse){
+  .tour-bubble{padding:16px 17px 14px}
+  .tour-bubble h2{font-size:1.18rem}
+  .tour-body{font-size:.9rem}
+}
+
+/* The chapter list on Account & friends. No rule here paints a button: the
+   app's own base tier already draws them, and repainting would have to restate
+   its border and text colour to stay readable. */
+.tour-chapters{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:8px;max-width:460px}
+/* Once anything is ticked the seen column is reserved on every row, so one
+   ticked chapter does not leave a short button among full-width ones. With
+   nothing ticked there is no column to reserve and the buttons fill the card. */
+.tour-chapters li{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;gap:10px}
+.tour-chapters.has-seen li{grid-template-columns:minmax(0,1fr) 42px}
+.tour-chapters button{text-align:left;display:grid;gap:2px;padding:12px 14px}
+.tour-chapters strong{font-size:.98rem}
+.tour-chapters small{color:var(--ink-5);font-weight:500;line-height:1.4}
+.tour-chapter-seen{text-align:right;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+
+/* The one-time credits explanation inside the confirmation dialog. */
+.credit-intro{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;color:var(--ink-4);font-size:.9rem;line-height:1.55}

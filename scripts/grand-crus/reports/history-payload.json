@@ -2,22 +2,22 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-D2_-izqp.js"
+    "dist/client/assets/index-DIdhBfZj.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DpfhrTEy.js",
-    "dist/client/assets/SectionLabel-D8amYTA1.js",
-    "dist/client/assets/SparklingDetailsCard-_fh4O9mo.js",
-    "dist/client/assets/VillageMap-D8Ai9JrZ.js",
-    "dist/client/assets/burgundyAtlas-j-t5BACG.js",
-    "dist/client/assets/index-D2_-izqp.js",
-    "dist/client/assets/index-ImwbRvnA.js",
+    "dist/client/assets/FriendTagDialog-DUPjX6LL.js",
+    "dist/client/assets/SectionLabel-BdGAjzg3.js",
+    "dist/client/assets/SparklingDetailsCard-DCyNQO0m.js",
+    "dist/client/assets/VillageMap-vljNkn1q.js",
+    "dist/client/assets/burgundyAtlas-BHZgCCD6.js",
+    "dist/client/assets/index-DIdhBfZj.js",
+    "dist/client/assets/index-QuTvBgVs.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-CpLCAZ4d.js",
-    "dist/client/assets/wineDetailCompact-DU49knEs.js"
+    "dist/client/assets/useModalFocus-a0d6McTK.js",
+    "dist/client/assets/wineDetailCompact-B4RhRf9A.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
