@@ -27,11 +27,11 @@ administrative procedures are distinct evidence, and none establishes farming.
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; commune observations 2014-03-31–2025-12-29. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; archive gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 6; 4 deeds on current references, none on historical references |
-| Parcels with holder or research leads | 24; a recorded legal holder alone is not a lead |
-| Parcels with no lead | 27 |
+| Parcels with holder or research leads | 26; a recorded legal holder alone is not a lead |
+| Parcels with no lead | 25 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: recursive DFI to 1994, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 107,503 / 14,109 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 346,184 / 54,353 bytes. Evidence: 109,790 / 14,315 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 378-parcel Chambolle-Morey bundle; the Musigny selection contains 51
@@ -237,6 +237,20 @@ Earlier shared-table effort is retained for Bertagna (5 filings / 72 pages),
 Drouhin-Laroze (3 / 226) and Leroy (1 / 17). Prieur’s inherited link is registry
 evidence without a quantified filing review. Those 315 earlier pages are not
 counted again as new screening.
+
+## Printed group totals: 10 October 2026
+
+The owner approved a rule in the Montrachet review (#548): a source that prints several current numbers with one
+total area names each parcel when today’s cadastral areas add up to that total exactly, to the square metre. The
+research build checks the sum. Three Musigny entries qualify:
+
+- Vougeraie AN22 + AN23, printed 0.0970 ha: 778 + 192 = 970 m². Both parcels gain their first lead.
+- Drouhin AN61 + AN40, printed 0.5660 ha: 5,480 + 180 = 5,660 m².
+- Drouhin AN60 + AN57, printed 0.1060 ha: 850 + 210 = 1,060 m².
+
+The Drouhin pairs agree with the SEPV filing, which already prints each individual area. Mugnier’s and Vogüé’s
+unnumbered totals, and Leroy’s plot 27 without an area, stay unmatched. Leads rise from 24 to 26 parcels. Current
+farming stays unverified.
 
 ## Reproduce and validate
 
