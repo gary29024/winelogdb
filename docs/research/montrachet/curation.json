@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-09",
+  "reviewedAt": "2026-10-10",
   "targetSeason": "2026",
   "parentFeatureId": "inao-denom-927",
   "status": "tier-2-researched",
@@ -423,10 +423,11 @@
         "mt-registry-778586172",
         "mt-filing-778586172-29",
         "mt-filing-778586172-28",
-        "mt-filing-778586172-1"
+        "mt-filing-778586172-1",
+        "mt-pappers-thenard-1920"
       ],
       "parcelOperationConfirmed": false,
-      "finding": "Three distinct selected files (31 pages) concern share succession and updated statutes, without AE32/34 and their individual areas. A company candidate exists, but the U21850980 identity crosswalk is not established by the reviewed company records; no domaine link asserted."
+      "finding": "Three distinct selected files (31 pages) concern share succession and updated statutes, without AE32/34 and their individual areas. A company candidate exists, but the U21850980 identity crosswalk is not established by the reviewed company records; no domaine link asserted. Supplemental review, 10 October 2026: The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels."
     },
     {
       "holderId": "U21874820",
@@ -1019,6 +1020,32 @@
       "ownerHolderIds": [],
       "endedSeason": null,
       "otherPublishedAreas": []
+    },
+    {
+      "id": "mt-thenard-1920-historical",
+      "producer": "Domaine Thenard (1920 contribution)",
+      "namedAreas": [
+        "LE MONTRACHET",
+        "MONTRACHET"
+      ],
+      "publishedAreaHa": null,
+      "precision": "square-metre",
+      "relation": "owner",
+      "sourceIds": [
+        "mt-pappers-thenard-1920"
+      ],
+      "finding": "The 1920 contribution names a historical 1.7976 ha Montrachet holding in Chassagne-Montrachet. Retained as historical named-area context only: no current extent, harvest end, split between cadastral names, current parcel allocation or U21850980 identity is established. The current published-area field stays null so this historical figure is excluded from the current census comparison.",
+      "producerHolderIds": [],
+      "ownerHolderIds": [],
+      "endedSeason": null,
+      "otherPublishedAreas": [
+        {
+          "publishedAreaHa": 1.7976,
+          "precision": "square-metre",
+          "sourceId": "mt-pappers-thenard-1920",
+          "context": "3 January 1920 contribution, item 43; reproduced in the 17 October 2002 deposit (PDF pages 10 and 41)."
+        }
+      ]
     }
   ],
   "historicalOwnerLists": [],
@@ -1031,7 +1058,8 @@
     "The bounded Montrachet pass screened 50 distinct PDF byte hashes / 1360 pages at 150 dpi with RapidOCR and DirectML. Two additional downloads were byte-identical copies (34 duplicate pages), not additional evidence; one Leflaive 2026 statutes request returned HTTP 408. This is not every filing ever deposited.",
     "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.",
     "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified.",
-    "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. Six images referenced by the 1921 history article are absent from its archive and remain unreviewed. Leflaive/Lafon lack printed numbers; Prieur’s area and 34/24 numbering conflict remain unmatched."
+    "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. Six images referenced by the 1921 history article are absent from its archive and remain unreviewed. Leflaive/Lafon lack printed numbers; Prieur’s area and 34/24 numbering conflict remain unmatched.",
+    "Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
@@ -1075,6 +1103,13 @@
       "printedReference": "Puligny 118/119/120/121; hypothetical earlier 65",
       "parcelIds": [],
       "limitation": "The 0.80 ha is an aggregate, without individual areas. The predecessor 65 and early ownership are conjectures, not documented lineage; no current parcel match.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "mt-pappers-thenard-1920",
+      "printedReference": "43 - Montrachet, vigne, 1 ha 79 a 76 ca (1920 list item)",
+      "parcelIds": [],
+      "limitation": "43 is a list ordinal, not AE43 or any cadastral identifier. The historical 1.7976 ha total supplies no individual AE32/AE34 area or accepted U21850980 company crosswalk.",
       "currentFarmer": null
     }
   ]

@@ -12932,6 +12932,106 @@
       "reviewedAt": "2026-10-09",
       "access": "read",
       "finding": "The official registry identifies the Commune de Puligny-Montrachet as a municipal authority. No producer company relationship or parcel-specific lease is established."
+    },
+    {
+      "url": "https://www.pappers.fr/entreprise/sci-du-domaine-thenard-778586172",
+      "retrievedFrom": "User-supplied Pappers PDF",
+      "retrievedAt": "2026-10-10T00:46:08.609392+00:00",
+      "sha256": "a9a4d05f83f5d4d5e1df5d57b89ce987ad2cd314909e30ec7f0f7934fa2723e0",
+      "bytes": 2004690,
+      "filingDate": "2002-10-17",
+      "pageCount": 55,
+      "id": "mt-pappers-thenard-1920",
+      "title": "Domaine Thenard: 1920 formation in the 2002 deposit",
+      "type": "company-filing",
+      "documentDate": "1920-01-03",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "screenedPages": 55,
+      "reviewedPages": [
+        1,
+        10,
+        36,
+        41,
+        55
+      ],
+      "imageReviewedPages": [
+        1,
+        10,
+        36,
+        41,
+        55
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
+      "finding": "The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels.",
+      "dateNote": "The 2002 filing date is not a land-transfer date. The typed copy repeats the 1920 contribution; no modern reference is supplied."
+    },
+    {
+      "url": "https://www.pappers.fr/entreprise/scev-domaine-louis-violland-349583500",
+      "retrievedFrom": "User-supplied Pappers PDF",
+      "retrievedAt": "2026-10-10T00:46:08.585393+00:00",
+      "sha256": "ac50734657a1d237f7357f8856ef7d9356b4d741435778b9f0e52c722f201343",
+      "bytes": 140929,
+      "filingDate": "1996-11-06",
+      "pageCount": 6,
+      "id": "ch-pappers-violland-1996",
+      "title": "Louis Violland filing cover with Maison Leon Violland enclosure",
+      "type": "company-filing",
+      "documentDate": "1996-10-08",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "screenedPages": 6,
+      "reviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "imageReviewedPages": [
+        1,
+        2,
+        3
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
+      "finding": "The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.",
+      "dateNote": "8 October 1996 is the signed transfer date; its effective date is 1 January 1996. The cover and enclosure identify different companies, so the transfer is not applied to 349583500."
+    },
+    {
+      "url": "https://www.pappers.fr/entreprise/sce-du-domaine-d-auvenay-778252445",
+      "retrievedFrom": "User-supplied Pappers PDF",
+      "retrievedAt": "2026-10-10T00:46:08.615392+00:00",
+      "sha256": "b52567bf3bcf6b2852628d7b5305bb7066f231105c893dc689805eb829d49027",
+      "bytes": 1123281,
+      "filingDate": "2013-01-14",
+      "pageCount": 31,
+      "id": "ch-pappers-auvenay-2012",
+      "title": "Domaine d Auvenay: 2012 debt-funded capital increase",
+      "type": "company-filing",
+      "documentDate": "2012-10-29",
+      "reviewedAt": "2026-10-10",
+      "access": "read",
+      "screenedPages": 31,
+      "reviewedPages": [
+        2,
+        3,
+        4,
+        6,
+        13,
+        14
+      ],
+      "imageReviewedPages": [
+        2,
+        3,
+        4,
+        6,
+        13,
+        14
+      ],
+      "pageNumbering": "one-based PDF",
+      "screeningMethod": "Every page OCR-screened with RapidOCR 3.10.0 and ONNX Runtime DirectML at 150 dpi; material statements checked against page images.",
+      "finding": "The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details.",
+      "dateNote": "The meeting heading and updated statutes state 29 October 2012. The inserted article on PDF page 4 instead says 26 October 2012; this internal discrepancy is preserved. Neither date is used as a land-transfer date."
     }
   ],
   "holders": {
@@ -14526,6 +14626,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Reuses the prior two-filings / 30-page no-link search. Corporate officers with the role Autre do not establish a defined Vougeraie relationship. Co-recorded rights are not a company identity or operator crosswalk."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Supplemental ch-pappers-violland-1996: one additional distinct PDF / 6 pages, separate from the preserved 2-file / 30-page effort. The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming."
         }
       ],
       "effort": {
@@ -17809,6 +17917,14 @@
           ],
           "outcome": "linked",
           "note": "Reuses the reviewed Domaine d’Auvenay company identity and the prior three-filings / 113-page Bonnes-Mares search. No new exact AH126 schedule or current farming claim is asserted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "linked",
+          "note": "Supplemental ch-pappers-auvenay-2012: one additional distinct PDF / 31 pages, separate from the preserved 3-file / 113-page effort and reviewed company link. The supplied 31-page filing records the 29 October 2012 capital increase, deposited 14 January 2013, by compensation against a shareholder receivable, not a new vineyard contribution. The retained property schedule concerns Saint-Romain, Baubigny and Ivry-en-Montagne. No qualifying current Montrachet-family individual reference-and-area schedule or U21930118 identity crosswalk was found. The 28 April 1989 vineyard-contribution recital (page 13) is an unacquired deed lead, without parcel details."
         }
       ],
       "effort": {
@@ -20011,6 +20127,14 @@
           ],
           "outcome": "no-link-found",
           "note": "Montrachet #446 pass: 3 distinct filings / 31 pages. Three distinct selected files (31 pages) concern share succession and updated statutes, without AE32/34 and their individual areas. A company candidate exists, but the U21850980 identity crosswalk is not established by the reviewed company records; no domaine link asserted."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "User-supplied Pappers PDF; SHA-256 comparison and complete 150 dpi RapidOCR/DirectML screening"
+          ],
+          "outcome": "no-link-found",
+          "note": "Supplemental review of mt-pappers-thenard-1920: one additional distinct PDF / 55 pages, separate from the preserved original 3-file / 31-page effort. The supplied 55-page filing contains the 3 January 1920 formation, deposited 17 October 2002. Page 10 and its typed copy on page 41 describe Montrachet, Chassagne-Montrachet, as 1 ha 79 a 76 ca (1.7976 ha). Item 43 is a list ordinal, not a cadastral reference. No individual AE32/AE34 schedule or company-record crosswalk for U21850980 is established; the historical aggregate is not allocated to current parcels."
         }
       ],
       "effort": {
