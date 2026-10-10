@@ -151,7 +151,9 @@ the historical extension for a cru.
 - A source that prints several current numbers with one total area names each of those
   parcels only when today's individual cadastral areas add up to that total exactly, to
   the square metre (`areaEvidence` of kind `printed-group-total`, checked by the research
-  build). A rounded or partial total stays in `unmatchedPrintedReferences`.
+  build). The printed total must itself state square metres: four hectare decimals, ares
+  and centiares, or m². A rounded or partial total, or one printed to 10 m² such as
+  1.158 ha, stays in `unmatchedPrintedReferences`.
 
 #### Shared holder research
 
