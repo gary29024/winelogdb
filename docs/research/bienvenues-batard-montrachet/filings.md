@@ -123,8 +123,8 @@ The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1
 ## Owner decisions: 10 October 2026
 
 This section supersedes the earlier statements above. The Ramonet (0.4508 ha) aggregate now names AI17 and AI123,
-because today’s cadastral areas add up to the printed total exactly. Leflaive’s 1.158 ha is printed only to 10 m²,
-so it stays unmatched under the square-metre rule. No new
+because today’s cadastral areas add up to the printed total exactly. Leflaive’s 1.158 ha, read with the owner as 1.1580 ha
+(a dropped final zero), also names its six parcels. No new
 Bienvenues holder filing was screened. The shared Ramonet, CVVB and Leflaive records gain the owner-requested
 producer searches described in #548 and #550; none prints a Bienvenues schedule. The filing totals above are
 unchanged.

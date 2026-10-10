@@ -229,6 +229,18 @@ class FarmingResearchTests(unittest.TestCase):
                          self.build(research(exact))['counts'])
         with self.assertRaisesRegex(ValueError, 'stated to the square metre'):
             self.build(research(exact, printed=f'{exact / 10000:.3f} ha'))
+        # A three-decimal total counts only when its dropped final zero is recorded, and only if the sum ends in zero.
+        three = f'{exact // 10000}.{(exact % 10000) // 10:03d} ha'
+        dropped = research(exact, printed=three)
+        dropped['externalResearch'][-1]['areaEvidence']['trailingZeroDropped'] = True
+        if exact % 10 == 0:
+            self.assertIn('test-group', next(p for p in self.build(dropped)['parcels'] if p['parcelId'] == first)['externalResearchIds'])
+        else:
+            with self.assertRaisesRegex(ValueError, 'stated to the square metre'):
+                self.build(dropped)
+        dropped['externalResearch'][-1]['areaEvidence']['printedTotal'] = f'{exact:,} m²'
+        with self.assertRaisesRegex(ValueError, 'only to a total printed with three hectare decimals'):
+            self.build(dropped)
         # One source can print the numbers and another, about the same holding, the total; both must be cited.
         split = research(exact)
         split['externalResearch'][-1]['areaEvidence'].update(referencesSourceId=source, totalSourceId='uncited-total')
