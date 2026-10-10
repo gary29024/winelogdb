@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-DP18pGmm.js"
+    "dist/client/assets/index-BOxmgTS4.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-DM_4f3JM.js",
-    "dist/client/assets/SectionLabel-hl-dHtRs.js",
-    "dist/client/assets/SparklingDetailsCard-KAoUXeGB.js",
-    "dist/client/assets/VillageMap-zmA4mzmW.js",
-    "dist/client/assets/burgundyAtlas-Bav2qTfQ.js",
-    "dist/client/assets/index-BFR1Dno2.js",
-    "dist/client/assets/index-DP18pGmm.js",
+    "dist/client/assets/FriendTagDialog-BFLfVS0L.js",
+    "dist/client/assets/SectionLabel-BmrtQ40z.js",
+    "dist/client/assets/SparklingDetailsCard-C3uUwlEi.js",
+    "dist/client/assets/VillageMap-DOd5Tfky.js",
+    "dist/client/assets/burgundyAtlas-B3u-jXjn.js",
+    "dist/client/assets/index-BOxmgTS4.js",
+    "dist/client/assets/index-DhR0_Zvt.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-BXqd0WV7.js",
-    "dist/client/assets/wineDetailCompact-Dxwy6g4o.js"
+    "dist/client/assets/useModalFocus-n7gJmQI8.js",
+    "dist/client/assets/wineDetailCompact-C7kqAztH.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5986710,
-  "evidenceGzipBytesTotal": 561637,
+  "evidenceBytesTotal": 5991954,
+  "evidenceGzipBytesTotal": 562119,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -42,10 +42,10 @@
     },
     {
       "cru": "bonnes-mares",
-      "file": "dist/client/assets/bonnes-mares.evidence-CUjLdpz8.js",
-      "sha256": "8817280229d6b0ba22c82ebcd8bc3df2909d933da2292bddc7611524169354c2",
-      "bytes": 167973,
-      "gzipBytes": 19186
+      "file": "dist/client/assets/bonnes-mares.evidence-CDZRmJX9.js",
+      "sha256": "6c948a7ce43690b885d53b0a059ee73795299416d59b8f2ec790ac81aa87812e",
+      "bytes": 170938,
+      "gzipBytes": 19455
     },
     {
       "cru": "chablis-grand-cru",
@@ -224,10 +224,10 @@
     },
     {
       "cru": "musigny",
-      "file": "dist/client/assets/musigny.evidence-DEyzFYMt.js",
-      "sha256": "7b1ed7f8d85c9bd7abb5b6e86e44396f1cb833c96775a2b7998a0dfcfacb713a",
-      "bytes": 107214,
-      "gzipBytes": 14341
+      "file": "dist/client/assets/musigny.evidence-B04MUoPw.js",
+      "sha256": "24f2ddbf0110fb8d87861078b6d46c83bfd74d3431a4fce5bd950967f5669f20",
+      "bytes": 109493,
+      "gzipBytes": 14554
     },
     {
       "cru": "richebourg",
