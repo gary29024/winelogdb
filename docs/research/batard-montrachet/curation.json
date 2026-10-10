@@ -264,24 +264,6 @@
       "finding": "Dated secondary research. Ramonet’s AI17 and AI123 are printed with 0.4508 ha combined; today’s cadastral areas add up exactly to 4,508 m² (printed-group-total rule). Historical classifications remain unallocated."
     },
     {
-      "id": "bien-winehog-40775",
-      "title": "Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet",
-      "url": "https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/",
-      "type": "critic",
-      "documentDate": "2020-05-09",
-      "modifiedAt": "2020-05-09T08:25:12+00:00",
-      "access": "read",
-      "reviewedAt": "2026-10-10",
-      "retrievedAt": "2026-10-09T15:32:54.659965+00:00",
-      "retrievedFrom": "User-supplied MHTML archive",
-      "sha256": "5ba57ea1690d099ddf29e0559e6a2497bb476431075afe1e14985ca6dfc6e01c",
-      "bytes": 2590348,
-      "archiveFormat": "MHTML",
-      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:36 +0000",
-      "missingEmbeddedImages": [],
-      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule). Historical classifications remain unallocated."
-    },
-    {
       "url": "https://www.bourgogne-chartron.com/wp-content/uploads/2021/12/surface-et-superficie.pdf",
       "retrievedFrom": "https://www.bourgogne-chartron.com/nos-terroirs/ (linked as ‘Superficie et années de plantation de nos appellations’)",
       "retrievedAt": "2026-10-10T05:05:06Z",
@@ -1069,48 +1051,6 @@
       "currentFarmer": null
     },
     {
-      "id": "bat-group-leflaive-bienvenues",
-      "title": "Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding",
-      "parcelIds": [
-        "21512000AI0111"
-      ],
-      "parcelAreasM2": {
-        "21512000AI0111": 2572
-      },
-      "printedReferences": [
-        "AI111",
-        "AI110",
-        "AI141",
-        "AI140",
-        "AI139",
-        "AI108"
-      ],
-      "areaEvidence": {
-        "kind": "printed-group-total",
-        "printedTotal": "1.158 ha",
-        "printedTotalM2": 11580,
-        "groupParcelAreasM2": {
-          "21512000AI0111": 2572,
-          "21512000AI0110": 2583,
-          "21512000AI0141": 1095,
-          "21512000AI0140": 1023,
-          "21512000AI0139": 1090,
-          "21512000AI0108": 3217
-        },
-        "individualAreasSource": "pinned-cadastral-snapshot",
-        "decidedAt": "2026-10-10"
-      },
-      "basis": "critic-named-cadastral-reference",
-      "finding": "Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule. Secondary attribution only; current farming remains unverified.",
-      "sourceIds": [
-        "bien-winehog-40775"
-      ],
-      "producer": "Domaine Leflaive",
-      "appNote": "Winehog prints AI111, AI110, AI141, AI140, AI139, AI108 with 1.158 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
-      "dateSourceId": "bien-winehog-40775",
-      "currentFarmer": null
-    },
-    {
       "id": "bat-winehog-41492-coffinet-duvernay",
       "title": "Winehog: the Coffinet-Duvernay half of the old Coffinet holding",
       "parcelIds": [
@@ -1728,7 +1668,7 @@
       "sourceIds": [
         "census-bat-caillot-hachette"
       ],
-      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "finding": "Historical published holding from a free 2013 Guide Hachette review (2009 and 2012 vintages). Census context only: no parcel is assigned, and current farming is unverified.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -1747,7 +1687,7 @@
       "sourceIds": [
         "census-bat-caillot-hachette"
       ],
-      "finding": "Published whole holding. Census context only: no parcel is assigned, and current farming is unverified.",
+      "finding": "Historical published holding from a free 2013 Guide Hachette review (2009 and 2012 vintages). Census context only: no parcel is assigned, and current farming is unverified.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,

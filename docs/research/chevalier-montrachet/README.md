@@ -102,7 +102,7 @@ an unsearched interval is a gap, not absence of history.
 
 [The filing inventory](filings.md) records 11 new distinct company filings / 152 pages, complete 150 dpi RapidOCR/DirectML screening, reused shared effort, acquisition hashes, exact-match limits and eight supplied and hashed Winehog copies. Prieur AH8 and the Latour GFAs’ AH92/93 match reference, individual area and recorded holder. Opale’s retired AH150 reaches AH182/AH183 only through official DFI; its former AH151 holding remains historical context. Printed Prieur AH3 is not silently corrected to equal-area AH123.
 
-Five official estate holdings remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name, a shared manager or a similar area. Three holder identifiers remain explicit no-link searches: Louis Violland, the municipality and GFV Le Chevalier de Puligny-Montrachet. SCI Montille et Partners has a management link since 10 October (below).
+Six official estate holdings, including Chartron’s own area table, remain a whole-cru named-area census. No parcel is assigned to a producer by a marketing map, a name or a similar area alone. AH169’s Montille lead comes from a reviewed management link, not a parcel assignment. Three holder identifiers remain explicit no-link searches: Louis Violland, the municipality and GFV Le Chevalier de Puligny-Montrachet. SCI Montille et Partners has a management link since 10 October (below).
 
 ## Holder research effort
 

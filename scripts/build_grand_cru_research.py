@@ -55,6 +55,19 @@ HOLDING_RELATIONS = {'owner', 'farmer', 'metayer', 'unstated'}
 HOLDING_PRECISIONS = {'square-metre', 'are', 'hundredth-hectare', 'approximate', 'none'}
 
 
+def printed_square_metres(text):
+    """The square metres a printed total states, or None when it is not printed to the square metre.
+
+    '1.8273 ha' and '55 a 31 ca' state square metres; '1.158 ha' (to 10 m²) and '0.8 ha' do not."""
+    if m := re.fullmatch(r'(\d+)\.(\d{4}) ha', text):
+        return int(m[1]) * 10000 + int(m[2])
+    if m := re.fullmatch(r'(\d+) a (\d{2}) ca', text):
+        return int(m[1]) * 100 + int(m[2])
+    if m := re.fullmatch(r'(\d[\d,]*) m²', text):
+        return int(m[1].replace(',', ''))
+    return None
+
+
 def check_group_total(item, snapshot_areas):
     """A source that prints several current numbers with one total area names each of them only when today's
     individual cadastral areas add up to that total exactly, to the square metre. A rounded or partial total
@@ -65,13 +78,15 @@ def check_group_total(item, snapshot_areas):
             'A printed group total needs two or more parcels and pinned cadastral areas')
     require(all(snapshot_areas.get(pid) == area for pid, area in group.items()),
             'Group parcel area differs from the pinned cadastral snapshot')
+    require(printed_square_metres(evidence['printedTotal']) == evidence['printedTotalM2'],
+            'A printed group total must be stated to the square metre')
     require(sum(group.values()) == evidence['printedTotalM2'], 'Printed group total differs from the cadastral sum')
     require(item['parcelIds'] and set(item['parcelIds']) <= set(group) and
             item.get('parcelAreasM2', {}) == {pid: group[pid] for pid in item['parcelIds']},
             'Group research names only parcels of its printed group, with their cadastral areas')
     # When one source prints the numbers and another, about the same holding, prints the total, both are cited.
     split = [evidence[k] for k in ('referencesSourceId', 'totalSourceId') if k in evidence]
-    require(len(split) in (0, 2) and set(split) <= set(item['sourceIds']),
+    require(len(split) in (0, 2) and len(set(split)) == len(split) and set(split) <= set(item['sourceIds']),
             'A group total from a second source names both the reference and the total source')
 
 

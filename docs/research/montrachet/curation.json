@@ -227,7 +227,7 @@
       "retrievedFrom": "User-supplied MHTML archive",
       "sha256": "c52cb61cdf0993d94d32983a5db18457007f9fa0690178687fc50c7af1da36de",
       "bytes": 2463526,
-      "finding": "The modern list matches Chassagne 24 (542 m²), attributed to the René Lamy-Pillot family, and 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. One paragraph prints 34 where the list prints 24; the owner-supplied map (10 October 2026) outlines 24 among the plots added in 1921 and leaves the large plot 34 outside, so 24 is accepted. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². Old 1861/1921 numbering is not a current-reference crosswalk.",
+      "finding": "The modern list matches Chassagne 24 (542 m²), listed for a private owner with Lamy-Pillot as producer, and 25 (635 m²) and 29 (275 m²), attributed to Guy Amiot. One paragraph prints 34 where the list prints 24; the owner-supplied map (10 October 2026) outlines 24 among the plots added in 1921 and leaves the large plot 34 outside, so 24 is accepted. Colin 27/28/161/162 (356/356/178/178 m²) remain original-reference context through documented DFI. Printed Prieur 30 is 2009 m², unlike current AE30 at 2090 m². Old 1861/1921 numbering is not a current-reference crosswalk.",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:27:26 +0000",
       "modifiedAt": "2017-10-01T13:28:58+00:00",
@@ -399,7 +399,7 @@
       "retrievedFrom": "User-supplied MHTML archive",
       "sha256": "7ee6be411c76d4deea90103ab116589547ad6d386efe7a926bc5d09571952aea",
       "bytes": 2994039,
-      "finding": "Lists six Chassagne-side holdings (DRC 0.6759, Comte Lafon 0.3182, Guy Amiot 0.0910, Leflaive 0.0821, Lamy-Pillot 0.0542 and Fleurot 0.0405 ha) and numbers them 1–6 on an aerial map without cadastral numbers. Against the pinned cadastre the Leflaive strip is AE134 (821 m²) and the Fleurot strip directly above it is AE173 (405 m²).",
+      "finding": "Lists six Chassagne-side holdings (DRC 0.6759, Comte Lafon 0.3182, Guy Amiot 0.0910, Leflaive 0.0821, Lamy-Pillot 0.0542 and Fleurot 0.0405 ha) and numbers them 1–6 on an aerial map without cadastral numbers. Against the pinned cadastre the Leflaive strip (4) is AE134 (821 m²); Fleurot’s strip (6) lies in the same block, two strips above, and is AE173 (405 m²).",
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Sat, 10 Oct 2026 07:22:46 +0000"
     },
@@ -1048,13 +1048,13 @@
         "AE24"
       ],
       "basis": "critic-named-cadastral-reference",
-      "finding": "Winehog lists plot 24 at 0.0542 ha among the Dent de Chien plots added to Montrachet in 1921, attributed to the René Lamy-Pillot family. A paragraph prints 34, but the article's map, supplied by the owner on 10 October 2026, outlines 24 and leaves the large plot 34 outside. Current AE24 measures 542 m². A free Guide Hachette page separately describes a 5 a 42 ca Dents-de-Chien parcel worked by Lamy-Pillot en métayage since 1988, so the domaine is a sharecropper, not the owner. Secondary attribution only; current farming remains unverified.",
+      "finding": "Winehog lists plot 24 at 0.0542 ha among the Dent de Chien plots added to Montrachet in 1921, for a private owner with Lamy-Pillot named as producer. A paragraph prints 34, but the article's map, supplied by the owner on 10 October 2026, outlines 24 and leaves the large plot 34 outside. Current AE24 measures 542 m². A free Guide Hachette page (undated review of the 2003 vintage) describes a 5 a 42 ca Dents-de-Chien parcel worked by Lamy-Pillot en métayage since 1988, which makes the domaine a sharecropper on that account, not the owner. Secondary attribution only; current farming remains unverified.",
       "sourceIds": [
         "mt-winehog-32708",
         "census-mt-lamy-pillot-hachette"
       ],
-      "producer": "Domaine René Lamy-Pillot",
-      "appNote": "Winehog lists plot 24, 0.0542 ha, for the Lamy-Pillot family; its map confirms 24 rather than 34. A guide describes 5 a 42 ca there en métayage (sharecropping) since 1988. Current AE24 is 542 m². Current farming unverified.",
+      "producer": "Domaine Lamy-Pillot",
+      "appNote": "Winehog lists plot 24, 0.0542 ha, with Lamy-Pillot as producer; its map confirms 24 rather than 34. An undated guide (2003 vintage) describes 5 a 42 ca there en métayage since 1988. Current AE24 is 542 m². Current farming unverified.",
       "dateSourceId": "mt-winehog-32708",
       "currentFarmer": null
     },
@@ -1069,12 +1069,12 @@
       },
       "printedReferences": [],
       "basis": "critic-attribution-area-reconstructed",
-      "finding": "Winehog (2016) gives Domaine Fleurot 0.0405 ha in the Chassagne part of Montrachet and outlines it as holding 6 on an unnumbered aerial map: the top strip of the block whose bottom strip is Leflaive’s AE134 (821 m², matching Leflaive’s 0.0821 ha). That strip is AE173, whose cadastral area is exactly 405 m². Matched by map position and area, not by a printed number; secondary attribution only and current farming unverified.",
+      "finding": "Winehog (2016) gives Domaine Fleurot 0.0405 ha in the Chassagne part of Montrachet and outlines it as holding 6 on an unnumbered aerial map: a narrow strip in the block whose bottom strip is Leflaive’s AE134 (holding 4, 821 m², matching Leflaive’s 0.0821 ha). In that block AE132 and AE133 lie between them; AE173, the strip above AE132, is exactly 405 m², and its neighbour AE172 is 428 m². Matched by map position and area, not by a printed number; secondary attribution only and current farming unverified.",
       "sourceIds": [
         "mt-winehog-29563"
       ],
       "producer": "Domaine Fleurot",
-      "appNote": "Winehog (2016) maps Fleurot’s 0.0405 ha as the strip above Leflaive’s AE134; that strip is AE173, exactly 405 m². Matched by map position and area, not a printed number; current farming unverified.",
+      "appNote": "Winehog (2016) maps Fleurot’s 0.0405 ha in the block whose bottom strip is Leflaive’s AE134; AE173 in that block is exactly 405 m². Matched by map position and area, not a printed number; current farming unverified.",
       "dateSourceId": "mt-winehog-29563",
       "currentFarmer": null
     }
@@ -1192,7 +1192,7 @@
           "kind": "existing-lease-recital",
           "leaseType": "bail rural à long terme",
           "tenants": [
-            "Jean de Laguiche (individual)"
+            "An individual (Laguiche family)"
           ],
           "signedDates": [
             "2002-06-04"
@@ -1204,8 +1204,8 @@
           "limitation": "The founding mandate proposed 18 years; the donation confirms a same-day executed lease, whose original instrument and renewals were not reviewed. The individual tenant is not a Drouhin company."
         }
       ],
-      "finding": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to Jean de Laguiche personally; it does not name Drouhin as tenant. No renewal or current farming season is established.",
-      "appNote": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to Jean de Laguiche personally; it does not name Drouhin as tenant. No renewal or current farming season is established.",
+      "finding": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to an individual family member; it does not name Drouhin as tenant. No renewal or current farming season is established.",
+      "appNote": "The formation names AH64 (20625 m²). A same-day donation recites an executed lease to an individual family member; it does not name Drouhin as tenant. No renewal or current farming season is established.",
       "supportingSourceIds": [
         "mt-filing-443494075-3",
         "mt-filing-443494075-1"
@@ -1566,7 +1566,7 @@
       "sourceIds": [
         "census-mt-lamy-pillot-hachette"
       ],
-      "finding": "Published whole holding, worked en métayage since 1988 by the source’s account. Census context only: no parcel is assigned, and current farming is unverified.",
+      "finding": "Published whole holding, worked en métayage since 1988 by the undated guide’s account (review of the 2003 vintage). Census context only: no parcel is assigned, and current farming is unverified.",
       "producerHolderIds": [],
       "ownerHolderIds": [],
       "endedSeason": null,
@@ -1581,9 +1581,9 @@
     "Current farming remains unconfirmed for every parcel.",
     "INPI and Pappers were each tried once on the Leflaive company and returned HTTP 403 locally; free official company searches, Le Figaro indexes and actes.ccm2.net filings were used instead.",
     "The bounded Montrachet pass screened 50 distinct PDF byte hashes / 1360 pages at 150 dpi with RapidOCR and DirectML. Two additional downloads were byte-identical copies (34 duplicate pages), not additional evidence; one Leflaive 2026 statutes request returned HTTP 408. This is not every filing ever deposited.",
-    "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established, but its individual tenant is not converted to a Drouhin company link. The commune has no producer link.",
+    "No company-record identity crosswalk was established for U21850980 (Thenard). GFA de Laguiche identity is established; its 2002 lease names an individual family member, so the Drouhin link added on 10 October 2026 stays a provisional reported tenancy, not a company lease. The commune has no producer link.",
     "Exact filing coverage is limited to six current parcels: AE30/31/33/129/134 and AH64. Colin’s thirteen current references receive historical context only through DFI ancestry. No current farming season is verified.",
-    "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. Six images referenced by the 1921 history article are absent from its archive and remain unreviewed. Leflaive/Lafon lack printed numbers; Prieur’s area and 34/24 numbering conflict remain unmatched.",
+    "All six requested Montrachet Winehog articles were supplied as authorized MHTML copies on 9 October 2026; URLs, dates, sizes and SHA-256 hashes are recorded. The six images missing from the 1921 history article were supplied on 10 October 2026 and settle its 34/24 discrepancy as 24. Leflaive/Lafon lack printed numbers, Prieur’s printed 30 conflicts with today’s area, and the rounded Puligny 118–121 total stays unmatched.",
     "Supplemental Pappers review on 10 October 2026 adds one distinct Thenard PDF / 55 pages: 51 distinct PDFs / 1415 pages including the original pass. The 1920 1.7976 ha aggregate remains historical and unallocated; item 43 is not a parcel number. Existing links, identities and original effort are preserved.",
     "Owner-supplied images (10 October 2026, photos.zip): the six maps missing from the 1921 article archive, and the Leflaive and Bouchard Chevalier maps, were supplied and reviewed; file names, SHA-256 hashes and sizes are recorded on each source. The five re-uploaded Chevalier and Montrachet archives are byte-identical to the 9 October copies. Images and archives stay outside the repository.",
     "Supplied by the owner on 10 October 2026 and reviewed: Winehog articles 29563 (Le Montrachet Six), 29546 (One Montrachet from six Domaines), 35102 (Drouhin, Montrachet Marquis de Laguiche 2015) and 71536 (Chassagne Blanchot-Dessous, recorded with Criots). Only 29563 adds a parcel, by map position and exact area (AE173); none adds a printed current reference or a lease."
