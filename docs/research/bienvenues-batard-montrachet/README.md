@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 0 |
 | Parcels with sale records (DVF) | 2; 2 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 19; recorded holders without a reviewed producer relationship remain separate |
-| Parcels with no lead | 19 |
+| Parcels with holder or research leads | 15; recorded holders without a reviewed producer relationship remain separate |
+| Parcels with no lead | 23 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1993-10-04, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 119,389 / 13,730 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 116,759 / 13,633 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 38 unique parcels.
@@ -40,8 +40,8 @@ rights is enabled; the production payload report checks compiled JS.
 
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
-| Parcels with research leads | 0 | 19 |
-| Unresolved parcels | 38 | 19 |
+| Parcels with research leads | 0 | 15 |
+| Unresolved parcels | 38 | 23 |
 | Reviewed holder links applicable to the cru | 0 | 7 |
 | Parcels with exact company filings | 0 | 8 |
 | Current farmers verified | 0 | 0 |
@@ -143,12 +143,14 @@ The cru issue and its #461 line are completed only after review and merge.
 ## Owner decisions applied: 10 October 2026
 
 The owner reviewed the Montrachet stack on 10 October 2026. The printed-group-total rule
-adds six Bienvenues parcels with leads (13 to 19). Current farming stays unverified.
+adds two Bienvenues parcels with leads (13 to 15). Current farming stays unverified.
 
 - **Ramonet.** AI17 and AI123 are printed as 0.4508 ha combined. Today’s areas add up to
   exactly 4,508 m².
-- **Leflaive.** AI111, AI110, AI141, AI140, AI139 and AI108 are printed as 1.158 ha. Today’s
-  six areas add up to exactly 11,580 m².
+- **Leflaive (not named).** AI111, AI110, AI141, AI140, AI139 and AI108 are printed as
+  1.158 ha. That total is stated only to 10 m², so the rule’s square-metre requirement is
+  not met, even though today’s six areas add up to 11,580 m². It stays an unmatched
+  printed reference, pending an owner decision on whether 1.158 can be read as 1.1580.
 - **Supplied images.** The missing Faiveley and Bienvenues-history images were supplied and
   are hashed on their sources. The 1839/1861 numbering stays historical only.
 - **Census.** Three producer holdings from hashed estate and merchant pages join the
