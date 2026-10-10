@@ -92,10 +92,12 @@ const LIGHT=0.75;
 /**
  * Surfaces whose ground is a photograph rather than the theme, so white is
  * right in both themes: the badges and the favourite pill that sit on a wine
- * label in the journal grid.
+ * label in the journal grid, and the scanning line that sweeps down a label
+ * while it is being read.
  */
 const overPhotograph=new Set([
   'favorites.css .journal-favorite-button #ffffffed',
+  'scanProgress.css .scan-beam-line #fff',
   'journalBatch.css .journal-select-mark #ffffffde',
   'journalMonths.css .journal-grid-vintage #ffffffe8'
 ]);

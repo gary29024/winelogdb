@@ -34,7 +34,12 @@ type Quote={id:string;total:number;available:number;units:Array<{action:string;c
 export type QuotePrompt={quote:Quote;resolve:(confirmed:boolean)=>void};
 let askQuote:((prompt:QuotePrompt)=>void)|null=null;
 export function registerQuotePrompt(prompt:((prompt:QuotePrompt)=>void)|null){askQuote=prompt}
-export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<Response>{
+/**
+ * `onRunStart` fires once the request is really on its way - after any credit
+ * confirmation - so a caller timing the wait does not count the dialog.
+ */
+export type ApiFetchOptions={onRunStart?:()=>void};
+export async function apiFetch(input:RequestInfo|URL,init?:RequestInit,options:ApiFetchOptions={}):Promise<Response>{
  const atStart=generation,identity=getSession();
  const url=typeof input==='string'?new URL(input,location.origin):input instanceof URL?input:new URL(input.url);
  // Read the method and headers off the inputs directly rather than by building a
@@ -67,8 +72,10 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit):Promise<
   if(atStart!==generation||identity!==getSession())throw new Error('Account changed');
   headers.set('X-WineLog-Quote',quote.id);headers.set('Idempotency-Key',crypto.randomUUID());
   const execute=()=>fetch(url.pathname+url.search,{method,headers,body:bytes,credentials:'same-origin',signal:init?.signal});
+  options.onRunStart?.();
   try{response=await execute()}catch(error){if(init?.signal?.aborted||atStart!==generation)throw error;response=await execute()}
  }else{
+  options.onRunStart?.();
   // Abortable callers retain their independent cancellation semantics. Explicit
   // Request objects and non-JSON endpoints also keep their original fetch path.
   if(method==='GET'&&!(input instanceof Request)&&!init?.signal&&shareableRead(url.pathname)){

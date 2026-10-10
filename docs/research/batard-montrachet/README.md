@@ -25,11 +25,11 @@ administrative procedures remain distinct evidence; none establishes current far
 | Sales and notices: available / imported date ranges and gaps | DVF+ declared 2014-01-01–2025-12-31, complete BFC 2026-1 archive imported; bundle observations 2014-01-03 to 2025-12-17. Notices: partial departmental 2004–2015, departmental 2016–2020 and regional 2019–2026 indexes; gaps below |
 | Parcels with an authorisation / application or suspension | 1 |
 | Parcels with sale records (DVF) | 15; 11 current-reference deeds, 0 historical-reference deeds |
-| Parcels with holder or research leads | 29; 28 holder-lead parcels plus the retained application lead |
-| Parcels with no lead | 60 |
+| Parcels with holder or research leads | 32; 31 holder-lead parcels plus the retained application lead |
+| Parcels with no lead | 57 |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1993-12-09, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 193,535 / 22,387 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 195,188 / 22,800 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 89 unique parcels.
@@ -40,8 +40,8 @@ rights is enabled; the production payload report checks compiled JS.
 
 | Measure | Tier 1 | Tier 2 |
 | --- | ---: | ---: |
-| Parcels with research leads | 1 | 29 |
-| Unresolved parcels | 88 | 60 |
+| Parcels with research leads | 1 | 32 |
+| Unresolved parcels | 88 | 57 |
 | Reviewed holder links applicable to the cru | 0 | 22 |
 | Parcels with exact company filings | 0 | 9 |
 | Current farmers verified | 0 | 0 |
@@ -66,7 +66,7 @@ rights is enabled; the production payload report checks compiled JS.
 | GUILLAUME BOILLOT (`440840049`) | — | 4 / 72 | The same 440840049 company is renamed from Guillaume Boillot to Henri Boillot in the 2025 statutes/official registry. Its current statutes retain contributions of Maison Henri Boillot shares in 2007 and 2010, supporting a family-holding link to that named Maison, not substitution of a separate Domaine company or an operator assignment. No AI15 schedule found; the existing 2019 refusal remains unchanged. |
 | KBMFI (`442440095`) | — | 5 / 235 | KBMFI retains current AE38 (2433 m²). The November 2022 withdrawal preserves that parcel while other property leaves the company; the filing recites the prior leases ending effective 15 September 2022. ROMEFI is KBMFI’s sole shareholder in the December 2022 decisions and is a corporate managing partner of Domaine Bonneau du Martray (328186416) in the official registry. This supports common ownership, not an operator or tenancy link. |
 | DOMAINE BAVARD JEAN PAUL (`484661939`) | — | 4 / 102 | Company statutes establish Domaine Bavard Jean Paul (484661939), wholly held by JLM (852211770) since 2022. The signed 26 August 2019 share transfer explicitly describes AI124 among parcels then operated by the company. It does not print an individual cadastral area and is not an exact current AI170 filing. AI124 reaches AI170 through documented DFI event 210:512:000:0000478:00001, validated 21 June 2021. After the user resumed the Tier 2 review, this remains dated historical context only; no verified current farming is asserted. |
-| DOMAINE GB (`490242302`) | — | 5 / 150 | Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. No current producer crosswalk or exact Bâtard schedule accepted in this bounded corpus. |
+| DOMAINE GB (`490242302`) | — | 8 / 194 | Domaine GB, formerly Domaine Alex Gambal, is wholly held by Cote d’Or Vineyards (851404954) in the 28 December 2023 statutes. The 2022 withdrawal names properties outside Bâtard; its Vougeraie métayage recital concerns those withdrawn properties, not AE65/AE177. The 2006 formation’s 18-year métayage concerns Volnay. A 10 October search (3 filings / 44 pages) finds Cloud Vineyards Limited of Hong Kong as Côte d’Or Vineyards’ sole shareholder and CFI Beaune as 2020 co-manager. No current producer crosswalk or exact Bâtard schedule is accepted. |
 | LES PETITS FILS DE PIERRE PONNELLE (`515620193`) | 2 / 33 | 0 / 0 | Reuses the existing shared company link and search effort (2 filings / 33 screened pages). No new company relationship or current farming assertion. |
 | SA MAISON JOSEPH DROUHIN (`515620417`) | — | 4 / 68 | Official registry and four filings establish the Maison Joseph Drouhin company (515620417). Selected statutes and capital/object changes do not print an exact AE137/AE138 schedule. Company identity is not current operation. |
 | H2O (`751761933`) | 4 / 59 | 0 / 0 | Reuses the existing shared company link and search effort (4 filings / 59 screened pages). No new company relationship or current farming assertion. |
@@ -160,6 +160,39 @@ The representative Chromium journey uses `WINELOG_E2E_CRU=batard-montrachet` wit
 unknown rights, holder search, scoped manual producer links, dated evidence and
 owner/shared views. The routine browser matrix remains unchanged.
 The cru issue and its #461 line are completed only after review and merge.
+
+## Owner decisions applied: 10 October 2026
+
+The owner reviewed the Montrachet stack on 10 October 2026 and asked for more producer searches.
+Three parcels gain leads (29 to 32). Current farming stays unverified everywhere.
+
+- **Printed group totals.** Two Bienvenues groups reach Bâtard edge parcels. Each is
+  named because today’s cadastral areas add up exactly to the printed total.
+  - Ramonet: AI17 + AI123 = 0.4508 ha (4,508 m²).
+  - Leflaive: six parcels = 1.158 ha (11,580 m²). AI111 is the one in Bâtard.
+- **Coffinet-Duvernay.** The Morey-Coffinet article says the old Coffinet holding was
+  divided, and that Coffinet-Duvernay has the 0.1304 ha plot just north of AE175. The
+  parcel along AE175’s north side is AE176, exactly 1,304 m², with no recorded company
+  holder. AE157, on the south side, has the same area, so the match relies on the stated
+  side as well as the area. It is labelled “Matched by area only” and replaces the
+  unmatched entry.
+- **Supplied images.** The Morey-Coffinet and Faiveley maps were supplied and are hashed
+  on their sources. Four DRC photos were not in the archive.
+- **Census.** Sixteen producer holdings join the named-area census: Domaine Jean Chartron’s
+  own table (12 a 84 ca), plus fifteen hashed estate, importer, merchant and guide pages.
+  Area coincidences (Vougeraie with AE53, AE70 and AE178; Henri Boillot with AI15) fall on
+  parcels that already lead to the same producer, so nothing new is inferred.
+- **Searches.** The shared table records more searches:
+  - Ramonet: 4 filings / 98 pages. It is a lease-taking company with no lease schedule.
+  - CVVB (Faiveley): 1 filing / 13 pages. The family land companies lease to CVVB, with
+    no parcel list.
+  - Domaine GB: 3 filings / 44 pages. Its partners are Côte d’Or Vineyards (Hong Kong
+    parent) and CFI Beaune, which is a possible lead only.
+
+  The census agent also screened 26 filings / 696 pages of producers with no recorded
+  company holding. They give no qualifying schedule; Caillot’s “AI40” plantation line has
+  no commune and is not a current parcel. A d’Auvenay article says its Bâtard parcel came
+  from Domaine Bavard in 2011–2012, which is history only.
 
 ## Supplemental Pappers review: 10 October 2026
 

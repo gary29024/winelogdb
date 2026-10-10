@@ -119,3 +119,11 @@ Five holdings from estate pages and supplied Winehog articles remain dated named
 Reused [Chevalier supplemental source](../chevalier-montrachet/filings.md#supplemental-pappers-review-10-october-2026), `ch-pappers-violland-1996` (6 pages).
 
 The supplied six-page 6 November 1996 deposit is internally inconsistent: page 1 names SCE Domaine Louis Violland (349583500), but the 8 October 1996 transfer and attached minutes concern Maison Leon Violland SARL (515420305). Vigninvest transfers that different company to Boisset. This enclosure does not establish a Boisset or Vougeraie relationship for holder 349583500, a current parcel schedule or current farming.
+
+## Owner decisions: 10 October 2026
+
+This section supersedes the earlier statements above. The Ramonet (0.4508 ha) and Leflaive (1.158 ha) aggregates
+now name their printed parcels, because today’s cadastral areas add up to each printed total exactly. No new
+Bienvenues holder filing was screened. The shared Ramonet, CVVB and Leflaive records gain the owner-requested
+producer searches described in #548 and #550; none prints a Bienvenues schedule. The filing totals above are
+unchanged.

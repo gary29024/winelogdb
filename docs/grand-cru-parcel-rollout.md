@@ -148,6 +148,10 @@ the historical extension for a cru.
   reference reaches a current parcel only through an accepted spatial successor or
   documented DFI ancestry (`predecessorReferences`); otherwise it stays in
   `unmatchedPrintedReferences`.
+- A source that prints several current numbers with one total area names each of those
+  parcels only when today's individual cadastral areas add up to that total exactly, to
+  the square metre (`areaEvidence` of kind `printed-group-total`, checked by the research
+  build). A rounded or partial total stays in `unmatchedPrintedReferences`. When one source prints the numbers and another source about the same holding prints the total (for example a critic's map and the estate's own area table), the entry records both (`referencesSourceId`, `totalSourceId`) and the same exact-sum check applies.
 
 #### Shared holder research
 
