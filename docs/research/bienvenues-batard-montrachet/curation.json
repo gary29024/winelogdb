@@ -120,7 +120,7 @@
       "archiveFormat": "MHTML",
       "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:36 +0000",
       "missingEmbeddedImages": [],
-      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined, a total stated only to 10 m². Today’s six cadastral areas add up to 11,580 m², consistent but not exact under the square-metre rule, so no parcel is named. Historical classifications remain unallocated."
+      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined, read as 1.1580 ha with its final zero dropped; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule, owner-approved reading). Historical classifications remain unallocated."
     },
     {
       "id": "bien-winehog-40828",
@@ -572,6 +572,59 @@
       "appNote": "Winehog prints AI17, AI123 with 0.4508 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
       "dateSourceId": "bien-winehog-40782",
       "currentFarmer": null
+    },
+    {
+      "id": "bien-group-leflaive-bienvenues",
+      "title": "Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding",
+      "parcelIds": [
+        "21512000AI0111",
+        "21512000AI0110",
+        "21512000AI0141",
+        "21512000AI0140",
+        "21512000AI0139",
+        "21512000AI0108"
+      ],
+      "parcelAreasM2": {
+        "21512000AI0111": 2572,
+        "21512000AI0110": 2583,
+        "21512000AI0141": 1095,
+        "21512000AI0140": 1023,
+        "21512000AI0139": 1090,
+        "21512000AI0108": 3217
+      },
+      "printedReferences": [
+        "AI111",
+        "AI110",
+        "AI141",
+        "AI140",
+        "AI139",
+        "AI108"
+      ],
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.158 ha",
+        "printedTotalM2": 11580,
+        "groupParcelAreasM2": {
+          "21512000AI0111": 2572,
+          "21512000AI0110": 2583,
+          "21512000AI0141": 1095,
+          "21512000AI0140": 1023,
+          "21512000AI0139": 1090,
+          "21512000AI0108": 3217
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10",
+        "trailingZeroDropped": true
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Read as 1.1580 ha (Winehog drops final zeros, as in 4.7750/4.775 ha), today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule, as the owner agreed. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40775"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AI111, AI110, AI141, AI140, AI139, AI108 with 1.158 ha (read as 1.1580 ha) in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40775",
+      "currentFarmer": null
     }
   ],
   "parcelFilings": [
@@ -897,20 +950,13 @@
     "BBM and Louis Violland have explicit no-link searches. BBM’s historical tenants are individuals; private shareholdings and wine distributions do not establish a producer-company identity or present operation. The executed replacement lease is not in the acquired corpus.",
     "INPI/Pappers each returned HTTP 403 on the first batch attempt. Public filing mirrors provide a bounded corpus, not complete corporate history.",
     "Eight current parcels have exact full-reference, whole-area and recorded-holder company evidence. Several parcels only contact this cru at the boundary: full cadastral areas are not assigned as Bienvenues holding areas. Fractional bare interest, bare-soil contributions and original historical terms remain qualified.",
-    "All four requested Bienvenues Winehog articles were supplied and hashed; the missing images were supplied on 10 October 2026. AI19 has both individual number and area. Ramonet’s AI17 + AI123 (0.4508 ha) are named under the printed-group-total rule. Leflaive’s 1.158 ha is printed only to 10 m² and stays unmatched; historical classification numbers remain unallocated.",
+    "All four requested Bienvenues Winehog articles were supplied and hashed; the missing images were supplied on 10 October 2026. AI19 has both individual number and area. Ramonet’s AI17 + AI123 (0.4508 ha) and Leflaive’s six parcels (1.158 ha, read with the owner as 1.1580 ha) are named under the printed-group-total rule; historical classification numbers remain unallocated.",
     "Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified.",
     "Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link.",
     "Supplied by the owner on 10 October 2026 and reviewed: three Winehog articles on the neighbouring village lieu-dit Les Enseignères (37857, 47634, 49264). They describe land below Bienvenues and print no Bienvenues number or area. The owner also supplied the missing images for the Faiveley and Bienvenues history articles; their hashes are recorded on each source. Images and archives stay outside the repository."
   ],
   "holderLinks": "shared",
   "unmatchedPrintedReferences": [
-    {
-      "sourceId": "bien-winehog-40775",
-      "printedReference": "AI111, AI110, AI141, AI140, AI139 and AI108; 1.158 ha combined",
-      "parcelIds": [],
-      "limitation": "The total is printed only to 10 m² (1.158 ha). Today’s six cadastral areas add up to 11,580 m², which is consistent, but the printed-group-total rule needs a total stated to the square metre, so no parcel is named.",
-      "currentFarmer": null
-    },
     {
       "sourceId": "bien-winehog-40828",
       "printedReference": "Historical 1839/1861 numbered areas 2–7, 10, 11, 16, 17 and 18",

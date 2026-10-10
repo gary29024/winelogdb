@@ -532,6 +532,24 @@
       "sha256": "6190e0971fa09dc1df3bfacca138739de475f7adc1dc12b96b2659aa295ff93a",
       "bytes": 552982,
       "finding": "A free wine-guide page gives Domaine Michel Caillot 0.67 ha and Olivier Leflaive 0.18 ha in this cru. Whole-holding census context only: it names no parcel and does not establish current farming."
+    },
+    {
+      "id": "bien-winehog-40775",
+      "title": "Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet",
+      "url": "https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/",
+      "type": "critic",
+      "documentDate": "2020-05-09",
+      "modifiedAt": "2020-05-09T08:25:12+00:00",
+      "access": "read",
+      "reviewedAt": "2026-10-10",
+      "retrievedAt": "2026-10-09T15:32:54.659965+00:00",
+      "retrievedFrom": "User-supplied MHTML archive",
+      "sha256": "5ba57ea1690d099ddf29e0559e6a2497bb476431075afe1e14985ca6dfc6e01c",
+      "bytes": 2590348,
+      "archiveFormat": "MHTML",
+      "archiveCaptureDate": "Fri, 09 Oct 2026 15:30:36 +0000",
+      "missingEmbeddedImages": [],
+      "finding": "Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined, read as 1.1580 ha with its final zero dropped; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule, owner-approved reading). Historical classifications remain unallocated."
     }
   ],
   "holders": [
@@ -1042,6 +1060,26 @@
       "currentFarmer": null
     },
     {
+      "id": "bat-winehog-41492-coffinet-duvernay",
+      "title": "Winehog: the Coffinet-Duvernay half of the old Coffinet holding",
+      "parcelIds": [
+        "21150000AE0176"
+      ],
+      "parcelAreasM2": {
+        "21150000AE0176": 1304
+      },
+      "printedReferences": [],
+      "basis": "critic-attribution-area-reconstructed",
+      "finding": "Winehog (2020) says the old Coffinet holding was divided and that Domaine Coffinet-Duvernay has the 0.1304 ha plot just north of Morey-Coffinet’s AE175. The parcel along AE175’s north side is AE176, exactly 1,304 m², with no recorded company holder. AE157 on the south side has the same area, so the match rests on the stated side as well as the area. Secondary attribution only; current farming unverified.",
+      "sourceIds": [
+        "bat-winehog-41492"
+      ],
+      "producer": "Domaine Coffinet-Duvernay",
+      "appNote": "Winehog (2020) places Coffinet-Duvernay’s 0.1304 ha just north of Morey-Coffinet’s AE175. That is AE176, exactly 1,304 m². Matched by stated position and area, not a printed number; current farming unverified.",
+      "dateSourceId": "bat-winehog-41492",
+      "currentFarmer": null
+    },
+    {
       "id": "bat-group-ramonet-bienvenues",
       "title": "Winehog: Ramonet’s two-parcel Bienvenues-Bâtard-Montrachet holding",
       "parcelIds": [
@@ -1076,23 +1114,46 @@
       "currentFarmer": null
     },
     {
-      "id": "bat-winehog-41492-coffinet-duvernay",
-      "title": "Winehog: the Coffinet-Duvernay half of the old Coffinet holding",
+      "id": "bat-group-leflaive-bienvenues",
+      "title": "Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding",
       "parcelIds": [
-        "21150000AE0176"
+        "21512000AI0111"
       ],
       "parcelAreasM2": {
-        "21150000AE0176": 1304
+        "21512000AI0111": 2572
       },
-      "printedReferences": [],
-      "basis": "critic-attribution-area-reconstructed",
-      "finding": "Winehog (2020) says the old Coffinet holding was divided and that Domaine Coffinet-Duvernay has the 0.1304 ha plot just north of Morey-Coffinet’s AE175. The parcel along AE175’s north side is AE176, exactly 1,304 m², with no recorded company holder. AE157 on the south side has the same area, so the match rests on the stated side as well as the area. Secondary attribution only; current farming unverified.",
-      "sourceIds": [
-        "bat-winehog-41492"
+      "printedReferences": [
+        "AI111",
+        "AI110",
+        "AI141",
+        "AI140",
+        "AI139",
+        "AI108"
       ],
-      "producer": "Domaine Coffinet-Duvernay",
-      "appNote": "Winehog (2020) places Coffinet-Duvernay’s 0.1304 ha just north of Morey-Coffinet’s AE175. That is AE176, exactly 1,304 m². Matched by stated position and area, not a printed number; current farming unverified.",
-      "dateSourceId": "bat-winehog-41492",
+      "areaEvidence": {
+        "kind": "printed-group-total",
+        "printedTotal": "1.158 ha",
+        "printedTotalM2": 11580,
+        "groupParcelAreasM2": {
+          "21512000AI0111": 2572,
+          "21512000AI0110": 2583,
+          "21512000AI0141": 1095,
+          "21512000AI0140": 1023,
+          "21512000AI0139": 1090,
+          "21512000AI0108": 3217
+        },
+        "individualAreasSource": "pinned-cadastral-snapshot",
+        "decidedAt": "2026-10-10",
+        "trailingZeroDropped": true
+      },
+      "basis": "critic-named-cadastral-reference",
+      "finding": "Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Read as 1.1580 ha (Winehog drops final zeros, as in 4.7750/4.775 ha), today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule, as the owner agreed. Secondary attribution only; current farming remains unverified.",
+      "sourceIds": [
+        "bien-winehog-40775"
+      ],
+      "producer": "Domaine Leflaive",
+      "appNote": "Winehog prints AI111, AI110, AI141, AI140, AI139, AI108 with 1.158 ha (read as 1.1580 ha) in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
+      "dateSourceId": "bien-winehog-40775",
       "currentFarmer": null
     }
   ],

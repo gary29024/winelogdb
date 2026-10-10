@@ -6,9 +6,9 @@ Reviewed 2026-10-10; target season 2026.
 
 All 38 mapped parcels retain their Tier 1 geometry, rights and historical evidence. Nine holders have a shared review or explicit search. Exact full-parcel schedules, dated secondary research and named-area holdings remain distinct; verified current farming is zero.
 
-Of 38 mapped parcels, 14 have recorded rights and 24 have no matched right holder. All 9 holder groups were triaged. 15 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 23 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
+Of 38 mapped parcels, 14 have recorded rights and 24 have no matched right holder. All 9 holder groups were triaged. 19 parcels have holder-derived or independent-research leads, 0 have an exact-reference application or suspended application, 0 have an authorisation decision, 0 have co-sale leads through a later company holder, and 19 remain without a named candidate. These are mutually exclusive research categories, not farmer counts.
 
-22 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
+18 parcels have inventory records only, not individual source investigations. Historical application references can also lack matched rights.
 
 8 parcels have reviewed company filings naming exact references with contribution, transfer, tenancy or purchase/lease mandate evidence. These do not confirm operation in the target season.
 
@@ -135,7 +135,7 @@ Parcels are grouped by the cadastral lieu-dit holding most of their geometry. Fo
 | Named area | Parcels | Without company record | …of which without any lead | Published beyond company records |
 | --- | ---: | ---: | ---: | ---: |
 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 14 (0.01 ha) | 7 (0.00 ha) | 7 (0.00 ha) | 0.00 ha |
-| Bienvenues-Bâtard-Montrachet | 24 (3.66 ha) | 17 (1.90 ha) | 15 (1.46 ha) | 3.40 ha |
+| Bienvenues-Bâtard-Montrachet | 24 (3.66 ha) | 17 (1.90 ha) | 11 (0.68 ha) | 3.40 ha |
 
 **Published holdings by named area**
 
@@ -162,9 +162,9 @@ All references are in commune 21512 (Puligny-Montrachet). Full IDs and evidence 
 | AI 0019 | Bienvenues-Bâtard-Montrachet | 5007.31 | [775567928](#holder-775567928) | Domaine Faiveley (company-record-research); Domaine Faiveley (critic-named-cadastral-reference) | Unconfirmed |
 | AI 0022 | Bienvenues-Bâtard-Montrachet | 1157.82 | None | Unresolved | Unconfirmed |
 | AI 0026 | Bienvenues-Bâtard-Montrachet | 1152.00 | [U29945686](#holder-u29945686) | Domaine Etienne Sauzet (company-record-research) | Unconfirmed |
-| AI 0108 | Bienvenues-Bâtard-Montrachet | 3247.14 | None | Unresolved | Unconfirmed |
-| AI 0110 | Bienvenues-Bâtard-Montrachet | 2591.29 | [778245316](#holder-778245316) | Domaine Leflaive (company-record-research) | Unconfirmed |
-| AI 0111 | Bienvenues-Bâtard-Montrachet | 2506.89 | None | Unresolved | Unconfirmed |
+| AI 0108 | Bienvenues-Bâtard-Montrachet | 3247.14 | None | Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
+| AI 0110 | Bienvenues-Bâtard-Montrachet | 2591.29 | [778245316](#holder-778245316) | Domaine Leflaive (company-record-research); Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
+| AI 0111 | Bienvenues-Bâtard-Montrachet | 2506.89 | None | Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
 | AI 0112 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 18.88 | None | Unresolved | Unconfirmed |
 | AI 0121 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 6.28 | [429240302](#holder-429240302) | Domaine Bachelet-Ramonet Père et Fils (company-record-research) | Unconfirmed |
 | AI 0122 | Bienvenues-Bâtard-Montrachet | 1335.58 | [429240302](#holder-429240302) | Domaine Bachelet-Ramonet Père et Fils (company-record-research) | Unconfirmed |
@@ -177,9 +177,9 @@ All references are in commune 21512 (Puligny-Montrachet). Full IDs and evidence 
 | AI 0136 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 3.70 | [778245316](#holder-778245316) | Domaine Leflaive (company-record-research) | Unconfirmed |
 | AI 0137 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 3.77 | [408395309](#holder-408395309) | Olivier Leflaive Frères (company-record-research) | Unconfirmed |
 | AI 0138 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 4.14 | [408395309](#holder-408395309) | Olivier Leflaive Frères (company-record-research) | Unconfirmed |
-| AI 0139 | Bienvenues-Bâtard-Montrachet | 1086.68 | [778245316](#holder-778245316) | Domaine Leflaive (company-record-research) | Unconfirmed |
-| AI 0140 | Bienvenues-Bâtard-Montrachet | 1029.55 | None | Unresolved | Unconfirmed |
-| AI 0141 | Bienvenues-Bâtard-Montrachet | 1083.54 | None | Unresolved | Unconfirmed |
+| AI 0139 | Bienvenues-Bâtard-Montrachet | 1086.68 | [778245316](#holder-778245316) | Domaine Leflaive (company-record-research); Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
+| AI 0140 | Bienvenues-Bâtard-Montrachet | 1029.55 | None | Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
+| AI 0141 | Bienvenues-Bâtard-Montrachet | 1083.54 | None | Domaine Leflaive (critic-named-cadastral-reference) | Unconfirmed |
 | AI 0142 | Bienvenues-Bâtard-Montrachet | 464.84 | None | Unresolved | Unconfirmed |
 | AI 0143 | Bienvenues-Bâtard-Montrachet | 463.53 | None | Unresolved | Unconfirmed |
 | AI 0144 | BATARD-MONTRACHET (neighbouring lieu-dit; edge parcels) | 15.64 | [775567928](#holder-775567928) | Domaine Faiveley (company-record-research); Domaine Faiveley (critic-named-cadastral-reference) | Unconfirmed |
@@ -216,6 +216,7 @@ Published vineyard research can name cadastral references or describe holdings. 
 - **Terroir Insight: Domaine Faiveley Bienvenues-Batard-Montrachet** (AI 0019; critic-named-cadastral-reference). Winehog (2020) prints plot 19 at 0.5057 ha, matching the current number and full cadastral area. Secondary historical attribution only. Sources: [Terroir Insight: Domaine Faiveley Bienvenues-Batard-Montrachet](https://winehog.org/terroir-insight-domaine-faiveley-bienvenues-batard-montrachet-40790/).
 - **Terroir Insight: Domaine Faiveley Batard-Montrachet** (AI 0144; critic-named-cadastral-reference). Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified. Sources: [Terroir Insight: Domaine Faiveley Batard-Montrachet](https://winehog.org/terroir-insight-domaine-faiveley-batard-montrachet-41215/).
 - **Winehog: Ramonet’s two-parcel Bienvenues-Bâtard-Montrachet holding** (AI 0017, AI 0123; critic-named-cadastral-reference). Winehog (2020) gives Ramonet’s Bienvenues-Bâtard-Montrachet as AI17 and AI123, 0.4508 ha combined, without individual areas. Today’s cadastral areas add up exactly to 4,508 m², so both are named under the printed-group-total rule. Secondary attribution only; current farming remains unverified. Sources: [Terroir Insight: Domaine Ramonet Bienvenues-Bâtard-Montrachet](https://winehog.org/terroir-insight-domaine-ramonet-bienvenues-batard-montrachet-40782/).
+- **Winehog: Leflaive’s six-parcel Bienvenues-Bâtard-Montrachet holding** (AI 0111, AI 0110, AI 0141, AI 0140, AI 0139, AI 0108; critic-named-cadastral-reference). Winehog (2020) gives Leflaive’s Bienvenues-Bâtard-Montrachet as AI111, AI110, AI141, AI140, AI139 and AI108, 1.158 ha combined, without individual areas. Read as 1.1580 ha (Winehog drops final zeros, as in 4.7750/4.775 ha), today’s six cadastral areas add up exactly to 11,580 m², so each is named under the printed-group-total rule, as the owner agreed. Secondary attribution only; current farming remains unverified. Sources: [Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/).
 
 ## Rights history and parcel lineage
 
@@ -360,7 +361,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - **bivb-names** — [BIVB Bienvenues-Bâtard-Montrachet appellation and commune scope](https://www.bourgogne-wines.com/wine-and-terroir/bourgogne-and-its-appellations/bienvenues-batard-montrachet,2458,9253.html?args=Y29tcF9pZD0yMjc4JmFjdGlvbj12aWV3RmljaGUmaWQ9MjE5Jnw%3D). appellation-reference; read; document date not established. BIVB lists one white Grand Cru in Puligny-Montrachet. The main cadastral BIENVENUES BATARD-MONTRACHET polygon occupies most of it, while BATARD-MONTRACHET contacts its edge. Because the cru name also identifies a smaller constituent, displayLayer remains false; white wines keep the complete INAO feature. No producer holding or distinct official climat is inferred.
 - **bien-winehog-40790** — [Terroir Insight: Domaine Faiveley Bienvenues-Batard-Montrachet](https://winehog.org/terroir-insight-domaine-faiveley-bienvenues-batard-montrachet-40790/). critic; read; document date 2020-06-01. Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated.
 - **bien-winehog-40782** — [Terroir Insight: Domaine Ramonet Bienvenues-Bâtard-Montrachet](https://winehog.org/terroir-insight-domaine-ramonet-bienvenues-batard-montrachet-40782/). critic; read; document date 2020-05-18. Dated secondary research. Ramonet’s AI17 and AI123 are printed with 0.4508 ha combined; today’s cadastral areas add up exactly to 4,508 m² (printed-group-total rule). Historical classifications remain unallocated.
-- **bien-winehog-40775** — [Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/). critic; read; document date 2020-05-09. Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined, a total stated only to 10 m². Today’s six cadastral areas add up to 11,580 m², consistent but not exact under the square-metre rule, so no parcel is named. Historical classifications remain unallocated.
+- **bien-winehog-40775** — [Terroir Insight: Domaine Leflaive Bienvenues-Batard-Montrachet](https://winehog.org/terroir-insight-domaine-leflaive-bienvenues-batard-montrachet-40775/). critic; read; document date 2020-05-09. Dated secondary research. Leflaive’s AI111, AI110, AI141, AI140, AI139 and AI108 are printed with 1.158 ha combined, read as 1.1580 ha with its final zero dropped; today’s six cadastral areas add up exactly to 11,580 m² (printed-group-total rule, owner-approved reading). Historical classifications remain unallocated.
 - **bien-winehog-40828** — [The creation of Bienvenues](https://winehog.org/the-creation-of-bienvenues-40828/). critic; read; document date 2020-05-12. Dated secondary research. Individual numbers and areas are required for a current match; aggregate holdings and historical classifications remain unallocated.
 - **bat-winehog-41215** — [Terroir Insight: Domaine Faiveley Batard-Montrachet](https://winehog.org/terroir-insight-domaine-faiveley-batard-montrachet-41215/). critic; read; document date 2020-06-19. Winehog (2020) names plot 144 and 0.3508 ha, matching the number and full cadastral area. Secondary historical attribution only; no current farming is verified.
 - **bien-holding-faiveley** — [Domaine Faiveley: Bienvenues holding](https://domaine-faiveley.com/fiche-vin/bienvenues-batard-montrachet-grand-cru/). estate; read; document date not established. Official estate page states 0.5057 ha; named-area census without individual parcel allocation.
@@ -419,7 +420,7 @@ Publication/document dates and vintage seasons are separate fields in the curati
 - BBM and Louis Violland have explicit no-link searches. BBM’s historical tenants are individuals; private shareholdings and wine distributions do not establish a producer-company identity or present operation. The executed replacement lease is not in the acquired corpus.
 - INPI/Pappers each returned HTTP 403 on the first batch attempt. Public filing mirrors provide a bounded corpus, not complete corporate history.
 - Eight current parcels have exact full-reference, whole-area and recorded-holder company evidence. Several parcels only contact this cru at the boundary: full cadastral areas are not assigned as Bienvenues holding areas. Fractional bare interest, bare-soil contributions and original historical terms remain qualified.
-- All four requested Bienvenues Winehog articles were supplied and hashed; the missing images were supplied on 10 October 2026. AI19 has both individual number and area. Ramonet’s AI17 + AI123 (0.4508 ha) are named under the printed-group-total rule. Leflaive’s 1.158 ha is printed only to 10 m² and stays unmatched; historical classification numbers remain unallocated.
+- All four requested Bienvenues Winehog articles were supplied and hashed; the missing images were supplied on 10 October 2026. AI19 has both individual number and area. Ramonet’s AI17 + AI123 (0.4508 ha) and Leflaive’s six parcels (1.158 ha, read with the owner as 1.1580 ha) are named under the printed-group-total rule; historical classification numbers remain unallocated.
 - Five holdings from estate pages and supplied Winehog articles remain dated named-area census. Leflaive’s current page rounds to 1.16 ha versus Winehog’s 1.158 ha; these are retained as separate publications without parcel splits. No current farming is verified.
 - Supplemental Pappers review on 10 October 2026 reuses ch-pappers-violland-1996 (6 pages) from Chevalier. Bienvenues remains 4 new distinct PDFs / 141 pages; reused evidence is not counted again. The conflicting-company enclosure does not establish a Violland producer link.
 - Supplied by the owner on 10 October 2026 and reviewed: three Winehog articles on the neighbouring village lieu-dit Les Enseignères (37857, 47634, 49264). They describe land below Bienvenues and print no Bienvenues number or area. The owner also supplied the missing images for the Faiveley and Bienvenues history articles; their hashes are recorded on each source. Images and archives stay outside the repository.

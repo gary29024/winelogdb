@@ -1646,15 +1646,16 @@ class BatardTierTwoTests(unittest.TestCase):
     def test_bienvenues_group_totals_reach_batard_edge_parcels(self):
         groups = {x['id']: x for x in self.curation['externalResearch']
                   if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
-        # Leflaive's 1.158 ha is printed only to 10 m², so AI111 is not named.
         self.assertEqual({k: v['parcelIds'] for k, v in groups.items()},
-                         {'bat-group-ramonet-bienvenues': ['21512000AI0017']})
+                         {'bat-group-ramonet-bienvenues': ['21512000AI0017'],
+                          'bat-group-leflaive-bienvenues': ['21512000AI0111']})
         for item in groups.values():
             self.assertEqual(sum(item['areaEvidence']['groupParcelAreasM2'].values()), item['areaEvidence']['printedTotalM2'])
-        rows = {p['parcelId']: p for p in self.register['parcels']}
-        self.assertEqual(rows['21512000AI0111']['researchStatus'], 'unresolved')
+        # Leflaive's 1.158 ha counts only as an owner-accepted dropped final zero (1.1580 ha).
+        self.assertTrue(groups['bat-group-leflaive-bienvenues']['areaEvidence']['trailingZeroDropped'])
+        self.assertNotIn('trailingZeroDropped', groups['bat-group-ramonet-bienvenues']['areaEvidence'])
         self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
-                          self.register['counts']['unresolved']), (31, 58))
+                          self.register['counts']['unresolved']), (32, 57))
 
 
 
@@ -1700,19 +1701,20 @@ class BienvenuesTierTwoTests(unittest.TestCase):
         groups = {x['id']: x for x in self.curation['externalResearch']
                   if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
         self.assertEqual({k: sorted(v['parcelIds']) for k, v in groups.items()}, {
-            'bien-group-ramonet-bienvenues': ['21512000AI0017', '21512000AI0123']})
+            'bien-group-ramonet-bienvenues': ['21512000AI0017', '21512000AI0123'],
+            'bien-group-leflaive-bienvenues': [f'21512000AI{n:04}' for n in (108, 110, 111, 139, 140, 141)]})
         for item in groups.values():
             self.assertEqual(sum(item['areaEvidence']['groupParcelAreasM2'].values()), item['areaEvidence']['printedTotalM2'])
             self.assertIsNone(item['currentFarmer'])
+        # Leflaive's 1.158 ha counts only as an owner-accepted dropped final zero (1.1580 ha).
+        self.assertTrue(groups['bien-group-leflaive-bienvenues']['areaEvidence']['trailingZeroDropped'])
         unmatched = self.curation['unmatchedPrintedReferences']
-        self.assertEqual(len(unmatched), 2)
+        self.assertEqual(len(unmatched), 1)
         self.assertTrue(all(not x['parcelIds'] for x in unmatched))
-        # Leflaive's 1.158 ha is printed only to 10 m², so it names no parcel even though the digits agree.
-        self.assertTrue(any('1.158' in x['printedReference'] for x in unmatched))
-        self.assertTrue(any('1839/1861' in x['printedReference'] for x in unmatched))
+        self.assertIn('1839/1861', unmatched[0]['printedReference'])
         self.assertEqual(len(self.curation['producerHoldings']), 8)
         self.assertEqual((self.register['counts']['parcels'] - self.register['counts']['unresolved'],
-                          self.register['counts']['unresolved']), (15, 23))
+                          self.register['counts']['unresolved']), (19, 19))
         self.assertTrue(all('parcelIds' not in x for x in self.curation['producerHoldings']))
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
 

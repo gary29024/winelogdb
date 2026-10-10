@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5985372 bytes raw / 554823 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5988783 bytes raw / 555027 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -36,8 +36,8 @@ Lazy evidence total: 5985372 bytes raw / 554823 bytes gzip. Each cru loads its o
 | [ruchottes-chambertin](../../../docs/research/ruchottes-chambertin/register.md) | 26 | 2008-10-06 → 2015-06-29 | 7 / 7 | 3 / 3 | 0 | 0 / 0 | 8682 |
 | [montrachet](../../../docs/research/montrachet/register.md) | 47 | 1994-06-28 → 2023-02-27 | 20 / 6 | 7 / 10 | 0 | 1 / 0 | 20269 |
 | [chevalier-montrachet](../../../docs/research/chevalier-montrachet/register.md) | 44 | 1989-09-22 → 2020-03-16 | 21 / 19 | 13 / 13 | 0 | 0 / 0 | 17425 |
-| [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 22722 |
-| [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 13633 |
+| [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 22814 |
+| [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 13745 |
 | [criots-batard-montrachet](../../../docs/research/criots-batard-montrachet/register.md) | 11 | 2001-03-15 → 2013-04-22 | 6 / 6 | 3 / 3 | 0 | 0 / 0 | 8028 |
 | [corton](../../../docs/research/corton/register.md) | 728 | 1989-04-12 → 2026-06-01 | 239 / 177 | 99 / 138 | 0 | 3 / 0 | 67432 |
 | [corton-charlemagne](../../../docs/research/corton-charlemagne/register.md) | 339 | 1990-01-10 → 2026-03-16 | 96 / 65 | 49 / 64 | 0 | 0 / 0 | 23450 |
