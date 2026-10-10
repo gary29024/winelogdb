@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "measurement": "Production JS chunks and pinned GeoJSON; gzip level 9, mtime 0",
   "initialStaticModules": [
-    "dist/client/assets/index-6lf4aFfv.js"
+    "dist/client/assets/index-D74XpX-V.js"
   ],
   "evidenceInInitialStaticModules": 0,
   "mapStaticModules": [
-    "dist/client/assets/FriendTagDialog-Dnfd-J7q.js",
-    "dist/client/assets/SectionLabel-tTwSFR49.js",
-    "dist/client/assets/SparklingDetailsCard-OqJNfxXJ.js",
-    "dist/client/assets/VillageMap-CaY-OWvX.js",
-    "dist/client/assets/burgundyAtlas-B0xJe3om.js",
-    "dist/client/assets/index-6lf4aFfv.js",
-    "dist/client/assets/index-DYKiFwGL.js",
+    "dist/client/assets/FriendTagDialog-BjgNTaXR.js",
+    "dist/client/assets/SectionLabel-Co5Dw-RG.js",
+    "dist/client/assets/SparklingDetailsCard-P3MJEliJ.js",
+    "dist/client/assets/VillageMap-DimKpjXf.js",
+    "dist/client/assets/burgundyAtlas-DIoSZ4Mf.js",
+    "dist/client/assets/index-D74XpX-V.js",
+    "dist/client/assets/index-DI1uqZaW.js",
     "dist/client/assets/resolve-C1JJtoeP.js",
     "dist/client/assets/schemas-r6ZUzAXA.js",
     "dist/client/assets/sparklingDetails-CctvmUtd.js",
-    "dist/client/assets/useModalFocus-DQRqkaI9.js",
-    "dist/client/assets/wineDetailCompact-BMA52s_B.js"
+    "dist/client/assets/useModalFocus-BPqW64fx.js",
+    "dist/client/assets/wineDetailCompact-C7W_mMiZ.js"
   ],
   "evidenceInMapStaticModules": 0,
   "evidenceChunkCount": 33,
-  "evidenceBytesTotal": 5895398,
-  "evidenceGzipBytesTotal": 544759,
+  "evidenceBytesTotal": 5911350,
+  "evidenceGzipBytesTotal": 547311,
   "parcelBundleBytesTotal": 2479029,
   "parcelBundleGzipBytesTotal": 371100,
   "evidenceChunks": [
@@ -91,10 +91,10 @@
     },
     {
       "cru": "chevalier-montrachet",
-      "file": "dist/client/assets/chevalier-montrachet.evidence-DyuTSY-J.js",
-      "sha256": "15ef2782f6779e5ced5e3bcb63c09ffdbc826233cd7543096e3c0da0cef8f038",
-      "bytes": 149426,
-      "gzipBytes": 16412
+      "file": "dist/client/assets/chevalier-montrachet.evidence-BA6zMvLx.js",
+      "sha256": "cc1a666bba6ef5ea6e29bfa1a0bc34110c7ddaec25a840dfcbcc8d55c6ce3b78",
+      "bytes": 159419,
+      "gzipBytes": 17658
     },
     {
       "cru": "clos-de-la-roche",
@@ -217,10 +217,10 @@
     },
     {
       "cru": "montrachet",
-      "file": "dist/client/assets/montrachet.evidence-BV9-GTFQ.js",
-      "sha256": "952563342346cccc5b94d49a01986b0afcc4e3475510bb508e67a0d950dcf143",
-      "bytes": 210912,
-      "gzipBytes": 19005
+      "file": "dist/client/assets/montrachet.evidence-BZAHf2GK.js",
+      "sha256": "2c96b86a569a26454b2811192b626d7f090908638709fe274cb6f1809f7ede43",
+      "bytes": 216871,
+      "gzipBytes": 20311
     },
     {
       "cru": "musigny",
