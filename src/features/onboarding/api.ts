@@ -18,6 +18,19 @@ export function tourState(raw:string|undefined):TourState{
  }catch{return EMPTY}
 }
 
+/**
+ * Whether a tour can be offered at all.
+ *
+ * No tour_state on the account is not a new member: it is a server from before
+ * migration 0095, where the column does not exist and a finished tour could
+ * not be recorded. A genuinely fresh account carries '{}', which parses to an
+ * empty state and does get the tour. Reading the two as the same thing runs
+ * the tour against a server that cannot remember it ran - and, during a deploy
+ * where the Worker lands before the migration, would show it to every existing
+ * member at once.
+ */
+export const toursAvailable=()=>typeof getAccount()?.tour_state==='string';
+
 export const currentTourState=()=>tourState(getAccount()?.tour_state);
 export const hasSeen=(state:TourState,tour:string)=>state.skipped||state.completed.includes(tour);
 

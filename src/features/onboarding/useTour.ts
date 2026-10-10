@@ -1,7 +1,7 @@
 import { useCallback,useEffect,useMemo,useState } from 'react';
 import { useLocation,useNavigate } from 'react-router-dom';
 import { getAccount } from '../../lib/auth/client';
-import { currentTourState,hasSeen,saveTourState } from './api';
+import { currentTourState,hasSeen,saveTourState,toursAvailable } from './api';
 import { FIRST_RUN,firstRun,stepsFor,tourById,type Tour } from './steps';
 
 /**
@@ -102,7 +102,9 @@ export function useTour(){
  const [tour,setTour]=useState<Tour>(firstRun);
  const steps=useMemo(()=>stepsFor(tour.steps,role,mobile),[tour,role,mobile]);
  const [index,setIndex]=useState(0);
- const [open,setOpen]=useState(()=>Boolean(account)&&!hasSeen(currentTourState(),FIRST_RUN));
+ // Only the automatic offer is gated: asking for a tour by name from Account
+ // is the reader's own choice, and an unsaveable one is a nuisance, not a bug.
+ const [open,setOpen]=useState(()=>Boolean(account)&&toursAvailable()&&!hasSeen(currentTourState(),FIRST_RUN));
 
  useEffect(()=>{
   replay=requested=>{const next=tourById(requested);if(!next)return;setTour(next);setIndex(0);setOpen(true)};

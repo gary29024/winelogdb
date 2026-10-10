@@ -277,7 +277,7 @@ All four phases are built:
 
 ## 8. Testing
 
-All green: 5707 unit tests across 352 files, plus 10 e2e tests.
+All green: 5709 unit tests across 352 files, plus 10 e2e tests.
 
 Unit:
 
@@ -348,6 +348,23 @@ limits). All three guards pass untouched, and the scan sheet's four labels are
 unchanged. Nothing for the tour to say: a progress bar during a scan is
 feedback on something the reader already started, not a place they could fail
 to find.
+
+**An absent column is not a new member.** CI on the first PR run went red in
+every browser job, and not on the tour's own tests: the first-run tour was
+opening over `lwin-edit`, `deep-search-recovery` and the Burgundy specs and
+swallowing their clicks. Those fixtures mock `/api/me` with no `tour_state`,
+which the client read as a fresh account.
+
+The fix is a distinction, not a test edit. No `tour_state` at all means a
+server from before migration 0095, where the column does not exist and a
+finished tour could not be recorded; `'{}'` means a real account with an empty
+state, which does get the tour. Reading the two as one would also have shown
+the tour to every existing member during any deploy where the Worker landed
+before the migration. Only the automatic offer is gated — asking for a tour by
+name from Account is the reader's own choice.
+
+This is the third time one value has stood for two states in this feature,
+after the two below. It is the failure this design keeps inviting.
 
 Two bugs the tests found during the original build, both of which would
 otherwise have shipped:

@@ -75,6 +75,21 @@ describe('the first-run tour',()=>{
   expect(bubble()).toBeNull();
  });
 
+ /**
+  * The distinction that broke every other browser test: an account payload with
+  * no tour_state is a server from before the migration, not a new member. The
+  * tour must not open over an app that cannot record it was run.
+  */
+ it('stays away when the account carries no tour state at all',async()=>{
+  await mount(undefined);
+  expect(bubble()).toBeNull();
+ });
+
+ it('still opens for a fresh account, whose column holds an empty object',async()=>{
+  await mount('{}');
+  expect(bubble()).toBeTruthy();
+ });
+
  it('treats an unreadable stored state as never seen rather than failing',async()=>{
   await mount('not json at all');
   expect(bubble()).toBeTruthy();
