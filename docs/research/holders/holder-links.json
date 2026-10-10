@@ -18044,12 +18044,23 @@
           ],
           "outcome": "linked",
           "note": "Reuses the reviewed Domaine Leflaive company identity and the four-filings / 111-page Montrachet screening. No exact AH77/AH148 schedule accepted. The company is distinct from the Leflaive GFA and a corporate identity does not establish present operation."
+        },
+        {
+          "at": "2026-10-10",
+          "where": [
+            "entreprises.lefigaro.fr free filing index",
+            "actes.ccm2.net: complete screening (embedded text or RapidOCR at 150 dpi)",
+            "https://recherche-entreprises.api.gouv.fr/search?q=778245316&per_page=10",
+            "https://recherche-entreprises.api.gouv.fr/search?q=884378621&per_page=10"
+          ],
+          "outcome": "linked",
+          "note": "Owner-requested search on 10 October 2026: 15 more filings / 410 pages. From 2016 the statutes say the vines belong to family members, directly or through the GFA, and are leased to the company; a recited 23 June 2012 agreement commits it to buy leased vines on request. No filing names AH131, AI108, AI112 or the 2024 to 2025 rights change. Holding company LEFLAIVE SAS (884378621; 10 filings / 378 pages) holds company shares, not land."
         }
       ],
       "effort": {
-        "filingsScreened": 4,
-        "pagesRead": 111,
-        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch."
+        "filingsScreened": 19,
+        "pagesRead": 521,
+        "note": "Distinct PDF byte hashes in the Montrachet pass; every page OCR-screened at 150 dpi. Shared holders are researched once for this batch. 10 October 2026: 15 more distinct filings / 410 pages."
       }
     },
     "778252445": {

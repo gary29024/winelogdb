@@ -1439,6 +1439,10 @@ class MontrachetTierTwoTests(unittest.TestCase):
         lamy = research['mt-winehog-32708-lamy-pillot']
         self.assertEqual((lamy['basis'], lamy['printedReferences'], lamy['parcelAreasM2']),
                          ('critic-named-cadastral-reference', ['AE24'], {'21150000AE0024': 542}))
+        # The guide's 5 a 42 ca en métayage corroborates the number; the domaine is a sharecropper, not the owner.
+        self.assertEqual(lamy['sourceIds'], ['mt-winehog-32708', 'census-mt-lamy-pillot-hachette'])
+        census = {h['id']: h for h in self.curation['producerHoldings'] if h['id'].startswith('mt-census-')}
+        self.assertEqual(census['mt-census-domaine-lamy-pillot']['relation'], 'metayer')
         fleurot = research['mt-winehog-29563-fleurot']
         self.assertEqual((fleurot['basis'], fleurot['printedReferences'], fleurot['parcelAreasM2']),
                          ('critic-attribution-area-reconstructed', [], {'21150000AE0173': 405}))
