@@ -30,7 +30,7 @@ procedures remain distinct evidence; none establishes current farming.
 | Parcels with no lead | 10; includes AH118–121, whose printed 0.8 ha total is 2 m² above today’s 7,998 m² sum |
 | Verified farming links | 0 |
 | Official history to earliest records (#461) | Delivered for per-cru review: complete official DFI member queried, earliest reachable validation 1994-06-28, all pinned geometry vintages and published rights; sale/notice coverage remains source-specific and qualified |
-| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 217,107 / 20,263 bytes |
+| Raw / gzip payload (parcels, evidence) | Parcels: 177,348 / 27,064 bytes. Evidence: 217,135 / 20,269 bytes |
 
 Measurements use Python 3.12 `gzip.compress(data, mtime=0)`. The parcel download
 is the shared 201-parcel Montrachet bundle; this cru selects 47 unique parcels.
@@ -44,7 +44,7 @@ Parcel rights is enabled. The production payload report checks compiled JS.
 | Parcels / recorded holders | 47 / 15 | 47 / 15 |
 | Parcels with holder or research leads | 0 | 37 |
 | Parcels with no lead | 47 | 10 |
-| Applicable reviewed holder links | 0 | 12 |
+| Applicable reviewed holder links | 0 | 13 (12 holders) |
 | Provisional reported-tenancy links | 0 | 1 |
 | Parcels with exact company filings | 0 | 6 |
 | Verified farming links | 0 | 0 |
@@ -206,20 +206,25 @@ they add five parcels with leads (32 to 37). Current farming stays unverified ev
 - **Printed group totals.** A source that prints several current numbers with one
   total area now names each parcel when today’s cadastral areas add up to that total
   exactly, to the square metre. The research build checks the sum. Two Chevalier
-  groups reach this cru: Leflaive’s six plots (1.8273 ha = 18,273 m²; AH77, AH131 and
-  AH149 lie here) and Bouchard’s ten plots (2.3295 ha = 23,295 m²; AH11 lies here).
+  groups touch this cru: Leflaive’s six plots (1.8273 ha = 18,273 m²) and Bouchard’s ten
+  plots (2.3295 ha = 23,295 m²). Their parcels lie in Chevalier; AH77, AH131, AH149 and
+  AH11 only touch the Montrachet outline (8, 16, 4 and 54 m² of overlap), as edge parcels
+  of the shared bundle. The research build now also requires the printed total to be
+  stated to the square metre.
   Puligny 118–121 is printed as 0.8 ha against 7,998 m² today, so it stays unmatched.
 - **Laguiche and Drouhin.** Drouhin’s own 2023 page says its family cultivates and
   vinifies the Laguiche Montrachet. U18179542 (GFA de Laguiche, AH64) now has a
   provisional `reported-tenancy` link to Maison Joseph Drouhin, limited to Montrachet.
   The 2002 deed still names an individual tenant, so this is not a filed lease.
 - **Supplied maps.** The owner supplied the missing Winehog images (`photos.zip`).
-  The 1921 map outlines plot 24, not 34, so AE24 (542 m², 0.0542 ha) is named for the
-  René Lamy-Pillot family.
+  The 1921 map outlines plot 24, not 34, so AE24 (542 m², 0.0542 ha) is named. The
+  article lists it for a private owner, with Lamy-Pillot as producer.
 - **Six-domaine map.** The 2016 map numbers six Chassagne holdings without cadastral
-  numbers. Fleurot’s 0.0405 ha strip sits directly above Leflaive’s AE134 (821 m²,
-  0.0821 ha, matching its filing). That strip is AE173, exactly 405 m². This is
-  recorded as `critic-attribution-area-reconstructed`, labelled “Matched by area only”.
+  numbers. Fleurot’s 0.0405 ha (holding 6) is a narrow strip in the block whose bottom
+  strip is Leflaive’s AE134 (holding 4; 821 m², matching its filing). AE132 and AE133 lie
+  between them, and the strip above AE132 is AE173, exactly 405 m²; its neighbour AE172 is
+  428 m². This is recorded as `critic-attribution-area-reconstructed`, labelled “Matched
+  by area only”.
 - **Lafon.** Lafon’s printed 0.3182 ha equals AE37 (3,182 m²), whose recorded holder is
   already the Lafon GFA. No new lead results, so the source stays unmatched.
 - **Producer-filing search.** Four more GFA Lafon filings (66 pages) were screened. Share
@@ -231,8 +236,9 @@ they add five parcels with leads (32 to 37). Current farming stays unverified ev
 - **Web census.** Four producer holdings from hashed estate, importer and guide pages join the
   named-area census: Blain-Gagnard 0.08 ha, Fontaine-Gagnard 7 a 81 ca, Guy Amiot 0.10 ha
   and Lamy-Pillot 5 a 42 ca. A Guide Hachette page says Lamy-Pillot has worked that
-  Dents-de-Chien parcel en métayage (sharecropping) since 1988. Its area equals AE24, so
-  it is cited on the AE24 entry, which now names Lamy-Pillot as a sharecropper, not owner.
+  Dents-de-Chien parcel en métayage (sharecropping) since 1988 (an undated review of the
+  2003 vintage). Its area equals AE24, so it is cited on the AE24 entry, which describes
+  Lamy-Pillot as a sharecropper on that account, not the owner.
   Holdings never name parcels.
 - **Leflaive search.** 15 more Domaine Leflaive filings (410 pages) were screened for the 2024
   to 2025 rights change on AH131, AI108 and AI112. Since 2016 the statutes say the family’s

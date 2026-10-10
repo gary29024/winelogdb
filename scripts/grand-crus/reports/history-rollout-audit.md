@@ -6,7 +6,7 @@ Independent raw-byte size/hash, unmodified current geometry, raw DFI rows, compl
 
 Notice availability and search gaps remain explicit, especially all Yonne departmental years. This audit does not imply complete notice coverage, named-area crosswalks, producer investigations or original ownership.
 
-Lazy evidence total: 5871830 bytes raw / 534720 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
+Lazy evidence total: 5869967 bytes raw / 534641 bytes gzip. Each cru loads its own chunk on demand. Full per-cru metadata, source samples and payload sizes are in [the JSON audit](history-rollout-audit.json).
 
 | Cru | Parcels | DFI validation range | Ancestors / pre-2019 | Documents / lots | Inferred only | Notice matches / candidates | Evidence gzip bytes |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
@@ -20,7 +20,7 @@ Lazy evidence total: 5871830 bytes raw / 534720 bytes gzip. Each cru loads its o
 | [la-tache](../../../docs/research/la-tache/register.md) | 2 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 7830 |
 | [la-grande-rue](../../../docs/research/la-grande-rue/register.md) | 3 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 0 / 0 | 8754 |
 | [musigny](../../../docs/research/musigny/register.md) | 51 | 1994-02-15 → 2024-07-15 | 7 / 3 | 6 / 7 | 0 | 0 / 0 | 14315 |
-| [bonnes-mares](../../../docs/research/bonnes-mares/register.md) | 130 | 1990-01-10 → 2020-11-09 | 22 / 22 | 7 / 11 | 0 | 3 / 0 | 19209 |
+| [bonnes-mares](../../../docs/research/bonnes-mares/register.md) | 130 | 1990-01-10 → 2020-11-09 | 22 / 22 | 7 / 11 | 0 | 3 / 0 | 19124 |
 | [clos-de-tart](../../../docs/research/clos-de-tart/register.md) | 17 | 1989-04-18 → 2003-11-04 | 5 / 5 | 4 / 4 | 0 | 0 / 0 | 11396 |
 | [clos-des-lambrays](../../../docs/research/clos-des-lambrays/register.md) | 22 | none matched → none matched | 0 / 0 | 0 / 0 | 0 | 7 / 0 | 8476 |
 | [clos-saint-denis](../../../docs/research/clos-saint-denis/register.md) | 49 | 1989-04-14 → 1995-12-05 | 14 / 14 | 5 / 11 | 0 | 0 / 0 | 14285 |
@@ -34,7 +34,7 @@ Lazy evidence total: 5871830 bytes raw / 534720 bytes gzip. Each cru loads its o
 | [latricieres-chambertin](../../../docs/research/latricieres-chambertin/register.md) | 25 | 1995-09-25 → 2023-02-13 | 11 / 10 | 6 / 6 | 0 | 0 / 0 | 8714 |
 | [mazis-chambertin](../../../docs/research/mazis-chambertin/register.md) | 62 | 1993-05-03 → 2026-03-02 | 7 / 3 | 5 / 5 | 0 | 0 / 0 | 10158 |
 | [ruchottes-chambertin](../../../docs/research/ruchottes-chambertin/register.md) | 26 | 2008-10-06 → 2015-06-29 | 7 / 7 | 3 / 3 | 0 | 0 / 0 | 8682 |
-| [montrachet](../../../docs/research/montrachet/register.md) | 47 | 1994-06-28 → 2023-02-27 | 20 / 6 | 7 / 10 | 0 | 1 / 0 | 20263 |
+| [montrachet](../../../docs/research/montrachet/register.md) | 47 | 1994-06-28 → 2023-02-27 | 20 / 6 | 7 / 10 | 0 | 1 / 0 | 20269 |
 | [chevalier-montrachet](../../../docs/research/chevalier-montrachet/register.md) | 44 | 1989-09-22 → 2020-03-16 | 21 / 19 | 13 / 13 | 0 | 0 / 0 | 10693 |
 | [batard-montrachet](../../../docs/research/batard-montrachet/register.md) | 89 | 1993-12-09 → 2026-03-12 | 33 / 24 | 15 / 15 | 0 | 2 / 0 | 12427 |
 | [bienvenues-batard-montrachet](../../../docs/research/bienvenues-batard-montrachet/register.md) | 38 | 1993-10-04 → 2026-03-12 | 23 / 20 | 7 / 9 | 0 | 0 / 0 | 10106 |

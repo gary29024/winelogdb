@@ -15,7 +15,7 @@ Four entries cover six current parcels. Each has its printed current reference, 
 | [DRC: historical estate schedule](https://actes.ccm2.net/acte/5409256#page=40) | 1974-12-21 | AE31: 3419 m²; AE129: 1670 m² | The 1974 notarial statutes name AE31 and AE129 with matching individual areas. AE130 is not printed. Filed in a 2002 bundle; historical estate evidence, not a 2002 acquisition or current farming. |
 | [Jacques Prieur: retained property schedule](https://actes.ccm2.net/acte/70384563-6751-4f80-b0dc-26f5fb4d5fa3#page=1) | 2021-06-21 | AE30: 2090 m²; AE33: 3773 m² | The 2021 statutes name both AE30 and AE33 with matching individual areas. The company identity crosswalk is supported by the schedule and official legal notice; current farming is unverified. |
 | [GFA des Associés du Domaine Leflaive: contribution](https://actes.ccm2.net/acte/8cfc21aa-8b68-4cb1-9f59-6c4dca2cb902#page=1) | 2009-12-12 | AE134: 821 m² | The GFA formation contributes AE134 (821 m²). A 2011 deed filed in 2017 recites a 2009 lease to Domaine Leflaive, ending 11 November 2033. The original lease and present performance were not reviewed; the separate Verzé lease does not apply here. |
-| [GFA de Laguiche: founding contribution](https://actes.ccm2.net/acte/9c898133-12c5-4836-ba59-3d64d9cbed11#page=2) | 2002-06-04 | AH64: 20625 m² | The formation names AH64 (20625 m²). A same-day donation recites an executed lease to Jean de Laguiche personally; it does not name Drouhin as tenant. No renewal or current farming season is established. |
+| [GFA de Laguiche: founding contribution](https://actes.ccm2.net/acte/9c898133-12c5-4836-ba59-3d64d9cbed11#page=2) | 2002-06-04 | AH64: 20625 m² | The formation names AH64 (20625 m²). A same-day donation recites an executed lease to an individual family member; it does not name Drouhin as tenant. No renewal or current farming season is established. |
 
 ## Original-reference research
 
@@ -43,7 +43,7 @@ The Colin references are not exact filings on AE208–220. The existing DFI grou
 | DOMAINE HEITZ LOCHARDET (`420474645`) | 5 | 147 | The official registry and five company filings identify Domaine Heitz-Lochardet. The 2021 property contribution concerns other communes; the 2024 contribution transfers company shares to Faciens Vinum. No qualifying current AH16 schedule found. |
 | GFA DES ASSOCIES DU DOMAINE LEFLAIVE (`519806384`) | 3 | 173 | The GFA contribution names AE134 (821 m²). A 2011 deed recites its 2009 lease to Domaine Leflaive, ending 11 November 2033. The original lease and current performance are unreviewed; the separate Verzé lease is not Montrachet evidence. |
 | GFA DU DOMAINE DES COMTES LAFON (`778232892`) | 4 | 80 | The 1994 decision transfers the operating branch to SARL Domaine des Comtes Lafon and retains the land company as a GFA. The 1996 donation recites estate leases; no AE37 schedule or current renewal is established. Corporate succession is not farming. |
-| GFA DE LAGUICHE (`U18179542`) | 3 | 66 | AH64 and its 20625 m² area establish the GFA de Laguiche identity. The 2002 donation names Jean de Laguiche personally as tenant. Drouhin’s published cultivation account does not establish a Drouhin company lease; current farming is unverified. |
+| GFA DE LAGUICHE (`U18179542`) | 3 | 66 | AH64 and its 20625 m² area establish the GFA de Laguiche identity. The 2002 donation names an individual family member as tenant. Drouhin’s published cultivation account does not establish a Drouhin company lease; current farming is unverified. |
 
 Counts describe this pass, including re-screened shared sources, and are not additive lifetime totals. Twelve holders have applicable reviewed links. Thenard remains without an established U-identifier crosswalk; Laguiche has a company identity but no supported Drouhin company link; the municipality has no producer link.
 
@@ -421,7 +421,7 @@ SHA-256 `688e34425f8f224811f2a4beeaff04817c3517484c3057872a10844de56ef2e8`; 484,
 
 [GFA de Laguiche: selected filing 2002-06-04 (deposit 2002-09-24)](https://actes.ccm2.net/acte/9c898133-12c5-4836-ba59-3d64d9cbed11) — document **2002-06-04**, deposit **2002-09-24**; **24 pages**, all OCR-screened.
 
-The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to Jean de Laguiche personally. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
+The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to an individual family member. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
 
 SHA-256 `86fe353f6686adc863b109831b4f3c25fdc160b3ec9071678dcef6e1b8565301`; 877,197 bytes; retrieved 2026-10-09T13:44:05.913992+00:00.
 
@@ -429,7 +429,7 @@ SHA-256 `86fe353f6686adc863b109831b4f3c25fdc160b3ec9071678dcef6e1b8565301`; 877,
 
 [GFA de Laguiche: selected filing 2002-06-04 (deposit 2002-12-10)](https://actes.ccm2.net/acte/a20e2694-ade7-40cc-b9e8-6fc6c6402f94) — document **2002-06-04**, deposit **2002-12-10**; **11 pages**, all OCR-screened.
 
-The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to Jean de Laguiche personally. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
+The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to an individual family member. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
 
 SHA-256 `cbe5a5fa42fc7bb88ed5f0a7d1ed78ec124d4ce368b99d8c0abac534f2b4edb0`; 326,486 bytes; retrieved 2026-10-09T13:44:08.810281+00:00.
 
@@ -437,7 +437,7 @@ SHA-256 `cbe5a5fa42fc7bb88ed5f0a7d1ed78ec124d4ce368b99d8c0abac534f2b4edb0`; 326,
 
 [GFA de Laguiche: selected filing 2019-02-15 (deposit 2019-02-28)](https://actes.ccm2.net/acte/c2cc2630-88bb-4109-9fdf-b237624ecf72) — document **2019-02-15**, deposit **2019-02-28**; **31 pages**, all OCR-screened.
 
-The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to Jean de Laguiche personally. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
+The 4 June 2002 GFA formation and 2019 statutes name AH64 (20625 m²), supporting U18179542 to 443494075. The same-day donation recites an executed lease to an individual family member. Drouhin’s published cultivation/vinification account does not prove a lease to a Drouhin company; no such holder-to-company link asserted.
 
 SHA-256 `f800dda569356126e4065c2b79adae051b909d1305ca524cc4e988bfbf0d03f7`; 1,560,707 bytes; retrieved 2026-10-09T13:44:14.050001+00:00.
 
@@ -507,10 +507,13 @@ Page images checked: 1, 10, 36, 41, 55 (one-based PDF). SHA-256 `a9a4d05f83f5d4d
 This section supersedes the earlier statements above.
 
 - **Plot 24.** The 34/24 conflict in the 1921 expansion article is settled by the map, which the owner supplied
-  on 10 October. The map outlines 24, so AE24 (542 m²) is named for the René Lamy-Pillot family.
-- **Fleurot.** The unnumbered 2016 six-domaine map places Fleurot’s 0.0405 ha on AE173 (405 m²), directly above
-  Leflaive’s AE134. This is labelled as matched by map position and area, not by a printed number.
-- **Group totals.** The Leflaive and Bouchard Chevalier aggregates name AH77, AH131, AH149 and AH11 here. Today’s
+  on 10 October. The map outlines 24, so AE24 (542 m²) is named. The article lists it for a private owner, with
+  Lamy-Pillot as producer.
+- **Fleurot.** The unnumbered 2016 six-domaine map places Fleurot’s 0.0405 ha in the block whose bottom strip is
+  Leflaive’s AE134, two strips above it, on AE173 (405 m²). This is labelled as matched by map position and area,
+  not by a printed number.
+- **Group totals.** The Leflaive and Bouchard Chevalier aggregates name AH77, AH131, AH149 and AH11, which only
+  touch the Montrachet outline. Today’s
   cadastral areas add up exactly to each printed total.
 - **No change.** Leflaive’s and Lafon’s published holdings, and Prieur’s 30, stay unmatched as described above.
 

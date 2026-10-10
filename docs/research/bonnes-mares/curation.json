@@ -231,7 +231,7 @@
       "bytes": 3999928,
       "retrievedAt": "2026-10-09T05:15:15.675485+00:00",
       "retrievalNote": "Authorized user-supplied WebArchive, hashed as original bytes. Complete article and available relevant maps reviewed; some lazy-loaded figures are absent. Raw archive, full text and images stay outside Git.",
-      "finding": "AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total; today’s five cadastral areas add up exactly to 4,250 m², so each is named under the printed-group-total rule. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha."
+      "finding": "AB96 individually matches 1465 m2. AB321/322/358/360/72 share a 0.425 ha total, printed only to 10 m²; today’s five cadastral areas add up to 4,250 m², but the printed-group-total rule needs square metres, so they remain unmatched. The 0.5715 ha article total differs from the separately reviewed estate sheet at 0.5801 ha."
     },
     {
       "id": "bm-winehog-roumier",
@@ -933,54 +933,6 @@
       "currentFarmer": null
     },
     {
-      "id": "bm-group-dujac-five-parcels",
-      "title": "Winehog: Dujac’s five-parcel Bonnes-Mares group",
-      "parcelIds": [
-        "21133000AB0321",
-        "21133000AB0322",
-        "21133000AB0358",
-        "21133000AB0360",
-        "21133000AB0072"
-      ],
-      "parcelAreasM2": {
-        "21133000AB0321": 492,
-        "21133000AB0322": 424,
-        "21133000AB0358": 478,
-        "21133000AB0360": 2758,
-        "21133000AB0072": 98
-      },
-      "printedReferences": [
-        "AB321",
-        "AB322",
-        "AB358",
-        "AB360",
-        "AB72"
-      ],
-      "areaEvidence": {
-        "kind": "printed-group-total",
-        "printedTotal": "0.425 ha",
-        "printedTotalM2": 4250,
-        "groupParcelAreasM2": {
-          "21133000AB0321": 492,
-          "21133000AB0322": 424,
-          "21133000AB0358": 478,
-          "21133000AB0360": 2758,
-          "21133000AB0072": 98
-        },
-        "individualAreasSource": "pinned-cadastral-snapshot",
-        "decidedAt": "2026-10-10"
-      },
-      "basis": "critic-named-cadastral-reference",
-      "finding": "Winehog (2018) gives Dujac’s AB321, AB322, AB358, AB360 and AB72 as 0.425 ha combined, without individual areas. Today’s cadastral areas add up exactly to 4,250 m², so each is named under the printed-group-total rule. This is critic research, not a company-record crosswalk for the provisional holder identifier recorded on four of them. Secondary attribution only; current farming remains unverified.",
-      "sourceIds": [
-        "bm-winehog-dujac"
-      ],
-      "producer": "Domaine Dujac",
-      "appNote": "Winehog prints AB321, AB322, AB358, AB360, AB72 with 0.425 ha in total; today’s cadastral areas add up exactly. Each is named by number; secondary attribution, current farming unverified.",
-      "dateSourceId": "bm-winehog-dujac",
-      "currentFarmer": null
-    },
-    {
       "id": "bm-group-vogue-ab98-ab99",
       "title": "Winehog: Vogüé’s AB98 and AB99 in Bonnes-Mares",
       "parcelIds": [
@@ -1547,6 +1499,13 @@
       "printedReference": "AB111: no area",
       "parcelIds": [],
       "limitation": "Printed without an individual area. The AB98/AB99 pair in the same article is named under the printed-group-total rule; AB111 is not.",
+      "currentFarmer": null
+    },
+    {
+      "sourceId": "bm-winehog-dujac",
+      "printedReference": "AB321, AB322, AB358, AB360, AB72: combined 0.425 ha",
+      "parcelIds": [],
+      "limitation": "No individual printed areas. The total is printed only to 10 m² (0.425 ha); today’s five cadastral areas add up to 4,250 m², consistent but not exact under the printed-group-total rule’s square-metre requirement, so no parcel is named.",
       "currentFarmer": null
     }
   ]

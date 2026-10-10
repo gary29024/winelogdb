@@ -626,22 +626,22 @@ class BonnesMaresTier2Tests(unittest.TestCase):
         ext = {x['id']: x for x in self.curation['externalResearch']}
         self.assertEqual(ext['bm-wh-arlaud']['parcelIds'], ['21133000AB0076', '21133000AB0121'])
         self.assertEqual(ext['bm-wh-groffier']['parcelIds'], ['21133000AB0266'])
-        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 9)
+        self.assertEqual(len(self.curation['unmatchedPrintedReferences']), 10)
         self.assertTrue(all(not r['parcelIds'] and r['currentFarmer'] is None
                             for r in self.curation['unmatchedPrintedReferences']))
-        # Exact group totals name Dujac's five and Vogüé's two parcels; Drouhin's 0.2298 ha (2,300 m² today) does not.
+        # Vogüé's 473 m² names AB98 and AB99. Dujac's 0.425 ha is printed only to 10 m² and Drouhin's 0.2298 ha
+        # (2,300 m² today) is not exact, so neither names a parcel.
         groups = {x['id']: sorted(x['parcelIds']) for x in self.curation['externalResearch']
                   if x.get('areaEvidence', {}).get('kind') == 'printed-group-total'}
-        self.assertEqual(groups, {
-            'bm-group-dujac-five-parcels': [f'21133000AB{n:04d}' for n in (72, 321, 322, 358, 360)],
-            'bm-group-vogue-ab98-ab99': ['21133000AB0098', '21133000AB0099']})
+        self.assertEqual(groups, {'bm-group-vogue-ab98-ab99': ['21133000AB0098', '21133000AB0099']})
+        self.assertTrue(any('0.425' in r['printedReference'] for r in self.curation['unmatchedPrintedReferences']))
         self.assertTrue(any('0.2298' in r['printedReference'] for r in self.curation['unmatchedPrintedReferences']))
         self.assertFalse(self.table['holders']['U21117863'].get('identity'))
         self.assertEqual(len(self.curation['producerHoldings']), 11)
         self.assertTrue(all('parcelIds' not in h for h in self.curation['producerHoldings']))
         arlaud = next(h for h in self.curation['producerHoldings'] if h['id'] == 'bm-arlaud')
         self.assertEqual((arlaud['publishedAreaHa'], arlaud['otherPublishedAreas'][0]['areaHa']), (.2131, .2081))
-        self.assertEqual(self.register['counts']['unresolved'], 78)
+        self.assertEqual(self.register['counts']['unresolved'], 82)
         self.assertEqual(self.register['counts']['currentFarmerConfirmed'], 0)
         self.assertTrue(all(p['currentFarmer'] is None for p in self.register['parcels']))
 
@@ -1403,7 +1403,7 @@ class MontrachetTierTwoTests(unittest.TestCase):
 
     def test_individual_and_company_tenants_remain_distinct(self):
         fs = {f['id']: f for f in self.curation['parcelFilings']}
-        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['Jean de Laguiche (individual)'])
+        self.assertEqual(fs['mt-laguiche-2002']['leaseEvidence'][0]['tenants'], ['An individual (Laguiche family)'])
         lease = fs['mt-leflaive-gfa-2009']['leaseEvidence'][0]
         self.assertEqual((lease['tenants'], lease['effectiveFrom'], lease['effectiveTo']),
                          (['Domaine Leflaive (778245316)'], '2009-07-04', '2033-11-11'))
