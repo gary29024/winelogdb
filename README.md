@@ -52,6 +52,8 @@ WineLog keeps the large LWIN and ELID reference catalogues as versioned producer
 
 Import an official Liv-ex workbook directly with `npm run lwin:import -- "C:\path\LWINdatabase.xlsx"`; no CSV conversion is required. ELID has no official machine-readable feed available to WineLog, so `npm run elid:sync` performs a conservative, rate-limited registry crawl that stores identifier facts only and never runs during bottle recognition. See **[Importing and refreshing LWIN and ELID reference data](docs/lwin-import.md)**.
 
+A scanned photo's approximate place is the nearest GeoNames town to its EXIF GPS, read from R2 shards that `npm run places:import` uploads once; the GPS is never sent to the label model. See **[Naming where a photo was taken](docs/photo-places.md)**.
+
 ## Search
 
 The migration creates owner/filter/sort indexes and an FTS5 table for producer, name, region, grapes, notes, event, and tags. API filtering supports vintage, country, region, style, minimum rating, and event, plus stable `limit`/`offset` loading and sorts for newest, oldest, rating, producer, and vintage. The UI stores all selections in URL query parameters so views are bookmarkable. Production write paths should maintain `wine_search` using D1 triggers or application transactions when enabling FTS queries at scale.

@@ -1,9 +1,12 @@
 export const REFERENCE_SHARDS=256;
-export type ReferenceProvider='lwin'|'elid';
+export type ReferenceProvider='lwin'|'elid'|'places';
 export type ReferenceManifest={
  provider:ReferenceProvider;version:string;prefix:string;shardCount:number;rows:number;matchableRows?:number;sparseRows?:number;
  source:string;sourceUpdatedAt:string|null;generatedAt:string;redirectsKey?:string|null;producerIndexKey?:string|null;lwinIdIndexPrefix?:string|null;
+ namesKey?:string|null;
 };
+/** Display names for photo places: first-level regions by "CC.code", countries by ISO code. */
+export type PlaceNames={regions:Record<string,string>;countries:Record<string,string>};
 export type ElidReferenceRecord={
  elid:string;baseElid:string;producerCode:string;producerName:string;producerKey:string;
  wineName:string;wineKey:string;vintageCode:string;sourceUrl:string;
@@ -119,6 +122,10 @@ export async function lwinRedirects(bucket:ReferenceSource):Promise<Record<strin
 export async function elidProducerIndex(bucket:ReferenceSource):Promise<ElidProducerIndex>{
  const manifest=await referenceManifest(bucket,'elid');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<ElidProducerIndex>(bucket,manifest.producerIndexKey)??{};
+}
+export async function placeNames(bucket:ReferenceSource):Promise<PlaceNames>{
+ const manifest=await referenceManifest(bucket,'places');if(!manifest?.namesKey)return {regions:{},countries:{}};
+ return await jsonObject<PlaceNames>(bucket,manifest.namesKey)??{regions:{},countries:{}};
 }
 
 /**
