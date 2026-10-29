@@ -62,7 +62,9 @@ export async function createWineResearchRun(db:D1Database,owner:string,wineId:st
     ]);
     if(!result[0].meta.changes)throw new Error('Research reservation is no longer available');
   }else await insert.run();
-  await db.prepare("DELETE FROM wine_research_runs WHERE owner_id=? AND updated_at<datetime('now','-30 days')").bind(owner).run().catch(()=>undefined);
+  // Cut off on the clock and in the format the rows were stamped with. SQLite's
+  // datetime('now') is another clock, and it writes a space where these have a T.
+  await db.prepare('DELETE FROM wine_research_runs WHERE owner_id=? AND updated_at<?').bind(owner,new Date(Date.now()-30*86400_000).toISOString()).run().catch(()=>undefined);
   return {run:(await getWineResearchRun(db,owner,wineId,requestId))!,created:true};
 }
 
