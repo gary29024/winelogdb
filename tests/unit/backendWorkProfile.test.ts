@@ -50,7 +50,7 @@ it('profiles common reads, cached navigation, recognition and competing dispatch
    expect(response.status).toBe(200);expect(await response.json()).toMatchObject({canonicalName:'Estate'});
   });
   const referenceGet=vi.fn(async(key:string)=>({text:async()=>JSON.stringify(key.endsWith('current.json')?{prefix:'reference/lwin/v1',shardCount:256}:[])}));
-  await measure('groupReference',()=>groupRecognitionSpec.enrich!({get:referenceGet} as unknown as R2Bucket,{wines:Array.from({length:20},()=>({producer:'Estate',wineName:'Wine',vintage:2020,confidence:.95})),unresolvedCount:0} as never));
+  await measure('groupReference',()=>groupRecognitionSpec.enrich!({get:referenceGet} as unknown as R2Bucket,{wines:Array.from({length:20},()=>({producer:'Estate',wineName:'Wine',vintage:2020,confidence:.95})),unresolvedCount:0} as never,{capturedAt:null,latitude:null,longitude:null,timestampSource:'none',gpsSource:'none'}));
   metrics.groupReferenceR2=referenceGet.mock.calls.length;
   d.sql.exec("INSERT INTO queue_outbox(id,body_json,due_at) VALUES('outbox','{}',0)");
   let release!:()=>void,started!:()=>void;

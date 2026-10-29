@@ -4,6 +4,7 @@ import { groupRecognitionEscalationReasons,preferEscalatedGroup } from '../src/l
 import { handleVisionRecognitionRequest,type RecognitionModeSpec,type VisionBindings } from './visionRecognition';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
 import { ReferenceReadScope } from '../src/lib/wine/referenceCatalog';
+import { photoPlaceName } from '../src/lib/places/photoPlace';
 
 const MAX_GROUP_IMAGE_BYTES=3*1024*1024;
 
@@ -24,7 +25,12 @@ export const groupRecognitionSpec:RecognitionModeSpec<GroupRecognitionResult>={
   oneFileError:'Choose exactly one group photo',
   jsonSchema:groupRecognitionResponseJsonSchema,
   parse:parseGroupRecognition,
-  enrich:async(bucket,result)=>{const scope=new ReferenceReadScope(bucket);return {...result,wines:await Promise.all(result.wines.map(wine=>enrichRecognitionReference(scope,wine))) }},
+  // One photograph, one place: every wine in it was where the photo was taken.
+  enrich:async(bucket,result,photo)=>{
+    const scope=new ReferenceReadScope(bucket);
+    const [wines,locationName]=await Promise.all([Promise.all(result.wines.map(wine=>enrichRecognitionReference(scope,wine))),photoPlaceName(scope,photo.latitude,photo.longitude)]);
+    return {...result,wines:wines.map(wine=>({...wine,locationName}))};
+  },
   escalationReasons:groupRecognitionEscalationReasons,
   preferEscalated:preferEscalatedGroup,
   wineCount:result=>result.wines.length,
