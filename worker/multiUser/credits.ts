@@ -5,7 +5,7 @@ import { producerSubjectKey,reusableProducer } from '../../src/lib/research/shar
 import { sharedSubjectKeys } from '../../src/lib/research/shared';
 import { producerRangeAllowed } from '../../src/lib/producers/rangeAccess';
 import { readVintageWindow,type VintageSubject } from '../../src/lib/maturity/vintageWindow';
-import { champagneExtractionRoute } from '../../src/lib/ai/reservedRoutes';
+import { batchSubmitRoute,champagneExtractionRoute } from '../../src/lib/ai/reservedRoutes';
 import { champagneInputFingerprint,readChampagnePhotos,readChampagneWine,requireChampagneWine } from '../champagneInput';
 import { workKey,activeFriendWork } from './researchWork';
 import { researchInputFingerprint } from './provider';
@@ -101,10 +101,14 @@ export async function plannedUnits(request:Request,db:D1Database,user:string):Pr
   }
   return units;
  }
- const batch=path.match(/^\/api\/batch-recognition\/sessions\/([^/]+)\/submit$/);
+ const batch=batchSubmitRoute(path);
  if(batch){
-  const rows=await db.prepare("SELECT i.id,p.id AS image_id FROM batch_recognition_items i JOIN batch_recognition_images p ON p.item_id=i.id AND p.owner_id=i.owner_id WHERE i.session_id=? AND i.owner_id=? AND i.status IN ('staged','failed') ORDER BY i.position,p.id").bind(batch[1],user).all<{id:string;image_id:string}>();
-  if(!rows.results.length)throw new ApiError(400,'No staged scan images');return rows.results.map(row=>({...unit('scan_batch',row.image_id,batch[1]),resultId:row.id}));
+  // The wines this submit sends: staged ones the first time, and on a retry
+  // after the original reservation ended, those still waiting. Planning staged
+  // or failed wines refused every retry - none are staged once a batch is
+  // queued, and a failed wine is never resubmitted.
+  const rows=await db.prepare("SELECT i.id,p.id AS image_id FROM batch_recognition_items i JOIN batch_recognition_images p ON p.item_id=i.id AND p.owner_id=i.owner_id WHERE i.session_id=? AND i.owner_id=? AND i.status IN ('staged','submitted') ORDER BY i.position,p.id").bind(batch[1],user).all<{id:string;image_id:string}>();
+  if(!rows.results.length)throw new ApiError(400,'This batch has no wines waiting for recognition');return rows.results.map(row=>({...unit('scan_batch',row.image_id,batch[1]),resultId:row.id}));
  }
  if(path==='/api/maturity/vintage'){if(data.refresh!==true&&await readVintageWindow(db,user,data as VintageSubject,true))return [];return [unit('vintage_window')]}
  throw new ApiError(400,'Unknown AI action');
@@ -127,8 +131,10 @@ async function reusableOperation(request:Request,db:D1Database,user:string,finge
 }
 export async function quote(request:Request,env:CreditEnv,member:Member){
  if(member.role!=='owner')await settings(env.DB);
- const fingerprint=await requestFingerprint(request);
- const existing=new URL(request.url).pathname.endsWith('/deep-search')?await reusableOperation(request,env.DB,member.id,fingerprint):null;
+ const fingerprint=await requestFingerprint(request),path=new URL(request.url).pathname;
+ // A Batch Scan retry, like a repeated Deep Search, joins the batch's open
+ // submission: nothing new to reserve, and running it reuses that reservation.
+ const existing=path.endsWith('/deep-search')||batchSubmitRoute(path)?await reusableOperation(request,env.DB,member.id,fingerprint):null;
  const units:CreditUnit[]=[],prices=new Map<string,{id:string;credits:number}>();
  const sponsor=await activeFriendWork(env.DB,member.id,await workKey(env.DB,member.id,new URL(request.url).pathname,request));
  for(const unit of existing||sponsor?[]:await plannedUnits(request,env.DB,member.id)){
@@ -168,7 +174,12 @@ async function maintainMatchingOperation(db:D1Database,op:CreditOperation){
  // the failed run before its receipt could restore research without another call.
  if(!live)await maintainOperation(db,op);
 }
-export async function reserve(request:Request,env:CreditEnv,member:Member,observedUsd=0):Promise<{operation:CreditOperation;existing:boolean}>{
+/**
+ * `existing` means nothing new was reserved. It is `joined` when the operation
+ * is another request's, still open for the same work, rather than this
+ * request's own earlier attempt replayed under its Idempotency-Key.
+ */
+export async function reserve(request:Request,env:CreditEnv,member:Member,observedUsd=0):Promise<{operation:CreditOperation;existing:boolean;joined?:boolean}>{
  const quoteId=request.headers.get('X-WineLog-Quote'),key=request.headers.get('Idempotency-Key');
  if(!quoteId||!key||key.length>128)throw new ApiError(402,'Review an AI credit quote before starting');
  const fingerprint=await requestFingerprint(request);
@@ -176,7 +187,7 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
  if(previous){if(previous.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:previous,existing:true}}
  const path=new URL(request.url).pathname;
  const running=await reusableOperation(request,env.DB,member.id,fingerprint);
- if(running)return {operation:running,existing:true};
+ if(running)return {operation:running,existing:true,joined:true};
  const quoted=await env.DB.prepare('SELECT * FROM credit_quotes WHERE id=? AND user_id=? AND expires_at>?').bind(quoteId,member.id,seconds()).first<{path:string;fingerprint:string;units_json:string;total:number}>();
  if(!quoted||quoted.fingerprint!==fingerprint||quoted.path!==new URL(request.url).pathname)throw new ApiError(409,'Quote expired or request changed; review a new quote');
  const config=member.role==='owner'?null:await settings(env.DB);
@@ -217,7 +228,7 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
    const raced=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
    if(raced){if(raced.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:raced,existing:true}}
    const running=await reusableOperation(request,env.DB,member.id,fingerprint);
-   if(running)return {operation:running,existing:true};
+   if(running)return {operation:running,existing:true,joined:true};
   }catch(recoveryError){if(recoveryError instanceof ApiError)throw recoveryError}
   console.error(JSON.stringify({event:'ai_reservation_failed',path,userId:member.id,error:error instanceof Error?error.message:String(error)}));
   throw new ApiError(503,'The AI request could not be saved because of a database error. Please retry.');
@@ -226,7 +237,7 @@ export async function reserve(request:Request,env:CreditEnv,member:Member,observ
   const raced=await env.DB.prepare('SELECT * FROM credit_operations WHERE user_id=? AND request_key=?').bind(member.id,key).first<CreditOperation>();
   if(raced){if(raced.fingerprint!==fingerprint)throw new ApiError(409,'Idempotency key was used for different work');return {operation:raced,existing:true}}
   const running=await reusableOperation(request,env.DB,member.id,fingerprint);
-  if(running)return {operation:running,existing:true};
+  if(running)return {operation:running,existing:true,joined:true};
   throw admissionError(reason);
  }
  const operation=await env.DB.prepare('SELECT * FROM credit_operations WHERE id=?').bind(id).first<CreditOperation>();if(!operation)throw new ApiError(503,'Could not reserve credits');return {operation,existing:false};

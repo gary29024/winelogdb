@@ -118,9 +118,11 @@ export async function processVertexBatchSubmitJob(env:Env,owner:string,sessionId
       }
       continue;
     }
-    const id=crypto.randomUUID();
-    await env.DB.prepare("INSERT INTO batch_recognition_jobs(id,owner_id,session_id,google_batch_name,item_ids_json,status,error,created_at,updated_at) VALUES(?,?,?,?,?,'queued',NULL,?,?)").bind(id,owner,sessionId,`${JOB_PREFIX}${item.id}`,JSON.stringify([item.id]),stamp,stamp).run();
-    toQueue.push({id});
+    // A retry can overlap the submission it recovers. The first insert owns the
+    // wine's job, so the wine is never sent to Gemini twice.
+    const id=crypto.randomUUID(),name=`${JOB_PREFIX}${item.id}`;
+    const created=await env.DB.prepare("INSERT INTO batch_recognition_jobs(id,owner_id,session_id,google_batch_name,item_ids_json,status,error,created_at,updated_at) SELECT ?,?,?,?,?,'queued',NULL,?,? WHERE NOT EXISTS(SELECT 1 FROM batch_recognition_jobs WHERE owner_id=? AND session_id=? AND google_batch_name=?)").bind(id,owner,sessionId,name,JSON.stringify([item.id]),stamp,stamp,owner,sessionId,name).run();
+    if(Number(created.meta.changes||0))toQueue.push({id});
   }
   await env.DB.prepare("UPDATE batch_recognition_sessions SET status='running',updated_at=? WHERE id=? AND owner_id=?").bind(stamp,sessionId,owner).run();
   await enqueueJobs(env,owner,sessionId,toQueue);

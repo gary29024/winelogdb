@@ -7,7 +7,7 @@ const summary=(over:Partial<BatchSessionSummary>&{id:string}):BatchSessionSummar
   ...over
 });
 const session=(over:Partial<BatchRecognitionSession>&{id:string}):BatchRecognitionSession=>({
-  ...summary(over),items:[],...over
+  ...summary(over),lastActivityAt:'2026-08-25T19:00:44.000Z',items:[],...over
 });
 
 describe('Recent batches after saving a wine',()=>{
