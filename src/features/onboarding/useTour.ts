@@ -46,7 +46,8 @@ function useMobile(){
  * not on the page. Only the second is grounds for passing over a step, and
  * reading the first as the second skipped step one of every tour.
  *
- * Remeasured on resize and on scroll anywhere in the page - the capture phase,
+ * Remeasured when the target changes size, on resize and on scroll anywhere in
+ * the page - the capture phase,
  * because the element that scrolls is often an inner container rather than the
  * window - and coalesced into one frame, the same shape Layout already uses for
  * the mobile viewport variable.
@@ -65,17 +66,29 @@ function useAnchorRect(anchor:string|undefined,step:number):Measurement{
  useEffect(()=>{
   if(!anchor){setMeasurement({anchor,rect:null});return}
   let frame=0,found=false;
+  let observed:Element|undefined;
   const publish=(box:DOMRect|undefined)=>setMeasurement({anchor,rect:box?{top:box.top,left:box.left,width:box.width,height:box.height}:null});
   const measure=()=>{
    window.cancelAnimationFrame(frame);
    frame=window.requestAnimationFrame(()=>{
-    const box=[...document.querySelectorAll(`[data-tour="${anchor}"]`)].map(element=>element.getBoundingClientRect()).find(candidate=>candidate.width>0&&candidate.height>0);
+    const target=[...document.querySelectorAll(`[data-tour="${anchor}"]`)]
+     .map(element=>({element,box:element.getBoundingClientRect()}))
+     .find(({box})=>box.width>0&&box.height>0);
+    if(target?.element!==observed){
+     resizeObserver?.disconnect();
+     observed=target?.element;
+     if(observed)resizeObserver?.observe(observed,{box:'border-box'});
+    }
+    const box=target?.box;
     // Absence is only reported once the anchor has been here and gone, or once
     // the grace period below has run out. Until then an empty look means the
     // page it belongs to has probably not arrived yet.
     if(box){found=true;publish(box)}else if(found)publish(undefined);
    });
   };
+  // Fonts and styles can resize an existing anchor without a DOM insertion or
+  // viewport event. Follow the visible target, including after a route change.
+  const resizeObserver=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(measure);
   measure();
   // The arrival of a lazily loaded page is a DOM change, so that is what is
   // watched rather than a poll.
@@ -84,7 +97,7 @@ function useAnchorRect(anchor:string|undefined,step:number):Measurement{
   const grace=window.setTimeout(()=>{if(!found)publish(undefined)},ANCHOR_GRACE);
   window.addEventListener('resize',measure);window.addEventListener('scroll',measure,true);
   return()=>{
-   window.cancelAnimationFrame(frame);window.clearTimeout(grace);observer.disconnect();
+   window.cancelAnimationFrame(frame);window.clearTimeout(grace);observer.disconnect();resizeObserver?.disconnect();
    window.removeEventListener('resize',measure);window.removeEventListener('scroll',measure,true);
   };
  },[anchor,step]);
@@ -122,7 +135,7 @@ export function useTour(){
   if(open&&step?.route&&pathname!==step.route)navigate(step.route);
  },[open,step?.route,pathname,navigate]);
 
- const measurement=useAnchorRect(step?.anchor,position);
+ const measurement=useAnchorRect(open?step?.anchor:undefined,position);
  // The previous step's box is kept until the new one is measured, so the
  // spotlight glides between anchors rather than blinking out for a frame.
  const rect=measurement.rect;

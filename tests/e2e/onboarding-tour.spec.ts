@@ -212,6 +212,31 @@ test.describe('an optional chapter',()=>{
 test.describe('the page chapters',()=>{
  test.use({viewport:{width:390,height:844}});
 
+ test('keeps the spotlight aligned when the Journal anchor changes size',async({page})=>{
+  await page.route('https://fonts.googleapis.com/**',route=>route.fulfill({contentType:'text/css',body:''}));
+  await signedIn(page,'{"completed":["first-run"],"skipped":false}');
+  await page.goto('/account');
+  await page.getByRole('button',{name:/The Journal/}).click();
+  await expect(bubble(page)).toContainText('The Journal \u00b7 Step 1 of 4');
+  await rings(page,'journal-scopes');
+
+  // A late font or stylesheet can resize the tabs without inserting children,
+  // scrolling, or resizing the viewport. Change only their border box so this
+  // regression does not depend on the timing of an external font download.
+  const scopes=page.locator('[data-tour="journal-scopes"]');
+  const before=await scopes.boundingBox();
+  await scopes.evaluate(element=>{
+   const {width,height}=element.getBoundingClientRect();
+   (element as HTMLElement).style.width=`${width+30}px`;
+   (element as HTMLElement).style.height=`${height+10}px`;
+  });
+  await expect.poll(async()=>(await scopes.boundingBox())!.width).toBeGreaterThan(before!.width+20);
+  await rings(page,'journal-scopes');
+
+  await page.getByRole('button',{name:'Next'}).click();
+  await rings(page,'journal-search');
+ });
+
  test('walks the Journal with nothing logged yet',async({page})=>{
   const saved=await signedIn(page,'{"completed":["first-run"],"skipped":false}');
   await page.goto('/account');
