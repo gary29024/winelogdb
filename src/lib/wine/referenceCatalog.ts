@@ -1,5 +1,6 @@
 export const REFERENCE_SHARDS=256;
 export type ReferenceProvider='lwin'|'elid'|'places';
+const REFERENCE_NAMES:Record<ReferenceProvider,string>={lwin:'LWIN catalogue',elid:'ELID catalogue',places:'Photo place list'};
 export type ReferenceManifest={
  provider:ReferenceProvider;version:string;prefix:string;shardCount:number;rows:number;matchableRows?:number;sparseRows?:number;
  source:string;sourceUpdatedAt:string|null;generatedAt:string;redirectsKey?:string|null;producerIndexKey?:string|null;lwinIdIndexPrefix?:string|null;
@@ -108,7 +109,7 @@ export async function referenceManifest(bucket:ReferenceSource,provider:Referenc
 export async function referenceRowsByShard<T>(bucket:ReferenceSource,provider:ReferenceProvider,shard:string,required=false):Promise<T[]>{
  const manifest=await referenceManifest(bucket,provider);if(!manifest)return [];
  const key=`${manifest.prefix}/shard-${shard}.json`,rows=await jsonObject<T[]>(bucket,key);
- if(required&&!rows)throw new Error(`LWIN catalogue shard unavailable: ${shard}; resume to retry.`);
+ if(required&&!rows)throw new Error(`${REFERENCE_NAMES[provider]} shard unavailable: ${shard}; resume to retry.`);
  return rows??[];
 }
 export async function referenceRows<T>(bucket:ReferenceSource,provider:ReferenceProvider,key:string):Promise<T[]>{
@@ -123,9 +124,11 @@ export async function elidProducerIndex(bucket:ReferenceSource):Promise<ElidProd
  const manifest=await referenceManifest(bucket,'elid');if(!manifest?.producerIndexKey)return {};
  return await jsonObject<ElidProducerIndex>(bucket,manifest.producerIndexKey)??{};
 }
-export async function placeNames(bucket:ReferenceSource):Promise<PlaceNames>{
+export async function placeNames(bucket:ReferenceSource,required=false):Promise<PlaceNames>{
  const manifest=await referenceManifest(bucket,'places');if(!manifest?.namesKey)return {regions:{},countries:{}};
- return await jsonObject<PlaceNames>(bucket,manifest.namesKey)??{regions:{},countries:{}};
+ const names=await jsonObject<PlaceNames>(bucket,manifest.namesKey);
+ if(required&&!names)throw new Error('Photo place names unavailable; resume to retry.');
+ return names??{regions:{},countries:{}};
 }
 
 /**

@@ -48,6 +48,25 @@ Useful options:
 
 Until the import has run, scans simply show no approximate place. Rerun it now and then to pick up GeoNames corrections; versions are immutable, and `current.json` switches only after every shard has uploaded.
 
+Run the import by hand, not from the Cloudflare build. A build would download and upload all 258 files on every deploy, under a new version each time because GeoNames republishes daily, and a deploy would fail whenever GeoNames was unreachable. The build token would also need R2 and D1 write access.
+
+## Correcting places already saved
+
+Wines saved before this change still show the place the label model guessed. After the import, **Owner controls → Background jobs → Photo places** renames them from their GPS (`worker/photoPlaceBackfill.ts`). It covers every account, like the other background jobs.
+
+A place is renamed only while it is still exactly what a recorded scan proposed:
+
+| Saved place | What the job does |
+| --- | --- |
+| Still the scan's guess | Renamed from the GPS, or cleared if no place is within 50 km |
+| Blank, and the scan proposed nothing | Named, as a new scan would be |
+| Typed by the member, or cleared after a guess | Kept |
+| No scan record (single scans from before credit operations were kept) | Kept: nothing tells a guess from typing |
+
+The scan records are the batch and group scan results kept with the wines they became, and each single scan's reply, matched to the tasting by its exact GPS coordinates. Photos' own copies of the place follow the same rule, and Batch Scan results still waiting for review are renamed before anyone saves them.
+
+Each rename is guarded on the name the job read, so a member's edit made while it runs wins. A chunk's renames, cursor and counts commit together. If a place file is missing, the chunk renames nothing and the job pauses with an error, rather than reading the gap as nothing nearby. The job runs once; new scans need no correction.
+
 ## Licence
 
 GeoNames data is published under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). WineLog derives a subset of it (names, coordinates, region and country names) and credits GeoNames on the About page.

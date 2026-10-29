@@ -52,7 +52,7 @@ WineLog keeps the large LWIN and ELID reference catalogues as versioned producer
 
 Import an official Liv-ex workbook directly with `npm run lwin:import -- "C:\path\LWINdatabase.xlsx"`; no CSV conversion is required. ELID has no official machine-readable feed available to WineLog, so `npm run elid:sync` performs a conservative, rate-limited registry crawl that stores identifier facts only and never runs during bottle recognition. See **[Importing and refreshing LWIN and ELID reference data](docs/lwin-import.md)**.
 
-A scanned photo's approximate place is the nearest GeoNames town to its EXIF GPS, read from R2 shards that `npm run places:import` uploads once; the GPS is never sent to the label model. See **[Naming where a photo was taken](docs/photo-places.md)**.
+A scanned photo's approximate place is the nearest GeoNames town to its EXIF GPS, read from R2 shards that `npm run places:import` uploads once; the GPS is never sent to the label model. Owner controls' **Photo places** job then renames the places earlier scans guessed, keeping any a member typed. See **[Naming where a photo was taken](docs/photo-places.md)**.
 
 ## Search
 

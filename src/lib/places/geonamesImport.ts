@@ -55,10 +55,10 @@ export function buildPlaceNames(countries:ReturnType<typeof parseCountryInfo>,re
 export function shardPlaces(places:PlaceRow[],shardCount=REFERENCE_SHARDS){
   const cells=new Map<string,PlaceRow[]>();
   for(const place of places){const key=placeCellKey(place[1],place[2]),cell=cells.get(key);if(cell)cell.push(place);else cells.set(key,[place])}
-  const shards=new Map<string,PlaceCell[]>();
+  // Every shard is written, empty or not, so a missing one is always an outage.
+  const shards=new Map<string,PlaceCell[]>(Array.from({length:shardCount},(_,index)=>[String(index).padStart(3,'0'),[]]));
   for(const key of [...cells.keys()].sort()){
-    const id=referenceShardId(key,shardCount),shard=shards.get(id),entry:PlaceCell=[key,cells.get(key)!];
-    if(shard)shard.push(entry);else shards.set(id,[entry]);
+    shards.get(referenceShardId(key,shardCount))!.push([key,cells.get(key)!]);
   }
   return shards;
 }

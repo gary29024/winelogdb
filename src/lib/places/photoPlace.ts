@@ -59,13 +59,14 @@ export const validCoordinates=(latitude:unknown,longitude:unknown):latitude is n
   typeof latitude==='number'&&typeof longitude==='number'&&Number.isFinite(latitude)&&Number.isFinite(longitude)
   &&latitude>=-90&&latitude<=90&&longitude>=-180&&longitude<=180;
 
-export async function nearestPlace(bucket:ReferenceSource,latitude:number,longitude:number):Promise<NearestPlace|null>{
+/** `required` makes a missing shard an error instead of an empty cell. */
+export async function nearestPlace(bucket:ReferenceSource,latitude:number,longitude:number,required=false):Promise<NearestPlace|null>{
   const manifest=await referenceManifest(bucket,'places');if(!manifest)return null;
   let best:NearestPlace|null=null;
   for(const cell of candidateCells(latitude,longitude)){
     // Cells come closest first, so none after this one can hold anything nearer.
     if(best&&cell.distanceKm>=best.distanceKm)break;
-    const cells=await referenceRowsByShard<PlaceCell>(bucket,'places',referenceShardId(cell.key,manifest.shardCount));
+    const cells=await referenceRowsByShard<PlaceCell>(bucket,'places',referenceShardId(cell.key,manifest.shardCount),required);
     for(const place of cells.find(([key])=>key===cell.key)?.[1]??[]){
       const distance=distanceKm(latitude,longitude,place[1],place[2]);
       if(distance<=MAX_PLACE_DISTANCE_KM&&(!best||distance<best.distanceKm))best={place,distanceKm:distance};
@@ -95,4 +96,14 @@ export async function photoPlaceName(bucket:ReferenceSource|undefined,latitude:n
     console.warn(JSON.stringify({event:'photo-place-lookup-failed',error:error instanceof Error?error.message:String(error)}));
     return null;
   }
+}
+
+/**
+ * The same name for rewriting places already saved. There a missing file must
+ * stop the work, not read as "nothing nearby" and erase the name.
+ */
+export async function requiredPhotoPlaceName(bucket:ReferenceSource,latitude:number,longitude:number){
+  if(!await referenceManifest(bucket,'places'))throw new Error('Photo place list unavailable. Run npm run places:import, then resume.');
+  const nearest=await nearestPlace(bucket,latitude,longitude,true);
+  return nearest?placeLabel(nearest.place,await placeNames(bucket,true)):null;
 }
