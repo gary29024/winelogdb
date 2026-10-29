@@ -20,7 +20,11 @@ type PreparedPhoto=PendingBatchPhoto&{metadata:PhotoMetadata;preview:string};
 type DraftWine={key:string;photos:PreparedPhoto[];preparing:boolean;error:string};
 type UploadProgress={sessionId:string;uploaded:number;total:number;phase:'persisting'|'uploading'|'queueing';resumable:boolean};
 type LightboxPhoto={src:string;alt:string};
-const RECOVERY_STALE_MS=90_000;
+// Automatic recovery waits until nothing in the batch has moved for longer than
+// one Flex recognition request may take (10 minutes) and than the server waits
+// before treating a silent request as dead (12 minutes). Any sooner, a healthy
+// batch reads as stalled and a retry can only resend work already queued.
+const RECOVERY_STALE_MS=15*60_000;
 const RETRY_LOCK_MS=90_000;
 const emptyWine=():DraftWine=>({key:crypto.randomUUID(),photos:[],preparing:false,error:''});
 function recognitionInitial(r:RecognitionResult):Partial<WineInput>{return {producer:r.producer??'',wineName:r.wineName??'',vintage:r.vintage,recognizedProducer:r.recognizedProducer,recognizedWineName:r.recognizedWineName,recognizedVintageText:r.recognizedVintageText,vintageKind:r.vintageKind,releaseDesignation:r.releaseDesignation,country:r.country,region:r.region,appellation:r.appellation,recognizedRegion:r.recognizedRegion,recognizedAppellation:r.recognizedAppellation,grapes:r.grapes,grapeBlend:r.grapeBlend,wineStyle:r.style,alcoholPercentage:r.alcoholPercentage,sparklingDetails:r.sparklingDetails,tastingDate:r.tastingDate,locationName:r.locationName,latitude:r.latitude,longitude:r.longitude,tags:derivedTags({country:r.country,region:r.region,appellation:r.appellation,grapes:r.grapes,style:r.style}),recognitionConfidence:r.confidence,recognitionStatus:'review'}}
@@ -59,27 +63,33 @@ export function BatchScanPage(){
   const waitingItems=useMemo(()=>session?.items.filter(x=>x.status==='submitted')??[],[session]);
   const stopPoll=useCallback(()=>{poll.current?.stop();poll.current=undefined},[]);
   const refreshPendingState=useCallback(async(id:string)=>{setCheckingPending(true);try{setPendingLocal((await listPendingBatchWines(id)).length)}catch{setPendingLocal(0)}finally{setCheckingPending(false)}},[]);
-  const recoverWaitingRecognition=useCallback(async(next:BatchRecognitionSession,force=false)=>{
-    const waiting=next.items.filter(item=>item.status==='submitted').length,recoverable=['queued','running','ready','partial','failed'].includes(next.status),age=Date.now()-Date.parse(next.updatedAt),stale=!Number.isFinite(age)||age>=RECOVERY_STALE_MS;
-    if(!waiting||!recoverable||recoveringSessions.current.has(next.id))return next;
-    if(!force&&['queued','running'].includes(next.status)&&!stale)return next;
-    if(!force&&recoveryAttemptedSessions.current.has(next.id))return next;
+  /** The batch as it now stands, and whether a recovery was actually queued for it. */
+  const recoverWaitingRecognition=useCallback(async(next:BatchRecognitionSession,force=false):Promise<{session:BatchRecognitionSession;queued:boolean}>=>{
+    const waiting=next.items.filter(item=>item.status==='submitted').length,recoverable=['queued','running','ready','partial','failed'].includes(next.status),age=Date.now()-Date.parse(next.lastActivityAt),stale=!Number.isFinite(age)||age>=RECOVERY_STALE_MS;
+    if(!waiting||!recoverable||recoveringSessions.current.has(next.id))return {session:next,queued:false};
+    if(!force&&['queued','running'].includes(next.status)&&!stale)return {session:next,queued:false};
+    if(!force&&recoveryAttemptedSessions.current.has(next.id))return {session:next,queued:false};
     recoveryAttemptedSessions.current.add(next.id);recoveringSessions.current.add(next.id);setRecovering(true);
     try{
-      await submitBatchSession(next.id);
+      try{await submitBatchSession(next.id)}catch(e){
+        const latest=await getBatchSession(next.id).catch(()=>null);
+        // Wines that finished while the retry was refused need no restart, and no error.
+        if(!latest||latest.items.some(item=>item.status==='submitted'))setError(`Could not restart ${waiting} waiting recognition${waiting===1?'':'s'}: ${(e as Error).message}`);
+        return {session:latest??next,queued:false};
+      }
       setNotice(`Recovery queued for ${waiting} waiting wine${waiting===1?'':'s'}. WineLog is checking existing recognition jobs now and will submit only items that are not already attached to an active job.`);
-      return await getBatchSession(next.id);
-    }catch(e){
-      const latest=await getBatchSession(next.id).catch(()=>null);
-      setError(`Could not restart ${waiting} waiting recognition${waiting===1?'':'s'}: ${(e as Error).message}`);
-      return latest??next;
+      return {session:await getBatchSession(next.id).catch(()=>next),queued:true};
     }finally{recoveringSessions.current.delete(next.id);setRecovering(false)}
   },[]);
-  const refreshSession=useCallback(async function refreshSession(id:string){let next=await getBatchSession(id);next=await recoverWaitingRecognition(next);setSession(next);setHistory(current=>mergeSessionIntoHistory(current,next));if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});if(!['queued','running'].includes(next.status))stopPoll();return next},[recoverWaitingRecognition,refreshPendingState,stopPoll]);
+  const refreshSession=useCallback(async function refreshSession(id:string){let next=await getBatchSession(id);next=(await recoverWaitingRecognition(next)).session;setSession(next);setHistory(current=>mergeSessionIntoHistory(current,next));if(next.status==='uploading')void refreshPendingState(id);else{setPendingLocal(0);setCheckingPending(false)}if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});if(!['queued','running'].includes(next.status))stopPoll();return next},[recoverWaitingRecognition,refreshPendingState,stopPoll]);
   async function retryWaitingRecognition(){
     if(!session||recovering||retryLockedSessionId===session.id)return;
     const id=session.id;setRetryLockedSessionId(id);if(retryUnlockTimer.current)window.clearTimeout(retryUnlockTimer.current);retryUnlockTimer.current=window.setTimeout(()=>{setRetryLockedSessionId(current=>current===id?null:current);retryUnlockTimer.current=undefined},RETRY_LOCK_MS);
-    setError('');const next=await recoverWaitingRecognition(session,true);setSession(next);if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(next.id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});
+    setError('');const {session:next,queued}=await recoverWaitingRecognition(session,true);
+    // The cooldown and its "Retry queued…" label belong to a retry that was
+    // queued. A refused one leaves the button ready beside its error.
+    if(!queued){window.clearTimeout(retryUnlockTimer.current);retryUnlockTimer.current=undefined;setRetryLockedSessionId(current=>current===id?null:current)}
+    setSession(next);if(['queued','running'].includes(next.status)&&!poll.current)poll.current=startBackoffPoll(()=>refreshSession(next.id).then(()=>undefined).catch(()=>undefined),{initialMs:10000,maxMs:30000});
   }
   useEffect(()=>{let active=true;listBatchSessions().then(async result=>{if(!active)return;setHistory(result.items);const asked=requestedSession&&result.items.find(x=>x.id===requestedSession);const resumable=asked||result.items.find(x=>['uploading','queued','running','ready','partial'].includes(x.status));if(resumable)await refreshSession(resumable.id)}).catch(()=>undefined);return()=>{active=false;stopPoll();uploadAbort.current?.abort();if(retryUnlockTimer.current)window.clearTimeout(retryUnlockTimer.current)}},[requestedSession,refreshSession,stopPoll]);
 

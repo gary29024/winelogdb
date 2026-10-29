@@ -21,7 +21,7 @@ import { isDeepSearchComplete } from '../src/lib/research/completeness';
 import { readVintageWindow,type VintageSubject } from '../src/lib/maturity/vintageWindow';
 import { getWineResearchRun } from '../src/lib/research/backgroundJobs';
 import { WINE_RESEARCH_RECOVERY_MS } from '../src/lib/research/recoveryPolicy';
-import { champagneExtractionRoute } from '../src/lib/ai/reservedRoutes';
+import { batchSubmitRoute,champagneExtractionRoute } from '../src/lib/ai/reservedRoutes';
 
 /** Minimum gap between two explicit Deep Search recovery checks of one operation. */
 const RESEARCH_CHECK_COOLDOWN_SECONDS=15;
@@ -68,7 +68,15 @@ export default {
    }
    if(aiRoute(path,request.method)){
     const observedUsd=member.role==='owner'?0:(await deploymentAiCost(env.DB,env)).usd;
-    const {operation,existing}=await reserve(request,env,member,observedUsd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
+    const {operation,existing,joined}=await reserve(request,env,member,observedUsd),operationUnits=JSON.parse(operation.units_json) as Array<{action:string;targetId?:string;scope?:string;parentOperationId?:string}>;
+    // A Batch Scan retry joins the submission still holding the batch's
+    // reservation, and runs its recovery under that same operation: the retry
+    // is not reserved, charged or counted against an allowance a second time.
+    if(joined&&batchSubmitRoute(path)){
+     const recovery=await legacy.fetch(await internalRequest(request,env,member.id),{...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)},ctx);
+     ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
+     return json(publicAiResponse(path,await recovery.json().catch(()=>({error:'Could not retry this batch'})) as Record<string,unknown>,operation),recovery.status);
+    }
     // Replays observe the original operation. They cannot reserve a new slot
     // after its failure released the original allowance.
     if(existing)return operation.response_json?json(publicAiResponse(path,JSON.parse(operation.response_json) as Record<string,unknown>,operation),operation.response_status??202):json({accepted:true,creditOperationId:operation.id,status:operation.status},202);

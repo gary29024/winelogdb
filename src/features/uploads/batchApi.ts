@@ -8,7 +8,9 @@ export type BatchSessionSummary={id:string;status:string;totalItems:number;expec
 export type BatchRecognitionItem={id:string;position:number;status:'staged'|'submitted'|'ready'|'failed'|'confirmed'|'rejected'|'expired';recognition:RecognitionResult|null;error:string|null;confirmedWineId:string|null;
   /** The saved wine as it stands now, once confirmed - the reading above is the scan, and goes stale the moment the wine is edited. */
   saved:{producer:string;wineName:string;vintage:number|null}|null;imageIds:string[]};
-export type BatchRecognitionSession=BatchSessionSummary&{items:BatchRecognitionItem[]};
+export type BatchRecognitionSession=BatchSessionSummary&{
+  /** When anything in the batch last moved: a wine's recognition starting, retrying or finishing. `updatedAt` only moves as the batch is queued and finishes. */
+  lastActivityAt:string;items:BatchRecognitionItem[]};
 
 /**
  * Fold a freshly fetched session back into the Recent batches list.

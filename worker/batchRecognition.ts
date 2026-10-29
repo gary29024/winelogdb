@@ -11,7 +11,7 @@ export type BatchRecognitionJob=
   |{kind:'recognition_batch_cleanup';owner:string;sessionId:string};
 
 type Env={CREDIT_CONTEXT?:ProviderAuthorization;DB:D1Database;AI_USAGE?:AnalyticsSink;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;GEMINI_API_KEY?:string;MAX_FILE_BYTES?:string;RESEARCH_QUEUE:Queue<unknown>};
-type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null};
+type ItemRow={id:string;position:number;status:string;metadata_json:string;recognition_json:string|null;error:string|null;confirmed_wine_id:string|null;saved_producer:string|null;saved_wine_name:string|null;saved_vintage:number|null;updated_at:string};
 type ImageRow={id:string;item_id:string;original_object_key:string;recognition_object_key:string;content_type:string;byte_size:number;recognition_byte_size:number;width:number;height:number};
 type GoogleInlineResponse={metadata?:{key?:string};response?:{usageMetadata?:Parameters<typeof geminiCallTokens>[0];candidates?:Array<{content?:{parts?:Array<{text?:string}>};finishReason?:string}>};error?:{message?:string}};
 
@@ -107,7 +107,7 @@ async function loadItems(db:D1Database,owner:string,sessionId:string){
   // scan and stops being true the moment the wine is edited. The saved wine is
   // joined so a card can show what it actually points at; a wine deleted since
   // leaves the join empty and the card falls back to the reading.
-  const items=await db.prepare(`SELECT i.id,i.position,i.status,i.metadata_json,i.recognition_json,i.error,i.confirmed_wine_id,
+  const items=await db.prepare(`SELECT i.id,i.position,i.status,i.metadata_json,i.recognition_json,i.error,i.confirmed_wine_id,i.updated_at,
       w.producer AS saved_producer,w.wine_name AS saved_wine_name,w.vintage AS saved_vintage
     FROM batch_recognition_items i LEFT JOIN wines w ON w.owner_id=i.owner_id AND w.id=i.confirmed_wine_id
     WHERE i.owner_id=? AND i.session_id=? ORDER BY i.position,i.id`).bind(owner,sessionId).all<ItemRow>();
@@ -121,10 +121,23 @@ const savedWine=(item:ItemRow)=>item.confirmed_wine_id&&item.saved_wine_name
   ?{producer:item.saved_producer??'',wineName:item.saved_wine_name,vintage:item.saved_vintage??null}
   :null;
 
+/**
+ * When anything in a batch last moved. The session row is stamped as the batch
+ * is queued and again as it finishes, so it reads as idle through a healthy
+ * run; each wine's recognition job and result are stamped as they progress.
+ */
+function lastActivity(stamps:unknown[]){
+  const times=stamps.map(value=>Date.parse(String(value))).filter(Number.isFinite);
+  return times.length?new Date(Math.max(...times)).toISOString():null;
+}
+
 export async function getBatchSession(db:D1Database,owner:string,sessionId:string){
-  const session=await db.prepare('SELECT id,status,total_items,expected_items,confirmed_items,created_at,updated_at,expires_at FROM batch_recognition_sessions WHERE id=? AND owner_id=?').bind(sessionId,owner).first<Record<string,unknown>>();
+  const session=await db.prepare(`SELECT s.id,s.status,s.total_items,s.expected_items,s.confirmed_items,s.created_at,s.updated_at,s.expires_at,
+      (SELECT max(j.updated_at) FROM batch_recognition_jobs j WHERE j.owner_id=s.owner_id AND j.session_id=s.id) AS jobs_updated_at
+    FROM batch_recognition_sessions s WHERE s.id=? AND s.owner_id=?`).bind(sessionId,owner).first<Record<string,unknown>>();
   if(!session)return null;const {items,byItem}=await loadItems(db,owner,sessionId),confirmedItems=countConfirmedBatchItems(items);
-  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems,createdAt:String(session.created_at),updatedAt:String(session.updated_at),expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,saved:savedWine(item),imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
+  const lastActivityAt=lastActivity([session.updated_at,session.jobs_updated_at,...items.map(item=>item.updated_at)])??String(session.updated_at);
+  return {id:String(session.id),status:String(session.status),totalItems:Number(session.total_items)||0,expectedItems:Number(session.expected_items)||0,confirmedItems,createdAt:String(session.created_at),updatedAt:String(session.updated_at),lastActivityAt,expiresAt:String(session.expires_at),items:items.map(item=>({id:item.id,position:item.position,status:item.status,recognition:item.recognition_json?parseJson(item.recognition_json,null):null,error:item.error,confirmedWineId:item.confirmed_wine_id,saved:savedWine(item),imageIds:(byItem.get(item.id)??[]).map(x=>x.id)}))};
 }
 
 export async function listBatchSessions(db:D1Database,owner:string){

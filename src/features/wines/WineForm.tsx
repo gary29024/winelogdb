@@ -311,10 +311,15 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       derivedTags({country,region,appellation,grapes:grapeBlend.map(x=>x.grape),style:wineStyleValue}));
     const savedSparklingDetails=hasSparklingDetails(sparklingDetails)?sparklingDetails:null;
     const vintageValue=fd.get('vintage')?Number(fd.get('vintage')):null;
+    // A wine is filed under its recognized name: cuvée linking reads it, and
+    // overwrites wine_name with the cuvée it finds. A name typed over the one
+    // the form was given therefore replaces the reading, as renaming a saved
+    // wine does, or the first save files the wine back under the label.
+    const renamed=wineName!==String(initial?.wineName??'').trim();
     const input:WineFormInput={
       producer,wineName,vintage:vintageValue,
       recognizedProducer:initial?.recognizedProducer??initial?.producer??producer,
-      recognizedWineName:initial?.recognizedWineName??initial?.wineName??wineName,
+      recognizedWineName:renamed?wineName:initial?.recognizedWineName??initial?.wineName??wineName,
       recognizedVintageText:initial?.recognizedVintageText??(vintageValue!=null?String(vintageValue):null),
       vintageKind:(vintageValue!=null?'vintage':vintageKind||'unknown') as WineInput['vintageKind'],
       releaseDesignation:releaseDesignation.trim()||null,
