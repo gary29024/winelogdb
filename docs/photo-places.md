@@ -48,7 +48,15 @@ Useful options:
 
 Until the import has run, scans simply show no approximate place. Rerun it now and then to pick up GeoNames corrections; versions are immutable, and `current.json` switches only after every shard has uploaded.
 
-Run the import by hand, not from the Cloudflare build. A build would download and upload all 258 files on every deploy, under a new version each time because GeoNames republishes daily, and a deploy would fail whenever GeoNames was unreachable. The build token would also need R2 and D1 write access.
+Do not make the import part of every Cloudflare build. Each deploy would download and upload all 258 files, under a new version each time because GeoNames republishes daily, and a build would fail whenever GeoNames was unreachable.
+
+To run it once without a computer, use one deploy. In the Worker's **Settings → Build**, append it to the Deploy command:
+
+```text
+npm run db:migrate && npx wrangler deploy && npm run places:import
+```
+
+Workers Builds creates its token with R2 write access, and this deploy command already applies D1 migrations, so the import needs no new permissions. It runs after the app is deployed, so a GeoNames outage cannot hold up the release. It takes several minutes, inside Cloudflare's 20-minute build limit, and its last log line reads `Places <version> are now current in R2 bucket winelog-private.` Then set the Deploy command back to `npm run db:migrate && npx wrangler deploy`. An `Authentication error` on the first upload means the build's token has lost R2 write access (Workers R2 Storage: Edit).
 
 ## Correcting places already saved
 
