@@ -7,11 +7,18 @@ inputs:
 runs:
   using: composite
   steps:
+    # Playwright downloads a WebKit build per Ubuntu release, in a folder named
+    # only by build number. Restoring one made on another release links
+    # against libraries that release lacks (libicu74 on Ubuntu 26.04).
+    - name: Identify the runner's release
+      id: release
+      shell: bash
+      run: (. /etc/os-release && echo "name=$ID-$VERSION_ID") >> "$GITHUB_OUTPUT"
     - uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
         # browsers.json names the exact browser builds the installed Playwright expects.
-        key: ${{ runner.os }}-playwright-${{ inputs.browser }}-${{ hashFiles('node_modules/playwright-core/browsers.json') }}
+        key: ${{ runner.os }}-${{ steps.release.outputs.name }}-playwright-${{ inputs.browser }}-${{ hashFiles('node_modules/playwright-core/browsers.json') }}
     # Skips the download when the cached build matches; still installs system packages.
     - name: Install ${{ inputs.browser }}
       shell: bash

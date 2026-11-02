@@ -21,7 +21,7 @@ export const recognitionResponseSchema={
     producer:{type:'STRING',nullable:true},wineName:{type:'STRING',nullable:true},vintage:{type:'NUMBER',nullable:true},recognizedVintageText:{type:'STRING',nullable:true},vintageKind:{type:'STRING',nullable:true},releaseDesignation:{type:'STRING',nullable:true},country:{type:'STRING',nullable:true},region:{type:'STRING',nullable:true},appellation:{type:'STRING',nullable:true},
     grapes:{type:'ARRAY',items:{type:'STRING'}},
     grapeBlend:{type:'ARRAY',items:{type:'OBJECT',properties:{grape:{type:'STRING'},percentage:{type:'NUMBER',nullable:true}},required:['grape']}},
-    style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},sparklingDetails:legacySparklingDetailsSchema,locationName:{type:'STRING',nullable:true},confidence:{type:'NUMBER'}
+    style:{type:'STRING',nullable:true},alcoholPercentage:{type:'NUMBER',nullable:true},sparklingDetails:legacySparklingDetailsSchema,confidence:{type:'NUMBER'}
   },
   required:['grapes','grapeBlend','confidence']
 } as const;
@@ -74,7 +74,6 @@ export const recognitionResponseJsonSchema={
     style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
     alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
     sparklingDetails:sparklingDetailsJsonSchema,
-    locationName:nullableString,
     confidence:{type:'number',minimum:0,maximum:1}
   },
   required:['grapes','grapeBlend','sparklingDetails','confidence']
@@ -134,7 +133,6 @@ export const groupRecognitionResponseJsonSchema={
           grapeBlend:{type:'array',maxItems:20,items:{type:'object',additionalProperties:false,properties:{grape:{type:'string'},percentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]}},required:['grape']}},
           style:{anyOf:[{type:'string',enum:['red','white','rose','sparkling','dessert','fortified','orange','other']},{type:'null'}]},
           alcoholPercentage:{anyOf:[{type:'number',minimum:0,maximum:100},{type:'null'}]},
-          locationName:nullableString,
           confidence:{type:'number',minimum:0,maximum:1},
           boundingBox:{
             type:'object',
@@ -143,7 +141,7 @@ export const groupRecognitionResponseJsonSchema={
             required:['xMin','yMin','xMax','yMax']
           }
         },
-        required:['producer','wineName','vintage','country','region','appellation','grapes','grapeBlend','style','alcoholPercentage','locationName','confidence','boundingBox']
+        required:['producer','wineName','vintage','country','region','appellation','grapes','grapeBlend','style','alcoholPercentage','confidence','boundingBox']
       }
     },
     unresolvedCount:{type:'integer',minimum:0,maximum:30}
@@ -205,10 +203,9 @@ export const sheetRecognitionResponseJsonSchema={
 
 export function buildRecognitionPrompt(metadata:RecognitionPhotoMetadata[]){
   const selected=selectRecognitionMetadata(metadata);
-  const context=[
-    selected.capturedAt?`The strongest photo timestamp is ${selected.capturedAt}.`:'No reliable photo timestamp.',
-    selected.latitude!=null&&selected.longitude!=null?`The exact EXIF GPS is ${selected.latitude}, ${selected.longitude}. Infer only an approximate concise human-readable place name when reasonably confident; never alter the coordinates.`:'No reliable GPS metadata.'
-  ].join(' ');
+  // The photo's GPS is not sent: the model named the wine's home as the place
+  // it was photographed. Callers name the place with photoPlaceName instead.
+  const context=selected.capturedAt?`The strongest photo timestamp is ${selected.capturedAt}.`:'No reliable photo timestamp.';
   const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. Producer, wineName and vintage are identity-critical: return them only when supported by visible label or bottle evidence in the supplied images. Release identity is equally evidence-critical. vintage is ONLY an actual four-digit vintage year as a JSON integer; otherwise it is null. recognizedVintageText is the exact visible vintage/NV/MV/edition text when present. vintageKind must be vintage, non_vintage, multi_vintage or unknown: unreadable/missing is unknown, not non_vintage. releaseDesignation carries an edition or release marker such as 171ème Édition, MV20 or 90-21 and is null when none is visible. Do not invent, complete, or substitute producer, cuvee/wine name, or vintage from general wine knowledge. Do not invent or substitute a release designation either. After the visible identity is established, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim only for country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. ${PRODUCER_NAME_RULE} ${PLACE_LEVEL_RULE} For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. For Champagne or another sparkling wine, sparklingDetails may capture dosage g/L, the printed dosage category, disgorgement, tirage/mise en bouteille, base vintage, reserve-wine percentage, lees-ageing months, lot/release code, assemblage, reserve-wine detail, malolactic information, fermentation/elevage and other concise technical details — but ONLY when that fact is explicitly readable somewhere in the supplied bottle images. Do not infer any sparklingDetails value from producer reputation, cuvee style, appellation conventions or general knowledge; return sparklingDetails null when none of these facts are visibly stated. Do not add producer history, vintage quality, terroir commentary, unprinted winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the specific bottle identity, especially the visible producer and wineName rather than confidence in broad regional knowledge. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
   return {prompt,selected};
 }

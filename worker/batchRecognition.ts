@@ -4,6 +4,7 @@ import { durableProvider,type ProviderAuthorization } from './multiUser/provider
 import { buildRecognitionPrompt,recognitionResponseSchema,RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { enrichRecognitionReference } from '../src/lib/wine/referenceIdentity';
+import { photoPlaceName } from '../src/lib/places/photoPlace';
 
 export type BatchRecognitionJob=
   |{kind:'recognition_batch_submit';owner:string;sessionId:string}
@@ -276,7 +277,7 @@ export async function processBatchPollJob(env:Env,owner:string,sessionId:string,
       try{
         const text=inline.response.candidates?.[0]?.content?.parts?.map(x=>x.text??'').join('')??'';if(!text)throw new Error('Gemini returned an empty recognition');
         const parsedBase=parseRecognition(text),base=await enrichRecognitionReference(env.REFERENCE_DATA,parsedBase),item=await env.DB.prepare('SELECT metadata_json FROM batch_recognition_items WHERE id=? AND owner_id=?').bind(itemId,owner).first<{metadata_json:string}>(),metadata=parseJson<RecognitionPhotoMetadata[]>(item?.metadata_json,[]),{selected}=buildRecognitionPrompt(metadata);
-        const result={...base,locationName:selected.gpsSource==='exif'&&base.locationName?.trim()?base.locationName.trim():null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId};
+        const result={...base,locationName:await photoPlaceName(env.REFERENCE_DATA,selected.latitude,selected.longitude),tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource,requestId:itemId};
         await env.DB.prepare("UPDATE batch_recognition_items SET status='ready',recognition_json=?,error=NULL,updated_at=? WHERE id=? AND owner_id=?").bind(JSON.stringify(result),stamp,itemId,owner).run();
         units=1;
       }catch(e){await env.DB.prepare("UPDATE batch_recognition_items SET status='failed',error=?,updated_at=? WHERE id=? AND owner_id=?").bind((e as Error).message,stamp,itemId,owner).run()}finally{
