@@ -407,11 +407,11 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
   // Year takes the new vintage.
   const latestVintage=new Date().getFullYear();
   /**
-   * Year status and edition, shown only where they can say something: with a
-   * year typed the status is fixed at Vintage and the select is disabled. An
-   * edition already filled in stays, whatever the year.
+   * A typed year makes the wine a vintage, so Year status shows only without
+   * one. Edition / release always shows: a vintage can be a numbered or named
+   * release too, and hiding the field with a year left no way to add one.
    */
-  const showYearDetails=!vintageInput.trim()||Boolean(releaseDesignation.trim());
+  const hasYear=Boolean(vintageInput.trim());
   const occasionSummary=[tastingName.trim(),venue.trim()].filter(Boolean).join(' · ');
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <>
@@ -444,7 +444,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
     </div>
 
     <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" inputMode="numeric" min={OLDEST_VINTAGE} max={latestVintage} step="1" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1',{min:0,max:70})}</div>
-    {showYearDetails&&<div className="wine-compact-row two"><label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)} disabled={Boolean(vintageInput)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">{vintageInput?'A year is entered, so this is a vintage wine.':'NV is different from a label whose vintage simply could not be read.'}</small>}</label><label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>}
+    <div className={hasYear?'wine-compact-row':'wine-compact-row two'}>{!hasYear&&<label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">NV is different from a label whose vintage simply could not be read.</small>}</label>}<label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
     <h2 className="form-section-heading">Bottle facts</h2>
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
