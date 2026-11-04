@@ -35,6 +35,7 @@ const setValue=(input:HTMLInputElement,value:string)=>{
 };
 const submit=async()=>{await act(async()=>{host!.querySelector('form')!.requestSubmit()})};
 const disclosure=(name:string)=>field(name).closest('details') as HTMLDetailsElement;
+const edition=()=>host!.querySelector('input[placeholder^="e.g. 171"]') as HTMLInputElement;
 
 describe('values that cannot be right are stopped at the field',()=>{
   it.each([
@@ -86,17 +87,25 @@ describe('values that cannot be right are stopped at the field',()=>{
 });
 
 describe('the form shows less until it is needed',()=>{
-  it('hides year status and edition once a year is typed',async()=>{
+  it('hides only the year status once a year is typed',async()=>{
     await render({vintage:null,vintageKind:'non_vintage'});
     const yearStatus=()=>[...host!.querySelectorAll('label')].find(label=>label.textContent?.startsWith('Year status'));
     expect(yearStatus()).toBeTruthy();
     await act(async()=>setValue(field('vintage'),'2019'));
     expect(yearStatus()).toBeUndefined();
+    expect(edition()).toBeTruthy();
+  });
+
+  it('takes an edition on a wine that already has a year',async()=>{
+    const saved=await render();
+    await act(async()=>setValue(edition(),'N°1'));
+    await submit();
+    expect(saved[0]).toMatchObject({vintage:2019,vintageKind:'vintage',releaseDesignation:'N°1'});
   });
 
   it('keeps an edition that is already filled in, year or not',async()=>{
     await render({releaseDesignation:'171ème Édition'});
-    expect(host!.querySelector('input[placeholder^="e.g. 171"]')).toBeTruthy();
+    expect(edition().value).toBe('171ème Édition');
   });
 
   it('folds the occasion away for a bottle with nothing to put there',async()=>{
