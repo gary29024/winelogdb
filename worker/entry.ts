@@ -3,18 +3,18 @@ import { apiErrorHandler } from '../src/lib/credits/primitives';
 import layeredApp from './layered';
 import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { handleRecognitionRequest } from './recognitionHandler';
 import { ACHIEVEMENT_DEFINITION_VERSION,createCustomAchievementCollection,deleteCustomAchievementCollection,loadAchievementCatalogueOptions,loadAchievementProgress,setAchievementMatchMode,updateCustomAchievementCollection } from './achievementHandler';
 import { JOURNEY_PAYLOAD_VERSION,loadJourneySummary } from './journeyHandler';
 import { currentOwnerRevision,etagMatches,revisionETag } from '../src/lib/db/ownerRevision';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 app.onError(apiErrorHandler);
 
-async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return await requestOwner(c.req.header('Authorization'),c.env)}
 
 app.post('/api/recognition',c=>handleRecognitionRequest(c.req.raw,c.env));
 

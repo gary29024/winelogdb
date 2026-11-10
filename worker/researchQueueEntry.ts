@@ -4,7 +4,7 @@ import { apiErrorHandler } from '../src/lib/credits/primitives';
 import type { ProviderAuthorization } from '../src/lib/credits/provider';
 import app from './cuveeEntry';
 import { AI_MODELS } from '../src/lib/ai/policy';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
 import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import type { ChampagneExtractionJob } from './champagneExtraction';
@@ -27,13 +27,13 @@ type WineBatchPollJob={kind:'wine_batch_poll';owner:string;wineId:string;request
 type ProducerCampaignTickJob={kind:'producer_campaign_tick';owner:string;campaignId:string};
 type CancelResearchSweepJob={kind:'research_cancel_sweep';owner:string;targetKind:ResearchTargetKind;targetId:string;requestId:string;pass:number};
 type ResearchJob=ProducerJob|ProducerBatchPollJob|ProducerCampaignTickJob|WineJob|WineBatchPollJob|CancelResearchSweepJob|BatchRecognitionJob|VintageResearchMessage|ChampagneExtractionJob;
-type Bindings={CREDIT_CONTEXT?:ProviderAuthorization;CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
+type Bindings={CREDIT_CONTEXT?:ProviderAuthorization;CREDIT_PRODUCER_IDS?:string[];DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string;RESEARCH_QUEUE:Queue<ResearchJob>};
 type AppEnv={Bindings:Bindings};
 const router=new Hono<AppEnv>();
 router.onError(apiErrorHandler);
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
-async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return await requestOwner(c.req.header('Authorization'),c.env)}
 
 async function latestProducerRun(db:D1Database,owner:string,producerId:string){const row=await db.prepare(`SELECT request_id,producer_id,status,stage,attempt,message,started_at,updated_at,completed_at,duration_ms FROM producer_research_runs WHERE owner_id=? AND producer_id=? ORDER BY updated_at DESC LIMIT 1`).bind(owner,producerId).first<Record<string,unknown>>();return row?settleIfStalled(db,owner,mapRunRow(row)):null}
 async function failProducerQueue(db:D1Database,owner:string,requestId:string,message:string){const stamp=new Date().toISOString();await db.prepare(`UPDATE producer_research_runs SET status='failed',stage='failed',message=?,updated_at=?,completed_at=?,duration_ms=cast((julianday(?)-julianday(started_at))*86400000 as integer) WHERE owner_id=? AND request_id=?`).bind(message,stamp,stamp,stamp,owner,requestId).run().catch(()=>undefined)}
@@ -259,4 +259,6 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   }}
 }
 
+/** The routes this layer declares, for the route map in docs/server-routes.md. */
+export const researchRoutes=()=>router.routes.map(({method,path})=>({method,path}));
 export default {fetch(request:Request,env:Bindings,ctx:ExecutionContext){return router.fetch(request,env,ctx)},queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}};

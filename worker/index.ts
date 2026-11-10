@@ -6,12 +6,10 @@ import { serveWineImage } from './wineImageHandler';
 import { photoObjectKeys } from '../src/lib/r2/thumbnails';
 import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
-import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { createObjectKey } from '../src/lib/r2/keys';
 import { wineInputSchema,type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
-import { parseRecognition } from '../src/features/recognition/schema';
 import { wineSaveStatements } from '../src/lib/db/wineSave';
 import { enrichRecognitionReference,type StoredReferenceIdentity } from '../src/lib/wine/referenceIdentity';
 import { previewLoggingReference,resolveLoggingReference } from './wineLoggingReference';
@@ -23,7 +21,7 @@ import { recheckWineReference } from './wineReferenceReview';
 import { linkWineReference,previewWineReference,rejectWineReference } from './manualWineReference';
 import { applyProducerNameReview,previewProducerNameReview } from './producerNameReview';
 
-type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={IMAGES?:ImagesBinding;DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type Variables={userId:string};
 type AppContext={Bindings:Bindings;Variables:Variables};
 type PhotoMetadata={capturedAt?:string|null;latitude?:number|null;longitude?:number|null;source?:'exif'|'file_fallback'|'none'};
@@ -32,14 +30,12 @@ const app=new Hono<AppContext>();
 app.onError(apiErrorHandler);
 app.use('/api/*',cors({origin:(origin,c)=>origin===c.env.APP_URL?origin:null,credentials:true}));
 app.use('/api/*',async(c,next)=>{
- if(c.req.path==='/api/auth/login')return next();
- try{const s=await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET);c.set('userId',s.userId)}catch{return c.json({error:'Unauthorized'},401)}
+ try{c.set('userId',await requestOwner(c.req.header('Authorization'),c.env))}catch{return c.json({error:'Unauthorized'},401)}
  // Only session verification can expire a login. Route/database failures must
  // reach the API error handler instead of logging a valid user out.
  await next();
 });
 
-app.post('/api/auth/login',c=>c.json({error:'Password login has been retired. Use Google login.'},410));
 
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 // Same column order for JSON/multipart INSERT and PUT; absent optional inputs
@@ -58,7 +54,6 @@ const normalizeMeta=(meta:PhotoMetadata|undefined)=>{
  const source:PhotoMetadata['source']=meta?.source==='exif'||meta?.source==='file_fallback'?meta.source:'none';
  return {capturedAt,latitude,longitude,source};
 };
-async function fileToBase64(file:File){const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary)}
 const wineSelect=`SELECT w.*,
  t.name AS tasting_name,
  we.consumed_at AS experience_date,
@@ -372,36 +367,6 @@ app.delete('/api/wines/:id',async c=>{
 });
 
 app.get('/api/images/:id',c=>serveWineImage(c.req.raw,c.env,c.get('userId'),c.req.param('id'),c.executionCtx));
-
-app.post('/api/recognition',async c=>{
- const form=await c.req.formData(),files=form.getAll('images').filter((x):x is File=>x instanceof File);
- try{validateBatch(files,{maxFiles:Number(c.env.MAX_BATCH_FILES)||12,maxBytes:3*1024*1024,minDimension:300,maxDimension:2000})}catch(e){return c.json({error:(e as Error).message},400)}
- const metadata=parseJson<PhotoMetadata[]>(form.get('metadata'),[]),normalized=files.map((_,i)=>normalizeMeta(metadata[i]));
- const ranked=[...normalized].sort((a,b)=>(b.source==='exif'?2:b.source==='file_fallback'?1:0)-(a.source==='exif'?2:a.source==='file_fallback'?1:0));
- const best=ranked[0]??normalizeMeta(undefined),tastingDate=best.capturedAt?.slice(0,10)??null;
- const context=[best.capturedAt?`The strongest photo timestamp is ${best.capturedAt}.`:'No reliable photo timestamp.',best.latitude!=null&&best.longitude!=null?`The strongest photo GPS is ${best.latitude}, ${best.longitude}. Infer a concise human-readable location only if reasonably confident.`:'No reliable GPS metadata.'].join(' ');
- try{
-  // Shadowed: entry.ts answers /api/recognition through the shared transport and
-  // never delegates here. Kept because deleting a route is not this change's job,
-  // but it now says what it would need rather than sending an undefined key and
-  // failing as an unreadable 401.
-  if(!c.env.GEMINI_API_KEY?.trim())return c.json({error:'This path needs GEMINI_API_KEY; recognition runs through AI Gateway instead.'},501);
-  const genAI=new GoogleGenerativeAI(c.env.GEMINI_API_KEY);
-  const model=genAI.getGenerativeModel({model:'gemini-3.1-flash-lite',generationConfig:{responseMimeType:'application/json',responseSchema:{type:SchemaType.OBJECT,properties:{producer:{type:SchemaType.STRING,nullable:true},wineName:{type:SchemaType.STRING,nullable:true},vintage:{type:SchemaType.NUMBER,nullable:true},country:{type:SchemaType.STRING,nullable:true},region:{type:SchemaType.STRING,nullable:true},appellation:{type:SchemaType.STRING,nullable:true},grapes:{type:SchemaType.ARRAY,items:{type:SchemaType.STRING}},grapeBlend:{type:SchemaType.ARRAY,items:{type:SchemaType.OBJECT,properties:{grape:{type:SchemaType.STRING},percentage:{type:SchemaType.NUMBER,nullable:true}},required:['grape']}},style:{type:SchemaType.STRING,nullable:true},alcoholPercentage:{type:SchemaType.NUMBER,nullable:true},locationName:{type:SchemaType.STRING,nullable:true},confidence:{type:SchemaType.NUMBER}},required:['grapes','grapeBlend','confidence']}}});
-  const imageParts=await Promise.all(files.map(async file=>({inlineData:{data:await fileToBase64(file),mimeType:file.type}})));
-  const prompt=`All supplied images are labels or views of the SAME wine bottle. Analyze them jointly in one identification. Reconcile front, back, neck and supplementary labels rather than treating them as separate wines. First prioritize facts visible anywhere in the supplied images. After identifying the bottle, you may fill high-confidence canonical facts from general wine knowledge even when not printed verbatim: country, region, appellation, grape varieties, and broad wine style. Use null or an empty array when not reasonably confident. For style, return only one of: red, white, rose, sparkling, dessert, fortified, orange, other. Capture grape blend percentages only when explicitly visible in the supplied images; never invent vintage-specific percentages. Keep plain grape names in grapes and percentages in grapeBlend. Do not add producer history, vintage quality, terroir commentary, winemaking techniques, drinking windows, tasting notes, scores, or detailed research here; those belong to Deep Search. Confidence is 0 to 1 and should reflect confidence in the bottle identification. ${context} Do not invent a tasting date; the application derives it from photo metadata.`;
-  let last:Error|undefined;
-  for(let attempt=0;attempt<2;attempt++){
-   try{
-    const timeout=new Promise<never>((_,reject)=>setTimeout(()=>reject(new Error('Recognition timed out')),25000));
-    const response=await Promise.race([model.generateContent([prompt,...imageParts]),timeout]);
-    const result=parseRecognition(response.response.text());
-    return c.json({...result,tastingDate,latitude:best.latitude,longitude:best.longitude,metadataSource:best.source});
-   }catch(e){last=e as Error;if(attempt===0)await new Promise(r=>setTimeout(r,500))}
-  }
-  throw last;
- }catch(e){return c.json({error:(e as Error).message||'Recognition failed'},502)}
-});
 
 app.all('*',c=>c.env.ASSETS.fetch(c.req.raw));
 export default app;

@@ -5,7 +5,7 @@ import { buildRecognitionPrompt,recognitionResponseJsonSchema,RECOGNITION_MODEL 
 import { preferEscalatedRecognition,recognitionEscalationReasons,RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
 import type { RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { handleGroupRecognitionRequest } from './groupRecognitionHandler';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 import type { AnalyticsSink } from '../src/lib/usage/aiUsage';
@@ -91,7 +91,7 @@ export async function handleRecognitionRequest(request:Request,env:RecognitionBi
   if(request.headers.get('X-WineLog-Recognition-Mode')==='group')return handleGroupRecognitionRequest(request,env);
   const requestId=crypto.randomUUID(),startedAt=Date.now();
   let owner:string;
-  try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}catch{return json({error:'Unauthorized',requestId},401,requestId)}
+  try{owner=await requestOwner(request.headers.get('Authorization'),env)}catch{return json({error:'Unauthorized',requestId},401,requestId)}
 
   let form:FormData;
   try{form=await request.formData()}catch{return json({error:'Could not read recognition request',requestId},400,requestId)}

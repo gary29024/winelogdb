@@ -60,7 +60,7 @@ describe('multi-user AI request bodies',()=>{
     // sheets and JSON research routes too. They all pass through the same branch.
     const source=(await import('node:fs')).readFileSync('worker/multiUserEntry.ts','utf8');
     const reserveAt=source.indexOf('await reserve(request,env,member');
-    const forwardAt=source.indexOf('const forwarded=await internalRequest(request,env,member.id)',reserveAt);
+    const forwardAt=source.indexOf('const forwarded=internalRequest(request)',reserveAt);
     expect(reserveAt).toBeGreaterThan(-1);
     expect(forwardAt).toBeGreaterThan(reserveAt);
   });

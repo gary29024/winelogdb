@@ -1,4 +1,5 @@
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
+import { createSession } from '../../src/lib/auth/session';
 import { realD1 } from './support/realD1';
 import { authenticate,authRoute,bindGoogleAccount,verifyOrigin } from '../../worker/multiUser/auth';
 import { exportJWK,generateKeyPair,SignJWT } from 'jose';
@@ -787,5 +788,26 @@ describe('public Worker authorization',()=>{
    expect(response.status,`${method} ${path}`).toBeGreaterThanOrEqual(400);expect(response.status,path).toBeLessThan(500);expect(await response.text()).not.toContain('Private');
   }
   await Promise.all(pending);expect(provider).not.toHaveBeenCalled();expect(database.sql.prepare("SELECT count(*) AS n FROM wines WHERE owner_id='alice'").get()!.n).toBe(1);
+ });
+ it('takes identity from the session cookie alone, whatever Authorization header the browser sends',async()=>{
+  // The inner routes used to be handed a token the entry point signed for
+  // itself. They now read the verified member off the environment, so a token
+  // arriving from outside - even a correctly signed one for someone else -
+  // must count for nothing.
+  database.sql.exec("INSERT INTO wines(id,owner_id,producer,wine_name,created_at,updated_at) VALUES('alice-wine','alice','Private','Wine','now','now'),('bob-wine','bob','Bob estate','Bob wine','now','now')");
+  database.sql.prepare('INSERT INTO auth_sessions VALUES(?,?,?)').run(await hash('bob-session'),'bob',seconds()+3600);
+  const e={...env(),WINE_IMAGES:{},RESEARCH_QUEUE:{send:vi.fn()},ASSETS:{fetch:vi.fn(async()=>Response.json({error:"Not found"},{status:404}))}} as unknown as Parameters<typeof publicWorker.fetch>[1];
+  const context={waitUntil:()=>undefined} as unknown as ExecutionContext;
+  const aliceToken=await createSession('alice',env().AUTH_SECRET);
+  const get=(path:string,headers:Record<string,string>={})=>publicWorker.fetch(new Request(`https://wine.example${path}`,{headers:{Cookie:'__Host-winelog=bob-session',Origin:'https://wine.example',...headers}}),e,context);
+  const own=await get('/api/wines/bob-wine');
+  expect(own.status).toBe(200);expect(await own.json()).toMatchObject({producer:'Bob estate'});
+  const forged=await get('/api/wines/alice-wine',{Authorization:`Bearer ${aliceToken}`});
+  expect(forged.status).toBe(404);expect(await forged.text()).not.toContain('Private');
+  const stillBob=await get('/api/wines/bob-wine',{Authorization:`Bearer ${aliceToken}`});
+  expect(stillBob.status).toBe(200);
+  // No cookie, only a signed token: the public door does not accept it.
+  const tokenOnly=await publicWorker.fetch(new Request('https://wine.example/api/wines/alice-wine',{headers:{Authorization:`Bearer ${aliceToken}`,Origin:'https://wine.example'}}),e,context);
+  expect(tokenOnly.status).toBe(401);
  });
 });
