@@ -67,15 +67,21 @@ jobs:
             node scripts/ci-scope.mjs --checkpoint
           fi
 
+  # Runner minutes are billed per machine, each rounded up to a whole minute, and every machine
+  # repeats checkout and install. So the selected checks share two machines: this one and `browser`.
   quality:
     name: Lint and build
     needs: scope
+    # A merge of an already-checked PR selects nothing, so no machine starts for it.
+    if: github.event_name != 'push' || needs.scope.outputs.quality == 'true' || needs.scope.outputs.research == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         if: needs.scope.outputs.quality == 'true' || needs.scope.outputs.research == 'true'
-      # Grand cru research checks share this job: a separate job bills its own minute and setup.
+        with:
+          # Vitest's --changed compares against the PR base, so it needs history.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         if: needs.scope.outputs.research == 'true'
         with:
@@ -101,27 +107,72 @@ jobs:
         working-directory: scripts
         run: python -m unittest test_grand_cru_research test_grand_cru_holder_links test_grand_cru_config test_grand_cru_parcels test_grand_cru_rights_history test_grand_cru_filiation test_grand_cru_source_inventory test_grand_cru_spatial_lineage test_grand_cru_notice_history test_grand_cru_sale_records test_grand_cru_history_rollout test_build_earlier_bulletin_reviews test_pull_wayback_bulletins test_pull_commoncrawl_bulletins test_pull_grand_cru_notice_bulletins test_index_cotedor_bulletins
       - uses: ./.github/actions/test-setup
-        if: needs.scope.outputs.quality == 'true'
+        id: setup
+        if: ${{ !cancelled() && (needs.scope.outputs.quality == 'true' || needs.scope.outputs.unit != 'none') }}
+      # Lint, formatting, build and unit tests each run even if an earlier one failed,
+      # so one round reports every failure instead of one failure per push.
       - name: Lint
-        if: needs.scope.outputs.quality == 'true'
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' && needs.scope.outputs.quality == 'true' }}
         run: npm run lint
       - name: Formatting of converted and newly added files
-        if: needs.scope.outputs.quality == 'true'
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' && needs.scope.outputs.quality == 'true' }}
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           if [ -n "$BASE_SHA" ]; then
-            git fetch --no-tags --depth=1 origin "$BASE_SHA"
             npm run format:check -- --base "$BASE_SHA"
           else
             npm run format:check
           fi
       - name: TypeScript and production build
-        if: needs.scope.outputs.quality == 'true'
+        id: build
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' && needs.scope.outputs.quality == 'true' }}
         run: |
           npm run build
           python scripts/measure_grand_cru_payload.py
+      - name: Full unit, component and integration suite
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' && needs.scope.outputs.unit == 'full' }}
+        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+      - name: Affected tests and source-reading contracts
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' && needs.scope.outputs.unit == 'changed' }}
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          SOURCE_READERS: ${{ needs.scope.outputs.sourceReaders }}
+        run: |
+          set -euo pipefail
+          selection="$RUNNER_TEMP/selected-tests.txt"
+          npx vitest list tests/unit --changed "$BASE_SHA" --filesOnly > "$selection"
+          if [ "$SOURCE_READERS" = true ]; then
+            node scripts/source-text-tests.mjs >> "$selection"
+          fi
+          sort -u "$selection" -o "$selection"
+          sed -i '/^$/d' "$selection"
+          if [ ! -s "$selection" ]; then
+            echo 'No affected tests resolved; running the full unit suite.'
+            npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
+          else
+            echo "Running $(wc -l < "$selection") affected test files:"
+            cat "$selection"
+            mapfile -t files < "$selection"
+            npx vitest run --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json "${files[@]}"
+          fi
+      - name: Test inventory and timing report
+        if: ${{ !cancelled() && needs.scope.outputs.unit != 'none' }}
+        run: |
+          if [ -f .cache/test-reports/vitest.json ]; then
+            node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
+          fi
+      - name: Upload unit test reports
+        if: ${{ !cancelled() && needs.scope.outputs.unit != 'none' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: .cache/test-reports/
+          retention-days: 7
+          include-hidden-files: true
+      # The platform gate needs a successful build, so it keeps the default "stop after a failure".
       - name: Apply local D1 migrations
         if: needs.scope.outputs.platform == 'true'
         run: npm run db:migrate:local
@@ -147,85 +198,43 @@ jobs:
         if: needs.scope.outputs.quality == 'false'
         run: echo 'No executable files changed.'
 
-  unit:
-    name: Unit and integration tests
+  # Chromium and the iPhone WebKit projects share one machine. Each browser's flows run
+  # whether or not the other's passed, and the job fails if either does.
+  browser:
+    name: Browser tests
     needs: scope
-    if: needs.scope.outputs.unit != 'none'
+    if: needs.scope.outputs.chromium != 'none' || needs.scope.outputs.webkit == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/test-setup
-      - name: Full unit, component and integration suite
-        if: needs.scope.outputs.unit == 'full'
-        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
-      - name: Affected tests and source-reading contracts
-        if: needs.scope.outputs.unit == 'changed'
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          SOURCE_READERS: ${{ needs.scope.outputs.sourceReaders }}
-        run: |
-          set -euo pipefail
-          selection="$RUNNER_TEMP/selected-tests.txt"
-          npx vitest list tests/unit --changed "$BASE_SHA" --filesOnly > "$selection"
-          if [ "$SOURCE_READERS" = true ]; then
-            node scripts/source-text-tests.mjs >> "$selection"
-          fi
-          sort -u "$selection" -o "$selection"
-          sed -i '/^$/d' "$selection"
-          if [ ! -s "$selection" ]; then
-            echo 'No affected tests resolved; running the full unit suite.'
-            npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json
-          else
-            echo "Running $(wc -l < "$selection") affected test files:"
-            cat "$selection"
-            mapfile -t files < "$selection"
-            npx vitest run --maxWorkers=2 --reporter=default --reporter=json --outputFile=.cache/test-reports/vitest.json "${files[@]}"
-          fi
-      - name: Test inventory and timing report
-        if: always()
-        run: |
-          if [ -f .cache/test-reports/vitest.json ]; then
-            node scripts/test-suite-report.mjs .cache/test-reports/vitest.json > .cache/test-reports/inventory.json
-          fi
-      - name: Upload unit test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-reports
-          path: .cache/test-reports/
-          retention-days: 7
-          include-hidden-files: true
-
-  browser_shards:
-    name: Chromium ${{ matrix.shard }}/${{ needs.scope.outputs.chromium == 'full' && 2 || 1 }}
-    needs: scope
-    if: needs.scope.outputs.chromium != 'none'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: ${{ fromJSON(needs.scope.outputs.chromium == 'full' && '[1,2]' || '[1]') }}
+    # The weekly exhaustive Burgundy map run takes about 14 minutes of Chromium flows alone.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-setup
-      - uses: ./.github/actions/playwright
+      - name: Chromium browser
+        id: chromium
+        if: needs.scope.outputs.chromium != 'none'
+        # A stalled package download should fail here, not use up the whole job's time.
+        timeout-minutes: 6
+        uses: ./.github/actions/playwright
         with:
           browser: chromium
+      - name: WebKit browser
+        id: webkit
+        if: ${{ !cancelled() && needs.scope.outputs.webkit == 'true' }}
+        timeout-minutes: 6
+        uses: ./.github/actions/playwright
+        with:
+          browser: webkit
       - name: Chromium flows
-        if: needs.scope.outputs.chromium == 'full' && github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
-        run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
+        if: ${{ !cancelled() && steps.chromium.outcome == 'success' && needs.scope.outputs.chromium == 'full' && github.event_name != 'schedule' && github.event_name != 'workflow_dispatch' }}
+        run: npm run test:e2e
       - name: Chromium flows with exhaustive Burgundy maps
-        if: needs.scope.outputs.chromium == 'full' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        if: ${{ !cancelled() && steps.chromium.outcome == 'success' && needs.scope.outputs.chromium == 'full' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
         env:
           WINELOG_E2E_EXHAUSTIVE_MAPS: '1'
-        run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
+        run: npm run test:e2e
       - name: Affected Chromium flows
-        if: needs.scope.outputs.chromium == 'selected'
+        if: ${{ !cancelled() && steps.chromium.outcome == 'success' && needs.scope.outputs.chromium == 'selected' }}
         shell: bash
         env:
           SPECS: ${{ needs.scope.outputs.specs }}
@@ -233,57 +242,39 @@ jobs:
           mapfile -t specs < <(node -e 'JSON.parse(process.env.SPECS).forEach(spec => console.log(spec))')
           test "${#specs[@]}" -gt 0
           npm run test:e2e -- "${specs[@]}"
-      - name: Upload browser reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: browser-reports-chromium-${{ matrix.shard }}
-          path: |
-            test-results/
-            playwright-report/
-          retention-days: 7
-
-  # Preserve the required check name and fail if any shard fails or is cancelled.
-  browser:
-    name: Browser (chromium)
-    needs: [scope, browser_shards]
-    if: always() && needs.scope.outputs.chromium != 'none'
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    steps:
-      - name: Require every Chromium shard to pass
-        env:
-          SHARDS_RESULT: ${{ needs.browser_shards.result }}
-        run: test "$SHARDS_RESULT" = success
-
-  webkit:
-    name: Browser (webkit)
-    needs: scope
-    if: needs.scope.outputs.webkit == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/test-setup
-      - uses: ./.github/actions/playwright
-        with:
-          browser: webkit
+      # Playwright empties test-results/ when a run starts, so keep Chromium's before WebKit runs.
+      - name: Keep Chromium reports
+        if: ${{ !cancelled() && needs.scope.outputs.chromium != 'none' }}
+        shell: bash
+        run: |
+          mkdir -p browser-reports/chromium
+          for folder in test-results playwright-report; do
+            if [ -d "$folder" ]; then mv "$folder" "browser-reports/chromium/$folder"; fi
+          done
       - name: Both iPhone projects
+        if: ${{ !cancelled() && steps.webkit.outcome == 'success' }}
         run: npm run test:e2e:full -- --project="iPhone*"
+      - name: Keep WebKit reports
+        if: ${{ !cancelled() && needs.scope.outputs.webkit == 'true' }}
+        shell: bash
+        run: |
+          mkdir -p browser-reports/webkit
+          for folder in test-results playwright-report; do
+            if [ -d "$folder" ]; then mv "$folder" "browser-reports/webkit/$folder"; fi
+          done
       - name: Upload browser reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: browser-reports-webkit
-          path: |
-            test-results/
-            playwright-report/
+          name: browser-reports
+          path: browser-reports/
           retention-days: 7
 
   regression:
     name: Regression and browser tests
-    if: always()
-    needs: [scope, quality, unit, browser, webkit]
+    # Nothing was selected for a merge of an already-checked PR, so there is nothing to confirm.
+    if: always() && (github.event_name != 'push' || needs.scope.result != 'success' || needs.scope.outputs.quality == 'true')
+    needs: [scope, quality, browser]
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
@@ -291,15 +282,10 @@ jobs:
         env:
           SCOPE_RESULT: ${{ needs.scope.result }}
           QUALITY_RESULT: ${{ needs.quality.result }}
-          UNIT_MODE: ${{ needs.scope.outputs.unit }}
-          UNIT_RESULT: ${{ needs.unit.result }}
           CHROMIUM_MODE: ${{ needs.scope.outputs.chromium }}
-          CHROMIUM_RESULT: ${{ needs.browser.result }}
           WEBKIT_MODE: ${{ needs.scope.outputs.webkit }}
-          WEBKIT_RESULT: ${{ needs.webkit.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
         run: |
           test "$SCOPE_RESULT" = success
           test "$QUALITY_RESULT" = success
-          if [ "$UNIT_MODE" != none ]; then test "$UNIT_RESULT" = success; fi
-          if [ "$CHROMIUM_MODE" != none ]; then test "$CHROMIUM_RESULT" = success; fi
-          if [ "$WEBKIT_MODE" = true ]; then test "$WEBKIT_RESULT" = success; fi
+          if [ "$CHROMIUM_MODE" != none ] || [ "$WEBKIT_MODE" = true ]; then test "$BROWSER_RESULT" = success; fi
