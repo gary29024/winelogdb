@@ -155,10 +155,10 @@ describe('finding the tastings you have logged',()=>{
   });
 
   it('keeps the mobile tab bar at five, which is what fits',async()=>{
-    // A sixth tab does not fit at 390px, so Tastings took a slot of its own and
-    // Producers and Vintages moved behind More.
+    // A sixth tab does not fit at 390px, so Tastings is reached through More,
+    // alongside Vintages, the cellar and Achievements.
     await renderShell(null);
-    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineTastingsMore');
+    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersMore');
   });
 });
 

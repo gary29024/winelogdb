@@ -101,7 +101,7 @@ test.describe('the first-run tour on a phone',()=>{
  test('rings the tab bar instead, with the same seven steps',async({page})=>{
   await signedIn(page);
   await page.goto('/');
-  // Seven, as on a desktop: the tab bar has a Tastings tab of its own.
+  // Seven, as on a desktop: the Tastings step points at the More tab.
   await expect(bubble(page)).toContainText('Step 1 of 7');
   await rings(page,'nav-passport');
   // ...and the item being ringed is the one in the bottom bar.
@@ -115,13 +115,14 @@ test.describe('the first-run tour on a phone',()=>{
   await page.getByRole('button',{name:'Next'}).click();
   await expect(bubble(page)).toContainText('One button, four ways in');
   await rings(page,'scan-trigger');
-  // Tastings has a tab of its own on a phone now...
+  // On a phone the Tastings step rings the More tab, which is where Tastings lives...
   await page.getByRole('button',{name:'Next'}).click();
   await rings(page,'nav-tastings');
-  // ...and Producers and Vintages are ringed on the More tab that holds them.
+  await expect(page.locator('nav.mobile-nav [data-tour="nav-tastings"]')).toHaveText('More');
+  // ...and Producers keeps a tab of its own.
   await page.getByRole('button',{name:'Next'}).click();
   await expect(bubble(page)).toContainText('Producers and Vintages');
-  await expect(page.locator('nav.mobile-nav [data-tour="nav-producers"]')).toHaveText('More');
+  await rings(page,'nav-producers');
  });
 
  test('keeps the bubble inside the screen at every step',async({page})=>{

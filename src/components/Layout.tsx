@@ -27,7 +27,7 @@ const preloadTastingList=()=>void import('../features/tastings/TastingsPage');
 const preloadAchievements=()=>void import('../features/achievements/AchievementsPage');
 
 // The places a phone reaches through More rather than a tab of their own.
-const MORE_PATHS=['/producers','/vintages','/achievements'];
+const MORE_PATHS=['/tastings','/vintages','/achievements'];
 
 export function Layout(){
   // One sheet at a time: the ways to add a wine, or the places that have no tab on a phone.
@@ -104,7 +104,7 @@ export function Layout(){
   }
   function openMoreSheet(event:MouseEvent<HTMLButtonElement>){
     usedKeyboard.current=event.detail===0;
-    preloadProducers();setOpenSheet('more')
+    preloadTastingList();setOpenSheet('more')
   }
   function goFromSheet(path:string){closeScanSheet();navigate(path)}
   // With an evening already running this button opens it rather than starting a
@@ -131,10 +131,10 @@ export function Layout(){
       <NavLink to="/" end data-tour="nav-passport" onPointerDown={preloadPassport} onFocus={preloadPassport}><span className="nav-icon"><AppIcon kind="passport"/></span><span className="nav-label">Passport</span></NavLink>
       <NavLink to="/journal" data-tour="nav-journal" onPointerDown={preloadJournal} onFocus={preloadJournal}><span className="nav-icon"><AppIcon kind="journal"/></span><span className="nav-label">Journal</span></NavLink>
       <button ref={scanTrigger} type="button" className="scan-nav" data-tour="scan-trigger" onClick={openScanSheet} aria-haspopup="dialog" aria-expanded={scanSheetOpen}><span className="scan-plus"><AppIcon kind="scan"/></span><span className="nav-label">Scan Wine</span></button>
-      <NavLink to="/tastings" data-tour="nav-tastings" onPointerDown={preloadTastingList} onFocus={preloadTastingList}><span className="nav-icon"><AppIcon kind="tasting"/></span><span className="nav-label">Tastings</span></NavLink>
-      {/* Producers, Vintages, the cellar and Achievements share one tab: five slots
-          are all a phone has, and these are visited less often than an evening is logged. */}
-      <button ref={moreTrigger} type="button" className={`more-nav${inMore?' is-current':''}`} data-tour="nav-producers" onClick={openMoreSheet} aria-haspopup="dialog" aria-expanded={moreSheetOpen}><span className="nav-icon"><AppIcon kind="more"/></span><span className="nav-label">More</span></button>
+      <NavLink to="/producers" data-tour="nav-producers" onPointerDown={preloadProducers} onFocus={preloadProducers}><span className="nav-icon"><AppIcon kind="producers"/></span><span className="nav-label">Producers</span></NavLink>
+      {/* Tastings, Vintages, the cellar and Achievements share one tab: five slots
+          are all a phone has. The tour's Tastings step rings this tab on a phone. */}
+      <button ref={moreTrigger} type="button" className={`more-nav${inMore?' is-current':''}`} data-tour="nav-tastings" onClick={openMoreSheet} aria-haspopup="dialog" aria-expanded={moreSheetOpen}><span className="nav-icon"><AppIcon kind="more"/></span><span className="nav-label">More</span></button>
     </nav>
 
     {scanSheetOpen&&<div className="scan-sheet-backdrop" onClick={closeScanSheet}>
@@ -161,7 +161,7 @@ export function Layout(){
         <span className="sheet-grabber" aria-hidden="true"/>
         <div className="scan-sheet-header"><div><p className="eyebrow">ALSO IN WINELOG</p><h2 id="more-sheet-title">More</h2></div><button type="button" className="sheet-close" onClick={closeScanSheet} aria-label="Close"><AppIcon kind="close"/></button></div>
         <nav className="more-sheet-links" aria-label="More places">
-          <NavLink to="/producers" onClick={closeScanSheet} onPointerDown={preloadProducers}><span className="sheet-option-icon"><AppIcon kind="producers"/></span><span><strong>Producers</strong><small>Everyone whose wine you have logged</small></span></NavLink>
+          <NavLink to="/tastings" onClick={closeScanSheet} onPointerDown={preloadTastingList}><span className="sheet-option-icon"><AppIcon kind="tasting"/></span><span><strong>Tastings</strong><small>Evenings you have logged, newest first</small></span></NavLink>
           <NavLink to="/vintages" onClick={closeScanSheet} onPointerDown={preloadVintages}><span className="sheet-option-icon"><AppIcon kind="vintages"/></span><span><strong>Vintages</strong><small>Each season, village by village</small></span></NavLink>
           <NavLink to="/journal?scope=cellar" onClick={closeScanSheet} onPointerDown={preloadJournal} className={()=>location.pathname==='/journal'&&inMore?'active':''}><span className="sheet-option-icon"><AppIcon kind="cellar"/></span><span><strong>Cellar</strong><small>Bottles you own and have not opened</small></span></NavLink>
           <NavLink to="/achievements" onClick={closeScanSheet} onPointerDown={preloadAchievements}><span className="sheet-option-icon"><AppIcon kind="achievements"/></span><span><strong>Achievements</strong><small>Stamps and collections you have earned</small></span></NavLink>

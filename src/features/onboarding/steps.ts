@@ -41,10 +41,10 @@ export const CREDITS_INTRO='credits-intro';
  * wherever someone navigates mid-tour, every remaining anchor is still on
  * screen.
  *
- * No step is viewport-specific. Passport, Journal and Tastings appear in both
+ * No step is viewport-specific. Passport, Journal and Producers appear in both
  * navs under the same anchor name, and the engine spotlights whichever copy is
- * on screen. On a phone the Producers step lands on the More tab, which is
- * where Producers and Vintages live there.
+ * on screen. On a phone the Tastings step lands on the More tab, which is
+ * where Tastings lives there.
  *
  * The cellar sentence in `nav-journal` is the single most valuable line in here.
  * A bottle you own but have not opened lives at /journal?scope=cellar, and
@@ -69,12 +69,12 @@ export const firstRunSteps:TourStep[]=[
  {
   id:'nav-tastings',anchor:'nav-tastings',
   title:'Tastings',
-  body:'An evening is a container: open one, and every wine you log while it is running joins it. This is where past evenings live.'
+  body:'An evening is a container: open one, and every wine you log while it is running joins it. This is where past evenings live. On a phone, Tastings is under More.'
  },
  {
   id:'nav-producers',anchor:'nav-producers',
   title:'Producers and Vintages',
-  body:'Producers builds itself from your Journal - everyone whose wine you log appears, and you never add one by hand. Vintages is the other way round: a season-by-season record of each village that is already complete, with your own bottles marked on it. On a phone both are under More, next to your cellar and achievements.'
+  body:'Producers builds itself from your Journal - everyone whose wine you log appears, and you never add one by hand. Vintages is the other way round: a season-by-season record of each village that is already complete, with your own bottles marked on it. On a phone, Vintages is under More, next to your tastings, cellar and achievements.'
  },
  {
   id:'nav-account',anchor:'nav-account',
@@ -113,7 +113,7 @@ export const chapters:Tour[]=[
    {
     id:'tastings-page',route:'/tastings',
     title:'Every evening in one place',
-    body:'A tasting is a container for one sitting - a dinner, a flight, a visit to a domaine. Past ones are listed here, newest first.'
+    body:'A tasting is a container for one sitting - a dinner, a flight, a visit to a domaine. Past ones are listed here, newest first. On a phone you get here through More.'
    },
    {
     id:'tastings-start',anchor:'scan-trigger',

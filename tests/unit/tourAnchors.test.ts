@@ -125,7 +125,7 @@ describe('labels the copy sends people to',()=>{
 });
 
 describe('who sees which step',()=>{
- it('gives the phone its Tastings step too, now that the tab bar has a Tastings slot',()=>{
+ it('gives the phone its Tastings step too, pointed at the More tab that holds it',()=>{
   const ids=stepsFor(firstRunSteps,'member',true).map(step=>step.id);
   expect(ids).toContain('nav-tastings');
   expect(ids).toContain('scan');

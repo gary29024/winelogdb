@@ -56,13 +56,13 @@ describe('the More tab', () => {
     expect(document.activeElement).toBe(sheet);
     const links = [...sheet.querySelectorAll('.more-sheet-links a')];
     expect(links.map((link) => link.querySelector('strong')?.textContent)).toEqual([
-      'Producers',
+      'Tastings',
       'Vintages',
       'Cellar',
       'Achievements',
     ]);
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
-      '/producers',
+      '/tastings',
       '/vintages',
       '/journal?scope=cellar',
       '/achievements',
@@ -91,14 +91,14 @@ describe('the More tab', () => {
     expect(document.querySelector('#scan-sheet-title')).toBeTruthy();
   });
 
-  it.each(['/producers', '/vintages/2020', '/achievements', '/journal?scope=cellar'])(
+  it.each(['/tastings', '/tastings/abc', '/vintages/2020', '/achievements', '/journal?scope=cellar'])(
     'is marked as the current tab on %s',
     (path) => {
       expect(render(path).querySelector('.mobile-nav .more-nav')!.className).toContain('is-current');
     },
   );
 
-  it.each(['/', '/journal', '/tastings'])('is not marked as current on %s', (path) => {
+  it.each(['/', '/journal', '/producers'])('is not marked as current on %s', (path) => {
     expect(render(path).querySelector('.mobile-nav .more-nav')!.className).not.toContain('is-current');
   });
 });
