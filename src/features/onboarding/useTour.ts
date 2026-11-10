@@ -46,7 +46,7 @@ function useMobile(){
  * not on the page. Only the second is grounds for passing over a step, and
  * reading the first as the second skipped step one of every tour.
  *
- * Remeasured on resize and on scroll anywhere in the page - the capture phase,
+ * Remeasured when a web font finishes loading, on resize and on scroll anywhere in the page - the capture phase,
  * because the element that scrolls is often an inner container rather than the
  * window - and coalesced into one frame, the same shape Layout already uses for
  * the mobile viewport variable.
@@ -83,9 +83,19 @@ function useAnchorRect(anchor:string|undefined,step:number):Measurement{
   observer.observe(document.body,{childList:true,subtree:true});
   const grace=window.setTimeout(()=>{if(!found)publish(undefined)},ANCHOR_GRACE);
   window.addEventListener('resize',measure);window.addEventListener('scroll',measure,true);
+  // A web font arriving after the first measurement reflows the nav - each link
+  // moves a few pixels - without changing the DOM, resizing or scrolling, which
+  // left the ring drawn where the anchor used to be.
+  let active=true;
+  const fonts=document.fonts as FontFaceSet|undefined;
+  const onFonts=()=>{if(active)measure()};
+  fonts?.addEventListener?.('loadingdone',onFonts);
+  void fonts?.ready?.then(onFonts,()=>undefined);
   return()=>{
+   active=false;
    window.cancelAnimationFrame(frame);window.clearTimeout(grace);observer.disconnect();
    window.removeEventListener('resize',measure);window.removeEventListener('scroll',measure,true);
+   fonts?.removeEventListener?.('loadingdone',onFonts);
   };
  },[anchor,step]);
  return measurement;
