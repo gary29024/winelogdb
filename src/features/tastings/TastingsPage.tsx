@@ -1,4 +1,5 @@
 import { PageHeader } from '../../components/PageHeader';
+import { PageSkeleton } from '../../components/PageSkeleton';
 import { useEffect,useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppIcon } from '../../components/AppIcons';
@@ -63,7 +64,7 @@ export function TastingsPage(){
 
   return <section className="tastings-page">
     <PageHeader title="Tastings" subtitle="Start a tasting from Scan Wine and each wine you log joins it, with the name, date and venue already filled in."/>
-    {loading?<p aria-live="polite">Loading tastings…</p>
+    {loading?<PageSkeleton label="Loading tastings…" shape="list"/>
       :error?<LoadError error={error} fallback="Your tastings could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>
       :months.length?<div className="tasting-months">{months.map(group=>
         <section className="tasting-month" key={group.key}>

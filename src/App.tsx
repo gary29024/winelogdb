@@ -1,4 +1,5 @@
 import './remainingLayout.css';
+import { PageSkeleton } from './components/PageSkeleton';
 import { AccountPage } from './features/auth/AccountPage';
 import { AdminPage } from './features/auth/AdminPage';
 import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';
@@ -44,10 +45,10 @@ function Edit(){
   return()=>{active=false};
  },[id,attempt]);
  if(failed)return <LoadError error={failed} fallback="This wine could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>;
- return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={`${id}:${revision}`} id={id} initial={w} referenceWine={w} referenceInitiallyOpen={revision>0} onReferenceUpdated={wine=>{setW(wine);setRevision(value=>value+1)}} submitLabel="Save changes"/></section>:<p>Loading wine…</p>;
+ return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={`${id}:${revision}`} id={id} initial={w} referenceWine={w} referenceInitiallyOpen={revision>0} onReferenceUpdated={wine=>{setW(wine);setRevision(value=>value+1)}} submitLabel="Save changes"/></section>:<PageSkeleton label="Loading wine…"/>;
 }
 function RequireSession({children}:{children:ReactNode}){return hasSession()?children:<Navigate to="/login" replace/>}
-function RouteFallback(){return <p className="route-loading" aria-live="polite">Loading…</p>}
+function RouteFallback(){return <PageSkeleton label="Loading…"/>}
 
 /**
  * One address, two records. The cellar is a scope of the Journal rather than a

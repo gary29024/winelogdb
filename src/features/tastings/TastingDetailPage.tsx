@@ -1,4 +1,6 @@
 import { useEffect,useState } from 'react';
+import { showToast } from '../../components/toast';
+import { PageSkeleton } from '../../components/PageSkeleton';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { linkFrom } from '../wines/backTarget';
@@ -107,11 +109,11 @@ export function TastingDetailPage(){
   async function removeTasting(){
     if(!confirm('Delete this tasting? The wines and their notes are kept — only the evening that grouped them goes.'))return;
     setBusy(true);setError('');
-    try{await deleteTasting(id);if(open)setActiveTasting(null);navigate('/tastings',{replace:true})}
+    try{await deleteTasting(id);if(open)setActiveTasting(null);showToast('Tasting deleted');navigate('/tastings',{replace:true})}
     catch(e){setError((e as Error).message);setBusy(false)}
   }
 
-  if(loading)return <p aria-live="polite">Loading tasting…</p>;
+  if(loading)return <PageSkeleton label="Loading tasting…"/>;
   if(!tasting)return <article className="tasting-detail"><Link className="back-pill" to="/tastings">← Tastings</Link>{error?<LoadError error={error} fallback="This tasting could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>:<p role="alert">That tasting no longer exists.</p>}</article>;
 
   return <article className="tasting-detail">

@@ -98,11 +98,11 @@ test.describe('the first-run tour on a desktop',()=>{
 test.describe('the first-run tour on a phone',()=>{
  test.use({viewport:{width:390,height:844}});
 
- test('rings the tab bar instead, and drops the step the tab bar has no room for',async({page})=>{
+ test('rings the tab bar instead, with the same seven steps',async({page})=>{
   await signedIn(page);
   await page.goto('/');
-  // Six, not seven: there is no Tastings tab to point at on a phone.
-  await expect(bubble(page)).toContainText('Step 1 of 6');
+  // Seven, as on a desktop: the tab bar has a Tastings tab of its own.
+  await expect(bubble(page)).toContainText('Step 1 of 7');
   await rings(page,'nav-passport');
   // ...and the item being ringed is the one in the bottom bar.
   const ringed=page.locator('nav.mobile-nav [data-tour="nav-passport"]');
@@ -115,22 +115,26 @@ test.describe('the first-run tour on a phone',()=>{
   await page.getByRole('button',{name:'Next'}).click();
   await expect(bubble(page)).toContainText('One button, four ways in');
   await rings(page,'scan-trigger');
-  // Tastings is skipped here, so Producers comes next.
+  // Tastings has a tab of its own on a phone now...
+  await page.getByRole('button',{name:'Next'}).click();
+  await rings(page,'nav-tastings');
+  // ...and Producers and Vintages are ringed on the More tab that holds them.
   await page.getByRole('button',{name:'Next'}).click();
   await expect(bubble(page)).toContainText('Producers and Vintages');
+  await expect(page.locator('nav.mobile-nav [data-tour="nav-producers"]')).toHaveText('More');
  });
 
  test('keeps the bubble inside the screen at every step',async({page})=>{
   await signedIn(page);
   await page.goto('/');
-  for(let step=1;step<=6;step++){
+  for(let step=1;step<=7;step++){
    const box=await bubble(page).boundingBox();
    expect(box,`step ${step} should have a bubble`).toBeTruthy();
    expect(box!.x,`step ${step} runs off the left`).toBeGreaterThanOrEqual(-1);
    expect(box!.x+box!.width,`step ${step} runs off the right`).toBeLessThanOrEqual(391);
    expect(box!.y,`step ${step} runs off the top`).toBeGreaterThanOrEqual(-1);
    expect(box!.y+box!.height,`step ${step} runs off the bottom`).toBeLessThanOrEqual(845);
-   if(step<6)await page.getByRole('button',{name:'Next'}).click();
+   if(step<7)await page.getByRole('button',{name:'Next'}).click();
   }
  });
 

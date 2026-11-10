@@ -1,0 +1,145 @@
+/* Loading placeholders and the "it worked" confirmation. */
+
+.page-skeleton {
+  display: grid;
+  gap: 14px;
+  max-width: 760px;
+  padding-top: 6px;
+}
+/* Read by screen readers, and by tests that look for the sentence; not drawn. */
+.skeleton-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skeleton-block {
+  display: block;
+  border-radius: var(--r-md);
+  background: linear-gradient(90deg, var(--sunken) 25%, var(--line) 50%, var(--sunken) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+.skeleton-hero,
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.skeleton-lines {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 9px;
+}
+.skeleton-thumb {
+  flex: 0 0 auto;
+  width: 84px;
+  height: 108px;
+}
+.skeleton-dot {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-pill);
+}
+.skeleton-line {
+  height: 13px;
+}
+.skeleton-line-title {
+  width: 82%;
+  height: 22px;
+}
+.skeleton-line-medium {
+  width: 58%;
+}
+.skeleton-line-short {
+  width: 30%;
+}
+.skeleton-panel {
+  height: 92px;
+  border-radius: var(--r-lg);
+}
+.skeleton-panel-tall {
+  height: 168px;
+}
+.skeleton-row {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.skeleton-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 10px;
+}
+.skeleton-card {
+  height: 168px;
+  border-radius: var(--r-lg);
+}
+@keyframes skeleton-sweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.toast-host {
+  position: fixed;
+  right: 0;
+  bottom: calc(var(--app-nav-height, 0px) + var(--mobile-browser-bottom, 0px) + 28px);
+  left: 0;
+  z-index: 95;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 100%;
+  margin: 0;
+  padding: 11px 18px 11px 14px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--on-accent);
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: 0 10px 30px #10182d33;
+  animation: toast-in 0.22s ease-out;
+}
+.toast svg {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (min-width: 701px) {
+  .toast-host {
+    bottom: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block,
+  .toast {
+    animation: none;
+  }
+}

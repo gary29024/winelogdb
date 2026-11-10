@@ -1,0 +1,159 @@
+/* The phone's fifth tab, and the two sheets' shared option rows.
+   Loaded after scanSheet.css, whose sheet, backdrop and header it reuses. */
+
+/* A tab that opens a sheet rather than a page, so it is a button dressed as its neighbours. */
+.mobile-nav button.more-nav {
+  appearance: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 48px;
+  flex: 1 1 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: var(--r-lg);
+  background: transparent;
+  color: var(--ink-7);
+  font:
+    700 0.72rem 'DM Sans',
+    sans-serif;
+  cursor: pointer;
+}
+.mobile-nav button.more-nav:hover:not(:disabled) {
+  background: 0 0;
+}
+.mobile-nav button.more-nav.is-current {
+  color: var(--wine);
+}
+.mobile-nav button.more-nav.is-current::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 16px;
+  height: 2.5px;
+  border-radius: var(--r-pill);
+  background: var(--wine);
+}
+.mobile-nav button.more-nav:active .nav-icon {
+  transform: scale(0.93);
+}
+
+/* The one primary way to add a wine: a full-width row with a chevron. */
+.scan-sheet-primary {
+  width: 100%;
+  min-height: 84px;
+}
+.scan-sheet-primary > span:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.sheet-action-go {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+.scan-sheet-divider {
+  margin: 18px 2px 8px;
+  color: var(--ink-6);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Quieter rows: the other ways to add a wine, and the places behind More. */
+.scan-sheet-options,
+.more-sheet-links {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--ground);
+  overflow: hidden;
+}
+.scan-sheet-options .scan-sheet-option,
+.more-sheet-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 60px;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.scan-sheet-options .scan-sheet-option + .scan-sheet-option,
+.more-sheet-links a + a {
+  border-top: 1px solid var(--line);
+}
+.scan-sheet-options .scan-sheet-option:hover:not(:disabled) {
+  background: transparent;
+}
+.scan-sheet-options .scan-sheet-option:active,
+.more-sheet-links a:active {
+  background: var(--sunken);
+}
+/* Hover only where there is a pointer to hover with: on a phone it sticks to the last row touched. */
+@media (hover: hover) {
+  .scan-sheet-options .scan-sheet-option:hover:not(:disabled),
+  .more-sheet-links a:hover {
+    background: var(--sunken);
+  }
+}
+.scan-sheet-option strong,
+.scan-sheet-option small,
+.more-sheet-links strong,
+.more-sheet-links small {
+  display: block;
+}
+.scan-sheet-option strong,
+.more-sheet-links strong {
+  font-size: 0.98rem;
+}
+.scan-sheet-option small,
+.more-sheet-links small {
+  margin-top: 2px;
+  color: var(--ink-6);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.sheet-option-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  color: var(--wine);
+}
+.sheet-option-icon .app-icon {
+  width: 21px;
+  height: 21px;
+}
+.more-sheet-links a.active strong {
+  color: var(--wine);
+}
+/* A tasting already running: the row opens it rather than starting another. */
+.scan-sheet-options .scan-sheet-option.is-live {
+  border: 0;
+  background: var(--ink);
+  color: var(--on-accent);
+}
+.scan-sheet-options .scan-sheet-option.is-live small {
+  color: inherit;
+  opacity: 0.8;
+}
+.more-sheet {
+  padding-bottom: calc(26px + var(--app-safe-bottom, 0px));
+}
