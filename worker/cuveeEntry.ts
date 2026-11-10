@@ -1,7 +1,8 @@
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { queueVintageResearch,readActiveVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
-import entryApp from './entry';
+import { layers as entryLayers } from './entry';
+import { composeLayers,inward } from './layers';
 import { requestOwner } from './identity';
 import { ensureAllProducerLinks,refreshProducerHomeCountry } from '../src/lib/producers/entities';
 import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
@@ -156,20 +157,20 @@ app.post('/api/journal/batch-experience',async c=>{
   catch(e){const message=(e as Error).message||'Could not update selected wines';return c.json({error:message},message.includes('no longer exist')?404:500)}
 });
 
-app.get('/api/wines',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.get('/api/wines',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   scheduleJournalMaintenance(c,owner);
-  return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  return inward(c,next);
 });
 
-app.get('/api/wines/:id',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.get('/api/wines/:id',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   try{await ensureWineIdentity(c.env.DB,owner,c.req.param('id'))}catch{}
-  return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  return inward(c,next);
 });
 
 // Keep the existing producer resolver out of the dynamic producer-detail hook below.
-app.get('/api/producers/resolve',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
+app.get('/api/producers/resolve',(c,next)=>inward(c,next));
 
 app.post('/api/producers/:id/cuvee-links',async c=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
@@ -195,10 +196,10 @@ app.post('/api/producers/:id/cuvee-links/:linkId/unlink',async c=>{
   catch(e){const message=(e as Error).message||'Could not unlink cuvée from catalog';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
-app.get('/api/producers/:id',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.get('/api/producers/:id',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   const producerId=c.req.param('id');
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(!response.ok)return response;
   try{
     const body=await response.clone().json() as Record<string,unknown>&{sharedOnly?:boolean;aliases?:string[];catalog?:unknown;catalogSource?:string;tastedWines?:Array<Record<string,unknown>&{id:string;cuveeId:string|null;vintage:number|null;shared?:boolean}>};
@@ -216,14 +217,14 @@ app.get('/api/producers/:id',async c=>{
   }catch(e){console.error(JSON.stringify({event:'producer-cuvee-catalog-state-failed',producerId,error:(e as Error).message}));return response}
 });
 
-app.post('/api/producers/:id/merge',async c=>{
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+app.post('/api/producers/:id/merge',async (c,next)=>{
+  const response=await inward(c,next);
   if(response.ok){try{const owner=await user(c);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}}
   return response;
 });
 
-app.post('/api/producers/:id/unlink',async c=>{
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+app.post('/api/producers/:id/unlink',async (c,next)=>{
+  const response=await inward(c,next);
   if(response.ok){
     try{
       const owner=await user(c),body=await response.clone().json() as {restoredProducerId?:string};
@@ -234,13 +235,13 @@ app.post('/api/producers/:id/unlink',async c=>{
   return response;
 });
 
-app.post('/api/wines',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.post('/api/wines',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   // Carried as a query parameter rather than in the body: this route takes JSON
   // and multipart alike, and a query string is readable in both without cloning
   // a photo upload to look for one field.
   const holdingId=(c.req.query('holding')||'').trim();
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(response.ok){
     try{const body=await response.clone().json() as {id?:string};if(body.id)await ensureWineIdentity(c.env.DB,owner,body.id)}catch{}
     /**
@@ -258,8 +259,8 @@ app.post('/api/wines',async c=>{
   return response;
 });
 
-app.put('/api/wines/:id',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.put('/api/wines/:id',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   const id=c.req.param('id');
   const before=await c.env.DB.prepare('SELECT wine_name,appellation,wine_style,country FROM wines WHERE owner_id=? AND id=?')
     .bind(owner,id).first<{wine_name:string;appellation:string|null;wine_style:string|null;country:string|null}>().catch(()=>null);
@@ -275,7 +276,7 @@ app.put('/api/wines/:id',async c=>{
     if('country' in body)requestedCountry=typeof body.country==='string'?body.country:null;
     preferCuveePrimaryName=body.preferCuveePrimaryName===true;
   }catch{}
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(response.ok){
     try{
       /**
@@ -337,11 +338,11 @@ app.put('/api/wines/:id',async c=>{
   return response;
 });
 
-app.delete('/api/wines/:id',async c=>{
-  let owner:string;try{owner=await user(c)}catch{return entryApp.fetch(c.req.raw,c.env,c.executionCtx)}
+app.delete('/api/wines/:id',async (c,next)=>{
+  let owner:string;try{owner=await user(c)}catch{return inward(c,next)}
   const id=c.req.param('id');
   const before=await c.env.DB.prepare('SELECT cuvee_id,producer_id FROM wines WHERE owner_id=? AND id=?').bind(owner,id).first<{cuvee_id:string|null;producer_id:string|null}>().catch(()=>null);
-  const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(response.ok&&before){
     try{
       await cleanupOrphanCuvee(c.env.DB,owner,before.cuvee_id);
@@ -731,5 +732,5 @@ app.post('/api/research/translation',async c=>{
   return c.json({translation:await translateResearch(c.env,owner,parsed.data)});
 });
 
-app.all('*',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
-export default app;
+export const layers=[app,...entryLayers] as const;
+export default composeLayers<AppEnv>(layers);

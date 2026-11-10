@@ -2,7 +2,8 @@ import { failVintageResearch,processVintageResearch,type VintageResearchMessage 
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import type { ProviderAuthorization } from '../src/lib/credits/provider';
-import app from './cuveeEntry';
+import app,{ layers as cuveeLayers } from './cuveeEntry';
+import { composeLayers } from './layers';
 import { AI_MODELS } from '../src/lib/ai/policy';
 import { requestOwner } from './identity';
 import { pollProducerBatchResearch,startProducerBatchResearch } from '../src/lib/producers/batchResearch';
@@ -198,7 +199,6 @@ router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/confirm',a
 
 router.post('/api/batch-recognition/sessions/:sessionId/items/:itemId/reject',async c=>{cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}await rejectBatchItem(c.env,owner,c.req.param('sessionId'),c.req.param('itemId'));return c.json({ok:true})});
 
-router.all('*',c=>app.fetch(c.req.raw,c.env,c.executionCtx));
 
 /**
  * Retries configured for the research queue in wrangler.jsonc. A message that
@@ -259,6 +259,7 @@ async function consume(batch:MessageBatch<ResearchJob>,env:Bindings){
   }}
 }
 
-/** The routes this layer declares, for the route map in docs/server-routes.md. */
-export const researchRoutes=()=>router.routes.map(({method,path})=>({method,path}));
-export default {fetch(request:Request,env:Bindings,ctx:ExecutionContext){return router.fetch(request,env,ctx)},queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}};
+/** Every Hono layer of the API, outermost first: this file's routes, then the ones beneath. */
+export const layers=[router,...cuveeLayers] as const;
+const api=composeLayers<AppEnv>(layers);
+export default {fetch(request:Request,env:Bindings,ctx:ExecutionContext){return api.fetch(request,env,ctx)},queue(batch:MessageBatch<ResearchJob>,env:Bindings){return consume(batch,env)}};
