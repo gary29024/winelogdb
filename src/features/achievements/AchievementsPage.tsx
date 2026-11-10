@@ -8,6 +8,7 @@ import { journeyLadder,stampTotals } from '../journey/model';
 import { JourneyStampIcon } from '../journey/JourneyStampIcon';
 import '../../achievementPassport.css';
 import '../../achievements.css';
+import { LoadError } from '../../components/LoadError';
 
 const categoryLabel:Record<AchievementProgress['definition']['category'],string>={
   'iconic-estates':'Iconic estates','historic-tastings':'Historic tasting','regional-exploration':'Regional explorer','guide-selections':'Guide selection'
@@ -25,15 +26,15 @@ function CollectionCards({items}:{items:AchievementProgress[]}){return <div clas
 })}</div>}
 
 export function AchievementsPage(){
-  const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[error,setError]=useState('');
+  const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
   const [journey,setJourney]=useState<JourneyData|null>(null);
   // The stamp ladder needs the journey counts, which the passport already
   // fetches; a failure here leaves the collections intact rather than the page
   // blank, because the ladder is the smaller half of what is on screen.
   useEffect(()=>{let active=true;getJourneyData().then(result=>{if(active)setJourney(result)}).catch(()=>undefined);return()=>{active=false}},[]);
-  useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[]);
+  useEffect(()=>{let active=true;setError('');getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setError((e as Error).message||'failed')});return()=>{active=false}},[attempt]);
   const summary=useMemo(()=>collections?{complete:collections.filter(item=>item.complete).length,active:collections.filter(item=>item.completed>0&&!item.complete).length,possible:collections.reduce((sum,item)=>sum+item.possible,0)}:null,[collections]);
-  if(error)return <section className="achievements-page"><p role="alert">{error}</p></section>;
+  if(error)return <section className="achievements-page"><LoadError error={error==='failed'?'':error} fallback="Your collections could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/></section>;
   if(!collections||!summary)return <section className="achievements-page"><p aria-live="polite">Checking your collection stamps…</p></section>;
   const ladder=journey?journeyLadder(journey.summary):[];
   const earnedStamps=stampTotals(ladder).earned;

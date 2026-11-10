@@ -28,6 +28,15 @@ npm run dev
 
 WineLog supports an invite-only pilot of up to 25 accounts. Google identities map to internal IDs, with explicitly configured `OWNER_GOOGLE_SUB` retaining the legacy `owner` data. Opaque, revocable HttpOnly cookie sessions replace password tokens. Owner invitations, selected-friend wine sharing, factual research reuse, and quoted AI credits are described in [MULTI_USER_ROLLOUT.md](MULTI_USER_ROLLOUT.md). Complete that cutover checklist before admitting members. Follow [Google OAuth setup](docs/google-oauth-setup.md) to configure the consent screen, owner bootstrap, and Worker environment.
 
+## Code formatting
+
+[Prettier](https://prettier.io) lays code out consistently. Most of the codebase predates it and is written as long single lines; reformatting all of it at once would touch about 840 files and break the tests that read source as text, so it is adopted file by file:
+
+- `npm run format -- <path>` formats a file. Add the path to `scripts/formatted-files.txt` afterwards.
+- `npm run format:check` fails if a listed file has drifted. CI runs it, and on a pull request it also requires every newly added code file to be formatted.
+
+Data, research material, migrations and fixtures are excluded in `.prettierignore`.
+
 ## Cloudflare setup and deployment
 
 **[SETUP.md](SETUP.md) is the step-by-step guide** for deploying your own copy,

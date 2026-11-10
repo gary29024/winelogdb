@@ -351,7 +351,16 @@ app.put('/api/wines/:id',async c=>{
 app.delete('/api/wines/:id',async c=>{
  const id=c.req.param('id'),owner=c.get('userId');
  const images=await c.env.DB.prepare('SELECT object_key FROM wine_images WHERE wine_id=? AND owner_id=?').bind(id,owner).all<{object_key:string}>();
- const deleted=await c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner).run();
+ // The wine and the two records that hang off it go in one batch, which D1 runs
+ // as a single transaction. An outer layer used to clear them in a second step
+ // after this route had answered, so a failure there left structure notes behind
+ // for a wine that no longer existed. Both are keyed by this owner and wine, so
+ // on an id that matches nothing they delete nothing.
+ const [deleted]=await c.env.DB.batch([
+  c.env.DB.prepare('DELETE FROM wines WHERE id=? AND owner_id=?').bind(id,owner),
+  c.env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(owner,id),
+  c.env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(owner,id)
+ ]);
  if(!deleted.meta.changes)return c.json({error:'Not found'},404);
  // One statement and one R2 batch for the whole set: deleting a twelve-photo wine
  // used to cost twelve serial D1 round trips.

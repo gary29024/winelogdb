@@ -9,6 +9,7 @@ import { linkFrom } from '../wines/backTarget';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { burgundyAtlasPlace } from '../../lib/places/burgundyAtlas';
 import { atlasCollections } from './atlasCollections';
+import { LoadError } from '../../components/LoadError';
 
 function statusCopy(status:AchievementProgress['items'][number]['status']){if(status==='tasted')return 'Tasted';if(status==='possible')return 'Needs linking';return 'Not tasted'}
 function collectionEyebrow(collection:AchievementProgress){const definition=collection.definition;if(definition.series)return `${definition.series.authority} · ${definition.series.region} · ${definition.series.edition}`;if(definition.origin==='catalogue')return 'SMART CATALOGUE COLLECTION';if(definition.origin==='custom')return 'MY COLLECTION';return 'COLLECTION'}
@@ -16,9 +17,9 @@ function smartRuleCopy(collection:AchievementProgress){const rule=collection.def
 function matchModeCopy(mode:AchievementMatchMode){if(mode==='producer')return 'Any wine from the participating producer counts.';if(mode==='cuvee')return 'The same named wine counts regardless of vintage.';return 'Only the exact historic wine and vintage counts.'}
 
 export function AchievementDetailPage(){
-  const {id}=useParams(),[collection,setCollection]=useState<AchievementProgress|null|undefined>(undefined),[error,setError]=useState(''),[actionError,setActionError]=useState(''),[changingMode,setChangingMode]=useState(false);
-  useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollection(result.find(item=>item.definition.id===id)??null)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id]);
-  if(error)return <section className="achievements-page"><p role="alert">{error}</p></section>;
+  const {id}=useParams(),[collection,setCollection]=useState<AchievementProgress|null|undefined>(undefined),[error,setError]=useState(''),[attempt,setAttempt]=useState(0),[actionError,setActionError]=useState(''),[changingMode,setChangingMode]=useState(false);
+  useEffect(()=>{let active=true;setError('');getAchievementProgress().then(result=>{if(active)setCollection(result.find(item=>item.definition.id===id)??null)}).catch(e=>{if(active)setError((e as Error).message||'failed')});return()=>{active=false}},[id,attempt]);
+  if(error)return <section className="achievements-page"><LoadError error={error==='failed'?'':error} fallback="This collection could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/></section>;
   if(collection===undefined)return <section className="achievements-page"><p aria-live="polite">Opening collection…</p></section>;
   if(!collection)return <section className="achievements-page"><Link className="achievement-back" to="/achievements">‹ Wine Collections</Link><h1>Collection not found</h1></section>;
   const {definition}=collection;

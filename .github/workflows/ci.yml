@@ -105,6 +105,18 @@ jobs:
       - name: Lint
         if: needs.scope.outputs.quality == 'true'
         run: npm run lint
+      - name: Formatting of converted and newly added files
+        if: needs.scope.outputs.quality == 'true'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
+            npm run format:check -- --base "$BASE_SHA"
+          else
+            npm run format:check
+          fi
       - name: TypeScript and production build
         if: needs.scope.outputs.quality == 'true'
         run: |

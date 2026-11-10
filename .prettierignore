@@ -1,0 +1,23 @@
+# Generated output and installed packages.
+dist
+node_modules
+.wrangler
+playwright-report
+test-results
+
+# Data, research material and fixtures: these are records, not code, and
+# reformatting them would bury real changes under whitespace.
+docs
+public
+scripts/**/data
+scripts/**/sources
+scripts/**/reports
+tests/**/fixtures
+src/lib/db/migrations
+**/*.json
+**/*.jsonl
+**/*.geojson
+**/*.html
+**/*.md
+**/*.sql
+**/*.yml

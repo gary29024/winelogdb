@@ -32,6 +32,7 @@ import '../../deepSearch.css';
 // so without this import a cold /shared/:id load has no rules for either.
 import '../../wineImages.css';
 import '../../sharedWine.css';
+import { LoadError } from '../../components/LoadError';
 
 const wineSearcherUrl=(producer:string,wineName:string,vintage:number|null)=>`https://www.wine-searcher.com/find/${encodeURIComponent([producer,wineName,vintage??''].filter(Boolean).join(' ')).replace(/%20/g,'+')}`;
 type Draft={tastingDate:string;rating:string;tastingName:string;venue:string;locationName:string;currency:string;price:string;tastingNotes:string;structure:TastingStructure};
@@ -43,10 +44,10 @@ const draftFromWine=(wine:SharedWine):Draft=>({
 const EMPTY_DRAFT:Draft={tastingDate:'',rating:'',tastingName:'',venue:'',locationName:'',currency:'',price:'',tastingNotes:'',structure:{}};
 
 export function SharedWinesPage(){
- const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[structureOpen,setStructureOpen]=useState(false);
+ const {id=''}=useParams(),{state}=useLocation(),[wine,setWine]=useState<SharedWine>(),[attempt,setAttempt]=useState(0),[error,setError]=useState(''),[favoriteError,setFavoriteError]=useState(''),[editing,setEditing]=useState(false),[saving,setSaving]=useState(false),[notice,setNotice]=useState(''),[favoriteBusy,setFavoriteBusy]=useState(false),[selectedPhoto,setSelectedPhoto]=useState<string>(),[draft,setDraft]=useState<Draft>(EMPTY_DRAFT),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[structureOpen,setStructureOpen]=useState(false);
  const back=useMemo(()=>backTargetFromState(state)??JOURNAL_BACK,[state]);
 
- useEffect(()=>{let active=true;setError('');setFavoriteError('');setNotice('');apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>{if(active){setWine(item);setDraft(draftFromWine(item))}}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id]);
+ useEffect(()=>{let active=true;setError('');setFavoriteError('');setNotice('');apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>{if(active){setWine(item);setDraft(draftFromWine(item))}}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[id,attempt]);
  // After the reader's own Deep Search: only the research changes, so an
  // experience being edited is left alone.
  const reloadResearch=useCallback(()=>apiJson<SharedWine>(`/api/shared/wines/${id}`).then(item=>setWine(current=>current?{...current,deepSearch:item.deepSearch}:item)),[id]);
@@ -86,7 +87,7 @@ export function SharedWinesPage(){
 
  const research=useResearchTranslation(deepResearchText(wine?.deepSearch));
  const copy=RESEARCH_COPY[research.lang];
- if(error&&!wine)return <section className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><p role="alert">{error}</p></section>;
+ if(error&&!wine)return <section className="detail wine-detail"><Link className="back-pill" to={back.to}>← {back.label}</Link><LoadError error={error} fallback="This shared wine could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/></section>;
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
 
  // Both pages build these rows from one definition, so a field added or removed

@@ -10,6 +10,7 @@ import '../../tastings.css';
 import { ShareStorySheet } from '../share/ShareStorySheet';
 import type { StoryCard } from '../share/renderStoryCollage';
 import { FriendTagDialog } from '../wines/FriendTagDialog';
+import { LoadError } from '../../components/LoadError';
 import { getTastingFriendTags,listFriendTags,setTastingFriendTags,type FriendTag } from '../wines/friendTags';
 
 const dateLabel=(value:string|null)=>{
@@ -50,7 +51,7 @@ function Lineup({tastingId,name,wines,onRemoved}:{tastingId:string;name:string;w
 export function TastingDetailPage(){
   const {id=''}=useParams(),navigate=useNavigate();
   const [tasting,setTasting]=useState<Tasting|null>(null),[wines,setWines]=useState<TastingWine[]>([]),[documents,setDocuments]=useState<TastingDocument[]>([]);
-  const [loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+  const [loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false),[attempt,setAttempt]=useState(0);
   const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
   const [tagOpen,setTagOpen]=useState(false),[tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagBusy,setTagBusy]=useState(false),[tagError,setTagError]=useState('');
   const [editing,setEditing]=useState(false),[nameDraft,setNameDraft]=useState(''),[venueDraft,setVenueDraft]=useState('');
@@ -64,7 +65,7 @@ export function TastingDetailPage(){
       setNameDraft(detail.tasting.name);setVenueDraft(detail.tasting.venue??'');
     }).catch(e=>{if(active)setError((e as Error).message)}).finally(()=>{if(active)setLoading(false)});
     return()=>{active=false};
-  },[id]);
+  },[id,attempt]);
 
   const open=Boolean(tasting?.startedAt&&!tasting.endedAt);
   const rated=wines.filter(wine=>wine.rating!=null).map(wine=>wine.rating as number);
@@ -111,7 +112,7 @@ export function TastingDetailPage(){
   }
 
   if(loading)return <p aria-live="polite">Loading tasting…</p>;
-  if(!tasting)return <article className="tasting-detail"><Link className="back-pill" to="/tastings">← Tastings</Link><p role="alert">{error||'That tasting no longer exists.'}</p></article>;
+  if(!tasting)return <article className="tasting-detail"><Link className="back-pill" to="/tastings">← Tastings</Link>{error?<LoadError error={error} fallback="This tasting could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>:<p role="alert">That tasting no longer exists.</p>}</article>;
 
   return <article className="tasting-detail">
     <Link className="back-pill" to="/tastings">← Tastings</Link>

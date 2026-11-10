@@ -123,6 +123,23 @@ describe('wine saves through the deployed entrypoint and migrated SQLite',()=>{
     expect((await request('DELETE',`/api/wines/${id}`)).status).toBe(204);
     expect(sqlite.prepare('SELECT count(*) AS n FROM wine_sparkling_details').get()).toMatchObject({n:0});
   });
+  it('removes the tasting structure and release details in the same transaction as the wine',async()=>{
+    const {sqlite,create,request}=setup(),id=await create({...rich,sparklingDetails:{dosageGPerL:2}});
+    const count=(table:string)=>(sqlite.prepare(`SELECT count(*) AS n FROM ${table}`).get() as {n:number}).n;
+    expect(count('wine_tasting_structures')).toBe(1);
+    // If the structure cannot be removed, the wine must stay too: nothing half-deleted.
+    sqlite.exec("CREATE TRIGGER reject_structure_delete BEFORE DELETE ON wine_tasting_structures BEGIN SELECT RAISE(ABORT,'Simulated cleanup failure'); END");
+    await expect(request('DELETE',`/api/wines/${id}`)).rejects.toThrow('Simulated cleanup failure');
+    expect(count('wines')).toBe(1);
+    expect(count('wine_tasting_structures')).toBe(1);
+    sqlite.exec('DROP TRIGGER reject_structure_delete');
+    expect((await request('DELETE',`/api/wines/${id}`,undefined,false,'someone-else')).status).toBe(404);
+    expect(count('wine_tasting_structures')).toBe(1);
+    expect((await request('DELETE',`/api/wines/${id}`)).status).toBe(204);
+    expect(count('wines')).toBe(0);
+    expect(count('wine_tasting_structures')).toBe(0);
+    expect(count('wine_sparkling_details')).toBe(0);
+  });
   it('clears every experience field and does not reveal an older experience',async()=>{
     const {sqlite,create,request}=setup(),id=await create();
     sqlite.prepare("INSERT INTO wine_experiences(id,owner_id,wine_id,tasting_notes,created_at,updated_at) VALUES('older','owner',?,'Older note','2020-01-01','2020-01-01')").run(id);
