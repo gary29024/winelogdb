@@ -1,6 +1,7 @@
 import { lwinDisplayWineName,sameWineDisplayName,wineNameNeedsReview } from '../src/lib/wine/lwinDisplayName';
 import { readLwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
+import { composeLayers } from './layers';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { serveWineImage } from './wineImageHandler';
 import { photoObjectKeys } from '../src/lib/r2/thumbnails';
@@ -369,4 +370,6 @@ app.delete('/api/wines/:id',async c=>{
 app.get('/api/images/:id',c=>serveWineImage(c.req.raw,c.env,c.get('userId'),c.req.param('id'),c.executionCtx));
 
 app.all('*',c=>c.env.ASSETS.fetch(c.req.raw));
-export default app;
+/** This layer's own routes, innermost of the stack. */
+export const layers=[app] as const;
+export default composeLayers<AppContext>(layers);

@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
-import layeredApp from './layered';
+import { layers as layeredLayers } from './layered';
+import { composeLayers,inward } from './layers';
 import { applyJournalVintageSearch } from '../src/lib/journal/searchQuery';
 import { favoriteUpdateSchema } from '../src/lib/journal/favorite';
 import { requestOwner } from './identity';
@@ -26,11 +27,13 @@ function privateRevalidated(c:{header:(name:string,value:string)=>void},etag:str
   if(etag)c.header('ETag',etag);
 }
 
-app.get('/api/wines',c=>{
+app.get('/api/wines',(c,next)=>{
   const url=new URL(c.req.raw.url);
-  if(!applyJournalVintageSearch(url))return layeredApp.fetch(c.req.raw,c.env,c.executionCtx);
-  const request=new Request(url.toString(),{method:'GET',headers:c.req.raw.headers});
-  return layeredApp.fetch(request,c.env,c.executionCtx);
+  if(!applyJournalVintageSearch(url))return inward(c,next);
+  // The layers beneath read the query from the request, so the rewritten
+  // address is swapped in for them rather than passed as a second request.
+  c.req.raw=new Request(url.toString(),{method:'GET',headers:c.req.raw.headers});
+  return inward(c,next);
 });
 
 app.get('/api/achievements/catalogue-options',async c=>{
@@ -134,8 +137,8 @@ app.put('/api/wines/:id/favorite',async c=>{
 // The wine row already carries producer_id and favorite, and the base handler now
 // maps both. Only fall back to a second read for a body that predates that mapping,
 // so the common detail view costs one wines lookup instead of two.
-app.get('/api/wines/:id',async c=>{
-  const response=await layeredApp.fetch(c.req.raw,c.env,c.executionCtx);
+app.get('/api/wines/:id',async (c,next)=>{
+  const response=await inward(c,next);
   if(!response.ok)return response;
   let body:Record<string,unknown>;
   try{body=await response.clone().json() as Record<string,unknown>}catch{return response}
@@ -147,5 +150,5 @@ app.get('/api/wines/:id',async c=>{
   return new Response(JSON.stringify({...body,producerId:meta.producer_id??null,favorite:Boolean(meta.favorite)}),{status:response.status,statusText:response.statusText,headers});
 });
 
-app.all('*',c=>layeredApp.fetch(c.req.raw,c.env,c.executionCtx));
-export default app;
+export const layers=[app,...layeredLayers] as const;
+export default composeLayers<AppEnv>(layers);

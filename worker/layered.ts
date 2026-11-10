@@ -3,7 +3,8 @@ import { producerRangeAllowed } from '../src/lib/producers/rangeAccess';
 import { reliableLwinReference,type LwinReference } from '../src/lib/wine/lwinMetadata';
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
-import baseApp from './index';
+import { layers as baseLayers } from './index';
+import { composeLayers,inward } from './layers';
 import { requestOwner } from './identity';
 import { canonicalCountryName } from '../src/lib/wine/canonicalize';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName,suggestExistingProducer } from '../src/lib/producers/entities';
@@ -317,21 +318,21 @@ app.post('/api/producers/:id/catalog-decisions/:decisionId/undo',async c=>{
   catch(e){const message=(e as Error).message||'Could not undo the catalogue correction';return c.json({error:message},message.includes('not found')?404:400)}
 });
 
-app.post('/api/wines',async c=>{
+app.post('/api/wines',async (c,next)=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(response.ok){
     try{const body=await response.clone().json() as {id?:string};if(body.id)await linkSavedWine(c.env.DB,owner,body.id)}catch{}
   }
   return response;
 });
 
-app.put('/api/wines/:id',async c=>{
+app.put('/api/wines/:id',async (c,next)=>{
   cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
+  const response=await inward(c,next);
   if(response.ok){try{await linkSavedWine(c.env.DB,owner,c.req.param('id'))}catch{}}
   return response;
 });
 
-app.all('*',c=>baseApp.fetch(c.req.raw,c.env,c.executionCtx));
-export default app;
+export const layers=[app,...baseLayers] as const;
+export default composeLayers<AppEnv>(layers);

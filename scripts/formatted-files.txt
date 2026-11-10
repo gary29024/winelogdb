@@ -9,3 +9,5 @@ tests/unit/LoadError.test.tsx
 worker/identity.ts
 tests/unit/requestOwner.test.ts
 tests/unit/serverRouteMap.test.ts
+worker/layers.ts
+tests/unit/layers.test.ts
