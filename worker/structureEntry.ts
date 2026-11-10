@@ -102,11 +102,6 @@ export default {
       }catch{return response}
     }
 
-    if(request.method==='DELETE'&&wineId){
-      let ownerId:string|null=null;try{ownerId=await owner(request,env)}catch{}
-      const response=await app.fetch(request,env,ctx);if(response.ok&&ownerId)await env.DB.batch([env.DB.prepare('DELETE FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId),env.DB.prepare('DELETE FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId)]).catch(()=>undefined);return response;
-    }
-
     return app.fetch(request,env,ctx);
   },
   async queue(batch:QueueBatch,env:Bindings){
