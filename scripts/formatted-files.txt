@@ -1,0 +1,8 @@
+# Files that have been run through the formatter and must stay that way.
+# `npm run format:check` fails if any of them drifts. Add a path here after
+# running `npm run format -- <path>` on it. See README, "Code formatting".
+scripts/format-check.mjs
+src/components/LoadError.tsx
+src/components/loadFailureReason.ts
+src/loadError.css
+tests/unit/LoadError.test.tsx
