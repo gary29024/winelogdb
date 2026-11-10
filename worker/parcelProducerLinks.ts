@@ -1,4 +1,4 @@
-import {requireSession} from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import {ApiError,boundedBytes} from '../src/lib/credits/primitives';
 import {parseSharedProducerId,sharedProducerId} from '../src/lib/producers/sharedRef';
 import type {ParcelProducerLink} from '../src/lib/places/parcelProducerLinks';
@@ -15,7 +15,7 @@ export async function parcelProducerLinksRoute(request:Request,env:Env):Promise<
  const url=new URL(request.url);
  if(url.pathname!=='/api/parcel-producer-links')return null;
  let owner:string;
- try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
+ try{owner=await requestOwner(request.headers.get('Authorization'),env)}
  catch{return json({error:'Unauthorized'},401)}
  try{
   const parent=url.searchParams.get('parent')??'',snapshot=url.searchParams.get('snapshot')??'';

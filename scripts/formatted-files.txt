@@ -6,3 +6,6 @@ src/components/LoadError.tsx
 src/components/loadFailureReason.ts
 src/loadError.css
 tests/unit/LoadError.test.tsx
+worker/identity.ts
+tests/unit/requestOwner.test.ts
+tests/unit/serverRouteMap.test.ts

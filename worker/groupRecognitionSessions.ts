@@ -1,4 +1,4 @@
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { groupRecognitionWineSchema,type GroupRecognitionWine } from '../src/features/recognition/groupSchema';
 
 type Env={DB:D1Database;WINE_IMAGES:R2Bucket;AUTH_SECRET:string;MAX_FILE_BYTES?:string};
@@ -15,7 +15,7 @@ const now=()=>new Date().toISOString();
 const parseJson=<T>(raw:unknown,fallback:T):T=>{try{return JSON.parse(String(raw)) as T}catch{return fallback}};
 const safeOwner=(owner:string)=>owner.replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,128);
 function json(body:unknown,status=200){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}})}
-async function owner(request:Request,env:Env){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
+async function owner(request:Request,env:Env){return await requestOwner(request.headers.get('Authorization'),env)}
 function asMetadata(value:unknown):PhotoMetadata{
   if(!value||typeof value!=='object')return {};
   const row=value as Record<string,unknown>;

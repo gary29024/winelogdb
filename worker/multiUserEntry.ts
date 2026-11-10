@@ -1,6 +1,5 @@
 import legacy from './structureEntry';
 import {serveLosslessMap} from './losslessMapAssets';
-import { SignJWT } from 'jose';
 import { ApiError,json,seconds,stamp,type IdentityEnv } from './multiUser/common';
 import { authenticate,authRoute,verifyOrigin } from './multiUser/auth';
 import { socialRoute } from './multiUser/social';
@@ -28,9 +27,12 @@ const RESEARCH_CHECK_COOLDOWN_SECONDS=15;
 export type MultiUserEnv=Parameters<typeof legacy.fetch>[1]&IdentityEnv&AiRateEnv;
 type Batch=Parameters<typeof legacy.queue>[0];
 function revalidated(response:Response){const headers=new Headers(response.headers);headers.set('Cache-Control','private, no-store');headers.set('Vary','Cookie');headers.set('X-Content-Type-Options','nosniff');return new Response(response.body,{status:response.status,headers})}
-async function internalRequest(request:Request,env:MultiUserEnv,user:string){
- const token=await new SignJWT({internal:true}).setProtectedHeader({alg:'HS256'}).setSubject(user).setIssuedAt().setExpirationTime('60s').sign(new TextEncoder().encode(env.AUTH_SECRET));
- const headers=new Headers(request.headers);headers.set('Authorization',`Bearer ${token}`);headers.delete('Cookie');return new Request(request,{headers});
+// The member is already verified by `authenticate`. Their id travels to the inner
+// routes on the environment object (VERIFIED_MEMBER_ID, set where `scoped` is
+// built), so the forwarded request carries no credential of any kind: the
+// browser's cookie and any Authorization header it sent are both dropped.
+function internalRequest(request:Request){
+ const headers=new Headers(request.headers);headers.delete('Authorization');headers.delete('Cookie');return new Request(request,{headers});
 }
 function allowanceMessage(label:string,resetsAt:string){return `${label} has no free runs remaining this week. The allowance resets ${new Date(resetsAt).toISOString()}.`}
 export default {
@@ -48,7 +50,7 @@ export default {
    // WineLog credits: each user-facing action is either included for everyone or
    // consumes a successful-run allowance configured by the owner.
    const unpriced=providerAuthorization(member.role,`${path} has no member AI policy, so it cannot reach a provider.`);
-   const scoped={...env,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
+   const scoped={...env,VERIFIED_MEMBER_ID:member.id,CREDIT_CONTEXT:unpriced,WINE_IMAGES:meteredBucket(env.WINE_IMAGES,env.DB,member.id,{skipMemberLimit:member.role==='owner'}),RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB)};
    if(path==='/api/credits'&&request.method==='GET'){
     const wallet=await env.DB.prepare('SELECT balance,reserved,balance-reserved AS available FROM credit_wallets WHERE user_id=?').bind(member.id).first()??{balance:0,reserved:0,available:0};
     if(member.role==='owner')return json({...wallet,actionAccess:null,sponsoredAi:true});
@@ -73,7 +75,7 @@ export default {
     // reservation, and runs its recovery under that same operation: the retry
     // is not reserved, charged or counted against an allowance a second time.
     if(joined&&batchSubmitRoute(path)){
-     const recovery=await legacy.fetch(await internalRequest(request,env,member.id),{...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)},ctx);
+     const recovery=await legacy.fetch(internalRequest(request),{...scoped,CREDIT_CONTEXT:{db:env.DB,operationId:operation.id,namespace:'http'},RESEARCH_QUEUE:durableQueue(env.RESEARCH_QUEUE,env.DB,operation.id)},ctx);
      ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
      return json(publicAiResponse(path,await recovery.json().catch(()=>({error:'Could not retry this batch'})) as Record<string,unknown>,operation),recovery.status);
     }
@@ -111,7 +113,7 @@ export default {
      // the public request body. In Cloudflare Workers, constructing Request from
      // the original first can lock its ReadableStream and make those later
      // request.clone() calls throw.
-     const forwarded=await internalRequest(request,env,member.id);
+     const forwarded=internalRequest(request);
      const response=await legacy.fetch(forwarded,executionEnv,ctx),data=await saveOperationResponse(env.DB,operation,response);
      ctx.waitUntil(flushOutbox(env.DB,env.RESEARCH_QUEUE));
      return json(publicAiResponse(path,data,operation),response.status);
@@ -127,7 +129,7 @@ export default {
      return json(await stopWaitingForWineResearch(env.DB,op));
     }
    }
-   const forwarded=await internalRequest(request,env,member.id);
+   const forwarded=internalRequest(request);
    if(request.method==='GET'&&champagneExtractionRoute(path)){
     const op=await env.DB.prepare("SELECT * FROM credit_operations WHERE user_id=? AND path=? AND status IN ('reserved','running','review') LIMIT 1").bind(member.id,path).first<CreditOperation>();
     if(op)await reconcileOperation(env.DB,op);

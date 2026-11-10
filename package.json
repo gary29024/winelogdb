@@ -27,7 +27,6 @@
     "test:e2e:layout": "playwright test --config playwright.layout.config.ts"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@hono/zod-validator": "^0.7.2",
     "@tanstack/react-query": "5.102.8",
     "exifr": "^7.1.3",

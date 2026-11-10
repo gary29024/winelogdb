@@ -8,7 +8,7 @@ A private, Cloudflare-native wine notebook. React provides an accessible respons
 - `src/features/uploads`: multi-image selection, client previews/progress, validation, independent result state, and retries.
 - `src/features/recognition`: strict schema for model output and editable review.
 - `src/lib/db`: D1 schema/migrations; `src/lib/r2`: opaque collision-resistant keys.
-- `worker/multiUserEntry.ts`: the public authentication, authorization, and credit boundary around the existing API. Images require current authorization; API and shared image responses use `no-store`.
+- `worker/multiUserEntry.ts`: the public authentication, authorization, and credit boundary around the existing API. It verifies the session once and passes the member down to the inner routes (`worker/identity.ts`); [docs/server-routes.md](docs/server-routes.md) lists every inner route and the file that answers it. Images require current authorization; API and shared image responses use `no-store`.
 
 Uploads accept JPEG, PNG, WebP, or HEIC, up to 10 MiB and 12 files per batch. Dimensions must be 300–12,000 px. Each image receives its own row and state, so a failed upload or recognition can be retried without duplicating successful items. Wine deletion first removes the record; R2 objects are deleted only if no remaining image row references them.
 

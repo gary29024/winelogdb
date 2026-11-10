@@ -2,7 +2,7 @@ import { apiErrorHandler } from '../src/lib/credits/primitives';
 import { queueVintageResearch,readActiveVintageResearch,readVintageResearch,type VintageResearchMessage } from './vintageResearchJobs';
 import { Hono,type Context } from 'hono';
 import entryApp from './entry';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { ensureAllProducerLinks,refreshProducerHomeCountry } from '../src/lib/producers/entities';
 import { repairIdentityKeys } from '../src/lib/producers/identityRepair';
 import { runOneShotMaintenance } from '../src/lib/db/oneShotMaintenance';
@@ -32,7 +32,7 @@ import { MAX_FRAME_LOOKUP,readBottleFrames } from '../src/lib/images/bottleFrame
 import { translationRequestSchema } from '../src/lib/research/translation';
 import { readResearchTranslation,translateResearch } from '../src/lib/research/translationService';
 
-type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
+type Bindings={DB:D1Database;RESEARCH_QUEUE?:Queue<VintageResearchMessage>;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string};
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 app.onError(apiErrorHandler);
@@ -48,7 +48,7 @@ const MAINTENANCE_LOCAL_CHECK_MS=60*60*1000;
 const maintenanceMemo=new Map<string,number>();
 
 function cors(c:{req:{header:(name:string)=>string|undefined};env:Bindings;header:(name:string,value:string)=>void}){const origin=c.req.header('Origin');if(origin&&origin===c.env.APP_URL){c.header('Access-Control-Allow-Origin',origin);c.header('Vary','Origin')}}
-async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return await requestOwner(c.req.header('Authorization'),c.env)}
 
 async function maybeScheduleIdentityMaintenance(c:Context<AppEnv>,owner:string){
   const now=Date.now(),lastLocal=maintenanceMemo.get(owner)??0;
@@ -216,8 +216,6 @@ app.get('/api/producers/:id',async c=>{
   }catch(e){console.error(JSON.stringify({event:'producer-cuvee-catalog-state-failed',producerId,error:(e as Error).message}));return response}
 });
 
-app.post('/api/producers/:id/research',c=>entryApp.fetch(c.req.raw,c.env,c.executionCtx));
-
 app.post('/api/producers/:id/merge',async c=>{
   const response=await entryApp.fetch(c.req.raw,c.env,c.executionCtx);
   if(response.ok){try{const owner=await user(c);await ensureAllCuveeLinksForProducer(c.env.DB,owner,c.req.param('id'))}catch{}}
@@ -234,11 +232,6 @@ app.post('/api/producers/:id/unlink',async c=>{
     }catch{}
   }
   return response;
-});
-
-app.post('/api/wines/:id/deep-search',async c=>{
-  try{const owner=await user(c);await ensureWineIdentity(c.env.DB,owner,c.req.param('id'))}catch{}
-  return entryApp.fetch(c.req.raw,c.env,c.executionCtx);
 });
 
 app.post('/api/wines',async c=>{

@@ -2,7 +2,7 @@ import app from './researchQueueEntry';
 import {parcelProducerLinksRoute} from './parcelProducerLinks';
 import { handleChampagneExtraction,processChampagneExtraction } from './champagneExtraction';
 import { tastingStructureStatement } from '../src/lib/db/wineSave';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { configureGeminiBatchGateway } from '../src/lib/research/geminiBatch';
 import { hasTastingStructure,tastingStructureSchema,type TastingStructure } from '../src/lib/wine/tastingStructure';
 import { hasSparklingDetails,sparklingDetailsSchema,type SparklingDetails } from '../src/lib/wine/sparklingDetails';
@@ -18,7 +18,7 @@ type Bindings=Parameters<typeof app.fetch>[1]&GeminiTransportBindings&SemanticEm
 type QueueBatch=Parameters<typeof app.queue>[0];
 type QueueJob={kind?:string;owner?:string;sessionId?:string;jobId?:string;pollCount?:number;producerId?:string;requestId?:string;refreshProfile?:boolean;rangeOnly?:boolean};
 
-async function owner(request:Request,env:Bindings){return (await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}
+async function owner(request:Request,env:Bindings){return await requestOwner(request.headers.get('Authorization'),env)}
 function jsonResponse(body:unknown,status=200,headers?:Headers){const out=new Headers(headers);out.delete('Content-Length');out.set('Content-Type','application/json; charset=utf-8');return new Response(JSON.stringify(body),{status,headers:out})}
 function configureBatchGateway(env:Bindings){return configureGeminiBatchGateway(env.GEMINI_API_KEY,env)}
 function parseSparklingDetails(raw:string|null|undefined):SparklingDetails|null{

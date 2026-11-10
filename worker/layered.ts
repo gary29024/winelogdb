@@ -4,27 +4,25 @@ import { reliableLwinReference,type LwinReference } from '../src/lib/wine/lwinMe
 import { Hono } from 'hono';
 import { apiErrorHandler } from '../src/lib/credits/primitives';
 import baseApp from './index';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { canonicalCountryName } from '../src/lib/wine/canonicalize';
 import { linkWineProducer,mapProducerRow,normalizeProducerAlias,resolveExistingProducer,setProducerPrimaryName,suggestExistingProducer } from '../src/lib/producers/entities';
 import { mergeProducerEntities,unlinkProducerMerge } from '../src/lib/producers/merge';
 import { deleteProducerEntity,rejectProducerHeroImage } from '../src/lib/producers/remove';
-import { getProducerResearchRun } from '../src/lib/producers/research';
 import { createManualProducerContact,deleteManualProducerContact,listManualProducerContacts,updateManualProducerContact } from '../src/lib/producers/manualContacts';
 import { applyCatalogDecisions,deleteCatalogDecision,listCatalogDecisions,saveCatalogDecision } from '../src/lib/producers/catalogDecisions';
 import { parseSharedProducerId,sharedProducerId } from '../src/lib/producers/sharedRef';
 import { resolveVisibleSharedProducer } from '../src/lib/research/sharedProducer';
-import { selectRecognitionMetadata,type RecognitionPhotoMetadata } from '../src/lib/uploads/metadataSelection';
 import { isAiUsageRunHistoryKind,usageRunHistory,usageSummary } from '../src/lib/usage/aiUsage';
 import { seedAiUsageOnce } from '../src/lib/usage/seedFromResearchJobs';
 import { readAiRates,type AiRateEnv } from '../src/lib/usage/rates';
 
-type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_PASSWORD:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
+type Bindings={DB:D1Database;WINE_IMAGES:R2Bucket;REFERENCE_DATA:R2Bucket;ASSETS:Fetcher;GEMINI_API_KEY?:string;AUTH_SECRET:string;APP_URL:string;MAX_FILE_BYTES?:string;MAX_BATCH_FILES?:string}&AiRateEnv;
 type AppEnv={Bindings:Bindings};
 const app=new Hono<AppEnv>();
 app.onError(apiErrorHandler);
 
-async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return (await requireSession(c.req.header('Authorization'),c.env.AUTH_SECRET)).userId}
+async function user(c:{req:{header:(name:string)=>string|undefined};env:Bindings}){return await requestOwner(c.req.header('Authorization'),c.env)}
 const parseJson=<T>(value:unknown,fallback:T):T=>{try{return JSON.parse(String(value)) as T}catch{return fallback}};
 async function linkSavedWine(db:D1Database,owner:string,wineId:string){
   const row=await db.prepare('SELECT producer FROM wines WHERE owner_id=? AND id=?').bind(owner,wineId).first<{producer:string}>();
@@ -145,13 +143,6 @@ app.get('/api/producers/resolve',async c=>{
     const suggestion=await suggestExistingProducer(c.env.DB,owner,name).catch(()=>null);
     return c.json({matched:false,inputName:name,...(suggestion?{suggestion}:{})});
   }catch(e){return c.json({error:(e as Error).message||'Could not resolve producer'},500)}
-});
-
-app.get('/api/producers/:id/research-status',async c=>{
-  cors(c);let owner:string;try{owner=await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  const requestId=(c.req.query('requestId')||'').trim();
-  if(!requestId)return c.json({error:'requestId is required'},400);
-  try{const run=await getProducerResearchRun(c.env.DB,owner,c.req.param('id'),requestId);return run?c.json(run):c.json({error:'Research run not found'},404)}catch(e){return c.json({error:(e as Error).message||'Could not load research status'},500)}
 });
 
 app.get('/api/producers/:id/hero-image',async c=>{
@@ -324,21 +315,6 @@ app.post('/api/producers/:id/catalog-decisions/:decisionId/undo',async c=>{
   if(body.confirmation!=='UNDO_PRODUCER_CATALOG_CORRECTION')return c.json({error:'Undoing a catalogue correction requires explicit confirmation'},400);
   try{return c.json(await deleteCatalogDecision(c.env.DB,owner,c.req.param('id'),c.req.param('decisionId')))}
   catch(e){const message=(e as Error).message||'Could not undo the catalogue correction';return c.json({error:message},message.includes('not found')?404:400)}
-});
-
-app.post('/api/recognition',async c=>{
-  cors(c);try{await user(c)}catch{return c.json({error:'Unauthorized'},401)}
-  let selected=selectRecognitionMetadata([]);
-  try{
-    const form=await c.req.raw.clone().formData();
-    selected=selectRecognitionMetadata(parseJson<RecognitionPhotoMetadata[]>(form.get('metadata'),[]));
-  }catch{}
-  const response=await baseApp.fetch(c.req.raw,c.env,c.executionCtx);
-  if(!response.ok)return response;
-  try{
-    const body=await response.clone().json() as Record<string,unknown>;
-    return c.json({...body,locationName:null,tastingDate:selected.capturedAt?.slice(0,10)??null,latitude:selected.latitude,longitude:selected.longitude,metadataSource:selected.gpsSource==='exif'?'exif':selected.timestampSource});
-  }catch{return response}
 });
 
 app.post('/api/wines',async c=>{

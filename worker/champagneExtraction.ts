@@ -1,6 +1,6 @@
 import { champagneResponseJsonSchema,champagneFailureDiagnostics,ChampagneResponseError } from './champagneResponse';
 import { z } from 'zod';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { CHAMPAGNE_EXTRACTION_PROMPT,isChampagne,prepareChampagneResult,champagneFailureDiagnosticsSchema,champagneResultSchema,type ChampagneExtractionStatus } from '../src/lib/wine/champagneExtraction';
 import { RECOGNITION_MODEL } from '../src/lib/recognition/geminiRequest';
 import { createGeminiBatch,fetchGeminiBatch,inlineResponseText,isTerminalBatchState,type GeminiInlineResponse } from '../src/lib/research/geminiBatch';
@@ -33,7 +33,7 @@ export async function handleChampagneExtraction(request:Request,env:Env):Promise
   if(!match)return null;
   if(!['GET','POST'].includes(request.method))return json({error:'Method not allowed'},405);
   let owner:string;
-  try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}catch{return json({error:'Unauthorized'},401)}
+  try{owner=await requestOwner(request.headers.get('Authorization'),env)}catch{return json({error:'Unauthorized'},401)}
   const wineId=decodeURIComponent(match[1]),wine=await wineFor(env.DB,owner,wineId);
   if(!wine)return json({error:'Wine not found'},404);
   let existing=await readRow(env.DB,owner,wineId);

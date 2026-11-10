@@ -3,7 +3,7 @@ import { validateBatch } from '../src/features/uploads/validation';
 import { selectRecognitionMetadata,type RecognitionPhotoMetadata,type SelectedRecognitionMetadata } from '../src/lib/uploads/metadataSelection';
 import { shouldRetryRecognitionFailure } from '../src/lib/recognition/retryPolicy';
 import { RECOGNITION_ESCALATION_MODEL } from '../src/lib/recognition/escalation';
-import { requireSession } from '../src/lib/auth/session';
+import { requestOwner } from './identity';
 import { postGeminiGenerateContent,type GeminiTransportBindings } from './geminiTransport';
 import { ApiError } from '../src/lib/credits/primitives';
 import type { AiUsageKind,AnalyticsSink } from '../src/lib/usage/aiUsage';
@@ -136,7 +136,7 @@ export async function runVisionRecognition<T>(request:Request,env:VisionBindings
   const requestId=crypto.randomUUID(),startedAt=Date.now();
   const fail=(body:unknown,status:number)=>({ok:false as const,response:recognitionJson(body,status,requestId)});
   let owner:string;
-  try{owner=(await requireSession(request.headers.get('Authorization')??undefined,env.AUTH_SECRET)).userId}catch{return fail({error:'Unauthorized',requestId},401)}
+  try{owner=await requestOwner(request.headers.get('Authorization'),env)}catch{return fail({error:'Unauthorized',requestId},401)}
   let form:FormData;
   try{form=await request.formData()}catch(e){
     const message=(e as Error).message||`Could not read ${spec.mode} recognition request`;
