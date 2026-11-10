@@ -4,6 +4,7 @@ import { AdminPage } from './features/auth/AdminPage';
 import { lazy,Suspense,useEffect,useState,type ReactNode } from 'react';
 import { BrowserRouter,Navigate,Route,Routes,useParams,useSearchParams } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { LoadError } from './components/LoadError';
 import { hasSession } from './lib/auth/client';
 import type { WineDetail } from './features/wines/api';
 
@@ -35,14 +36,14 @@ const TastingDetailPage=lazy(()=>import('./features/tastings/TastingDetailPage')
 const TastingSheetPage=lazy(()=>import('./features/tastings/TastingSheetPage').then(module=>({default:module.TastingSheetPage})));
 
 function Edit(){
- const {id}=useParams(),[w,setW]=useState<WineDetail>(),[failed,setFailed]=useState(false),[revision,setRevision]=useState(0);
+ const {id}=useParams(),[w,setW]=useState<WineDetail>(),[failed,setFailed]=useState<unknown>(null),[revision,setRevision]=useState(0),[attempt,setAttempt]=useState(0);
  useEffect(()=>{
   if(!id)return;
-  let active=true;setFailed(false);
-  import('./features/wines/api').then(({getWine})=>getWine(id)).then(wine=>{if(active)setW(wine)}).catch(()=>{if(active)setFailed(true)});
+  let active=true;setFailed(null);
+  import('./features/wines/api').then(({getWine})=>getWine(id)).then(wine=>{if(active)setW(wine)}).catch(error=>{if(active)setFailed(error??true)});
   return()=>{active=false};
- },[id]);
- if(failed)return <p role="alert">Could not load wine.</p>;
+ },[id,attempt]);
+ if(failed)return <LoadError error={failed} fallback="This wine could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>;
  return w&&w.id===id?<section><h1>Edit {w.wineName}</h1><WineForm key={`${id}:${revision}`} id={id} initial={w} referenceWine={w} referenceInitiallyOpen={revision>0} onReferenceUpdated={wine=>{setW(wine);setRevision(value=>value+1)}} submitLabel="Save changes"/></section>:<p>Loading wine…</p>;
 }
 function RequireSession({children}:{children:ReactNode}){return hasSession()?children:<Navigate to="/login" replace/>}

@@ -1,0 +1,6 @@
+/* The one "this page could not load" panel: what went wrong, in plain words,
+   and a way to try again without reloading the whole app. */
+.load-error{display:grid;justify-items:start;gap:10px;margin:var(--s4) 0;padding:14px 16px;border:1px solid var(--bad-line);border-radius:var(--r-md);background:var(--bad-wash)}
+.load-error p{margin:0;color:var(--bad-ink)}
+.load-error .load-error-retry{min-height:40px;border:1px solid var(--bad-line);border-radius:var(--r-pill);background:var(--paper);color:var(--bad-ink);padding:7px 15px;font:700 .82rem 'DM Sans',sans-serif;cursor:pointer}
+.load-error .load-error-retry:disabled{opacity:.6;cursor:default}

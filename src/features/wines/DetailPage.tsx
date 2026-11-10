@@ -39,6 +39,7 @@ import '../../referenceSuggestions.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { AppIcon } from '../../components/AppIcons';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
+import { LoadError } from '../../components/LoadError';
 
 type DeepState='idle'|'confirm-usage'|'running'|'error';
 const deepSearchHeld=(run:WineResearchRun|null)=>run?.retryBlocked??/Provider completion needs reconciliation/.test(run?.message??'');
@@ -74,7 +75,7 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[loadError,setLoadError]=useState<unknown>(null),[loadAttempt,setLoadAttempt]=useState(0),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
  const technicalView=getAccount()?.role==='owner';
  const [deepChecking,setDeepChecking]=useState(false);
  const deepHeld=deepSearchHeld(deepRun);
@@ -89,8 +90,8 @@ export function DetailPage(){
   const poll=async()=>{const next=await getWineDeepSearchStatus(id,run.requestId).catch(()=>null);if(!next)return;setDeepRun(next);if(next.status==='running')return;stopDeepTimers();if(next.status==='complete'){await reloadWine().catch(()=>undefined);setDeepState('idle');setDeepError('');setDeepNotice(`Deep Search completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`)}else{setDeepError(technicalView?`${next.message||'The background Deep Search failed.'} · Request ${next.requestId}`:memberResearchFailure(next));setDeepState('error')}};
   pollRef.current=startBackoffPoll(poll);void poll();
  }
- useEffect(()=>{let active=true;Promise.all([getWine(id),getWineDeepSearchStatus(id).catch(()=>null)]).then(([next,run])=>{if(!active)return;setWine(next);if(run&&(run.status==='running'||run.status==='failed'))watchDeepSearch(run)}).catch(()=>undefined);return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
- },[id]);
+ useEffect(()=>{let active=true;setLoadError(null);Promise.all([getWine(id),getWineDeepSearchStatus(id).catch(()=>null)]).then(([next,run])=>{if(!active)return;setWine(next);if(run&&(run.status==='running'||run.status==='failed'))watchDeepSearch(run)}).catch(error=>{if(active)setLoadError(error??true)});return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
+ },[id,loadAttempt]);
  async function checkDeepSearch(){
   if(deepChecking||deepCancelling)return;setDeepChecking(true);setDeepError('');setDeepNotice('');
   try{
@@ -168,6 +169,8 @@ export function DetailPage(){
   if(handed){rememberBackTarget(id,handed);return handed}
   return readBackTarget(id)??JOURNAL_BACK;
  },[state,id]);
+ // A failed first load used to leave "Loading wine…" on screen for good.
+ if(!wine&&loadError)return <LoadError error={loadError===true?'':loadError} fallback="This wine could not be loaded." onRetry={()=>setLoadAttempt(value=>value+1)}/>;
  if(!wine)return <p aria-live="polite">Loading wine…</p>;
  // Derived rather than stored: the denomination is a fact about the appellation,
  // so reading it from the tree at display time keeps every wine current with the

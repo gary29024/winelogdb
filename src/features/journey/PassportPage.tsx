@@ -14,6 +14,7 @@ import { TasteSection } from './TasteSection';
 import '../../journey.css';
 import '../../achievementPassport.css';
 import { linkFrom } from '../wines/backTarget';
+import { LoadError } from '../../components/LoadError';
 
 const journalHref=(params:Record<string,string>)=>`/journal?${new URLSearchParams(params).toString()}`;
 const flags:Record<string,string>={France:'🇫🇷',Italy:'🇮🇹',Spain:'🇪🇸',Portugal:'🇵🇹',Germany:'🇩🇪',Australia:'🇦🇺','United States':'🇺🇸','United Kingdom':'🇬🇧',Argentina:'🇦🇷',Chile:'🇨🇱','South Africa':'🇿🇦','New Zealand':'🇳🇿',Austria:'🇦🇹',Greece:'🇬🇷',Hungary:'🇭🇺'};
@@ -44,9 +45,9 @@ function tastingDate(item:RecentTasting){
 }
 
 export function PassportPage(){
-  const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState('');
+  const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
   const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[collectionsError,setCollectionsError]=useState('');
-  useEffect(()=>{let active=true;getJourneyData().then(result=>{if(active)setData(result)}).catch(e=>{if(active)setError((e as Error).message)});return()=>{active=false}},[]);
+  useEffect(()=>{let active=true;setError('');getJourneyData().then(result=>{if(active)setData(result)}).catch(e=>{if(active)setError((e as Error).message||'failed')});return()=>{active=false}},[attempt]);
   useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setCollectionsError((e as Error).message)});return()=>{active=false}},[]);
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
   const ladder=useMemo(()=>data?journeyLadder(data.summary):[],[data]);
@@ -56,7 +57,7 @@ export function PassportPage(){
   const stamps=useMemo(()=>stampTotals(ladder),[ladder]);
   const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
   const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
-  if(error)return <section className="journey-page"><p role="alert">{error}</p></section>;
+  if(error)return <section className="journey-page"><LoadError error={error==='failed'?'':error} fallback="Your Wine Passport could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/></section>;
   if(!data)return <section className="journey-page"><p aria-live="polite">Stamping your Wine Passport…</p></section>;
 
   const {summary}=data;
