@@ -1,4 +1,5 @@
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
+import { PageSkeleton } from '../../components/PageSkeleton';
 import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
@@ -408,7 +409,7 @@ export function ProducerDetailPage(){
   return readBackTarget(id,'producer')??PRODUCERS_BACK;
  },[navState,id]);
  const research=useResearchTranslation({profile:producer?.profile??'',winemakingPractices:producer?.winemakingPractices??''}),copy=RESEARCH_COPY[research.lang];
- if(loading)return <p>Loading producer…</p>;
+ if(loading)return <PageSkeleton label="Loading producer…"/>;
  // A producer that could not be fetched is worth asking for again: without this
  // the message stayed until the app was restarted.
  if(!producer)return <div className="producer-load-error" role="alert"><p>{error||'Producer not found'}</p>

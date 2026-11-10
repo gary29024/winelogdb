@@ -1,4 +1,5 @@
 import { useCallback,useEffect,useMemo,useState } from 'react';
+import { showToast } from '../../components/toast';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { pourFamily } from '../../lib/wine/pourFamily';
 import { bottleLabel,listCellar,priceLabel,removeHolding,updateHolding,type CellarHolding } from './api';
@@ -75,7 +76,7 @@ export function CellarScope(){
   async function drop(holding:CellarHolding){
     if(!window.confirm(`Remove ${holding.bottles} bottle${holding.bottles===1?'':'s'} of ${holding.wineName} from your cellar? This does not log a tasting.`))return false;
     setBusyId(holding.id);
-    try{await removeHolding(holding.id);setReloadSeq(seq=>seq+1);return true}
+    try{await removeHolding(holding.id);showToast('Removed from your cellar');setReloadSeq(seq=>seq+1);return true}
     catch(e){setError((e as Error).message||'Could not remove those bottles');return false}
     finally{setBusyId('')}
   }

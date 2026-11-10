@@ -155,10 +155,10 @@ describe('finding the tastings you have logged',()=>{
   });
 
   it('keeps the mobile tab bar at five, which is what fits',async()=>{
-    // A sixth tab does not fit at 390px, so the phone route in is the journal's
-    // own link rather than another tab.
+    // A sixth tab does not fit at 390px, so Tastings is reached through More,
+    // alongside Vintages, the cellar and Achievements.
     await renderShell(null);
-    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersVintages');
+    expect(host!.querySelector('.mobile-nav')!.textContent).toBe('PassportJournalScan WineProducersMore');
   });
 });
 
@@ -215,23 +215,24 @@ describe('the scan sheet',()=>{
   const openSheet=async()=>{
     const trigger=host!.querySelector('.mobile-nav .scan-nav')!;
     await act(async()=>{trigger.dispatchEvent(new MouseEvent('click',{bubbles:true}))});
-    return host!.querySelector('.scan-sheet-grid')!;
+    return host!.querySelector('.scan-sheet')!;
   };
 
-  it('offers four ways in, two per row',async()=>{
+  it('offers one main way in, and the others as rows beneath it',async()=>{
     await renderShell(null);
     const grid=await openSheet();
-    expect([...grid.querySelectorAll('.scan-sheet-action strong')].map(node=>node.textContent))
-      .toEqual(['Single Wine','Group Photo','Batch Scan','Start Tasting']);
+    expect([...grid.querySelectorAll('.scan-sheet-action strong')].map(node=>node.textContent)).toEqual(['Single Wine']);
+    expect([...grid.querySelectorAll('.scan-sheet-option strong')].map(node=>node.textContent))
+      .toEqual(['Group Photo','Batch Scan','Start Tasting','Add manually instead']);
   });
 
-  it('turns the fourth into a way back into the evening already running',async()=>{
+  it('turns Start Tasting into a way back into the evening already running',async()=>{
     await renderShell(tasting);
     const grid=await openSheet();
-    const actions=[...grid.querySelectorAll('.scan-sheet-action')];
-    expect(actions[3].querySelector('strong')?.textContent).toBe('Tasting in progress');
-    expect(actions[3].textContent).toContain('Burgundy portfolio');
-    expect(actions[3].className).toContain('is-live');
+    const actions=[...grid.querySelectorAll('.scan-sheet-option')];
+    expect(actions[2].querySelector('strong')?.textContent).toBe('Tasting in progress');
+    expect(actions[2].textContent).toContain('Burgundy portfolio');
+    expect(actions[2].className).toContain('is-live');
   });
 
   it('shows the live strip in flow above the page, not over the nav',async()=>{

@@ -39,8 +39,6 @@
 .scan-sheet-grid .scan-sheet-action small{font-size:.76rem;margin-top:2px}
 .scan-sheet-grid .sheet-action-icon{width:40px;height:40px}
 .scan-sheet-grid .sheet-action-icon .app-icon{width:22px;height:22px}
-/* A tasting already running: the button opens it rather than starting another. */
-.scan-sheet-action.is-live{border:0;background:var(--ink);color:var(--on-accent)}
 @media(max-width:700px), (max-width:932px) and (orientation:landscape) and (pointer:coarse){
   .scan-sheet-grid{gap:9px}
   .scan-sheet-grid .scan-sheet-action{min-height:104px;padding:12px 12px}

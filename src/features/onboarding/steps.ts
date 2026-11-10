@@ -36,16 +36,15 @@ export const FIRST_RUN='first-run';
 export const CREDITS_INTRO='credits-intro';
 
 /**
- * Seven steps on a desktop, six on a phone, all anchored to the persistent
- * chrome rather than to a page - which is why the tour needs no route changes
- * and cannot be stranded by one: wherever someone navigates mid-tour, every
- * remaining anchor is still on screen.
+ * Seven steps, all anchored to the persistent chrome rather than to a page -
+ * which is why the tour needs no route changes and cannot be stranded by one:
+ * wherever someone navigates mid-tour, every remaining anchor is still on
+ * screen.
  *
- * Only the Tastings step is viewport-specific, and for a real reason: the top
- * bar carries a Tastings link and the five-slot tab bar has no room for one, so
- * on a phone the subject is covered by Start Tasting inside the scan sheet
- * instead. Passport, Journal and Producers appear in both navs under the same
- * anchor name, and the engine spotlights whichever copy is on screen.
+ * No step is viewport-specific. Passport, Journal and Producers appear in both
+ * navs under the same anchor name, and the engine spotlights whichever copy is
+ * on screen. On a phone the Tastings step lands on the More tab, which is
+ * where Tastings lives there.
  *
  * The cellar sentence in `nav-journal` is the single most valuable line in here.
  * A bottle you own but have not opened lives at /journal?scope=cellar, and
@@ -65,17 +64,17 @@ export const firstRunSteps:TourStep[]=[
  {
   id:'scan',anchor:'scan-trigger',
   title:'One button, four ways in',
-  body:'Scan Wine opens a sheet holding Single Wine, Group Photo, Batch Scan and Start Tasting - one bottle, a lineup photo, a big batch, or an evening with friends. The sheet explains each one, and you can always add a wine by hand instead.'
+  body:'Scan Wine opens a sheet with Single Wine at the top - one bottle, the usual case. Beneath it are Group Photo, Batch Scan and Start Tasting - a lineup photo, a big batch, or an evening with friends - and adding a wine by hand. Each row says what it does.'
  },
  {
-  id:'nav-tastings',anchor:'nav-tastings',viewport:'desktop',
+  id:'nav-tastings',anchor:'nav-tastings',
   title:'Tastings',
-  body:'An evening is a container: open one, and every wine you log while it is running joins it. This is where past evenings live.'
+  body:'An evening is a container: open one, and every wine you log while it is running joins it. This is where past evenings live. On a phone, Tastings is under More.'
  },
  {
   id:'nav-producers',anchor:'nav-producers',
   title:'Producers and Vintages',
-  body:'Producers builds itself from your Journal - everyone whose wine you log appears, and you never add one by hand. Vintages is the other way round: a season-by-season record of each village that is already complete, with your own bottles marked on it.'
+  body:'Producers builds itself from your Journal - everyone whose wine you log appears, and you never add one by hand. Vintages is the other way round: a season-by-season record of each village that is already complete, with your own bottles marked on it. On a phone, Vintages is under More, next to your tastings, cellar and achievements.'
  },
  {
   id:'nav-account',anchor:'nav-account',
@@ -114,7 +113,7 @@ export const chapters:Tour[]=[
    {
     id:'tastings-page',route:'/tastings',
     title:'Every evening in one place',
-    body:'A tasting is a container for one sitting - a dinner, a flight, a visit to a domaine. Past ones are listed here, newest first. On a phone this page has no tab of its own, which is why it is easy to miss.'
+    body:'A tasting is a container for one sitting - a dinner, a flight, a visit to a domaine. Past ones are listed here, newest first. On a phone you get here through More.'
    },
    {
     id:'tastings-start',anchor:'scan-trigger',

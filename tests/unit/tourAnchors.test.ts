@@ -125,10 +125,9 @@ describe('labels the copy sends people to',()=>{
 });
 
 describe('who sees which step',()=>{
- it('gives the phone no Tastings step, because the tab bar has no Tastings slot',()=>{
+ it('gives the phone its Tastings step too, pointed at the More tab that holds it',()=>{
   const ids=stepsFor(firstRunSteps,'member',true).map(step=>step.id);
-  expect(ids).not.toContain('nav-tastings');
-  // The subject is not dropped, only moved: the scan sheet carries Start Tasting.
+  expect(ids).toContain('nav-tastings');
   expect(ids).toContain('scan');
  });
 

@@ -2,7 +2,8 @@ export type AppIconKey=
   |'passport'|'journal'|'producers'|'vintages'
   |'scan'|'single-wine'|'group-photo'|'batch-scan'
   |'tasting'|'pen'|'close'|'search'|'heart'|'heart-filled'
-  |'sparkle'|'chevron-right'|'person-tag';
+  |'sparkle'|'chevron-right'|'person-tag'
+  |'more'|'cellar'|'achievements';
 
 const frame={viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round' as const,strokeLinejoin:'round' as const,focusable:'false' as const,'aria-hidden':true};
 
@@ -27,6 +28,12 @@ export function AppIcon({kind}:{kind:AppIconKey}){
   if(kind==='pen')return <svg {...frame} className="app-icon"><path d="M4 20h4.2l9.6-9.6a2.4 2.4 0 0 0-3.4-3.4L4.8 16.6Z"/><path d="M13.8 8.2l3.4 3.4"/><path d="M4 20l1-4"/></svg>;
   // Researched rather than recorded: a four-point star with two smaller sparks.
   if(kind==='sparkle')return <svg {...frame} className="app-icon"><path d="M11.1 3.4 12.7 8l4.6 1.6-4.6 1.6-1.6 4.6-1.6-4.6L4.9 9.6 9.5 8Z"/><path d="M17.7 14.2l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7Z"/></svg>;
+  // More: three dots in a row - the conventional "there is more here" mark.
+  if(kind==='more')return <svg {...frame} className="app-icon"><circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/></svg>;
+  // Cellar: bottles lying in a rack, seen end-on.
+  if(kind==='cellar')return <svg {...frame} className="app-icon"><rect x="3" y="3.5" width="18" height="17" rx="2.4"/><path d="M3 12h18M12 3.5v17"/><circle cx="7.5" cy="7.75" r="1.7"/><circle cx="16.5" cy="7.75" r="1.7"/><circle cx="7.5" cy="16.25" r="1.7"/><circle cx="16.5" cy="16.25" r="1.7"/></svg>;
+  // Achievements: a medal on its ribbon.
+  if(kind==='achievements')return <svg {...frame} className="app-icon"><circle cx="12" cy="14.6" r="5.4"/><path d="M8.6 10.4 6 3.5h4l2 4.2 2-4.2h4l-2.6 6.9"/><path d="m12 12.2.8 1.6 1.7.2-1.25 1.2.3 1.7-1.55-.85-1.55.85.3-1.7L9.5 14l1.7-.2Z"/></svg>;
   if(kind==='chevron-right')return <svg {...frame} className="app-icon"><path d="m9.6 5.4 6.6 6.6-6.6 6.6"/></svg>;
   if(kind==='person-tag')return <svg {...frame} className="app-icon"><path d="M8.5 5 12 2l3.5 3H19a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><circle cx="12" cy="10.5" r="2.5"/><path d="M7 19v-1a5 5 0 0 1 10 0v1"/></svg>;
   return <svg {...frame} className="app-icon"><path d="M6.6 6.6l10.8 10.8M17.4 6.6 6.6 17.4"/></svg>;

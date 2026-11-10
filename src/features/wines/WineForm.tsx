@@ -1,4 +1,5 @@
 import { useEffect,useMemo,useRef,useState, type FormEvent } from 'react';
+import { showToast } from '../../components/toast';
 import { resolvePlace } from '../../lib/places/resolve';
 import { Link,useNavigate } from 'react-router-dom';
 import { addWineImages,getWine,saveWine, type WinePhoto,type WineDetail } from './api';
@@ -380,7 +381,8 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       const joined=!id&&activeTasting&&input.tastingName===activeTasting.name
         &&(input.tastingDate??null)===(activeTasting.tastingDate??null);
       if(onSaved)onSaved(savedId,{producer:input.producer,wineName:input.wineName,vintage:input.vintage??null});
-      else nav(joined&&activeTasting?`/tastings/${activeTasting.id}`:`/wines/${savedId}`);
+      else showToast(id?'Changes saved':joined?'Wine added to the tasting':'Wine saved');
+      if(!onSaved)nav(joined&&activeTasting?`/tastings/${activeTasting.id}`:`/wines/${savedId}`);
     }catch(e){setError((e as Error).message);setReferenceReview(null);setBusy(false)}
   }
   // The tree, not the typist, holds the denomination: showing what it reads back
