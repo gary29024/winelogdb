@@ -1,17 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { layers as stack } from '../../worker/researchQueueEntry';
+import { layers as stack } from '../../worker/structureEntry';
 
-// The API's routes are written in five files that are registered, outermost
+// The API's routes are written in six files that are registered, outermost
 // first, on one Hono app (worker/layers.ts). Several addresses are declared by
 // more than one of them, each adding to what the next one returns. This test
 // writes down which files declare which address, so the answer to "where is
-// this handled?" is a table rather than a search through five files - and so
+// this handled?" is a table rather than a search through six files - and so
 // that folding those addresses into one handler each cannot silently drop or
 // add one: the table changes, and the change shows up in review.
 //
 // Update the table after adding or moving a route:
 //   npx vitest run tests/unit/serverRouteMap.test.ts -u
 const FILES = [
+  'worker/structureEntry.ts',
   'worker/researchQueueEntry.ts',
   'worker/cuveeEntry.ts',
   'worker/entry.ts',
@@ -49,21 +50,22 @@ describe('server route map', () => {
       '`npx vitest run tests/unit/serverRouteMap.test.ts -u` after adding or moving a route.',
       '',
       'A request enters `worker/multiUserEntry.ts` (sign-in, permissions, AI credits), then',
-      '`worker/structureEntry.ts`, then one Hono app on which the files below are registered from the',
+      'one Hono app on which the files below are registered from the',
       'outside in (`worker/layers.ts`). Where an address lists several files, the first one receives the',
       'request and hands it to the next with `inward(c, next)`, adding to its answer.',
       '',
-      'Not listed: the routes `multiUserEntry.ts` and `structureEntry.ts` answer themselves',
-      '(`/api/auth/*`, `/api/me`, `/api/credits*`, `/api/admin/*`, `/api/friends*`, `/api/shared/*`,',
-      'catalogue corrections, group scans and Champagne extraction). Those are matched by hand in',
-      'those two files and in `worker/multiUser/`.',
+      'Not listed: the routes `multiUserEntry.ts` answers itself (`/api/auth/*`, `/api/me`,',
+      '`/api/credits*`, `/api/admin/*`, `/api/friends*`, `/api/shared/*`), matched by hand there and in',
+      '`worker/multiUser/`; and three features `structureEntry.ts` passes every request to first, each',
+      'matching its own addresses (parcel producer links, group scans and Champagne extraction).',
       '',
       `${routes.length} addresses, ${shared.length} of them declared by more than one layer.`,
       '',
       '| Method | Address | Declared in (outermost first) |',
       '| --- | --- | --- |',
       ...routes.map(
-        (route) => `| ${route.method} | \`${route.path}\` | ${route.files.map((file) => `\`${file}\``).join(' → ')} |`,
+        (route) =>
+          `| ${route.method} | \`${route.path.replaceAll('|', '\\|')}\` | ${route.files.map((file) => `\`${file}\``).join(' → ')} |`,
       ),
       '',
     ];

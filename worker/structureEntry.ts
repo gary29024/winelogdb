@@ -1,4 +1,6 @@
-import app from './researchQueueEntry';
+import { Hono } from 'hono';
+import app,{ layers as queueLayers } from './researchQueueEntry';
+import { composeLayers,inward } from './layers';
 import {parcelProducerLinksRoute} from './parcelProducerLinks';
 import { handleChampagneExtraction,processChampagneExtraction } from './champagneExtraction';
 import { tastingStructureStatement } from '../src/lib/db/wineSave';
@@ -35,74 +37,84 @@ async function failBatchGatewayConfig(env:Bindings,job:QueueJob,error:string){
   ]).catch(e=>console.error(JSON.stringify({event:'vertex-batch-config-fail-save',sessionId,error:(e as Error).message})));
 }
 
-function exactWineId(pathname:string){const match=pathname.match(/^\/api\/wines\/([^/]+)$/);return match?decodeURIComponent(match[1]):null}
-const pathId=(match:RegExpMatchArray,index:number)=>decodeURIComponent(match[index]||'');
 const correctionStatus=(message:string)=>/not found/i.test(message)?404:400;
 
-export default {
-  async fetch(request:Request,env:Bindings,ctx:ExecutionContext){
-    configureBatchGateway(env);
-    const url=new URL(request.url),wineId=exactWineId(url.pathname);
-    const parcelLinks=await parcelProducerLinksRoute(request,env);if(parcelLinks)return parcelLinks;
-    const champagneResponse=await handleChampagneExtraction(request,env);if(champagneResponse)return champagneResponse;
-    const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
+// The outermost API layer. Its routes are registered ahead of every other layer's on the one
+// Hono app (see worker/layers.ts); a route passes a request further in with inward(c,next).
+const router=new Hono<{Bindings:Bindings}>();
 
-    // Range corrections live above the legacy producer route so they can evolve
-    // independently without making the already-large layered router larger.
-    const correctionList=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-range-corrections$/);
-    if(request.method==='GET'&&correctionList){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}try{return jsonResponse(await listCatalogRangeCorrections(env.DB,ownerId,pathId(correctionList,1)))}catch(e){const message=(e as Error).message||'Could not load range corrections';return jsonResponse({error:message},correctionStatus(message))}}
-    const manualCreate=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-manual$/);
-    if(request.method==='POST'&&manualCreate){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as Record<string,unknown>;if(body.confirmation!=='ADD_MISSING_CATALOG_WINE')return jsonResponse({error:'Adding a missing wine requires explicit confirmation'},400);try{return jsonResponse(await addManualCatalogEntry(env.DB,ownerId,pathId(manualCreate,1),body),201)}catch(e){const message=(e as Error).message||'Could not add the missing wine';return jsonResponse({error:message},correctionStatus(message))}}
-    const manualDelete=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-manual\/([^/]+)$/);
-    if(request.method==='DELETE'&&manualDelete){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string};if(body.confirmation!=='REMOVE_MANUAL_CATALOG_WINE')return jsonResponse({error:'Removing a manual wine requires explicit confirmation'},400);try{return jsonResponse(await deleteManualCatalogEntry(env.DB,ownerId,pathId(manualDelete,1),pathId(manualDelete,2)))}catch(e){const message=(e as Error).message||'Could not remove the manual wine';return jsonResponse({error:message},correctionStatus(message))}}
-    const missingAction=url.pathname.match(/^\/api\/producers\/([^/]+)\/catalog-missing\/([^/]+)\/(add|ignore)$/);
-    if(request.method==='POST'&&missingAction){let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string},action=missingAction[3];const expected=action==='add'?'ADD_MISSING_CATALOG_WINE':'IGNORE_CATALOG_CANDIDATE';if(body.confirmation!==expected)return jsonResponse({error:'This range correction requires explicit confirmation'},400);try{return jsonResponse(action==='add'?await addMissingCandidate(env.DB,ownerId,pathId(missingAction,1),pathId(missingAction,2)):await ignoreMissingCandidate(env.DB,ownerId,pathId(missingAction,1),pathId(missingAction,2)))}catch(e){const message=(e as Error).message||'Could not update the missing-wine suggestion';return jsonResponse({error:message},correctionStatus(message))}}
+// Three self-contained features match their own addresses and otherwise step aside.
+router.all('*',async(c,next)=>{
+  const request=c.req.raw,env=c.env;
+  const parcelLinks=await parcelProducerLinksRoute(request,env);if(parcelLinks)return parcelLinks;
+  const champagneResponse=await handleChampagneExtraction(request,env);if(champagneResponse)return champagneResponse;
+  const groupSessionResponse=await handleGroupRecognitionSessionRequest(request,env);if(groupSessionResponse)return groupSessionResponse;
+  return next();
+});
 
-    // Semantic retrieval is an input to the real Journal route, never a second
-    // implementation of that route. Candidate IDs are internal-only: strip any
-    // caller-supplied value first, then set it only on the forwarded request we
-    // create after ranking. The canonical route still owns CORS, auth,
-    // maintenance, filtering and pagination.
-    if(request.method==='GET'&&url.pathname==='/api/journal'){
-      url.searchParams.delete('__semanticIds');
-      const journalRequest=new Request(url,request);
-      const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
-      const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
-      if(useSemantic){
-        let ownerId:string;try{ownerId=await owner(journalRequest,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
-        ctx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
-        try{
-          const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
-          if(semantic?.ids.length){
-            const forwardedUrl=new URL(journalRequest.url);
-            forwardedUrl.searchParams.set('__semanticIds',semantic.ids.join(','));
-            return app.fetch(new Request(forwardedUrl,journalRequest),env,ctx);
-          }
-        }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
+// Range corrections live above the legacy producer route so they can evolve
+// independently without making the already-large layered router larger.
+router.get('/api/producers/:id/catalog-range-corrections',async c=>{const request=c.req.raw,env=c.env;let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}try{return jsonResponse(await listCatalogRangeCorrections(env.DB,ownerId,c.req.param('id')))}catch(e){const message=(e as Error).message||'Could not load range corrections';return jsonResponse({error:message},correctionStatus(message))}});
+router.post('/api/producers/:id/catalog-manual',async c=>{const request=c.req.raw,env=c.env;let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as Record<string,unknown>;if(body.confirmation!=='ADD_MISSING_CATALOG_WINE')return jsonResponse({error:'Adding a missing wine requires explicit confirmation'},400);try{return jsonResponse(await addManualCatalogEntry(env.DB,ownerId,c.req.param('id'),body),201)}catch(e){const message=(e as Error).message||'Could not add the missing wine';return jsonResponse({error:message},correctionStatus(message))}});
+router.delete('/api/producers/:id/catalog-manual/:entryId',async c=>{const request=c.req.raw,env=c.env;let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string};if(body.confirmation!=='REMOVE_MANUAL_CATALOG_WINE')return jsonResponse({error:'Removing a manual wine requires explicit confirmation'},400);try{return jsonResponse(await deleteManualCatalogEntry(env.DB,ownerId,c.req.param('id'),c.req.param('entryId')))}catch(e){const message=(e as Error).message||'Could not remove the manual wine';return jsonResponse({error:message},correctionStatus(message))}});
+router.post('/api/producers/:id/catalog-missing/:candidateId/:action{add|ignore}',async c=>{const request=c.req.raw,env=c.env;let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}const body=await request.json().catch(()=>({})) as {confirmation?:string},action=c.req.param('action');const expected=action==='add'?'ADD_MISSING_CATALOG_WINE':'IGNORE_CATALOG_CANDIDATE';if(body.confirmation!==expected)return jsonResponse({error:'This range correction requires explicit confirmation'},400);try{return jsonResponse(action==='add'?await addMissingCandidate(env.DB,ownerId,c.req.param('id'),c.req.param('candidateId')):await ignoreMissingCandidate(env.DB,ownerId,c.req.param('id'),c.req.param('candidateId')))}catch(e){const message=(e as Error).message||'Could not update the missing-wine suggestion';return jsonResponse({error:message},correctionStatus(message))}});
+
+// Semantic retrieval is an input to the real Journal route, never a second
+// implementation of that route. Candidate IDs are internal-only: strip any
+// caller-supplied value first, then set it only on the request handed inward
+// after ranking. The canonical route still owns CORS, auth,
+// maintenance, filtering and pagination.
+router.get('/api/journal',async(c,next)=>{
+  const env=c.env,url=new URL(c.req.url);
+  url.searchParams.delete('__semanticIds');
+  const journalRequest=new Request(url,c.req.raw);
+  c.req.raw=journalRequest;
+  const rawQuery=(url.searchParams.get('query')??'').trim(),semanticFlag=url.searchParams.get('semantic');
+  const useSemantic=rawQuery&&semanticFlag!=='0'&&(semanticFlag==='1'||shouldUseSemanticQuery(rawQuery));
+  if(useSemantic){
+    let ownerId:string;try{ownerId=await owner(journalRequest,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+    c.executionCtx.waitUntil(warmSemanticWineIndex(env,ownerId).catch(error=>console.error(JSON.stringify({event:'semantic-index-warm-failed',error:(error as Error).message}))));
+    try{
+      const semantic=await semanticWineIds(env,ownerId,rawQuery,72);
+      if(semantic?.ids.length){
+        const forwardedUrl=new URL(journalRequest.url);
+        forwardedUrl.searchParams.set('__semanticIds',semantic.ids.join(','));
+        c.req.raw=new Request(forwardedUrl,journalRequest);
       }
-      return app.fetch(journalRequest,env,ctx);
-    }
+    }catch(error){console.error(JSON.stringify({event:'semantic-journal-search-failed',error:(error as Error).message}))}
+  }
+  return inward(c,next);
+});
 
-    if(request.method==='PUT'&&url.pathname.match(/^\/api\/wines\/[^/]+\/tasting-structure$/)){
-      let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
-      const id=decodeURIComponent(url.pathname.split('/')[3]||'');const body=await request.json().catch(()=>null) as {structure?:unknown}|null;
-      const parsed=tastingStructureSchema.nullable().safeParse(body?.structure??null);if(!parsed.success)return jsonResponse({error:'Invalid tasting structure',issues:parsed.error.issues},400);
-      const exists=await env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,id).first<{id:string}>();if(!exists)return jsonResponse({error:'Wine not found'},404);
-      try{await tastingStructureStatement(env.DB,ownerId,id,parsed.data).run();return jsonResponse({ok:true})}
-      catch(error){console.error('tasting-structure-save-failed',error);return jsonResponse({error:'Could not save tasting structure. Please retry.'},500)}
-    }
+router.put('/api/wines/:id/tasting-structure',async c=>{
+  const request=c.req.raw,env=c.env;
+    let ownerId:string;try{ownerId=await owner(request,env)}catch{return jsonResponse({error:'Unauthorized'},401)}
+    const id=c.req.param('id');const body=await request.json().catch(()=>null) as {structure?:unknown}|null;
+    const parsed=tastingStructureSchema.nullable().safeParse(body?.structure??null);if(!parsed.success)return jsonResponse({error:'Invalid tasting structure',issues:parsed.error.issues},400);
+    const exists=await env.DB.prepare('SELECT id FROM wines WHERE owner_id=? AND id=?').bind(ownerId,id).first<{id:string}>();if(!exists)return jsonResponse({error:'Wine not found'},404);
+    try{await tastingStructureStatement(env.DB,ownerId,id,parsed.data).run();return jsonResponse({ok:true})}
+    catch(error){console.error('tasting-structure-save-failed',error);return jsonResponse({error:'Could not save tasting structure. Please retry.'},500)}
+});
 
-    if(request.method==='GET'&&wineId){
-      const response=await app.fetch(request,env,ctx);if(!response.ok)return response;
-      let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
-      try{
-        const [body,row,groupSourcePhotos,sparklingRow]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId),env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{details_json:string}>()]);
-        let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
-        return jsonResponse({...body,tastingStructure:structure,sparklingDetails:parseSparklingDetails(sparklingRow?.details_json),groupSourcePhotos},response.status,new Headers(response.headers));
-      }catch{return response}
-    }
+// Adds the tasting structure, sparkling details and group source photos to a wine the inner layers found.
+router.get('/api/wines/:id',async(c,next)=>{
+  const request=c.req.raw,env=c.env,wineId=c.req.param('id');
+    const response=await inward(c,next);if(!response.ok)return response;
+    let ownerId:string;try{ownerId=await owner(request,env)}catch{return response}
+    try{
+      const [body,row,groupSourcePhotos,sparklingRow]=await Promise.all([response.clone().json() as Promise<Record<string,unknown>>,env.DB.prepare('SELECT structure_json FROM wine_tasting_structures WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{structure_json:string}>(),groupSourcePhotosForWine(env.DB,ownerId,wineId),env.DB.prepare('SELECT details_json FROM wine_sparkling_details WHERE owner_id=? AND wine_id=?').bind(ownerId,wineId).first<{details_json:string}>()]);
+      let structure:TastingStructure|null=null;if(row?.structure_json){const parsed=tastingStructureSchema.safeParse(JSON.parse(row.structure_json));if(parsed.success&&hasTastingStructure(parsed.data))structure=parsed.data}
+      return jsonResponse({...body,tastingStructure:structure,sparklingDetails:parseSparklingDetails(sparklingRow?.details_json),groupSourcePhotos},response.status,new Headers(response.headers));
+    }catch{return response}
+});
 
-    return app.fetch(request,env,ctx);
+export const layers=[router,...queueLayers] as const;
+const api=composeLayers<{Bindings:Bindings}>(layers);
+
+export default {
+  fetch(request:Request,env:Bindings,ctx:ExecutionContext){
+    configureBatchGateway(env);
+    return api.fetch(request,env,ctx);
   },
   async queue(batch:QueueBatch,env:Bindings){
     configureBatchGateway(env);
