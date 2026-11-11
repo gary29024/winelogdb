@@ -10,6 +10,7 @@ import { useActiveTasting } from '../features/tastings/useActiveTasting';
 import '../scanSheet.css';
 import '../moreSheet.css';
 import '../mobileViewport.css';
+import '../search.css';
 import { CreditConfirmation } from '../features/auth/CreditConfirmation';
 import '../multiUser.css';
 
@@ -122,7 +123,9 @@ export function Layout(){
       <NavLink className="brand" to="/">WineLog</NavLink>
       <nav className="desktop-nav" aria-label="Main navigation"><NavLink to="/" end data-tour="nav-passport" onPointerEnter={preloadPassport} onFocus={preloadPassport}>Passport</NavLink><NavLink to="/journal" data-tour="nav-journal" onPointerEnter={preloadJournal} onFocus={preloadJournal}>Journal</NavLink><NavLink to="/tastings" data-tour="nav-tastings" onPointerEnter={preloadTastingList} onFocus={preloadTastingList}>Tastings</NavLink><NavLink to="/producers" data-tour="nav-producers" onPointerEnter={preloadProducers} onFocus={preloadProducers}>Producers</NavLink><NavLink to="/vintages" onPointerEnter={preloadVintages} onFocus={preloadVintages}>Vintages</NavLink></nav>
       {/* nav-account rides on the chip itself, which renders the link now. */}
-      <div className="topbar-end"><AccountChip/><button type="button" className="top-scan-trigger" data-tour="scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
+      {/* Search sits beside the account so it is on every screen, phone included:
+          the tab bar has no slot left for it. */}
+      <div className="topbar-end"><NavLink className="top-search-link" to="/search" aria-label="Search" title="Search wines, producers and tastings"><AppIcon kind="search"/></NavLink><AccountChip/><button type="button" className="top-scan-trigger" data-tour="scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
     <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/><TourOverlay/><ToastHost/>
     <footer>Your private tasting notebook</footer>
