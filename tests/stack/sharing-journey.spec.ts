@@ -24,6 +24,8 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     await page.getByRole('textbox', { name: 'Producer *', exact: true }).fill('Domaine Dujac');
     await page.getByRole('textbox', { name: 'Wine name *', exact: true }).fill('Clos de la Roche typo');
     await page.getByRole('spinbutton', { name: 'Vintage', exact: true }).fill('2019');
+    // Country, region and appellation sit in the Bottle facts fold, closed to start with.
+    await page.locator('.bottle-facts-disclosure > summary').click();
     await page.getByLabel('Country', { exact: true }).fill('France');
     await page.getByLabel('Region', { exact: true }).fill('Burgundy');
     await page.locator('input[name=appellation]').fill('Clos de la Roche');
