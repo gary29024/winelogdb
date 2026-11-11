@@ -1,5 +1,6 @@
 import {
   isCancelledError,
+  keepPreviousData,
   notifyManager,
   QueryClient,
   useQuery,
@@ -55,26 +56,48 @@ export const queryClient = new QueryClient({
  */
 export type ReadPolicy = {
   summary?: boolean;
+  /**
+   * Good until this device says otherwise. The open tasting changes only when
+   * this device starts, ends or reopens one, and each of those says so itself,
+   * so it is read once and never thrown away by an unrelated write.
+   */
+  pinned?: boolean;
   /** Do not ask yet - there is no id to ask about. The screen stays loading. */
   skip?: boolean;
+  /**
+   * While the next page or search is on its way, keep showing the last one. A
+   * list that empties and refills on every keystroke is harder to read than one
+   * that changes once.
+   */
+  keepPrevious?: boolean;
 };
 
-const SUMMARY_FRESH_MS = 30_000;
-const isSummary = (query: Query) => query.meta?.summary === true;
+/** Reads something. Given the signal only if it asks for it, so it can be abandoned. */
+export type Loader<T> = (signal: AbortSignal) => Promise<T>;
 
-function readOptions<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy) {
+const SUMMARY_FRESH_MS = 30_000;
+const keptThroughWrites = (query: Query) => query.meta?.keep === true;
+
+function readOptions<T>(key: QueryKey, load: Loader<T>, policy: ReadPolicy) {
   return {
     queryKey: key,
-    queryFn: load,
-    ...(policy.summary ? { staleTime: SUMMARY_FRESH_MS, meta: { summary: true } } : {}),
+    // Asking for the signal tells the library the request may be abandoned when
+    // its screen closes, so only a loader that takes one is treated that way.
+    queryFn: load.length ? ({ signal }: { signal: AbortSignal }) => load(signal) : () => (load as () => Promise<T>)(),
+    ...(policy.summary ? { staleTime: SUMMARY_FRESH_MS, meta: { keep: true } } : {}),
+    ...(policy.pinned ? { staleTime: Infinity, meta: { keep: true } } : {}),
     ...(policy.skip ? { enabled: false } : {}),
+    ...(policy.keepPrevious ? { placeholderData: keepPreviousData } : {}),
   };
 }
 
 export type Loaded<T> = {
   /** The latest answer, or `undefined` until the first one arrives. */
   data: T | undefined;
-  /** True while there is nothing to show yet, including during "Try again". */
+  /**
+   * True while there is nothing current to show: before the first answer,
+   * during "Try again", and while a kept earlier page stands in for the next.
+   */
   loading: boolean;
   /** True when the read failed and there is no earlier answer to show. */
   failed: boolean;
@@ -91,16 +114,18 @@ export type Loaded<T> = {
  * request and one copy. It is handed the client directly rather than through a
  * provider, so a component renders the same way in the app and alone in a test.
  */
-export function useLoad<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy = {}): Loaded<T> {
+export function useLoad<T>(key: QueryKey, load: Loader<T>, policy: ReadPolicy = {}): Loaded<T> {
   const query = useQuery(readOptions(key, load, policy), queryClient);
   const empty = query.data === undefined;
   const failed = empty && query.isError && !query.isFetching;
   return {
     data: query.data,
-    loading: query.isPending || (empty && query.isFetching),
+    loading: query.isPending || (empty && query.isFetching) || query.isPlaceholderData,
     failed,
     error: failed ? query.error.message : '',
-    retry: () => void query.refetch(),
+    // Joins a request already on its way - a write has usually just started
+    // one - so asking again after a save is one read, not two.
+    retry: () => void query.refetch({ cancelRefetch: false }),
   };
 }
 
@@ -112,7 +137,7 @@ export function useLoad<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPo
  * same key. If the answer is thrown away while the request is in flight, the
  * caller is given the one asked for afterwards rather than a cancellation.
  */
-export async function readShared<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy = {}): Promise<T> {
+export async function readShared<T>(key: QueryKey, load: Loader<T>, policy: ReadPolicy = {}): Promise<T> {
   const options = readOptions(key, load, policy);
   try {
     return await queryClient.fetchQuery(options);
@@ -154,11 +179,11 @@ export function discard(key: QueryKey) {
  * Called from the one function every request goes through, so that a write
  * added later cannot forget to say so. Screens that are open ask again; answers
  * kept for screens that are closed are dropped, so reopening one shows its
- * loading state instead of the answer from before the write. Summaries are left
- * to `discard`, for the reason given on `ReadPolicy`.
+ * loading state instead of the answer from before the write. Summaries and pinned
+ * answers are left to `discard`, for the reasons given on `ReadPolicy`.
  */
 export function dataChanged() {
-  const predicate = (query: Query) => !isSummary(query);
+  const predicate = (query: Query) => !keptThroughWrites(query);
   queryClient.removeQueries({ type: 'inactive', predicate });
   void queryClient.invalidateQueries({ type: 'active', predicate });
 }
