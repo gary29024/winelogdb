@@ -1,4 +1,11 @@
-import { notifyManager, QueryClient, useQuery, type QueryKey } from '@tanstack/react-query';
+import {
+  isCancelledError,
+  notifyManager,
+  QueryClient,
+  useQuery,
+  type Query,
+  type QueryKey,
+} from '@tanstack/react-query';
 
 // Tell screens about an answer as soon as it arrives, not one timer tick later.
 // The library's default waits for a timer, which leaves a screen on its loading
@@ -36,12 +43,37 @@ export const queryClient = new QueryClient({
   },
 });
 
+/**
+ * How long an answer stays good, and what makes it stale.
+ *
+ * Most answers are asked for again every time their screen opens, and are
+ * thrown away by any write. A `summary` is different: the Passport and the
+ * collections are expensive to work out and change only when what has been
+ * drunk changes. They stay good for thirty seconds, and only `discard` - which
+ * `summariesChanged` calls - makes them stale. A cellar write or a favourite
+ * that was already set must not throw away an answer that is still true.
+ */
+export type ReadPolicy = { summary?: boolean };
+
+const SUMMARY_FRESH_MS = 30_000;
+const isSummary = (query: Query) => query.meta?.summary === true;
+
+function readOptions<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy) {
+  return {
+    queryKey: key,
+    queryFn: load,
+    ...(policy.summary ? { staleTime: SUMMARY_FRESH_MS, meta: { summary: true } } : {}),
+  };
+}
+
 export type Loaded<T> = {
   /** The latest answer, or `undefined` until the first one arrives. */
   data: T | undefined;
   /** True while there is nothing to show yet, including during "Try again". */
   loading: boolean;
-  /** Why there is nothing to show. Empty while an earlier answer is on screen. */
+  /** True when the read failed and there is no earlier answer to show. */
+  failed: boolean;
+  /** What the failure said, which may be nothing. Empty unless `failed`. */
   error: string;
   /** Ask again. */
   retry: () => void;
@@ -54,15 +86,47 @@ export type Loaded<T> = {
  * request and one copy. It is handed the client directly rather than through a
  * provider, so a component renders the same way in the app and alone in a test.
  */
-export function useLoad<T>(key: QueryKey, load: () => Promise<T>): Loaded<T> {
-  const query = useQuery({ queryKey: key, queryFn: load }, queryClient);
+export function useLoad<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy = {}): Loaded<T> {
+  const query = useQuery(readOptions(key, load, policy), queryClient);
   const empty = query.data === undefined;
+  const failed = empty && query.isError && !query.isFetching;
   return {
     data: query.data,
     loading: query.isPending || (empty && query.isFetching),
-    error: empty && query.error ? query.error.message : '',
+    failed,
+    error: failed ? query.error.message : '',
     retry: () => void query.refetch(),
   };
+}
+
+/**
+ * Read the same answer outside a component - a form filling itself in once, or
+ * a handler waiting for the refreshed answer after its own write.
+ *
+ * It shares the request and the copy with any screen using `useLoad` on the
+ * same key. If the answer is thrown away while the request is in flight, the
+ * caller is given the one asked for afterwards rather than a cancellation.
+ */
+export async function readShared<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolicy = {}): Promise<T> {
+  const options = readOptions(key, load, policy);
+  try {
+    return await queryClient.fetchQuery(options);
+  } catch (error) {
+    if (isCancelledError(error)) return queryClient.fetchQuery(options);
+    throw error;
+  }
+}
+
+/**
+ * One named answer stopped being true.
+ *
+ * An open screen asks again, and its request in flight is abandoned so that an
+ * answer from before the change cannot land after it. A copy kept for a closed
+ * screen is dropped.
+ */
+export function discard(key: QueryKey) {
+  queryClient.removeQueries({ queryKey: key, type: 'inactive' });
+  void queryClient.invalidateQueries({ queryKey: key, type: 'active' });
 }
 
 /**
@@ -71,11 +135,13 @@ export function useLoad<T>(key: QueryKey, load: () => Promise<T>): Loaded<T> {
  * Called from the one function every request goes through, so that a write
  * added later cannot forget to say so. Screens that are open ask again; answers
  * kept for screens that are closed are dropped, so reopening one shows its
- * loading state instead of the answer from before the write.
+ * loading state instead of the answer from before the write. Summaries are left
+ * to `discard`, for the reason given on `ReadPolicy`.
  */
 export function dataChanged() {
-  queryClient.removeQueries({ type: 'inactive' });
-  void queryClient.invalidateQueries({ type: 'active' });
+  const predicate = (query: Query) => !isSummary(query);
+  queryClient.removeQueries({ type: 'inactive', predicate });
+  void queryClient.invalidateQueries({ type: 'active', predicate });
 }
 
 /** The account changed. Nothing read for the previous one may be shown. */

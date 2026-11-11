@@ -1,7 +1,7 @@
 import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
-import { createSessionCache } from '../../lib/cache/sessionCache';
+import { discard,readShared,useLoad } from '../../lib/query/client';
 import type { JourneySummary,StructureSample } from './model';
 
 export type CountryStat={country:string;wines:number;producers:number;appellations:number;averageRating:number|null};
@@ -53,15 +53,18 @@ export type JourneyData={
   recentTastings:RecentTasting[];
 };
 
-const journeyCache=createSessionCache(async()=>{
+const JOURNEY_KEY=['journey'] as const;
+async function loadJourneyData(){
   const response=await apiFetch('/api/journey',{headers:authHeaders()});
   if(response.status===401){clearSession();throw new Error('Session expired. Please sign in again.')}
   if(!response.ok){const body=await response.json().catch(()=>({})) as {error?:string};throw new Error(body.error||'Could not load Wine Journey')}
   return response.json() as Promise<JourneyData>;
-});
-export const invalidateJourneyData=journeyCache.invalidate;
+}
+export const invalidateJourneyData=()=>discard(JOURNEY_KEY);
 registerSummaryCache(invalidateJourneyData);
-export const getJourneyData=journeyCache.get;
+/** For a screen: shared with every other screen showing the journey. */
+export const useJourneyData=()=>useLoad(JOURNEY_KEY,loadJourneyData,{summary:true});
+export const getJourneyData=()=>readShared(JOURNEY_KEY,loadJourneyData,{summary:true});
 
 export type KindSpend={kind:string;label:string;runs:number;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;units:number;unit:'run'|'wine';unitCount:number;costPerUnit:number;cost:number;costPerRun:number;searchesPerRun:number};
 export type UsageRunPart={step?:'translation'|null;model:string;tier:string;createdAt:string;requests:number;searchQueries:number;promptTokens:number;outputTokens:number;cost:number};

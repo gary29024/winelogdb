@@ -26,7 +26,7 @@ export async function bootstrapAccount(){
  const body=response.ok?await response.json() as {user:Account;friendRequests?:number}:null,next=body?.user??null;
  friendRequests=Number(body?.friendRequests)||0;
  const previous=sessionStorage.getItem('winelog-account');
- if(previous!==next?.id){generation++;for(const key of Object.keys(sessionStorage))if(key.startsWith('winelog'))sessionStorage.removeItem(key)}
+ if(previous!==next?.id){generation++;forgetLoadedData();for(const key of Object.keys(sessionStorage))if(key.startsWith('winelog'))sessionStorage.removeItem(key)}
  account=next;localStorage.removeItem('session');if(next)sessionStorage.setItem('winelog-account',next.id);localStorage.setItem('winelog-account-id',next?.id??'');window.dispatchEvent(new Event(ACCOUNT_UPDATED));return next;
 }
 export async function logout(){await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'});clearSession();localStorage.setItem('winelog-account-event',crypto.randomUUID());location.assign('/login')}

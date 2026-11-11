@@ -1,7 +1,7 @@
 import { apiFetch } from '../../lib/auth/client';
 import { authHeaders,clearSession } from '../../lib/auth/client';
 import { registerSummaryCache } from '../../lib/cache/summaryCaches';
-import { createSessionCache } from '../../lib/cache/sessionCache';
+import { discard,readShared,useLoad } from '../../lib/query/client';
 import type { AchievementCatalogueOptions,AchievementMatchMode,AchievementProgress,CustomAchievementInput } from './types';
 
 async function requireJson<T>(response:Response,message:string):Promise<T>{
@@ -10,13 +10,16 @@ async function requireJson<T>(response:Response,message:string):Promise<T>{
   if(!response.ok){const details=body.issues?.map(issue=>`${issue.path?.join('.')||'field'}: ${issue.message||'Invalid input'}`).join('; ');throw new Error([body.error||message,details].filter(Boolean).join(' — '))}
   return body;
 }
-const achievementCache=createSessionCache(async()=>{
+const ACHIEVEMENTS_KEY=['achievements'] as const;
+async function loadAchievementProgress(){
   const response=await apiFetch('/api/achievements',{headers:authHeaders()});
   return requireJson<AchievementProgress[]>(response,'Could not load wine collections');
-});
-export const invalidateAchievementProgress=achievementCache.invalidate;
+}
+export const invalidateAchievementProgress=()=>discard(ACHIEVEMENTS_KEY);
 registerSummaryCache(invalidateAchievementProgress);
-export const getAchievementProgress=achievementCache.get;
+/** For a screen: shared with every other screen showing the collections. */
+export const useAchievementProgress=()=>useLoad(ACHIEVEMENTS_KEY,loadAchievementProgress,{summary:true});
+export const getAchievementProgress=()=>readShared(ACHIEVEMENTS_KEY,loadAchievementProgress,{summary:true});
 export async function getAchievementCatalogueOptions(){
   const response=await apiFetch('/api/achievements/catalogue-options',{headers:authHeaders()});
   return requireJson<AchievementCatalogueOptions>(response,'Could not load catalogue targets');

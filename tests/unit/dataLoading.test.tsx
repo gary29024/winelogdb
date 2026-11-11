@@ -171,15 +171,94 @@ describe('a write makes earlier answers a guess', () => {
   });
 });
 
+describe('a summary read outside a screen', () => {
+  const deferred = <T,>() => {
+    let resolve!: (value: T) => void;
+    const promise = new Promise<T>((done) => (resolve = done));
+    return { promise, resolve };
+  };
+  const summary = { summary: true };
+
+  it('shares concurrent requests and reuses the answer for thirty seconds', async () => {
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1000);
+    const reply = deferred<number>();
+    const load = vi.fn(() => reply.promise);
+    const first = query.readShared(['s'], load, summary);
+    const second = query.readShared(['s'], load, summary);
+    reply.resolve(1);
+    expect(await first).toBe(1);
+    expect(await second).toBe(1);
+    expect(await query.readShared(['s'], load, summary)).toBe(1);
+    expect(load).toHaveBeenCalledTimes(1);
+    clock.mockReturnValue(31_001);
+    await query.readShared(['s'], load, summary);
+    expect(load).toHaveBeenCalledTimes(2);
+    clock.mockRestore();
+  });
+
+  it('does not restore an answer from before it was discarded', async () => {
+    const old = deferred<number>();
+    const load = vi.fn().mockReturnValueOnce(old.promise).mockResolvedValue(2);
+    const first = query.readShared(['s'], load, summary);
+    await Promise.resolve();
+    query.discard(['s']);
+    old.resolve(1);
+    expect(await first, 'the caller in flight gets the answer asked for afterwards').toBe(2);
+    expect(await query.readShared(['s'], load, summary)).toBe(2);
+    expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it('asks again after a failure instead of keeping it', async () => {
+    const load = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue(2);
+    await expect(query.readShared(['s'], load, summary)).rejects.toThrow('offline');
+    expect(await query.readShared(['s'], load, summary)).toBe(2);
+  });
+
+  it('is left alone by an ordinary write, and dropped by discard', async () => {
+    const load = vi.fn(async () => 1);
+    await query.readShared(['s'], load, summary);
+    query.dataChanged();
+    await query.readShared(['s'], load, summary);
+    expect(load, 'a cellar write must not throw away a count that is still true').toHaveBeenCalledTimes(1);
+    query.discard(['s']);
+    await query.readShared(['s'], load, summary);
+    expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it('is not shared between accounts', async () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce(Response.json({ user: { id: 'a' } }))
+        .mockResolvedValueOnce(Response.json({ user: { id: 'b' } })),
+    );
+    const { bootstrapAccount, clearSession } = await import('../../src/lib/auth/client');
+    await bootstrapAccount();
+    const load = vi.fn().mockResolvedValueOnce(1).mockResolvedValue(2);
+    expect(await query.readShared(['s'], load, summary)).toBe(1);
+    await bootstrapAccount();
+    expect(await query.readShared(['s'], load, summary)).toBe(2);
+    clearSession();
+    await query.readShared(['s'], load, summary);
+    expect(load).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe('screens moved onto the shared loader', () => {
   const source = (path: string) => readFileSync(join(process.cwd(), path), 'utf8');
 
-  it.each(['src/features/tastings/TastingsPage.tsx', 'src/features/producers/ProducersPage.tsx'])(
-    '%s no longer keeps its own loading and error state',
-    (path) => {
-      const text = source(path);
-      expect(text).toMatch(/useLoad\(/);
-      expect(text).not.toMatch(/setLoading|setError|useEffect/);
-    },
-  );
+  it.each([
+    'src/features/tastings/TastingsPage.tsx',
+    'src/features/producers/ProducersPage.tsx',
+    'src/features/journey/PassportPage.tsx',
+    'src/features/achievements/AchievementsPage.tsx',
+    'src/features/achievements/AchievementDetailPage.tsx',
+  ])('%s no longer keeps its own loading and error state', (path) => {
+    const text = source(path);
+    expect(text).toMatch(/useLoad\(|useJourneyData\(|useAchievementProgress\(/);
+    expect(text).not.toMatch(/setLoading|setError|useEffect/);
+  });
 });

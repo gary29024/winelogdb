@@ -1,12 +1,11 @@
 import { PageIntro } from '../../components/PageIntro';
-import { useEffect,useMemo,useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { AchievementIcon as CollectionAchievementIcon } from '../achievements/AchievementIcon';
-import { getAchievementProgress } from '../achievements/api';
+import { useAchievementProgress } from '../achievements/api';
 import { passportCollectionKicker,passportCollectionSummary,selectPassportCollections } from '../achievements/passportPreview';
-import type { AchievementProgress } from '../achievements/types';
-import { getJourneyData,type JourneyData,type RecentTasting } from './api';
+import { useJourneyData,type RecentTasting } from './api';
 import { journeyLadder,nextMilestones,stampTotals } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
@@ -45,10 +44,8 @@ function tastingDate(item:RecentTasting){
 }
 
 export function PassportPage(){
-  const [data,setData]=useState<JourneyData|null>(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
-  const [collections,setCollections]=useState<AchievementProgress[]|null>(null),[collectionsError,setCollectionsError]=useState('');
-  useEffect(()=>{let active=true;setError('');getJourneyData().then(result=>{if(active)setData(result)}).catch(e=>{if(active)setError((e as Error).message||'failed')});return()=>{active=false}},[attempt]);
-  useEffect(()=>{let active=true;getAchievementProgress().then(result=>{if(active)setCollections(result)}).catch(e=>{if(active)setCollectionsError((e as Error).message)});return()=>{active=false}},[]);
+  const journey=useJourneyData(),data=journey.data??null;
+  const achievements=useAchievementProgress(),collections=achievements.data??null,collectionsError=achievements.failed;
   const milestones=useMemo(()=>data?nextMilestones(data.summary):[],[data]);
   const ladder=useMemo(()=>data?journeyLadder(data.summary):[],[data]);
   // The track that needs the fewest tastings to earn its next stamp - the one
@@ -57,7 +54,7 @@ export function PassportPage(){
   const stamps=useMemo(()=>stampTotals(ladder),[ladder]);
   const featuredCollections=useMemo(()=>collections?selectPassportCollections(collections):[],[collections]);
   const collectionsSummary=useMemo(()=>collections?passportCollectionSummary(collections):null,[collections]);
-  if(error)return <section className="journey-page"><LoadError error={error==='failed'?'':error} fallback="Your Wine Passport could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/></section>;
+  if(journey.failed)return <section className="journey-page"><LoadError error={journey.error} fallback="Your Wine Passport could not be loaded." onRetry={journey.retry}/></section>;
   if(!data)return <section className="journey-page"><p aria-live="polite">Stamping your Wine Passport…</p></section>;
 
   const {summary}=data;
