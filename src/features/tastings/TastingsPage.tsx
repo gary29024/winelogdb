@@ -1,11 +1,12 @@
 import { PageHeader } from '../../components/PageHeader';
 import { PageSkeleton } from '../../components/PageSkeleton';
-import { useEffect,useMemo,useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppIcon } from '../../components/AppIcons';
 import { listTastings,type TastingSummary } from './api';
 import '../../tastings.css';
 import { LoadError } from '../../components/LoadError';
+import { useLoad } from '../../lib/query/client';
 
 const isOpen=(tasting:TastingSummary)=>Boolean(tasting.startedAt&&!tasting.endedAt);
 const dateLabel=(value:string|null)=>{
@@ -36,13 +37,8 @@ const monthLabel=(key:string)=>{
  * lineup - only the tasting you open does.
  */
 export function TastingsPage(){
-  const [items,setItems]=useState<TastingSummary[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
-
-  useEffect(()=>{
-    let active=true;setLoading(true);setError('');
-    listTastings().then(({items:next})=>{if(active)setItems(next)}).catch(e=>{if(active)setError((e as Error).message)}).finally(()=>{if(active)setLoading(false)});
-    return()=>{active=false};
-  },[attempt]);
+  const {data,loading,error,retry}=useLoad(['tastings'],listTastings);
+  const items=useMemo(()=>data?.items??[],[data]);
 
   const months=useMemo(()=>{
     const sortKey=(tasting:TastingSummary)=>tasting.tastingDate||tasting.createdAt;
@@ -65,7 +61,7 @@ export function TastingsPage(){
   return <section className="tastings-page">
     <PageHeader title="Tastings" subtitle="Start a tasting from Scan Wine and each wine you log joins it, with the name, date and venue already filled in."/>
     {loading?<PageSkeleton label="Loading tastings…" shape="list"/>
-      :error?<LoadError error={error} fallback="Your tastings could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>
+      :error?<LoadError error={error} fallback="Your tastings could not be loaded." onRetry={retry}/>
       :months.length?<div className="tasting-months">{months.map(group=>
         <section className="tasting-month" key={group.key}>
           <h2 className="tasting-month-heading">{monthLabel(group.key)}</h2>

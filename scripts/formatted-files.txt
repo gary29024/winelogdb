@@ -16,3 +16,5 @@ src/feedback.css
 src/components/toast.ts
 src/components/ToastHost.tsx
 src/components/PageSkeleton.tsx
+src/lib/query/client.ts
+tests/unit/dataLoading.test.tsx
