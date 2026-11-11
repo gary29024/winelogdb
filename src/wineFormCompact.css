@@ -89,6 +89,8 @@
 .form-disclosure[open]>summary{border-bottom:1px solid var(--line)}
 .form-disclosure[open]>summary::after{content:'Hide'}
 .form-disclosure-body{display:grid;gap:8px;padding:8px 12px 11px}
+/* The title stays on one line; the list of saved facts beside it is what shortens. */
+.bottle-facts-disclosure>summary>span{flex:0 0 auto;white-space:nowrap}
 .form-disclosure-body>.full-field{margin:0}
 .experience-fields>.form-disclosure{margin:10px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}
 .experience-fields>.form-disclosure>summary{padding:10px 0 4px;font-size:1rem}
