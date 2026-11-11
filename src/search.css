@@ -126,3 +126,11 @@
   background: transparent;
   color: var(--ink);
 }
+
+/* Hashtags on a wine page are links into the search. */
+.detail-tags a.tag {
+  text-decoration: none;
+}
+.detail-tags a.tag:hover {
+  text-decoration: underline;
+}

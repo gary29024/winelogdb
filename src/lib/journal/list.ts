@@ -89,7 +89,14 @@ export async function listJournalPage(db:D1Database,owner:string,q:JournalListQu
   if(rawQuery&&!vintageSearch){
     const searchPredicates:string[]=[];
     const clean=rawQuery.replace(/[^\p{L}\p{N}\s]/gu,' ').trim();
-    if(clean){
+    // A search that starts with # is a hashtag: it looks at the tags alone, as
+    // one phrase, so #birthday does not also bring back every wine whose notes
+    // happen to say "birthday". Shared bottles carry no tags of the reader's own
+    // and tasting names are not tags, so neither is consulted.
+    if(clean&&rawQuery.startsWith('#')){
+      searchPredicates.push('w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?)');
+      args.push(`tags : "${clean}"*`,owner);
+    }else if(clean){
       searchPredicates.push('(w.id IN (SELECT wine_id FROM wine_search WHERE wine_search MATCH ? AND owner_id=?) OR EXISTS (SELECT 1 FROM wine_experiences we JOIN tastings t ON t.id=we.tasting_id WHERE we.wine_id=w.id AND we.owner_id=? AND lower(t.name) LIKE lower(?)))');
       args.push(clean+'*',owner,owner,`%${rawQuery}%`);
       if(includeShared){

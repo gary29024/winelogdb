@@ -159,6 +159,21 @@ describe('search everywhere', () => {
     expect(links()).toEqual(['/tastings/t2']);
   });
 
+  it('treats a search starting with # as a hashtag and looks at wines only', async () => {
+    const fetchMock = await render('/search?q=%23birthday');
+    expect(links()).toEqual(['/wines/w1', '/shared/w2']);
+    expect(host!.querySelector('.search-group h2')?.textContent).toBe('Wines tagged #birthday 9');
+    expect(String(called(fetchMock, '/api/journal')[0][0])).toContain('query=%23birthday');
+    expect(called(fetchMock, '/api/producers')).toHaveLength(0);
+    expect(called(fetchMock, '/api/tastings')).toHaveLength(0);
+    expect(host!.querySelector('a.search-more')?.getAttribute('href')).toBe('/journal?query=%23birthday');
+  });
+
+  it('makes the hashtags on a wine page open that search', () => {
+    const detail = readFileSync('src/features/wines/DetailPage.tsx', 'utf8');
+    expect(detail).toContain('to={`/search?q=${encodeURIComponent(`#${t}`)}`}');
+  });
+
   it('says so plainly when nothing matches', async () => {
     await render('/search?q=zzzz', { items: [], total: 0, nextOffset: null });
     expect(host!.textContent).toContain('Nothing found');

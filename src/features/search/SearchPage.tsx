@@ -72,38 +72,43 @@ export function SearchPage() {
 
   const needle = searchKey(settled);
   const active = needle.length >= MIN_LENGTH;
+  // "#birthday" is a hashtag: the server then looks at wine tags alone, and
+  // producers and tastings, which have no tags, stay out of the answer.
+  const tagMode = settled.startsWith('#');
+  const everything = active && !tagMode;
 
   const wines = useLoad(
     ['search', 'wines', settled],
     (signal) => listWines(new URLSearchParams({ query: settled }), { limit: WINE_LIMIT, signal }),
     { skip: !active, keepPrevious: true },
   );
-  const producers = useLoad(['producers'], listProducers, { skip: !active });
-  const tastings = useLoad(['tastings'], listTastings, { skip: !active });
+  const producers = useLoad(['producers'], listProducers, { skip: !everything });
+  const tastings = useLoad(['tastings'], listTastings, { skip: !everything });
 
   const producerHits = useMemo<ProducerSummary[]>(
     () =>
-      active
+      everything
         ? (producers.data?.items ?? []).filter((p) =>
             matches(needle, [p.canonicalName, p.homeLocality, p.homeRegion, p.homeCountry].filter(Boolean).join(' ')),
           )
         : [],
-    [active, needle, producers.data],
+    [everything, needle, producers.data],
   );
   const tastingHits = useMemo<TastingSummary[]>(
     () =>
-      active
+      everything
         ? (tastings.data?.items ?? []).filter((t) => matches(needle, [t.name, t.venue].filter(Boolean).join(' ')))
         : [],
-    [active, needle, tastings.data],
+    [everything, needle, tastings.data],
   );
 
   const wineItems: JournalWine[] = active ? (wines.data?.items ?? []) : [];
   const wineTotal = active ? (wines.data?.total ?? 0) : 0;
   const waiting =
     active &&
-    ((wines.loading && !wines.data) || (producers.loading && !producers.data) || (tastings.loading && !tastings.data));
-  const failed = active ? wines.error || producers.error || tastings.error : null;
+    ((wines.loading && !wines.data) ||
+      (everything && ((producers.loading && !producers.data) || (tastings.loading && !tastings.data))));
+  const failed = active ? wines.error || (everything ? producers.error || tastings.error : null) : null;
   const nothing = active && !waiting && !failed && !wineItems.length && !producerHits.length && !tastingHits.length;
   const journalLink = `/journal?query=${encodeURIComponent(settled)}`;
 
@@ -133,7 +138,8 @@ export function SearchPage() {
 
       {!active && (
         <p className="search-hint">
-          Type at least two letters. Try a producer, a village, a vintage year or the name of an evening.
+          Type at least two letters. Try a producer, a village, a vintage year or the name of an evening. Start with #
+          to look through your hashtags only, for example #birthday.
         </p>
       )}
       {waiting && <p aria-live="polite">Searching…</p>}
@@ -151,14 +157,18 @@ export function SearchPage() {
       {nothing && (
         <div className="empty">
           <h2>Nothing found</h2>
-          <p>No wine, producer or tasting matches “{settled}”. Try fewer words or a different spelling.</p>
+          <p>
+            {tagMode
+              ? `No wine carries the hashtag ${settled}. Remove the # to search everything instead.`
+              : `No wine, producer or tasting matches “${settled}”. Try fewer words or a different spelling.`}
+          </p>
         </div>
       )}
 
       {wineItems.length > 0 && (
         <section className="search-group" aria-labelledby="search-wines">
           <h2 id="search-wines">
-            Wines <small>{wineTotal}</small>
+            {tagMode ? `Wines tagged ${settled}` : 'Wines'} <small>{wineTotal}</small>
           </h2>
           <ul>
             {wineItems.map((wine) => (
