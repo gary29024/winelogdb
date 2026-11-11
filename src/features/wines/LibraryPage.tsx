@@ -7,6 +7,7 @@ import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
 import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
 import { attachWinesToTasting,getTasting } from '../tastings/api';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
+import { useLoad } from '../../lib/query/client';
 import { WineImage } from './WineImage';
 import { JournalSearchInput } from './JournalSearchInput';
 import { JournalScopeTabs } from './JournalScopeTabs';
@@ -136,7 +137,8 @@ export function LibraryPage(){
    * bottles with the filters you already know.
    */
   const attachTo=params.get('attachTo')??'';
-  const [attachName,setAttachName]=useState('');
+  // The tasting being added to, shared with its own page so its name is usually already known.
+  const attachName=useLoad(['tasting',attachTo],()=>getTasting(attachTo),{skip:!attachTo}).data?.tasting.name??'';
   const selectedWines=useMemo(()=>data.filter(wine=>selectedIds.has(wine.id)),[data,selectedIds]);
 
   function update(k:string,v:string,replace=true){
@@ -236,13 +238,6 @@ export function LibraryPage(){
   },[restoreFilters,queryKey]);
 
   useEffect(()=>setPageDraft(String(currentPage)),[currentPage]);
-
-  useEffect(()=>{
-    if(!attachTo){setAttachName('');return}
-    let active=true;
-    getTasting(attachTo).then(detail=>{if(active)setAttachName(detail.tasting.name)}).catch(()=>{if(active)setAttachName('')});
-    return()=>{active=false};
-  },[attachTo]);
 
   useEffect(()=>{
     if(restoring)return;

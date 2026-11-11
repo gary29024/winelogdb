@@ -1,5 +1,6 @@
 import { useEffect,useId,useRef,useState } from 'react';
-import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun,type UsageSummary } from './api';
+import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun } from './api';
+import { useLoad } from '../../lib/query/client';
 import '../../journey.css';
 import '../../aiSpend.css';
 import '../../settingsCards.css';
@@ -126,19 +127,12 @@ function AiSpendRunDialog({label,runs,totalRuns,currency,days,loading,error,onCl
 }
 
 export function AiSpendCard(){
-  const [spend,setSpend]=useState<UsageSummary|null>(null);
-  const [error,setError]=useState('');
+  const loadedSpend=useLoad(['ai-spend'],()=>getAiSpend()),spend=loadedSpend.data??null,error=loadedSpend.failed;
   const [selectedKind,setSelectedKind]=useState<RunHistoryKind|null>(null);
   const [selectedRuns,setSelectedRuns]=useState<UsageRun[]>([]);
   const [runsLoading,setRunsLoading]=useState(false);
   const [runsError,setRunsError]=useState('');
   const runCache=useRef(new Map<string,UsageRun[]>());
-
-  useEffect(()=>{
-    let live=true;
-    void getAiSpend().then(next=>{if(live)setSpend(next)}).catch(e=>{if(live)setError((e as Error).message)});
-    return()=>{live=false};
-  },[]);
 
   useEffect(()=>{
     if(!selectedKind||!spend)return;

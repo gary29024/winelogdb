@@ -9,6 +9,8 @@ export default defineConfig({
     // Keep per-file isolation; threads avoid a fresh OS process for each file.
     pool:'threads',
     globalSetup:['tests/unit/support/databaseSetup.ts'],
+    // Answers kept by the shared loader outlive a component tree; see the file.
+    setupFiles:['tests/unit/support/forgetLoadedData.ts'],
     forceRerunTriggers:['**/vitest.config.*','src/lib/db/migrations/**'],
     allowOnly:!process.env.CI,
   },

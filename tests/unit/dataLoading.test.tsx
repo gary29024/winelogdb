@@ -281,6 +281,60 @@ describe('a screen that edits what it loaded', () => {
   });
 });
 
+describe('answers with their own rules', () => {
+  it('reads a pinned answer once, through writes, until it is discarded', async () => {
+    const load = vi.fn(async () => 'open tasting');
+    const pinned = { pinned: true };
+    await query.readShared(['p'], load, pinned);
+    query.dataChanged();
+    await query.readShared(['p'], load, pinned);
+    expect(load).toHaveBeenCalledTimes(1);
+    query.discard(['p']);
+    await query.readShared(['p'], load, pinned);
+    expect(load).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps the last page on screen, marked as loading, while the next one arrives', async () => {
+    let finish: (value: string) => void = () => undefined;
+    const pages: Record<number, () => Promise<string>> = {
+      0: async () => 'page one',
+      1: () => new Promise<string>((resolve) => (finish = resolve)),
+    };
+    function Pager({ page }: { page: number }) {
+      const { data, loading } = query.useLoad(['list', page], pages[page], { keepPrevious: true });
+      return (
+        <p>
+          {data}
+          {loading ? ' (loading)' : ''}
+        </p>
+      );
+    }
+    await show(<Pager page={0} />);
+    await settle();
+    expect(host!.textContent).toBe('page one');
+    await act(async () => root!.render(<Pager page={1} />));
+    expect(host!.textContent).toBe('page one (loading)');
+    await act(async () => finish('page two'));
+    expect(host!.textContent).toBe('page two');
+  });
+
+  it('hands a signal to a loader that asks for one, and abandons it when the screen closes', async () => {
+    let seen: AbortSignal | undefined;
+    const load = vi.fn((signal: AbortSignal) => {
+      seen = signal;
+      return new Promise<string>(() => undefined);
+    });
+    function Abortable() {
+      query.useLoad(['abortable'], load);
+      return null;
+    }
+    await show(<Abortable />);
+    expect(seen?.aborted).toBe(false);
+    await show(null);
+    expect(seen?.aborted).toBe(true);
+  });
+});
+
 describe('screens moved onto the shared loader', () => {
   const source = (path: string) => readFileSync(join(process.cwd(), path), 'utf8');
 

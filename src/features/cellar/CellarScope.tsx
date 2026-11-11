@@ -1,4 +1,5 @@
-import { useCallback,useEffect,useMemo,useState } from 'react';
+import { useCallback,useMemo,useState } from 'react';
+import { useLoad } from '../../lib/query/client';
 import { showToast } from '../../components/toast';
 import { useNavigate,useSearchParams } from 'react-router-dom';
 import { pourFamily } from '../../lib/wine/pourFamily';
@@ -12,6 +13,8 @@ import { maturityVerdict } from '../../lib/maturity/ageing';
 const PAGE_SIZE=36;
 const NARROWING_KEYS=['country','style','vintage','location','sort'];
 const SORTS:Array<[string,string]>=[['vintage','Vintage, newest'],['oldestVintage','Vintage, oldest'],['producer','Producer'],['bottles','Most bottles'],['added','Recently added'],['purchased','Recently bought']];
+
+const NO_HOLDINGS:CellarHolding[]=[];
 
 /**
  * Bottles you hold.
@@ -29,13 +32,10 @@ const SORTS:Array<[string,string]>=[['vintage','Vintage, newest'],['oldestVintag
 export function CellarScope(){
   const [params,setParams]=useSearchParams();
   const navigate=useNavigate();
-  const [items,setItems]=useState<CellarHolding[]>([]);
-  const [total,setTotal]=useState(0),[bottles,setBottles]=useState(0);
-  const [loading,setLoading]=useState(true),[error,setError]=useState('');
+  const [actionError,setError]=useState('');
   const [adding,setAdding]=useState(false),[busyId,setBusyId]=useState('');
   const [editing,setEditing]=useState<CellarHolding|null>(null);
   const [viewingVintage,setViewingVintage]=useState<CellarHolding|null>(null);
-  const [reloadSeq,setReloadSeq]=useState(0);
   // Folded like the Journal's, so all three tabs share one control row and the
   // count sits beside it. Open on arrival when a link already carries a filter.
   const [filtersOpen,setFiltersOpen]=useState(()=>NARROWING_KEYS.some(key=>Boolean(params.get(key))));
@@ -48,15 +48,13 @@ export function CellarScope(){
     return next;
   },[params]);
 
-  useEffect(()=>{
-    const controller=new AbortController();
-    setLoading(true);setError('');
-    listCellar(query,{limit:PAGE_SIZE,offset,signal:controller.signal})
-      .then(page=>{setItems(page.items);setTotal(page.total);setBottles(page.bottles)})
-      .catch(e=>{if((e as Error).name!=='AbortError')setError((e as Error).message||'Could not load your cellar')})
-      .finally(()=>{if(!controller.signal.aborted)setLoading(false)});
-    return()=>controller.abort();
-  },[query,offset,reloadSeq]);
+  // One answer per filter and page. A write through the app makes it ask again,
+  // and `reload` covers the changes that are not this device's writes.
+  const listKey=useMemo(()=>['cellar','list',query.toString(),offset],[query,offset]);
+  const list=useLoad(listKey,signal=>listCellar(query,{limit:PAGE_SIZE,offset,signal}),{keepPrevious:true});
+  const items=list.data?.items??NO_HOLDINGS,total=list.data?.total??0,bottles=list.data?.bottles??0;
+  const loading=list.loading,reload=list.retry;
+  const error=actionError||(list.failed?list.error||'Could not load your cellar':'');
 
   const update=useCallback((key:string,value:string)=>{
     const next=new URLSearchParams(params);
@@ -75,8 +73,8 @@ export function CellarScope(){
 
   async function drop(holding:CellarHolding){
     if(!window.confirm(`Remove ${holding.bottles} bottle${holding.bottles===1?'':'s'} of ${holding.wineName} from your cellar? This does not log a tasting.`))return false;
-    setBusyId(holding.id);
-    try{await removeHolding(holding.id);showToast('Removed from your cellar');setReloadSeq(seq=>seq+1);return true}
+    setBusyId(holding.id);setError('');
+    try{await removeHolding(holding.id);showToast('Removed from your cellar');reload();return true}
     catch(e){setError((e as Error).message||'Could not remove those bottles');return false}
     finally{setBusyId('')}
   }
@@ -84,8 +82,8 @@ export function CellarScope(){
   async function adjust(holding:CellarHolding,delta:number){
     const next=holding.bottles+delta;
     if(next<0)return;
-    setBusyId(holding.id);
-    try{await updateHolding(holding.id,{bottles:next});setReloadSeq(seq=>seq+1)}
+    setBusyId(holding.id);setError('');
+    try{await updateHolding(holding.id,{bottles:next});reload()}
     catch(e){setError((e as Error).message||'Could not update those bottles')}
     finally{setBusyId('')}
   }
@@ -168,12 +166,12 @@ export function CellarScope(){
         obvious way out of the sheet after pressing the button is Cancel - which
         saves nothing and so reloaded nothing. The star only appeared on the
         next visit to the page. */}
-    {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);setReloadSeq(seq=>seq+1)}}
-      onVintageResearched={()=>setReloadSeq(seq=>seq+1)}/>}
-    {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);setReloadSeq(seq=>seq+1)}}
-      onVintageResearched={()=>setReloadSeq(seq=>seq+1)}
+    {adding&&<AddToCellarSheet onClose={()=>setAdding(false)} onAdded={()=>{setAdding(false);reload()}}
+      onVintageResearched={()=>reload()}/>}
+    {editing&&<AddToCellarSheet holding={editing} onClose={()=>setEditing(null)} onAdded={()=>{setEditing(null);reload()}}
+      onVintageResearched={()=>reload()}
       onRemove={async holding=>{const removed=await drop(holding);if(removed)setEditing(null)}}/>}
     {viewingVintage&&<VintageResearchDialog wine={viewingVintage} initialWindow={viewingVintage.vintageWindow}
-      onClose={()=>setViewingVintage(null)} onResearched={()=>setReloadSeq(seq=>seq+1)}/>}
+      onClose={()=>setViewingVintage(null)} onResearched={()=>reload()}/>}
   </>;
 }
