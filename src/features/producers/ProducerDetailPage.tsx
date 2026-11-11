@@ -1,5 +1,6 @@
 import { FriendResearchStatus } from '../auth/FriendResearchStatus';
 import { PageSkeleton } from '../../components/PageSkeleton';
+import { readShared,useLoad } from '../../lib/query/client';
 import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
@@ -124,8 +125,12 @@ const suggestionReason:Record<ProducerNameSuggestion['reason'],string>={
   spelling:'a slightly different spelling'
 };
 export function ProducerDetailPage(){
- const {id=''}=useParams(),{state:navState}=useLocation(),[producer,setProducer]=useState<ProducerDetail>(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedGroups,setCollapsedGroups]=useState<Set<string>>(readCollapsedGroups),[storedAxis,setStoredAxis]=useState<RangeAxis|null>(readStoredAxis),[rangeFilter,setRangeFilter]=useState(''),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
+ const {id=''}=useParams(),{state:navState}=useLocation(),[available,setAvailable]=useState<ProducerSummary[]>([]),[availableLoaded,setAvailableLoaded]=useState(false),[availableLoading,setAvailableLoading]=useState(false),[availableError,setAvailableError]=useState(''),[selectedAlias,setSelectedAlias]=useState(''),[primaryName,setPrimaryName]=useState(''),[loading,setLoading]=useState(true),[error,setError]=useState(''),[notice,setNotice]=useState(''),[researching,setResearching]=useState(false),[researchRun,setResearchRun]=useState<ProducerResearchRun|null>(null),[researchCancelling,setResearchCancelling]=useState(false),[merging,setMerging]=useState(false),[unlinking,setUnlinking]=useState(''),[savingPrimary,setSavingPrimary]=useState(false),[collapsedGroups,setCollapsedGroups]=useState<Set<string>>(readCollapsedGroups),[storedAxis,setStoredAxis]=useState<RangeAxis|null>(readStoredAxis),[rangeFilter,setRangeFilter]=useState(''),[fixingKey,setFixingKey]=useState(''),[mergeTargetKey,setMergeTargetKey]=useState(''),[catalogBusy,setCatalogBusy]=useState(false),[deleting,setDeleting]=useState(false),[removingPhoto,setRemovingPhoto]=useState(false),[friendOperation,setFriendOperation]=useState(''),[nameSuggestions,setNameSuggestions]=useState<ProducerNameSuggestion[]>([]),[confirmingName,setConfirmingName]=useState('');
  const nav=useNavigate(),account=getAccount();
+ // The producer is the shared copy, so a save made anywhere makes this page ask
+ // again. `loading` and `error` stay here because they also cover the research
+ // status that is read alongside it.
+ const producerKey=useMemo(()=>['producer',id],[id]),loadProducer=()=>getProducer(id),loadedProducer=useLoad(producerKey,loadProducer),producer=loadedProducer.data;
  const memberView=account?.role==='member';
  const technicalView=account?.role==='owner';
  // The wine range is the expensive half of producer research, so members get the
@@ -134,7 +139,7 @@ export function ProducerDetailPage(){
  const lwinRange=rangeAllowed&&producer?.catalogSource==='lwin';
  const researchPoll=useRef<Poller|undefined>(undefined);
  function stopResearchTimers(){researchPoll.current?.stop();researchPoll.current=undefined}
- async function reload(){const detail=await getProducer(id);setProducer(detail);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
+ async function reload(){const detail=await readShared(producerKey,loadProducer);setPrimaryName(detail.canonicalName);setSelectedAlias('')}
  async function refreshAvailable(){const directory=await listProducers();setAvailable(producerLinkChoices(directory.items.filter(item=>!item.sharedOnly),id));setAvailableLoaded(true);setSelectedAlias('')}
  // The whole producer directory is a big read, and linking an alias is rare, so
  // it is fetched when someone asks to link rather than on every producer visit.
@@ -157,7 +162,7 @@ export function ProducerDetailPage(){
  }
  useEffect(()=>{
   let active=true;
-  setLoading(true);setProducer(undefined);setAvailable([]);setAvailableLoaded(false);setAvailableError('');setError('');
+  setLoading(true);setAvailable([]);setAvailableLoaded(false);setAvailableError('');setError('');
   Promise.all([reload(),id.startsWith('shared::')?Promise.resolve(null):getProducerResearchStatus(id).catch(()=>null)]).then(([,run])=>{
    if(!active)return;if(run)watchResearch(run);
   }).catch(e=>{if(active)setError(e.message)}).finally(()=>{if(active)setLoading(false)});
@@ -409,7 +414,7 @@ export function ProducerDetailPage(){
   return readBackTarget(id,'producer')??PRODUCERS_BACK;
  },[navState,id]);
  const research=useResearchTranslation({profile:producer?.profile??'',winemakingPractices:producer?.winemakingPractices??''}),copy=RESEARCH_COPY[research.lang];
- if(loading)return <PageSkeleton label="Loading producer…"/>;
+ if(loading||loadedProducer.loading)return <PageSkeleton label="Loading producer…"/>;
  // A producer that could not be fetched is worth asking for again: without this
  // the message stayed until the app was restarted.
  if(!producer)return <div className="producer-load-error" role="alert"><p>{error||'Producer not found'}</p>

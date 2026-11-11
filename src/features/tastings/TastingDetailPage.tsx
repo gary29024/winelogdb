@@ -1,11 +1,11 @@
-import { useEffect,useState } from 'react';
+import { useMemo,useState } from 'react';
 import { showToast } from '../../components/toast';
 import { PageSkeleton } from '../../components/PageSkeleton';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { WineImage } from '../wines/WineImage';
 import { linkFrom } from '../wines/backTarget';
 import { deleteTasting,detachWineFromTasting,endTasting,getTasting,reopenTasting,updateTasting,
-  type Tasting,type TastingDocument,type TastingWine } from './api';
+  type Tasting,type TastingDetail,type TastingDocument,type TastingWine } from './api';
 import { setActiveTasting } from './useActiveTasting';
 import { TastingDocuments } from './TastingDocuments';
 import '../../tastings.css';
@@ -13,6 +13,7 @@ import { ShareStorySheet } from '../share/ShareStorySheet';
 import type { StoryCard } from '../share/renderStoryCollage';
 import { FriendTagDialog } from '../wines/FriendTagDialog';
 import { LoadError } from '../../components/LoadError';
+import { setLoaded,useLoad } from '../../lib/query/client';
 import { getTastingFriendTags,listFriendTags,setTastingFriendTags,type FriendTag } from '../wines/friendTags';
 
 const dateLabel=(value:string|null)=>{
@@ -49,25 +50,23 @@ function Lineup({tastingId,name,wines,onRemoved}:{tastingId:string;name:string;w
     </li>)}</ol>;
 }
 
+const NO_WINES:TastingWine[]=[],NO_DOCUMENTS:TastingDocument[]=[];
+
 /** One evening: its lineup in pour order, its wine list, and the way to edit it. */
 export function TastingDetailPage(){
   const {id=''}=useParams(),navigate=useNavigate();
-  const [tasting,setTasting]=useState<Tasting|null>(null),[wines,setWines]=useState<TastingWine[]>([]),[documents,setDocuments]=useState<TastingDocument[]>([]);
-  const [loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false),[attempt,setAttempt]=useState(0);
+  // The page shows the shared copy of this tasting and writes its own edits
+  // back into it, so the list and the strip never hold a different answer.
+  const key=useMemo(()=>['tasting',id],[id]);
+  const loaded=useLoad(key,()=>getTasting(id),{skip:!id}),loading=loaded.loading;
+  const tasting=loaded.data?.tasting??null,wines=loaded.data?.wines??NO_WINES,documents=loaded.data?.documents??NO_DOCUMENTS;
+  const setTasting=(next:Tasting)=>setLoaded<TastingDetail>(key,detail=>({...detail,tasting:next}));
+  const setWines=(change:(previous:TastingWine[])=>TastingWine[])=>setLoaded<TastingDetail>(key,detail=>({...detail,wines:change(detail.wines)}));
+  const setDocuments=(next:TastingDocument[])=>setLoaded<TastingDetail>(key,detail=>({...detail,documents:next}));
+  const [error,setError]=useState(''),[busy,setBusy]=useState(false);
   const [storyCard,setStoryCard]=useState<StoryCard|null>(null);
   const [tagOpen,setTagOpen]=useState(false),[tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]),[tagBusy,setTagBusy]=useState(false),[tagError,setTagError]=useState('');
   const [editing,setEditing]=useState(false),[nameDraft,setNameDraft]=useState(''),[venueDraft,setVenueDraft]=useState('');
-
-  useEffect(()=>{
-    if(!id)return;
-    let active=true;setLoading(true);setError('');
-    getTasting(id).then(detail=>{
-      if(!active)return;
-      setTasting(detail.tasting);setWines(detail.wines);setDocuments(detail.documents);
-      setNameDraft(detail.tasting.name);setVenueDraft(detail.tasting.venue??'');
-    }).catch(e=>{if(active)setError((e as Error).message)}).finally(()=>{if(active)setLoading(false)});
-    return()=>{active=false};
-  },[id,attempt]);
 
   const open=Boolean(tasting?.startedAt&&!tasting.endedAt);
   const rated=wines.filter(wine=>wine.rating!=null).map(wine=>wine.rating as number);
@@ -114,7 +113,7 @@ export function TastingDetailPage(){
   }
 
   if(loading)return <PageSkeleton label="Loading tasting…"/>;
-  if(!tasting)return <article className="tasting-detail"><Link className="back-pill" to="/tastings">← Tastings</Link>{error?<LoadError error={error} fallback="This tasting could not be loaded." onRetry={()=>setAttempt(value=>value+1)}/>:<p role="alert">That tasting no longer exists.</p>}</article>;
+  if(!tasting)return <article className="tasting-detail"><Link className="back-pill" to="/tastings">← Tastings</Link>{loaded.failed?<LoadError error={loaded.error} fallback="This tasting could not be loaded." onRetry={loaded.retry}/>:<p role="alert">That tasting no longer exists.</p>}</article>;
 
   return <article className="tasting-detail">
     <Link className="back-pill" to="/tastings">← Tastings</Link>
@@ -163,7 +162,7 @@ export function TastingDetailPage(){
         }))
       })}>Share to a story</button>}
       <Link className="button" to={`/journal?attachTo=${id}`}>Add from journal</Link>
-      <button type="button" onClick={()=>setEditing(true)} disabled={busy}>Rename / venue</button>
+      <button type="button" onClick={()=>{setNameDraft(tasting.name);setVenueDraft(tasting.venue??'');setEditing(true)}} disabled={busy}>Rename / venue</button>
 
     </div></details>}
 
