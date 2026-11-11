@@ -53,7 +53,11 @@ export const queryClient = new QueryClient({
  * `summariesChanged` calls - makes them stale. A cellar write or a favourite
  * that was already set must not throw away an answer that is still true.
  */
-export type ReadPolicy = { summary?: boolean };
+export type ReadPolicy = {
+  summary?: boolean;
+  /** Do not ask yet - there is no id to ask about. The screen stays loading. */
+  skip?: boolean;
+};
 
 const SUMMARY_FRESH_MS = 30_000;
 const isSummary = (query: Query) => query.meta?.summary === true;
@@ -63,6 +67,7 @@ function readOptions<T>(key: QueryKey, load: () => Promise<T>, policy: ReadPolic
     queryKey: key,
     queryFn: load,
     ...(policy.summary ? { staleTime: SUMMARY_FRESH_MS, meta: { summary: true } } : {}),
+    ...(policy.skip ? { enabled: false } : {}),
   };
 }
 
@@ -115,6 +120,20 @@ export async function readShared<T>(key: QueryKey, load: () => Promise<T>, polic
     if (isCancelledError(error)) return queryClient.fetchQuery(options);
     throw error;
   }
+}
+
+/**
+ * Put a newer answer in place of the one a screen is showing.
+ *
+ * For a screen that edits what it loaded: the server's reply to a save is the
+ * record as it now stands, and showing it should not wait for another read. An
+ * updater that is given nothing - the record has not been read - changes nothing.
+ */
+export function setLoaded<T>(key: QueryKey, next: T | ((previous: T) => T)) {
+  queryClient.setQueryData<T>(key, (previous) => {
+    if (typeof next !== 'function') return next;
+    return previous === undefined ? previous : (next as (previous: T) => T)(previous);
+  });
 }
 
 /**

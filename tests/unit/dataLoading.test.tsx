@@ -247,6 +247,40 @@ describe('a summary read outside a screen', () => {
   });
 });
 
+describe('a screen that edits what it loaded', () => {
+  it('shows the saved record at once, without another read', async () => {
+    const load = vi.fn(async () => ({ name: 'Before' }));
+    function Editor() {
+      const { data } = query.useLoad(['record'], load);
+      return <p>{data?.name}</p>;
+    }
+    await show(<Editor />);
+    await settle();
+    await act(async () => query.setLoaded<{ name: string }>(['record'], (record) => ({ ...record, name: 'After' })));
+    expect(host!.textContent).toBe('After');
+    expect(load).toHaveBeenCalledTimes(1);
+  });
+
+  it('changes nothing when the record has not been read', () => {
+    const change = vi.fn((record: { name: string }) => record);
+    query.setLoaded<{ name: string }>(['unread'], change);
+    expect(change).not.toHaveBeenCalled();
+    expect(query.queryClient.getQueryData(['unread'])).toBeUndefined();
+  });
+
+  it('waits, still loading, while there is no id to ask about', async () => {
+    const load = vi.fn(async () => 'never');
+    function Waiting() {
+      const { loading } = query.useLoad(['record', ''], load, { skip: true });
+      return <p>{loading ? 'loading' : 'done'}</p>;
+    }
+    await show(<Waiting />);
+    await settle();
+    expect(host!.textContent).toBe('loading');
+    expect(load).not.toHaveBeenCalled();
+  });
+});
+
 describe('screens moved onto the shared loader', () => {
   const source = (path: string) => readFileSync(join(process.cwd(), path), 'utf8');
 
@@ -260,5 +294,19 @@ describe('screens moved onto the shared loader', () => {
     const text = source(path);
     expect(text).toMatch(/useLoad\(|useJourneyData\(|useAchievementProgress\(/);
     expect(text).not.toMatch(/setLoading|setError|useEffect/);
+  });
+});
+
+describe('detail pages show the shared copy of their record', () => {
+  const source = (path: string) => readFileSync(join(process.cwd(), path), 'utf8');
+
+  it.each([
+    ['src/features/tastings/TastingDetailPage.tsx', /useState<Tasting\|null>/],
+    ['src/features/wines/DetailPage.tsx', /useState<WineDetail>/],
+    ['src/features/producers/ProducerDetailPage.tsx', /useState<ProducerDetail>/],
+  ])('%s keeps no private copy', (path, privateCopy) => {
+    const text = source(path);
+    expect(text).toMatch(/useLoad\(/);
+    expect(text).not.toMatch(privateCopy);
   });
 });

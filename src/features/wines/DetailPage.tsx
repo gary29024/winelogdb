@@ -10,6 +10,7 @@ import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { isChampagne } from '../../lib/wine/champagneExtraction';
 import { hasSparklingDetails } from '../../lib/wine/sparklingDetails';
 import { useEffect,useMemo,useRef,useState } from 'react';
+import { readShared,setLoaded,useLoad } from '../../lib/query/client';
 import { Link,useLocation,useNavigate,useParams } from 'react-router-dom';
 import type { DeepSearchResult } from '../../lib/db/schema';
 import { addWineImages,applyWineReferenceSuggestion,cancelWineDeepSearch,checkWineDeepSearchStatus,deleteWine,deleteWineImage,getWine,getWineDeepSearchStatus,setWineFavorite,startWineDeepSearch,type WineDetail,type WineResearchRun } from './api';
@@ -77,7 +78,11 @@ function ClaimEvidence({deep,field}:{deep:DeepSearchResult;field:DeepField}){
 
 
 export function DetailPage(){
- const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[wine,setWine]=useState<WineDetail>(),[loadError,setLoadError]=useState<unknown>(null),[loadAttempt,setLoadAttempt]=useState(0),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
+ const {id=''}=useParams(),nav=useNavigate(),{state}=useLocation(),[loadAttempt,setLoadAttempt]=useState(0),[favoriteBusy,setFavoriteBusy]=useState(false),[referenceBusy,setReferenceBusy]=useState<string>(''),[referenceError,setReferenceError]=useState(''),[deepState,setDeepState]=useState<DeepState>('idle'),[deepError,setDeepError]=useState(''),[deepRun,setDeepRun]=useState<WineResearchRun|null>(null),[deepNotice,setDeepNotice]=useState(''),[deepCancelling,setDeepCancelling]=useState(false),[selectedImage,setSelectedImage]=useState<string>(),[selectedGroupSource,setSelectedGroupSource]=useState<string>(),[openDeepFields,setOpenDeepFields]=useState<Set<DeepField>>(readOpenDeepFields),[photoBusy,setPhotoBusy]=useState(false),[photoError,setPhotoError]=useState(''),[friendOperation,setFriendOperation]=useState('');
+ // The wine is the shared copy: this page shows it and writes its own edits
+ // back into it, and any save made elsewhere makes the page ask again.
+ const wineKey=useMemo(()=>['wine',id],[id]),loadWine=()=>getWine(id),loadedWine=useLoad(wineKey,loadWine),wine=loadedWine.data;
+ const setWine=(next:WineDetail|((current:WineDetail)=>WineDetail))=>setLoaded<WineDetail>(wineKey,next);
  const technicalView=getAccount()?.role==='owner';
  const [deepChecking,setDeepChecking]=useState(false);
  const deepHeld=deepSearchHeld(deepRun);
@@ -86,13 +91,15 @@ export function DetailPage(){
  const copy=RESEARCH_COPY[research.lang];
  const pollRef=useRef<Poller|undefined>(undefined);
  function stopDeepTimers(){pollRef.current?.stop();pollRef.current=undefined}
- async function reloadWine(){const next=await getWine(id);setWine(next);return next}
+ const reloadWine=()=>readShared(wineKey,loadWine);
  function watchDeepSearch(run:WineResearchRun){
   stopDeepTimers();setDeepRun(run);if(run.waitingForFriend&&run.creditOperationId){setFriendOperation(run.creditOperationId);setDeepState('idle');return}setFriendOperation('');setDeepState(run.status==='running'?'running':run.status==='failed'?'error':'idle');if(run.status!=='running')return;
   const poll=async()=>{const next=await getWineDeepSearchStatus(id,run.requestId).catch(()=>null);if(!next)return;setDeepRun(next);if(next.status==='running')return;stopDeepTimers();if(next.status==='complete'){await reloadWine().catch(()=>undefined);setDeepState('idle');setDeepError('');setDeepNotice(`Deep Search completed${next.durationMs!=null?` in ${(next.durationMs/1000).toFixed(1)}s`:''}.`)}else{setDeepError(technicalView?`${next.message||'The background Deep Search failed.'} · Request ${next.requestId}`:memberResearchFailure(next));setDeepState('error')}};
   pollRef.current=startBackoffPoll(poll);void poll();
  }
- useEffect(()=>{let active=true;setLoadError(null);Promise.all([getWine(id),getWineDeepSearchStatus(id).catch(()=>null)]).then(([next,run])=>{if(!active)return;setWine(next);if(run&&(run.status==='running'||run.status==='failed'))watchDeepSearch(run)}).catch(error=>{if(active)setLoadError(error??true)});return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
+ // A run is only watched once the wine itself has loaded; a wine that failed
+ // to load shows its own error, from the shared copy.
+ useEffect(()=>{let active=true;Promise.all([readShared(wineKey,loadWine),getWineDeepSearchStatus(id).catch(()=>null)]).then(([,run])=>{if(!active)return;if(run&&(run.status==='running'||run.status==='failed'))watchDeepSearch(run)}).catch(()=>undefined);return()=>{active=false;stopDeepTimers()}// eslint-disable-next-line react-hooks/exhaustive-deps
  },[id,loadAttempt]);
  async function checkDeepSearch(){
   if(deepChecking||deepCancelling)return;setDeepChecking(true);setDeepError('');setDeepNotice('');
@@ -172,7 +179,7 @@ export function DetailPage(){
   return readBackTarget(id)??JOURNAL_BACK;
  },[state,id]);
  // A failed first load used to leave "Loading wine…" on screen for good.
- if(!wine&&loadError)return <LoadError error={loadError===true?'':loadError} fallback="This wine could not be loaded." onRetry={()=>setLoadAttempt(value=>value+1)}/>;
+ if(!wine&&loadedWine.failed)return <LoadError error={loadedWine.error} fallback="This wine could not be loaded." onRetry={()=>{loadedWine.retry();setLoadAttempt(value=>value+1)}}/>;
  if(!wine)return <PageSkeleton label="Loading wine…"/>;
  // Derived rather than stored: the denomination is a fact about the appellation,
  // so reading it from the tree at display time keeps every wine current with the
