@@ -1,3 +1,4 @@
+import { dataChanged,forgetLoadedData } from '../query/client';
 import { requiresAiReservation as isAi } from '../ai/reservedRoutes';
 
 export type Account={id:string;email:string;display_name:string;handle?:string|null;role:'owner'|'member';status:string;tour_state?:string};
@@ -19,7 +20,7 @@ export const getSession=()=>account?.id??null;
 export const hasSession=()=>account!==null;
 export const accountStorageKey=(key:string)=>`${key}:${getSession()??'signed-out'}`;
 export const authHeaders=(json=false):Record<string,string>=>({...account?{'X-WineLog-Account':account.id}:{},...json?{'Content-Type':'application/json'}:{}});
-export function clearSession(){account=null;generation++;pendingReads.clear();localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
+export function clearSession(){account=null;generation++;pendingReads.clear();forgetLoadedData();localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
 export async function bootstrapAccount(){
  const response=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
  const body=response.ok?await response.json() as {user:Account;friendRequests?:number}:null,next=body?.user??null;
@@ -90,6 +91,8 @@ export async function apiFetch(input:RequestInfo|URL,init?:RequestInit,options:A
  }
  if(atStart!==generation||identity!==getSession())throw new Error('Account changed; discard the previous response');
  if(response.status===401){clearSession();location.assign('/login')}
+ // A write that landed makes what screens read earlier a guess; see dataChanged.
+ if(method!=='GET'&&response.ok)dataChanged();
  return response;
 }
 

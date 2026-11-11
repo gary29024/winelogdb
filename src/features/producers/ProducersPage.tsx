@@ -1,7 +1,8 @@
 import { PageHeader } from '../../components/PageHeader';
 import { PageSkeleton } from '../../components/PageSkeleton';
+import { useLoad } from '../../lib/query/client';
 import { accountStorageKey,getAccount } from '../../lib/auth/client';
-import { useCallback,useEffect,useMemo,useState } from 'react';
+import { useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProducers,type ProducerSummary } from './api';
 import '../../producer.css';
@@ -46,12 +47,10 @@ const regionPanelId=(country:string,region:string)=>`producer-region-${slug(coun
 const regionKey=(country:string,region:string)=>`${country}\u0000${region}`;
 
 export function ProducersPage(){
- const [items,setItems]=useState<ProducerSummary[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[query,setQuery]=useState(''),[expandedCountries,setExpandedCountries]=useState<Set<string>>(()=>readExpanded(COUNTRY_OPEN_KEY)),[expandedRegions,setExpandedRegions]=useState<Set<string>>(()=>readExpanded(REGION_OPEN_KEY));
- const showRange=getAccount()?.role!=='member';
  // A failed load used to be terminal: the message stayed until the app was
- // restarted, because nothing ever asked again. Retrying clears it.
- const load=useCallback(()=>{setLoading(true);setError('');return listProducers().then(x=>setItems(x.items)).catch(e=>setError(e.message||'Could not load producers')).finally(()=>setLoading(false))},[]);
- useEffect(()=>{void load()},[load]);
+ // restarted, because nothing ever asked again. `retry` asks again.
+ const {data,loading,error,retry}=useLoad(['producers'],listProducers),items=useMemo(()=>data?.items??[],[data]),[query,setQuery]=useState(''),[expandedCountries,setExpandedCountries]=useState<Set<string>>(()=>readExpanded(COUNTRY_OPEN_KEY)),[expandedRegions,setExpandedRegions]=useState<Set<string>>(()=>readExpanded(REGION_OPEN_KEY));
+ const showRange=getAccount()?.role!=='member';
  const filteredItems=useMemo(()=>{
   const needle=searchKey(query);if(!needle)return items;
   const tokens=needle.split(/\s+/).filter(Boolean);
@@ -100,7 +99,7 @@ export function ProducersPage(){
  return <section className="producer-page"><PageHeader title="Producers" subtitle="Browse domaines by where they are physically based: country, broad wine region, then commune — not by the appellations represented in their wines."/>
   <div className="producer-search"><div className="producer-search-field"><span aria-hidden="true"><AppIcon kind="search"/></span><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search producers…" aria-label="Search producers"/>{hasQuery&&<button type="button" onClick={()=>setQuery('')} aria-label="Clear producer search">Clear</button>}</div></div>
   {!loading&&!error&&<ResearchCampaignLink unresearched={items.filter(item=>!item.sharedOnly&&!item.researchedAt).length}/>}
-  {loading?<PageSkeleton label="Loading producers…" shape="list"/>:error?<div className="producer-load-error" role="alert"><p>{error}</p><button type="button" onClick={()=>{void load()}}>Try again</button></div>:groups.length?<>
+  {loading?<PageSkeleton label="Loading producers…" shape="list"/>:error?<div className="producer-load-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Try again</button></div>:groups.length?<>
   <div className="producer-range-head producer-countries-head"><strong>{groups.length} {groups.length===1?'country':'countries'} · {hasQuery?`${filteredItems.length} of ${items.length}`:filteredItems.length} producer{(hasQuery?items.length:filteredItems.length)===1?'':'s'}</strong>{collapsible&&<button type="button" className="range-toggle-all" onClick={toggleAllCountries}>{allOpen?'Collapse all':'Expand all'}</button>}</div>
   <div className="producer-countries">{groups.map(group=><section className={`producer-country${isOpen(group.country)?'':' is-collapsed'}`} key={group.country}><h2>{collapsible?<button type="button" className="country-group-toggle" aria-expanded={isOpen(group.country)} aria-controls={countryPanelId(group.country)} onClick={()=>toggleCountry(group.country)}><span className="country-group-name">{group.country}</span><span className="catalog-group-count">{countryCount(group)}</span><span className="catalog-chevron" aria-hidden="true"/></button>:group.country}</h2><div className="producer-country-body" id={countryPanelId(group.country)} hidden={!isOpen(group.country)}>{group.regions.map(region=><div className={`producer-region${isRegionOpen(group,region.region)?'':' is-collapsed'}`} key={region.region}><h3>{regionsCollapsible(group)?<button type="button" className="region-group-toggle" aria-expanded={isRegionOpen(group,region.region)} aria-controls={regionPanelId(group.country,region.region)} onClick={()=>toggleRegion(group.country,region.region)}><span className="region-group-name">{region.region}</span><span className="catalog-group-count">{regionCount(region)}</span><span className="catalog-chevron" aria-hidden="true"/></button>:region.region}</h3><div className="producer-region-body" id={regionPanelId(group.country,region.region)} hidden={!isRegionOpen(group,region.region)}>{region.communes.map(commune=><div className="producer-commune" key={commune.commune}><h4>{commune.commune}</h4><div className="producer-list">{commune.producers.map(p=><Link to={`/producers/${p.id}`} className="producer-row" key={p.id}><div><strong>{p.canonicalName}</strong></div><div className="producer-counts"><span>{p.tastedCount} tasted</span>{showRange&&p.catalogCount>0&&<span>{p.catalogCount} wines in range</span>}</div></Link>)}</div></div>)}</div></div>)}</div></section>)}</div></>:hasQuery?<div className="empty producer-search-empty"><h2>No matching producers</h2><p>Try a producer name, commune, region or country.</p><button type="button" onClick={()=>setQuery('')}>Clear search</button></div>:<div className="empty"><h2>No producers yet</h2><p>Add a wine and WineLog will create its stable producer identity automatically.</p></div>}
  </section>
