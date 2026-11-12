@@ -7,6 +7,14 @@ import {
   type Query,
   type QueryKey,
 } from '@tanstack/react-query';
+import {
+  clearSavedCopyMarks,
+  markSavedCopy,
+  isStandaloneCopy,
+  readKeepingCopy,
+  savedCopyMarks,
+  subscribeSavedCopies,
+} from '../offline/savedReads';
 
 // Tell screens about an answer as soon as it arrives, not one timer tick later.
 // The library's default waits for a timer, which leaves a screen on its loading
@@ -78,14 +86,31 @@ export type Loader<T> = (signal: AbortSignal) => Promise<T>;
 const SUMMARY_FRESH_MS = 30_000;
 const keptThroughWrites = (query: Query) => query.meta?.keep === true;
 
+/**
+ * Run a read, keeping a copy of its answer on the device, and fall back to that
+ * copy when the server cannot be reached at all.
+ *
+ * A saved copy is handed back as an ordinary answer, so no screen needs to know
+ * about it. It is marked stale straight away, which makes the next visit ask
+ * the server again, and it is named in the list the offline bar reads.
+ */
+function withSavedCopy<T>(key: QueryKey, read: () => Promise<T>): Promise<T> {
+  return readKeepingCopy(key, read, (at) => {
+    markSavedCopy(key, at);
+    queueMicrotask(() => void queryClient.invalidateQueries({ queryKey: key, exact: true, refetchType: 'none' }));
+  });
+}
+
 function readOptions<T>(key: QueryKey, load: Loader<T>, policy: ReadPolicy) {
   return {
     queryKey: key,
     // Asking for the signal tells the library the request may be abandoned when
     // its screen closes, so only a loader that takes one is treated that way.
-    queryFn: load.length ? ({ signal }: { signal: AbortSignal }) => load(signal) : () => (load as () => Promise<T>)(),
+    queryFn: load.length
+      ? ({ signal }: { signal: AbortSignal }) => withSavedCopy(key, () => load(signal))
+      : () => withSavedCopy(key, load as () => Promise<T>),
     ...(policy.summary ? { staleTime: SUMMARY_FRESH_MS, meta: { keep: true } } : {}),
-    ...(policy.pinned ? { staleTime: Infinity, meta: { keep: true } } : {}),
+    ...(policy.pinned ? { staleTime: Infinity, meta: { keep: true, pinned: true } } : {}),
     ...(policy.skip ? { enabled: false } : {}),
     ...(policy.keepPrevious ? { placeholderData: keepPreviousData } : {}),
   };
@@ -186,6 +211,45 @@ export function dataChanged() {
   const predicate = (query: Query) => !keptThroughWrites(query);
   queryClient.removeQueries({ type: 'inactive', predicate });
   void queryClient.invalidateQueries({ type: 'active', predicate });
+}
+
+/**
+ * The connection came back. Everything on screen is asked for again, summaries
+ * and pinned answers included, because any of it may be a saved copy.
+ */
+export function connectionReturned() {
+  clearSavedCopyMarks();
+  queryClient.removeQueries({ type: 'inactive' });
+  void queryClient.invalidateQueries({ type: 'active' });
+}
+
+/**
+ * The date of the oldest saved copy a screen is showing right now, or 0 when
+ * everything on screen came from the server.
+ */
+export function oldestSavedCopyOnScreen() {
+  let oldest = 0;
+  for (const [name, at] of savedCopyMarks()) {
+    if (isStandaloneCopy(name)) {
+      if (!oldest || at < oldest) oldest = at;
+      continue;
+    }
+    const query = queryClient.getQueryCache().find({ queryKey: JSON.parse(name) as QueryKey, exact: true });
+    // A pinned answer (the open tasting) is on every screen, so it says nothing
+    // about whether the screen in front of you is a saved copy.
+    if (query?.getObserversCount() && !query.meta?.pinned && (!oldest || at < oldest)) oldest = at;
+  }
+  return oldest;
+}
+
+/** Tell a listener whenever what is on screen, or which of it is a saved copy, changes. */
+export function subscribeSavedCopiesOnScreen(listener: () => void) {
+  const stopMarks = subscribeSavedCopies(listener);
+  const stopCache = queryClient.getQueryCache().subscribe(listener);
+  return () => {
+    stopMarks();
+    stopCache();
+  };
 }
 
 /** The account changed. Nothing read for the previous one may be shown. */

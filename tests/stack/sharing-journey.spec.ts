@@ -201,19 +201,28 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     expect(stack.unexpectedOutbound).toEqual([]);
 
     // The built app keeps itself on the device: with the network switched off a
-    // reload still opens the signed-in app and says plainly that it is offline,
-    // and the data it cannot reach is reported rather than invented.
+    // reload still opens the signed-in app, says plainly that it is offline, and
+    // shows the Journal as it was last loaded on this device, marked as a copy.
     await page.goto(`${stack.origin}/journal`);
+    await expect(page.locator('.journal-card').first()).toBeVisible();
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)) ).toBe(true);
     await page.context().setOffline(true);
     await page.reload();
     await expect(page.locator('.offline-bar')).toContainText('You are offline');
     await expect(page.getByRole('heading', { level: 1, name: 'Journal' })).toBeVisible();
+    await expect(page.locator('.offline-bar')).toContainText('Showing the copy saved on this phone today');
+    await expect(page.locator('.journal-card').first()).toBeVisible();
+    // A view never loaded on this device has no copy, and says so instead of inventing one.
+    await page.goto(`${stack.origin}/journal?query=never-searched-before`);
     await expect(page.getByText('You appear to be offline')).toBeVisible();
+    // A wine opened earlier in this journey is readable too, heading and all.
+    await page.goto(`${stack.origin}/wines/${wineId}`);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Clos de la Roche');
+    await expect(page.locator('.offline-bar')).toContainText('Showing the copy saved on this phone');
     await page.context().setOffline(false);
     await expect(page.locator('.offline-bar')).toHaveCount(0);
-    console.log('Checkpoint: app opens offline from the saved copy');
+    console.log('Checkpoint: app and Journal open offline from the saved copies');
     expect(stack.unexpectedOutbound).toEqual([]);
     passed = true;
   } finally { await stack.close({ preserve: !passed }); }
