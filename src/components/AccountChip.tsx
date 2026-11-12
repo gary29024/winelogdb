@@ -1,7 +1,7 @@
 import { useEffect,useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ACCOUNT_UPDATED,FRIEND_REQUESTS_UPDATED,getAccount,getFriendRequestCount } from '../lib/auth/client';
-import '../accountChip.css';
+import './accountChip.css';
 
 /**
  * The top-right way into Account & friends: the reader's initial and name in a

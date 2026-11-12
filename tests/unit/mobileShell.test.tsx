@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readStyle } from './support/styleSheets';
 import { act } from 'react';
 import { createRoot,type Root } from 'react-dom/client';
 import { MemoryRouter,Route,Routes } from 'react-router-dom';
@@ -10,7 +9,7 @@ import { Layout } from '../../src/components/Layout';
 declare global{var IS_REACT_ACT_ENVIRONMENT:boolean}
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 
-const shellCss=readFileSync(resolve(process.cwd(),'src/mobileShell.css'),'utf8');
+const shellCss=readStyle('mobileShell.css');
 
 let root:Root|null=null,host:HTMLDivElement|null=null;
 

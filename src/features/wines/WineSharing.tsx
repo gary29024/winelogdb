@@ -2,7 +2,7 @@ import { useCallback,useRef,useState } from 'react';
 import { AppIcon } from '../../components/AppIcons';
 import { FriendTagDialog } from './FriendTagDialog';
 import { getWineFriendTags,listFriendTags,setWineFriendTags,type FriendTag } from './friendTags';
-import '../../wineSharing.css';
+import './wineSharing.css';
 
 /** How many friends this wine is tagged with, or a sharer to name on a wine
  *  someone else owns. The count arrives with the wine, so the button is right

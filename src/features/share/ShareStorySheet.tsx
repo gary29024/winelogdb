@@ -4,7 +4,7 @@ import { drawStoryCard } from './renderStoryCollage';
 import { loadStoryPhotos,renderStoryFile,shareStoryFile } from './shareStory';
 import { fetchBottleFrames,measureBottleFrame,thumbnailOf } from './bottleFrameApi';
 import type { LoadedPhoto,StoryCard,StoryFrames } from './renderStoryCollage';
-import '../../shareStory.css';
+import './shareStory.css';
 
 /**
  * The card, shown before it is shared, and the wines it is made of.

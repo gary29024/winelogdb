@@ -2,7 +2,7 @@ import { Component,lazy,Suspense,useId,useRef,useState,type ReactNode } from 're
 import { createPortal } from 'react-dom';
 import type { BurgundyVillageMapTarget } from '../../lib/places/burgundyVillageMap';
 import { useModalFocus } from '../../components/useModalFocus';
-import '../../villageMap.css';
+import './villageMap.css';
 
 const VillageMap=lazy(()=>import('./VillageMap'));
 

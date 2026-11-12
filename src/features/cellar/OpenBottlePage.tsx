@@ -9,7 +9,7 @@ import { authHeaders,clearSession } from '../../lib/auth/client';
 import { applyLabelDifferences,compareToLabel,type CheckField,type CheckableWine,type LabelDifference } from './labelCheck';
 import { bottleLabel,getHolding,type CellarHolding } from './api';
 import type { WinePhoto } from '../wines/api';
-import '../../cellar.css';
+import './cellar.css';
 import { stripAiTransportMetadata } from '../../lib/credits/response';
 
 type Chosen=WinePhoto&{preview:string;recognitionFile:File};

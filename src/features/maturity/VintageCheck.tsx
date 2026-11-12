@@ -4,7 +4,7 @@ import { askableVintage,maturityPair,vintageCell,vintageScoreLabel,windowShift,t
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';
 import { getVintageWindow,lookUpVintageWindow,observeVintageResearch,type VintageLookupResult } from './api';
 import { DrinkingWindow } from './DrinkingWindow';
-import '../../maturity.css';
+import './maturity.css';
 
 type Wine=VintageSubject&{classification?:string|null};
 type Props={wine:Wine;onResearched?:()=>void;initialWindow?:VintageWindow|null;debounceMs?:number};

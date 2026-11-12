@@ -6,8 +6,8 @@ import { getProducer,resolveProducer,type ProducerResolution } from '../producer
 import { resolvePlace } from '../../lib/places/resolve';
 // The suggestion banner is the scan form's, down to the class names, so it is
 // the same control in both places rather than a second one that looks like it.
-import '../../producerResolution.css';
-import '../../wineFormCompact.css';
+import '../../styles/producerResolution.css';
+import '../../styles/wineFormCompact.css';
 
 /** A wine this producer is known to make, however the app came to know it. */
 type KnownWine={name:string;appellation:string|null;style:string|null};

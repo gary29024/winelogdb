@@ -4,7 +4,7 @@ import { AchievementIcon } from './AchievementIcon';
 import { catalogueRuleTargetCount } from './customCollections';
 import { deleteCustomAchievement,getAchievementCatalogueOptions,getAchievementProgress,saveCustomAchievement } from './api';
 import type { AchievementCatalogueOptions,AchievementCatalogueRule,AchievementIconKey,AchievementProgress,CustomAchievementInput,CustomAchievementManualItem } from './types';
-import '../../achievements.css';
+import './achievements.css';
 
 const icons:AchievementIconKey[]=['first-growth','judgment-paris','beaujolais-crus','bordeaux-classification','sauternes','graves','saint-emilion','burgundy-grand-cru','gevrey-grand-cru','rhone-crus','michelin-grapes'];
 type SmartKind=AchievementCatalogueRule['type'];

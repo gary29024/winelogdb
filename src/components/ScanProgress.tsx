@@ -1,5 +1,5 @@
 import { useEffect,useState,type CSSProperties } from 'react';
-import '../scanProgress.css';
+import './scanProgress.css';
 
 /**
  * The glowing line that sweeps down a photograph while it is being read.

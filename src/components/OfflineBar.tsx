@@ -2,7 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { bootstrapAccount } from '../lib/auth/client';
 import { connectionReturned, oldestSavedCopyOnScreen, subscribeSavedCopiesOnScreen } from '../lib/query/client';
 import { savedLabel } from '../lib/offline/savedReads';
-import '../offline.css';
+import './offline.css';
 
 function subscribe(notify: () => void) {
   window.addEventListener('online', notify);

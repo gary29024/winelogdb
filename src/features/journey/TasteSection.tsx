@@ -4,7 +4,7 @@ import type { GrapeStat,JourneyData,RegionStat,StyleStat } from './api';
 import { buildStructureProfile,structureDisplay } from './model';
 import { buildCadence,buildCruMix,buildDrinkingAge,buildMix,favoriteRates,readDiscovery,showsRatingInsights,showsStructureInsights } from './insights';
 import { styleColorKeyFor } from './passportVisuals';
-import '../../taste.css';
+import './taste.css';
 
 /**
  * What used to be the Insights page, folded into the Passport.

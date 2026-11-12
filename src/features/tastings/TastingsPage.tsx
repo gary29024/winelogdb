@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppIcon } from '../../components/AppIcons';
 import { listTastings,type TastingSummary } from './api';
-import '../../tastings.css';
+import './tastings.css';
 import { LoadError } from '../../components/LoadError';
 import { useLoad } from '../../lib/query/client';
 

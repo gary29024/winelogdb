@@ -6,7 +6,7 @@ import { useDocumentUrl } from './useDocumentUrl';
 import { clearSheetDraft,readSheetDraft,sheetDraftAge,writeSheetDraft } from './sheetDraftStore';
 import { createTastingSheetWines,fillTastingSheetPrices,getTasting,parseTastingSheetPage,readTastingDocumentFile,
   uploadTastingDocuments,type SheetLineupWine,type SheetMatch,type Tasting,type TastingDocument } from './api';
-import '../../tastingSheet.css';
+import './tastingSheet.css';
 
 /**
  * Reading the printed wine list.

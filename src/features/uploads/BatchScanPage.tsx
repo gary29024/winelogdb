@@ -10,7 +10,7 @@ import { prepareRecognitionImage } from './prepareImage';
 import { confirmBatchWine,createBatchSession,getBatchSession,listBatchSessions,mergeSessionIntoHistory,rejectBatchWine,removeBatchSession,stageBatchWine,submitBatchSession,type BatchRecognitionItem,type BatchRecognitionSession,type BatchSessionSummary } from './batchApi';
 import { clearPendingBatchSession,listPendingBatchWines,removePendingBatchWine,savePendingBatchWines,type PendingBatchPhoto,type PendingBatchWine } from './batchUploadStore';
 import { loadBatchPreviewBlob } from './batchPreviewCache';
-import '../../batchScan.css';
+import './batchScan.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { Link,useSearchParams } from 'react-router-dom';
 import { linkFrom } from '../wines/backTarget';

@@ -1,5 +1,5 @@
 import type { useResearchTranslation } from './researchTranslation';
-import '../../researchLanguage.css';
+import './researchLanguage.css';
 
 type State=ReturnType<typeof useResearchTranslation>;
 

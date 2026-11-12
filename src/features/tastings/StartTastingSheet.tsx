@@ -2,7 +2,7 @@ import { useEffect,useRef,useState,type FormEvent } from 'react';
 import { AppIcon } from '../../components/AppIcons';
 import { localTastingDate,startTasting,type Tasting } from './api';
 import { setActiveTasting } from './useActiveTasting';
-import '../../tastings.css';
+import './tastings.css';
 
 /**
  * Starting an evening: a name, a date and optionally a venue.

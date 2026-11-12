@@ -2,7 +2,7 @@ import { useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getResearchCampaign,getResearchCampaignPlan,type ResearchCampaign } from './api';
 import { campaignSummary } from './campaignCopy';
-import '../../researchCampaign.css';
+import './researchCampaign.css';
 
 /**
  * The producer library's one line about batch research: how much of the library

@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe,expect,it,vi,beforeEach } from 'vitest';
+import { readStyle } from './support/styleSheets';
 import { cleanup,fireEvent,render,screen,waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -148,7 +149,7 @@ describe('the cellar scope of the Journal',()=>{
   it('reads as the journal list does on a phone',async()=>{
     // A stack of bordered cards fitted two to a screen. The rows share one
     // panel and a hairline apiece, the same treatment the journal already uses.
-    const css=(await import('node:fs')).readFileSync('src/cellar.css','utf8');
+    const css=readStyle('cellar.css');
     const phone=css.match(/@media \(max-width:700px\)\{[\s\S]*?\n\}/)![0];
     expect(phone).toMatch(/\.cellar-card\{[^}]*border:0/);
     expect(phone).toMatch(/\.cellar-card\{[^}]*border-bottom:1px solid var\(--sunken\)/);

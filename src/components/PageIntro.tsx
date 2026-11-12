@@ -1,4 +1,4 @@
-import '../pageIntro.css';
+import './pageIntro.css';
 
 /** Shared title and description treatment for the Journal and Passport. */
 export function PageIntro({title,description}:{title:string;description:string}){

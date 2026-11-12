@@ -9,7 +9,7 @@ import { linkFrom,rememberBackTarget } from './backTarget';
 import { WineImage } from './WineImage';
 import { LwinLinkEditor } from './LwinLinkEditor';
 import { ProducerNameReview } from './ProducerNameReview';
-import '../../referenceSuggestions.css';
+import './referenceSuggestions.css';
 
 type ReviewItem={id:string;producer:string;wineName:string;vintage:number|null;lwin7:string|null;conflict:boolean};
 type ReviewPage={items:ReviewItem[];total:number;nextCursor:string|null};

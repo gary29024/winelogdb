@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
+import { readStyle } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 
 const library=readFileSync('src/features/wines/LibraryPage.tsx','utf8');
 const layout=readFileSync('src/components/Layout.tsx','utf8');
-const styles=readFileSync('src/styles.css','utf8');
+const styles=readStyle('styles.css');
 
 describe('the journal filter disclosure',()=>{
   it('leaves search out of the fold, being the control used every visit',()=>{

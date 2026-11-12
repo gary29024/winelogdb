@@ -4,7 +4,7 @@ import { AchievementIcon } from './AchievementIcon';
 import { achievementChecklistHeading } from './collectionSections';
 import { getAchievementProgress,setAchievementMatchMode,useAchievementProgress } from './api';
 import type { AchievementMatchMode,AchievementProgress } from './types';
-import '../../achievements.css';
+import './achievements.css';
 import { linkFrom } from '../wines/backTarget';
 import { BurgundyAtlasLink } from '../../components/BurgundyAtlasLink';
 import { burgundyAtlasPlace } from '../../lib/places/burgundyAtlas';

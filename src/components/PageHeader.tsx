@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import '../pageHeader.css';
+import './pageHeader.css';
 
 /**
  * One page header, where there were four.

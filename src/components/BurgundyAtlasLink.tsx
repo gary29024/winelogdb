@@ -1,5 +1,5 @@
 import type { BurgundyAtlasPlace } from '../lib/places/burgundyAtlas';
-import '../burgundyAtlas.css';
+import './burgundyAtlas.css';
 
 export function BurgundyAtlasLink({place,compact=false}:{place:BurgundyAtlasPlace|null;compact?:boolean}){
   if(!place)return null;

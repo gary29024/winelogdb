@@ -1,4 +1,4 @@
-import '../loadError.css';
+import './loadError.css';
 
 import { loadFailureReason } from './loadFailureReason';
 

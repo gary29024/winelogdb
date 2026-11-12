@@ -4,7 +4,7 @@ import { getResearchCampaignById,listResearchCampaigns,
   type ResearchCampaign,type ResearchCampaignItem,type ResearchCampaignSummary } from './api';
 import { campaignOutcomeLine } from './campaignCopy';
 import { BATCH_RESEARCH_BACK,linkFrom } from '../wines/backTarget';
-import '../../researchCampaign.css';
+import './researchCampaign.css';
 
 const when=(value:string)=>{
   const date=new Date(value);

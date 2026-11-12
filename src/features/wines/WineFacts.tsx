@@ -9,8 +9,8 @@ import { WineVillageMap } from '../vineyards/WineVillageMap';
 // able to render .detail-classification while forgetting this import, which is
 // how a shared Village pill shipped with no styling at all; owning the import
 // here makes that impossible for any page that renders the pill.
-import '../../wineClassification.css';
-import '../../wineFacts.css';
+import './wineClassification.css';
+import './wineFacts.css';
 
 const classificationLabel:Record<string,string>={grand_cru:'Grand Cru',premier_cru:'Premier Cru',village:'Village'};
 

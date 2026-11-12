@@ -1,6 +1,6 @@
 import { useEffect,useRef } from 'react';
 import { createPortal } from 'react-dom';
-import '../imageLightbox.css';
+import './imageLightbox.css';
 import { AppIcon } from './AppIcons';
 
 type ImageLightboxProps={src:string;alt:string;onClose:()=>void};

@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs';
+import { readStyle } from './support/styleSheets';
 import { cleanup,render,screen } from '@testing-library/react';
 import { afterEach,describe,expect,it } from 'vitest';
 import { SectionLabel } from '../../src/components/SectionLabel';
 
 afterEach(()=>cleanup());
 
-const provenanceCss=readFileSync('src/sectionProvenance.css','utf8');
-const styles=readFileSync('src/styles.css','utf8');
+const provenanceCss=readStyle('sectionProvenance.css');
+const styles=readStyle('styles.css');
 
 describe('the provenance badge',()=>{
   it('says nothing at all for a derived section',()=>{

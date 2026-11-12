@@ -1,7 +1,7 @@
 import { useEffect,useRef,useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { shouldUseSemanticQuery } from '../../lib/journal/semanticQuery';
-import '../../journalSearch.css';
+import './journalSearch.css';
 
 const SEARCH_DEBOUNCE_MS=300;
 

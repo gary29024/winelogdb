@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach,beforeEach,describe,expect,it,vi } from 'vitest';
+import { readStyle } from './support/styleSheets';
 import { cleanup,fireEvent,render,screen,waitFor } from '@testing-library/react';
 import { VintageCheck } from '../../src/features/maturity/VintageCheck';
 
@@ -35,7 +36,7 @@ describe('the vintage block above the form',()=>{
     const box=container.querySelector('.vintage-check')!;
     expect(box.querySelector('.maturity-line')).not.toBeNull();
     expect(box.querySelector('.vintage-researched')).not.toBeNull();
-    const css=(await import('node:fs')).readFileSync('src/maturity.css','utf8');
+    const css=readStyle('maturity.css');
     expect(css).toMatch(/\.vintage-check\{[^}]*border:1px solid/);
     expect(css,'the inner window drops its own border').toMatch(/\.vintage-check>\.maturity-line\{[^}]*border:0/);
   });

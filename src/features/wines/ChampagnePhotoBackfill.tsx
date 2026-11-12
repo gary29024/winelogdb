@@ -7,7 +7,7 @@ import { getChampagneExtraction,startChampagneExtraction } from './champagneExtr
 import { SparklingDetailsCard } from './SparklingDetailsCard';
 import { WineImage } from './WineImage';
 import { authHeaders } from '../../lib/auth/client';
-import '../../sparklingDetails.css';
+import './sparklingDetails.css';
 
 type Props={wineId:string;imageIds:string[];details:SparklingDetails;onApply:(suggestions:SparklingDetails)=>void};
 const pending=(run:ChampagneExtractionStatus|null)=>Boolean(run&&['queued','running','submitted'].includes(run.status));

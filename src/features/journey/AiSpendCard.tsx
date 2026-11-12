@@ -1,9 +1,9 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import { getAiSpend,getAiSpendRuns,type RunHistoryKind,type UsageRun } from './api';
 import { useLoad } from '../../lib/query/client';
-import '../../journey.css';
-import '../../aiSpend.css';
-import '../../settingsCards.css';
+import './journey.css';
+import './aiSpend.css';
+import '../../styles/settingsCards.css';
 
 /**
  * What the AI has cost, per run.

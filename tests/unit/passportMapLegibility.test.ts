@@ -1,8 +1,7 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readStyle } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 
-const read=(name:string)=>readFileSync(join(process.cwd(),'src',name),'utf8');
+const read=readStyle;
 const styles=read('styles.css'),passport=read('passport.css');
 
 /** The two palettes: bare :root is light, the dark-scheme block overrides it. */

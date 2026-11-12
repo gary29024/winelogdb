@@ -1,7 +1,7 @@
 import { useEffect,useRef,useState } from 'react';
 import { apiJson } from '../../lib/auth/api';
 import type { WineDetail } from './api';
-import '../../referenceSuggestions.css';
+import './referenceSuggestions.css';
 
 export type LwinLinkPreview={requestedLwin7:string;lwin7:string;storedLwin7:string|null;displayName:string;producer:string|null;wineName:string|null;country:string|null;region:string|null;colour:string|null;productType:string|null;productSubtype:string|null;lwin11:string|null;vintage:number|null;suggestions:WineDetail['referenceSuggestions'];previewToken:string};
 export function LwinLinkEditor({wine,disabled=false,candidates=[],showStoredSummary=true,onLink,onReject}:{wine:WineDetail;disabled?:boolean;candidates?:string[];showStoredSummary?:boolean;onLink:(preview:LwinLinkPreview)=>Promise<void>;onReject:()=>Promise<void>}){

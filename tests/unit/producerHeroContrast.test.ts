@@ -1,8 +1,7 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readStyle } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 
-const read=(name:string)=>readFileSync(join(process.cwd(),'src',name),'utf8');
+const read=readStyle;
 const producer=read('producer.css'),styles=read('styles.css');
 /** Character ranges covered by a `prefers-color-scheme:dark` block. */
 const darkBlocks=(css:string)=>[...css.matchAll(/@media[^{]*prefers-color-scheme\s*:\s*dark[^{]*\{/g)].map(match=>{

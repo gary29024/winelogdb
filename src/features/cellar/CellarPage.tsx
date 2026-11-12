@@ -2,7 +2,7 @@ import { PageIntro } from '../../components/PageIntro';
 import { Link } from 'react-router-dom';
 import { JournalScopeTabs } from '../wines/JournalScopeTabs';
 import { CellarScope } from './CellarScope';
-import '../../cellar.css';
+import './cellar.css';
 
 export default function CellarPage(){
   return <section className="journal-page cellar-page">

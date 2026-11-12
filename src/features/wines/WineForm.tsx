@@ -23,8 +23,8 @@ import { FriendTagDialog } from './FriendTagDialog';
 import { listFriendTags,type FriendTag } from './friendTags';
 import { getAccount } from '../../lib/auth/client';
 import { apiJson } from '../../lib/auth/api';
-import '../../producerResolution.css';
-import '../../wineFormCompact.css';
+import '../../styles/producerResolution.css';
+import '../../styles/wineFormCompact.css';
 
 function parseBlend(value:string):GrapeBlendEntry[]{
   return value.split(',').map(x=>x.trim()).filter(Boolean).map(part=>{

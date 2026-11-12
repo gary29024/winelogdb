@@ -15,7 +15,7 @@ import { prepareRecognitionImageWithinBytes } from './prepareImage';
 import { cropGroupPhoto } from './cropGroupPhoto';
 import { nextPendingKey,savedRecognition } from './groupReviewQueue';
 import { deleteGroupScanSession,getGroupScanSession,linkGroupScanWine,listGroupScanSessions,saveGroupScanSession,type GroupScanHistoryItem } from './groupScanStore';
-import '../../groupScan.css';
+import './groupScan.css';
 import { AppIcon } from '../../components/AppIcons';
 import { linkFrom } from '../wines/backTarget';
 import { stripAiTransportMetadata } from '../../lib/credits/response';

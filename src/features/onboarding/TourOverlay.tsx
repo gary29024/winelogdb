@@ -1,7 +1,7 @@
 import { useEffect,useRef } from 'react';
 import { useTour } from './useTour';
 import { FIRST_RUN } from './steps';
-import '../../onboarding.css';
+import './onboarding.css';
 
 /** The bubble's intended width; the stylesheet narrows it on a small screen. */
 const BUBBLE=340;
