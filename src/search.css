@@ -1,0 +1,136 @@
+/* Search everywhere: the round button in the top bar and the page it opens. */
+.top-search-link {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--ink);
+  text-decoration: none;
+}
+.top-search-link:hover,
+.top-search-link[aria-current='page'] {
+  color: var(--wine);
+  background: var(--ground);
+}
+.top-search-link .app-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.search-page {
+  max-width: 720px;
+}
+.search-everywhere {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: var(--s4) 0;
+  padding: 4px 8px 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--muted);
+}
+.search-everywhere:focus-within {
+  border-color: var(--wine);
+}
+.search-everywhere > span {
+  display: grid;
+}
+.search-everywhere .app-icon {
+  width: 20px;
+  height: 20px;
+}
+.search-everywhere input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.05rem;
+}
+.search-everywhere .search-clear {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+}
+.search-hint {
+  color: var(--muted);
+}
+
+.search-group {
+  margin-top: var(--s5);
+}
+.search-group h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+}
+.search-group h2 small {
+  color: var(--muted);
+  font:
+    600 0.85rem 'DM Sans',
+    sans-serif;
+}
+.search-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--paper);
+  overflow: hidden;
+}
+.search-group li + li {
+  border-top: 1px solid var(--line);
+}
+.search-result {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+.search-result:hover {
+  background: var(--ground);
+}
+.search-result-name {
+  font-weight: 600;
+}
+.search-result small {
+  color: var(--muted);
+}
+.search-more {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--wine);
+  font-weight: 600;
+}
+/* The page draws its own clear button; hide the browser's so there is one, not two. */
+.search-everywhere input::-webkit-search-cancel-button {
+  display: none;
+}
+.search-everywhere .search-clear:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink);
+}
+
+/* Hashtags on a wine page are links into the search. */
+.detail-tags a.tag {
+  text-decoration: none;
+}
+.detail-tags a.tag:hover {
+  text-decoration: underline;
+}

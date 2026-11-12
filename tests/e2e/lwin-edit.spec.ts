@@ -24,6 +24,8 @@ async function setup(page:Page,overrides:Record<string,unknown>={},role='owner',
  if(role==='member'){
   // Members get the catalogue read back through the wine fields and the facts
   // list; the matching panel itself is owner work and is not rendered for them.
+  // They sit in the Bottle facts fold, which starts closed to keep the form short.
+  await page.locator('.bottle-facts-disclosure > summary').click();
   await expect(page.locator('.wine-enriched-details')).toBeVisible();
   await expect(page.getByText('LWIN reference',{exact:true})).toHaveCount(0);
   return {actions,saves};

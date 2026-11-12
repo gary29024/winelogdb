@@ -54,3 +54,27 @@ describe('filtering the journal by one grape',()=>{
     expect(call.args.filter(arg=>String(arg).includes('rossese'))).toEqual(['rossese']);
   });
 });
+
+describe('searching by hashtag',()=>{
+  it('looks at the tags alone, as one phrase, when the search starts with #',async()=>{
+    const {listJournalPage}=await import('../../src/lib/journal/list');
+    const {createD1Stub}=await import('./support/d1Stub');
+    const stub=createD1Stub(sql=>/count\(\*\)/.test(sql)?{all:[{total:0}]}:{all:[]});
+    await listJournalPage(stub.db,'owner',{query:'#Pinot Noir'},[],true);
+    const [call]=stub.matching(/wine_search MATCH/);
+    expect(call.args).toContain('tags : "Pinot Noir"*');
+    // Notes, tasting names and shared bottles are not hashtags.
+    expect(call.sql).not.toMatch(/lower\(t\.name\) LIKE/);
+    expect(call.sql).not.toMatch(/w\.is_shared=1 AND \(lower\(w\.producer\)/);
+  });
+
+  it('keeps an ordinary search on every field',async()=>{
+    const {listJournalPage}=await import('../../src/lib/journal/list');
+    const {createD1Stub}=await import('./support/d1Stub');
+    const stub=createD1Stub(sql=>/count\(\*\)/.test(sql)?{all:[{total:0}]}:{all:[]});
+    await listJournalPage(stub.db,'owner',{query:'birthday'});
+    const [call]=stub.matching(/wine_search MATCH/);
+    expect(call.args).toContain('birthday*');
+    expect(call.sql).toMatch(/lower\(t\.name\) LIKE/);
+  });
+});

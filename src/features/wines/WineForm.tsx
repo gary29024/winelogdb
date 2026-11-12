@@ -137,6 +137,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
    */
   const [occasionOpen,setOccasionOpen]=useState(()=>[initial?.tastingName,initial?.venue,initial?.locationName].some(x=>String(x??'').trim())||(initial?.latitude!=null&&initial?.longitude!=null));
   const [tagsOpen,setTagsOpen]=useState(false);
+  const [factsOpen,setFactsOpen]=useState(false);
   const prefilled=useRef(false);
   /**
    * The wine in tonight's lineup that this photograph is probably of.
@@ -414,6 +415,7 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
    * release too, and hiding the field with a year left no way to add one.
    */
   const hasYear=Boolean(vintageInput.trim());
+  const factsSummary=[country.trim(),region.trim(),appellation.trim(),blend.trim()].filter(Boolean).join(' · ');
   const occasionSummary=[tastingName.trim(),venue.trim()].filter(Boolean).join(' · ');
   const hasGps=initial?.latitude!=null&&initial?.longitude!=null,hasEstimatedPlace=hasGps&&Boolean(initial?.locationName?.trim());
   return <>
@@ -447,7 +449,14 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
 
     <div className="wine-compact-row three"><label>Vintage<input name="vintage" type="number" inputMode="numeric" min={OLDEST_VINTAGE} max={latestVintage} step="1" value={vintageInput} onChange={e=>{setVintageInput(e.target.value);if(e.target.value)setVintageKind('vintage');else if(vintageKind==='vintage')setVintageKind('unknown')}}/></label><label>Style<select name="wineStyle" value={wineStyle} onChange={e=>setWineStyle(e.target.value)}><option value="">Unknown</option>{['red','white','rose','sparkling','dessert','fortified','orange','other'].map(x=><option key={x}>{x}</option>)}</select></label>{field('alcoholPercentage','Alcohol %','number','0.1',{min:0,max:70})}</div>
     <div className={hasYear?'wine-compact-row':'wine-compact-row two'}>{!hasYear&&<label>Year status<select value={vintageKind} onChange={e=>setVintageKind(e.target.value)}><option value="vintage">Vintage</option><option value="non_vintage">Non-vintage</option><option value="multi_vintage">Multi-vintage</option><option value="unknown">Unknown / unreadable</option></select>{!memberView&&<small className="wine-field-help">NV is different from a label whose vintage simply could not be read.</small>}</label>}<label>Edition / release<input type="text" value={releaseDesignation} onChange={e=>setReleaseDesignation(e.target.value)} placeholder="e.g. 171ème Édition, MV20"/><small className="wine-field-help">Use this for a numbered or named release, not as a substitute for a vintage year.</small></label></div>
-    <h2 className="form-section-heading">Bottle facts</h2>
+    {/* Most wines are logged with a name, a year and a note. Where it is from
+        and what it is made of usually arrives from the label scan or the
+        producer's range, so it is folded away with what is filled in shown on
+        the fold - checked at a glance, opened only to correct. Folded fields are
+        still in the form and still saved. */}
+    <details className="form-disclosure bottle-facts-disclosure" open={factsOpen} onToggle={e=>setFactsOpen(e.currentTarget.open)}>
+      <summary><span>Bottle facts</span><small>{factsSummary||'Country, region, grapes'}</small></summary>
+      <div className="form-disclosure-body">
     <div className="wine-compact-row two"><label>Country<input name="country" value={country} onChange={e=>setCountry(e.target.value)}/></label><label>Region<input name="region" value={region} onChange={e=>setRegion(e.target.value)}/></label></div>
     <div className="wine-compact-row appellation-row"><label>Appellation<input name="appellation" value={appellation} onChange={e=>setAppellation(e.target.value)}/>{!memberView&&<small className="wine-field-help">{denomination?`Recognized as a ${denomination}; no need to type it.`:'The denomination is read from the name, so leave DOC / DOCG / AVA off — but keep IGT or IGP, which tells a zone apart from the region it shares a name with.'}</small>}</label>
 
@@ -470,6 +479,9 @@ export function WineForm({initial,id,photos=[],onSave,onSaved,submitLabel,enable
       </span>}
       <small className="wine-field-help">Percentages are optional. Separate grapes with commas.{!memberView&&<> A grape sold under another name — Pinot Nero, Garnacha — is filed under the one name when you save.</>}</small>
     </label>
+
+      </div>
+    </details>
 
     {id&&isChampagne(initial??{})&&<ChampagnePhotoBackfill key={id} wineId={id} imageIds={initial?.imageIds??[]} details={sparklingDetails} onApply={suggestions=>{setSparklingDetails(current=>({...current,...missingChampagneDetails(current,suggestions)}));setDirty(true)}}/>}
     {sparklingVisible&&<SparklingDetailsFields details={sparklingDetails} onChange={value=>{setSparklingDetails(value);setDirty(true)}} showHelper={!memberView}/>}

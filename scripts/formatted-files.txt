@@ -19,3 +19,6 @@ src/components/PageSkeleton.tsx
 src/lib/query/client.ts
 tests/unit/dataLoading.test.tsx
 tests/unit/support/forgetLoadedData.ts
+src/features/search/SearchPage.tsx
+src/search.css
+tests/unit/searchPage.test.tsx
