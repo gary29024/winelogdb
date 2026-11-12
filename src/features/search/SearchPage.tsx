@@ -7,7 +7,7 @@ import { useLoad } from '../../lib/query/client';
 import { listProducers, type ProducerSummary } from '../producers/api';
 import { listTastings, type TastingSummary } from '../tastings/api';
 import { listWines, type JournalWine } from '../wines/api';
-import '../../search.css';
+import '../../styles/search.css';
 
 const DEBOUNCE_MS = 250;
 /** One letter matches half the notebook; wait for two before asking. */

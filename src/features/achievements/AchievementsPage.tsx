@@ -6,8 +6,8 @@ import type { AchievementProgress } from './types';
 import { useJourneyData } from '../journey/api';
 import { journeyLadder,stampTotals } from '../journey/model';
 import { JourneyStampIcon } from '../journey/JourneyStampIcon';
-import '../../achievementPassport.css';
-import '../../achievements.css';
+import '../../styles/achievementPassport.css';
+import './achievements.css';
 import { LoadError } from '../../components/LoadError';
 
 const categoryLabel:Record<AchievementProgress['definition']['category'],string>={

@@ -1,4 +1,4 @@
-import '../feedback.css';
+import './feedback.css';
 
 type Shape = 'detail' | 'list' | 'cards';
 

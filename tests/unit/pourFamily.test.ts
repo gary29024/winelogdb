@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readStyle } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 import { pourFamily } from '../../src/lib/wine/pourFamily';
 
@@ -33,7 +32,7 @@ describe('which colour a photo-less wine shows',()=>{
   it('has a tint declared for every family it can return',()=>{
     // The class name is built from the return value, so a family with no
     // matching rule renders the neutral tile silently.
-    const styles=readFileSync(join(process.cwd(),'src','styles.css'),'utf8');
+    const styles=readStyle('styles.css');
     const families=['red','white','rose','sparkling','orange','sweet'];
     expect(families.filter(family=>!styles.includes(`.bottle-${family}`))).toEqual([]);
   });

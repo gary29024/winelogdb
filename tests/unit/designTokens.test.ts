@@ -1,9 +1,7 @@
-import { readFileSync,readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { styleSheets } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 
-const dir=join(process.cwd(),'src');
-const sheets=readdirSync(dir).filter(name=>name.endsWith('.css')).map(name=>({name,css:readFileSync(join(dir,name),'utf8')}));
+const sheets=styleSheets().map(({name,css})=>({name,css}));
 const styles=sheets.find(sheet=>sheet.name==='styles.css')!.css;
 const root=styles.slice(styles.indexOf(':root{'),styles.indexOf('}',styles.indexOf(':root{')));
 

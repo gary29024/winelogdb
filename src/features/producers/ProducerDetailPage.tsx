@@ -22,7 +22,7 @@ import { CompositionBar } from '../../components/CompositionBar';
 import { SectionLabel } from '../../components/SectionLabel';
 import { foldToOther,OTHER_TONE,SERIES_TONES } from '../../lib/ui/composition';
 import { isResearchStale } from '../../lib/research/freshness';
-import '../../producer.css';
+import './producer.css';
 import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { backTargetFromState,linkFrom,readBackTarget,rememberBackTarget,PRODUCERS_BACK } from '../wines/backTarget';
 import { ElapsedSeconds } from '../../components/ElapsedSeconds';

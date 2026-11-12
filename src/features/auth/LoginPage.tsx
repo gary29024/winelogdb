@@ -1,5 +1,5 @@
 import { Link,useSearchParams } from 'react-router-dom';
-import '../../auth.css';
+import './auth.css';
 
 const GOOGLE_SIGNIN_BUTTON='https://developers.google.com/static/identity/images/branding_guideline_sample_lt_sq_lg.png';
 

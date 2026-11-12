@@ -6,7 +6,7 @@ import { startBackoffPoll,type Poller } from '../../lib/polling/backoff';
 import { BATCH_RESEARCH_BACK,linkFrom } from '../wines/backTarget';
 import { campaignSummary,planSummary } from './campaignCopy';
 import { CampaignItemList } from './ResearchCampaignHistory';
-import '../../researchCampaign.css';
+import './researchCampaign.css';
 
 const CHOICES=[10,25,50,100] as const;
 

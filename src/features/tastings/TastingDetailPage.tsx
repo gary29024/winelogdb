@@ -8,7 +8,7 @@ import { deleteTasting,detachWineFromTasting,endTasting,getTasting,reopenTasting
   type Tasting,type TastingDetail,type TastingDocument,type TastingWine } from './api';
 import { setActiveTasting } from './useActiveTasting';
 import { TastingDocuments } from './TastingDocuments';
-import '../../tastings.css';
+import './tastings.css';
 import { ShareStorySheet } from '../share/ShareStorySheet';
 import type { StoryCard } from '../share/renderStoryCollage';
 import { FriendTagDialog } from '../wines/FriendTagDialog';

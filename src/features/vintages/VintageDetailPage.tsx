@@ -7,7 +7,7 @@ import type { GrapeId } from './types';
 import { useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
 import { BaselineToggle,HowWeEstimate,QualityOutlookCard,SampleBadge,ScoreMeter,SugarChart } from './VintageParts';
-import '../../vintages.css';
+import './vintages.css';
 
 const EFFECT_MARK:Record<Effect,string>={helps:'↑',hurts:'↓',neutral:'–'};
 const EFFECT_WORD:Record<Effect,string>={helps:'helps',hurts:'hurts',neutral:'neutral'};

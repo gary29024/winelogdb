@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 // favorites.css reached them only through the Journal, which left the tabs
 // unstyled - no pill, no active scope - for anyone landing on the cellar
 // directly, since that page is its own lazily loaded chunk.
-import '../../favorites.css';
+import './favorites.css';
 
 export type JournalScope='tasted'|'cellar'|'favorites';
 

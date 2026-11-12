@@ -234,7 +234,7 @@ Built:
 | `src/features/onboarding/useTour.ts` | Active step, anchor measurement, replay hook |
 | `src/features/onboarding/TourOverlay.tsx` | Spotlight, bubble, keyboard and focus |
 | `src/features/onboarding/api.ts` | Reads `tour_state`, writes it through `PATCH /api/me/tour` |
-| `src/onboarding.css` | Overlay styling |
+| `src/features/onboarding/onboarding.css` | Overlay styling |
 | `worker/multiUser/auth.ts` | `PATCH /api/me/tour` and its validator |
 | `worker/multiUser/common.ts`, `src/lib/auth/client.ts` | `tour_state` on the member/account types |
 | `src/components/Layout.tsx` | `data-tour` anchors; mounts `<TourOverlay/>` beside `<CreditConfirmation/>` |

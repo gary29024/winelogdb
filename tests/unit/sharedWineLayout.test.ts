@@ -11,7 +11,7 @@ const files=walk(src).map(path=>path.slice(src.length+1).replace(/\\/g,'/'));
 const read=(path:string)=>readFileSync(join(src,path),'utf8');
 const strip=(text:string)=>text.replace(/\/\*[\s\S]*?\*\//g,'');
 const sheets=files.filter(path=>path.endsWith('.css'))
-  .map(name=>({name,text:strip(read(name))}));
+  .map(path=>({name:path.split('/').pop()!,text:strip(read(path))}));
 // Every stylesheet that declares a class, by a selector that actually targets it
 // rather than merely mentioning it inside a longer descendant chain. A class can
 // be styled in several sheets, so the question is whether ANY of them is loaded.
@@ -25,7 +25,7 @@ const library=read('features/wines/LibraryPage.tsx');
 const passport=read('features/journey/PassportPage.tsx');
 const fieldDefs=read('lib/wine/detailFields.ts');
 // main.tsx loads these for every route, so they are nobody's to ask for.
-const global=[...read('main.tsx').matchAll(/import\s+'[./]*?([^'/]+\.css)'/g)].map(match=>match[1]);
+const global=[...read('main.tsx').matchAll(/import\s+'[^']*?([^'/]+\.css)'/g)].map(match=>match[1]);
 
 /** Resolve a relative import against a module path, the way the bundler does. */
 function resolveImport(from:string,spec:string){

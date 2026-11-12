@@ -20,19 +20,19 @@ import { SharedDeepSearchControls } from './SharedDeepSearchControls';
 import { deepResearchText,readOpenDeepFields,researchSections,type DeepField,uncitedFigures,writeOpenDeepFields } from './researchSections';
 import { ResearchLanguageStatus,ResearchLanguageSwitch } from './ResearchLanguage';
 import { DEEP_FIELD_LABELS_ZH,RESEARCH_COPY,useResearchTranslation } from './researchTranslation';
-import '../../favorites.css';
-import '../../wineDetailCompact.css';
+import './favorites.css';
+import './wineDetailCompact.css';
 // The structure grid and the research panel are wine-detail markup whose rules
 // live in these two sheets. The classification pill's sheet is owned by the
 // component that renders it, so no page can forget it again.
-import '../../wineFormCompact.css';
-import '../../deepSearch.css';
+import '../../styles/wineFormCompact.css';
+import './deepSearch.css';
 // The gallery and lightbox markup below is the wine-detail one, and its rules
 // live in wineImages.css. This page never renders <WineImage>, and it is in the
 // entry bundle while every other importer of that stylesheet is a lazy route,
 // so without this import a cold /shared/:id load has no rules for either.
-import '../../wineImages.css';
-import '../../sharedWine.css';
+import './wineImages.css';
+import './sharedWine.css';
 import { LoadError } from '../../components/LoadError';
 
 const wineSearcherUrl=(producer:string,wineName:string,vintage:number|null)=>`https://www.wine-searcher.com/find/${encodeURIComponent([producer,wineName,vintage??''].filter(Boolean).join(' ')).replace(/%20/g,'+')}`;

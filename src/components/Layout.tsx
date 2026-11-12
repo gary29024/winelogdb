@@ -7,13 +7,13 @@ import { LiveTastingStrip } from '../features/tastings/LiveTastingStrip';
 import { TourOverlay } from '../features/onboarding/TourOverlay';
 import { StartTastingSheet } from '../features/tastings/StartTastingSheet';
 import { useActiveTasting } from '../features/tastings/useActiveTasting';
-import '../scanSheet.css';
-import '../moreSheet.css';
-import '../mobileViewport.css';
-import '../search.css';
+import './scanSheet.css';
+import './moreSheet.css';
+import './mobileViewport.css';
+import '../styles/search.css';
 import { OfflineBar } from './OfflineBar';
 import { CreditConfirmation } from '../features/auth/CreditConfirmation';
-import '../multiUser.css';
+import './multiUser.css';
 
 const MOBILE_BROWSER_BOTTOM_VAR='--mobile-browser-bottom';
 const preloadUpload=()=>void import('../features/uploads/UploadPage');

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useActiveTasting } from './useActiveTasting';
-import '../../tastings.css';
+import './tastings.css';
 
 /**
  * The one line saying an evening is running.

@@ -3,7 +3,7 @@ import { useEffect,useRef,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
 import { photoKeepingCopy } from '../../lib/offline/savedPhotos';
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
-import '../../wineImages.css';
+import './wineImages.css';
 
 const MAX_CACHED_IMAGES=144;
 const imageUrls=new Map<string,string>();

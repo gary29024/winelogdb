@@ -1,5 +1,5 @@
 import { hasSparklingDetails,type SparklingDetails } from '../../lib/wine/sparklingDetails';
-import '../../sparklingDetails.css';
+import './sparklingDetails.css';
 
 type Props={details:SparklingDetails|null|undefined};
 

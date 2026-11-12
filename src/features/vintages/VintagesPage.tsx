@@ -7,7 +7,7 @@ import { BURGUNDY,VINTAGE_REGIONS,regionById,regionOfVillage } from './regions';
 import { rememberRegion,rememberVillage,rememberedRegion,rememberedVillage,useBaseline,useRegionWines,useVintageData } from './useVintages';
 import { VintageIcon } from './VintageIcons';
 import { BaselineToggle,HowWeEstimate,SampleBadge,ScoreMeter } from './VintageParts';
-import '../../vintages.css';
+import './vintages.css';
 
 const ARROWS:Record<Level,string>={2:'↑↑',1:'↑',0:'=','-1':'↓','-2':'↓↓'};
 const LEVEL_WORDS:Record<'warmth'|'rain'|'nights',Record<Level,string>>={

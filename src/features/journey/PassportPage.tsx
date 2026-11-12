@@ -11,8 +11,8 @@ import { journeyLadder,nextMilestones,stampTotals } from './model';
 import { grapeColorFor } from './passportVisuals';
 import { PassportMap } from './PassportMap';
 import { TasteSection } from './TasteSection';
-import '../../journey.css';
-import '../../achievementPassport.css';
+import './journey.css';
+import '../../styles/achievementPassport.css';
 import { linkFrom } from '../wines/backTarget';
 import { LoadError } from '../../components/LoadError';
 

@@ -2,7 +2,7 @@ import { useMemo,useState } from 'react';
 import { CATALOG_HIERARCHY_LABELS,catalogChoicesForPresentation,type CatalogPresentationChoice } from '../../lib/cuvees/catalogPresentation';
 import { cuveeStyleFamily,normalizeCuveeAlias } from '../../lib/cuvees/entities';
 import { changeTastedCuveeCatalogLink,linkTastedCuveeToCatalog,unlinkTastedCuveeFromCatalog,type ProducerDetail,type TastedWine } from './api';
-import '../../cuveeCatalogLinks.css';
+import './cuveeCatalogLinks.css';
 
 export type TastedCuveeGroup={key:string;cuveeId:string|null;catalogCuveeId:string|null;name:string;appellation:string|null;wineStyle:string|null;grapes:string[];releaseFamily:boolean;wines:TastedWine[]};
 type CatalogTarget=CatalogPresentationChoice;

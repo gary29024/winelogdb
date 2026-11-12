@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ImageLightbox } from '../../components/ImageLightbox';
 import { useDocumentUrl } from './useDocumentUrl';
 import { deleteTastingDocument,uploadTastingDocuments,type TastingDocument } from './api';
-import '../../tastings.css';
+import './tastings.css';
 
 /**
  * The printed wine list.

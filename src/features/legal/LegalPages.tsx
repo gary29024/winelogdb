@@ -1,6 +1,6 @@
 import { type ReactNode,useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../legal.css';
+import './legal.css';
 
 const LAST_UPDATED='5 October 2026';
 

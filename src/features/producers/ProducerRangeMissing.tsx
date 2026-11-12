@@ -1,6 +1,6 @@
 import { useCallback,useEffect,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
-import '../../producerRangeCorrections.css';
+import './producerRangeCorrections.css';
 
 type Props={producerId:string;onChanged:()=>Promise<void>};
 type Entry={id:string;name:string;category:string;appellation:string|null;classification:string|null;style:string|null;notes:string|null;sourceUrl:string|null};

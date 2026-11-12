@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { AppIcon,type AppIconKey } from './AppIcons';
-import '../sectionProvenance.css';
+import './sectionProvenance.css';
 
 /**
  * Who is answerable for the facts under this heading.

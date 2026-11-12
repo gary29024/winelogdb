@@ -1,4 +1,4 @@
-import './remainingLayout.css';
+import './styles/remainingLayout.css';
 import { PageSkeleton } from './components/PageSkeleton';
 import { AccountPage } from './features/auth/AccountPage';
 import { AdminPage } from './features/auth/AdminPage';

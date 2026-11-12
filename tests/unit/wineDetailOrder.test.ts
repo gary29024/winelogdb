@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
+import { readStyle } from './support/styleSheets';
 import { describe,expect,it } from 'vitest';
 
 const owner=readFileSync('src/features/wines/DetailPage.tsx','utf8');
 const shared=readFileSync('src/features/wines/SharedWinesPage.tsx','utf8');
-const styles=readFileSync('src/styles.css','utf8');
+const styles=readStyle('styles.css');
 const pages:[string,string][]=[['owner',owner],['shared',shared]];
 
 /** Where a marker first appears, so two markers can be compared by position. */

@@ -1,5 +1,5 @@
 import { compositionShares,type CompositionEntry } from '../lib/ui/composition';
-import '../compositionBar.css';
+import './compositionBar.css';
 
 /**
  * The shape of a set, before its contents.

@@ -1,5 +1,5 @@
 import { useToast } from './toast';
-import '../feedback.css';
+import './feedback.css';
 
 /**
  * Announces the current confirmation. Always mounted, so screen readers hear a message appear in it.

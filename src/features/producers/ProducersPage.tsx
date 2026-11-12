@@ -5,7 +5,7 @@ import { accountStorageKey,getAccount } from '../../lib/auth/client';
 import { useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProducers,type ProducerSummary } from './api';
-import '../../producer.css';
+import './producer.css';
 import './search.css';
 import { AppIcon } from '../../components/AppIcons';
 import { ResearchCampaignLink } from './ResearchCampaignLink';

@@ -1,6 +1,6 @@
 import { maturityVerdict,readinessLabel,windowLabel,type Readiness } from '../../lib/maturity/ageing';
 import { shiftVerdict,type VintageWindow } from '../../lib/maturity/vintageWindow';
-import '../../maturity.css';
+import './maturity.css';
 
 type Wine={country?:string|null;region?:string|null;appellation?:string|null;
   classification?:string|null;wineStyle?:string|null;vintage?:number|null;

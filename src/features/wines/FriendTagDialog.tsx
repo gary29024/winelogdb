@@ -1,6 +1,6 @@
 import { useEffect,useId,useRef } from 'react';
 import type { FriendTag } from './friendTags';
-import '../../friendTags.css';
+import './friendTags.css';
 
 type Props={
   open:boolean;
