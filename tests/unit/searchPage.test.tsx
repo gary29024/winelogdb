@@ -94,9 +94,21 @@ const wines = [
   },
 ];
 
-async function render(path: string, wineReply: unknown = { items: wines, total: 9, nextOffset: null }) {
+const tags = [
+  { tag: 'Burgundy', wines: 27 },
+  { tag: 'Pinot Noir', wines: 19 },
+  { tag: 'birthday', wines: 1 },
+  ...Array.from({ length: 11 }, (_, i) => ({ tag: `extra${i + 1}`, wines: 1 })),
+];
+
+async function render(
+  path: string,
+  wineReply: unknown = { items: wines, total: 9, nextOffset: null },
+  tagReply: unknown = { items: [] },
+) {
   const fetchMock = vi.fn(async (url: string) => {
     const address = String(url);
+    if (address.includes('/api/tags')) return json(tagReply);
     if (address.includes('/api/journal')) return json(wineReply);
     if (address.includes('/api/producers')) return json({ items: producers });
     if (address.includes('/api/tastings')) return json({ items: tastings });
@@ -127,8 +139,36 @@ const called = (mock: ReturnType<typeof vi.fn>, part: string) =>
 describe('search everywhere', () => {
   it('asks nothing until two letters are typed', async () => {
     const fetchMock = await render('/search');
-    expect(fetchMock).not.toHaveBeenCalled();
+    // The one thing asked for is the list of hashtags to offer.
+    expect(fetchMock.mock.calls.map((call) => String(call[0]))).toEqual(['/api/tags']);
     expect(host!.textContent).toContain('Type at least two letters');
+    expect(host!.querySelector('.search-tags')).toBeNull();
+  });
+
+  it('offers your hashtags before anything is typed, and a tap searches that hashtag', async () => {
+    const fetchMock = await render('/search', { items: [wines[0]], total: 1, nextOffset: null }, { items: tags });
+    const pills = () => [...host!.querySelectorAll('.search-tag')];
+    expect(host!.querySelector('.search-tags h2')!.textContent).toBe('Your hashtags 14');
+    // The most used come first; the rest wait behind "Show all".
+    expect(pills()).toHaveLength(12);
+    expect(pills()[1].textContent).toBe('#Pinot Noir19');
+    expect(pills()[1].querySelector('small')!.getAttribute('aria-label')).toBe('19 wines');
+    expect(pills()[2].querySelector('small')!.getAttribute('aria-label')).toBe('1 wine');
+    await act(async () => {
+      (host!.querySelector('.search-tags-all') as HTMLButtonElement).click();
+    });
+    expect(pills()).toHaveLength(14);
+
+    await act(async () => {
+      (pills()[1] as HTMLButtonElement).click();
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    expect((host!.querySelector('input[type=search]') as HTMLInputElement).value).toBe('#Pinot Noir');
+    expect(called(fetchMock, '/api/journal').map((call) => String(call[0]))[0]).toContain('query=%23Pinot+Noir');
+    expect(host!.querySelector('.search-tags')).toBeNull();
+    expect(host!.querySelector('.search-group h2')!.textContent).toBe('Wines tagged #Pinot Noir 1');
   });
 
   it('shows wines, producers and tastings together for one search', async () => {

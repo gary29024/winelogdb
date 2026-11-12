@@ -54,6 +54,9 @@ async function requireOk(r:Response,message:string){
 export async function listWines(params:URLSearchParams,options:{limit?:number;offset?:number;signal?:AbortSignal}={}):Promise<{items:JournalWine[];nextOffset:number|null;total:number}>{
   const query=new URLSearchParams(params);query.set('limit',String(options.limit??36));query.set('offset',String(options.offset??0));const r=await apiFetch(`/api/journal?${query}`,{headers:authHeaders(),signal:options.signal});await requireOk(r,'Could not load wines');return r.json();
 }
+/** Your hashtags, most used first, with how many of your wines carry each. */
+export type TagCount={tag:string;wines:number};
+export async function listTags(signal?:AbortSignal):Promise<{items:TagCount[]}>{const r=await apiFetch('/api/tags',{headers:authHeaders(),signal});await requireOk(r,'Could not load your hashtags');return r.json()}
 export async function batchUpdateJournalExperience(ids:string[],patch:JournalBatchPatch){const r=await apiFetch('/api/journal/batch-experience',{method:'POST',headers:authHeaders(true),body:JSON.stringify({ids,...patch})});await requireOk(r,'Could not update selected wines');summariesChanged();return r.json() as Promise<{updated:number;tastingName?:string|null;venue?:string|null}>}
 export async function getWine(id:string):Promise<WineDetail>{const r=await apiFetch(`/api/wines/${id}`,{headers:authHeaders()});await requireOk(r,'Wine not found');const wine=await r.json() as WineDetail;return {...wine,sparklingDetails:wine.sparklingDetails??null,groupSourcePhotos:wine.groupSourcePhotos??[]}}
 export async function saveWineTastingStructure(id:string,structure:TastingStructure|null){const r=await apiFetch(`/api/wines/${id}/tasting-structure`,{method:'PUT',headers:authHeaders(true),body:JSON.stringify({structure})});await requireOk(r,'Could not save tasting structure');summariesChanged();return r.json() as Promise<{ok:true}>}

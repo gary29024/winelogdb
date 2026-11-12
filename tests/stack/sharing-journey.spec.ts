@@ -82,6 +82,10 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     expect(JSON.stringify(shared.body)).not.toContain('OWNER_SECRET');
     expect(shared.body).toMatchObject({ wineName: 'Clos de la Roche', tastingNotes: '', rating: null, venue: null, price: null });
     expect(shared.body).not.toHaveProperty('tags');
+    // The hashtag list on Search counts the owner's own tags, and a friend who
+    // was given the wine never sees them there either.
+    expect((await api(page, '/api/tags')).body.items).toContainEqual({ tag: 'OWNER_SECRET_TAG', wines: 1 });
+    expect(JSON.stringify((await api(member.page, '/api/tags')).body)).not.toContain('OWNER_SECRET_TAG');
     expect((await api(outsider.page, `/api/shared/wines/${wineId}`)).status).toBe(404);
     expect((await api(member.page, `/api/wines/${wineId}`)).status).toBe(404);
     expect((await api(member.page, `/api/wines/${wineId}`, 'PUT', { producer: 'Intruder', wineName: 'Changed' })).status).toBe(404);
