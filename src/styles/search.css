@@ -134,3 +134,58 @@
 .detail-tags a.tag:hover {
   text-decoration: underline;
 }
+
+/* Before anything is typed: the hashtags already in use, as tappable pills. */
+.search-tags {
+  margin-top: var(--s5);
+}
+.search-tags h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+.search-tags h2 small {
+  color: var(--muted);
+  font:
+    600 0.85rem 'DM Sans',
+    sans-serif;
+}
+.search-tags ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.search-tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+}
+.search-tag small {
+  color: var(--muted);
+  font-weight: 600;
+}
+.search-tag:hover:not(:disabled) {
+  background: var(--ground);
+  border-color: var(--wine);
+}
+.search-tags-all {
+  border: 0;
+  padding: 8px 0;
+  background: transparent;
+}
+.search-tags-all:hover:not(:disabled) {
+  background: transparent;
+  text-decoration: underline;
+}

@@ -6,7 +6,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { useLoad } from '../../lib/query/client';
 import { listProducers, type ProducerSummary } from '../producers/api';
 import { listTastings, type TastingSummary } from '../tastings/api';
-import { listWines, type JournalWine } from '../wines/api';
+import { listTags, listWines, type JournalWine } from '../wines/api';
 import '../../styles/search.css';
 
 const DEBOUNCE_MS = 250;
@@ -14,6 +14,8 @@ const DEBOUNCE_MS = 250;
 const MIN_LENGTH = 2;
 const WINE_LIMIT = 6;
 const LIST_LIMIT = 5;
+/** Hashtags shown before "Show all" is tapped. */
+const TAG_LIMIT = 12;
 
 /** Lower case, no accents, no punctuation: "Roumier" finds "G. Roumier" and "Môrey" finds "Morey". */
 const searchKey = (value: string | null | undefined) =>
@@ -82,6 +84,16 @@ export function SearchPage() {
     (signal) => listWines(new URLSearchParams({ query: settled }), { limit: WINE_LIMIT, signal }),
     { skip: !active, keepPrevious: true },
   );
+  // Before anything is typed, the page offers the hashtags already in use.
+  const tags = useLoad(['tags'], listTags, { skip: active });
+  const [allTags, setAllTags] = useState(false);
+  const tagItems = tags.data?.items ?? [];
+  const openTag = (tag: string) => {
+    const next = `#${tag}`;
+    setDraft(next);
+    setSettled(next);
+    setParams({ q: next }, { replace: true });
+  };
   const producers = useLoad(['producers'], listProducers, { skip: !everything });
   const tastings = useLoad(['tastings'], listTastings, { skip: !everything });
 
@@ -139,8 +151,30 @@ export function SearchPage() {
       {!active && (
         <p className="search-hint">
           Type at least two letters. Try a producer, a village, a vintage year or the name of an evening. Start with #
-          to look through your hashtags only, for example #birthday.
+          to look through your hashtags only, for example #birthday{tagItems.length ? ', or tap one below' : ''}.
         </p>
+      )}
+      {!active && tagItems.length > 0 && (
+        <section className="search-tags" aria-labelledby="search-tags">
+          <h2 id="search-tags">
+            Your hashtags <small>{tagItems.length}</small>
+          </h2>
+          <ul>
+            {(allTags ? tagItems : tagItems.slice(0, TAG_LIMIT)).map(({ tag, wines: n }) => (
+              <li key={tag}>
+                <button type="button" className="search-tag" onClick={() => openTag(tag)}>
+                  <span>#{tag}</span>
+                  <small aria-label={count(n, 'wine')}>{n}</small>
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!allTags && tagItems.length > TAG_LIMIT && (
+            <button type="button" className="search-more search-tags-all" onClick={() => setAllTags(true)}>
+              Show all {tagItems.length} hashtags
+            </button>
+          )}
+        </section>
       )}
       {waiting && <p aria-live="polite">Searching…</p>}
       {failed && (

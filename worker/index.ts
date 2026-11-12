@@ -8,6 +8,7 @@ import { photoObjectKeys } from '../src/lib/r2/thumbnails';
 import { grapeGroup } from '../src/lib/wine/grapes';
 import { cors } from 'hono/cors';
 import { requestOwner } from './identity';
+import { listTagCounts } from '../src/lib/journal/tagCounts';
 import { createObjectKey } from '../src/lib/r2/keys';
 import { wineInputSchema,type WineInput } from '../src/lib/db/schema';
 import { dimensionsSchema, validateBatch } from '../src/features/uploads/validation';
@@ -105,6 +106,9 @@ app.get('/api/wines',async c=>{
  const items=await mapWinesWithImages(c.env.DB,owner,rows.results as Record<string,unknown>[]);
  return c.json({items,nextOffset:rows.results.length===limit?offset+limit:null});
 });
+
+// The hashtags on this person's own wines, with a count each, for the list on the Search page.
+app.get('/api/tags',async c=>c.json({items:await listTagCounts(c.env.DB,c.get('userId'))}));
 
 app.get('/api/wines/:id',async c=>{
  const id=c.req.param('id'),owner=c.get('userId');

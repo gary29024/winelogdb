@@ -13,7 +13,7 @@ Not listed: the routes `multiUserEntry.ts` answers itself (`/api/auth/*`, `/api/
 `worker/multiUser/`; and three features `structureEntry.ts` passes every request to first, each
 matching its own addresses (parcel producer links, group scans and Champagne extraction).
 
-102 addresses, 10 of them declared by more than one layer.
+103 addresses, 10 of them declared by more than one layer.
 
 | Method | Address | Declared in (outermost first) |
 | --- | --- | --- |
@@ -81,6 +81,7 @@ matching its own addresses (parcel producer links, group scans and Champagne ext
 | POST | `/api/recognition` | `worker/entry.ts` |
 | POST | `/api/research/translation` | `worker/cuveeEntry.ts` |
 | POST | `/api/research/translation/lookup` | `worker/cuveeEntry.ts` |
+| GET | `/api/tags` | `worker/index.ts` |
 | GET | `/api/tastings` | `worker/cuveeEntry.ts` |
 | POST | `/api/tastings` | `worker/cuveeEntry.ts` |
 | GET | `/api/tastings/:id` | `worker/cuveeEntry.ts` |
