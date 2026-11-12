@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo,useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GrapeStat,JourneyData,RegionStat,StyleStat } from './api';
 import { buildStructureProfile,structureDisplay } from './model';
@@ -27,6 +27,33 @@ const monthName=(month:string)=>{
   return Number.isNaN(date.getTime())?month:new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}).format(date);
 };
 
+type MiniBar={key:string;label:string;wines:number;highlight:boolean};
+const winesLabel=(bar:MiniBar)=>`${bar.label}: ${bar.wines} ${bar.wines===1?'wine':'wines'}`;
+
+/**
+ * A row of small bars. Pointing at a bar, tapping it, or tabbing to it swaps the
+ * caption underneath for that bar's number ("May 2026: 12 wines"), so the count
+ * can be read on a phone too, where there is no hover. Moving the mouse away,
+ * or tapping somewhere else, brings the usual caption back.
+ */
+function MiniBars({bars,caption}:{bars:MiniBar[];caption:string}){
+  const [active,setActive]=useState<string|null>(null);
+  const tallest=Math.max(1,...bars.map(bar=>bar.wines));
+  const shown=bars.find(bar=>bar.key===active);
+  return <>
+    <div className="taste-mini-chart" onPointerLeave={event=>{if(event.pointerType==='mouse')setActive(null)}}>
+      {bars.map(bar=><button key={bar.key} type="button" aria-label={winesLabel(bar)} aria-pressed={active===bar.key}
+        className={[bar.highlight&&'is-latest',active===bar.key&&'is-active'].filter(Boolean).join(' ')||undefined}
+        onPointerEnter={event=>{if(event.pointerType==='mouse')setActive(bar.key)}}
+        onFocus={()=>setActive(bar.key)} onBlur={()=>setActive(null)}
+        onClick={()=>setActive(bar.key)}>
+        <span style={{height:`${Math.max(4,Math.round(bar.wines/tallest*100))}%`}}/>
+      </button>)}
+    </div>
+    <small aria-live="polite" className={shown?'is-reading':undefined}>{shown?winesLabel(shown):caption}</small>
+  </>;
+}
+
 export function TasteSection({data}:{data:JourneyData}){
   const profile=useMemo(()=>buildStructureProfile(data.structures??[]),[data]);
   const discovery=useMemo(()=>readDiscovery(data.discovery??{tastings:0,newProducers:0,newRegions:0,newCountries:0}),[data]);
@@ -43,9 +70,7 @@ export function TasteSection({data}:{data:JourneyData}){
   const {summary}=data;
   const withRatings=showsRatingInsights(summary),withStructure=showsStructureInsights(summary);
   const topStyle=withRatings?[...data.styles].filter(style=>style.averageRating!=null).sort((a,b)=>(b.averageRating??-1)-(a.averageRating??-1)||b.wines-a.wines)[0]:undefined;
-  const busiestMonth=Math.max(1,...cadence.months.map(month=>month.wines));
   const years=[...data.years].sort((a,b)=>a.year.localeCompare(b.year)).slice(-6);
-  const busiestYear=Math.max(1,...years.map(year=>year.wines));
   const widestBand=Math.max(1,...(drinkingAge?.bands.map(band=>band.wines)??[1]));
 
   return <section className="taste-section" id="passport-taste" aria-labelledby="taste-heading">
@@ -107,17 +132,13 @@ export function TasteSection({data}:{data:JourneyData}){
     <article className="taste-card taste-charts">
       <div>
         <strong>Wines by year</strong>
-        {years.length?<div className="taste-mini-chart" role="img" aria-label={years.map(year=>`${year.year}: ${year.wines}`).join(', ')}>
-          {years.map((year,index)=><span key={year.year} className={index===years.length-1?'is-latest':undefined} style={{height:`${Math.max(4,Math.round(year.wines/busiestYear*100))}%`}} title={`${year.year}: ${year.wines}`}/>)}
-        </div>:<div className="taste-mini-chart"/>}
-        <small>{years.length?`${years[0].year}–${years[years.length-1].year}`:'Tasting dates fill this in'}</small>
+        {years.length
+          ?<MiniBars bars={years.map((year,index)=>({key:year.year,label:year.year,wines:year.wines,highlight:index===years.length-1}))} caption={`${years[0].year}–${years[years.length-1].year}`}/>
+          :<><div className="taste-mini-chart"/><small>Tasting dates fill this in</small></>}
       </div>
       <div>
         <strong>Rhythm</strong>
-        <div className="taste-mini-chart" role="img" aria-label={cadence.months.map(month=>`${monthName(month.month)}: ${month.wines}`).join(', ')}>
-          {cadence.months.map(month=><span key={month.month} className={cadence.busiest?.month===month.month?'is-latest':undefined} style={{height:`${Math.max(4,Math.round(month.wines/busiestMonth*100))}%`}} title={`${monthName(month.month)}: ${month.wines}`}/>)}
-        </div>
-        <small>{cadence.busiest?`Busiest: ${monthName(cadence.busiest.month)}`:'No tastings dated in the last year'}</small>
+        <MiniBars bars={cadence.months.map(month=>({key:month.month,label:monthName(month.month),wines:month.wines,highlight:cadence.busiest?.month===month.month}))} caption={cadence.busiest?`Busiest: ${monthName(cadence.busiest.month)}`:'No tastings dated in the last year'}/>
       </div>
     </article>
 

@@ -81,10 +81,10 @@ describe('Your taste, for a journal that rarely scores wines',()=>{
   it('names every month of the rhythm chart, empty ones included',()=>{
     const page=render(journal());
     const chart=[...page.querySelectorAll('.taste-charts .taste-mini-chart')][1];
-    const label=chart.getAttribute('aria-label')??'';
-    expect(label).toMatch(/August 2026: 5/);
-    expect(label).toMatch(/July 2026: 4/);
-    expect(label).toMatch(/: 0/);
+    const label=[...chart.querySelectorAll('button')].map(bar=>bar.getAttribute('aria-label')).join(', ');
+    expect(label).toMatch(/August 2026: 5 wines/);
+    expect(label).toMatch(/July 2026: 4 wines/);
+    expect(label).toMatch(/: 0 wines/);
   });
 
   it('hides the rating and structure readings and says so once',()=>{
@@ -133,5 +133,31 @@ describe('the Passport stays about the wine',()=>{
     for(const file of ['src/features/journey/PassportPage.tsx','src/features/journey/TasteSection.tsx'])
       expect(readFileSync(file,'utf8')).not.toContain('AiSpendCard');
     expect(readFileSync('src/features/auth/AdminPage.tsx','utf8')).toMatch(/section==='spend'&&<AiSpendCard\/>/);
+  });
+});
+
+describe('Reading the number behind a chart bar',()=>{
+  it('swaps the caption for the tapped bar and its count',()=>{
+    const page=render(journal({years:[{year:'2025',wines:1,ratedWines:0,averageRating:null},{year:'2026',wines:41,ratedWines:2,averageRating:null}]}));
+    const [years]=[...page.querySelectorAll('.taste-charts>div')];
+    expect(text(years.querySelector('small')!)).toBe('2025–2026');
+    const bars=[...years.querySelectorAll('.taste-mini-chart>button')] as HTMLButtonElement[];
+    expect(bars.map(bar=>bar.getAttribute('aria-label'))).toEqual(['2025: 1 wine','2026: 41 wines']);
+    act(()=>bars[1].click());
+    expect(text(years.querySelector('small')!)).toBe('2026: 41 wines');
+    expect(bars[1].getAttribute('aria-pressed')).toBe('true');
+    act(()=>bars[0].click());
+    expect(text(years.querySelector('small')!)).toBe('2025: 1 wine');
+    act(()=>bars[0].blur());
+  });
+
+  it('keeps the busiest month as the Rhythm caption until a bar is chosen',()=>{
+    const page=render(journal());
+    const rhythm=[...page.querySelectorAll('.taste-charts>div')][1];
+    expect(text(rhythm.querySelector('small')!)).toMatch(/^Busiest: /);
+    const bars=[...rhythm.querySelectorAll('.taste-mini-chart>button')] as HTMLButtonElement[];
+    expect(bars.length).toBeGreaterThan(0);
+    act(()=>bars[bars.length-1].click());
+    expect(text(rhythm.querySelector('small')!)).toMatch(/: \d+ wines?$/);
   });
 });
