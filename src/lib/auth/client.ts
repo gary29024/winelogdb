@@ -1,4 +1,5 @@
 import { dataChanged,forgetLoadedData } from '../query/client';
+import { setSavedReadsOwner } from '../offline/savedReads';
 import { requiresAiReservation as isAi } from '../ai/reservedRoutes';
 
 export type Account={id:string;email:string;display_name:string;handle?:string|null;role:'owner'|'member';status:string;tour_state?:string};
@@ -20,7 +21,7 @@ export const getSession=()=>account?.id??null;
 export const hasSession=()=>account!==null;
 export const accountStorageKey=(key:string)=>`${key}:${getSession()??'signed-out'}`;
 export const authHeaders=(json=false):Record<string,string>=>({...account?{'X-WineLog-Account':account.id}:{},...json?{'Content-Type':'application/json'}:{}});
-export function clearSession(){account=null;generation++;pendingReads.clear();forgetLoadedData();localStorage.removeItem('session');localStorage.removeItem(REMEMBERED_ACCOUNT);sessionStorage.removeItem('winelog-account')}
+export function clearSession(){account=null;generation++;pendingReads.clear();forgetLoadedData();localStorage.removeItem('session');localStorage.removeItem(REMEMBERED_ACCOUNT);setSavedReadsOwner(null);sessionStorage.removeItem('winelog-account')}
 /**
  * Who was signed in the last time the server said so, kept on this device so
  * the app can open with no signal. It is a name and an id, never a credential:
@@ -39,11 +40,13 @@ export async function bootstrapAccount(){
   const saved=rememberedAccount();
   if(!saved)throw error;
   if(sessionStorage.getItem('winelog-account')!==saved.id){generation++;forgetLoadedData()}
-  account=saved;sessionStorage.setItem('winelog-account',saved.id);window.dispatchEvent(new Event(ACCOUNT_UPDATED));return saved;
+  account=saved;setSavedReadsOwner(saved.id);sessionStorage.setItem('winelog-account',saved.id);window.dispatchEvent(new Event(ACCOUNT_UPDATED));return saved;
  }
  const body=response.ok?await response.json() as {user:Account;friendRequests?:number}:null,next=body?.user??null;
  friendRequests=Number(body?.friendRequests)||0;
  try{if(next)localStorage.setItem(REMEMBERED_ACCOUNT,JSON.stringify(next));else localStorage.removeItem(REMEMBERED_ACCOUNT)}catch{}
+ // Saved copies of screens belong to one account; anyone else's are deleted here.
+ setSavedReadsOwner(next?.id??null);
  const previous=sessionStorage.getItem('winelog-account');
  if(previous!==next?.id){generation++;forgetLoadedData();for(const key of Object.keys(sessionStorage))if(key.startsWith('winelog'))sessionStorage.removeItem(key)}
  account=next;localStorage.removeItem('session');if(next)sessionStorage.setItem('winelog-account',next.id);localStorage.setItem('winelog-account-id',next?.id??'');window.dispatchEvent(new Event(ACCOUNT_UPDATED));return next;

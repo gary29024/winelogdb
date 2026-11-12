@@ -28,3 +28,5 @@ src/lib/offline/register.ts
 src/components/OfflineBar.tsx
 src/offline.css
 tests/unit/offlineShell.test.ts
+src/lib/offline/savedReads.ts
+tests/unit/savedReads.test.tsx

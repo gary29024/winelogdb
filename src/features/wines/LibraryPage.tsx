@@ -8,6 +8,7 @@ import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
 import { attachWinesToTasting,getTasting } from '../tastings/api';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
 import { useLoad } from '../../lib/query/client';
+import { markSavedCopy,readKeepingCopy,unmarkSavedCopy } from '../../lib/offline/savedReads';
 import { WineImage } from './WineImage';
 import { JournalSearchInput } from './JournalSearchInput';
 import { JournalScopeTabs } from './JournalScopeTabs';
@@ -247,7 +248,10 @@ export function LibraryPage(){
     // phone this avoids tearing down and rebuilding dozens of image cards just
     // to show a loading line, and makes a settled search feel continuous.
     setLoading(true);setError('');setSelectedIds(new Set());setSelecting(Boolean(attachTo));setBatchOpen(false);
-    listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal:controller.signal})
+    // With no signal, the last copy of this exact view (same search, filters
+    // and page) is shown instead of an error, and the offline bar says so.
+    const savedKey=['journal',queryKey];
+    readKeepingCopy(savedKey,()=>listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal:controller.signal}),at=>markSavedCopy(savedKey,at,true))
       .then(result=>{
         if(controller.signal.aborted)return;
         // A saved page can disappear after deletion or unsharing. Keep the
@@ -262,8 +266,11 @@ export function LibraryPage(){
       })
       .catch(e=>{if(e?.name!=='AbortError')setError(e.message)})
       .finally(()=>{if(!controller.signal.aborted&&!redirecting)setLoading(false)});
-    return()=>controller.abort();
+    return()=>{controller.abort();unmarkSavedCopy(savedKey)};
   },[queryKey,refreshSeq,restoring,attachTo,currentOffset,params,setParams]);
+
+  // The signal came back: ask for the list again instead of leaving a saved copy up.
+  useEffect(()=>{const reload=()=>setRefreshSeq(value=>value+1);window.addEventListener('online',reload);return()=>window.removeEventListener('online',reload)},[]);
 
   function leaveAttachMode(){
     setSelectedIds(new Set());setSelecting(false);setBatchError('');
