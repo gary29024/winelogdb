@@ -8,8 +8,7 @@ import { JOURNAL_BACK,linkFrom,type BackTarget } from './backTarget';
 import { Link,Navigate,useNavigate,useSearchParams } from 'react-router-dom';
 import { attachWinesToTasting,getTasting } from '../tastings/api';
 import { batchUpdateJournalExperience,listWines,setWineFavorite,type JournalWine } from './api';
-import { useLoad } from '../../lib/query/client';
-import { markSavedCopy,readKeepingCopy,unmarkSavedCopy } from '../../lib/offline/savedReads';
+import { setLoaded,useLoad } from '../../lib/query/client';
 import { WineImage } from './WineImage';
 import { JournalSearchInput } from './JournalSearchInput';
 import { JournalScopeTabs } from './JournalScopeTabs';
@@ -25,6 +24,8 @@ import { LoadError } from '../../components/LoadError';
 import { listFriendTags,setBulkWineFriendTags,type FriendTag } from './friendTags';
 
 const PAGE_SIZE=36;
+type JournalPage={items:JournalWine[];nextOffset:number|null;total:number};
+const NO_WINES:JournalWine[]=[];
 const MAX_BATCH_SELECTION=500;
 type ViewMode='grid'|'list';
 const journalDate=(wine:JournalWine)=>wine.tastingDate||wine.createdAt;
@@ -103,14 +104,16 @@ export function LibraryPage(){
     const search=params.toString();
     return search?{to:`/journal?${search}`,label:'Journal'}:JOURNAL_BACK;
   },[params]);
-  const [data,setData]=useState<JournalWine[]>([]),[nextOffset,setNextOffset]=useState<number|null>(null),[total,setTotal]=useState(0),[error,setError]=useState(''),[loading,setLoading]=useState(true);
+  // What a save, a favourite or a batch change said went wrong. A failed read of
+  // the list itself is reported by the loader below.
+  const [actionError,setError]=useState('');
   // A URL that carries its own filters always wins, so a deep link or a link in
   // from Insights is never overridden by what was stored. Once the remembered
   // filters have been applied they are consumed: otherwise clearing the URL
   // later would make the original snapshot restore itself a second time.
   const [restoreFilters,setRestoreFilters]=useState(()=>params.toString()?'':savedJournalFilters());
   const restoring=Boolean(restoreFilters)&&!params.toString();
-  const [view,setViewState]=useState<ViewMode>(initialView),[refreshSeq,setRefreshSeq]=useState(0);
+  const [view,setViewState]=useState<ViewMode>(initialView);
   // Search text lives in JournalSearchInput so each keystroke does not traverse
   // the wine grid. This counter is only for an explicit Reset when the draft has
   // not reached the URL yet.
@@ -129,8 +132,34 @@ export function LibraryPage(){
   const [tagOpen,setTagOpen]=useState(false),[tagBusy,setTagBusy]=useState(false),[tagError,setTagError]=useState(''),[tagFriends,setTagFriends]=useState<FriendTag[]>([]),[tagSelected,setTagSelected]=useState<string[]>([]);
   const [changeEvent,setChangeEvent]=useState(false),[changeVenue,setChangeVenue]=useState(false),[eventValue,setEventValue]=useState(''),[venueValue,setVenueValue]=useState(''),[eventMixed,setEventMixed]=useState(false),[venueMixed,setVenueMixed]=useState(false);
   const rawOffset=Number(params.get('offset'))||0,currentOffset=Math.max(0,Math.floor(rawOffset/PAGE_SIZE)*PAGE_SIZE),currentPage=currentOffset/PAGE_SIZE+1;
-  const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   const queryKey=params.toString();
+  /**
+   * The list comes through the shared loader, named after this exact view: the
+   * same search, filters and page. So coming back from a wine shows the list
+   * at once and checks it in the background, any save elsewhere refreshes it,
+   * and with no signal the copy kept on this phone is shown instead.
+   *
+   * While the next page or search is on its way the last one stays painted.
+   */
+  const journalKey=useMemo(()=>['journal',queryKey] as const,[queryKey]);
+  const list=useLoad<JournalPage>(journalKey,signal=>listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal}),{skip:restoring,keepPrevious:true});
+  const arrived=!list.loading&&list.data?list.data:undefined;
+  // A saved page can disappear after deletion or unsharing. Its answer is not
+  // shown; the effect further down returns to the last page that still exists.
+  const pageGone=Boolean(arrived)&&currentOffset>0&&currentOffset>=arrived!.total;
+  // The last page worth showing. When the next one fails it stays on screen with
+  // the error beside it, which is better than an empty Journal.
+  const [kept,setKept]=useState<JournalPage>();
+  useEffect(()=>{if(list.data&&!pageGone)setKept(list.data)},[list.data,pageGone]);
+  const page=list.data&&!pageGone?list.data:kept;
+  const data=page?.items??NO_WINES,nextOffset=page?.nextOffset??null,total=page?.total??0;
+  const loading=list.loading||pageGone;
+  const error=actionError||list.error||(list.failed?'Your journal could not be loaded.':'');
+  const startOver=()=>{setError('');setSelectedIds(new Set());setSelecting(Boolean(attachTo));setBatchOpen(false)};
+  /** Ask for this view again, as a fresh start: selection and old errors go. */
+  const refresh=()=>{startOver();list.retry()};
+  const showFavorite=(id:string,favorite:boolean)=>setLoaded<JournalPage>(journalKey,previous=>({...previous,items:previous.items.map(item=>item.id===id?{...item,favorite}:item)}));
+  const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
   const favoriteOnly=params.get('favorite')==='1';
   /**
    * Adding already-logged wines to a tasting reuses this page's own selection
@@ -218,12 +247,12 @@ export function LibraryPage(){
   async function toggleFavorite(wine:JournalWine,next:boolean){
     if(favoriteBusy.has(wine.id))return;
     setError('');setFavoriteBusy(previous=>new Set(previous).add(wine.id));
-    setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:next}:item));
+    showFavorite(wine.id,next);
     try{
       await setWineFavorite(wine.id,next);
-      if(favoriteOnly&&!next)setRefreshSeq(value=>value+1);
+      if(favoriteOnly&&!next)refresh();
     }catch(e){
-      setData(previous=>previous.map(item=>item.id===wine.id?{...item,favorite:wine.favorite}:item));setError((e as Error).message);
+      showFavorite(wine.id,wine.favorite);setError((e as Error).message);
     }finally{setFavoriteBusy(previous=>{const copy=new Set(previous);copy.delete(wine.id);return copy})}
   }
 
@@ -241,37 +270,16 @@ export function LibraryPage(){
 
   useEffect(()=>setPageDraft(String(currentPage)),[currentPage]);
 
-  useEffect(()=>{
-    if(restoring)return;
-    const controller=new AbortController();
-    let redirecting=false;
-    // Keep the previous page painted while the next query is in flight. On a
-    // phone this avoids tearing down and rebuilding dozens of image cards just
-    // to show a loading line, and makes a settled search feel continuous.
-    setLoading(true);setError('');setSelectedIds(new Set());setSelecting(Boolean(attachTo));setBatchOpen(false);
-    // With no signal, the last copy of this exact view (same search, filters
-    // and page) is shown instead of an error, and the offline bar says so.
-    const savedKey=['journal',queryKey];
-    readKeepingCopy(savedKey,()=>listWines(params,{limit:PAGE_SIZE,offset:currentOffset,signal:controller.signal}),at=>markSavedCopy(savedKey,at,true))
-      .then(result=>{
-        if(controller.signal.aborted)return;
-        // A saved page can disappear after deletion or unsharing. Keep the
-        // filters and return to the last remaining page before showing results.
-        if(currentOffset>0&&currentOffset>=result.total){
-          const lastOffset=Math.max(0,(Math.ceil(result.total/PAGE_SIZE)-1)*PAGE_SIZE);
-          redirecting=true;
-          setParams(previous=>{const next=new URLSearchParams(previous);if(lastOffset)next.set('offset',String(lastOffset));else next.delete('offset');return next},{replace:true});
-          return;
-        }
-        setData(result.items);setNextOffset(result.nextOffset);setTotal(result.total);
-      })
-      .catch(e=>{if(e?.name!=='AbortError')setError(e.message)})
-      .finally(()=>{if(!controller.signal.aborted&&!redirecting)setLoading(false)});
-    return()=>{controller.abort();unmarkSavedCopy(savedKey)};
-  },[queryKey,refreshSeq,restoring,attachTo,currentOffset,params,setParams]);
+  // A different search, filter or page starts clean: nothing selected, no old error.
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- startOver reads only attachTo, which is listed
+  useEffect(()=>{if(!restoring)startOver()},[queryKey,restoring,attachTo]);
 
-  // The signal came back: ask for the list again instead of leaving a saved copy up.
-  useEffect(()=>{const reload=()=>setRefreshSeq(value=>value+1);window.addEventListener('online',reload);return()=>window.removeEventListener('online',reload)},[]);
+  useEffect(()=>{
+    if(!pageGone||!arrived)return;
+    const lastOffset=Math.max(0,(Math.ceil(arrived.total/PAGE_SIZE)-1)*PAGE_SIZE);
+    setParams(previous=>{const next=new URLSearchParams(previous);if(lastOffset)next.set('offset',String(lastOffset));else next.delete('offset');return next},{replace:true});
+  },[pageGone,arrived,setParams]);
+
 
   function leaveAttachMode(){
     setSelectedIds(new Set());setSelecting(false);setBatchError('');
@@ -298,7 +306,7 @@ export function LibraryPage(){
     setBatchBusy(true);setBatchError('');setBatchNotice('');
     try{
       const result=await batchUpdateJournalExperience([...selectedIds],patch);
-      setBatchNotice(`Updated ${result.updated} wine${result.updated===1?'':'s'}.`);setBatchOpen(false);setSelecting(false);setSelectedIds(new Set());setRefreshSeq(value=>value+1);
+      setBatchNotice(`Updated ${result.updated} wine${result.updated===1?'':'s'}.`);setBatchOpen(false);setSelecting(false);setSelectedIds(new Set());list.retry();
     }catch(e){setBatchError((e as Error).message)}finally{setBatchBusy(false)}
   }
 
@@ -355,7 +363,7 @@ export function LibraryPage(){
     <div className={`journal-viewbar${selecting?' selecting':''}`}>{selecting&&<span>{`${selectedIds.size} selected`}</span>}{selecting?<div className="journal-selection-actions"><button type="button" onClick={selectAllOnPage} disabled={!data.length}>Select all on page</button><button type="button" onClick={()=>setSelectedIds(new Set())} disabled={!selectedIds.size}>Clear</button>{attachTo
       ?<button type="button" className="primary" onClick={()=>void submitAttach()} disabled={!selectedIds.size||batchBusy}>{batchBusy?'Adding…':`Add ${selectedIds.size} to ${attachName||'tasting'}`}</button>
       :<><button type="button" onClick={()=>void openFriendTagging()} disabled={!selectedIds.size}>Tag friends</button><button type="button" onClick={openStoryCard} disabled={!selectedIds.size}>Share</button><button ref={batchTrigger} type="button" className="primary" onClick={openBatchEditor} disabled={!selectedIds.size}>Edit event / venue</button></>}<button type="button" onClick={attachTo?leaveAttachMode:stopSelecting} className="quiet">Done</button></div>:<div className="journal-view-actions"><button type="button" className="journal-select-toggle" data-tour="journal-select" onClick={()=>{setSelecting(true);setBatchNotice('')}} disabled={!data.some(wine=>!wine.shared)}>Select</button><div className="journal-view-toggle" role="group" aria-label="Journal layout"><button type="button" className={view==='list'?'active':''} aria-pressed={view==='list'} onClick={()=>setView('list')}>List</button><button type="button" className={view==='grid'?'active':''} aria-pressed={view==='grid'} onClick={()=>setView('grid')}>Grid</button></div></div>}</div>
-    {loading&&!data.length?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<LoadError error={error} fallback="Your journal could not be loaded." onRetry={()=>setRefreshSeq(value=>value+1)}/>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):(narrowingCount>0||Boolean(params.get('query')))?<div className="empty"><h2>No matching wines</h2><p>Try a different search or clear your filters.</p><button type="button" onClick={()=>{setSearchResetSeq(value=>value+1);setParams(previous=>{const next=new URLSearchParams(previous);for(const key of NARROWING_KEYS)next.delete(key);next.delete('query');next.delete('offset');return next})}}>Clear filters</button></div>:favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
+    {loading&&!data.length?<p aria-live="polite">Pouring your collection…</p>:error&&!data.length?<LoadError error={error} fallback="Your journal could not be loaded." onRetry={refresh}/>:data.length?(chronological?<div className="journal-months">{groups.map(group=><section className="journal-month" key={group.key}><h2 className="journal-month-heading">{monthLabel(group.key)}</h2>{renderItems(group.items)}</section>)}</div>:renderItems(data)):(narrowingCount>0||Boolean(params.get('query')))?<div className="empty"><h2>No matching wines</h2><p>Try a different search or clear your filters.</p><button type="button" onClick={()=>{setSearchResetSeq(value=>value+1);setParams(previous=>{const next=new URLSearchParams(previous);for(const key of NARROWING_KEYS)next.delete(key);next.delete('query');next.delete('offset');return next})}}>Clear filters</button></div>:favoriteOnly?<div className="empty favorite-empty"><span><AppIcon kind="heart"/></span><h2>No favorite wines yet</h2><p>Tap the heart on a Journal card or wine page to keep special bottles here.</p><button type="button" onClick={()=>update('favorite','')}>Show all wines</button></div>:<div className="empty"><span><AppIcon kind="journal"/></span><h2>Your journal is empty</h2><p>Scan a bottle label to add your first wine.</p><Link className="button" to="/upload">Scan Wine</Link></div>}
     {error&&data.length>0&&<p className="journal-page-error" role="alert">{error}</p>}
     {totalPages>1&&<nav className="journal-pagination" aria-label="Journal pages"><button type="button" disabled={!hasPrevious||loading} onClick={()=>goToOffset(currentOffset-PAGE_SIZE)}>← Previous</button><form className="journal-page-picker" onSubmit={event=>{event.preventDefault();goToPage()}}><label>Page <input type="number" min="1" max={totalPages} inputMode="numeric" aria-label="Journal page number" value={pageDraft} onChange={event=>setPageDraft(event.target.value)}/> of {totalPages}</label><button type="submit" disabled={loading||pageDraft===String(currentPage)}>Go</button><span>{resultLabel}</span></form><button type="button" disabled={!hasNext||loading} onClick={()=>goToOffset(nextOffset??currentOffset+PAGE_SIZE)}>Next →</button></nav>}
     <FriendTagDialog open={tagOpen} title={`Tag ${selectedIds.size} wine${selectedIds.size===1?'':'s'}`} description="Choose friends to add to every selected wine. Existing friend tags are kept." friends={tagFriends} selected={tagSelected} busy={tagBusy} error={tagError} confirmLabel="Tag selected wines" onSelectedChange={setTagSelected} onConfirm={()=>void saveFriendTags()} onClose={()=>setTagOpen(false)}/>

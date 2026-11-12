@@ -214,24 +214,19 @@ export async function readKeepingCopy<T>(
 // Which answers on screen right now are saved copies, and from when. The
 // offline bar reads this to say so.
 const marks = new Map<string, number>();
-/** Copies shown by a screen that loads for itself (the Journal list) rather than through the shared loader. */
-const standalone = new Set<string>();
 const listeners = new Set<() => void>();
 const announce = () => listeners.forEach((listener) => listener());
 
-export function markSavedCopy(key: readonly unknown[], at: number, onScreenUntilUnmarked = false) {
+export function markSavedCopy(key: readonly unknown[], at: number) {
   marks.set(nameOf(key), at);
-  if (onScreenUntilUnmarked) standalone.add(nameOf(key));
   announce();
 }
 export function unmarkSavedCopy(key: readonly unknown[]) {
-  standalone.delete(nameOf(key));
   if (marks.delete(nameOf(key))) announce();
 }
 export function clearSavedCopyMarks() {
   if (!marks.size) return;
   marks.clear();
-  standalone.clear();
   announce();
 }
 export function subscribeSavedCopies(listener: () => void) {
@@ -242,8 +237,6 @@ export function subscribeSavedCopies(listener: () => void) {
 }
 /** The names and dates of the saved copies currently handed out. */
 export const savedCopyMarks = (): ReadonlyMap<string, number> => marks;
-/** True for a copy whose screen says for itself when it is no longer showing. */
-export const isStandaloneCopy = (name: string) => standalone.has(name);
 
 /** "today at 14:05", "yesterday at 09:30", or "on 3 Nov at 18:20". */
 export function savedLabel(at: number, now = Date.now()) {

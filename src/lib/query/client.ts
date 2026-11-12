@@ -10,7 +10,6 @@ import {
 import {
   clearSavedCopyMarks,
   markSavedCopy,
-  isStandaloneCopy,
   readKeepingCopy,
   savedCopyMarks,
   subscribeSavedCopies,
@@ -230,10 +229,6 @@ export function connectionReturned() {
 export function oldestSavedCopyOnScreen() {
   let oldest = 0;
   for (const [name, at] of savedCopyMarks()) {
-    if (isStandaloneCopy(name)) {
-      if (!oldest || at < oldest) oldest = at;
-      continue;
-    }
     const query = queryClient.getQueryCache().find({ queryKey: JSON.parse(name) as QueryKey, exact: true });
     // A pinned answer (the open tasting) is on every screen, so it says nothing
     // about whether the screen in front of you is a saved copy.

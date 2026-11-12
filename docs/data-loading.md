@@ -30,17 +30,18 @@ Pass one as the third argument when the default does not fit.
 | --- | --- | --- |
 | `summary` | Good for thirty seconds and left alone by ordinary writes; only `discard` makes it stale. | Passport, collections |
 | `pinned` | Read once and kept until `discard`. | The open tasting |
-| `keepPrevious` | Keep the last page on screen, with `loading` true, while the next arrives. | Cellar list |
+| `keepPrevious` | Keep the last page on screen, with `loading` true, while the next arrives. | Cellar list, Journal list |
 | `skip` | Do not ask yet, because there is no id to ask about. | Pages opened without an id |
 
 A loader that takes a parameter is given an `AbortSignal`, and its request is abandoned when the screen
 closes or the key changes.
 
+The Journal list (`LibraryPage`) adds two things of its own on top of `keepPrevious`: it remembers the
+last page that arrived, so a failed next page leaves the old one painted with the error beside it, and
+it redirects from a page number that no longer exists to the last one that does.
+
 ## What is deliberately not on it
 
-- **The Journal list** (`LibraryPage`). It keeps the previous page painted with an error beside it when
-  the next page fails, restores saved filters, and redirects from a page that no longer exists. Those
-  are woven through one effect and are covered by their own tests.
 - **Forms that fill themselves in once** (wine edit, open bottle, shared wine notes). A background
   refresh must not overwrite what someone is typing.
 - **Small one-off probes** such as the cellar strip on a wine page, which ask once per visit and would
