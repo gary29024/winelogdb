@@ -46,8 +46,12 @@
 .taste-charts strong{font-size:.82rem}
 .taste-charts small{overflow:hidden;color:var(--ink-7);font-size:.68rem;text-overflow:ellipsis;white-space:nowrap}
 .taste-mini-chart{display:flex;align-items:flex-end;gap:3px;height:48px}
-.taste-mini-chart>span{flex:1;min-width:0;border-radius:var(--r-xs) var(--r-xs) 2px 2px;background:var(--line-strong)}
-.taste-mini-chart>span.is-latest{background:var(--wine)}
+.taste-mini-chart>button{display:flex;flex:1;align-items:flex-end;min-width:0;height:100%;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.taste-mini-chart>button>span{width:100%;border-radius:var(--r-xs) var(--r-xs) 2px 2px;background:var(--line-strong);transition:opacity .15s}
+.taste-mini-chart>button.is-latest>span{background:var(--wine)}
+.taste-mini-chart:has(.is-active)>button:not(.is-active)>span{opacity:.45}
+.taste-mini-chart>button:hover:not(:disabled){background:none}
+.taste-charts small.is-reading{color:var(--ink);font-weight:600}
 
 .taste-more{margin-top:10px;overflow:hidden;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper)}
 .taste-more-title{margin:0;padding:11px 14px 6px;font-size:.82rem;font-weight:700}
