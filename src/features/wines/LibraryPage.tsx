@@ -1,4 +1,5 @@
 import { useModalFocus } from '../../components/useModalFocus';
+import { SharedLabel } from './SharedLabel';
 import { PageIntro } from '../../components/PageIntro';
 import { accountStorageKey } from '../../lib/auth/client';
 import { useEffect,useMemo,useRef,useState } from 'react';
@@ -70,7 +71,7 @@ const sharedText=(values:Array<string|null>)=>{
 };
 
 function WineCard({wine:w,view,selecting,selected,onToggle,onFavorite,favoriteBusy,backTo}:{wine:JournalWine;view:ViewMode;selecting:boolean;selected:boolean;onToggle:()=>void;onFavorite:(next:boolean)=>void;favoriteBusy:boolean;backTo:BackTarget}){
-  const image=w.shared&&w.imageUrl?<img src={w.imageUrl} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb" loading="lazy" decoding="async"/>:w.imageIds[0]?<WineImage imageId={w.imageIds[0]} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:<div className={`bottle bottle-${pourFamily(w.wineStyle)}`}>{w.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>;
+  const image=w.shared&&w.imageUrl?<SharedLabel src={w.imageUrl} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:w.imageIds[0]?<WineImage imageId={w.imageIds[0]} alt={`${w.producer} ${w.wineName} front label`} className="journal-wine-thumb"/>:<div className={`bottle bottle-${pourFamily(w.wineStyle)}`}>{w.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>;
   const selectable=selecting&&!w.shared;
   const className=`wine-card journal-card ${view==='grid'?'journal-grid-card':''}${w.shared?' shared':''}${selectable?' journal-selectable-card':''}${selected?' selected':''}`;
   // Keep the card's descendants stable when selection mode changes. WineImage
