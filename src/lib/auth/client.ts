@@ -20,11 +20,30 @@ export const getSession=()=>account?.id??null;
 export const hasSession=()=>account!==null;
 export const accountStorageKey=(key:string)=>`${key}:${getSession()??'signed-out'}`;
 export const authHeaders=(json=false):Record<string,string>=>({...account?{'X-WineLog-Account':account.id}:{},...json?{'Content-Type':'application/json'}:{}});
-export function clearSession(){account=null;generation++;pendingReads.clear();forgetLoadedData();localStorage.removeItem('session');sessionStorage.removeItem('winelog-account')}
+export function clearSession(){account=null;generation++;pendingReads.clear();forgetLoadedData();localStorage.removeItem('session');localStorage.removeItem(REMEMBERED_ACCOUNT);sessionStorage.removeItem('winelog-account')}
+/**
+ * Who was signed in the last time the server said so, kept on this device so
+ * the app can open with no signal. It is a name and an id, never a credential:
+ * the server still decides every request, and signing out removes it.
+ */
+const REMEMBERED_ACCOUNT='winelog-account-offline';
+function rememberedAccount():Account|null{
+ try{const saved=JSON.parse(localStorage.getItem(REMEMBERED_ACCOUNT)??'null') as Account|null;return saved&&typeof saved.id==='string'?saved:null}catch{return null}
+}
 export async function bootstrapAccount(){
- const response=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
+ let response:Response;
+ try{response=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'})}
+ catch(error){
+  // The request never reached the server: no signal, not signed out. Open as
+  // the person last seen here; anything they try to load says it is offline.
+  const saved=rememberedAccount();
+  if(!saved)throw error;
+  if(sessionStorage.getItem('winelog-account')!==saved.id){generation++;forgetLoadedData()}
+  account=saved;sessionStorage.setItem('winelog-account',saved.id);window.dispatchEvent(new Event(ACCOUNT_UPDATED));return saved;
+ }
  const body=response.ok?await response.json() as {user:Account;friendRequests?:number}:null,next=body?.user??null;
  friendRequests=Number(body?.friendRequests)||0;
+ try{if(next)localStorage.setItem(REMEMBERED_ACCOUNT,JSON.stringify(next));else localStorage.removeItem(REMEMBERED_ACCOUNT)}catch{}
  const previous=sessionStorage.getItem('winelog-account');
  if(previous!==next?.id){generation++;forgetLoadedData();for(const key of Object.keys(sessionStorage))if(key.startsWith('winelog'))sessionStorage.removeItem(key)}
  account=next;localStorage.removeItem('session');if(next)sessionStorage.setItem('winelog-account',next.id);localStorage.setItem('winelog-account-id',next?.id??'');window.dispatchEvent(new Event(ACCOUNT_UPDATED));return next;
