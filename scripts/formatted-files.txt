@@ -30,3 +30,5 @@ src/offline.css
 tests/unit/offlineShell.test.ts
 src/lib/offline/savedReads.ts
 tests/unit/savedReads.test.tsx
+src/lib/offline/savedPhotos.ts
+tests/unit/savedPhotos.test.tsx

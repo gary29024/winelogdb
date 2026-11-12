@@ -34,76 +34,99 @@ function request<T>(source: IDBRequest<T>) {
   });
 }
 
-function open(scope: string) {
-  return new Promise<IDBDatabase>((resolve, reject) => {
-    if (typeof indexedDB === 'undefined') {
-      reject(new Error('Browser storage is unavailable'));
-      return;
-    }
-    const opening = indexedDB.open(DB_PREFIX + scope, 1);
-    opening.onupgradeneeded = () => {
-      opening.result.createObjectStore(STORE, { keyPath: 'key' }).createIndex('at', 'at');
-    };
-    opening.onsuccess = () => resolve(opening.result);
-    opening.onerror = () => reject(opening.error ?? new Error('Could not open browser storage'));
-  });
+/** One kind of thing kept on the device: what it holds, and when it was filed. */
+export interface DeviceStore<T> {
+  get(scope: string, key: string): Promise<{ value: T; at: number } | undefined>;
+  put(scope: string, key: string, saved: { value: T; at: number }): Promise<void>;
+  clear(scope: string): Promise<void>;
 }
 
-let writes = 0;
-async function prune(db: IDBDatabase) {
-  const store = db.transaction(STORE, 'readwrite').objectStore(STORE);
-  let extra = (await request(store.count())) - MAX_ENTRIES;
-  if (extra <= 0) return;
-  await new Promise<void>((resolve, reject) => {
-    const walk = store.index('at').openCursor();
-    walk.onerror = () => reject(walk.error);
-    walk.onsuccess = () => {
-      const cursor = walk.result;
-      if (!cursor || extra <= 0) return resolve();
-      cursor.delete();
-      extra -= 1;
-      cursor.continue();
-    };
-  });
-}
-
-const browserBackend: SavedReadsBackend = {
-  async get(scope, key) {
-    const db = await open(scope);
-    try {
-      const row = await request<{ value: unknown; at: number } | undefined>(
-        db.transaction(STORE).objectStore(STORE).get(key),
-      );
-      return row ? { value: row.value, at: row.at } : undefined;
-    } finally {
-      db.close();
-    }
-  },
-  async put(scope, key, saved) {
-    const db = await open(scope);
-    try {
-      await request(
-        db
-          .transaction(STORE, 'readwrite')
-          .objectStore(STORE)
-          .put({ key, ...saved }),
-      );
-      if (++writes % PRUNE_EVERY === 0) await prune(db);
-    } finally {
-      db.close();
-    }
-  },
-  clear(scope) {
-    return new Promise<void>((resolve) => {
-      if (typeof indexedDB === 'undefined') return resolve();
-      const removal = indexedDB.deleteDatabase(DB_PREFIX + scope);
-      removal.onsuccess = removal.onerror = removal.onblocked = () => resolve();
+/**
+ * A store in the browser's own database, one database per account, holding at
+ * most `maxEntries` things. When it grows past that, the oldest are removed.
+ */
+export function browserDeviceStore<T>(prefix: string, maxEntries: number): DeviceStore<T> {
+  const open = (scope: string) =>
+    new Promise<IDBDatabase>((resolve, reject) => {
+      if (typeof indexedDB === 'undefined') {
+        reject(new Error('Browser storage is unavailable'));
+        return;
+      }
+      const opening = indexedDB.open(prefix + scope, 1);
+      opening.onupgradeneeded = () => {
+        opening.result.createObjectStore(STORE, { keyPath: 'key' }).createIndex('at', 'at');
+      };
+      opening.onsuccess = () => resolve(opening.result);
+      opening.onerror = () => reject(opening.error ?? new Error('Could not open browser storage'));
     });
-  },
-};
+
+  let writes = 0;
+  async function prune(db: IDBDatabase) {
+    const store = db.transaction(STORE, 'readwrite').objectStore(STORE);
+    let extra = (await request(store.count())) - maxEntries;
+    if (extra <= 0) return;
+    await new Promise<void>((resolve, reject) => {
+      const walk = store.index('at').openCursor();
+      walk.onerror = () => reject(walk.error);
+      walk.onsuccess = () => {
+        const cursor = walk.result;
+        if (!cursor || extra <= 0) return resolve();
+        cursor.delete();
+        extra -= 1;
+        cursor.continue();
+      };
+    });
+  }
+
+  return {
+    async get(scope, key) {
+      const db = await open(scope);
+      try {
+        const row = await request<{ value: T; at: number } | undefined>(
+          db.transaction(STORE).objectStore(STORE).get(key),
+        );
+        return row ? { value: row.value, at: row.at } : undefined;
+      } finally {
+        db.close();
+      }
+    },
+    async put(scope, key, saved) {
+      const db = await open(scope);
+      try {
+        await request(
+          db
+            .transaction(STORE, 'readwrite')
+            .objectStore(STORE)
+            .put({ key, ...saved }),
+        );
+        if (++writes % PRUNE_EVERY === 0) await prune(db);
+      } finally {
+        db.close();
+      }
+    },
+    clear(scope) {
+      return new Promise<void>((resolve) => {
+        if (typeof indexedDB === 'undefined') return resolve();
+        const removal = indexedDB.deleteDatabase(prefix + scope);
+        removal.onsuccess = removal.onerror = removal.onblocked = () => resolve();
+      });
+    },
+  };
+}
+
+const browserBackend: SavedReadsBackend = browserDeviceStore<unknown>(DB_PREFIX, MAX_ENTRIES);
 
 let backend: SavedReadsBackend = browserBackend;
 let scope: string | null = null;
+/** Other things kept per account on this device (label photos), deleted along with the copies. */
+const alsoOwned = new Set<(scope: string) => Promise<void>>();
+
+/** The account whose copies are being kept, or null when nobody is signed in. */
+export const savedReadsOwner = () => scope;
+/** Have something else deleted whenever the copies of an account are. */
+export function deleteWithSavedReads(clear: (scope: string) => Promise<void>) {
+  alsoOwned.add(clear);
+}
 
 /** Tests only: keep copies somewhere other than the browser's database. */
 export function setSavedReadsBackend(next: SavedReadsBackend | null) {
@@ -126,7 +149,10 @@ const lastScope = () => {
 export function setSavedReadsOwner(accountId: string | null) {
   const previous = scope ?? lastScope();
   scope = accountId;
-  if (previous && previous !== accountId) void backend.clear(previous).catch(() => null);
+  if (previous && previous !== accountId) {
+    void backend.clear(previous).catch(() => null);
+    alsoOwned.forEach((clear) => void clear(previous).catch(() => null));
+  }
   try {
     if (accountId) localStorage.setItem(SCOPE_KEY, accountId);
     else localStorage.removeItem(SCOPE_KEY);

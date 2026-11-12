@@ -1,6 +1,7 @@
 import { apiFetch } from '../../lib/auth/client';
 import { useEffect,useRef,useState } from 'react';
 import { authHeaders } from '../../lib/auth/client';
+import { photoKeepingCopy } from '../../lib/offline/savedPhotos';
 import { labelFocusPosition } from '../../lib/wine/labelFocus';
 import '../../wineImages.css';
 
@@ -26,9 +27,10 @@ function loadImageUrl(imageId:string,variant:'thumbnail'|'original'){
   const cacheKey=`${variant}:${imageId}`;
   const cached=cachedImageUrl(cacheKey);if(cached)return Promise.resolve(cached);
   const pending=imageRequests.get(cacheKey);if(pending)return pending;
-  const request=apiFetch(`/api/images/${imageId}${variant==='thumbnail'?'?variant=thumbnail':''}`,{headers:authHeaders(),cache:'default'})
-    .then(async response=>{if(!response.ok)throw new Error(`Image failed (${response.status})`);return response.blob()})
-    .then(blob=>{const src=URL.createObjectURL(blob);rememberImageUrl(cacheKey,src);return src})
+  // With no connection, a small photo kept on this phone is shown instead.
+  const request=photoKeepingCopy(imageId,variant,()=>apiFetch(`/api/images/${imageId}${variant==='thumbnail'?'?variant=thumbnail':''}`,{headers:authHeaders(),cache:'default'})
+    .then(async response=>{if(!response.ok)throw new Error(`Image failed (${response.status})`);return response.blob()}))
+    .then(({photo,standIn})=>{const src=URL.createObjectURL(photo);if(!standIn)rememberImageUrl(cacheKey,src);return src})
     .finally(()=>imageRequests.delete(cacheKey));
   imageRequests.set(cacheKey,request);return request;
 }

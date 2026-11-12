@@ -202,9 +202,11 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
 
     // The built app keeps itself on the device: with the network switched off a
     // reload still opens the signed-in app, says plainly that it is offline, and
-    // shows the Journal as it was last loaded on this device, marked as a copy.
+    // shows the Journal as it was last loaded on this device, marked as a copy,
+    // with the label photos it showed then.
     await page.goto(`${stack.origin}/journal`);
     await expect(page.locator('.journal-card').first()).toBeVisible();
+    await expect(page.locator('img.journal-wine-thumb').first()).toBeVisible();
     await page.evaluate(async () => { await navigator.serviceWorker.ready; });
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)) ).toBe(true);
     await page.context().setOffline(true);
@@ -213,12 +215,14 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     await expect(page.getByRole('heading', { level: 1, name: 'Journal' })).toBeVisible();
     await expect(page.locator('.offline-bar')).toContainText('Showing the copy saved on this phone today');
     await expect(page.locator('.journal-card').first()).toBeVisible();
+    await expect(page.locator('img.journal-wine-thumb').first()).toBeVisible();
     // A view never loaded on this device has no copy, and says so instead of inventing one.
     await page.goto(`${stack.origin}/journal?query=never-searched-before`);
     await expect(page.getByText('You appear to be offline')).toBeVisible();
     // A wine opened earlier in this journey is readable too, heading and all.
     await page.goto(`${stack.origin}/wines/${wineId}`);
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Clos de la Roche');
+    await expect(page.locator('img.detail-photo').first()).toBeVisible();
     await expect(page.locator('.offline-bar')).toContainText('Showing the copy saved on this phone');
     await page.context().setOffline(false);
     await expect(page.locator('.offline-bar')).toHaveCount(0);
