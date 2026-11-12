@@ -1,4 +1,5 @@
 import { useCallback,useEffect,useMemo,useState,type FormEvent } from 'react';
+import { SharedLabel } from './SharedLabel';
 import { Link,useLocation,useParams } from 'react-router-dom';
 import { apiJson } from '../../lib/auth/api';
 import type { SharedWine,SharedWineExperience } from '../../lib/wine/shared';
@@ -109,7 +110,7 @@ export function SharedWinesPage(){
     title={wine.wineName}
     media={<div className="detail-media">
      {heroPhoto
-      ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(heroPhoto.url)} aria-label={`Open photo 1 of ${wine.photos!.length}`}><img src={heroPhoto.url} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo" loading="lazy" decoding="async"/></button>
+      ?<button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(heroPhoto.url)} aria-label={`Open photo 1 of ${wine.photos!.length}`}><SharedLabel src={heroPhoto.url} alt={`${wine.producer} ${wine.wineName}`} className="detail-photo"/></button>
       :<div className="detail-bottle">{wine.wineStyle?.slice(0,1).toUpperCase()||'W'}</div>}
      {(wine.photos?.length??0)>1&&<span className="detail-photo-count">{wine.photos!.length} photos</span>}
     </div>}
@@ -146,7 +147,7 @@ export function SharedWinesPage(){
       name; a recipient cannot change these, so there is nothing to manage. */}
   {(wine.photos?.length??0)>1&&<section className="detail-section detail-photos-panel">
    <SectionLabel>Photos</SectionLabel>
-   <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><img src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo" loading="lazy" decoding="async"/></button></span>)}</div>
+   <div className="detail-gallery" aria-label={`${wine.wineName} photos`}>{wine.photos!.map((photo,index)=><span className="detail-photo-slot" key={photo.id}><button type="button" className="detail-photo-button" onClick={()=>setSelectedPhoto(photo.url)} aria-label={`Open photo ${index+1} of ${wine.photos!.length}`}><SharedLabel src={photo.url} alt={`${wine.producer} ${wine.wineName} photo ${index+1}`} className="detail-photo"/></button></span>)}</div>
   </section>}
   <section className="detail-section deep-search-panel">
    <div className="deep-panel-head"><SectionLabel origin={wine.deepSearch&&wine.deepSearch.complete!==false?'researched':undefined}>Deep Search</SectionLabel>{wine.deepSearch&&<div className="deep-panel-meta"><ResearchLanguageSwitch state={research}/></div>}</div>
