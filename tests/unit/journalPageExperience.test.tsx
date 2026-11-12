@@ -30,6 +30,54 @@ async function render(url:string,fetcher:ReturnType<typeof vi.fn>){
   await flush();return host;
 }
 
+describe('Journal on the shared loader',()=>{
+  const reply=(body:unknown)=>new Response(JSON.stringify(body),{status:200,headers:{'content-type':'application/json'}});
+  const pageOf=(total:number,offset=0)=>({items:[journalWine()],nextOffset:offset+36<total?offset+36:null,total});
+
+  it('shows the list at once on coming back, and checks it in the background',async()=>{
+    let waiting:(()=>void)|undefined,calls=0;
+    const fetcher=vi.fn(async()=>{
+      // The first visit is answered; the second visit's check is held back.
+      if(++calls>1)await new Promise<void>(resolve=>{waiting=resolve});
+      return reply(pageOf(1));
+    });
+    const page=await render('/journal',fetcher);
+    expect(page.querySelectorAll('.journal-card')).toHaveLength(1);
+    act(()=>root!.unmount());
+    // Opening a wine and coming back mounts the page afresh.
+    const {LibraryPage}=await import('../../src/features/wines/LibraryPage');
+    root=createRoot(host!);
+    await act(async()=>{root!.render(<MemoryRouter initialEntries={['/journal']}><Routes><Route path="/journal" element={<LibraryPage/>}/></Routes></MemoryRouter>)});
+    expect(host!.textContent).not.toContain('Pouring your collection');
+    expect(host!.querySelectorAll('.journal-card')).toHaveLength(1);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    waiting?.();await flush();
+  });
+
+  it('keeps the page on screen, with the reason beside it, when the next page cannot be loaded',async()=>{
+    const fetcher=vi.fn(async(url:string)=>{
+      const offset=Number(new URL(String(url),'https://x').searchParams.get('offset')||0);
+      return offset?new Response(JSON.stringify({error:'Journal is busy'}),{status:503,headers:{'content-type':'application/json'}}):reply(pageOf(73));
+    });
+    const page=await render('/journal',fetcher);
+    const next=[...page.querySelectorAll('.journal-pagination button')].find(button=>button.textContent?.includes('Next')) as HTMLButtonElement;
+    await act(async()=>{next.click()});await flush();
+    expect(page.querySelectorAll('.journal-card')).toHaveLength(1);
+    expect(page.querySelector('.journal-page-error')?.textContent).toContain('Journal is busy');
+  });
+
+  it('returns to the last page that still exists when the page asked for is gone',async()=>{
+    const fetcher=vi.fn(async(url:string)=>{
+      const offset=Number(new URL(String(url),'https://x').searchParams.get('offset')||0);
+      return reply(offset>=72?{items:[],nextOffset:null,total:40}:pageOf(40,offset));
+    });
+    const page=await render('/journal?offset=72',fetcher);await flush();
+    expect((page.querySelector('[aria-label="Journal page number"]') as HTMLInputElement).value).toBe('2');
+    expect(page.querySelectorAll('.journal-card')).toHaveLength(1);
+    expect(fetcher.mock.calls.map(([url])=>new URL(String(url),'https://x').searchParams.get('offset'))).toEqual(['72','36']);
+  });
+});
+
 describe('Journal result navigation',()=>{
   it('shows the filtered record count and supports direct page entry',async()=>{
     const fetcher=vi.fn(async(url:string)=>{

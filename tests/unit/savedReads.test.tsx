@@ -3,7 +3,6 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  markSavedCopy,
   readKeepingCopy,
   recallRead,
   savedLabel,
@@ -11,7 +10,6 @@ import {
   setSavedReadsOwner,
   type SavedRead,
   type SavedReadsBackend,
-  unmarkSavedCopy,
 } from '../../src/lib/offline/savedReads';
 import { connectionReturned, oldestSavedCopyOnScreen, readShared, useLoad } from '../../src/lib/query/client';
 
@@ -111,20 +109,13 @@ describe('saved copies of what a screen loaded', () => {
   });
 });
 
-describe('a screen that loads for itself (the Journal list)', () => {
-  it('gets its saved copy back and is named to the offline bar until it says otherwise', async () => {
+describe('the Journal list', () => {
+  it('gets the saved copy of the same view back', async () => {
     const key = ['journal', 'query=dujac'];
     await readKeepingCopy(key, async () => ({ items: ['w1'], total: 1 }));
     await settle();
-    const again = await readKeepingCopy(
-      key,
-      async () => Promise.reject(offline()),
-      (at) => markSavedCopy(key, at, true),
-    );
+    const again = await readKeepingCopy(key, async () => Promise.reject(offline()));
     expect(again).toEqual({ items: ['w1'], total: 1 });
-    expect(oldestSavedCopyOnScreen()).toBeGreaterThan(0);
-    unmarkSavedCopy(key);
-    expect(oldestSavedCopyOnScreen()).toBe(0);
   });
 
   it('keeps a different search apart', async () => {
@@ -135,11 +126,13 @@ describe('a screen that loads for itself (the Journal list)', () => {
     );
   });
 
-  it('is wired into the Journal list', async () => {
+  it('reads through the shared loader, which keeps the copy and reloads when the signal returns', async () => {
     const { readFileSync } = await import('node:fs');
     const page = readFileSync('src/features/wines/LibraryPage.tsx', 'utf8');
-    expect(page).toContain('readKeepingCopy(savedKey,()=>listWines(params,');
-    expect(page).toContain("window.addEventListener('online',reload)");
+    // Named after the exact view, so the copies saved before this change are still found.
+    expect(page).toContain("useMemo(()=>['journal',queryKey] as const,[queryKey])");
+    expect(page).toContain('useLoad<JournalPage>(journalKey,signal=>listWines(params,');
+    expect(page).not.toMatch(/readKeepingCopy|addEventListener\('online'/);
   });
 });
 
