@@ -22,3 +22,9 @@ tests/unit/support/forgetLoadedData.ts
 src/features/search/SearchPage.tsx
 src/search.css
 tests/unit/searchPage.test.tsx
+src/lib/offline/serviceWorker.template.js
+src/lib/offline/shellFiles.ts
+src/lib/offline/register.ts
+src/components/OfflineBar.tsx
+src/offline.css
+tests/unit/offlineShell.test.ts

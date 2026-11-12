@@ -199,6 +199,22 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     expect(stack.providerCalls.some(call => call.kind === 'embedding')).toBe(true);
     expect(await stack.db.prepare('SELECT count(*) AS n FROM member_ai_action_usage').first('n')).toBe(0);
     expect(stack.unexpectedOutbound).toEqual([]);
+
+    // The built app keeps itself on the device: with the network switched off a
+    // reload still opens the signed-in app and says plainly that it is offline,
+    // and the data it cannot reach is reported rather than invented.
+    await page.goto(`${stack.origin}/journal`);
+    await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+    await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)) ).toBe(true);
+    await page.context().setOffline(true);
+    await page.reload();
+    await expect(page.locator('.offline-bar')).toContainText('You are offline');
+    await expect(page.getByRole('heading', { level: 1, name: 'Journal' })).toBeVisible();
+    await expect(page.getByText('You appear to be offline')).toBeVisible();
+    await page.context().setOffline(false);
+    await expect(page.locator('.offline-bar')).toHaveCount(0);
+    console.log('Checkpoint: app opens offline from the saved copy');
+    expect(stack.unexpectedOutbound).toEqual([]);
     passed = true;
   } finally { await stack.close({ preserve: !passed }); }
 });

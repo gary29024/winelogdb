@@ -11,6 +11,7 @@ import '../scanSheet.css';
 import '../moreSheet.css';
 import '../mobileViewport.css';
 import '../search.css';
+import { OfflineBar } from './OfflineBar';
 import { CreditConfirmation } from '../features/auth/CreditConfirmation';
 import '../multiUser.css';
 
@@ -127,6 +128,7 @@ export function Layout(){
           the tab bar has no slot left for it. */}
       <div className="topbar-end"><NavLink className="top-search-link" to="/search" aria-label="Search" title="Search wines, producers and tastings"><AppIcon kind="search"/></NavLink><AccountChip/><button type="button" className="top-scan-trigger" data-tour="scan-trigger" onClick={openScanSheet}>Scan Wine</button></div>
     </header>
+    <OfflineBar/>
     <main><LiveTastingStrip/><Outlet/></main><CreditConfirmation/><TourOverlay/><ToastHost/>
     <footer>Your private tasting notebook</footer>
 
