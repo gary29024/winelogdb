@@ -216,6 +216,10 @@ test('owner-to-member sharing through browser, Worker, D1 and R2', async ({ brow
     // A view never loaded on this device has no copy, and says so instead of inventing one.
     await page.goto(`${stack.origin}/journal?query=never-searched-before`);
     await expect(page.getByText('You appear to be offline')).toBeVisible();
+    // A wine opened earlier in this journey is readable too, heading and all.
+    await page.goto(`${stack.origin}/wines/${wineId}`);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Clos de la Roche');
+    await expect(page.locator('.offline-bar')).toContainText('Showing the copy saved on this phone');
     await page.context().setOffline(false);
     await expect(page.locator('.offline-bar')).toHaveCount(0);
     console.log('Checkpoint: app and Journal open offline from the saved copies');
