@@ -20,8 +20,8 @@ describe('the rates',()=>{
   });
 
   it('prices a per-model override above the default',()=>{
-    const rates=readAiRates({AI_COST_MODEL_RATES:JSON.stringify({'gemini-3.6-flash':{input:0.1,output:0.4}})});
-    expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:1e6},rates,'gemini-3.6-flash')).toBeCloseTo(0.5,6);
+    const rates=readAiRates({AI_COST_MODEL_RATES:JSON.stringify({'gemini-3.8-flash':{input:0.1,output:0.4}})});
+    expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:1e6},rates,'gemini-3.8-flash')).toBeCloseTo(0.5,6);
     expect(tokenCostUsd({searchQueries:0,promptTokens:1e6,outputTokens:1e6},rates,'gemini-3.7-flash')).toBeCloseTo(2.8,6);
   });
 
@@ -174,7 +174,7 @@ describe('the usage ledger',()=>{
 
   it('counts a run once even when it escalated to a second model',async()=>{
     const {env}=ledger();
-    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.6-flash',requests:1,promptTokens:1200,outputTokens:300});
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.8-flash',requests:1,promptTokens:1200,outputTokens:300});
     await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.7-flash',requests:1,promptTokens:1200,outputTokens:300});
     const summary=await usageSummary(env.DB,'owner',DEFAULT_RATES);
     const scan=summary.kinds.find(kind=>kind.kind==='scan_single')!;
@@ -237,10 +237,10 @@ describe('the usage ledger',()=>{
 
   it('writes the same numbers to Analytics Engine',async()=>{
     const {env,analytics}=ledger();
-    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.6-flash',requests:1,units:9,promptTokens:9000,outputTokens:800});
+    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.8-flash',requests:1,units:9,promptTokens:9000,outputTokens:800});
     expect(analytics).toHaveLength(1);
     expect(analytics[0]).toMatchObject({indexes:['scan_group'],doubles:[1,0,9000,800,9]});
-    expect(analytics[0].blobs).toContain('gemini-3.6-flash');
+    expect(analytics[0].blobs).toContain('gemini-3.8-flash');
     expect(analytics[0].blobs,'the tier, so the time series can be priced too').toContain('standard');
   });
 
@@ -393,7 +393,7 @@ describe('what a cost is quoted per',()=>{
     const {env}=ledger();
     // one batch session, three wines
     for(const item of ['i-1','i-2','i-3'])
-      await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'session-1',targetId:item,model:'gemini-3.6-flash',requests:1,units:1,promptTokens:1000,outputTokens:250});
+      await recordAiUsage(env,'owner',{kind:'scan_batch',runId:'session-1',targetId:item,model:'gemini-3.8-flash',requests:1,units:1,promptTokens:1000,outputTokens:250});
     // one producer run, two grounded requests
     for(const searches of [5,9])
       await recordAiUsage(env,'owner',{kind:'producer_research',runId:'r-1',model:'gemini-3.7-flash',requests:1,searchQueries:searches,promptTokens:700,outputTokens:1800});
@@ -413,7 +413,7 @@ describe('what a cost is quoted per',()=>{
 
   it('counts a wine once when its recognition escalated',async()=>{
     const {env}=ledger();
-    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.6-flash',requests:1,units:1,promptTokens:1200,outputTokens:300});
+    await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.8-flash',requests:1,units:1,promptTokens:1200,outputTokens:300});
     await recordAiUsage(env,'owner',{kind:'scan_single',runId:'scan-1',model:'gemini-3.7-flash',requests:1,units:0,promptTokens:1200,outputTokens:300});
     const scan=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_single')!;
     expect(scan.unitCount).toBe(1);
@@ -423,7 +423,7 @@ describe('what a cost is quoted per',()=>{
 
   it('counts every wine a group photo produced, from one request',async()=>{
     const {env}=ledger();
-    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.6-flash',requests:1,units:9,promptTokens:9000,outputTokens:1500});
+    await recordAiUsage(env,'owner',{kind:'scan_group',runId:'g-1',model:'gemini-3.8-flash',requests:1,units:9,promptTokens:9000,outputTokens:1500});
     const group=(await usageSummary(env.DB,'owner',DEFAULT_RATES)).kinds.find(kind=>kind.kind==='scan_group')!;
     expect(group.unitCount).toBe(9);
     expect(group.runs).toBe(1);

@@ -14,9 +14,12 @@ describe('WineLog AI model policy',()=>{
     expect(AI_ROUTES.vintageIntelligence.models[0]).toBe(AI_MODELS.vintagePrimary);
   });
 
-  it('keeps 3.8 primary and 3.7 as the grounded-research availability fallback',()=>{
+  // 3.7 Flash retires on Vertex on 2027-01-28; 3.1 Flash Lite (already used for
+  // grounded vintage checks) is the backup until at least 2027-05-07.
+  it('keeps 3.8 primary and 3.1 Flash Lite as the grounded-research availability fallback',()=>{
     expect(AI_MODELS.groundedResearchPrimary).toBe('gemini-3.8-flash');
-    expect(AI_MODELS.groundedResearchFallback).toBe('gemini-3.7-flash');
+    expect(AI_MODELS.groundedResearchFallback).toBe('gemini-3.1-flash-lite');
+    expect(Object.values(AI_MODELS)).not.toContain('gemini-3.7-flash');
     expect(AI_ROUTES.wineDeepSearch.models).toEqual([AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback]);
     expect(AI_ROUTES.producerResearch.models).toEqual([AI_MODELS.groundedResearchPrimary,AI_MODELS.groundedResearchFallback]);
   });
