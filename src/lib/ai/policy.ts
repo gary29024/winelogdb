@@ -3,7 +3,7 @@ export const AI_MODELS={
   recognitionEscalationSync:'gemini-3.8-flash',
   recognitionEscalationFlex:'gemini-3.8-flash',
   groundedResearchPrimary:'gemini-3.8-flash',
-  groundedResearchFallback:'gemini-3.7-flash',
+  groundedResearchFallback:'gemini-3.1-flash-lite',
   vintagePrimary:'gemini-3.1-flash-lite',
   vintageEscalation:'gemini-3.8-flash',
   researchTranslation:'gemini-3.1-flash-lite',

@@ -12,7 +12,7 @@ When a producer already has a fresh saved profile and an official website, WineL
 4. retries only known transient Z.AI 429 conditions, up to three total Z.AI attempts;
 5. if Z.AI remains unavailable or returns an invalid model result, tries Qwen3-30B-A3B on Cloudflare Workers AI;
 6. commits a cheap-path result only when the model says the evidence is complete and the range passes conservative coverage checks;
-7. otherwise falls through to the existing Gemini 3.8/3.7 + Google Search workflow unchanged.
+7. otherwise falls through to the existing Gemini 3.8 (3.1 Flash Lite fallback) + Google Search workflow unchanged.
 
 If Z.AI successfully extracts a range but the official evidence itself is incomplete, WineLog does **not** spend on a second copy of the same model: it goes directly to grounded Gemini. Workers AI is the resilience fallback for provider/model failure, not a second opinion on weak source evidence.
 

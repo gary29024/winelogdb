@@ -32,8 +32,8 @@ export function researchBatchErrorPollDelay(pollCount:number){
 }
 
 /**
- * The primary 3.7 model gets two retryable status failures before failover.
- * The fallback 3.6 model gets a larger bounded budget, then the run fails
+ * The primary model gets two retryable status failures before failover.
+ * The fallback model gets a larger bounded budget, then the run fails
  * instead of polling forever.
  */
 export function researchBatchTransientAction(attempt:number,pollCount:number):ResearchBatchPollAction{
